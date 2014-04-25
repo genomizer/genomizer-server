@@ -1,8 +1,7 @@
 package transfer;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import org.
+//import java.net.InetAddress;
+//import java.net.UnknownHostException;
 
 public class DownloadCommand extends Command {
 
@@ -15,10 +14,10 @@ public class DownloadCommand extends Command {
 
 
 	public void Execute() {
-		String url = urlFactory();	
-		
-		
-		
+		String url = urlFactory();
+
+
+
 	}
 
 	private String urlFactory() {
