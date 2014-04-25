@@ -1,5 +1,18 @@
 package transfer;
 
-public class DownloadCommand {
+public class DownloadCommand extends Command {
 
+
+
+
+	public void Execute() {
+		
+		
+		
+		
+	}
+
+	
+	
+	
 }
