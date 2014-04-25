@@ -2,6 +2,7 @@ package transfer;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import org.
 
 public class DownloadCommand extends Command {
 
@@ -14,23 +15,17 @@ public class DownloadCommand extends Command {
 
 
 	public void Execute() {
-
-
-
-
+		String url = urlFactory();	
+		
+		
+		
 	}
 
 	private String urlFactory() {
 		String url;
 
-		String host = null;
-		try {
-			host = InetAddress.getLocalHost().getCanonicalHostName();
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
 
-		url = "file://" + host + "/" + filePath;
+		url = "file://" + "webservernamn" + "/" + filePath;
 
 		return url;
 	}
