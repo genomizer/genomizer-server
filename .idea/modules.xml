@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/genomizer-server.iml" filepath="$PROJECT_DIR$/genomizer-server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/genomizer-Server.iml" filepath="$PROJECT_DIR$/genomizer-Server.iml" />
     </modules>
   </component>
 </project>
