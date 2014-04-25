@@ -1,4 +1,4 @@
-//Class to make initial commit
+//Class to make initial commit2
 public class Main {
 
 }
