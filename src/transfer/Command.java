@@ -7,8 +7,6 @@ public abstract class Command {
 
 	}
 
-	public void Execute() {
-
-	}
+	public abstract void Execute();
 
 }
