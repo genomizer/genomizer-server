@@ -8,6 +8,20 @@ package transfer;
  * Time: 1:43 PM
  * To change this template use File | Settings | File Templates.
  */
-public class UploadCommand {
+public class UploadCommand extends Command {
 
+    private String path;
+
+    public UploadCommand(String path) {
+        this.path = path;
+    }
+
+    @Override
+    public void Execute() {
+
+    }
+
+    public String getPath() {
+        return path;
+    }
 }

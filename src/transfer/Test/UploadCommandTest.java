@@ -2,6 +2,9 @@ package transfer.Test;
 
 import org.junit.Before;
 import org.junit.Test;
+import transfer.UploadCommand;
+
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Project: genomizer-Server
@@ -13,10 +16,20 @@ import org.junit.Test;
  */
 public class UploadCommandTest {
 
+    private UploadCommand uploadCommand;
+
     @Before
     public void setup() {
-
+        uploadCommand = new UploadCommand("fake path");
     }
 
+    @Test
+    public void shouldHavePath() {
+        assertNotNull(uploadCommand.getPath());
+    }
 
+    @Test
+    public void shouldHaveSocket() {
+
+    }
 }
