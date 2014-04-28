@@ -1,7 +1,8 @@
 package process.classes;
 
-public class ProcessHandler {
+import java.util.HashMap;
 
+public class ProcessHandler {
 	private ProcessHandler() {
 
 	}
@@ -9,13 +10,20 @@ public class ProcessHandler {
 		return new ProcessHandler();
 	}
 
-	public void runExecutable(String process, String[] param, String inFilePath, String outFilePath) throws ProcessException {
+	public String runExecutable(String process, String[] param, String inFilePath, String outFilePath) throws IllegalArgumentException {
+		switch(process){
+			case "rawToProfile":
+				return "rawToProfile";
+			default: throw new IllegalArgumentException();
+		}
 
 	}
 
-	public void runConversion(String conversion, String inFilePath, String outFilePath){
+	public String runConversion(String conversion, String inFilePath, String outFilePath){
 
+		return null;
 	}
+
 
 
 
