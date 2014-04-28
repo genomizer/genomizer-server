@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -15,6 +16,7 @@ import org.junit.Test;
 public class TestDatabaseConnect {
 
 	private static final String dbDriver = "org.postgresql.Driver";
+
 	private static final String dbConString = "jdbc:postgresql://postgres/c5dv151_vt14" ;
 	private static final String dbUser = "c5dv151_vt14";
 	private static final String dbPass = "shielohh";
@@ -85,10 +87,10 @@ public class TestDatabaseConnect {
 	}
 
 	@Test
-	public void testParameter(){
-/*
+	public void testFindSpecific(){
+
 		Statement statement = null;
-		String selectTableSQL = "SELECT Name FROM Workspace WHERE ";
+		String selectTableSQL = "SELECT * FROM experiment WHERE (tissue='toe')";
 		ResultSet rs = null;
 
 		try {
@@ -97,8 +99,49 @@ public class TestDatabaseConnect {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-*/
+
+		try {
+			while (rs.next()) {
+				String name = rs.getString("tissue");
+				System.out.println("Name : " + name);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
+	@Test
+	public void testPrepStatement() {
+		
+		PreparedStatement statement = null;
+		String selectTableSQL = "SELECT ExpID FROM Experiment WHERE (species = ?)";
+		try {
+			statement = dbCon.prepareStatement(selectTableSQL);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		
+		try {
+			statement.setString(1, "fish");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		ResultSet rs = null;
+		try {
+			rs = statement.executeQuery();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			while (rs.next()) {
+				String name = rs.getString("ExpID");
+				System.out.println("Name : " + name);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
 }
