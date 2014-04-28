@@ -1,70 +1,99 @@
 package transfer;
 
-<<<<<<< HEAD
-=======
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+
+import java.io.*;
 import java.net.MalformedURLException;
->>>>>>> af507414c0aca23277bf41e552511efb6997a97c
 import java.net.URL;
 
 /**
  * Created by c11epm on 4/28/14.
  */
 public class HttpURLDummy {
-    private URL conn;
+    //TODO create a definitionfile
+    private final int TRANSFERCHUNKSIZE = 1024;
+    private URL url;
+    private String localFilePath;
     private BufferedInputStream in = null;
     private FileOutputStream fout = null;
+    private File outputFile;
 
-    public HttpURLDummy(String url){
+    public HttpURLDummy(String url, String localFilePath){
         try {
-            conn = new URL(url);
-
+            this.url = new URL(url);
+            this.localFilePath = localFilePath;
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
 
     }
 
-    public String getResponse() {
-        return null;
-    }
-
-    public boolean connect() {
-        File f = new File("/home/c11/c11epm/testfile.jpg");
-        try {
-            if(f.createNewFile()){
+    public boolean openFile(String filePath){
+        outputFile = new File(filePath);
+        if(!outputFile.exists()){
+            try {
+                if(!outputFile.createNewFile()){
+                    return false;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
                 return false;
             }
-            in = new BufferedInputStream(conn.openStream());
-            fout = new FileOutputStream(f);
-        } catch (IOException e) {
+        }
+        return true;
+    }
+
+
+    public boolean openOutputStream(){
+        try {
+            fout = new FileOutputStream(outputFile);
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
             return false;
         }
         return true;
     }
 
-<<<<<<< HEAD
-    public HttpURLDummy(){
-=======
+    public boolean openInputStream(){
+        try {
+            in = new BufferedInputStream(url.openStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean openStreams() {
+        return openFile(localFilePath) &&
+                openInputStream() && openOutputStream();
+    }
+
+
     public boolean readData() {
-        final byte data[] = new byte[1024];
+        final byte data[] = new byte[TRANSFERCHUNKSIZE];
         int count;
         try {
-            while((count = in.read(data,0,1024)) != -1){
-                System.out.println("Reading data...");
+            System.out.println("Reading data...");
+            while((count = in.read(data,0,TRANSFERCHUNKSIZE)) != -1){
                 fout.write(data, 0, count);
-                System.out.println("Print Data");
             }
         } catch (IOException e) {
             e.printStackTrace();
             return false;
         }
+        System.out.println("Download complete");
         return true;
->>>>>>> af507414c0aca23277bf41e552511efb6997a97c
 
     }
+    public String getURL() {
+        return url.toString();
+    }
+
+    public boolean changeURL(URL url) {
+        assert url != null;
+        this.url = url;
+        return openStreams();
+    }
+
 }
