@@ -2,7 +2,7 @@ package transfer.Test;
 
 import org.junit.Before;
 import org.junit.Test;
-import transfer.HttpURLDummy;
+import transfer.HTTPURLClientDownload;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -14,14 +14,14 @@ import static org.junit.Assert.*;
  * Created by c11epm on 4/28/14.
  */
 public class HttpURLTest {
-    private HttpURLDummy dummy;
+    private HTTPURLClientDownload dummy;
 
     @Before
     public void setup() throws MalformedURLException {
         String localFilePath = "/home/" +
                 System.getProperty("user.name").substring(0,3) +
                 "/" + System.getProperty("user.name") + "/testfile.jpg";
-        dummy = new HttpURLDummy("http://www8.cs.umu.se/~c11epm/thailand/IMG_20131227_105730.jpg", localFilePath);
+        dummy = new HTTPURLClientDownload("http://www8.cs.umu.se/~c11epm/thailand/IMG_20131227_105730.jpg", localFilePath);
     }
 
     @Test
