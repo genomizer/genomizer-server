@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c7270085-9483-4066-a9d4-0e381f5c6c93" name="Default" comment="Added UploadCommand class and test">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/transfer/UploadCommand.java" afterPath="$PROJECT_DIR$/src/transfer/UploadCommand.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/transfer/Test/UploadCommandTest.java" afterPath="$PROJECT_DIR$/src/transfer/Test/UploadCommandTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-    </list>
+    <list default="true" id="c7270085-9483-4066-a9d4-0e381f5c6c93" name="Default" comment="" />
     <ignored path="genomizer-Server.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -74,16 +69,16 @@
             <entry file="file://$PROJECT_DIR$/src/Main.java">
               <provider selected="true" editor-type-id="text-editor">
                 <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="252">
-                  <caret line="1" column="13" selection-start-line="1" selection-start-column="13" selection-end-line="1" selection-end-column="13" />
+                  <caret line="2" column="24" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
                   <folding />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="UploadCommand.java" pinned="false" current="true" current-in-tab="true">
+          <file leaf-file-name="UploadCommand.java" pinned="false" current="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/transfer/UploadCommand.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.42172524" vertical-offset="0" max-vertical-offset="1368">
+                <state vertical-scroll-proportion="0.25239617" vertical-offset="159" max-vertical-offset="1368">
                   <caret line="22" column="54" selection-start-line="22" selection-start-column="37" selection-end-line="22" selection-end-column="37" />
                   <folding>
                     <element signature="imports" expanded="true" />
@@ -108,11 +103,11 @@
       </split-first>
       <split-second>
         <leaf>
-          <file leaf-file-name="UploadCommandTest.java" pinned="false" current="false" current-in-tab="true">
+          <file leaf-file-name="UploadCommandTest.java" pinned="false" current="true" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/transfer/Test/UploadCommandTest.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.63258785" vertical-offset="0" max-vertical-offset="939">
-                  <caret line="42" column="0" selection-start-line="42" selection-start-column="0" selection-end-line="42" selection-end-column="0" />
+                <state vertical-scroll-proportion="0.36421725" vertical-offset="0" max-vertical-offset="939">
+                  <caret line="26" column="60" selection-start-line="26" selection-start-column="11" selection-end-line="26" selection-end-column="11" />
                   <folding>
                     <element signature="e#827#828#0" expanded="true" />
                     <element signature="e#887#888#0" expanded="true" />
@@ -212,46 +207,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="genomizer-Server" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="genomizer-server" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="transfer" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="genomizer-Server" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="genomizer-server" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="transfer" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Test" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -473,7 +428,11 @@
       <created>1398428317735</created>
       <updated>1398428317735</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Added UploadCommand class and test">
+      <created>1398669603413</created>
+      <updated>1398669603413</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -641,19 +600,8 @@
     <entry file="file://$PROJECT_DIR$/src/Main.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="252">
-          <caret line="1" column="13" selection-start-line="1" selection-start-column="13" selection-end-line="1" selection-end-column="13" />
+          <caret line="2" column="24" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/transfer/Test/UploadCommandTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.63258785" vertical-offset="0" max-vertical-offset="939">
-          <caret line="42" column="0" selection-start-line="42" selection-start-column="0" selection-end-line="42" selection-end-column="0" />
-          <folding>
-            <element signature="e#827#828#0" expanded="true" />
-            <element signature="e#887#888#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -667,12 +615,23 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/transfer/UploadCommand.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.42172524" vertical-offset="0" max-vertical-offset="1368">
+        <state vertical-scroll-proportion="0.25239617" vertical-offset="159" max-vertical-offset="1368">
           <caret line="22" column="54" selection-start-line="22" selection-start-column="37" selection-end-line="22" selection-end-column="37" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#934#935#0" expanded="true" />
             <element signature="e#961#962#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/transfer/Test/UploadCommandTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.36421725" vertical-offset="0" max-vertical-offset="939">
+          <caret line="26" column="60" selection-start-line="26" selection-start-column="11" selection-end-line="26" selection-end-column="11" />
+          <folding>
+            <element signature="e#827#828#0" expanded="true" />
+            <element signature="e#887#888#0" expanded="true" />
           </folding>
         </state>
       </provider>
