@@ -4,6 +4,9 @@ import org.junit.Before;
 import org.junit.Test;
 import transfer.UploadCommand;
 
+import java.net.Socket;
+
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 /**
@@ -17,10 +20,14 @@ import static org.junit.Assert.assertNotNull;
 public class UploadCommandTest {
 
     private UploadCommand uploadCommand;
+    private Socket s ;
+
+    private String svar = "GET /file/ex1.raw HTTP/1.1";
 
     @Before
     public void setup() {
-        uploadCommand = new UploadCommand("fake path");
+        s  = new Socket();
+        uploadCommand = new UploadCommand("fake path",s);
     }
 
     @Test
@@ -29,7 +36,10 @@ public class UploadCommandTest {
     }
 
     @Test
-    public void shouldHaveSocket() {
-
+    public void shouldhaveSvar(){
+        assertEquals(uploadCommand.pathToURL(),svar);
     }
+
+
+
 }
