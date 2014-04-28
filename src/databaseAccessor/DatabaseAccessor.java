@@ -30,7 +30,7 @@ public class DatabaseAccessor {
     }
 
     public void addUser(String username, String password, String role) throws SQLException {
-        String userString = "INSERT INTO UserInfo " +
+        String userString = "INSERT INTO User_Info " +
                 "(Username, Password, Role) VALUES " +
                 "(?, ?, ?)";
         PreparedStatement addUser = conn.prepareStatement(userString);
@@ -43,7 +43,7 @@ public class DatabaseAccessor {
 
     public ArrayList<String> getUsers() throws SQLException {
         ArrayList<String> users = new ArrayList<String>();
-        String query = "SELECT Username FROM UserInfo";
+        String query = "SELECT Username FROM User_Info";
 
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(query);
@@ -55,7 +55,7 @@ public class DatabaseAccessor {
 
     public void deleteUser(String username) throws SQLException {
         
-        String statementStr = "DELETE FROM UserInfo " +
+        String statementStr = "DELETE FROM User_Info " +
                 "WHERE (Username = ?)";
         PreparedStatement deleteUser = conn.prepareStatement(statementStr);
         deleteUser.setString(1, username);

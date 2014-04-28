@@ -20,7 +20,7 @@ public class DBInterface {
 	 * @return String password
 	 */
 	public String getPassword(String userName) {
-		//SELECT Password FROM User WHERE Username = userName
+		//SELECT Password FROM User_Info WHERE Username = userName
 		return null;
 	}
 
@@ -31,7 +31,7 @@ public class DBInterface {
 	 * @param String newPassword
 	 */
 	public void setPassword(String userName, String newPassword) {
-		//UPDATE USER SET Password = newPassword WHERE Username = userName
+		//UPDATE User_Info SET Password = newPassword WHERE Username = userName
 	}
 
 	/**
@@ -41,7 +41,7 @@ public class DBInterface {
 	 * @return String userRole
 	 */
 	public String getUserPermissions(String userName) {
-		//SELECT Role FROM User WHERE Username = userName
+		//SELECT Role FROM User_Info WHERE Username = userName
 		return null;
 	}
 
@@ -52,7 +52,7 @@ public class DBInterface {
 	 * @param String newRole
 	 */
 	public void setUserPermissions(String userName, String newRole) {
-		//UPDATE UserInfo SET Role = newRole WHERE Username = userName
+		//UPDATE User_Info SET Role = newRole WHERE Username = userName
 	}
 
 	/**
@@ -63,7 +63,7 @@ public class DBInterface {
 	 * @return ArrayList<String>
 	 */
 	public ArrayList<String> getUsers() {
-		//SELECT Username FROM UserInfo
+		//SELECT Username FROM User_Info
 		return null;
 	}
 
@@ -76,13 +76,13 @@ public class DBInterface {
 	 * @param String role
 	 */
 	public void addUser(String userName, String password, String role) {
-		//INSERT INTO UserInfo(Username, Password, Role) VALUES(userName, password, role)
+		//INSERT INTO User_Info(Username, Password, Role) VALUES(userName, password, role)
 	}
 
 	/**
 	 * RW & KK
 	 * OBS! No support for workspaces yet!
-	 * ie. Deletes a user from the UserInfo table.
+	 * ie. Deletes a user from the User_Info table.
 	 * 
 	 * To be extended to:
 	 * 
@@ -94,8 +94,7 @@ public class DBInterface {
 	 */
 	public void deleteUser(String userName) {
 		//DELETE FROM Working_On WHERE (Username = userName)
-		//DELETE FROM UserInfo WHERE (Username = userName)
-		return null;
+		//DELETE FROM User_Info WHERE (Username = userName)
 	}
 
 

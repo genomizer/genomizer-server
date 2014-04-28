@@ -27,7 +27,7 @@ public class MethodTestsRWandKK {
         String database = "c5dv151_vt14";
         */
         
-        // Ruaridh's Home DB Info (Comment out when at school)
+        // Ruaridh's DB Info (Comment out when at school)
         String username = "genomizer_prog";
         String password = "secret";
         String host = "localhost";
