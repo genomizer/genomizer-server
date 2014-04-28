@@ -5,29 +5,31 @@ package transfer;
 
 public class DownloadCommand extends Command {
 
-	private String filePath;
+    private String filePath;
 
-	public DownloadCommand(String filePath) {
-		this.filePath = filePath;
+    public DownloadCommand(String filePath) {
+        this.filePath = filePath;
 
-	}
-
-
-	public void Execute() {
-		String url = urlFactory();
+    }
 
 
-
-	}
-
-	private String urlFactory() {
-		String url;
+    public void execute() {
+        String url = urlFactory();
 
 
-		url = "file://" + "webservernamn" + "/" + filePath;
 
-		return url;
-	}
+    }
+
+    private String urlFactory() {
+        String url;
 
 
+        url = "file://" + "webservernamn" + "/" + filePath;
+
+        return url;
+
+    }
 }
+
+
+

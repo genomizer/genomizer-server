@@ -1,6 +1,7 @@
 package transfer;
 
 import java.io.*;
+import java.net.InetAddress;
 import java.net.Socket;
 
 /**
@@ -17,34 +18,25 @@ public class UploadCommand extends Command {
     private Socket sendSocket;
 
 
-    public UploadCommand(String path, Socket sendSocket) {
-        this.sendSocket = sendSocket;
+    public UploadCommand(String path) {
         this.path = "/file/ex1.raw";
-
-        try {
-            sendSocket.connect(sendSocket.getLocalSocketAddress());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
-
-
     }
 
 
 
     @Override
-    public void Execute() {
+    public void execute() {
         try {
-            byte[] sendData = path.getBytes();
+            InetAddress a = InetAddress.getByName("127.0.0.1");
+            sendSocket = new Socket(a,7777);
+
+            byte[] sendData = dlLinkJSON().getBytes();
             OutputStream output = sendSocket.getOutputStream();
-            output.write(sendData);
+             output.write(sendData);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
 
     public String getPath() {
@@ -52,11 +44,8 @@ public class UploadCommand extends Command {
     }
 
 
-
     public String pathToURL(){
         return "POST "+"http://ip/DB/"+path+":8080"+" HTTP/1.1";
-
-
     }
 
 
@@ -66,7 +55,6 @@ public class UploadCommand extends Command {
                 "{\n" +
                 "upload-link: "+pathToURL()+"\n" +
                 "}";
-
     }
 
 

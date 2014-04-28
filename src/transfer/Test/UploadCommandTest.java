@@ -22,20 +22,18 @@ import static transfer.UploadCommand.*;
 public class UploadCommandTest {
 
     private UploadCommand uploadCommand;
-    private Socket s ;
-    private Receive res;
 
 
 
-    private String svar = "POST http://ip/DB//file/ex1.raw:8080 HTTP/1.1";
+
+    private String path = "POST http://ip/DB//file/ex1.raw:8080 HTTP/1.1";
 
     @Before
     public void setup() {
 
-        res = new Receive();
-        res.start();
-        s = new Socket();
-        uploadCommand = new UploadCommand("fake path",s);
+
+
+        uploadCommand = new UploadCommand("fake path");
     }
 
     @Test
@@ -44,15 +42,24 @@ public class UploadCommandTest {
     }
 
     @Test
-    public void shouldhaveSvar(){
-        assertEquals(uploadCommand.pathToURL(),svar);
+    public void shouldhaveCorrectPath(){
+        assertEquals(uploadCommand.pathToURL(),path);
     }
 
 
     @Test
     public void shouldHaveJson(){
-        System.out.println(uploadCommand.dlLinkJSON());
+//        System.out.println(uploadCommand.dlLinkJSON());
         assertNotNull(uploadCommand.dlLinkJSON());
+    }
+
+    @Test
+    public void shouldSendOverSocket(){
+        Receive res = new Receive();
+        Thread t = new Thread(res);
+        t.start();
+        uploadCommand.execute();
+
     }
 
 

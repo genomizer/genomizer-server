@@ -3,9 +3,11 @@ package transfer.Test;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Arrays;
 
 /**
  * Project: genomizer-Server
@@ -16,7 +18,7 @@ import java.net.Socket;
  * To change this template use File | Settings | File Templates.
  */
 
-    public class Receive extends Thread {
+public class Receive implements Runnable {
 
 
     private InputStream is;
@@ -25,7 +27,9 @@ import java.net.Socket;
     public Receive() {
 
         try {
-            welcome = new ServerSocket();
+            welcome = new ServerSocket(7777);
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -36,10 +40,12 @@ import java.net.Socket;
     @Override
     public void run() {
 
-    try {
+        try {
+            byte[] info = new byte[1000];
             listen = welcome.accept();
-        DataInputStream stream = new DataInputStream(listen.getInputStream());
-            System.out.println(stream.read());
+            DataInputStream stream = new DataInputStream(listen.getInputStream());
+            stream.read(info);
+            System.out.println(new String(info));
         } catch (IOException e) {
             e.printStackTrace();
         }
