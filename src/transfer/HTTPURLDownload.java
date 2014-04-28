@@ -8,7 +8,7 @@ import java.net.URL;
 /**
  * Created by c11epm on 4/28/14.
  */
-public class HTTPURLClientDownload {
+public class HTTPURLDownload {
     //TODO create a definitionfile
     private final int TRANSFERCHUNKSIZE = 1024;
     private URL url;
@@ -17,7 +17,7 @@ public class HTTPURLClientDownload {
     private FileOutputStream fout = null;
     private File outputFile;
 
-    public HTTPURLClientDownload(String url, String localFilePath){
+    public HTTPURLDownload(String url, String localFilePath){
         try {
             this.url = new URL(url);
             this.localFilePath = localFilePath;
