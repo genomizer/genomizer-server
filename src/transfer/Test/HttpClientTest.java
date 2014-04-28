@@ -11,12 +11,14 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.HttpURLConnection;
 
 /**
  * Created by c11epm on 4/25/14.
  */
 public class HttpClientTest {
     DefaultHttpClient c;
+    HttpURLConnection connection;
 
     @Test
     public void shouldStartClient(){
