@@ -6,7 +6,7 @@ import com.google.gson.GsonBuilder;
 /**
  * Class used to represent a command in the software.
  *
- * @author Jonas Nilsson
+ * @author tfy09jnn
  * @version 1.0
  */
 public abstract class Command {

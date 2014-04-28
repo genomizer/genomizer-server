@@ -8,11 +8,13 @@ public class CommandHandler {
 
 	}
 
-	public void doStuff(String json, String restful) {
+	public static final int LOGIN_COMMAND = 1;
+	public void doStuff(String json, String restful, int code) {
 
-		//Get code from restful
+		//Get code from restful //TODO: add parser code....
 		int msgCode = 0;
 
+		@SuppressWarnings("unused")
 		Command myCom = createCommand(msgCode, json, restful);
 
 		//Initiate command
