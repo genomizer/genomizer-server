@@ -1,4 +1,3 @@
-package DBInterface;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -68,7 +67,7 @@ public class DBInterface {
 
 	/**
 	 * Adds a new user
-	 *
+	 * Taken RW and KK!!!
 	 * @param String userName
 	 * @param String password
 	 * @param String role
