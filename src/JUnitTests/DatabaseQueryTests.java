@@ -3,6 +3,8 @@ package JUnitTests;
 import static org.junit.Assert.*;
 import java.sql.DriverManager;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.junit.After;
@@ -11,13 +13,19 @@ import org.junit.Test;
 
 public class DatabaseQueryTests {
 
-	Connection connection = null;
+	private static final String dbDriver = "org.postgresql.Driver";
+	private static final String dbConString =
+									"jdbc:postgresql://postgres/c5dv151_vt14" ;
+	private static final String dbUser = "c5dv151_vt14";
+	private static final String dbPass = "shielohh";
+
+	private Connection connection = null;
 
 	@Before
 	public void setup(){
 
 		try{
-			Class.forName("org.postgresql.Driver");
+			Class.forName(dbDriver);
 		}
 		catch(ClassNotFoundException e) {
 
@@ -27,11 +35,10 @@ public class DatabaseQueryTests {
 			return;
 
 		}
-
 		try{
-		connection = DriverManager.getConnection(
-					 "jdbc:postgresql://postgresql/c5dv151_vt14",
-					 "c5dv151_vt14", "shielohh");
+
+			connection = DriverManager.getConnection(
+						dbConString, dbUser, dbPass);
 		}
 		catch (SQLException e) {
 
@@ -42,23 +49,65 @@ public class DatabaseQueryTests {
 		}
 	}
 
-
-
-	@Test
-	public void testStartUpConnectionDatabase() {
-
-
-
-	}
-
 	@After
 	public void tearDown(){
-
 		try {
 			connection.close();
 		} catch (SQLException e) {
 			System.out.println("Failed to close the connection!!\n");
 		}
 	}
+
+	@Test
+	public void testStartUpConnectionDatabase() {
+		assertNotNull(connection);
+	}
+
+	@Test
+	public void testAddExperimentToDatabase() {
+		//INSERT INTO UserInfo(Username, Password, Role) VALUES(userName, password, role)
+		String id = "awe1123";
+		String specie = "Human";
+		String s = "M";
+		String tis = "arm";
+		String cell = "yes";
+		String devS = "Early";
+		String antiN = "cooltName";
+		String antiS = "C";
+		String antiB = "ntzzz";
+
+		String query = "INSERT INTO Experiment(ExpID, Species, Sex, Tissue," +
+					   " CellType, DevStage, AntiName, Antisymbol, Antibody)"+
+					   " VALUES(?,?,?,?,?,?,?,?,?) RETURNING *";
+		ResultSet res = null;
+
+		try {
+			PreparedStatement pStatement = connection.prepareStatement(query);
+			pStatement.setString(1, id);
+			pStatement.setString(2, specie);
+			pStatement.setString(3, s);
+			pStatement.setString(4, tis);
+			pStatement.setString(5, cell);
+			pStatement.setString(6, devS);
+			pStatement.setString(7, antiN);
+			pStatement.setString(8, antiS);
+			pStatement.setString(9, antiB);
+
+			res = pStatement.executeQuery();
+
+			if(res != null){
+				res.close();
+			}
+			pStatement.close();
+
+		} catch (SQLException e) {
+			System.out.println("Error! Couldn't insert values,SQLException\n");
+			e.printStackTrace();
+		}
+
+
+
+	}
+
 
 }
