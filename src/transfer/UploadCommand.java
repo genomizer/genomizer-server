@@ -1,8 +1,6 @@
 package transfer;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.Socket;
 
 /**
@@ -22,8 +20,12 @@ public class UploadCommand extends Command {
     public UploadCommand(String path, Socket sendSocket) {
         this.sendSocket = sendSocket;
         this.path = "/file/ex1.raw";
-        receive r = new receive();
-        r.start();
+
+        try {
+            sendSocket.connect(sendSocket.getLocalSocketAddress());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
 
@@ -52,19 +54,25 @@ public class UploadCommand extends Command {
 
 
     public String pathToURL(){
-        return "GET "+path+" HTTP/1.1";
+        return "POST "+"http://ip/DB/"+path+":8080"+" HTTP/1.1";
 
 
     }
 
 
+    public String dlLinkJSON(){
+        return "200 (OK) \n" +
+                "Content-Type: application/json \n\n" +
+                "{\n" +
+                "upload-link: "+pathToURL()+"\n" +
+                "}";
 
-   public class receive extends Thread {
+    }
 
 
-       @Override
-       public void run() {
 
-       }
-   }
+
+
+
+
 }

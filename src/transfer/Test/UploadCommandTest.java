@@ -4,10 +4,12 @@ import org.junit.Before;
 import org.junit.Test;
 import transfer.UploadCommand;
 
+import java.net.ServerSocket;
 import java.net.Socket;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static transfer.UploadCommand.*;
 
 /**
  * Project: genomizer-Server
@@ -21,12 +23,18 @@ public class UploadCommandTest {
 
     private UploadCommand uploadCommand;
     private Socket s ;
+    private Receive res;
 
-    private String svar = "GET /file/ex1.raw HTTP/1.1";
+
+
+    private String svar = "POST http://ip/DB//file/ex1.raw:8080 HTTP/1.1";
 
     @Before
     public void setup() {
-        s  = new Socket();
+
+        res = new Receive();
+        res.start();
+        s = new Socket();
         uploadCommand = new UploadCommand("fake path",s);
     }
 
@@ -39,6 +47,14 @@ public class UploadCommandTest {
     public void shouldhaveSvar(){
         assertEquals(uploadCommand.pathToURL(),svar);
     }
+
+
+    @Test
+    public void shouldHaveJson(){
+        System.out.println(uploadCommand.dlLinkJSON());
+        assertNotNull(uploadCommand.dlLinkJSON());
+    }
+
 
 
 

@@ -1,7 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c7270085-9483-4066-a9d4-0e381f5c6c93" name="Default" comment="" />
+    <list default="true" id="c7270085-9483-4066-a9d4-0e381f5c6c93" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/apache/httpcomponents-client-4.3.3/tutorial/html/images/asf_logo_wide.gif" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/apache/httpcomponents-client-4.3.3/lib/commons-codec-1.6.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/apache/httpcomponents-client-4.3.3/lib/commons-logging-1.1.3.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/apache/httpcomponents-client-4.3.3/lib/fluent-hc-4.3.3.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/apache/httpcomponents-client-4.3.3/tutorial/html/images/hc_logo.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/apache/httpcomponents-client-4.3.3/lib/httpclient-4.3.3.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/apache/httpcomponents-client-4.3.3/lib/httpclient-cache-4.3.3.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/apache/httpcomponents-client-4.3.3/tutorial/pdf/httpclient-tutorial.pdf" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/apache/httpcomponents-client-4.3.3/lib/httpcore-4.3.2.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/apache/httpcomponents-client-4.3.3/lib/httpmime-4.3.3.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/apache/httpcomponents-client-4.3.3/examples/org/apache/http/examples/client/ClientAbortMethod.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/apache/httpcomponents-client-4.3.3/examples/org/apache/http/examples/client/ClientAuthentication.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/apache/httpcomponents-client-4.3.3/examples/org/apache/http/examples/client/ClientChunkEncodedPost.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/apache/httpcomponents-client-4.3.3/examples/org/apache/http/examples/client/ClientConfiguration.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/apache/httpcomponents-client-4.3.3/examples/org/apache/http/examples/client/ClientConnectionRelease.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/apache/httpcomponents-client-4.3.3/examples/org/apache/http/examples/client/ClientCustomContext.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/apache/httpcomponents-client-4.3.3/examples/org/apache/http/examples/client/ClientCustomSSL.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/apache/httpcomponents-client-4.3.3/examples/org/apache/http/examples/client/ClientEvictExpiredConnections.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/apache/httpcomponents-client-4.3.3/examples/org/apache/http/examples/client/ClientExecuteProxy.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/apache/httpcomponents-client-4.3.3/examples/org/apache/http/examples/client/ClientExecuteSOCKS.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/apache/httpcomponents-client-4.3.3/examples/org/apache/http/examples/client/ClientFormLogin.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/apache/httpcomponents-client-4.3.3/examples/org/apache/http/examples/client/ClientMultiThreadedExecution.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/apache/httpcomponents-client-4.3.3/examples/org/apache/http/examples/entity/mime/ClientMultipartFormPost.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/apache/httpcomponents-client-4.3.3/examples/org/apache/http/examples/client/ClientPreemptiveBasicAuthentication.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/apache/httpcomponents-client-4.3.3/examples/org/apache/http/examples/client/ClientPreemptiveDigestAuthentication.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/apache/httpcomponents-client-4.3.3/examples/org/apache/http/examples/client/ClientProxyAuthentication.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/apache/httpcomponents-client-4.3.3/examples/org/apache/http/examples/client/ClientWithRequestFuture.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/apache/httpcomponents-client-4.3.3/examples/org/apache/http/examples/client/ClientWithResponseHandler.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/transfer/FileTransferThread.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/apache/httpcomponents-client-4.3.3/examples/org/apache/http/client/fluent/FluentAsync.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/apache/httpcomponents-client-4.3.3/examples/org/apache/http/client/fluent/FluentExecutor.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/apache/httpcomponents-client-4.3.3/examples/org/apache/http/client/fluent/FluentQuickStart.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/apache/httpcomponents-client-4.3.3/examples/org/apache/http/client/fluent/FluentRequests.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/apache/httpcomponents-client-4.3.3/examples/org/apache/http/client/fluent/FluentResponseHandling.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/transfer/Test/HttpClientTest.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/apache/httpcomponents-client-4.3.3/LICENSE.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/apache/httpcomponents-client-4.3.3/NOTICE.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/apache/httpcomponents-client-4.3.3/examples/org/apache/http/examples/client/ProxyTunnelDemo.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/apache/httpcomponents-client-4.3.3/examples/org/apache/http/examples/client/QuickStart.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/apache/httpcomponents-client-4.3.3/README.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/apache/httpcomponents-client-4.3.3/RELEASE_NOTES.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/transfer/Test/Receive.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/apache/httpcomponents-client-4.3.3/tutorial/html/advanced.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/apache/httpcomponents-client-4.3.3/tutorial/html/authentication.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/apache/httpcomponents-client-4.3.3/tutorial/html/caching.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/apache/httpcomponents-client-4.3.3/tutorial/html/connmgmt.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/apache/httpcomponents-client-4.3.3/tutorial/html/fluent.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/apache/httpcomponents-client-4.3.3/tutorial/html/fundamentals.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/apache/httpcomponents-client-4.3.3/tutorial/html/css/hc-tutorial.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/apache/httpcomponents-client-4.3.3/tutorial/html/index.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/apache/httpcomponents-client-4.3.3/tutorial/html/preface.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/apache/httpcomponents-client-4.3.3/tutorial/html/statemgmt.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/transfer/DownloadCommand.java" afterPath="$PROJECT_DIR$/src/transfer/DownloadCommand.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/transfer/UploadCommand.java" afterPath="$PROJECT_DIR$/src/transfer/UploadCommand.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/transfer/Test/UploadCommandTest.java" afterPath="$PROJECT_DIR$/src/transfer/Test/UploadCommandTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+    </list>
     <ignored path="genomizer-Server.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -65,35 +124,21 @@
     <splitter split-orientation="horizontal" split-proportion="0.5">
       <split-first>
         <leaf>
-          <file leaf-file-name="Main.java" pinned="false" current="false" current-in-tab="false">
+          <file leaf-file-name="Main.java" pinned="false" current="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/Main.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="252">
-                  <caret line="2" column="24" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+                <state vertical-scroll-proportion="0.021582734" vertical-offset="0" max-vertical-offset="834">
+                  <caret line="1" column="13" selection-start-line="1" selection-start-column="13" selection-end-line="1" selection-end-column="13" />
                   <folding />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="UploadCommand.java" pinned="false" current="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/src/transfer/UploadCommand.java">
+          <file leaf-file-name="Annotaions.java" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/transfer/Annotaions.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.25239617" vertical-offset="159" max-vertical-offset="1368">
-                  <caret line="22" column="54" selection-start-line="22" selection-start-column="37" selection-end-line="22" selection-end-column="37" />
-                  <folding>
-                    <element signature="imports" expanded="true" />
-                    <element signature="e#934#935#0" expanded="true" />
-                    <element signature="e#961#962#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="DownloadCommand.java" pinned="false" current="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/transfer/DownloadCommand.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="432">
-                  <caret line="16" column="13" selection-start-line="16" selection-start-column="4" selection-end-line="16" selection-end-column="4" />
+                <state vertical-scroll-proportion="0.0" vertical-offset="180" max-vertical-offset="324">
+                  <caret line="10" column="25" selection-start-line="10" selection-start-column="25" selection-end-line="10" selection-end-column="25" />
                   <folding />
                 </state>
               </provider>
@@ -103,14 +148,43 @@
       </split-first>
       <split-second>
         <leaf>
+          <file leaf-file-name="Main.java" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/Main.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="0.0" vertical-offset="18" max-vertical-offset="288">
+                  <caret line="1" column="13" selection-start-line="1" selection-start-column="13" selection-end-line="1" selection-end-column="13" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="DownloadCommand.java" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/transfer/DownloadCommand.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="0.0" vertical-offset="36" max-vertical-offset="702">
+                  <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="UploadCommand.java" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/transfer/UploadCommand.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="0.0" vertical-offset="180" max-vertical-offset="1512">
+                  <caret line="10" column="16" selection-start-line="10" selection-start-column="16" selection-end-line="10" selection-end-column="16" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
           <file leaf-file-name="UploadCommandTest.java" pinned="false" current="true" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/transfer/Test/UploadCommandTest.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.36421725" vertical-offset="0" max-vertical-offset="939">
-                  <caret line="26" column="60" selection-start-line="26" selection-start-column="11" selection-end-line="26" selection-end-column="11" />
+                <state vertical-scroll-proportion="0.43165466" vertical-offset="0" max-vertical-offset="1134">
+                  <caret line="20" column="0" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
                   <folding>
-                    <element signature="e#827#828#0" expanded="true" />
-                    <element signature="e#887#888#0" expanded="true" />
+                    <element signature="imports" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -140,8 +214,8 @@
         <option value="$PROJECT_DIR$/src/transfer/Annotaions.java" />
         <option value="$PROJECT_DIR$/src/transfer/FileTransferThreadTest.java" />
         <option value="$PROJECT_DIR$/src/transfer/FileTransferThread.java" />
-        <option value="$PROJECT_DIR$/src/transfer/Test/UploadCommandTest.java" />
         <option value="$PROJECT_DIR$/src/transfer/UploadCommand.java" />
+        <option value="$PROJECT_DIR$/src/transfer/Test/UploadCommandTest.java" />
       </list>
     </option>
   </component>
@@ -176,8 +250,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -210,8 +282,50 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="genomizer-Server" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="genomizer-server" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="transfer" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="genomizer-Server" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="genomizer-server" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="transfer" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -227,8 +341,6 @@
     <property name="recentsLimit" value="5" />
     <property name="restartRequiresConfirmation" value="true" />
     <property name="dynamic.classpath" value="false" />
-    <property name="OverrideImplement.combined" value="true" />
-    <property name="OverrideImplement.overriding.sorted" value="false" />
   </component>
   <component name="RecentsManager">
     <key name="CreateTestDialog.Recents.Supers">
@@ -242,7 +354,7 @@
       <recent name="transfer" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.uploadCommandTest">
+  <component name="RunManager" selected="JUnit.fileTransferTest">
     <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
       <module name="" />
       <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m" />
@@ -372,12 +484,12 @@
       <option name="FILTER_LOGCAT_AUTOMATICALLY" value="true" />
       <method />
     </configuration>
-    <configuration default="false" name="uploadCommandTest" type="JUnit" factoryName="JUnit">
+    <configuration default="false" name="fileTransferTest" type="JUnit" factoryName="JUnit">
       <module name="genomizer-Server" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" value="" />
-      <option name="PACKAGE_NAME" value="transfer.Test" />
-      <option name="MAIN_CLASS_NAME" value="transfer.Test.UploadCommandTest" />
+      <option name="PACKAGE_NAME" value="transfer" />
+      <option name="MAIN_CLASS_NAME" value="transfer.FileTransferThreadTest" />
       <option name="METHOD_NAME" value="" />
       <option name="TEST_OBJECT" value="class" />
       <option name="VM_PARAMETERS" value="-ea" />
@@ -395,7 +507,7 @@
       <method />
     </configuration>
     <list size="1">
-      <item index="0" class="java.lang.String" itemvalue="JUnit.uploadCommandTest" />
+      <item index="0" class="java.lang.String" itemvalue="JUnit.fileTransferTest" />
     </list>
     <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
       <Host>localhost</Host>
@@ -420,24 +532,12 @@
       <created>1398426140995</created>
       <updated>1398426140995</updated>
     </task>
-    <task id="LOCAL-00003" summary="Added UploadCommand class and test">
-      <created>1398426560154</created>
-      <updated>1398426560154</updated>
-    </task>
-    <task id="LOCAL-00004" summary="Added UploadCommand class and test">
-      <created>1398428317735</created>
-      <updated>1398428317735</updated>
-    </task>
-    <task id="LOCAL-00005" summary="Added UploadCommand class and test">
-      <created>1398669603413</created>
-      <updated>1398669603413</updated>
-    </task>
-    <option name="localTasksCounter" value="6" />
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="37" width="2560" height="1403" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -446,10 +546,10 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24766356" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24766356" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32943925" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24727838" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32943925" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -463,31 +563,6 @@
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
-    <layout-to-restore>
-      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24766356" sideWeight="0.5" order="9" side_tool="true" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24766356" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32943925" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.12688942" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32943925" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-    </layout-to-restore>
   </component>
   <component name="Vcs.Log.UiProperties">
     <option name="RECENTLY_FILTERED_USER_GROUPS">
@@ -506,8 +581,8 @@
     </option>
     <MESSAGE value="filethread&#10;" />
     <MESSAGE value="remove filetransfer&#10;" />
-    <MESSAGE value="Added UploadCommand class and test" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added UploadCommand class and test" />
+    <MESSAGE value="Merge branch 'transfer' of github.com:genomizer/genomizer-server into transfer&#10;&#10;Conflicts:&#10;&#9;.idea/workspace.xml&#10;" />
+    <option name="LAST_COMMIT_MESSAGE" value="Merge branch 'transfer' of github.com:genomizer/genomizer-server into transfer&#10;&#10;Conflicts:&#10;&#9;.idea/workspace.xml&#10;" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -527,50 +602,37 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/transfer/UploadCommand.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="54" max-vertical-offset="594">
-          <caret line="3" column="39" selection-start-line="3" selection-start-column="28" selection-end-line="3" selection-end-column="28" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#934#935#0" expanded="true" />
-            <element signature="e#961#962#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/transfer/Test/UploadCommandTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="738">
-          <caret line="32" column="8" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
-          <folding>
-            <element signature="e#827#828#0" expanded="true" />
-            <element signature="e#887#888#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="18" max-vertical-offset="288">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="288">
           <caret line="1" column="13" selection-start-line="1" selection-start-column="13" selection-end-line="1" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/transfer/Command.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="36" max-vertical-offset="324">
-          <caret line="2" column="22" selection-start-line="2" selection-start-column="22" selection-end-line="2" selection-end-column="22" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/transfer/DownloadCommand.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="288" max-vertical-offset="432">
-          <caret line="16" column="13" selection-start-line="16" selection-start-column="4" selection-end-line="16" selection-end-column="4" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="36" max-vertical-offset="702">
+          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/transfer/UploadCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="180" max-vertical-offset="1512">
+          <caret line="10" column="16" selection-start-line="10" selection-start-column="16" selection-end-line="10" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/transfer/Test/UploadCommandTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="360" max-vertical-offset="1134">
+          <caret line="20" column="0" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -583,16 +645,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/transfer/Annotaions.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.21582733" vertical-offset="0" max-vertical-offset="834">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="324">
           <caret line="10" column="25" selection-start-line="10" selection-start-column="25" selection-end-line="10" selection-end-column="25" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/transfer/Command.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.23741007" vertical-offset="0" max-vertical-offset="834">
-          <caret line="11" column="63" selection-start-line="11" selection-start-column="1" selection-end-line="11" selection-end-column="1" />
           <folding />
         </state>
       </provider>
@@ -600,38 +654,33 @@
     <entry file="file://$PROJECT_DIR$/src/Main.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="252">
-          <caret line="2" column="24" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+          <caret line="1" column="13" selection-start-line="1" selection-start-column="13" selection-end-line="1" selection-end-column="13" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/transfer/DownloadCommand.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="432">
-          <caret line="16" column="13" selection-start-line="16" selection-start-column="4" selection-end-line="16" selection-end-column="4" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="198">
+          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/transfer/UploadCommand.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.25239617" vertical-offset="159" max-vertical-offset="1368">
-          <caret line="22" column="54" selection-start-line="22" selection-start-column="37" selection-end-line="22" selection-end-column="37" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#934#935#0" expanded="true" />
-            <element signature="e#961#962#0" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="342">
+          <caret line="10" column="16" selection-start-line="10" selection-start-column="16" selection-end-line="10" selection-end-column="16" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/transfer/Test/UploadCommandTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.36421725" vertical-offset="0" max-vertical-offset="939">
-          <caret line="26" column="60" selection-start-line="26" selection-start-column="11" selection-end-line="26" selection-end-column="11" />
+        <state vertical-scroll-proportion="0.43165466" vertical-offset="0" max-vertical-offset="1134">
+          <caret line="20" column="0" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
           <folding>
-            <element signature="e#827#828#0" expanded="true" />
-            <element signature="e#887#888#0" expanded="true" />
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
