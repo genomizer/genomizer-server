@@ -4,9 +4,9 @@ import java.util.HashMap;
 
 public class DBInterface {
 
-	/*Metoder som måste göras:
-	 * metod för att lägga ihop annotationer i sökning (te x where + blala AND + sdfsdfkdfl...)
-	 * metod som genererar sökvägar inkl filnamn (OCH SKAPAR MAPPAR)
+	/*Metoder som mÃ¥ste gÃ¶ras:
+	 * metod fÃ¶r att lÃ¤gga ihop annotationer i sÃ¶kning (te x where + blala AND + sdfsdfkdfl...)
+	 * metod som genererar sÃ¶kvÃ¤gar inkl filnamn (OCH SKAPAR MAPPAR)
 	 *r
 	 * */
 
@@ -52,22 +52,25 @@ public class DBInterface {
 	 * @param String newRole
 	 */
 	public void setUserPermissions(String userName, String newRole) {
-		//UPDATE USER SET Role = newRole WHERE Username = userName
+		//UPDATE UserInfo SET Role = newRole WHERE Username = userName
 	}
 
 	/**
-	 * Gets list of all users
+	 * RW & KK
+	 * 
+	 * Gets list of all usernames
 	 *
 	 * @return ArrayList<String>
 	 */
 	public ArrayList<String> getUsers() {
-		//SELECT * FROM User
+		//SELECT Username FROM UserInfo
 		return null;
 	}
 
 	/**
+	 * RW & KK
+	 * 
 	 * Adds a new user
-	 * Taken RW and KK!!!
 	 * @param String userName
 	 * @param String password
 	 * @param String role
@@ -77,13 +80,19 @@ public class DBInterface {
 	}
 
 	/**
+	 * RW & KK
+	 * OBS! No support for workspaces yet!
+	 * ie. Deletes a user from the UserInfo table.
+	 * 
+	 * To be extended to:
+	 * 
 	 * Deletes a user and his/her workspaces
 	 * Returns list of removed workspace(s) files
 	 *
 	 * @param String userName
 	 * @return ArrayList<AnnoObj>
 	 */
-	public ArrayList<AnnoObj> removeUser(String userName) {
+	public void deleteUser(String userName) {
 		//DELETE FROM Working_On WHERE (Username = userName)
 		//DELETE FROM UserInfo WHERE (Username = userName)
 		return null;
