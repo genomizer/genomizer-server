@@ -2,14 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c7270085-9483-4066-a9d4-0e381f5c6c93" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/transfer/Command.java" afterPath="$PROJECT_DIR$/src/transfer/Command.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/transfer/DownloadCommand.java" afterPath="$PROJECT_DIR$/src/transfer/DownloadCommand.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/transfer/FileTransferThread.java" afterPath="$PROJECT_DIR$/src/transfer/FileTransferThread.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/transfer/HttpURLDummy.java" afterPath="$PROJECT_DIR$/src/transfer/HttpURLDummy.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/transfer/Test/Receive.java" afterPath="$PROJECT_DIR$/src/transfer/Test/Receive.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/transfer/UploadCommand.java" afterPath="$PROJECT_DIR$/src/transfer/UploadCommand.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/transfer/Test/UploadCommandTest.java" afterPath="$PROJECT_DIR$/src/transfer/Test/UploadCommandTest.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="genomizer-Server.iws" />
@@ -81,6 +73,8 @@
                 <state vertical-scroll-proportion="0.115428574" vertical-offset="241" max-vertical-offset="1260">
                   <caret line="21" column="8" selection-start-line="21" selection-start-column="8" selection-end-line="21" selection-end-column="8" />
                   <folding>
+                    <element signature="e#406#407#0" expanded="true" />
+                    <element signature="e#449#450#0" expanded="true" />
                     <element signature="e#889#890#0" expanded="true" />
                     <element signature="e#916#917#0" expanded="true" />
                     <element signature="e#949#950#0" expanded="true" />
@@ -470,7 +464,11 @@
       <created>1398426140995</created>
       <updated>1398426140995</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Merge branch 'transfer' of github.com:genomizer/genomizer-server into transfer&#10;&#10;Conflicts:&#10;&#9;.idea/workspace.xml&#10;">
+      <created>1398688799221</created>
+      <updated>1398688799221</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -561,6 +559,8 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="180" max-vertical-offset="1512">
           <caret line="10" column="16" selection-start-line="10" selection-start-column="16" selection-end-line="10" selection-end-column="16" />
           <folding>
+            <element signature="e#406#407#0" expanded="true" />
+            <element signature="e#449#450#0" expanded="true" />
             <element signature="e#889#890#0" expanded="true" />
             <element signature="e#916#917#0" expanded="true" />
             <element signature="e#949#950#0" expanded="true" />
@@ -689,6 +689,8 @@
         <state vertical-scroll-proportion="0.115428574" vertical-offset="241" max-vertical-offset="1260">
           <caret line="21" column="8" selection-start-line="21" selection-start-column="8" selection-end-line="21" selection-end-column="8" />
           <folding>
+            <element signature="e#406#407#0" expanded="true" />
+            <element signature="e#449#450#0" expanded="true" />
             <element signature="e#889#890#0" expanded="true" />
             <element signature="e#916#917#0" expanded="true" />
             <element signature="e#949#950#0" expanded="true" />

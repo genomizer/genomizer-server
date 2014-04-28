@@ -4,7 +4,10 @@ import org.junit.Before;
 import org.junit.Test;
 import transfer.HttpURLDummy;
 
-import static org.junit.Assert.*;
+import java.net.MalformedURLException;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 
 /**
@@ -12,18 +15,25 @@ import static org.junit.Assert.*;
  */
 public class HttpURLTest {
     private HttpURLDummy dummy;
+
     @Before
-    public void setup(){
-        dummy = new HttpURLDummy();
-    }
-    @Test
-    public void shouldBeNull(){
-        assertNull(dummy);
+    public void setup() throws MalformedURLException {
+        dummy = new HttpURLDummy("http://www8.cs.umu.se/~c11epm/thailand/IMG_20131227_105730.jpg");
     }
 
     @Test
-    public void shouldReturnRequestMethod(){
+    public void shouldNotBeNull() {
+        assertNotNull(dummy);
+    }
 
+    @Test
+    public void shouldConnectToURL() {
+        assertTrue(dummy.connect());
+    }
+    @Test
+    public void shouldReadDataFromURL(){
+        shouldConnectToURL();
+        assertTrue(dummy.readData());
     }
 
 }
