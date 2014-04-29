@@ -152,7 +152,7 @@ public class TestDatabaseConnect {
 	public void testSearchByPubMed(){
 
 		String searchPubMed = "banankaka[ExpID] AND Human[Species]";
-
+		int indexCounter = 1;
 
 		PreparedStatement pStatement;
 
@@ -173,8 +173,10 @@ System.out.println("asdasd: " + query + "\n-----------\n");
 
 				//first adding the Label, then the Value
 
-				pStatement.setString(i+1, queryMaterial.getValues().get(i));
-				pStatement.setString(i+1, queryMaterial.getValues().get(i));
+				pStatement.setString(indexCounter, queryMaterial.getValues().get(indexCounter-1));
+				indexCounter++;
+				pStatement.setString(indexCounter, queryMaterial.getValues().get(indexCounter-1));
+				indexCounter++;
 
 System.out.println("Questionmark: " + i + " Value: " + queryMaterial.getValues().get(i));
 			}
