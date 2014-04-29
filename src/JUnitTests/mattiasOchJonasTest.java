@@ -7,10 +7,14 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import database.SearchResult;
 
 public class mattiasOchJonasTest {
 
@@ -21,6 +25,7 @@ public class mattiasOchJonasTest {
 	private static final String dbPass = "shielohh";
 
 	private Connection connection = null;
+	private SearchResult resultPackager = null;
 
 	@Before
 	public void setup(){
@@ -39,7 +44,7 @@ public class mattiasOchJonasTest {
 		try{
 
 			connection = DriverManager.getConnection(
-						dbConString, dbUser, dbPass);
+					dbConString, dbUser, dbPass);
 		}
 		catch (SQLException e) {
 
@@ -59,9 +64,40 @@ public class mattiasOchJonasTest {
 		}
 	}
 
+	//databse must contain values for following test to succeed.ArrayList
+	@Test
+	public void testSimpleSearchByAnnotation(){
+
+		String query = "SELECT * FROM File NATURAL JOIN Annotated_With " +
+					   "WHERE (Label = ? AND Value = ?)";
+
+		PreparedStatement pStatement;
+		try {
+			pStatement = connection.prepareStatement(query);
+			pStatement.setString(1, "Species");
+			pStatement.setString(2, "Human");
+
+			ResultSet res = pStatement.executeQuery();
+			resultPackager = new SearchResult(res);
+			resultPackager.printList();
+
+			if(res != null){
+				res.close();
+			}
+			pStatement.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
 	@Test
 	public void testCreateResultFormat() {
 
+		assertEquals(1,1);
+
+		/*
 		String id = "awe1123";
 		String specie = "Human";
 		String s = "M";
@@ -72,9 +108,11 @@ public class mattiasOchJonasTest {
 		String antiS = "C";
 		String antiB = "ntzzz";
 
-		String query = "INSERT INTO Experiment(ExpID, Species, Sex, Tissue," +
+		String query = "SELECT * FROM  Annotated_With(ExpID, Species, Sex, Tissue," +
 					   " CellType, DevStage, AntiName, Antisymbol, Antibody)"+
 					   " VALUES(?,?,?,?,?,?,?,?,?) RETURNING *";
+
+
 		ResultSet res = null;
 
 		try {
@@ -90,6 +128,16 @@ public class mattiasOchJonasTest {
 			pStatement.setString(9, antiB);
 
 			res = pStatement.executeQuery();
+
+			if(res != null){
+				res.close();
+			}
+			pStatement.close();
+
+		} catch (SQLException e) {
+			System.out.println("Error! Couldn't insert values,SQLException\n");
+			e.printStackTrace();
+		}*/
 	}
 
 }
