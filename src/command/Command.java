@@ -1,5 +1,8 @@
 package command;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 //import com.google.gson.Gson;
 //import com.google.gson.GsonBuilder;
 
@@ -35,6 +38,22 @@ public abstract class Command {
 
 		this.header = header;
 
+		//Remove this line later, just for testing.
+		tstPrintJSON();
+
 	}
+
+	//Remove this method later. Just for testing.
+	public void tstPrintJSON() {
+
+		//Create the builder.
+	    final GsonBuilder builder = new GsonBuilder();
+	    builder.excludeFieldsWithoutExposeAnnotation();
+	    final Gson gson = builder.create();
+
+	    System.out.println(gson.toJson(this));
+
+	}
+
 
 }

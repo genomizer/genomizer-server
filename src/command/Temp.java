@@ -19,21 +19,24 @@ public class Temp {
 		    CommandType cmdt = CommandType.LOGIN_COMMAND;
 
 		    //Create JSON to initiate class with.
-		    String json = "";
+		    String json = "{\"username\": \"uname\", \"password\": \"pw\"}";
 
 		    //Create restful.
 		    String restful = "";
 
 		    //Create the COMMAND.
-		    cmdh.doStuff(json, restful, cmdt);
+		    Response rsp = cmdh.doStuff(json, restful, cmdt);
 
+		    if(rsp == null) {
 
-		    final Command lCom = new LoginCommand();
-		    String [] values = new String[4];
-		    values[0] = "A";
-		    values[1] = "B";
-		    values[2] = "C";
-		    values[3] = "D";
+		    	System.out.println("WORKING.");
+
+		    } else {
+
+		    	System.out.println("NOT WORKING");
+
+		    }
+
 
 		    //Create the JSON STRING from object and print it.
 
