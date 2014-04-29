@@ -88,17 +88,21 @@ public class SearchResult {
 	 * Returns the values of a row. Parameters: row number
 	 *
 	 * @param int rowNr
-	 * @return ArrayList<String>
+	 * @return ArrayList<String> or null if failed.
 	 */
 	public ArrayList<String> getRowValues(int rowNr) {
 		ArrayList<String> valuesList = new ArrayList<String>();
-		HashMap<String, String> rowData = resultList.get(rowNr);
 
-		for (int i = 0; i < nameList.size(); i++) {
-			valuesList.add(rowData.get(nameList.get(i)));
+		if(rowCount > 0){
+
+			HashMap<String, String> rowData = resultList.get(rowNr);
+
+			for (int i = 0; i < nameList.size(); i++) {
+				valuesList.add(rowData.get(nameList.get(i)));
+			}
+			return valuesList;
 		}
-
-		return valuesList;
+		return null;
 	}
 
 	/**

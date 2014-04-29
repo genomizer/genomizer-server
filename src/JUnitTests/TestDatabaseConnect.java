@@ -157,8 +157,8 @@ public class TestDatabaseConnect {
 	public void testSearchByPubMed(){
 
 //		String searchPubMed = "Human[Species]";
-		//String searchPubMed = "banankaka[ExpID] AND Human[Species] AND 1[FileID] AND asdmas[Species] AND Human[Species]";
-		String searchPubMed = "Sven[Author] AND banank[ExpID]";
+		String searchPubMed = "banankaka[ExpID] AND Human[Species]";
+//		String searchPubMed = "Sven[Author] AND banankaka[ExpID]";
 
 		SearchResult queryRes = new SearchResult();
 
@@ -192,8 +192,10 @@ System.out.println("asdasd: " + query + "\n-----------\n");
 				System.out.print(resultHeader.get(i) + "	|");
 			}
 			System.out.println("\n-----------------------------------------------------------------------------------");
-			for(int i=0;i<result.size();i++){
-				System.out.print(result.get(i) + "	|");
+			if(result != null){
+				for(int i=0;i<result.size();i++){
+					System.out.print(result.get(i) + "	|");
+				}
 			}
 
 
