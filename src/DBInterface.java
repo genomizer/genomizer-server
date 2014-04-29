@@ -48,6 +48,7 @@ public class DBInterface {
 	}
 
 	/**
+	 * RW & KK
 	 * Sets user role
 	 *
 	 * @param String userName

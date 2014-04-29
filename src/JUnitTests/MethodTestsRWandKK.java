@@ -5,7 +5,6 @@ import static org.junit.Assert.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import junit.framework.TestCase;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -70,6 +69,22 @@ public class MethodTestsRWandKK {
     }
 
     @Test
+    public void shouldBeAbleToResetPassword() throws Exception {
+        String newPassword = "newPass_fghaiouwgfrib237845";
+
+        String pass = dbac.getPassword(testUser);
+        assertEquals(testPassword, pass);
+
+        int res = dbac.resetPassword(testUser, newPassword);
+        assertEquals(1, res); // Check one tuple was updated
+
+        pass = dbac.getPassword(testUser);
+        assertEquals(newPassword, pass);
+    }
+
+
+
+    @Test
     public void shouldBeAbleToDeleteUser() throws Exception {
 
         dbac.deleteUser(testUser);
@@ -78,4 +93,28 @@ public class MethodTestsRWandKK {
         assertFalse(users.contains(testUser));
     }
 
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
