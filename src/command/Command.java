@@ -14,25 +14,27 @@ package command;
  */
 public abstract class Command {
 
+	//Used to get the header for the respons.
+	private String header;
+
 	//Used to validate the class object.
 	public abstract boolean validate();
-
-	//Initiate JSON. (Remove later)
-	public abstract void initiateJson(String[] values); //TODO: Should probably be removed/changed since GSON solves these problems. (there for testing)
 
 	//Method used to run command.
 	public abstract void execute();
 
-	//Creates a JSON String.
-	/*
-	public String createJson() {
+	//Method used to get the header.
+	public String getHeader() {
 
-		//Create the builder.
-	    final GsonBuilder builder = new GsonBuilder();
-	    builder.excludeFieldsWithoutExposeAnnotation();
-	    final Gson gson = builder.create();
+		return header;
 
-		return gson.toJson(this);
 	}
-	*/
+
+	//Method used to set header.
+	public void setHeader(String header) {
+
+		this.header = header;
+
+	}
+
 }
