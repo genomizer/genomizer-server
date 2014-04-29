@@ -37,10 +37,12 @@ public class CommandHandler {
 
 		Command myCom = createCommand(cmdt, json, restful);
 
-		//Initiate command (placeholder)
-		//TODO: What kind of work?
+		//TODO: What kind of work? returns respons.
 		myCom.execute();
 
+		//Create respons
+
+		//Return respons.
 	}
 
 	/**
@@ -59,6 +61,16 @@ public class CommandHandler {
 			//Create cmd
 			newCommand = cmdFactory.createLoginCommand(json, restful);
 
+
+		} else if (cmdt == CommandType.LOGOUT_COMMAND) {
+
+			//Create cmd
+			newCommand = cmdFactory.createLogoutCommand(restful);
+
+		} else if (cmdt == CommandType.RETRIEVE_EXPERIMENT_COMMAND) {
+
+			//Create cmd
+			newCommand = cmdFactory.createLogoutCommand(restful);
 
 		} else if (cmdt == CommandType.EXPERIMENT_COMMAND) {
 

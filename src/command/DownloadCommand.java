@@ -46,15 +46,6 @@ public class DownloadCommand extends Command {
 
 	}
 
-	@Override
-	public void initiateJson(String[] values) {
-
-		attr1 = values[0];
-		attr2 = values[1];
-		attr3 = values[2];
-		attr4 = values[3];
-	}
-
 	/**
 	 * Runs the actual code that is used to execute the
 	 * download.

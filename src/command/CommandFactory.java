@@ -47,9 +47,32 @@ public class CommandFactory {
 	 */
 	public Command createLoginCommand(String json, String restful) {
 
-		return null;
+		//Create command with json.
+		final Command loginCmd = gson.fromJson(json, LoginCommand.class);
+
+		//Set headers
+		loginCmd.setHeader(restful);
+
+		return loginCmd;
 
 	}
+
+	/**
+	 * Used to create logout command.
+	 * @param restful
+	 * @return
+	 */
+	public Command createLogoutCommand(String restful) {
+
+		//Create command with json.
+		final Command logoutCmd = new LogoutCommand();
+
+		//Set headers
+		logoutCmd.setHeader(restful);
+
+		return logoutCmd;
+	}
+
 
 	/**
 	 * Used to create the command needed for sysadmin.
@@ -108,7 +131,13 @@ public class CommandFactory {
 	 */
 	public Command createSearchCommand(String json, String restful) {
 
-		return null;
+		//Create command with json.
+		final Command searchCmd = new SearchCommand();
+
+		//Set headers
+		searchCmd.setHeader(restful);
+
+		return searchCmd;
 
 	}
 
@@ -123,10 +152,11 @@ public class CommandFactory {
 		//Create command with json.
 		final Command downloadCmd = gson.fromJson(json, DownloadCommand.class);
 
+		//Set restful header
+
 		//Get info from restful.
 		@SuppressWarnings("unused")
 		String[] stuff;							//TODO: Placeholder. Remove later... initiates the command...
-		downloadCmd.initiateJson(null);
 
 
 		return downloadCmd;
