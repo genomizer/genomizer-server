@@ -72,7 +72,7 @@ public class DatabaseQueryTests {
 	public void testSimpleSearchByAnnotation(){
 
 		String query = "SELECT * FROM File NATURAL JOIN Annotated_With " +
-					   "WHERE (? = ? AND ? = ?   )";
+					   "WHERE ((Label = ? AND Value = ?) AND (Label = ? AND ? = ?))";
 
 		PreparedStatement pStatement;
 

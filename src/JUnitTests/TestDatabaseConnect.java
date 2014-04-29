@@ -154,9 +154,8 @@ public class TestDatabaseConnect {
 	@Test
 	public void testSearchByPubMed(){
 
-		String searchPubMed = "banankaka[ExpID] AND Human[Species]";
-		String searchPubMed = "banankaka[ExpID] AND Human[Species] AND 1[FileID] AND Human[Species] AND Human[Species]";
-		int indexCounter = 1;
+		String searchPubMed = "Human[Species]";
+		//String searchPubMed = "banankaka[ExpID] AND Human[Species] AND 1[FileID] AND asdmas[Species] AND Human[Species]";
 		SearchResult queryRes = new SearchResult();
 
 		PreparedStatement pStatement;
@@ -172,33 +171,37 @@ public class TestDatabaseConnect {
 System.out.println("asdasd: " + query + "\n-----------\n");
 		try {
 			pStatement = dbCon.prepareStatement(query);
-			for(int i = 0;i < queryMaterial.getValues().size();i++){
+			for(int i = 1;i < queryMaterial.getValues().size();i++){
 
 				//first adding the Label, then the Value
 
-				pStatement.setString(indexCounter, queryMaterial.getValues().get(indexCounter-1));
-System.out.print("Read: " + queryMaterial.getValues().get(indexCounter-1));
-				indexCounter++;
-				pStatement.setString(indexCounter, queryMaterial.getValues().get(indexCounter-1));
-System.out.println(" = " + queryMaterial.getValues().get(indexCounter-1));
-				indexCounter++;
-
+				pStatement.setString(i, queryMaterial.getValues().get(i-1));
+				i++;
+				pStatement.setString(i, queryMaterial.getValues().get(i-1));
 			}
-
 			ResultSet res = pStatement.executeQuery();
 
+
+
+//try {
+//	while (res.next()) {
+//		String name = res.getString("FileID");
+//		System.out.println("Name : " + name);
+//	}
+//} catch (SQLException e) {
+//	e.printStackTrace();
+//}
 
 			queryRes.setResultData(res);
 			ArrayList<String> result = queryRes.getRowValues(0);
 			ArrayList<String> resultHeader = queryRes.getColHeaders();
 
-
 			for(int i=0;i<resultHeader.size();i++){
-				System.out.print(resultHeader.get(i) + "|");
+				System.out.print(resultHeader.get(i) + "	|");
 			}
-			System.out.println();
+			System.out.println("\n-----------------------------------------------------------");
 			for(int i=0;i<result.size();i++){
-				System.out.print(result.get(i) + "|");
+				System.out.print(result.get(i) + "	|");
 			}
 
 

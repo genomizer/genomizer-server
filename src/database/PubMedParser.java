@@ -75,7 +75,7 @@ public class PubMedParser {
 				valueList.add(totStr.substring(k, startklam -1));
 
 				totStr.delete(k, endklam +1);
-				String appendString = "? = ?";
+				String appendString = "(Label = ? AND Value = ?)";
 				totStr.insert(k, appendString);
 				i = k + appendString.length();
 			}
