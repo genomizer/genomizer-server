@@ -7,8 +7,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.junit.After;
 import org.junit.Before;
@@ -64,33 +62,7 @@ public class SearchResultTest {
 		}
 	}
 
-	//databse must contain values for following test to succeed.ArrayList
-	@Test
-	public void testSimpleSearchByAnnotation(){
 
-		String query = "SELECT * FROM File NATURAL JOIN Annotated_With " +
-					   "WHERE (Label = ? AND Value = ?)";
-
-		PreparedStatement pStatement;
-		try {
-			pStatement = connection.prepareStatement(query);
-			pStatement.setString(1, "Species");
-			pStatement.setString(2, "Human");
-
-			ResultSet res = pStatement.executeQuery();
-			resultPackager = new SearchResult(res);
-			resultPackager.printList();
-
-			if(res != null){
-				res.close();
-			}
-			pStatement.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
 
 	@Test
 	public void testCreateResultFormat() {

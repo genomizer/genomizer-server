@@ -11,6 +11,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import database.SearchResult;
+
 public class DatabaseQueryTests {
 
 	private static final String dbDriver = "org.postgresql.Driver";
@@ -63,50 +65,30 @@ public class DatabaseQueryTests {
 		assertNotNull(connection);
 	}
 
-	@Test
-	public void testAddExperimentToDatabase() {
-		//INSERT INTO UserInfo(Username, Password, Role) VALUES(userName, password, role)
-		String id = "awe1123";
-		String specie = "Human";
-		String s = "M";
-		String tis = "arm";
-		String cell = "yes";
-		String devS = "Early";
-		String antiN = "cooltName";
-		String antiS = "C";
-		String antiB = "ntzzz";
+	//databse must contain values for following test to succeed.ArrayList
+		@Test
+	public void testSimpleSearchByAnnotation(){
 
-		String query = "INSERT INTO Experiment(ExpID, Species, Sex, Tissue," +
-					   " CellType, DevStage, AntiName, Antisymbol, Antibody)"+
-					   " VALUES(?,?,?,?,?,?,?,?,?) RETURNING *";
-		ResultSet res = null;
+		String query = "SELECT * FROM File NATURAL JOIN Annotated_With " +
+					   "WHERE (Label = ? AND Value = ?)";
 
+		PreparedStatement pStatement;
 		try {
-			PreparedStatement pStatement = connection.prepareStatement(query);
-			pStatement.setString(1, id);
-			pStatement.setString(2, specie);
-			pStatement.setString(3, s);
-			pStatement.setString(4, tis);
-			pStatement.setString(5, cell);
-			pStatement.setString(6, devS);
-			pStatement.setString(7, antiN);
-			pStatement.setString(8, antiS);
-			pStatement.setString(9, antiB);
+			pStatement = connection.prepareStatement(query);
+			pStatement.setString(1, "Species");
+			pStatement.setString(2, "Human");
 
-			res = pStatement.executeQuery();
+			ResultSet res = pStatement.executeQuery();
+
 
 			if(res != null){
 				res.close();
 			}
 			pStatement.close();
-
 		} catch (SQLException e) {
-			System.out.println("Error! Couldn't insert values,SQLException\n");
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-
-
 	}
 
 
