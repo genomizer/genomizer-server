@@ -38,14 +38,10 @@ public class CommandHandler {
 		Command myCom = createCommand(cmdt, json, restful);
 
 		//TODO: What kind of work? returns respons.
-		myCom.execute();
-
-		//Create respons
-
-		Response lrs = new LoginResponse(200, "hej");
+		Response rsp = myCom.execute();
 
 		//Return respons.
-		return lrs;
+		return rsp;
 	}
 
 	/**
