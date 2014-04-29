@@ -1,14 +1,15 @@
 package authentication;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.UUID;
 
 public class Authenticate {
 
-	private ArrayList<String> activeUsers;
+	static private HashMap<String, String> activeUsersID = new HashMap<String,String>();
 
 	public Authenticate(){
-		activeUsers=new ArrayList<String>();
+	//	activeUsersID=new ArrayList<String>();
 	}
 
 	static public String createUserID(String username){
@@ -17,11 +18,13 @@ public class Authenticate {
 
 	}
 
-	public void addUser(String userID){
-		activeUsers.add(userID);
+	static public void addUser(String username,String userID){
+		activeUsersID.put(username, userID);
 	}
 
-	public boolean checkUser(String userID){
-		return activeUsers.contains(userID);
+	static public boolean checkUser(String username){
+		System.out.println(activeUsersID);
+		return activeUsersID.containsKey(username);
+		
 	}
 }

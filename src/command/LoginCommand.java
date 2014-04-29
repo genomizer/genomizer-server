@@ -44,9 +44,14 @@ public class LoginCommand extends Command {
 
 	@Override
 	public void execute() {
-
-		authenticate.createUserID(username);
-		// TODO Auto-generated method stub
+		if(Authenticate.checkUser(username)){
+		//bugg if username is exactly the same as the UUID
+			System.out.println("Användaren fanns");
+		}else{
+			Authenticate.addUser(username,Authenticate.createUserID(username));
+			System.out.println("skapar användare");
+		}
+			// TODO Auto-generated method stub
 
 	}
 
