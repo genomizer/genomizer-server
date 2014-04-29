@@ -215,12 +215,18 @@ public class DatabaseAccessor {
 
 
     //NMP
+    /**
+     *
+     * @param searchPubMed
+     * @return null if failed, else a SearchResult object.
+     */
     public SearchResult searchExperiment(String searchPubMed){
 
-    	PreparedStatement pStatement;
+		SearchResult queryRes = new SearchResult();
+		PreparedStatement pStatement;
 
-    	String query = "SELECT * FROM File NATURAL JOIN Annotated_With " +
-					   "WHERE (";
+		String query = "SELECT * FROM File NATURAL JOIN Annotated_With " +
+				"WHERE (";
 
 		//getting the where-statements from pubmed string to usable query.
 		PubMedParser theParser = new PubMedParser();
@@ -228,19 +234,19 @@ public class DatabaseAccessor {
 
 		query = query + queryMaterial.getWhereString() + ")";
 
-System.out.println("asdasd: " + query);
-
 		try {
 			pStatement = conn.prepareStatement(query);
-			for(int i = 0;i < queryMaterial.getValues().size();i++){
-				pStatement.setString(i+1, queryMaterial.getValues().get(i));
+			for(int i = 1;i < queryMaterial.getValues().size();i++){
+
+				//first adding the Label, then the Value
+				pStatement.setString(i, queryMaterial.getValues().get(i-1));
+				i++;
+				pStatement.setString(i, queryMaterial.getValues().get(i-1));
 			}
 
 			ResultSet res = pStatement.executeQuery();
 
-			SearchResult queryRes = new SearchResult();
 			queryRes.setResultData(res);
-
 			return queryRes;
 
 		} catch (SQLException e) {
