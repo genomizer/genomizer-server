@@ -1,6 +1,9 @@
 package command;
 
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+//TODO: Test JSON - convert.
 
 /**
  * Class used to retrieve an experiment.
@@ -12,14 +15,14 @@ public class RetrieveExperimentCommand extends Command {
 
 	@Expose
 	private String name;
-	
+
+	@SerializedName("created by")
 	@Expose
 	private String created_by;
-	
-	//@Expose
-	//private String[] annotations;
-	
-	
+
+	@Expose
+	private Annotations annotations = new Annotations();
+
 	/**
 	 * Empty constructor.
 	 */
@@ -42,20 +45,44 @@ public class RetrieveExperimentCommand extends Command {
 
 	}
 
+	/**
+	 * Class used to store annotation.
+	 * @author tfy09jnn
+	 * @version 1.0
+	 */
+	class Annotations {
+
+		@Expose
+		private String pubmedId;
+
+		@Expose
+		private String type;
+
+		@Expose
+		private String specie;
+
+		@Expose
+		private String genoRelease;
+
+		@Expose
+		private String cellLine;
+
+		@Expose
+		private String devStage;
+
+		@Expose
+		private String sex;
+
+		@Expose
+		private String tissue;
+
+		/**
+		 * Empty constructor.
+		 */
+		public Annotations() {
+
+		}
+
+	}
+
 }
-/*
-{
-"name": "experimentName",
-"created by": "user",
-"annotations": {
-        "pubmedId": "ex23",
-        "type": "raw",
-        "specie": "human",
-        "genoRelease": "v1.23",
-        "cellLine": "yes",
-        "devStage": "larva",
-        "sex": "male",
-        "tissue": "eye"
-}
-}
-*/

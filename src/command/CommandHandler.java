@@ -42,8 +42,10 @@ public class CommandHandler {
 
 		//Create respons
 
+		Response lrs = new LoginResponse(200, "hej");
+
 		//Return respons.
-		return null;
+		return lrs;
 	}
 
 	/**
