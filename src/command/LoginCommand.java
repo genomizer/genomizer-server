@@ -14,7 +14,7 @@ public class LoginCommand extends Command {
 	private String username;
 
 	@Expose
-	private String pw;
+	private String password;
 
 	/* This class responds on success only
 	 * with header = 200 (OK).
