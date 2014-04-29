@@ -23,6 +23,8 @@ public class DatabaseQueryTests {
 
 	private Connection connection = null;
 
+	private ResultSet res = null;
+
 	@Before
 	public void setup(){
 
@@ -66,28 +68,27 @@ public class DatabaseQueryTests {
 	}
 
 	//databse must contain values for following test to succeed.ArrayList
-		@Test
+	@Test
 	public void testSimpleSearchByAnnotation(){
 
 		String query = "SELECT * FROM File NATURAL JOIN Annotated_With " +
-					   "WHERE (Label = ? AND Value = ?)";
+					   "WHERE (? = ? AND ? = ?   )";
 
 		PreparedStatement pStatement;
+
 		try {
 			pStatement = connection.prepareStatement(query);
-			pStatement.setString(1, "Species");
-			pStatement.setString(2, "Human");
+			pStatement.setString(1, "Label");
+			pStatement.setString(2, "Species");
+			pStatement.setString(3, "Value");
+			pStatement.setString(4, "Human");
 
-			ResultSet res = pStatement.executeQuery();
+			res = pStatement.executeQuery();
 
+			assertNotNull(res);
 
-			if(res != null){
-				res.close();
-			}
-			pStatement.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Failed to connect to database and send query\n");
 		}
 	}
 
