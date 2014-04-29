@@ -15,7 +15,20 @@ public class Temp {
 		    final Gson gson = builder.create();
 
 		    //Create the class to convert to JSON and fill it.
-		    final Command dCom = new DownloadCommand();
+		    CommandHandler cmdh = new CommandHandler();
+		    CommandType cmdt = CommandType.LOGIN_COMMAND;
+
+		    //Create JSON to initiate class with.
+		    String json = "";
+
+		    //Create restful.
+		    String restful = "";
+
+		    //Create the COMMAND.
+		    cmdh.doStuff(json, restful, cmdt);
+
+
+		    final Command lCom = new LoginCommand();
 		    String [] values = new String[4];
 		    values[0] = "A";
 		    values[1] = "B";
