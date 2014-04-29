@@ -21,7 +21,6 @@ public class Temp {
 		    values[1] = "B";
 		    values[2] = "C";
 		    values[3] = "D";
-		    dCom.initiateJson(values);
 
 		    //Create the JSON STRING from object and print it.
 

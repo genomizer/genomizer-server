@@ -29,13 +29,6 @@ public class SearchCommand extends Command {
 
 	}
 
-	@Override
-	public void initiateJson(String[] values) {
-
-		// TODO Auto-generated method stub
-
-	}
-
 	/**
 	 * Runs the actual code needed to search
 	 * the database.

@@ -8,7 +8,6 @@ package command;
  */
 public class UploadCommand extends Command {
 
-
 	/**
 	 * Used to validate the correctness of the
 	 * class when built.
@@ -19,16 +18,6 @@ public class UploadCommand extends Command {
 		// TODO Auto-generated method stub (Should maybe be private?)
 
 		return false;
-	}
-
-	/**
-	 * Tmp class used to initiate the class for testing.
-	 */
-	@Override
-	public void initiateJson(String[] values) {
-
-		// TODO Auto-generated method stub
-
 	}
 
 	/**

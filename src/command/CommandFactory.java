@@ -47,7 +47,12 @@ public class CommandFactory {
 	 */
 	public Command createLoginCommand(String json, String restful) {
 
-		return null;
+		//Create command with json.
+		final Command loginCmd = gson.fromJson(json, LoginCommand.class);
+
+		//Set headers
+
+		return loginCmd;
 
 	}
 
@@ -123,10 +128,11 @@ public class CommandFactory {
 		//Create command with json.
 		final Command downloadCmd = gson.fromJson(json, DownloadCommand.class);
 
+		//Set restful header
+
 		//Get info from restful.
 		@SuppressWarnings("unused")
 		String[] stuff;							//TODO: Placeholder. Remove later... initiates the command...
-		downloadCmd.initiateJson(null);
 
 
 		return downloadCmd;

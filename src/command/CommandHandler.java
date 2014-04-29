@@ -38,6 +38,7 @@ public class CommandHandler {
 		Command myCom = createCommand(cmdt, json, restful);
 
 		//Initiate command (placeholder)
+
 		//TODO: What kind of work?
 		myCom.execute();
 
