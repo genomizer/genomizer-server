@@ -72,10 +72,10 @@ public class PubMedParser {
 				k++;
 
 				valueList.add(totStr.substring(k, startklam -1));
-
+				valueList.add(s);
 
 				totStr.delete(k, endklam +1);
-				String appendString = s + " = ?";
+				String appendString = "? = ?";
 				totStr.insert(k, appendString);
 			}
 		}
