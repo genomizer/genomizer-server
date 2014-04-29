@@ -1,5 +1,6 @@
 package databaseAccessor;
 
+import java.io.IOException;
 import java.sql.Connection;
 
 import java.sql.DriverManager;
@@ -139,6 +140,10 @@ public class DatabaseAccessor {
 
     public int deleteAnnotation(String label) throws SQLException {
 
+        if (getAnnotationType(label) == null) {
+            return 0;
+        }
+
         if (getAnnotationType(label).equals("DropDown")) {
             removeChoices(label);
         }
@@ -163,7 +168,11 @@ public class DatabaseAccessor {
     }
 
     public int addDropDownAnnotation(String label, ArrayList<String> choices)
-            throws SQLException {
+            throws SQLException, IOException {
+
+        if (choices.isEmpty()) {
+            throw new IOException("Must specify at least one choice");
+        }
 
         int tuplesInserted = 0;
 
@@ -194,6 +203,7 @@ public class DatabaseAccessor {
         		"WHERE (Label = ?)";
         ArrayList<String> dropDownStrings = new ArrayList<String>();
         PreparedStatement getDropDownStrings = conn.prepareStatement(query);
+        getDropDownStrings.setString(1, label);
         ResultSet rs = getDropDownStrings.executeQuery();
         while (rs.next()) {
             dropDownStrings.add(rs.getString("Value"));
@@ -203,6 +213,8 @@ public class DatabaseAccessor {
 
 
 
+
+    //NMP
     public SearchResult searchExperiment(String searchPubMed){
 
     	PreparedStatement pStatement;

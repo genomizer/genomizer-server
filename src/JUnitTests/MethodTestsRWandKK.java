@@ -2,6 +2,7 @@ package JUnitTests;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Map;
@@ -16,7 +17,14 @@ import databaseAccessor.DatabaseAccessor;
 public class MethodTestsRWandKK {
     public static String testUser = "testUser_jhasdfv";
     public static String testPassword = "secret";
+    public static String testNewPassword = "secret2";
     public static String testRole = "admin";
+    public static String testNewRole = "admin2";
+
+    public static String testAnnotationLabel = "annotation_label_1234rwt";
+    public static ArrayList<String> testChoices = new ArrayList<String>();
+    public static String testChoice = "test_choice_1234rwt";
+
 
     public static DatabaseAccessor dbac;
 
@@ -27,6 +35,9 @@ public class MethodTestsRWandKK {
         String password = "shielohh";
         String host = "postgres";
         String database = "c5dv151_vt14";
+
+        testChoices.add(testChoice);
+        testChoices.add(testChoice + "2");
 
 
         // Ruaridh's DB Info (Comment out when at school)
@@ -60,107 +71,137 @@ public class MethodTestsRWandKK {
 
         users = dbac.getUsers();
         assertTrue(users.contains(testUser));
+        dbac.deleteUser(testUser);
+    }
+
+    @Test
+    public void shouldBeAbleToDeleteUser() throws Exception {
+
+        dbac.addUser(testUser, testPassword, testRole);
+
+        ArrayList<String> users = dbac.getUsers();
+        assertTrue(users.contains(testUser));
+
+        dbac.deleteUser(testUser);
+
+        users = dbac.getUsers();
+        assertFalse(users.contains(testUser));
     }
 
     @Test
     public void shouldBeAbleToGetPassword() throws Exception {
 
+        dbac.addUser(testUser, testPassword, testRole);
+
         String password = dbac.getPassword(testUser);
         assertEquals(testPassword, password);
+        dbac.deleteUser(testUser);
     }
 
     @Test
     public void shouldBeAbleToResetPassword() throws Exception {
-        String newPassword = "newPass_fghaiouwgfrib237845";
+
+        dbac.addUser(testUser, testPassword, testRole);
 
         String pass = dbac.getPassword(testUser);
         assertEquals(testPassword, pass);
 
-        int res = dbac.resetPassword(testUser, newPassword);
+        int res = dbac.resetPassword(testUser, testNewPassword);
         assertEquals(1, res); // Check one tuple was updated
 
         pass = dbac.getPassword(testUser);
-        assertEquals(newPassword, pass);
+        assertEquals(testNewPassword, pass);
+        dbac.deleteUser(testUser);
     }
 
     @Test
     public void shouldBeAbleToSetUserPermissions() throws Exception {
-        String role = testRole + "new_dhdhdfh";
-        dbac.setRole(testUser, role);
 
-        assertEquals(dbac.getRole(testUser), role);
-    }
+        dbac.addUser(testUser, testPassword, testRole);
 
+        assertEquals(testRole, dbac.getRole(testUser));
 
-    @Test
-    public void shouldBeAbleToDeleteUser() throws Exception {
+        dbac.setRole(testUser, testNewRole);
+
+        assertEquals(testNewRole, dbac.getRole(testUser));
 
         dbac.deleteUser(testUser);
-
-        ArrayList<String> users = dbac.getUsers();
-        assertFalse(users.contains(testUser));
     }
 
     @Test
     public void shouldBeAbleToAddFreeTextAnnotaion() throws Exception {
 
-        String label = "freetext_annotation_label";
-
-        dbac.addFreeTextAnnotation(label);
+        dbac.addFreeTextAnnotation(testAnnotationLabel);
 
         Map<String, String> annotations = dbac.getAnnotations();
-        assertEquals("FreeText", annotations.get(label));
+        assertEquals("FreeText", annotations.get(testAnnotationLabel));
+
+        dbac.deleteAnnotation(testAnnotationLabel);
     }
 
     @Test
     public void shouldBeAbleToDeleteFreeTextAnnotaion() throws Exception {
 
-        String label = "freetext_annotation_label";
-
-        dbac.deleteAnnotation(label);
-
+        dbac.addFreeTextAnnotation(testAnnotationLabel);
         Map<String, String> annotations = dbac.getAnnotations();
-        assertFalse(annotations.containsKey(label));
+        assertTrue(annotations.containsKey(testAnnotationLabel));
+
+        dbac.deleteAnnotation(testAnnotationLabel);
+
+        annotations = dbac.getAnnotations();
+        assertFalse(annotations.containsKey(testAnnotationLabel));
     }
 
     @Test
-    public void shouldBeAbleToAddDropDownAnnotation() throws SQLException {
+    public void shouldBeAbleToAddDropDownAnnotation() throws Exception {
 
-        String label = "drop_down_annotation_label";
-        ArrayList<String> choices = new ArrayList<String>();
-        choices.add("choice1");
-        choices.add("choice2");
-
-        dbac.addDropDownAnnotation(label, choices);
+        dbac.addDropDownAnnotation(testAnnotationLabel, testChoices);
         Map<String, String> annotations = dbac.getAnnotations();
-        assertEquals("DropDown", annotations.get(label));
-    }
-
-    public void shouldHaveChoicesForDropDownAnnotation() throws Exception {
-        String label = "drop_down_annotation_label";
-        ArrayList<String> dropDownStrings= dbac.getDropDownAnnotations(label);
-
-        assertTrue(dropDownStrings.contains("choice1"));
-        assertTrue(dropDownStrings.contains("choice2"));
-        assertEquals(2, dropDownStrings.size());
+        assertEquals("DropDown", annotations.get(testAnnotationLabel));
+        dbac.deleteAnnotation(testAnnotationLabel);
     }
 
     @Test
     public void shouldBeAbleToDeleteDropDownAnnotation() throws Exception {
 
+        dbac.addDropDownAnnotation(testAnnotationLabel, testChoices);
+        Map<String, String> annotations = dbac.getAnnotations();
+        assertEquals("DropDown", annotations.get(testAnnotationLabel));
+
+        assertEquals(1, dbac.deleteAnnotation(testAnnotationLabel));
+        annotations = dbac.getAnnotations();
+        assertFalse(annotations.containsKey(testAnnotationLabel));
+    }
+
+    @Test(expected = IOException.class)
+    public void shouldNotAddDropDownAnnotationWithNoChoices() throws Exception {
+
         String label = "drop_down_annotation_label";
         ArrayList<String> choices = new ArrayList<String>();
-        choices.add("choice1");
-        choices.add("choice2");
 
-        assertEquals(1, dbac.deleteAnnotation(label));
-        Map<String, String> annotations = dbac.getAnnotations();
-        assertFalse(annotations.containsKey(label));
+        dbac.addDropDownAnnotation(label, choices);
+    }
+
+    @Test
+    public void shouldHandleDropDownAnnotationWithDuplicateChoices() throws Exception {
+
+    }
+
+    @Test
+    public void shouldHaveChoicesForDropDownAnnotation() throws Exception {
+        dbac.addDropDownAnnotation(testAnnotationLabel, testChoices);
+        ArrayList<String> dropDownStrings= dbac.getDropDownAnnotations(testAnnotationLabel);
+
+        assertTrue(dropDownStrings.contains(testChoices.get(0)));
+        assertTrue(dropDownStrings.contains(testChoices.get(1)));
+        assertEquals(2, dropDownStrings.size());
+        dbac.deleteAnnotation(testAnnotationLabel);
     }
 
 
-}
 
+
+}
 
 
 
