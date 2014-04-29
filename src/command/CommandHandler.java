@@ -38,9 +38,6 @@ public class CommandHandler {
 
 		}
 
-
-
-
 		return null;
 	}
 

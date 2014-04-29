@@ -21,6 +21,7 @@ public abstract class Command {
 	public abstract void execute();
 
 	//Creates a JSON String.
+	/*
 	public String createJson() {
 
 		//Create the builder.
@@ -30,5 +31,5 @@ public abstract class Command {
 
 		return gson.toJson(this);
 	}
-
+	*/
 }
