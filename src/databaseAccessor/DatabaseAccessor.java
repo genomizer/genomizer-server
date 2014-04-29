@@ -226,7 +226,8 @@ System.out.println("asdasd: " + query);
 
 			ResultSet res = pStatement.executeQuery();
 
-			SearchResult queryRes = new SearchResult(res);
+			SearchResult queryRes = new SearchResult();
+			queryRes.setResultData(res);
 
 			return queryRes;
 
