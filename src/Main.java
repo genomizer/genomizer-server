@@ -14,6 +14,8 @@ public class Main {
 		String samToBam = "samtools-0.1.19/samtools view -bS -o test/male.bam test/male.sam";
 
 		String[] sortBam = new String[]{"samtools-0.1.19/samtools", "sort", "test/male.bam", "test/maleSorted"};
+
+		//String bamToWig = "samtools pileup fileName.bam | perl -ne 'BEGIN{print "track type=wiggle_0 name=fileName description=fileName\n"};($c, $start, undef, $depth) = split; if ($c ne $lastC) { print "variableStep chrom=$c\n"; };$lastC=$c;next unless $. % 10 ==0;print "$start\t$depth\n" unless $depth<3;'  > fileName.wig"
 		//samtools view -bS -o /path/*.bam /path/*.sam"
 		ProcessCommand p = new ProcessCommand("rawToProfile", new String[]{bowTie, samToBam});
 		try {

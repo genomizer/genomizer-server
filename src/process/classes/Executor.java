@@ -9,18 +9,18 @@ public abstract class Executor {
 
 private final String FILEPATH = "resources/";
 
-	protected void executeProgram(String[] command) throws InterruptedException, IOException{
+	protected String executeProgram(String[] command) throws InterruptedException, IOException{
 
 		File pathToExecutable = new File( FILEPATH + command[0] );
 		command[0]=pathToExecutable.getAbsolutePath();
-		executeCommand(command);
+		return executeCommand(command);
 	}
 
-	protected void executeScript(String[] command) throws InterruptedException, IOException{
+	protected String executeScript(String[] command) throws InterruptedException, IOException{
 
 		File pathToExecutable = new File( FILEPATH + command[1] );
 		command[1]=pathToExecutable.getAbsolutePath();
-		executeCommand(command);
+		return executeCommand(command);
 	}
 
 	protected String[] parse(String procedureParameters){
@@ -34,7 +34,7 @@ private final String FILEPATH = "resources/";
 		return temp;
 	}
 
-	private void executeCommand(String[] command) throws InterruptedException, IOException{
+	private String executeCommand(String[] command) throws InterruptedException, IOException{
 		ProcessBuilder builder = new ProcessBuilder(command);
 
 		builder.directory( new File( FILEPATH ).getAbsoluteFile() );
@@ -51,7 +51,8 @@ private final String FILEPATH = "resources/";
 
 		int result = process.waitFor();
 
-		System.out.printf( "Process exited with result %d and output %s%n", result, text );
+//		System.out.printf( "Process exited with result %d and output %s%n", result, text );
+		return text.toString();
 	}
 
 }

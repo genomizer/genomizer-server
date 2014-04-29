@@ -30,5 +30,4 @@ public class ProcessCommand {
 			default: throw new IllegalArgumentException();
 		}
 	}
-
 }
