@@ -17,11 +17,14 @@ import java.util.concurrent.Executor;
 import sun.misc.IOUtils;
 
 
+
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
+
 import command.CommandHandler;
 import command.CommandType;
+import command.Response;
 
 public class Doorman {
 
@@ -89,7 +92,7 @@ public class Doorman {
 		};
 	}
 
-	private void connection_login(HttpExchange exchange) {
+	private void connection_login(HttpExchange exchange) throws IOException {
 		InputStream bodyStream = exchange.getRequestBody();
 		Scanner scanner = new Scanner(bodyStream);
 		String body = "";
@@ -100,18 +103,23 @@ public class Doorman {
 		System.out.println(exchange.getRequestURI().toString());
 
 
-		commandHandler.doStuff(body, exchange.getRequestURI().toString(), CommandType.LOGIN_COMMAND);
+		Response response = commandHandler.doStuff(body, exchange.getRequestURI().toString(), CommandType.LOGIN_COMMAND);
 
-		/*String response = "This is the response";
-        exchange.sendResponseHeaders(200, response.length());
+		respond(exchange, response);
+        
+
+	}
+	
+	private void respond(HttpExchange exchange, Response response) {
+		String body = response.getBody();
+		exchange.sendResponseHeaders(response.getCode(), body.length());
         OutputStream os = exchange.getResponseBody();
-        os.write(response.getBytes());
-        os.close();*/
-
+        os.write(response.toString().getBytes());
+        os.close();
 	}
 
 	private void connection_logout(HttpExchange exchange) {
-		InputStream bodyStream = exchange.getRequestBody();
+		/*InputStream bodyStream = exchange.getRequestBody();
 		Scanner scanner = new Scanner(bodyStream);
 		String body = "";
 		while(scanner.hasNext()) {
@@ -122,7 +130,7 @@ public class Doorman {
 
 
 		commandHandler.doStuff(body, exchange.getRequestURI().toString(), CommandType.LOGOUT_COMMAND);
-
+*/
 	}
 
 	public static void main(String args[]) {
