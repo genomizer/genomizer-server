@@ -37,6 +37,7 @@ public class DBInterface {
 	}
 
 	/**
+	 * RW and KK
 	 * Gets user role
 	 *
 	 * @param String userName
@@ -116,6 +117,8 @@ public class DBInterface {
 	}
 
 	/**
+	 *
+	 * RW and KK
 	 * Creates a new annotation column in database table
 	 *
 	 * @param String colName

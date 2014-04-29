@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Map;
 
 
 import org.junit.AfterClass;
@@ -70,7 +71,7 @@ public class MethodTestsRWandKK {
 
     @Test
     public void shouldBeAbleToResetPassword() throws Exception {
-        String newPassword = "newPass_fghaiouwgfrib237845";
+        String newPassword = "newPass_fghaiouwgfr"freetext"ib237845";
 
         String pass = dbac.getPassword(testUser);
         assertEquals(testPassword, pass);
@@ -82,6 +83,13 @@ public class MethodTestsRWandKK {
         assertEquals(newPassword, pass);
     }
 
+    @Test
+    public void shouldBeAbleToSetUserPermissions() throws Exception {
+        String role = testRole + "new_dhdhdfh";
+        dbac.setRole(testUser, role);
+
+        assertEquals(dbac.getRole(testUser), role);
+    }
 
 
     @Test
@@ -91,6 +99,28 @@ public class MethodTestsRWandKK {
 
         ArrayList<String> users = dbac.getUsers();
         assertFalse(users.contains(testUser));
+    }
+
+    @Test
+    public void shouldBeAbleToAddFreeTextAnnotaion() throws Exception {
+
+        String label = "freetext_annotation_label";
+
+        dbac.addFreeTextAnnotation(label);
+
+        Map<String, String> annotations = dbac.getAnnotations();
+        assertEquals("FreeText", annotations.get(label));
+    }
+
+    @Test
+    public void shouldBeAbleToDeleteFreeTextAnnotaion() throws Exception {
+
+        String label = "freetext_annotation_label";
+
+        dbac.deleteAnnotation(label);
+
+        Map<String, String> annotations = dbac.getAnnotations();
+        assertFalse(annotations.containsKey(label));
     }
 
 

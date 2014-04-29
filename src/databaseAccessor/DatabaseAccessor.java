@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 
@@ -72,7 +74,7 @@ public class DatabaseAccessor {
         PreparedStatement getPassword = conn.prepareStatement(query);
         getPassword.setString(1, testUser);
         ResultSet rs = getPassword.executeQuery();
-        if(rs.next()) {
+        if(rs.next()) {// TODO Auto-generated method stub
             return rs.getString("password");
         }
         return null;
@@ -86,6 +88,56 @@ public class DatabaseAccessor {
         resetPassword.setString(2, username);
         return resetPassword.executeUpdate();
 
+    }
+
+    public int setRole(String username, String role) throws SQLException {
+        String query = "UPDATE User_Info SET Role = ? " +
+                "WHERE (Username = ?)";
+        PreparedStatement setRole = conn.prepareStatement(query);
+        setRole.setString(1, role);
+        setRole.setString(2, username);
+        return setRole.executeUpdate();
+    }
+
+    public String getRole(String username) throws SQLException {
+        String query = "SELECT Role FROM User_Info " +
+                "WHERE (Username = ?)";
+        PreparedStatement getRole = conn.prepareStatement(query);
+        getRole.setString(1, username);
+        ResultSet rs = getRole.executeQuery();
+        if(rs.next()) {
+            return rs.getString("Role");
+        }
+        return null;
+    }
+
+    public int addFreeTextAnnotation(String label) throws SQLException {
+        String query = "INSERT INTO Annotation " +
+        		"(Label, DataType) VALUES (?, 'FreeText')";
+        PreparedStatement addAnnotation = conn.prepareStatement(query);
+        addAnnotation.setString(1, label);
+        return addAnnotation.executeUpdate();
+
+    }
+
+    public Map<String, String> getAnnotations() throws SQLException {
+        HashMap<String, String> annotations = new HashMap<String, String>();
+        String query = "SELECT * FROM Annotation";
+        Statement getAnnotations = conn.createStatement();
+        ResultSet rs = getAnnotations.executeQuery(query);
+        while (rs.next()) {
+            annotations.put(rs.getString("Label"), rs.getString("DataType"));
+        }
+
+        return annotations;
+    }
+
+    public int deleteAnnotation(String label) throws SQLException {
+        String statementStr = "DELETE FROM Annotation " +
+                "WHERE (Label = ?)";
+        PreparedStatement deleteAnnotation = conn.prepareStatement(statementStr);
+        deleteAnnotation.setString(1, label);
+        return deleteAnnotation.executeUpdate();
     }
 
 }
