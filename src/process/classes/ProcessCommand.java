@@ -1,14 +1,12 @@
 package process.classes;
 
-import java.util.HashMap;
-
 public class ProcessCommand {
 
 	private String processName;
 	private String [] parameters;
 
 
-	private ProcessCommand(String processName,String bowTieParams) {
+	public ProcessCommand(String processName,String bowTieParams) {
 		this.processName = processName;
 		this.parameters[0] = bowTieParams;
 	}
@@ -27,10 +25,8 @@ public class ProcessCommand {
 				rawToProfileConverter.procedure(parameters);
 			case "profileToRegion":
 				// TODOOO
-
 			default: throw new IllegalArgumentException();
 		}
-
 	}
 
 }

@@ -9,26 +9,26 @@ import org.junit.*;
 import process.classes.ProcessCommand;
 
 public class ProcessCommandTest {
-	private ProcessCommand processHandler;
+	private ProcessCommand processCommand;
 	private String process;
 	private String param[];
 	private String inFilePath;
 	private String outFilePath;
+	
 	@Before
 	public void setup() {
-		processHandler = ProcessCommand.createProcessHandler();
+		processCommand = new ProcessCommand("rawToProfile", "");
 
 	}
 
 	@Test
 	public void shouldCreateProcessHandler() {
-		ProcessCommand processHandler = ProcessCommand.createProcessHandler();
 
 	}
 
 	@Test
 	public void shouldNotBeNull() {
-		assertNotNull(processHandler);
+		assertNotNull(processCommand);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -37,7 +37,7 @@ public class ProcessCommandTest {
 		param = null;
 		inFilePath = null;
 		outFilePath = null;
-		processHandler.runExecutable(process, param, inFilePath, outFilePath);
+		processCommand.execute();
 
 	}
 
@@ -47,7 +47,7 @@ public class ProcessCommandTest {
 		param = null;
 		inFilePath = null;
 		outFilePath = null;
-		String result = processHandler.runExecutable(process, param, inFilePath, outFilePath);
+		String result = processCommand.execute();
 		assertEquals("rawToProfile", result);
 	}
 
