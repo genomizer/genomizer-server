@@ -2,6 +2,12 @@ package command;
 
 import com.google.gson.annotations.Expose;
 
+/**
+ * Class used to represent a command of the type Download.
+ *
+ * @author tfy09jnn
+ * @version 1.0
+ */
 public class DownloadCommand extends Command {
 
 	//@SerializedName("attr1")
@@ -20,15 +26,24 @@ public class DownloadCommand extends Command {
 	@Expose
 	private String attr4;
 
-	//Constructor.
+	/**
+	 * Empty constructor.
+	 */
 	public DownloadCommand() {
+
 	}
 
-
+	/**
+	 * Used to validate the correctness of the
+	 * class when built.
+	 */
 	@Override
 	public boolean validate() {
-		// TODO Auto-generated method stub
+
+		// TODO Auto-generated method stub (Should maybe be private?)
+
 		return false;
+
 	}
 
 	@Override
@@ -40,12 +55,21 @@ public class DownloadCommand extends Command {
 		attr4 = values[3];
 	}
 
+	/**
+	 * Runs the actual code that is used to execute the
+	 * download.
+	 */
 	@Override
 	public void execute() {
+
 		// TODO Auto-generated method stub
 
 	}
 
+
+	/* Hashcodes(auto-generated) used temporary for testing purposes.
+	 * Might be removed later.
+	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;

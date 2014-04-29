@@ -24,13 +24,18 @@ public class Temp {
 		    dCom.initiateJson(values);
 
 		    //Create the JSON STRING from object and print it.
+
+		    /*
 		    final String json = dCom.createJson();
 		    System.out.printf("Serialised: %s%n", json);
+			*/
 
 		    //Create a class from a JSON STRING then check if same as other class.
+		    /*
 		    final Command secondBCom = gson.fromJson(json, DownloadCommand.class);
 		    System.out.printf("Same BookCommand: %s%n", dCom.equals(secondBCom));
 		    System.out.printf("Serialised: %s%n", secondBCom.createJson());
+		    */
 
 		}
 
