@@ -6,16 +6,18 @@ import java.util.Scanner;
 
 public abstract class Executor {
 
-	private void executeProgram(String[] command) throws InterruptedException, IOException{
+private final String FILEPATH = "resources/";
 
-		File pathToExecutable = new File( "resources/" + command[0] );
+	void executeProgram(String[] command) throws InterruptedException, IOException{
+
+		File pathToExecutable = new File( FILEPATH + command[0] );
 		command[0]=pathToExecutable.getAbsolutePath();
 		executeCommand(command);
 	}
 
-	private void executeScript(String[] command) throws InterruptedException, IOException{
+	void executeScript(String[] command) throws InterruptedException, IOException{
 
-		File pathToExecutable = new File( "resources/" + command[1] );
+		File pathToExecutable = new File( FILEPATH + command[1] );
 		command[1]=pathToExecutable.getAbsolutePath();
 		executeCommand(command);
 	}
@@ -23,7 +25,7 @@ public abstract class Executor {
 	private void executeCommand(String[] command) throws InterruptedException, IOException{
 		ProcessBuilder builder = new ProcessBuilder(command);
 
-		builder.directory( new File( "resources" ).getAbsoluteFile() );
+		builder.directory( new File( FILEPATH ).getAbsoluteFile() );
 		builder.redirectErrorStream(true);
 		Process process =  builder.start();
 

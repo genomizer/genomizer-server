@@ -13,14 +13,14 @@ import org.junit.Before;
 import org.junit.Test;
 
 import process.classes.Executor;
-import process.classes.RawToProfile;
+import process.classes.RawToProfileConverter;
 
 public class RawToProfileTest {
-	RawToProfile rtp = null;
+	RawToProfileConverter rtp = null;
 
 	@Before
 	public void setup() {
-		rtp = new RawToProfile();
+		rtp = new RawToProfileConverter();
 	}
 
 	@After

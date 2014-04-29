@@ -6,23 +6,23 @@ import org.junit.Test;
 
 import org.junit.*;
 
-import process.classes.ProcessHandler;
+import process.classes.ProcessCommand;
 
-public class ProcessHandlerTest {
-	private ProcessHandler processHandler;
+public class ProcessCommandTest {
+	private ProcessCommand processHandler;
 	private String process;
 	private String param[];
 	private String inFilePath;
 	private String outFilePath;
 	@Before
 	public void setup() {
-		processHandler = ProcessHandler.createProcessHandler();
+		processHandler = ProcessCommand.createProcessHandler();
 
 	}
 
 	@Test
 	public void shouldCreateProcessHandler() {
-		ProcessHandler processHandler = ProcessHandler.createProcessHandler();
+		ProcessCommand processHandler = ProcessCommand.createProcessHandler();
 
 	}
 
