@@ -12,6 +12,7 @@ public class PubMedParser {
 
 	private ArrayList<String> values;
 	private String whereString;
+	private ArrayList<String> fileAnno;
 
 	/**
 	 * Constructor
@@ -20,6 +21,7 @@ public class PubMedParser {
 	public PubMedParser() {
 		values = new ArrayList<String>();
 		whereString = new String();
+		makeFileAnno();
 	}
 
 	/**
@@ -75,12 +77,40 @@ public class PubMedParser {
 				valueList.add(totStr.substring(k, startklam -1));
 
 				totStr.delete(k, endklam +1);
-				String appendString = "(Label = ? AND Value = ?)";
+				boolean isFileAnno = false;
+
+				for(int j = 0; j < fileAnno.size(); j ++) {
+					if(s.equals(fileAnno.get(j))) {
+						isFileAnno = true;
+					}
+				}
+
+				String appendString = null;
+				if(isFileAnno) {
+					appendString = "? = ?";
+				} else {
+					appendString = "(Label = ? AND Value = ?)";
+				}
+
 				totStr.insert(k, appendString);
+
 				i = k + appendString.length();
 			}
 		}
 		values = valueList;
 		whereString = totStr.toString();
+	}
+
+	private void makeFileAnno() {
+		fileAnno.add("FileID");
+		fileAnno.add("Path");
+		fileAnno.add("Type");
+		fileAnno.add("Date");
+		fileAnno.add("MetaData");
+		fileAnno.add("Author");
+		fileAnno.add("Uploader");
+		fileAnno.add("IsPrivate");
+		fileAnno.add("ExpID");
+		fileAnno.add("GRVersion");
 	}
 }
