@@ -88,4 +88,25 @@ public class DatabaseAccessor {
 
     }
 
+    public int setRole(String username, String role) throws SQLException {
+        String query = "UPDATE User_Info SET Role = ? " +
+                "WHERE (Username = ?)";
+        PreparedStatement setRole = conn.prepareStatement(query);
+        setRole.setString(1, role);
+        setRole.setString(2, username);
+        return setRole.executeUpdate();
+    }
+
+    public String getRole(String username) throws SQLException {
+        String query = "SELECT Role FROM User_Info " +
+                "WHERE (Username = ?)";
+        PreparedStatement getRole = conn.prepareStatement(query);
+        getRole.setString(1, username);
+        ResultSet rs = getRole.executeQuery();
+        if(rs.next()) {
+            return rs.getString("Role");
+        }
+        return null;
+    }
+
 }

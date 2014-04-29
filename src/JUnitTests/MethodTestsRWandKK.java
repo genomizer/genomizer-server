@@ -82,6 +82,13 @@ public class MethodTestsRWandKK {
         assertEquals(newPassword, pass);
     }
 
+    @Test
+    public void shouldBeAbleToSetUserPermissions() throws Exception {
+        String role = testRole + "new_dhdhdfh";
+        dbac.setRole(testUser, role);
+
+        assertEquals(dbac.getRole(testUser), role);
+    }
 
 
     @Test
