@@ -14,9 +14,6 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 
 public class HTTPURLUpload {
-
-	
-	
 	
 	
 	/**
