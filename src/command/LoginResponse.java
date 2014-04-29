@@ -15,12 +15,4 @@ public class LoginResponse extends Response {
 		this.token = token;
 	}
 
-	public String toString() {
-
-		GsonBuilder gsonBuilder = new GsonBuilder();
-		Gson gson = gsonBuilder.excludeFieldsWithoutExposeAnnotation().create();
-
-		return "HTTP/1.1 " + code + " OK\n" + gson.toJson(this);
-	}
-
 }
