@@ -19,6 +19,8 @@ public class Main {
 //		e.specificParamProcedure(sortBam);
 		e.specificParamProcedure(sortSam);
 
+
+
 	}
 
 }
