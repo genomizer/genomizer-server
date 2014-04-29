@@ -78,4 +78,14 @@ public class DatabaseAccessor {
         return null;
     }
 
+    public int resetPassword(String username, String newPassword) throws SQLException {
+        String query = "UPDATE User_Info SET Password = ? " +
+        		"WHERE (Username = ?)";
+        PreparedStatement resetPassword = conn.prepareStatement(query);
+        resetPassword.setString(1, newPassword);
+        resetPassword.setString(2, username);
+        return resetPassword.executeUpdate();
+
+    }
+
 }
