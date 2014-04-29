@@ -14,6 +14,7 @@ public class DBInterface {
 	//USERS
 
 	/**
+	 * RW and KK
 	 * Gets user password
 	 *
 	 * @param String userName
@@ -57,7 +58,7 @@ public class DBInterface {
 
 	/**
 	 * RW & KK
-	 * 
+	 *
 	 * Gets list of all usernames
 	 *
 	 * @return ArrayList<String>
@@ -69,7 +70,7 @@ public class DBInterface {
 
 	/**
 	 * RW & KK
-	 * 
+	 *
 	 * Adds a new user
 	 * @param String userName
 	 * @param String password
@@ -83,9 +84,9 @@ public class DBInterface {
 	 * RW & KK
 	 * OBS! No support for workspaces yet!
 	 * ie. Deletes a user from the User_Info table.
-	 * 
+	 *
 	 * To be extended to:
-	 * 
+	 *
 	 * Deletes a user and his/her workspaces
 	 * Returns list of removed workspace(s) files
 	 *
