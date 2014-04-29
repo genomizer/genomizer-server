@@ -2,6 +2,7 @@ package command;
 
 public enum CommandType {
 	LOGIN_COMMAND ,
+	LOGOUT_COMMAND,
 	EXPERIMENT_COMMAND,
 	FILE_COMMAND,
 	SEARCH_COMMAND,
