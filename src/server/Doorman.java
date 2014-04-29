@@ -110,11 +110,12 @@ public class Doorman {
 
 	}
 	
-	private void respond(HttpExchange exchange, Response response) {
+	private void respond(HttpExchange exchange, Response response) throws IOException {
 		String body = response.getBody();
 		exchange.sendResponseHeaders(response.getCode(), body.length());
         OutputStream os = exchange.getResponseBody();
-        os.write(response.toString().getBytes());
+        os.write(body.getBytes());
+        os.flush();
         os.close();
 	}
 
