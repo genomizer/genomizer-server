@@ -24,7 +24,7 @@ public abstract class Command {
 	public abstract boolean validate();
 
 	//Method used to run command.
-	public abstract void execute();
+	public abstract Response execute();
 
 	//Method used to get the header.
 	public String getHeader() {

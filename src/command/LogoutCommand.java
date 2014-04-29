@@ -23,8 +23,10 @@ public class LogoutCommand extends Command {
 	 * Used to execute the logout command.
 	 */
 	@Override
-	public void execute() {
+	public Response execute() {
+
 		// TODO Auto-generated method stub
+		return null;
 
 	}
 
