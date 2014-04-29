@@ -40,6 +40,66 @@ public class CommandFactory {
 	}
 
 	/**
+	 * Used to create the command needed for login.
+	 * @param json string to initiate class.
+	 * @param restful tag to put into class.
+	 * @return the actual command.
+	 */
+	public Command createLoginCommand(String json, String restful) {
+
+		return null;
+
+	}
+
+	/**
+	 * Used to create the command needed for sysadmin.
+	 * @param json string to initiate class.
+	 * @param restful tag to put into class.
+	 * @return the actual command.
+	 */
+	public Command createSysadmCommand(String json, String restful) {
+
+		return null;
+
+	}
+
+	/**
+	 * Used to create the command needed for processes.
+	 * @param json string to initiate class.
+	 * @param restful tag to put into class.
+	 * @return the actual command.
+	 */
+	public Command createProcessCommand(String json, String restful) {
+
+		return null;
+
+	}
+
+	/**
+	 * Used to create the command needed for experiments.
+	 * @param json string to initiate class.
+	 * @param restful tag to put into class.
+	 * @return the actual command.
+	 */
+	public Command createExperimentCommand(String json, String restful) {
+
+		return null;
+
+	}
+
+	/**
+	 * Used to create the command needed for users.
+	 * @param json string to initiate class.
+	 * @param restful tag to put into class.
+	 * @return the actual command.
+	 */
+	public Command createUserCommand(String json, String restful) {
+
+		return null;
+
+	}
+
+	/**
 	 * Used to create the command needed for searching the
 	 * database.
 	 * @param json string to initiate class.
