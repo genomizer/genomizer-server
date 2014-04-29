@@ -5,6 +5,8 @@ import static org.junit.Assert.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import junit.framework.TestCase;
+
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -58,6 +60,13 @@ public class MethodTestsRWandKK {
 
         users = dbac.getUsers();
         assertTrue(users.contains(testUser));
+    }
+
+    @Test
+    public void shouldBeAbleToGetPassword() throws Exception {
+
+        String password = dbac.getPassword(testUser);
+        assertEquals(testPassword, password);
     }
 
     @Test

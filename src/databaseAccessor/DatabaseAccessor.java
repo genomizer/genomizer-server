@@ -54,7 +54,7 @@ public class DatabaseAccessor {
     }
 
     public void deleteUser(String username) throws SQLException {
-        
+
         String statementStr = "DELETE FROM User_Info " +
                 "WHERE (Username = ?)";
         PreparedStatement deleteUser = conn.prepareStatement(statementStr);
@@ -64,6 +64,18 @@ public class DatabaseAccessor {
 
     public void close() throws SQLException {
         conn.close();
+    }
+
+    public String getPassword(String testUser) throws SQLException {
+        String query = "SELECT Password FROM User_Info " +
+        		"WHERE (Username = ?)";
+        PreparedStatement getPassword = conn.prepareStatement(query);
+        getPassword.setString(1, testUser);
+        ResultSet rs = getPassword.executeQuery();
+        if(rs.next()) {
+            return rs.getString("password");
+        }
+        return null;
     }
 
 }

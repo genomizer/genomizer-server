@@ -26,6 +26,7 @@ public class DBInterface {
 	}
 
 	/**
+	 * RW and KK
 	 * Sets user password
 	 *
 	 * @param String userName
