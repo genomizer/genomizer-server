@@ -26,8 +26,10 @@ public class Temp {
 		    //Create restful.
 		    String restful = "";
 
+		    String uuid = "123";
+
 		    //Create the COMMAND.
-		    Response rsp = cmdh.doStuff(json, restful, cmdt);
+		    Response rsp = cmdh.doStuff(json, restful, uuid, cmdt);
 
 		    if(rsp == null) {
 

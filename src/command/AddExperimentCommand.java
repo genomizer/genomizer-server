@@ -30,20 +30,3 @@ public class AddExperimentCommand {
 
 
 }
-
-/*
-{
-"name": "experimentName",
-"created by": "user",
-"annotations": {
-        "pubmedId": "ex23",
-        "type": "raw",
-        "specie": "human",
-        "genoRelease": "v1.23",
-        "cellLine": "yes",
-        "devStage": "larva",
-        "sex": "male",
-        "tissue": "eye"
-}
-}
-*/
