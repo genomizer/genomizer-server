@@ -5,25 +5,39 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Set;
 
+/**
+ * Class for holding resultdata in an arraylist of hashmaps. Every row is a
+ * database entry and contains all values and keys.
+ *
+ * @author yhi04jeo
+ */
 public class SearchResult {
 
-	private ArrayList<HashMap<String, String>> resultList;
-	private int colCount = 0;
-	private int rowCount = 0;
+	private ArrayList<HashMap<String, String>> resultList; //List of Row data
+	private int colCount = 0; //Nr of data columns
+	private int rowCount = 0; //Nr of rows (results)
+	private ArrayList<String> nameList = new ArrayList<String>(); //Annotations
 	private ResultSetMetaData colNames;
-	private ArrayList<String> nameList = new ArrayList<String>();
 
-	public SearchResult(ResultSet r) throws SQLException {
-		//Set of column names
+	/**
+	 * Inititates a SearchResult object.
+	 */
+	public SearchResult() {
+		resultList = new ArrayList<HashMap<String, String>>();
+	}
+
+	/**
+	 * Adds resultdata. An arraylist of hashmaps will be filled
+	 * with data. This method must be used before getters can return not
+	 * null values. Parameters: ResultSet object
+	 *
+	 * @param ResultSet r
+	 * @throws SQLException
+	 */
+	public void setResultData(ResultSet r) throws SQLException {
 		colNames = r.getMetaData();
 		colCount = colNames.getColumnCount();
-
-		//List of rows
-		resultList = new ArrayList<HashMap<String, String>>();
-
-		//Row data with column names as keys and values
 		HashMap<String, String> rowResult;
 
         while (r.next()) {
@@ -43,45 +57,55 @@ public class SearchResult {
 		}
 	}
 
-	public void printList() {
-		Set<String> keySet;
-
-		for (int i = 0; i < resultList.size(); i++) {
-			keySet = resultList.get(0).keySet();
-			System.out.println(i + ":");
-
-			for (String key: keySet) {
-				System.out.print(key + "= " + resultList.get(i).get(key) + ", ");
-			}
-
-			System.out.println();
-		}
-	}
-
+	/**
+	 * Returns the list with hashmaps.
+	 *
+	 * @return ArrayList<HashMap<String, String>>
+	 */
 	public ArrayList<HashMap<String, String>> getList() {
 		return resultList;
 	}
 
+	/**
+	 * Returns the number of columns(annotations)
+	 *
+	 * @return int
+	 */
 	public int getColCount() {
 		return colCount;
 	}
 
+	/**
+	 * Returns the number of rows(search results)
+	 *
+	 * @return int
+	 */
 	public int getRowCount() {
 		return rowCount;
 	}
 
+	/**
+	 * Returns the values of a row. Parameters: row number
+	 *
+	 * @param int rowNr
+	 * @return ArrayList<String>
+	 */
 	public ArrayList<String> getRowValues(int rowNr) {
 		ArrayList<String> valuesList = new ArrayList<String>();
 		HashMap<String, String> rowData = resultList.get(rowNr);
-		Set<String> keySet = rowData.keySet();
 
-		for (String key: keySet) {
-			valuesList.add(rowData.get(key));
+		for (int i = 0; i < nameList.size(); i++) {
+			valuesList.add(rowData.get(nameList.get(i)));
 		}
 
 		return valuesList;
 	}
 
+	/**
+	 * Returns an arraylist of annotations; column headers.
+	 *
+	 * @return ArrayList<String>
+	 */
 	public ArrayList<String> getColHeaders() {
 		return nameList;
 	}
