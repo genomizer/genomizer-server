@@ -1,8 +1,21 @@
 package server;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Scanner;
 import java.util.concurrent.Executor;
+
+import sun.misc.IOUtils;
+
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -20,14 +33,14 @@ public class Doorman {
 		this.commandHandler = commandHandler;
 
 		httpServer = HttpServer.create(new InetSocketAddress(port),0);
-		//httpServer.createContext("/", rootHandler());
-		httpServer.createContext("/login", createHandler(CommandType.LOGIN_COMMAND));
-		httpServer.createContext("/experiment", createHandler(CommandType.EXPERIMENT_COMMAND));
-		httpServer.createContext("/file", createHandler(CommandType.FILE_COMMAND));
-		httpServer.createContext("/search", createHandler(CommandType.SEARCH_COMMAND));
-		httpServer.createContext("/user", createHandler(CommandType.USER_COMMAND));
-		httpServer.createContext("/process", createHandler(CommandType.PROCESS_COMMAND));
-		httpServer.createContext("/sysadm", createHandler(CommandType.SYSADM_COMMAND));
+		httpServer.createContext("/", createHandler()); // SHOULD BE CHANGED!!!
+		httpServer.createContext("/login", createHandler());
+		httpServer.createContext("/experiment", createHandler());
+		httpServer.createContext("/file", createHandler());
+		httpServer.createContext("/search", createHandler());
+		httpServer.createContext("/user", createHandler());
+		httpServer.createContext("/process", createHandler());
+		httpServer.createContext("/sysadm", createHandler());
 
 		httpServer.setExecutor(new Executor() {
 			@Override
@@ -41,12 +54,86 @@ public class Doorman {
 		httpServer.start();
 	}
 
-	HttpHandler createHandler(CommandType type) {
+	HttpHandler createHandler() {
 		return new HttpHandler() {
 			@Override
-			public void handle(HttpExchange arg0) throws IOException {
-//				commandHandler.doStuff(arg0.getRequestBody(), type);
+			public void handle(HttpExchange exchange) throws IOException {
+
+				System.out.println("HEJ " + exchange.getHttpContext().getPath());
+
+				if(exchange.getRequestMethod().equals("GET")) {
+					System.out.println("GET");
+
+				} else if(exchange.getRequestMethod().equals("POST")) {
+					System.out.println("POST");
+
+					if(exchange.getHttpContext().getPath().equals("/login")) {
+						connection_login(exchange);
+					}
+
+				} else if(exchange.getRequestMethod().equals("DELETE")) {
+					System.out.println("DELETE");
+
+					if(exchange.getHttpContext().getPath().equals("/login")) {
+						connection_logout(exchange);
+					}
+				}
+
+
+                System.out.println("HEJ2");
+
+
+
+                //commandHandler.doStuff(, , type);
 			}
 		};
+	}
+
+	private void connection_login(HttpExchange exchange) {
+		InputStream bodyStream = exchange.getRequestBody();
+		Scanner scanner = new Scanner(bodyStream);
+		String body = "";
+		while(scanner.hasNext()) {
+			body = body.concat(scanner.next());
+		}
+
+		System.out.println(exchange.getRequestURI().toString());
+
+
+		commandHandler.doStuff(body, exchange.getRequestURI().toString(), CommandType.LOGIN_COMMAND);
+
+		/*String response = "This is the response";
+        exchange.sendResponseHeaders(200, response.length());
+        OutputStream os = exchange.getResponseBody();
+        os.write(response.getBytes());
+        os.close();*/
+
+	}
+
+	private void connection_logout(HttpExchange exchange) {
+		InputStream bodyStream = exchange.getRequestBody();
+		Scanner scanner = new Scanner(bodyStream);
+		String body = "";
+		while(scanner.hasNext()) {
+			body = body.concat(scanner.next());
+		}
+
+		System.out.println(exchange.getRequestURI().toString());
+
+
+		commandHandler.doStuff(body, exchange.getRequestURI().toString(), CommandType.LOGOUT_COMMAND);
+
+	}
+
+	public static void main(String args[]) {
+		try {
+			new Doorman(new CommandHandler(), 8080).start();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+
+
 	}
 }
