@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Class to parse a PubMed String
  *
  * @author dv11ann
- *
+ * Rör för tusan inte din hjäkel, detta är min klass :P get your own!
  */
 public class PubMedParser {
 
@@ -73,7 +73,7 @@ public class PubMedParser {
 					k--;
 				}
 				k++;
-				valueList.add(s);
+//				valueList.add(s);
 				valueList.add(totStr.substring(k, startklam -1));
 
 				totStr.delete(k, endklam +1);
@@ -87,10 +87,14 @@ public class PubMedParser {
 
 				String appendString = null;
 				if(isFileAnno) {
-					appendString = "? = ?";
+					appendString = s + " = ?";
 				} else {
 					appendString = "(Label = ? AND Value = ?)";
+					valueList.add(s);
 				}
+
+
+
 
 				totStr.insert(k, appendString);
 
@@ -102,6 +106,7 @@ public class PubMedParser {
 	}
 
 	private void makeFileAnno() {
+		fileAnno = new ArrayList<String>();
 		fileAnno.add("FileID");
 		fileAnno.add("Path");
 		fileAnno.add("Type");

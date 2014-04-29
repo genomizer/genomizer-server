@@ -10,6 +10,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import javax.sound.midi.SysexMessage;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -154,8 +156,10 @@ public class TestDatabaseConnect {
 	@Test
 	public void testSearchByPubMed(){
 
-		String searchPubMed = "Human[Species]";
+//		String searchPubMed = "Human[Species]";
 		//String searchPubMed = "banankaka[ExpID] AND Human[Species] AND 1[FileID] AND asdmas[Species] AND Human[Species]";
+		String searchPubMed = "Sven[Author] AND banank[ExpID]";
+
 		SearchResult queryRes = new SearchResult();
 
 		PreparedStatement pStatement;
@@ -168,38 +172,26 @@ public class TestDatabaseConnect {
 
 		query = query + queryMaterial.getWhereString() + ")";
 
+
 System.out.println("asdasd: " + query + "\n-----------\n");
 		try {
 			pStatement = dbCon.prepareStatement(query);
-			for(int i = 1;i < queryMaterial.getValues().size();i++){
 
-				//first adding the Label, then the Value
+			for(int i = 1;i <= queryMaterial.getValues().size();i++){
 
-				pStatement.setString(i, queryMaterial.getValues().get(i-1));
-				i++;
 				pStatement.setString(i, queryMaterial.getValues().get(i-1));
 			}
+
 			ResultSet res = pStatement.executeQuery();
-
-
-
-//try {
-//	while (res.next()) {
-//		String name = res.getString("FileID");
-//		System.out.println("Name : " + name);
-//	}
-//} catch (SQLException e) {
-//	e.printStackTrace();
-//}
-
 			queryRes.setResultData(res);
+
 			ArrayList<String> result = queryRes.getRowValues(0);
 			ArrayList<String> resultHeader = queryRes.getColHeaders();
 
 			for(int i=0;i<resultHeader.size();i++){
 				System.out.print(resultHeader.get(i) + "	|");
 			}
-			System.out.println("\n-----------------------------------------------------------");
+			System.out.println("\n-----------------------------------------------------------------------------------");
 			for(int i=0;i<result.size();i++){
 				System.out.print(result.get(i) + "	|");
 			}
