@@ -28,18 +28,27 @@ public class RawToProfileTest {
 		rtp = null;
 	}
 
+
+	@Test
+	public void shouldParseAStringToAnArrayOfStrings() {
+		String[] input = new String[]{"hello this is a test"};
+		rtp.procedure(input);
+		String[] output = rtp.getBowTieParameters();
+		assertArrayEquals(new String[]{"hello","this","is","a","test"}, output);
+	}
+
 //	@Test(expected = IOException.class)
 //	public void ExceptedIOException() {
 //		rtp.execute(new String[]{"HEJ"});
 //	}
 
-	@Test
-	public void StandardShouldGetString() {
-		rtp.standardParamProcedure(new String[]{""});
-	}
-
-	@Test
-	public void SpecificShouldGetString() {
-		rtp.specificParamProcedure(new String[]{""});
-	}
+//	@Test
+//	public void StandardShouldGetString() {
+//		rtp.standardParamProcedure(new String[]{""});
+//	}
+//
+//	@Test
+//	public void SpecificShouldGetString() {
+//		rtp.specificParamProcedure(new String[]{""});
+//	}
 }
