@@ -44,7 +44,7 @@ public class LoginCommand extends Command {
 
 	@Override
 	public void execute() {
-		if(Authenticate.checkUser(username)){
+		if(Authenticate.userExists(username)){
 		//bugg if username is exactly the same as the UUID
 			System.out.println("Användaren fanns");
 		}else{

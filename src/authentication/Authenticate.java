@@ -22,7 +22,7 @@ public class Authenticate {
 		activeUsersID.put(username, userID);
 	}
 
-	static public boolean checkUser(String username){
+	static public boolean userExists(String username){
 		System.out.println(activeUsersID);
 		return activeUsersID.containsKey(username);
 		
