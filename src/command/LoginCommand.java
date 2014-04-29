@@ -45,7 +45,7 @@ public class LoginCommand extends Command {
 
 		Response rsp;
 
-		if(Authenticate.checkUser(username)){
+		if(Authenticate.userExists(username)){
 		//bugg if username is exactly the same as the UUID
 			System.out.println("Användaren fanns");
 			rsp = new LoginResponse(405, "");
