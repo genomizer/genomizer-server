@@ -50,6 +50,7 @@ public class PubMedParser {
 		int endklam = 0;
 
 		totStr.append(pubMed);
+		System.out.println(pubMed);
 		for(int i = 0; i < totStr.length(); i++) {
 			char c = totStr.charAt(i);
 			foundCol = false;
@@ -70,13 +71,13 @@ public class PubMedParser {
 					k--;
 				}
 				k++;
-
-				valueList.add(totStr.substring(k, startklam -1));
 				valueList.add(s);
+				valueList.add(totStr.substring(k, startklam -1));
 
 				totStr.delete(k, endklam +1);
 				String appendString = "? = ?";
 				totStr.insert(k, appendString);
+				i = k + appendString.length();
 			}
 		}
 		values = valueList;
