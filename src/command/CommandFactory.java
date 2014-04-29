@@ -40,6 +40,18 @@ public class CommandFactory {
 	}
 
 	/**
+	 * Used to create the command needed for retrieving experiments.
+	 * @param json string to initiate class.
+	 * @param restful tag to put into class.
+	 * @return the actual command.
+	 */
+	public Command createRetrieveExperimentCommand(String json, String restful) {
+
+		return null;
+
+	}
+
+	/**
 	 * Used to create the command needed for login.
 	 * @param json string to initiate class.
 	 * @param restful tag to put into class.

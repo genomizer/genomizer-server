@@ -24,4 +24,14 @@ public class LoginResponseTest {
 		assertEquals(expected, result.substring(result.indexOf('\n')+1));
 	}
 
+	@Test
+	public void shouldHaveCorrectFormat() {
+		loginResponse = new LoginResponse(200, "uuid");
+		String result = loginResponse.toString();
+		String expected = "HTTP/1.1 200 OK";
+		expected += "\n{\"token\":\"uuid\"}";
+		System.out.println(result);
+		assertEquals(expected, result);
+	}
+
 }
