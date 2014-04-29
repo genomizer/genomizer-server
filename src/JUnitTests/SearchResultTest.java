@@ -16,7 +16,7 @@ import org.junit.Test;
 
 import database.SearchResult;
 
-public class mattiasOchJonasTest {
+public class SearchResultTest {
 
 	private static final String dbDriver = "org.postgresql.Driver";
 	private static final String dbConString =
