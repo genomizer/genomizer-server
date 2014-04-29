@@ -34,10 +34,10 @@ public class SearchCommand extends Command {
 	 * the database.
 	 */
 	@Override
-	public void execute() {
+	public Response execute() {
 
 		// TODO Auto-generated method stub
-
+		return null;
 	}
 
 }

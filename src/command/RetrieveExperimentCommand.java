@@ -1,6 +1,9 @@
 package command;
 
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+//TODO: Implement response.
 
 /**
  * Class used to retrieve an experiment.
@@ -12,14 +15,14 @@ public class RetrieveExperimentCommand extends Command {
 
 	@Expose
 	private String name;
-	
+
+	@SerializedName("created by")
 	@Expose
 	private String created_by;
-	
-	//@Expose
-	//private String[] annotations;
-	
-	
+
+	@Expose
+	private Annotations annotations = new Annotations();
+
 	/**
 	 * Empty constructor.
 	 */
@@ -36,26 +39,11 @@ public class RetrieveExperimentCommand extends Command {
 	}
 
 	@Override
-	public void execute() {
+	public Response execute() {
 
 		// TODO Auto-generated method stub
+		return null;
 
 	}
 
 }
-/*
-{
-"name": "experimentName",
-"created by": "user",
-"annotations": {
-        "pubmedId": "ex23",
-        "type": "raw",
-        "specie": "human",
-        "genoRelease": "v1.23",
-        "cellLine": "yes",
-        "devStage": "larva",
-        "sex": "male",
-        "tissue": "eye"
-}
-}
-*/

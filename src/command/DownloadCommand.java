@@ -51,10 +51,11 @@ public class DownloadCommand extends Command {
 	 * download.
 	 */
 	@Override
-	public void execute() {
+	public Response execute() {
 
 		// TODO Auto-generated method stub
 
+		return null;
 	}
 
 
