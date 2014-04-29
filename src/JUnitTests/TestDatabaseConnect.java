@@ -13,6 +13,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import database.ParsedPubMed;
+import database.PubMedParser;
+import database.SearchResult;
+
 public class TestDatabaseConnect {
 
 	private static final String dbDriver = "org.postgresql.Driver";
@@ -112,7 +116,7 @@ public class TestDatabaseConnect {
 
 	@Test
 	public void testPrepStatement() {
-		
+
 		PreparedStatement statement = null;
 		String selectTableSQL = "SELECT ExpID FROM Experiment WHERE (species = ?)";
 		try {
@@ -120,20 +124,20 @@ public class TestDatabaseConnect {
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
-		
+
 		try {
 			statement.setString(1, "fish");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		ResultSet rs = null;
 		try {
 			rs = statement.executeQuery();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		try {
 			while (rs.next()) {
 				String name = rs.getString("ExpID");
@@ -142,6 +146,49 @@ public class TestDatabaseConnect {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Test
+	public void testSearchByPubMed(){
+
+		String searchPubMed = "banankaka[ExpID] AND Human[Species]";
+
+
+		PreparedStatement pStatement;
+
+		String query = "SELECT * FROM File NATURAL JOIN Annotated_With " +
+				"WHERE (";
+
+		//getting the where-statements from pubmed string to usable query.
+		PubMedParser theParser = new PubMedParser();
+		ParsedPubMed queryMaterial = theParser.parsePubMed(searchPubMed);
+
+		query = query + queryMaterial.getWhereString() + ")";
+
+System.out.println("asdasd: " + query + "\n-----------\n");
+
+		try {
+			pStatement = dbCon.prepareStatement(query);
+			for(int i = 0;i < queryMaterial.getValues().size();i++){
+
+				//first adding the Label, then the Value
+
+				pStatement.setString(i+1, queryMaterial.getValues().get(i));
+				pStatement.setString(i+1, queryMaterial.getValues().get(i));
+
+System.out.println("Questionmark: " + i + " Value: " + queryMaterial.getValues().get(i));
+			}
+
+			ResultSet res = pStatement.executeQuery();
+
+			SearchResult queryRes = new SearchResult(res);
+
+			queryRes.printList();
+
+		} catch (SQLException e) {
+			System.out.println("Failed to send query to database\n");
+		}
+
 	}
 
 }

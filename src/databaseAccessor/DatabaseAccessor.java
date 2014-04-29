@@ -1,6 +1,7 @@
 package databaseAccessor;
 
 import java.sql.Connection;
+
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,6 +11,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+
+//may be changed
+import database.SearchResult;
+import database.ParsedPubMed;
+import database.PubMedParser;
 
 public class DatabaseAccessor {
 
@@ -193,6 +199,41 @@ public class DatabaseAccessor {
             dropDownStrings.add(rs.getString("Value"));
         }
         return dropDownStrings;
+    }
+
+
+
+    public SearchResult searchExperiment(String searchPubMed){
+
+    	PreparedStatement pStatement;
+
+    	String query = "SELECT * FROM File NATURAL JOIN Annotated_With " +
+					   "WHERE (";
+
+		//getting the where-statements from pubmed string to usable query.
+		PubMedParser theParser = new PubMedParser();
+		ParsedPubMed queryMaterial = theParser.parsePubMed(searchPubMed);
+
+		query = query + queryMaterial.getWhereString() + ")";
+
+System.out.println("asdasd: " + query);
+
+		try {
+			pStatement = conn.prepareStatement(query);
+			for(int i = 0;i < queryMaterial.getValues().size();i++){
+				pStatement.setString(i+1, queryMaterial.getValues().get(i));
+			}
+
+			ResultSet res = pStatement.executeQuery();
+
+			SearchResult queryRes = new SearchResult(res);
+
+			return queryRes;
+
+		} catch (SQLException e) {
+			System.out.println("Failed to send query to database\n");
+		}
+		return null;
     }
 
 }

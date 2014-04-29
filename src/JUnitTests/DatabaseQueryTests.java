@@ -72,21 +72,23 @@ public class DatabaseQueryTests {
 	public void testSimpleSearchByAnnotation(){
 
 		String query = "SELECT * FROM File NATURAL JOIN Annotated_With " +
-					   "WHERE (Label = ? AND Value = ?)";
+					   "WHERE (? = ? AND ? = ?   )";
 
 		PreparedStatement pStatement;
 
 		try {
 			pStatement = connection.prepareStatement(query);
-			pStatement.setString(1, "Species");
-			pStatement.setString(2, "Human");
+			pStatement.setString(1, "Label");
+			pStatement.setString(2, "Species");
+			pStatement.setString(3, "Value");
+			pStatement.setString(4, "Human");
 
 			res = pStatement.executeQuery();
 
 			assertNotNull(res);
 
 		} catch (SQLException e) {
-			System.out.println("Failed to connect to database and sen query\n");
+			System.out.println("Failed to connect to database and send query\n");
 		}
 	}
 
