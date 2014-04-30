@@ -96,7 +96,7 @@ public class CommandHandler {
 
 			newCommand = null;
 
-		} else if (cmdt == CommandType.SEARCH_FOR_EXPERIMENT_COMMAND) {
+		} else if (cmdt == CommandType.SEARCH_FOR_EXPERIMENTS_COMMAND) {
 
 			newCommand = null;
 
