@@ -14,35 +14,63 @@ public class RawToProfileConverter extends Executor {
 		private String readsgff_to_allnucsgr_v1  = "perl readsgff_to_allnucsgr_v1.pl test/reads_gff/";
 		private String smooth = "perl smooth_v4.pl test/reads_gff/allnucs_sgr/ 10 1 5 0 0";
 		private String step10 = "perl AllSeqRegSGRtoPositionSGR_v1.pl y 10 test/reads_gff/allnucs_sgr/smoothed/";
-		private String sgr2wig = "perl sgr2wig.pl test/reads_gff/allnucs_sgr/smoothed/step10/male_v1_v1_median_smooth_winSiz-10_minProbe-5_step10.sgr test/reads_gff/allnucs_sgr/smoothed/step10/step10.wig";
+//		private String sgr2wig = "perl sgr2wig.pl /test/reads_gff/allnucs_sgr/smoothed/step10/male_v1_v1_median_smooth_winSiz-10_minProbe-5_step10.sgr step10.wig";
+
+		private String sgr2wig = "perl sgr2wig.pl male_v1_v1_median_smooth_winSiz-10_minProbe-5_step10.sgr step10.wig";
 		
 		private String[] sortBamParameters = new String[]{"samtools-0.1.19/samtools", "sort", "test/male.bam", "test/maleSorted"};
 		public void procedure(String[] parameters, String inFile, String outFile) throws InterruptedException, IOException {
 			bowTieParameters = parse(parameters[0]);
 			samToBamParameters = new String[]{"samtools-0.1.19/samtools", "view", "-bS", "-o", "test/male.bam", "test/male.sam"};
-
+			long startTime;
+			long endTime;
+			
+			startTime = System.currentTimeMillis();
 			executeProgram(bowTieParameters);
-			System.out.println("bowtie done");
+			endTime = System.currentTimeMillis();
+			System.out.println("bowtie done, Time: "+((endTime - startTime)) + " milliseconds");
+			
 			Thread.sleep(2000);
+			
+			startTime = System.currentTimeMillis();
 			executeScript(parse(sortSam));
-			System.out.println("sortsam done");
+			endTime = System.currentTimeMillis();
+			System.out.println("sortsam done, Time: "+((endTime - startTime)) + " milliseconds");
+			
 			Thread.sleep(2000);
+			
+			startTime = System.currentTimeMillis();
 			executeScript(parse(readgff));
-			System.out.println("readgff done");
+			endTime = System.currentTimeMillis();
+			System.out.println("readgff done, Time: "+((endTime - startTime)) + " milliseconds");
+			
 			Thread.sleep(2000);
+			
+			startTime = System.currentTimeMillis();
 			executeScript(parse(readsgff_to_allnucsgr_v1));
-			System.out.println("readsgff to allnucsgr done");
+			endTime = System.currentTimeMillis();
+			System.out.println("readsgff to allnucsgr done, Time: "+((endTime - startTime)) + " milliseconds");
+			
 			Thread.sleep(2000);
+			
+			startTime = System.currentTimeMillis();
 			executeScript(parse(smooth));
-			System.out.println("smooth done");
+			endTime = System.currentTimeMillis();
+			System.out.println("smooth done, Time: "+((endTime - startTime)) + " milliseconds");
 			
 			Thread.sleep(2000);
+			
+			startTime = System.currentTimeMillis();
 			executeScript(parse(step10));
-			System.out.println("step10 done");
+			endTime = System.currentTimeMillis();
+			System.out.println("step10 done, Time: "+((endTime - startTime)) + " milliseconds");
 			
 			Thread.sleep(2000);
+			
+			startTime = System.currentTimeMillis();
 			executeScript(parse(sgr2wig));
-			System.out.println("sgr2wig done");
+			endTime = System.currentTimeMillis();
+			System.out.println("sgr2wig done, Time: "+((endTime - startTime)) + " milliseconds");
 
 			
 //			for(int i=0; i<samToBamParameters.length; i++){
