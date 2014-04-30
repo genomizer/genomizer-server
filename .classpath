@@ -1,9 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="external-libs"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+<<<<<<< HEAD
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/java-6-openjdk-i386"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/jdbc"/>
+=======
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/java-6-openjdk-amd64"/>
+	<classpathentry kind="lib" path="/home/walkma/git/genomizer-server/external-libs/commons-codec-1.6.jar"/>
+	<classpathentry kind="lib" path="/home/walkma/git/genomizer-server/external-libs/commons-logging-1.1.3.jar"/>
+	<classpathentry kind="lib" path="/home/walkma/git/genomizer-server/external-libs/fluent-hc-4.3.3.jar"/>
+	<classpathentry kind="lib" path="/home/walkma/git/genomizer-server/external-libs/httpclient-4.3.3.jar"/>
+	<classpathentry kind="lib" path="/home/walkma/git/genomizer-server/external-libs/httpclient-cache-4.3.3.jar"/>
+	<classpathentry kind="lib" path="/home/walkma/git/genomizer-server/external-libs/httpcore-4.3.2.jar"/>
+	<classpathentry kind="lib" path="/home/walkma/git/genomizer-server/external-libs/httpmime-4.3.3.jar"/>
+>>>>>>> e6ad67e5666daba2c642532871627d9df1989f36
 	<classpathentry kind="output" path="bin"/>
 </classpath>
