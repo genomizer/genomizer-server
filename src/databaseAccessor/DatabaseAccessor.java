@@ -14,12 +14,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import database.FilePathGenerator;
 //may be changed
 import database.SearchResult;
 import database.ParsedPubMed;
 import database.PubMedParser;
 
 public class DatabaseAccessor {
+
+	public static int FREETEXT = 1;
+	public static int DROPDOWN = 2;
 
     Connection conn;
 
@@ -167,27 +171,23 @@ public class DatabaseAccessor {
 
     }
 
-    public Map<String, String> getAnnotations() throws SQLException {
-        HashMap<String, String> annotations = new HashMap<String, String>();
+    public Map<String, Integer> getAnnotations() throws SQLException {
+        HashMap<String, Integer> annotations = new HashMap<String, Integer>();
         String query = "SELECT * FROM Annotation";
         Statement getAnnotations = conn.createStatement();
         ResultSet rs = getAnnotations.executeQuery(query);
         while (rs.next()) {
-            annotations.put(rs.getString("Label"), rs.getString("DataType"));
+        	int dataType = FREETEXT;
+        	if (rs.getString("DataType").equals("DropDown")) {
+        		dataType = DROPDOWN;
+        	}
+            annotations.put(rs.getString("Label"), dataType);
         }
 
         return annotations;
     }
 
     public int deleteAnnotation(String label) throws SQLException {
-
-        if (getAnnotationType(label) == null) {
-            return 0;
-        }
-
-        if (getAnnotationType(label).equals("DropDown")) {
-            removeChoices(label);
-        }
 
         String statementStr = "DELETE FROM Annotation " + "WHERE (Label = ?)";
         PreparedStatement deleteAnnotation = conn
@@ -203,8 +203,8 @@ public class DatabaseAccessor {
         return deleteAnnotation.executeUpdate();
     }
 
-    private String getAnnotationType(String label) throws SQLException {
-        Map<String, String> annotations = getAnnotations();
+    public int getAnnotationType(String label) throws SQLException {
+        Map<String, Integer> annotations = getAnnotations();
         return annotations.get(label);
     }
 
@@ -389,5 +389,52 @@ public class DatabaseAccessor {
         deleteFile.setString(1, path);
         return deleteFile.executeUpdate();
     }
+
+
+//    /**
+//     *
+//     * @param fileID
+//     * @param metaData
+//     * @param Uploder
+//     * @param GRVersion
+//     * @return
+//     * @throws SQLException
+//     */
+//    public ArrayList<String> convertFromRawToProfile(int fileID, String metaData, String uploader, String GRVersion) throws SQLException {
+//    	ArrayList<String> returnList = new ArrayList<String>();
+//
+//    	StringBuilder strBuiler = new StringBuilder();
+//
+//    	strBuiler.append(fileID);
+//    	strBuiler.append("[FileID]");
+//
+//    	SearchResult sr = searchExperiment(strBuiler.toString());
+//
+//    	String expID = sr.getValueByAnnotation(0, "expid");
+//
+//    	returnList.add(sr.getValueByAnnotation(0, "path"));
+//
+//    	FilePathGenerator fpg = new FilePathGenerator();
+//
+//    	String newFilePath = fpg.GenerateFilePathForCoversion(fileID, species, expID);
+//
+//        String query = "INSERT INTO File " +
+//                "(Path, FileType, Date, MetaData, Author, Uploader, IsPrivate, ExpID, GRVersion) VALUES (?, ?, CURRENT_TIMESTAMP, ?, ?, ?, ?, ?, ?)";
+//
+//        PreparedStatement tagExp = conn.prepareStatement(query);
+//
+//        tagExp.setString(1, newFilePath);
+//        tagExp.setString(2, "profile");
+//        tagExp.setString(3, metaData);
+//        tagExp.setString(4, null);
+//        tagExp.setString(5, uploader);
+//        tagExp.setBoolean(6, true);
+//        tagExp.setString(7, expID);
+//        tagExp.setString(8, GRVersion);
+//
+//        returnList.add(newFilePath);
+//
+//    	return returnList;
+//    }
 
 }

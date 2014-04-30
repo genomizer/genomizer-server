@@ -151,8 +151,8 @@ public class MethodTestsRWandKK {
 
         dbac.addFreeTextAnnotation(testAnnotationLabel);
 
-        Map<String, String> annotations = dbac.getAnnotations();
-        assertEquals("FreeText", annotations.get(testAnnotationLabel));
+        Map<String, Integer> annotations = dbac.getAnnotations();
+        assertTrue(0 == annotations.get(testAnnotationLabel));
 
         dbac.deleteAnnotation(testAnnotationLabel);
     }
@@ -161,7 +161,7 @@ public class MethodTestsRWandKK {
     public void shouldBeAbleToDeleteFreeTextAnnotaion() throws Exception {
 
         dbac.addFreeTextAnnotation(testAnnotationLabel);
-        Map<String, String> annotations = dbac.getAnnotations();
+        Map<String, Integer> annotations = dbac.getAnnotations();
         assertTrue(annotations.containsKey(testAnnotationLabel));
 
         dbac.deleteAnnotation(testAnnotationLabel);
@@ -174,8 +174,8 @@ public class MethodTestsRWandKK {
     public void shouldBeAbleToAddDropDownAnnotation() throws Exception {
 
         dbac.addDropDownAnnotation(testAnnotationLabel, testChoices);
-        Map<String, String> annotations = dbac.getAnnotations();
-        assertEquals("DropDown", annotations.get(testAnnotationLabel));
+        Map<String, Integer> annotations = dbac.getAnnotations();
+        assertTrue(annotations.get(testAnnotationLabel) == DatabaseAccessor.DROPDOWN);
         dbac.deleteAnnotation(testAnnotationLabel);
     }
 
@@ -183,8 +183,8 @@ public class MethodTestsRWandKK {
     public void shouldBeAbleToDeleteDropDownAnnotation() throws Exception {
 
         dbac.addDropDownAnnotation(testAnnotationLabel, testChoices);
-        Map<String, String> annotations = dbac.getAnnotations();
-        assertEquals("DropDown", annotations.get(testAnnotationLabel));
+        Map<String, Integer> annotations = dbac.getAnnotations();
+        assertTrue(annotations.get(testAnnotationLabel) == DatabaseAccessor.DROPDOWN);
 
         assertEquals(1, dbac.deleteAnnotation(testAnnotationLabel));
         annotations = dbac.getAnnotations();
