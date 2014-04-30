@@ -12,6 +12,7 @@ import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
+import java.util.UUID;
 import java.util.concurrent.Executor;
 
 import sun.misc.IOUtils;
@@ -71,68 +72,60 @@ public class Doorman {
 					System.out.println("POST");
 
 					if(exchange.getHttpContext().getPath().equals("/login")) {
-						connection_login(exchange);
+						System.out.println("login");
+						exchange(exchange, CommandType.LOGIN_COMMAND);
 					}
 
 				} else if(exchange.getRequestMethod().equals("DELETE")) {
 					System.out.println("DELETE");
 
 					if(exchange.getHttpContext().getPath().equals("/login")) {
-						connection_logout(exchange);
+						exchange(exchange, CommandType.LOGOUT_COMMAND);
 					}
 				}
-
-
-                System.out.println("HEJ2");
-
-
-
-                //commandHandler.doStuff(, , type);
 			}
 		};
 	}
 
-	private void connection_login(HttpExchange exchange) throws IOException {
+	private void exchange(HttpExchange exchange, CommandType type) throws IOException {
 		InputStream bodyStream = exchange.getRequestBody();
 		Scanner scanner = new Scanner(bodyStream);
 		String body = "";
+
+		String uuid = null;
+
+		if(!(type == CommandType.LOGIN_COMMAND)) {
+			try {
+				uuid =  exchange.getRequestHeaders().get("Authorization").get(0);
+			} catch(NullPointerException e) {
+				e.printStackTrace();
+			}
+		}
+
 		while(scanner.hasNext()) {
 			body = body.concat(scanner.next());
 		}
 
-		System.out.println(exchange.getRequestURI().toString());
-
-
-		Response response = commandHandler.doStuff(body, exchange.getRequestURI().toString(), CommandType.LOGIN_COMMAND);
+		Response response = commandHandler.doStuff(body, exchange.getRequestURI().toString(), uuid, type);
 
 		respond(exchange, response);
-        
+
 
 	}
-	
+
 	private void respond(HttpExchange exchange, Response response) throws IOException {
+		System.out.println("1");
 		String body = response.getBody();
-		exchange.sendResponseHeaders(response.getCode(), body.length());
+		System.out.println("2");
+		System.out.println("RESPOND BODY: " + body);
+		exchange.sendResponseHeaders(response.getCode(), body.getBytes().length);
         OutputStream os = exchange.getResponseBody();
         os.write(body.getBytes());
         os.flush();
         os.close();
 	}
 
-	private void connection_logout(HttpExchange exchange) {
-		/*InputStream bodyStream = exchange.getRequestBody();
-		Scanner scanner = new Scanner(bodyStream);
-		String body = "";
-		while(scanner.hasNext()) {
-			body = body.concat(scanner.next());
-		}
 
-		System.out.println(exchange.getRequestURI().toString());
-
-
-		commandHandler.doStuff(body, exchange.getRequestURI().toString(), CommandType.LOGOUT_COMMAND);
-*/
-	}
 
 	public static void main(String args[]) {
 		try {
