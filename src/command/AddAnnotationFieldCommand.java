@@ -34,11 +34,21 @@ public class AddAnnotationFieldCommand extends Command {
 
 	}
 
+	/**
+	 * Method used to validate all attributes.
+	 */
 	@Override
 	public boolean validate() {
 
-		// TODO Auto-generated method stub
-		return false;
+		//TODO: Add some more validation.
+
+		if(name == null || type == null || defaults == null || forced == null) {
+
+			return false;
+
+		}
+
+		return true;
 
 	}
 
@@ -47,7 +57,13 @@ public class AddAnnotationFieldCommand extends Command {
 
 		Response rsp;
 
+
+
+
+		//Need to get some kind of boolean as a response if success to add.
 		boolean success = true;
+
+		//Add check on user ID, privileges etc.. ?
 
 		if(success) {
 
