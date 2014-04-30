@@ -73,10 +73,8 @@ public class PubMedParser {
 					k--;
 				}
 				k++;
-//				valueList.add(s);
-				valueList.add(totStr.substring(k, startklam -1));
 
-				totStr.delete(k, endklam +1);
+				
 				boolean isFileAnno = false;
 
 				for(int j = 0; j < fileAnno.size(); j ++) {
@@ -92,9 +90,10 @@ public class PubMedParser {
 					appendString = "(Label = ? AND Value = ?)";
 					valueList.add(s);
 				}
+				
+				valueList.add(totStr.substring(k, startklam -1));
 
-
-
+				totStr.delete(k, endklam +1);
 
 				totStr.insert(k, appendString);
 
