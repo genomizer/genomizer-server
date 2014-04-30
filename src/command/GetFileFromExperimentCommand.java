@@ -19,10 +19,11 @@ public class GetFileFromExperimentCommand extends Command {
 	private String fileID;
 
 	/**
-	 * Empty constructor.
+	 * Constructor. Takes the fileID as argument.
+	 * @param fileID
 	 */
-	public GetFileFromExperimentCommand() {
-
+	public GetFileFromExperimentCommand(String fileID) {
+		this.fileID = fileID;
 	}
 
 	/**

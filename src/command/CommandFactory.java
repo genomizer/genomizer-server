@@ -116,9 +116,7 @@ public class CommandFactory {
 	 * @return the actual command.
 	 */
 	public Command createGetFileFromExperimentCommand(String json, String restful) {
-
-		return null;
-
+		return new GetFileFromExperimentCommand(parseID(restful));
 	}
 
 	/**
@@ -275,6 +273,12 @@ public class CommandFactory {
 
 		return null;
 
+	}
+
+	public String parseID(String restful) {
+		String[] split = restful.split("/");
+		String ID = split[split.length];
+		return ID;
 	}
 
 }
