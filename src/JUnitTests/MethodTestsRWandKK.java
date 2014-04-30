@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 
@@ -24,6 +25,20 @@ public class MethodTestsRWandKK {
     public static String testAnnotationLabel = "annotation_label_1234rwt";
     public static ArrayList<String> testChoices = new ArrayList<String>();
     public static String testChoice = "test_choice_1234rwt";
+    public static String testFreeTextValue = "test_free_text_annotation_value";
+
+    // test Experiment
+    public static String testExpId = "test_experiment_id_hrhgqerg";
+
+    // test File
+    public static String path = "/TestPath/gkdbfalkfnvlankfl";
+    public static String type = "raw";
+    public static String metaData = "/TestPath/inputfile.fastq";
+    public static String author = "Ruaridh";
+    public static String uploader = "Per";
+    public static boolean isPrivate = false;
+    public static String expId = null;
+    public static String grVersion = null;
 
 
     public static DatabaseAccessor dbac;
@@ -51,6 +66,10 @@ public class MethodTestsRWandKK {
 
     @AfterClass
     public static void undoAllChanges() throws SQLException {
+        dbac.deleteUser(testUser);
+        dbac.deleteAnnotation(testAnnotationLabel);
+        dbac.deleteExperiment(testExpId);
+        dbac.deleteTag(testExpId, testAnnotationLabel);
         dbac.close();
     }
 
@@ -124,7 +143,6 @@ public class MethodTestsRWandKK {
         dbac.setRole(testUser, testNewRole);
 
         assertEquals(testNewRole, dbac.getRole(testUser));
-
         dbac.deleteUser(testUser);
     }
 
@@ -198,6 +216,84 @@ public class MethodTestsRWandKK {
         dbac.deleteAnnotation(testAnnotationLabel);
     }
 
+    @Test
+    public void shouldBeAbleToGetChoicesForADropDownAttribute() throws Exception {
+        dbac.addDropDownAnnotation(testAnnotationLabel, testChoices);
+
+        List<String> choices = dbac.getChoices(testAnnotationLabel);
+        assertTrue(choices.contains(testChoices.get(0)));
+        assertTrue(choices.contains(testChoices.get(1)));
+        assertEquals(2, choices.size());
+
+        dbac.deleteAnnotation(testAnnotationLabel);
+    }
+
+    @Test
+    public void shouldHandleGettingChoicesForFreeTextAnnotation() throws Exception {
+        dbac.addFreeTextAnnotation(testAnnotationLabel);
+        List<String> choices = dbac.getChoices(testAnnotationLabel);
+        assertTrue(choices.isEmpty());
+
+        dbac.deleteAnnotation(testAnnotationLabel);
+    }
+
+    @Test
+    public void shouldBeAbleToAddExperiment() throws Exception {
+        dbac.addExperiment(testExpId);
+        assertTrue(dbac.hasExperiment(testExpId));
+        dbac.deleteExperiment(testExpId);
+    }
+
+    @Test
+    public void shouldBeAbleToDeleteExperiment() throws Exception {
+        dbac.addExperiment(testExpId);
+        assertTrue(dbac.hasExperiment(testExpId));
+        dbac.deleteExperiment(testExpId);
+        assertFalse(dbac.hasExperiment(testExpId));
+    }
+
+    @Test
+    public void shouldBeAbleToTagExperimentFreeText() throws Exception {
+        dbac.addExperiment(testExpId);
+        dbac.addFreeTextAnnotation(testAnnotationLabel);
+        int res = dbac.tagExperiment(testExpId, testAnnotationLabel, testFreeTextValue);
+        assertEquals(1, res);
+        dbac.deleteTag(testExpId, testAnnotationLabel);
+        dbac.deleteExperiment(testExpId);
+        dbac.deleteAnnotation(testAnnotationLabel);
+    }
+
+    @Test
+    public void shouldBeAbleToDeleteExperimentTagFreeText() throws Exception {
+        dbac.addExperiment(testExpId);
+        dbac.addFreeTextAnnotation(testAnnotationLabel);
+        dbac.tagExperiment(testExpId, testAnnotationLabel, testFreeTextValue);
+
+        int res = dbac.deleteTag(testExpId, testAnnotationLabel);
+        assertEquals(1, res);
+    }
+
+    /* Should addFile take a JSONObject as a parameter?*/
+    @Test
+    public void shouldBeAbleToAddAFile() throws Exception {
+
+        int res = dbac.addFile(path, type, metaData, author, uploader, isPrivate, expId, grVersion);
+        assertEquals(1, res);
+        dbac.deleteFile(path);
+    }
+
+    @Test
+    public void shouldBeAbleToDeleteFile() throws Exception {
+        dbac.addFile(path, type, metaData, author, uploader, isPrivate, expId, grVersion);
+        int res = dbac.deleteFile(path);
+        assertEquals(1, res);
+    }
+
+//    @Test
+//    public void shouldNotBeAbleToDeleteAnExperimentIfThereExistsAFileReferencingIt() throws Exception {
+//        dbac.addExperiment(expID);
+//        dbac.deleteExperiment(expId);
+//    }
 
 
 
