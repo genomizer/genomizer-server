@@ -68,6 +68,7 @@ public class MethodTestsRWandKK {
     public static void undoAllChanges() throws SQLException {
         dbac.deleteUser(testUser);
         dbac.deleteAnnotation(testAnnotationLabel);
+        dbac.deleteFile(path);
         dbac.deleteExperiment(testExpId);
         dbac.deleteTag(testExpId, testAnnotationLabel);
         dbac.close();
@@ -271,6 +272,7 @@ public class MethodTestsRWandKK {
 
         int res = dbac.deleteTag(testExpId, testAnnotationLabel);
         assertEquals(1, res);
+        dbac.deleteExperiment(testExpId);
     }
 
     /* Should addFile take a JSONObject as a parameter?*/
@@ -289,11 +291,16 @@ public class MethodTestsRWandKK {
         assertEquals(1, res);
     }
 
-//    @Test
-//    public void shouldNotBeAbleToDeleteAnExperimentIfThereExistsAFileReferencingIt() throws Exception {
-//        dbac.addExperiment(expID);
-//        dbac.deleteExperiment(expId);
-//    }
+    @Test(expected = SQLException.class)
+    public void shouldNotBeAbleToDeleteAnExperimentIfThereExistsAFileReferencingIt() throws Exception {
+        dbac.addExperiment(testExpId);
+        dbac.addFile(path, type, metaData, author, uploader, isPrivate, testExpId, grVersion);
+        dbac.deleteExperiment(testExpId);
+        assertTrue(dbac.hasExperiment(testExpId));
+        
+        dbac.deleteFile(path);
+        dbac.deleteExperiment(testExpId);
+    }
 
 
 
