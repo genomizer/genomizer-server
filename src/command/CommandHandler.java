@@ -55,6 +55,7 @@ public class CommandHandler {
 	private Command createCommand(CommandType cmdt, String json, String restful) {
 
 		Command newCommand = null;
+		String[] parsedRest = parseRest(restful);
 
 		if(cmdt == CommandType.LOGIN_COMMAND) {
 
@@ -143,6 +144,16 @@ public class CommandHandler {
 		}
 
 		return newCommand;
+	}
+
+	public String[] parseRest(String restful) {
+		String[] split = restful.split("/");
+		String[] parsed = new String[split.length];
+
+		for(int i = 0; i < split.length-1; i++) {
+			parsed[i] = split[i+1];
+		}
+		return parsed;
 	}
 
 }
