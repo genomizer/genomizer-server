@@ -58,7 +58,6 @@ public class CommandHandler {
 
 			newCommand = cmdFactory.createLoginCommand(json, restful);
 
-
 		} else if (cmdt == CommandType.LOGOUT_COMMAND) {
 
 			newCommand = cmdFactory.createLogoutCommand(restful);
