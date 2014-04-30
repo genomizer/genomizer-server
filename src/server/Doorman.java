@@ -66,21 +66,67 @@ public class Doorman {
 				System.out.println("HEJ " + exchange.getHttpContext().getPath());
 
 				if(exchange.getRequestMethod().equals("GET")) {
-					System.out.println("GET");
 
-				} else if(exchange.getRequestMethod().equals("POST")) {
-					System.out.println("POST");
-
-					if(exchange.getHttpContext().getPath().equals("/login")) {
-						System.out.println("login");
-						exchange(exchange, CommandType.LOGIN_COMMAND);
+					if(exchange.getHttpContext().getPath().equals("/experiment")) {
+						exchange(exchange, CommandType.RETRIEVE_EXPERIMENT_COMMAND);
+					} else if(exchange.getHttpContext().getPath().equals("/file")) {
+						exchange(exchange, CommandType.GET_FILE_FROM_EXPERIMENT_COMMAND);
+					} else if(exchange.getHttpContext().getPath().equals("/search")) {
+						exchange(exchange, CommandType.SEARCH_FOR_EXPERIMENTS_COMMAND);
+					} else if(exchange.getHttpContext().getPath().equals("/annotation")) {
+						exchange(exchange, CommandType.GET_ANNOTATION_INFORMATION_COMMAND);
+					} else if(exchange.getHttpContext().getPath().equals("/sysadm")) {
+						exchange(exchange, CommandType.GET_ANNOTATION_PRIVILEGES_COMMAND);
 					}
 
+
+
+				} else if(exchange.getRequestMethod().equals("PUT")) {
+
+					if(exchange.getHttpContext().getPath().equals("/experiment")) {
+						exchange(exchange, CommandType.UPDATE_EXPERIMENT_COMMAND);
+					} else if(exchange.getHttpContext().getPath().equals("/file")) {
+						exchange(exchange, CommandType.UPDATE_FILE_IN_EXPERIMENT_COMMAND);
+					} else if(exchange.getHttpContext().getPath().equals("/user")) {
+						exchange(exchange, CommandType.UPDATE_USER_COMMAND);
+					} else if(exchange.getHttpContext().getPath().equals("/process")) {
+						exchange(exchange, CommandType.CONVERT_RAW_TO_PROFILE_COMMAND);
+					} else if(exchange.getHttpContext().getPath().equals("/annotation")) {
+						exchange(exchange, CommandType.ADD_ANNOTATION_VALUE_COMMAND);
+					} else if(exchange.getHttpContext().getPath().equals("/sysadm")) {
+						exchange(exchange, CommandType.UPDATE_ANNOTATION_PRIVILEGES_COMMAND);
+					}
+
+
+
+				} else if(exchange.getRequestMethod().equals("POST")) {
+
+					if(exchange.getHttpContext().getPath().equals("/login")) {
+						exchange(exchange, CommandType.LOGIN_COMMAND);
+					} else if(exchange.getHttpContext().getPath().equals("/experiment")) {
+						exchange(exchange, CommandType.ADD_EXPERIMENT_COMMAND);
+					} else if(exchange.getHttpContext().getPath().equals("/file")) {
+						exchange(exchange, CommandType.ADD_FILE_TO_EXPERIMENT_COMMAND);
+					} else if(exchange.getHttpContext().getPath().equals("/user")) {
+						exchange(exchange, CommandType.CREATE_USER_COMMAND);
+					} else if(exchange.getHttpContext().getPath().equals("/annotation")) {
+						exchange(exchange, CommandType.ADD_ANNOTATION_FIELD_COMMAND);
+					}
+
+
+
 				} else if(exchange.getRequestMethod().equals("DELETE")) {
-					System.out.println("DELETE");
 
 					if(exchange.getHttpContext().getPath().equals("/login")) {
 						exchange(exchange, CommandType.LOGOUT_COMMAND);
+					} else if(exchange.getHttpContext().getPath().equals("/experiment")) {
+						exchange(exchange, CommandType.REMOVE_EXPERIMENT_COMMAND);
+					} else if(exchange.getHttpContext().getPath().equals("/file")) {
+						exchange(exchange, CommandType.DELETE_FILE_FROM_EXPERIMENT_COMMAND);
+					} else if(exchange.getHttpContext().getPath().equals("/user")) {
+						exchange(exchange, CommandType.DELETE_USER_COMMAND);
+					} else if(exchange.getHttpContext().getPath().equals("/annotation")) {
+						exchange(exchange, CommandType.REMOVE_ANNOTATION_FIELD_COMMAND);
 					}
 				}
 			}
@@ -114,15 +160,20 @@ public class Doorman {
 	}
 
 	private void respond(HttpExchange exchange, Response response) throws IOException {
-		System.out.println("1");
-		String body = response.getBody();
-		System.out.println("2");
-		System.out.println("RESPOND BODY: " + body);
-		exchange.sendResponseHeaders(response.getCode(), body.getBytes().length);
-        OutputStream os = exchange.getResponseBody();
-        os.write(body.getBytes());
-        os.flush();
-        os.close();
+		String body = null;
+		if(response.getBody() == null || response.getBody().equals("")) {
+			exchange.sendResponseHeaders(response.getCode(), 0);
+
+		} else {
+
+			body = response.getBody();
+			exchange.sendResponseHeaders(response.getCode(), body.getBytes().length);
+
+			OutputStream os = exchange.getResponseBody();
+			os.write(body.getBytes());
+			os.flush();
+			os.close();
+		}
 	}
 
 
