@@ -59,15 +59,15 @@ public class CommandHandler {
 
 		if(cmdt == CommandType.LOGIN_COMMAND) {
 
-			newCommand = cmdFactory.createLoginCommand(json, restful);
+			newCommand = cmdFactory.createLoginCommand(json, parsedRest);
 
 		} else if (cmdt == CommandType.LOGOUT_COMMAND) {
 
-			newCommand = cmdFactory.createLogoutCommand(restful);
+			newCommand = cmdFactory.createLogoutCommand(parsedRest);
 
 		} else if (cmdt == CommandType.RETRIEVE_EXPERIMENT_COMMAND) {
 
-			newCommand = cmdFactory.createRetrieveExperimentCommand(json, restful);
+			newCommand = cmdFactory.createRetrieveExperimentCommand(json, parsedRest);
 
 		} else if (cmdt == CommandType.ADD_EXPERIMENT_COMMAND) {
 
@@ -83,11 +83,11 @@ public class CommandHandler {
 
 		} else if (cmdt == CommandType.GET_FILE_FROM_EXPERIMENT_COMMAND) {
 
-			newCommand = cmdFactory.createGetFileFromExperimentCommand(json, restful);
+			newCommand = cmdFactory.createGetFileFromExperimentCommand(json, parsedRest);
 
 		} else if (cmdt == CommandType.ADD_FILE_TO_EXPERIMENT_COMMAND) {
 
-			newCommand = null;
+			newCommand = cmdFactory.createAddFileToExperimentCommand(json, parsedRest);
 
 		} else if (cmdt == CommandType.UPDATE_FILE_IN_EXPERIMENT_COMMAND) {
 
