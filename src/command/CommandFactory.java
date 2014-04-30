@@ -160,11 +160,17 @@ public class CommandFactory {
 	 * @param json string to initiate class.
 	 * @param restful tag to put into class.
 	 * @return the actual command.
+	 * @throws SQLException
 	 */
 	public Command createSearchForExperimentCommand(String json, String restful) {
 
-		return null;
-
+		String queryParameters = restful.substring(restful.lastIndexOf('/')+1);
+		String[] params = queryParameters.split("=");
+		if (params[0].equals("annotations")) {
+			return new SearchForExperimentsCommand(params[1]);
+		} else {
+			throw new IllegalArgumentException();
+		}
 	}
 
 	/**
