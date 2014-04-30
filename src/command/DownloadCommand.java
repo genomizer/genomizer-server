@@ -1,5 +1,7 @@
 package command;
 
+import java.util.ArrayList;
+
 import com.google.gson.annotations.Expose;
 
 /**
@@ -40,10 +42,12 @@ public class DownloadCommand extends Command {
 	@Override
 	public boolean validate() {
 
-		// TODO Auto-generated method stub (Should maybe be private?)
-
-		return false;
-
+		// Check if file exists
+//		if(!fileExists(fileID)) {
+//			return false;
+//		} else {
+			return true;
+//		}
 	}
 
 	/**
@@ -53,9 +57,22 @@ public class DownloadCommand extends Command {
 	@Override
 	public Response execute() {
 
-		// TODO Auto-generated method stub
+		Response rsp = rsp;
+		ArrayList<String> attributes = new ArrayList<String>();
 
-		return null;
+		if(!fileExists(fileID)) {
+			attributes = getFileAttributes(fileID);
+			rsp = new DownloadResponse(200, attributes);
+		} else {
+			rsp = new FNFResponse();
+		}
+
+//		String fileName = getFileName(fileID);
+//		String size = getFileSize(fileID);
+//		String type = getFileType(fileID);
+//		String URL = getFileURL(fileID);
+
+		return rsp;
 	}
 
 
