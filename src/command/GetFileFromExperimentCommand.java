@@ -22,8 +22,9 @@ public class GetFileFromExperimentCommand extends Command {
 	 * Constructor. Takes the fileID as argument.
 	 * @param fileID
 	 */
-	public GetFileFromExperimentCommand(String fileID) {
-		this.fileID = fileID;
+	public GetFileFromExperimentCommand(String[] restful) {
+		fileID = restful[restful.length];
+
 	}
 
 	/**
@@ -45,13 +46,13 @@ public class GetFileFromExperimentCommand extends Command {
 		Response rsp = rsp;
 		ArrayList<String> attributes = new ArrayList<String>();
 
-		if(!fileExists(fileID)) {
-			attributes = getFileAttributes(fileID);
-			rsp = new DownloadResponse(200, attributes);
-		} else {
-			// File not found, send appropriate response (404)
-			rsp = new ErrorResponse(404);
-		}
+//		if(!fileExists(fileID)) {
+//			attributes = getFileAttributes(fileID);
+//			rsp = new DownloadResponse(200, attributes);
+//		} else {
+//			// File not found, send appropriate response (404)
+//			rsp = new ErrorResponse(404);
+//		}
 		return rsp;
 	}
 

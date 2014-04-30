@@ -3,22 +3,12 @@ package server;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
-import java.util.Iterator;
-import java.util.List;
+
 import java.util.Scanner;
-import java.util.UUID;
 import java.util.concurrent.Executor;
 
 import response.Response;
-import sun.misc.IOUtils;
-
-
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -37,7 +27,6 @@ public class Doorman {
 		this.commandHandler = commandHandler;
 
 		httpServer = HttpServer.create(new InetSocketAddress(port),0);
-		httpServer.createContext("/", createHandler()); // SHOULD BE CHANGED!!!
 		httpServer.createContext("/login", createHandler());
 		httpServer.createContext("/experiment", createHandler());
 		httpServer.createContext("/file", createHandler());
@@ -63,69 +52,91 @@ public class Doorman {
 			@Override
 			public void handle(HttpExchange exchange) throws IOException {
 
-				if(exchange.getRequestMethod().equals("GET")) {
-
-					if(exchange.getHttpContext().getPath().equals("/experiment")) {
+				switch(exchange.getRequestMethod()) {
+				case "GET":
+					switch(exchange.getHttpContext().getPath()) {
+					case "/experiment":
 						exchange(exchange, CommandType.RETRIEVE_EXPERIMENT_COMMAND);
-					} else if(exchange.getHttpContext().getPath().equals("/file")) {
+						break;
+					case "/file":
 						exchange(exchange, CommandType.GET_FILE_FROM_EXPERIMENT_COMMAND);
-					} else if(exchange.getHttpContext().getPath().equals("/search")) {
+						break;
+					case "/search":
 						exchange(exchange, CommandType.SEARCH_FOR_EXPERIMENTS_COMMAND);
-					} else if(exchange.getHttpContext().getPath().equals("/annotation")) {
+						break;
+					case "/annotation":
 						exchange(exchange, CommandType.GET_ANNOTATION_INFORMATION_COMMAND);
-					} else if(exchange.getHttpContext().getPath().equals("/sysadm")) {
+						break;
+					case "/sysadm":
 						exchange(exchange, CommandType.GET_ANNOTATION_PRIVILEGES_COMMAND);
+						break;
 					}
 
 
-
-				} else if(exchange.getRequestMethod().equals("PUT")) {
-
-					if(exchange.getHttpContext().getPath().equals("/experiment")) {
+				case "PUT":
+					switch(exchange.getHttpContext().getPath()) {
+					case "/experiment":
 						exchange(exchange, CommandType.UPDATE_EXPERIMENT_COMMAND);
-					} else if(exchange.getHttpContext().getPath().equals("/file")) {
+						break;
+					case "/file":
 						exchange(exchange, CommandType.UPDATE_FILE_IN_EXPERIMENT_COMMAND);
-					} else if(exchange.getHttpContext().getPath().equals("/user")) {
+						break;
+					case "/user":
 						exchange(exchange, CommandType.UPDATE_USER_COMMAND);
-					} else if(exchange.getHttpContext().getPath().equals("/process")) {
+						break;
+					case "/process":
 						exchange(exchange, CommandType.CONVERT_RAW_TO_PROFILE_COMMAND);
-					} else if(exchange.getHttpContext().getPath().equals("/annotation")) {
+						break;
+					case "/annotation":
 						exchange(exchange, CommandType.ADD_ANNOTATION_VALUE_COMMAND);
-					} else if(exchange.getHttpContext().getPath().equals("/sysadm")) {
+						break;
+					case "/sysadm":
 						exchange(exchange, CommandType.UPDATE_ANNOTATION_PRIVILEGES_COMMAND);
+						break;
 					}
 
 
-
-				} else if(exchange.getRequestMethod().equals("POST")) {
-
-					if(exchange.getHttpContext().getPath().equals("/login")) {
+				case "POST":
+					switch(exchange.getHttpContext().getPath()) {
+					case "/login":
 						exchange(exchange, CommandType.LOGIN_COMMAND);
-					} else if(exchange.getHttpContext().getPath().equals("/experiment")) {
+						break;
+					case "/experiment":
 						exchange(exchange, CommandType.ADD_EXPERIMENT_COMMAND);
-					} else if(exchange.getHttpContext().getPath().equals("/file")) {
+						break;
+					case "/file":
 						exchange(exchange, CommandType.ADD_FILE_TO_EXPERIMENT_COMMAND);
-					} else if(exchange.getHttpContext().getPath().equals("/user")) {
+						break;
+					case "/user":
 						exchange(exchange, CommandType.CREATE_USER_COMMAND);
-					} else if(exchange.getHttpContext().getPath().equals("/annotation")) {
+						break;
+					case "/annotation":
 						exchange(exchange, CommandType.ADD_ANNOTATION_FIELD_COMMAND);
+						break;
+
 					}
 
 
-
-				} else if(exchange.getRequestMethod().equals("DELETE")) {
-
-					if(exchange.getHttpContext().getPath().equals("/login")) {
+				case "DELETE":
+					switch(exchange.getHttpContext().getPath()) {
+					case "/login":
 						exchange(exchange, CommandType.LOGOUT_COMMAND);
-					} else if(exchange.getHttpContext().getPath().equals("/experiment")) {
+						break;
+					case "/experiment":
 						exchange(exchange, CommandType.REMOVE_EXPERIMENT_COMMAND);
-					} else if(exchange.getHttpContext().getPath().equals("/file")) {
+						break;
+					case "/file":
 						exchange(exchange, CommandType.DELETE_FILE_FROM_EXPERIMENT_COMMAND);
-					} else if(exchange.getHttpContext().getPath().equals("/user")) {
+						break;
+					case "/user":
 						exchange(exchange, CommandType.DELETE_USER_COMMAND);
-					} else if(exchange.getHttpContext().getPath().equals("/annotation")) {
+						break;
+					case "/annotation":
 						exchange(exchange, CommandType.REMOVE_ANNOTATION_FIELD_COMMAND);
-					}
+						break;
+
+
+				}
 				}
 			}
 		};
@@ -149,6 +160,7 @@ public class Doorman {
 		while(scanner.hasNext()) {
 			body = body.concat(scanner.next());
 		}
+		scanner.close();
 
 		Response response = commandHandler.doStuff(body, exchange.getRequestURI().toString(), uuid, type);
 
