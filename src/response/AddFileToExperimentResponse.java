@@ -9,7 +9,9 @@ public class AddFileToExperimentResponse extends Response {
 
 	public AddFileToExperimentResponse(int code, String filepath) {
 		this.code = code;
-		this.filepath = filepath;
+		// create URL from filepath
+		// http//:....:8090/html/ + filepath
+		// this.filepath = fileURL;
 	}
 
 }

@@ -45,16 +45,16 @@ public class AddFileToExperimentCommand extends Command {
 		fileInfo.add(fileName);
 		fileInfo.add(size);
 		fileInfo.add(type);
-
-		// Method from database group, needs more info
-		// String filepath = uploadFile(experimentID, fileInfo);
-		// if(filepath != null) {
-			// rsp = new AddFileToExperimentResponse(200, filepath);
-		// } else {
-			// rsp = new ErrorResponse(404);
-		// }
-		// return rsp;
-		return null;
+//
+//		 Method from database group, needs more info
+//		 String filepath = uploadFile(experimentID, fileInfo);
+//		 if(filepath != null) {
+//			 rsp = new AddFileToExperimentResponse(200, filepath);
+//		 } else {
+//			 rsp = new ErrorResponse(404);
+//		 }
+//		 return rsp;
+//		return null;
 	}
 
 
