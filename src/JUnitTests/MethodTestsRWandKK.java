@@ -63,6 +63,12 @@ public class MethodTestsRWandKK {
 //        String database = "genomizerdb";
 
         dbac = new DatabaseAccessor(username, password, host, database);
+
+        dbac.deleteUser(testUser);
+        dbac.deleteAnnotation(testAnnotationLabel);
+        dbac.deleteFile(path);
+        dbac.deleteExperiment(testExpId);
+        dbac.deleteTag(testExpId, testAnnotationLabel);
     }
 
     @AfterClass
@@ -301,6 +307,11 @@ public class MethodTestsRWandKK {
 
         dbac.deleteFile(path);
         dbac.deleteExperiment(testExpId);
+    }
+
+    @Test
+    public void shouldBeAbleToSearchUsingPubMedString() throws Exception {
+
     }
 
 

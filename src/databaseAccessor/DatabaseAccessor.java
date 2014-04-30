@@ -31,18 +31,19 @@ public class DatabaseAccessor {
     public static Integer FREETEXT = 1;
     public static Integer DROPDOWN = 2;
 
-
-
-
     /**
      * Creates a databaseAccessor that opens a connection to a database.
      *
-     * @param username - The username to log in to the database as. Should
-     * be "c5dv151_vt14" as of now.
-     * @param password - The password to log in to the database. Should be
-     * "shielohh" as of now.
-     * @param host - The name of the database management system. Will problebly
-     * always be "postgres" unless the DMS is switched with something else.
+     * @param username
+     *            - The username to log in to the database as. Should be
+     *            "c5dv151_vt14" as of now.
+     * @param password
+     *            - The password to log in to the database. Should be "shielohh"
+     *            as of now.
+     * @param host
+     *            - The name of the database management system. Will problebly
+     *            always be "postgres" unless the DMS is switched with something
+     *            else.
      * @param database
      * @throws SQLException
      */
@@ -59,8 +60,8 @@ public class DatabaseAccessor {
     }
 
     /**
-     * Public method to check if the instance of the class is
-     * connected to a database.
+     * Public method to check if the instance of the class is connected to a
+     * database.
      *
      * @return boolean, true if it is connected, otherwise false.
      */
@@ -71,9 +72,12 @@ public class DatabaseAccessor {
     /**
      * Method to add a new user to the database.
      *
-     * @param String, the username
-     * @param String, the password
-     * @param String, therole
+     * @param String
+     *            , the username
+     * @param String
+     *            , the password
+     * @param String
+     *            , therole
      * @throws SQLException
      */
     public void addUser(String username, String password, String role)
@@ -86,6 +90,7 @@ public class DatabaseAccessor {
         addUser.setString(3, role);
 
         addUser.executeUpdate();
+        addUser.close();
     }
 
     public ArrayList<String> getUsers() throws SQLException {
@@ -97,6 +102,7 @@ public class DatabaseAccessor {
         while (rs.next()) {
             users.add(rs.getString("Username"));
         }
+        stmt.close();
         return users;
     }
 
@@ -106,6 +112,7 @@ public class DatabaseAccessor {
         PreparedStatement deleteUser = conn.prepareStatement(statementStr);
         deleteUser.setString(1, username);
         deleteUser.executeUpdate();
+        deleteUser.close();
     }
 
     public void close() throws SQLException {
@@ -114,7 +121,9 @@ public class DatabaseAccessor {
 
     /**
      * Returns the password for the given user. Used for login.
-     * @param user - the username as stirng
+     *
+     * @param user
+     *            - the username as stirng
      * @return String - the password
      * @throws SQLException
      */
@@ -124,10 +133,12 @@ public class DatabaseAccessor {
         PreparedStatement getPassword = conn.prepareStatement(query);
         getPassword.setString(1, user);
         ResultSet rs = getPassword.executeQuery();
+        String pass = null;
         if (rs.next()) {
-            return rs.getString("password");
+            pass = rs.getString("password");
         }
-        return null;
+        getPassword.close();
+        return pass;
     }
 
     public int resetPassword(String username, String newPassword)
@@ -137,7 +148,9 @@ public class DatabaseAccessor {
         PreparedStatement resetPassword = conn.prepareStatement(query);
         resetPassword.setString(1, newPassword);
         resetPassword.setString(2, username);
-        return resetPassword.executeUpdate();
+        int res = resetPassword.executeUpdate();
+        resetPassword.close();
+        return res;
 
     }
 
@@ -147,7 +160,9 @@ public class DatabaseAccessor {
         PreparedStatement setRole = conn.prepareStatement(query);
         setRole.setString(1, role);
         setRole.setString(2, username);
-        return setRole.executeUpdate();
+        int res = setRole.executeUpdate();
+        setRole.close();
+        return res;
     }
 
     public String getRole(String username) throws SQLException {
@@ -155,10 +170,12 @@ public class DatabaseAccessor {
         PreparedStatement getRole = conn.prepareStatement(query);
         getRole.setString(1, username);
         ResultSet rs = getRole.executeQuery();
+        String role = null;
         if (rs.next()) {
-            return rs.getString("Role");
+            role = rs.getString("Role");
         }
-        return null;
+        getRole.close();
+        return role;
     }
 
     public int addFreeTextAnnotation(String label) throws SQLException {
@@ -166,8 +183,9 @@ public class DatabaseAccessor {
                 + "(Label, DataType) VALUES (?, 'FreeText')";
         PreparedStatement addAnnotation = conn.prepareStatement(query);
         addAnnotation.setString(1, label);
-        return addAnnotation.executeUpdate();
-
+        int res = addAnnotation.executeUpdate();
+        addAnnotation.close();
+        return res;
     }
 
     public Map<String, Integer> getAnnotations() throws SQLException {
@@ -177,11 +195,12 @@ public class DatabaseAccessor {
         ResultSet rs = getAnnotations.executeQuery(query);
         while (rs.next()) {
             if (rs.getString("DataType").equalsIgnoreCase("FreeText")) {
-                annotations.put(rs.getString("Label"), FREETEXT );
+                annotations.put(rs.getString("Label"), FREETEXT);
             } else {
                 annotations.put(rs.getString("Label"), DROPDOWN);
             }
         }
+        getAnnotations.close();
 
         return annotations;
     }
@@ -200,14 +219,20 @@ public class DatabaseAccessor {
         PreparedStatement deleteAnnotation = conn
                 .prepareStatement(statementStr);
         deleteAnnotation.setString(1, label);
-        return deleteAnnotation.executeUpdate();
+        int res = deleteAnnotation.executeUpdate();
+        deleteAnnotation.close();
+        return res;
     }
 
     private int removeChoices(String label) throws SQLException {
-        String statementStr = "DELETE FROM Annotation_Choices " + "WHERE (Label = ?)";
-        PreparedStatement deleteAnnotation = conn.prepareStatement(statementStr);
+        String statementStr = "DELETE FROM Annotation_Choices "
+                + "WHERE (Label = ?)";
+        PreparedStatement deleteAnnotation = conn
+                .prepareStatement(statementStr);
         deleteAnnotation.setString(1, label);
-        return deleteAnnotation.executeUpdate();
+        int res = deleteAnnotation.executeUpdate();
+        deleteAnnotation.close();
+        return res;
     }
 
     private Integer getAnnotationType(String label) throws SQLException {
@@ -241,14 +266,16 @@ public class DatabaseAccessor {
             addChoices.setString(2, choice);
             tuplesInserted += addChoices.executeUpdate();
         }
+        addChoices.close();
 
         return tuplesInserted;
 
     }
 
-    public ArrayList<String> getDropDownAnnotations(String label) throws SQLException {
-        String query = "SELECT Value FROM Annotation_Choices " +
-        		"WHERE (Label = ?)";
+    public ArrayList<String> getDropDownAnnotations(String label)
+            throws SQLException {
+        String query = "SELECT Value FROM Annotation_Choices "
+                + "WHERE (Label = ?)";
         ArrayList<String> dropDownStrings = new ArrayList<String>();
         PreparedStatement getDropDownStrings = conn.prepareStatement(query);
         getDropDownStrings.setString(1, label);
@@ -256,13 +283,9 @@ public class DatabaseAccessor {
         while (rs.next()) {
             dropDownStrings.add(rs.getString("Value"));
         }
+        getDropDownStrings.close();
         return dropDownStrings;
     }
-
-
-
-
-
 
     // KOLLA! Ska den kasta ett undantag?
     // Skriv fler tester!
@@ -271,45 +294,39 @@ public class DatabaseAccessor {
      * @param searchPubMed
      * @return null if failed, else a SearchResult object.
      */
-    public SearchResult searchExperiment(String searchPubMed){
+    public SearchResult searchExperiment(String searchPubMed) {
 
+        PreparedStatement pStatement;
 
-		PreparedStatement pStatement;
+        String query = "SELECT * FROM File NATURAL JOIN Annotated_With "
+                + "WHERE (";
 
-		String query = "SELECT * FROM File NATURAL JOIN Annotated_With " +
-				"WHERE (";
+        // getting the where-statements from pubmed string to usable query.
+        PubMedParser theParser = new PubMedParser();
+        ParsedPubMed queryMaterial = theParser.parsePubMed(searchPubMed);
 
-		//getting the where-statements from pubmed string to usable query.
-		PubMedParser theParser = new PubMedParser();
-		ParsedPubMed queryMaterial = theParser.parsePubMed(searchPubMed);
+        query = query + queryMaterial.getWhereString() + ")";
 
-		query = query + queryMaterial.getWhereString() + ")";
+        try {
+            pStatement = conn.prepareStatement(query);
+            for (int i = 1; i < queryMaterial.getValues().size(); i++) {
+                pStatement.setString(i, queryMaterial.getValues().get(i - 1));
+            }
 
-		try {
-			pStatement = conn.prepareStatement(query);
-			for(int i = 1;i < queryMaterial.getValues().size();i++){
-				pStatement.setString(i, queryMaterial.getValues().get(i-1));
-			}
+            ResultSet res = pStatement.executeQuery();
 
-			ResultSet res = pStatement.executeQuery();
+            SearchResult queryRes = new SearchResult(res);
+            return queryRes;
 
-			SearchResult queryRes = new SearchResult(res);
-			return queryRes;
-
-		} catch (SQLException e) {
-			System.out.println("Failed to send query to database\n");
-		}
-		return null;
+        } catch (SQLException e) {
+            System.out.println("Failed to send query to database\n");
+        }
+        return null;
     }
 
-	public String uploadFile() {
-		//
-		return null;
-	}
-
     public List<String> getChoices(String label) throws SQLException {
-        String query = "SELECT Value FROM Annotation_Choices " +
-        		"WHERE Label = ?";
+        String query = "SELECT Value FROM Annotation_Choices "
+                + "WHERE Label = ?";
         List<String> choices = new ArrayList<String>();
         PreparedStatement getChoices = conn.prepareStatement(query);
         getChoices.setString(1, label);
@@ -317,41 +334,45 @@ public class DatabaseAccessor {
         while (rs.next()) {
             choices.add(rs.getString("Value"));
         }
+        getChoices.close();
 
         return choices;
     }
 
     public int addExperiment(String expID) throws SQLException {
-        String query = "INSERT INTO Experiment " +
-        		"(ExpID) VALUES (?)";
+        String query = "INSERT INTO Experiment " + "(ExpID) VALUES (?)";
         PreparedStatement addExp = conn.prepareStatement(query);
         addExp.setString(1, expID);
 
-        return addExp.executeUpdate();
+        int res = addExp.executeUpdate();
+        addExp.close();
+        return res;
     }
 
     public boolean hasExperiment(String expID) throws SQLException {
-        String query = "SELECT ExpID FROM Experiment " +
-        		"WHERE ExpID = ?";
+        String query = "SELECT ExpID FROM Experiment " + "WHERE ExpID = ?";
         PreparedStatement hasExp = conn.prepareStatement(query);
         hasExp.setString(1, expID);
         ResultSet rs = hasExp.executeQuery();
 
-        return rs.next();
+        boolean res = rs.next();
+        hasExp.close();
+        return res;
     }
 
     public int deleteExperiment(String expId) throws SQLException {
         String statementStr = "DELETE FROM Experiment " + "WHERE (ExpID = ?)";
-        PreparedStatement deleteExperiment = conn.prepareStatement(statementStr);
+        PreparedStatement deleteExperiment = conn
+                .prepareStatement(statementStr);
         deleteExperiment.setString(1, expId);
         return deleteExperiment.executeUpdate();
 
     }
 
     // TODO should not be able to tag freely a dropdown annotation
-    public int tagExperiment(String expID, String label, String value) throws SQLException {
-        String query = "INSERT INTO Annotated_With " +
-                "VALUES (?, ?, ?)";
+    public int tagExperiment(String expID, String label, String value)
+            throws SQLException {
+        String query = "INSERT INTO Annotated_With " + "VALUES (?, ?, ?)";
         PreparedStatement tagExp = conn.prepareStatement(query);
         tagExp.setString(1, expID);
         tagExp.setString(2, label);
@@ -361,21 +382,21 @@ public class DatabaseAccessor {
     }
 
     public int deleteTag(String expID, String label) throws SQLException {
-        String statementStr = "DELETE FROM Annotated_With " + "WHERE (ExpID = ? AND Label = ?)";
+        String statementStr = "DELETE FROM Annotated_With "
+                + "WHERE (ExpID = ? AND Label = ?)";
         PreparedStatement deleteTag = conn.prepareStatement(statementStr);
         deleteTag.setString(1, expID);
         deleteTag.setString(2, label);
         return deleteTag.executeUpdate();
     }
 
-
     // Too many parameters. Could take a JSONObject instead.
     public int addFile(String path, String type, String metaData,
             String author, String uploader, boolean isPrivate, String expID,
             String grVersion) throws SQLException {
 
-        String query = "INSERT INTO File " +
-                "(Path, FileType, Date, MetaData, Author, Uploader, IsPrivate, ExpID, GRVersion) VALUES (?, ?, CURRENT_TIMESTAMP, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO File "
+                + "(Path, FileType, Date, MetaData, Author, Uploader, IsPrivate, ExpID, GRVersion) VALUES (?, ?, CURRENT_TIMESTAMP, ?, ?, ?, ?, ?, ?)";
         PreparedStatement tagExp = conn.prepareStatement(query);
 
         tagExp.setString(1, path);
@@ -387,14 +408,18 @@ public class DatabaseAccessor {
         tagExp.setString(7, expID);
         tagExp.setString(8, grVersion);
 
-        return tagExp.executeUpdate();
+        int res = tagExp.executeUpdate();
+        tagExp.close();
+        return res;
     }
 
     public int deleteFile(String path) throws SQLException {
         String statementStr = "DELETE FROM File " + "WHERE (Path = ?)";
         PreparedStatement deleteFile = conn.prepareStatement(statementStr);
         deleteFile.setString(1, path);
-        return deleteFile.executeUpdate();
+        int res = deleteFile.executeUpdate();
+        deleteFile.close();
+        return res;
     }
 
 }
