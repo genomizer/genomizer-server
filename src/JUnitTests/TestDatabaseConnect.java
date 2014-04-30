@@ -7,10 +7,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
 
 import org.junit.After;
 import org.junit.Before;
@@ -95,7 +92,6 @@ public class TestDatabaseConnect {
 		} catch (SQLException e) {
 			System.out.println("testSearchByWrongLabel fail");
 		}
-		System.out.println("hoppla");
 	}
 
 	@Test
@@ -104,6 +100,18 @@ public class TestDatabaseConnect {
 
 		try {
 			SearchResult res = searchFile(searchPubMed);
+			printQResult(res);
+		} catch (SQLException e) {
+			System.out.println("testSearchByNotExist fail");
+		}
+	}
+
+	@Test
+	public void testSearchByLabel() {
+		String searchPubMed = "2[FileID]";
+
+		try {
+			SearchResult res = searchExperiment(searchPubMed);
 			printQResult(res);
 		} catch (SQLException e) {
 			System.out.println("testSearchByNotExist fail");
@@ -121,13 +129,13 @@ public class TestDatabaseConnect {
 		ParsedPubMed queryMaterial = theParser.parsePubMed(searchPubMed);
 
 		query = query + queryMaterial.getWhereString() + ")";
-		System.out.println("\n\n" + query + "\n");
 		pStatement = conn.prepareStatement(query);
+		ArrayList<String> valueList = queryMaterial.getValues();
 
-		for(int i = 1;i <= queryMaterial.getValues().size();i++){
+		for(int i = 1;i <= valueList.size();i++){
 
 			if(queryMaterial.getValues().get(i-1).equals("Date")) {
-				i++;
+				valueList.remove(i -1);
 				java.sql.Date date = java.sql.Date.valueOf(queryMaterial.getValues().get(i-1));
 				pStatement.setDate(i,date);
 
@@ -141,11 +149,44 @@ public class TestDatabaseConnect {
 		return new SearchResult(res);
 	}
 
+	/**
+	 * kanske fixa, vet ej om det bara är strängar eller om det finns int
+	 *
+	 * @param searchPubMed
+	 * @return
+	 * @throws SQLException
+	 */
+	private SearchResult searchExperiment(String searchPubMed) throws SQLException {
+
+		PreparedStatement pStatement = null;
+		ResultSet res = null;
+		String query = "SELECT * FROM Annotated_With " +
+				"WHERE (";
+
+		PubMedParser theParser = new PubMedParser();
+		ParsedPubMed queryMaterial = theParser.parsePubMed(searchPubMed);
+
+		query = query + queryMaterial.getWhereString() + ")";
+		System.out.println("\n\n" + query + "\n");
+		pStatement = conn.prepareStatement(query);
+
+		for(int i = 1;i <= queryMaterial.getValues().size();i++){
+
+			if(isInteger(queryMaterial.getValues().get(i-1))) {
+				pStatement.setInt(i, Integer.parseInt(queryMaterial.getValues().get(i-1)));
+			} else {
+				pStatement.setString(i, queryMaterial.getValues().get(i-1));
+			}
+		}
+		res = pStatement.executeQuery();
+		return new SearchResult(res);
+	}
+
 	private void printQResult(SearchResult queryRes) throws SQLException {
 
 		ArrayList<String> result = queryRes.getRowValues(0);
 		ArrayList<String> resultHeader = queryRes.getColHeaders();
-
+System.out.println("\n\n");
 		for(int i=0;i<resultHeader.size();i++){
 			System.out.print(resultHeader.get(i) + "	|");
 		}
