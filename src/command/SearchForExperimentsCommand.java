@@ -1,5 +1,7 @@
 package command;
 
+import com.google.gson.annotations.Expose;
+
 import response.Response;
 
 /**
@@ -8,13 +10,14 @@ import response.Response;
  * @author tfy09jnn
  * @version 1.0
  */
-public class SearchCommand extends Command {
+public class SearchForExperimentsCommand extends Command {
 
+	private String annotations;
 
 	/**
 	 * Empty constructor.
 	 */
-	public SearchCommand() {
+	public SearchForExperimentsCommand() {
 
 	}
 
@@ -37,6 +40,8 @@ public class SearchCommand extends Command {
 	 */
 	@Override
 	public Response execute() {
+
+		//SearchResult result = database.getsearchresult(annotations)
 
 		// TODO Auto-generated method stub
 		return null;
