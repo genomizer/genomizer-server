@@ -2,7 +2,7 @@ package process.classes;
 
 import java.util.HashMap;
 
-public class ProcessHandler {
+public class ProcessHandler implements ProcessInterface{
 	private ProcessHandler() {
 
 	}
