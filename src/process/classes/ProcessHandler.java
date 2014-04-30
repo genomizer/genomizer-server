@@ -11,7 +11,7 @@ public class ProcessHandler {
 		switch(processName){
 		case "rawToProfile":
 			RawToProfileConverter rawToProfileConverter = new RawToProfileConverter();
-
+			System.out.println("JORÅ!");
 			rawToProfileConverter.procedure(procedureParams, inFile, outFile);
 			break;
 		case "profileToRegion":

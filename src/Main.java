@@ -1,7 +1,7 @@
 import java.io.IOException;
 
 import process.classes.Executor;
-import process.classes.ProcessCommand;
+import process.classes.ProcessHandler;
 
 //Class to make initial commit
 public class Main {
@@ -17,10 +17,13 @@ public class Main {
 
 		//String bamToWig = "samtools pileup fileName.bam | perl -ne 'BEGIN{print "track type=wiggle_0 name=fileName description=fileName\n"};($c, $start, undef, $depth) = split; if ($c ne $lastC) { print "variableStep chrom=$c\n"; };$lastC=$c;next unless $. % 10 ==0;print "$start\t$depth\n" unless $depth<3;'  > fileName.wig"
 		//samtools view -bS -o /path/*.bam /path/*.sam"
-		ProcessCommand p = new ProcessCommand("rawToProfile", new String[]{bowTie, samToBam});
+		ProcessHandler p = new ProcessHandler();
 		try {
 			System.out.println("nu executar vi");
-			p.execute();
+			String inFile = null;
+			String outFile = null;
+
+			p.executeProcess("rawToProfile", new String[]{bowTie, samToBam}, inFile, outFile);
 			System.out.println("nu har vi executat");
 		} catch (IllegalArgumentException | InterruptedException | IOException e) {
 			// TODO Auto-generated catch block
