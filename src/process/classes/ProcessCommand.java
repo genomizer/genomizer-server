@@ -13,21 +13,16 @@ public class ProcessCommand {
 		this.parameters = procedureParams;
 	}
 
-//	Future Sprint
-//	private ProcessCommand(String processName,String bowTieParams, String ratioCalcParams) {
-//		this.processName = processName;
-//		this.parameters[0] = bowTieParams;
-//		this.parameters[1] =  ratioCalcParams;
-//	}
-
 	public String execute() throws IllegalArgumentException, InterruptedException, IOException {
 		switch(processName){
 			case "rawToProfile":
 				RawToProfileConverter rawToProfileConverter = new RawToProfileConverter();
-				rawToProfileConverter.procedure(parameters);
+//				rawToProfileConverter.procedure(parameters);
+				break;
 			case "profileToRegion":
 				// TODOOO
 			default: throw new IllegalArgumentException();
 		}
+		return null;
 	}
 }

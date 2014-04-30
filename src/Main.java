@@ -19,18 +19,12 @@ public class Main {
 		//samtools view -bS -o /path/*.bam /path/*.sam"
 		ProcessCommand p = new ProcessCommand("rawToProfile", new String[]{bowTie, samToBam});
 		try {
+			System.out.println("nu executar vi");
 			p.execute();
+			System.out.println("nu har vi executat");
 		} catch (IllegalArgumentException | InterruptedException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		//e.specificParamProcedure(bowTie);
-		//e.specificParamProcedure(samToBam);
-//		e.specificParamProcedure(sortBam);
-//		e.specificParamProcedure(sortSam);
-
-
-
 	}
-
 }
