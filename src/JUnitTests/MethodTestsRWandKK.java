@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -16,6 +17,8 @@ import org.junit.Test;
 import databaseAccessor.DatabaseAccessor;
 
 public class MethodTestsRWandKK {
+    
+    // test User
     public static String testUser = "testUser_jhasdfv";
     public static String testPassword = "secret";
     public static String testNewPassword = "secret2";
@@ -36,10 +39,7 @@ public class MethodTestsRWandKK {
     public static String type = "raw";
     public static String metaData = "/TestPath/inputfile.fastq";
     public static String author = "Ruaridh";
-    public static String uploader = "Per";
     public static boolean isPrivate = false;
-    public static String expId = null;
-    public static String grVersion = null;
 
 
     public static DatabaseAccessor dbac;
@@ -47,20 +47,20 @@ public class MethodTestsRWandKK {
     @BeforeClass
     public static void setup() throws Exception {
 
-        String username = "c5dv151_vt14";
-        String password = "shielohh";
-        String host = "postgres";
-        String database = "c5dv151_vt14";
+//        String username = "c5dv151_vt14";
+//        String password = "shielohh";
+//        String host = "postgres";
+//        String database = "c5dv151_vt14";
 
         testChoices.add(testChoice);
         testChoices.add(testChoice + "2");
 
 
         // Ruaridh's DB Info (Comment out when at school)
-//        String username = "genomizer_prog";
-//        String password = "secret";
-//        String host = "localhost";
-//        String database = "genomizerdb";
+        String username = "genomizer_prog";
+        String password = "secret";
+        String host = "localhost";
+        String database = "genomizerdb";
 
         dbac = new DatabaseAccessor(username, password, host, database);
 
@@ -70,14 +70,19 @@ public class MethodTestsRWandKK {
         dbac.deleteExperiment(testExpId);
         dbac.deleteTag(testExpId, testAnnotationLabel);
     }
-
-    @AfterClass
-    public static void undoAllChanges() throws SQLException {
+    
+    @After
+    public void tearDown() throws Exception {
+        
         dbac.deleteUser(testUser);
         dbac.deleteAnnotation(testAnnotationLabel);
         dbac.deleteFile(path);
         dbac.deleteExperiment(testExpId);
         dbac.deleteTag(testExpId, testAnnotationLabel);
+    }
+
+    @AfterClass
+    public static void undoAllChanges() throws SQLException {
         dbac.close();
     }
 
@@ -266,7 +271,6 @@ public class MethodTestsRWandKK {
         dbac.addFreeTextAnnotation(testAnnotationLabel);
         int res = dbac.tagExperiment(testExpId, testAnnotationLabel, testFreeTextValue);
         assertEquals(1, res);
-        dbac.deleteTag(testExpId, testAnnotationLabel);
         dbac.deleteExperiment(testExpId);
         dbac.deleteAnnotation(testAnnotationLabel);
     }
@@ -281,37 +285,76 @@ public class MethodTestsRWandKK {
         assertEquals(1, res);
         dbac.deleteExperiment(testExpId);
     }
+    
+    @Test
+    public void shouldBeAbleToTagExperimentDropDown() throws Exception {
+        dbac.addExperiment(testExpId);
+        dbac.addDropDownAnnotation(testAnnotationLabel, testChoices);
+        int res = dbac.tagExperiment(testExpId, testAnnotationLabel, testChoice);
+        assertEquals(1, res);
+        dbac.deleteExperiment(testExpId);
+        dbac.deleteAnnotation(testAnnotationLabel);
+    }
+    
+    @Test(expected = IOException.class)
+    public void shouldNotBeAbleToTagExperimentWithInvalidDropdownChoice() throws Exception {
+
+        dbac.addExperiment(testExpId);
+        dbac.addDropDownAnnotation(testAnnotationLabel, testChoices);
+        dbac.tagExperiment(testExpId, testAnnotationLabel, testFreeTextValue);
+    }
 
     /* Should addFile take a JSONObject as a parameter?*/
     @Test
     public void shouldBeAbleToAddAFile() throws Exception {
-
-        int res = dbac.addFile(path, type, metaData, author, uploader, isPrivate, expId, grVersion);
+        dbac.addUser(testUser, testPassword, testRole);
+        int res = dbac.addFile(path, type, metaData, author, testUser, isPrivate, null, null);
         assertEquals(1, res);
+        dbac.deleteUser(testUser);
         dbac.deleteFile(path);
     }
 
     @Test
     public void shouldBeAbleToDeleteFile() throws Exception {
-        dbac.addFile(path, type, metaData, author, uploader, isPrivate, expId, grVersion);
+        dbac.addUser(testUser, testPassword, testRole);
+        dbac.addFile(path, type, metaData, author, testUser, isPrivate, null, null);
         int res = dbac.deleteFile(path);
         assertEquals(1, res);
+        dbac.deleteUser(testUser);
     }
 
     @Test(expected = SQLException.class)
     public void shouldNotBeAbleToDeleteAnExperimentIfThereExistsAFileReferencingIt() throws Exception {
         dbac.addExperiment(testExpId);
-        dbac.addFile(path, type, metaData, author, uploader, isPrivate, testExpId, grVersion);
+        dbac.addUser(testUser, testPassword, testRole);
+        dbac.addFile(path, type, metaData, author, testUser, isPrivate, testExpId, null);
         dbac.deleteExperiment(testExpId);
         assertTrue(dbac.hasExperiment(testExpId));
 
         dbac.deleteFile(path);
         dbac.deleteExperiment(testExpId);
+        dbac.deleteUser(testUser);
+    }
+    
+    @Test
+    public void shouldBeAbleToSearchUsingExperimentID() throws Exception {
+        dbac.addExperiment(testExpId);
+        Experiment e = dbac.getExperiment(testExpId);
+        assertEquals(e.getID(), testExpId);
+    }
+    
+    @Test
+    public void shouldReturnExperimentObjectContainingAnnotations() throws Exception {
+        dbac.addExperiment(testExpId);
+        dbac.addDropDownAnnotation(testAnnotationLabel, testChoices);
+        dbac.tagExperiment(testExpId, testAnnotationLabel, testChoice);
+        Experiment e = dbac.getExperiment(testExpId);
+        assertTrue(e.getAnnotations().containsKey(testAnnotationLabel));
     }
 
     @Test
-    public void shouldBeAbleToSearchUsingPubMedString() throws Exception {
-
+    public void shouldReturnExperimentObjectContainingFileTuples() throws Exception {
+        // TODO
     }
 
 

@@ -6,7 +6,7 @@ CREATE TABLE File
     Date DATE NOT NULL,
     MetaData VARCHAR(256),
     Author VARCHAR(32) NOT NULL,
-    Uploader VARCHAR(32) NOT NULL,
+    Uploader VARCHAR(32),
     IsPrivate BOOLEAN NOT NULL,
     ExpID VARCHAR(64),
     GRVersion VARCHAR(16),
@@ -34,8 +34,8 @@ CREATE TABLE Annotated_With
     Label VARCHAR(32) NOT NULL,
     Value VARCHAR(32) NOT NULL,
     CONSTRAINT pkey_annotated_with PRIMARY KEY(ExpID, Label),
-    CONSTRAINT fkey_expid FOREIGN KEY (ExpID) REFERENCES Experiment(ExpID),
-    CONSTRAINT fkey_label FOREIGN KEY (Label) REFERENCES Annotation(Label)
+    CONSTRAINT fkey_expid FOREIGN KEY (ExpID) REFERENCES Experiment(ExpID) ON DELETE CASCADE,
+    CONSTRAINT fkey_label FOREIGN KEY (Label) REFERENCES Annotation(Label) ON DELETE CASCADE
 );
 
 CREATE TABLE Annotation_Choices
@@ -43,7 +43,7 @@ CREATE TABLE Annotation_Choices
     Label VARCHAR(32) NOT NULL,
     Value VARCHAR(32) NOT NULL,
     CONSTRAINT pkey_annotation_choices PRIMARY KEY(Label, Value),
-    CONSTRAINT fkey_label FOREIGN KEY (Label) REFERENCES Annotation(Label)
+    CONSTRAINT fkey_label FOREIGN KEY (Label) REFERENCES Annotation(Label) ON DELETE CASCADE
 );
 
 CREATE TABLE User_Info
@@ -54,7 +54,7 @@ CREATE TABLE User_Info
     CONSTRAINT pkey_user_info PRIMARY KEY(Username)
 );
 
-ALTER TABLE File ADD CONSTRAINT fkey_uploader FOREIGN KEY (Uploader) REFERENCES User_Info(Username);
+ALTER TABLE File ADD CONSTRAINT fkey_uploader FOREIGN KEY (Uploader) REFERENCES User_Info(Username) ON DELETE SET NULL;
 
 CREATE TABLE Working_on
 (
