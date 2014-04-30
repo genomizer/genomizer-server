@@ -74,11 +74,11 @@ public class DatabaseAccessor {
         conn.close();
     }
 
-    public String getPassword(String testUser) throws SQLException {
+    public String getPassword(String User) throws SQLException {
         String query = "SELECT Password FROM User_Info "
                 + "WHERE (Username = ?)";
         PreparedStatement getPassword = conn.prepareStatement(query);
-        getPassword.setString(1, testUser);
+        getPassword.setString(1, User);
         ResultSet rs = getPassword.executeQuery();
         if (rs.next()) {// TODO Auto-generated method stub
             return rs.getString("password");
