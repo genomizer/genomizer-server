@@ -150,4 +150,12 @@ public class CommandFactoryTest {
 
 	}
 
+	@Test
+	public void testParseID() {
+		String restful = "/file/421";
+		CommandFactory cmdf = new CommandFactory();
+		String id = cmdf.parseID(restful);
+		assertEquals("421", id);
+	}
+
 }

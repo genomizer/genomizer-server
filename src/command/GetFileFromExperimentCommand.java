@@ -22,8 +22,9 @@ public class GetFileFromExperimentCommand extends Command {
 	 * Constructor. Takes the fileID as argument.
 	 * @param fileID
 	 */
-	public GetFileFromExperimentCommand(String fileID) {
-		this.fileID = fileID;
+	public GetFileFromExperimentCommand(String[] restful) {
+		fileID = restful[restful.length];
+
 	}
 
 	/**

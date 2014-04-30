@@ -1,6 +1,7 @@
 package command;
 
 import response.AddAnnotationFieldResponse;
+import response.ErrorResponse;
 import response.Response;
 
 import com.google.gson.annotations.Expose;
@@ -72,7 +73,7 @@ public class AddAnnotationFieldCommand extends Command {
 
 		} else {
 
-			rsp = new AddAnnotationFieldResponse(400);
+			rsp = new ErrorResponse(400);
 
 		}
 

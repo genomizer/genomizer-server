@@ -55,18 +55,19 @@ public class CommandHandler {
 	private Command createCommand(CommandType cmdt, String json, String restful) {
 
 		Command newCommand = null;
+		String[] parsedRest = parseRest(restful);
 
 		if(cmdt == CommandType.LOGIN_COMMAND) {
 
-			newCommand = cmdFactory.createLoginCommand(json, restful);
+			newCommand = cmdFactory.createLoginCommand(json, parsedRest);
 
 		} else if (cmdt == CommandType.LOGOUT_COMMAND) {
 
-			newCommand = cmdFactory.createLogoutCommand(restful);
+			newCommand = cmdFactory.createLogoutCommand(parsedRest);
 
 		} else if (cmdt == CommandType.RETRIEVE_EXPERIMENT_COMMAND) {
 
-			newCommand = cmdFactory.createRetrieveExperimentCommand(json, restful);
+			newCommand = cmdFactory.createRetrieveExperimentCommand(json, parsedRest);
 
 		} else if (cmdt == CommandType.ADD_EXPERIMENT_COMMAND) {
 
@@ -82,11 +83,11 @@ public class CommandHandler {
 
 		} else if (cmdt == CommandType.GET_FILE_FROM_EXPERIMENT_COMMAND) {
 
-			newCommand = cmdFactory.createGetFileFromExperimentCommand(json, restful);
+			newCommand = cmdFactory.createGetFileFromExperimentCommand(json, parsedRest);
 
 		} else if (cmdt == CommandType.ADD_FILE_TO_EXPERIMENT_COMMAND) {
 
-			newCommand = null;
+			newCommand = cmdFactory.createAddFileToExperimentCommand(json, parsedRest);
 
 		} else if (cmdt == CommandType.UPDATE_FILE_IN_EXPERIMENT_COMMAND) {
 
@@ -143,6 +144,16 @@ public class CommandHandler {
 		}
 
 		return newCommand;
+	}
+
+	public String[] parseRest(String restful) {
+		String[] split = restful.split("/");
+		String[] parsed = new String[split.length];
+
+		for(int i = 0; i < split.length-1; i++) {
+			parsed[i] = split[i+1];
+		}
+		return parsed;
 	}
 
 }
