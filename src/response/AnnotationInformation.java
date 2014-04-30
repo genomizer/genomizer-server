@@ -54,5 +54,9 @@ public class AnnotationInformation {
 		return forced;
 	}
 
+	public void setId(int newid) {
+		id = newid;
+	}
+
 
 }
