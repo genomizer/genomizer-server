@@ -1,30 +1,32 @@
 package process.classes;
 
-import java.util.HashMap;
+import java.io.IOException;
 
+<<<<<<< HEAD
 public class ProcessHandler implements ProcessInterface{
 	private ProcessHandler() {
 
 	}
 	public static ProcessHandler createProcessHandler(){
+=======
+public class ProcessHandler {
+	public ProcessHandler createProcessHandler() {
+>>>>>>> b12c0e3086e53a5d7707e8f61e46526adb08bda6
 		return new ProcessHandler();
 	}
+	//SPRINT 1: Let procedureParams be empty!
+	public String executeProcess(String processName, String[] procedureParams, String inFile, String outFile) throws InterruptedException, IOException {
+		switch(processName){
+		case "rawToProfile":
+			RawToProfileConverter rawToProfileConverter = new RawToProfileConverter();
 
-	public String runExecutable(String process, String[] param, String inFilePath, String outFilePath) throws IllegalArgumentException {
-		switch(process){
-			case "rawToProfile":
-				return "rawToProfile";
-			default: throw new IllegalArgumentException();
+			rawToProfileConverter.procedure(procedureParams, inFile, outFile);
+			break;
+		case "profileToRegion":
+			// TODOOO
+			break;
+		default: throw new IllegalArgumentException();
 		}
-
-	}
-
-	public String runConversion(String conversion, String inFilePath, String outFilePath){
-
 		return null;
 	}
-
-
-
-
 }
