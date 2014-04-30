@@ -51,8 +51,13 @@ public class PubMedParser {
 		int startklam = 0;
 		int endklam = 0;
 
+		/*
+		 * Makes a stringbuffer out of the pubMed string.
+		 * Will loop until it finds one '[' and saves the position as
+		 * an integer 'startklam', then continues to loop until it
+		 * finds a ']' and marks the position as an 'endklam'.
+		 */
 		totStr.append(pubMed);
-		System.out.println(pubMed);
 		for(int i = 0; i < totStr.length(); i++) {
 			char c = totStr.charAt(i);
 			foundCol = false;
@@ -65,16 +70,25 @@ public class PubMedParser {
 				foundCol = true;
 			}
 
+			/*
+			 * When the ']' is found, it will go back to the startklam
+			 * position, and loop back in the string until it finds a
+			 * space ' ' or a paranthesis '('. It will use these positions
+			 * to cut out the part of the string and replace it with:
+			 * (s + " = ?") or ("(Label = ? AND Value = ?)"), dpending on
+			 * if the annotation exists in the filetable or if it is an
+			 * experiment annotation.
+			 *
+			 */
 			if(foundCol) {
 				String s = totStr.substring(startklam, endklam);
-				int k = startklam;
+				int index = startklam;
 
-				while((k <= totStr.length()) && (k > (-1)) && (totStr.charAt(k) != ' ') && totStr.charAt(k) != '(') {
-					k--;
+				while((index <= totStr.length()) && (index > (-1)) && (totStr.charAt(index) != ' ') && totStr.charAt(index) != '(') {
+					index--;
 				}
-				k++;
+				index++;
 
-				
 				boolean isFileAnno = false;
 
 				for(int j = 0; j < fileAnno.size(); j ++) {
@@ -83,27 +97,37 @@ public class PubMedParser {
 					}
 				}
 
+				/*
+				 * if the value is "date" it has to be handled differently.
+				 *
+				 */
 				String appendString = null;
 				if(isFileAnno) {
 					appendString = s + " = ?";
+					if(s.equals("Date")) {
+						valueList.add(s);
+					}
 				} else {
 					appendString = "(Label = ? AND Value = ?)";
 					valueList.add(s);
 				}
-				
-				valueList.add(totStr.substring(k, startklam -1));
 
-				totStr.delete(k, endklam +1);
+				valueList.add(totStr.substring(index, startklam -1));
 
-				totStr.insert(k, appendString);
+				totStr.delete(index, endklam +1);
 
-				i = k + appendString.length();
+				totStr.insert(index, appendString);
+
+				i = index + appendString.length();
 			}
 		}
 		values = valueList;
 		whereString = totStr.toString();
 	}
 
+	/*
+	 * The fileannotations, ugly i know.
+	 */
 	private void makeFileAnno() {
 		fileAnno = new ArrayList<String>();
 		fileAnno.add("FileID");

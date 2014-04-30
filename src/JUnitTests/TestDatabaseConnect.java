@@ -7,6 +7,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 
@@ -26,12 +28,12 @@ public class TestDatabaseConnect {
 	private static final String dbUser = "c5dv151_vt14";
 	private static final String dbPass = "shielohh";
 
-	private Connection dbCon=null;
+	private Connection conn=null;
 
 	@Before
 	public void connect() {
 
-		dbCon=null;
+		conn=null;
 
 		try {
 			Class.forName(dbDriver);
@@ -40,7 +42,7 @@ public class TestDatabaseConnect {
 		}
 
 		try {
-			dbCon = DriverManager.getConnection(
+			conn = DriverManager.getConnection(
 					dbConString, dbUser, dbPass);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -50,158 +52,118 @@ public class TestDatabaseConnect {
 	@After
 	public void discinnect() {
 		try {
-			dbCon.close();
+			conn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		dbCon = null;
+		conn = null;
 	}
 
 	@Test
 	public void shouldConnect() {
 
 		try {
-			assertTrue(dbCon.isValid(5));
+			assertTrue(conn.isValid(5));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 
-	/*
+	/**
+	 * Andrés tester
+	 */
 	@Test
-	public void shouldExQuery() {
-
-		Statement statement = null;
-		String selectTableSQL = "SELECT Name FROM Workspace";
-		ResultSet rs = null;
+	public void testSearchByAuthorLabel() {
+		String searchPubMed = "Sven[Author] AND Human[Species]";
 
 		try {
-			statement = dbCon.createStatement();
-			rs = statement.executeQuery(selectTableSQL);
+			SearchResult res = searchFile(searchPubMed);
+			printQResult(res);
 		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		try {
-			while (rs.next()) {
-				String name = rs.getString("Name");
-				System.out.println("Name : " + name);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
+			System.out.println("testSearchByAuthorLabel fail");
 		}
 	}
 
 	@Test
-	public void testFindSpecific(){
-
-		Statement statement = null;
-		String selectTableSQL = "SELECT * FROM experiment WHERE (tissue='toe')";
-		ResultSet rs = null;
+	public void testSearchByWrongLabel() {
+		String searchPubMed = "2014-04-29[Date]";
+		System.out.println("datum");
 
 		try {
-			statement = dbCon.createStatement();
-			rs = statement.executeQuery(selectTableSQL);
+			SearchResult res = searchFile(searchPubMed);
+			printQResult(res);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			System.out.println("testSearchByWrongLabel fail");
 		}
-
-		try {
-			while (rs.next()) {
-				String name = rs.getString("tissue");
-				System.out.println("Name : " + name);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		System.out.println("hoppla");
 	}
 
 	@Test
-	public void testPrepStatement() {
-
-		PreparedStatement statement = null;
-		String selectTableSQL = "SELECT ExpID FROM Experiment WHERE (species = ?)";
-		try {
-			statement = dbCon.prepareStatement(selectTableSQL);
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		}
+	public void testSearchByNotExistLabel() {
+		String searchPubMed = "2[FileID]";
 
 		try {
-			statement.setString(1, "fish");
+			SearchResult res = searchFile(searchPubMed);
+			printQResult(res);
 		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		ResultSet rs = null;
-		try {
-			rs = statement.executeQuery();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		try {
-			while (rs.next()) {
-				String name = rs.getString("ExpID");
-				System.out.println("Name : " + name);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
+			System.out.println("testSearchByNotExist fail");
 		}
 	}
-	*/
 
-	@Test
-	public void testSearchByPubMed(){
+	private SearchResult searchFile(String searchPubMed) throws SQLException {
 
-//		String searchPubMed = "Human[Species]";
-		String searchPubMed = "banankaka[ExpID] AND Human[Species]";
-//		String searchPubMed = "Sven[Author] AND banankaka[ExpID]";
-
-		PreparedStatement pStatement;
-
+		PreparedStatement pStatement = null;
+		ResultSet res = null;
 		String query = "SELECT * FROM File NATURAL JOIN Annotated_With " +
 				"WHERE (";
-		//getting the where-statements from pubmed string to usable query.
+
 		PubMedParser theParser = new PubMedParser();
 		ParsedPubMed queryMaterial = theParser.parsePubMed(searchPubMed);
 
 		query = query + queryMaterial.getWhereString() + ")";
+		System.out.println("\n\n" + query + "\n");
+		pStatement = conn.prepareStatement(query);
 
+		for(int i = 1;i <= queryMaterial.getValues().size();i++){
 
-System.out.println("asdasd: " + query + "\n-----------\n");
-		try {
-			pStatement = dbCon.prepareStatement(query);
+			if(queryMaterial.getValues().get(i-1).equals("Date")) {
+				i++;
+				java.sql.Date date = java.sql.Date.valueOf(queryMaterial.getValues().get(i-1));
+				pStatement.setDate(i,date);
 
-			for(int i = 1;i <= queryMaterial.getValues().size();i++){
-
+			} else if(isInteger(queryMaterial.getValues().get(i-1))) {
+				pStatement.setInt(i, Integer.parseInt(queryMaterial.getValues().get(i-1)));
+			} else {
 				pStatement.setString(i, queryMaterial.getValues().get(i-1));
-				System.out.println(queryMaterial.getValues().get(i-1));
 			}
-
-			ResultSet res = pStatement.executeQuery();
-
-			SearchResult queryRes = new SearchResult(res);
-
-			ArrayList<String> result = queryRes.getRowValues(0);
-			ArrayList<String> resultHeader = queryRes.getColHeaders();
-
-			for(int i=0;i<resultHeader.size();i++){
-				System.out.print(resultHeader.get(i) + "	|");
-			}
-			System.out.println("\n-----------------------------------------------------------------------------------");
-			if(result != null){
-				for(int i=0;i<result.size();i++){
-					System.out.print(result.get(i) + "	|");
-				}
-			}
-
-
-
-		} catch (SQLException e) {
-			System.out.println("Failed to send query to database\n");
 		}
-
+		res = pStatement.executeQuery();
+		return new SearchResult(res);
 	}
 
+	private void printQResult(SearchResult queryRes) throws SQLException {
+
+		ArrayList<String> result = queryRes.getRowValues(0);
+		ArrayList<String> resultHeader = queryRes.getColHeaders();
+
+		for(int i=0;i<resultHeader.size();i++){
+			System.out.print(resultHeader.get(i) + "	|");
+		}
+		System.out.println("\n-----------------------------------------------------------------------------------");
+		if(result != null){
+			for(int i=0;i<result.size();i++){
+				System.out.print(result.get(i) + "	|");
+			}
+		}
+		System.out.println("\n");
+	}
+
+	private boolean isInteger(String s) {
+		try {
+			Integer.parseInt(s);
+		} catch(NumberFormatException e) {
+	        return false;
+	    }
+	    return true;
+	}
 }
