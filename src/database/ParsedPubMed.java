@@ -21,8 +21,8 @@ public class ParsedPubMed {
 	}
 
 	/**
-	 * Returns a array list of values to be mapped to a preparedstatement.
-	 * @return
+	 * Returns a array list of values to be mapped to a prepared statement.
+	 * @return an arraylist of strings
 	 */
 	public ArrayList<String> getValues() {
 		return values;
