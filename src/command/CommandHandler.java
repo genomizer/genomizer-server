@@ -82,7 +82,7 @@ public class CommandHandler {
 
 		} else if (cmdt == CommandType.GET_FILE_FROM_EXPERIMENT_COMMAND) {
 
-			newCommand = null;
+			newCommand = cmdFactory.createGetFileFromExperimentCommand(json, restful);
 
 		} else if (cmdt == CommandType.ADD_FILE_TO_EXPERIMENT_COMMAND) {
 

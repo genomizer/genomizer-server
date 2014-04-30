@@ -7,8 +7,7 @@ import com.google.gson.annotations.Expose;
 public class ConvertRawToProfileCommand extends Command {
 
 
-	@Expose
-	private String token;
+	private String fileID;
 
 
 	public ConvertRawToProfileCommand() {
@@ -24,6 +23,11 @@ public class ConvertRawToProfileCommand extends Command {
 	@Override
 	public Response execute() {
 		// TODO Auto-generated method stub
+		//Har ett filID, parsa i commandFactory
+		//FileExists till databas
+		//skicka filen till processmetoden, vilka param,returvärde?
+		//return respons 201
+
 		return null;
 	}
 
