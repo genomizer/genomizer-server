@@ -63,8 +63,6 @@ public class Doorman {
 			@Override
 			public void handle(HttpExchange exchange) throws IOException {
 
-				System.out.println("HEJ " + exchange.getHttpContext().getPath());
-
 				if(exchange.getRequestMethod().equals("GET")) {
 
 					if(exchange.getHttpContext().getPath().equals("/experiment")) {
