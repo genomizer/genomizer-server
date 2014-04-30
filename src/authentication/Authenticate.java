@@ -19,12 +19,16 @@ public class Authenticate {
 	}
 
 	static public void addUser(String username,String userID){
-		activeUsersID.put(username, userID);
+		activeUsersID.put(userID, username);
 	}
 
 	static public boolean userExists(String username){
 		System.out.println(activeUsersID);
-		return activeUsersID.containsKey(username);
-		
+		return activeUsersID.containsValue(username);
+
+	}
+
+	static public String getUsername(String userID){
+		return activeUsersID.get(userID);
 	}
 }
