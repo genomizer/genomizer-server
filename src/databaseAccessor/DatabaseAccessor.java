@@ -22,6 +22,25 @@ public class DatabaseAccessor {
 
     Connection conn;
 
+    String username = "c5dv151_vt14";
+    String password = "shielohh";
+    String host = "postgres";
+    String database = "c5dv151_vt14";
+
+
+
+
+    /**
+     * Creates a databaseAccessor that opens a connection to a database.
+     * @param username - The username to log in to the database as. Should
+     * be "c5dv151_vt14" as of now.
+     * @param password - The password to log in to the database. Should be
+     * "shielohh" as of now.
+     * @param host - The name of the database management system. Will problebly
+     * always be "postgres" unless the DMS is switched with something else.
+     * @param database
+     * @throws SQLException
+     */
     public DatabaseAccessor(String username, String password, String host,
             String database) throws SQLException {
 
@@ -74,13 +93,19 @@ public class DatabaseAccessor {
         conn.close();
     }
 
-    public String getPassword(String User) throws SQLException {
+    /**
+     * Returns the password for the given user. Used for login.
+     * @param user - the username as stirng
+     * @return String - the password
+     * @throws SQLException
+     */
+    public String getPassword(String user) throws SQLException {
         String query = "SELECT Password FROM User_Info "
                 + "WHERE (Username = ?)";
         PreparedStatement getPassword = conn.prepareStatement(query);
-        getPassword.setString(1, User);
+        getPassword.setString(1, user);
         ResultSet rs = getPassword.executeQuery();
-        if (rs.next()) {// TODO Auto-generated method stub
+        if (rs.next()) {
             return rs.getString("password");
         }
         return null;
