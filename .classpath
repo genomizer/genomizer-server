@@ -14,5 +14,6 @@
 	<classpathentry kind="lib" path="/home/walkma/git/genomizer-server/external-libs/httpclient-cache-4.3.3.jar"/>
 	<classpathentry kind="lib" path="/home/walkma/git/genomizer-server/external-libs/httpcore-4.3.2.jar"/>
 	<classpathentry kind="lib" path="/home/walkma/git/genomizer-server/external-libs/httpmime-4.3.3.jar"/>
+	<classpathentry kind="lib" path="/home/dv11/dv11ann/Downloads/postgresql-9.3-1101.jdbc4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
