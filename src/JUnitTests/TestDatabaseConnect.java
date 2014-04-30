@@ -160,8 +160,6 @@ public class TestDatabaseConnect {
 		String searchPubMed = "banankaka[ExpID] AND Human[Species]";
 //		String searchPubMed = "Sven[Author] AND banankaka[ExpID]";
 
-		SearchResult queryRes = new SearchResult();
-
 		PreparedStatement pStatement;
 
 		String query = "SELECT * FROM File NATURAL JOIN Annotated_With " +
@@ -180,10 +178,12 @@ System.out.println("asdasd: " + query + "\n-----------\n");
 			for(int i = 1;i <= queryMaterial.getValues().size();i++){
 
 				pStatement.setString(i, queryMaterial.getValues().get(i-1));
+				System.out.println(queryMaterial.getValues().get(i-1));
 			}
 
 			ResultSet res = pStatement.executeQuery();
-			queryRes.setResultData(res);
+
+			SearchResult queryRes = new SearchResult(res);
 
 			ArrayList<String> result = queryRes.getRowValues(0);
 			ArrayList<String> resultHeader = queryRes.getColHeaders();

@@ -32,6 +32,7 @@ public class DatabaseAccessor {
 
     /**
      * Creates a databaseAccessor that opens a connection to a database.
+     *
      * @param username - The username to log in to the database as. Should
      * be "c5dv151_vt14" as of now.
      * @param password - The password to log in to the database. Should be
@@ -53,10 +54,24 @@ public class DatabaseAccessor {
 
     }
 
+    /**
+     * Public method to check if the instance of the class is
+     * connected to a database.
+     *
+     * @return boolean, true if it is connected, otherwise false.
+     */
     public boolean isConnected() {
         return conn != null;
     }
 
+    /**
+     * Method to add a new user to the database.
+     *
+     * @param String, the username
+     * @param String, the password
+     * @param String, therole
+     * @throws SQLException
+     */
     public void addUser(String username, String password, String role)
             throws SQLException {
         String userString = "INSERT INTO User_Info "
@@ -247,7 +262,7 @@ public class DatabaseAccessor {
      */
     public SearchResult searchExperiment(String searchPubMed){
 
-		SearchResult queryRes = new SearchResult();
+
 		PreparedStatement pStatement;
 
 		String query = "SELECT * FROM File NATURAL JOIN Annotated_With " +
@@ -262,16 +277,12 @@ public class DatabaseAccessor {
 		try {
 			pStatement = conn.prepareStatement(query);
 			for(int i = 1;i < queryMaterial.getValues().size();i++){
-
-				//first adding the Label, then the Value
-				pStatement.setString(i, queryMaterial.getValues().get(i-1));
-				i++;
 				pStatement.setString(i, queryMaterial.getValues().get(i-1));
 			}
 
 			ResultSet res = pStatement.executeQuery();
 
-			queryRes.setResultData(res);
+			SearchResult queryRes = new SearchResult(res);
 			return queryRes;
 
 		} catch (SQLException e) {
@@ -279,5 +290,14 @@ public class DatabaseAccessor {
 		}
 		return null;
     }
+
+    public String deleteFile(String fileID) {
+    	return null;
+    }
+
+	public String uploadFile() {
+		//
+		return null;
+	}
 
 }
