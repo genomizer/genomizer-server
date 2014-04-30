@@ -22,6 +22,7 @@ public class MethodTestsRWandKK {
     public static String testRole = "admin";
     public static String testNewRole = "admin2";
 
+    // test Annotation
     public static String testAnnotationLabel = "annotation_label_1234rwt";
     public static ArrayList<String> testChoices = new ArrayList<String>();
     public static String testChoice = "test_choice_1234rwt";
@@ -153,7 +154,7 @@ public class MethodTestsRWandKK {
         dbac.addFreeTextAnnotation(testAnnotationLabel);
 
         Map<String, Integer> annotations = dbac.getAnnotations();
-        assertTrue(0 == annotations.get(testAnnotationLabel));
+        assertEquals(DatabaseAccessor.FREETEXT, annotations.get(testAnnotationLabel));
 
         dbac.deleteAnnotation(testAnnotationLabel);
     }
@@ -176,7 +177,7 @@ public class MethodTestsRWandKK {
 
         dbac.addDropDownAnnotation(testAnnotationLabel, testChoices);
         Map<String, Integer> annotations = dbac.getAnnotations();
-        assertTrue(annotations.get(testAnnotationLabel) == DatabaseAccessor.DROPDOWN);
+        assertEquals(DatabaseAccessor.DROPDOWN, annotations.get(testAnnotationLabel));
         dbac.deleteAnnotation(testAnnotationLabel);
     }
 
@@ -185,7 +186,7 @@ public class MethodTestsRWandKK {
 
         dbac.addDropDownAnnotation(testAnnotationLabel, testChoices);
         Map<String, Integer> annotations = dbac.getAnnotations();
-        assertTrue(annotations.get(testAnnotationLabel) == DatabaseAccessor.DROPDOWN);
+        assertEquals(DatabaseAccessor.DROPDOWN, annotations.get(testAnnotationLabel));
 
         assertEquals(1, dbac.deleteAnnotation(testAnnotationLabel));
         annotations = dbac.getAnnotations();
@@ -297,7 +298,7 @@ public class MethodTestsRWandKK {
         dbac.addFile(path, type, metaData, author, uploader, isPrivate, testExpId, grVersion);
         dbac.deleteExperiment(testExpId);
         assertTrue(dbac.hasExperiment(testExpId));
-        
+
         dbac.deleteFile(path);
         dbac.deleteExperiment(testExpId);
     }
