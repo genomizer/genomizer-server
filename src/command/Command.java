@@ -20,7 +20,7 @@ import com.google.gson.GsonBuilder;
 public abstract class Command {
 
 	//Used to get the header for the respons.
-	private String header;
+	protected String header;
 
 	//Used to validate the class object.
 	public abstract boolean validate();
