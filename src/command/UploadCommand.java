@@ -1,5 +1,7 @@
 package command;
 
+import response.Response;
+
 /**
  * Class used to represent a command of the type Upload.
  *

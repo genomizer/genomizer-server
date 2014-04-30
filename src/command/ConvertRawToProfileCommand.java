@@ -1,5 +1,7 @@
 package command;
 
+import response.Response;
+
 import com.google.gson.annotations.Expose;
 
 public class ConvertRawToProfileCommand extends Command {

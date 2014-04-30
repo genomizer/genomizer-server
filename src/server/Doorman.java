@@ -15,6 +15,7 @@ import java.util.Scanner;
 import java.util.UUID;
 import java.util.concurrent.Executor;
 
+import response.Response;
 import sun.misc.IOUtils;
 
 
@@ -25,7 +26,6 @@ import com.sun.net.httpserver.HttpServer;
 
 import command.CommandHandler;
 import command.CommandType;
-import command.Response;
 
 public class Doorman {
 

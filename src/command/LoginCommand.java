@@ -1,4 +1,6 @@
 package command;
+import response.LoginResponse;
+import response.Response;
 import authentication.Authenticate;
 
 import com.google.gson.annotations.Expose;

@@ -2,6 +2,9 @@ package command;
 
 import java.util.ArrayList;
 
+import response.DownloadResponse;
+import response.Response;
+
 import com.google.gson.annotations.Expose;
 
 /**

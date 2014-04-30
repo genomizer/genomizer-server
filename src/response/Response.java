@@ -1,4 +1,4 @@
-package command;
+package response;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

@@ -1,5 +1,7 @@
 package command;
 
+import response.Response;
+
 //TODO: Fix comments.
 //TODO: Check command types etc...
 

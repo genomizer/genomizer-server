@@ -1,4 +1,4 @@
-package command;
+package response;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.Gson;

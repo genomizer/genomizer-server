@@ -1,8 +1,9 @@
 package command.test;
 
 import static org.junit.Assert.*;
-import command.LoginResponse;
 import org.junit.Test;
+
+import response.LoginResponse;
 
 
 public class LoginResponseTest {

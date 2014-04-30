@@ -1,5 +1,7 @@
 package command;
 
+import response.Response;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
