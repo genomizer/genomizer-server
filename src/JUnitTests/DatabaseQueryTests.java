@@ -11,7 +11,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import database.SearchResult;
 
 public class DatabaseQueryTests {
 
@@ -80,6 +79,7 @@ public class DatabaseQueryTests {
 			pStatement = connection.prepareStatement(query);
 			pStatement.setString(1, "Label");
 			pStatement.setString(2, "Species");
+
 			pStatement.setString(3, "Value");
 			pStatement.setString(4, "Human");
 
@@ -88,6 +88,7 @@ public class DatabaseQueryTests {
 			try {
 				while (res.next()) {
 					String name = res.getString("ExpID");
+
 					System.out.println("Name : " + name);
 				}
 			} catch (SQLException e) {

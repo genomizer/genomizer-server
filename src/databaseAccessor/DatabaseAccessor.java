@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -254,7 +255,10 @@ public class DatabaseAccessor {
 
 
 
-    //NMP
+
+
+    // KOLLA! Ska den kasta ett undantag?
+    // Skriv fler tester!
     /**
      *
      * @param searchPubMed
@@ -291,13 +295,99 @@ public class DatabaseAccessor {
 		return null;
     }
 
-    public String deleteFile(String fileID) {
-    	return null;
-    }
-
 	public String uploadFile() {
 		//
 		return null;
 	}
+
+    public List<String> getChoices(String label) throws SQLException {
+        String query = "SELECT Value FROM Annotation_Choices " +
+        		"WHERE Label = ?";
+        List<String> choices = new ArrayList<String>();
+        PreparedStatement getChoices = conn.prepareStatement(query);
+        getChoices.setString(1, label);
+        ResultSet rs = getChoices.executeQuery();
+        while (rs.next()) {
+            choices.add(rs.getString("Value"));
+        }
+
+        return choices;
+    }
+
+    public int addExperiment(String expID) throws SQLException {
+        String query = "INSERT INTO Experiment " +
+        		"(ExpID) VALUES (?)";
+        PreparedStatement addExp = conn.prepareStatement(query);
+        addExp.setString(1, expID);
+
+        return addExp.executeUpdate();
+    }
+
+    public boolean hasExperiment(String expID) throws SQLException {
+        String query = "SELECT ExpID FROM Experiment " +
+        		"WHERE ExpID = ?";
+        PreparedStatement hasExp = conn.prepareStatement(query);
+        hasExp.setString(1, expID);
+        ResultSet rs = hasExp.executeQuery();
+
+        return rs.next();
+    }
+
+    public int deleteExperiment(String expId) throws SQLException {
+        String statementStr = "DELETE FROM Experiment " + "WHERE (ExpID = ?)";
+        PreparedStatement deleteExperiment = conn.prepareStatement(statementStr);
+        deleteExperiment.setString(1, expId);
+        return deleteExperiment.executeUpdate();
+
+    }
+
+    // TODO should not be able to tag freely a dropdown annotation
+    public int tagExperiment(String expID, String label, String value) throws SQLException {
+        String query = "INSERT INTO Annotated_With " +
+                "VALUES (?, ?, ?)";
+        PreparedStatement tagExp = conn.prepareStatement(query);
+        tagExp.setString(1, expID);
+        tagExp.setString(2, label);
+        tagExp.setString(3, value);
+
+        return tagExp.executeUpdate();
+    }
+
+    public int deleteTag(String expID, String label) throws SQLException {
+        String statementStr = "DELETE FROM Annotated_With " + "WHERE (ExpID = ? AND Label = ?)";
+        PreparedStatement deleteTag = conn.prepareStatement(statementStr);
+        deleteTag.setString(1, expID);
+        deleteTag.setString(2, label);
+        return deleteTag.executeUpdate();
+    }
+
+
+    // Too many parameters. Could take a JSONObject instead.
+    public int addFile(String path, String type, String metaData,
+            String author, String uploader, boolean isPrivate, String expID,
+            String grVersion) throws SQLException {
+
+        String query = "INSERT INTO File " +
+                "(Path, FileType, Date, MetaData, Author, Uploader, IsPrivate, ExpID, GRVersion) VALUES (?, ?, CURRENT_TIMESTAMP, ?, ?, ?, ?, ?, ?)";
+        PreparedStatement tagExp = conn.prepareStatement(query);
+
+        tagExp.setString(1, path);
+        tagExp.setString(2, type);
+        tagExp.setString(3, metaData);
+        tagExp.setString(4, author);
+        tagExp.setString(5, uploader);
+        tagExp.setBoolean(6, isPrivate);
+        tagExp.setString(7, expID);
+        tagExp.setString(8, grVersion);
+
+        return tagExp.executeUpdate();
+    }
+
+    public int deleteFile(String path) throws SQLException {
+        String statementStr = "DELETE FROM File " + "WHERE (Path = ?)";
+        PreparedStatement deleteFile = conn.prepareStatement(statementStr);
+        deleteFile.setString(1, path);
+        return deleteFile.executeUpdate();
+    }
 
 }
