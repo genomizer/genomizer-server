@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import JUnitTests.Experiment;
 
 //may be changed
 import database.SearchResult;
@@ -36,7 +35,7 @@ public class DatabaseAccessor {
     /**
      * Creates a databaseAccessor that opens a connection to a
      * database.
-     * 
+     *
      * @param username
      *            - The username to log in to the database as. Should
      *            be "c5dv151_vt14" as of now.
@@ -65,7 +64,7 @@ public class DatabaseAccessor {
     /**
      * Public method to check if the instance of the class is
      * connected to a database.
-     * 
+     *
      * @return boolean, true if it is connected, otherwise false.
      */
     public boolean isConnected() {
@@ -74,7 +73,7 @@ public class DatabaseAccessor {
 
     /**
      * Method to add a new user to the database.
-     * 
+     *
      * @param String
      *            , the username
      * @param String
@@ -126,7 +125,7 @@ public class DatabaseAccessor {
 
     /**
      * Returns the password for the given user. Used for login.
-     * 
+     *
      * @param user
      *            - the username as stirng
      * @return String - the password
@@ -285,7 +284,7 @@ public class DatabaseAccessor {
     // KOLLA! Ska den kasta ett undantag?
     // Skriv fler tester!
     /**
-     * 
+     *
      * @param searchPubMed
      * @return null if failed, else a SearchResult object.
      */
@@ -374,11 +373,11 @@ public class DatabaseAccessor {
 
     public int tagExperiment(String expID, String label, String value)
             throws SQLException, IOException {
-        
+
         if (!isValidAnnotationValue(label, value)) {
             throw new IOException(value + " is not a valid choice for the annotation type " + label);
         }
-        
+
         String query = "INSERT INTO Annotated_With " + "VALUES (?, ?, ?)";
         PreparedStatement tagExp = conn.prepareStatement(query);
         tagExp.setString(1, expID);
@@ -452,9 +451,24 @@ public class DatabaseAccessor {
         if (rs.next()) {
             e = new Experiment(rs.getString("ExpID"));
             e = fillAnnotations(e);
+            e = fillFiles(e);
         }
         getExp.close();
 
+        return e;
+    }
+
+    private Experiment fillFiles(Experiment e) throws SQLException {
+        String query = "SELECT * FROM File "
+                + "WHERE ExpID = ?";
+        PreparedStatement getFiles = conn.prepareStatement(query);
+        getFiles.setString(1, e.getID());
+        ResultSet rs = getFiles.executeQuery();
+
+        while(rs.next()) {
+            e.addFile(new FileTuple(rs));
+        }
+        getFiles.close();
         return e;
     }
 
@@ -464,7 +478,7 @@ public class DatabaseAccessor {
         PreparedStatement getExpAnnotations = conn.prepareStatement(query);
         getExpAnnotations.setString(1, e.getID());
         ResultSet rs = getExpAnnotations.executeQuery();
-        
+
         while(rs.next()) {
             e.addAnnotation(rs.getString("Label"), rs.getString("Value"));
         }

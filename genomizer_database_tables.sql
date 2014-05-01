@@ -5,7 +5,7 @@ CREATE TABLE File
     FileType VARCHAR(32) NOT NULL,
     Date DATE NOT NULL,
     MetaData VARCHAR(256),
-    Author VARCHAR(32) NOT NULL,
+    Author VARCHAR(32),
     Uploader VARCHAR(32),
     IsPrivate BOOLEAN NOT NULL,
     ExpID VARCHAR(64),
@@ -58,7 +58,7 @@ ALTER TABLE File ADD CONSTRAINT fkey_uploader FOREIGN KEY (Uploader) REFERENCES 
 
 CREATE TABLE Working_on
 (
-    Username VARCHAR(32) NOT NULL,
+   Username VARCHAR(32) NOT NULL,
 	WorkspaceID VARCHAR(32) NOT NULL,
 	CONSTRAINT pkey_working_on PRIMARY KEY(Username, WorkspaceID),
 	CONSTRAINT fkey_username FOREIGN KEY (Username) REFERENCES User_Info(Username)
