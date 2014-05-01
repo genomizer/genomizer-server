@@ -71,7 +71,7 @@ public class TestDatabaseConnect {
 	 */
 	@Test
 	public void testSearchByAuthorLabel() {
-		String searchPubMed = "Sven[Author] AND Human[Species]";
+		String searchPubMed = "(((Sven[Author]) AND Arm[Tissue]) OR Human[Species])";
 
 		try {
 			SearchResult res = searchFile(searchPubMed);
@@ -94,41 +94,40 @@ public class TestDatabaseConnect {
 		}
 	}
 
-	@Test
-	public void testSearchByNotExistLabel() {
-		String searchPubMed = "2[FileID]";
+//	@Test
+//	public void testSearchByNotExistLabel() {
+//		String searchPubMed = "2[FileID]";
+//
+//		try {
+//			SearchResult res = searchFile(searchPubMed);
+//			printQResult(res);
+//		} catch (SQLException e) {
+//			System.out.println("testSearchByNotExist fail");
+//		}
+//	}
 
-		try {
-			SearchResult res = searchFile(searchPubMed);
-			printQResult(res);
-		} catch (SQLException e) {
-			System.out.println("testSearchByNotExist fail");
-		}
-	}
-
-	@Test
-	public void testSearchByLabel() {
-		String searchPubMed = "2[FileID]";
-
-		try {
-			SearchResult res = searchExperiment(searchPubMed);
-			printQResult(res);
-		} catch (SQLException e) {
-			System.out.println("testSearchByNotExist fail");
-		}
-	}
+//	@Test
+//	public void testSearchByLabel() {
+//		String searchPubMed = "2[FileID]";
+//
+//		try {
+//			SearchResult res = searchExperiment(searchPubMed);
+//			printQResult(res);
+//		} catch (SQLException e) {
+//			System.out.println("testSearchByNotExist fail");
+//		}
+//	}
 
 	private SearchResult searchFile(String searchPubMed) throws SQLException {
 
 		PreparedStatement pStatement = null;
 		ResultSet res = null;
-		String query = "SELECT * FROM File NATURAL JOIN Annotated_With " +
-				"WHERE (";
 
 		PubMedParser theParser = new PubMedParser();
 		ParsedPubMed queryMaterial = theParser.parsePubMed(searchPubMed);
 
-		query = query + queryMaterial.getWhereString() + ")";
+		String query = queryMaterial.getWhereString();
+		System.out.println(query);
 		pStatement = conn.prepareStatement(query);
 		ArrayList<String> valueList = queryMaterial.getValues();
 
@@ -142,6 +141,7 @@ public class TestDatabaseConnect {
 			} else if(isInteger(queryMaterial.getValues().get(i-1))) {
 				pStatement.setInt(i, Integer.parseInt(queryMaterial.getValues().get(i-1)));
 			} else {
+				System.out.println(queryMaterial.getValues().get(i-1));
 				pStatement.setString(i, queryMaterial.getValues().get(i-1));
 			}
 		}
