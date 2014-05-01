@@ -68,7 +68,9 @@ public class MethodTestsRWandKK {
 
         dbac.deleteUser(testUser);
         dbac.deleteAnnotation(testAnnotationLabel);
+        dbac.deleteAnnotation(testAnnotationLabel + "2");
         dbac.deleteFile(path);
+        dbac.deleteFile(path + "2");
         dbac.deleteExperiment(testExpId);
         dbac.deleteTag(testExpId, testAnnotationLabel);
     }
@@ -78,7 +80,9 @@ public class MethodTestsRWandKK {
 
         dbac.deleteUser(testUser);
         dbac.deleteAnnotation(testAnnotationLabel);
+        dbac.deleteAnnotation(testAnnotationLabel + "2");
         dbac.deleteFile(path);
+        dbac.deleteFile(path + "2");
         dbac.deleteExperiment(testExpId);
         dbac.deleteTag(testExpId, testAnnotationLabel);
     }
@@ -339,7 +343,7 @@ public class MethodTestsRWandKK {
     }
 
     @Test
-    public void shouldReturnExperimentObjectContainingAnnotationsOnSearch() throws Exception {
+    public void shouldReturnExperimentObjectContainingAnnotationOnSearch() throws Exception {
         dbac.addExperiment(testExpId);
         dbac.addDropDownAnnotation(testAnnotationLabel, testChoices);
         dbac.tagExperiment(testExpId, testAnnotationLabel, testChoice);
@@ -348,13 +352,44 @@ public class MethodTestsRWandKK {
     }
 
     @Test
-    public void shouldReturnExperimentObjectContainingFileTuplesOnSearch() throws Exception {
+    public void shouldReturnExperimentObjectContainingFileTupleOnSearch() throws Exception {
         dbac.addExperiment(testExpId);
         dbac.addFile(path, type, metaData, author, null, isPrivate, testExpId, null);
         Experiment e = dbac.getExperiment(testExpId);
         List<FileTuple> files = e.getFiles();
         assertEquals(1, files.size());
         assertEquals(path, files.get(0).path);
+    }
+
+    @Test
+    public void shouldReturnExperimentObjectContainingAnnotationsOnSearch() throws Exception {
+        dbac.addExperiment(testExpId);
+
+        dbac.addDropDownAnnotation(testAnnotationLabel, testChoices);
+        dbac.tagExperiment(testExpId, testAnnotationLabel, testChoice);
+
+        dbac.addFreeTextAnnotation(testAnnotationLabel + "2");
+        dbac.tagExperiment(testExpId, testAnnotationLabel + "2", testFreeTextValue);
+
+        Experiment e = dbac.getExperiment(testExpId);
+        assertEquals(2, e.getAnnotations().size());
+        assertTrue(e.getAnnotations().containsKey(testAnnotationLabel));
+        assertTrue(e.getAnnotations().containsKey(testAnnotationLabel + "2"));
+
+    }
+
+    @Test
+    public void shouldReturnExperimentObjectContainingFileTuplesOnSearch() throws Exception {
+
+        dbac.addExperiment(testExpId);
+        dbac.addFile(path, type, metaData, author, null, isPrivate, testExpId, null);
+        dbac.addFile(path + "2", type, metaData, author, null, isPrivate, testExpId, null);
+
+        Experiment e = dbac.getExperiment(testExpId);
+        List<FileTuple> files = e.getFiles();
+        assertEquals(2, files.size());
+        assertEquals(path, files.get(0).path);
+        assertEquals(path + "2", files.get(1).path);
     }
 
 
