@@ -2,9 +2,13 @@ package JUnitTests;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
+
 import org.junit.Test;
 
 import database.PubMedToSQLConverter;
+import databaseAccessor.DatabaseAccessor;
+import databaseAccessor.Experiment;
 
 public class PubMedToSQLConverterTests {
 
@@ -13,7 +17,17 @@ public class PubMedToSQLConverterTests {
     public static String sqlStr1 = "SELECT * FROM File AS F "
             + "WHERE EXISTS (SELECT * FROM Annotated_With AS A "
             + "WHERE F.ExpID = A.ExpID AND "
-            + "A.Label = ? AND A.Value = ?)";
+            + "A.Label = ? AND A.Value = ?)\nORDER BY ExpID";
+
+    // Test Exp
+    public static String expId = "ExperimentId_";
+
+    // Test File
+    public static String path = "/TestPath/gkdbfalkfnvlankfl";
+    public static String type = "raw";
+    public static String metaData = "/TestPath/inputfile.fastq";
+    public static String author = "Ruaridh";
+    public static boolean isPrivate = false;
 
     @Test
     public void shouldParseSinglePairRightFormat() throws Exception {
@@ -26,13 +40,25 @@ public class PubMedToSQLConverterTests {
     }
 
     @Test
-    public void testname() throws Exception {
-        PubMedToSQLConverter pmsl = new PubMedToSQLConverter();
+    public void shouldBeAbleToSearchUsingPubMedStringWithExpAttributes() throws Exception {
 
-        System.out.println(pmsl.convert("(((Ruaridh[Author]) AND book1[Book]) OR 123456789[ISBN]) AND filter1[Filter])"));
+        String username = "c5dv151_vt14";
+        String password = "shielohh";
+        String host = "postgres";
+        String database = "c5dv151_vt14";
 
-        for (String s: pmsl.getParameters()) {
-            System.out.println(s);
+        DatabaseAccessor dbac = new DatabaseAccessor(username, password, host, database);
+
+        dbac.addExperiment(expId);
+        dbac.addFile(path, type, metaData, author, null, isPrivate, expId, null);
+        dbac.tagExperiment(expId, "Species", "Human");
+
+        List<Experiment> experiments = dbac.search("Human[Species]");
+        for (Experiment e: experiments) {
+            System.out.println(e.getID());
         }
+
+        dbac.deleteFile(path);
+        dbac.deleteExperiment(expId);
     }
 }

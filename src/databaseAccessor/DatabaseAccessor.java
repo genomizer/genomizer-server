@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-
+import database.PubMedToSQLConverter;
 //may be changed
 import database.SearchResult;
 import database.ParsedPubMed;
@@ -22,7 +22,8 @@ import database.PubMedParser;
 
 public class DatabaseAccessor {
 
-    Connection conn;
+    private Connection conn;
+    private PubMedToSQLConverter pm2sql;
 
     String username = "c5dv151_vt14";
     String password = "shielohh";
@@ -33,24 +34,24 @@ public class DatabaseAccessor {
     public static Integer DROPDOWN = 2;
 
     /**
-     * Creates a databaseAccessor that opens a connection to a
-     * database.
+     * Creates a databaseAccessor that opens a connection to a database.
      *
      * @param username
-     *            - The username to log in to the database as. Should
-     *            be "c5dv151_vt14" as of now.
+     *            - The username to log in to the database as. Should be
+     *            "c5dv151_vt14" as of now.
      * @param password
-     *            - The password to log in to the database. Should be
-     *            "shielohh" as of now.
+     *            - The password to log in to the database. Should be "shielohh"
+     *            as of now.
      * @param host
-     *            - The name of the database management system. Will
-     *            problebly always be "postgres" unless the DMS is
-     *            switched with something else.
+     *            - The name of the database management system. Will problebly
+     *            always be "postgres" unless the DMS is switched with something
+     *            else.
      * @param database
      * @throws SQLException
+     * @throws IOException
      */
-    public DatabaseAccessor(String username, String password,
-            String host, String database) throws SQLException {
+    public DatabaseAccessor(String username, String password, String host,
+            String database) throws SQLException {
 
         String url = "jdbc:postgresql://" + host + "/" + database;
         Properties props = new Properties();
@@ -59,11 +60,13 @@ public class DatabaseAccessor {
 
         conn = DriverManager.getConnection(url, props);
 
+        pm2sql = new PubMedToSQLConverter();
+
     }
 
     /**
-     * Public method to check if the instance of the class is
-     * connected to a database.
+     * Public method to check if the instance of the class is connected to a
+     * database.
      *
      * @return boolean, true if it is connected, otherwise false.
      */
@@ -110,10 +113,8 @@ public class DatabaseAccessor {
 
     public void deleteUser(String username) throws SQLException {
 
-        String statementStr = "DELETE FROM User_Info "
-                + "WHERE (Username = ?)";
-        PreparedStatement deleteUser = conn
-                .prepareStatement(statementStr);
+        String statementStr = "DELETE FROM User_Info " + "WHERE (Username = ?)";
+        PreparedStatement deleteUser = conn.prepareStatement(statementStr);
         deleteUser.setString(1, username);
         deleteUser.executeUpdate();
         deleteUser.close();
@@ -149,8 +150,7 @@ public class DatabaseAccessor {
             throws SQLException {
         String query = "UPDATE User_Info SET Password = ? "
                 + "WHERE (Username = ?)";
-        PreparedStatement resetPassword = conn
-                .prepareStatement(query);
+        PreparedStatement resetPassword = conn.prepareStatement(query);
         resetPassword.setString(1, newPassword);
         resetPassword.setString(2, username);
         int res = resetPassword.executeUpdate();
@@ -159,8 +159,7 @@ public class DatabaseAccessor {
 
     }
 
-    public int setRole(String username, String role)
-            throws SQLException {
+    public int setRole(String username, String role) throws SQLException {
         String query = "UPDATE User_Info SET Role = ? "
                 + "WHERE (Username = ?)";
         PreparedStatement setRole = conn.prepareStatement(query);
@@ -172,8 +171,7 @@ public class DatabaseAccessor {
     }
 
     public String getRole(String username) throws SQLException {
-        String query = "SELECT Role FROM User_Info "
-                + "WHERE (Username = ?)";
+        String query = "SELECT Role FROM User_Info " + "WHERE (Username = ?)";
         PreparedStatement getRole = conn.prepareStatement(query);
         getRole.setString(1, username);
         ResultSet rs = getRole.executeQuery();
@@ -185,12 +183,10 @@ public class DatabaseAccessor {
         return role;
     }
 
-    public int addFreeTextAnnotation(String label)
-            throws SQLException {
+    public int addFreeTextAnnotation(String label) throws SQLException {
         String query = "INSERT INTO Annotation "
                 + "(Label, DataType) VALUES (?, 'FreeText')";
-        PreparedStatement addAnnotation = conn
-                .prepareStatement(query);
+        PreparedStatement addAnnotation = conn.prepareStatement(query);
         addAnnotation.setString(1, label);
         int res = addAnnotation.executeUpdate();
         addAnnotation.close();
@@ -216,8 +212,7 @@ public class DatabaseAccessor {
 
     public int deleteAnnotation(String label) throws SQLException {
 
-        String statementStr = "DELETE FROM Annotation "
-                + "WHERE (Label = ?)";
+        String statementStr = "DELETE FROM Annotation " + "WHERE (Label = ?)";
         PreparedStatement deleteAnnotation = conn
                 .prepareStatement(statementStr);
         deleteAnnotation.setString(1, label);
@@ -226,15 +221,13 @@ public class DatabaseAccessor {
         return res;
     }
 
-    public Integer getAnnotationType(String label)
-            throws SQLException {
+    public Integer getAnnotationType(String label) throws SQLException {
         Map<String, Integer> annotations = getAnnotations();
         return annotations.get(label);
     }
 
-    public int addDropDownAnnotation(String label,
-            ArrayList<String> choices) throws SQLException,
-            IOException {
+    public int addDropDownAnnotation(String label, ArrayList<String> choices)
+            throws SQLException, IOException {
 
         if (choices.isEmpty()) {
             throw new IOException("Must specify at least one choice");
@@ -270,8 +263,7 @@ public class DatabaseAccessor {
         String query = "SELECT Value FROM Annotation_Choices "
                 + "WHERE (Label = ?)";
         ArrayList<String> dropDownStrings = new ArrayList<String>();
-        PreparedStatement getDropDownStrings = conn
-                .prepareStatement(query);
+        PreparedStatement getDropDownStrings = conn.prepareStatement(query);
         getDropDownStrings.setString(1, label);
         ResultSet rs = getDropDownStrings.executeQuery();
         while (rs.next()) {
@@ -298,16 +290,14 @@ public class DatabaseAccessor {
         // getting the where-statements from pubmed string to usable
         // query.
         PubMedParser theParser = new PubMedParser();
-        ParsedPubMed queryMaterial = theParser
-                .parsePubMed(searchPubMed);
+        ParsedPubMed queryMaterial = theParser.parsePubMed(searchPubMed);
 
         query = query + queryMaterial.getWhereString() + ")";
 
         try {
             pStatement = conn.prepareStatement(query);
             for (int i = 1; i < queryMaterial.getValues().size(); i++) {
-                pStatement.setString(i, queryMaterial.getValues()
-                        .get(i - 1));
+                pStatement.setString(i, queryMaterial.getValues().get(i - 1));
             }
 
             ResultSet res = pStatement.executeQuery();
@@ -337,8 +327,7 @@ public class DatabaseAccessor {
     }
 
     public int addExperiment(String expID) throws SQLException {
-        String query = "INSERT INTO Experiment "
-                + "(ExpID) VALUES (?)";
+        String query = "INSERT INTO Experiment " + "(ExpID) VALUES (?)";
         PreparedStatement addExp = conn.prepareStatement(query);
         addExp.setString(1, expID);
 
@@ -348,8 +337,7 @@ public class DatabaseAccessor {
     }
 
     public boolean hasExperiment(String expID) throws SQLException {
-        String query = "SELECT ExpID FROM Experiment "
-                + "WHERE ExpID = ?";
+        String query = "SELECT ExpID FROM Experiment " + "WHERE ExpID = ?";
         PreparedStatement hasExp = conn.prepareStatement(query);
         hasExp.setString(1, expID);
         ResultSet rs = hasExp.executeQuery();
@@ -360,8 +348,7 @@ public class DatabaseAccessor {
     }
 
     public int deleteExperiment(String expId) throws SQLException {
-        String statementStr = "DELETE FROM Experiment "
-                + "WHERE (ExpID = ?)";
+        String statementStr = "DELETE FROM Experiment " + "WHERE (ExpID = ?)";
         PreparedStatement deleteExperiment = conn
                 .prepareStatement(statementStr);
         deleteExperiment.setString(1, expId);
@@ -375,7 +362,8 @@ public class DatabaseAccessor {
             throws SQLException, IOException {
 
         if (!isValidAnnotationValue(label, value)) {
-            throw new IOException(value + " is not a valid choice for the annotation type " + label);
+            throw new IOException(value
+                    + " is not a valid choice for the annotation type " + label);
         }
 
         String query = "INSERT INTO Annotated_With " + "VALUES (?, ?, ?)";
@@ -389,16 +377,16 @@ public class DatabaseAccessor {
         return res;
     }
 
-    private boolean isValidAnnotationValue(String label, String value) throws SQLException {
-        return getAnnotationType(label) == FREETEXT || getChoices(label).contains(value);
+    private boolean isValidAnnotationValue(String label, String value)
+            throws SQLException {
+        return getAnnotationType(label) == FREETEXT
+                || getChoices(label).contains(value);
     }
 
-    public int deleteTag(String expID, String label)
-            throws SQLException {
+    public int deleteTag(String expID, String label) throws SQLException {
         String statementStr = "DELETE FROM Annotated_With "
                 + "WHERE (ExpID = ? AND Label = ?)";
-        PreparedStatement deleteTag = conn
-                .prepareStatement(statementStr);
+        PreparedStatement deleteTag = conn.prepareStatement(statementStr);
         deleteTag.setString(1, expID);
         deleteTag.setString(2, label);
         int res = deleteTag.executeUpdate();
@@ -408,8 +396,8 @@ public class DatabaseAccessor {
 
     // Too many parameters. Could take a JSONObject instead.
     public int addFile(String path, String type, String metaData,
-            String author, String uploader, boolean isPrivate,
-            String expID, String grVersion) throws SQLException {
+            String author, String uploader, boolean isPrivate, String expID,
+            String grVersion) throws SQLException {
 
         String query = "INSERT INTO File "
                 + "(Path, FileType, Date, MetaData, Author, Uploader, IsPrivate, ExpID, GRVersion) VALUES (?, ?, CURRENT_TIMESTAMP, ?, ?, ?, ?, ?, ?)";
@@ -430,10 +418,8 @@ public class DatabaseAccessor {
     }
 
     public int deleteFile(String path) throws SQLException {
-        String statementStr = "DELETE FROM File "
-                + "WHERE (Path = ?)";
-        PreparedStatement deleteFile = conn
-                .prepareStatement(statementStr);
+        String statementStr = "DELETE FROM File " + "WHERE (Path = ?)";
+        PreparedStatement deleteFile = conn.prepareStatement(statementStr);
         deleteFile.setString(1, path);
         int res = deleteFile.executeUpdate();
         deleteFile.close();
@@ -441,8 +427,7 @@ public class DatabaseAccessor {
     }
 
     public Experiment getExperiment(String expID) throws SQLException {
-        String query = "SELECT ExpID FROM Experiment "
-                + "WHERE ExpID = ?";
+        String query = "SELECT ExpID FROM Experiment " + "WHERE ExpID = ?";
         PreparedStatement getExp = conn.prepareStatement(query);
         getExp.setString(1, expID);
         ResultSet rs = getExp.executeQuery();
@@ -459,13 +444,12 @@ public class DatabaseAccessor {
     }
 
     private Experiment fillFiles(Experiment e) throws SQLException {
-        String query = "SELECT * FROM File "
-                + "WHERE ExpID = ?";
+        String query = "SELECT * FROM File " + "WHERE ExpID = ?";
         PreparedStatement getFiles = conn.prepareStatement(query);
         getFiles.setString(1, e.getID());
         ResultSet rs = getFiles.executeQuery();
 
-        while(rs.next()) {
+        while (rs.next()) {
             e.addFile(new FileTuple(rs));
         }
         getFiles.close();
@@ -479,11 +463,57 @@ public class DatabaseAccessor {
         getExpAnnotations.setString(1, e.getID());
         ResultSet rs = getExpAnnotations.executeQuery();
 
-        while(rs.next()) {
+        while (rs.next()) {
             e.addAnnotation(rs.getString("Label"), rs.getString("Value"));
         }
         getExpAnnotations.close();
         return e;
+    }
+
+    public List<Experiment> search(String pubMedString) throws IOException,
+            SQLException {
+        String query = pm2sql.convert(pubMedString);
+        List<String> params = pm2sql.getParameters();
+        PreparedStatement getFiles = conn.prepareStatement(query);
+        getFiles = bind(getFiles, params);
+
+        ResultSet rs = getFiles.executeQuery();
+
+        ArrayList<Experiment> experiments = new ArrayList<Experiment>();
+
+        if (!rs.next()) {
+            return experiments;
+        }
+
+        String expId = rs.getString("ExpId");
+        Experiment exp = new Experiment(expId);
+        exp = fillAnnotations(exp);
+        exp.addFile(new FileTuple(rs));
+
+        while (rs.next()) {
+            expId = rs.getString("ExpId");
+
+            if (exp.getID().equals(expId)) {
+                exp.addFile(new FileTuple(rs));
+            } else {
+                experiments.add(exp);
+                exp = new Experiment(expId);
+                exp = fillAnnotations(exp);
+                exp.addFile(new FileTuple(rs));
+            }
+        }
+
+        experiments.add(exp);
+
+        return experiments;
+    }
+
+    private PreparedStatement bind(PreparedStatement query, List<String> params)
+            throws SQLException {
+        for (int i = 0; i < params.size(); i++) {
+            query.setString(i + 1, params.get(i));
+        }
+        return query;
     }
 
 }

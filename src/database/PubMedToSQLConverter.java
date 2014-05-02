@@ -11,9 +11,11 @@ public class PubMedToSQLConverter {
             + "WHERE EXISTS (SELECT * FROM Annotated_With AS A "
             + "WHERE F.ExpID = A.ExpID AND "
             + "A.Label = ? AND A.Value = ?)";
-    
+
     private String sqlFragmentForFileAttr = "SELECT * FROM File "
             + "WHERE ? = ?";
+
+    private String orderBySqlFragment = "\nORDER BY ExpID";
 
     private final String AND = " AND ";
     private final String OR = " OR ";
@@ -27,22 +29,22 @@ public class PubMedToSQLConverter {
     private List<String> parameters;
 
 
-    public PubMedToSQLConverter() throws IOException {
-        
+    public PubMedToSQLConverter() {
+
         fileAttributes = new HashSet<String>();
         for (int i = 0; i < fileAttributeArray.length; i++) {
             fileAttributes.add(fileAttributeArray[i]);
         }
-        
+
         parameters = new ArrayList<String>();
     }
 
     public String convert(String pmStr)
             throws IOException {
-        
+
         parameters.clear();
         StringBuilder sqlQuery = new StringBuilder();
-                
+
         while (pmStr.length() > 0) {
             if (startsWithRoundBracket(pmStr)) {
                 pmStr = moveFirstChar(pmStr, sqlQuery);
@@ -52,6 +54,7 @@ public class PubMedToSQLConverter {
                 pmStr = moveConstraint(pmStr, sqlQuery);
             }
         }
+        sqlQuery.append(orderBySqlFragment);
         return sqlQuery.toString();
     }
 
@@ -64,18 +67,18 @@ public class PubMedToSQLConverter {
         if (leftSqBrIndex == -1 || rightSqBrIndex == -1) {
             throw new IOException("PubMed String is in wrong format");
         }
-        
+
         String label = s.substring(leftSqBrIndex + 1, rightSqBrIndex);
         String value = s.substring(0, leftSqBrIndex);
         parameters.add(label);
         parameters.add(value);
-        
+
         if (fileAttributes.contains(label)) {
             sb.append(sqlFragmentForFileAttr);
         } else {
             sb.append(sqlFragmentForExpAttr);
         }
-        
+
         return s.substring(rightSqBrIndex + 1);
     }
 
