@@ -162,7 +162,7 @@ public class Doorman {
 		}
 		scanner.close();
 
-		Response response = commandHandler.doStuff(body, exchange.getRequestURI().toString(), uuid, type);
+		Response response = commandHandler.processNewCommand(body, exchange.getRequestURI().toString(), uuid, type);
 
 		respond(exchange, response);
 

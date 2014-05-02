@@ -165,13 +165,7 @@ public class CommandFactory {
 	 */
 	public Command createSearchForExperimentCommand(String json, String[] restful) {
 
-		String queryParameters = restful.substring(restful.lastIndexOf('/')+1);
-		String[] params = queryParameters.split("=");
-		if (params[0].equals("annotations")) {
-			return new SearchForExperimentsCommand(params[1]);
-		} else {
-			throw new IllegalArgumentException();
-		}
+		return new SearchForExperimentsCommand(restful[restful.length]);
 	}
 
 	/**

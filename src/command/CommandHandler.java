@@ -33,7 +33,7 @@ public class CommandHandler {
 	 * @param restful
 	 * @param cmdt
 	 */
-	public Response doStuff(String json, String restful, String uuid, CommandType cmdt) {	//TODO: Rename this method.
+	public Response processNewCommand(String json, String restful, String uuid, CommandType cmdt) {	//TODO: Rename this method.
 
 		//Get code from restful //TODO: add parser code....
 		Command myCom = createCommand(cmdt, json, restful);
