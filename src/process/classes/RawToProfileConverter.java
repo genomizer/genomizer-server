@@ -11,12 +11,6 @@ import java.io.IOException;
 public class RawToProfileConverter extends Executor {
 
 		private String[] bowTieParameters; 		//Step 1
-		private String sortSam = "sort -k 3,3 -k 4,4n"; //Step 2
-		private String samToGff = "perl sam_to_readsgff_v1.pl"; //Step 3
-		private String gffToAllnusgr  = "perl readsgff_to_allnucsgr_v1.pl"; //Step 4
-		private String smooth = "perl smooth_v4.pl test/reads_gff/allnucs_sgr/ 10 1 5 0 0";  //Step 5 TODO: CHANGE LAST 0 to 1
-		private String step10 = "perl AllSeqRegSGRtoPositionSGR_v1.pl y 10 test/reads_gff/allnucs_sgr/smoothed/"; // Step 6
-		private String sgr2wig = "perl sgr2wig.pl test/reads_gff/allnucs_sgr/smoothed/Step10/male_v1_v1_median_smooth_winSiz-10_minProbe-5_step10.sgr /home/shinowa/git/genomizer-server/resources/test/reads_gff/allnucs_sgr/smoothed/Step10/step10.wig"; //Step 7
 		
 		
 		/**
@@ -34,22 +28,35 @@ public class RawToProfileConverter extends Executor {
 		 * 
 		 * 
 		 * 
-		 * @param parameters
-		 * @param inFile
+		 * @param parameters String array with execution parameters
+		 * @param inFile The filepath to the file to create a wig from
 		 * @param outFile
 		 * @throws InterruptedException
 		 * @throws IOException
 		 */
 		public void procedure(String[] parameters, String inFile, String outFile) throws InterruptedException, IOException {
-			String bowTieOutput = "test/male.sam";
-			String dir = "test/";
+
+			String dir = String.valueOf((Thread.currentThread().getId())) + "/";
+			String bowTieOutput = dir+"male.sam";
+			
+			File fileDir = new File("resources/"+dir);
+			System.out.println("dir "+fileDir.toString());
+			if(!fileDir.exists()) {
+				fileDir.mkdir();
+			}
+			
+			
+			
+			String sortSam = "sort -k 3,3 -k 4,4n " + bowTieOutput; //Step 2
+			String samToGff = "perl sam_to_readsgff_v1.pl "+dir; //Step 3
+			String gffToAllnusgr  = "perl readsgff_to_allnucsgr_v1.pl "+dir+"/reads_gff/"; //Step 4
+			String smooth = "perl smooth_v4.pl "+dir+"reads_gff/allnucs_sgr/ 10 1 5 0 0";  //Step 5 TODO: CHANGE LAST 0 to 1
+			String step10 = "perl AllSeqRegSGRtoPositionSGR_v1.pl y 10 "+dir+"reads_gff/allnucs_sgr/smoothed/"; // Step 6
+			String sgr2wig = "perl sgr2wig.pl "+dir+"/reads_gff/allnucs_sgr/smoothed/Step10/*.sgr "+outFile+".wig"; //Step 7
+			
+			
 			bowTieParameters = parse(parameters[0]+" "+inFile+" "+bowTieOutput);
 			
-			//Testar bowtie
-			for(int i = 0; i < bowTieParameters.length; i++) {
-				System.out.print(bowTieParameters[i]+ " ");
-			}
-
 			long startTime;
 			long endTime;
 			
@@ -57,54 +64,32 @@ public class RawToProfileConverter extends Executor {
 			executeProgram(bowTieParameters);
 			endTime = System.currentTimeMillis();
 			System.out.println("bowtie done, Time: "+((endTime - startTime)) + " milliseconds");
-			
-			Thread.sleep(2000);
-			
-			//Testar sortSam
-			for(int i = 0; i < parse(sortSam + " "+bowTieOutput).length; i++) {
-				System.out.print(parse(sortSam + " "+bowTieOutput)[i]+ " ");
-			}
-			
+						
 			startTime = System.currentTimeMillis();
-			executeScript(parse(sortSam + " "+bowTieOutput));
+			executeScript(parse(sortSam));
 			endTime = System.currentTimeMillis();
 			System.out.println("sortsam done, Time: "+((endTime - startTime)) + " milliseconds");
-			
-			Thread.sleep(2000);
-			
-			//Testar samToGff
-			for(int i = 0; i < parse(samToGff + " "+dir).length; i++) {
-				System.out.print(parse(samToGff + " "+dir)[i]+ " ");
-			}
-			
+						
 			startTime = System.currentTimeMillis();
-			executeScript(parse(samToGff + " "+dir));
+			executeScript(parse(samToGff));
 			endTime = System.currentTimeMillis();
 			System.out.println("readgff done, Time: "+((endTime - startTime)) + " milliseconds");
-			
-			Thread.sleep(2000);
-			
+						
 			startTime = System.currentTimeMillis();
-			executeScript(parse(gffToAllnusgr+ " "+dir+"reads_gff/"));
+			executeScript(parse(gffToAllnusgr));
 			endTime = System.currentTimeMillis();
 			System.out.println("readsgff to allnucsgr done, Time: "+((endTime - startTime)) + " milliseconds");
-			
-			Thread.sleep(2000);
-			
+						
 			startTime = System.currentTimeMillis();
-			executeScript(parse(smooth+" "+dir+"reads_gff/allnucs_sgr/"));
+			executeScript(parse(smooth));
 			endTime = System.currentTimeMillis();
 			System.out.println("smooth done, Time: "+((endTime - startTime)) + " milliseconds");
-			
-			Thread.sleep(2000);
-			
+						
 			startTime = System.currentTimeMillis();
 			executeScript(parse(step10));
 			endTime = System.currentTimeMillis();
 			System.out.println("step10 done, Time: "+((endTime - startTime)) + " milliseconds");
-			
-			Thread.sleep(2000);
-			
+						
 			startTime = System.currentTimeMillis();
 			executeScript(parse(sgr2wig));
 			endTime = System.currentTimeMillis();

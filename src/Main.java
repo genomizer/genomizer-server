@@ -22,12 +22,11 @@ public class Main {
 		String genome = "d_melanogaster_fb5_22";
 		String bowTie = "bowtie -a -m 1 --best -p 10 -v 2 -q  -S "+genome;
 		String inFile = "reads/MOF_male_wt_reads_sample.fastq";
-
+		String outFile = "/home/shinowa/Videos/step10";
 		ProcessHandler p = new ProcessHandler();
 		String[] para = new String[]{bowTie};
 		try {
 			System.out.println("nu executar vi");
-			String outFile = null;
 
 			p.executeProcess("rawToProfile", para, inFile, outFile);
 			System.out.println("nu har vi executat");
