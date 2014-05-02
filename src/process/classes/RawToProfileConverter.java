@@ -14,7 +14,7 @@ public class RawToProfileConverter extends Executor {
 		private String sortSam = "sort -k 3,3 -k 4,4n"; //Step 2
 		private String samToGff = "perl sam_to_readsgff_v1.pl"; //Step 3
 		private String gffToAllnusgr  = "perl readsgff_to_allnucsgr_v1.pl"; //Step 4
-		private String smooth = "perl smooth_v4.pl test/reads_gff/allnucs_sgr/ 10 1 5 0 1";  //Step 5 TODO: CHANGE LAST 0 to 1
+		private String smooth = "perl smooth_v4.pl test/reads_gff/allnucs_sgr/ 10 1 5 0 0";  //Step 5 TODO: CHANGE LAST 0 to 1
 		private String step10 = "perl AllSeqRegSGRtoPositionSGR_v1.pl y 10 test/reads_gff/allnucs_sgr/smoothed/"; // Step 6
 		private String sgr2wig = "perl sgr2wig.pl test/reads_gff/allnucs_sgr/smoothed/Step10/male_v1_v1_median_smooth_winSiz-10_minProbe-5_step10.sgr /home/shinowa/git/genomizer-server/resources/test/reads_gff/allnucs_sgr/smoothed/Step10/step10.wig"; //Step 7
 		
