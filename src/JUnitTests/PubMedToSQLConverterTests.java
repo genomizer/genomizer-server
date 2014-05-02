@@ -9,6 +9,7 @@ import org.junit.Test;
 import database.PubMedToSQLConverter;
 import databaseAccessor.DatabaseAccessor;
 import databaseAccessor.Experiment;
+import databaseAccessor.FileTuple;
 
 public class PubMedToSQLConverterTests {
 
@@ -53,9 +54,12 @@ public class PubMedToSQLConverterTests {
         dbac.addFile(path, type, metaData, author, null, isPrivate, expId, null);
         dbac.tagExperiment(expId, "Species", "Human");
 
-        List<Experiment> experiments = dbac.search("Human[Species]");
+        List<Experiment> experiments = dbac.search(author + "[Author]");
         for (Experiment e: experiments) {
             System.out.println(e.getID());
+            for (FileTuple ft: e.getFiles()) {
+                System.out.println("    " + ft.expId + ft.path);
+            }
         }
 
         dbac.deleteFile(path);

@@ -13,14 +13,14 @@ public class PubMedToSQLConverter {
             + "A.Label = ? AND A.Value = ?)";
 
     private String sqlFragmentForFileAttr = "SELECT * FROM File "
-            + "WHERE ? = ?";
+            + "WHERE ";
 
     private String orderBySqlFragment = "\nORDER BY ExpID";
 
     private final String AND = " AND ";
     private final String OR = " OR ";
 
-    private final String[] fileAttributeArray = { "FileID", "Path",
+    private final String[] fileAttributeArray = {"FileID", "Path",
             "FileType", "Date", "MetaData", "Author", "Uploader",
             "ExpID", "GRVersion" };
 
@@ -70,13 +70,16 @@ public class PubMedToSQLConverter {
 
         String label = s.substring(leftSqBrIndex + 1, rightSqBrIndex);
         String value = s.substring(0, leftSqBrIndex);
-        parameters.add(label);
-        parameters.add(value);
 
         if (fileAttributes.contains(label)) {
             sb.append(sqlFragmentForFileAttr);
+            sb.append(label);
+            sb.append(" = ? ");
+            parameters.add(value);
         } else {
             sb.append(sqlFragmentForExpAttr);
+            parameters.add(label);
+            parameters.add(value);
         }
 
         return s.substring(rightSqBrIndex + 1);

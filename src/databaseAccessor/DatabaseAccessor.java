@@ -473,6 +473,7 @@ public class DatabaseAccessor {
     public List<Experiment> search(String pubMedString) throws IOException,
             SQLException {
         String query = pm2sql.convert(pubMedString);
+
         List<String> params = pm2sql.getParameters();
         PreparedStatement getFiles = conn.prepareStatement(query);
         getFiles = bind(getFiles, params);
