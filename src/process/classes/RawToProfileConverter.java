@@ -64,8 +64,11 @@ public class RawToProfileConverter extends Executor {
 
 		long startTime;
 		long endTime;
-
+		long allTimeStart;
+		long allTimeEnd;
+		
 		startTime = System.currentTimeMillis();
+		allTimeStart = startTime;
 		executeProgram(bowTieParameters);
 		endTime = System.currentTimeMillis();
 		System.out.println("bowtie done, Time: " + ((endTime - startTime))
@@ -104,11 +107,33 @@ public class RawToProfileConverter extends Executor {
 		startTime = System.currentTimeMillis();
 		executeScript(parse(sgr2wig));
 		endTime = System.currentTimeMillis();
+		allTimeEnd = endTime;
 		System.out.println("sgr2wig done, Time: " + ((endTime - startTime))
 				+ " milliseconds");
-
+		
+		System.out.println(allTimeEnd-allTimeStart);
+		System.out.println("All done, took "+getTime(allTimeEnd-allTimeStart));
+		
 	}
-
+	
+	public String getTime(long temp) {
+		String out = "";
+		
+		String minute;
+		String second;
+		
+		second = String.valueOf((temp % 60000) / 1000);
+		minute = String.valueOf(temp / 60000);
+		
+		if ( second.length() == 1) {
+			out = minute + ":0" + second;
+		} else {
+			out = minute + ":" + second;
+		}
+		System.out.println(out);
+		return out;
+	}
+	
 	public String[] getBowTieParameters() {
 		return bowTieParameters;
 	}
