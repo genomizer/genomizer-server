@@ -24,7 +24,8 @@ public class PubMedToSQLConverterTests {
     public static String expId = "ExperimentId_";
 
     // Test File
-    public static String path = "/TestPath/gkdbfalkfnvlankfl";
+    public static String path = "/TestPath/gkdbfalkfnvlankfl/testFileName_fghasgha.fastq";
+    public static String filename = "testFileName_fghasgha.fastq";
     public static String type = "raw";
     public static String metaData = "/TestPath/inputfile.fastq";
     public static String author = "Ruaridh";
@@ -33,7 +34,7 @@ public class PubMedToSQLConverterTests {
     @Test
     public void shouldParseSinglePairRightFormat() throws Exception {
         PubMedToSQLConverter pmsl = new PubMedToSQLConverter();
-        assertEquals(sqlStr1, pmsl.convert(pmStr1));
+        assertEquals(sqlStr1, pmsl.convertFileSearch(pmStr1));
 
             assertEquals("Species", pmsl.getParameters().get(0));
             assertEquals("Human", pmsl.getParameters().get(1));
@@ -51,7 +52,7 @@ public class PubMedToSQLConverterTests {
         DatabaseAccessor dbac = new DatabaseAccessor(username, password, host, database);
 
         dbac.addExperiment(expId);
-        dbac.addFile(path, type, metaData, author, null, isPrivate, expId, null);
+        dbac.addFile(path, type, filename, metaData, author, author, isPrivate, expId, null);
         dbac.tagExperiment(expId, "Species", "Human");
 
         List<Experiment> experiments = dbac.search(author + "[Author]");

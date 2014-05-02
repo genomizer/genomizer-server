@@ -9,6 +9,7 @@ public class FileTuple {
     public final Integer id;
     public final String path;
     public final String type;
+    public final String filename;
     public final Date date;
     public final String metaData;
     public final String author;
@@ -21,6 +22,7 @@ public class FileTuple {
         id = resSet.getInt("FileID");
         path = resSet.getString("Path");
         type = resSet.getString("FileType");
+        filename = resSet.getString("FileName");
         date = resSet.getDate("Date");
         metaData = resSet.getString("MetaData");
         author = resSet.getString("Author");

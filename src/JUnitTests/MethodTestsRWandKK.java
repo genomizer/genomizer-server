@@ -37,7 +37,8 @@ public class MethodTestsRWandKK {
     public static String testExpId = "test_experiment_id_hrhgqerg";
 
     // test File
-    public static String path = "/TestPath/gkdbfalkfnvlankfl";
+    public static String path = "/TestPath/gkdbfalkfnvlankfl/testFileName_fghasgha.fastq";
+    public static String filename = "testFileName_fghasgha.fastq";
     public static String type = "raw";
     public static String metaData = "/TestPath/inputfile.fastq";
     public static String author = "Ruaridh";
@@ -314,14 +315,14 @@ public class MethodTestsRWandKK {
     @Test
     public void shouldBeAbleToAddAFile() throws Exception {
         dbac.addUser(testUser, testPassword, testRole);
-        int res = dbac.addFile(path, type, metaData, author, testUser, isPrivate, null, null);
+        int res = dbac.addFile(path, type, filename, metaData, author, testUser, isPrivate, null, null);
         assertEquals(1, res);
     }
 
     @Test
     public void shouldBeAbleToDeleteFile() throws Exception {
         dbac.addUser(testUser, testPassword, testRole);
-        dbac.addFile(path, type, metaData, author, testUser, isPrivate, null, null);
+        dbac.addFile(path, type, filename, metaData, author, testUser, isPrivate, null, null);
         int res = dbac.deleteFile(path);
         assertEquals(1, res);
     }
@@ -330,7 +331,7 @@ public class MethodTestsRWandKK {
     public void shouldNotBeAbleToDeleteAnExperimentIfThereExistsAFileReferencingIt() throws Exception {
         dbac.addExperiment(testExpId);
         dbac.addUser(testUser, testPassword, testRole);
-        dbac.addFile(path, type, metaData, author, testUser, isPrivate, testExpId, null);
+        dbac.addFile(path, type, filename, metaData, author, testUser, isPrivate, testExpId, null);
         dbac.deleteExperiment(testExpId);
         assertTrue(dbac.hasExperiment(testExpId));
     }
@@ -354,7 +355,7 @@ public class MethodTestsRWandKK {
     @Test
     public void shouldReturnExperimentObjectContainingFileTupleOnSearch() throws Exception {
         dbac.addExperiment(testExpId);
-        dbac.addFile(path, type, metaData, author, null, isPrivate, testExpId, null);
+        dbac.addFile(path, type, filename, metaData, author, author, isPrivate, testExpId, null);
         Experiment e = dbac.getExperiment(testExpId);
         List<FileTuple> files = e.getFiles();
         assertEquals(1, files.size());
@@ -382,8 +383,8 @@ public class MethodTestsRWandKK {
     public void shouldReturnExperimentObjectContainingFileTuplesOnSearch() throws Exception {
 
         dbac.addExperiment(testExpId);
-        dbac.addFile(path, type, metaData, author, null, isPrivate, testExpId, null);
-        dbac.addFile(path + "2", type, metaData, author, null, isPrivate, testExpId, null);
+        dbac.addFile(path, type, filename, metaData, author, author, isPrivate, testExpId, null);
+        dbac.addFile(path + "2", type, filename, metaData, author, author, isPrivate, testExpId, null);
 
         Experiment e = dbac.getExperiment(testExpId);
         List<FileTuple> files = e.getFiles();

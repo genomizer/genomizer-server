@@ -7,6 +7,9 @@ import java.util.List;
 
 public class PubMedToSQLConverter {
 
+    private String sqlFragmentForExpSearch = "SELECT * FROM Experiment "
+            + "WHERE A.Label = ? AND A.Value = ?";
+
     private String sqlFragmentForExpAttr = "SELECT * FROM File AS F "
             + "WHERE EXISTS (SELECT * FROM Annotated_With AS A "
             + "WHERE F.ExpID = A.ExpID AND "
@@ -22,12 +25,12 @@ public class PubMedToSQLConverter {
 
     private final String[] fileAttributeArray = {"FileID", "Path",
             "FileType", "Date", "MetaData", "Author", "Uploader",
-            "ExpID", "GRVersion" };
+            "ExpID", "GRVersion", "FileName"};
+
 
     private HashSet<String> fileAttributes;
     private String query;
     private List<String> parameters;
-
 
     public PubMedToSQLConverter() {
 
@@ -39,7 +42,7 @@ public class PubMedToSQLConverter {
         parameters = new ArrayList<String>();
     }
 
-    public String convert(String pmStr)
+    public String convertFileSearch(String pmStr)
             throws IOException {
 
         parameters.clear();
@@ -54,8 +57,47 @@ public class PubMedToSQLConverter {
                 pmStr = moveConstraint(pmStr, sqlQuery);
             }
         }
+
         sqlQuery.append(orderBySqlFragment);
         return sqlQuery.toString();
+    }
+
+    public String convertExperimentSearch(String pmStr)
+            throws IOException {
+
+        parameters.clear();
+        StringBuilder sqlQuery = new StringBuilder();
+
+        while (pmStr.length() > 0) {
+            if (startsWithRoundBracket(pmStr)) {
+                pmStr = moveFirstChar(pmStr, sqlQuery);
+            } else if (startsWithConj(pmStr)) {
+                pmStr = moveConj(pmStr, sqlQuery);
+            } else {
+                pmStr = moveExperimentConstraint(pmStr, sqlQuery);
+            }
+        }
+
+        sqlQuery.append(orderBySqlFragment);
+        return sqlQuery.toString();
+    }
+
+    private String moveExperimentConstraint(String s, StringBuilder sb) throws IOException {
+        int leftSqBrIndex = s.indexOf('[');
+        int rightSqBrIndex = s.indexOf(']');
+
+        if (leftSqBrIndex == -1 || rightSqBrIndex == -1) {
+            throw new IOException("PubMed String is in wrong format");
+        }
+
+        String label = s.substring(leftSqBrIndex + 1, rightSqBrIndex);
+        String value = s.substring(0, leftSqBrIndex);
+
+        sb.append(sqlFragmentForExpSearch);
+        parameters.add(label);
+        parameters.add(value);
+
+        return s.substring(rightSqBrIndex + 1);
     }
 
     private String moveConstraint(String s, StringBuilder sb)
@@ -113,6 +155,19 @@ public class PubMedToSQLConverter {
 
     public String getQuery() {
         return query;
+    }
+
+    public boolean hasFileConsatraint(String pubMedString) {
+
+        while (pubMedString.indexOf('[') != - 1) {
+            pubMedString = pubMedString.substring(pubMedString.indexOf('[') + 1);
+            String label = pubMedString.substring(0, pubMedString.indexOf(']'));
+            if (fileAttributes.contains(label)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 }

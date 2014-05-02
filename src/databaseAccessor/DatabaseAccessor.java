@@ -395,22 +395,23 @@ public class DatabaseAccessor {
     }
 
     // Too many parameters. Could take a JSONObject instead.
-    public int addFile(String path, String type, String metaData,
+    public int addFile(String path, String type, String filename, String metaData,
             String author, String uploader, boolean isPrivate, String expID,
             String grVersion) throws SQLException {
 
         String query = "INSERT INTO File "
-                + "(Path, FileType, Date, MetaData, Author, Uploader, IsPrivate, ExpID, GRVersion) VALUES (?, ?, CURRENT_TIMESTAMP, ?, ?, ?, ?, ?, ?)";
+                + "(Path, FileType, FileName, Date, MetaData, Author, Uploader, IsPrivate, ExpID, GRVersion) VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?, ?, ?, ?, ?)";
         PreparedStatement tagExp = conn.prepareStatement(query);
 
         tagExp.setString(1, path);
         tagExp.setString(2, type);
-        tagExp.setString(3, metaData);
-        tagExp.setString(4, author);
-        tagExp.setString(5, uploader);
-        tagExp.setBoolean(6, isPrivate);
-        tagExp.setString(7, expID);
-        tagExp.setString(8, grVersion);
+        tagExp.setString(3, filename);
+        tagExp.setString(4, metaData);
+        tagExp.setString(5, author);
+        tagExp.setString(6, uploader);
+        tagExp.setBoolean(7, isPrivate);
+        tagExp.setString(8, expID);
+        tagExp.setString(9, grVersion);
 
         int res = tagExp.executeUpdate();
         tagExp.close();
@@ -451,12 +452,11 @@ public class DatabaseAccessor {
 		pStatement = conn.prepareStatement(query);
 		pStatement.setString(1, filePath);
 
-		ResultSet res = pStatement.executeQuery();
+		ResultSet rs = pStatement.executeQuery();
 
-        while (res.next()) {
-            return false;
-        }
-		return true;
+        boolean res = rs.next();
+        pStatement.close();
+        return res;
 	}
 
     private Experiment fillFiles(Experiment e) throws SQLException {
@@ -488,9 +488,41 @@ public class DatabaseAccessor {
 
     public List<Experiment> search(String pubMedString) throws IOException,
             SQLException {
-        String query = pm2sql.convert(pubMedString);
+
+        if (pm2sql.hasFileConsatraint(pubMedString)) {
+            return searchFiles(pubMedString);
+        }
+        return searchExperiments(pubMedString);
+    }
+
+    private List<Experiment> searchExperiments(String pubMedString) throws IOException, SQLException {
+
+        String query = pm2sql.convertExperimentSearch(pubMedString);
 
         List<String> params = pm2sql.getParameters();
+
+        PreparedStatement getFiles = conn.prepareStatement(query);
+        getFiles = bind(getFiles, params);
+
+        ResultSet rs = getFiles.executeQuery();
+
+        ArrayList<Experiment> experiments = new ArrayList<Experiment>();
+
+        while (rs.next()) {
+            Experiment exp = new Experiment(rs.getString("ExpID"));
+            exp = fillAnnotations(exp);
+            exp = fillFiles(exp);
+            experiments.add(exp);
+        }
+        return experiments;
+    }
+
+    private List<Experiment> searchFiles(String pubMedString) throws IOException, SQLException {
+
+        String query = pm2sql.convertFileSearch(pubMedString);
+
+        List<String> params = pm2sql.getParameters();
+
         PreparedStatement getFiles = conn.prepareStatement(query);
         getFiles = bind(getFiles, params);
 
