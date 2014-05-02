@@ -1,18 +1,36 @@
 package database;
 
+import java.io.File;
+
+import javax.swing.filechooser.FileSystemView;
+
 public class FilePathGenerator {
 
-	public FilePathGenerator() {
+	public static String GenerateFilePath(String expID, String fileType, String fileName) {
 
+		StringBuilder dir = new StringBuilder();
+
+		File file=FileSystemView.getFileSystemView().getHomeDirectory();
+
+		dir.append(file.toString());
+		dir.append('/');
+		dir.append(expID);
+		dir.append('/');
+		dir.append(fileType);
+		dir.append('/');
+		dir.append(fileName);
+		return dir.toString();
 	}
 
-	public String GenerateFilePath(String species, String expID, String fileName){
-
-		return "/homo/";
-	}
-
-	public String GenerateFilePathForCoversion(String fileID,String species, String expID){
-
+	/**
+	 *
+	 * @param fileID
+	 * @param species
+	 * @param expID
+	 * @return the homo root
+	 */
+	@Deprecated
+	public static String GenerateFilePathForCoversion(String fileID,String species, String expID){
 		return "/homo/";
 	}
 }
