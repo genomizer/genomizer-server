@@ -8,7 +8,9 @@ import java.net.InetSocketAddress;
 import java.util.Scanner;
 import java.util.concurrent.Executor;
 
+import response.ErrorResponse;
 import response.Response;
+import response.StatusCode;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -146,14 +148,16 @@ public class Doorman {
 		InputStream bodyStream = exchange.getRequestBody();
 		Scanner scanner = new Scanner(bodyStream);
 		String body = "";
-
 		String uuid = null;
 
-		if(!(type == CommandType.LOGIN_COMMAND)) {
+		if(type != CommandType.LOGIN_COMMAND) {
 			try {
 				uuid =  exchange.getRequestHeaders().get("Authorization").get(0);
 			} catch(NullPointerException e) {
+				Response errorResponse = new ErrorResponse(StatusCode.UNAUTHORIZED);
 				e.printStackTrace();
+				respond(exchange, errorResponse);
+				return;
 			}
 		}
 

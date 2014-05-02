@@ -56,9 +56,7 @@ public class CommandHandler {
 		String[] parsedRest = parseRest(restful);
 
 		if(cmdt == CommandType.LOGIN_COMMAND) {
-
 			newCommand = cmdFactory.createLoginCommand(json, parsedRest);
-
 		} else if (cmdt == CommandType.LOGOUT_COMMAND) {
 
 			newCommand = cmdFactory.createLogoutCommand(parsedRest);

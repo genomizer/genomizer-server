@@ -35,14 +35,13 @@ public class CommandFactory {
 	 */
 	public Command createLoginCommand(String json, String[] restful) {
 
+
 		//Create command with json.
 		final Command loginCmd = gson.fromJson(json, LoginCommand.class);
 
 		//Set headers
-		loginCmd.setHeader(restful);
-
+		//loginCmd.setHeader(restful);
 		return loginCmd;
-
 	}
 
 	/**
