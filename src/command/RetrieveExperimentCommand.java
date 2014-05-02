@@ -2,6 +2,7 @@ package command;
 
 import response.ErrorResponse;
 import response.Response;
+import response.StatusCode;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -45,8 +46,7 @@ public class RetrieveExperimentCommand extends Command {
 	public Response execute() {
 
 		//Method not implemented, send appropriate response
-		return 	new ErrorResponse(405);
-
+		return 	new ErrorResponse(StatusCode.NO_CONTENT);
 	}
 
 }

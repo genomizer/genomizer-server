@@ -11,6 +11,7 @@ import databaseAccessor.DatabaseAccessor;
 import response.ErrorResponse;
 import response.Response;
 import response.SearchResponse;
+import response.StatusCode;
 
 /**
  * Class used to represent a command of the type Search.
@@ -64,7 +65,7 @@ public class SearchForExperimentsCommand extends Command {
 		SearchResponse response = new SearchResponse();
 
 		//Method not implemented, send appropriate response
-		return 	new ErrorResponse(405);
+		return 	new ErrorResponse(StatusCode.NO_CONTENT);
 	}
 
 	public String getAnnotations() {

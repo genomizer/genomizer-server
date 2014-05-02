@@ -1,6 +1,8 @@
 package command;
 
+import response.ErrorResponse;
 import response.Response;
+import response.StatusCode;
 
 import com.google.gson.annotations.Expose;
 
@@ -28,7 +30,7 @@ public class ConvertRawToProfileCommand extends Command {
 		//skicka filen till processmetoden, vilka param,returvärde?
 		//return respons 201
 
-		return null;
+		return 	new ErrorResponse(StatusCode.NO_CONTENT);
 	}
 
 }

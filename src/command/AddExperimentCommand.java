@@ -3,6 +3,7 @@ package command;
 import javax.xml.ws.Response;
 
 import response.ErrorResponse;
+import response.StatusCode;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -42,7 +43,7 @@ public class AddExperimentCommand extends Command {
 	public response.Response execute() {
 
 		//Method not implemented, send appropriate response
-		return 	new ErrorResponse(405);
+		return 	new ErrorResponse(StatusCode.NO_CONTENT);
 	}
 
 

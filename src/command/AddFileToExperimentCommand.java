@@ -6,6 +6,7 @@ import com.google.gson.annotations.Expose;
 
 import response.ErrorResponse;
 import response.Response;
+import response.StatusCode;
 
 /**
  * Class used to represent a command of the type Addfile.
@@ -70,7 +71,7 @@ public class AddFileToExperimentCommand extends Command {
 //		return null;
 
 		//Method not implemented, send appropriate response
-		return 	new ErrorResponse(405);
+		return 	new ErrorResponse(StatusCode.NO_CONTENT);
 	}
 
 

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import response.DownloadResponse;
 import response.ErrorResponse;
 import response.Response;
+import response.StatusCode;
 
 import com.google.gson.annotations.Expose;
 
@@ -56,7 +57,7 @@ public class GetFileFromExperimentCommand extends Command {
 //		}
 
 		//Method not implemented, send appropriate response
-		return 	new ErrorResponse(405);
+		return 	new ErrorResponse(StatusCode.NO_CONTENT);
 	}
 
 }

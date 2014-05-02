@@ -7,6 +7,7 @@ import process.classes.ProcessHandler;
 
 import response.ErrorResponse;
 import response.Response;
+import response.StatusCode;
 
 import authentication.Authenticate;
 
@@ -79,7 +80,7 @@ public class ProcessCommand extends Command {
 		//return respons 201
 
 		//Method not implemented, send appropriate response
-		return 	new ErrorResponse(405);
+		return 	new ErrorResponse(StatusCode.NO_CONTENT);
 	}
 
 }
