@@ -273,44 +273,6 @@ public class DatabaseAccessor {
         return dropDownStrings;
     }
 
-    // KOLLA! Ska den kasta ett undantag?
-    // Skriv fler tester!
-    /**
-     *
-     * @param searchPubMed
-     * @return null if failed, else a SearchResult object.
-     */
-    public SearchResult searchExperiment(String searchPubMed) {
-
-        PreparedStatement pStatement;
-
-        String query = "SELECT * FROM File NATURAL JOIN Annotated_With "
-                + "WHERE (";
-
-        // getting the where-statements from pubmed string to usable
-        // query.
-        PubMedParser theParser = new PubMedParser();
-        ParsedPubMed queryMaterial = theParser.parsePubMed(searchPubMed);
-
-        query = query + queryMaterial.getWhereString() + ")";
-
-        try {
-            pStatement = conn.prepareStatement(query);
-            for (int i = 1; i < queryMaterial.getValues().size(); i++) {
-                pStatement.setString(i, queryMaterial.getValues().get(i - 1));
-            }
-
-            ResultSet res = pStatement.executeQuery();
-
-            SearchResult queryRes = new SearchResult(res);
-            return queryRes;
-
-        } catch (SQLException e) {
-            System.out.println("Failed to send query to database\n");
-        }
-        return null;
-    }
-
     public List<String> getChoices(String label) throws SQLException {
         String query = "SELECT Value FROM Annotation_Choices "
                 + "WHERE Label = ?";
@@ -395,6 +357,7 @@ public class DatabaseAccessor {
     }
 
     // Too many parameters. Could take a JSONObject instead.
+    // TODO should generate path instead of taking one
     public int addFile(String path, String type, String filename, String metaData,
             String author, String uploader, boolean isPrivate, String expID,
             String grVersion) throws SQLException {

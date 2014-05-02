@@ -3,10 +3,11 @@ CREATE TABLE File
     FileID SERIAL NOT NULL,
     Path VARCHAR(128) UNIQUE NOT NULL,
     FileType VARCHAR(32) NOT NULL,
+    FileName VARCHAR(32) NOT NULL,
     Date DATE NOT NULL,
     MetaData VARCHAR(256),
     Author VARCHAR(32),
-    Uploader VARCHAR(32),
+    Uploader VARCHAR(32) NOT NULL,
     IsPrivate BOOLEAN NOT NULL,
     ExpID VARCHAR(64),
     GRVersion VARCHAR(16),
@@ -53,8 +54,6 @@ CREATE TABLE User_Info
     Role VARCHAR(32) NOT NULL,
     CONSTRAINT pkey_user_info PRIMARY KEY(Username)
 );
-
-ALTER TABLE File ADD CONSTRAINT fkey_uploader FOREIGN KEY (Uploader) REFERENCES User_Info(Username) ON DELETE SET NULL;
 
 CREATE TABLE Working_on
 (

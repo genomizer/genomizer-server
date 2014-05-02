@@ -22,15 +22,4 @@ public class FilePathGenerator {
 		return dir.toString();
 	}
 
-	/**
-	 *
-	 * @param fileID
-	 * @param species
-	 * @param expID
-	 * @return the homo root
-	 */
-	@Deprecated
-	public static String GenerateFilePathForCoversion(String fileID,String species, String expID){
-		return "/homo/";
-	}
 }
