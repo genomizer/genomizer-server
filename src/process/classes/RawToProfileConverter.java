@@ -3,25 +3,35 @@ package process.classes;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Class used to create .wig file from .fastq format.
+ * 
+ * @version 1.0
+ */
 public class RawToProfileConverter extends Executor {
 
 		private String[] bowTieParameters;
-		private String[] samToBamParameters;
-		
-//		String bowTie = "bowtie -a -m 1 --best -p 10 -v 2 d_melanogaster_fb5_22 -q reads/MOF_male_wt_reads_sample.fastq -S test/male.sam";
 		private String sortSam = "sort -k 3,3 -k 4,4n test/*.sam";
 		private String readgff = "perl sam_to_readsgff_v1.pl test/";
-		private String readsgff_to_allnucsgr_v1  = "perl readsgff_to_allnucsgr_v1.pl test/reads_gff/";
+		private String readsgfftoallnuscgr  = "perl readsgff_to_allnucsgr_v1.pl test/reads_gff/";
 		private String smooth = "perl smooth_v4.pl test/reads_gff/allnucs_sgr/ 10 1 5 0 0";
 		private String step10 = "perl AllSeqRegSGRtoPositionSGR_v1.pl y 10 test/reads_gff/allnucs_sgr/smoothed/";
-//		private String sgr2wig = "perl sgr2wig.pl /test/reads_gff/allnucs_sgr/smoothed/step10/male_v1_v1_median_smooth_winSiz-10_minProbe-5_step10.sgr step10.wig";
-
 		private String sgr2wig = "perl sgr2wig.pl male_v1_v1_median_smooth_winSiz-10_minProbe-5_step10.sgr step10.wig";
 		
-		private String[] sortBamParameters = new String[]{"samtools-0.1.19/samtools", "sort", "test/male.bam", "test/maleSorted"};
+		
+		/**
+		 * Takes a string array with execution parameters for each part of 
+		 * the procedure which creates a .wig file from a .fastq file.
+		 * 
+		 * @param parameters
+		 * @param inFile
+		 * @param outFile
+		 * @throws InterruptedException
+		 * @throws IOException
+		 */
 		public void procedure(String[] parameters, String inFile, String outFile) throws InterruptedException, IOException {
 			bowTieParameters = parse(parameters[0]);
-			samToBamParameters = new String[]{"samtools-0.1.19/samtools", "view", "-bS", "-o", "test/male.bam", "test/male.sam"};
+			
 			long startTime;
 			long endTime;
 			
@@ -47,7 +57,7 @@ public class RawToProfileConverter extends Executor {
 			Thread.sleep(2000);
 			
 			startTime = System.currentTimeMillis();
-			executeScript(parse(readsgff_to_allnucsgr_v1));
+			executeScript(parse(readsgfftoallnuscgr));
 			endTime = System.currentTimeMillis();
 			System.out.println("readsgff to allnucsgr done, Time: "+((endTime - startTime)) + " milliseconds");
 			
@@ -96,7 +106,4 @@ public class RawToProfileConverter extends Executor {
 		public String[] getBowTieParameters() {
 			return bowTieParameters;
 		}
-
-
-
 }
