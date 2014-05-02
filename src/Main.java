@@ -22,7 +22,7 @@ public class Main {
 		String bowTie = "bowtie -a -m 1 --best -p 10 -v 2 d_melanogaster_fb5_22 -q reads/MOF_male_wt_reads_sample.fastq -S " +path;
 		
 		ProcessHandler p = new ProcessHandler();
-		String[] para = new String[]{bowTie, sortSam, readgff, readsgfftoallnuscgr, smooth, step10, sgr2wig};
+		String[] para = new String[]{bowTie};
 		try {
 			System.out.println("nu executar vi");
 			String inFile = null;
