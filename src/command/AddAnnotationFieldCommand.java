@@ -58,7 +58,7 @@ public class AddAnnotationFieldCommand extends Command {
 
 		Response rsp;
 
-
+		// TODO: connect to database
 
 
 		//Need to get some kind of boolean as a response if success to add.
@@ -77,7 +77,8 @@ public class AddAnnotationFieldCommand extends Command {
 
 		}
 
-		return rsp;
+		//Method not implemented, send appropriate response
+		return 	new ErrorResponse(405);
 
 	}
 

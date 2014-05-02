@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.google.gson.annotations.Expose;
 
+import response.ErrorResponse;
 import response.Response;
 
 /**
@@ -28,15 +29,27 @@ public class AddFileToExperimentCommand extends Command {
  	private String type;
 
 
+	/**
+	 * Validates the request by checking
+	 * the attributes. No attribute can be null
+	 * and type needs to be either "raw", "profile",
+	 * or "region".
+	 */
 	@Override
 	public boolean validate() {
 
-		if(experimentID == null || fileName == null || size == null || type != "raw" || type != "profile" || type != "region") {
+		if(experimentID == null || fileName == null || size == null || type == null || type != "raw" || type != "profile" || type != "region") {
 			return false;
 		}
 		return true;
 	}
 
+	/**
+	 * Adds all attributes an arraylist and
+	 * pass that and the experimentID to the database.
+	 * A filepath is returned and sent to the client as
+	 * a URL.
+	 */
 	@Override
 	public Response execute() {
 
@@ -55,6 +68,9 @@ public class AddFileToExperimentCommand extends Command {
 //		 }
 //		 return rsp;
 //		return null;
+
+		//Method not implemented, send appropriate response
+		return 	new ErrorResponse(405);
 	}
 
 

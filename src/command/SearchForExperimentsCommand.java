@@ -63,7 +63,8 @@ public class SearchForExperimentsCommand extends Command {
 
 		SearchResponse response = new SearchResponse();
 
-		return null;
+		//Method not implemented, send appropriate response
+		return 	new ErrorResponse(405);
 	}
 
 	public String getAnnotations() {

@@ -1,5 +1,6 @@
 package command;
 
+import response.ErrorResponse;
 import response.Response;
 
 /**
@@ -27,8 +28,8 @@ public class LogoutCommand extends Command {
 	@Override
 	public Response execute() {
 
-		// TODO Auto-generated method stub
-		return null;
+		//Method not implemented, send appropriate response
+		return 	new ErrorResponse(405);
 
 	}
 
