@@ -1,5 +1,7 @@
 package command;
 
+import response.Response;
+
 /**
  * Class used to represent a command of the type Upload.
  *
@@ -25,10 +27,10 @@ public class UploadCommand extends Command {
 	 * to the server.
 	 */
 	@Override
-	public void execute() {
+	public Response execute() {
 
 		// TODO Auto-generated method stub
-
+		return null;
 	}
 
 }

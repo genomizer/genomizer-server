@@ -1,5 +1,7 @@
 package command;
 
+import response.Response;
+
 //TODO: Fix comments.
 //TODO: Check command types etc...
 
@@ -31,17 +33,16 @@ public class CommandHandler {
 	 * @param restful
 	 * @param cmdt
 	 */
-	public void doStuff(String json, String restful, CommandType cmdt) {	//TODO: Rename this method.
+	public Response doStuff(String json, String restful, String uuid, CommandType cmdt) {	//TODO: Rename this method.
 
 		//Get code from restful //TODO: add parser code....
-
 		Command myCom = createCommand(cmdt, json, restful);
 
-		//Initiate command (placeholder)
+		//TODO: What kind of work? returns respons.
+		Response rsp = myCom.execute();
 
-		//TODO: What kind of work?
-		myCom.execute();
-
+		//Return respons.
+		return rsp;
 	}
 
 	/**
@@ -54,45 +55,107 @@ public class CommandHandler {
 	private Command createCommand(CommandType cmdt, String json, String restful) {
 
 		Command newCommand = null;
+		String[] parsedRest = parseRest(restful);
 
 		if(cmdt == CommandType.LOGIN_COMMAND) {
 
-			//Create cmd
-			newCommand = cmdFactory.createLoginCommand(json, restful);
+			newCommand = cmdFactory.createLoginCommand(json, parsedRest);
 
+		} else if (cmdt == CommandType.LOGOUT_COMMAND) {
 
-		} else if (cmdt == CommandType.EXPERIMENT_COMMAND) {
+			newCommand = cmdFactory.createLogoutCommand(parsedRest);
 
-			//Create cmd
-			newCommand = cmdFactory.createExperimentCommand(json, restful);
+		} else if (cmdt == CommandType.RETRIEVE_EXPERIMENT_COMMAND) {
 
-		} else if (cmdt == CommandType.FILE_COMMAND) {
+			newCommand = cmdFactory.createRetrieveExperimentCommand(json, parsedRest);
 
-			//Create cmd
+		} else if (cmdt == CommandType.ADD_EXPERIMENT_COMMAND) {
 
-		} else if (cmdt == CommandType.SEARCH_COMMAND) {
+			newCommand = null;
 
-			//Create cmd
-			newCommand = cmdFactory.createSearchCommand(json, restful);
+		} else if (cmdt == CommandType.UPDATE_EXPERIMENT_COMMAND) {
 
-		} else if (cmdt == CommandType.USER_COMMAND) {
+			newCommand = null;
 
-			//Create cmd
-			newCommand = cmdFactory.createUserCommand(json, restful);
+		} else if (cmdt == CommandType.REMOVE_EXPERIMENT_COMMAND) {
 
-		} else if (cmdt == CommandType.PROCESS_COMMAND) {
+			newCommand = null;
 
-			//Create cmd
-			newCommand = cmdFactory.createProcessCommand(json, restful);
+		} else if (cmdt == CommandType.GET_FILE_FROM_EXPERIMENT_COMMAND) {
 
-		} else if (cmdt == CommandType.SYSADM_COMMAND) {
+			newCommand = cmdFactory.createGetFileFromExperimentCommand(json, parsedRest);
 
-			//Create cmd
-			newCommand = cmdFactory.createSysadmCommand(json, restful);
+		} else if (cmdt == CommandType.ADD_FILE_TO_EXPERIMENT_COMMAND) {
+
+			newCommand = cmdFactory.createAddFileToExperimentCommand(json, parsedRest);
+
+		} else if (cmdt == CommandType.UPDATE_FILE_IN_EXPERIMENT_COMMAND) {
+
+			newCommand = null;
+
+		} else if (cmdt == CommandType.DELETE_FILE_FROM_EXPERIMENT_COMMAND) {
+
+			newCommand = null;
+
+		} else if (cmdt == CommandType.SEARCH_FOR_EXPERIMENTS_COMMAND) {
+
+			newCommand = null;
+
+		} else if (cmdt == CommandType.CREATE_USER_COMMAND) {
+
+			newCommand = null;
+
+		} else if (cmdt == CommandType.UPDATE_USER_COMMAND) {
+
+			newCommand = null;
+
+		} else if (cmdt == CommandType.DELETE_USER_COMMAND) {
+
+			newCommand = null;
+
+		} else if (cmdt == CommandType.CONVERT_RAW_TO_PROFILE_COMMAND) {
+
+			newCommand = null;
+
+		} else if (cmdt == CommandType.GET_ANNOTATION_INFORMATION_COMMAND) {
+
+			newCommand = null;
+
+		} else if (cmdt == CommandType.ADD_ANNOTATION_FIELD_COMMAND) {
+
+			newCommand = null;
+
+		} else if (cmdt == CommandType.ADD_ANNOTATION_VALUE_COMMAND) {
+
+			newCommand = null;
+
+		} else if (cmdt == CommandType.REMOVE_ANNOTATION_FIELD_COMMAND) {
+
+			newCommand = null;
+
+		} else if (cmdt == CommandType.GET_ANNOTATION_PRIVILEGES_COMMAND) {
+
+			newCommand = null;
+
+		} else if (cmdt == CommandType.UPDATE_ANNOTATION_PRIVILEGES_COMMAND) {
+
+			newCommand = null;
 
 		}
 
 		return newCommand;
 	}
 
+	public String[] parseRest(String restful) {
+		String[] split = restful.split("/");
+		String[] parsed = new String[split.length];
+
+		for(int i = 0; i < split.length-1; i++) {
+			parsed[i] = split[i+1];
+		}
+		return parsed;
+	}
+
 }
+
+

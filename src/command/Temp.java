@@ -1,8 +1,12 @@
 package command;
 
+import response.Response;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+
+//TODO: Remove class.
 public class Temp {
 
 	public static void main(String args[]) {
@@ -15,12 +19,30 @@ public class Temp {
 		    final Gson gson = builder.create();
 
 		    //Create the class to convert to JSON and fill it.
-		    final Command dCom = new DownloadCommand();
-		    String [] values = new String[4];
-		    values[0] = "A";
-		    values[1] = "B";
-		    values[2] = "C";
-		    values[3] = "D";
+		    CommandHandler cmdh = new CommandHandler();
+		    CommandType cmdt = CommandType.LOGIN_COMMAND;
+
+		    //Create JSON to initiate class with.
+		    String json = "{\"username\": \"uname\", \"password\": \"pw\"}";
+
+		    //Create restful.
+		    String restful = "";
+
+		    String uuid = "123";
+
+		    //Create the COMMAND.
+		    Response rsp = cmdh.doStuff(json, restful, uuid, cmdt);
+
+		    if(rsp == null) {
+
+		    	System.out.println("WORKING.");
+
+		    } else {
+
+		    	System.out.println("NOT WORKING");
+
+		    }
+
 
 		    //Create the JSON STRING from object and print it.
 
