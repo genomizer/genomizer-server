@@ -11,12 +11,12 @@ import java.io.IOException;
 public class RawToProfileConverter extends Executor {
 
 		private String[] bowTieParameters; 		//Step 1
-		private String sortSam = "sort -k 3,3 -k 4,4n test/*.sam"; //Step 2
-		private String samToGff = "perl sam_to_readsgff_v1.pl test/"; //Step 3
-		private String gffToAllnusgr  = "perl readsgff_to_allnucsgr_v1.pl test/reads_gff/"; //Step 4
-		private String smooth = "perl smooth_v4.pl test/reads_gff/allnucs_sgr/ 10 1 5 0 0";  //Step 5
+		private String sortSam = "sort -k 3,3 -k 4,4n"; //Step 2
+		private String samToGff = "perl sam_to_readsgff_v1.pl"; //Step 3
+		private String gffToAllnusgr  = "perl readsgff_to_allnucsgr_v1.pl"; //Step 4
+		private String smooth = "perl smooth_v4.pl test/reads_gff/allnucs_sgr/ 10 1 5 0 1";  //Step 5 TODO: CHANGE LAST 0 to 1
 		private String step10 = "perl AllSeqRegSGRtoPositionSGR_v1.pl y 10 test/reads_gff/allnucs_sgr/smoothed/"; // Step 6
-		private String sgr2wig = "perl sgr2wig.pl male_v1_v1_median_smooth_winSiz-10_minProbe-5_step10.sgr step10.wig"; //Step 7
+		private String sgr2wig = "perl sgr2wig.pl test/reads_gff/allnucs_sgr/smoothed/Step10/male_v1_v1_median_smooth_winSiz-10_minProbe-5_step10.sgr /home/shinowa/git/genomizer-server/resources/test/reads_gff/allnucs_sgr/smoothed/Step10/step10.wig"; //Step 7
 		
 		
 		/**
@@ -41,8 +41,15 @@ public class RawToProfileConverter extends Executor {
 		 * @throws IOException
 		 */
 		public void procedure(String[] parameters, String inFile, String outFile) throws InterruptedException, IOException {
-			bowTieParameters = parse(parameters[0]);
+			String bowTieOutput = "test/male.sam";
+			String dir = "test/";
+			bowTieParameters = parse(parameters[0]+" "+inFile+" "+bowTieOutput);
 			
+			//Testar bowtie
+			for(int i = 0; i < bowTieParameters.length; i++) {
+				System.out.print(bowTieParameters[i]+ " ");
+			}
+
 			long startTime;
 			long endTime;
 			
@@ -53,29 +60,39 @@ public class RawToProfileConverter extends Executor {
 			
 			Thread.sleep(2000);
 			
+			//Testar sortSam
+			for(int i = 0; i < parse(sortSam + " "+bowTieOutput).length; i++) {
+				System.out.print(parse(sortSam + " "+bowTieOutput)[i]+ " ");
+			}
+			
 			startTime = System.currentTimeMillis();
-			executeScript(parse(sortSam));
+			executeScript(parse(sortSam + " "+bowTieOutput));
 			endTime = System.currentTimeMillis();
 			System.out.println("sortsam done, Time: "+((endTime - startTime)) + " milliseconds");
 			
 			Thread.sleep(2000);
 			
+			//Testar samToGff
+			for(int i = 0; i < parse(samToGff + " "+dir).length; i++) {
+				System.out.print(parse(samToGff + " "+dir)[i]+ " ");
+			}
+			
 			startTime = System.currentTimeMillis();
-			executeScript(parse(samToGff));
+			executeScript(parse(samToGff + " "+dir));
 			endTime = System.currentTimeMillis();
 			System.out.println("readgff done, Time: "+((endTime - startTime)) + " milliseconds");
 			
 			Thread.sleep(2000);
 			
 			startTime = System.currentTimeMillis();
-			executeScript(parse(gffToAllnusgr));
+			executeScript(parse(gffToAllnusgr+ " "+dir+"reads_gff/"));
 			endTime = System.currentTimeMillis();
 			System.out.println("readsgff to allnucsgr done, Time: "+((endTime - startTime)) + " milliseconds");
 			
 			Thread.sleep(2000);
 			
 			startTime = System.currentTimeMillis();
-			executeScript(parse(smooth));
+			executeScript(parse(smooth+" "+dir+"reads_gff/allnucs_sgr/"));
 			endTime = System.currentTimeMillis();
 			System.out.println("smooth done, Time: "+((endTime - startTime)) + " milliseconds");
 			

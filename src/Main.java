@@ -18,14 +18,15 @@ public class Main {
 	
 	public static void main(String [ ] args) {
 
-		String path = "test/male.sam";
-		String bowTie = "bowtie -a -m 1 --best -p 10 -v 2 d_melanogaster_fb5_22 -q reads/MOF_male_wt_reads_sample.fastq -S " +path;
-		
+
+		String genome = "d_melanogaster_fb5_22";
+		String bowTie = "bowtie -a -m 1 --best -p 10 -v 2 -q  -S "+genome;
+		String inFile = "reads/MOF_male_wt_reads_sample.fastq";
+
 		ProcessHandler p = new ProcessHandler();
 		String[] para = new String[]{bowTie};
 		try {
 			System.out.println("nu executar vi");
-			String inFile = null;
 			String outFile = null;
 
 			p.executeProcess("rawToProfile", para, inFile, outFile);
