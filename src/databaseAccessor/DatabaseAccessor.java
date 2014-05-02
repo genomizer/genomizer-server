@@ -443,6 +443,22 @@ public class DatabaseAccessor {
         return e;
     }
 
+	public boolean isValidFilePath(String filePath) throws SQLException {
+
+		PreparedStatement pStatement = null;
+		String query = "SELECT * FROM File Where (Path = ?)";
+
+		pStatement = conn.prepareStatement(query);
+		pStatement.setString(1, filePath);
+
+		ResultSet res = pStatement.executeQuery();
+
+        while (res.next()) {
+            return false;
+        }
+		return true;
+	}
+
     private Experiment fillFiles(Experiment e) throws SQLException {
         String query = "SELECT * FROM File " + "WHERE ExpID = ?";
         PreparedStatement getFiles = conn.prepareStatement(query);
@@ -516,5 +532,4 @@ public class DatabaseAccessor {
         }
         return query;
     }
-
 }

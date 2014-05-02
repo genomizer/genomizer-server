@@ -69,30 +69,30 @@ public class TestDatabaseConnect {
 	/**
 	 * Andrés tester
 	 */
-	@Test
-	public void testSearchByAuthorLabel() {
-		String searchPubMed = "(((Sven[Author]) AND Arm[Tissue]) OR Human[Species])";
+//	@Test
+//	public void testSearchByAuthorLabel() {
+//		String searchPubMed = "(((Sven[Author]) AND Arm[Tissue]) OR Human[Species])";
+//
+//		try {
+//			SearchResult res = searchFile(searchPubMed);
+//			printQResult(res);
+//		} catch (SQLException e) {
+//			System.out.println("testSearchByAuthorLabel fail");
+//		}
+//	}
 
-		try {
-			SearchResult res = searchFile(searchPubMed);
-			printQResult(res);
-		} catch (SQLException e) {
-			System.out.println("testSearchByAuthorLabel fail");
-		}
-	}
-
-	@Test
-	public void testSearchByWrongLabel() {
-		String searchPubMed = "2014-04-29[Date]";
-		System.out.println("datum");
-
-		try {
-			SearchResult res = searchFile(searchPubMed);
-			printQResult(res);
-		} catch (SQLException e) {
-			System.out.println("testSearchByWrongLabel fail");
-		}
-	}
+//	@Test
+//	public void testSearchByWrongLabel() {
+//		String searchPubMed = "2014-04-29[Date]";
+//		System.out.println("datum");
+//
+//		try {
+//			SearchResult res = searchFile(searchPubMed);
+//			printQResult(res);
+//		} catch (SQLException e) {
+//			System.out.println("testSearchByWrongLabel fail");
+//		}
+//	}
 
 //	@Test
 //	public void testSearchByNotExistLabel() {
@@ -106,17 +106,54 @@ public class TestDatabaseConnect {
 //		}
 //	}
 
-//	@Test
-//	public void testSearchByLabel() {
-//		String searchPubMed = "2[FileID]";
-//
-//		try {
-//			SearchResult res = searchExperiment(searchPubMed);
-//			printQResult(res);
-//		} catch (SQLException e) {
-//			System.out.println("testSearchByNotExist fail");
-//		}
-//	}
+	@Test
+	public void testValiedFileFail() {
+		String path = "c:/doc/1";
+
+		
+		try {
+			assertFalse(isValidFilePath(path));			
+		} catch (SQLException e) {
+			System.out.println("testSearchByNotExist fail");
+		}
+	}
+	
+	@Test
+	public void testValiedFileues() {
+		String path = "c:/moho";
+		
+		try {
+			assertTrue(isValidFilePath(path));			
+		} catch (SQLException e) {
+			System.out.println("testSearchByNotExist fail");
+		}
+		
+	}
+	
+	@Test
+	public void testDifferentFile() {
+		String path = "/TestPath/gkdbfalkfnvlankfl";
+		
+		try {
+			assertTrue(isValidFilePath(path));			
+		} catch (SQLException e) {
+			System.out.println("testSearchByNotExist fail");
+		}
+		
+	}
+	
+	@Test
+	public void testAnotherFilePathFile() {
+		String path = "/TestPath/gkdbfalkfn";
+		
+		//Filepath should be viable
+		try {
+			assertTrue(isValidFilePath(path));			
+		} catch (SQLException e) {
+			System.out.println("testSearchByNotExist fail");
+		}
+		
+	}
 
 	private SearchResult searchFile(String searchPubMed) throws SQLException {
 
@@ -206,5 +243,23 @@ System.out.println("\n\n");
 	        return false;
 	    }
 	    return true;
+	}
+
+	private boolean isValidFilePath(String filePath) throws SQLException {
+
+		PreparedStatement pStatement = null;
+
+		String query = "SELECT * FROM File Where (Path = ?)";
+		
+		pStatement = conn.prepareStatement(query);
+		pStatement.setString(1, filePath);
+
+		ResultSet res = pStatement.executeQuery();
+		
+        while (res.next()) {
+            return false;
+        }
+
+		return true;
 	}
 }
