@@ -5,7 +5,7 @@ import com.google.gson.GsonBuilder;
 
 /**
  * Used to create and return different commands that
- * will be executed later by calling the execute() method.
+ * will be executed later by calling their execute() method.
  *
  * @author tfy09jnn
  * @version 1.0
@@ -47,8 +47,8 @@ public class CommandFactory {
 
 	/**
 	 * Used to create logout command.
-	 * @param restful
-	 * @return
+	 * @param RESTful-header.
+	 * @return a logout command.
 	 */
 	public Command createLogoutCommand(String[] restful) {
 
@@ -59,6 +59,7 @@ public class CommandFactory {
 		logoutCmd.setHeader(restful);
 
 		return logoutCmd;
+
 	}
 
 	/**
@@ -118,6 +119,7 @@ public class CommandFactory {
 	public Command createGetFileFromExperimentCommand(String json, String[] restful) {
 
 		return new GetFileFromExperimentCommand(restful);
+
 	}
 
 	/**
@@ -166,6 +168,7 @@ public class CommandFactory {
 	public Command createSearchForExperimentCommand(String json, String[] restful) {
 
 		return new SearchForExperimentsCommand(restful[restful.length]);
+
 	}
 
 	/**
