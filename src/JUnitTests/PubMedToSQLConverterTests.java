@@ -19,9 +19,20 @@ public class PubMedToSQLConverterTests {
     public void shouldParseSinglePairRightFormat() throws Exception {
         PubMedToSQLConverter pmsl = new PubMedToSQLConverter();
         assertEquals(sqlStr1, pmsl.convert(pmStr1));
-        
+
             assertEquals("Species", pmsl.getParameters().get(0));
             assertEquals("Human", pmsl.getParameters().get(1));
             assertEquals(2, pmsl.getParameters().size());
+    }
+
+    @Test
+    public void testname() throws Exception {
+        PubMedToSQLConverter pmsl = new PubMedToSQLConverter();
+
+        System.out.println(pmsl.convert("(((Ruaridh[Author]) AND book1[Book]) OR 123456789[ISBN]) AND filter1[Filter])"));
+
+        for (String s: pmsl.getParameters()) {
+            System.out.println(s);
+        }
     }
 }
