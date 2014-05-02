@@ -35,7 +35,6 @@ public class PubMedToSQLConverterTests {
     public static String testFreeTextValue = "test_free_text_annotation_value";
 
     // Test File
-    public static String path = "/TestPath/gkdbfalkfnvlankfl/testFileName_fghasgha.fastq";
     public static String filename = "testFileName_fghasgha.fastq";
     public static String type = "raw";
     public static String metaData = "/TestPath/inputfile.fastq";
@@ -69,7 +68,7 @@ public class PubMedToSQLConverterTests {
     }
 
     private static void fillDatabase() throws SQLException, IOException {
-
+/*
         int nrTuples = 24;
 
         for (int i = 0; i < nrTuples; i++) {
@@ -82,7 +81,7 @@ public class PubMedToSQLConverterTests {
 
         for (int i = 0; i < nrTuples; i++) {
             dbac.addExperiment(expId + i);
-            dbac.addFile(path + i, type, filename + i, metaData, author, uploader, isPrivate, expId + i, null);
+            dbac.addFile(type, filename + i, metaData, author, uploader, isPrivate, expId + i, null);
             if (i % 4 == 0) {
                 dbac.tagExperiment(expId + i, testDropDownAnnotationLabel + i, testChoices.get(0));
             } else if (i % 4 == 2) {
@@ -91,7 +90,7 @@ public class PubMedToSQLConverterTests {
                 dbac.tagExperiment(expId + i, testFreeTextAnnotationLabel + i, "Free Tesxt Annotation " + i);
             }
         }
-
+*/
     }
 
     @Test
@@ -115,7 +114,7 @@ public class PubMedToSQLConverterTests {
         DatabaseAccessor dbac = new DatabaseAccessor(username, password, host, database);
 
         dbac.addExperiment(expId);
-        dbac.addFile(path, type, filename, metaData, author, author, isPrivate, expId, null);
+        String path = dbac.addFile(type, filename, metaData, author, author, isPrivate, expId, null);
         dbac.tagExperiment(expId, "Species", "Human");
 
         List<Experiment> experiments = dbac.search("Human[Species] AND Ruaridh[Author]");

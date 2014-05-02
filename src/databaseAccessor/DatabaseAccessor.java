@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import database.PubMedToSQLConverter;
+import database.FilePathGenerator;
 //may be changed
 import database.SearchResult;
 import database.ParsedPubMed;
@@ -358,17 +359,20 @@ public class DatabaseAccessor {
 
     // Too many parameters. Could take a JSONObject instead.
     // TODO should generate path instead of taking one
-    public int addFile(String path, String type, String filename, String metaData,
+    public String addFile(String fileType, String fileName, String metaData,
             String author, String uploader, boolean isPrivate, String expID,
             String grVersion) throws SQLException {
+
+
+    	String path = FilePathGenerator.GenerateFilePath(expID, fileType, fileName);
 
         String query = "INSERT INTO File "
                 + "(Path, FileType, FileName, Date, MetaData, Author, Uploader, IsPrivate, ExpID, GRVersion) VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?, ?, ?, ?, ?)";
         PreparedStatement tagExp = conn.prepareStatement(query);
 
         tagExp.setString(1, path);
-        tagExp.setString(2, type);
-        tagExp.setString(3, filename);
+        tagExp.setString(2, fileType);
+        tagExp.setString(3, fileName);
         tagExp.setString(4, metaData);
         tagExp.setString(5, author);
         tagExp.setString(6, uploader);
@@ -376,10 +380,12 @@ public class DatabaseAccessor {
         tagExp.setString(8, expID);
         tagExp.setString(9, grVersion);
 
-        int res = tagExp.executeUpdate();
+        tagExp.executeUpdate();
+
         tagExp.close();
-        return res;
+        return path;
     }
+
 
     public int deleteFile(String path) throws SQLException {
         String statementStr = "DELETE FROM File " + "WHERE (Path = ?)";
@@ -407,7 +413,7 @@ public class DatabaseAccessor {
         return e;
     }
 
-	public boolean isValidFilePath(String filePath) throws SQLException {
+	private boolean isValidFilePath(String filePath) throws SQLException {
 
 		PreparedStatement pStatement = null;
 		String query = "SELECT * FROM File Where (Path = ?)";
