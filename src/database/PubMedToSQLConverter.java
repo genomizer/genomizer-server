@@ -7,8 +7,8 @@ import java.util.List;
 
 public class PubMedToSQLConverter {
 
-    private String sqlFragmentForExpSearch = "SELECT * FROM Experiment "
-            + "WHERE A.Label = ? AND A.Value = ?";
+    private String sqlFragmentForExpSearch = "SELECT ExpID FROM Experiment NATURAL JOIN Annotated_With "
+            + "WHERE Label = ? AND Value = ?";
 
     private String sqlFragmentForExpAttr = "SELECT * FROM File AS F "
             + "WHERE EXISTS (SELECT * FROM Annotated_With AS A "

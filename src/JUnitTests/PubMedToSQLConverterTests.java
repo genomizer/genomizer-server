@@ -55,7 +55,7 @@ public class PubMedToSQLConverterTests {
         dbac.addFile(path, type, filename, metaData, author, author, isPrivate, expId, null);
         dbac.tagExperiment(expId, "Species", "Human");
 
-        List<Experiment> experiments = dbac.search(author + "[Author]");
+        List<Experiment> experiments = dbac.search("Human[Species]");
         for (Experiment e: experiments) {
             System.out.println(e.getID());
             for (FileTuple ft: e.getFiles()) {
