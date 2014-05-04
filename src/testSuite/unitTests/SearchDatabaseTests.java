@@ -80,7 +80,7 @@ public class SearchDatabaseTests {
                 line = in.readLine();
             }
         } else {
-            System.out.println("null url");
+            throw new IOException("Could not find file: " + path);
         }
         return sqlStrings;
     }
@@ -106,5 +106,44 @@ public class SearchDatabaseTests {
         List<Experiment> experiments = dbac.search("/Exp1/Raw/file1.fastq[Path]");
         assertEquals(1, experiments.size());
         assertEquals(1, experiments.get(0).getFiles().size());
+    }
+    
+    @Test
+    public void shouldBeAbleToSearchUsingPubMedString() throws Exception {
+        List<Experiment> experiments = dbac.search("Human[Species] AND Unknown[Sex]");
+        assertEquals(1, experiments.size());
+        assertEquals("Exp1", experiments.get(0).getID());
+    }
+    
+    @Test
+    public void shouldBeAbleToSearchUsingPubMedString2() throws Exception {
+        List<Experiment> experiments = dbac.search("Human[Species] AND Does not matter[Sex]");
+        assertEquals(1, experiments.size());
+        assertEquals("Exp2", experiments.get(0).getID());
+    }
+    
+    @Test
+    public void shouldBeAbleToSearchUsingPubMedString3() throws Exception {
+        List<Experiment> experiments = dbac.search("Human[Species] OR Rat[Species]");
+        assertEquals(3, experiments.size());
+    }
+    
+    @Test
+    public void shouldBeAbleToSearchUsingPubMedString4() throws Exception {
+        List<Experiment> experiments = dbac.search("Human[Species] AND Child[Development Stage]");
+        assertEquals(1, experiments.size());
+        assertEquals("Exp2", experiments.get(0).getID());
+    }
+    
+    @Test
+    public void shouldBeAbleToSearchUsingPubMedString5() throws Exception {
+        List<Experiment> experiments = dbac.search("Human[Species] AND Umeå Uni[Author]");
+        assertEquals(1, experiments.size());
+        assertEquals(1, experiments.get(0).getFiles().size());
+        assertEquals("/Exp1/Raw/file1.fastq", experiments.get(0).getFiles().get(0).path);
+    }
+    
+    @Test
+    public void shouldBeAbleToSearchUsingPubMedString6() throws Exception {
     }
 }
