@@ -40,40 +40,48 @@ public class SearchDatabaseTests {
 
     @BeforeClass
     public static void setup() throws Exception {
-        dbac = new DatabaseAccessor(username, password, host,
-                database);
-        
+        dbac = new DatabaseAccessor(username, password, host, database);
+
         String url = "jdbc:postgresql://" + host + "/" + database;
         Properties props = new Properties();
         props.setProperty("user", username);
         props.setProperty("password", password);
 
         conn = DriverManager.getConnection(url, props);
-        
+
         addTuplesSqlStrings = buildSqlStringsFromFile(addTestTuplesPath);
-        
-        for (String s: addTuplesSqlStrings) {
+
+        for (String s : addTuplesSqlStrings) {
             Statement statement = conn.createStatement();
             statement.execute(s);
         }
-        
+
         clearTablesSqlStrings = buildSqlStringsFromFile(clearTablesPath);
     }
-    
-    private static List<String> buildSqlStringsFromFile(String path) throws UnsupportedEncodingException, IOException {
+
+    /**
+     * Builds a list of strings from a sql file so that they can be executed
+     * with jdbc.
+     * 
+     * @param path The path to the sql file
+     * @return A list of sql strings from the file
+     * @throws UnsupportedEncodingException
+     * @throws IOException
+     */
+    private static List<String> buildSqlStringsFromFile(String path)
+            throws UnsupportedEncodingException, IOException {
         List<String> sqlStrings = new ArrayList<String>();
         URL sqlFileUrl = SearchDatabaseTests.class.getResource(path);
         if (sqlFileUrl != null) {
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(sqlFileUrl.openStream(),
-                            "UTF-8"));
+            BufferedReader in = new BufferedReader(new InputStreamReader(
+                    sqlFileUrl.openStream(), "UTF-8"));
             String line = in.readLine();
             StringBuilder statement = new StringBuilder();
-            
+
             while (line != null) {
                 statement.append(line);
                 if (line.endsWith(";")) {
-                    statement.deleteCharAt(statement.length()-1);
+                    statement.deleteCharAt(statement.length() - 1);
                     sqlStrings.add(statement.toString());
                     statement.delete(0, statement.length());
                 }
@@ -87,7 +95,7 @@ public class SearchDatabaseTests {
 
     @AfterClass
     public static void undoAllChanges() throws SQLException {
-        for (String s: clearTablesSqlStrings) {
+        for (String s : clearTablesSqlStrings) {
             Statement statement = conn.createStatement();
             statement.execute(s);
         }
@@ -95,55 +103,83 @@ public class SearchDatabaseTests {
     }
 
     @Test
-    public void shouldBeAbleToSearchForExperimentUsingPubMedString() throws Exception {
+    public void shouldBeAbleToSearchForExperimentUsingPubMedString()
+            throws Exception {
         List<Experiment> experiments = dbac.search("Exp1[ExpID]");
         assertEquals(1, experiments.size());
         assertEquals(2, experiments.get(0).getFiles().size());
     }
-    
+
     @Test
-    public void shouldBeAbleToSearchForFilesUsingPubMedString() throws Exception {
-        List<Experiment> experiments = dbac.search("/Exp1/Raw/file1.fastq[Path]");
+    public void shouldBeAbleToSearchForFilesUsingPubMedString()
+            throws Exception {
+        List<Experiment> experiments = dbac
+                .search("/Exp1/Raw/file1.fastq[Path]");
         assertEquals(1, experiments.size());
         assertEquals(1, experiments.get(0).getFiles().size());
     }
-    
+
     @Test
     public void shouldBeAbleToSearchUsingPubMedString() throws Exception {
-        List<Experiment> experiments = dbac.search("Human[Species] AND Unknown[Sex]");
+        List<Experiment> experiments = dbac
+                .search("Human[Species] AND Unknown[Sex]");
         assertEquals(1, experiments.size());
         assertEquals("Exp1", experiments.get(0).getID());
     }
-    
+
     @Test
     public void shouldBeAbleToSearchUsingPubMedString2() throws Exception {
-        List<Experiment> experiments = dbac.search("Human[Species] AND Does not matter[Sex]");
+        List<Experiment> experiments = dbac
+                .search("Human[Species] AND Does not matter[Sex]");
         assertEquals(1, experiments.size());
         assertEquals("Exp2", experiments.get(0).getID());
     }
-    
+
     @Test
     public void shouldBeAbleToSearchUsingPubMedString3() throws Exception {
-        List<Experiment> experiments = dbac.search("Human[Species] OR Rat[Species]");
+        List<Experiment> experiments = dbac
+                .search("Human[Species] OR Rat[Species]");
         assertEquals(3, experiments.size());
     }
-    
+
     @Test
     public void shouldBeAbleToSearchUsingPubMedString4() throws Exception {
-        List<Experiment> experiments = dbac.search("Human[Species] AND Child[Development Stage]");
+        List<Experiment> experiments = dbac
+                .search("Human[Species] AND Child[Development Stage]");
         assertEquals(1, experiments.size());
         assertEquals("Exp2", experiments.get(0).getID());
     }
-    
+
     @Test
     public void shouldBeAbleToSearchUsingPubMedString5() throws Exception {
-        List<Experiment> experiments = dbac.search("Human[Species] AND Umeå Uni[Author]");
+        List<Experiment> experiments = dbac
+                .search("Human[Species] AND Umeå Uni[Author]");
         assertEquals(1, experiments.size());
         assertEquals(1, experiments.get(0).getFiles().size());
-        assertEquals("/Exp1/Raw/file1.fastq", experiments.get(0).getFiles().get(0).path);
+        assertEquals("/Exp1/Raw/file1.fastq", experiments.get(0).getFiles()
+                .get(0).path);
+    }
+
+    @Test
+    public void shouldBeAbleToSearchUsingPubMedString6() throws Exception {
+        List<Experiment> experiments = dbac
+                .search("Human[Species] NOT Child[Development Stage]");
+        assertEquals(1, experiments.size());
+        assertEquals("Adult", experiments.get(0).getAnnotations().get("Development Stage"));
     }
     
     @Test
-    public void shouldBeAbleToSearchUsingPubMedString6() throws Exception {
+    public void shouldBeAbleToSearchStartingWithNot() throws Exception {
+        List<Experiment> experiments = dbac
+                .search("NOT Child[Development Stage]");
+        assertEquals(2, experiments.size());
+    }
+    
+    @Test
+    public void shouldBeAbleToSearchUsingNOT() throws Exception {
+        List<Experiment> experiments = dbac
+                .search("Child[Development Stage] NOT Human[Species]");
+        assertEquals(1, experiments.size());
+        assertEquals("Rat", experiments.get(0).getAnnotations().get("Species"));
     }
 }

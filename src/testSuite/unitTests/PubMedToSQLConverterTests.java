@@ -9,7 +9,6 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-
 import database.DatabaseAccessor;
 import database.PubMedToSQLConverter;
 
@@ -26,44 +25,48 @@ public class PubMedToSQLConverterTests {
 
     public String multipleMixedConstraintsPmStrWithBrackets = "(Ruaridh Watt[Author] OR (Human[Species] AND Arm[Tissue]))";
 
+    public String expConstraintPmStrNOT = "NOT Human[Species]";
+    public String multipleExpConstraintsPmStrNOT = "Human[Species] NOT Unknown[Sex]";
+
     private String sqlFragmentForExpSearch = "SELECT ExpID FROM Experiment NATURAL JOIN Annotated_With "
             + "WHERE Label = ? AND Value = ?";
 
+    private String sqlFragmentForExpSearchNegated = "SELECT ExpID FROM Experiment AS E "
+            + "WHERE NOT EXISTS (SELECT * FROM Annotated_With AS A "
+            + "WHERE E.ExpID = A.ExpID AND Label = ? AND Value = ?)";
+
     private String sqlFragmentForExpAttrInFileSearch = "SELECT * FROM File AS F "
             + "WHERE EXISTS (SELECT * FROM Annotated_With AS A "
-            + "WHERE F.ExpID = A.ExpID AND "
-            + "A.Label = ? AND A.Value = ?)";
+            + "WHERE F.ExpID = A.ExpID AND " + "A.Label = ? AND A.Value = ?)";
 
-    private String sqlFragmentForFileAttr = "SELECT * FROM File "
-            + "WHERE ";
+    private String sqlFragmentForExpAttrInFileSearchNegated = "SELECT * FROM File AS F "
+            + "WHERE NOT EXISTS (SELECT * FROM Annotated_With AS A "
+            + "WHERE F.ExpID = A.ExpID AND " + "A.Label = ? AND A.Value = ?)";
+
+    private String sqlFragmentForFileAttr = "SELECT * FROM File " + "WHERE ";
 
     private String orderBySqlFragment = "\nORDER BY ExpID";
 
     @BeforeClass
-    public static void setupBeforeClass() throws SQLException,
-            IOException {
+    public static void setupBeforeClass() throws SQLException, IOException {
 
         dbac = new DatabaseAccessor(SearchDatabaseTests.username,
-                SearchDatabaseTests.password,
-                SearchDatabaseTests.host,
+                SearchDatabaseTests.password, SearchDatabaseTests.host,
                 SearchDatabaseTests.database);
         pm2sql = new PubMedToSQLConverter();
     }
 
     @AfterClass
-    public static void teardownAfterClass() throws SQLException,
-            IOException {
+    public static void teardownAfterClass() throws SQLException, IOException {
 
         dbac.close();
     }
 
     @Test
     public void shouldConvertExpConstraintPmStr() throws Exception {
-        String query = pm2sql
-                .convertExperimentSearch(expConstraintPmStr);
+        String query = pm2sql.convertExperimentSearch(expConstraintPmStr);
 
-        String expected = sqlFragmentForExpSearch
-                + orderBySqlFragment;
+        String expected = sqlFragmentForExpSearch + orderBySqlFragment;
 
         assertEquals(expected, query);
         assertEquals(2, pm2sql.getParameters().size());
@@ -72,8 +75,8 @@ public class PubMedToSQLConverterTests {
     }
 
     @Test
-    public void shouldConvertMultipleExpConstraintPmStr()
-            throws Exception {
+    public void shouldConvertMultipleExpConstraintPmStr() throws Exception {
+
         String query = pm2sql
                 .convertExperimentSearch(multipleExpConstraintsPmStr);
 
@@ -95,8 +98,8 @@ public class PubMedToSQLConverterTests {
         String query = pm2sql
                 .convertExperimentSearch(multipleExpConstraintsPmStrWithBrackets);
 
-        String expected = sqlFragmentForExpSearch + "\nINTERSECT\n"
-                + "(" + sqlFragmentForExpSearch + "\nUNION\n"
+        String expected = sqlFragmentForExpSearch + "\nINTERSECT\n" + "("
+                + sqlFragmentForExpSearch + "\nUNION\n"
                 + sqlFragmentForExpSearch + ")" + orderBySqlFragment;
 
         assertEquals(expected, query);
@@ -114,7 +117,7 @@ public class PubMedToSQLConverterTests {
 
         String query = pm2sql.convertFileSearch(fileConstraintPmStr);
 
-        String expected = sqlFragmentForFileAttr + "Author = ? "
+        String expected = sqlFragmentForFileAttr + "Author = ?"
                 + orderBySqlFragment;
 
         assertEquals(expected, query);
@@ -131,10 +134,9 @@ public class PubMedToSQLConverterTests {
 
         // (Ruaridh Watt[Author] OR (Human[Species] AND Arm[Tissue]))
 
-        String expected = "(" + sqlFragmentForFileAttr
-                + "Author = ? " + "\nUNION\n" + "("
-                + sqlFragmentForExpAttrInFileSearch + "\nINTERSECT\n"
-                + sqlFragmentForExpAttrInFileSearch + "))"
+        String expected = "(" + sqlFragmentForFileAttr + "Author = ?"
+                + "\nUNION\n" + "(" + sqlFragmentForExpAttrInFileSearch
+                + "\nINTERSECT\n" + sqlFragmentForExpAttrInFileSearch + "))"
                 + orderBySqlFragment;
 
         assertEquals(expected, query);
@@ -144,6 +146,52 @@ public class PubMedToSQLConverterTests {
         assertEquals("Human", pm2sql.getParameters().get(2));
         assertEquals("Tissue", pm2sql.getParameters().get(3));
         assertEquals("Arm", pm2sql.getParameters().get(4));
+    }
+
+    @Test
+    public void shouldConvertPubMedStringBeginingWithNot() throws Exception {
+
+        String query = pm2sql.convertExperimentSearch(expConstraintPmStrNOT);
+
+        String expected = sqlFragmentForExpSearchNegated + orderBySqlFragment;
+
+        assertEquals(expected, query);
+        assertEquals(2, pm2sql.getParameters().size());
+        assertEquals("Species", pm2sql.getParameters().get(0));
+        assertEquals("Human", pm2sql.getParameters().get(1));
+    }
+
+    @Test
+    public void shouldConvertNOTInMultiPubMedString() throws Exception {
+
+        String query = pm2sql
+                .convertExperimentSearch(multipleExpConstraintsPmStrNOT);
+
+        String expected = sqlFragmentForExpSearch + "\nINTERSECT\n"
+                + sqlFragmentForExpSearchNegated + orderBySqlFragment;
+
+        assertEquals(expected, query);
+        assertEquals(4, pm2sql.getParameters().size());
+        assertEquals("Species", pm2sql.getParameters().get(0));
+        assertEquals("Human", pm2sql.getParameters().get(1));
+        assertEquals("Sex", pm2sql.getParameters().get(2));
+        assertEquals("Unknown", pm2sql.getParameters().get(3));
+    }
+    
+    @Test
+    public void shouldConvertNOTInMultiPubMedString2() throws Exception {
+
+        String query = pm2sql
+                .convertFileSearch("NOT Ruaridh[Author] NOT Human[Species]");
+
+        String expected = sqlFragmentForFileAttr + "Author <> ?" + "\nINTERSECT\n"
+                + sqlFragmentForExpAttrInFileSearchNegated + orderBySqlFragment;
+
+        assertEquals(expected, query);
+        assertEquals(3, pm2sql.getParameters().size());
+        assertEquals("Ruaridh", pm2sql.getParameters().get(0));
+        assertEquals("Species", pm2sql.getParameters().get(1));
+        assertEquals("Human", pm2sql.getParameters().get(2));
     }
 
 }
