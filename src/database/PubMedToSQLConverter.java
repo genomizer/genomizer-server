@@ -7,10 +7,16 @@ import java.util.List;
 
 public class PubMedToSQLConverter {
 
+    private static final String AND = " AND ";
+    private static final String INTERSECT = "\nINTERSECT\n";
+    
+    private static final String OR = " OR ";
+    private static final String UNION = "\nUNION\n";
+    
     private String sqlFragmentForExpSearch = "SELECT ExpID FROM Experiment NATURAL JOIN Annotated_With "
             + "WHERE Label = ? AND Value = ?";
 
-    private String sqlFragmentForExpAttr = "SELECT * FROM File AS F "
+    private String sqlFragmentForExpAttrInFileSearch = "SELECT * FROM File AS F "
             + "WHERE EXISTS (SELECT * FROM Annotated_With AS A "
             + "WHERE F.ExpID = A.ExpID AND "
             + "A.Label = ? AND A.Value = ?)";
@@ -20,8 +26,7 @@ public class PubMedToSQLConverter {
 
     private String orderBySqlFragment = "\nORDER BY ExpID";
 
-    private final String AND = " AND ";
-    private final String OR = " OR ";
+    
 
     private final String[] fileAttributeArray = {"FileID", "Path",
             "FileType", "Date", "MetaData", "Author", "Uploader",
@@ -119,7 +124,7 @@ public class PubMedToSQLConverter {
             sb.append(" = ? ");
             parameters.add(value);
         } else {
-            sb.append(sqlFragmentForExpAttr);
+            sb.append(sqlFragmentForExpAttrInFileSearch);
             parameters.add(label);
             parameters.add(value);
         }
@@ -129,10 +134,10 @@ public class PubMedToSQLConverter {
 
     private String moveConj(String s, StringBuilder sb) {
         if (s.startsWith(OR)) {
-            sb.append("\nUNION\n");
+            sb.append(UNION);
             return s.substring(4);
         }
-        sb.append("\nINTERSECT\n");
+        sb.append(INTERSECT);
         return s.substring(5);
     }
 

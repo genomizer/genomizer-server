@@ -1,4 +1,4 @@
-package databaseAccessor;
+package database;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -14,8 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import database.PubMedToSQLConverter;
-import database.FilePathGenerator;
 
 /**
  * PREREQUISITES: The construction parameters must reference a
@@ -118,7 +116,7 @@ public class DatabaseAccessor {
      * @throws SQLException
      *             if the query does not succeed
      */
-    public ArrayList<String> getUsers() throws SQLException {
+    public List<String> getUsers() throws SQLException {
         ArrayList<String> users = new ArrayList<String>();
         String query = "SELECT Username FROM User_Info";
 
@@ -165,7 +163,7 @@ public class DatabaseAccessor {
      * Returns the password for the given user. Used for login.
      * 
      * @param user
-     *            - the username as stirng
+     *            - the username as string
      * @return String - the password
      * @throws SQLException
      *             if the query does not succeed
@@ -356,7 +354,7 @@ public class DatabaseAccessor {
      *             if the choices are invalid
      */
     public int addDropDownAnnotation(String label,
-            ArrayList<String> choices) throws SQLException,
+            List<String> choices) throws SQLException,
             IOException {
 
         if (choices.isEmpty()) {

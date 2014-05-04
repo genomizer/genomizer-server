@@ -1,4 +1,4 @@
-package JUnitTests;
+package unused;
 
 import static org.junit.Assert.*;
 
@@ -13,9 +13,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import database.ParsedPubMed;
-import database.PubMedParser;
-import database.SearchResult;
 
 public class TestDatabaseConnect {
 
@@ -67,7 +64,7 @@ public class TestDatabaseConnect {
 	}
 
 	/**
-	 * Andrés tester
+	 * Andrï¿½s tester
 	 */
 //	@Test
 //	public void testSearchByAuthorLabel() {
@@ -187,7 +184,7 @@ public class TestDatabaseConnect {
 	}
 
 	/**
-	 * kanske fixa, vet ej om det bara är strängar eller om det finns int
+	 * kanske fixa, vet ej om det bara ï¿½r strï¿½ngar eller om det finns int
 	 *
 	 * @param searchPubMed
 	 * @return

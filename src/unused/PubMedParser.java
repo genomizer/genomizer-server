@@ -1,12 +1,13 @@
-package database;
+package unused;
 
 import java.util.ArrayList;
+
 
 /**
  * Class to parse a PubMed String
  *
  * @author dv11ann
- * Rör för tusan inte din hjäkel, detta är min klass :P get your own!
+ * Rï¿½r fï¿½r tusan inte din hjï¿½kel, detta ï¿½r min klass :P get your own!
  */
 public class PubMedParser {
 
