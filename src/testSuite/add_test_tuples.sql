@@ -49,7 +49,7 @@ INSERT INTO File VALUES(DEFAULT, '/Exp3/Raw/file1.fastq', 'Raw', 'file1.fastq', 
 
 INSERT INTO File VALUES(DEFAULT, '/Exp3/Profile/file1.sam', 'Profile', 'file1.sam', CURRENT_TIMESTAMP, '-n 1 --best', 'Genomizer', 'user1', 'false', 'Exp3', 'rn5');
 
-INSERT INTO File VALUES(DEFAULT, '/Exp1/Profile/file2.sam', 'Profile', 'file2.sam', CURRENT_TIMESTAMP, '-n 2 --best', 'Genomizer', 'user1', 'false', 'Exp3', 'rn5');
+INSERT INTO File VALUES(DEFAULT, '/Exp3/Profile/file2.sam', 'Profile', 'file2.sam', CURRENT_TIMESTAMP, '-n 2 --best', 'Genomizer', 'user1', 'false', 'Exp3', 'rn5');
 
 
 
