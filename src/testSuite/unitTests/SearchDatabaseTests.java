@@ -62,7 +62,7 @@ public class SearchDatabaseTests {
     /**
      * Builds a list of strings from a sql file so that they can be executed
      * with jdbc.
-     * 
+     *
      * @param path The path to the sql file
      * @return A list of sql strings from the file
      * @throws UnsupportedEncodingException
@@ -153,7 +153,7 @@ public class SearchDatabaseTests {
     @Test
     public void shouldBeAbleToSearchUsingPubMedString5() throws Exception {
         List<Experiment> experiments = dbac
-                .search("Human[Species] AND UmeÃ¥ Uni[Author]");
+                .search("Human[Species] AND Umeå Uni[Author]");
         assertEquals(1, experiments.size());
         assertEquals(1, experiments.get(0).getFiles().size());
         assertEquals("/Exp1/Raw/file1.fastq", experiments.get(0).getFiles()
@@ -167,14 +167,14 @@ public class SearchDatabaseTests {
         assertEquals(1, experiments.size());
         assertEquals("Adult", experiments.get(0).getAnnotations().get("Development Stage"));
     }
-    
+
     @Test
     public void shouldBeAbleToSearchStartingWithNot() throws Exception {
         List<Experiment> experiments = dbac
                 .search("NOT Child[Development Stage]");
         assertEquals(2, experiments.size());
     }
-    
+
     @Test
     public void shouldBeAbleToSearchUsingNOT() throws Exception {
         List<Experiment> experiments = dbac
@@ -182,7 +182,7 @@ public class SearchDatabaseTests {
         assertEquals(1, experiments.size());
         assertEquals("Rat", experiments.get(0).getAnnotations().get("Species"));
     }
-    
+
     @Test
     public void shouldBeAbleToSearch1() throws Exception {
         List<Experiment> experiments = dbac
