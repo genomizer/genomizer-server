@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 
 
@@ -35,6 +36,30 @@ public class Experiment {
 
     public void addFile(FileTuple ft) {
         files.add(ft);
+    }
+    
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder(id);
+        for (Entry<String, String> a: annotations.entrySet()) {
+            sb.append(" (");
+            sb.append(a.getKey());
+            sb.append(", ");
+            sb.append(a.getValue());
+            sb.append("),");
+        }
+        
+        for (FileTuple ft: files) {
+            sb.append("\n    ");
+            sb.append(ft.path);
+            sb.append(", ");
+            sb.append(ft.type);
+            sb.append(", ");
+            sb.append(ft.uploader);
+            sb.append(", ");
+            sb.append(ft.author);
+        }
+        return sb.toString();
     }
 
 }

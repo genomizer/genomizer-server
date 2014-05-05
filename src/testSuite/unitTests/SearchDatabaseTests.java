@@ -182,4 +182,30 @@ public class SearchDatabaseTests {
         assertEquals(1, experiments.size());
         assertEquals("Rat", experiments.get(0).getAnnotations().get("Species"));
     }
+    
+    @Test
+    public void shouldBeAbleToSearch1() throws Exception {
+        List<Experiment> experiments = dbac
+                .search("Human[Species] NOT Adult[Development Stage]");
+        for (Experiment e: experiments) {
+            System.out.println(e.toString());
+        }
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
