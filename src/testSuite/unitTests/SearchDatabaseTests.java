@@ -28,9 +28,9 @@ public class SearchDatabaseTests {
     private static String clearTablesPath = "/testSuite/clear_tables.sql";
 
     public static String username = "genomizer";
-    public static String password = "chipseqdata";
+    public static String password = "genomizer";
     public static String host = "85.226.111.95";
-    public static String database = "genomizer";
+    public static String database = "genomizer_testdb";
 
     private static DatabaseAccessor dbac;
     private static Connection conn;
