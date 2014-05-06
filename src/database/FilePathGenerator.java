@@ -2,12 +2,9 @@ package database;
 
 import java.io.File;
 
-import javax.swing.filechooser.FileSystemView;
-
 public class FilePathGenerator {
 
-	private static String homeDir = FileSystemView.getFileSystemView()
-			.getHomeDirectory().toString();
+	private static String homeDir = "var/www/";
 
 	/**
 	 * Used when uploading and downloading files. Returns a Dir string
@@ -23,7 +20,6 @@ public class FilePathGenerator {
 		StringBuilder dir = new StringBuilder();
 
 		dir.append(homeDir);
-		dir.append('/');
 		dir.append("data");
 		dir.append('/');
 		dir.append(expID);

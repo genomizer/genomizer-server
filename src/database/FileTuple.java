@@ -21,7 +21,7 @@ public class FileTuple {
 
     public FileTuple(ResultSet resSet) throws SQLException {
         id = resSet.getInt("FileID");
-        path = resSet.getString("Path");
+        path = '/'+resSet.getString("Path");
         DownloadURL = ServerDependentValues.DownLoadURL+path;
         type = resSet.getString("FileType");
         filename = resSet.getString("FileName");

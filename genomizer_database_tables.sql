@@ -18,7 +18,7 @@ CREATE TABLE Annotation
 (
     Label VARCHAR(32) NOT NULL,
     DataType VARCHAR(16) NOT NULL,
-    Defult VARCHAR(32),
+    Default VARCHAR(32),
     Requierd BOOLEAN, NOT NULL,
     CONSTRAINT pkey_annotation PRIMARY KEY(Label)
 );
