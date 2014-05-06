@@ -1,12 +1,14 @@
 package command;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.google.gson.annotations.Expose;
 
-import database.SearchResult;
-import databaseAccessor.DatabaseAccessor;
+import database.DatabaseAccessor;
+import database.Experiment;
 
 import response.ErrorResponse;
 import response.Response;
@@ -55,12 +57,16 @@ public class SearchForExperimentsCommand extends Command {
 	    String host = "postgres";
 	    String database = "c5dv151_vt14";
 	    DatabaseAccessor db = null;
-		try {
-			db = new DatabaseAccessor(username, password, host, database);
-		} catch (SQLException e) {
-			return new ErrorResponse(503);
-		}
-		SearchResult result = db.searchExperiment(annotations);
+//		try {
+//			//db = new DatabaseAccessor(username, password, host, database);
+//			//List<Experiment> searchResult = db.search(annotations);
+//
+//		} catch (SQLException e) {
+//			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE);
+//		} catch (IOException e) {
+//			return new ErrorResponse(StatusCode.BAD_REQUEST);
+//		}
+
 
 		SearchResponse response = new SearchResponse();
 

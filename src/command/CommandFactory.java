@@ -166,7 +166,7 @@ public class CommandFactory {
 	 */
 	public Command createSearchForExperimentCommand(String json, String[] restful) {
 
-		return new SearchForExperimentsCommand(restful[restful.length]);
+		return new SearchForExperimentsCommand(restful[restful.length-1]);
 
 	}
 
