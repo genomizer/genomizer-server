@@ -5,10 +5,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import databaseAccessor.DatabaseAccessor;
+import database.DatabaseAccessor;
 
 import response.AnnotationInformation;
 import response.GetAnnotationInformationResponse;
@@ -28,7 +29,7 @@ public class GetAnnotationInformationCommand extends Command {
 		ArrayList<AnnotationInformation> annotations = new ArrayList<AnnotationInformation>();
 
 		DatabaseAccessor accessor = null;
-		Map<String, String> a = null;
+		Map<String, Integer> a = null;
 		try {
 			accessor = new DatabaseAccessor("c5dv151_vt14", "shielohh", "postgres", "c5dv151_vt14");
 			a = accessor.getAnnotations();
@@ -43,21 +44,15 @@ public class GetAnnotationInformationCommand extends Command {
 		}
 
 		for(int i = 0; i < annotation_names.size(); i++) {
-			int type;
-			if(a.get(annotation_names.get(i)).equals("dropdown")) {
-				type = AnnotationInformation.TYPE_DROP_DOWN;
-			} else {
-				type = AnnotationInformation.TYPE_FREE_TEXT;
-			}
 			ArrayList<String> values = null;
 			try {
-				values = accessor.getDropDownAnnotations(annotation_names.get(i));
+				values = (ArrayList<String>) accessor.getChoices(annotation_names.get(i));
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
-			AnnotationInformation annotation = new AnnotationInformation(0, annotation_names.get(i), type, values, true);
+			AnnotationInformation annotation = new AnnotationInformation(0, annotation_names.get(i), a.get(annotation_names.get(i)), values, true);
 			annotations.add(annotation);
 		}
 		Collections.sort(annotations, new compareAnnotations());

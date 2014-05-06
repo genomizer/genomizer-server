@@ -4,11 +4,16 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Map;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.*;
 
+import database.DatabaseAccessor;
+
+import response.AddFileToExperimentResponse;
 import response.ErrorResponse;
 import response.Response;
 import response.StatusCode;
@@ -62,21 +67,20 @@ public class AddFileToExperimentCommand extends Command {
 		fileInfo.add(fileName);
 		fileInfo.add(size);
 		fileInfo.add(type);
-//
-//		 Method from database group, needs more info
-//		 String filepath = uploadFile(experimentID, fileInfo);
-//		 if(filepath != null) {
-//			 rsp = new AddFileToExperimentResponse(200, filepath);
-//		 } else {
-//			 rsp = new ErrorResponse(404);
-//		 }
-//		 return rsp;
-//		return null;
 
-		//Method not implemented, send appropriate response
+		DatabaseAccessor accessor = null;
+		String response_url = null;
+		try {
+			accessor = new DatabaseAccessor("c5dv151_vt14", "shielohh", "postgres", "c5dv151_vt14");
+			response_url = accessor.addFile(type, fileName, null, "Jonas Markström", "Jonas Markström", false, experimentID, "1.0");
+			return new AddFileToExperimentResponse(StatusCode.OK, response_url);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return new ErrorResponse(StatusCode.NO_CONTENT);
 
 
-		return 	new ErrorResponse(StatusCode.NO_CONTENT);
 	}
 
 
