@@ -166,7 +166,7 @@ public class CommandFactory {
 	 */
 	public Command createSearchForExperimentCommand(String json, String[] restful) {
 
-		return new SearchForExperimentsCommand(restful[restful.length]);
+		return new SearchForExperimentsCommand(restful[restful.length-1]);
 
 	}
 
@@ -201,8 +201,7 @@ public class CommandFactory {
 	 * @param restful tag to put into class.
 	 * @return the actual command.
 	 */
-	public Command createProcessCommand(String json, String[] restful) {
-
+	public Command createConvertRawToProfileCommand(String json, String[] restful) {
 
 		ProcessCommand processCommand = gson.fromJson(json, ProcessCommand.class);
 		processCommand.setProcessType(restful[2]);
