@@ -4,7 +4,7 @@ import java.io.File;
 
 public class FilePathGenerator {
 
-	private static String homeDir = "var/www/";
+	private static String homeDir = "/var/www/";
 
 	/**
 	 * Used when uploading and downloading files. Returns a Dir string

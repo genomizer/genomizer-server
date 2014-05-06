@@ -18,8 +18,8 @@ CREATE TABLE Annotation
 (
     Label VARCHAR(32) NOT NULL,
     DataType VARCHAR(16) NOT NULL,
-    Default VARCHAR(32),
-    Requierd BOOLEAN, NOT NULL,
+    DefaultValue VARCHAR(32),
+    Required BOOLEAN NOT NULL,
     CONSTRAINT pkey_annotation PRIMARY KEY(Label)
 );
 
@@ -29,7 +29,7 @@ CREATE TABLE Experiment
     CONSTRAINT pkey_experiment PRIMARY KEY(ExpID)
 );
 
-ALTER TABLE File ADD CONSTRAINT fkey_expid FOREIGN KEY (ExpID) REFERENCES Experiment(ExpID);
+ALTER TABLE File ADD CONSTRAINT fkey_expid FOREIGN KEY (ExpID) REFERENCES Experiment(ExpID) ON UPDATE CASCADE;
 
 CREATE TABLE Annotated_With
 (
@@ -37,8 +37,8 @@ CREATE TABLE Annotated_With
     Label VARCHAR(32) NOT NULL,
     Value VARCHAR(32) NOT NULL,
     CONSTRAINT pkey_annotated_with PRIMARY KEY(ExpID, Label),
-    CONSTRAINT fkey_expid FOREIGN KEY (ExpID) REFERENCES Experiment(ExpID) ON DELETE CASCADE,
-    CONSTRAINT fkey_label FOREIGN KEY (Label) REFERENCES Annotation(Label) ON DELETE CASCADE
+    CONSTRAINT fkey_expid FOREIGN KEY (ExpID) REFERENCES Experiment(ExpID) ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT fkey_label FOREIGN KEY (Label) REFERENCES Annotation(Label) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE Annotation_Choices
@@ -46,11 +46,8 @@ CREATE TABLE Annotation_Choices
     Label VARCHAR(32) NOT NULL,
     Value VARCHAR(32) NOT NULL,
     CONSTRAINT pkey_annotation_choices PRIMARY KEY(Label, Value),
-    CONSTRAINT fkey_label FOREIGN KEY (Label) REFERENCES Annotation(Label) ON DELETE CASCADE
-    
+    CONSTRAINT fkey_label FOREIGN KEY (Label) REFERENCES Annotation(Label) ON UPDATE CASCADE ON DELETE CASCADE
 );
-
-ALTER TABLE Annotaion ADD CONSTRAINT fkey_defult FOREIGN KEY (Defult) REFERENCES Annotation_Choices(Value);
 
 CREATE TABLE User_Info
 (
@@ -62,7 +59,7 @@ CREATE TABLE User_Info
 
 CREATE TABLE Working_on
 (
-   Username VARCHAR(32) NOT NULL,
+    Username VARCHAR(32) NOT NULL,
 	WorkspaceID VARCHAR(32) NOT NULL,
 	CONSTRAINT pkey_working_on PRIMARY KEY(Username, WorkspaceID),
 	CONSTRAINT fkey_username FOREIGN KEY (Username) REFERENCES User_Info(Username)
