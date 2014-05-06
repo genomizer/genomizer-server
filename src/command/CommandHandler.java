@@ -110,7 +110,7 @@ public class CommandHandler {
 
 		} else if (cmdt == CommandType.PROCESS_COMMAND) {
 
-			newCommand = cmdFactory.createConvertRawToProfileCommand(json, parsedRest);
+			newCommand = cmdFactory.createProcessCommand(json, parsedRest);
 
 		} else if (cmdt == CommandType.GET_ANNOTATION_INFORMATION_COMMAND) {
 
