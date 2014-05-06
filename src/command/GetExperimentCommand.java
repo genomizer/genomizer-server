@@ -4,17 +4,26 @@ import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 /**
- * Class used to represent a logout command.
+ * Class used to retrieve an experiment.
  *
- * @author tfy09jnn
- * @version 1.0
+ * @author tfy09jnn, Hugo Källström
+ * @version 1.1
  */
-public class RemoveAnnotationFieldCommand extends Command {
+public class GetExperimentCommand extends Command {
+
+
 
 	/**
-	 * Used to validate the logout command.
+	 * Empty constructor.
 	 */
+	public GetExperimentCommand(String rest) {
+
+	}
+
 	@Override
 	public boolean validate() {
 
@@ -23,15 +32,11 @@ public class RemoveAnnotationFieldCommand extends Command {
 
 	}
 
-	/**
-	 * Used to execute the logout command.
-	 */
 	@Override
 	public Response execute() {
 
 		//Method not implemented, send appropriate response
 		return 	new MinimalResponse(StatusCode.NO_CONTENT);
-
 	}
 
 }

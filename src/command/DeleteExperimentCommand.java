@@ -16,9 +16,9 @@ import response.StatusCode;
  * @author tfy09jnn, Hugo Källström
  * @version 1.0
  */
-public class RemoveExperimentCommand extends Command {
+public class DeleteExperimentCommand extends Command {
 	
-	public RemoveExperimentCommand(String restful) {
+	public DeleteExperimentCommand(String restful) {
 		this.setHeader(restful);
 	}
 	/**
