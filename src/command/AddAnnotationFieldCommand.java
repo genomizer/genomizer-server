@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import response.AddAnnotationFieldResponse;
 import response.ErrorResponse;
 import response.Response;
-import response.StatusCode;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -55,10 +54,16 @@ public class AddAnnotationFieldCommand extends Command {
 	public boolean validate() {
 
 		/* Restrictions on size on name? types?
-		 *
 		 */
-
+		//Check if anything was not set.
 		if(name == null || type == null || defaults == null || forced == null) {
+
+			return false;
+
+		}
+
+		//Check if name is to long, no types exists.
+		if(name.length() > 10 || type.length < 1 ) {
 
 			return false;
 
