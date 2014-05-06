@@ -658,7 +658,7 @@ public class DatabaseAccessor {
 
         String path = FilePathGenerator.GenerateFilePath(expID,
                 fileType, fileName);
-        String URL = "http://scratcy.cs.umu.se:8090/upload.php?path=";
+        String URL = "http://scratcy.cs.umu.se:8090/upload.php?path=var/www";
 
         String query = "INSERT INTO File "
                 + "(Path, FileType, FileName, Date, MetaData, Author, Uploader, IsPrivate, ExpID, GRVersion) VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?, ?, ?, ?, ?)";
