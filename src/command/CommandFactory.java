@@ -194,6 +194,7 @@ public class CommandFactory {
 
 	}
 
+	//TODO: Refactor raw to profile command to process command.
 	/**
 	 * Used to create the command needed for converting raw to profile.
 	 * @param json string to initiate class.
@@ -217,6 +218,19 @@ public class CommandFactory {
 		return new GetAnnotationInformationCommand();
 
 	}
+
+	/**
+	 * Used to create a command needed to add annotation fields.
+	 * @param json string to initiate class.
+	 * @param restful tag to put into class.
+	 * @return the actual command.
+	 */
+	public Command createAddAnnotationFieldCommand(String json, String[] restful) {
+
+		return new AddAnnotationFieldCommand();
+
+	}
+
 
 	/**
 	 * Used to create the command needed to add annotation values.
@@ -248,9 +262,9 @@ public class CommandFactory {
 	 * @param restful tag to put into class.
 	 * @return the actual command.
 	 */
-	public Command createGetAnnotationPrevilegesCommand(String json, String[] restful) {
+	public Command createGetAnnotationPrivilegesCommand(String json, String[] restful) {
 
-		return new GetAnnotationPrevilegesCommand();
+		return new GetAnnotationPrivilegesCommand();
 
 	}
 
@@ -260,9 +274,9 @@ public class CommandFactory {
 	 * @param restful tag to put into class.
 	 * @return the actual command.
 	 */
-	public Command createUpdateAnnotationPrevilegesCommand(String json, String[] restful) {
+	public Command createUpdateAnnotationPrivilegesCommand(String json, String[] restful) {
 
-		return new UpdateAnnotationPrevilegesCommand();
+		return new UpdateAnnotationPrivilegesCommand();
 
 	}
 
