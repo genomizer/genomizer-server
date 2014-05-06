@@ -203,11 +203,15 @@ public class CommandFactory {
 	 */
 	public Command createProcessCommand(String json, String[] restful) {
 
+
+		ProcessCommand processCommand = gson.fromJson(json, ProcessCommand.class);
+		processCommand.setProcessType(restful[2]);
+		processCommand.setFileID(restful[3]);
 		//Create from json
 		//set userID
 		//set fileID
 		//set processType
-		return new ConvertRawToProfileCommand();
+		return processCommand;
 
 	}
 
