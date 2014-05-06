@@ -37,19 +37,26 @@ public class RawToProfileConverter extends Executor {
 	public void procedure(String[] parameters, String inFile, String outFile)
 			throws InterruptedException, IOException {
 
-		String dir = String.valueOf((Thread.currentThread().getId())) + "/";
-		String bowTieOutput = dir + "male.sam";
-
+//		String dir = String.valueOf((Thread.currentThread().getId())) + "/";
+		String dir = "test/";
+		String bowTieOutput = dir + "*.sam";
+		
+		
 		File fileDir = new File("resources/" + dir);
+		deleteDir(fileDir); 
+		System.out.println("Deletes directory");
+		
 		System.out.println("dir " + fileDir.toString());
 		if (!fileDir.exists()) {
 			fileDir.mkdir();
 		}
-
+		
+		if(fileDir.exists()) {
+			
 		String sortSam = "sort -k 3,3 -k 4,4n " + bowTieOutput; // Step 2
 		String samToGff = "perl sam_to_readsgff_v1.pl " + dir; // Step 3
 		String gffToAllnusgr = "perl readsgff_to_allnucsgr_v1.pl " + dir
-				+ "/reads_gff/"; // Step 4
+				+ "reads_gff/"; // Step 4
 		String smooth = "perl smooth_v4.pl " + dir
 				+ "reads_gff/allnucs_sgr/ 10 1 5 0 0"; // Step 5 TODO: CHANGE
 														// LAST 0 to 1
@@ -113,7 +120,20 @@ public class RawToProfileConverter extends Executor {
 		
 		System.out.println(allTimeEnd-allTimeStart);
 		System.out.println("All done, took "+getTime(allTimeEnd-allTimeStart));
-		
+		}
+	}
+	
+	public static boolean deleteDir(File dir) {
+	    if (dir.isDirectory()) {
+	        String[] children = dir.list();
+	        for (int i=0; i<children.length; i++) {
+	            boolean success = deleteDir(new File(dir, children[i]));
+	            if (!success) {
+	                return false;
+	            }
+	        }
+	    }
+	    return dir.delete();
 	}
 	
 	public String getTime(long temp) {

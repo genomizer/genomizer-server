@@ -29,7 +29,7 @@ public class Main {
 		String genome = "d_melanogaster_fb5_22";
 		String bowTie = "bowtie -a -m 1 --best -p 10 -v 2 -q  -S " + genome;
 		String inFile = "reads/MOF_male_wt_reads.fastq";
-		String outFile = "/home/shinowa/Videos/step10";
+		String outFile = "/home/shinowa/git/genomizer-server/resources/result";
 		ProcessHandler p = new ProcessHandler();
 		String[] para = new String[] { bowTie };
 		try {
