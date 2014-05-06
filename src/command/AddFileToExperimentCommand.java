@@ -1,8 +1,13 @@
 package command;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.InetAddress;
+import java.net.Socket;
 import java.util.ArrayList;
 
 import com.google.gson.annotations.Expose;
+import com.google.gson.*;
 
 import response.ErrorResponse;
 import response.Response;
@@ -29,7 +34,6 @@ public class AddFileToExperimentCommand extends Command {
 	@Expose
  	private String type;
 
-
 	/**
 	 * Validates the request by checking
 	 * the attributes. No attribute can be null
@@ -54,7 +58,6 @@ public class AddFileToExperimentCommand extends Command {
 	@Override
 	public Response execute() {
 
-		Response rsp;
 		ArrayList<String> fileInfo = new ArrayList<String>();
 		fileInfo.add(fileName);
 		fileInfo.add(size);
@@ -71,6 +74,8 @@ public class AddFileToExperimentCommand extends Command {
 //		return null;
 
 		//Method not implemented, send appropriate response
+
+
 		return 	new ErrorResponse(StatusCode.NO_CONTENT);
 	}
 
