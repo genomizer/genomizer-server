@@ -23,9 +23,9 @@ public class ProcessCommand extends Command {
 	private String processType;
 	private String metadata;
 	private String userID;
+	private String[] parameters;
+	private String genomeRelease;
 
-	private String outFilePath;
-	private String inFilePath;
 
 	public ProcessCommand() {
 
@@ -41,22 +41,22 @@ public class ProcessCommand extends Command {
 	public Response execute() {
 
 		//TODO Parse metadata to get GRversion and parameters?
-		String GRversion = "placeholderGRversion";
 		metadata = "meta1,meta2,meta3";
-		String[] parameters = {"param1","param2","param3"};
+//		String[] parameters = {"param1","param2","param3"};
 
-		String username = "c5dv151_vt14";
-		String password = "shielohh";
-		String host = "postgres";
-		String database = "c5dv151_vt14";
+		String databaseUsername = "c5dv151_vt14";
+		String databasePassword = "shielohh";
+		String databaseHost = "postgres";
+		String databaseDatabase = "c5dv151_vt14";
 		DatabaseAccessor dbac;
 		//Har ett filID,,processtype,param till profile->region parsa i commandFactory
 		try {
-			dbac = new  DatabaseAccessor(username, password, host, database);
+			//borde inte dbac skapas någon annanstans sen skickas som param?
+			dbac = new  DatabaseAccessor(databaseUsername, databasePassword, databaseHost, databaseDatabase);
 			switch(processType){
 				case "rawtoprofile":
-					String uploader=Authenticate.getUsername(userID);
-//					ArrayList<String> filepaths=dbac.convertFromRawtoProfile(fileID,metadata,uploader,GRversion);
+					String uploader = Authenticate.getUsername(userID);
+//					ArrayList<String> filepaths=dbac.convertFromRawtoProfile(fileID,metadata,uploader,genomeRelease);
 
 					ProcessHandler processHandler = new ProcessHandler();
 
