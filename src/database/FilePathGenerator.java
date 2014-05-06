@@ -6,13 +6,25 @@ import javax.swing.filechooser.FileSystemView;
 
 public class FilePathGenerator {
 
-	public static String GenerateFilePath(String expID, String fileType, String fileName) {
+	private static String homeDir = FileSystemView.getFileSystemView()
+			.getHomeDirectory().toString();
+
+	/**
+	 * Used when uploading and downloading files. Returns a Dir string
+	 * where the file is or where is should be saved.
+	 * @param expID - the ID for the experiment.
+	 * @param fileType - the type of the file.
+	 * @param fileName - the name of the file.
+	 * @return the string for the file.
+	 */
+	public static String GenerateFilePath(String expID, String fileType,
+			String fileName) {
 
 		StringBuilder dir = new StringBuilder();
 
-		File file=FileSystemView.getFileSystemView().getHomeDirectory();
-
-		dir.append(file.toString());
+		dir.append(homeDir);
+		dir.append('/');
+		dir.append("data");
 		dir.append('/');
 		dir.append(expID);
 		dir.append('/');
@@ -22,4 +34,25 @@ public class FilePathGenerator {
 		return dir.toString();
 	}
 
+	/**
+	 * Used when first adding a new experiment. Creates a folder
+	 * for the experiment and subfolders for files
+	 *
+	 * @param expID
+	 *            - the ID for the experiment.
+	 */
+	public static void GenerateExperimentFolders(String expID) {
+
+		File file = new File(homeDir + "/data/" + expID + "/raw/");
+
+		file.mkdirs();
+
+		file = new File(homeDir + "/data/" + expID + "/profile/");
+
+		file.mkdirs();
+
+		file = new File(homeDir + "/data/" + expID + "/region/");
+
+		file.mkdirs();
+	}
 }
