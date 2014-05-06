@@ -57,15 +57,15 @@ public class SearchForExperimentsCommand extends Command {
 	    String host = "postgres";
 	    String database = "c5dv151_vt14";
 	    DatabaseAccessor db = null;
-//		try {
-//			//db = new DatabaseAccessor(username, password, host, database);
-//			//List<Experiment> searchResult = db.search(annotations);
-//
-//		} catch (SQLException e) {
-//			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE);
-//		} catch (IOException e) {
-//			return new ErrorResponse(StatusCode.BAD_REQUEST);
-//		}
+		try {
+			db = new DatabaseAccessor(username, password, host, database);
+			List<Experiment> searchResult = db.search(annotations);
+
+		} catch (SQLException e) {
+			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE);
+		} catch (IOException e) {
+			return new ErrorResponse(StatusCode.BAD_REQUEST);
+		}
 
 
 		SearchResponse response = new SearchResponse();

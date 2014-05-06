@@ -1,5 +1,7 @@
 package command;
 
+import java.util.ArrayList;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -30,10 +32,9 @@ public class CommandFactory {
 	/**
 	 * Used to create the command needed for login.
 	 * @param json string to initiate class.
-	 * @param restful tag to put into class.
 	 * @return the actual command.
 	 */
-	public Command createLoginCommand(String json, String[] restful) {
+	public Command createLoginCommand(String json) {
 
 
 		//Create command with json.
@@ -49,13 +50,10 @@ public class CommandFactory {
 	 * @param RESTful-header.
 	 * @return a logout command.
 	 */
-	public Command createLogoutCommand(String[] restful) {
+	public Command createLogoutCommand() {
 
 		//Create command with json.
 		final Command logoutCmd = new LogoutCommand();
-
-		//Set headers
-		logoutCmd.setHeader(restful);
 
 		return logoutCmd;
 
@@ -67,7 +65,7 @@ public class CommandFactory {
 	 * @param restful tag to put into class.
 	 * @return the actual command.
 	 */
-	public Command createRetrieveExperimentCommand(String json, String[] restful) {
+	public Command createRetrieveExperimentCommand(String json, String restful) {
 
 		return new RetrieveExperimentCommand();
 
@@ -76,10 +74,9 @@ public class CommandFactory {
 	/**
 	 * Used to create the command needed for adding experiments.
 	 * @param json string to initiate class.
-	 * @param restful tag to put into class.
 	 * @return the actual command.
 	 */
-	public Command createAddExperimentCommand(String json, String[] restful) {
+	public Command createAddExperimentCommand(String json) {
 
 		return new AddExperimentCommand();
 
@@ -91,7 +88,7 @@ public class CommandFactory {
 	 * @param restful tag to put into class.
 	 * @return the actual command.
 	 */
-	public Command createUpdateExperimentCommand(String json, String[] restful) {
+	public Command createUpdateExperimentCommand(String json, String restful) {
 
 		return new UpdateExperimentCommand();
 
@@ -103,7 +100,7 @@ public class CommandFactory {
 	 * @param restful tag to put into class.
 	 * @return the actual command.
 	 */
-	public Command createRemoveExperimentCommand(String json, String[] restful) {
+	public Command createRemoveExperimentCommand(String json, String restful) {
 
 		return new RemoveExperimentCommand();
 
@@ -115,7 +112,7 @@ public class CommandFactory {
 	 * @param restful tag to put into class.
 	 * @return the actual command.
 	 */
-	public Command createGetFileFromExperimentCommand(String json, String[] restful) {
+	public Command createGetFileFromExperimentCommand(String json, String restful) {
 
 		return new GetFileFromExperimentCommand(restful);
 
@@ -124,10 +121,9 @@ public class CommandFactory {
 	/**
 	 * Used to create the command needed for adding files to experiments.
 	 * @param json string to initiate class.
-	 * @param restful tag to put into class.
 	 * @return the actual command.
 	 */
-	public Command createAddFileToExperimentCommand(String json, String[] restful) {
+	public Command createAddFileToExperimentCommand(String json) {
 
 		return new AddFileToExperimentCommand();
 
@@ -139,7 +135,7 @@ public class CommandFactory {
 	 * @param restful tag to put into class.
 	 * @return the actual command.
 	 */
-	public Command createUpdateFileInExperimentCommand(String json, String[] restful) {
+	public Command createUpdateFileInExperimentCommand(String json, String restful) {
 
 		return new UpdateFileInExperimentCommand();
 
@@ -151,7 +147,7 @@ public class CommandFactory {
 	 * @param restful tag to put into class.
 	 * @return the actual command.
 	 */
-	public Command createDeleteFileFromExperimentCommand(String json, String[] restful) {
+	public Command createDeleteFileFromExperimentCommand(String json, String restful) {
 
 		return new DeleteFileFromExperimentCommand();
 
@@ -164,9 +160,9 @@ public class CommandFactory {
 	 * @return the actual command.
 	 * @throws SQLException
 	 */
-	public Command createSearchForExperimentCommand(String json, String[] restful) {
+	public Command createSearchForExperimentCommand(String json, String restful) {
 
-		return new SearchForExperimentsCommand(restful[restful.length-1]);
+		return new SearchForExperimentsCommand(restful);
 
 	}
 
@@ -176,7 +172,7 @@ public class CommandFactory {
 	 * @param restful tag to put into class.
 	 * @return the actual command.
 	 */
-	public Command createUpdateUserCommand(String json, String[] restful) {
+	public Command createUpdateUserCommand(String json, String restful) {
 
 		return new UpdateUserCommand();
 
@@ -188,7 +184,7 @@ public class CommandFactory {
 	 * @param restful tag to put into class.
 	 * @return the actual command.
 	 */
-	public Command createDeleteUserCommand(String json, String[] restful) {
+	public Command createDeleteUserCommand(String json, String restful) {
 
 		return new DeleteUserCommand();
 
@@ -201,7 +197,7 @@ public class CommandFactory {
 	 * @param restful tag to put into class.
 	 * @return the actual command.
 	 */
-	public Command createConvertRawToProfileCommand(String json, String[] restful) {
+	public Command createConvertRawToProfileCommand(String json, String restful) {
 
 		return new ConvertRawToProfileCommand();
 
@@ -210,10 +206,9 @@ public class CommandFactory {
 	/**
 	 * Used to create the command needed to get annotation information.
 	 * @param json string to initiate class.
-	 * @param restful tag to put into class.
 	 * @return the actual command.
 	 */
-	public Command createGetAnnotationInformationCommand(String json, String[] restful) {
+	public Command createGetAnnotationInformationCommand(String json) {
 
 		return new GetAnnotationInformationCommand();
 
@@ -225,7 +220,7 @@ public class CommandFactory {
 	 * @param restful tag to put into class.
 	 * @return the actual command.
 	 */
-	public Command createAddAnnotationFieldCommand(String json, String[] restful) {
+	public Command createAddAnnotationFieldCommand(String json, String restful) {
 
 		return new AddAnnotationFieldCommand();
 
@@ -238,7 +233,7 @@ public class CommandFactory {
 	 * @param restful tag to put into class.
 	 * @return the actual command.
 	 */
-	public Command createAddAnnotationValueCommand(String json, String[] restful) {
+	public Command createAddAnnotationValueCommand(String json, String restful) {
 
 		return new AddAnnotationValueCommand();
 
@@ -250,7 +245,7 @@ public class CommandFactory {
 	 * @param restful tag to put into class.
 	 * @return the actual command.
 	 */
-	public Command createRemoveAnnotationFieldCommand(String json, String[] restful) {
+	public Command createRemoveAnnotationFieldCommand(String json, String restful) {
 
 		return new RemoveAnnotationFieldCommand();
 
@@ -259,10 +254,9 @@ public class CommandFactory {
 	/**
 	 * Used to create the command needed to get annotation privileges.
 	 * @param json string to initiate class.
-	 * @param restful tag to put into class.
 	 * @return the actual command.
 	 */
-	public Command createGetAnnotationPrivilegesCommand(String json, String[] restful) {
+	public Command createGetAnnotationPrivilegesCommand(String json) {
 
 		return new GetAnnotationPrivilegesCommand();
 
@@ -274,7 +268,7 @@ public class CommandFactory {
 	 * @param restful tag to put into class.
 	 * @return the actual command.
 	 */
-	public Command createUpdateAnnotationPrivilegesCommand(String json, String[] restful) {
+	public Command createUpdateAnnotationPrivilegesCommand(String json, String restful) {
 
 		return new UpdateAnnotationPrivilegesCommand();
 

@@ -68,7 +68,7 @@ public class CommandFactoryTest {
 
 		CommandFactory cmdf = new CommandFactory();
 		String[] restful = {"1", "2"};
-		assertNotNull(cmdf.createLogoutCommand(restful));
+		assertNotNull(cmdf.createLogoutCommand());
 
 	}
 
