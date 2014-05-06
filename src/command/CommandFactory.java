@@ -67,7 +67,7 @@ public class CommandFactory {
 	 */
 	public Command createRetrieveExperimentCommand(String json, String restful) {
 
-		return new RetrieveExperimentCommand();
+		return new GetExperimentCommand();
 
 	}
 
@@ -102,7 +102,7 @@ public class CommandFactory {
 	 */
 	public Command createRemoveExperimentCommand(String json, String restful) {
 
-		return new RemoveExperimentCommand(restful);
+		return new DeleteExperimentCommand(restful);
 
 	}
 
@@ -256,7 +256,7 @@ public class CommandFactory {
 	 */
 	public Command createRemoveAnnotationFieldCommand(String json, String restful) {
 
-		return new RemoveAnnotationFieldCommand();
+		return new DeleteAnnotationFieldCommand();
 
 	}
 
