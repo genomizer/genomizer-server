@@ -5,17 +5,16 @@ import response.Response;
 import response.StatusCode;
 
 /**
- * Class used to represent a logout command.
+ * Class used to represent a remove experiment command.
  *
- * @author tfy09jnn
+ * @author tfy09jnn, Hugo Källström
  * @version 1.0
  */
 public class RemoveExperimentCommand extends Command {
 
 	/**
-	 * Used to validate the logout command.
+	 * Used to validate the command.
 	 */
-	@Override
 	public boolean validate() {
 
 		// TODO Auto-generated method stub
@@ -24,9 +23,8 @@ public class RemoveExperimentCommand extends Command {
 	}
 
 	/**
-	 * Used to execute the logout command.
+	 * Used to execute the command.
 	 */
-	@Override
 	public Response execute() {
 
 		//Method not implemented, send appropriate response
