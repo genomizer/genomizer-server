@@ -1,4 +1,4 @@
-package database;
+package unused;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;

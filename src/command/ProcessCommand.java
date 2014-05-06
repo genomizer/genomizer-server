@@ -5,7 +5,9 @@ import java.util.ArrayList;
 
 import process.classes.ProcessHandler;
 
+import response.ErrorResponse;
 import response.Response;
+import response.StatusCode;
 
 import authentication.Authenticate;
 
@@ -54,11 +56,11 @@ public class ProcessCommand extends Command {
 			switch(processType){
 				case "rawtoprofile":
 					String uploader=Authenticate.getUsername(userID);
-					ArrayList<String> filepaths=dbac.convertFromRawtoProfile(fileID,metadata,uploader,GRversion);
+//					ArrayList<String> filepaths=dbac.convertFromRawtoProfile(fileID,metadata,uploader,GRversion);
 
 					ProcessHandler processHandler = new ProcessHandler();
 
-					processHandler.executeProcess(processType, parameters, filepaths.get(0), filepaths.get(1));
+//					processHandler.executeProcess(processType, parameters, filepaths.get(0), filepaths.get(1));
 
 					break;
 				default:
@@ -77,7 +79,8 @@ public class ProcessCommand extends Command {
 		//skicka filen till processmetoden (runexecutable),returvärde massa text ifrån script?
 		//return respons 201
 
-		return null;
+		//Method not implemented, send appropriate response
+		return 	new ErrorResponse(StatusCode.NO_CONTENT);
 	}
 
 }

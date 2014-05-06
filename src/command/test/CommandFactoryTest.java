@@ -24,12 +24,12 @@ public class CommandFactoryTest {
 	 * Test creation of upload command.
 	 */
 	@Test
-	public void testCreateUploadCommand() {
+	public void testCreateAddExperimentCommand() {
 
 		CommandFactory cmdf = new CommandFactory();
 		String json = "JSON_STRING";
-		String restful = "restful";
-		assertNotNull(cmdf.createUploadCommand(json, restful));
+		String[] restful = {"1", "2"};
+		assertNotNull(cmdf.createAddExperimentCommand(json, restful));
 
 	}
 
@@ -41,7 +41,7 @@ public class CommandFactoryTest {
 
 		CommandFactory cmdf = new CommandFactory();
 		String json = "JSON_STRING";
-		String restful = "restful";
+		String[] restful = {"1", "2"};
 		assertNotNull(cmdf.createRetrieveExperimentCommand(json, restful));
 
 	}
@@ -54,7 +54,7 @@ public class CommandFactoryTest {
 
 		CommandFactory cmdf = new CommandFactory();
 		String json = "JSON_STRING";
-		String restful = "restful";
+		String[] restful = {"1", "2"};
 		Command cmd = cmdf.createLoginCommand(json, restful);
 		assertNotNull(cmd);
 
@@ -67,7 +67,7 @@ public class CommandFactoryTest {
 	public void testCreateLogoutCommand() {
 
 		CommandFactory cmdf = new CommandFactory();
-		String restful = "restful";
+		String[] restful = {"1", "2"};
 		assertNotNull(cmdf.createLogoutCommand(restful));
 
 	}
@@ -80,7 +80,7 @@ public class CommandFactoryTest {
 
 		CommandFactory cmdf = new CommandFactory();
 		String json = "JSON_STRING";
-		String restful = "restful";
+		String[] restful = {"1", "2"};
 		assertNotNull(cmdf.createSysadmCommand(json, restful));
 
 	}
@@ -93,7 +93,7 @@ public class CommandFactoryTest {
 
 		CommandFactory cmdf = new CommandFactory();
 		String json = "JSON_STRING";
-		String restful = "restful";
+		String[] restful = {"1", "2"};
 		assertNotNull(cmdf.createProcessCommand(json, restful));
 
 	}
@@ -106,7 +106,7 @@ public class CommandFactoryTest {
 
 		CommandFactory cmdf = new CommandFactory();
 		String json = "JSON_STRING";
-		String restful = "restful";
+		String[] restful = {"1", "2"};
 		assertNotNull(cmdf.createExperimentCommand(json, restful));
 
 	}
@@ -119,7 +119,7 @@ public class CommandFactoryTest {
 
 		CommandFactory cmdf = new CommandFactory();
 		String json = "JSON_STRING";
-		String restful = "restful";
+		String[] restful = {"1", "2"};
 		assertNotNull(cmdf.createUserCommand(json, restful));
 
 	}
@@ -132,7 +132,7 @@ public class CommandFactoryTest {
 
 		CommandFactory cmdf = new CommandFactory();
 		String json = "JSON_STRING";
-		String restful = "restful";
+		String[] restful = {"1", "2"};
 		assertNotNull(cmdf.createSearchCommand(json, restful));
 
 	}
@@ -145,7 +145,7 @@ public class CommandFactoryTest {
 
 		CommandFactory cmdf = new CommandFactory();
 		String json = "JSON_STRING";
-		String restful = "restful";
+		String[] restful = {"1", "2"};
 		assertNotNull(cmdf.createDownloadCommand(json, restful));
 
 	}

@@ -31,7 +31,7 @@ public class Temp {
 		    String uuid = "123";
 
 		    //Create the COMMAND.
-		    Response rsp = cmdh.doStuff(json, restful, uuid, cmdt);
+		    Response rsp = cmdh.processNewCommand(json, restful, uuid, cmdt);
 
 		    if(rsp == null) {
 

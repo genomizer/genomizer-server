@@ -10,7 +10,7 @@ import response.StatusCode;
  * @author tfy09jnn
  * @version 1.0
  */
-public class LogoutCommand extends Command {
+public class UpdateAnnotationPrivilegesCommand extends Command {
 
 	/**
 	 * Used to validate the logout command.

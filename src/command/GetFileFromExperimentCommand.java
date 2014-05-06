@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import response.DownloadResponse;
 import response.ErrorResponse;
 import response.Response;
+import response.StatusCode;
 
 import com.google.gson.annotations.Expose;
 
@@ -37,14 +38,15 @@ public class GetFileFromExperimentCommand extends Command {
 	}
 
 	/**
-	 * Runs the actual code that is used to execute the
-	 * download.
+	 * Check to see if the requested file exists and
+	 * get its attributes from the database. Return
+	 * the attributes and an URL to the client.
 	 */
 	@Override
 	public Response execute() {
 
-		Response rsp = rsp;
-		ArrayList<String> attributes = new ArrayList<String>();
+//		Response rsp = rsp;
+//		ArrayList<String> attributes = new ArrayList<String>();
 
 //		if(!fileExists(fileID)) {
 //			attributes = getFileAttributes(fileID);
@@ -53,7 +55,9 @@ public class GetFileFromExperimentCommand extends Command {
 //			// File not found, send appropriate response (404)
 //			rsp = new ErrorResponse(404);
 //		}
-		return rsp;
+
+		//Method not implemented, send appropriate response
+		return 	new ErrorResponse(StatusCode.NO_CONTENT);
 	}
 
 }

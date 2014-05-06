@@ -8,7 +8,9 @@ import java.net.InetSocketAddress;
 import java.util.Scanner;
 import java.util.concurrent.Executor;
 
+import response.ErrorResponse;
 import response.Response;
+import response.StatusCode;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -85,7 +87,7 @@ public class Doorman {
 						exchange(exchange, CommandType.UPDATE_USER_COMMAND);
 						break;
 					case "/process":
-						exchange(exchange, CommandType.CONVERT_RAW_TO_PROFILE_COMMAND);
+						exchange(exchange, CommandType.PROCESS_COMMAND);
 						break;
 					case "/annotation":
 						exchange(exchange, CommandType.ADD_ANNOTATION_VALUE_COMMAND);
@@ -146,14 +148,16 @@ public class Doorman {
 		InputStream bodyStream = exchange.getRequestBody();
 		Scanner scanner = new Scanner(bodyStream);
 		String body = "";
-
 		String uuid = null;
 
-		if(!(type == CommandType.LOGIN_COMMAND)) {
+		if(type != CommandType.LOGIN_COMMAND) {
 			try {
 				uuid =  exchange.getRequestHeaders().get("Authorization").get(0);
 			} catch(NullPointerException e) {
+				Response errorResponse = new ErrorResponse(StatusCode.UNAUTHORIZED);
 				e.printStackTrace();
+				respond(exchange, errorResponse);
+				return;
 			}
 		}
 
@@ -162,7 +166,7 @@ public class Doorman {
 		}
 		scanner.close();
 
-		Response response = commandHandler.doStuff(body, exchange.getRequestURI().toString(), uuid, type);
+		Response response = commandHandler.processNewCommand(body, exchange.getRequestURI().toString(), uuid, type);
 
 		respond(exchange, response);
 
@@ -184,19 +188,5 @@ public class Doorman {
 			os.flush();
 			os.close();
 		}
-	}
-
-
-
-	public static void main(String args[]) {
-		try {
-			new Doorman(new CommandHandler(), 8080).start();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-
-
 	}
 }

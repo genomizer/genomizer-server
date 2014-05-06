@@ -5,7 +5,7 @@ import com.google.gson.GsonBuilder;
 
 /**
  * Used to create and return different commands that
- * will be executed later by calling the execute() method.
+ * will be executed later by calling their execute() method.
  *
  * @author tfy09jnn
  * @version 1.0
@@ -35,20 +35,19 @@ public class CommandFactory {
 	 */
 	public Command createLoginCommand(String json, String[] restful) {
 
+
 		//Create command with json.
 		final Command loginCmd = gson.fromJson(json, LoginCommand.class);
 
 		//Set headers
-		loginCmd.setHeader(restful);
-
+		//loginCmd.setHeader(restful);
 		return loginCmd;
-
 	}
 
 	/**
 	 * Used to create logout command.
-	 * @param restful
-	 * @return
+	 * @param RESTful-header.
+	 * @return a logout command.
 	 */
 	public Command createLogoutCommand(String[] restful) {
 
@@ -59,6 +58,7 @@ public class CommandFactory {
 		logoutCmd.setHeader(restful);
 
 		return logoutCmd;
+
 	}
 
 	/**
@@ -69,7 +69,7 @@ public class CommandFactory {
 	 */
 	public Command createRetrieveExperimentCommand(String json, String[] restful) {
 
-		return null;
+		return new RetrieveExperimentCommand();
 
 	}
 
@@ -81,7 +81,7 @@ public class CommandFactory {
 	 */
 	public Command createAddExperimentCommand(String json, String[] restful) {
 
-		return null;
+		return new AddExperimentCommand();
 
 	}
 
@@ -93,7 +93,7 @@ public class CommandFactory {
 	 */
 	public Command createUpdateExperimentCommand(String json, String[] restful) {
 
-		return null;
+		return new UpdateExperimentCommand();
 
 	}
 
@@ -105,7 +105,7 @@ public class CommandFactory {
 	 */
 	public Command createRemoveExperimentCommand(String json, String[] restful) {
 
-		return null;
+		return new RemoveExperimentCommand();
 
 	}
 
@@ -118,6 +118,7 @@ public class CommandFactory {
 	public Command createGetFileFromExperimentCommand(String json, String[] restful) {
 
 		return new GetFileFromExperimentCommand(restful);
+
 	}
 
 	/**
@@ -128,7 +129,7 @@ public class CommandFactory {
 	 */
 	public Command createAddFileToExperimentCommand(String json, String[] restful) {
 
-		return null;
+		return new AddFileToExperimentCommand();
 
 	}
 
@@ -140,7 +141,7 @@ public class CommandFactory {
 	 */
 	public Command createUpdateFileInExperimentCommand(String json, String[] restful) {
 
-		return null;
+		return new UpdateFileInExperimentCommand();
 
 	}
 
@@ -152,7 +153,7 @@ public class CommandFactory {
 	 */
 	public Command createDeleteFileFromExperimentCommand(String json, String[] restful) {
 
-		return null;
+		return new DeleteFileFromExperimentCommand();
 
 	}
 
@@ -165,24 +166,7 @@ public class CommandFactory {
 	 */
 	public Command createSearchForExperimentCommand(String json, String[] restful) {
 
-		String queryParameters = restful.substring(restful.lastIndexOf('/')+1);
-		String[] params = queryParameters.split("=");
-		if (params[0].equals("annotations")) {
-			return new SearchForExperimentsCommand(params[1]);
-		} else {
-			throw new IllegalArgumentException();
-		}
-	}
-
-	/**
-	 * Used to create the command needed for users.
-	 * @param json string to initiate class.
-	 * @param restful tag to put into class.
-	 * @return the actual command.
-	 */
-	public Command createUserCommand(String json, String[] restful) {
-
-		return null;
+		return new SearchForExperimentsCommand(restful[restful.length-1]);
 
 	}
 
@@ -194,7 +178,7 @@ public class CommandFactory {
 	 */
 	public Command createUpdateUserCommand(String json, String[] restful) {
 
-		return null;
+		return new UpdateUserCommand();
 
 	}
 
@@ -206,10 +190,11 @@ public class CommandFactory {
 	 */
 	public Command createDeleteUserCommand(String json, String[] restful) {
 
-		return null;
+		return new DeleteUserCommand();
 
 	}
 
+	//TODO: Refactor raw to profile command to process command.
 	/**
 	 * Used to create the command needed for converting raw to profile.
 	 * @param json string to initiate class.
@@ -218,7 +203,7 @@ public class CommandFactory {
 	 */
 	public Command createConvertRawToProfileCommand(String json, String[] restful) {
 
-		return null;
+		return new ConvertRawToProfileCommand();
 
 	}
 
@@ -230,9 +215,22 @@ public class CommandFactory {
 	 */
 	public Command createGetAnnotationInformationCommand(String json, String[] restful) {
 
-		return null;
+		return new GetAnnotationInformationCommand();
 
 	}
+
+	/**
+	 * Used to create a command needed to add annotation fields.
+	 * @param json string to initiate class.
+	 * @param restful tag to put into class.
+	 * @return the actual command.
+	 */
+	public Command createAddAnnotationFieldCommand(String json, String[] restful) {
+
+		return new AddAnnotationFieldCommand();
+
+	}
+
 
 	/**
 	 * Used to create the command needed to add annotation values.
@@ -242,7 +240,7 @@ public class CommandFactory {
 	 */
 	public Command createAddAnnotationValueCommand(String json, String[] restful) {
 
-		return null;
+		return new AddAnnotationValueCommand();
 
 	}
 
@@ -254,7 +252,7 @@ public class CommandFactory {
 	 */
 	public Command createRemoveAnnotationFieldCommand(String json, String[] restful) {
 
-		return null;
+		return new RemoveAnnotationFieldCommand();
 
 	}
 
@@ -266,7 +264,7 @@ public class CommandFactory {
 	 */
 	public Command createGetAnnotationPrivilegesCommand(String json, String[] restful) {
 
-		return null;
+		return new GetAnnotationPrivilegesCommand();
 
 	}
 
@@ -278,7 +276,7 @@ public class CommandFactory {
 	 */
 	public Command createUpdateAnnotationPrivilegesCommand(String json, String[] restful) {
 
-		return null;
+		return new UpdateAnnotationPrivilegesCommand();
 
 	}
 
