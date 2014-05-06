@@ -1,5 +1,9 @@
 package process.classes;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 import java.util.StringTokenizer;
@@ -47,6 +51,31 @@ private final String FILEPATH = "resources/";
 		  text.append(s.nextLine());
 		  text.append("\n");
 		}
+		s.close();
+
+		int result = process.waitFor();
+
+//		System.out.printf( "Process exited with result %d and output %s%n", result, text );
+		return text.toString();
+	}
+
+	protected String executeShellCommand(String[] command) throws InterruptedException, IOException{
+		ProcessBuilder builder = new ProcessBuilder(command);
+
+		builder.directory( new File( FILEPATH ).getAbsoluteFile() );
+		builder.redirectErrorStream(true);
+		Process process =  builder.start();
+
+		Scanner s = new Scanner(process.getInputStream());
+		StringBuilder text = new StringBuilder();
+		File file = new File(FILEPATH+"results/sorted/sorted.sam");
+		FileWriter fw = new FileWriter(file.getAbsoluteFile());
+		BufferedWriter bw = new BufferedWriter(fw);
+		while (s.hasNextLine()) {
+			bw.append(s.nextLine());
+			bw.append("\n");
+		}
+		bw.close();
 		s.close();
 
 		int result = process.waitFor();
