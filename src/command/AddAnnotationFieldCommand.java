@@ -12,7 +12,7 @@ import response.StatusCode;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import databaseAccessor.DatabaseAccessor;
+import database.DatabaseAccessor;
 
 /* TODO: Fix error handling in execute method.
  *		 Test class vs the database.
