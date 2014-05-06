@@ -1,5 +1,6 @@
 package command;
 
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -13,20 +14,24 @@ import authentication.Authenticate;
 
 import com.google.gson.annotations.Expose;
 
-import database.SearchResult;
-import databaseAccessor.DatabaseAccessor;
+import database.*;
 
 public class ProcessCommand extends Command {
 
 
 	private String fileID;
 	private String processType;
-	private String metadata;
+
 	private String userID;
 
-	private String outFilePath;
-	private String inFilePath;
+	@Expose
+	private String metadata;
+	@Expose
+	private String[] parameters;
+	@Expose
+	private String genomeRelease;
 
+	//Empty constructor
 	public ProcessCommand() {
 
 	}
@@ -56,6 +61,7 @@ public class ProcessCommand extends Command {
 			switch(processType){
 				case "rawtoprofile":
 					String uploader=Authenticate.getUsername(userID);
+					System.out.println("Uploader of file: " + uploader);
 //					ArrayList<String> filepaths=dbac.convertFromRawtoProfile(fileID,metadata,uploader,GRversion);
 
 					ProcessHandler processHandler = new ProcessHandler();
@@ -80,7 +86,52 @@ public class ProcessCommand extends Command {
 		//return respons 201
 
 		//Method not implemented, send appropriate response
-		return 	new ErrorResponse(StatusCode.NO_CONTENT);
+		return new ErrorResponse(StatusCode.NO_CONTENT);
+	}
+
+	public String getMetadata() {
+		// TODO Auto-generated method stub
+		return metadata;
+	}
+
+	public String[] getParameters() {
+		// TODO Auto-generated method stub
+		return parameters;
+	}
+
+	public String getGenomeRelease() {
+		// TODO Auto-generated method stub
+		return genomeRelease;
+	}
+
+	public void setFileID(String fileID) {
+		this.fileID = fileID;
+
+	}
+
+	public String getFileID() {
+		// TODO Auto-generated method stub
+		return fileID;
+	}
+
+	public String getProcessType() {
+		return processType;
+	}
+
+	public void setProcessType(String processType) {
+		// TODO Auto-generated method stub
+		this.processType = processType;
+
+	}
+
+	public Object getUserID() {
+		// TODO Auto-generated method stub
+		return this.userID;
+	}
+
+	public void setUserID(String uuid) {
+		this.userID = uuid;
+
 	}
 
 }
