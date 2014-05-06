@@ -102,7 +102,7 @@ public class CommandFactory {
 	 */
 	public Command createRemoveExperimentCommand(String json, String restful) {
 
-		return new RemoveExperimentCommand();
+		return new RemoveExperimentCommand(restful);
 
 	}
 
@@ -198,11 +198,7 @@ public class CommandFactory {
 	 * @param uuid
 	 * @return the actual command.
 	 */
-<<<<<<< HEAD
-	public Command createConvertRawToProfileCommand(String json, String restful) {
-=======
 	public Command createProcessCommand(String json, String[] restful, String uuid) {
->>>>>>> branch 'communication' of https://github.com/genomizer/genomizer-server.git
 
 		ProcessCommand processCommand = gson.fromJson(json, ProcessCommand.class);
 		processCommand.setProcessType(restful[2]);

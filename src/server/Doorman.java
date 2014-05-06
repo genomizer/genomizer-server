@@ -8,7 +8,7 @@ import java.net.InetSocketAddress;
 import java.util.Scanner;
 import java.util.concurrent.Executor;
 
-import response.ErrorResponse;
+import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
 
@@ -154,7 +154,7 @@ public class Doorman {
 			try {
 				uuid =  exchange.getRequestHeaders().get("Authorization").get(0);
 			} catch(NullPointerException e) {
-				Response errorResponse = new ErrorResponse(StatusCode.UNAUTHORIZED);
+				Response errorResponse = new MinimalResponse(StatusCode.UNAUTHORIZED);
 				e.printStackTrace();
 				respond(exchange, errorResponse);
 				return;
