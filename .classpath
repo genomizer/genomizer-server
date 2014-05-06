@@ -1,28 +1,7 @@
-<<<<<<< HEAD
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="lib" path="C:/Users/Hugo/Desktop/eclipse/postgresql-9.3-1101.jdbc4.jar"/>
-	<classpathentry kind="lib" path="lib/gson-2.2.4.jar"/>
-	<classpathentry kind="src" path="external-libs"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/jdbc"/>
-	<classpathentry kind="lib" path="external-libs/commons-codec-1.6.jar"/>
-	<classpathentry kind="lib" path="external-libs/commons-logging-1.1.3.jar"/>
-	<classpathentry kind="lib" path="external-libs/fluent-hc-4.3.3.jar"/>
-	<classpathentry kind="lib" path="external-libs/httpclient-4.3.3.jar"/>
-	<classpathentry kind="lib" path="external-libs/httpclient-cache-4.3.3.jar"/>
-	<classpathentry kind="lib" path="external-libs/httpcore-4.3.2.jar"/>
-	<classpathentry kind="lib" path="external-libs/httpmime-4.3.3.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
-	<classpathentry kind="output" path="bin"/>
-</classpath>
-=======
-<?xml version="1.0" encoding="UTF-8"?>
-<classpath>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="lib" path="/home/dv12/dv12rwt/workspace/postgresql-9.3-1101.jdbc4.jar"/>
 	<classpathentry kind="lib" path="lib/gson-2.2.4.jar"/>
 	<classpathentry kind="src" path="external-libs"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/jdbc"/>
@@ -34,6 +13,6 @@
 	<classpathentry kind="lib" path="external-libs/httpcore-4.3.2.jar"/>
 	<classpathentry kind="lib" path="external-libs/httpmime-4.3.3.jar"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/java-7-openjdk-amd64"/>
+	<classpathentry kind="lib" path="lib/postgresql-9.3-1101.jdbc4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
->>>>>>> branch 'communication' of https://github.com/genomizer/genomizer-server.git
