@@ -75,3 +75,5 @@ Response
 [Client-Server API](http://docs.genomizer.apiary.io/)
 
 [Git merge instructions](https://github.com/genomizer/genomizer-server/wiki/Merging-in-Git)
+
+[Server information](http://scratchy.cs.umu.se:8000/admin/server.html)
