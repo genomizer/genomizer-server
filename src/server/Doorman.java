@@ -87,7 +87,7 @@ public class Doorman {
 						exchange(exchange, CommandType.UPDATE_USER_COMMAND);
 						break;
 					case "/process":
-						exchange(exchange, CommandType.CONVERT_RAW_TO_PROFILE_COMMAND);
+						exchange(exchange, CommandType.PROCESS_COMMAND);
 						break;
 					case "/annotation":
 						exchange(exchange, CommandType.ADD_ANNOTATION_VALUE_COMMAND);
@@ -188,19 +188,5 @@ public class Doorman {
 			os.flush();
 			os.close();
 		}
-	}
-
-
-
-	public static void main(String args[]) {
-		try {
-			new Doorman(new CommandHandler(), 8080).start();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-
-
 	}
 }
