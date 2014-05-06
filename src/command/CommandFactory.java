@@ -69,7 +69,7 @@ public class CommandFactory {
 	 */
 	public Command createRetrieveExperimentCommand(String json, String[] restful) {
 
-		return null;
+		return new RetrieveExperimentCommand();
 
 	}
 
@@ -81,7 +81,7 @@ public class CommandFactory {
 	 */
 	public Command createAddExperimentCommand(String json, String[] restful) {
 
-		return null;
+		return new AddExperimentCommand();
 
 	}
 
@@ -93,7 +93,7 @@ public class CommandFactory {
 	 */
 	public Command createUpdateExperimentCommand(String json, String[] restful) {
 
-		return null;
+		return new UpdateExperimentCommand();
 
 	}
 
@@ -105,7 +105,7 @@ public class CommandFactory {
 	 */
 	public Command createRemoveExperimentCommand(String json, String[] restful) {
 
-		return null;
+		return new RemoveExperimentCommand();
 
 	}
 
@@ -129,7 +129,7 @@ public class CommandFactory {
 	 */
 	public Command createAddFileToExperimentCommand(String json, String[] restful) {
 
-		return null;
+		return new AddFileToExperimentCommand();
 
 	}
 
@@ -141,7 +141,7 @@ public class CommandFactory {
 	 */
 	public Command createUpdateFileInExperimentCommand(String json, String[] restful) {
 
-		return null;
+		return new UpdateFileInExperimentCommand();
 
 	}
 
@@ -153,7 +153,7 @@ public class CommandFactory {
 	 */
 	public Command createDeleteFileFromExperimentCommand(String json, String[] restful) {
 
-		return null;
+		return new DeleteFileFromExperimentCommand();
 
 	}
 
@@ -190,7 +190,7 @@ public class CommandFactory {
 	 */
 	public Command createUpdateUserCommand(String json, String[] restful) {
 
-		return null;
+		return new UpdateUserCommand();
 
 	}
 
@@ -202,7 +202,7 @@ public class CommandFactory {
 	 */
 	public Command createDeleteUserCommand(String json, String[] restful) {
 
-		return null;
+		return new DeleteUserCommand();
 
 	}
 
@@ -214,7 +214,7 @@ public class CommandFactory {
 	 */
 	public Command createConvertRawToProfileCommand(String json, String[] restful) {
 
-		return null;
+		return new ConvertRawToProfileCommand();
 
 	}
 
@@ -226,7 +226,7 @@ public class CommandFactory {
 	 */
 	public Command createGetAnnotationInformationCommand(String json, String[] restful) {
 
-		return null;
+		return new GetAnnotationInformationCommand();
 
 	}
 
@@ -238,7 +238,7 @@ public class CommandFactory {
 	 */
 	public Command createAddAnnotationValueCommand(String json, String[] restful) {
 
-		return null;
+		return new AddAnnotationValueCommand();
 
 	}
 
@@ -250,7 +250,7 @@ public class CommandFactory {
 	 */
 	public Command createRemoveAnnotationFieldCommand(String json, String[] restful) {
 
-		return null;
+		return new RemoveAnnotationFieldCommand();
 
 	}
 
@@ -260,9 +260,9 @@ public class CommandFactory {
 	 * @param restful tag to put into class.
 	 * @return the actual command.
 	 */
-	public Command createGetAnnotationPrivilegesCommand(String json, String[] restful) {
+	public Command createGetAnnotationPrevilegesCommand(String json, String[] restful) {
 
-		return null;
+		return new GetAnnotationPrevilegesCommand();
 
 	}
 
@@ -272,9 +272,9 @@ public class CommandFactory {
 	 * @param restful tag to put into class.
 	 * @return the actual command.
 	 */
-	public Command createUpdateAnnotationPrivilegesCommand(String json, String[] restful) {
+	public Command createUpdateAnnotationPrevilegesCommand(String json, String[] restful) {
 
-		return null;
+		return new UpdateAnnotationPrevilegesCommand();
 
 	}
 

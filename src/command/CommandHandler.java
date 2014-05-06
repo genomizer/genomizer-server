@@ -34,9 +34,7 @@ public class CommandHandler {
 
 		//Get code from restful //TODO: add parser code....
 		Command myCom = createCommand(json, restful, cmdt);
-		if(myCom == null) {
-			
-		}
+
 		//TODO: Find out what type of work that needs to be done. (Slow? Fast?)
 		//Create a response to return.
 		Response rsp = myCom.execute();
@@ -58,7 +56,9 @@ public class CommandHandler {
 		String[] parsedRest = parseRest(restful);
 
 		if(cmdt == CommandType.LOGIN_COMMAND) {
+
 			newCommand = cmdFactory.createLoginCommand(json, parsedRest);
+
 		} else if (cmdt == CommandType.LOGOUT_COMMAND) {
 
 			newCommand = cmdFactory.createLogoutCommand(parsedRest);
@@ -111,7 +111,7 @@ public class CommandHandler {
 
 			newCommand = null;
 
-		} else if (cmdt == CommandType.CONVERT_RAW_TO_PROFILE_COMMAND) {
+		} else if (cmdt == CommandType.PROCESS_COMMAND) {
 
 			newCommand = null;
 
