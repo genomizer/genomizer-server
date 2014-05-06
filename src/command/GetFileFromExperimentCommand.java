@@ -3,7 +3,7 @@ package command;
 import java.util.ArrayList;
 
 import response.DownloadResponse;
-import response.ErrorResponse;
+import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
 
@@ -57,7 +57,7 @@ public class GetFileFromExperimentCommand extends Command {
 //		}
 
 		//Method not implemented, send appropriate response
-		return 	new ErrorResponse(StatusCode.NO_CONTENT);
+		return 	new MinimalResponse(StatusCode.NO_CONTENT);
 	}
 
 }

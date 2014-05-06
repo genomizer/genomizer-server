@@ -2,7 +2,7 @@ package command;
 
 import javax.xml.ws.Response;
 
-import response.ErrorResponse;
+import response.MinimalResponse;
 import response.StatusCode;
 
 import com.google.gson.annotations.Expose;
@@ -43,7 +43,7 @@ public class AddExperimentCommand extends Command {
 	public response.Response execute() {
 
 		//Method not implemented, send appropriate response
-		return 	new ErrorResponse(StatusCode.NO_CONTENT);
+		return 	new MinimalResponse(StatusCode.NO_CONTENT);
 	}
 
 

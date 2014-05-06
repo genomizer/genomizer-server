@@ -14,7 +14,7 @@ import com.google.gson.*;
 import database.DatabaseAccessor;
 
 import response.AddFileToExperimentResponse;
-import response.ErrorResponse;
+import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
 
@@ -78,7 +78,7 @@ public class AddFileToExperimentCommand extends Command {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return new ErrorResponse(StatusCode.NO_CONTENT);
+		return new MinimalResponse(StatusCode.NO_CONTENT);
 
 
 	}

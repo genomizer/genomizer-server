@@ -1,6 +1,6 @@
 package command;
 
-import response.ErrorResponse;
+import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
 
@@ -39,7 +39,7 @@ public class ExperimentCommand extends Command {
 
 		// TODO Auto-generated method stub
 
-		return 	new ErrorResponse(StatusCode.NO_CONTENT);
+		return 	new MinimalResponse(StatusCode.NO_CONTENT);
 
 	}
 

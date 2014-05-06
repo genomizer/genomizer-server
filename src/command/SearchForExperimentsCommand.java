@@ -10,7 +10,7 @@ import com.google.gson.annotations.Expose;
 import database.DatabaseAccessor;
 import database.Experiment;
 
-import response.ErrorResponse;
+import response.MinimalResponse;
 import response.Response;
 import response.SearchResponse;
 import response.StatusCode;
@@ -62,16 +62,16 @@ public class SearchForExperimentsCommand extends Command {
 			List<Experiment> searchResult = db.search(annotations);
 
 		} catch (SQLException e) {
-			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE);
+			return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
 		} catch (IOException e) {
-			return new ErrorResponse(StatusCode.BAD_REQUEST);
+			return new MinimalResponse(StatusCode.BAD_REQUEST);
 		}
 
 
 		SearchResponse response = new SearchResponse();
 
 		//Method not implemented, send appropriate response
-		return 	new ErrorResponse(StatusCode.NO_CONTENT);
+		return 	new MinimalResponse(StatusCode.NO_CONTENT);
 	}
 
 	public String getAnnotations() {
