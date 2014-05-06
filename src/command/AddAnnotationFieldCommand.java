@@ -1,5 +1,9 @@
 package command;
 
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
 import response.AddAnnotationFieldResponse;
 import response.ErrorResponse;
 import response.Response;
@@ -7,6 +11,14 @@ import response.StatusCode;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import databaseAccessor.DatabaseAccessor;
+
+/* TODO: Fix error handling in execute method.
+ *		 Test class vs the database.
+ *		 Make JUnit test cases.
+ *		 Add some more validation.
+ */
 
 /**
  * Class used to add annotation fields.
@@ -42,7 +54,9 @@ public class AddAnnotationFieldCommand extends Command {
 	@Override
 	public boolean validate() {
 
-		//TODO: Add some more validation.
+		/* Restrictions on size on name? types?
+		 *
+		 */
 
 		if(name == null || type == null || defaults == null || forced == null) {
 
@@ -58,46 +72,49 @@ public class AddAnnotationFieldCommand extends Command {
 	public Response execute() {
 
 		Response rsp;
+		int addedAnnotations = 0;
 
-		// TODO: connect to database
+		try {
 
+			//Get database access.
+			DatabaseAccessor dbAccess = new DatabaseAccessor("c5dv151_vt14", "shielohh", "postgres", "c5dv151_vt14");
 
-		//Need to get some kind of boolean as a response if success to add.
-		boolean success = true;
+			//Add types to arraylist to pass them to the database. //TODO: Make pretty.
+			ArrayList<String> types = new ArrayList<String>();
+			for(int i = 0; i < type.length; i++) {
 
-		//Add check on user ID, privileges etc.. ?
+				types.add(type[i]);
 
-		if(success) {
+			}
 
-			rsp = new AddAnnotationFieldResponse(201);
+			//Add annotation field.
+			addedAnnotations = dbAccess.addDropDownAnnotation(name, types);
 
+			//Create response.
+			if(addedAnnotations != 0) {
 
-		} else {
+				rsp = new AddAnnotationFieldResponse(201);
 
+			} else {
+
+				rsp = new ErrorResponse(400);
+
+			}
+
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+			rsp = new ErrorResponse(400);
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
 			rsp = new ErrorResponse(400);
 
 		}
 
-		//Method not implemented, send appropriate response
-		return 	new ErrorResponse(StatusCode.NO_CONTENT);
+		return rsp;
 
 	}
 
-
-
-
-
 }
-
-/*
-{
-"name": "species",
-"type": [
-         "fly",
-         "rat",
-         "human"
-        ],
-"default": "human",
-"forced": "true/false"
-}
-*/
