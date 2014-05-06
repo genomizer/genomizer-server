@@ -155,14 +155,13 @@ public class CommandFactory {
 
 	/**
 	 * Used to create the command needed for searching experiments.
-	 * @param json string to initiate class.
 	 * @param restful tag to put into class.
 	 * @return the actual command.
 	 * @throws SQLException
 	 */
-	public Command createSearchForExperimentCommand(String json, String restful) {
-
-		return new SearchForExperimentsCommand(restful);
+	public Command createSearchForExperimentCommand(String restful) {
+		int index = restful.indexOf("=");
+		return new SearchForExperimentsCommand(restful.substring(index+1));
 
 	}
 

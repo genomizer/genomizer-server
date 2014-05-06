@@ -100,7 +100,7 @@ public class CommandHandler {
 
 		} else if (cmdt == CommandType.SEARCH_FOR_EXPERIMENTS_COMMAND) {
 
-			newCommand = cmdFactory.createSearchForExperimentCommand(json, parsedRest);
+			newCommand = cmdFactory.createSearchForExperimentCommand(parsedRest);
 
 		} else if (cmdt == CommandType.UPDATE_USER_COMMAND) {
 
