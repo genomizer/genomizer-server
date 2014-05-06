@@ -34,7 +34,9 @@ public class CommandHandler {
 
 		//Get code from restful //TODO: add parser code....
 		Command myCom = createCommand(json, restful, cmdt);
-
+		if(myCom == null) {
+			
+		}
 		//TODO: Find out what type of work that needs to be done. (Slow? Fast?)
 		//Create a response to return.
 		Response rsp = myCom.execute();
