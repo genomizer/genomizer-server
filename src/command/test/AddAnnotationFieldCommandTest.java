@@ -38,7 +38,6 @@ public class AddAnnotationFieldCommandTest {
 
 	    //Create input
 	    String json = "{\"name\":\"species\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
-	    String restful = "";
 
 		//Create command with json.
 		final Command aafc = gson.fromJson(json, AddAnnotationFieldCommand.class);
@@ -46,9 +45,6 @@ public class AddAnnotationFieldCommandTest {
 		String json2 = gson.toJson(aafc);
 
 		System.out.println(json2);
-
-		//Set header
-		aafc.setHeader(restful);
 
 		assertEquals(json2, json);
 
