@@ -201,8 +201,12 @@ public class CommandFactory {
 	 * @param restful tag to put into class.
 	 * @return the actual command.
 	 */
-	public Command createConvertRawToProfileCommand(String json, String[] restful) {
+	public Command createProcessCommand(String json, String[] restful) {
 
+		//Create from json
+		//set userID
+		//set fileID
+		//set processType
 		return new ConvertRawToProfileCommand();
 
 	}
