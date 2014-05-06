@@ -3,6 +3,7 @@ package command;
 import java.util.ArrayList;
 
 import com.google.gson.annotations.Expose;
+import com.google.gson.*;
 
 import response.ErrorResponse;
 import response.Response;
@@ -28,7 +29,6 @@ public class AddFileToExperimentCommand extends Command {
 
 	@Expose
  	private String type;
-
 
 	/**
 	 * Validates the request by checking
