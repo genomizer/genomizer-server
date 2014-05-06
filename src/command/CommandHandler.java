@@ -33,7 +33,7 @@ public class CommandHandler {
 	public Response processNewCommand(String json, String restful, String uuid, CommandType cmdt) {	//TODO: Rename this method.
 
 		//Get code from restful //TODO: add parser code....
-		Command myCom = createCommand(json, restful, cmdt);
+		Command myCom = createCommand(json, restful, uuid, cmdt);
 
 		//TODO: Find out what type of work that needs to be done. (Slow? Fast?)
 		//Create a response to return.
@@ -50,7 +50,7 @@ public class CommandHandler {
 	 * @param a enum that determines command type.
 	 * @return
 	 */
-	private Command createCommand(String json, String restful, CommandType cmdt) {
+	private Command createCommand(String json, String restful, String uuid, CommandType cmdt) {
 
 		Command newCommand = null;
 		String[] parsedRest = parseRest(restful);
@@ -110,7 +110,7 @@ public class CommandHandler {
 
 		} else if (cmdt == CommandType.PROCESS_COMMAND) {
 
-			newCommand = cmdFactory.createConvertRawToProfileCommand(json, parsedRest);
+			newCommand = cmdFactory.createConvertRawToProfileCommand(json, parsedRest, uuid);
 
 		} else if (cmdt == CommandType.GET_ANNOTATION_INFORMATION_COMMAND) {
 

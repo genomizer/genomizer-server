@@ -199,9 +199,10 @@ public class CommandFactory {
 	 * Used to create the command needed for converting raw to profile.
 	 * @param json string to initiate class.
 	 * @param restful tag to put into class.
+	 * @param uuid
 	 * @return the actual command.
 	 */
-	public Command createConvertRawToProfileCommand(String json, String[] restful) {
+	public Command createConvertRawToProfileCommand(String json, String[] restful, String uuid) {
 
 		ProcessCommand processCommand = gson.fromJson(json, ProcessCommand.class);
 		processCommand.setProcessType(restful[2]);
