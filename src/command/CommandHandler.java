@@ -55,6 +55,7 @@ public class CommandHandler {
 		Command newCommand = null;
 		String[] parsedRest = parseRest(restful);
 
+		//TODO: Change to switch statement.
 		if(cmdt == CommandType.LOGIN_COMMAND) {
 
 			newCommand = cmdFactory.createLoginCommand(json, parsedRest);
@@ -69,15 +70,15 @@ public class CommandHandler {
 
 		} else if (cmdt == CommandType.ADD_EXPERIMENT_COMMAND) {
 
-			newCommand = null;
+			newCommand = cmdFactory.createAddExperimentCommand(json, parsedRest);
 
 		} else if (cmdt == CommandType.UPDATE_EXPERIMENT_COMMAND) {
 
-			newCommand = null;
+			newCommand = cmdFactory.createUpdateExperimentCommand(json, parsedRest);
 
 		} else if (cmdt == CommandType.REMOVE_EXPERIMENT_COMMAND) {
 
-			newCommand = null;
+			newCommand = cmdFactory.createRemoveExperimentCommand(json, parsedRest);
 
 		} else if (cmdt == CommandType.GET_FILE_FROM_EXPERIMENT_COMMAND) {
 
@@ -89,55 +90,51 @@ public class CommandHandler {
 
 		} else if (cmdt == CommandType.UPDATE_FILE_IN_EXPERIMENT_COMMAND) {
 
-			newCommand = null;
+			newCommand = cmdFactory.createUpdateFileInExperimentCommand(json, parsedRest);
 
 		} else if (cmdt == CommandType.DELETE_FILE_FROM_EXPERIMENT_COMMAND) {
 
-			newCommand = null;
+			newCommand = cmdFactory.createDeleteFileFromExperimentCommand(json, parsedRest);
 
 		} else if (cmdt == CommandType.SEARCH_FOR_EXPERIMENTS_COMMAND) {
 
-			newCommand = null;
-
-		} else if (cmdt == CommandType.CREATE_USER_COMMAND) {
-
-			newCommand = null;
+			newCommand = cmdFactory.createSearchForExperimentCommand(json, parsedRest);
 
 		} else if (cmdt == CommandType.UPDATE_USER_COMMAND) {
 
-			newCommand = null;
+			newCommand = cmdFactory.createUpdateUserCommand(json, parsedRest);
 
 		} else if (cmdt == CommandType.DELETE_USER_COMMAND) {
 
-			newCommand = null;
+			newCommand = cmdFactory.createDeleteUserCommand(json, parsedRest);
 
 		} else if (cmdt == CommandType.PROCESS_COMMAND) {
 
-			newCommand = null;
+			newCommand = cmdFactory.createConvertRawToProfileCommand(json, parsedRest);
 
 		} else if (cmdt == CommandType.GET_ANNOTATION_INFORMATION_COMMAND) {
 
-			newCommand = null;
+			newCommand = cmdFactory.createGetAnnotationInformationCommand(json, parsedRest);
 
 		} else if (cmdt == CommandType.ADD_ANNOTATION_FIELD_COMMAND) {
 
-			newCommand = null;
+			newCommand = cmdFactory.createAddAnnotationFieldCommand(json, parsedRest);
 
 		} else if (cmdt == CommandType.ADD_ANNOTATION_VALUE_COMMAND) {
 
-			newCommand = null;
+			newCommand = cmdFactory.createAddAnnotationValueCommand(json, parsedRest);
 
 		} else if (cmdt == CommandType.REMOVE_ANNOTATION_FIELD_COMMAND) {
 
-			newCommand = null;
+			newCommand = cmdFactory.createRemoveAnnotationFieldCommand(json, parsedRest);
 
 		} else if (cmdt == CommandType.GET_ANNOTATION_PRIVILEGES_COMMAND) {
 
-			newCommand = null;
+			newCommand = cmdFactory.createGetAnnotationPrivilegesCommand(json, parsedRest);
 
 		} else if (cmdt == CommandType.UPDATE_ANNOTATION_PRIVILEGES_COMMAND) {
 
-			newCommand = null;
+			newCommand = cmdFactory.createUpdateAnnotationPrivilegesCommand(json, parsedRest);
 
 		}
 
