@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 
 import org.junit.*;
 
+import authentication.Authenticate;
+
 import command.Command;
 import command.CommandFactory;
 import command.ProcessCommand;
@@ -12,10 +14,14 @@ public class CreateProcessCommandTest {
 
 	CommandFactory cmdf;
 	ProcessCommand processCommand;
+	String uuid;
 
 	@Before
 	public void setup(){
 		cmdf = new CommandFactory();
+
+		uuid = Authenticate.createUserID("splutt");
+		Authenticate.addUser("splutt", uuid);
 
 		String json = "{\"parameters\": " +
 				"[\"param1\"," +
@@ -29,7 +35,7 @@ public class CreateProcessCommandTest {
 
 		String[] restfulArray = restful.split("/");
 
-		processCommand = (ProcessCommand)cmdf.createProcessCommand(json, restfulArray);
+		processCommand = (ProcessCommand)cmdf.createProcessCommand(json, restfulArray, uuid);
 	}
 
 	@Test
@@ -58,6 +64,11 @@ public class CreateProcessCommandTest {
 	@Test
 	public void shouldSetProcessType(){
 		assertEquals("rawtoprofile",processCommand.getProcessType());
+	}
+
+	@Test
+	public void shouldSetUserID(){
+		assertEquals(uuid, processCommand.getUserID());
 	}
 
 

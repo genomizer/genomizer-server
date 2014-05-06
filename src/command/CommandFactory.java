@@ -202,11 +202,12 @@ public class CommandFactory {
 	 * @param uuid
 	 * @return the actual command.
 	 */
-	public Command createConvertRawToProfileCommand(String json, String[] restful, String uuid) {
+	public Command createProcessCommand(String json, String[] restful, String uuid) {
 
 		ProcessCommand processCommand = gson.fromJson(json, ProcessCommand.class);
 		processCommand.setProcessType(restful[2]);
 		processCommand.setFileID(restful[3]);
+		processCommand.setUserID(uuid);
 		//Create from json
 		//set userID
 		//set fileID

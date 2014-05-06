@@ -61,6 +61,7 @@ public class ProcessCommand extends Command {
 			switch(processType){
 				case "rawtoprofile":
 					String uploader=Authenticate.getUsername(userID);
+					System.out.println("Uploader of file: " + uploader);
 //					ArrayList<String> filepaths=dbac.convertFromRawtoProfile(fileID,metadata,uploader,GRversion);
 
 					ProcessHandler processHandler = new ProcessHandler();
@@ -120,6 +121,16 @@ public class ProcessCommand extends Command {
 	public void setProcessType(String processType) {
 		// TODO Auto-generated method stub
 		this.processType = processType;
+
+	}
+
+	public Object getUserID() {
+		// TODO Auto-generated method stub
+		return this.userID;
+	}
+
+	public void setUserID(String uuid) {
+		this.userID = uuid;
 
 	}
 
