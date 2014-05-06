@@ -8,6 +8,7 @@ public class FileTuple {
 
     public final Integer id;
     public final String path;
+    public final String DownloadURL;
     public final String type;
     public final String filename;
     public final Date date;
@@ -21,6 +22,7 @@ public class FileTuple {
     public FileTuple(ResultSet resSet) throws SQLException {
         id = resSet.getInt("FileID");
         path = resSet.getString("Path");
+        DownloadURL = ServerDependentValues.DownLoadURL+path;
         type = resSet.getString("FileType");
         filename = resSet.getString("FileName");
         date = resSet.getDate("Date");
