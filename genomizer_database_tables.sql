@@ -18,6 +18,8 @@ CREATE TABLE Annotation
 (
     Label VARCHAR(32) NOT NULL,
     DataType VARCHAR(16) NOT NULL,
+    Defult VARCHAR(32),
+    Requierd BOOLEAN, NOT NULL,
     CONSTRAINT pkey_annotation PRIMARY KEY(Label)
 );
 
@@ -45,7 +47,10 @@ CREATE TABLE Annotation_Choices
     Value VARCHAR(32) NOT NULL,
     CONSTRAINT pkey_annotation_choices PRIMARY KEY(Label, Value),
     CONSTRAINT fkey_label FOREIGN KEY (Label) REFERENCES Annotation(Label) ON DELETE CASCADE
+    
 );
+
+ALTER TABLE Annotaion ADD CONSTRAINT fkey_defult FOREIGN KEY (Defult) REFERENCES Annotation_Choices(Value);
 
 CREATE TABLE User_Info
 (
