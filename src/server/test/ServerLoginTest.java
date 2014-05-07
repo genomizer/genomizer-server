@@ -9,6 +9,9 @@ import java.net.URL;
 
 import com.google.gson.*;
 
+/* TODO: Add logout command.
+ * 		 Make JUnit testcase.
+ */
 /**
  * Class used to test the server login.
  *
