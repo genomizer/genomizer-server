@@ -83,6 +83,8 @@ public class AddAnnotationFieldCommand extends Command {
 		Response rsp;
 		int addedAnnotations = 0;
 
+		int defaultValueIndex = 0;
+
 		try {
 
 			//Get database access.
@@ -92,12 +94,16 @@ public class AddAnnotationFieldCommand extends Command {
 			ArrayList<String> types = new ArrayList<String>();
 			for(int i = 0; i < type.length; i++) {
 
-				types.add(type[i]);
+				//types.add(type[i]);
+				types.add(i, type[i]);
+				if(type[i].equals(defaults)) {
+					defaultValueIndex = i;
+				}
 
 			}
 
 			//Add annotation field.
-			addedAnnotations = dbAccess.addDropDownAnnotation(name, types);
+			addedAnnotations = dbAccess.addDropDownAnnotation(name, types, defaultValueIndex, forced);
 
 			//Create response.
 			if(addedAnnotations != 0) {
