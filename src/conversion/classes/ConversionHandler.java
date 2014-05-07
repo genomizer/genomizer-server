@@ -4,7 +4,7 @@ import java.io.File;
 
 
 public class ConversionHandler {
-	public ConversionHandler createProcessHandler() {
+	public ConversionHandler createConversionHandler() {
 		return new ConversionHandler();
 	}
 
@@ -55,7 +55,7 @@ public class ConversionHandler {
 		String path = infilePath;
 		GenomeReleaseConverter genomeConverter = new GenomeReleaseConverter();
 		ProfileDataConverter typeConverter = new ProfileDataConverter();
-		
+
 		// turn the inputfile to bed
 		switch(fileType){
 		case "wig":
@@ -71,13 +71,13 @@ public class ConversionHandler {
 		default:
 			throw new IllegalArgumentException();
 		}
-		
-		
+
+
 		String outfileBed = outfilePath.split("\\.")[0];
 		outfileBed = outfileBed+".bed";
-		
+
 		genomeConverter.procedure(path, outfileBed, chainfilePath);
-		
+
 		//convert the outputfile to the inputfiles original filetype
 		switch(fileType){
 		case "wig":
@@ -93,11 +93,11 @@ public class ConversionHandler {
 		default:
 			throw new IllegalArgumentException();
 		}
-		
+
 		//delete the bedfile
 		File file = new File(outfileBed);
 		file.delete();
-		
+
 		}
 	public String checkFileType(String filePath){
 		String type = "";
@@ -105,12 +105,12 @@ public class ConversionHandler {
 			type = filePath.split("\\.", 10)[1];
 			System.err.println(type);
 		}
-		
-		
-		
+
+
+
 		return type;
-		
-		
-		
+
+
+
 	}
 }
