@@ -20,10 +20,10 @@ public class CreateProcessCommandTest {
 
 	@Before
 	public void setup(){
+
 		cmdf = new CommandFactory();
 
-		uuid = Authenticate.createUserID("splutt");
-		Authenticate.addUser("splutt", uuid);
+
 
 		String json = "{" +
 							"\"filename\": \"fileNAME\"," +
@@ -40,7 +40,7 @@ public class CreateProcessCommandTest {
 							"\"genomeRelease\": \"hg38\", " +
 							"\"author\": \"yuri\"}";
 
-		processCommand = (ProcessCommand)cmdf.createProcessCommand(json, uuid);
+		processCommand = (ProcessCommand)cmdf.createProcessCommand(json, "splutt");
 	}
 
 	@Test
