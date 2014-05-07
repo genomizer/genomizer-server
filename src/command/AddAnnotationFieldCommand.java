@@ -32,8 +32,9 @@ public class AddAnnotationFieldCommand extends Command {
 	private String name;
 
 	@Expose
-	private String[] type;
+	private ArrayList<String> type = new Arraylist<String>();
 
+	//private String[] type;
 	@SerializedName("default")
 	@Expose
 	private String defaults;
@@ -93,6 +94,8 @@ public class AddAnnotationFieldCommand extends Command {
 			DatabaseAccessor dbAccess = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
 
 			//Add types to arraylist to pass them to the database. //TODO: Make pretty.
+
+			/*
 			ArrayList<String> types = new ArrayList<String>();
 			for(int i = 0; i < type.length; i++) {
 
@@ -103,9 +106,20 @@ public class AddAnnotationFieldCommand extends Command {
 				}
 
 			}
+			*/
+			for(int i = 0; i < type.size(); i++) {
+
+				if(type.get(i).equals(defaults)) {
+
+					defaultValueIndex = i;
+					break;
+
+				}
+
+			}
 
 			//Add annotation field.
-			addedAnnotations = dbAccess.addDropDownAnnotation(name, types, defaultValueIndex, forced);
+			addedAnnotations = dbAccess.addDropDownAnnotation(name, type, defaultValueIndex, forced);
 
 			//Create response.
 			if(addedAnnotations != 0) {
