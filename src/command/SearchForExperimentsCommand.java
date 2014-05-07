@@ -60,7 +60,7 @@ public class SearchForExperimentsCommand extends Command {
 	    List<Experiment> searchResult = null;
 
 		try {
-			db = new DatabaseAccessor(DatabaseSettings.database, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
+			db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
 			searchResult = db.search(annotations);
 		} catch (SQLException e) {
 			return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
