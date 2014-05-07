@@ -56,6 +56,7 @@ public class AddExperimentCommand extends Command {
 			db.addExperiment(name);
 
 			for(Annotation annotation: annotations) {
+				System.out.println("annotation name: " +annotation.getName() + " annotation value: " + annotation.getValue());
 				db.annotateExperiment(name, annotation.getName(), annotation.getValue());
 			}
 			return new MinimalResponse(StatusCode.CREATED);
