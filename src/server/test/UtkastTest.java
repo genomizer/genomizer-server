@@ -288,7 +288,7 @@ public class UtkastTest {
 
 		JsonObject jj=new JsonObject();
 		jj.addProperty("experimentID", "idid");
-		jj.addProperty("fileName", "name");
+		jj.addProperty("fileName", "filfil");
 		jj.addProperty("size", "1.3gb");
 		jj.addProperty("type", "raw");
 
