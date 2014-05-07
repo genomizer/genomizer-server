@@ -14,28 +14,27 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-
 /**
  * PREREQUISITES: The construction parameters must reference a
  * postgresql database with the genomizer database tables preloaded.
  * This is done by running the genomizer_database_tables.sql.
- *
+ * 
  * DatabaseAccessor manipulates the underlying postgresql database
  * using SQL commands.
- *
+ * 
  * Developed by the Datastorage group for the Genomizer Project,
  * Software Engineering course at Umeå University 2014.
- *
+ * 
  * @author dv12rwt, Ruaridh Watt
  * @author dv12kko, Kenny Kunto
  * @author dv12ann, André Niklasson
  * @author dv12can, Carl Alexandersson
  * @author yhi04jeo, Jonas Engbo
  * @author oi11mhn, Mattias Hinnerson
- *
+ * 
  */
 public class DatabaseAccessor {
-
+    
     public static Integer FREETEXT = 1;
     public static Integer DROPDOWN = 2;
 
@@ -45,7 +44,7 @@ public class DatabaseAccessor {
     /**
      * Creates a databaseAccessor that opens a connection to a
      * database.
-     *
+     * 
      * @param username
      *            - The username to log in to the database as. Should
      *            be "c5dv151_vt14" as of now.
@@ -77,7 +76,7 @@ public class DatabaseAccessor {
     /**
      * Public method to check if the instance of the class is
      * connected to a database.
-     *
+     * 
      * @return boolean, true if it is connected, otherwise false.
      */
     public boolean isConnected() {
@@ -86,7 +85,7 @@ public class DatabaseAccessor {
 
     /**
      * Method to add a new user to the database.
-     *
+     * 
      * @param String
      *            the username
      * @param String
@@ -111,7 +110,7 @@ public class DatabaseAccessor {
     /**
      * Returns an ArrayList which contains the usernames of all the
      * users in the database in the form of strings.
-     *
+     * 
      * @return an ArrayList of usernames.
      * @throws SQLException
      *             if the query does not succeed
@@ -131,7 +130,7 @@ public class DatabaseAccessor {
 
     /**
      * Deletes a user from the database.
-     *
+     * 
      * @param username
      *            the username of the user to be deleted.
      * @throws SQLException
@@ -151,7 +150,7 @@ public class DatabaseAccessor {
     /**
      * Closes the connection to the database, releasing all resources
      * it uses.
-     *
+     * 
      * @throws SQLException
      *             if a database access error occurs
      */
@@ -161,7 +160,7 @@ public class DatabaseAccessor {
 
     /**
      * Returns the password for the given user. Used for login.
-     *
+     * 
      * @param user
      *            - the username as string
      * @return String - the password
@@ -184,7 +183,7 @@ public class DatabaseAccessor {
 
     /**
      * Changes the password for a user.
-     *
+     * 
      * @param username
      *            the user to change the password for.
      * @param newPassword
@@ -209,7 +208,7 @@ public class DatabaseAccessor {
 
     /**
      * Sets the role (permissions) for the user.
-     *
+     * 
      * @param username
      *            the user to set the role for.
      * @param role
@@ -232,7 +231,7 @@ public class DatabaseAccessor {
 
     /**
      * Gets the role (permissions) for a user.
-     *
+     * 
      * @param username
      *            the user to get the role for.
      * @return the role as a string.
@@ -256,20 +255,28 @@ public class DatabaseAccessor {
     /**
      * Adds a free text annotation to the list of possible
      * annotations.
-     *
+     * 
      * @param label
      *            the name of the annotation.
+     * @param required
+     *            if the annotation should be forced or not
+     * @param defaultValue
+     *            the default value this field should take or null if
+     *            a default value is not required
      * @return the number of tuples updated in the database.
      * @throws SQLException
      *             if the query does not succeed
      */
-    public int addFreeTextAnnotation(String label)
+    public int addFreeTextAnnotation(String label,
+            String defaultValue, boolean required)
             throws SQLException {
         String query = "INSERT INTO Annotation "
-                + "(Label, DataType) VALUES (?, 'FreeText')";
+                + "VALUES (?, 'FreeText', ?, ?)";
         PreparedStatement addAnnotation = conn
                 .prepareStatement(query);
         addAnnotation.setString(1, label);
+        addAnnotation.setString(2, defaultValue);
+        addAnnotation.setBoolean(3, required);
         int res = addAnnotation.executeUpdate();
         addAnnotation.close();
         return res;
@@ -277,10 +284,10 @@ public class DatabaseAccessor {
 
     /**
      * Gets all the annotation possibilities from the database.
-     *
+     * 
      * @return a Map with the label string as key and datatype as
      *         value.
-     *
+     * 
      *         The possible datatypes are FREETEXT and DROPDOWN.
      * @throws SQLException
      *             if the query does not succeed
@@ -292,9 +299,11 @@ public class DatabaseAccessor {
         ResultSet rs = getAnnotations.executeQuery(query);
         while (rs.next()) {
             if (rs.getString("DataType").equalsIgnoreCase("FreeText")) {
-                annotations.put(rs.getString("Label"), FREETEXT);
+                annotations.put(rs.getString("Label"),
+                        Annotation.FREETEXT);
             } else {
-                annotations.put(rs.getString("Label"), DROPDOWN);
+                annotations.put(rs.getString("Label"),
+                        Annotation.DROPDOWN);
             }
         }
         getAnnotations.close();
@@ -304,7 +313,7 @@ public class DatabaseAccessor {
 
     /**
      * Deletes an annotation from the list of possible annotations.
-     *
+     * 
      * @param label
      *            the label of the annotation to delete.
      * @return the number of tuples deleted in the database.
@@ -325,11 +334,11 @@ public class DatabaseAccessor {
 
     /**
      * Gets the datatype of a given annotation.
-     *
+     * 
      * @param label
      *            annotation label.
      * @return the annotation's datatype (FREETEXT or DROPDOWN).
-     *
+     * 
      * @throws SQLException
      *             if the query does not succeed
      */
@@ -342,7 +351,7 @@ public class DatabaseAccessor {
     /**
      * Adds a drop down annotation to the list of possible
      * annotations.
-     *
+     * 
      * @param label
      *            the name of the annotation.
      * @param choices
@@ -354,27 +363,37 @@ public class DatabaseAccessor {
      *             if the choices are invalid
      */
     public int addDropDownAnnotation(String label,
-            List<String> choices) throws SQLException,
-            IOException {
+            List<String> choices, int defaultValueIndex,
+            boolean required) throws SQLException, IOException {
 
         if (choices.isEmpty()) {
             throw new IOException("Must specify at least one choice");
         }
 
+        if (defaultValueIndex < 0
+                || defaultValueIndex >= choices.size()) {
+            throw new IOException("Invalid default value index");
+        }
+
         int tuplesInserted = 0;
 
         String annotationQuery = "INSERT INTO Annotation "
-                + "(Label, DataType) VALUES (?, 'DropDown')";
+                + "VALUES (?, 'DropDown', ?, ?)";
+
         String choicesQuery = "INSERT INTO Annotation_Choices "
                 + "(Label, Value) VALUES (?, ?)";
-        PreparedStatement addAnnotation = null;
-        PreparedStatement addChoices = null;
 
-        addAnnotation = conn.prepareStatement(annotationQuery);
-        addChoices = conn.prepareStatement(choicesQuery);
+        PreparedStatement addAnnotation = conn
+                .prepareStatement(annotationQuery);
+
         addAnnotation.setString(1, label);
+        addAnnotation.setString(2, choices.get(defaultValueIndex));
+        addAnnotation.setBoolean(3, required);
         tuplesInserted += addAnnotation.executeUpdate();
+        addAnnotation.close();
 
+        PreparedStatement addChoices = conn
+                .prepareStatement(choicesQuery);
         addChoices.setString(1, label);
         for (String choice : choices) {
             addChoices.setString(2, choice);
@@ -396,7 +415,7 @@ public class DatabaseAccessor {
     /**
      * Gets all the choices for a drop down annotation. Deprecated,
      * use {@link #getChoices(String) getChoices} instead.
-     *
+     * 
      * @param label
      *            the drop down annotation to get the choice for.
      * @return the choices.
@@ -422,7 +441,7 @@ public class DatabaseAccessor {
 
     /**
      * Gets all the choices for a drop down annotation.
-     *
+     * 
      * @param label
      *            the drop down annotation to get the choice for.
      * @return the choices.
@@ -446,7 +465,7 @@ public class DatabaseAccessor {
 
     /**
      * Adds an experiment ID to the database.
-     *
+     * 
      * @param expID
      *            the ID for the experiment.
      * @return the number of tuples inserted in the database.
@@ -468,7 +487,7 @@ public class DatabaseAccessor {
 
     /**
      * Checks if a given experiment ID exists in the database.
-     *
+     * 
      * @param expID
      *            the experiment ID to look for.
      * @return true if the experiment exists in the database, else
@@ -490,7 +509,7 @@ public class DatabaseAccessor {
 
     /**
      * Deletes an experiment from the database.
-     *
+     * 
      * @param expId
      *            the experiment ID.
      * @return the number of tuples deleted.
@@ -515,7 +534,7 @@ public class DatabaseAccessor {
     /**
      * Annotates an experiment with the given label and value. Checks
      * so that the value is valid if it is a drop down annotation.
-     *
+     * 
      * @param expID
      *            the name of the experiment to annotate.
      * @param label
@@ -552,7 +571,7 @@ public class DatabaseAccessor {
 
     /**
      * Checks so that the annotation value is valid.
-     *
+     * 
      * @param label
      *            the annotation name.
      * @param value
@@ -563,13 +582,13 @@ public class DatabaseAccessor {
      */
     private boolean isValidAnnotationValue(String label, String value)
             throws SQLException {
-        return getAnnotationType(label) == FREETEXT
+        return getAnnotationType(label) == Annotation.FREETEXT
                 || getChoices(label).contains(value);
     }
 
     /**
      * Deletes an annotation from an experiment.
-     *
+     * 
      * @param expID
      *            the experiment to delete the annotation from.
      * @param label
@@ -595,7 +614,7 @@ public class DatabaseAccessor {
     // instead.
     /**
      * Adds a file to the database.
-     *
+     * 
      * @param fileType
      * @param fileName
      * @param metaData
@@ -638,7 +657,7 @@ public class DatabaseAccessor {
 
     /**
      * Adds a file to the database with URL.
-     *
+     * 
      * @param fileType
      * @param fileName
      * @param metaData
@@ -677,13 +696,12 @@ public class DatabaseAccessor {
         tagExp.executeUpdate();
 
         tagExp.close();
-        return URL+path;
+        return URL + path;
     }
-
 
     /**
      * Deletes a file from the database.
-     *
+     * 
      * @param path
      *            the path to the file.
      * @return the number of deleted tuples in the database.
@@ -703,7 +721,7 @@ public class DatabaseAccessor {
 
     /**
      * Gets an experiment from the database.
-     *
+     * 
      * @param expID
      *            the ID of the experiment.
      * @return an Experiment object.
@@ -730,7 +748,7 @@ public class DatabaseAccessor {
 
     /**
      * Checks if the file path is a valid file path. Not used.
-     *
+     * 
      * @param filePath
      * @return
      * @throws SQLException
@@ -756,7 +774,7 @@ public class DatabaseAccessor {
     /**
      * Adds all the files that belong to the experiment to an
      * Experiment object.
-     *
+     * 
      * @param e
      *            the experiment to add files to.
      * @return the Experiment object containing all its files.
@@ -779,7 +797,7 @@ public class DatabaseAccessor {
     /**
      * Fill an Experiment object with all annotations that exists for
      * that experiment.
-     *
+     * 
      * @param e
      *            the Experiment object.
      * @return the Experiment object containing all it's annotations.
@@ -807,16 +825,16 @@ public class DatabaseAccessor {
      * Searches the database for Experiments. The search criteria are
      * specified in a String that has the same format as that used by
      * PubMed:
-     *
+     * 
      * <Value>[<Label>] <AND|OR> <Value>[<Label>] ...
-     *
+     * 
      * Round brackets should be used to disambiguate the logical
      * expression.
-     *
+     * 
      * Example:
-     *
+     * 
      * "(Human[Species] OR Fly[Species]) AND Joe Bloggs[Uploader]"
-     *
+     * 
      * @param pubMedString
      *            The String containing the search criteria in PubMed
      *            format.

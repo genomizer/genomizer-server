@@ -46,8 +46,8 @@ public class ExperimentTests {
     @Before
     public void setup() throws SQLException, IOException {
         dbac.addExperiment(testExpId);
-        dbac.addFreeTextAnnotation(testLabelFT);
-        dbac.addDropDownAnnotation(testLabelDD, testChoices);
+        dbac.addFreeTextAnnotation(testLabelFT, null, true);
+        dbac.addDropDownAnnotation(testLabelDD, testChoices, 0, false);
     }
 
     @After

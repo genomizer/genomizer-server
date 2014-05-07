@@ -16,9 +16,7 @@ public class TestFilePathGEN {
 	public void getCatFilePath() {
 		String generatedPath = FilePathGenerator.GenerateFilePath("CatTest",
 				"raw", "CatFacts.txt");
-		String expectedPath = FileSystemView.getFileSystemView()
-				.getHomeDirectory().getPath()
-				+ "/data/CatTest/raw/CatFacts.txt";
+		String expectedPath ="/var/www/data/CatTest/raw/CatFacts.txt";
 
 		System.out.println(expectedPath);
 		System.out.println(generatedPath);
@@ -31,7 +29,7 @@ public class TestFilePathGEN {
 	 *
 	 * File f = new
 	 * File(FileSystemView.getFileSystemView().getHomeDirectory().getPath
-	 * ()+"/data/hej/vad/gör/du/");
+	 * ()+"/data/hej/vad/gï¿½r/du/");
 	 *
 	 * System.out.println(FileSystemView.getFileSystemView().getHomeDirectory().
 	 * getPath());
