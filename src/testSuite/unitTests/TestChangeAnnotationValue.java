@@ -152,6 +152,19 @@ public class TestChangeAnnotationValue {
     	assertTrue(choices.contains(newValue));
     	assertFalse(choices.contains(oldValue));
 	}
+    
+    @Test
+    public void shouldChangeAnnotationValueForAnnotationTable() throws Exception {
+    	Experiment exp1 = dbac.getExperiment("Exp1");
+    	
+    	String label = "Sex";
+    	String newValue = "Monkey";
+    	String oldValue = exp1.getAnnotations().get(label);
+
+    	dbac.changeAnnotationValue(label, oldValue, newValue);
+    	
+    	assertEquals(dbac.getDefaultValue(label), newValue);
+	}
 
     @Test
     public void shouldBeAbleToChangeFreeTextValue() throws Exception {
