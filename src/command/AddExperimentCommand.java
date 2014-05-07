@@ -53,6 +53,7 @@ public class AddExperimentCommand extends Command {
 	public response.Response execute() {
 		try {
 			DatabaseAccessor db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
+			System.out.println("NAME: " + name);
 			db.addExperiment(name);
 
 			for(Annotation annotation: annotations) {
