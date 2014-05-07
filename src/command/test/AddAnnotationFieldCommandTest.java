@@ -5,6 +5,8 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import response.Response;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -34,6 +36,19 @@ public class AddAnnotationFieldCommandTest {
 	    final GsonBuilder builder = new GsonBuilder();
 	    builder.excludeFieldsWithoutExposeAnnotation();
 	    gson = builder.create();
+
+	}
+
+	//TODO: Implement this test. Currently
+	@Test
+	public void testExecuteMethod() {
+
+		String json = "{\"name\":\"species\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
+		final Command aafc = gson.fromJson(json, AddAnnotationFieldCommand.class);
+
+		Response rsp = aafc.execute();
+
+		assertNotNull(rsp);
 
 	}
 
