@@ -122,7 +122,7 @@ public class AddAnnotationFieldCommand extends Command {
 			//Add annotation field.
 			addedAnnotations = dbAccess.addDropDownAnnotation(name, type, defaultValueIndex, forced);
 
-			System.out.println("Added amounth of annotations:" + addedAnnotations);
+			//System.out.println("Added amounth of annotations:" + addedAnnotations);
 
 			//Create response.
 			if(addedAnnotations != 0) {
