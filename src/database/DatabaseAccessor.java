@@ -927,6 +927,32 @@ public class DatabaseAccessor {
     }
 
     /**
+     * Finds all annotationLabels that exist in the database, example of labels:
+     * sex, tissue, etc...
+     * @return ArrayList<String> annotationLabels
+     */
+    public ArrayList<String> getAllAnnotationLabels(){
+    	ArrayList<String> allAnnotationlabels = new ArrayList<>();
+
+    	String findAllLabelsQuery = "SELECT Label FROM Annotation";
+    	PreparedStatement ps;
+
+    	try {
+			ps = conn.prepareStatement(findAllLabelsQuery);
+			ResultSet res = ps.executeQuery();
+			while(res.next()){
+				allAnnotationlabels.add(res.getString("Label"));
+			}
+			res.close();
+    	} catch (SQLException e) {
+			e.printStackTrace();
+    		return null;
+		}
+    	return allAnnotationlabels;
+    }
+
+
+    /**
      * Changes the annotation Label value.
      * @param String oldLabel
      * @param string newLabel
@@ -944,11 +970,12 @@ public class DatabaseAccessor {
 
 			lblExp.setString(1, newLabel);
 			lblExp.setString(2, oldLabel);
-			return lblExp.execute();
+			lblExp.execute();
+			return true;
 
 		} catch (SQLException e) {
 
-			System.out.println("Failed to Create change label query");
+			System.out.println("Failed to Create changeLabel query");
 			return false;
 		}
     }
