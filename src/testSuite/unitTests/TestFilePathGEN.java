@@ -42,33 +42,33 @@ public class TestFilePathGEN {
 	 * }
 	 */
 
-	@Test
-	public void testExperimentFolders() {
-
-		String expID = "kebab";
-
-		FilePathGenerator.GenerateExperimentFolders(expID);
-
-		File f = new File(FileSystemView.getFileSystemView().getHomeDirectory()
-				.getPath()
-				+ "/data/" + expID + "/raw/");
-
-		assertTrue(f.exists());
-		assertTrue(f.isDirectory());
-
-		f = new File(FileSystemView.getFileSystemView().getHomeDirectory()
-				.getPath()
-				+ "/data/" + expID + "/profile/");
-
-		assertTrue(f.exists());
-		assertTrue(f.isDirectory());
-
-		f = new File(FileSystemView.getFileSystemView().getHomeDirectory()
-				.getPath()
-				+ "/data/" + expID + "/region/");
-
-		assertTrue(f.exists());
-		assertTrue(f.isDirectory());
-	}
+//	@Test
+//	public void testExperimentFolders() {
+//
+//		String expID = "kebab";
+//
+//		FilePathGenerator.GenerateExperimentFolders(expID);
+//
+//		File f = new File(FileSystemView.getFileSystemView().getHomeDirectory()
+//				.getPath()
+//				+ "/data/" + expID + "/raw/");
+//
+//		assertTrue(f.exists());
+//		assertTrue(f.isDirectory());
+//
+//		f = new File(FileSystemView.getFileSystemView().getHomeDirectory()
+//				.getPath()
+//				+ "/data/" + expID + "/profile/");
+//
+//		assertTrue(f.exists());
+//		assertTrue(f.isDirectory());
+//
+//		f = new File(FileSystemView.getFileSystemView().getHomeDirectory()
+//				.getPath()
+//				+ "/data/" + expID + "/region/");
+//
+//		assertTrue(f.exists());
+//		assertTrue(f.isDirectory());
+//	}
 
 }
