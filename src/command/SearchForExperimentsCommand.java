@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
 
 import database.DatabaseAccessor;
@@ -57,10 +59,11 @@ public class SearchForExperimentsCommand extends Command {
 	    String host = "postgres";
 	    String database = "c5dv151_vt14";
 	    DatabaseAccessor db = null;
+	    List<Experiment> searchResult = null;
+
 		try {
 			db = new DatabaseAccessor(username, password, host, database);
-			List<Experiment> searchResult = db.search(annotations);
-
+			searchResult = db.search(annotations);
 		} catch (SQLException e) {
 			return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
 		} catch (IOException e) {
@@ -68,7 +71,7 @@ public class SearchForExperimentsCommand extends Command {
 		}
 
 
-		SearchResponse response = new SearchResponse();
+		SearchResponse response = new SearchResponse(searchResult);
 
 		//Method not implemented, send appropriate response
 		return 	new MinimalResponse(StatusCode.NO_CONTENT);

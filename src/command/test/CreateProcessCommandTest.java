@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 
 import org.junit.*;
 
+import response.Response;
+
 import authentication.Authenticate;
 
 import command.Command;
@@ -91,6 +93,12 @@ public class CreateProcessCommandTest {
 	@Test
 	public void shouldSetExpID(){
 		assertEquals("66",processCommand.getExpID());
+	}
+
+	@Test
+	public void execute(){
+		Response response = processCommand.execute();
+		System.out.println("Execute response: " + response.getCode());
 	}
 
 }
