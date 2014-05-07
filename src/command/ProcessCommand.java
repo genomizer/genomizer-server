@@ -1,12 +1,14 @@
 package command;
 
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 import process.classes.ProcessHandler;
 
 import response.MinimalResponse;
+import response.ProcessResponse;
 import response.Response;
 import response.StatusCode;
 
@@ -28,6 +30,12 @@ public class ProcessCommand extends Command {
 	private String[] parameters;
 	@Expose
 	private String genomeRelease;
+	@Expose
+	private String filename;
+	@Expose
+	private String filepath;
+	@Expose
+	private String expid;
 
 	//Empty constructor
 	public ProcessCommand() {
@@ -37,7 +45,7 @@ public class ProcessCommand extends Command {
 	@Override
 	public boolean validate() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
@@ -53,42 +61,53 @@ public class ProcessCommand extends Command {
 		String DBhost = "postgres";
 		String DBdatabase = "c5dv151_vt14";
 		DatabaseAccessor dbac;
+		ProcessHandler processHandler;
 		//Har ett filID,,processtype,param till profile->region parsa i commandFactory
 		try {
 			dbac = new  DatabaseAccessor(DBusername, DBpassword, DBhost, DBdatabase);
+			processHandler = new ProcessHandler();
 			switch(processtype){
-				case "rawtoprofile":
+			case "rawtoprofile":
 
-					System.out.println("Uploader of file: " + DBusername);
+				System.out.println("Uploader of file: " + username);
 
+				System.out.println("filename:" + filename);
+				System.out.println("metadata:" + metadata);
+				System.out.println("username: " + username);
+				System.out.println("expid: " + expid);
+				System.out.println("genomeRelease: " + genomeRelease);
 
+				String outfilepath = dbac.addFile("profile", filename, metadata, "yuri", username, false, expid, genomeRelease);
 
+				try {
 
-//					ArrayList<String> filepaths=dbac.convertFromRawtoProfile(fileID,metadata,uploader,GRversion);
+					processHandler.executeProcess("rawToProfile", parameters, filepath, outfilepath);
 
-					ProcessHandler processHandler = new ProcessHandler();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					System.err.println("CATCH (IE) in ProcessCommand.Execute when running processHandler.executeProcess");
+					e.printStackTrace();
+					return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					System.err.println("CATCH (IO) in ProcessCommand.Execute when running processHandler.executeProcess");
+					e.printStackTrace();
+					return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE);
+				}
 
-//					processHandler.executeProcess(processType, parameters, filepaths.get(0), filepaths.get(1));
-
-					break;
-				default:
-					System.err.println("Unknown process type in processcommand execute");
-					break;
+				break;
+			default:
+				System.err.println("Unknown process type in processcommand execute");
+				break;
 
 			}
 		} catch (SQLException e) {
 			System.err.println("Error in ProcessCommand execute:");
 			e.printStackTrace();
+			return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE);
 		}
 
-
-		//FileExists till databas
-		//Kontrollera vart outfilepath,infilepath
-		//skicka filen till processmetoden (runexecutable),returvärde massa text ifrån script?
-		//return respons 201
-
-		//Method not implemented, send appropriate response
-		return new MinimalResponse(StatusCode.NO_CONTENT);
+		return new ProcessResponse(StatusCode.CREATED);
 	}
 
 	public String getMetadata() {
@@ -124,6 +143,21 @@ public class ProcessCommand extends Command {
 	public void setUsername(String username) {
 		this.username = username;
 
+	}
+
+	public String getFilename() {
+		// TODO Auto-generated method stub
+		return this.filename;
+	}
+
+	public String getFilepath() {
+		// TODO Auto-generated method stub
+		return this.filepath;
+	}
+
+	public String getExpID() {
+		// TODO Auto-generated method stub
+		return this.expid;
 	}
 
 }
