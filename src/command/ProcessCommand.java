@@ -62,6 +62,10 @@ public class ProcessCommand extends Command {
 				case "rawtoprofile":
 					String uploader=Authenticate.getUsername(userID);
 					System.out.println("Uploader of file: " + uploader);
+
+
+
+
 //					ArrayList<String> filepaths=dbac.convertFromRawtoProfile(fileID,metadata,uploader,GRversion);
 
 					ProcessHandler processHandler = new ProcessHandler();
