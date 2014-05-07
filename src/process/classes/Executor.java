@@ -59,7 +59,7 @@ private final String FILEPATH = "resources/";
 		return text.toString();
 	}
 
-	protected String executeShellCommand(String[] command) throws InterruptedException, IOException{
+	protected String executeShellCommand(String[] command, String dir, String fileName) throws InterruptedException, IOException{
 		ProcessBuilder builder = new ProcessBuilder(command);
 
 		builder.directory( new File( FILEPATH ).getAbsoluteFile() );
@@ -68,7 +68,12 @@ private final String FILEPATH = "resources/";
 
 		Scanner s = new Scanner(process.getInputStream());
 		StringBuilder text = new StringBuilder();
-		File file = new File(FILEPATH+"results/sorted/sorted.sam");
+		File dirFile = new File(FILEPATH+dir);
+		
+		if(!dirFile.exists()) {
+			dirFile.mkdirs();
+		}
+		File file = new File(dirFile.toString()+"/"+fileName);
 		FileWriter fw = new FileWriter(file.getAbsoluteFile());
 		BufferedWriter bw = new BufferedWriter(fw);
 		while (s.hasNextLine()) {
