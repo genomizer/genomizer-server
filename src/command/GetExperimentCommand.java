@@ -10,7 +10,7 @@ import java.util.Map.Entry;
 import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
-import response.getExperimentResponse;
+import response.GetExperimentResponse;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -64,7 +64,7 @@ public class GetExperimentCommand extends Command {
 			return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
 		}
 
-		return new getExperimentResponse(getInfo(exp), getAnnotations(exp), getFiles(exp), 200);
+		return new GetExperimentResponse(getInfo(exp), exp.getAnnotations(), exp.getFiles(), 200);
 	}
 
 	public ArrayList<String> getInfo(Experiment exp) {
@@ -74,18 +74,7 @@ public class GetExperimentCommand extends Command {
 
 	}
 
-	public HashMap<String, String> getAnnotations(Experiment exp) {
-		ArrayList<String> annotations = new ArrayList<String>();
-		HashMap<String, String> annotationMap = (HashMap<String, String>) exp.getAnnotations();
-		return annotationMap;
 
-	}
-
-	public ArrayList<FileTuple> getFiles(Experiment exp) {
-		ArrayList<String> files = new ArrayList<String>();
-		ArrayList<FileTuple> fileList = (ArrayList<FileTuple>) exp.getFiles();
-		return fileList;
-	}
 
 
 

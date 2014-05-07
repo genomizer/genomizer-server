@@ -186,7 +186,7 @@ public class Doorman {
 		System.out.println("BEFORE PROCESS COMMAND...");
 		Response response = null;
 		try {
-			response = commandHandler.processNewCommand(body, exchange.getRequestURI().toString(), uuid, type);
+			response = commandHandler.processNewCommand(body, exchange.getRequestURI().toString(), username, type);
 		} catch(Exception e ) {
 			e.printStackTrace();
 		}
