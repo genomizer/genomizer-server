@@ -28,6 +28,11 @@ public class AnnotationInformation {
 		this.name = name;
 		this.values = values;
 		this.forced = forced;
+
+		if(type == TYPE_FREE_TEXT) {
+			values.clear();
+			values.add("freetext");
+		}
 	}
 
 	public int getId() {
