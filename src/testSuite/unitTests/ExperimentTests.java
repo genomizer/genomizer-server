@@ -18,9 +18,9 @@ import database.DatabaseAccessor;
 import database.Experiment;
 
 public class ExperimentTests {
-    
+
     private static DatabaseAccessor dbac;
-    
+
     private static String testExpId = "testExpId1";
 
     private static String testLabelFT = "testLabelFT1";
@@ -37,26 +37,26 @@ public class ExperimentTests {
         testChoices.add(testChoice);
         testChoices.add(testChoice + "2");
     }
-    
+
     @AfterClass
     public static void undoAllChanges() throws SQLException {
         dbac.close();
     }
-    
+
     @Before
     public void setup() throws SQLException, IOException {
         dbac.addExperiment(testExpId);
         dbac.addFreeTextAnnotation(testLabelFT);
         dbac.addDropDownAnnotation(testLabelDD, testChoices);
     }
-    
+
     @After
     public void teardown() throws SQLException {
         dbac.deleteExperiment(testExpId);
         dbac.deleteAnnotation(testLabelFT);
         dbac.deleteAnnotation(testLabelDD);
     }
-    
+
     @Test
     public void shouldBeAbleToConnectToDB() throws Exception {
         assertTrue(dbac.isConnected());
@@ -64,11 +64,11 @@ public class ExperimentTests {
 
     @Test
     public void testGetDeleteGetAddExperiment() throws Exception {
-        
+
         assertTrue(dbac.hasExperiment(testExpId));
         Experiment e = dbac.getExperiment(testExpId);
         assertEquals(testExpId, e.getID());
-        
+
         dbac.deleteExperiment(testExpId);
         assertFalse(dbac.hasExperiment(testExpId));
         e = dbac.getExperiment(testExpId);
@@ -83,13 +83,13 @@ public class ExperimentTests {
     @Test
     public void shouldBeAbleToAnnotateExperimentFreeText()
             throws Exception {
-        
+
         int res = dbac.annotateExperiment(testExpId,
                 testLabelFT, testValueFT);
         assertEquals(1, res);
         Experiment e = dbac.getExperiment(testExpId);
         assertEquals(testValueFT, e.getAnnotations().get(testLabelFT));
-        
+
     }
 
     @Test
@@ -131,7 +131,7 @@ public class ExperimentTests {
             assertFalse(e.getAnnotations().containsKey(testLabelDD));
         }
     }
-    
+
     @Test
     public void shouldBeAbleToSearchUsingExperimentID()
             throws Exception {
@@ -163,6 +163,17 @@ public class ExperimentTests {
         assertTrue(e.getAnnotations().containsKey(testLabelFT));
         assertTrue(e.getAnnotations().containsKey(testLabelDD));
 
+    }
+
+    @Test
+    public void changeFromOldLabelToNewLabel()
+    		throws Exception{
+
+    	String oldLabel = "AntiName";
+    	String newLabel = "AName";
+
+    	boolean changeSucceed = dbac.changeAnnotationLabel(oldLabel, newLabel);
+    	assertTrue(changeSucceed);
     }
 
 }

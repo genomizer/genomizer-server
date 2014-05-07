@@ -907,4 +907,30 @@ public class DatabaseAccessor {
         }
         return query;
     }
+
+    /**
+     * Changes the annotation Label value.
+     * @param String oldLabel
+     * @param string newLabel
+     * @return boolean true if changed succeeded,
+     * 				   false if it failed.
+     */
+    public boolean changeAnnotationLabel(String oldLabel, String newLabel){
+
+    	//creating new entry
+    	try {
+			int nrOfTuplesUpdated = addFreeTextAnnotation(newLabel);
+			
+			
+			
+
+		} catch (SQLException e) {
+			System.out.println("Failed asdasdasdasd");
+		}
+
+    	//removing old one
+
+
+    	return true;
+    }
 }
