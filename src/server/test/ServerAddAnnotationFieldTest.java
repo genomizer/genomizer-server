@@ -3,14 +3,19 @@ package server.test;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
+
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
-
+/**
+ * Class used to test the server when adding annotation fields.
+ *
+ * @author tfy09jnn
+ * @version 1.0
+ */
 public class ServerAddAnnotationFieldTest {
 
 	private static Token token = null;
@@ -77,6 +82,7 @@ public class ServerAddAnnotationFieldTest {
 
 		//add request header
 		con.setRequestProperty("Content-Type", "application/json");
+		con.setRequestProperty("Authorization", token.getToken());
 
 		JsonObject jj=new JsonObject();
 		jj.addProperty("name", "species");
