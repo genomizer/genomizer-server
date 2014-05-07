@@ -19,7 +19,7 @@ public class CreateProcessCommandTest {
 	String uuid;
 
 	String username = "splutt";
-	String filename = "filename12";
+	String filename = "filename1234";
 	String filepath = "path/to/local/file";
 	String expid = "Exp1";
 	String processtype = "rawtoprofile";
@@ -55,6 +55,7 @@ public class CreateProcessCommandTest {
 	public void shouldInitiateProcessCommand(){
 		assertNotNull(processCommand);
 	}
+/*
 	@Test
 	public void shouldSetMetadata(){
 		assertEquals("astringofmetadata", processCommand.getMetadata());
@@ -102,7 +103,7 @@ public class CreateProcessCommandTest {
 	public void shouldSetExpID(){
 		assertEquals(expid,processCommand.getExpID());
 	}
-
+*/
 	@Test
 	public void execute(){
 		Response response = processCommand.execute();

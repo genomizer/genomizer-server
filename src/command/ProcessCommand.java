@@ -3,25 +3,21 @@ package command;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-
 import process.classes.ProcessHandler;
-
-import response.MinimalResponse;
 import response.ProcessResponse;
 import response.Response;
 import response.StatusCode;
 
-import authentication.Authenticate;
-
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.annotations.Expose;
-
 import database.*;
 
 public class ProcessCommand extends Command {
 
 	private String username;
 
+	//Following fields correspond to the JSON body of a process command.
 	@Expose
 	private String processtype;
 	@Expose
@@ -44,18 +40,19 @@ public class ProcessCommand extends Command {
 
 	@Override
 	public boolean validate() {
-		// TODO Auto-generated method stub
+		// TODO Validate process command
 		return true;
 	}
 
 	@Override
 	public Response execute() {
+		System.out.println("-------------ProcessCommand - Execute----------------");
 
-		//TODO Parse metadata to get GRversion and parameters?
-		String GRversion = "placeholderGRversion";
-		metadata = "meta1,meta2,meta3";
+
 		String[] parameters = {"param1","param2","param3"};
 
+
+		//TODO Should not be hardcoded here!
 		String DBusername = "c5dv151_vt14";
 		String DBpassword = "shielohh";
 		String DBhost = "postgres";
@@ -70,7 +67,6 @@ public class ProcessCommand extends Command {
 			case "rawtoprofile":
 
 				System.out.println("Uploader of file: " + username);
-
 				System.out.println("filename:" + filename);
 				System.out.println("metadata:" + metadata);
 				System.out.println("username: " + username);
@@ -84,12 +80,12 @@ public class ProcessCommand extends Command {
 					processHandler.executeProcess("rawToProfile", parameters, filepath, outfilepath);
 
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
+					// TODO Fix this
 					System.err.println("CATCH (IE) in ProcessCommand.Execute when running processHandler.executeProcess");
 					e.printStackTrace();
 					return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
+					// TODO Fix this
 					System.err.println("CATCH (IO) in ProcessCommand.Execute when running processHandler.executeProcess");
 					e.printStackTrace();
 					return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE);
@@ -110,18 +106,21 @@ public class ProcessCommand extends Command {
 		return new ProcessResponse(StatusCode.CREATED);
 	}
 
+	public void setUsername(String username) {
+		this.username = username;
+
+	}
+
+/*
 	public String getMetadata() {
-		// TODO Auto-generated method stub
 		return this.metadata;
 	}
 
 	public String[] getParameters() {
-		// TODO Auto-generated method stub
 		return this.parameters;
 	}
 
 	public String getGenomeRelease() {
-		// TODO Auto-generated method stub
 		return this.genomeRelease;
 	}
 
@@ -130,34 +129,24 @@ public class ProcessCommand extends Command {
 	}
 
 	public void setProcessType(String processType) {
-		// TODO Auto-generated method stub
 		this.processtype = processType;
 
 	}
 
 	public String getUsername() {
-		// TODO Auto-generated method stub
 		return this.username;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
-
-	}
-
 	public String getFilename() {
-		// TODO Auto-generated method stub
 		return this.filename;
 	}
 
 	public String getFilepath() {
-		// TODO Auto-generated method stub
 		return this.filepath;
 	}
 
 	public String getExpID() {
-		// TODO Auto-generated method stub
 		return this.expid;
 	}
-
+*/
 }
