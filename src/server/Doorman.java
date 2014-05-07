@@ -73,6 +73,7 @@ public class Doorman {
 						exchange(exchange, CommandType.GET_ANNOTATION_PRIVILEGES_COMMAND);
 						break;
 					}
+					break;
 
 
 				case "PUT":
@@ -96,6 +97,7 @@ public class Doorman {
 						exchange(exchange, CommandType.UPDATE_ANNOTATION_PRIVILEGES_COMMAND);
 						break;
 					}
+					break;
 
 
 				case "POST":
@@ -117,6 +119,7 @@ public class Doorman {
 						break;
 
 					}
+					break;
 
 
 				case "DELETE":
@@ -139,6 +142,7 @@ public class Doorman {
 
 
 				}
+					break;
 				}
 			}
 		};
@@ -157,6 +161,7 @@ public class Doorman {
 				Response errorResponse = new MinimalResponse(StatusCode.UNAUTHORIZED);
 				e.printStackTrace();
 				respond(exchange, errorResponse);
+				scanner.close();
 				return;
 			}
 		}
