@@ -765,7 +765,7 @@ public class DatabaseAccessor {
                 + "WHERE (Path = ?)";
         PreparedStatement deleteFile = conn
                 .prepareStatement(statementStr);
-        deleteFile.setString(1, path);
+        deleteFile.setInt(1, path);
         int res = deleteFile.executeUpdate();
         deleteFile.close();
         return res;

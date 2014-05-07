@@ -48,6 +48,7 @@ public class FileTableTests {
         testPath = dbac.addFile(testType, testName, testMetaData,
                 testAuthor, testUploader, testIsPrivate, testExpId,
                 testGRVersion);
+
     }
 
     @After
