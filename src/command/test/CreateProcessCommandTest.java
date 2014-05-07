@@ -37,7 +37,6 @@ public class CreateProcessCommandTest {
 							"\"metadata\": \"astringofmetadata\"," +
 							"\"genomeRelease\": \"hg38\", " +
 							"\"author\": \"yuri\"}";
-		System.out.println(json);
 
 		processCommand = (ProcessCommand)cmdf.createProcessCommand(json, uuid);
 	}
@@ -65,7 +64,7 @@ public class CreateProcessCommandTest {
 
 	@Test
 	public void shouldSetUserID(){
-		assertEquals(uuid, processCommand.getUserID());
+		assertEquals(uuid, processCommand.getUsername());
 	}
 
 
