@@ -73,8 +73,7 @@ public class SearchForExperimentsCommand extends Command {
 
 		SearchResponse response = new SearchResponse(searchResult);
 
-		//Method not implemented, send appropriate response
-		return 	new MinimalResponse(StatusCode.NO_CONTENT);
+		return response;
 	}
 
 	public String getAnnotations() {
