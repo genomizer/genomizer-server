@@ -245,7 +245,7 @@ public class CommandFactory {
 	 */
 	public Command createAddAnnotationValueCommand(String json, String restful) {
 
-		return new AddAnnotationValueComfinal Command loginCmd = gson.fromJson(json, LoginCommand.class);mand();
+		return new AddAnnotationValueCommand();
 
 	}
 
