@@ -20,7 +20,7 @@ public class UtkastTest {
 	public static void main(String args[]) throws Exception {
 		sendLogin();
 		sendAddExperiment();
-		sendAddFile();
+		//sendAddFile();
 	}
 
 	private static void sendLogin() throws Exception {
@@ -340,7 +340,7 @@ public class UtkastTest {
 		//con.setRequestProperty("Authorization", UUID.randomUUID().toString());
 		JsonObject ja=new JsonObject();
 //		JsonObject name=new JsonObject();
-		ja.addProperty("name", "RobbanOCHRobbansSUPERExperiment");
+		ja.addProperty("name", "RobbanOCHRobbansSUPERExperiment122");
 //		ja.add(name);
 
 
