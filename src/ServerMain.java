@@ -38,6 +38,7 @@ public class ServerMain {
 			System.out.println("Doorman started.");
 		} catch (IOException e) {
 			System.err.println("Error when starting server");
+			e.printStackTrace();
 			//log exception
 			System.exit(1);
 		}
