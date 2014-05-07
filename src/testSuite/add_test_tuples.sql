@@ -6,20 +6,23 @@ INSERT INTO Experiment VALUES('Exp4');
 INSERT INTO Genome_Release VALUES('hg38', 'Human', '/GenomeRelease/Human/hg38.fasta');
 INSERT INTO Genome_Release VALUES('rn5', 'Rat', '/GenomeRelease/Rat/rn5.fasta');
 
-INSERT INTO Annotation VALUES('Species', 'DropDown');
+
+INSERT INTO Annotation VALUES('Species', 'DropDown', NULL, TRUE);
 INSERT INTO Annotation_Choices VALUES('Species', 'Human');
 INSERT INTO Annotation_Choices VALUES('Species', 'Fly');
 INSERT INTO Annotation_Choices VALUES('Species', 'Rat');
 
-INSERT INTO Annotation VALUES('Sex', 'DropDown');
+
+INSERT INTO Annotation VALUES('Sex', 'DropDown', 'Unknown', FALSE);
 INSERT INTO Annotation_Choices VALUES('Sex', 'Female');
 INSERT INTO Annotation_Choices VALUES('Sex', 'Male');
 INSERT INTO Annotation_Choices VALUES('Sex', 'Unknown');
 INSERT INTO Annotation_Choices  VALUES('Sex', 'Does not matter');
 
-INSERT INTO Annotation VALUES('Tissue', 'FreeText');
 
-INSERT INTO Annotation VALUES('Development Stage', 'FreeText');
+INSERT INTO Annotation VALUES('Tissue', 'FreeText', NULL, TRUE);
+
+INSERT INTO Annotation VALUES('Development Stage', 'FreeText', NULL, FALSE);
 
 
 INSERT INTO Annotated_With  VALUES('Exp1', 'Species', 'Human');
