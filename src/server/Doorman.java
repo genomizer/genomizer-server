@@ -12,6 +12,8 @@ import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
 
+import authentication.Authenticate;
+
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
@@ -41,7 +43,7 @@ public class Doorman {
 		httpServer.setExecutor(new Executor() {
 			@Override
 			public void execute(Runnable command) {
-				System.out.println("\n------------------\nNew Executor.");
+				System.out.println("New Executor.");
 				new Thread(command).start();
 			}
 		});
@@ -155,6 +157,7 @@ public class Doorman {
 		Scanner scanner = new Scanner(bodyStream);
 		String body = "";
 		String uuid = null;
+		String username = null;
 
 		System.out.println("Exchange: " + type);
 
@@ -177,6 +180,8 @@ public class Doorman {
 		}
 		scanner.close();
 
+		username = Authenticate.getUsername(uuid);
+
 		System.out.println("BODY: " + body);
 		System.out.println("BEFORE PROCESS COMMAND...");
 		Response response = null;
@@ -186,6 +191,8 @@ public class Doorman {
 			e.printStackTrace();
 		}
 		System.out.println("AFTER PROCESS COMMAND.");
+
+		//TODO Should there be some error checking?
 
 
 		respond(exchange, response);

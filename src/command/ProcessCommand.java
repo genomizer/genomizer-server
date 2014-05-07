@@ -18,7 +18,7 @@ import database.*;
 
 public class ProcessCommand extends Command {
 
-	private String userID;
+	private String username;
 
 	@Expose
 	private String processtype;
@@ -48,18 +48,18 @@ public class ProcessCommand extends Command {
 		metadata = "meta1,meta2,meta3";
 		String[] parameters = {"param1","param2","param3"};
 
-		String username = "c5dv151_vt14";
-		String password = "shielohh";
-		String host = "postgres";
-		String database = "c5dv151_vt14";
+		String DBusername = "c5dv151_vt14";
+		String DBpassword = "shielohh";
+		String DBhost = "postgres";
+		String DBdatabase = "c5dv151_vt14";
 		DatabaseAccessor dbac;
 		//Har ett filID,,processtype,param till profile->region parsa i commandFactory
 		try {
-			dbac = new  DatabaseAccessor(username, password, host, database);
+			dbac = new  DatabaseAccessor(DBusername, DBpassword, DBhost, DBdatabase);
 			switch(processtype){
 				case "rawtoprofile":
-					String uploader=Authenticate.getUsername(userID);
-					System.out.println("Uploader of file: " + uploader);
+
+					System.out.println("Uploader of file: " + DBusername);
 
 
 
@@ -93,21 +93,21 @@ public class ProcessCommand extends Command {
 
 	public String getMetadata() {
 		// TODO Auto-generated method stub
-		return metadata;
+		return this.metadata;
 	}
 
 	public String[] getParameters() {
 		// TODO Auto-generated method stub
-		return parameters;
+		return this.parameters;
 	}
 
 	public String getGenomeRelease() {
 		// TODO Auto-generated method stub
-		return genomeRelease;
+		return this.genomeRelease;
 	}
 
 	public String getProcessType() {
-		return processtype;
+		return this.processtype;
 	}
 
 	public void setProcessType(String processType) {
@@ -116,13 +116,13 @@ public class ProcessCommand extends Command {
 
 	}
 
-	public Object getUserID() {
+	public String getUsername() {
 		// TODO Auto-generated method stub
-		return this.userID;
+		return this.username;
 	}
 
-	public void setUserID(String uuid) {
-		this.userID = uuid;
+	public void setUsername(String username) {
+		this.username = username;
 
 	}
 

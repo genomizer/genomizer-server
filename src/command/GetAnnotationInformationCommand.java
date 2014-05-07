@@ -19,8 +19,7 @@ public class GetAnnotationInformationCommand extends Command {
 
 	@Override
 	public boolean validate() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
