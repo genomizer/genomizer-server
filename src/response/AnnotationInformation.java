@@ -61,7 +61,7 @@ public class AnnotationInformation {
 	}
 
 	public String toString() {
-		String returnstring = "ID: " + id + "\nNAME: " + name + "FORCED: " + forced + "\nVALUES:\n" ;
+		String returnstring = "ID: " + id + "\nNAME: " + name + "\nFORCED: " + forced + "\nVALUES:\n" ;
 
 		for(int i = 0; i < values.size(); i++) {
 			returnstring = returnstring + "     " + values.get(i) + "\n";
