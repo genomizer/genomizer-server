@@ -64,7 +64,7 @@ public class CommandHandler {
 
 		} else if (cmdt == CommandType.LOGOUT_COMMAND) {
 
-			newCommand = cmdFactory.createLogoutCommand();
+			newCommand = cmdFactory.createLogoutCommand(username);
 
 		} else if (cmdt == CommandType.RETRIEVE_EXPERIMENT_COMMAND) {
 
