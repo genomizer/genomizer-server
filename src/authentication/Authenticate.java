@@ -28,6 +28,10 @@ public class Authenticate {
 
 	}
 
+	static public boolean idExists(String id) {
+		return activeUsersID.containsKey(id);
+	}
+
 	static public String getUsername(String userID){
 		return activeUsersID.get(userID);
 	}

@@ -1,5 +1,7 @@
 package command;
 
+import authentication.Authenticate;
+import response.LoginResponse;
 import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
@@ -29,6 +31,12 @@ public class LogoutCommand extends Command {
 	@Override
 	public Response execute() {
 
+		if(Authenticate.){
+			//bugg if username is exactly the same as the UUID
+				System.out.println("Användaren fanns");
+				rsp = new LoginResponse(405, "");
+		}
+		
 		//Method not implemented, send appropriate response
 		return 	new MinimalResponse(StatusCode.NO_CONTENT);
 
