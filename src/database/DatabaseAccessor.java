@@ -610,6 +610,58 @@ public class DatabaseAccessor {
         return res;
     }
 
+	/**
+	 * Checks if a given annotation is required to be filled by the user.
+	 * @param annotationLabel the name of the annotation to check
+	 * @return true if it is required, else false
+	 * @throws SQLException
+	 */
+	public boolean isRequierd(String annotationLabel) throws SQLException {
+
+		String query = "SELECT Required FROM Annotation WHERE Label = ?";
+
+		PreparedStatement ps = conn.prepareStatement(query);
+
+		ps.setString(1, annotationLabel);
+
+		ResultSet rs = ps.executeQuery();
+
+		boolean isRequired = false;
+
+
+
+		while(rs.next()){
+			isRequired =  rs.getBoolean("Required");
+		}
+		return isRequired;
+	}
+
+	/**
+	 * Gets the default value for a annotation if there is one, If not
+	 * it returns NULL.
+	 * @param annotationLabel the name of the annotation to check
+	 * @return The defult value or NULL.
+	 * @throws SQLException
+	 */
+	public String getDefaultValue(String annotationLabel) throws SQLException {
+
+		String query = "SELECT DefaultValue FROM Annotation WHERE Label = ?";
+
+		PreparedStatement ps = conn.prepareStatement(query);
+
+		ps.setString(1, annotationLabel);
+
+		ResultSet rs = ps.executeQuery();
+
+		while(rs.next()){
+			return rs.getString("DefaultValue");
+		}
+
+		return null;
+	}
+
+
+
     // Too many parameters. Should take a JSONObject or FileTuple
     // instead.
     /**
@@ -718,6 +770,46 @@ public class DatabaseAccessor {
         deleteFile.close();
         return res;
     }
+
+
+	public ArrayList<String> process(String fileID, String fileType, String fileName,
+			String metaData, String uploader, String grVersion, String expID)
+					throws SQLException {
+
+		ArrayList<String> pathList = new ArrayList<String>();
+
+		String ToPath;
+
+        String SelectQuery = "SELECT Path, Author, IsPrivate FROM File WHERE (FileID = ?)";
+        PreparedStatement ps = conn.prepareStatement(SelectQuery);
+
+        int fID = Integer.parseInt(fileID);
+
+        ps.setInt(1, fID);
+
+        ResultSet rs = ps.executeQuery();
+
+        String fromPath = null;
+        boolean isPrivate = false;
+        String author = null;
+
+        if (rs.next()) {
+            fromPath = rs.getString("Path");
+            author = rs.getString("Author");
+            isPrivate = rs.getBoolean("IsPrivate");
+        }else {
+        	throw new SQLException("Not a valid fileID");
+        }
+
+        ToPath = addFile(fileType, fileName, metaData, author, uploader, isPrivate, expID, grVersion);
+        ps.close();
+
+        pathList.add(fromPath);
+        pathList.add(ToPath);
+
+        return pathList;
+    }
+
 
     /**
      * Gets an experiment from the database.
@@ -980,10 +1072,69 @@ public class DatabaseAccessor {
 		}
     }
 
-    public boolean addGenomeRelease(String GenomeVersion, String Specie){
+    /**
+     * Add one genome release to the database.
+     *
+     * @param String genomeVersion.
+     * @param String specie.
+     * @return String filePath, the path where the genome Version file should
+     * be saved.
+     */
+    public String addGenomeRelease(String genomeVersion, String specie){
 
+    	String filePath = "";
 
+    	FilePathGenerator.generate
 
-    	return true;
+    	return filePath;
     }
+
+    /*
+     * Changes the value of an annotation corresponding to it's label.
+     * Parameters: label of annotation, the old value and the new value to
+     * change to. Throws an SQLException if the new value already exists in the
+     * choices table (changing all males to female, and female is already in the
+     * table)
+     *
+     * @param String label
+     * @param String oldValue
+     * @param String newValue
+     * @throws SQLException
+     */
+	public void changeAnnotationValue(String label, String oldValue,
+			String newValue) throws SQLException {
+
+
+    	String query = "UPDATE Annotation_Choices " +
+    			"SET Value = ? " +
+    			"WHERE Label = ? and Value = ?";
+
+    	String query2 = "UPDATE Annotated_With "
+    			+ "SET Value = ? "
+                + "WHERE Label = ? and Value = ?";
+
+    	String query3 = "UPDATE Annotation " +
+    			"SET DefaultValue = ? " +
+    			"WHERE Label = ? and DefaultValue = ?";
+
+    	PreparedStatement statement = conn
+                .prepareStatement(query);
+    	ArrayList<String> parameters = new ArrayList<String>();
+    	parameters.add(newValue);
+    	parameters.add(label);
+    	parameters.add(oldValue);
+    	statement = bind(statement, parameters);
+    	statement.executeUpdate();
+    	statement.close();
+
+    	statement = conn.prepareStatement(query2);
+    	statement = bind(statement, parameters);
+    	statement.executeUpdate();
+    	statement.close();
+
+    	statement = conn.prepareStatement(query3);
+    	statement = bind(statement, parameters);
+    	statement.executeUpdate();
+    	statement.close();
+	}
 }
