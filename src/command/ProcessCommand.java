@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import process.classes.ProcessHandler;
 
 import response.MinimalResponse;
+import response.ProcessResponse;
 import response.Response;
 import response.StatusCode;
 
@@ -66,50 +67,47 @@ public class ProcessCommand extends Command {
 			dbac = new  DatabaseAccessor(DBusername, DBpassword, DBhost, DBdatabase);
 			processHandler = new ProcessHandler();
 			switch(processtype){
-				case "rawtoprofile":
+			case "rawtoprofile":
 
-					System.out.println("Uploader of file: " + DBusername);
+				System.out.println("Uploader of file: " + username);
 
-					String outfilepath = dbac.addFile("profile", filename, metadata, "yuri", username, false, expid, genomeRelease);
+				System.out.println("filename:" + filename);
+				System.out.println("metadata:" + metadata);
+				System.out.println("username: " + username);
+				System.out.println("expid: " + expid);
+				System.out.println("genomeRelease: " + genomeRelease);
+
+				String outfilepath = dbac.addFile("profile", filename, metadata, "yuri", username, false, expid, genomeRelease);
 
 				try {
-					processHandler.executeProcess("rawtoprofile", parameters, filepath, outfilepath);
+
+					processHandler.executeProcess("rawToProfile", parameters, filepath, outfilepath);
+
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					System.err.println("CATCH (IE) in ProcessCommand.Execute when running processHandler.executeProcess");
 					e.printStackTrace();
+					return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					System.err.println("CATCH (IO) in ProcessCommand.Execute when running processHandler.executeProcess");
 					e.printStackTrace();
+					return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE);
 				}
 
-
-//					ArrayList<String> filepaths=dbac.convertFromRawtoProfile(fileID,metadata,uploader,GRversion);
-
-
-
-//					processHandler.executeProcess(processType, parameters, filepaths.get(0), filepaths.get(1));
-
-					break;
-				default:
-					System.err.println("Unknown process type in processcommand execute");
-					break;
+				break;
+			default:
+				System.err.println("Unknown process type in processcommand execute");
+				break;
 
 			}
 		} catch (SQLException e) {
 			System.err.println("Error in ProcessCommand execute:");
 			e.printStackTrace();
+			return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE);
 		}
 
-
-		//FileExists till databas
-		//Kontrollera vart outfilepath,infilepath
-		//skicka filen till processmetoden (runexecutable),returvärde massa text ifrån script?
-		//return respons 201
-
-		//Method not implemented, send appropriate response
-		return new MinimalResponse(StatusCode.NO_CONTENT);
+		return new ProcessResponse(StatusCode.CREATED);
 	}
 
 	public String getMetadata() {
