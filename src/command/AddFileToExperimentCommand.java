@@ -72,13 +72,14 @@ public class AddFileToExperimentCommand extends Command {
 		DatabaseAccessor accessor = null;
 		String response_url = null;
 		try {
-			accessor = new DatabaseAccessor(DatabaseSettings.mc333_username, DatabaseSettings.mc333_password, DatabaseSettings.mc333_host, DatabaseSettings.mc333_database);
+			accessor = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
 			response_url = accessor.addFile(type, fileName, null, "Jonas Markström", "Jonas Markström", false, experimentID, "1.0");
 			return new AddFileToExperimentResponse(StatusCode.OK, response_url);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
 		return new MinimalResponse(StatusCode.NO_CONTENT);
 
 

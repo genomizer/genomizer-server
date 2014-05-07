@@ -54,21 +54,15 @@ public class AddAnnotationFieldCommand extends Command {
 	 */
 	@Override
 	public boolean validate() {
-
 		/* Restrictions on size on name? types?
 		 */
 		//Check if anything was not set.
 		if(name == null || type == null || defaults == null || forced == null) {
-
 			return false;
-
 		}
-
 		//Check if name is to long, no types exists.
 		if(name.length() > 10 || type.size() < 1 ) {
-
 			return false;
-
 		}
 
 		return true;
@@ -84,7 +78,6 @@ public class AddAnnotationFieldCommand extends Command {
 
 		Response rsp;
 		int addedAnnotations = 0;
-
 		int defaultValueIndex = 0;
 
 		try {
@@ -98,13 +91,11 @@ public class AddAnnotationFieldCommand extends Command {
 			/*
 			ArrayList<String> types = new ArrayList<String>();
 			for(int i = 0; i < type.length; i++) {
-
 				//types.add(type[i]);
 				types.add(i, type[i]);
 				if(type[i].equals(defaults)) {
 					defaultValueIndex = i;
 				}
-
 			}
 			*/
 
@@ -118,30 +109,21 @@ public class AddAnnotationFieldCommand extends Command {
 				}
 
 			}
-
 			//Add annotation field.
 			addedAnnotations = dbAccess.addDropDownAnnotation(name, type, defaultValueIndex, forced);
-
 			//System.out.println("Added amounth of annotations:" + addedAnnotations);
-
+			
 			//Create response.
 			if(addedAnnotations != 0) {
-
 				rsp = new AddAnnotationFieldResponse(201);
-
 			} else {
-
 				rsp = new MinimalResponse(400);
-
 			}
 
 		} catch (SQLException e) {
-
 			e.printStackTrace();
 			rsp = new MinimalResponse(400);
-
 		} catch (IOException e) {
-
 			e.printStackTrace();
 			rsp = new MinimalResponse(400);
 
