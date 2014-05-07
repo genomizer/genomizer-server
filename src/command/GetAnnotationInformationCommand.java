@@ -49,13 +49,19 @@ public class GetAnnotationInformationCommand extends Command {
 		for(int i = 0; i < annotation_names.size(); i++) {
 			ArrayList<String> values = null;
 			try {
-				values = (ArrayList<String>) accessor.getChoices(annotation_names.get(i));
-			} catch (SQLException e) {
+				if(accessor.getAnnotationType(annotation_names.get(i)).equals("FREETEXT")) {
+					values = new ArrayList<String>();
+					values.add("freetext");
+				} else if(accessor.getAnnotationType(annotation_names.get(i)).equals("DROPDOWN")) {
+					values = (ArrayList<String>) accessor.getChoices(annotation_names.get(i));
+
+				}
+			} catch (SQLException e1) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				e1.printStackTrace();
 			}
 
-			AnnotationInformation annotation = new AnnotationInformation(0, annotation_names.get(i), a.get(annotation_names.get(i)), values, true);
+			AnnotationInformation annotation = new AnnotationInformation(0, annotation_names.get(i), values, true);
 			annotations.add(annotation);
 		}
 		Collections.sort(annotations, new compareAnnotations());

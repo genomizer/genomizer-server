@@ -3,25 +3,21 @@ package command;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-
 import process.classes.ProcessHandler;
-
-import response.MinimalResponse;
 import response.ProcessResponse;
 import response.Response;
 import response.StatusCode;
 
-import authentication.Authenticate;
-
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.annotations.Expose;
-
 import database.*;
 
 public class ProcessCommand extends Command {
 
 	private String username;
 
+	//Following fields corresponds to the JSON body of a process command.
 	@Expose
 	private String processtype;
 	@Expose
@@ -44,18 +40,45 @@ public class ProcessCommand extends Command {
 
 	@Override
 	public boolean validate() {
-		// TODO Auto-generated method stub
+
+		if(username == null || processtype == null || metadata == null || parameters == null || genomeRelease == null || filename == null || filepath == null || expid == null){
+			return false;
+		}
+
+		//TODO Lengths
+
+		/*
+		 * Path VARCHAR(128) UNIQUE NOT NULL,
+    FileType VARCHAR(32) NOT NULL,
+    FileName VARCHAR(32) NOT NULL,
+    Date DATE NOT NULL,
+    MetaData VARCHAR(256),
+    Author VARCHAR(32),
+    Uploader VARCHAR(32) NOT NULL,
+    IsPrivate BOOLEAN NOT NULL,
+    ExpID VARCHAR(64),
+    GRVersion VARCHAR(16),
+		 */
+		//Not null
+		//length of file info
+		//
+
+		// TODO Validate process command
 		return true;
 	}
 
+	/**
+	 * Method that runs when the processCommand is executed.
+	 */
 	@Override
 	public Response execute() {
+		System.out.println("-------------ProcessCommand - Execute----------------");
 
-		//TODO Parse metadata to get GRversion and parameters?
-		String GRversion = "placeholderGRversion";
-		metadata = "meta1,meta2,meta3";
+
 		String[] parameters = {"param1","param2","param3"};
 
+
+		//TODO Should not be hardcoded here!
 		String DBusername = "c5dv151_vt14";
 		String DBpassword = "shielohh";
 		String DBhost = "postgres";
@@ -64,19 +87,23 @@ public class ProcessCommand extends Command {
 		ProcessHandler processHandler;
 
 		try {
+
 			dbac = new  DatabaseAccessor(DBusername, DBpassword, DBhost, DBdatabase);
 			processHandler = new ProcessHandler();
+
 			switch(processtype){
 			case "rawtoprofile":
+				//The process type was a rawtoprofile
 
+				//TODO Remove print for validating data.
 				System.out.println("Uploader of file: " + username);
-
 				System.out.println("filename:" + filename);
 				System.out.println("metadata:" + metadata);
 				System.out.println("username: " + username);
 				System.out.println("expid: " + expid);
 				System.out.println("genomeRelease: " + genomeRelease);
 
+				//Receive the path for the profile data from the database accessor.
 				String outfilepath = dbac.addFile("profile", filename, metadata, "yuri", username, false, expid, genomeRelease);
 
 				try {
@@ -84,12 +111,12 @@ public class ProcessCommand extends Command {
 					processHandler.executeProcess("rawToProfile", parameters, filepath, outfilepath);
 
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
+					// TODO Fix this
 					System.err.println("CATCH (IE) in ProcessCommand.Execute when running processHandler.executeProcess");
 					e.printStackTrace();
 					return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
+					// TODO Fix this
 					System.err.println("CATCH (IO) in ProcessCommand.Execute when running processHandler.executeProcess");
 					e.printStackTrace();
 					return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE);
@@ -107,21 +134,29 @@ public class ProcessCommand extends Command {
 			return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE);
 		}
 
+		//The execute executed correctly. Return created response.
 		return new ProcessResponse(StatusCode.CREATED);
 	}
 
+	/**
+	 * Set the username of the uploader wich will be added to the database annotation.
+	 * @param username - the username of the uploader.
+	 */
+	public void setUsername(String username) {
+		this.username = username;
+
+	}
+
+/*
 	public String getMetadata() {
-		// TODO Auto-generated method stub
 		return this.metadata;
 	}
 
 	public String[] getParameters() {
-		// TODO Auto-generated method stub
 		return this.parameters;
 	}
 
 	public String getGenomeRelease() {
-		// TODO Auto-generated method stub
 		return this.genomeRelease;
 	}
 
@@ -130,34 +165,24 @@ public class ProcessCommand extends Command {
 	}
 
 	public void setProcessType(String processType) {
-		// TODO Auto-generated method stub
 		this.processtype = processType;
 
 	}
 
 	public String getUsername() {
-		// TODO Auto-generated method stub
 		return this.username;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
-
-	}
-
 	public String getFilename() {
-		// TODO Auto-generated method stub
 		return this.filename;
 	}
 
 	public String getFilepath() {
-		// TODO Auto-generated method stub
 		return this.filepath;
 	}
 
 	public String getExpID() {
-		// TODO Auto-generated method stub
 		return this.expid;
 	}
-
+*/
 }
