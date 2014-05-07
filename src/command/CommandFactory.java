@@ -67,7 +67,7 @@ public class CommandFactory {
 	 */
 	public Command createRetrieveExperimentCommand(String json, String restful) {
 
-		return new GetExperimentCommand();
+		return new GetExperimentCommand(restful);
 
 	}
 

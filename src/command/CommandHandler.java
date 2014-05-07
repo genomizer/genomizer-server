@@ -154,9 +154,9 @@ public class CommandHandler {
 
 		String[] split = restful.split("/");
 		String[] parsed = new String[split.length - 2];
-		
+
 		for(int i = 0; i < parsed.length; i++) {
-			parsed[i] = split[i+2];			
+			parsed[i] = split[i+2];
 		}
 		return parsed[parsed.length - 1];
 
