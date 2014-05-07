@@ -9,7 +9,6 @@ import java.net.URL;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
-
 /**
  * Class used to test adding a corrupted annotation field
  * where types are missing.
