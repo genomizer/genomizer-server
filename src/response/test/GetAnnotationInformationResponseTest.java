@@ -44,6 +44,7 @@ public class GetAnnotationInformationResponseTest {
 	public void testDatabaseConnection() {
 		GetAnnotationInformationCommand cmd = new GetAnnotationInformationCommand();
 		Response rsp = cmd.execute();
+		rsp.getBody();
 	}
 
 }

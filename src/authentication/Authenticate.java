@@ -31,10 +31,12 @@ public class Authenticate {
 
 	static public String getID(String username) {
 		Iterator<String> keys = activeUsersID.keySet().iterator();
-		String key;
+		String key = null;
+		String temp_username;
 		while(keys.hasNext()) {
-			key = activeUsersID.get(keys.next());
-			if(key.equals(username)) {
+			key = keys.next();
+			temp_username = activeUsersID.get(key);
+			if(temp_username.equals(username)) {
 				return key;
 			}
 		}
