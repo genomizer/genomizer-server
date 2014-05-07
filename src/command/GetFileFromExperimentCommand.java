@@ -7,8 +7,8 @@ import response.DownloadResponse;
 import response.ErrorResponse;
 import response.Response;
 import response.StatusCode;
-import databaseAccessor.DatabaseAccessor;
-import database.SearchResult;
+import database.DatabaseAccessor;
+
 
 import com.google.gson.annotations.Expose;
 
@@ -22,7 +22,7 @@ public class GetFileFromExperimentCommand extends Command {
 
 	private String fileID;
 	private DatabaseAccessor db;
-	private SearchResult results;
+
 
 	/**
 	 * Constructor. Takes the fileID as argument.
@@ -61,21 +61,21 @@ public class GetFileFromExperimentCommand extends Command {
 		Response rsp;
 		ArrayList<String> attributes = new ArrayList<String>();
 
-		results = db.searchExperiment(fileID);
-
-
-		if(results == null) {
-			// File not found, send appropriate response (404)
-			rsp = new ErrorResponse(404);
-		} else {
-			int rowNr = results.getRowCount();
-			for (int i = 0; i < rowNr; i++) {
-				attributes = results.getRowValues(i);
-			}
-			System.out.println(attributes.toString());
-			rsp = new DownloadResponse(200, attributes);
-
-		}
+//		results = db.searchExperiment(fileID);
+//
+//
+//		if(results == null) {
+//			// File not found, send appropriate response (404)
+//			rsp = new ErrorResponse(404);
+//		} else {
+//			int rowNr = results.getRowCount();
+//			for (int i = 0; i < rowNr; i++) {
+//				attributes = results.getRowValues(i);
+//			}
+//			System.out.println(attributes.toString());
+//			rsp = new DownloadResponse(200, attributes);
+//
+//		}
 
 		//Method not implemented, send appropriate response
 		return 	new ErrorResponse(StatusCode.NO_CONTENT);
