@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import response.AddAnnotationFieldResponse;
-import response.ErrorResponse;
+import response.MinimalResponse;
 import response.Response;
 
 import com.google.gson.annotations.Expose;
@@ -102,19 +102,19 @@ public class AddAnnotationFieldCommand extends Command {
 
 			} else {
 
-				rsp = new ErrorResponse(400);
+				rsp = new MinimalResponse(400);
 
 			}
 
 		} catch (SQLException e) {
 
 			e.printStackTrace();
-			rsp = new ErrorResponse(400);
+			rsp = new MinimalResponse(400);
 
 		} catch (IOException e) {
 
 			e.printStackTrace();
-			rsp = new ErrorResponse(400);
+			rsp = new MinimalResponse(400);
 
 		}
 

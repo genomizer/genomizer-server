@@ -3,7 +3,7 @@ package command;
 import java.util.ArrayList;
 
 import response.DownloadResponse;
-import response.ErrorResponse;
+import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
 
@@ -23,8 +23,8 @@ public class GetFileFromExperimentCommand extends Command {
 	 * Constructor. Takes the fileID as argument.
 	 * @param fileID
 	 */
-	public GetFileFromExperimentCommand(String[] restful) {
-		fileID = restful[restful.length];
+	public GetFileFromExperimentCommand(String restful) {
+		fileID = restful;
 
 	}
 
@@ -57,7 +57,7 @@ public class GetFileFromExperimentCommand extends Command {
 //		}
 
 		//Method not implemented, send appropriate response
-		return 	new ErrorResponse(StatusCode.NO_CONTENT);
+		return 	new MinimalResponse(StatusCode.NO_CONTENT);
 	}
 
 }

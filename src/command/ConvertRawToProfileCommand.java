@@ -1,6 +1,6 @@
 package command;
 
-import response.ErrorResponse;
+import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
 
@@ -30,7 +30,7 @@ public class ConvertRawToProfileCommand extends Command {
 		//skicka filen till processmetoden, vilka param,returvärde?
 		//return respons 201
 
-		return 	new ErrorResponse(StatusCode.NO_CONTENT);
+		return 	new MinimalResponse(StatusCode.NO_CONTENT);
 	}
 
 }

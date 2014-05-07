@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import process.classes.ProcessHandler;
 
-import response.ErrorResponse;
+import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
 
@@ -90,7 +90,7 @@ public class ProcessCommand extends Command {
 		//return respons 201
 
 		//Method not implemented, send appropriate response
-		return new ErrorResponse(StatusCode.NO_CONTENT);
+		return new MinimalResponse(StatusCode.NO_CONTENT);
 	}
 
 	public String getMetadata() {

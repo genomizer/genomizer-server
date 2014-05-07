@@ -1,6 +1,6 @@
 package command;
 
-import response.ErrorResponse;
+import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
 
@@ -10,7 +10,7 @@ import response.StatusCode;
  * @author tfy09jnn
  * @version 1.0
  */
-public class RemoveAnnotationFieldCommand extends Command {
+public class DeleteAnnotationFieldCommand extends Command {
 
 	/**
 	 * Used to validate the logout command.
@@ -30,7 +30,7 @@ public class RemoveAnnotationFieldCommand extends Command {
 	public Response execute() {
 
 		//Method not implemented, send appropriate response
-		return 	new ErrorResponse(StatusCode.NO_CONTENT);
+		return 	new MinimalResponse(StatusCode.NO_CONTENT);
 
 	}
 

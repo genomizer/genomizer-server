@@ -1,36 +1,26 @@
 package command;
 
-import response.ErrorResponse;
+import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-//TODO: Implement response.
-
 /**
  * Class used to retrieve an experiment.
  *
- * @author tfy09jnn
- * @version 1.0
+ * @author tfy09jnn, Hugo Källström
+ * @version 1.1
  */
-public class RetrieveExperimentCommand extends Command {
+public class GetExperimentCommand extends Command {
 
-	@Expose
-	private String name;
 
-	@SerializedName("created by")
-	@Expose
-	private String created_by;
-
-	@Expose
-	private Annotations annotations = new Annotations();
 
 	/**
 	 * Empty constructor.
 	 */
-	public RetrieveExperimentCommand() {
+	public GetExperimentCommand(String rest) {
 
 	}
 
@@ -46,7 +36,7 @@ public class RetrieveExperimentCommand extends Command {
 	public Response execute() {
 
 		//Method not implemented, send appropriate response
-		return 	new ErrorResponse(StatusCode.NO_CONTENT);
+		return 	new MinimalResponse(StatusCode.NO_CONTENT);
 	}
 
 }
