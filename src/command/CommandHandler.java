@@ -112,7 +112,7 @@ public class CommandHandler {
 
 		} else if (cmdt == CommandType.PROCESS_COMMAND) {
 
-			newCommand = cmdFactory.createProcessCommand(json, parsedRest, uuid);
+			newCommand = cmdFactory.createProcessCommand(json, uuid);
 
 		} else if (cmdt == CommandType.GET_ANNOTATION_INFORMATION_COMMAND) {
 
@@ -154,9 +154,9 @@ public class CommandHandler {
 
 		String[] split = restful.split("/");
 		String[] parsed = new String[split.length - 2];
-		
+
 		for(int i = 0; i < parsed.length; i++) {
-			parsed[i] = split[i+2];			
+			parsed[i] = split[i+2];
 		}
 		return parsed[parsed.length - 1];
 
