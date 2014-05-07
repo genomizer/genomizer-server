@@ -69,7 +69,7 @@ private final String FILEPATH = "resources/";
 		Scanner s = new Scanner(process.getInputStream());
 		StringBuilder text = new StringBuilder();
 		File dirFile = new File(FILEPATH+dir);
-		
+
 		if(!dirFile.exists()) {
 			dirFile.mkdirs();
 		}
@@ -87,6 +87,23 @@ private final String FILEPATH = "resources/";
 
 //		System.out.printf( "Process exited with result %d and output %s%n", result, text );
 		return text.toString();
+	}
+	protected File cleanUpInitiator(String dirName) {
+
+		return new File(dirName.substring(0, dirName.length()-1));
+
+	}
+	protected static boolean cleanUp(File dir) {
+		if (dir.isDirectory()) {
+			String[] children = dir.list();
+			for (int i = 0; i < children.length; i++) {
+				boolean success = cleanUp(new File(dir, children[i]));
+				if (!success) {
+					return false;
+				}
+			}
+		}
+		return dir.delete();
 	}
 
 }
