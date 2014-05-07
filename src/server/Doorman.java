@@ -41,6 +41,7 @@ public class Doorman {
 		httpServer.setExecutor(new Executor() {
 			@Override
 			public void execute(Runnable command) {
+				System.out.println("New Executor.");
 				new Thread(command).start();
 			}
 		});

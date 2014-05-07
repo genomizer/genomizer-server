@@ -27,6 +27,7 @@ public class ServerMain {
 		try {
 			Doorman doorman = new Doorman(commandHandler, port);
 			doorman.start();
+			System.out.println("Doorman started.");
 		} catch (IOException e) {
 			System.err.println("Error when starting server");
 			//log exception

@@ -23,6 +23,7 @@ public class ClientDummy {
 
 	public static void main(String args[]) throws Exception {
 		sendLogin();
+		
 	}
 
 	public static Token token = null;
