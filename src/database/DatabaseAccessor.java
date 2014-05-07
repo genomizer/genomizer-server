@@ -1032,6 +1032,18 @@ public class DatabaseAccessor {
 		}
     }
 
+    /**
+     * Changes the value of an annotation corresponding to it's label.
+     * Parameters: label of annotation, the old value and the new value to
+     * change to. Throws an SQLException if the new value already exists in the
+     * choices table (changing all males to female, and female is already in the
+     * table)
+     *
+     * @param String label
+     * @param String oldValue
+     * @param String newValue
+     * @throws SQLException
+     */
 	public void changeAnnotationValue(String label, String oldValue,
 			String newValue) throws SQLException {
 
