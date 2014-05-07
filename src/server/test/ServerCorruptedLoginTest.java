@@ -2,22 +2,20 @@ package server.test;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-
-import java.net.HttpURLConnection;
-
-import java.net.URL;
 import java.io.DataOutputStream;
 
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import com.google.gson.*;
 
 /**
- * Class used to test the server login.
+ * Class used to test server with corrupted login.
  *
  * @author tfy09jnn
  * @version 1.0
  */
-public class ServerLoginTest {
+public class ServerCorruptedLoginTest {
 
 	private static Token token = null;
 
@@ -31,31 +29,30 @@ public class ServerLoginTest {
 
 		int responseCode = 0;
 
-		//Normal login attempt.
-		responseCode = sendLogin();
+		//Corrupted login attempt.
+		responseCode = sendCorruptedLogin();
 
 		if(responseCode == 200 && token != null) {
 
-			System.out.println("[SUCCESS] Legit login test success. Did receive code: "
-			+ responseCode + " and wanted code: 200.");
+			System.out.println("[FAILED] Corrupted login test success. Did receive code:"
+			+ responseCode + " and wanted error code.");
 
 		} else {
 
-			System.out.println("[FAILED] Legit login test failed. Could not log in.");
-			System.out.println("[FAILED] Legit login test failed. Did receive code:"
-			+ responseCode + " and wanted error code.");
+			System.out.println("[SUCCESS] Corrupted login test failed. Did receive code: "
+			+ responseCode + " and wanted other code then 200.");
 
 		}
 
 	}
 
 	/**
-	 * Class to handle the login.
-	 *
+	 * Class that sends a corrupted login where
+	 * the JSON password is removed.
 	 *
 	 * @throws Exception
 	 */
-	private static int sendLogin() throws Exception {
+	private static int sendCorruptedLogin() throws Exception {
 
 		String url = "http://scratchy.cs.umu.se:7000/login";
 
@@ -70,7 +67,6 @@ public class ServerLoginTest {
 
 		JsonObject jj=new JsonObject();
 		jj.addProperty("username", "jonas");
-		jj.addProperty("password", "losenord");
 
 		String json_output = jj.toString();
 
@@ -79,7 +75,6 @@ public class ServerLoginTest {
 		wr.write(json_output.getBytes());
 		wr.flush();
 		wr.close();
-
 
 		int responseCode = con.getResponseCode();
 
