@@ -340,7 +340,7 @@ public class UtkastTest {
 		//con.setRequestProperty("Authorization", UUID.randomUUID().toString());
 		JsonObject ja=new JsonObject();
 //		JsonObject name=new JsonObject();
-		ja.addProperty("name", "expID");
+		ja.addProperty("name", "Aaaaffffffff");
 //		ja.add(name);
 
 
@@ -356,11 +356,11 @@ public class UtkastTest {
 		ann1.addProperty("value", "123");
 		annotations.add(ann1);
 
-		JsonObject ann2=new JsonObject();
+		//JsonObject ann2=new JsonObject();
 		//ann2.addProperty("id", 2);
-		ann2.addProperty("name", "type");
-		ann2.addProperty("value", "raw");
-		annotations.add(ann2);
+		//ann2.addProperty("name", "type");
+		//ann2.addProperty("value", "raw");
+		//annotations.add(ann2);
 
 		JsonObject ann3=new JsonObject();
 		//ann3.addProperty("id", 3);
