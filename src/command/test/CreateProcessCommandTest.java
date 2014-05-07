@@ -25,17 +25,19 @@ public class CreateProcessCommandTest {
 
 		String json = "{" +
 							"\"filename\": \"fileNAME\"," +
-							"\"filepath\": \"path\to\local\file\"," +
-							"\"expid": "66","processtype": "rawtoprofile","parameters": ["param1","param2","param3","param4"
-				                ],
-				 "metadata": "astringofmetadata",
-				 "genomeRelease": "hg38",
-				 "author": "yuri"
-				}";
-
-		String restful = "/process/rawtoprofile/66";
-
-		String[] restfulArray = restful.split("/");
+							"\"filepath\": \"path\\to\\local\\file\"," +
+							"\"expid\": \"66\"," +
+							"\"processtype\": \"rawtoprofile\"," +
+							"\"parameters\": [" +
+												"\"param1\"," +
+												"\"param2\"," +
+												"\"param3\"," +
+												"\"param4\"" +
+											"]," +
+							"\"metadata\": \"astringofmetadata\"," +
+							"\"genomeRelease\": \"hg38\", " +
+							"\"author\": \"yuri\"}";
+		System.out.println(json);
 
 		processCommand = (ProcessCommand)cmdf.createProcessCommand(json, uuid);
 	}
