@@ -81,7 +81,7 @@ public class ProcessCommand extends Command {
 
 				try {
 
-					processHandler.executeProcess("rawtoprofile", parameters, filepath, outfilepath);
+					processHandler.executeProcess("rawToProfile", parameters, filepath, outfilepath);
 
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
