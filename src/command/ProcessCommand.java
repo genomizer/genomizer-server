@@ -3,6 +3,8 @@ package command;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+
 import process.classes.ProcessHandler;
 import response.ProcessResponse;
 import response.Response;
@@ -82,13 +84,18 @@ public class ProcessCommand extends Command {
 				System.out.println("fileid: " + fileid);
 				System.out.println("genomeRelease: " + genomeRelease);
 
+
+				ArrayList<String> filepaths = dbac.process(fileid, "profile", filename, metadata, username, genomeRelease, expid);
+
+
+
 				//Receive the path for the profile data from the database accessor.
 			//	String outfilepath = dbac.addFile("profile", filename, metadata, "yuri", username, false, expid, genomeRelease);
 
-				/*
+
 				try {
 
-					processHandler.executeProcess("rawToProfile", parameters, fileid, outfilepath);
+					processHandler.executeProcess("rawToProfile", parameters, filepaths.get(0), filepaths.get(1));
 
 				} catch (InterruptedException e) {
 					// TODO Fix this
@@ -101,7 +108,7 @@ public class ProcessCommand extends Command {
 					e.printStackTrace();
 					return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE);
 				}
-				 */
+
 				break;
 			default:
 				System.err.println("Unknown process type in processcommand execute");
