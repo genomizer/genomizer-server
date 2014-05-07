@@ -74,13 +74,10 @@ public class GetExperimentCommand extends Command {
 
 	}
 
-	public ArrayList<String> getAnnotations(Experiment exp) {
+	public HashMap<String, String> getAnnotations(Experiment exp) {
 		ArrayList<String> annotations = new ArrayList<String>();
 		HashMap<String, String> annotationMap = (HashMap<String, String>) exp.getAnnotations();
-		for (Entry<String, String> a: annotationMap.entrySet()) {
-			annotations.add(a.getValue());
-		}
-		return annotations;
+		return annotationMap;
 
 	}
 
