@@ -43,8 +43,12 @@ public class Doorman {
 		httpServer.setExecutor(new Executor() {
 			@Override
 			public void execute(Runnable command) {
-				System.out.println("New Executor.");
+
+				try {
 				new Thread(command).start();
+				} catch(Exception e) {
+					e.printStackTrace();
+				}
 			}
 		});
 	}
@@ -57,6 +61,8 @@ public class Doorman {
 		return new HttpHandler() {
 			@Override
 			public void handle(HttpExchange exchange) throws IOException {
+
+				System.out.println("\n-----------------\nNEW EXCHANGE: " + exchange.getHttpContext().getPath());
 
 				switch(exchange.getRequestMethod()) {
 				case "GET":
@@ -152,7 +158,7 @@ public class Doorman {
 		};
 	}
 
-	private void exchange(HttpExchange exchange, CommandType type) throws IOException {
+	private void exchange(HttpExchange exchange, CommandType type) {
 		InputStream bodyStream = exchange.getRequestBody();
 		Scanner scanner = new Scanner(bodyStream);
 		String body = "";
@@ -167,7 +173,12 @@ public class Doorman {
 			} catch(NullPointerException e) {
 				Response errorResponse = new MinimalResponse(StatusCode.UNAUTHORIZED);
 				e.printStackTrace();
-				respond(exchange, errorResponse);
+				try {
+					respond(exchange, errorResponse);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				scanner.close();
 				return;
 			}
@@ -180,12 +191,18 @@ public class Doorman {
 		}
 		scanner.close();
 
+		Response response = null;
+
+		try {
 		username = Authenticate.getUsername(uuid);
+		} catch(Exception e ) {
+			e.printStackTrace();
+		}
 
 		System.out.println("BODY: " + body);
 		System.out.println("BEFORE PROCESS COMMAND...");
-		Response response = null;
-		try {
+
+		try{
 			response = commandHandler.processNewCommand(body, exchange.getRequestURI().toString(), uuid, type);
 		} catch(Exception e ) {
 			e.printStackTrace();
@@ -195,7 +212,12 @@ public class Doorman {
 		//TODO Should there be some error checking?
 
 
-		respond(exchange, response);
+		try {
+			respond(exchange, response);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 
 	}

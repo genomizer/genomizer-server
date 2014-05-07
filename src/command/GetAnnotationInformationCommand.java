@@ -29,12 +29,16 @@ public class GetAnnotationInformationCommand extends Command {
 
 		DatabaseAccessor accessor = null;
 		Map<String, Integer> a = null;
+		System.out.println("Database accessor creating...");
 		try {
-			accessor = new DatabaseAccessor("pvt", "pvt", "localhost", "genomizer");
+			accessor = new DatabaseAccessor("pvt", "pvt", "localhost:6000", "genomizer");
+			System.out.println("Database accessor created.");
 			a = accessor.getAnnotations();
+			System.out.println("Got annotations.");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.exit(1);
 		}
 		Iterator<String> keys = a.keySet().iterator();
 		ArrayList<String> annotation_names = new ArrayList<String>();
