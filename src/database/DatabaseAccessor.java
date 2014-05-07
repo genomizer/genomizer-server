@@ -771,6 +771,46 @@ public class DatabaseAccessor {
         return res;
     }
 
+
+	public ArrayList<String> process(String fileID, String fileType, String fileName,
+			String metaData, String uploader, String grVersion, String expID)
+					throws SQLException {
+
+		ArrayList<String> pathList = new ArrayList<String>();
+
+		String ToPath;
+
+        String SelectQuery = "SELECT Path, Author, IsPrivate FROM File WHERE (FileID = ?)";
+        PreparedStatement ps = conn.prepareStatement(SelectQuery);
+
+        int fID = Integer.parseInt(fileID);
+
+        ps.setInt(1, fID);
+
+        ResultSet rs = ps.executeQuery();
+
+        String fromPath = null;
+        boolean isPrivate = false;
+        String author = null;
+
+        if (rs.next()) {
+            fromPath = rs.getString("Path");
+            author = rs.getString("Author");
+            isPrivate = rs.getBoolean("IsPrivate");
+        }else {
+        	throw new SQLException("Not a valid fileID");
+        }
+
+        ToPath = addFile(fileType, fileName, metaData, author, uploader, isPrivate, expID, grVersion);
+        ps.close();
+
+        pathList.add(fromPath);
+        pathList.add(ToPath);
+
+        return pathList;
+    }
+
+
     /**
      * Gets an experiment from the database.
      *
