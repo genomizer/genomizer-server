@@ -12,6 +12,8 @@ import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
 
+import authentication.Authenticate;
+
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
@@ -155,6 +157,7 @@ public class Doorman {
 		Scanner scanner = new Scanner(bodyStream);
 		String body = "";
 		String uuid = null;
+		String username = null;
 
 		if(type != CommandType.LOGIN_COMMAND) {
 			try {
@@ -173,7 +176,11 @@ public class Doorman {
 		}
 		scanner.close();
 
-		Response response = commandHandler.processNewCommand(body, exchange.getRequestURI().toString(), uuid, type);
+		//TODO Should there be some error checking?
+		username = Authenticate.getUsername(uuid);
+
+
+		Response response = commandHandler.processNewCommand(body, exchange.getRequestURI().toString(), username, type);
 
 		respond(exchange, response);
 
