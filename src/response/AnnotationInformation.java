@@ -47,11 +47,24 @@ public class AnnotationInformation {
 	}
 
 	public boolean isForced() {
+
 		return forced;
 	}
 
 	public void setId(int newid) {
 		id = newid;
+	}
+
+	public String toString() {
+		String returnstring = "ID: " + id + "\nNAME: " + name + "FORCED: " + forced + "\nVALUES:\n" ;
+
+		for(int i = 0; i < values.size(); i++) {
+			returnstring = returnstring + "     " + values.get(i) + "\n";
+		}
+
+
+		return returnstring;
+
 	}
 
 
