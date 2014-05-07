@@ -233,6 +233,7 @@ public class Doorman {
 			exchange.sendResponseHeaders(response.getCode(), body.getBytes().length);
 
 			OutputStream os = exchange.getResponseBody();
+			System.out.println("BODY_DOORMAN PRINT: " + body);
 			os.write(body.getBytes());
 			os.flush();
 			os.close();

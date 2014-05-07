@@ -7,15 +7,19 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 public class UtkastTest {
 
 	public static Token token = null;
 
-	public UtkastTest() {
-
+	public static void main(String args[]) throws Exception {
+		sendProcessing();
 	}
+
+
 
 	private static void sendUpdateAnnotationPriveleges() throws Exception {
 
@@ -89,10 +93,7 @@ public class UtkastTest {
 
 		String response = responseBuffer.toString();
 
-		Gson gson = new Gson();
-		token = gson.fromJson(response, Token.class);
-
-		System.out.println("TOKEN: " + token.getToken());
+		System.out.println("RESPONSE: " + response);
 
 
 	}
@@ -141,10 +142,69 @@ public class UtkastTest {
 
 		String response = responseBuffer.toString();
 
+		System.out.println("RESPONSE: " + response);
+
+
+	}
+
+	private static void sendProcessing() throws Exception {
+/*
+		String url = "http://scratchy.cs.umu.se:7000/login";
+
+		URL obj = new URL(url);
+		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+		// optional default is GET
+		con.setRequestMethod("PUT");
+
+		//add request header
+		con.setRequestProperty("Authorization", "UUID");
+
+*/
+
+		JsonObject jj=new JsonObject();
+
+		jj.addProperty("filename", "fileNAME");
+		jj.addProperty("filepath", "path/to/local/file");
+		jj.addProperty("expid", "66");
+		jj.addProperty("processtype", "rawtoprofile");
+		jj.addProperty("metadata", "adaf");
+		String json_output2="\"parameters\":\"[\"param1\",\"param2\",\"param3\",\"param4\"]";
+
+
+		System.out.println(String.valueOf(jj.toString().getBytes().length));
+
+
+		String json_output = jj.toString()+json_output2;
+		System.out.println(json_output);
+	/*
+		con.setDoOutput(true);
+		DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+		wr.write(json_output.getBytes());
+		wr.flush();
+		wr.close();
+
+
+		int responseCode = con.getResponseCode();
+		System.out.println("\nSending 'GET' request to URL : " + url);
+		System.out.println("Response Code : " + responseCode);
+
+		BufferedReader in = new BufferedReader(
+		        new InputStreamReader(con.getInputStream()));
+		String inputLine;
+		StringBuffer responseBuffer = new StringBuffer();
+
+		while ((inputLine = in.readLine()) != null) {
+			responseBuffer.append(inputLine);
+		}
+		in.close();
+
+		String response = responseBuffer.toString();
+
 		Gson gson = new Gson();
 		token = gson.fromJson(response, Token.class);
 
-		System.out.println("TOKEN: " + token.getToken());
+		System.out.println("TOKEN: " + token.getToken());*/
 
 
 	}

@@ -50,10 +50,10 @@ public class CommandFactory {
 	 * @param RESTful-header.
 	 * @return a logout command.
 	 */
-	public Command createLogoutCommand() {
+	public Command createLogoutCommand(String username) {
 
 		//Create command with json.
-		final Command logoutCmd = new LogoutCommand();
+		final Command logoutCmd = new LogoutCommand(username);
 
 		return logoutCmd;
 
@@ -228,7 +228,9 @@ public class CommandFactory {
 	 */
 	public Command createAddAnnotationFieldCommand(String json, String restful) {
 
-		return new AddAnnotationFieldCommand();
+		final Command AddAnnotationFieldCmd = gson.fromJson(json, AddAnnotationFieldCommand.class);
+
+		return AddAnnotationFieldCmd;
 
 	}
 

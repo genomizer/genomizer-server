@@ -8,6 +8,7 @@ public class FileInformation {
 
     public final Integer id;
     public final String path;
+    public final String url;
     public final String type;
     public final String filename;
     public final Date date;
@@ -21,6 +22,7 @@ public class FileInformation {
     public FileInformation(FileTuple src) {
     	id = src.id;
     	path = src.path;
+    	url = src.DownloadURL;
     	type = src.type;
     	filename = src.filename;
     	date = src.date;

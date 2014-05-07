@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import response.AddAnnotationFieldResponse;
 import response.MinimalResponse;
 import response.Response;
+import server.DatabaseSettings;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -88,7 +89,8 @@ public class AddAnnotationFieldCommand extends Command {
 		try {
 
 			//Get database access.
-			DatabaseAccessor dbAccess = new DatabaseAccessor("c5dv151_vt14", "shielohh", "postgres", "c5dv151_vt14");
+			//DatabaseAccessor dbAccess = new DatabaseAccessor("c5dv151_vt14", "shielohh", "postgres", "c5dv151_vt14");
+			DatabaseAccessor dbAccess = new DatabaseAccessor(DatabaseSettings.mc333_username, DatabaseSettings.mc333_password, DatabaseSettings.mc333_host, DatabaseSettings.mc333_database);
 
 			//Add types to arraylist to pass them to the database. //TODO: Make pretty.
 			ArrayList<String> types = new ArrayList<String>();

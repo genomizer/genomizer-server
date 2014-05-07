@@ -14,6 +14,7 @@ import database.DatabaseAccessor;
 import response.AnnotationInformation;
 import response.GetAnnotationInformationResponse;
 import response.Response;
+import server.DatabaseSettings;
 
 public class GetAnnotationInformationCommand extends Command {
 
@@ -25,19 +26,13 @@ public class GetAnnotationInformationCommand extends Command {
 	@Override
 	public Response execute() {
 
-		String username = "pvt";
-	    String password = "pvt";
-	    String host = "localhost:6000";
-	    String database = "genomizer";
-
 		ArrayList<AnnotationInformation> annotations = new ArrayList<AnnotationInformation>();
 
 		DatabaseAccessor accessor = null;
 		Map<String, Integer> a = null;
-		System.out.println("Database accessor creating...");
-		try {
 
-			accessor = new DatabaseAccessor(username, password, host, database);
+		try {
+			accessor = new DatabaseAccessor(DatabaseSettings.mc333_username, DatabaseSettings.mc333_password, DatabaseSettings.mc333_host, DatabaseSettings.mc333_database);
 			a = accessor.getAnnotations();
 			System.out.println("Got annotations.");
 		} catch (SQLException e) {
@@ -68,6 +63,12 @@ public class GetAnnotationInformationCommand extends Command {
 		for(int i = 0; i < annotations.size(); i++) {
 			annotations.get(i).setId(i);
 		}
+
+		for(int i = 0; i < annotations.size(); i++) {
+			System.out.println("\n" + annotations.get(i));
+
+		}
+
 		return new GetAnnotationInformationResponse(200, annotations);
 	}
 
