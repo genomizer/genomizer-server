@@ -32,7 +32,7 @@ public class AddAnnotationFieldCommand extends Command {
 	private String name;
 
 	@Expose
-	private ArrayList<String> type = new Arraylist<String>();
+	private ArrayList<String> type = new ArrayList<String>();
 
 	//private String[] type;
 	@SerializedName("default")
@@ -65,7 +65,7 @@ public class AddAnnotationFieldCommand extends Command {
 		}
 
 		//Check if name is to long, no types exists.
-		if(name.length() > 10 || type.length < 1 ) {
+		if(name.length() > 10 || type.size() < 1 ) {
 
 			return false;
 
