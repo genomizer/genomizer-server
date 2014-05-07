@@ -32,13 +32,12 @@ public class GetAnnotationInformationCommand extends Command {
 		Map<String, Integer> a = null;
 
 		try {
-			accessor = new DatabaseAccessor(DatabaseSettings.mc333_username, DatabaseSettings.mc333_password, DatabaseSettings.mc333_host, DatabaseSettings.mc333_database);
+			accessor = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
 			a = accessor.getAnnotations();
 			System.out.println("Got annotations.");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			System.exit(1);
 		}
 		Iterator<String> keys = a.keySet().iterator();
 		ArrayList<String> annotation_names = new ArrayList<String>();
