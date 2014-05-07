@@ -20,7 +20,7 @@ public class CreateProcessCommandTest {
 
 	String username = "splutt";
 	String filename = "filename1234";
-	String filepath = "path/to/local/file";
+	String fileid = "1";
 	String expid = "Exp1";
 	String processtype = "rawtoprofile";
 	String parameters = "\"param1\"," +
@@ -40,7 +40,7 @@ public class CreateProcessCommandTest {
 
 		String json = "{" +
 							"\"filename\": \"" + filename + "\"," +
-							"\"filepath\": \"" + filepath + "\"," +
+							"\"fileid\": \"" + fileid + "\"," +
 							"\"expid\": \"" + expid + "\"," +
 							"\"processtype\": \"" + processtype + "\"," +
 							"\"parameters\": [" + parameters + "]," +
