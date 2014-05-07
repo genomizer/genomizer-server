@@ -44,10 +44,10 @@ public class LogoutCommand extends Command {
 		String id = Authenticate.getID(username);
 		if(Authenticate.idExists(id)){
 			Authenticate.deleteUser(id);
-			System.out.println("USER ID DELETED.");
+			System.out.println("USER ID DELETED: " + id);
 			return new LogoutResponse(StatusCode.OK);
 		} else {
-			System.out.println("USER ID NOT FOUND.");
+			System.out.println("USER ID NOT FOUND: " + id);
 			return 	new MinimalResponse(StatusCode.FILE_NOT_FOUND);
 		}
 
