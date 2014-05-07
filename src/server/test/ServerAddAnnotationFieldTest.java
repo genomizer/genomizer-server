@@ -78,8 +78,6 @@ public class ServerAddAnnotationFieldTest {
 		// optional default is GET
 		con.setRequestMethod("POST");
 
-		//TODO: add token.
-
 		//add request header
 		con.setRequestProperty("Content-Type", "application/json");
 		con.setRequestProperty("Authorization", token.getToken());
@@ -149,7 +147,6 @@ public class ServerAddAnnotationFieldTest {
 		wr.write(json_output.getBytes());
 		wr.flush();
 		wr.close();
-
 
 		int responseCode = con.getResponseCode();
 
