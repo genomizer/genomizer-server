@@ -20,15 +20,15 @@ public class CreateProcessCommandTest {
 
 	@Before
 	public void setup(){
+
 		cmdf = new CommandFactory();
 
-		uuid = Authenticate.createUserID("splutt");
-		Authenticate.addUser("splutt", uuid);
+
 
 		String json = "{" +
-							"\"filename\": \"fileNAME\"," +
+							"\"filename\": \"fileNAME66\"," +
 							"\"filepath\": \"path/to/local/file\"," +
-							"\"expid\": \"66\"," +
+							"\"expid\": \"Exp1\"," +
 							"\"processtype\": \"rawtoprofile\"," +
 							"\"parameters\": [" +
 												"\"param1\"," +
@@ -40,7 +40,7 @@ public class CreateProcessCommandTest {
 							"\"genomeRelease\": \"hg38\", " +
 							"\"author\": \"yuri\"}";
 
-		processCommand = (ProcessCommand)cmdf.createProcessCommand(json, uuid);
+		processCommand = (ProcessCommand)cmdf.createProcessCommand(json, "splutt");
 	}
 
 	@Test
@@ -77,12 +77,12 @@ public class CreateProcessCommandTest {
 
 	@Test
 	public void shouldSetUserID(){
-		assertEquals(uuid, processCommand.getUsername());
+		assertEquals("splutt", processCommand.getUsername());
 	}
 
 	@Test
 	public void shouldSetFilename(){
-		assertEquals("fileNAME", processCommand.getFilename());
+		assertEquals("fileNAME66", processCommand.getFilename());
 	}
 
 	@Test
@@ -92,7 +92,7 @@ public class CreateProcessCommandTest {
 
 	@Test
 	public void shouldSetExpID(){
-		assertEquals("66",processCommand.getExpID());
+		assertEquals("Exp1",processCommand.getExpID());
 	}
 
 	@Test
