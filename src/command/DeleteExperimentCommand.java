@@ -14,10 +14,10 @@ import response.StatusCode;
  * Class used to represent a remove experiment command.
  *
  * @author tfy09jnn, Hugo Källström
- * @version 1.0
+ * @version 1.1
  */
 public class DeleteExperimentCommand extends Command {
-	
+
 	public DeleteExperimentCommand(String restful) {
 		this.setHeader(restful);
 	}
@@ -27,8 +27,8 @@ public class DeleteExperimentCommand extends Command {
 	public boolean validate() {
 
 		if(this.getHeader() == null) {
-			return false;			
-		} else { 
+			return false;
+		} else {
 			return true;
 		}
 
@@ -49,7 +49,7 @@ public class DeleteExperimentCommand extends Command {
 			db.deleteExperiment(this.header);
 		} catch (SQLException e) {
 			return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
-		} 
+		}
 
 		return new MinimalResponse(200);
 	}
