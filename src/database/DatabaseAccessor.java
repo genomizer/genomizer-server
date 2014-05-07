@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-
 /**
  * PREREQUISITES: The construction parameters must reference a
  * postgresql database with the genomizer database tables preloaded.
@@ -259,17 +258,25 @@ public class DatabaseAccessor {
      *
      * @param label
      *            the name of the annotation.
+     * @param required
+     *            if the annotation should be forced or not
+     * @param defaultValue
+     *            the default value this field should take or null if
+     *            a default value is not required
      * @return the number of tuples updated in the database.
      * @throws SQLException
      *             if the query does not succeed
      */
-    public int addFreeTextAnnotation(String label)
+    public int addFreeTextAnnotation(String label,
+            String defaultValue, boolean required)
             throws SQLException {
         String query = "INSERT INTO Annotation "
-                + "(Label, DataType) VALUES (?, 'FreeText')";
+                + "VALUES (?, 'FreeText', ?, ?)";
         PreparedStatement addAnnotation = conn
                 .prepareStatement(query);
         addAnnotation.setString(1, label);
+        addAnnotation.setString(2, defaultValue);
+        addAnnotation.setBoolean(3, required);
         int res = addAnnotation.executeUpdate();
         addAnnotation.close();
         return res;
@@ -292,9 +299,11 @@ public class DatabaseAccessor {
         ResultSet rs = getAnnotations.executeQuery(query);
         while (rs.next()) {
             if (rs.getString("DataType").equalsIgnoreCase("FreeText")) {
-                annotations.put(rs.getString("Label"), FREETEXT);
+                annotations.put(rs.getString("Label"),
+                        Annotation.FREETEXT);
             } else {
-                annotations.put(rs.getString("Label"), DROPDOWN);
+                annotations.put(rs.getString("Label"),
+                        Annotation.DROPDOWN);
             }
         }
         getAnnotations.close();
@@ -354,27 +363,37 @@ public class DatabaseAccessor {
      *             if the choices are invalid
      */
     public int addDropDownAnnotation(String label,
-            List<String> choices) throws SQLException,
-            IOException {
+            List<String> choices, int defaultValueIndex,
+            boolean required) throws SQLException, IOException {
 
         if (choices.isEmpty()) {
             throw new IOException("Must specify at least one choice");
         }
 
+        if (defaultValueIndex < 0
+                || defaultValueIndex >= choices.size()) {
+            throw new IOException("Invalid default value index");
+        }
+
         int tuplesInserted = 0;
 
         String annotationQuery = "INSERT INTO Annotation "
-                + "(Label, DataType) VALUES (?, 'DropDown')";
+                + "VALUES (?, 'DropDown', ?, ?)";
+
         String choicesQuery = "INSERT INTO Annotation_Choices "
                 + "(Label, Value) VALUES (?, ?)";
-        PreparedStatement addAnnotation = null;
-        PreparedStatement addChoices = null;
 
-        addAnnotation = conn.prepareStatement(annotationQuery);
-        addChoices = conn.prepareStatement(choicesQuery);
+        PreparedStatement addAnnotation = conn
+                .prepareStatement(annotationQuery);
+
         addAnnotation.setString(1, label);
+        addAnnotation.setString(2, choices.get(defaultValueIndex));
+        addAnnotation.setBoolean(3, required);
         tuplesInserted += addAnnotation.executeUpdate();
+        addAnnotation.close();
 
+        PreparedStatement addChoices = conn
+                .prepareStatement(choicesQuery);
         addChoices.setString(1, label);
         for (String choice : choices) {
             addChoices.setString(2, choice);
@@ -563,7 +582,7 @@ public class DatabaseAccessor {
      */
     private boolean isValidAnnotationValue(String label, String value)
             throws SQLException {
-        return getAnnotationType(label) == FREETEXT
+        return getAnnotationType(label) == Annotation.FREETEXT
                 || getChoices(label).contains(value);
     }
 
@@ -658,7 +677,7 @@ public class DatabaseAccessor {
 
         String path = FilePathGenerator.GenerateFilePath(expID,
                 fileType, fileName);
-        String URL = "http://scratcy.cs.umu.se:8090/upload.php?path=";
+        String URL = ServerDependentValues.UploadURL;
 
         String query = "INSERT INTO File "
                 + "(Path, FileType, FileName, Date, MetaData, Author, Uploader, IsPrivate, ExpID, GRVersion) VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?, ?, ?, ?, ?)";
@@ -677,9 +696,8 @@ public class DatabaseAccessor {
         tagExp.executeUpdate();
 
         tagExp.close();
-        return URL+path;
+        return URL + path;
     }
-
 
     /**
      * Deletes a file from the database.
@@ -906,5 +924,24 @@ public class DatabaseAccessor {
             query.setString(i + 1, params.get(i));
         }
         return query;
+    }
+
+    /**
+     * Changes the annotation Label value.
+     * @param String oldLabel
+     * @param string newLabel
+     * @return boolean true if changed succeeded,
+     * 				   false if it failed.
+     */
+    public boolean changeAnnotationLabel(String oldLabel, String newLabel){
+
+    	String changeLblQuery = "UPDATE Annotation SET Label = ? WHERE (Label =?)";
+
+    	PreparedStatement tagExp = conn.prepareStatement(changeLblQuery);
+
+    	tagExp.setString(1, newLabel);
+    	tagExp.setString(2, oldLabel);
+
+    	return true;
     }
 }
