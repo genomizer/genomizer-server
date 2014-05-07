@@ -228,7 +228,9 @@ public class CommandFactory {
 	 */
 	public Command createAddAnnotationFieldCommand(String json, String restful) {
 
-		return new AddAnnotationFieldCommand();
+		final Command AddAnnotationFieldCmd = gson.fromJson(json, AddAnnotationFieldCommand.class);
+
+		return AddAnnotationFieldCmd;
 
 	}
 
