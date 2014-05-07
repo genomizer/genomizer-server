@@ -31,6 +31,7 @@ public class Doorman {
 		httpServer = HttpServer.create(new InetSocketAddress(port),0);
 		httpServer.createContext("/login", createHandler());
 		httpServer.createContext("/experiment", createHandler());
+		httpServer.createContext("/annotation", createHandler());
 		httpServer.createContext("/file", createHandler());
 		httpServer.createContext("/search", createHandler());
 		httpServer.createContext("/user", createHandler());
@@ -40,6 +41,7 @@ public class Doorman {
 		httpServer.setExecutor(new Executor() {
 			@Override
 			public void execute(Runnable command) {
+				System.out.println("New Executor.");
 				new Thread(command).start();
 			}
 		});
@@ -73,6 +75,7 @@ public class Doorman {
 						exchange(exchange, CommandType.GET_ANNOTATION_PRIVILEGES_COMMAND);
 						break;
 					}
+					break;
 
 
 				case "PUT":
@@ -96,6 +99,7 @@ public class Doorman {
 						exchange(exchange, CommandType.UPDATE_ANNOTATION_PRIVILEGES_COMMAND);
 						break;
 					}
+					break;
 
 
 				case "POST":
@@ -117,6 +121,7 @@ public class Doorman {
 						break;
 
 					}
+					break;
 
 
 				case "DELETE":
@@ -139,6 +144,7 @@ public class Doorman {
 
 
 				}
+					break;
 				}
 			}
 		};
@@ -157,6 +163,7 @@ public class Doorman {
 				Response errorResponse = new MinimalResponse(StatusCode.UNAUTHORIZED);
 				e.printStackTrace();
 				respond(exchange, errorResponse);
+				scanner.close();
 				return;
 			}
 		}

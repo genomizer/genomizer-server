@@ -112,7 +112,7 @@ public class CommandHandler {
 
 		} else if (cmdt == CommandType.PROCESS_COMMAND) {
 
-			newCommand = cmdFactory.createProcessCommand(json, parsedRest, uuid);
+			newCommand = cmdFactory.createProcessCommand(json, uuid);
 
 		} else if (cmdt == CommandType.GET_ANNOTATION_INFORMATION_COMMAND) {
 

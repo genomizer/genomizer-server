@@ -18,12 +18,10 @@ import database.*;
 
 public class ProcessCommand extends Command {
 
-
-	private String fileID;
-	private String processType;
-
 	private String userID;
 
+	@Expose
+	private String processtype;
 	@Expose
 	private String metadata;
 	@Expose
@@ -58,7 +56,7 @@ public class ProcessCommand extends Command {
 		//Har ett filID,,processtype,param till profile->region parsa i commandFactory
 		try {
 			dbac = new  DatabaseAccessor(username, password, host, database);
-			switch(processType){
+			switch(processtype){
 				case "rawtoprofile":
 					String uploader=Authenticate.getUsername(userID);
 					System.out.println("Uploader of file: " + uploader);
@@ -108,23 +106,13 @@ public class ProcessCommand extends Command {
 		return genomeRelease;
 	}
 
-	public void setFileID(String fileID) {
-		this.fileID = fileID;
-
-	}
-
-	public String getFileID() {
-		// TODO Auto-generated method stub
-		return fileID;
-	}
-
 	public String getProcessType() {
-		return processType;
+		return processtype;
 	}
 
 	public void setProcessType(String processType) {
 		// TODO Auto-generated method stub
-		this.processType = processType;
+		this.processtype = processType;
 
 	}
 

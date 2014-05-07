@@ -23,11 +23,14 @@ public class ClientDummy {
 
 	public static void main(String args[]) throws Exception {
 		sendLogin();
+		
 	}
+
+	public static Token token = null;
 
 	private static void sendLogin() throws Exception {
 
-		String url = "http://localhost:8080/login";
+		String url = "http://scratchy.cs.umu.se:7000/login";
 
 		URL obj = new URL(url);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -37,7 +40,7 @@ public class ClientDummy {
 
 		//add request header
 		con.setRequestProperty("Content-Type", "application/json");
-		con.setRequestProperty("Authorization", UUID.randomUUID().toString());
+		//con.setRequestProperty("Authorization", UUID.randomUUID().toString());
 
 		JsonObject jj=new JsonObject();
 		jj.addProperty("username", "jonas");
@@ -64,15 +67,20 @@ public class ClientDummy {
 		BufferedReader in = new BufferedReader(
 		        new InputStreamReader(con.getInputStream()));
 		String inputLine;
-		StringBuffer response = new StringBuffer();
+		StringBuffer responseBuffer = new StringBuffer();
 
 		while ((inputLine = in.readLine()) != null) {
-			response.append(inputLine);
+			responseBuffer.append(inputLine);
 		}
 		in.close();
 
-		//print result
-		System.out.println(response.toString());
+		String response = responseBuffer.toString();
+
+		Gson gson = new Gson();
+		token = gson.fromJson(response, Token.class);
+
+		System.out.println("TOKEN: " + token.getToken());
+
 
 	}
 }

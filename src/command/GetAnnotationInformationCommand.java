@@ -30,7 +30,7 @@ public class GetAnnotationInformationCommand extends Command {
 		DatabaseAccessor accessor = null;
 		Map<String, Integer> a = null;
 		try {
-			accessor = new DatabaseAccessor("c5dv151_vt14", "shielohh", "postgres", "c5dv151_vt14");
+			accessor = new DatabaseAccessor("pvt", "pvt", "localhost", "genomizer");
 			a = accessor.getAnnotations();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
