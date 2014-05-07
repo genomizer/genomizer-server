@@ -53,7 +53,7 @@ public class AddAnnotationValueCommand extends Command {
 			e.printStackTrace();
 		}
 
-		//accessor.changeAnnotationValue(label, oldValue, newValue)
+		//accessor.addDropDownAnnotation(label, choices, defaultValueIndex, required)
 		//Method not implemented, send appropriate response
 		return 	new MinimalResponse(StatusCode.NO_CONTENT);
 
