@@ -20,8 +20,8 @@ public class SearchDummy {
 
 	private static void sendLogin() throws Exception {
 
-//		String url = "http://scratchy.cs.umu.se:7000/login";
-		String url = "http://localhost:7000/login";
+		String url = "http://scratchy.cs.umu.se:7000/login";
+//		String url = "http://localhost:7000/login";
 
 		URL obj = new URL(url);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -76,8 +76,8 @@ public class SearchDummy {
 	}
 
 	private static void sendSearchRequest() throws Exception {
-//		String url = "http://scratchy.cs.umu.se:7000/annotation";
-		String url = "http://localhost:7000/search/?annotations=Exp2[ExpID]";
+		String url = "http://scratchy.cs.umu.se:7000/search/?annotation=Exp2[ExpID]";
+//		String url = "http://localhost:7000/search/?annotations=Exp1[ExpID]";
 
 		URL obj = new URL(url);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
