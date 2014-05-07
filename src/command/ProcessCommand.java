@@ -7,6 +7,7 @@ import process.classes.ProcessHandler;
 import response.ProcessResponse;
 import response.Response;
 import response.StatusCode;
+import server.DatabaseSettings;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -77,18 +78,12 @@ public class ProcessCommand extends Command {
 
 		String[] parameters = {"param1","param2","param3"};
 
-
-		//TODO Should not be hardcoded here!
-		String DBusername = "c5dv151_vt14";
-		String DBpassword = "shielohh";
-		String DBhost = "postgres";
-		String DBdatabase = "c5dv151_vt14";
 		DatabaseAccessor dbac;
 		ProcessHandler processHandler;
 
 		try {
 
-			dbac = new  DatabaseAccessor(DBusername, DBpassword, DBhost, DBdatabase);
+			dbac = new  DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
 			processHandler = new ProcessHandler();
 
 			switch(processtype){
