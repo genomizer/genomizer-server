@@ -90,7 +90,7 @@ public class AddAnnotationFieldCommand extends Command {
 
 			//Get database access.
 			//DatabaseAccessor dbAccess = new DatabaseAccessor("c5dv151_vt14", "shielohh", "postgres", "c5dv151_vt14");
-			DatabaseAccessor dbAccess = new DatabaseAccessor(DatabaseSettings.mc333_username, DatabaseSettings.mc333_password, DatabaseSettings.mc333_host, DatabaseSettings.mc333_database);
+			DatabaseAccessor dbAccess = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
 
 			//Add types to arraylist to pass them to the database. //TODO: Make pretty.
 			ArrayList<String> types = new ArrayList<String>();
