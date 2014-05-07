@@ -49,11 +49,12 @@ public class GetAnnotationInformationCommand extends Command {
 		for(int i = 0; i < annotation_names.size(); i++) {
 			ArrayList<String> values = null;
 			try {
-				if(accessor.getAnnotationType(annotation_names.get(i)).equals("FREETEXT")) {
+				if(accessor.getAnnotationType(annotation_names.get(i)) == DatabaseAccessor.FREETEXT) {
 					values = new ArrayList<String>();
 					values.add("freetext");
-				} else if(accessor.getAnnotationType(annotation_names.get(i)).equals("DROPDOWN")) {
+				} else if(accessor.getAnnotationType(annotation_names.get(i)) == DatabaseAccessor.DROPDOWN) {
 					values = (ArrayList<String>) accessor.getChoices(annotation_names.get(i));
+				} else {
 
 				}
 			} catch (SQLException e1) {
