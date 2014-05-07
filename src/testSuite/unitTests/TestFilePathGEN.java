@@ -71,4 +71,35 @@ public class TestFilePathGEN {
 		assertTrue(f.isDirectory());
 	}
 
+	@Test
+	public void testGeneratePathForGenomeFiles(){
+
+		String version = "F1.3";
+		String specie = "fly";
+		String expectedPath = "/var/www/data/genome_releases/fly/F1.3";
+
+		String generatedPath = FilePathGenerator.GeneratePathForGenomeFiles(
+											version,specie);
+
+		System.out.println(expectedPath);
+		System.out.println(generatedPath);
+
+		assertEquals(expectedPath, generatedPath);
+	}
+
+	@Test
+	public void testGenerateGenomeReleaseFolders() {
+
+		String specie = "dog";
+
+		FilePathGenerator.GenerateGenomeReleaseFolders(specie);
+
+		File f = new File(FileSystemView.getFileSystemView().getHomeDirectory()
+				.getPath()
+				+ "/data/genome_releases" + specie);
+
+		assertTrue(f.exists());
+		assertTrue(f.isDirectory());
+	}
+
 }

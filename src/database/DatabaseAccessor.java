@@ -979,4 +979,21 @@ public class DatabaseAccessor {
 			return false;
 		}
     }
+
+    /**
+     * Add one genome release to the database.
+     *
+     * @param String genomeVersion.
+     * @param String specie.
+     * @return String filePath, the path where the genome Version file should
+     * be saved.
+     */
+    public String addGenomeRelease(String genomeVersion, String specie){
+
+    	String filePath = "";
+
+    	FilePathGenerator.generate
+
+    	return filePath;
+    }
 }
