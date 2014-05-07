@@ -1,12 +1,19 @@
 package command;
 
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
 import javax.xml.ws.Response;
 
 import response.MinimalResponse;
 import response.StatusCode;
+import server.DatabaseSettings;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import database.DatabaseAccessor;
 
 /**
  * Class used to add an experiment represented as a command.
@@ -24,7 +31,7 @@ public class AddExperimentCommand extends Command {
 	private String created_by;
 
 	@Expose
-	private Annotations annotations = new Annotations();
+	private ArrayList<Annotation> annotations = new ArrayList<Annotation>();
 
 	/**
 	 * Empty constructor.
@@ -35,15 +42,31 @@ public class AddExperimentCommand extends Command {
 
 	@Override
 	public boolean validate() {
-		// TODO Auto-generated method stub
-		return false;
+		if(name == null || created_by == null || annotations == null) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 
 	@Override
 	public response.Response execute() {
+		try {
+			DatabaseAccessor db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
+			db.addExperiment(name);
 
-		//Method not implemented, send appropriate response
-		return 	new MinimalResponse(StatusCode.NO_CONTENT);
+			for(Annotation annotation: annotations) {
+				db.annotateExperiment(name, annotation.getName(), annotation.getValue());
+			}
+			return new MinimalResponse(StatusCode.CREATED);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return 	new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return 	new MinimalResponse(StatusCode.BAD_REQUEST);
+		}
 	}
 
 
