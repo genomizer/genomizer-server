@@ -50,10 +50,10 @@ public class CommandFactory {
 	 * @param RESTful-header.
 	 * @return a logout command.
 	 */
-	public Command createLogoutCommand() {
+	public Command createLogoutCommand(String username) {
 
 		//Create command with json.
-		final Command logoutCmd = new LogoutCommand();
+		final Command logoutCmd = new LogoutCommand(username);
 
 		return logoutCmd;
 

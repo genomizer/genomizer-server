@@ -49,13 +49,13 @@ public class LoginCommand extends Command {
 
 		if(Authenticate.userExists(username)){
 		//bugg if username is exactly the same as the UUID
-			System.out.println("Användaren fanns");
-			rsp = new LoginResponse(405, "");
+			System.out.println("USER ALREADY EXISTS, SENDS UUID ONCE MORE.");
+			rsp = new LoginResponse(200, Authenticate.getID(username));
 		}else{
 			String usrId = Authenticate.createUserID(username);
 
 			Authenticate.addUser(username,usrId);
-			System.out.println("skapar användare");
+			System.out.println("USER CREATED.");
 			rsp = new LoginResponse(200, usrId);
 		}
 			// TODO Auto-generated method stub

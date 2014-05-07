@@ -2,9 +2,12 @@ package command;
 
 import authentication.Authenticate;
 import response.LoginResponse;
+import response.LogoutResponse;
 import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
+
+
 
 /**
  * Class used to represent a logout command.
@@ -13,6 +16,13 @@ import response.StatusCode;
  * @version 1.0
  */
 public class LogoutCommand extends Command {
+
+
+	private String username;
+
+	public LogoutCommand(String username) {
+		this.username = username;
+	}
 
 	/**
 	 * Used to validate the logout command.
@@ -25,20 +35,24 @@ public class LogoutCommand extends Command {
 
 	}
 
+
 	/**
 	 * Used to execute the logout command.
 	 */
 	@Override
 	public Response execute() {
-
-		if(Authenticate.){
-			//bugg if username is exactly the same as the UUID
-				System.out.println("Användaren fanns");
-				rsp = new LoginResponse(405, "");
+		String id = Authenticate.getID(username);
+		if(Authenticate.idExists(id)){
+			Authenticate.deleteUser(id);
+			System.out.println("USER ID DELETED.");
+			return new LogoutResponse(StatusCode.OK);
+		} else {
+			System.out.println("USER ID NOT FOUND.");
+			return 	new MinimalResponse(StatusCode.FILE_NOT_FOUND);
 		}
-		
+
 		//Method not implemented, send appropriate response
-		return 	new MinimalResponse(StatusCode.NO_CONTENT);
+
 
 	}
 
