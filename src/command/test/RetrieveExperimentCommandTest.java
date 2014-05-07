@@ -21,13 +21,13 @@ public class RetrieveExperimentCommandTest {
 	/**
 	 * Test creation of RetrieveExperimentCommand object.
 	 */
-	@Test
-	public void testCreateRetrieveExperimentCommand() {
-
-		GetExperimentCommand recmd = new GetExperimentCommand();
-		assertNotNull(recmd);
-
-	}
+//	@Test
+//	public void testCreateRetrieveExperimentCommand() {
+//
+//		GetExperimentCommand recmd = new GetExperimentCommand();
+//		assertNotNull(recmd);
+//
+//	}
 
 	/**
 	 * Test retrieve experiment command creation of object with
