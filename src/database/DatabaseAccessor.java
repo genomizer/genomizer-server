@@ -937,11 +937,19 @@ public class DatabaseAccessor {
 
     	String changeLblQuery = "UPDATE Annotation SET Label = ? WHERE (Label =?)";
 
-    	PreparedStatement tagExp = conn.prepareStatement(changeLblQuery);
+    	PreparedStatement lblExp;
 
-    	tagExp.setString(1, newLabel);
-    	tagExp.setString(2, oldLabel);
+		try {
+			lblExp = conn.prepareStatement(changeLblQuery);
 
-    	return true;
+			lblExp.setString(1, newLabel);
+			lblExp.setString(2, oldLabel);
+			return lblExp.execute();
+
+		} catch (SQLException e) {
+
+			System.out.println("Failed to Create change label query");
+			return false;
+		}
     }
 }
