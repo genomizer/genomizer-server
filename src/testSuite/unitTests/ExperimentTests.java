@@ -3,6 +3,7 @@ package testSuite.unitTests;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -169,11 +170,30 @@ public class ExperimentTests {
     public void changeFromOldLabelToNewLabel()
     		throws Exception{
 
-    	String oldLabel = "AntiName";
-    	String newLabel = "AName";
 
-    	boolean changeSucceed = dbac.changeAnnotationLabel(oldLabel, newLabel);
-    	assertTrue(changeSucceed);
+    	String oldLabel = "bajs";
+    	String newLabel = "Tissue";
+    	String value = "Arm";
+    	int nrOfLabelsBefore = 0;
+    	int nrOfLabelsAfter = 0;
+
+    	//searching nr of a specific value in annotations.
+    	String BeforepubMed = value + "[" + oldLabel + "]";
+    	List<Experiment> preResult =  dbac.search(BeforepubMed);
+    	nrOfLabelsBefore = preResult.size();
+
+
+    	boolean suceed = dbac.changeAnnotationLabel(oldLabel, newLabel);
+
+    	//now search if label changed and nr of values are the same.
+
+    	String pubMed = value + "[" + newLabel + "]";
+
+    	List<Experiment> result = dbac.search(pubMed);
+    	nrOfLabelsAfter = result.size();
+
+
+    	assertEquals(nrOfLabelsBefore, nrOfLabelsAfter);
     }
 
 }
