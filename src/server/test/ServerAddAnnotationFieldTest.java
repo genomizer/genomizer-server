@@ -10,6 +10,9 @@ import java.net.URL;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+/* TODO: Add logout command.
+ * 		 Make JUnit testcase.
+ */
 /**
  * Class used to test the server when adding annotation fields.
  *

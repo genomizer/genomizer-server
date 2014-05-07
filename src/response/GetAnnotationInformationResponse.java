@@ -14,11 +14,13 @@ public class GetAnnotationInformationResponse extends Response {
 	@Expose
 	ArrayList<AnnotationInformation> annotations;
 
+	JsonArray annotationsArray;
+
 	public GetAnnotationInformationResponse(int code,
 			ArrayList<AnnotationInformation> annotations) {
 
 		this.code = code;
-	    JsonArray annotationsArray = new JsonArray();
+	    annotationsArray = new JsonArray();
 	    for (AnnotationInformation anno: annotations) {
 	    	GsonBuilder builder = new GsonBuilder();
 	    	Gson gson = builder.create();
@@ -29,6 +31,11 @@ public class GetAnnotationInformationResponse extends Response {
 
 	    System.out.println(toPrettyFormat(annotationsArray.toString()));
 
+	}
+
+	@Override
+	public String getBody() {
+		return toPrettyFormat(annotationsArray.toString());
 	}
 
     public static String toPrettyFormat(String jsonString)
