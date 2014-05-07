@@ -82,9 +82,8 @@ public class FilePathGenerator {
 	 */
 	public static void GenerateGenomeReleaseFolders(String specie) {
 
-		File file = new File(homeDir + "/data/genome_releases" + specie);
+		File file = new File(homeDir + "/data/genome_releases/" + specie);
 		file.mkdirs();
-
 	}
 
 }
