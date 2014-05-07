@@ -610,6 +610,58 @@ public class DatabaseAccessor {
         return res;
     }
 
+	/**
+	 * Checks if a given annotation is required to be filled by the user.
+	 * @param annotationLabel the name of the annotation to check
+	 * @return true if it is required, else false
+	 * @throws SQLException
+	 */
+	public boolean isRequierd(String annotationLabel) throws SQLException {
+
+		String query = "SELECT Required FROM Annotation WHERE Label = ?";
+
+		PreparedStatement ps = conn.prepareStatement(query);
+
+		ps.setString(1, annotationLabel);
+
+		ResultSet rs = ps.executeQuery();
+
+		boolean isRequired = false;
+
+
+
+		while(rs.next()){
+			isRequired =  rs.getBoolean("Required");
+		}
+		return isRequired;
+	}
+
+	/**
+	 * Gets the default value for a annotation if there is one, If not
+	 * it returns NULL.
+	 * @param annotationLabel the name of the annotation to check
+	 * @return The defult value or NULL.
+	 * @throws SQLException
+	 */
+	public String getDefaultValue(String annotationLabel) throws SQLException {
+
+		String query = "SELECT DefaultValue FROM Annotation WHERE Label = ?";
+
+		PreparedStatement ps = conn.prepareStatement(query);
+
+		ps.setString(1, annotationLabel);
+
+		ResultSet rs = ps.executeQuery();
+
+		while(rs.next()){
+			return rs.getString("DefaultValue");
+		}
+
+		return null;
+	}
+
+
+
     // Too many parameters. Should take a JSONObject or FileTuple
     // instead.
     /**
