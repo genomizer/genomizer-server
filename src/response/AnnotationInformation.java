@@ -6,8 +6,6 @@ import com.google.gson.annotations.Expose;
 
 public class AnnotationInformation {
 
-	public static final int TYPE_DROP_DOWN = 1;
-	public static final int TYPE_FREE_TEXT = 2;
 
 	@Expose
 	private int id;
@@ -21,7 +19,7 @@ public class AnnotationInformation {
 	@Expose
 	private boolean forced;
 
-	public AnnotationInformation(int id, String name, int type,
+	public AnnotationInformation(int id, String name,
 			ArrayList<String> values, boolean forced) {
 
 		this.id = id;
@@ -56,10 +54,12 @@ public class AnnotationInformation {
 	}
 
 	public String toString() {
-		String returnstring = "ID: " + id + "\nNAME: " + name + "FORCED: " + forced + "\nVALUES:\n" ;
+		String returnstring = "ID: " + id + "\nNAME: " + name + "\nFORCED: " + forced + "\nVALUES:\n" ;
 
-		for(int i = 0; i < values.size(); i++) {
-			returnstring = returnstring + "     " + values.get(i) + "\n";
+		if(values != null) {
+			for(int i = 0; i < values.size(); i++) {
+				returnstring = returnstring + "     " + values.get(i) + "\n";
+			}
 		}
 
 

@@ -16,14 +16,70 @@ public class UtkastTest {
 	public static Token token = null;
 
 	public static void main(String args[]) throws Exception {
-		sendProcessing();
+		sendLogin();
+		sendAddFile();
 	}
 
+	private static void sendLogin() throws Exception {
+
+		String url = "http://scratchy.cs.umu.se:7000/login";
+
+		URL obj = new URL(url);
+		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+		// optional default is GET
+		con.setRequestMethod("POST");
+
+		//add request header
+		con.setRequestProperty("Content-Type", "application/json");
+		//con.setRequestProperty("Authorization", UUID.randomUUID().toString());
+
+		JsonObject jj=new JsonObject();
+		jj.addProperty("username", "jonas");
+		jj.addProperty("password", "losenord");
+
+		//System.out.println(String.valueOf(jj.toString().getBytes().length));
+//		con.setRequestProperty("Content-Length", String.valueOf(jj.toString().getBytes().length));
+
+		//System.out.println(jj.toString());
+
+		String json_output = jj.toString();
+
+		con.setDoOutput(true);
+		DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+		wr.write(json_output.getBytes());
+		wr.flush();
+		wr.close();
+
+
+		int responseCode = con.getResponseCode();
+		//System.out.println("\nSending 'GET' request to URL : " + url);
+		//System.out.println("Response Code : " + responseCode);
+
+		BufferedReader in = new BufferedReader(
+		        new InputStreamReader(con.getInputStream()));
+		String inputLine;
+		StringBuffer responseBuffer = new StringBuffer();
+
+		while ((inputLine = in.readLine()) != null) {
+			responseBuffer.append(inputLine);
+		}
+		in.close();
+
+		String response = responseBuffer.toString();
+
+		Gson gson = new Gson();
+		token = gson.fromJson(response, Token.class);
+
+		System.out.println("TOKEN: " + token.getToken());
+
+
+	}
 
 
 	private static void sendUpdateAnnotationPriveleges() throws Exception {
 
-		String url = "http://scratchy.cs.umu.se:7000/login";
+		String url = "http://scratchy.cs.umu.se:7000/sysadm/"+"username";
 
 		URL obj = new URL(url);
 
@@ -64,7 +120,7 @@ public class UtkastTest {
 
 	private static void sendGetAnnotationPriveleges() throws Exception {
 
-		String url = "http://scratchy.cs.umu.se:7000/login";
+		String url = "http://scratchy.cs.umu.se:7000/sysadm/"+"username";
 
 		URL obj = new URL(url);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -100,7 +156,7 @@ public class UtkastTest {
 
 	private static void sendDeleteAnnotation() throws Exception {
 
-		String url = "http://scratchy.cs.umu.se:7000/login";
+		String url = "http://scratchy.cs.umu.se:7000/annotation";
 
 		URL obj = new URL(url);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -148,8 +204,22 @@ public class UtkastTest {
 	}
 
 	private static void sendProcessing() throws Exception {
-/*
-		String url = "http://scratchy.cs.umu.se:7000/login";
+
+		String username = "splutt";
+		String filename = "filename12";
+		String filepath = "path/to/local/file";
+		String expid = "Exp1";
+		String processtype = "rawtoprofile";
+		String parameters = "\"param1\"," +
+							"\"param2\"," +
+							"\"param3\"," +
+							"\"param4\"";
+		String metadata = "astringofmetadata";
+		String genomeRelease = "hg38";
+		String author = "yuri";
+
+
+		String url = "http://scratchy.cs.umu.se:7000/process";
 
 		URL obj = new URL(url);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -160,27 +230,22 @@ public class UtkastTest {
 		//add request header
 		con.setRequestProperty("Authorization", "UUID");
 
-*/
-
-		JsonObject jj=new JsonObject();
-
-		jj.addProperty("filename", "fileNAME");
-		jj.addProperty("filepath", "path/to/local/file");
-		jj.addProperty("expid", "66");
-		jj.addProperty("processtype", "rawtoprofile");
-		jj.addProperty("metadata", "adaf");
-		String json_output2="\"parameters\":\"[\"param1\",\"param2\",\"param3\",\"param4\"]";
 
 
-		System.out.println(String.valueOf(jj.toString().getBytes().length));
 
+		String json = "{" +
+				"\"filename\": \"" + filename + "\"," +
+				"\"filepath\": \"" + filepath + "\"," +
+				"\"expid\": \"" + expid + "\"," +
+				"\"processtype\": \"" + processtype + "\"," +
+				"\"parameters\": [" + parameters + "]," +
+				"\"metadata\": \"" + metadata + "\"," +
+				"\"genomeRelease\": \"" + genomeRelease + "\"," +
+				"\"author\": \"" + author + "\"}";
 
-		String json_output = jj.toString()+json_output2;
-		System.out.println(json_output);
-	/*
 		con.setDoOutput(true);
 		DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-		wr.write(json_output.getBytes());
+		wr.write(json.getBytes());
 		wr.flush();
 		wr.close();
 
@@ -201,12 +266,58 @@ public class UtkastTest {
 
 		String response = responseBuffer.toString();
 
-		Gson gson = new Gson();
-		token = gson.fromJson(response, Token.class);
-
-		System.out.println("TOKEN: " + token.getToken());*/
+		System.out.println(response.toString());
 
 
+	}
+
+	private static void sendAddFile() throws Exception {
+
+		String url = "http://scratchy.cs.umu.se:7000/file";
+
+		URL obj = new URL(url);
+		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+		// optional default is GET
+		con.setRequestMethod("POST");
+
+		//add request header
+		con.setRequestProperty("Authorization",token.getToken());
+		con.setRequestProperty("Content-Type", "application/json");
+		//con.setRequestProperty("Authorization", UUID.randomUUID().toString());
+
+		JsonObject jj=new JsonObject();
+		jj.addProperty("experimentID", "idid");
+		jj.addProperty("fileName", "name");
+		jj.addProperty("size", "1.3gb");
+		jj.addProperty("type", "raw");
+
+
+		String json_output = jj.toString();
+
+		con.setDoOutput(true);
+		DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+		wr.write(json_output.getBytes());
+		wr.flush();
+		wr.close();
+
+
+		int responseCode = con.getResponseCode();
+		//System.out.println("\nSending 'GET' request to URL : " + url);
+		System.out.println("Response Code : " + responseCode);
+
+		BufferedReader in = new BufferedReader(
+		        new InputStreamReader(con.getInputStream()));
+		String inputLine;
+		StringBuffer responseBuffer = new StringBuffer();
+
+		while ((inputLine = in.readLine()) != null) {
+			responseBuffer.append(inputLine);
+		}
+		in.close();
+
+		String response = responseBuffer.toString();
+		System.out.println(response.toString());;
 	}
 
 }

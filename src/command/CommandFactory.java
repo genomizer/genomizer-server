@@ -123,7 +123,9 @@ public class CommandFactory {
 	 */
 	public Command createAddFileToExperimentCommand(String json) {
 
-		return new AddFileToExperimentCommand();
+		final Command addFileToExperimentCmd = gson.fromJson(json, AddFileToExperimentCommand.class);
+
+		return addFileToExperimentCmd;
 
 	}
 
@@ -243,7 +245,7 @@ public class CommandFactory {
 	 */
 	public Command createAddAnnotationValueCommand(String json, String restful) {
 
-		return new AddAnnotationValueCommand();
+		return new AddAnnotationValueComfinal Command loginCmd = gson.fromJson(json, LoginCommand.class);mand();
 
 	}
 
