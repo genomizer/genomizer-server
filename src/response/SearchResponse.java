@@ -50,7 +50,6 @@ public class SearchResponse extends Response {
 			expJson.add("annotations", annotJsonArray);
 
 			experimentArray.add(expJson);
-			System.out.println(toPrettyFormat(experimentArray.toString()));
 		}
 
 
