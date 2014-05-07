@@ -16,6 +16,7 @@ import response.MinimalResponse;
 import response.Response;
 import response.SearchResponse;
 import response.StatusCode;
+import server.DatabaseSettings;
 
 /**
  * Class used to represent a command of the type Search.
@@ -54,15 +55,12 @@ public class SearchForExperimentsCommand extends Command {
 	 */
 	@Override
 	public Response execute() {
-	    String username = "c5dv151_vt14";
-	    String password = "shielohh";
-	    String host = "postgres";
-	    String database = "c5dv151_vt14";
+
 	    DatabaseAccessor db = null;
 	    List<Experiment> searchResult = null;
 
 		try {
-			db = new DatabaseAccessor(username, password, host, database);
+			db = new DatabaseAccessor(DatabaseSettings.database, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
 			searchResult = db.search(annotations);
 		} catch (SQLException e) {
 			return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
