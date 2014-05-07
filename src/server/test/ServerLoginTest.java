@@ -41,7 +41,6 @@ public class ServerLoginTest {
 
 		} else {
 
-			System.out.println("[FAILED] Legit login test failed. Could not log in.");
 			System.out.println("[FAILED] Legit login test failed. Did receive code:"
 			+ responseCode + " and wanted error code.");
 
@@ -95,7 +94,6 @@ public class ServerLoginTest {
 
 		String response = responseBuffer.toString();
 
-		token = null;
 		Gson gson = new Gson();
 		token = gson.fromJson(response, Token.class);
 
