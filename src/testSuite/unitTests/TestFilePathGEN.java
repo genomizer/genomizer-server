@@ -90,13 +90,13 @@ public class TestFilePathGEN {
 	@Test
 	public void testGenerateGenomeReleaseFolders() {
 
-		String specie = "dog";
+		String specie = "cat";
 
 		FilePathGenerator.GenerateGenomeReleaseFolders(specie);
 
 		File f = new File(FileSystemView.getFileSystemView().getHomeDirectory()
 				.getPath()
-				+ "/data/genome_releases" + specie);
+				+ "/data/genome_releases/" + specie);
 
 		assertTrue(f.exists());
 		assertTrue(f.isDirectory());
