@@ -8,7 +8,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.io.DataOutputStream;
 
-
 import com.google.gson.*;
 
 /**
@@ -78,7 +77,6 @@ public class ServerLoginTest {
 		wr.write(json_output.getBytes());
 		wr.flush();
 		wr.close();
-
 
 		int responseCode = con.getResponseCode();
 

@@ -3,20 +3,21 @@ package server.test;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
-
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+
 /**
- * Class used to test the server when adding annotation fields.
+ * Class used to test adding a corrupted annotation field
+ * where types are missing.
  *
  * @author tfy09jnn
  * @version 1.0
  */
-public class ServerAddAnnotationFieldTest {
+public class ServerCorruptedAnnotationFieldTest {
 
 	private static Token token = null;
 
@@ -50,19 +51,17 @@ public class ServerAddAnnotationFieldTest {
 
 		if(responseCode == 201) {
 
-			System.out.println("[SUCCESS] Legit annotation field was added. Did receive code:"
-					+ responseCode + " and wanted code: 201.");
+			System.out.println("[FAILED] Corrupted annotation field was added. Did receive code:"
+					+ responseCode + " and wanted code error code.");
 
 		} else {
 
-			System.out.println("[FAILED] Legit annotation field was not added. Did receive code:"
-					+ responseCode + " and wanted code: 201.");
+			System.out.println("[SUCCESS] Corrupted annotation field was rejected. Did receive code:"
+					+ responseCode + " and wanted error code.");
 
 		}
 
-
 	}
-
 
 	/**
 	 * Tries to add a annotation field.
@@ -83,7 +82,8 @@ public class ServerAddAnnotationFieldTest {
 		con.setRequestProperty("Content-Type", "application/json");
 		con.setRequestProperty("Authorization", token.getToken());
 
-		String json_output = "{\"name\":\"species\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
+		//here type is totaly removed.
+		String json_output = "{\"name\":\"species\",\"default\":\"human\",\"forced\":true}";
 
 		con.setDoOutput(true);
 		DataOutputStream wr = new DataOutputStream(con.getOutputStream());
