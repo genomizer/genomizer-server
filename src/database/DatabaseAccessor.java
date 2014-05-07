@@ -1031,4 +1031,41 @@ public class DatabaseAccessor {
 			return false;
 		}
     }
+
+	public void changeAnnotationValue(String label, String oldValue,
+			String newValue) throws SQLException {
+
+
+    	String query = "UPDATE Annotation_Choices " +
+    			"SET Value = ? " +
+    			"WHERE Label = ? and Value = ?";
+
+    	String query2 = "UPDATE Annotated_With "
+    			+ "SET Value = ? "
+                + "WHERE Label = ? and Value = ?";
+
+    	String query3 = "UPDATE Annotation " +
+    			"SET DefaultValue = ? " +
+    			"WHERE Label = ? and DefaultValue = ?";
+
+    	PreparedStatement statement = conn
+                .prepareStatement(query);
+    	ArrayList<String> parameters = new ArrayList<String>();
+    	parameters.add(newValue);
+    	parameters.add(label);
+    	parameters.add(oldValue);
+    	statement = bind(statement, parameters);
+    	statement.executeUpdate();
+    	statement.close();
+
+    	statement = conn.prepareStatement(query2);
+    	statement = bind(statement, parameters);
+    	statement.executeUpdate();
+    	statement.close();
+
+    	statement = conn.prepareStatement(query3);
+    	statement = bind(statement, parameters);
+    	statement.executeUpdate();
+    	statement.close();
+	}
 }
