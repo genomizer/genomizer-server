@@ -87,4 +87,12 @@ public class FileTableTests {
         }
     }
 
+    @Test
+    public void addGenomeReleaseTest(){
+
+    	boolean howDidItGo = dbac.addGenomeRelease("f2.3","Fly");
+
+
+    }
+
 }

@@ -979,4 +979,11 @@ public class DatabaseAccessor {
 			return false;
 		}
     }
+
+    public boolean addGenomeRelease(String GenomeVersion, String Specie){
+
+
+
+    	return true;
+    }
 }
