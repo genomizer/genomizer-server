@@ -48,13 +48,44 @@ public class ConversionHandler {
 		return null;
 	}
 
-	public String executeGenomeReleaseConversion(String conversionName, String inFile){
-		switch(conversionName){
-		case "":
+	public void executeGenomeReleaseConversion(String chainFilePath, String inFilePath,String outFilePath){
+		String fileType = checkFileType(inFilePath);
+		String path = inFilePath;
+		GenomeReleaseConverter converter = new GenomeReleaseConverter();
+		
+		
+		
+		//TODO convert to bed type
+		switch(fileType){
+		case "wig":
+			
 			break;
-
-		default: throw new IllegalArgumentException();
+		case "sgr":
+			
+			break;
+		case "bed":
+			break;
+		default:
+			throw new IllegalArgumentException();
 		}
-		return null;
+		converter.procedure(path, outFilePath, chainFilePath);
+		
+		
+		//TODO Convert back to original filetype
+		
+		}
+	public String checkFileType(String filePath){
+		String type = "";
+		if((filePath.length()-filePath.replaceAll("\\.","").length())==1){
+			type = filePath.split("\\.", 10)[1];
+			System.err.println(type);
+		}
+		
+		
+		
+		return type;
+		
+		
+		
 	}
 }

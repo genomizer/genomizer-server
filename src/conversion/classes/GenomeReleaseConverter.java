@@ -12,7 +12,7 @@ import process.classes.Executor;
 public class GenomeReleaseConverter extends Executor {
 	
 	public String procedure(String inFilePath, String outFilePath, String chainFilePath){
-		String outString;
+		String outString = "";
 		String [] liftover = new String[4];
 		liftover[0] = "liftOver";
 		liftover[1] = inFilePath;
