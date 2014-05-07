@@ -62,7 +62,6 @@ public class ServerAddAnnotationFieldTest {
 
 	}
 
-
 	/**
 	 * Tries to add a annotation field.
 	 * @return int representing the response code.
@@ -82,13 +81,7 @@ public class ServerAddAnnotationFieldTest {
 		con.setRequestProperty("Content-Type", "application/json");
 		con.setRequestProperty("Authorization", token.getToken());
 
-		JsonObject jj=new JsonObject();
-		jj.addProperty("name", "species");
-		jj.addProperty("type", "[\"fly\", \"rat\", \"human\"]");
-		jj.addProperty("default", "human");
-		jj.addProperty("forced", true);
-
-		String json_output = jj.toString();
+		String json_output = "{\"name\":\"species\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
 
 		con.setDoOutput(true);
 		DataOutputStream wr = new DataOutputStream(con.getOutputStream());
@@ -168,6 +161,5 @@ public class ServerAddAnnotationFieldTest {
 		return responseCode;
 
 	}
-
 
 }

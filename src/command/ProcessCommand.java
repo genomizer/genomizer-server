@@ -62,7 +62,7 @@ public class ProcessCommand extends Command {
 		String DBdatabase = "c5dv151_vt14";
 		DatabaseAccessor dbac;
 		ProcessHandler processHandler;
-		//Har ett filID,,processtype,param till profile->region parsa i commandFactory
+
 		try {
 			dbac = new  DatabaseAccessor(DBusername, DBpassword, DBhost, DBdatabase);
 			processHandler = new ProcessHandler();

@@ -2,12 +2,13 @@ import java.io.IOException;
 
 import command.CommandHandler;
 
+import server.DatabaseSettings;
 import server.Doorman;
 
 
 public class ServerMain {
 
-	public static int port = 8080;
+	public static int port = 7000;
 
 
 	/**
@@ -15,12 +16,19 @@ public class ServerMain {
 	 */
 	public static void main(String[] args) {
 		if (args.length > 0) {
-			try {
-				port = Integer.parseInt(args[0]);
-			} catch (NumberFormatException e) {
-				System.err.println("Invalid port: " + args[0]);
+			String database = args[0];
+			if (database.equals("test")) {
+				DatabaseSettings.database = "c5dv151_vt14";
+				DatabaseSettings.username = "c5dv151_vt14";
+				DatabaseSettings.password = "shielohh";
+				DatabaseSettings.host = "postgres";
+			} else if (database.equals("global")) {
+				//not tested
+				DatabaseSettings.username = "pvt";
+				DatabaseSettings.password = "pvt";
+				DatabaseSettings.database = "genomizer";
+				DatabaseSettings.host = "localhost:6000";
 			}
-
 		}
 
 		CommandHandler commandHandler = new CommandHandler();

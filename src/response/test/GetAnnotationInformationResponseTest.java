@@ -18,7 +18,6 @@ import command.GetAnnotationInformationCommand;
 
 public class GetAnnotationInformationResponseTest {
 
-	@Test
 	public void testAnnotation() {
 		//Create the builder.
 

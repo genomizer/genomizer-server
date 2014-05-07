@@ -1,6 +1,7 @@
 package response;
 
 import java.util.List;
+import java.util.Map;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -14,11 +15,12 @@ import database.FileTuple;
 
 public class SearchResponse extends Response {
 
+	JsonArray experimentArray;
 
 	public SearchResponse(List<Experiment> searchResult) {
 		code = 200;
 
-		JsonArray experimentArray = new JsonArray();
+		experimentArray = new JsonArray();
 		for (Experiment exp : searchResult) {
 			JsonObject expJson = new JsonObject();
 			expJson.addProperty("name", exp.getID());
@@ -37,17 +39,26 @@ public class SearchResponse extends Response {
 			expJson.add("files", files);
 
 			Map<String,String> annotations = exp.getAnnotations();
-			JsonArray annotJson = new JsonArray();
-			for (String header : annotations.keySet()) {
-
+			JsonArray annotJsonArray = new JsonArray();
+			for (String key : annotations.keySet()) {
+				JsonObject annotJson = new JsonObject();
+				annotJson.addProperty("name", key);
+				annotJson.addProperty("value", annotations.get(key));
+				annotJsonArray.add(annotJson);
 			}
 
+			expJson.add("annotations", annotJsonArray);
 
 			experimentArray.add(expJson);
 			System.out.println(toPrettyFormat(experimentArray.toString()));
 		}
 
 
+	}
+
+	@Override
+	public String getBody() {
+		return toPrettyFormat(experimentArray.toString());
 	}
 
     public static String toPrettyFormat(String jsonString)

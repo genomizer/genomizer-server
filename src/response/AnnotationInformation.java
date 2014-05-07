@@ -16,9 +16,6 @@ public class AnnotationInformation {
 	private String name;
 
 	@Expose
-	private int type;
-
-	@Expose
 	private ArrayList<String> values;
 
 	@Expose
@@ -29,7 +26,6 @@ public class AnnotationInformation {
 
 		this.id = id;
 		this.name = name;
-		this.type = type;
 		this.values = values;
 		this.forced = forced;
 	}
@@ -42,9 +38,9 @@ public class AnnotationInformation {
 		return name;
 	}
 
-	public int getType() {
-		return type;
-	}
+//	public int getType() {
+//		return type;
+//	}
 
 	public ArrayList<String> getValues() {
 		return values;
