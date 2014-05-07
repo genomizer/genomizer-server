@@ -197,7 +197,7 @@ public class CommandFactory {
 	 * @param uuid
 	 * @return the actual command.
 	 */
-	public Command createProcessCommand(String json, String restful, String uuid) {
+	public Command createProcessCommand(String json, String uuid) {
 
 		ProcessCommand processCommand = gson.fromJson(json, ProcessCommand.class);
 //		processCommand.setProcessType(restful[2]);

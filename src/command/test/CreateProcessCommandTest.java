@@ -23,19 +23,21 @@ public class CreateProcessCommandTest {
 		uuid = Authenticate.createUserID("splutt");
 		Authenticate.addUser("splutt", uuid);
 
-		String json = "{\"parameters\": " +
-				"[\"param1\"," +
-				"\"param2\"," +
-				"\"param3\"," +
-				"\"param4\"]," +
-				"\"metadata\": \"astringofmetadata\"," +
-				"\"genomeRelease\": \"hg38\"}";
+		String json = "{" +
+							"\"filename\": \"fileNAME\"," +
+							"\"filepath\": \"path\to\local\file\"," +
+							"\"expid": "66","processtype": "rawtoprofile","parameters": ["param1","param2","param3","param4"
+				                ],
+				 "metadata": "astringofmetadata",
+				 "genomeRelease": "hg38",
+				 "author": "yuri"
+				}";
 
 		String restful = "/process/rawtoprofile/66";
 
 		String[] restfulArray = restful.split("/");
 
-		processCommand = (ProcessCommand)cmdf.createProcessCommand(json, restfulArray, uuid);
+		processCommand = (ProcessCommand)cmdf.createProcessCommand(json, uuid);
 	}
 
 	@Test
@@ -51,13 +53,6 @@ public class CreateProcessCommandTest {
 		assertEquals("param4",(processCommand.getParameters())[3]);
 
 		assertEquals("hg38", processCommand.getGenomeRelease());
-
-	}
-
-	@Test
-	public void shouldSetFileID(){
-
-		assertEquals("66", processCommand.getFileID());
 
 	}
 
