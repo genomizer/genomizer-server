@@ -25,12 +25,17 @@ public class GetAnnotationInformationCommand extends Command {
 	@Override
 	public Response execute() {
 
+		String username = "c5dv151_vt14";
+	    String password = "shielohh";
+	    String host = "postgres";
+	    String database = "c5dv151_vt14";
+
 		ArrayList<AnnotationInformation> annotations = new ArrayList<AnnotationInformation>();
 
 		DatabaseAccessor accessor = null;
 		Map<String, Integer> a = null;
 		try {
-			accessor = new DatabaseAccessor("pvt", "pvt", "localhost", "genomizer");
+			accessor = new DatabaseAccessor(username, password, host, database);
 			a = accessor.getAnnotations();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
