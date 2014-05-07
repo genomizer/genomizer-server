@@ -2,8 +2,10 @@ package command;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import response.MinimalResponse;
 import response.Response;
@@ -74,18 +76,18 @@ public class GetExperimentCommand extends Command {
 
 	public ArrayList<String> getAnnotations(Experiment exp) {
 		ArrayList<String> annotations = new ArrayList<String>();
-		Map annotationMap = exp.getAnnotations();
-		annotations.add((String) annotationMap.get("type"));
+		HashMap<String, String> annotationMap = (HashMap<String, String>) exp.getAnnotations();
+		for (Entry<String, String> a: annotationMap.entrySet()) {
+			annotations.add(a.getValue());
+		}
 		return annotations;
 
 	}
 
-	public ArrayList<String> getFiles(Experiment exp) {
+	public ArrayList<FileTuple> getFiles(Experiment exp) {
 		ArrayList<String> files = new ArrayList<String>();
-		List fileList = exp.getFiles();
-		for (FileTuple ft: fileList) {
-			files.add(ft);
-		}
+		ArrayList<FileTuple> fileList = (ArrayList<FileTuple>) exp.getFiles();
+		return fileList;
 	}
 
 
