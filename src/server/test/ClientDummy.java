@@ -21,12 +21,14 @@ import com.google.gson.*;
 
 public class ClientDummy {
 
+	public static Token token = null;
+
 	public static void main(String args[]) throws Exception {
 		sendLogin();
-		
+		sendGetAnnotationInformation();
 	}
 
-	public static Token token = null;
+
 
 	private static void sendLogin() throws Exception {
 
@@ -81,6 +83,40 @@ public class ClientDummy {
 
 		System.out.println("TOKEN: " + token.getToken());
 
+
+	}
+
+	private static void sendGetAnnotationInformation() throws Exception {
+		String url = "http://scratchy.cs.umu.se:7000/annotation";
+
+		URL obj = new URL(url);
+		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+		// optional default is GET
+		con.setRequestMethod("GET");
+
+		//add request header
+		con.setRequestProperty("Content-Type", "application/json");
+		con.setRequestProperty("Authorization", token.getToken());
+//		con.setRequestProperty("Content-Length", String.valueOf(jj.toString().getBytes().length));
+
+		int responseCode = con.getResponseCode();
+		System.out.println("\nSending 'GET' request to URL : " + url);
+		System.out.println("Response Code : " + responseCode);
+
+		BufferedReader in = new BufferedReader(
+		        new InputStreamReader(con.getInputStream()));
+		String inputLine;
+		StringBuffer responseBuffer = new StringBuffer();
+
+		while ((inputLine = in.readLine()) != null) {
+			responseBuffer.append(inputLine);
+		}
+		in.close();
+
+		String response = responseBuffer.toString();
+
+		System.out.println("RESPONSE: " + response);
 
 	}
 }

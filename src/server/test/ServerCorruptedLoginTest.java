@@ -90,7 +90,6 @@ public class ServerCorruptedLoginTest {
 
 		String response = responseBuffer.toString();
 
-		token = null;
 		Gson gson = new Gson();
 		token = gson.fromJson(response, Token.class);
 
