@@ -18,6 +18,19 @@ public class CreateProcessCommandTest {
 	ProcessCommand processCommand;
 	String uuid;
 
+	String username = "splutt";
+	String filename = "filename12";
+	String filepath = "path/to/local/file";
+	String expid = "Exp1";
+	String processtype = "rawtoprofile";
+	String parameters = "\"param1\"," +
+						"\"param2\"," +
+						"\"param3\"," +
+						"\"param4\"";
+	String metadata = "astringofmetadata";
+	String genomeRelease = "hg38";
+	String author = "yuri";
+
 	@Before
 	public void setup(){
 
@@ -26,21 +39,16 @@ public class CreateProcessCommandTest {
 
 
 		String json = "{" +
-							"\"filename\": \"fileNAME66\"," +
-							"\"filepath\": \"path/to/local/file\"," +
-							"\"expid\": \"Exp1\"," +
-							"\"processtype\": \"rawtoprofile\"," +
-							"\"parameters\": [" +
-												"\"param1\"," +
-												"\"param2\"," +
-												"\"param3\"," +
-												"\"param4\"" +
-											"]," +
-							"\"metadata\": \"astringofmetadata\"," +
-							"\"genomeRelease\": \"hg38\", " +
-							"\"author\": \"yuri\"}";
+							"\"filename\": \"" + filename + "\"," +
+							"\"filepath\": \"" + filepath + "\"," +
+							"\"expid\": \"" + expid + "\"," +
+							"\"processtype\": \"" + processtype + "\"," +
+							"\"parameters\": [" + parameters + "]," +
+							"\"metadata\": \"" + metadata + "\"," +
+							"\"genomeRelease\": \"" + genomeRelease + "\"," +
+							"\"author\": \"" + author + "\"}";
 
-		processCommand = (ProcessCommand)cmdf.createProcessCommand(json, "splutt");
+		processCommand = (ProcessCommand)cmdf.createProcessCommand(json, username);
 	}
 
 	@Test
@@ -67,32 +75,32 @@ public class CreateProcessCommandTest {
 
 	@Test
 	public void shouldSetGenomeRelease(){
-		assertEquals("hg38", processCommand.getGenomeRelease());
+		assertEquals(genomeRelease, processCommand.getGenomeRelease());
 	}
 
 	@Test
 	public void shouldSetProcessType(){
-		assertEquals("rawtoprofile",processCommand.getProcessType());
+		assertEquals(processtype,processCommand.getProcessType());
 	}
 
 	@Test
 	public void shouldSetUserID(){
-		assertEquals("splutt", processCommand.getUsername());
+		assertEquals(username, processCommand.getUsername());
 	}
 
 	@Test
 	public void shouldSetFilename(){
-		assertEquals("fileNAME66", processCommand.getFilename());
+		assertEquals(filename, processCommand.getFilename());
 	}
 
 	@Test
 	public void shouldSetFilepath(){
-		assertEquals("path/to/local/file",processCommand.getFilepath());
+		assertEquals(filepath,processCommand.getFilepath());
 	}
 
 	@Test
 	public void shouldSetExpID(){
-		assertEquals("Exp1",processCommand.getExpID());
+		assertEquals(expid,processCommand.getExpID());
 	}
 
 	@Test
