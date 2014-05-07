@@ -33,8 +33,8 @@ public class AddAnnotationFieldCommand extends Command {
 
 	@Expose
 	private ArrayList<String> type = new ArrayList<String>();
-
 	//private String[] type;
+
 	@SerializedName("default")
 	@Expose
 	private String defaults;
@@ -93,8 +93,8 @@ public class AddAnnotationFieldCommand extends Command {
 			//DatabaseAccessor dbAccess = new DatabaseAccessor("c5dv151_vt14", "shielohh", "postgres", "c5dv151_vt14");
 			DatabaseAccessor dbAccess = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
 
-			//Add types to arraylist to pass them to the database. //TODO: Make pretty.
 
+			//Add types to arraylist to pass them to the database. //TODO: Make pretty.
 			/*
 			ArrayList<String> types = new ArrayList<String>();
 			for(int i = 0; i < type.length; i++) {
@@ -107,6 +107,7 @@ public class AddAnnotationFieldCommand extends Command {
 
 			}
 			*/
+
 			for(int i = 0; i < type.size(); i++) {
 
 				if(type.get(i).equals(defaults)) {
