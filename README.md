@@ -1,6 +1,7 @@
 Genomizer Server
 ===================
-This is the main repository for the server side of the Genomizer system. 
+This is the main repository for the server side of the Genomizer system. It is currently found
+at http://scratchy.cs.umu.se:7000.
 
 ##Development
 All development is done in either of four branches, *communication*, *process*, *transfer* or *database*. When some feature
