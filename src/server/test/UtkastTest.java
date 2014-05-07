@@ -340,7 +340,7 @@ public class UtkastTest {
 		//con.setRequestProperty("Authorization", UUID.randomUUID().toString());
 		JsonObject ja=new JsonObject();
 //		JsonObject name=new JsonObject();
-		ja.addProperty("name", "Aaaaffffffff");
+		ja.addProperty("name", "RobbanOCHRobbansSUPERExperiment");
 //		ja.add(name);
 
 
