@@ -10,9 +10,9 @@ import java.util.Map.Entry;
 
 import database.FileTuple;
 
-public class getExperimentResponse extends Response {
+public class GetExperimentResponse extends Response {
 
-	public getExperimentResponse(ArrayList<String> info, HashMap<String, String> annotations, ArrayList<FileTuple> files, int code) {
+	public GetExperimentResponse(ArrayList<String> info, HashMap<String, String> annotations, ArrayList<FileTuple> files, int code) {
 		this.code = code;
 
 		JsonObject obj = new JsonObject();
