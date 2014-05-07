@@ -153,12 +153,15 @@ public class CommandHandler {
 	public String parseRest(String restful) {
 
 		String[] split = restful.split("/");
-		String[] parsed = new String[split.length - 2];
+		return split[split.length -1];
 
-		for(int i = 0; i < parsed.length; i++) {
-			parsed[i] = split[i+2];
-		}
-		return parsed[parsed.length - 1];
+//		String[] parsed = new String[split.length - 2];
+
+//		for(int i = 0; i < parsed.length; i++) {
+//			parsed[i] = split[i+2];
+//		}
+
+//		return parsed[parsed.length - 1];
 
 	}
 
