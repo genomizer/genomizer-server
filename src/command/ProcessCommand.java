@@ -30,7 +30,7 @@ public class ProcessCommand extends Command {
 	@Expose
 	private String filename;
 	@Expose
-	private String filepath;
+	private String fileid;
 	@Expose
 	private String expid;
 
@@ -42,29 +42,12 @@ public class ProcessCommand extends Command {
 	@Override
 	public boolean validate() {
 
-		if(username == null || processtype == null || metadata == null || parameters == null || genomeRelease == null || filename == null || filepath == null || expid == null){
+		if(username == null || processtype == null || metadata == null || parameters == null || genomeRelease == null || filename == null || fileid == null || expid == null){
 			return false;
 		}
 
 		//TODO Lengths
-
-		/*
-		 * Path VARCHAR(128) UNIQUE NOT NULL,
-    FileType VARCHAR(32) NOT NULL,
-    FileName VARCHAR(32) NOT NULL,
-    Date DATE NOT NULL,
-    MetaData VARCHAR(256),
-    Author VARCHAR(32),
-    Uploader VARCHAR(32) NOT NULL,
-    IsPrivate BOOLEAN NOT NULL,
-    ExpID VARCHAR(64),
-    GRVersion VARCHAR(16),
-		 */
-		//Not null
-		//length of file info
-		//
-
-		// TODO Validate process command
+		//TODO Validate process command
 		return true;
 	}
 
@@ -96,14 +79,16 @@ public class ProcessCommand extends Command {
 				System.out.println("metadata:" + metadata);
 				System.out.println("username: " + username);
 				System.out.println("expid: " + expid);
+				System.out.println("fileid: " + fileid);
 				System.out.println("genomeRelease: " + genomeRelease);
 
 				//Receive the path for the profile data from the database accessor.
-				String outfilepath = dbac.addFile("profile", filename, metadata, "yuri", username, false, expid, genomeRelease);
+			//	String outfilepath = dbac.addFile("profile", filename, metadata, "yuri", username, false, expid, genomeRelease);
 
+				/*
 				try {
 
-					processHandler.executeProcess("rawToProfile", parameters, filepath, outfilepath);
+					processHandler.executeProcess("rawToProfile", parameters, fileid, outfilepath);
 
 				} catch (InterruptedException e) {
 					// TODO Fix this
@@ -116,11 +101,12 @@ public class ProcessCommand extends Command {
 					e.printStackTrace();
 					return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE);
 				}
-
+				 */
 				break;
 			default:
 				System.err.println("Unknown process type in processcommand execute");
-				break;
+				return new ProcessResponse(StatusCode.NO_CONTENT);
+//				break;
 
 			}
 		} catch (SQLException e) {
