@@ -31,6 +31,7 @@ public class Doorman {
 		httpServer = HttpServer.create(new InetSocketAddress(port),0);
 		httpServer.createContext("/login", createHandler());
 		httpServer.createContext("/experiment", createHandler());
+		httpServer.createContext("/annotation", createHandler());
 		httpServer.createContext("/file", createHandler());
 		httpServer.createContext("/search", createHandler());
 		httpServer.createContext("/user", createHandler());
