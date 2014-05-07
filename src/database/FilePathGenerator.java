@@ -51,4 +51,40 @@ public class FilePathGenerator {
 
 		file.mkdirs();
 	}
+
+	/**
+	 * Generates a filepath for where the genome release file should be stored.
+	 * @param String version, the genome version of the file,
+	 * @param String specie, the specie that the genome versions belongs to.
+	 * @return String filePath, where the file can be stored.
+	 */
+	public static String GeneratePathForGenomeFiles(String version,
+													String specie){
+
+		StringBuilder dir = new StringBuilder();
+
+		dir.append(homeDir);
+		dir.append("data");
+		dir.append('/');
+		dir.append("genome_releases");
+		dir.append('/');
+		dir.append(specie);
+		dir.append('/');
+		dir.append(version);
+		return dir.toString();
+	}
+
+	/**
+	 * Used when first adding a new Genome_release type for a specific specie.
+	 * Creates all folders needed for the GenomeVersion file.
+	 *
+	 * @param String Specie.
+	 */
+	public static void GenerateGenomeReleaseFolders(String specie) {
+
+		File file = new File(homeDir + "/data/genome_releases" + specie);
+		file.mkdirs();
+
+	}
+
 }
