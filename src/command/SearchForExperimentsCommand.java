@@ -1,14 +1,16 @@
 package command;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.google.gson.annotations.Expose;
 
-import database.SearchResult;
-import databaseAccessor.DatabaseAccessor;
+import database.DatabaseAccessor;
+import database.Experiment;
 
-import response.ErrorResponse;
+import response.MinimalResponse;
 import response.Response;
 import response.SearchResponse;
 import response.StatusCode;
@@ -57,15 +59,19 @@ public class SearchForExperimentsCommand extends Command {
 	    DatabaseAccessor db = null;
 		try {
 			db = new DatabaseAccessor(username, password, host, database);
+			List<Experiment> searchResult = db.search(annotations);
+
 		} catch (SQLException e) {
-			return new ErrorResponse(503);
+			return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
+		} catch (IOException e) {
+			return new MinimalResponse(StatusCode.BAD_REQUEST);
 		}
-		SearchResult result = db.searchExperiment(annotations);
+
 
 		SearchResponse response = new SearchResponse();
 
 		//Method not implemented, send appropriate response
-		return 	new ErrorResponse(StatusCode.NO_CONTENT);
+		return 	new MinimalResponse(StatusCode.NO_CONTENT);
 	}
 
 	public String getAnnotations() {

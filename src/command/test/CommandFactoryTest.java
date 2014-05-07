@@ -68,7 +68,7 @@ public class CommandFactoryTest {
 
 		CommandFactory cmdf = new CommandFactory();
 		String[] restful = {"1", "2"};
-		assertNotNull(cmdf.createLogoutCommand(restful));
+		assertNotNull(cmdf.createLogoutCommand());
 
 	}
 
@@ -92,7 +92,15 @@ public class CommandFactoryTest {
 	public void testCreateProcessCommand() {
 
 		CommandFactory cmdf = new CommandFactory();
-		String json = "JSON_STRING";
+		String json = "{\"parameters\": " +
+											"[\"param1\"," +
+											"\"param2\"," +
+											"\"param3\"," +
+											"\"param4\"]," +
+						"\"metadata\": \"astringofmetadata\"," +
+						"\"genomeRelease\": \"hg38\"}";
+
+
 		String[] restful = {"1", "2"};
 		assertNotNull(cmdf.createProcessCommand(json, restful));
 

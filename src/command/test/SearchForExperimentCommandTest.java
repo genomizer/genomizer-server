@@ -5,7 +5,10 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import response.Response;
+
 import command.CommandFactory;
+import command.CommandHandler;
 import command.SearchForExperimentsCommand;
 
 public class SearchForExperimentCommandTest {
@@ -15,7 +18,7 @@ public class SearchForExperimentCommandTest {
 	@Before
 	public void setup() {
 		CommandFactory factory = new CommandFactory();
-		command = (SearchForExperimentsCommand) factory.createSearchForExperimentCommand("", "/search/annotations=123[expId]");
+		command = (SearchForExperimentsCommand) factory.createSearchForExperimentCommand("/search/annotations=123[expId]");
 	}
 
 	@Test
@@ -30,6 +33,7 @@ public class SearchForExperimentCommandTest {
 
 	@Test
 	public void shouldTryAccessDB() throws Exception {
-		command.execute();
+		Response res = command.execute();
+		System.out.println(res.getCode());
 	}
 }

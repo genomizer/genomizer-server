@@ -1,5 +1,7 @@
 package command;
 
+import java.util.ArrayList;
+
 import response.Response;
 
 /**
@@ -33,7 +35,7 @@ public class CommandHandler {
 	public Response processNewCommand(String json, String restful, String uuid, CommandType cmdt) {	//TODO: Rename this method.
 
 		//Get code from restful //TODO: add parser code....
-		Command myCom = createCommand(json, restful, cmdt);
+		Command myCom = createCommand(json, restful, uuid, cmdt);
 
 		//TODO: Find out what type of work that needs to be done. (Slow? Fast?)
 		//Create a response to return.
@@ -50,19 +52,19 @@ public class CommandHandler {
 	 * @param a enum that determines command type.
 	 * @return
 	 */
-	private Command createCommand(String json, String restful, CommandType cmdt) {
+	private Command createCommand(String json, String restful, String uuid, CommandType cmdt) {
 
 		Command newCommand = null;
-		String[] parsedRest = parseRest(restful);
+		String parsedRest = parseRest(restful);
 
 		//TODO: Change to switch statement.
 		if(cmdt == CommandType.LOGIN_COMMAND) {
 
-			newCommand = cmdFactory.createLoginCommand(json, parsedRest);
+			newCommand = cmdFactory.createLoginCommand(json);
 
 		} else if (cmdt == CommandType.LOGOUT_COMMAND) {
 
-			newCommand = cmdFactory.createLogoutCommand(parsedRest);
+			newCommand = cmdFactory.createLogoutCommand();
 
 		} else if (cmdt == CommandType.RETRIEVE_EXPERIMENT_COMMAND) {
 
@@ -70,7 +72,7 @@ public class CommandHandler {
 
 		} else if (cmdt == CommandType.ADD_EXPERIMENT_COMMAND) {
 
-			newCommand = cmdFactory.createAddExperimentCommand(json, parsedRest);
+			newCommand = cmdFactory.createAddExperimentCommand(json);
 
 		} else if (cmdt == CommandType.UPDATE_EXPERIMENT_COMMAND) {
 
@@ -86,7 +88,7 @@ public class CommandHandler {
 
 		} else if (cmdt == CommandType.ADD_FILE_TO_EXPERIMENT_COMMAND) {
 
-			newCommand = cmdFactory.createAddFileToExperimentCommand(json, parsedRest);
+			newCommand = cmdFactory.createAddFileToExperimentCommand(json);
 
 		} else if (cmdt == CommandType.UPDATE_FILE_IN_EXPERIMENT_COMMAND) {
 
@@ -98,7 +100,7 @@ public class CommandHandler {
 
 		} else if (cmdt == CommandType.SEARCH_FOR_EXPERIMENTS_COMMAND) {
 
-			newCommand = cmdFactory.createSearchForExperimentCommand(json, parsedRest);
+			newCommand = cmdFactory.createSearchForExperimentCommand(parsedRest);
 
 		} else if (cmdt == CommandType.UPDATE_USER_COMMAND) {
 
@@ -110,11 +112,11 @@ public class CommandHandler {
 
 		} else if (cmdt == CommandType.PROCESS_COMMAND) {
 
-			newCommand = cmdFactory.createProcessCommand(json, parsedRest);
+			newCommand = cmdFactory.createProcessCommand(json, parsedRest, uuid);
 
 		} else if (cmdt == CommandType.GET_ANNOTATION_INFORMATION_COMMAND) {
 
-			newCommand = cmdFactory.createGetAnnotationInformationCommand(json, parsedRest);
+			newCommand = cmdFactory.createGetAnnotationInformationCommand(json);
 
 		} else if (cmdt == CommandType.ADD_ANNOTATION_FIELD_COMMAND) {
 
@@ -130,7 +132,7 @@ public class CommandHandler {
 
 		} else if (cmdt == CommandType.GET_ANNOTATION_PRIVILEGES_COMMAND) {
 
-			newCommand = cmdFactory.createGetAnnotationPrivilegesCommand(json, parsedRest);
+			newCommand = cmdFactory.createGetAnnotationPrivilegesCommand(json);
 
 		} else if (cmdt == CommandType.UPDATE_ANNOTATION_PRIVILEGES_COMMAND) {
 
@@ -148,18 +150,15 @@ public class CommandHandler {
 	 * @param RESTful-header
 	 * @return a String array with RESTful-header parts.
 	 */
-	public String[] parseRest(String restful) {
+	public String parseRest(String restful) {
 
 		String[] split = restful.split("/");
-		String[] parsed = new String[split.length];
-
-		for(int i = 0; i < split.length-1; i++) {
-
-			parsed[i] = split[i+1];
-
+		String[] parsed = new String[split.length - 2];
+		
+		for(int i = 0; i < parsed.length; i++) {
+			parsed[i] = split[i+2];			
 		}
-
-		return parsed;
+		return parsed[parsed.length - 1];
 
 	}
 

@@ -1,11 +1,12 @@
 package command;
 
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 import process.classes.ProcessHandler;
 
-import response.ErrorResponse;
+import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
 
@@ -13,20 +14,24 @@ import authentication.Authenticate;
 
 import com.google.gson.annotations.Expose;
 
-import database.SearchResult;
-import databaseAccessor.DatabaseAccessor;
+import database.*;
 
 public class ProcessCommand extends Command {
 
 
 	private String fileID;
 	private String processType;
-	private String metadata;
+
 	private String userID;
+
+	@Expose
+	private String metadata;
+	@Expose
 	private String[] parameters;
+	@Expose
 	private String genomeRelease;
 
-
+	//Empty constructor
 	public ProcessCommand() {
 
 	}
@@ -41,22 +46,27 @@ public class ProcessCommand extends Command {
 	public Response execute() {
 
 		//TODO Parse metadata to get GRversion and parameters?
+		String GRversion = "placeholderGRversion";
 		metadata = "meta1,meta2,meta3";
-//		String[] parameters = {"param1","param2","param3"};
+		String[] parameters = {"param1","param2","param3"};
 
-		String databaseUsername = "c5dv151_vt14";
-		String databasePassword = "shielohh";
-		String databaseHost = "postgres";
-		String databaseDatabase = "c5dv151_vt14";
+		String username = "c5dv151_vt14";
+		String password = "shielohh";
+		String host = "postgres";
+		String database = "c5dv151_vt14";
 		DatabaseAccessor dbac;
 		//Har ett filID,,processtype,param till profile->region parsa i commandFactory
 		try {
-			//borde inte dbac skapas någon annanstans sen skickas som param?
-			dbac = new  DatabaseAccessor(databaseUsername, databasePassword, databaseHost, databaseDatabase);
+			dbac = new  DatabaseAccessor(username, password, host, database);
 			switch(processType){
 				case "rawtoprofile":
-					String uploader = Authenticate.getUsername(userID);
-//					ArrayList<String> filepaths=dbac.convertFromRawtoProfile(fileID,metadata,uploader,genomeRelease);
+					String uploader=Authenticate.getUsername(userID);
+					System.out.println("Uploader of file: " + uploader);
+
+
+
+
+//					ArrayList<String> filepaths=dbac.convertFromRawtoProfile(fileID,metadata,uploader,GRversion);
 
 					ProcessHandler processHandler = new ProcessHandler();
 
@@ -80,7 +90,52 @@ public class ProcessCommand extends Command {
 		//return respons 201
 
 		//Method not implemented, send appropriate response
-		return 	new ErrorResponse(StatusCode.NO_CONTENT);
+		return new MinimalResponse(StatusCode.NO_CONTENT);
+	}
+
+	public String getMetadata() {
+		// TODO Auto-generated method stub
+		return metadata;
+	}
+
+	public String[] getParameters() {
+		// TODO Auto-generated method stub
+		return parameters;
+	}
+
+	public String getGenomeRelease() {
+		// TODO Auto-generated method stub
+		return genomeRelease;
+	}
+
+	public void setFileID(String fileID) {
+		this.fileID = fileID;
+
+	}
+
+	public String getFileID() {
+		// TODO Auto-generated method stub
+		return fileID;
+	}
+
+	public String getProcessType() {
+		return processType;
+	}
+
+	public void setProcessType(String processType) {
+		// TODO Auto-generated method stub
+		this.processType = processType;
+
+	}
+
+	public Object getUserID() {
+		// TODO Auto-generated method stub
+		return this.userID;
+	}
+
+	public void setUserID(String uuid) {
+		this.userID = uuid;
+
 	}
 
 }

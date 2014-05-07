@@ -1,6 +1,6 @@
 package command;
 
-import response.ErrorResponse;
+import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
 
@@ -30,7 +30,7 @@ public class UpdateAnnotationPrivilegesCommand extends Command {
 	public Response execute() {
 
 		//Method not implemented, send appropriate response
-		return 	new ErrorResponse(StatusCode.NO_CONTENT);
+		return 	new MinimalResponse(StatusCode.NO_CONTENT);
 
 	}
 

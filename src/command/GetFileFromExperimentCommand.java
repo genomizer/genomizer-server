@@ -1,15 +1,12 @@
 package command;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 import response.DownloadResponse;
-import response.ErrorResponse;
+import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
 import database.DatabaseAccessor;
-
-
 import com.google.gson.annotations.Expose;
 
 /**
@@ -28,14 +25,9 @@ public class GetFileFromExperimentCommand extends Command {
 	 * Constructor. Takes the fileID as argument.
 	 * @param fileID
 	 */
-	public GetFileFromExperimentCommand(String[] restful) {
-		fileID = restful[restful.length - 1];
-		try {
-			db = new DatabaseAccessor("c5dv151_vt14", "shielohh", "postgres", "c5dv151_vt14");
-		} catch (SQLException e) {
-			System.out.println("Could not connect to database");
-			e.printStackTrace();
-		}
+	public GetFileFromExperimentCommand(String restful) {
+		fileID = restful;
+
 	}
 
 	/**
@@ -44,9 +36,6 @@ public class GetFileFromExperimentCommand extends Command {
 	 */
 	@Override
 	public boolean validate() {
-		if (fileID  == null) {
-			return false;
-		}
 		return true;
 	}
 
@@ -58,8 +47,8 @@ public class GetFileFromExperimentCommand extends Command {
 	@Override
 	public Response execute() {
 
-		Response rsp;
-		ArrayList<String> attributes = new ArrayList<String>();
+//		Response rsp = rsp;
+//		ArrayList<String> attributes = new ArrayList<String>();
 
 //		results = db.searchExperiment(fileID);
 //
@@ -75,10 +64,11 @@ public class GetFileFromExperimentCommand extends Command {
 //			System.out.println(attributes.toString());
 //			rsp = new DownloadResponse(200, attributes);
 //
+
 //		}
 
 		//Method not implemented, send appropriate response
-		return 	new ErrorResponse(StatusCode.NO_CONTENT);
+		return 	new MinimalResponse(StatusCode.NO_CONTENT);
 	}
 
 }
