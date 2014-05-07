@@ -19,6 +19,7 @@ public class FileTableTests {
 
     private static DatabaseAccessor dbac;
 
+    private String testGenomePath;
     private String testPath;
     private String testName = "testFileName1";
     private String testType = "testFileType1";
@@ -85,6 +86,13 @@ public class FileTableTests {
         } finally {
             assertTrue(dbac.hasExperiment(testExpId));
         }
+    }
+
+    @Test
+    public void addGenomeReleaseTest(){
+
+    	testGenomePath = dbac.addGenomeRelease("F2.3","Fly");
+
     }
 
 }
