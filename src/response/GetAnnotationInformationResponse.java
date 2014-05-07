@@ -28,14 +28,11 @@ public class GetAnnotationInformationResponse extends Response {
 	    	annotationsArray.add(annoJson);
 	    	annotationsArray.toString();
 	    }
-
-	    System.out.println(toPrettyFormat(annotationsArray.toString()));
-
 	}
 
 	@Override
 	public String getBody() {
-		return toPrettyFormat(annotationsArray.toString());
+		return annotationsArray.toString();
 	}
 
     public static String toPrettyFormat(String jsonString)
