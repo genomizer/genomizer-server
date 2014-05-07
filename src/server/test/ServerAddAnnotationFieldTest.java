@@ -60,9 +60,7 @@ public class ServerAddAnnotationFieldTest {
 
 		}
 
-
 	}
-
 
 	/**
 	 * Tries to add a annotation field.
