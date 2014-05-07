@@ -6,7 +6,10 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -28,6 +31,8 @@ public class ExperimentTests {
     private static String testValueFT = "testValueFT1";
     private static String testLabelDD = "testLabelDD1";
     private static String testChoice = "testchoice";
+    private static String oldLabel = "Tissue";				//for changeLabel
+	private static String newLabel = "Tis";					//for changeLabel
     private static List<String> testChoices;
 
     @BeforeClass
@@ -46,9 +51,9 @@ public class ExperimentTests {
 
     @Before
     public void setup() throws SQLException, IOException {
-        dbac.addExperiment(testExpId);
-        dbac.addFreeTextAnnotation(testLabelFT, null, true);
-        dbac.addDropDownAnnotation(testLabelDD, testChoices, 0, false);
+       dbac.addExperiment(testExpId);
+       dbac.addFreeTextAnnotation(testLabelFT, null, true);
+       dbac.addDropDownAnnotation(testLabelDD, testChoices, 0, false);
     }
 
     @After
@@ -167,33 +172,40 @@ public class ExperimentTests {
     }
 
     @Test
+    public void getAllAnnotationLabelsTest(){
+
+    	ArrayList<String> allAnnotationlabels = dbac.getAllAnnotationLabels();
+
+    	/*should be equal to 6 iff 4 entries in database,
+    	  and 2 adds in beginning every testrun.*/
+    	assertEquals(6,allAnnotationlabels.size());
+
+    	//a bit hardcoded, works if database contains this values before.
+    	assertTrue(allAnnotationlabels.contains("Sex"));
+    	assertTrue(allAnnotationlabels.contains("Species"));
+    	assertTrue(allAnnotationlabels.contains("Development Stage"));
+    	assertTrue(allAnnotationlabels.contains("Tissue"));
+    }
+
+    @Test
     public void changeFromOldLabelToNewLabel()
     		throws Exception{
 
+    	ArrayList<String> allLabelsBefore = dbac.getAllAnnotationLabels();
 
-    	String oldLabel = "bajs";
-    	String newLabel = "Tissue";
-    	String value = "Arm";
-    	int nrOfLabelsBefore = 0;
-    	int nrOfLabelsAfter = 0;
+    	if(allLabelsBefore.contains(oldLabel)){
 
-    	//searching nr of a specific value in annotations.
-    	String BeforepubMed = value + "[" + oldLabel + "]";
-    	List<Experiment> preResult =  dbac.search(BeforepubMed);
-    	nrOfLabelsBefore = preResult.size();
+    		boolean succeed = dbac.changeAnnotationLabel(oldLabel, newLabel);
 
+    		assertTrue(succeed);
 
-    	boolean suceed = dbac.changeAnnotationLabel(oldLabel, newLabel);
-
-    	//now search if label changed and nr of values are the same.
-
-    	String pubMed = value + "[" + newLabel + "]";
-
-    	List<Experiment> result = dbac.search(pubMed);
-    	nrOfLabelsAfter = result.size();
-
-
-    	assertEquals(nrOfLabelsBefore, nrOfLabelsAfter);
+    		ArrayList<String> allLabelsAfter = dbac.getAllAnnotationLabels();
+    		assertFalse(allLabelsAfter.contains(oldLabel));
+    		assertTrue(allLabelsAfter.contains(newLabel));
+    	}else{
+    		System.out.println("The old label did not exist in database!");
+    		fail();
+    	}
     }
 
 }
