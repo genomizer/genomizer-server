@@ -1,6 +1,7 @@
 package command;
 
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -18,18 +19,22 @@ import database.*;
 
 public class ProcessCommand extends Command {
 
+	private String username;
 
-	private String fileID;
-	private String processType;
-
-	private String userID;
-
+	@Expose
+	private String processtype;
 	@Expose
 	private String metadata;
 	@Expose
 	private String[] parameters;
 	@Expose
 	private String genomeRelease;
+	@Expose
+	private String filename;
+	@Expose
+	private String filepath;
+	@Expose
+	private String expid;
 
 	//Empty constructor
 	public ProcessCommand() {
@@ -39,7 +44,7 @@ public class ProcessCommand extends Command {
 	@Override
 	public boolean validate() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
@@ -50,25 +55,39 @@ public class ProcessCommand extends Command {
 		metadata = "meta1,meta2,meta3";
 		String[] parameters = {"param1","param2","param3"};
 
-		String username = "c5dv151_vt14";
-		String password = "shielohh";
-		String host = "postgres";
-		String database = "c5dv151_vt14";
+		String DBusername = "c5dv151_vt14";
+		String DBpassword = "shielohh";
+		String DBhost = "postgres";
+		String DBdatabase = "c5dv151_vt14";
 		DatabaseAccessor dbac;
+		ProcessHandler processHandler;
 		//Har ett filID,,processtype,param till profile->region parsa i commandFactory
 		try {
-			dbac = new  DatabaseAccessor(username, password, host, database);
-			switch(processType){
+			dbac = new  DatabaseAccessor(DBusername, DBpassword, DBhost, DBdatabase);
+			processHandler = new ProcessHandler();
+			switch(processtype){
 				case "rawtoprofile":
-					String uploader=Authenticate.getUsername(userID);
-					System.out.println("Uploader of file: " + uploader);
 
+					System.out.println("Uploader of file: " + DBusername);
 
+					String outfilepath = dbac.addFile("profile", filename, metadata, "yuri", username, false, expid, genomeRelease);
+
+				try {
+					processHandler.executeProcess("rawtoprofile", parameters, filepath, outfilepath);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					System.err.println("CATCH (IE) in ProcessCommand.Execute when running processHandler.executeProcess");
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					System.err.println("CATCH (IO) in ProcessCommand.Execute when running processHandler.executeProcess");
+					e.printStackTrace();
+				}
 
 
 //					ArrayList<String> filepaths=dbac.convertFromRawtoProfile(fileID,metadata,uploader,GRversion);
 
-					ProcessHandler processHandler = new ProcessHandler();
+
 
 //					processHandler.executeProcess(processType, parameters, filepaths.get(0), filepaths.get(1));
 
@@ -95,47 +114,52 @@ public class ProcessCommand extends Command {
 
 	public String getMetadata() {
 		// TODO Auto-generated method stub
-		return metadata;
+		return this.metadata;
 	}
 
 	public String[] getParameters() {
 		// TODO Auto-generated method stub
-		return parameters;
+		return this.parameters;
 	}
 
 	public String getGenomeRelease() {
 		// TODO Auto-generated method stub
-		return genomeRelease;
-	}
-
-	public void setFileID(String fileID) {
-		this.fileID = fileID;
-
-	}
-
-	public String getFileID() {
-		// TODO Auto-generated method stub
-		return fileID;
+		return this.genomeRelease;
 	}
 
 	public String getProcessType() {
-		return processType;
+		return this.processtype;
 	}
 
 	public void setProcessType(String processType) {
 		// TODO Auto-generated method stub
-		this.processType = processType;
+		this.processtype = processType;
 
 	}
 
-	public Object getUserID() {
+	public String getUsername() {
 		// TODO Auto-generated method stub
-		return this.userID;
+		return this.username;
 	}
 
-	public void setUserID(String uuid) {
-		this.userID = uuid;
+	public void setUsername(String username) {
+		this.username = username;
 
+	}
+
+	public String getFilename() {
+		// TODO Auto-generated method stub
+		return this.filename;
+	}
+
+	public String getFilepath() {
+		// TODO Auto-generated method stub
+		return this.filepath;
+	}
+
+	public String getExpID() {
+		// TODO Auto-generated method stub
+		return this.expid;
 	}
 
 }

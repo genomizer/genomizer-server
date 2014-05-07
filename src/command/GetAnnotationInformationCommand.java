@@ -19,19 +19,23 @@ public class GetAnnotationInformationCommand extends Command {
 
 	@Override
 	public boolean validate() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	public Response execute() {
+
+		String username = "c5dv151_vt14";
+	    String password = "shielohh";
+	    String host = "postgres";
+	    String database = "c5dv151_vt14";
 
 		ArrayList<AnnotationInformation> annotations = new ArrayList<AnnotationInformation>();
 
 		DatabaseAccessor accessor = null;
 		Map<String, Integer> a = null;
 		try {
-			accessor = new DatabaseAccessor("c5dv151_vt14", "shielohh", "postgres", "c5dv151_vt14");
+			accessor = new DatabaseAccessor(username, password, host, database);
 			a = accessor.getAnnotations();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

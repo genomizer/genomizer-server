@@ -32,10 +32,10 @@ public class CommandHandler {
 	 * @param a RESTful-header.
 	 * @param a enum that determines command type.
 	 */
-	public Response processNewCommand(String json, String restful, String uuid, CommandType cmdt) {	//TODO: Rename this method.
+	public Response processNewCommand(String json, String restful, String username, CommandType cmdt) {	//TODO: Rename this method.
 
 		//Get code from restful //TODO: add parser code....
-		Command myCom = createCommand(json, restful, uuid, cmdt);
+		Command myCom = createCommand(json, restful, username, cmdt);
 
 		//TODO: Find out what type of work that needs to be done. (Slow? Fast?)
 		//Create a response to return.
@@ -52,7 +52,7 @@ public class CommandHandler {
 	 * @param a enum that determines command type.
 	 * @return
 	 */
-	private Command createCommand(String json, String restful, String uuid, CommandType cmdt) {
+	private Command createCommand(String json, String restful, String username, CommandType cmdt) {
 
 		Command newCommand = null;
 		String parsedRest = parseRest(restful);
@@ -112,7 +112,7 @@ public class CommandHandler {
 
 		} else if (cmdt == CommandType.PROCESS_COMMAND) {
 
-			newCommand = cmdFactory.createProcessCommand(json, parsedRest, uuid);
+			newCommand = cmdFactory.createProcessCommand(json, username);
 
 		} else if (cmdt == CommandType.GET_ANNOTATION_INFORMATION_COMMAND) {
 
@@ -153,12 +153,15 @@ public class CommandHandler {
 	public String parseRest(String restful) {
 
 		String[] split = restful.split("/");
-		String[] parsed = new String[split.length - 2];
-		
-		for(int i = 0; i < parsed.length; i++) {
-			parsed[i] = split[i+2];			
-		}
-		return parsed[parsed.length - 1];
+		return split[split.length -1];
+
+//		String[] parsed = new String[split.length - 2];
+
+//		for(int i = 0; i < parsed.length; i++) {
+//			parsed[i] = split[i+2];
+//		}
+
+//		return parsed[parsed.length - 1];
 
 	}
 

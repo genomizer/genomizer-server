@@ -1,11 +1,23 @@
 package command;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
+import response.getExperimentResponse;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import database.DatabaseAccessor;
+import database.Experiment;
+import database.FileTuple;
 
 /**
  * Class used to retrieve an experiment.
@@ -21,22 +33,60 @@ public class GetExperimentCommand extends Command {
 	 * Empty constructor.
 	 */
 	public GetExperimentCommand(String rest) {
-
+		this.header = rest;
 	}
 
 	@Override
 	public boolean validate() {
 
-		// TODO Auto-generated method stub
-		return false;
+		if(this.header == null) {
+			return false;
+		} else {
+			return true;
+		}
 
 	}
 
 	@Override
 	public Response execute() {
 
-		//Method not implemented, send appropriate response
-		return 	new MinimalResponse(StatusCode.NO_CONTENT);
+		String username = "c5dv151_vt14";
+	    String password = "shielohh";
+	    String host = "postgres";
+	    String database = "c5dv151_vt14";
+	    Experiment exp;
+	    DatabaseAccessor db = null;
+
+		try {
+			db = new DatabaseAccessor(username, password, host, database);
+			exp = db.getExperiment(this.header);
+		} catch (SQLException e) {
+			return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
+		}
+
+		return new getExperimentResponse(getInfo(exp), getAnnotations(exp), getFiles(exp), 200);
 	}
+
+	public ArrayList<String> getInfo(Experiment exp) {
+		ArrayList<String> info = new ArrayList<String>();
+		info.add(exp.getID());
+		return info;
+
+	}
+
+	public HashMap<String, String> getAnnotations(Experiment exp) {
+		ArrayList<String> annotations = new ArrayList<String>();
+		HashMap<String, String> annotationMap = (HashMap<String, String>) exp.getAnnotations();
+		return annotationMap;
+
+	}
+
+	public ArrayList<FileTuple> getFiles(Experiment exp) {
+		ArrayList<String> files = new ArrayList<String>();
+		ArrayList<FileTuple> fileList = (ArrayList<FileTuple>) exp.getFiles();
+		return fileList;
+	}
+
+
 
 }

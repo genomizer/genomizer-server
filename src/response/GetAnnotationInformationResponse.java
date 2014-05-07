@@ -14,6 +14,8 @@ public class GetAnnotationInformationResponse extends Response {
 
 		this.code = code;
 		this.annotations = annotations;
+		AnnotationInformation anno = annotations.get(0);
+		System.out.println();
 	}
 
 }

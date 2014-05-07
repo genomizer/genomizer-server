@@ -12,6 +12,8 @@ import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
 
+import authentication.Authenticate;
+
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
@@ -41,6 +43,7 @@ public class Doorman {
 		httpServer.setExecutor(new Executor() {
 			@Override
 			public void execute(Runnable command) {
+				System.out.println("New Executor.");
 				new Thread(command).start();
 			}
 		});
@@ -154,6 +157,9 @@ public class Doorman {
 		Scanner scanner = new Scanner(bodyStream);
 		String body = "";
 		String uuid = null;
+		String username = null;
+
+		System.out.println("Exchange: " + type);
 
 		if(type != CommandType.LOGIN_COMMAND) {
 			try {
@@ -165,6 +171,8 @@ public class Doorman {
 				scanner.close();
 				return;
 			}
+		} else {
+			System.out.println("FOUND LOGIN COMMAND.");
 		}
 
 		while(scanner.hasNext()) {
@@ -172,7 +180,20 @@ public class Doorman {
 		}
 		scanner.close();
 
-		Response response = commandHandler.processNewCommand(body, exchange.getRequestURI().toString(), uuid, type);
+		username = Authenticate.getUsername(uuid);
+
+		System.out.println("BODY: " + body);
+		System.out.println("BEFORE PROCESS COMMAND...");
+		Response response = null;
+		try {
+			response = commandHandler.processNewCommand(body, exchange.getRequestURI().toString(), uuid, type);
+		} catch(Exception e ) {
+			e.printStackTrace();
+		}
+		System.out.println("AFTER PROCESS COMMAND.");
+
+		//TODO Should there be some error checking?
+
 
 		respond(exchange, response);
 
@@ -194,5 +215,6 @@ public class Doorman {
 			os.flush();
 			os.close();
 		}
+		System.out.println("END OF EXCHANGE\n------------------");
 	}
 }
