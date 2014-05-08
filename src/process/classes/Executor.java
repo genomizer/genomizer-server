@@ -14,10 +14,10 @@ import java.util.StringTokenizer;
 public abstract class Executor {
 
 private final String FILEPATH = "resources/";
-	
+
 	/**
 	 * Used to execute a program like bowtie
-	 * 
+	 *
 	 * @param command
 	 * @return
 	 * @throws InterruptedException
@@ -29,10 +29,10 @@ private final String FILEPATH = "resources/";
 		command[0]=pathToExecutable.getAbsolutePath();
 		return executeCommand(command);
 	}
-	
+
 	/**
 	 * Used to execute a script
-	 * 
+	 *
 	 * @param command
 	 * @return
 	 * @throws InterruptedException
@@ -44,10 +44,10 @@ private final String FILEPATH = "resources/";
 		command[1]=pathToExecutable.getAbsolutePath();
 		return executeCommand(command);
 	}
-	
+
 	/**
 	 * Used to parse a string and make it into a String array
-	 * 
+	 *
 	 * @param procedureParameters
 	 * @return
 	 */
@@ -61,10 +61,10 @@ private final String FILEPATH = "resources/";
 		}
 		return temp;
 	}
-	
+
 	/**
 	 * Used to execute commands
-	 * 
+	 *
 	 * @param command
 	 * @return
 	 * @throws InterruptedException
@@ -93,7 +93,7 @@ private final String FILEPATH = "resources/";
 
 	/**
 	 * Used to execute shell command
-	 * 
+	 *
 	 * @param command
 	 * @param dir
 	 * @param fileName
@@ -102,6 +102,7 @@ private final String FILEPATH = "resources/";
 	 * @throws IOException
 	 */
 	protected String executeShellCommand(String[] command, String dir, String fileName) throws InterruptedException, IOException{
+		System.out.println("DIR == == = = " + dir);
 		ProcessBuilder builder = new ProcessBuilder(command);
 
 		builder.directory( new File( FILEPATH ).getAbsoluteFile() );
@@ -110,7 +111,7 @@ private final String FILEPATH = "resources/";
 
 		Scanner s = new Scanner(process.getInputStream());
 		StringBuilder text = new StringBuilder();
-		File dirFile = new File(FILEPATH+dir);
+		File dirFile = new File(dir);
 
 		if(!dirFile.exists()) {
 			dirFile.mkdirs();
@@ -130,10 +131,10 @@ private final String FILEPATH = "resources/";
 //		System.out.printf( "Process exited with result %d and output %s%n", result, text );
 		return text.toString();
 	}
-	
+
 	/**
 	 * Used to make a File object which represents a folder.
-	 * 
+	 *
 	 * @param dirName
 	 * @return
 	 */
@@ -142,10 +143,10 @@ private final String FILEPATH = "resources/";
 		return new File(dirName.substring(0, dirName.length()-1));
 
 	}
-	
+
 	/**
 	 * Deletes a folder and all its subfolders.
-	 * 
+	 *
 	 * @param dir
 	 * @return
 	 */

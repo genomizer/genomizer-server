@@ -12,8 +12,24 @@ import java.io.InputStreamReader;
  */
 public class RawToProfileConverter extends Executor {
 
-	private String[] bowTieParameters; // Step 1
-
+	private String remoteExecution;
+	private String dir;
+	private String sortedDir;
+	private String sortSam;
+	private String samToGff;
+	private String gffToAllnusgr;
+	private String smooth;
+	private String step10;
+	private String sgr2wig;
+	private File fileDir;
+	private String inFolder;
+	private String[] parameters;
+	private String outFile;
+	private String rawFile1;
+	private String rawFile2;
+	private String rawFile_1_Name;
+	private String rawFile_2_Name;
+	private String logString;
 	/**
 	 * Takes a string array that contains bowtie parameters and then follows a
 	 * procedure.
@@ -36,204 +52,109 @@ public class RawToProfileConverter extends Executor {
 	 * @throws InterruptedException
 	 * @throws IOException
 	 */
-	public void procedure(String[] parameters, String inFolder, String outFile)
+	public String procedure(String[] parameters, String inFolder, String outFile)
 			throws InterruptedException, IOException {
-		File[] inFiles = new File("resources/"+inFolder).getAbsoluteFile().listFiles();
-		String fileOne;
-		String fileTwo;
-		String fileOneName;
-		String fileTwoName;
+		File[] inFiles = new File("/"+inFolder).getAbsoluteFile().listFiles();
+		this.parameters = parameters;
+		this.outFile = outFile;
+		this.inFolder = inFolder;
 
-		fileOne = inFiles[0].getName();
-		fileTwo = inFiles[1].getName();
-		fileOneName = fileOne.substring(0, fileOne.length()-6);
-		fileTwoName = fileTwo.substring(0, fileTwo.length()-6);
+		if(inFiles.length == 0) {
+			return "No files found at path " + inFolder;
+		} else if(inFiles.length > 2) {
+			return "Experiment contains more than two raw files";
+		}
+		rawFile1 = inFiles[0].getName();
+		rawFile_1_Name = rawFile1.substring(0, rawFile1.length()-6);
 
-		// String dir = String.valueOf((Thread.currentThread().getId())) + "/";
-
-		String dir = "results_"+Thread.currentThread().getId()+"/";
-		String sortedDir = dir + "sorted/";
-		String bowTieOutput;	// = "beforeSorted.sam";
-		String outString;
-
-		File fileDir = new File("resources/" + dir);
-		// deleteDir(fileDir);
+		if(inFiles.length == 2) {
+			rawFile2 = inFiles[1].getName();
+			rawFile_2_Name = rawFile2.substring(0, rawFile2.length()-6);
+		}
+		initiateConversionStrings(parameters, outFile);
 		System.out.println("Deletes directory");
 
-		System.out.println("dir " + fileDir.toString());
-		if (!fileDir.exists()) {
-			fileDir.mkdir();
-		}
+		makeConversionDirectories(remoteExecution + dir+"/sorted");
+
+		printTrace(parameters, inFolder, outFile);
 
 		if (fileDir.exists()) {
-
-			String sortSam; // Step 2
-//			 = "sort " + dir + bowTieOutput + " -k 3,3 -k 4,4n";
-
-			String samToGff = "perl sam_to_readsgff_v1.pl " + sortedDir; // Step 3
-			String gffToAllnusgr = "perl readsgff_to_allnucsgr_v1.pl "
-					+ sortedDir + "reads_gff/"; // Step 4
-			String smooth = "perl smooth_v4.pl " + sortedDir
-					+ "reads_gff/allnucs_sgr/ 10 1 5 0 0"; // Step 5
-			String step10 = "perl AllSeqRegSGRtoPositionSGR_v1.pl y 10 "
-					+ sortedDir + "reads_gff/allnucs_sgr/smoothed/"; // Step 6
-			String sgr2wig = "perl sgr2wig.pl " + sortedDir
-					+ "/reads_gff/allnucs_sgr/smoothed/Step10/*.sgr " + outFile
-					+ "test.wig"; // Step 7
-
-
-
-			long startTime;
-			long endTime;
-			long allTimeStart;
-			long allTimeEnd;
-
-			//Sets parameters for first bowtie execute
-			bowTieParameters = parse(parameters[0] + " " + inFolder+"/"+fileOne + " " +dir
-					+ fileOneName + ".sam");
-
-			startTime = System.currentTimeMillis();
-			allTimeStart = startTime;
-			outString = executeProgram(bowTieParameters);
-			endTime = System.currentTimeMillis();
-			System.out.println("bowtie done, Time: " + ((endTime - startTime))
-					+ " milliseconds");
-
-			//Sets parameters for second bowtie execute
-			bowTieParameters = parse(parameters[0] + " " + inFolder+"/"+fileTwo + " " +dir
-					+ fileTwoName + ".sam");
-
-			startTime = System.currentTimeMillis();
-			allTimeStart = startTime;
-			outString = executeProgram(bowTieParameters);
-			endTime = System.currentTimeMillis();
-			System.out.println("bowtie done, Time: " + ((endTime - startTime))
-					+ " milliseconds");
-
-			String newString;
-			startTime = System.currentTimeMillis();
-			/*
-			 * Process p = Runtime.getRuntime().exec(sortSam); BufferedReader
-			 * reader = new BufferedReader(new
-			 * InputStreamReader(p.getInputStream())); String line = "";
-			 * System.out.println("NUSKRIVER VIH�ER"); while ((line =
-			 * reader.readLine()) != null) { System.out.println("hej"+line); }
-			 */
-
-			//Sets parameters for sorting first sam file
-			sortSam = "sort " + dir + fileOneName +".sam"+ " -k 3,3 -k 4,4n";
-			newString = executeShellCommand(parse(sortSam), dir + "sorted/",
-					fileOneName + "_sorted.sam");
-
-			//Sets parameters for sorting second sam file
-			sortSam = "sort " + dir + fileTwoName + ".sam" + " -k 3,3 -k 4,4n";
-			newString = executeShellCommand(parse(sortSam), dir + "sorted/",
-					fileTwoName + "_sorted.sam");
-
-			System.out.println(newString);
-			endTime = System.currentTimeMillis();
-			System.out.println("sortsam done, Time: " + ((endTime - startTime))
-					+ " milliseconds");
-
-			startTime = System.currentTimeMillis();
-			outString = outString + " " + executeScript(parse(samToGff));
-			endTime = System.currentTimeMillis();
-			System.out.println("readgff done, Time: " + ((endTime - startTime))
-					+ " milliseconds");
-
-			startTime = System.currentTimeMillis();
-			outString = outString + " " + executeScript(parse(gffToAllnusgr));
-			endTime = System.currentTimeMillis();
-			System.out.println("readsgff to allnucsgr done, Time: "
-					+ ((endTime - startTime)) + " milliseconds");
-
-			sgr2wig = "perl sgr2wig.pl " + sortedDir
-			+ "/reads_gff/allnucs_sgr/.sgr" outFile +"test.wig";
-			outString = outString + " " + executeScript(parse(sgr2wig));
+			logString = runBowTie(rawFile1, rawFile_1_Name);
+			sortSamFile(rawFile_1_Name);
+			if(inFiles.length == 2) {
+				logString = logString + "\n"+ runBowTie(rawFile2, rawFile_2_Name);
+				//Sets parameters for sorting second sam file
+				sortSamFile(rawFile_2_Name);
+			}//Sets parameters for sorting first sam file
+			logString = logString + "\n" + executeScript(parse(samToGff));
+			logString = logString + "\n" + executeScript(parse(gffToAllnusgr));
+			//logString = logString + "\n" + executeScript(parse(smooth));
+			//logString = logString + "\n" + executeScript(parse(step10));
 /*
-			startTime = System.currentTimeMillis();
-			outString = outString + " " + executeScript(parse(smooth));
-			endTime = System.currentTimeMillis();
-			System.out.println("smooth done, Time: " + ((endTime - startTime))
-					+ " milliseconds");
-
-
-			startTime = System.currentTimeMillis();
-			outString = outString + " " + executeScript(parse(step10));
-			endTime = System.currentTimeMillis();
-			System.out.println("step10 done, Time: " + ((endTime - startTime))
-					+ " milliseconds");
-
-
-			File[] sgrFiles = new File("resources/"+sortedDir+"/reads_gff/allnucs_sgr/smoothed/Step10").getAbsoluteFile().listFiles();
-			System.out.println(sortedDir+"reads_gff/allnucs_sgr/smoothed/Step10/");*/
-//			String fileOne;
-//			String fileTwo;
-//			String fileOneName;
-//			String fileTwoName;
-/*
-			fileOne = sgrFiles[0].getName();
-			fileTwo = sgrFiles[1].getName();
-			fileOneName = fileOne.substring(0, fileOne.length()-6);
-			fileTwoName = fileTwo.substring(0, fileTwo.length()-6);
-
-			System.out.println(" HFHFHFHHFHFHFHFHFHHFHFH "+ outFile+fileOneName
-					+ ".wig");
 			//Parameters for first sgr2wig execution
 			sgr2wig = "perl sgr2wig.pl " + sortedDir
 					+ "/reads_gff/allnucs_sgr/smoothed/Step10/"+fileOne +" "+ outFile+fileOneName
 					+ ".wig"; // Step 7
-
-			startTime = System.currentTimeMillis();
-			outString = outString + " " + executeScript(parse(sgr2wig));
-			endTime = System.currentTimeMillis();
-			allTimeEnd = endTime;
-			System.out.println("sgr2wig done, Time: " + ((endTime - startTime))
-					+ " milliseconds");
-
-			System.out.println("fileTwo "+fileTwo);
-
-			//TODO kan inte skicka in *.sgr när det finns mer än en fil till detta script
-			//Parameters for second sgr2wig execution
-			sgr2wig = "perl sgr2wig.pl " + sortedDir
-					+ "/reads_gff/allnucs_sgr/smoothed/Step10/"+fileTwo+ " "+ outFile+"/"+fileTwoName
-					+ ".wig"; // Step 7
-
-			startTime = System.currentTimeMillis();
-			outString = outString + " " + executeScript(parse(sgr2wig));
-			endTime = System.currentTimeMillis();
-			allTimeEnd = endTime;
-			System.out.println("sgr2wig done, Time: " + ((endTime - startTime))
-					+ " milliseconds");*/
-			System.out.println("dir = " + dir);
-			System.out.println("cleanup gav tillbaka = " + cleanUp(cleanUpInitiator("resources/" + dir)));/*
-			if(allTimeEnd-allTimeStart > 60000) {
-				System.out.println("All done, took "+getTime(allTimeEnd-allTimeStart));
-			}*/
-			System.out.println(outString);
-		}
-	}
-
-
-	public String getTime(long temp) {
-		String out = "";
-
-		String minute;
-		String second;
-
-		second = String.valueOf((temp % 60000) / 1000);
-		minute = String.valueOf(temp / 60000);
-
-		if (second.length() == 1) {
-			out = minute + ":0" + second;
+			outString = outString + " " + executeScript(parse(sgr2wig));*/
+			cleanUp(cleanUpInitiator(remoteExecution+dir));
+			return logString;
 		} else {
-			out = minute + ":" + second;
+			return "Failed to create directory " + fileDir.toString();
 		}
-		System.out.println(out);
-		return out;
+	}
+	private void printTrace(String[] parameters, String inFolder, String outFile) {
+		System.out.println("dir " + fileDir.toString());
+		System.out.println("INFOLDER = " + inFolder);
+		System.out.println("OUTFILE = " + outFile);
+		System.out.println("DIR = " + dir);
+		System.out.println("SORTEDDIR = " + sortedDir);
+		System.out.println("BOWTIE = " + parse(parameters[0] + " " + inFolder+"/"+rawFile1 + " " +dir
+					+ rawFile_1_Name + ".sam"));
+	}
+	private String runBowTie(String fileOne, String fileOneName) throws InterruptedException, IOException {
+		String[] bowTieParameters = parse("bowtie " + parameters[0] + " " + parameters[1] + " " + inFolder+"/"+fileOne + " " + remoteExecution + dir
+				+ fileOneName + ".sam");
+
+		printStringArray(bowTieParameters);
+		return executeProgram(bowTieParameters);
+
 	}
 
-	public String[] getBowTieParameters() {
-		return bowTieParameters;
+	private String printStringArray(String[] s) {
+		String string = "";
+		for(int i = 0; i < s.length; i++) {
+			string += s[i]+" ";
+		}
+		System.out.println(string);
+		return string;
+	}
+
+	private void sortSamFile(String unsortedSamFileName) throws InterruptedException, IOException {
+		sortSam = "sort " + remoteExecution+dir + unsortedSamFileName +".sam"+ " -k 3,3 -k 4,4n";
+	executeShellCommand(parse(sortSam), remoteExecution+dir + "sorted/",
+			unsortedSamFileName + "_sorted.sam");
+
+	}
+	private void makeConversionDirectories(String directoryPath) {
+		fileDir = new File(directoryPath);
+		if (!fileDir.exists()) {
+			fileDir.mkdirs();
+		}
+
+	}
+	private void initiateConversionStrings(String[] parameters, String outFile) {
+		remoteExecution = "/scratch/resources/";
+		dir = "results_"+Thread.currentThread().getId()+"/";
+		sortedDir =  remoteExecution +dir + "sorted/";
+		samToGff = "perl sam_to_readsgff_v1.pl " + sortedDir; // Step 3
+		gffToAllnusgr = "perl readsgff_to_allnucsgr_v1.pl "
+				+ sortedDir + "reads_gff/"; // Step 4
+		smooth = "perl smooth_v4.pl " + sortedDir
+				+ "reads_gff/allnucs_sgr/ " + parameters[2] ; // Step 5
+		step10 = "perl AllSeqRegSGRtoPositionSGR_v1.pl" + parameters[3] + " "
+				+ sortedDir + "reads_gff/allnucs_sgr/smoothed/"; // Step 6
+		sgr2wig = "perl sgr2wig.pl " + sortedDir
+				+ "/reads_gff/allnucs_sgr/smoothed/Step10/*.sgr " + outFile
+				+ "test.wig";
 	}
 }
