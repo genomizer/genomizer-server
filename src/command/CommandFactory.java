@@ -24,6 +24,7 @@ public class CommandFactory {
 
 		//Create the builder.
 	    builder = new GsonBuilder();
+	    builder.setPrettyPrinting();
 	    builder.excludeFieldsWithoutExposeAnnotation();
 	    gson = builder.create();
 
