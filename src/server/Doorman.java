@@ -171,8 +171,8 @@ public class Doorman {
 			try {
 				uuid =  exchange.getRequestHeaders().get("Authorization").get(0);
 			} catch(NullPointerException e) {
+				System.out.println("Unauthorized request!");
 				Response errorResponse = new MinimalResponse(StatusCode.UNAUTHORIZED);
-				e.printStackTrace();
 				try {
 					respond(exchange, errorResponse);
 				} catch (IOException e1) {

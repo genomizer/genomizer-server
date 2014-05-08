@@ -64,6 +64,12 @@ public class GetAnnotationInformationCommand extends Command {
 			AnnotationInformation annotation = new AnnotationInformation(0, annotation_names.get(i), values, true);
 			annotations.add(annotation);
 		}
+
+	    ArrayList<String> vals = new ArrayList<String>();
+	    vals.add("freetext");
+	    AnnotationInformation expId = new AnnotationInformation(0, "ExpID", vals, false);
+		annotations.add(expId);
+
 		Collections.sort(annotations, new compareAnnotations());
 
 		for(int i = 0; i < annotations.size(); i++) {
