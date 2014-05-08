@@ -1148,6 +1148,31 @@ public class DatabaseAccessor {
 		return true;
     }
 
+    /** Creates an Annotation object from an annotation label.
+     *
+     *  @param label the name of the annotation to create the object for.
+     *  @return the Annotation object. If the label does not exist, then null
+     *  will be returned.
+     *  @throws SQLException if the query does not succeed.
+     */
+     public Annotation getAnnotationObject(String label) throws SQLException {
+
+    	 String query = "SELECT * FROM Annotation "
+    			 		+ "LEFT JOIN Annotation_Choices "
+    			 		+ "ON (Annotation.Label = Annotation_Choices.Label) "
+    			 		+ "WHERE Annotation.Label = ?";
+
+    	 PreparedStatement stmt = conn.prepareStatement(query);
+    	 stmt.setString(1, label); ResultSet rs = stmt.executeQuery();
+
+    	 if(rs.next()) {
+    		 return new Annotation(rs);
+    	 }
+    	 else {
+    		 return null;
+    	 }
+    }
+
     /*
      * Changes the value of an annotation corresponding to it's label.
      * Parameters: label of annotation, the old value and the new value to
