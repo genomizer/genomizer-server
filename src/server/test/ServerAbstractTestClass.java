@@ -18,7 +18,7 @@ import com.google.gson.JsonObject;
 public abstract class ServerAbstractTestClass {
 
 	//Token used to identify users.
-	protected static Token token = null;
+	protected Token token = null;
 
 	/**
 	 * method used to set the token.

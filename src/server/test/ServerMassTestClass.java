@@ -76,7 +76,7 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 		/* Note: If the annotation field is added already, this test will not
 		 * 		 currently pass. Change the json_output name to something else
 		 * 		 in order to get it to work.remove the annotation
-	 *		that was added to be able to test continuously.
+		 *		 that was added to be able to test continuously.
 		 */
 
 		//Create JSON login object.
@@ -91,7 +91,7 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 		con.setRequestProperty("Content-Type", "application/json");
 		con.setRequestProperty("Authorization", token.getToken());
 
-		String json_output = "{\"name\":\"species10\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
+		String json_output = "{\"name\":\"species11\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
 
 		con.setDoOutput(true);
 		DataOutputStream wr = new DataOutputStream(con.getOutputStream());
