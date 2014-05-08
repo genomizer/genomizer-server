@@ -49,8 +49,8 @@ public class AddFileToExperimentCommand extends Command {
 	@Expose
 	private String author;
 
+	@Expose
 	private String uploader;
-
 
 	@Expose
 	private boolean isPrivate;
@@ -96,7 +96,7 @@ public class AddFileToExperimentCommand extends Command {
 		try {
 			accessor = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
 			//response_url = accessor.addFile(type, fileName, "metadata", "Jonas Markström", "Jonas Markström", false, experimentID, "v.123");
-			response_url = accessor.addFileURL(type, fileName,metaData, author, "Not implemented yet", false, experimentID, grVersion);
+			response_url = accessor.addFileURL(type, fileName,metaData, author, uploader, false, experimentID, grVersion);
 			return new AddFileToExperimentResponse(StatusCode.OK, response_url);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

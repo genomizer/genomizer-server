@@ -257,7 +257,8 @@ public class ClientDummy {
 		ja.addProperty("type", "raw");
 		ja.addProperty("fileType", "unknown");
 		ja.addProperty("metadata", "not implemented yet");
-		ja.addProperty("author", "Jonas");
+		ja.addProperty("author", "Jonas M");
+		ja.addProperty("uploader", "Jonas M");
 		ja.addProperty("isPrivate", "false");
 		ja.addProperty("grVersion", "v1.0");
 
