@@ -252,15 +252,15 @@ public class ClientDummy {
 		JsonObject ja=new JsonObject();
 
 		ja.addProperty("experimentID", "Exp1");
-		ja.addProperty("fileName", "test1.txt");
+		ja.addProperty("fileName", "test123456.txt");
 		ja.addProperty("size", "1mb");
 		ja.addProperty("type", "raw");
 		ja.addProperty("fileType", "unknown");
-		ja.addProperty("metadata", "not implemented yet");
+		ja.addProperty("metaData", "not impl. yet");
 		ja.addProperty("author", "Jonas M");
 		ja.addProperty("uploader", "Jonas M");
 		ja.addProperty("isPrivate", "false");
-		ja.addProperty("grVersion", "v1.0");
+		ja.addProperty("grVersion", "rn5");
 
 		String json_output = ja.toString();
 		System.out.println("JSON: " + json_output);

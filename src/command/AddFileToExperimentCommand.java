@@ -103,7 +103,7 @@ public class AddFileToExperimentCommand extends Command {
 			e.printStackTrace();
 		}
 
-		return new MinimalResponse(StatusCode.NO_CONTENT);
+		return new MinimalResponse(StatusCode.BAD_REQUEST);
 
 
 	}
