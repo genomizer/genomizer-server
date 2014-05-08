@@ -1220,6 +1220,32 @@ public class DatabaseAccessor {
         }
     }
 
+    /**
+     * Creates a list of Annotation objects from a list of annotation labels.
+     * @param labels the list of labels.
+     * @return will return a list with all the annotations with valid labels.
+     * If the list with labels is empty or none of the labels are valid,
+     * then it will return null.
+     * @throws SQLException if the query does not succeed.
+     */
+    public List<Annotation> getAnnotationObject(List<String> labels)
+   		 throws SQLException {
+
+   	 List<Annotation> annotations = null;
+   	 Annotation annotation = null;
+
+   	 for (String label : labels) {
+   		 annotation = getAnnotationObject(label);
+   		 if (annotation != null) {
+   			 if(annotations == null) {
+   				 annotations = new ArrayList<Annotation>();
+   			 }
+   			 annotations.add(annotation);
+   		 }
+   	 }
+   	 return annotations;
+    }
+
     /*
      * Changes the value of an annotation corresponding to it's label.
      * Parameters: label of annotation, the old value and the new value to
