@@ -5,18 +5,17 @@ import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import java.net.URLEncoder;
 
-public class SearchDummy {
-
+public class GetAnnotationDummy {
 	public static Token token = null;
 
 	public static void main(String args[]) throws Exception {
 		sendLogin();
-		sendSearchRequest();
+		sendGetAnnotationRequest();
 	}
 
 	private static void sendLogin() throws Exception {
@@ -76,11 +75,10 @@ public class SearchDummy {
 
 	}
 
-	private static void sendSearchRequest() throws Exception {
+	private static void sendGetAnnotationRequest() throws Exception {
 
-		String query = URLEncoder.encode("Exp1[ExpID] OR Exp2[ExpID]", "UTF-8");
-//		String url = "http://scratchy.cs.umu.se:7000/search/?annotation=" + query;
-		String url = "http://localhost:7001/search/?annotations=" + query;
+//		String url = "http://scratchy.cs.umu.se:7000/annotation";
+		String url = "http://localhost:7001/annotation";
 
 		System.out.println(URLEncoder.encode(url, "UTF-8"));
 

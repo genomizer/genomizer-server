@@ -91,6 +91,8 @@ public class AddFileToExperimentCommand extends Command {
 		fileInfo.add(size);
 		fileInfo.add(type);*/
 
+		System.out.println("META DATA: " + metaData);
+
 		DatabaseAccessor accessor = null;
 		String response_url = null;
 		try {
@@ -103,7 +105,7 @@ public class AddFileToExperimentCommand extends Command {
 			e.printStackTrace();
 		}
 
-		return new MinimalResponse(StatusCode.NO_CONTENT);
+		return new MinimalResponse(StatusCode.BAD_REQUEST);
 
 
 	}
