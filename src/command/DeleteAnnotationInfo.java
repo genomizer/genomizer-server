@@ -12,6 +12,7 @@ public class DeleteAnnotationInfo {
 	@Expose
 	public ArrayList<String> values = new ArrayList<String>();
 
+
 	public String getId() {
 		return id;
 	}

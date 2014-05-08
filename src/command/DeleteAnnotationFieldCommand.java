@@ -2,6 +2,7 @@ package command;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Map;
 
 import com.google.gson.annotations.Expose;
 
@@ -29,9 +30,24 @@ public class DeleteAnnotationFieldCommand extends Command {
 	public boolean validate() {
 		if(deleteId == null) {
 			return false;
-		} else {
-			return true;
 		}
+
+		try {
+			DatabaseAccessor db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
+			Map<String, Integer> currAnno = db.getAnnotations();
+			for(DeleteAnnotationInfo da: deleteId) {
+				if(da.getId() == null) {
+					return false;
+				}
+				if(currAnno.containsKey(da.getId())) {
+					return false;
+				}
+			}
+		} catch (SQLException e) {
+			return false;
+		}
+
+		return true;
 	}
 
 	/**
@@ -60,7 +76,5 @@ public class DeleteAnnotationFieldCommand extends Command {
 		}
 		//Method not implemented, send appropriate response
 		return 	new MinimalResponse(StatusCode.NO_CONTENT);
-
 	}
-
 }
