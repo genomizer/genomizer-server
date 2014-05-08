@@ -68,7 +68,7 @@ public class AddAnnotationFieldCommandTest {
 	}
 
 	/**
-	 * Test for the validation of validation of null objects
+	 * Test for the validation of validation of missing objects
 	 * that were made when JSON was serialized.
 	 */
 	@Test
