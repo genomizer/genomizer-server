@@ -11,14 +11,14 @@ import process.classes.Executor;
  */
 public class GenomeReleaseConverter extends Executor {
 	
-	public String procedure(String inFilePath, String outFilePath, String chainFilePath){
+	public String procedure(String inFilePath, String outFilePath, String chainFilePath,String unliftedPath ){
 		String outString = "";
-		String [] liftover = new String[4];
+		String [] liftover = new String[5];
 		liftover[0] = "liftOver";
 		liftover[1] = inFilePath;
 		liftover[2] = chainFilePath;
 		liftover[3] = outFilePath;
-		
+		liftover[4] = unliftedPath;
 		try {
 			outString = executeProgram(liftover);
 		} catch (InterruptedException e) {
