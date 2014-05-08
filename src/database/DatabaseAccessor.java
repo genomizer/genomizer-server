@@ -1073,20 +1073,104 @@ public class DatabaseAccessor {
     }
 
     /**
-     * Add one genome release to the database.
+     * Method for getting all stored versions of genome Releases in the
+     * database
+     * @return ArrayList<String> genome versions.
+     * @throws SQLException
+     */
+    public ArrayList<String> getStoredGenomeVersions() throws SQLException{
+
+    	ArrayList<String> allVersions = new ArrayList<String>();
+
+    	String getGenVerQuery = "SELECT * FROM Genome_Release";
+    	PreparedStatement ps = conn.prepareStatement(getGenVerQuery);
+
+    	ResultSet res = ps.executeQuery();
+
+    	while(res.next()){
+    		allVersions.add(res.getString("Version"));
+    	}
+    	return allVersions;
+    }
+
+    /**
+     * Add one genomerelease to the database.
      *
      * @param String genomeVersion.
      * @param String specie.
      * @return String filePath, the path where the genome Version file should
      * be saved.
+     * @throws SQLException
      */
-    public String addGenomeRelease(String genomeVersion, String specie){
+    public String addGenomeRelease(String genomeVersion, String specie)
+    	   throws SQLException{
 
     	String filePath = "";
 
-    	FilePathGenerator.generate
+    	String path = FilePathGenerator.GeneratePathForGenomeFiles(
+    										genomeVersion, specie);
 
+    	String insertGenRelQuery = "INSERT INTO Genome_Release " +
+    							   "(Version,Species,FilePath) " +
+    							   "VALUES (?,?,?)";
+
+    	PreparedStatement ps = conn.prepareStatement(insertGenRelQuery);
+
+    	ps.setString(1, genomeVersion);
+    	ps.setString(2, specie);
+    	ps.setString(3, path);
+
+    	ps.execute();
     	return filePath;
+    }
+
+    /**
+     * Removes one genome version stored in the database.
+     * @param version, the genome version.
+     * @param specie.
+     * @return boolean, true if succeded, false if failed.
+     */
+    public boolean removeGenomeRelease(String genomeVersion, String specie){
+
+    	String removeQuery = "DELETE FROM Genome_Release WHERE (Version = ? AND Species = ?)";
+
+    	PreparedStatement ps;
+		try {
+			ps = conn.prepareStatement(removeQuery);
+
+			ps.setString(1, genomeVersion);
+			ps.setString(2, specie);
+			ps.execute();
+		} catch (SQLException e) {
+			System.out.println("Failed to remove genome release!");
+			return false;
+		}
+		return true;
+    }
+
+    /** Creates an Annotation object from an annotation label.
+     *
+     *  @param label the name of the annotation to create the object for.
+     *  @return the Annotation object. If the label does not exist, then null
+     *  will be returned.
+     *  @throws SQLException if the query does not succeed.
+     */
+     public Annotation getAnnotationObject(String label) throws SQLException {
+
+    	 String query = "SELECT * FROM Annotation "
+    			 		+ "LEFT JOIN Annotation_Choices "
+    			 		+ "ON (Annotation.Label = Annotation_Choices.Label) "
+    			 		+ "WHERE Annotation.Label = ?";
+
+    	 PreparedStatement stmt = conn.prepareStatement(query);
+    	 stmt.setString(1, label); ResultSet rs = stmt.executeQuery();
+
+    	 if(rs.next()) {
+    		 return new Annotation(rs);
+    	 }
+    	 else {
+    		 return null;
+    	 }
     }
 
     /*

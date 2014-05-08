@@ -53,6 +53,7 @@ public class AddAnnotationFieldCommand extends Command {
 	 */
 	@Override
 	public boolean validate() {
+
 		/* Restrictions on size on name? types?
 		 */
 		//Check if anything was not set.
