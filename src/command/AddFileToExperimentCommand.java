@@ -93,7 +93,7 @@ public class AddFileToExperimentCommand extends Command {
 		fileInfo.add(type);*/
 
 		DatabaseAccessor accessor = null;
-		FileTuple response_url = null;
+		String response_url = null;
 		int filetype;
 		if(type.equalsIgnoreCase("raw")) {
 			filetype = FileTuple.RAW;
@@ -107,8 +107,8 @@ public class AddFileToExperimentCommand extends Command {
 		try {
 			accessor = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
 			//response_url = accessor.addFile(type, fileName, "metadata", "Jonas Markström", "Jonas Markström", false, experimentID, "v.123");
-			response_url = accessor.addNewFile(experimentID, filetype, fileName, "NO INPUT FILE",metaData, author, uploader, false, grVersion);
-			return new AddFileToExperimentResponse(StatusCode.OK, response_url.getUploadURL());
+			response_url = accessor.addFileURL(type, fileName, metaData, author, uploader, false, experimentID, grVersion);
+			return new AddFileToExperimentResponse(StatusCode.OK, response_url);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
