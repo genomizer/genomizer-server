@@ -366,6 +366,27 @@ public class DatabaseAccessor {
 	    return res;
 	}
 
+    /**
+     * Checks if the file with the specified fileID exists in the database.
+     * @param fileID the fileID of the file.
+     * @return true if the file exists, else false.
+     * @throws SQLException
+     */
+    public boolean hasFile(int fileID) throws SQLException {
+    	String query = "SELECT fileID FROM File " +
+    			"WHERE fileID = ?";
+    	PreparedStatement stmt = conn.prepareStatement(query);
+    	stmt.setInt(1, fileID);
+    	ResultSet rs = stmt.executeQuery();
+
+    	boolean res = rs.next();
+    	if (rs.next()) {
+    		res = false;
+    	}
+        stmt.close();
+        return res;
+    }
+
 	/**
 	 * Annotates an experiment with the given label and value. Checks so that
 	 * the value is valid if it is a drop down annotation.
@@ -1101,6 +1122,20 @@ public class DatabaseAccessor {
 	    deleteFile.close();
 	    return res;
 	}
+
+    /**
+     * Deletes a file from the database using the fileID.
+     * @param fileID the fileID of the file to be deleted.
+     * @return 1 if deletion was successful, else 0.
+     * @throws SQLException
+     */
+    public int deleteFile(int fileID) throws SQLException {
+    	String query = "DELETE FROM File " +
+    			"WHERE FileID = ?";
+    	PreparedStatement stmt = conn.prepareStatement(query);
+    	stmt.setInt(1, fileID);
+    	return stmt.executeUpdate();
+    }
 
 	/**
 	 * Checks if the file path is a valid file path. Not used.

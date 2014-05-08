@@ -17,6 +17,7 @@ import org.junit.Test;
 
 import database.DatabaseAccessor;
 import database.Experiment;
+import database.FileTuple;
 
 public class FileTableTests {
 
@@ -25,13 +26,17 @@ public class FileTableTests {
     private String testGenomePath;
     private String testPath;
     private String testName = "testFileName1";
-    private String testType = "testFileType1";
+    private String testInputFile = "testInputFile";
+    private String testType = "testFileType4";
+    private int testFileType = FileTuple.RAW;
     private String testAuthor = "testFileAuthor1";
     private String testUploader = "testUploader1";
     private String testMetaData = "testUploader1";
     private boolean testIsPrivate = false;
-    private String testExpId = "testExpId1";
+    private String testExpId = "testExpId2";
     private String testGRVersion = null;
+
+    private String testFileName = "testFileName3";
 
     @BeforeClass
     public static void setupTestCase() throws Exception {
@@ -133,4 +138,32 @@ public class FileTableTests {
 		}
     }
 
+    @Test
+    public void shouldBeAbleToCheckIfFileExistsInDatabase() throws Exception {
+    	ArrayList<Experiment> experiments =
+    			(ArrayList<Experiment>) dbac.search(testPath + "[Path]");
+    	Experiment experiment = experiments.get(0);
+    	int fileID = experiment.getFiles().get(0).id;
+		assertTrue(dbac.hasFile(fileID));
+	}
+
+    @Test
+    public void shouldBeAbleToDeleteFileUsingFileID() throws Exception {
+    	FileTuple ft = dbac.addNewFile(testExpId, testFileType,
+    			testFileName, testInputFile, testMetaData, testAuthor,
+    			testUploader, testIsPrivate, testGRVersion);
+    	int fileID = ft.id;
+    	assertEquals(1, dbac.deleteFile(fileID));
+    	assertFalse(dbac.hasFile(fileID));
+    	
+	}
+    
+    @Test
+    public void shouldReturnZeroIfFileToBeDeletedDoesNotExistInDatabase() throws Exception {
+    	if (dbac.hasFile(123)) {
+    		fail("Use another ID for the test, this one" +
+    				"exists in the database.");
+    	}
+    	assertEquals(0, dbac.deleteFile(123));
+	}
 }
