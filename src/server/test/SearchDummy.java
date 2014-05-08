@@ -8,6 +8,7 @@ import java.net.URL;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import java.net.URLEncoder;
 
 public class SearchDummy {
 
@@ -21,7 +22,7 @@ public class SearchDummy {
 	private static void sendLogin() throws Exception {
 
 		String url = "http://scratchy.cs.umu.se:7000/login";
-//		String url = "http://localhost:7000/login";
+//		String url = "http://localhost:7001/login";
 
 		URL obj = new URL(url);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -76,8 +77,12 @@ public class SearchDummy {
 	}
 
 	private static void sendSearchRequest() throws Exception {
-		String url = "http://scratchy.cs.umu.se:7000/search/?annotation=Exp2[ExpID]";
-//		String url = "http://localhost:7000/search/?annotations=Exp1[ExpID]";
+
+		String query = URLEncoder.encode("Exp1[ExpID] OR Exp2[ExpID]", "UTF-8");
+		String url = "http://scratchy.cs.umu.se:7000/search/?annotation=" + query;
+//		String url = "http://localhost:7001/search/?annotations=" + query;
+
+		System.out.println(URLEncoder.encode(url, "UTF-8"));
 
 		URL obj = new URL(url);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();

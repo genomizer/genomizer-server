@@ -40,6 +40,24 @@ public class AddFileToExperimentCommand extends Command {
 	@Expose
  	private String type;
 
+	@Expose
+	private String fileType;
+
+	@Expose
+	private String metaData;
+
+	@Expose
+	private String author;
+
+	@Expose
+	private String uploader;
+
+	@Expose
+	private boolean isPrivate;
+
+	@Expose
+	private String grVersion;
+
 	/**
 	 * Validates the request by checking
 	 * the attributes. No attribute can be null
@@ -55,6 +73,10 @@ public class AddFileToExperimentCommand extends Command {
 		return true;
 	}
 
+
+	public void setUploader(String uploader) {
+		this.uploader = uploader;
+	}
 	/**
 	 * Adds all attributes an arraylist and
 	 * pass that and the experimentID to the database.
@@ -64,23 +86,26 @@ public class AddFileToExperimentCommand extends Command {
 	@Override
 	public Response execute() {
 
-		ArrayList<String> fileInfo = new ArrayList<String>();
+		/*ArrayList<String> fileInfo = new ArrayList<String>();
 		fileInfo.add(fileName);
 		fileInfo.add(size);
-		fileInfo.add(type);
+		fileInfo.add(type);*/
+
+		System.out.println("META DATA: " + metaData);
 
 		DatabaseAccessor accessor = null;
 		String response_url = null;
 		try {
 			accessor = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
-			response_url = accessor.addFile(type, fileName, "metadata", "Jonas Markström", "Jonas Markström", false, experimentID, "v.123");
+			//response_url = accessor.addFile(type, fileName, "metadata", "Jonas Markström", "Jonas Markström", false, experimentID, "v.123");
+			response_url = accessor.addFileURL(type, fileName,metaData, author, uploader, false, experimentID, grVersion);
 			return new AddFileToExperimentResponse(StatusCode.OK, response_url);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		return new MinimalResponse(StatusCode.NO_CONTENT);
+		return new MinimalResponse(StatusCode.BAD_REQUEST);
 
 
 	}

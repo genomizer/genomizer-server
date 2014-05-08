@@ -21,6 +21,7 @@ public class GetAnnotationInformationResponse extends Response {
 
 		this.code = code;
 	    annotationsArray = new JsonArray();
+
 	    for (AnnotationInformation anno: annotations) {
 	    	GsonBuilder builder = new GsonBuilder();
 	    	Gson gson = builder.create();
