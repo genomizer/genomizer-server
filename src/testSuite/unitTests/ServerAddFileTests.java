@@ -9,6 +9,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import database.DatabaseAccessor;
+import database.Experiment;
 import database.FilePathGenerator;
 import database.FileTuple;
 
@@ -18,9 +19,9 @@ public class ServerAddFileTests {
 
     private String testFileName = "testFileName1";
     private int testFileType = FileTuple.RAW;
-    private String testAuthor = "testFileAuthor1";
-    private String testUploader = "testUploader1";
-    private String testMetaData = "testMetaData1";
+    private String testAuthor = "test File Author1";
+    private String testUploader = "test Uploader 1";
+    private String testMetaData = "test Meta Data 1";
     private String testInputFileName = "testInputFileName";
     private boolean testIsPrivate = false;
     private String testExpId = "testExpId1";
@@ -53,7 +54,9 @@ public class ServerAddFileTests {
 
     @Test
     public void testGetDeleteGetAddGetFile() throws Exception {
-        FileTuple ft = dbac.getExperiment(testExpId).getFiles().get(0);
+        Experiment e = dbac.getExperiment(testExpId);
+        System.out.println(e.toString());
+        FileTuple ft = e.getFiles().get(0);
         assertEquals(FilePathGenerator.GenerateFilePath(testExpId, testFileType, testFileName), ft.path);
     }
 
