@@ -39,16 +39,22 @@ public class AddAnnotationFieldCommandTest {
 
 	}
 
-	//TODO: Implement this test. Currently
+	//TODO: Temporary test method. Remove this test later.
 	@Test
-	public void testExecuteMethod() {
+	public void testTemporary() {
 
-		String json = "{\"name\":\"species\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
+		//Create not properly formatted JSON string.
+	    String json = "{\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
 		final Command aafc = gson.fromJson(json, AddAnnotationFieldCommand.class);
 
-		Response rsp = aafc.execute();
+		aafc.tstPrintJSON();
 
-		assertNotNull(rsp);
+		String json2 = "{\"name\":\"species\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
+		final Command aafc2 = gson.fromJson(json2, AddAnnotationFieldCommand.class);
+
+		aafc2.tstPrintJSON();
+
+		assertTrue(true);
 
 	}
 
@@ -91,6 +97,7 @@ public class AddAnnotationFieldCommandTest {
 
 		/* In this test, default is removed from the
 		 * JSON string before serialization.
+		assertTrue(true);
 		 */
 
 		//Create input string with null values.

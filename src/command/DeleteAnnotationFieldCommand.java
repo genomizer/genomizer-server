@@ -2,6 +2,7 @@ package command;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Map;
 
 import com.google.gson.annotations.Expose;
 
@@ -19,29 +20,34 @@ import server.DatabaseSettings;
  */
 public class DeleteAnnotationFieldCommand extends Command {
 
-
-	/*
-{
- "deleteId": [
-              { "id": 1, "values": ["man", "mouse"] },
-              { "id": 2, "values": [ ] },
-              { "id": 3, "values": ["leg"] }
-             ]
-}
-*/
-
 	@Expose
-	private ArrayList<String> deleteId = new ArrayList<String>();
+	private ArrayList<DeleteAnnotationInfo> deleteId = new ArrayList<DeleteAnnotationInfo>();
 
 	/**
 	 * Used to validate the logout command.
 	 */
 	@Override
 	public boolean validate() {
+		if(deleteId == null) {
+			return false;
+		}
 
-		// TODO Auto-generated method stub
-		return false;
+		try {
+			DatabaseAccessor db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
+			Map<String, Integer> currAnno = db.getAnnotations();
+			for(DeleteAnnotationInfo da: deleteId) {
+				if(da.getId() == null) {
+					return false;
+				}
+				if(currAnno.containsKey(da.getId())) {
+					return false;
+				}
+			}
+		} catch (SQLException e) {
+			return false;
+		}
 
+		return true;
 	}
 
 	/**
@@ -49,40 +55,26 @@ public class DeleteAnnotationFieldCommand extends Command {
 	 */
 	@Override
 	public Response execute() {
-
 		Response rsp;
 		int result = 0;
 
 		try {
-
 			DatabaseAccessor dbAccess = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
 
-
 			//TODO: Add the label. API looks wierd currently.
-			//result = dbAccess.deleteAnnotation(label);
-
+			for(DeleteAnnotationInfo delAnno: deleteId) {
+				result = dbAccess.deleteAnnotation(delAnno.getId());
+			}
 			if(result == 0) {
-
 				rsp = new MinimalResponse(403);
-
 			} else {
-
 				rsp = new MinimalResponse(200);
-
 			}
 
-
 		} catch (SQLException e) {
-
 			e.printStackTrace();
 		}
-
-
-
-
 		//Method not implemented, send appropriate response
 		return 	new MinimalResponse(StatusCode.NO_CONTENT);
-
 	}
-
 }
