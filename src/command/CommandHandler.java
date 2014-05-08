@@ -2,7 +2,9 @@ package command;
 
 import java.util.ArrayList;
 
+import response.MinimalResponse;
 import response.Response;
+import response.StatusCode;
 
 /**
  * Should be used to handle and create different commands with
@@ -37,12 +39,12 @@ public class CommandHandler {
 		//Get code from restful //TODO: add parser code....
 		Command myCom = createCommand(json, restful, username, cmdt);
 
-		//TODO: Find out what type of work that needs to be done. (Slow? Fast?)
-		//Create a response to return.
-		Response rsp = myCom.execute();
 
-		return rsp;
-
+		if (myCom.validate()) {
+			return myCom.execute();
+		} else {
+			return new MinimalResponse(StatusCode.BAD_REQUEST);
+		}
 	}
 
 	/**

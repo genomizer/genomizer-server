@@ -8,7 +8,7 @@ import server.Doorman;
 
 public class ServerMain {
 
-	public static int port = 7000;
+	public static int port = 7001;
 
 
 	/**
