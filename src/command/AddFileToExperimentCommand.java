@@ -12,6 +12,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.*;
 
 import database.DatabaseAccessor;
+import database.FileTuple;
 
 import response.AddFileToExperimentResponse;
 import response.MinimalResponse;
@@ -92,12 +93,22 @@ public class AddFileToExperimentCommand extends Command {
 		fileInfo.add(type);*/
 
 		DatabaseAccessor accessor = null;
-		String response_url = null;
+		FileTuple response_url = null;
+		int filetype;
+		if(type.equalsIgnoreCase("raw")) {
+			filetype = FileTuple.RAW;
+		} else if(type.equalsIgnoreCase("profile")) {
+			filetype = FileTuple.PROFILE;
+		} else if(type.equalsIgnoreCase("region")) {
+			filetype = FileTuple.REGION;
+		} else {
+			filetype = FileTuple.OTHER;
+		}
 		try {
 			accessor = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
 			//response_url = accessor.addFile(type, fileName, "metadata", "Jonas Markström", "Jonas Markström", false, experimentID, "v.123");
-			response_url = accessor.addFileURL(type, fileName,metaData, author, uploader, false, experimentID, grVersion);
-			return new AddFileToExperimentResponse(StatusCode.OK, response_url);
+			response_url = accessor.addNewFile(experimentID, filetype, fileName, "NO INPUT FILE",metaData, author, uploader, false, grVersion);
+			return new AddFileToExperimentResponse(StatusCode.OK, response_url.getUploadURL());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
