@@ -683,6 +683,19 @@ public class DatabaseAccessor {
         return path;
     }
 
+    /**
+     * @param expID
+     * @param fileType An Integer identifying the file type eg. FileTuple.RAW
+     * @param fileName
+     * @param inputFileName
+     * @param metaData
+     * @param author
+     * @param uploader
+     * @param isPrivate
+     * @param genomeRelease
+     * @return The FileTuple inserted in the database
+     * @throws SQLException
+     */
     public FileTuple addNewFile(String expID, int fileType, String fileName,
             String inputFileName, String metaData, String author,
             String uploader, boolean isPrivate, String genomeRelease)
