@@ -185,7 +185,7 @@ public class ExperimentTests {
     }
 
     @Test
-    public void changeFromOldLabelToNewLabel()
+    public void changeFromOldLabelToNewLabelTest()
     		throws Exception{
 
     	ArrayList<String> allLabelsBefore = dbac.getAllAnnotationLabels();
