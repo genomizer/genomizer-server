@@ -144,7 +144,7 @@ public class ValidateProcessCommandTest {
 							"\"param2\"," +
 							"\"param3\"," +
 							"\"param4\"";
-		String metadata = "astringofmetadata";
+		String metadata = "a string of metadata";
 		String genomeRelease = "";
 		String author = "yuri";
 
@@ -163,7 +163,7 @@ public class ValidateProcessCommandTest {
 							"\"author\": \"" + author + "\"}";
 
 		ProcessCommand processCommand = (ProcessCommand)cmdf.createProcessCommand(json, username);
-
+		System.out.println(processCommand);
 
 		assertTrue(processCommand.validate());
 	}
