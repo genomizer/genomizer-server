@@ -54,6 +54,12 @@ public class AddAnnotationFieldCommandTest {
 
 		aafc2.tstPrintJSON();
 
+		String json3 = "{\"name\": null,\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
+		final Command aafc3 = gson.fromJson(json3, AddAnnotationFieldCommand.class);
+
+		aafc3.tstPrintJSON();
+		aafc3.validate();
+
 		assertTrue(true);
 
 	}
