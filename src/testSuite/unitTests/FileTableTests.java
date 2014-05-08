@@ -92,7 +92,7 @@ public class FileTableTests {
     }
 
     @Test
-    public void addGenomeReleaseTest(){
+    public void addRemoveGenomeReleaseTest(){
 
     	ArrayList<String> genomeVersions;
 
@@ -100,12 +100,16 @@ public class FileTableTests {
     		testGenomePath = dbac.addGenomeRelease("F2.3","Fly");
 
     		genomeVersions = dbac.getStoredGenomeVersions();
-
     		assertTrue(genomeVersions.contains("F2.3"));
 
+    		boolean succeed = dbac.removeGenomeRelease("F2.3", "Fly");
+    		assertTrue(succeed);
+
     	} catch (SQLException e) {
-    		System.out.println("Failed to insert a new Genome releaseVersion");
+    		System.out.println("Failed to insert/remove a new" +
+    								" Genome releaseVersion");
     		e.printStackTrace();
+    		fail();
     	}
     }
 
@@ -117,11 +121,6 @@ public class FileTableTests {
 		try {
 			dbac.addGenomeRelease("chemicalX", "cat");
 			genomeVersions = dbac.getStoredGenomeVersions();
-
-			for(int i=0;i < genomeVersions.size();i++){
-				System.out.println(genomeVersions.get(i) + "||");
-			}
-
 			assertTrue(genomeVersions.contains("chemicalX"));
 
 			//then remove inserted genome_Release
