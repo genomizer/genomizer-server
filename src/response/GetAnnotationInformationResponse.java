@@ -21,6 +21,11 @@ public class GetAnnotationInformationResponse extends Response {
 
 		this.code = code;
 	    annotationsArray = new JsonArray();
+	    ArrayList<String> vals = new ArrayList<String>();
+	    vals.add("freetext");
+	    AnnotationInformation expId = new AnnotationInformation(0, "ExpID", vals, false);
+
+	    annotations.add(expId);
 	    for (AnnotationInformation anno: annotations) {
 	    	GsonBuilder builder = new GsonBuilder();
 	    	Gson gson = builder.create();
