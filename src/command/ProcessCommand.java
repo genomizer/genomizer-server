@@ -35,6 +35,8 @@ public class ProcessCommand extends Command {
 	private String fileid;
 	@Expose
 	private String expid;
+	@Expose
+	private String author;
 
 	//Empty constructor
 	public ProcessCommand() {
@@ -44,41 +46,71 @@ public class ProcessCommand extends Command {
 	@Override
 	public boolean validate() {
 
-		if((username == null && CanBeNull.USERNAME == false) || (processtype == null && CanBeNull.FILE_FILETYPE == false) ||
-				(metadata == null && CanBeNull.FILE_METADATA == false) || (genomeRelease == null && CanBeNull.GENOME_VERSION == false) 	||
-				(filename == null && CanBeNull.FILE_FILENAME == false))
-		{
+
+		if(username == null){
 			System.err.println("ProcessCommand - Validate\n" +
-					"Some annotation that can not be null is null.");
+					"username is null");
+			return false;
+		}
+		if(processtype == null){
+			System.err.println("ProcessCommand - Validate\n" +
+					"processtype is null");
+			return false;
+		}
+		if(metadata == null){
+			System.err.println("ProcessCommand - Validate\n" +
+					"metadata is null");
+			return false;
+		}
+		if(genomeRelease == null){
+			System.err.println("ProcessCommand - Validate\n" +
+					"genomerelease is null");
+			return false;
+		}
+		if(filename == null){
+			System.err.println("ProcessCommand - Validate\n" +
+					"filename is null");
 			return false;
 		}
 
 		if(expid == null){
 			System.err.println("ProcessCommand - Validate\n" +
-					"ExpID is null");
+					"expid is null");
 			return false;
 		}
 
 		if(fileid == null){
 			System.err.println("ProcessCommand - Validate\n" +
-					"FileID is null");
+					"fileid is null");
 			return false;
 		}
 
 		if(parameters == null){
 			System.err.println("ProcessCommand - Validate\n" +
-					"Parameters are null");
+					"parameters are null");
+			return false;
+		}
+		if(author == null){
+			System.err.println("ProcessCommand - Validate\n" +
+					"author is null");
 			return false;
 		}
 
-		if(username.length() > MaxSize.USERNAME ||
-				processtype.length() > MaxSize.FILE_FILETYPE ||
+
+
+		//TODO Hardcoded. Not using CanBeNull class
+		if(username.length() > MaxSize.USERNAME || username.length() <= 0 ||
+				processtype.length() > MaxSize.FILE_FILETYPE || processtype.length() <= 0 ||
 				metadata.length() > MaxSize.FILE_METADATA ||
 				genomeRelease.length() > MaxSize.GENOME_VERSION ||
-				filename.length() > MaxSize.FILE_FILENAME)
+				filename.length() > MaxSize.FILE_FILENAME || filename.length() <= 0 ||
+				author.length() > MaxSize.FILE_AUTHOR ||
+				fileid.length() <= 0 ||
+				expid.length() > MaxSize.EXPID || expid.length() <= 0)
+
 		{
 			System.err.println("ProcessCommand - Validate\n" +
-								"Wrong lengths of annotations. Could not continue");
+					"Wrong lengths of annotations. Could not continue");
 			return false;
 		}
 
