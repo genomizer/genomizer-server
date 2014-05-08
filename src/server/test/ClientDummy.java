@@ -252,7 +252,7 @@ public class ClientDummy {
 		JsonObject ja=new JsonObject();
 
 		ja.addProperty("experimentID", "Exp1");
-		ja.addProperty("fileName", "test123456.txt");
+		ja.addProperty("fileName", "test1234567.txt");
 		ja.addProperty("size", "1mb");
 		ja.addProperty("type", "raw");
 		ja.addProperty("fileType", "unknown");
