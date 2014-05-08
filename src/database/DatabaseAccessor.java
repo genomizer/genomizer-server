@@ -1408,4 +1408,36 @@ public class DatabaseAccessor {
         statement.executeUpdate();
         statement.close();
     }
+
+    public String addChainFile(String fromVersion, String toVersion,
+			String fileName) throws SQLException {
+
+		String species = "";
+		String speciesQuery = "SELECT Species From Genome_Release"
+				+ " WHERE (version = ?)";
+
+		PreparedStatement speciesStat = conn.prepareStatement(speciesQuery);
+		speciesStat.setString(1, fromVersion);
+		System.out.println(speciesStat.toString());
+		ResultSet rs = speciesStat.executeQuery();
+		while(rs.next()) {
+			species = rs.getString("Species");
+		}
+
+        String filePath = FilePathGenerator.GenerateChainFilePath(species, fileName);
+
+        String insertQuery = "INSERT INTO Chain_File "
+                + "(FromVersion, ToVersion, FilePath) VALUES (?, ?, ?)";
+
+        PreparedStatement insertStat = conn.prepareStatement(insertQuery);
+        insertStat.setString(1, fromVersion);
+        insertStat.setString(2, toVersion);
+        insertStat.setString(3, filePath);
+        insertStat.executeUpdate();
+        insertStat.close();
+
+        String URL = ServerDependentValues.UploadURL;
+
+        return URL + filePath;
+	}
 }

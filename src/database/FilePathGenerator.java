@@ -86,6 +86,31 @@ public class FilePathGenerator {
 		file.mkdirs();
 	}
 
+	public static String GenerateChainFilePath(String species, String fileName) {
+
+		String path = "";
+		StringBuilder dir = new StringBuilder();
+
+		dir.append(homeDir);
+		dir.append("data");
+		dir.append('/');
+		dir.append("genome_releases");
+		dir.append('/');
+		dir.append(species);
+		dir.append('/');
+		dir.append("chain_files");
+		dir.append('/');
+		dir.append(fileName);
+
+		File chainFolder = new File(dir.toString());
+
+		if (!chainFolder.exists()) {
+			chainFolder.mkdirs();
+		}
+
+		return dir.toString();
+	}
+
 	/**
 	 * Generates a filepath for where the genome release file should be stored.
 	 * @param String version, the genome version of the file,
