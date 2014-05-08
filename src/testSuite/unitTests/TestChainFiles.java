@@ -39,8 +39,31 @@ public class TestChainFiles {
 		}
 	}
 
+	@After
+	public void tearDown(){
+
+	}
+
+	@AfterClass
+	public void after(){
+		try {
+			dbac.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
     @Test
-    public void shouldAddChainFile () throws SQLException {
+    public void shouldAddandRemoveChainFile () throws SQLException {
+    	addChain_file();
+    	removeChainFile();
+	}
+
+
+
+
+    public void addChain_file() throws SQLException {
 
     	String fromVersion = "hg18";
     	String toVersion = "hg38";
@@ -50,17 +73,28 @@ public class TestChainFiles {
     	filePath = dbac.addChainFile(fromVersion, toVersion, fileName);
 
     	System.out.println(filePath);
+    	assertEquals("http://scratchy.cs.umu.se:8000/upload.php?path=/var/www/data/genome_releases/Human/chain_files/chainHuman",filePath);
 
+    	try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
 
-	}
-
-    @Test
-    public void shouldDeleteFile() {
-
+    public void removeChainFile() throws SQLException {
     	String fromVersion = "hg18";
     	String toVersion = "hg38";
 
-    	assertEquals(1,1);
+    	try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+    	assertEquals(1,dbac.removeChainFile(fromVersion, toVersion));
 
     }
 }

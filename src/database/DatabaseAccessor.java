@@ -1440,4 +1440,26 @@ public class DatabaseAccessor {
 
         return URL + filePath;
 	}
+
+    public String getChainFile(String fromVersion, String toVersion) throws SQLException {
+
+        String query = "SELECT ExpID FROM Experiment WHERE (FromVersion = ?) AND (ToVersion = ?)";
+        PreparedStatement ps = conn.prepareStatement(query);
+
+        ps.setString(1, fromVersion);
+        ps.setString(1, toVersion);
+
+        ResultSet rs = ps.executeQuery();
+
+        String res = null;
+
+        if (rs.next()) {
+
+            res = rs.getString("FilePath");
+        }
+
+        ps.close();
+
+        return res;
+    }
 }
