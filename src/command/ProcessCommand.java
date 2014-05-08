@@ -144,11 +144,13 @@ public class ProcessCommand extends Command {
 				//TODO Remove print for validating data.
 				System.out.println("Uploader of file: " + username);
 				System.out.println("filename:" + filename);
+				System.out.println("fileid:" + fileid);
 				System.out.println("metadata:" + metadata);
 				System.out.println("username: " + username);
 				System.out.println("expid: " + expid);
 				System.out.println("fileid: " + fileid);
 				System.out.println("genomeRelease: " + genomeRelease);
+				System.out.println("author:" + author);
 
 
 				//Profile hardcoded since in case "rawtoprofile"
@@ -200,6 +202,19 @@ public class ProcessCommand extends Command {
 	public void setUsername(String username) {
 		this.username = username;
 
+	}
+
+	public String toString(){
+
+		return "Uploader of file: " + username + "\n" +
+				"Filename: " + filename + "\n" +
+				"Processtype: " + processtype + "\n" +
+				"metadata:" + metadata + "\n" +
+				"username: " + username + "\n" +
+				"expid: " + expid + "\n" +
+				"fileid: " + fileid + "\n" +
+				"genomeRelease: " + genomeRelease + "\n" +
+				"author:" + author + "\n";
 	}
 
 	/*
