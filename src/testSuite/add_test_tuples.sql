@@ -40,19 +40,19 @@ INSERT INTO Annotated_With  VALUES('Exp3', 'Development Stage', 'Child');
 
 INSERT INTO User_Info VALUES('user1', 'secret1', 'role1');
 
-INSERT INTO File VALUES(DEFAULT, '/Exp1/Raw/file1.fastq', 'Raw', 'file1.fastq', CURRENT_TIMESTAMP, '/Exp1/Raw/file1_input.fastq', 'Umeå Uni', 'user1', 'True', 'Exp1', NULL);
+INSERT INTO File VALUES(DEFAULT, '/Exp1/Raw/file1.fastq', 'Raw', 'file1.fastq', CURRENT_TIMESTAMP, NULL, '/Exp1/Raw/file1_input.fastq', 'Umeå Uni', 'user1', 'True', 'Exp1', NULL);
 
-INSERT INTO File VALUES(DEFAULT, '/Exp1/Profile/file1.sam', 'Profile', 'file1.sam', CURRENT_TIMESTAMP, '-n 1 --best', 'Genomizer', 'user1', 'false', 'Exp1', 'hg38');
-
-
-INSERT INTO File VALUES(DEFAULT, '/Exp2/Raw/file1.fastq', 'Raw', 'file1.fastq', CURRENT_TIMESTAMP, '/Exp2/Raw/file1_input.fastq', 'UCSC', 'user1', 'false', 'Exp2', NULL);
+INSERT INTO File VALUES(DEFAULT, '/Exp1/Profile/file1.sam', 'Profile', 'file1.sam', CURRENT_TIMESTAMP, '-n 1 --best', '/Exp1/Profile/file1_input.sam', 'Genomizer', 'user1', 'false', 'Exp1', 'hg38');
 
 
-INSERT INTO File VALUES(DEFAULT, '/Exp3/Raw/file1.fastq', 'Raw', 'file1.fastq', CURRENT_TIMESTAMP, '/Exp3/Raw/file1_input.fastq', 'UCSC', 'user1', 'false', 'Exp3', NULL);
+INSERT INTO File VALUES(DEFAULT, '/Exp2/Raw/file1.fastq', 'Raw', 'file1.fastq', CURRENT_TIMESTAMP, NULL, '/Exp2/Raw/file1_input.fastq', 'UCSC', 'user1', 'false', 'Exp2', NULL);
 
-INSERT INTO File VALUES(DEFAULT, '/Exp3/Profile/file1.sam', 'Profile', 'file1.sam', CURRENT_TIMESTAMP, '-n 1 --best', 'Genomizer', 'user1', 'false', 'Exp3', 'rn5');
 
-INSERT INTO File VALUES(DEFAULT, '/Exp3/Profile/file2.sam', 'Profile', 'file2.sam', CURRENT_TIMESTAMP, '-n 2 --best', 'Genomizer', 'user1', 'false', 'Exp3', 'rn5');
+INSERT INTO File VALUES(DEFAULT, '/Exp3/Raw/file1.fastq', 'Raw', 'file1.fastq', CURRENT_TIMESTAMP, NULL, '/Exp3/Raw/file1_input.fastq', 'UCSC', 'user1', 'false', 'Exp3', NULL);
+
+INSERT INTO File VALUES(DEFAULT, '/Exp3/Profile/file1.sam', 'Profile', 'file1.sam', CURRENT_TIMESTAMP, '-n 1 --best', '/Exp3/Profile/file1_input.sam', 'Genomizer', 'user1', 'false', 'Exp3', 'rn5');
+
+INSERT INTO File VALUES(DEFAULT, '/Exp3/Profile/file2.sam', 'Profile', 'file2.sam', CURRENT_TIMESTAMP, '-n 2 --best', '/Exp3/Profile/file2_input.sam', 'Genomizer', 'user1', 'false', 'Exp3', 'rn5');
 
 
 

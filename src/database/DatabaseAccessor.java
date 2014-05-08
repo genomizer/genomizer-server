@@ -666,6 +666,7 @@ public class DatabaseAccessor {
     // instead.
     /**
      * Adds a file to the database.
+     * Use serverAddFile(...)
      *
      * @param fileType
      * @param fileName
@@ -679,6 +680,7 @@ public class DatabaseAccessor {
      * @throws SQLException
      *             if the query does not succeed
      */
+	//@Deprecated
     public String addFile(String fileType, String fileName,
             String metaData, String author, String uploader,
             boolean isPrivate, String expID, String grVersion)
@@ -688,7 +690,7 @@ public class DatabaseAccessor {
                 fileType, fileName);
 
         String query = "INSERT INTO File "
-                + "(Path, FileType, FileName, Date, MetaData, Author, Uploader, IsPrivate, ExpID, GRVersion) VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?, ?, ?, ?, ?)";
+                + "(Path, FileType, FileName, Date, MetaData, InputFilePath, Author, Uploader, IsPrivate, ExpID, GRVersion) VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, NULL, ?, ?, ?, ?, ?)";
         PreparedStatement tagExp = conn.prepareStatement(query);
 
         tagExp.setString(1, path);
@@ -709,6 +711,7 @@ public class DatabaseAccessor {
 
     /**
      * Adds a file to the database with URL.
+     * Use clientAddFile(...)
      *
      * @param fileType
      * @param fileName
@@ -722,6 +725,7 @@ public class DatabaseAccessor {
      * @throws SQLException
      *             if the query does not succeed
      */
+    //@Deprecated
     public String addFileURL(String fileType, String fileName,
             String metaData, String author, String uploader,
             boolean isPrivate, String expID, String grVersion)
@@ -732,7 +736,7 @@ public class DatabaseAccessor {
         String URL = ServerDependentValues.UploadURL;
 
         String query = "INSERT INTO File "
-                + "(Path, FileType, FileName, Date, MetaData, Author, Uploader, IsPrivate, ExpID, GRVersion) VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?, ?, ?, ?, ?)";
+                + "(Path, FileType, FileName, Date, MetaData, InputFilePath, Author, Uploader, IsPrivate, ExpID, GRVersion) VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, NULL, ?, ?, ?, ?, ?)";
         PreparedStatement tagExp = conn.prepareStatement(query);
 
         tagExp.setString(1, path);
@@ -750,6 +754,8 @@ public class DatabaseAccessor {
         tagExp.close();
         return URL + path;
     }
+
+
 
     /**
      * Deletes a file from the database.
