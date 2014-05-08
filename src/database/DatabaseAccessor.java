@@ -445,6 +445,96 @@ public class DatabaseAccessor {
     }
 
     /**
+     * Method to add a value to a existing DropDown annotation.
+     *
+     * @param label, the label of the chosen DropDown annotation.
+     * @param value, the value that will be added to the DropDown annotation.
+     * @return, Integer, how many rows that were added to the database.
+     * @throws SQLException, if the value already exist or another SQL error.
+     * @throws IOException, if the chosen label does not represent a DropDown
+     * annotation.
+     */
+    public int addDropDownAnnotationValue(String label, String value)
+    		throws SQLException, IOException {
+
+    	String statementStr = "SELECT * FROM Annotation WHERE " +
+    			"(label = ? AND datatype = 'DropDown')";
+
+        PreparedStatement checkTag = conn
+                .prepareStatement(statementStr);
+        checkTag.setString(1, label);
+
+        ResultSet rs = checkTag.executeQuery();
+        boolean res = rs.next();
+        checkTag.close();
+
+        if(!res) {
+        	throw new IOException("The annotation of the chosen label is not of type DropDown");
+        } else {
+
+        	statementStr = "INSERT INTO Annotation_Choices (label , value) "
+        			+ "VALUES (?,?)";
+
+        	PreparedStatement insertTag = conn
+        			.prepareStatement(statementStr);
+        	insertTag.setString(1, label);
+        	insertTag.setString(2, value);
+        	int ress = insertTag.executeUpdate();
+        	insertTag.close();
+
+        	return ress;
+        }
+    }
+
+    /**
+     * Method to remove a given annotation of a dropdown- annotation.
+     *
+     * @param label, the label of the chosen annotation
+     * @param the value of the chosen annotation.
+     * @return boolean, true if a value was removed, false if not. This could be
+     *         if no matching value was found in the database.
+     * @throws SQLException
+     * @throws IOException, throws an IOException if the chosen value to be
+     * 			removed is the active DefaultValue of the chosen label.
+     *
+     */
+    public int removeAnnotationValue(String label, String value)
+    		throws SQLException, IOException {
+
+    	String statementStr = "SELECT * FROM Annotation WHERE " +
+    			"(label = ? AND defaultvalue = ?)";
+
+        PreparedStatement checkTag = conn
+                .prepareStatement(statementStr);
+        checkTag.setString(1, label);
+        checkTag.setString(2, value);
+
+        ResultSet rs = checkTag.executeQuery();
+
+        boolean res = rs.next();
+        checkTag.close();
+
+        if(res) {
+        	throw new IOException("The chosen value of the label is a default " +
+        			"value. Change the default value of the label and run this " +
+        			"method again.");
+        } else {
+
+        	statementStr = "DELETE FROM Annotation_Choices "
+        			+ "WHERE (label = ? AND value = ?)";
+
+        	PreparedStatement deleteTag = conn
+        			.prepareStatement(statementStr);
+        	deleteTag.setString(1, label);
+        	deleteTag.setString(2, value);
+        	int ress = deleteTag.executeUpdate();
+        	deleteTag.close();
+
+        	return ress;
+        }
+    }
+
+    /**
      * Adds an experiment ID to the database.
      *
      * @param expID
