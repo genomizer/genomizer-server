@@ -1,20 +1,15 @@
 package server.test;
 
 import static org.junit.Assert.*;
-
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
 import org.junit.Test;
 
-import com.google.gson.Gson;
+import java.io.DataOutputStream;
+import java.net.HttpURLConnection;
+
 import com.google.gson.JsonObject;
 
 /**
- * Class used to test the server login.
+ * Class used to test that the server works properly.
  *
  * @author tfy09jnn
  * @version 1.0
@@ -43,6 +38,9 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 
 	}
 
+	/*TODO: When all checks on password/names works properly,
+	 * 		make sure that this test works.
+	 */
 	/**
 	 * Used to test that a corrupted login attempt
 	 * does not pass.
@@ -51,6 +49,10 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 	 */
 	@Test
 	public void testCorruptedLogin() throws Exception {
+		/* Note: This test should work, but the code that
+		 * 		 check the login is not implemented
+		 * 			2014-05-08, 15:00
+		 */
 
 		//Create JSON corrupted login object.
 		JsonObject jj = new JsonObject();
@@ -63,11 +65,19 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 
 	}
 
+	/*TODO: When deleteAnootationCommand works properly, remove the annotation
+	 *		that was added to be able to test continuously.
+	 */
 	/**
 	 * Used to test that a annotation field can be added.
 	 */
 	@Test
 	public void testAddAnnotationFieldCommand() throws Exception {
+		/* Note: If the annotation field is added already, this test will not
+		 * 		 currently pass. Change the json_output name to something else
+		 * 		 in order to get it to work.remove the annotation
+	 *		that was added to be able to test continuously.
+		 */
 
 		//Create JSON login object.
 		JsonObject jj = new JsonObject();
@@ -76,19 +86,12 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 
 		sendLogin(jj);
 
-		String url = "http://scratchy.cs.umu.se:7000/annotation";
-
-		URL obj = new URL(url);
-		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
-		// optional default is GET
-		con.setRequestMethod("POST");
-
-		//add request header
+		//Get connection and then add headers.
+		HttpURLConnection con = connect("POST", "http://scratchy.cs.umu.se:7000/annotation");
 		con.setRequestProperty("Content-Type", "application/json");
 		con.setRequestProperty("Authorization", token.getToken());
 
-		String json_output = "{\"name\":\"species8\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
+		String json_output = "{\"name\":\"species10\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
 
 		con.setDoOutput(true);
 		DataOutputStream wr = new DataOutputStream(con.getOutputStream());
@@ -96,26 +99,40 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 		wr.flush();
 		wr.close();
 
+		//Get responsecode and logout.
 		int responseCode = con.getResponseCode();
-
-		BufferedReader in = new BufferedReader(
-		        new InputStreamReader(con.getInputStream()));
-		String inputLine;
-		StringBuffer responseBuffer = new StringBuffer();
-
-		while ((inputLine = in.readLine()) != null) {
-			responseBuffer.append(inputLine);
-		}
-		in.close();
-
-		String response = responseBuffer.toString();
-
-		Gson gson = new Gson();
-		token = gson.fromJson(response, Token.class);
-
 		sendLogout();
 
 		assertTrue(responseCode == 201);
+
+	}
+
+	/**
+	 * Used to test that get annotation information works.
+	 *
+	 * @throws Exception
+	 */
+
+	@Test
+	public void testGetAnnotationInformationCommand() throws Exception {
+
+		//Create JSON login object.
+		JsonObject jj = new JsonObject();
+		jj.addProperty("username", "jonas");
+		jj.addProperty("password", "losenord");
+
+		sendLogin(jj);
+
+		//Get connection and then add headers.
+		HttpURLConnection con = connect("GET", "http://scratchy.cs.umu.se:7000/annotation");
+		con.setRequestProperty("Content-Type", "application/json");
+		con.setRequestProperty("Authorization", token.getToken());
+
+		int responseCode = con.getResponseCode();
+
+		sendLogout();
+
+		assertTrue(responseCode == 200);
 
 	}
 
