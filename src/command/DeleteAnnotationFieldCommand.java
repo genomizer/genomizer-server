@@ -15,8 +15,8 @@ import server.DatabaseSettings;
 /**
  * Class used to represent a logout command.
  *
- * @author tfy09jnn
- * @version 1.0
+ * @author tfy09jnn, Hugo Källström
+ * @version 1.1
  */
 public class DeleteAnnotationFieldCommand extends Command {
 
@@ -25,28 +25,19 @@ public class DeleteAnnotationFieldCommand extends Command {
 
 	/**
 	 * Used to validate the logout command.
+	 * Checks if all annotations which are to
+	 * be deleted are present in the database.
 	 */
 	@Override
 	public boolean validate() {
 		if(deleteId == null) {
 			return false;
 		}
-
-		try {
-			DatabaseAccessor db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
-			Map<String, Integer> currAnno = db.getAnnotations();
-			for(DeleteAnnotationInfo da: deleteId) {
-				if(da.getId() == null) {
-					return false;
-				}
-				if(currAnno.containsKey(da.getId())) {
-					return false;
-				}
+		for(DeleteAnnotationInfo da: deleteId) {
+			if(da.getId() == null) {
+				return false;
 			}
-		} catch (SQLException e) {
-			return false;
 		}
-
 		return true;
 	}
 
@@ -55,20 +46,22 @@ public class DeleteAnnotationFieldCommand extends Command {
 	 */
 	@Override
 	public Response execute() {
-		Response rsp;
 		int result = 0;
 
 		try {
-			DatabaseAccessor dbAccess = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
-
+			DatabaseAccessor db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
+			Map<String, Integer> currAnno = db.getAnnotations();
 			//TODO: Add the label. API looks wierd currently.
-			for(DeleteAnnotationInfo delAnno: deleteId) {
-				result = dbAccess.deleteAnnotation(delAnno.getId());
+			for(DeleteAnnotationInfo da: deleteId) {
+				if(currAnno.containsKey(da.getId())) {
+					return new MinimalResponse(400);
+				}
+				result = db.deleteAnnotation(da.getId());
 			}
 			if(result == 0) {
-				rsp = new MinimalResponse(403);
+				return new MinimalResponse(403);
 			} else {
-				rsp = new MinimalResponse(200);
+				return new MinimalResponse(200);
 			}
 
 		} catch (SQLException e) {

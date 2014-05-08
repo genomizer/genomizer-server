@@ -1,6 +1,7 @@
 package command;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.List;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
+import java.net.URLDecoder;
 
 import database.DatabaseAccessor;
 import database.Experiment;
@@ -42,11 +44,10 @@ public class SearchForExperimentsCommand extends Command {
 	 */
 	@Override
 	public boolean validate() {
-
-		// TODO Auto-generated method stub (Should maybe be private?)
-
-		return false;
-
+		if (annotations == null) {
+			return false;
+		}
+		return true;
 	}
 
 	/**
@@ -60,14 +61,21 @@ public class SearchForExperimentsCommand extends Command {
 	    List<Experiment> searchResult = null;
 
 		try {
+			annotations = URLDecoder.decode(annotations, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			return new MinimalResponse(StatusCode.BAD_REQUEST);
+		}
+
+		try {
 			db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
 			searchResult = db.search(annotations);
 		} catch (SQLException e) {
 			return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
 		} catch (IOException e) {
+			e.printStackTrace();
 			return new MinimalResponse(StatusCode.BAD_REQUEST);
 		}
-
 
 		SearchResponse response = new SearchResponse(searchResult);
 
