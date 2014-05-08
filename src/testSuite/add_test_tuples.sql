@@ -4,8 +4,16 @@ INSERT INTO Experiment VALUES('Exp3');
 INSERT INTO Experiment VALUES('Exp4');
 
 INSERT INTO Genome_Release VALUES('hg38', 'Human', '/GenomeRelease/Human/hg38.fasta');
+INSERT INTO Genome_Release VALUES('hg19', 'Human', '/GenomeRelease/Human/hg19.fasta');
+INSERT INTO Genome_Release VALUES('hg18', 'Human', '/GenomeRelease/Human/hg18.fasta');
 INSERT INTO Genome_Release VALUES('rn5', 'Rat', '/GenomeRelease/Rat/rn5.fasta');
+INSERT INTO Genome_Release VALUES('rn4', 'Rat', '/GenomeRelease/Rat/rn4.fasta');
+INSERT INTO Genome_Release VALUES('rn3', 'Rat', '/GenomeRelease/Rat/rn3.fasta');
 
+INSERT INTO Chain_File VALUES('rn3', 'rn4', '/Chain_File/Rat/rn3-rn4.fasta');
+INSERT INTO Chain_File VALUES('rn4', 'rn5', '/Chain_File/Rat/rn4-rn5.fasta');
+INSERT INTO Chain_File VALUES('hg19', 'hg38', '/Chain_File/Human/hg19-hg38.fasta');
+INSERT INTO Chain_File VALUES('hg18', 'hg19', '/Chain_File/Human/hg18-hg19.fasta');
 
 INSERT INTO Annotation VALUES('Species', 'DropDown', NULL, TRUE);
 INSERT INTO Annotation_Choices VALUES('Species', 'Human');
@@ -53,9 +61,4 @@ INSERT INTO File VALUES(DEFAULT, '/Exp3/Raw/file1.fastq', 'Raw', 'file1.fastq', 
 INSERT INTO File VALUES(DEFAULT, '/Exp3/Profile/file1.sam', 'Profile', 'file1.sam', CURRENT_TIMESTAMP, '-n 1 --best', '/Exp3/Profile/file1_input.sam', 'Genomizer', 'user1', 'false', 'Exp3', 'rn5');
 
 INSERT INTO File VALUES(DEFAULT, '/Exp3/Profile/file2.sam', 'Profile', 'file2.sam', CURRENT_TIMESTAMP, '-n 2 --best', '/Exp3/Profile/file2_input.sam', 'Genomizer', 'user1', 'false', 'Exp3', 'rn5');
-
-
-
-
-
 

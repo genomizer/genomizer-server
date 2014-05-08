@@ -858,6 +858,33 @@ public class DatabaseAccessor {
     }
 
     /**
+     * Deletes a chain_file from the database. You find the unique file
+     * by sending in the genome version the file converts from and the
+     * genome version the file converts to.
+     * @param fromVersion - genome version the Chain_file converts from
+     * @param toVersion - genome version the Chin_file converts to
+     * @return the number of deleted tuples in the database. (Should be one if success)
+     * @throws SQLException - if the query does not succeed
+     */
+    public int removeChainFile(String fromVersion, String toVersion) throws SQLException{
+
+        String query = "DELETE FROM Chain_File WHERE (FromVersion = ?) AND (ToVersion = ?)";
+
+        PreparedStatement ps = conn.prepareStatement(query);
+
+        ps.setString(1, fromVersion);
+        ps.setString(2, toVersion);
+
+        int res =  ps.executeUpdate();
+
+        ps.close();
+
+        return res;
+    }
+
+
+
+    /**
      * Gets an experiment from the database.
      *
      * @param expID
