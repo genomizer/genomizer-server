@@ -5,8 +5,6 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import response.Response;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -36,31 +34,6 @@ public class AddAnnotationFieldCommandTest {
 	    final GsonBuilder builder = new GsonBuilder();
 	    builder.excludeFieldsWithoutExposeAnnotation();
 	    gson = builder.create();
-
-	}
-
-	//TODO: Temporary test method. Remove this test later.
-	@Test
-	public void testTemporary() {
-
-		//Create not properly formatted JSON string.
-	    String json = "{\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
-		final Command aafc = gson.fromJson(json, AddAnnotationFieldCommand.class);
-
-		aafc.tstPrintJSON();
-
-		String json2 = "{\"name\":\"species\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
-		final Command aafc2 = gson.fromJson(json2, AddAnnotationFieldCommand.class);
-
-		aafc2.tstPrintJSON();
-
-		String json3 = "{\"name\": null,\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
-		final Command aafc3 = gson.fromJson(json3, AddAnnotationFieldCommand.class);
-
-		aafc3.tstPrintJSON();
-		aafc3.validate();
-
-		assertTrue(true);
 
 	}
 
@@ -103,7 +76,6 @@ public class AddAnnotationFieldCommandTest {
 
 		/* In this test, default is removed from the
 		 * JSON string before serialization.
-		assertTrue(true);
 		 */
 
 		//Create input string with null values.
