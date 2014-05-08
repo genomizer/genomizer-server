@@ -1409,6 +1409,16 @@ public class DatabaseAccessor {
         statement.close();
     }
 
+    /**
+     * Adds a chain file to database for conversions. Parameters: Oldversion,
+     * new version and filename. Returns: file path
+     *
+     * @param String fromVersion
+     * @param String toVersion
+     * @param String fileName
+     * @return String file path
+     * @throws SQLException
+     */
     public String addChainFile(String fromVersion, String toVersion,
 			String fileName) throws SQLException {
 
