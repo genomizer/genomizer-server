@@ -3,7 +3,9 @@ package server;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.InetSocketAddress;
+import java.net.URLDecoder;
 
 import java.util.Scanner;
 import java.util.concurrent.Executor;
@@ -164,7 +166,6 @@ public class Doorman {
 		String body = "";
 		String uuid = null;
 		String username = null;
-
 		System.out.println("Exchange: " + type);
 
 		if(type != CommandType.LOGIN_COMMAND) {
@@ -187,7 +188,7 @@ public class Doorman {
 		}
 
 		while(scanner.hasNext()) {
-			body = body.concat(scanner.next());
+			body = body.concat(" " + scanner.next());
 		}
 		scanner.close();
 

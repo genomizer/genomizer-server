@@ -17,7 +17,41 @@ import com.google.gson.JsonObject;
  */
 public abstract class ServerAbstractTestClass {
 
+	//Token used to identify users.
 	protected Token token = null;
+
+	/**
+	 * method used to set the token.
+	 *
+	 * @param response
+	 */
+	public void setToken(String response) {
+
+		Gson gson = new Gson();
+		token = gson.fromJson(response, Token.class);
+
+	}
+
+	/**
+	 * Class used to get the response.
+	 * @param con
+	 * @return
+	 * @throws Exception
+	 */
+	public String getResponseString(HttpURLConnection con) throws Exception {
+
+		BufferedReader in = new BufferedReader(
+			    new InputStreamReader(con.getInputStream()));
+		String inputLine;
+		StringBuffer responseBuffer = new StringBuffer();
+
+		while ((inputLine = in.readLine()) != null) {
+			responseBuffer.append(inputLine);
+		}
+		in.close();
+
+		return responseBuffer.toString();
+	}
 
 	/**
 	 * Used to open a connection.
@@ -25,11 +59,9 @@ public abstract class ServerAbstractTestClass {
 	 * @return the connection.
 	 * @throws Exception
 	 */
-	public HttpURLConnection connect(String reqMethod) throws Exception {
+	public HttpURLConnection connect(String reqMethod, String restful) throws Exception {
 
-		String url = "http://scratchy.cs.umu.se:7000/login";
-
-		URL obj = new URL(url);
+		URL obj = new URL(restful);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
 		//Set the request property.
@@ -47,11 +79,11 @@ public abstract class ServerAbstractTestClass {
 	public int sendLogin(JsonObject jj) throws Exception {
 
 		//Get the connection.
-		HttpURLConnection con = connect("POST");
+		HttpURLConnection con = connect("POST", "http://scratchy.cs.umu.se:7000/login");
 
 		//Add request header
 		con.setRequestProperty("Content-Type", "application/json");
-		
+
 		//Get JSON string.
 		String json_output = jj.toString();
 
@@ -92,7 +124,7 @@ public abstract class ServerAbstractTestClass {
 	public int sendLogout() throws Exception {
 
 		//Get the connection.
-		HttpURLConnection con = connect("DELETE");
+		HttpURLConnection con = connect("DELETE", "http://scratchy.cs.umu.se:7000/login");
 
 		//add request header
 		con.setRequestProperty("Content-Type", "application/json");

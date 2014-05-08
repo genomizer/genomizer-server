@@ -14,8 +14,11 @@ public class FilePathGenerator {
 	 * @param fileName - the name of the file.
 	 * @return the string for the file.
 	 */
+	@Deprecated
 	public static String GenerateFilePath(String expID, String fileType,
 			String fileName) {
+
+	    fileType = fileType.toLowerCase();
 
 		StringBuilder dir = new StringBuilder();
 
@@ -29,6 +32,37 @@ public class FilePathGenerator {
 		dir.append(fileName);
 		return dir.toString();
 	}
+
+	public static String GenerateFilePath(String expID, int fileType,
+            String fileName) {
+
+        StringBuilder dir = new StringBuilder();
+
+        dir.append(homeDir);
+        dir.append("data");
+        dir.append('/');
+        dir.append(expID);
+        dir.append('/');
+
+        switch (fileType) {
+        case FileTuple.RAW:
+            dir.append("raw");
+            break;
+        case FileTuple.PROFILE:
+            dir.append("profile");
+            break;
+        case FileTuple.REGION:
+            dir.append("region");
+            break;
+        default:
+            dir.append("unknown");
+            break;
+        }
+
+        dir.append('/');
+        dir.append(fileName);
+        return dir.toString();
+    }
 
 	/**
 	 * Used when first adding a new experiment. Creates a folder

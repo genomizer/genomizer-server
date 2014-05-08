@@ -76,10 +76,10 @@ public class GetAnnotationInformationCommand extends Command {
 			annotations.get(i).setId(i);
 		}
 
-		for(int i = 0; i < annotations.size(); i++) {
+		/*for(int i = 0; i < annotations.size(); i++) {
 			System.out.println("\n" + annotations.get(i));
 
-		}
+		}*/
 
 		return new GetAnnotationInformationResponse(200, annotations);
 	}

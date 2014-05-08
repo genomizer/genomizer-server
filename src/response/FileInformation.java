@@ -22,7 +22,7 @@ public class FileInformation {
     public FileInformation(FileTuple src) {
     	id = src.id;
     	path = src.path;
-    	url = src.DownloadURL;
+    	url = src.getDownloadURL();
     	type = src.type;
     	filename = src.filename;
     	date = src.date;
