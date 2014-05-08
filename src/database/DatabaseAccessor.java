@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-
 /**
  * PREREQUISITES: The construction parameters must reference a postgresql
  * database with the genomizer database tables preloaded. This is done by
@@ -639,7 +638,8 @@ public class DatabaseAccessor {
     // Too many parameters. Should take a JSONObject or FileTuple
     // instead.
     /**
-     * Adds a file to the database. Use serverAddFile(...)
+     * Adds a file to the database. Users should migrate to serverAddFile(...)
+     * which returns the FileTuple added to the database.
      *
      * @param fileType
      * @param fileName
@@ -653,11 +653,10 @@ public class DatabaseAccessor {
      * @throws SQLException
      *             if the query does not succeed
      */
-     @Deprecated
+    @Deprecated
     public String addFile(String fileType, String fileName, String metaData,
             String author, String uploader, boolean isPrivate, String expID,
             String grVersion) throws SQLException {
-
 
         String path = FilePathGenerator.GenerateFilePath(expID, fileType,
                 fileName);
@@ -684,17 +683,16 @@ public class DatabaseAccessor {
         return path;
     }
 
-    public FileTuple serverAddFile(String expID, int fileType,
-            String fileName, String inputFileName, String metaData,
-            String author, String uploader, boolean isPrivate,
-            String genomeRelease) throws SQLException {
+    public FileTuple addNewFile(String expID, int fileType, String fileName,
+            String inputFileName, String metaData, String author,
+            String uploader, boolean isPrivate, String genomeRelease)
+            throws SQLException {
 
         String path = FilePathGenerator.GenerateFilePath(expID, fileType,
                 fileName);
 
-        String inputFilePath = FilePathGenerator.GenerateFilePath(expID, fileType,
-                inputFileName);
-
+        String inputFilePath = FilePathGenerator.GenerateFilePath(expID,
+                fileType, inputFileName);
 
         String query = "INSERT INTO File "
                 + "(Path, FileType, FileName, Date, MetaData, InputFilePath, "
@@ -756,7 +754,7 @@ public class DatabaseAccessor {
      * @throws SQLException
      *             if the query does not succeed
      */
-    // @Deprecated
+     @Deprecated
     public String addFileURL(String fileType, String fileName, String metaData,
             String author, String uploader, boolean isPrivate, String expID,
             String grVersion) throws SQLException {
@@ -786,6 +784,8 @@ public class DatabaseAccessor {
         tagExp.close();
         return URL + path;
     }
+
+
 
     /**
      * Deletes a file from the database.

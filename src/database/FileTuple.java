@@ -14,7 +14,6 @@ public class FileTuple {
     public final Integer id;
     public final String path;
     public final String inputFilePath;
-    public final String DownloadURL;
     public final int type;
     public final String filename;
     public final Date date;
@@ -29,7 +28,6 @@ public class FileTuple {
         id = resSet.getInt("FileID");
         path = resSet.getString("Path");
         inputFilePath = resSet.getString("InputFilePath");
-        DownloadURL = ServerDependentValues.DownLoadURL+path;
 
         switch (resSet.getString("FileType")) {
         case "Raw":
@@ -55,4 +53,20 @@ public class FileTuple {
         expId = resSet.getString("ExpID");
         grVersion = resSet.getString("GRVersion");
     }
+
+    public String getDownloadURL() {
+        return ServerDependentValues.DownLoadURL+path;
+    }
+
+    public String getUploadURL() {
+        return ServerDependentValues.UploadURL+path;
+    }
 }
+
+
+
+
+
+
+
+

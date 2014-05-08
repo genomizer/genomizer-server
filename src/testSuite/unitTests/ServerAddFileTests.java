@@ -42,7 +42,7 @@ public class ServerAddFileTests {
     @Before
     public void setUp() throws Exception {
         dbac.addExperiment(testExpId);
-        ft = dbac.serverAddFile(testExpId, testFileType, testFileName, testInputFileName, testMetaData, testAuthor, testUploader, testIsPrivate, null);
+        ft = dbac.addNewFile(testExpId, testFileType, testFileName, testInputFileName, testMetaData, testAuthor, testUploader, testIsPrivate, null);
     }
 
     @After
