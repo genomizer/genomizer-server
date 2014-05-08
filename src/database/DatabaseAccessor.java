@@ -587,7 +587,7 @@ public class DatabaseAccessor {
     }
 
     /**
-     * Deletes an annotation from an experiment.
+     * Deletes one annotation from a specific experiment.
      *
      * @param expID
      *            the experiment to delete the annotation from.
@@ -1106,7 +1106,7 @@ public class DatabaseAccessor {
      * @param String specie.
      * @return String filePath, the path where the genome Version file should
      * be saved.
-     * @throws SQLException
+     * @throws SQLException if adding query failed.
      */
     public String addGenomeRelease(String genomeVersion, String specie)
     	   throws SQLException{
@@ -1131,7 +1131,7 @@ public class DatabaseAccessor {
     }
 
     /**
-     * Removes one genome version stored in the database.
+     * Removes one specific genome version stored in the database.
      * @param version, the genome version.
      * @param specie.
      * @return boolean, true if succeded, false if failed.
