@@ -6,10 +6,15 @@ import java.util.Date;
 
 public class FileTuple {
 
+    public static final int RAW = 1;
+    public static final int PROFILE = 2;
+    public static final int REGION = 3;
+    public static final int OTHER = 4;
+
     public final Integer id;
     public final String path;
-    public final String DownloadURL;
-    public final String type;
+    public final String inputFilePath;
+    public final int type;
     public final String filename;
     public final Date date;
     public final String metaData;
@@ -22,8 +27,23 @@ public class FileTuple {
     public FileTuple(ResultSet resSet) throws SQLException {
         id = resSet.getInt("FileID");
         path = resSet.getString("Path");
-        DownloadURL = ServerDependentValues.DownLoadURL+path;
-        type = resSet.getString("FileType");
+        inputFilePath = resSet.getString("InputFilePath");
+
+        switch (resSet.getString("FileType")) {
+        case "Raw":
+            type = RAW;
+            break;
+        case "Profile":
+            type = PROFILE;
+            break;
+        case "Region":
+            type = REGION;
+            break;
+        default:
+            type = OTHER;
+            break;
+        }
+
         filename = resSet.getString("FileName");
         date = resSet.getDate("Date");
         metaData = resSet.getString("MetaData");
@@ -34,4 +54,19 @@ public class FileTuple {
         grVersion = resSet.getString("GRVersion");
     }
 
+    public String getDownloadURL() {
+        return ServerDependentValues.DownLoadURL+path;
+    }
+
+    public String getUploadURL() {
+        return ServerDependentValues.UploadURL+path;
+    }
 }
+
+
+
+
+
+
+
+
