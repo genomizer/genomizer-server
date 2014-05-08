@@ -1,8 +1,10 @@
 package conversion.classes;
 
+import java.io.File;
+
 
 public class ConversionHandler {
-	public ConversionHandler createProcessHandler() {
+	public ConversionHandler createConversionHandler() {
 		return new ConversionHandler();
 	}
 
@@ -48,31 +50,54 @@ public class ConversionHandler {
 		return null;
 	}
 
-	public void executeGenomeReleaseConversion(String chainFilePath, String inFilePath,String outFilePath){
-		String fileType = checkFileType(inFilePath);
-		String path = inFilePath;
-		GenomeReleaseConverter converter = new GenomeReleaseConverter();
-		
-		
-		
-		//TODO convert to bed type
+	public void executeGenomeReleaseConversion(String chainfilePath, String infilePath,String outfilePath){
+		String fileType = checkFileType(infilePath);
+		String path = infilePath;
+		GenomeReleaseConverter genomeConverter = new GenomeReleaseConverter();
+		ProfileDataConverter typeConverter = new ProfileDataConverter();
+
+		// turn the inputfile to bed
 		switch(fileType){
 		case "wig":
-			
+			path = typeConverter.wigToBed(infilePath);
 			break;
 		case "sgr":
-			
+			path = typeConverter.sgrToBed(infilePath);
 			break;
+		case "gff3":
+			path = typeConverter.gff3ToBed(infilePath);
 		case "bed":
 			break;
 		default:
 			throw new IllegalArgumentException();
 		}
-		converter.procedure(path, outFilePath, chainFilePath);
-		
-		
-		//TODO Convert back to original filetype
-		
+
+
+		String outfileBed = outfilePath.split("\\.")[0];
+		outfileBed = outfileBed+".bed";
+
+		genomeConverter.procedure(path, outfileBed, chainfilePath);
+
+		//convert the outputfile to the inputfiles original filetype
+		switch(fileType){
+		case "wig":
+			typeConverter.bedToWig(outfileBed);
+			break;
+		case "sgr":
+			typeConverter.bedToSgr(outfileBed);
+			break;
+		case "gff3":
+			typeConverter.bedToGff3(outfileBed);
+		case "bed":
+			break;
+		default:
+			throw new IllegalArgumentException();
+		}
+
+		//delete the bedfile
+		File file = new File(outfileBed);
+		file.delete();
+
 		}
 	public String checkFileType(String filePath){
 		String type = "";
@@ -80,12 +105,12 @@ public class ConversionHandler {
 			type = filePath.split("\\.", 10)[1];
 			System.err.println(type);
 		}
-		
-		
-		
+
+
+
 		return type;
-		
-		
-		
+
+
+
 	}
 }
