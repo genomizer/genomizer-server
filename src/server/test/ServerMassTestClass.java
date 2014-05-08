@@ -136,4 +136,40 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 
 	}
 
+	/**
+	 * Used to test that the server responds correctly when a request
+	 * that does not exist is sent.
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void testCorruptedGetAnnotationInformationCommand() throws Exception {
+		/* Note: Not tested. Check what the server should respond if getting
+		 * 		 a wierd request of this kind.
+		 */
+
+		//Create JSON login object.
+		JsonObject jj = new JsonObject();
+		jj.addProperty("username", "jonas");
+		jj.addProperty("password", "losenord");
+
+		sendLogin(jj);
+
+		//Get connection and then add headers. (Added /corrupted)
+		HttpURLConnection con = connect("GET", "http://scratchy.cs.umu.se:7000/corrupted");
+		con.setRequestProperty("Content-Type", "application/json");
+		con.setRequestProperty("Authorization", token.getToken());
+
+		int responseCode = con.getResponseCode();
+
+		sendLogout();
+
+		assertTrue(responseCode == 204);
+
+	}
+
 }
+
+
+
+
