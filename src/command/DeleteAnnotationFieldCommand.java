@@ -19,29 +19,19 @@ import server.DatabaseSettings;
  */
 public class DeleteAnnotationFieldCommand extends Command {
 
-
-	/*
-{
- "deleteId": [
-              { "id": 1, "values": ["man", "mouse"] },
-              { "id": 2, "values": [ ] },
-              { "id": 3, "values": ["leg"] }
-             ]
-}
-*/
-
 	@Expose
-	private ArrayList<String> deleteId = new ArrayList<String>();
+	private ArrayList<DeleteAnnotationInfo> deleteId = new ArrayList<DeleteAnnotationInfo>();
 
 	/**
 	 * Used to validate the logout command.
 	 */
 	@Override
 	public boolean validate() {
-
-		// TODO Auto-generated method stub
-		return false;
-
+		if(deleteId == null) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 
 	/**
@@ -49,37 +39,25 @@ public class DeleteAnnotationFieldCommand extends Command {
 	 */
 	@Override
 	public Response execute() {
-
 		Response rsp;
 		int result = 0;
 
 		try {
-
 			DatabaseAccessor dbAccess = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
 
-
 			//TODO: Add the label. API looks wierd currently.
-			//result = dbAccess.deleteAnnotation(label);
-
+			for(DeleteAnnotationInfo delAnno: deleteId) {
+				result = dbAccess.deleteAnnotation(delAnno.getId());
+			}
 			if(result == 0) {
-
 				rsp = new MinimalResponse(403);
-
 			} else {
-
 				rsp = new MinimalResponse(200);
-
 			}
 
-
 		} catch (SQLException e) {
-
 			e.printStackTrace();
 		}
-
-
-
-
 		//Method not implemented, send appropriate response
 		return 	new MinimalResponse(StatusCode.NO_CONTENT);
 
