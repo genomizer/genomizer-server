@@ -491,8 +491,7 @@ public class DatabaseAccessor {
      *
      * @param label, the label of the chosen annotation
      * @param the value of the chosen annotation.
-     * @return boolean, true if a value was removed, false if not. This could be
-     *         if no matching value was found in the database.
+     * @return Integer, how many values that were deleted.
      * @throws SQLException
      * @throws IOException, throws an IOException if the chosen value to be
      * 			removed is the active DefaultValue of the chosen label.
