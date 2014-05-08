@@ -8,9 +8,11 @@ import java.net.InetSocketAddress;
 import java.util.Scanner;
 import java.util.concurrent.Executor;
 
-import response.ErrorResponse;
+import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
+
+import authentication.Authenticate;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -31,6 +33,7 @@ public class Doorman {
 		httpServer = HttpServer.create(new InetSocketAddress(port),0);
 		httpServer.createContext("/login", createHandler());
 		httpServer.createContext("/experiment", createHandler());
+		httpServer.createContext("/annotation", createHandler());
 		httpServer.createContext("/file", createHandler());
 		httpServer.createContext("/search", createHandler());
 		httpServer.createContext("/user", createHandler());
@@ -40,7 +43,12 @@ public class Doorman {
 		httpServer.setExecutor(new Executor() {
 			@Override
 			public void execute(Runnable command) {
+
+				try {
 				new Thread(command).start();
+				} catch(Exception e) {
+					e.printStackTrace();
+				}
 			}
 		});
 	}
@@ -53,6 +61,8 @@ public class Doorman {
 		return new HttpHandler() {
 			@Override
 			public void handle(HttpExchange exchange) throws IOException {
+
+				System.out.println("\n-----------------\nNEW EXCHANGE: " + exchange.getHttpContext().getPath());
 
 				switch(exchange.getRequestMethod()) {
 				case "GET":
@@ -73,6 +83,7 @@ public class Doorman {
 						exchange(exchange, CommandType.GET_ANNOTATION_PRIVILEGES_COMMAND);
 						break;
 					}
+					break;
 
 
 				case "PUT":
@@ -87,7 +98,7 @@ public class Doorman {
 						exchange(exchange, CommandType.UPDATE_USER_COMMAND);
 						break;
 					case "/process":
-						exchange(exchange, CommandType.CONVERT_RAW_TO_PROFILE_COMMAND);
+						exchange(exchange, CommandType.PROCESS_COMMAND);
 						break;
 					case "/annotation":
 						exchange(exchange, CommandType.ADD_ANNOTATION_VALUE_COMMAND);
@@ -96,6 +107,7 @@ public class Doorman {
 						exchange(exchange, CommandType.UPDATE_ANNOTATION_PRIVILEGES_COMMAND);
 						break;
 					}
+					break;
 
 
 				case "POST":
@@ -117,6 +129,7 @@ public class Doorman {
 						break;
 
 					}
+					break;
 
 
 				case "DELETE":
@@ -139,26 +152,38 @@ public class Doorman {
 
 
 				}
+					break;
 				}
 			}
 		};
 	}
 
-	private void exchange(HttpExchange exchange, CommandType type) throws IOException {
+	private void exchange(HttpExchange exchange, CommandType type) {
 		InputStream bodyStream = exchange.getRequestBody();
 		Scanner scanner = new Scanner(bodyStream);
 		String body = "";
 		String uuid = null;
+		String username = null;
+
+		System.out.println("Exchange: " + type);
 
 		if(type != CommandType.LOGIN_COMMAND) {
 			try {
 				uuid =  exchange.getRequestHeaders().get("Authorization").get(0);
 			} catch(NullPointerException e) {
-				Response errorResponse = new ErrorResponse(StatusCode.UNAUTHORIZED);
+				Response errorResponse = new MinimalResponse(StatusCode.UNAUTHORIZED);
 				e.printStackTrace();
-				respond(exchange, errorResponse);
+				try {
+					respond(exchange, errorResponse);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				scanner.close();
 				return;
 			}
+		} else {
+			System.out.println("FOUND LOGIN COMMAND.");
 		}
 
 		while(scanner.hasNext()) {
@@ -166,9 +191,33 @@ public class Doorman {
 		}
 		scanner.close();
 
-		Response response = commandHandler.processNewCommand(body, exchange.getRequestURI().toString(), uuid, type);
+		Response response = null;
 
-		respond(exchange, response);
+		try {
+		username = Authenticate.getUsername(uuid);
+		} catch(Exception e ) {
+			e.printStackTrace();
+		}
+
+		System.out.println("BODY: " + body);
+		System.out.println("BEFORE PROCESS COMMAND...");
+
+		try {
+			response = commandHandler.processNewCommand(body, exchange.getRequestURI().toString(), username, type);
+		} catch(Exception e ) {
+			e.printStackTrace();
+		}
+		System.out.println("AFTER PROCESS COMMAND.");
+
+		//TODO Should there be some error checking?
+
+
+		try {
+			respond(exchange, response);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 
 	}
@@ -184,23 +233,11 @@ public class Doorman {
 			exchange.sendResponseHeaders(response.getCode(), body.getBytes().length);
 
 			OutputStream os = exchange.getResponseBody();
+			System.out.println("BODY_DOORMAN PRINT: " + body);
 			os.write(body.getBytes());
 			os.flush();
 			os.close();
 		}
-	}
-
-
-
-	public static void main(String args[]) {
-		try {
-			new Doorman(new CommandHandler(), 8080).start();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-
-
+		System.out.println("END OF EXCHANGE\n------------------");
 	}
 }

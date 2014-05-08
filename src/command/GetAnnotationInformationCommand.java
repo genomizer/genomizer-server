@@ -5,21 +5,22 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import databaseAccessor.DatabaseAccessor;
+import database.DatabaseAccessor;
 
 import response.AnnotationInformation;
 import response.GetAnnotationInformationResponse;
 import response.Response;
+import server.DatabaseSettings;
 
 public class GetAnnotationInformationCommand extends Command {
 
 	@Override
 	public boolean validate() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
@@ -28,10 +29,12 @@ public class GetAnnotationInformationCommand extends Command {
 		ArrayList<AnnotationInformation> annotations = new ArrayList<AnnotationInformation>();
 
 		DatabaseAccessor accessor = null;
-		Map<String, String> a = null;
+		Map<String, Integer> a = null;
+
 		try {
-			accessor = new DatabaseAccessor("c5dv151_vt14", "shielohh", "postgres", "c5dv151_vt14");
+			accessor = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
 			a = accessor.getAnnotations();
+			System.out.println("Got annotations.");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -43,21 +46,22 @@ public class GetAnnotationInformationCommand extends Command {
 		}
 
 		for(int i = 0; i < annotation_names.size(); i++) {
-			int type;
-			if(a.get(annotation_names.get(i)).equals("dropdown")) {
-				type = AnnotationInformation.TYPE_DROP_DOWN;
-			} else {
-				type = AnnotationInformation.TYPE_FREE_TEXT;
-			}
 			ArrayList<String> values = null;
 			try {
-				values = accessor.getDropDownAnnotations(annotation_names.get(i));
-			} catch (SQLException e) {
+				if(accessor.getAnnotationType(annotation_names.get(i)) == DatabaseAccessor.FREETEXT) {
+					values = new ArrayList<String>();
+					values.add("freetext");
+				} else if(accessor.getAnnotationType(annotation_names.get(i)) == DatabaseAccessor.DROPDOWN) {
+					values = (ArrayList<String>) accessor.getChoices(annotation_names.get(i));
+				} else {
+
+				}
+			} catch (SQLException e1) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				e1.printStackTrace();
 			}
 
-			AnnotationInformation annotation = new AnnotationInformation(0, annotation_names.get(i), type, values, true);
+			AnnotationInformation annotation = new AnnotationInformation(0, annotation_names.get(i), values, true);
 			annotations.add(annotation);
 		}
 		Collections.sort(annotations, new compareAnnotations());
@@ -65,6 +69,12 @@ public class GetAnnotationInformationCommand extends Command {
 		for(int i = 0; i < annotations.size(); i++) {
 			annotations.get(i).setId(i);
 		}
+
+		for(int i = 0; i < annotations.size(); i++) {
+			System.out.println("\n" + annotations.get(i));
+
+		}
+
 		return new GetAnnotationInformationResponse(200, annotations);
 	}
 

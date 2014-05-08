@@ -2,6 +2,7 @@ package authentication;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.UUID;
 
 public class Authenticate {
@@ -26,6 +27,28 @@ public class Authenticate {
 		System.out.println(activeUsersID);
 		return activeUsersID.containsValue(username);
 
+	}
+
+	static public String getID(String username) {
+		Iterator<String> keys = activeUsersID.keySet().iterator();
+		String key = null;
+		String temp_username;
+		while(keys.hasNext()) {
+			key = keys.next();
+			temp_username = activeUsersID.get(key);
+			if(temp_username.equals(username)) {
+				return key;
+			}
+		}
+		return null;
+	}
+
+	static public void deleteUser(String id) {
+		activeUsersID.remove(id);
+	}
+
+	static public boolean idExists(String id) {
+		return activeUsersID.containsKey(id);
 	}
 
 	static public String getUsername(String userID){

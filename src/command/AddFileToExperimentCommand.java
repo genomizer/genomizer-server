@@ -1,12 +1,23 @@
 package command;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Map;
 
 import com.google.gson.annotations.Expose;
+import com.google.gson.*;
 
-import response.ErrorResponse;
+import database.DatabaseAccessor;
+
+import response.AddFileToExperimentResponse;
+import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
+import server.DatabaseSettings;
 
 /**
  * Class used to represent a command of the type Addfile.
@@ -28,7 +39,6 @@ public class AddFileToExperimentCommand extends Command {
 
 	@Expose
  	private String type;
-
 
 	/**
 	 * Validates the request by checking
@@ -54,24 +64,25 @@ public class AddFileToExperimentCommand extends Command {
 	@Override
 	public Response execute() {
 
-		Response rsp;
 		ArrayList<String> fileInfo = new ArrayList<String>();
 		fileInfo.add(fileName);
 		fileInfo.add(size);
 		fileInfo.add(type);
-//
-//		 Method from database group, needs more info
-//		 String filepath = uploadFile(experimentID, fileInfo);
-//		 if(filepath != null) {
-//			 rsp = new AddFileToExperimentResponse(200, filepath);
-//		 } else {
-//			 rsp = new ErrorResponse(404);
-//		 }
-//		 return rsp;
-//		return null;
 
-		//Method not implemented, send appropriate response
-		return 	new ErrorResponse(StatusCode.NO_CONTENT);
+		DatabaseAccessor accessor = null;
+		String response_url = null;
+		try {
+			accessor = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
+			response_url = accessor.addFile(type, fileName, "metadata", "Jonas Markström", "Jonas Markström", false, experimentID, "v.123");
+			return new AddFileToExperimentResponse(StatusCode.OK, response_url);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return new MinimalResponse(StatusCode.NO_CONTENT);
+
+
 	}
 
 

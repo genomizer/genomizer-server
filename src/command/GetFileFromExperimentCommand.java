@@ -3,10 +3,10 @@ package command;
 import java.util.ArrayList;
 
 import response.DownloadResponse;
-import response.ErrorResponse;
+import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
-
+import database.DatabaseAccessor;
 import com.google.gson.annotations.Expose;
 
 /**
@@ -18,13 +18,15 @@ import com.google.gson.annotations.Expose;
 public class GetFileFromExperimentCommand extends Command {
 
 	private String fileID;
+	private DatabaseAccessor db;
+
 
 	/**
 	 * Constructor. Takes the fileID as argument.
 	 * @param fileID
 	 */
-	public GetFileFromExperimentCommand(String[] restful) {
-		fileID = restful[restful.length];
+	public GetFileFromExperimentCommand(String restful) {
+		fileID = restful;
 
 	}
 
@@ -48,16 +50,25 @@ public class GetFileFromExperimentCommand extends Command {
 //		Response rsp = rsp;
 //		ArrayList<String> attributes = new ArrayList<String>();
 
-//		if(!fileExists(fileID)) {
-//			attributes = getFileAttributes(fileID);
-//			rsp = new DownloadResponse(200, attributes);
-//		} else {
+//		results = db.searchExperiment(fileID);
+//
+//
+//		if(results == null) {
 //			// File not found, send appropriate response (404)
 //			rsp = new ErrorResponse(404);
+//		} else {
+//			int rowNr = results.getRowCount();
+//			for (int i = 0; i < rowNr; i++) {
+//				attributes = results.getRowValues(i);
+//			}
+//			System.out.println(attributes.toString());
+//			rsp = new DownloadResponse(200, attributes);
+//
+
 //		}
 
 		//Method not implemented, send appropriate response
-		return 	new ErrorResponse(StatusCode.NO_CONTENT);
+		return 	new MinimalResponse(StatusCode.NO_CONTENT);
 	}
 
 }
