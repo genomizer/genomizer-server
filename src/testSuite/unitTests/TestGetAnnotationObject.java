@@ -135,13 +135,13 @@ public class TestGetAnnotationObject {
 	}
 
     @Test
-    public void shouldGetAnEmptyListOfChoicesForFreeTextAnnotations()
+    public void shouldReturnNullWhenRequestingListWithChoicesForFreeTextAnnotations()
     		throws Exception {
 
     	String label = "Tissue";
     	Annotation annotation = dbac.getAnnotationObject(label);
 
-    	assertTrue(annotation.getPossibleValues().isEmpty());
+    	assertTrue(annotation.getPossibleValues() == null);
 	}
 
     @Test
