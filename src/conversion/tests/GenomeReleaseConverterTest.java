@@ -1,8 +1,5 @@
 package conversion.tests;
 
-import static org.junit.Assert.*;
-
-
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -17,10 +14,6 @@ public class GenomeReleaseConverterTest {
 		GenomeReleaseConverter handler = new GenomeReleaseConverter();
 		handler.procedure("test.bed", "temp.bed", "dm2ToDm3.over.chain.gz", "unlifted.bed");
 	}
-	@Test
-	public void testSgrToBedConversion() {
-		ConversionHandler ch = new ConversionHandler();
 
-	}
 
 }
