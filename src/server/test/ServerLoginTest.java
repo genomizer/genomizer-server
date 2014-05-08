@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.io.DataOutputStream;
 
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import com.google.gson.*;
@@ -47,10 +48,51 @@ public class ServerLoginTest {
 
 		}
 
+		//Normal logout attempt.
+		responseCode = sendLogout();
+
+		if(responseCode == 200) {
+
+			System.out.println("[SUCCESS] Legit logout test success. Did receive code: "
+			+ responseCode + " and wanted code: 200.");
+
+		} else {
+
+			System.out.println("[FAILED] Legit logout test failed. Did receive code:"
+			+ responseCode + " and wanted error code.");
+
+		}
+
 	}
 
 	/**
-	 * Class to handle the login.
+	 * Used to handle the logout.
+	 *
+	 * @return
+	 * @throws Exception
+	 */
+	private static int sendLogout() throws Exception {
+
+		String url = "http://scratchy.cs.umu.se:7000/login";
+
+		URL obj = new URL(url);
+		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+		// optional default is GET
+		con.setRequestMethod("DELETE");
+
+		//add request header
+		con.setRequestProperty("Content-Type", "application/json");
+		con.setRequestProperty("Authorization", token.getToken());
+
+		int responseCode = con.getResponseCode();
+
+		return responseCode;
+
+	}
+
+	/**
+	 * Used to handle the login.
 	 *
 	 *
 	 * @throws Exception
