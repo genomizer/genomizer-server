@@ -44,7 +44,41 @@ public class ProcessCommand extends Command {
 	@Override
 	public boolean validate() {
 
-		if(username == null || processtype == null || metadata == null || parameters == null || genomeRelease == null || filename == null || fileid == null || expid == null){
+		if((username == null && CanBeNull.USERNAME == false) || (processtype == null && CanBeNull.FILE_FILETYPE == false) ||
+				(metadata == null && CanBeNull.FILE_METADATA == false) || (genomeRelease == null && CanBeNull.GENOME_VERSION == false) 	||
+				(filename == null && CanBeNull.FILE_FILENAME == false))
+		{
+			System.err.println("ProcessCommand - Validate\n" +
+					"Some annotation that can not be null is null.");
+			return false;
+		}
+
+		if(expid == null){
+			System.err.println("ProcessCommand - Validate\n" +
+					"ExpID is null");
+			return false;
+		}
+
+		if(fileid == null){
+			System.err.println("ProcessCommand - Validate\n" +
+					"FileID is null");
+			return false;
+		}
+
+		if(parameters == null){
+			System.err.println("ProcessCommand - Validate\n" +
+					"Parameters are null");
+			return false;
+		}
+
+		if(username.length() > MaxSize.USERNAME ||
+				processtype.length() > MaxSize.FILE_FILETYPE ||
+				metadata.length() > MaxSize.FILE_METADATA ||
+				genomeRelease.length() > MaxSize.GENOME_VERSION ||
+				filename.length() > MaxSize.FILE_FILENAME)
+		{
+			System.err.println("ProcessCommand - Validate\n" +
+								"Wrong lengths of annotations. Could not continue");
 			return false;
 		}
 
@@ -85,12 +119,13 @@ public class ProcessCommand extends Command {
 				System.out.println("genomeRelease: " + genomeRelease);
 
 
+				//Profile hardcoded since in case "rawtoprofile"
 				ArrayList<String> filepaths = dbac.process(fileid, "profile", filename, metadata, username, genomeRelease, expid);
 
 
 
 				//Receive the path for the profile data from the database accessor.
-			//	String outfilepath = dbac.addFile("profile", filename, metadata, "yuri", username, false, expid, genomeRelease);
+				//	String outfilepath = dbac.addFile("profile", filename, metadata, "yuri", username, false, expid, genomeRelease);
 
 
 				try {
@@ -113,7 +148,7 @@ public class ProcessCommand extends Command {
 			default:
 				System.err.println("Unknown process type in processcommand execute");
 				return new ProcessResponse(StatusCode.NO_CONTENT);
-//				break;
+				//				break;
 
 			}
 		} catch (SQLException e) {
@@ -135,7 +170,7 @@ public class ProcessCommand extends Command {
 
 	}
 
-/*
+	/*
 	public String getMetadata() {
 		return this.metadata;
 	}
@@ -172,5 +207,5 @@ public class ProcessCommand extends Command {
 	public String getExpID() {
 		return this.expid;
 	}
-*/
+	 */
 }
