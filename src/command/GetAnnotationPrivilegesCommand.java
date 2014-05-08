@@ -19,7 +19,7 @@ public class GetAnnotationPrivilegesCommand extends Command {
 	public boolean validate() {
 
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 
 	}
 

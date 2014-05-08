@@ -135,13 +135,13 @@ public class TestGetAnnotationObject {
 	}
 
     @Test
-    public void shouldGetAnEmptyListOfChoicesForFreeTextAnnotations()
+    public void shouldReturnNullWhenRequestingListWithChoicesForFreeTextAnnotations()
     		throws Exception {
 
     	String label = "Tissue";
     	Annotation annotation = dbac.getAnnotationObject(label);
 
-    	assertTrue(annotation.getPossibleValues().isEmpty());
+    	assertTrue(annotation.getPossibleValues() == null);
 	}
 
     @Test
@@ -174,5 +174,38 @@ public class TestGetAnnotationObject {
     	Annotation annotation = dbac.getAnnotationObject(label);
 
     	assertTrue(annotation == null);
+	}
+
+    @Test
+    public void shouldBeAbleToGetMultipleAnnotations() throws Exception {
+    	List<String> labels = new ArrayList<String>();
+    	labels.add("Sex");
+    	labels.add("Tissue");
+    	List<Annotation> annotations = dbac.getAnnotationObject(labels);
+
+    	assertEquals("Sex", annotations.get(0).label);
+    	assertEquals("Tissue", annotations.get(1).label);
+	}
+    
+    @Test
+    public void shouldGetNullWhenSendingInEmptyList() throws Exception {
+    	List<String> labels = new ArrayList<String>();
+    	List<Annotation> annotations = dbac.getAnnotationObject(labels);
+    	
+    	assertEquals(null, annotations);
+	}
+    
+    @Test
+    public void shouldGetAnnotationsWhenMixingValidWithInvalidLabels() throws Exception {
+    	List<String> labels = new ArrayList<String>();
+    	labels.add("invlaidLabel");
+    	labels.add("Sex");
+    	labels.add("anotherInvalidLabel");
+    	labels.add("Tissue");
+    	List<Annotation> annotations = dbac.getAnnotationObject(labels);
+    	
+    	assertTrue(annotations.size() == 2);
+    	assertEquals("Sex", annotations.get(0).label);
+    	assertEquals("Tissue", annotations.get(1).label);
 	}
 }

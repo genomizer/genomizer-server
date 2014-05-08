@@ -6,6 +6,7 @@ public class CanBeNull {
 	public final static boolean FILE_FILETYPE = false;
 	public final static boolean FILE_FILENAME = false;
 	public final static boolean FILE_METADATA = true;
+	public final static boolean FILE_INPUT_FILE_PATH = true;
 	public final static boolean FILE_AUTHOR = true;
 	public final static boolean FILE_UPLOADER = false;
 	public final static boolean FILE_ISPRIVATE = false;
