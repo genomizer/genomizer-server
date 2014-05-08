@@ -17,7 +17,41 @@ import com.google.gson.JsonObject;
  */
 public abstract class ServerAbstractTestClass {
 
-	protected Token token = null;
+	//Token used to identify users.
+	protected static Token token = null;
+
+	/**
+	 * method used to set the token.
+	 *
+	 * @param response
+	 */
+	public void setToken(String response) {
+
+		Gson gson = new Gson();
+		token = gson.fromJson(response, Token.class);
+
+	}
+
+	/**
+	 * Class used to get the response.
+	 * @param con
+	 * @return
+	 * @throws Exception
+	 */
+	public String getResponseString(HttpURLConnection con) throws Exception {
+
+		BufferedReader in = new BufferedReader(
+			    new InputStreamReader(con.getInputStream()));
+		String inputLine;
+		StringBuffer responseBuffer = new StringBuffer();
+
+		while ((inputLine = in.readLine()) != null) {
+			responseBuffer.append(inputLine);
+		}
+		in.close();
+
+		return responseBuffer.toString();
+	}
 
 	/**
 	 * Used to open a connection.
@@ -51,7 +85,7 @@ public abstract class ServerAbstractTestClass {
 
 		//Add request header
 		con.setRequestProperty("Content-Type", "application/json");
-		
+
 		//Get JSON string.
 		String json_output = jj.toString();
 
