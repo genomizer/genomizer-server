@@ -8,6 +8,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -36,7 +37,8 @@ public class ClientDummy {
 
 	private static void sendLogin() throws Exception {
 
-		String url = "http://scratchy.cs.umu.se:"+ port +"/login";
+		//String url = "http://scratchy.cs.umu.se:"+ port +"/login";
+		String url = "http://localhost:"+ port +"/login";
 
 		URL obj = new URL(url);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -91,7 +93,8 @@ public class ClientDummy {
 	}
 
 	private static void sendGetAnnotationInformation() throws Exception {
-		String url = "http://scratchy.cs.umu.se:"+port+"/annotation";
+		//String url = "http://scratchy.cs.umu.se:"+port+"/annotation";
+		String url = "http://localhost:"+ port +"/annotation";
 
 		URL obj = new URL(url);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -128,7 +131,8 @@ public class ClientDummy {
 
 	private static void sendAddExperiment() throws Exception {
 
-		String url = "http://scratchy.cs.umu.se:"+port+"/experiment";
+		//String url = "http://scratchy.cs.umu.se:"+port+"/experiment";
+		String url = "http://localhost:"+ port +"/experiment";
 
 		URL obj = new URL(url);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -142,7 +146,7 @@ public class ClientDummy {
 		//con.setRequestProperty("Authorization", UUID.randomUUID().toString());
 		JsonObject ja=new JsonObject();
 //		JsonObject name=new JsonObject();
-		ja.addProperty("name", "Jonas_Experiment1");
+		ja.addProperty("name", "Jonas2 2342324s2Experiment1");
 //		ja.add(name);
 
 
@@ -206,7 +210,6 @@ public class ClientDummy {
 
 
 		String json_output = ja.toString();
-		//System.out.println(toPrettyFormat(json_output));
 
 		con.setDoOutput(true);
 		DataOutputStream wr = new DataOutputStream(con.getOutputStream());
@@ -236,7 +239,8 @@ public class ClientDummy {
 
 	private static void sendAddFileToExperiment() throws Exception {
 
-		String url = "http://scratchy.cs.umu.se:"+port+"/file";
+		//String url = "http://scratchy.cs.umu.se:"+port+"/file";
+		String url = "http://localhost:"+ port +"/file";
 		System.out.println("\nSending Add File To Experiment.");
 
 		URL obj = new URL(url);
@@ -252,7 +256,7 @@ public class ClientDummy {
 		JsonObject ja=new JsonObject();
 
 		ja.addProperty("experimentID", "Exp1");
-		ja.addProperty("fileName", "test1234567.txt");
+		ja.addProperty("fileName", "test1234561.txt");
 		ja.addProperty("size", "1mb");
 		ja.addProperty("type", "raw");
 		ja.addProperty("fileType", "unknown");
@@ -293,7 +297,8 @@ public class ClientDummy {
 	}
 
 	private static void sendLogout() throws Exception {
-		String url = "http://scratchy.cs.umu.se:"+port+"/login";
+		//String url = "http://scratchy.cs.umu.se:"+port+"/login";
+		String url = "http://localhost:"+ port +"/login";
 
 		URL obj = new URL(url);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();

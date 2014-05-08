@@ -91,8 +91,6 @@ public class AddFileToExperimentCommand extends Command {
 		fileInfo.add(size);
 		fileInfo.add(type);*/
 
-		System.out.println("META DATA: " + metaData);
-
 		DatabaseAccessor accessor = null;
 		String response_url = null;
 		try {
