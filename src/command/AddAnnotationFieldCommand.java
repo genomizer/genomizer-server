@@ -33,7 +33,6 @@ public class AddAnnotationFieldCommand extends Command {
 
 	@Expose
 	private ArrayList<String> type = new ArrayList<String>();
-	//private String[] type;
 
 	@SerializedName("default")
 	@Expose
@@ -83,21 +82,7 @@ public class AddAnnotationFieldCommand extends Command {
 		try {
 
 			//Get database access.
-			//DatabaseAccessor dbAccess = new DatabaseAccessor("c5dv151_vt14", "shielohh", "postgres", "c5dv151_vt14");
 			DatabaseAccessor dbAccess = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
-
-
-			//Add types to arraylist to pass them to the database. //TODO: Make pretty.
-			/*
-			ArrayList<String> types = new ArrayList<String>();
-			for(int i = 0; i < type.length; i++) {
-				//types.add(type[i]);
-				types.add(i, type[i]);
-				if(type[i].equals(defaults)) {
-					defaultValueIndex = i;
-				}
-			}
-			*/
 
 			for(int i = 0; i < type.size(); i++) {
 
@@ -109,21 +94,28 @@ public class AddAnnotationFieldCommand extends Command {
 				}
 
 			}
+
 			//Add annotation field.
 			addedAnnotations = dbAccess.addDropDownAnnotation(name, type, defaultValueIndex, forced);
-			//System.out.println("Added amounth of annotations:" + addedAnnotations);
-			
+
 			//Create response.
 			if(addedAnnotations != 0) {
+
 				rsp = new AddAnnotationFieldResponse(201);
+
 			} else {
+
 				rsp = new MinimalResponse(400);
+
 			}
 
 		} catch (SQLException e) {
+
 			e.printStackTrace();
 			rsp = new MinimalResponse(400);
+
 		} catch (IOException e) {
+
 			e.printStackTrace();
 			rsp = new MinimalResponse(400);
 
