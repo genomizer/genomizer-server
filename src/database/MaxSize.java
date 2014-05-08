@@ -6,6 +6,7 @@ public class MaxSize {
 	public final static int FILE_FILETYPE = 32;
 	public final static int FILE_FILENAME = 32;
 	public final static int FILE_METADATA = 256;
+	public final static int FILE_INTUP_FILE_PATH = 128;
 	public final static int FILE_AUTHOR = 32;
 	public final static int FILE_UPLOADER = 32;
 	public final static int FILE_EXPID = 64;
