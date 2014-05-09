@@ -26,8 +26,8 @@ public class ClientDummy {
 	public static final int port = 7000;
 
 	public static void main(String args[]) throws Exception {
-		sendLogin();
 
+		sendLogin();
 		//sendGetAnnotationInformation();
 		//sendAddFileToExperiment();
 		//sendAddExperiment();
@@ -135,7 +135,7 @@ public class ClientDummy {
 
 		System.out.println("sendprocessing");
 		String username = "splutt";
-		String filename = "filename12";
+		String filename = "file666fffgg";
 		String fileid = "1";
 		String expid = "Exp1";
 		String processtype = "rawtoprofile";
@@ -184,6 +184,8 @@ public class ClientDummy {
 		System.out.println("\nSending 'PUT' request to URL : " + url);
 		System.out.println("Response Code : " + responseCode);
 		System.out.println("sendprocessing5");
+
+
 		BufferedReader in = new BufferedReader(
 		        new InputStreamReader(con.getInputStream()));
 		String inputLine;
@@ -193,6 +195,8 @@ public class ClientDummy {
 			responseBuffer.append(inputLine);
 		}
 		in.close();
+
+
 		System.out.println("sendprocessing7");
 		String response = responseBuffer.toString();
 

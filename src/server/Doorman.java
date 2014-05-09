@@ -154,7 +154,7 @@ public class Doorman {
 						break;
 
 
-				}
+					}
 					break;
 				}
 			}
@@ -177,6 +177,7 @@ public class Doorman {
 				Response errorResponse = new MinimalResponse(StatusCode.UNAUTHORIZED);
 				try {
 					respond(exchange, errorResponse);
+					scanner.close();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

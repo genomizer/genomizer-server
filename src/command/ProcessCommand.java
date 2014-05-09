@@ -159,6 +159,8 @@ public class ProcessCommand extends Command {
 				ArrayList<String> filepaths = dbac.process(fileid, "profile", filename, metadata, username, genomeRelease, expid);
 
 
+				System.err.println("Filepath[0]: " + filepaths.get(0));
+				System.err.println("Filepath[1]: " + filepaths.get(1));
 
 				//Receive the path for the profile data from the database accessor.
 				//	String outfilepath = dbac.addFile("profile", filename, metadata, "yuri", username, false, expid, genomeRelease);
@@ -166,7 +168,8 @@ public class ProcessCommand extends Command {
 
 				try {
 					System.out.println("Executing process");
-					processHandler.executeProcess("rawToProfile", parameters, filepaths.get(0), filepaths.get(1));
+					String log = processHandler.executeProcess("rawToProfile", parameters, filepaths.get(0), filepaths.get(1));
+					System.err.println("AFter processHandler.executeProcess: " + log);
 					System.out.println("Executed process");
 				} catch (InterruptedException e) {
 					// TODO Fix this
@@ -183,7 +186,7 @@ public class ProcessCommand extends Command {
 				break;
 			default:
 				System.err.println("Unknown process type in processcommand execute");
-				return new ProcessResponse(StatusCode.NO_CONTENT);
+				return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE);
 				//				break;
 
 			}
