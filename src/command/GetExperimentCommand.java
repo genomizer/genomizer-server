@@ -11,6 +11,7 @@ import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
 import response.GetExperimentResponse;
+import server.DatabaseSettings;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -50,15 +51,11 @@ public class GetExperimentCommand extends Command {
 	@Override
 	public Response execute() {
 
-		String username = "c5dv151_vt14";
-	    String password = "shielohh";
-	    String host = "postgres";
-	    String database = "c5dv151_vt14";
 	    Experiment exp;
 	    DatabaseAccessor db = null;
 
 		try {
-			db = new DatabaseAccessor(username, password, host, database);
+			db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
 			exp = db.getExperiment(this.header);
 		} catch (SQLException e) {
 			return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
