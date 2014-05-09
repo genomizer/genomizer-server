@@ -1,30 +1,15 @@
 package testSuite.unitTests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
 
 import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import database.Annotation;
 import database.DatabaseAccessor;
-import database.FilePathGenerator;
 
 public class TestChainFiles {
 
@@ -45,7 +30,7 @@ public class TestChainFiles {
 	}
 
 	@AfterClass
-	public void after(){
+	public static void after(){
 		try {
 			dbac.close();
 		} catch (SQLException e) {
