@@ -32,7 +32,7 @@ public class ClientDummy {
 		//sendAddFileToExperiment();
 		//sendAddExperiment();
 		sendProcessing();
-		sendLogout();
+		//sendLogout();
 	}
 
 
@@ -133,6 +133,7 @@ public class ClientDummy {
 
 	private static void sendProcessing() throws Exception {
 
+		System.out.println("sendprocessing");
 		String username = "splutt";
 		String filename = "filename12";
 		String fileid = "1";
@@ -146,20 +147,21 @@ public class ClientDummy {
 		String genomeRelease = "hg38";
 		String author = "yuri";
 
-
-		String url = "http://scratchy.cs.umu.se:7000/process";
+		String url = "http://localhost:"+ port +"/process";
+//		String url = "http://scratchy.cs.umu.se:7000/process";
 
 		URL obj = new URL(url);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
+		System.out.println("sendprocessing2");
 		// optional default is GET
 		con.setRequestMethod("PUT");
 
 		//add request header
-		con.setRequestProperty("Authorization", "UUID");
+		System.out.println("Sending token: " + token.getToken());
+		con.setRequestProperty("Authorization", token.getToken());
 
 
-
+		System.out.println("sendprocessing3");
 
 		String json = "{" +
 				"\"filename\": \"" + filename + "\"," +
@@ -176,22 +178,22 @@ public class ClientDummy {
 		wr.write(json.getBytes());
 		wr.flush();
 		wr.close();
-
+		System.out.println("sendprocessing4");
 
 		int responseCode = con.getResponseCode();
-		System.out.println("\nSending 'GET' request to URL : " + url);
+		System.out.println("\nSending 'PUT' request to URL : " + url);
 		System.out.println("Response Code : " + responseCode);
-
+		System.out.println("sendprocessing5");
 		BufferedReader in = new BufferedReader(
 		        new InputStreamReader(con.getInputStream()));
 		String inputLine;
 		StringBuffer responseBuffer = new StringBuffer();
-
+		System.out.println("sendprocessing6");
 		while ((inputLine = in.readLine()) != null) {
 			responseBuffer.append(inputLine);
 		}
 		in.close();
-
+		System.out.println("sendprocessing7");
 		String response = responseBuffer.toString();
 
 		System.out.println(response.toString());

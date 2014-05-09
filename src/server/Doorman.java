@@ -100,6 +100,7 @@ public class Doorman {
 						exchange(exchange, CommandType.UPDATE_USER_COMMAND);
 						break;
 					case "/process":
+						System.out.println("found process RESTful");
 						exchange(exchange, CommandType.PROCESS_COMMAND);
 						break;
 					case "/annotation":
@@ -186,7 +187,7 @@ public class Doorman {
 		} else {
 			System.out.println("FOUND LOGIN COMMAND.");
 		}
-
+		System.out.println("STarting scanner in exchange");
 		while(scanner.hasNext()) {
 			body = body.concat(" " + scanner.next());
 		}

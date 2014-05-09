@@ -135,10 +135,12 @@ public class ProcessCommand extends Command {
 		try {
 
 			dbac = new  DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
+			System.out.println("created databaseaccesor");
 			processHandler = new ProcessHandler();
 
 			switch(processtype){
 			case "rawtoprofile":
+				System.out.println("The process type was a rawtoprofile");
 				//The process type was a rawtoprofile
 
 				//TODO Remove print for validating data.
@@ -163,9 +165,9 @@ public class ProcessCommand extends Command {
 
 
 				try {
-
+					System.out.println("Executing process");
 					processHandler.executeProcess("rawToProfile", parameters, filepaths.get(0), filepaths.get(1));
-
+					System.out.println("Executed process");
 				} catch (InterruptedException e) {
 					// TODO Fix this
 					System.err.println("CATCH (IE) in ProcessCommand.Execute when running processHandler.executeProcess");
