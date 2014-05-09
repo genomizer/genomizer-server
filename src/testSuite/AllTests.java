@@ -16,6 +16,7 @@ import testSuite.unitTests.TestChangeAnnotationValue;
 import testSuite.unitTests.TestFileNameValidator;
 import testSuite.unitTests.TestFilePathGEN;
 import testSuite.unitTests.TestGetAnnotationObject;
+import testSuite.unitTests.UpdateExperimentTest;
 import testSuite.unitTests.UserInfoTests;
 
 
@@ -25,7 +26,7 @@ import testSuite.unitTests.UserInfoTests;
 				PubMedToSQLConverterTests.class, SearchDatabaseTests.class, ServerAddFileTests.class,
 				TestAnnotationRequiredDefault.class, TestChainFiles.class, TestChangeAnnotationValue.class,
 				TestFileNameValidator.class, TestFilePathGEN.class, TestGetAnnotationObject.class,
-				UserInfoTests.class })
+				UpdateExperimentTest.class, UserInfoTests.class })
 public class AllTests {
 
 }
