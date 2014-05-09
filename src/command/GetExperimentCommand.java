@@ -61,7 +61,7 @@ public class GetExperimentCommand extends Command {
 			return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
 		}
 
-		return new GetExperimentResponse(getInfo(exp), exp.getAnnotations(), exp.getFiles(), 200);
+		return new GetExperimentResponse(getInfo(exp), exp.getAnnotations(), exp.getFiles(), StatusCode.OK);
 	}
 
 	public ArrayList<String> getInfo(Experiment exp) {
