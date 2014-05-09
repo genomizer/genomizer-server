@@ -9,6 +9,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import response.LoginResponse;
+import response.Response;
 
 /**
  * Testclass used to test the login response class.
@@ -56,6 +57,22 @@ public class LoginResponseTest {
 		LoginResponse rsp = new LoginResponse(200, "abcdefg123");
 		rsp = gson.fromJson(json, LoginResponse.class);
 		String json2 = gson.toJson(rsp);
+
+		assertEquals(json, json2);
+
+	}
+
+	/**
+	 * Test used to check that LoginResponse works with
+	 * the getBody() in the superclass.
+	 */
+	@Test
+	public void testLoginResponseGetBody() {
+
+		Response rsp = new LoginResponse(200, "abcdefg123");
+		String json = "{\"token\":\"user-id\"}" + "\n";
+		rsp = gson.fromJson(json, LoginResponse.class);
+		String json2 = rsp.getBody();
 
 		assertEquals(json, json2);
 
