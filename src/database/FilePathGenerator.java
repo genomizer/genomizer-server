@@ -1,6 +1,7 @@
 package database;
 
 import java.io.File;
+import java.io.IOException;
 
 public class FilePathGenerator {
 
@@ -143,6 +144,35 @@ public class FilePathGenerator {
 
 		File file = new File(homeDir + "/data/genome_releases/" + specie);
 		file.mkdirs();
+	}
+
+	/**
+	 * Tests if the requested filename(not whole path) is valid on the server
+	 * file system or a file is already using that name. Returns true if the
+	 * name can be used, false if it cannot.
+	 *
+	 * @param String fileName
+	 * @return boolean
+	 */
+	public static boolean isNameOk(String fileName) {
+
+		File file = new File(homeDir + File.separator + fileName);
+		boolean isOk = false;
+
+		if (!file.exists()) {
+			try {
+				isOk = file.createNewFile() ;
+			} catch (IOException e) {
+				isOk = false;
+			}
+
+			if (isOk) {
+				file.delete();
+			}
+
+		}
+
+		return isOk;
 	}
 
 }

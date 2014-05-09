@@ -102,4 +102,21 @@ public class TestFilePathGEN {
 		assertTrue(f.isDirectory());
 	}
 
+	@Test
+	public void testGoodChars() {
+		boolean isOk = false;
+		isOk = FilePathGenerator.isNameOk("aaa");
+
+		assertTrue(isOk);
+	}
+
+
+	@Test
+	public void testBadChars() {
+		boolean isOk = false;
+		isOk = FilePathGenerator.isNameOk("?!//&/*\n");
+
+		assertFalse(isOk);
+	}
+
 }
