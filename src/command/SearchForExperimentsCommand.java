@@ -68,6 +68,7 @@ public class SearchForExperimentsCommand extends Command {
 		}
 
 		try {
+			System.out.println("anno:" + annotations);
 			db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
 			searchResult = db.search(annotations);
 		} catch (SQLException e) {

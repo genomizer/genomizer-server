@@ -40,11 +40,14 @@ public class SearchResponse extends Response {
 
 			Map<String,String> annotations = exp.getAnnotations();
 			JsonArray annotJsonArray = new JsonArray();
+			int i = 0;
 			for (String key : annotations.keySet()) {
 				JsonObject annotJson = new JsonObject();
+				annotJson.addProperty("id", i);
 				annotJson.addProperty("name", key);
 				annotJson.addProperty("value", annotations.get(key));
 				annotJsonArray.add(annotJson);
+				i++;
 			}
 
 			expJson.add("annotations", annotJsonArray);
