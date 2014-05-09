@@ -25,7 +25,7 @@ public class LoginResponseTest {
 	/**
 	 * Setup method to initiate gson builder.
 	 */
-	@Before
+	@Before		System.out.println(json + "\n" + json2);
 	public void setUp() {
 
 		//Create the builder.
