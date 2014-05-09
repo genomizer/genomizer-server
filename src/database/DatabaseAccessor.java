@@ -62,14 +62,13 @@ public class DatabaseAccessor {
             String database) throws SQLException {
 
         String url = "jdbc:postgresql://" + host + "/" + database;
+
         Properties props = new Properties();
         props.setProperty("user", username);
         props.setProperty("password", password);
 
         conn = DriverManager.getConnection(url, props);
-
         pm2sql = new PubMedToSQLConverter();
-
     }
 
     /**
@@ -101,7 +100,6 @@ public class DatabaseAccessor {
 	 * Round brackets should be used to disambiguate the logical expression.
 	 *
 	 * Example:
-	 *
 	 * "(Human[Species] OR Fly[Species]) AND Joe Bloggs[Uploader]"
 	 *
 	 * @param pubMedString
@@ -119,6 +117,7 @@ public class DatabaseAccessor {
 	    if (pm2sql.hasFileConstraint(pubMedString)) {
 	        return searchFiles(pubMedString);
 	    }
+
 	    return searchExperiments(pubMedString);
 	}
 
@@ -131,15 +130,19 @@ public class DatabaseAccessor {
 	 *             if the query does not succeed
 	 */
 	public List<String> getUsers() throws SQLException {
+
 	    ArrayList<String> users = new ArrayList<String>();
 	    String query = "SELECT Username FROM User_Info";
 
 	    Statement stmt = conn.createStatement();
 	    ResultSet rs = stmt.executeQuery(query);
+
 	    while (rs.next()) {
 	        users.add(rs.getString("Username"));
 	    }
+
 	    stmt.close();
+
 	    return users;
 	}
 
@@ -156,13 +159,14 @@ public class DatabaseAccessor {
      */
     public void addUser(String username, String password, String role)
             throws SQLException {
+
         String userString = "INSERT INTO User_Info "
                 + "(Username, Password, Role) VALUES " + "(?, ?, ?)";
+
         PreparedStatement addUser = conn.prepareStatement(userString);
         addUser.setString(1, username);
         addUser.setString(2, password);
         addUser.setString(3, role);
-
         addUser.executeUpdate();
         addUser.close();
     }
@@ -178,6 +182,7 @@ public class DatabaseAccessor {
     public void deleteUser(String username) throws SQLException {
 
         String statementStr = "DELETE FROM User_Info " + "WHERE (Username = ?)";
+
         PreparedStatement deleteUser = conn.prepareStatement(statementStr);
         deleteUser.setString(1, username);
         deleteUser.executeUpdate();
@@ -195,16 +200,21 @@ public class DatabaseAccessor {
      *             if the query does not succeed
      */
     public String getPassword(String user) throws SQLException {
+
         String query = "SELECT Password FROM User_Info "
                 + "WHERE (Username = ?)";
+
         PreparedStatement getPassword = conn.prepareStatement(query);
         getPassword.setString(1, user);
         ResultSet rs = getPassword.executeQuery();
         String pass = null;
+
         if (rs.next()) {
             pass = rs.getString("password");
         }
+
         getPassword.close();
+
         return pass;
     }
 
@@ -221,15 +231,17 @@ public class DatabaseAccessor {
      */
     public int resetPassword(String username, String newPassword)
             throws SQLException {
+
         String query = "UPDATE User_Info SET Password = ? "
                 + "WHERE (Username = ?)";
+
         PreparedStatement resetPassword = conn.prepareStatement(query);
         resetPassword.setString(1, newPassword);
         resetPassword.setString(2, username);
         int res = resetPassword.executeUpdate();
         resetPassword.close();
-        return res;
 
+        return res;
     }
 
     /**
@@ -242,15 +254,20 @@ public class DatabaseAccessor {
 	 *             if the query does not succeed
 	 */
 	public String getRole(String username) throws SQLException {
+
 	    String query = "SELECT Role FROM User_Info " + "WHERE (Username = ?)";
+
 	    PreparedStatement getRole = conn.prepareStatement(query);
 	    getRole.setString(1, username);
 	    ResultSet rs = getRole.executeQuery();
 	    String role = null;
+
 	    if (rs.next()) {
 	        role = rs.getString("Role");
 	    }
+
 	    getRole.close();
+
 	    return role;
 	}
 
@@ -266,13 +283,17 @@ public class DatabaseAccessor {
      *             if the query does not succeed
      */
     public int setRole(String username, String role) throws SQLException {
+
         String query = "UPDATE User_Info SET Role = ? "
                 + "WHERE (Username = ?)";
+
         PreparedStatement setRole = conn.prepareStatement(query);
         setRole.setString(1, role);
         setRole.setString(2, username);
+
         int res = setRole.executeUpdate();
         setRole.close();
+
         return res;
     }
 
@@ -286,17 +307,20 @@ public class DatabaseAccessor {
 	 *             if the query does not succeed
 	 */
 	public Experiment getExperiment(String expID) throws SQLException {
+
 	    String query = "SELECT ExpID FROM Experiment " + "WHERE ExpID = ?";
+
 	    PreparedStatement getExp = conn.prepareStatement(query);
 	    getExp.setString(1, expID);
 	    ResultSet rs = getExp.executeQuery();
-
 	    Experiment e = null;
+
 	    if (rs.next()) {
 	        e = new Experiment(rs.getString("ExpID"));
 	        e = fillAnnotations(e);
 	        e = fillFiles(e);
 	    }
+
 	    getExp.close();
 
 	    return e;
@@ -312,6 +336,7 @@ public class DatabaseAccessor {
 	 *             if the query does not succeed
 	 */
 	public int addExperiment(String expID) throws SQLException {
+
 	    String query = "INSERT INTO Experiment " + "(ExpID) VALUES (?)";
 	    PreparedStatement addExp = conn.prepareStatement(query);
 	    addExp.setString(1, expID);
@@ -320,6 +345,7 @@ public class DatabaseAccessor {
 
 	    int res = addExp.executeUpdate();
 	    addExp.close();
+
 	    return res;
 	}
 
@@ -336,12 +362,16 @@ public class DatabaseAccessor {
 	 *             database)
 	 */
 	public int deleteExperiment(String expId) throws SQLException {
+
 	    String statementStr = "DELETE FROM Experiment " + "WHERE (ExpID = ?)";
+
 	    PreparedStatement deleteExperiment = conn
 	            .prepareStatement(statementStr);
 	    deleteExperiment.setString(1, expId);
+
 	    int res = deleteExperiment.executeUpdate();
 	    deleteExperiment.close();
+
 	    return res;
 
 	}
@@ -356,13 +386,16 @@ public class DatabaseAccessor {
 	 *             if the query does not succeed
 	 */
 	public boolean hasExperiment(String expID) throws SQLException {
+
 	    String query = "SELECT ExpID FROM Experiment " + "WHERE ExpID = ?";
+
 	    PreparedStatement hasExp = conn.prepareStatement(query);
 	    hasExp.setString(1, expID);
 	    ResultSet rs = hasExp.executeQuery();
 
 	    boolean res = rs.next();
 	    hasExp.close();
+
 	    return res;
 	}
 
@@ -387,7 +420,8 @@ public class DatabaseAccessor {
 
 	    if (!isValidAnnotationValue(label, value)) {
 	        throw new IOException(value
-	                + " is not a valid choice for the annotation type " + label);
+	                + " is not a valid choice for the annotation type "
+	        		+ label);
 	    }
 
 	    String query = "INSERT INTO Annotated_With " + "VALUES (?, ?, ?)";
@@ -398,6 +432,7 @@ public class DatabaseAccessor {
 
 	    int res = tagExp.executeUpdate();
 	    tagExp.close();
+
 	    return res;
 	}
 
@@ -414,13 +449,17 @@ public class DatabaseAccessor {
 	 */
 	public int removeExperimentAnnotation(String expID, String label)
 	        throws SQLException {
+
 	    String statementStr = "DELETE FROM Annotated_With "
 	            + "WHERE (ExpID = ? AND Label = ?)";
+
 	    PreparedStatement deleteTag = conn.prepareStatement(statementStr);
 	    deleteTag.setString(1, expID);
 	    deleteTag.setString(2, label);
+
 	    int res = deleteTag.executeUpdate();
 	    deleteTag.close();
+
 	    return res;
 	}
 
@@ -434,10 +473,13 @@ public class DatabaseAccessor {
 	 *             if the query does not succeed
 	 */
 	public Map<String, Integer> getAnnotations() throws SQLException {
+
 	    HashMap<String, Integer> annotations = new HashMap<String, Integer>();
 	    String query = "SELECT * FROM Annotation";
+
 	    Statement getAnnotations = conn.createStatement();
 	    ResultSet rs = getAnnotations.executeQuery(query);
+
 	    while (rs.next()) {
 	        if (rs.getString("DataType").equalsIgnoreCase("FreeText")) {
 	            annotations.put(rs.getString("Label"), Annotation.FREETEXT);
@@ -445,6 +487,7 @@ public class DatabaseAccessor {
 	            annotations.put(rs.getString("Label"), Annotation.DROPDOWN);
 	        }
 	    }
+
 	    getAnnotations.close();
 
 	    return annotations;
@@ -489,19 +532,20 @@ public class DatabaseAccessor {
 	public List<Annotation> getAnnotationObject(List<String> labels)
 		 throws SQLException {
 
-	 List<Annotation> annotations = null;
-	 Annotation annotation = null;
+		List<Annotation> annotations = null;
+		Annotation annotation = null;
 
-	 for (String label : labels) {
-		 annotation = getAnnotationObject(label);
-		 if (annotation != null) {
-			 if(annotations == null) {
-				 annotations = new ArrayList<Annotation>();
-			 }
-			 annotations.add(annotation);
-		 }
-	 }
-	 return annotations;
+		for (String label : labels) {
+			annotation = getAnnotationObject(label);
+			if (annotation != null) {
+				if(annotations == null) {
+					annotations = new ArrayList<Annotation>();
+				}
+				annotations.add(annotation);
+			}
+		}
+
+		return annotations;
 	}
 
 	/**
@@ -511,7 +555,8 @@ public class DatabaseAccessor {
 	 * @return ArrayList<String> annotationLabels
 	 */
 	public ArrayList<String> getAllAnnotationLabels() {
-	    ArrayList<String> allAnnotationlabels = new ArrayList<>();
+
+		ArrayList<String> allAnnotationlabels = new ArrayList<>();
 
 	    String findAllLabelsQuery = "SELECT Label FROM Annotation";
 	    PreparedStatement ps;
@@ -527,6 +572,7 @@ public class DatabaseAccessor {
 	        e.printStackTrace();
 	        return null;
 	    }
+
 	    return allAnnotationlabels;
 	}
 
@@ -541,8 +587,10 @@ public class DatabaseAccessor {
 	 *             if the query does not succeed
 	 */
 	public Integer getAnnotationType(String label) throws SQLException {
-	    Map<String, Integer> annotations = getAnnotations();
-	    return annotations.get(label);
+
+		Map<String, Integer> annotations = getAnnotations();
+
+		return annotations.get(label);
 	}
 
 	/**
@@ -554,12 +602,12 @@ public class DatabaseAccessor {
 	 * @return The defult value or NULL.
 	 * @throws SQLException
 	 */
-	public String getDefaultAnnotationValue(String annotationLabel) throws SQLException {
+	public String getDefaultAnnotationValue(String annotationLabel)
+			throws SQLException {
 
 	    String query = "SELECT DefaultValue FROM Annotation WHERE Label = ?";
 
 	    PreparedStatement ps = conn.prepareStatement(query);
-
 	    ps.setString(1, annotationLabel);
 
 	    ResultSet rs = ps.executeQuery();
@@ -586,8 +634,10 @@ public class DatabaseAccessor {
         PreparedStatement deleteAnnotation = conn
                 .prepareStatement(statementStr);
         deleteAnnotation.setString(1, label);
+
         int res = deleteAnnotation.executeUpdate();
         deleteAnnotation.close();
+
         return res;
     }
 
@@ -607,14 +657,18 @@ public class DatabaseAccessor {
 	 */
 	public int addFreeTextAnnotation(String label, String defaultValue,
 	        boolean required) throws SQLException {
-	    String query = "INSERT INTO Annotation "
+
+		String query = "INSERT INTO Annotation "
 	            + "VALUES (?, 'FreeText', ?, ?)";
-	    PreparedStatement addAnnotation = conn.prepareStatement(query);
+
+		PreparedStatement addAnnotation = conn.prepareStatement(query);
 	    addAnnotation.setString(1, label);
 	    addAnnotation.setString(2, defaultValue);
 	    addAnnotation.setBoolean(3, required);
+
 	    int res = addAnnotation.executeUpdate();
 	    addAnnotation.close();
+
 	    return res;
 	}
 
@@ -626,21 +680,21 @@ public class DatabaseAccessor {
 	 * @return true if it is required, else false
 	 * @throws SQLException
 	 */
-	public boolean isAnnotationRequiered(String annotationLabel) throws SQLException {
+	public boolean isAnnotationRequiered(String annotationLabel)
+			throws SQLException {
 
 	    String query = "SELECT Required FROM Annotation WHERE Label = ?";
 
 	    PreparedStatement ps = conn.prepareStatement(query);
-
 	    ps.setString(1, annotationLabel);
 
 	    ResultSet rs = ps.executeQuery();
-
 	    boolean isRequired = false;
 
 	    while (rs.next()) {
 	        isRequired = rs.getBoolean("Required");
 	    }
+
 	    return isRequired;
 	}
 
@@ -657,16 +711,22 @@ public class DatabaseAccessor {
 	@Deprecated
 	public ArrayList<String> getDropDownAnnotations(String label)
 	        throws SQLException {
+
 	    String query = "SELECT Value FROM Annotation_Choices "
 	            + "WHERE (Label = ?)";
 	    ArrayList<String> dropDownStrings = new ArrayList<String>();
+
 	    PreparedStatement getDropDownStrings = conn.prepareStatement(query);
 	    getDropDownStrings.setString(1, label);
+
 	    ResultSet rs = getDropDownStrings.executeQuery();
+
 	    while (rs.next()) {
 	        dropDownStrings.add(rs.getString("Value"));
 	    }
+
 	    getDropDownStrings.close();
+
 	    return dropDownStrings;
 	}
 
@@ -714,6 +774,7 @@ public class DatabaseAccessor {
 
         PreparedStatement addChoices = conn.prepareStatement(choicesQuery);
         addChoices.setString(1, label);
+
         for (String choice : choices) {
             addChoices.setString(2, choice);
             try {
@@ -725,6 +786,7 @@ public class DatabaseAccessor {
                  */
             }
         }
+
         addChoices.close();
 
         return tuplesInserted;
@@ -756,14 +818,15 @@ public class DatabaseAccessor {
 	    checkTag.close();
 
 	    if(!res) {
-	    	throw new IOException("The annotation of the chosen label is not of type DropDown");
+	    	throw new IOException("The annotation of the chosen label" +
+	    			" is not of type DropDown");
 	    } else {
-
 	    	statementStr = "INSERT INTO Annotation_Choices (label , value) "
 	    			+ "VALUES (?,?)";
 
 	    	PreparedStatement insertTag = conn
 	    			.prepareStatement(statementStr);
+
 	    	insertTag.setString(1, label);
 	    	insertTag.setString(2, value);
 	    	int ress = insertTag.executeUpdate();
@@ -801,11 +864,10 @@ public class DatabaseAccessor {
 	    checkTag.close();
 
 	    if(res) {
-	    	throw new IOException("The chosen value of the label is a default " +
-	    			"value. Change the default value of the label and run this " +
-	    			"method again.");
+	    	throw new IOException("The chosen value of the label is a" +
+	    			" default value. Change the default value of the label" +
+	    			" and run this method again.");
 	    } else {
-
 	    	statementStr = "DELETE FROM Annotation_Choices "
 	    			+ "WHERE (label = ? AND value = ?)";
 
@@ -813,6 +875,7 @@ public class DatabaseAccessor {
 	    			.prepareStatement(statementStr);
 	    	deleteTag.setString(1, label);
 	    	deleteTag.setString(2, value);
+
 	    	int ress = deleteTag.executeUpdate();
 	    	deleteTag.close();
 
@@ -831,7 +894,8 @@ public class DatabaseAccessor {
 	 */
 	public boolean changeAnnotationLabel(String oldLabel, String newLabel) {
 
-	    String changeLblQuery = "UPDATE Annotation SET Label = ? WHERE (Label =?)";
+	    String changeLblQuery = "UPDATE Annotation SET Label = ?" +
+	    		" WHERE (Label =?)";
 
 	    PreparedStatement lblExp;
 
@@ -907,15 +971,20 @@ public class DatabaseAccessor {
      *             if the query does not succeed
      */
     public List<String> getChoices(String label) throws SQLException {
+
         String query = "SELECT Value FROM Annotation_Choices "
                 + "WHERE Label = ?";
         List<String> choices = new ArrayList<String>();
+
         PreparedStatement getChoices = conn.prepareStatement(query);
         getChoices.setString(1, label);
+
         ResultSet rs = getChoices.executeQuery();
+
         while (rs.next()) {
             choices.add(rs.getString("Value"));
         }
+
         getChoices.close();
 
         return choices;
@@ -950,22 +1019,21 @@ public class DatabaseAccessor {
 	            + "Author, Uploader, IsPrivate, ExpID, GRVersion) "
 	            + "VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?, ?, ?, ?, ?, ?)";
 	    PreparedStatement addFile = conn.prepareStatement(query);
-
 	    addFile.setString(1, path);
 
 	    switch (fileType) {
-	    case FileTuple.RAW:
-	        addFile.setString(2, "Raw");
-	        break;
-	    case FileTuple.PROFILE:
-	        addFile.setString(2, "Profile");
-	        break;
-	    case FileTuple.REGION:
-	        addFile.setString(2, "Region");
-	        break;
-	    default:
-	        addFile.setString(2, "Other");
-	        break;
+		    case FileTuple.RAW:
+		        addFile.setString(2, "Raw");
+		        break;
+		    case FileTuple.PROFILE:
+		        addFile.setString(2, "Profile");
+		        break;
+		    case FileTuple.REGION:
+		        addFile.setString(2, "Region");
+		        break;
+		    default:
+		        addFile.setString(2, "Other");
+		        break;
 	    }
 
 	    addFile.setString(3, fileName);
@@ -981,12 +1049,14 @@ public class DatabaseAccessor {
 	    addFile.close();
 
 	    Experiment exp;
+
 	    try {
 	        exp = search(path + "[Path]").get(0);
 	        return exp.getFiles().get(0);
 	    } catch (IOException e) {
 	        e.printStackTrace();
 	    }
+
 	    return null;
 	}
 
@@ -1033,8 +1103,8 @@ public class DatabaseAccessor {
 	    addFile.setString(9, grVersion);
 
 	    addFile.executeUpdate();
-
 	    addFile.close();
+
 	    return path;
 	}
 
@@ -1067,7 +1137,6 @@ public class DatabaseAccessor {
 	            + "Author, Uploader, IsPrivate, ExpID, GRVersion) "
 	            + "VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, NULL, ?, ?, ?, ?, ?)";
 	    PreparedStatement tagExp = conn.prepareStatement(query);
-
 	    tagExp.setString(1, path);
 	    tagExp.setString(2, fileType);
 	    tagExp.setString(3, fileName);
@@ -1079,8 +1148,8 @@ public class DatabaseAccessor {
 	    tagExp.setString(9, grVersion);
 
 	    tagExp.executeUpdate();
-
 	    tagExp.close();
+
 	    return URL + path;
 	}
 
@@ -1094,11 +1163,14 @@ public class DatabaseAccessor {
 	 *             if the query does not succeed
 	 */
 	public int deleteFile(String path) throws SQLException {
+
 	    String statementStr = "DELETE FROM File " + "WHERE (Path = ?)";
 	    PreparedStatement deleteFile = conn.prepareStatement(statementStr);
+
 	    deleteFile.setString(1, path);
 	    int res = deleteFile.executeUpdate();
 	    deleteFile.close();
+
 	    return res;
 	}
 
@@ -1109,10 +1181,13 @@ public class DatabaseAccessor {
      * @throws SQLException
      */
     public int deleteFile(int fileID) throws SQLException {
+
     	String query = "DELETE FROM File " +
     			"WHERE FileID = ?";
+
     	PreparedStatement stmt = conn.prepareStatement(query);
     	stmt.setInt(1, fileID);
+
     	return stmt.executeUpdate();
     }
 
@@ -1123,17 +1198,21 @@ public class DatabaseAccessor {
 	 * @throws SQLException
 	 */
 	public boolean hasFile(int fileID) throws SQLException {
+
 		String query = "SELECT fileID FROM File " +
 				"WHERE fileID = ?";
 		PreparedStatement stmt = conn.prepareStatement(query);
 		stmt.setInt(1, fileID);
-		ResultSet rs = stmt.executeQuery();
 
+		ResultSet rs = stmt.executeQuery();
 		boolean res = rs.next();
+
 		if (rs.next()) {
 			res = false;
 		}
+
 	    stmt.close();
+
 	    return res;
 	}
 
@@ -1158,6 +1237,7 @@ public class DatabaseAccessor {
 
 	    boolean res = rs.next();
 	    pStatement.close();
+
 	    return res;
 	}
 
@@ -1180,14 +1260,12 @@ public class DatabaseAccessor {
 	        String grVersion, String expID) throws SQLException {
 
 	    ArrayList<String> pathList = new ArrayList<String>();
-
 	    String ToPath;
 
-	    String SelectQuery = "SELECT Path, Author, IsPrivate FROM File WHERE (FileID = ?)";
+	    String SelectQuery = "SELECT Path, Author, IsPrivate FROM File" +
+	    		" WHERE (FileID = ?)";
 	    PreparedStatement ps = conn.prepareStatement(SelectQuery);
-
 	    int fID = Integer.parseInt(fileID);
-
 	    ps.setInt(1, fID);
 
 	    ResultSet rs = ps.executeQuery();
@@ -1232,6 +1310,7 @@ public class DatabaseAccessor {
 	    while (res.next()) {
 	        allVersions.add(res.getString("Version"));
 	    }
+
 	    return allVersions;
 	}
 
@@ -1259,12 +1338,12 @@ public class DatabaseAccessor {
 	            + "(Version,Species,FilePath) " + "VALUES (?,?,?)";
 
 	    PreparedStatement ps = conn.prepareStatement(insertGenRelQuery);
-
 	    ps.setString(1, genomeVersion);
 	    ps.setString(2, specie);
 	    ps.setString(3, path);
 
 	    ps.execute();
+
 	    return filePath;
 	}
 
@@ -1279,9 +1358,11 @@ public class DatabaseAccessor {
 	 */
 	public boolean removeGenomeRelease(String genomeVersion, String specie) {
 
-	    String removeQuery = "DELETE FROM Genome_Release WHERE (Version = ? AND Species = ?)";
+	    String removeQuery = "DELETE FROM Genome_Release WHERE " +
+	    		"(Version = ? AND Species = ?)";
 
 	    PreparedStatement ps;
+
 	    try {
 	        ps = conn.prepareStatement(removeQuery);
 
@@ -1292,19 +1373,20 @@ public class DatabaseAccessor {
 	        System.out.println("Failed to remove genome release!");
 	        return false;
 	    }
+
 	    return true;
 	}
 
-	public String getChainFile(String fromVersion, String toVersion) throws SQLException {
+	public String getChainFile(String fromVersion, String toVersion)
+			throws SQLException {
 
-	    String query = "SELECT ExpID FROM Experiment WHERE (FromVersion = ?) AND (ToVersion = ?)";
+	    String query = "SELECT ExpID FROM Experiment WHERE (FromVersion = ?)" +
+	    		" AND (ToVersion = ?)";
 	    PreparedStatement ps = conn.prepareStatement(query);
-
 	    ps.setString(1, fromVersion);
 	    ps.setString(1, toVersion);
 
 	    ResultSet rs = ps.executeQuery();
-
 	    String res = null;
 
 	    if (rs.next()) {
@@ -1336,13 +1418,16 @@ public class DatabaseAccessor {
 
 		PreparedStatement speciesStat = conn.prepareStatement(speciesQuery);
 		speciesStat.setString(1, fromVersion);
+
 		System.out.println(speciesStat.toString());
 		ResultSet rs = speciesStat.executeQuery();
+
 		while(rs.next()) {
 			species = rs.getString("Species");
 		}
 
-	    String filePath = FilePathGenerator.GenerateChainFilePath(species, fileName);
+	    String filePath = FilePathGenerator.GenerateChainFilePath(species,
+	    		fileName);
 
 	    String insertQuery = "INSERT INTO Chain_File "
 	            + "(FromVersion, ToVersion, FilePath) VALUES (?, ?, ?)";
@@ -1365,20 +1450,21 @@ public class DatabaseAccessor {
 	 * genome version the file converts to.
 	 * @param fromVersion - genome version the Chain_file converts from
 	 * @param toVersion - genome version the Chin_file converts to
-	 * @return the number of deleted tuples in the database. (Should be one if success)
+	 * @return the number of deleted tuples in the database. (Should be one if
+	 * success)
 	 * @throws SQLException - if the query does not succeed
 	 */
-	public int removeChainFile(String fromVersion, String toVersion) throws SQLException{
+	public int removeChainFile(String fromVersion, String toVersion)
+			throws SQLException{
 
-	    String query = "DELETE FROM Chain_File WHERE (FromVersion = ?) AND (ToVersion = ?)";
+	    String query = "DELETE FROM Chain_File WHERE (FromVersion = ?)" +
+	    		" AND (ToVersion = ?)";
 
 	    PreparedStatement ps = conn.prepareStatement(query);
-
 	    ps.setString(1, fromVersion);
 	    ps.setString(2, toVersion);
 
 	    int res =  ps.executeUpdate();
-
 	    ps.close();
 
 	    return res;
@@ -1397,6 +1483,7 @@ public class DatabaseAccessor {
      */
     private boolean isValidAnnotationValue(String label, String value)
             throws SQLException {
+
         return getAnnotationType(label) == Annotation.FREETEXT
                 || getChoices(label).contains(value);
     }
@@ -1411,6 +1498,7 @@ public class DatabaseAccessor {
      *             if the query does not succeed
      */
     private Experiment fillFiles(Experiment e) throws SQLException {
+
         String query = "SELECT * FROM File " + "WHERE ExpID = ?";
         PreparedStatement getFiles = conn.prepareStatement(query);
         getFiles.setString(1, e.getID());
@@ -1419,7 +1507,9 @@ public class DatabaseAccessor {
         while (rs.next()) {
             e.addFile(new FileTuple(rs));
         }
+
         getFiles.close();
+
         return e;
     }
 
@@ -1434,6 +1524,7 @@ public class DatabaseAccessor {
      *             if the query does not succeed
      */
     private Experiment fillAnnotations(Experiment e) throws SQLException {
+
         String query = "SELECT Label, Value FROM Annotated_With "
                 + "WHERE ExpID = ?";
         PreparedStatement getExpAnnotations = conn.prepareStatement(query);
@@ -1443,7 +1534,9 @@ public class DatabaseAccessor {
         while (rs.next()) {
             e.addAnnotation(rs.getString("Label"), rs.getString("Value"));
         }
+
         getExpAnnotations.close();
+
         return e;
     }
 
@@ -1451,14 +1544,12 @@ public class DatabaseAccessor {
             throws IOException, SQLException {
 
         String query = pm2sql.convertExperimentSearch(pubMedString);
-
         List<String> params = pm2sql.getParameters();
 
         PreparedStatement getFiles = conn.prepareStatement(query);
         getFiles = bind(getFiles, params);
 
         ResultSet rs = getFiles.executeQuery();
-
         ArrayList<Experiment> experiments = new ArrayList<Experiment>();
 
         while (rs.next()) {
@@ -1467,6 +1558,7 @@ public class DatabaseAccessor {
             exp = fillFiles(exp);
             experiments.add(exp);
         }
+
         return experiments;
     }
 
@@ -1474,14 +1566,12 @@ public class DatabaseAccessor {
             throws IOException, SQLException {
 
         String query = pm2sql.convertFileSearch(pubMedString);
-
         List<String> params = pm2sql.getParameters();
 
         PreparedStatement getFiles = conn.prepareStatement(query);
         getFiles = bind(getFiles, params);
 
         ResultSet rs = getFiles.executeQuery();
-
         ArrayList<Experiment> experiments = new ArrayList<Experiment>();
 
         if (!rs.next()) {
@@ -1513,9 +1603,11 @@ public class DatabaseAccessor {
 
     private PreparedStatement bind(PreparedStatement query, List<String> params)
             throws SQLException {
+
         for (int i = 0; i < params.size(); i++) {
             query.setString(i + 1, params.get(i));
         }
+
         return query;
     }
 }
