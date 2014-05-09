@@ -128,5 +128,34 @@ public class AddAnnotationPossibilitiesTests {
         assertTrue(choices.isEmpty());
 
     }
-
+    
+    @Test(expected=SQLException.class)
+    public void shouldThrowAnExceptionWhenAddingADropDownAnnotationThatAlreadyExists() 
+    		throws SQLException, IOException {
+        ArrayList<String> otherChoices = new ArrayList<String>();
+        otherChoices.add(testChoice);
+        otherChoices.add(testChoice + "2");
+    	dbac.addDropDownAnnotation(testLabelDD, otherChoices, 0, false);
+    }
+    
+    @Test
+    public void shouldBeAbleToAddADropDownAnnotationChoice() throws Exception {
+    	String newChoice = "newChoice";
+    	dbac.addDropDownAnnotationValue(testLabelDD, newChoice);
+    	ArrayList<String> choices = (ArrayList<String>) dbac.getAnnotationObject(testLabelDD).getPossibleValues();
+    	assertTrue(choices.contains(newChoice));
+    	assertEquals(3, choices.size());
+	}
+    
+    @Test(expected=SQLException.class)
+    public void shouldThrowAnExceptionWhenAddingADropDownChoiceThatAlreadyExist() throws Exception {
+    	dbac.addDropDownAnnotation(testLabelDD, testChoices, 0, false);
+    	dbac.addDropDownAnnotationValue(testLabelDD, testChoice);
+	}
+    
+    @Test(expected = IOException.class)
+    public void shouldThrowAnExceptionWhenTryingToAddAChoiceForANoneDropDownAnnotation() throws Exception {
+    	String newChoice = "newChoice";
+    	dbac.addDropDownAnnotationValue(testLabelFT, newChoice);
+	}
 }
