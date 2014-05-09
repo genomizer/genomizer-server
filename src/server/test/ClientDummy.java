@@ -27,9 +27,11 @@ public class ClientDummy {
 
 	public static void main(String args[]) throws Exception {
 		sendLogin();
-		sendGetAnnotationInformation();
-		sendAddFileToExperiment();
+
+		//sendGetAnnotationInformation();
+		//sendAddFileToExperiment();
 		//sendAddExperiment();
+		sendProcessing();
 		sendLogout();
 	}
 
@@ -126,6 +128,74 @@ public class ClientDummy {
 
 
 		System.out.println("RESPONSE: " + response);
+
+	}
+
+	private static void sendProcessing() throws Exception {
+
+		String username = "splutt";
+		String filename = "filename12";
+		String fileid = "1";
+		String expid = "Exp1";
+		String processtype = "rawtoprofile";
+		String parameters = "\"param1\"," +
+							"\"param2\"," +
+							"\"param3\"," +
+							"\"param4\"";
+		String metadata = "astringofmetadata";
+		String genomeRelease = "hg38";
+		String author = "yuri";
+
+
+		String url = "http://scratchy.cs.umu.se:7000/process";
+
+		URL obj = new URL(url);
+		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+		// optional default is GET
+		con.setRequestMethod("PUT");
+
+		//add request header
+		con.setRequestProperty("Authorization", "UUID");
+
+
+
+
+		String json = "{" +
+				"\"filename\": \"" + filename + "\"," +
+				"\"fileid\": \"" + fileid + "\"," +
+				"\"expid\": \"" + expid + "\"," +
+				"\"processtype\": \"" + processtype + "\"," +
+				"\"parameters\": [" + parameters + "]," +
+				"\"metadata\": \"" + metadata + "\"," +
+				"\"genomeRelease\": \"" + genomeRelease + "\"," +
+				"\"author\": \"" + author + "\"}";
+
+		con.setDoOutput(true);
+		DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+		wr.write(json.getBytes());
+		wr.flush();
+		wr.close();
+
+
+		int responseCode = con.getResponseCode();
+		System.out.println("\nSending 'GET' request to URL : " + url);
+		System.out.println("Response Code : " + responseCode);
+
+		BufferedReader in = new BufferedReader(
+		        new InputStreamReader(con.getInputStream()));
+		String inputLine;
+		StringBuffer responseBuffer = new StringBuffer();
+
+		while ((inputLine = in.readLine()) != null) {
+			responseBuffer.append(inputLine);
+		}
+		in.close();
+
+		String response = responseBuffer.toString();
+
+		System.out.println(response.toString());
+
 
 	}
 
