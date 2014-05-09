@@ -4,3 +4,4 @@ bin/
 .idea/
 .idea
 *.orig
+.classpath

@@ -1,95 +1,60 @@
 package testSuite.unitTests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
 
-import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import database.Annotation;
+import testSuite.TestInitializer;
 import database.DatabaseAccessor;
-import database.FilePathGenerator;
 
 public class TestChainFiles {
 
-	private static DatabaseAccessor dbac;
+    private static DatabaseAccessor dbac;
+    private static TestInitializer ti;
 
-	@BeforeClass
-	public static void setUp(){
-		try {
-			dbac = new DatabaseAccessor("c5dv151_vt14", "shielohh", "postgres", "c5dv151_vt14");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
+    @BeforeClass
+    public static void setupBeforeClass() throws Exception {
+    	ti = new TestInitializer();
+    	dbac = ti.setup();
+    }
 
-	@After
-	public void tearDown(){
-
-	}
-
-	@AfterClass
-	public void after(){
-		try {
-			dbac.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+    @AfterClass
+    public static void undoAllChanges() throws SQLException {
+    	ti.removeTuples();
+    }
 
     @Test
-    public void shouldAddandGetAndRemoveChainFile () throws SQLException {
-    	addChain_file();
-    	removeChainFile();
-	}
-
-
-
-
     public void addChain_file() throws SQLException {
 
     	String fromVersion = "hg18";
     	String toVersion = "hg38";
     	String fileName = "chainHuman";
-    	String filePath = "";
 
-    	filePath = dbac.addChainFile(fromVersion, toVersion, fileName);
+    	String filePath = dbac.addChainFile(fromVersion, toVersion, fileName);
 
-    	System.out.println(filePath);
     	assertEquals("http://scratchy.cs.umu.se:8000/upload.php?path=/var/www/data/genome_releases/Human/chain_files/chainHuman",filePath);
-
-
     }
 
+    @Test
     public void removeChainFile() throws SQLException {
-    	String fromVersion = "hg18";
+    	String fromVersion = "hg19";
     	String toVersion = "hg38";
 
     	assertEquals(1,dbac.removeChainFile(fromVersion, toVersion));
 
     }
 
+    @Test
     public void getChainFIle() throws SQLException {
-    	String fromVersion = "hg18";
-    	String toVersion = "hg38";
+    	String fromVersion = "rn3";
+    	String toVersion = "rn4";
 
-    	dbac.getChainFile(fromVersion, toVersion);
+    	String filePath = dbac.getChainFile(fromVersion, toVersion);
+
+    	assertEquals("/var/www/data/Chain_File/Rat/rn3-rn4.fasta",filePath);
     }
 }

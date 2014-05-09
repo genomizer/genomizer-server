@@ -14,7 +14,7 @@ public class FileTuple {
     public final Integer id;
     public final String path;
     public final String inputFilePath;
-    public final int type;
+    public final String type;
     public final String filename;
     public final Date date;
     public final String metaData;
@@ -28,22 +28,7 @@ public class FileTuple {
         id = resSet.getInt("FileID");
         path = resSet.getString("Path");
         inputFilePath = resSet.getString("InputFilePath");
-
-        switch (resSet.getString("FileType")) {
-        case "Raw":
-            type = RAW;
-            break;
-        case "Profile":
-            type = PROFILE;
-            break;
-        case "Region":
-            type = REGION;
-            break;
-        default:
-            type = OTHER;
-            break;
-        }
-
+        type = resSet.getString("FileType");
         filename = resSet.getString("FileName");
         date = resSet.getDate("Date");
         metaData = resSet.getString("MetaData");
