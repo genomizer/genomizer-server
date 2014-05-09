@@ -1456,7 +1456,6 @@ public class DatabaseAccessor {
 		PreparedStatement speciesStat = conn.prepareStatement(speciesQuery);
 		speciesStat.setString(1, fromVersion);
 
-		System.out.println(speciesStat.toString());
 		ResultSet rs = speciesStat.executeQuery();
 
 		while(rs.next()) {
