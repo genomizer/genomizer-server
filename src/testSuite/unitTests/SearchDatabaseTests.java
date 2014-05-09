@@ -114,7 +114,7 @@ public class SearchDatabaseTests {
     public void shouldBeAbleToSearchForFilesUsingPubMedString()
             throws Exception {
         List<Experiment> experiments = dbac
-                .search("/Exp1/Raw/file1.fastq[Path]");
+                .search("/var/www/data/Exp2/raw/file1.fastq[Path]");
         assertEquals(1, experiments.size());
         assertEquals(1, experiments.get(0).getFiles().size());
     }
@@ -156,7 +156,7 @@ public class SearchDatabaseTests {
                 .search("Human[Species] AND Umeå Uni[Author]");
         assertEquals(1, experiments.size());
         assertEquals(1, experiments.get(0).getFiles().size());
-        assertEquals("/Exp1/Raw/file1.fastq", experiments.get(0).getFiles()
+        assertEquals("/var/www/data/Exp1/raw/file1.fastq", experiments.get(0).getFiles()
                 .get(0).path);
     }
 
