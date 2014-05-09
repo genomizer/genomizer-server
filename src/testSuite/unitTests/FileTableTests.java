@@ -3,7 +3,10 @@ package testSuite.unitTests;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -19,6 +22,7 @@ public class FileTableTests {
 
     private static DatabaseAccessor dbac;
 
+    private String testGenomePath;
     private String testPath;
     private String testName = "testFileName1";
     private String testType = "testFileType1";
@@ -85,6 +89,48 @@ public class FileTableTests {
         } finally {
             assertTrue(dbac.hasExperiment(testExpId));
         }
+    }
+
+    @Test
+    public void addRemoveGenomeReleaseTest(){
+
+    	ArrayList<String> genomeVersions;
+
+    	try {
+    		testGenomePath = dbac.addGenomeRelease("F2.3","Fly");
+
+    		genomeVersions = dbac.getStoredGenomeVersions();
+    		assertTrue(genomeVersions.contains("F2.3"));
+
+    		boolean succeed = dbac.removeGenomeRelease("F2.3", "Fly");
+    		assertTrue(succeed);
+
+    	} catch (SQLException e) {
+    		System.out.println("Failed to insert/remove a new" +
+    								" Genome releaseVersion");
+    		e.printStackTrace();
+    		fail();
+    	}
+    }
+
+    @Test
+    public void getStoredGenomeVersionsTest(){
+
+    	ArrayList<String> genomeVersions;
+
+		try {
+			dbac.addGenomeRelease("chemicalX", "cat");
+			genomeVersions = dbac.getStoredGenomeVersions();
+			assertTrue(genomeVersions.contains("chemicalX"));
+
+			//then remove inserted genome_Release
+			dbac.removeGenomeRelease("chemicalX", "cat");
+
+		} catch (SQLException e) {
+			System.out.println("Failed to get stored genome versions!");
+			e.printStackTrace();
+			fail();
+		}
     }
 
 }
