@@ -50,7 +50,7 @@ public class ConversionHandler {
 		return null;
 	}
 
-	public void executeGenomeReleaseConversion(String chainfilePath, String infilePath,String outfilePath){
+	public void executeGenomeReleaseConversion(String chainfilePath, String infilePath,String outfilePath,String unliftedPath){
 		String fileType = checkFileType(infilePath);
 		String path = infilePath;
 		GenomeReleaseConverter genomeConverter = new GenomeReleaseConverter();
@@ -76,7 +76,7 @@ public class ConversionHandler {
 		String outfileBed = outfilePath.split("\\.")[0];
 		outfileBed = outfileBed+".bed";
 
-		genomeConverter.procedure(path, outfileBed, chainfilePath);
+		genomeConverter.procedure(path, outfileBed, chainfilePath, unliftedPath);
 
 		//convert the outputfile to the inputfiles original filetype
 		switch(fileType){
@@ -101,8 +101,10 @@ public class ConversionHandler {
 		}
 	public String checkFileType(String filePath){
 		String type = "";
-		if((filePath.length()-filePath.replaceAll("\\.","").length())==1){
-			type = filePath.split("\\.", 10)[1];
+		if((filePath.length()-filePath.replaceAll("\\.","").length())>=1){
+			String[] splitArray = filePath.split("\\.");
+			int lengthOfArray = splitArray.length;
+			type = splitArray[lengthOfArray-1];
 			System.err.println(type);
 		}
 
