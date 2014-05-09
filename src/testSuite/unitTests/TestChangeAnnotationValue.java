@@ -137,50 +137,50 @@ public class TestChangeAnnotationValue {
     	assertFalse(exp1.getAnnotations().get(label).equals(oldValue));
 
     }
-    
+
     @Test
     public void shouldChangeAnnotationValueForAnnotationChoices() throws Exception {
     	Experiment exp1 = dbac.getExperiment("Exp1");
-    	
+
     	String label = "Sex";
     	String newValue = "Monkey";
     	String oldValue = exp1.getAnnotations().get(label);
 
     	dbac.changeAnnotationValue(label, oldValue, newValue);
-    	
+
     	ArrayList<String> choices = (ArrayList<String>) dbac.getChoices(label);
     	assertTrue(choices.contains(newValue));
     	assertFalse(choices.contains(oldValue));
 	}
-    
+
     @Test
     public void shouldChangeAnnotationValueForAnnotationTable() throws Exception {
     	Experiment exp1 = dbac.getExperiment("Exp1");
-    	
+
     	String label = "Sex";
     	String newValue = "Monkey";
     	String oldValue = exp1.getAnnotations().get(label);
 
     	dbac.changeAnnotationValue(label, oldValue, newValue);
-    	
-    	assertEquals(dbac.getDefaultValue(label), newValue);
+
+    	assertEquals(dbac.getDefaultAnnotationValue(label), newValue);
 	}
 
     @Test
     public void shouldBeAbleToChangeFreeTextValue() throws Exception {
     	Experiment exp1 = dbac.getExperiment("Exp1");
-    	
+
     	String label = "Tissue";
     	String newValue = "Monkey";
     	String oldValue = exp1.getAnnotations().get(label);
-    	
+
     	dbac.changeAnnotationValue(label, oldValue, newValue);
-    	
+
     	exp1 = dbac.getExperiment("Exp1");
     	assertEquals(exp1.getAnnotations().get(label), newValue);
     	assertFalse(exp1.getAnnotations().get(label).equals(oldValue));
 	}
-    
+
     @Test(expected = SQLException.class)
     public void shouldThrowAnExceptionWhenValueAlreadyExistsInChoices() throws Exception {
     	Experiment exp1 = dbac.getExperiment("Exp1");

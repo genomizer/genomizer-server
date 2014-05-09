@@ -25,8 +25,8 @@ public class TestAnnotationRequiredDefault {
 	@Test
 	public void testIsRequierdTrue(){
 		try {
-			assertTrue(dbac.isRequierd("Species"));
-			assertTrue(dbac.isRequierd("Tissue"));
+			assertTrue(dbac.isAnnotationRequiered("Species"));
+			assertTrue(dbac.isAnnotationRequiered("Tissue"));
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -36,8 +36,8 @@ public class TestAnnotationRequiredDefault {
 	@Test
 	public void testIsRequierdFalse(){
 		try {
-			assertFalse(dbac.isRequierd("Sex"));
-			assertFalse(dbac.isRequierd("Development Stage"));
+			assertFalse(dbac.isAnnotationRequiered("Sex"));
+			assertFalse(dbac.isAnnotationRequiered("Development Stage"));
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -48,7 +48,7 @@ public class TestAnnotationRequiredDefault {
 	public void testGetDefaultValue(){
 
 		try {
-			assertEquals("Human",dbac.getDefaultValue("Species"));
+			assertEquals("Human",dbac.getDefaultAnnotationValue("Species"));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -59,7 +59,7 @@ public class TestAnnotationRequiredDefault {
 	public void testShouldGetNull(){
 
 		try {
-			assertNull(dbac.getDefaultValue("Tissue"));
+			assertNull(dbac.getDefaultAnnotationValue("Tissue"));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
