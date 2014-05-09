@@ -1,6 +1,10 @@
 package testSuite.unitTests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -13,20 +17,20 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-
 import database.DatabaseAccessor;
 import database.Experiment;
 
 public class ExperimentTests {
-    
+
     private static DatabaseAccessor dbac;
-    
+
     private static String testExpId = "testExpId1";
 
     private static String testLabelFT = "testLabelFT1";
     private static String testValueFT = "testValueFT1";
     private static String testLabelDD = "testLabelDD1";
     private static String testChoice = "testchoice";
+	private static String newLabel = "Tis";					//for changeLabel
     private static List<String> testChoices;
 
     @BeforeClass
@@ -37,26 +41,27 @@ public class ExperimentTests {
         testChoices.add(testChoice);
         testChoices.add(testChoice + "2");
     }
-    
+
     @AfterClass
     public static void undoAllChanges() throws SQLException {
         dbac.close();
     }
-    
+
     @Before
     public void setup() throws SQLException, IOException {
-        dbac.addExperiment(testExpId);
-        dbac.addFreeTextAnnotation(testLabelFT);
-        dbac.addDropDownAnnotation(testLabelDD, testChoices);
+       dbac.addExperiment(testExpId);
+       dbac.addFreeTextAnnotation(testLabelFT, null, true);
+       dbac.addDropDownAnnotation(testLabelDD, testChoices, 0, false);
     }
-    
+
     @After
     public void teardown() throws SQLException {
         dbac.deleteExperiment(testExpId);
         dbac.deleteAnnotation(testLabelFT);
         dbac.deleteAnnotation(testLabelDD);
+        dbac.deleteAnnotation(newLabel);
     }
-    
+
     @Test
     public void shouldBeAbleToConnectToDB() throws Exception {
         assertTrue(dbac.isConnected());
@@ -64,11 +69,11 @@ public class ExperimentTests {
 
     @Test
     public void testGetDeleteGetAddExperiment() throws Exception {
-        
+
         assertTrue(dbac.hasExperiment(testExpId));
         Experiment e = dbac.getExperiment(testExpId);
         assertEquals(testExpId, e.getID());
-        
+
         dbac.deleteExperiment(testExpId);
         assertFalse(dbac.hasExperiment(testExpId));
         e = dbac.getExperiment(testExpId);
@@ -83,13 +88,13 @@ public class ExperimentTests {
     @Test
     public void shouldBeAbleToAnnotateExperimentFreeText()
             throws Exception {
-        
+
         int res = dbac.annotateExperiment(testExpId,
                 testLabelFT, testValueFT);
         assertEquals(1, res);
         Experiment e = dbac.getExperiment(testExpId);
         assertEquals(testValueFT, e.getAnnotations().get(testLabelFT));
-        
+
     }
 
     @Test
@@ -131,7 +136,7 @@ public class ExperimentTests {
             assertFalse(e.getAnnotations().containsKey(testLabelDD));
         }
     }
-    
+
     @Test
     public void shouldBeAbleToSearchUsingExperimentID()
             throws Exception {
@@ -163,6 +168,41 @@ public class ExperimentTests {
         assertTrue(e.getAnnotations().containsKey(testLabelFT));
         assertTrue(e.getAnnotations().containsKey(testLabelDD));
 
+    }
+
+    @Test
+    public void getAllAnnotationLabelsTest(){
+
+    	ArrayList<String> allAnnotationlabels = dbac.getAllAnnotationLabels();
+
+    	/*should be equal to 6 iff 4 entries in database,
+    	  and 2 adds in beginning every testrun.*/
+        assertEquals(2, allAnnotationlabels.size());
+
+    	//a bit hardcoded, works if database contains this values before.
+    	assertTrue(allAnnotationlabels.contains(testLabelDD));
+    	assertTrue(allAnnotationlabels.contains(testLabelFT));
+    }
+
+    @Test
+    public void changeFromOldLabelToNewLabelTest()
+    		throws Exception{
+
+    	ArrayList<String> allLabelsBefore = dbac.getAllAnnotationLabels();
+
+    	if(allLabelsBefore.contains(testLabelFT)){
+
+    		boolean succeed = dbac.changeAnnotationLabel(testLabelFT, newLabel);
+
+    		assertTrue(succeed);
+
+    		ArrayList<String> allLabelsAfter = dbac.getAllAnnotationLabels();
+    		assertFalse(allLabelsAfter.contains(testLabelFT));
+    		assertTrue(allLabelsAfter.contains(newLabel));
+    	}else{
+    		System.out.println("The old label did not exist in database!");
+    		fail();
+    	}
     }
 
 }

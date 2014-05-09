@@ -2,8 +2,6 @@ package database;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 
 
@@ -22,7 +20,7 @@ public class Experiment {
         return id;
     }
 
-    public Map<String, String> getAnnotations() {
+    public HashMap<String, String> getAnnotations() {
         return annotations;
     }
 
@@ -30,14 +28,14 @@ public class Experiment {
         annotations.put(label, value);
     }
 
-    public List<FileTuple> getFiles() {
+    public ArrayList<FileTuple> getFiles() {
         return files;
     }
 
     public void addFile(FileTuple ft) {
         files.add(ft);
     }
-    
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder(id);
@@ -48,7 +46,7 @@ public class Experiment {
             sb.append(a.getValue());
             sb.append("),");
         }
-        
+
         for (FileTuple ft: files) {
             sb.append("\n    ");
             sb.append(ft.path);

@@ -24,7 +24,7 @@ public class RawToProfileConverter extends Executor {
 	private File fileDir;
 	private String inFolder;
 	private String[] parameters;
-	private String outFile;
+	private String outFilePath;
 	private String rawFile1;
 	private String rawFile2;
 	private String rawFile_1_Name;
@@ -53,11 +53,11 @@ public class RawToProfileConverter extends Executor {
 	 * @throws InterruptedException
 	 * @throws IOException
 	 */
-	public String procedure(String[] parameters, String inFolder, String outFile)
+	public String procedure(String[] parameters, String inFolder, String outFilePath)
 			throws InterruptedException, IOException {
 		File[] inFiles = new File("/" + inFolder).listFiles();
 		this.parameters = parameters;
-		this.outFile = outFile;
+		this.outFilePath = outFilePath;
 		this.inFolder = inFolder;
 
 		if (inFiles.length == 0) {
@@ -74,11 +74,12 @@ public class RawToProfileConverter extends Executor {
 			rawFile_2_Name = rawFile2.substring(0, rawFile2.length() - 6);
 		}
 
-		initiateConversionStrings(parameters, outFile);
+		initiateConversionStrings(parameters, outFilePath);
+		System.out.println("Deletes directory");
 
 		makeConversionDirectories(remoteExecution + dir + "/sorted");
 
-		printTrace(parameters, inFolder, outFile);
+		printTrace(parameters, inFolder, outFilePath);
 
 		if (fileDir.exists()) {
 			logString = runBowTie(rawFile1, rawFile_1_Name);
@@ -94,30 +95,33 @@ public class RawToProfileConverter extends Executor {
 			logString = logString + "\n" + executeScript(parse(smooth));
 			logString = logString + "\n" + executeScript(parse(step10));
 
-			if(parameters.length == 6) {
-				logString = logString + "/n"+ runRatioCalculation(parameters, sortedDir
-						+ "/reads_gff/allnucs_sgr/smoothed/Step10/");
+			if(parameters.length == 4) {
+				moveEndFiles(sortedDir + "reads_gff/allnucs_sgr/smoothed/Step10/", outFilePath);
 			} else {
-
+				doRatioCalculation(sortedDir + "reads_gff/allnucs_sgr/smoothed/Step10/", parameters);
+				moveEndFiles(sortedDir + "reads_gff/allnucs_sgr/smoothed/Step10/ratios/smoothed/", outFilePath);
 			}
-
 			/*
-			 * //Parameters for first sgr2wig execution sgr2wig =
-			 * "perl sgr2wig.pl " + sortedDir +
-			 * "/reads_gff/allnucs_sgr/smoothed/Step10/"+fileOne +" "+
-			 * outFile+fileOneName + ".wig"; // Step 7 outString = outString +
-			 * " " + executeScript(parse(sgr2wig));
-			 */
-//			cleanUp(cleanUpInitiator(remoteExecution + remoteExecution + dir + "/sorted/"));
+			//Parameters for first sgr2wig execution
+			sgr2wig = "perl sgr2wig.pl " + sortedDir
+					+ "/reads_gff/allnucs_sgr/smoothed/Step10/"+fileOne +" "+ outFile+fileOneName
+					+ ".wig"; // Step 7
+			outString = outString + " " + executeScript(parse(sgr2wig));*/
+			//cleanUp(cleanUpInitiator(remoteExecution+dir));
+
 			return logString;
 		} else {
 			return "Failed to create directory " + fileDir.toString();
 		}
 	}
 
-	private String runRatioCalculation(String[] parameters2, String dirPath) throws InterruptedException, IOException {
-		String ratioCalc = "perl ratio_calculator_v2.pl "+dirPath+" single 4 0";
-		return executeScript(parse(ratioCalc));
+	private void doRatioCalculation(String dirPath, String[] parameters) throws InterruptedException, IOException {
+		String ratioCalc = "perl ratio_calculator_v2.pl "+dirPath + " " + parameters[4];
+		String smooth = "perl smooth_v4.pl "+dirPath+"ratios/" + " " + parameters[5];
+		executeScript(parse(ratioCalc));
+		executeScript(parse(smooth));
+
+
 	}
 
 	private void printTrace(String[] parameters, String inFolder, String outFile) {
@@ -182,5 +186,16 @@ public class RawToProfileConverter extends Executor {
 		sgr2wig = "perl sgr2wig.pl " + sortedDir
 				+ "/reads_gff/allnucs_sgr/smoothed/Step10/*.sgr " + outFile
 				+ "test.wig";
+	}
+
+	private void moveEndFiles(String dirToFiles, String dest) {
+		//sortedDir+"reads_gff/allnucs_sgr/smoothed/Step10/"
+		File[] filesInDir = new File("/"+dirToFiles).getAbsoluteFile().listFiles();
+		for(int i=0;i<filesInDir.length;i++) {
+			if(!filesInDir[i].isDirectory()){
+				if(filesInDir[i].renameTo(new File(dest + filesInDir[i].getName())));
+			}
+
+		}
 	}
 }

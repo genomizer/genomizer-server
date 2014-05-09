@@ -18,7 +18,7 @@ import org.junit.Test;
 import database.DatabaseAccessor;
 
 public class AddAnnotationPossibilitiesTests {
-
+    
     private static DatabaseAccessor dbac;
     
     private static String testLabelFT = "testLabel1";
@@ -42,8 +42,8 @@ public class AddAnnotationPossibilitiesTests {
     
     @Before
     public void setup() throws SQLException, IOException {
-        dbac.addFreeTextAnnotation(testLabelFT);
-        dbac.addDropDownAnnotation(testLabelDD, testChoices);
+        dbac.addFreeTextAnnotation(testLabelFT, null, true);
+        dbac.addDropDownAnnotation(testLabelDD, testChoices, 0, false);
     }
     
     @After
@@ -68,7 +68,7 @@ public class AddAnnotationPossibilitiesTests {
         annotations = dbac.getAnnotations();
         assertFalse(annotations.containsKey(testLabelFT));
         
-        dbac.addFreeTextAnnotation(testLabelFT);
+        dbac.addFreeTextAnnotation(testLabelFT, null, true);
         annotations = dbac.getAnnotations();
         assertTrue(annotations.containsKey(testLabelFT));
         assertEquals(DatabaseAccessor.FREETEXT, annotations.get(testLabelFT));
@@ -86,7 +86,7 @@ public class AddAnnotationPossibilitiesTests {
         annotations = dbac.getAnnotations();
         assertFalse(annotations.containsKey(testLabelDD));
         
-        dbac.addDropDownAnnotation(testLabelDD, testChoices);
+        dbac.addDropDownAnnotation(testLabelDD, testChoices, 0, false);
         annotations = dbac.getAnnotations();
         assertTrue(annotations.containsKey(testLabelDD));
         assertEquals(DatabaseAccessor.DROPDOWN, annotations.get(testLabelDD));
@@ -100,7 +100,7 @@ public class AddAnnotationPossibilitiesTests {
         String label = "should not be added";
         
         try {
-            dbac.addDropDownAnnotation(label, choices);
+            dbac.addDropDownAnnotation(label, choices, 0, false);
         } catch (Exception e) {
             throw e;
         } finally {

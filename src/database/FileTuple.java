@@ -6,8 +6,14 @@ import java.util.Date;
 
 public class FileTuple {
 
+    public static final int RAW = 1;
+    public static final int PROFILE = 2;
+    public static final int REGION = 3;
+    public static final int OTHER = 4;
+
     public final Integer id;
     public final String path;
+    public final String inputFilePath;
     public final String type;
     public final String filename;
     public final Date date;
@@ -21,6 +27,7 @@ public class FileTuple {
     public FileTuple(ResultSet resSet) throws SQLException {
         id = resSet.getInt("FileID");
         path = resSet.getString("Path");
+        inputFilePath = resSet.getString("InputFilePath");
         type = resSet.getString("FileType");
         filename = resSet.getString("FileName");
         date = resSet.getDate("Date");
@@ -32,4 +39,19 @@ public class FileTuple {
         grVersion = resSet.getString("GRVersion");
     }
 
+    public String getDownloadURL() {
+        return ServerDependentValues.DownLoadURL+path;
+    }
+
+    public String getUploadURL() {
+        return ServerDependentValues.UploadURL+path;
+    }
 }
+
+
+
+
+
+
+
+

@@ -9,13 +9,14 @@ import testSuite.unitTests.ExperimentTests;
 import testSuite.unitTests.FileTableTests;
 import testSuite.unitTests.PubMedToSQLConverterTests;
 import testSuite.unitTests.SearchDatabaseTests;
+import testSuite.unitTests.TestChangeAnnotationValue;
 import testSuite.unitTests.TestFilePathGEN;
 import testSuite.unitTests.UserInfoTests;
 
 
 @RunWith(Suite.class)
 @SuiteClasses({ TestFilePathGEN.class, UserInfoTests.class, AddAnnotationPossibilitiesTests.class,
-        ExperimentTests.class, FileTableTests.class, PubMedToSQLConverterTests.class, SearchDatabaseTests.class })
+        ExperimentTests.class, FileTableTests.class, PubMedToSQLConverterTests.class, SearchDatabaseTests.class, TestChangeAnnotationValue.class })
 public class AllTests {
 
 }
