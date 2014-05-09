@@ -38,7 +38,7 @@ public class LoginResponseTest {
 	 * Test used to create the login response.
 	 */
 	@Test
-	public void testCreateLoginResponse() {
+	public void testCreateLoginResponseNotNull() {
 
 		LoginResponse rsp = new LoginResponse(200, "abcdefg123");
 		assertNotNull(rsp);
