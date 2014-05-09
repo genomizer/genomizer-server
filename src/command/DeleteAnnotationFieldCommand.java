@@ -53,9 +53,9 @@ public class DeleteAnnotationFieldCommand extends Command {
 			Map<String, Integer> currAnno = db.getAnnotations();
 			//TODO: Add the label. API looks wierd currently.
 			for(DeleteAnnotationInfo da: deleteId) {
-				if(currAnno.containsKey(da.getId())) {
-					return new MinimalResponse(400);
-				}
+//				if(currAnno.containsKey(da.getId())) {
+//					return new MinimalResponse(400);
+//				}
 				result = db.deleteAnnotation(da.getId());
 			}
 			if(result == 0) {
