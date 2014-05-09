@@ -26,16 +26,18 @@ public class Main {
 
 	public static void main(String[] args) {
 
-		String genome = "d_melanogaster_fb5_22";
-		String bowTie = "bowtie -a -m 1 --best -p 10 -v 2 -q  -S " + genome;
-		String inFile = "reads/MOF_male_wt_reads.fastq";
-		String outFile = "/home/shinowa/git/genomizer-server/resources/result";
+		String genome = "/home/c11/c11oan/edu/PVT/genomizer-server/reads/d_melanogaster_fb5_22";
+		String bowTie = "-a -m 1 --best -p 10 -v 2 -q  -S ";
+		String inFile = "/scratch/reads";
+		String outFile = "/scratch/";
+		String smoothingParam = "10 1 5 0 0";
+		String yString = "y 10";
 		ProcessHandler p = new ProcessHandler();
-		String[] para = new String[] { bowTie };
+		String[] para = new String[] {bowTie, genome, smoothingParam, yString};
 		try {
 			System.out.println("nu executar vi");
 
-			p.executeProcess("rawToProfile", para, inFile, outFile);
+			System.out.println("allting går här = " + p.executeProcess("rawToProfile", para, inFile, outFile));
 			System.out.println("nu har vi executat");
 		} catch (IllegalArgumentException | InterruptedException | IOException e) {
 			// TODO Auto-generated catch block
