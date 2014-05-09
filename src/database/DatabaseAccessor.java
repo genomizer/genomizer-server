@@ -565,7 +565,7 @@ public class DatabaseAccessor {
      * @throws SQLException
      *             if the query does not succeed.
      */
-    public List<Annotation> getAnnotationObject(List<String> labels)
+    public List<Annotation> getAnnotationObjects(List<String> labels)
             throws SQLException {
 
         List<Annotation> annotations = null;

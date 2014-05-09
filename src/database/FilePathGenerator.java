@@ -131,6 +131,7 @@ public class FilePathGenerator {
 		dir.append(specie);
 		dir.append('/');
 		dir.append(version);
+		dir.append('/');
 		return dir.toString();
 	}
 
