@@ -8,6 +8,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import testSuite.TestInitializer;
+
 import database.DatabaseAccessor;
 import database.Experiment;
 import database.FilePathGenerator;
@@ -30,9 +32,9 @@ public class ServerAddFileTests {
 
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
-        dbac = new DatabaseAccessor(SearchDatabaseTests.username,
-                SearchDatabaseTests.password, SearchDatabaseTests.host,
-                SearchDatabaseTests.database);
+        dbac = new DatabaseAccessor(TestInitializer.username,
+        		TestInitializer.password, TestInitializer.host,
+        		TestInitializer.database);
     }
 
     @AfterClass

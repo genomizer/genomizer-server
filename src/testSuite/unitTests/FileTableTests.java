@@ -1,10 +1,11 @@
 package testSuite.unitTests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.IOException;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -14,7 +15,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-
+import testSuite.TestInitializer;
 import database.DatabaseAccessor;
 import database.Experiment;
 import database.FileTuple;
@@ -40,9 +41,9 @@ public class FileTableTests {
 
     @BeforeClass
     public static void setupTestCase() throws Exception {
-        dbac = new DatabaseAccessor(SearchDatabaseTests.username,
-                SearchDatabaseTests.password, SearchDatabaseTests.host,
-                SearchDatabaseTests.database);
+        dbac = new DatabaseAccessor(TestInitializer.username,
+        		TestInitializer.password, TestInitializer.host,
+        		TestInitializer.database);
     }
 
     @AfterClass
@@ -155,9 +156,9 @@ public class FileTableTests {
     	int fileID = ft.id;
     	assertEquals(1, dbac.deleteFile(fileID));
     	assertFalse(dbac.hasFile(fileID));
-    	
+
 	}
-    
+
     @Test
     public void shouldReturnZeroIfFileToBeDeletedDoesNotExistInDatabase() throws Exception {
     	if (dbac.hasFile(123)) {

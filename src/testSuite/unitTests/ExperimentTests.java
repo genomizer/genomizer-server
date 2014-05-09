@@ -17,6 +17,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import testSuite.TestInitializer;
+
 import database.DatabaseAccessor;
 import database.Experiment;
 
@@ -35,8 +37,8 @@ public class ExperimentTests {
 
     @BeforeClass
     public static void setupTestCase() throws Exception {
-        dbac = new DatabaseAccessor(SearchDatabaseTests.username, SearchDatabaseTests.password, SearchDatabaseTests.host,
-                SearchDatabaseTests.database);
+        dbac = new DatabaseAccessor(TestInitializer.username, TestInitializer.password, TestInitializer.host,
+        		TestInitializer.database);
         testChoices = new ArrayList<String>();
         testChoices.add(testChoice);
         testChoices.add(testChoice + "2");
