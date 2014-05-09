@@ -92,7 +92,7 @@ public class TestGetAnnotationObject {
     	List<String> labels = new ArrayList<String>();
     	labels.add("Sex");
     	labels.add("Tissue");
-    	List<Annotation> annotations = dbac.getAnnotationObject(labels);
+    	List<Annotation> annotations = dbac.getAnnotationObjects(labels);
 
     	assertEquals("Sex", annotations.get(0).label);
     	assertEquals("Tissue", annotations.get(1).label);
@@ -101,7 +101,7 @@ public class TestGetAnnotationObject {
     @Test
     public void shouldGetNullWhenSendingInEmptyList() throws Exception {
     	List<String> labels = new ArrayList<String>();
-    	List<Annotation> annotations = dbac.getAnnotationObject(labels);
+    	List<Annotation> annotations = dbac.getAnnotationObjects(labels);
 
     	assertEquals(null, annotations);
 	}
@@ -113,7 +113,7 @@ public class TestGetAnnotationObject {
     	labels.add("Sex");
     	labels.add("anotherInvalidLabel");
     	labels.add("Tissue");
-    	List<Annotation> annotations = dbac.getAnnotationObject(labels);
+    	List<Annotation> annotations = dbac.getAnnotationObjects(labels);
 
     	assertTrue(annotations.size() == 2);
     	assertEquals("Sex", annotations.get(0).label);
