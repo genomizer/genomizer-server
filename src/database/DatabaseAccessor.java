@@ -1417,11 +1417,12 @@ public class DatabaseAccessor {
 	public String getChainFile(String fromVersion, String toVersion)
 			throws SQLException {
 
-	    String query = "SELECT ExpID FROM Experiment WHERE (FromVersion = ?)" +
+	    String query = "SELECT FilePath FROM Chain_File WHERE (FromVersion = ?)" +
 	    		" AND (ToVersion = ?)";
 	    PreparedStatement ps = conn.prepareStatement(query);
+
 	    ps.setString(1, fromVersion);
-	    ps.setString(1, toVersion);
+	    ps.setString(2, toVersion);
 
 	    ResultSet rs = ps.executeQuery();
 	    String res = null;
