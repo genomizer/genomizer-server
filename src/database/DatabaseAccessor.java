@@ -399,6 +399,43 @@ public class DatabaseAccessor {
 	    return res;
 	}
 
+
+	/**
+	 * Updates a value of a single annotation of a unique experiment
+	 * @param expID
+	 *            the name of the experiment to annotate.
+	 * @param label
+	 *            the annotation to set.
+	 * @param value
+	 *            the value of the annotation.
+	 * @return the number of tuples updated in the database.
+	 * @throws SQLException
+	 *             if the query does not succeed
+	 * @throws IOException
+	 *             if the value is invalid for the annotation type.
+	 */
+	public int updateExperiment(String expID, String label, String value)
+			throws SQLException, IOException {
+
+		if (!isValidAnnotationValue(label, value)) {
+			throw new IOException(value
+					+ " is not a valid choice for the annotation type " + label);
+		}
+
+		String query = "UPDATE Annotated_With SET Value = ? WHERE (Label = ?) AND (ExpID = ?)";
+
+		PreparedStatement ps = conn.prepareStatement(query);
+
+		ps.setString(1, value);
+		ps.setString(2, label);
+		ps.setString(3, expID);
+
+		int res = ps.executeUpdate();
+		ps.close();
+		return res;
+	}
+
+
     /**
 	 * Annotates an experiment with the given label and value. Checks so that
 	 * the value is valid if it is a drop down annotation.
