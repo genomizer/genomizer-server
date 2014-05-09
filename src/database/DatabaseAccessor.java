@@ -1440,6 +1440,26 @@ public class DatabaseAccessor {
         return true;
     }
 
+    public ArrayList<String> getAllGenomReleases(String species) throws SQLException{
+
+    	ArrayList<String> genomes = new ArrayList<String>();
+
+    	String query = "SELECT Version FROM Genome_Release WHERE Species = ?";
+
+    	PreparedStatement ps = conn.prepareStatement(query);
+
+        ps.setString(1, species);
+
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+        	genomes.add(rs.getString("Version"));
+        }
+
+        ps.close();
+    	return genomes;
+    }
+
     public String getChainFile(String fromVersion, String toVersion)
             throws SQLException {
 
