@@ -367,27 +367,6 @@ public class DatabaseAccessor {
 	}
 
     /**
-     * Checks if the file with the specified fileID exists in the database.
-     * @param fileID the fileID of the file.
-     * @return true if the file exists, else false.
-     * @throws SQLException
-     */
-    public boolean hasFile(int fileID) throws SQLException {
-    	String query = "SELECT fileID FROM File " +
-    			"WHERE fileID = ?";
-    	PreparedStatement stmt = conn.prepareStatement(query);
-    	stmt.setInt(1, fileID);
-    	ResultSet rs = stmt.executeQuery();
-
-    	boolean res = rs.next();
-    	if (rs.next()) {
-    		res = false;
-    	}
-        stmt.close();
-        return res;
-    }
-
-	/**
 	 * Annotates an experiment with the given label and value. Checks so that
 	 * the value is valid if it is a drop down annotation.
 	 *
@@ -1138,6 +1117,27 @@ public class DatabaseAccessor {
     }
 
 	/**
+	 * Checks if the file with the specified fileID exists in the database.
+	 * @param fileID the fileID of the file.
+	 * @return true if the file exists, else false.
+	 * @throws SQLException
+	 */
+	public boolean hasFile(int fileID) throws SQLException {
+		String query = "SELECT fileID FROM File " +
+				"WHERE fileID = ?";
+		PreparedStatement stmt = conn.prepareStatement(query);
+		stmt.setInt(1, fileID);
+		ResultSet rs = stmt.executeQuery();
+
+		boolean res = rs.next();
+		if (rs.next()) {
+			res = false;
+		}
+	    stmt.close();
+	    return res;
+	}
+
+	/**
 	 * Checks if the file path is a valid file path. Not used.
 	 *
 	 * @param filePath
@@ -1161,6 +1161,20 @@ public class DatabaseAccessor {
 	    return res;
 	}
 
+	/**
+	 * Method to convert from raw data to profile data. Returns a list of
+	 * filepaths
+	 *
+	 * @param fileID
+	 * @param fileType
+	 * @param fileName
+	 * @param metaData
+	 * @param uploader
+	 * @param grVersion
+	 * @param expID
+	 * @return ArrayList<String>
+	 * @throws SQLException
+	 */
 	public ArrayList<String> process(String fileID, String fileType,
 	        String fileName, String metaData, String uploader,
 	        String grVersion, String expID) throws SQLException {
