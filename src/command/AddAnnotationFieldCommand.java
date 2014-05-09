@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import response.AddAnnotationFieldResponse;
 import response.MinimalResponse;
 import response.Response;
+import response.StatusCode;
 import server.DatabaseSettings;
 
 import com.google.gson.annotations.Expose;
@@ -61,7 +62,7 @@ public class AddAnnotationFieldCommand extends Command {
 			return false;
 		}
 		//Check if name is to long, no types exists.
-		if(name.length() > 10 || type.size() < 1 ) {
+		if(name.length() > 20 || type.size() < 1 ) {
 			return false;
 		}
 
@@ -81,49 +82,31 @@ public class AddAnnotationFieldCommand extends Command {
 		int defaultValueIndex = 0;
 
 		try {
-
 			//Get database access.
 			DatabaseAccessor dbAccess = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
 
 			for(int i = 0; i < type.size(); i++) {
-
 				if(type.get(i).equals(defaults)) {
-
 					defaultValueIndex = i;
 					break;
-
 				}
-
 			}
-
 			//Add annotation field.
 			addedAnnotations = dbAccess.addDropDownAnnotation(name, type, defaultValueIndex, forced);
-
 			//Create response.
 			if(addedAnnotations != 0) {
-
-				rsp = new AddAnnotationFieldResponse(201);
-
+				rsp = new AddAnnotationFieldResponse(StatusCode.CREATED);
 			} else {
-
 				rsp = new MinimalResponse(400);
-
 			}
-
 		} catch (SQLException e) {
-
 			e.printStackTrace();
 			rsp = new MinimalResponse(400);
-
 		} catch (IOException e) {
-
 			e.printStackTrace();
 			rsp = new MinimalResponse(400);
-
 		}
-
 		return rsp;
-
 	}
 
 }
