@@ -78,7 +78,7 @@ public class DatabaseAccessor {
      *             if a database access error occurs
      */
     public void close() throws SQLException {
-    	conn.close();
+        conn.close();
     }
 
     /**
@@ -92,61 +92,60 @@ public class DatabaseAccessor {
     }
 
     /**
-	 * Searches the database for Experiments. The search criteria are specified
-	 * in a String that has the same format as that used by PubMed:
-	 *
-	 * <Value>[<Label>] <AND|OR> <Value>[<Label>] ...
-	 *
-	 * Round brackets should be used to disambiguate the logical expression.
-	 *
-	 * Example:
-	 * "(Human[Species] OR Fly[Species]) AND Joe Bloggs[Uploader]"
-	 *
-	 * @param pubMedString
-	 *            The String containing the search criteria in PubMed format.
-	 * @return A List of experiments containing file that fullfill the criteria
-	 *         specifies in the pubMedString.
-	 * @throws IOException
-	 *             If the pubMedString is not in the right format
-	 * @throws SQLException
-	 *             if the query does not succeed
-	 */
-	public List<Experiment> search(String pubMedString) throws IOException,
-	        SQLException {
+     * Searches the database for Experiments. The search criteria are specified
+     * in a String that has the same format as that used by PubMed:
+     *
+     * <Value>[<Label>] <AND|OR> <Value>[<Label>] ...
+     *
+     * Round brackets should be used to disambiguate the logical expression.
+     *
+     * Example: "(Human[Species] OR Fly[Species]) AND Joe Bloggs[Uploader]"
+     *
+     * @param pubMedString
+     *            The String containing the search criteria in PubMed format.
+     * @return A List of experiments containing file that fullfill the criteria
+     *         specifies in the pubMedString.
+     * @throws IOException
+     *             If the pubMedString is not in the right format
+     * @throws SQLException
+     *             if the query does not succeed
+     */
+    public List<Experiment> search(String pubMedString) throws IOException,
+            SQLException {
 
-	    if (pm2sql.hasFileConstraint(pubMedString)) {
-	        return searchFiles(pubMedString);
-	    }
+        if (pm2sql.hasFileConstraint(pubMedString)) {
+            return searchFiles(pubMedString);
+        }
 
-	    return searchExperiments(pubMedString);
-	}
+        return searchExperiments(pubMedString);
+    }
 
-	/**
-	 * Returns an ArrayList which contains the usernames of all the users in the
-	 * database in the form of strings.
-	 *
-	 * @return an ArrayList of usernames.
-	 * @throws SQLException
-	 *             if the query does not succeed
-	 */
-	public List<String> getUsers() throws SQLException {
+    /**
+     * Returns an ArrayList which contains the usernames of all the users in the
+     * database in the form of strings.
+     *
+     * @return an ArrayList of usernames.
+     * @throws SQLException
+     *             if the query does not succeed
+     */
+    public List<String> getUsers() throws SQLException {
 
-	    ArrayList<String> users = new ArrayList<String>();
-	    String query = "SELECT Username FROM User_Info";
+        ArrayList<String> users = new ArrayList<String>();
+        String query = "SELECT Username FROM User_Info";
 
-	    Statement stmt = conn.createStatement();
-	    ResultSet rs = stmt.executeQuery(query);
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(query);
 
-	    while (rs.next()) {
-	        users.add(rs.getString("Username"));
-	    }
+        while (rs.next()) {
+            users.add(rs.getString("Username"));
+        }
 
-	    stmt.close();
+        stmt.close();
 
-	    return users;
-	}
+        return users;
+    }
 
-	/**
+    /**
      * Method to add a new user to the database.
      *
      * @param String
@@ -188,7 +187,6 @@ public class DatabaseAccessor {
         deleteUser.executeUpdate();
         deleteUser.close();
     }
-
 
     /**
      * Returns the password for the given user. Used for login.
@@ -245,33 +243,33 @@ public class DatabaseAccessor {
     }
 
     /**
-	 * Gets the role (permissions) for a user.
-	 *
-	 * @param username
-	 *            the user to get the role for.
-	 * @return the role as a string.
-	 * @throws SQLException
-	 *             if the query does not succeed
-	 */
-	public String getRole(String username) throws SQLException {
+     * Gets the role (permissions) for a user.
+     *
+     * @param username
+     *            the user to get the role for.
+     * @return the role as a string.
+     * @throws SQLException
+     *             if the query does not succeed
+     */
+    public String getRole(String username) throws SQLException {
 
-	    String query = "SELECT Role FROM User_Info " + "WHERE (Username = ?)";
+        String query = "SELECT Role FROM User_Info " + "WHERE (Username = ?)";
 
-	    PreparedStatement getRole = conn.prepareStatement(query);
-	    getRole.setString(1, username);
-	    ResultSet rs = getRole.executeQuery();
-	    String role = null;
+        PreparedStatement getRole = conn.prepareStatement(query);
+        getRole.setString(1, username);
+        ResultSet rs = getRole.executeQuery();
+        String role = null;
 
-	    if (rs.next()) {
-	        role = rs.getString("Role");
-	    }
+        if (rs.next()) {
+            role = rs.getString("Role");
+        }
 
-	    getRole.close();
+        getRole.close();
 
-	    return role;
-	}
+        return role;
+    }
 
-	/**
+    /**
      * Sets the role (permissions) for the user.
      *
      * @param username
@@ -298,365 +296,366 @@ public class DatabaseAccessor {
     }
 
     /**
-	 * Gets an experiment from the database.
-	 *
-	 * @param expID
-	 *            the ID of the experiment.
-	 * @return an Experiment object.
-	 * @throws SQLException
-	 *             if the query does not succeed
-	 */
-	public Experiment getExperiment(String expID) throws SQLException {
+     * Gets an experiment from the database.
+     *
+     * @param expID
+     *            the ID of the experiment.
+     * @return an Experiment object.
+     * @throws SQLException
+     *             if the query does not succeed
+     */
+    public Experiment getExperiment(String expID) throws SQLException {
 
-	    String query = "SELECT ExpID FROM Experiment " + "WHERE ExpID = ?";
+        String query = "SELECT ExpID FROM Experiment " + "WHERE ExpID = ?";
 
-	    PreparedStatement getExp = conn.prepareStatement(query);
-	    getExp.setString(1, expID);
-	    ResultSet rs = getExp.executeQuery();
-	    Experiment e = null;
+        PreparedStatement getExp = conn.prepareStatement(query);
+        getExp.setString(1, expID);
+        ResultSet rs = getExp.executeQuery();
+        Experiment e = null;
 
-	    if (rs.next()) {
-	        e = new Experiment(rs.getString("ExpID"));
-	        e = fillAnnotations(e);
-	        e = fillFiles(e);
-	    }
+        if (rs.next()) {
+            e = new Experiment(rs.getString("ExpID"));
+            e = fillAnnotations(e);
+            e = fillFiles(e);
+        }
 
-	    getExp.close();
+        getExp.close();
 
-	    return e;
-	}
-
-	/**
-	 * Adds an experiment ID to the database.
-	 *
-	 * @param expID
-	 *            the ID for the experiment.
-	 * @return the number of tuples inserted in the database.
-	 * @throws SQLException
-	 *             if the query does not succeed
-	 */
-	public int addExperiment(String expID) throws SQLException {
-
-	    String query = "INSERT INTO Experiment " + "(ExpID) VALUES (?)";
-	    PreparedStatement addExp = conn.prepareStatement(query);
-	    addExp.setString(1, expID);
-
-	    FilePathGenerator.GenerateExperimentFolders(expID);
-
-	    int res = addExp.executeUpdate();
-	    addExp.close();
-
-	    return res;
-	}
-
-	/**
-	 * Deletes an experiment from the database.
-	 *
-	 * @param expId
-	 *            the experiment ID.
-	 * @return the number of tuples deleted.
-	 * @throws SQLException
-	 *             if the query does not succeed. Occurs if Experiment contains
-	 *             at least one file. (All files relating to an experiment must
-	 *             be deleted first before an experiment can be deleted from the
-	 *             database)
-	 */
-	public int deleteExperiment(String expId) throws SQLException {
-
-	    String statementStr = "DELETE FROM Experiment " + "WHERE (ExpID = ?)";
-
-	    PreparedStatement deleteExperiment = conn
-	            .prepareStatement(statementStr);
-	    deleteExperiment.setString(1, expId);
-
-	    int res = deleteExperiment.executeUpdate();
-	    deleteExperiment.close();
-
-	    return res;
-
-	}
-
-	/**
-	 * Checks if a given experiment ID exists in the database.
-	 *
-	 * @param expID
-	 *            the experiment ID to look for.
-	 * @return true if the experiment exists in the database, else false.
-	 * @throws SQLException
-	 *             if the query does not succeed
-	 */
-	public boolean hasExperiment(String expID) throws SQLException {
-
-	    String query = "SELECT ExpID FROM Experiment " + "WHERE ExpID = ?";
-
-	    PreparedStatement hasExp = conn.prepareStatement(query);
-	    hasExp.setString(1, expID);
-	    ResultSet rs = hasExp.executeQuery();
-
-	    boolean res = rs.next();
-	    hasExp.close();
-
-	    return res;
-	}
-
-
-	/**
-	 * Updates a value of a single annotation of a unique experiment
-	 * @param expID
-	 *            the name of the experiment to annotate.
-	 * @param label
-	 *            the annotation to set.
-	 * @param value
-	 *            the value of the annotation.
-	 * @return the number of tuples updated in the database.
-	 * @throws SQLException
-	 *             if the query does not succeed
-	 * @throws IOException
-	 *             if the value is invalid for the annotation type.
-	 */
-	public int updateExperiment(String expID, String label, String value)
-			throws SQLException, IOException {
-
-		if (!isValidAnnotationValue(label, value)) {
-			throw new IOException(value
-					+ " is not a valid choice for the annotation type " + label);
-		}
-
-		String query = "UPDATE Annotated_With SET Value = ? WHERE (Label = ?) AND (ExpID = ?)";
-
-		PreparedStatement ps = conn.prepareStatement(query);
-
-		ps.setString(1, value);
-		ps.setString(2, label);
-		ps.setString(3, expID);
-
-		int res = ps.executeUpdate();
-		ps.close();
-		return res;
-	}
-
+        return e;
+    }
 
     /**
-	 * Annotates an experiment with the given label and value. Checks so that
-	 * the value is valid if it is a drop down annotation.
-	 *
-	 * @param expID
-	 *            the name of the experiment to annotate.
-	 * @param label
-	 *            the annotation to set.
-	 * @param value
-	 *            the value of the annotation.
-	 * @return the number of tuples updated in the database.
-	 * @throws SQLException
-	 *             if the query does not succeed
-	 * @throws IOException
-	 *             if the value is invalid for the annotation type.
-	 */
-	public int annotateExperiment(String expID, String label, String value)
-	        throws SQLException, IOException {
+     * Adds an experiment ID to the database.
+     *
+     * @param expID
+     *            the ID for the experiment.
+     * @return the number of tuples inserted in the database.
+     * @throws SQLException
+     *             if the query does not succeed
+     */
+    public int addExperiment(String expID) throws SQLException {
 
-	    if (!isValidAnnotationValue(label, value)) {
-	        throw new IOException(value
-	                + " is not a valid choice for the annotation type "
-	        		+ label);
-	    }
+        String query = "INSERT INTO Experiment " + "(ExpID) VALUES (?)";
+        PreparedStatement addExp = conn.prepareStatement(query);
+        addExp.setString(1, expID);
 
-	    String query = "INSERT INTO Annotated_With " + "VALUES (?, ?, ?)";
-	    PreparedStatement tagExp = conn.prepareStatement(query);
-	    tagExp.setString(1, expID);
-	    tagExp.setString(2, label);
-	    tagExp.setString(3, value);
+        FilePathGenerator.GenerateExperimentFolders(expID);
 
-	    int res = tagExp.executeUpdate();
-	    tagExp.close();
+        int res = addExp.executeUpdate();
+        addExp.close();
 
-	    return res;
-	}
+        return res;
+    }
 
-	/**
-	 * Deletes one annotation from a specific experiment.
-	 *
-	 * @param expID
-	 *            the experiment to delete the annotation from.
-	 * @param label
-	 *            the name of the annotation.
-	 * @return the number of tuples deleted from the database.
-	 * @throws SQLException
-	 *             if the query does not succeed
-	 */
-	public int removeExperimentAnnotation(String expID, String label)
-	        throws SQLException {
+    /**
+     * Deletes an experiment from the database.
+     *
+     * @param expId
+     *            the experiment ID.
+     * @return the number of tuples deleted.
+     * @throws SQLException
+     *             if the query does not succeed. Occurs if Experiment contains
+     *             at least one file. (All files relating to an experiment must
+     *             be deleted first before an experiment can be deleted from the
+     *             database)
+     */
+    public int deleteExperiment(String expId) throws SQLException {
 
-	    String statementStr = "DELETE FROM Annotated_With "
-	            + "WHERE (ExpID = ? AND Label = ?)";
+        String statementStr = "DELETE FROM Experiment " + "WHERE (ExpID = ?)";
 
-	    PreparedStatement deleteTag = conn.prepareStatement(statementStr);
-	    deleteTag.setString(1, expID);
-	    deleteTag.setString(2, label);
+        PreparedStatement deleteExperiment = conn
+                .prepareStatement(statementStr);
+        deleteExperiment.setString(1, expId);
 
-	    int res = deleteTag.executeUpdate();
-	    deleteTag.close();
+        int res = deleteExperiment.executeUpdate();
+        deleteExperiment.close();
 
-	    return res;
-	}
+        return res;
 
-	/**
-	 * Gets all the annotation possibilities from the database.
-	 *
-	 * @return a Map with the label string as key and datatype as value.
-	 *
-	 *         The possible datatypes are FREETEXT and DROPDOWN.
-	 * @throws SQLException
-	 *             if the query does not succeed
-	 */
-	public Map<String, Integer> getAnnotations() throws SQLException {
+    }
 
-	    HashMap<String, Integer> annotations = new HashMap<String, Integer>();
-	    String query = "SELECT * FROM Annotation";
+    /**
+     * Checks if a given experiment ID exists in the database.
+     *
+     * @param expID
+     *            the experiment ID to look for.
+     * @return true if the experiment exists in the database, else false.
+     * @throws SQLException
+     *             if the query does not succeed
+     */
+    public boolean hasExperiment(String expID) throws SQLException {
 
-	    Statement getAnnotations = conn.createStatement();
-	    ResultSet rs = getAnnotations.executeQuery(query);
+        String query = "SELECT ExpID FROM Experiment " + "WHERE ExpID = ?";
 
-	    while (rs.next()) {
-	        if (rs.getString("DataType").equalsIgnoreCase("FreeText")) {
-	            annotations.put(rs.getString("Label"), Annotation.FREETEXT);
-	        } else {
-	            annotations.put(rs.getString("Label"), Annotation.DROPDOWN);
-	        }
-	    }
+        PreparedStatement hasExp = conn.prepareStatement(query);
+        hasExp.setString(1, expID);
+        ResultSet rs = hasExp.executeQuery();
 
-	    getAnnotations.close();
+        boolean res = rs.next();
+        hasExp.close();
 
-	    return annotations;
-	}
+        return res;
+    }
 
-	/**
-	 * Creates an Annotation object from an annotation label.
-	 *
-	 * @param label
-	 *            the name of the annotation to create the object for.
-	 * @return the Annotation object. If the label does not exist, then null
-	 *         will be returned.
-	 * @throws SQLException
-	 *             if the query does not succeed.
-	 */
-	public Annotation getAnnotationObject(String label) throws SQLException {
+    /**
+     * Updates a value of a single annotation of a unique experiment
+     *
+     * @param expID
+     *            the name of the experiment to annotate.
+     * @param label
+     *            the annotation to set.
+     * @param value
+     *            the value of the annotation.
+     * @return the number of tuples updated in the database.
+     * @throws SQLException
+     *             if the query does not succeed
+     * @throws IOException
+     *             if the value is invalid for the annotation type.
+     */
+    public int updateExperiment(String expID, String label, String value)
+            throws SQLException, IOException {
 
-	    String query = "SELECT * FROM Annotation "
-	            + "LEFT JOIN Annotation_Choices "
-	            + "ON (Annotation.Label = Annotation_Choices.Label) "
-	            + "WHERE Annotation.Label = ?";
+        if (!isValidAnnotationValue(label, value)) {
+            throw new IOException(value
+                    + " is not a valid choice for the annotation type " + label);
+        }
 
-	    PreparedStatement stmt = conn.prepareStatement(query);
-	    stmt.setString(1, label);
-	    ResultSet rs = stmt.executeQuery();
+        String query = "UPDATE Annotated_With SET Value = ? WHERE (Label = ?) AND (ExpID = ?)";
 
-	    if (rs.next()) {
-	        return new Annotation(rs);
-	    } else {
-	        return null;
-	    }
-	}
+        PreparedStatement ps = conn.prepareStatement(query);
 
-	/**
-	 * Creates a list of Annotation objects from a list of annotation labels.
-	 * @param labels the list of labels.
-	 * @return will return a list with all the annotations with valid labels.
-	 * If the list with labels is empty or none of the labels are valid,
-	 * then it will return null.
-	 * @throws SQLException if the query does not succeed.
-	 */
-	public List<Annotation> getAnnotationObject(List<String> labels)
-		 throws SQLException {
+        ps.setString(1, value);
+        ps.setString(2, label);
+        ps.setString(3, expID);
 
-		List<Annotation> annotations = null;
-		Annotation annotation = null;
+        int res = ps.executeUpdate();
+        ps.close();
+        return res;
+    }
 
-		for (String label : labels) {
-			annotation = getAnnotationObject(label);
-			if (annotation != null) {
-				if(annotations == null) {
-					annotations = new ArrayList<Annotation>();
-				}
-				annotations.add(annotation);
-			}
-		}
+    /**
+     * Annotates an experiment with the given label and value. Checks so that
+     * the value is valid if it is a drop down annotation.
+     *
+     * @param expID
+     *            the name of the experiment to annotate.
+     * @param label
+     *            the annotation to set.
+     * @param value
+     *            the value of the annotation.
+     * @return the number of tuples updated in the database.
+     * @throws SQLException
+     *             if the query does not succeed
+     * @throws IOException
+     *             if the value is invalid for the annotation type.
+     */
+    public int annotateExperiment(String expID, String label, String value)
+            throws SQLException, IOException {
 
-		return annotations;
-	}
+        if (!isValidAnnotationValue(label, value)) {
+            throw new IOException(value
+                    + " is not a valid choice for the annotation type " + label);
+        }
 
-	/**
-	 * Finds all annotationLabels that exist in the database, example of labels:
-	 * sex, tissue, etc...
-	 *
-	 * @return ArrayList<String> annotationLabels
-	 */
-	public ArrayList<String> getAllAnnotationLabels() {
+        String query = "INSERT INTO Annotated_With " + "VALUES (?, ?, ?)";
+        PreparedStatement tagExp = conn.prepareStatement(query);
+        tagExp.setString(1, expID);
+        tagExp.setString(2, label);
+        tagExp.setString(3, value);
 
-		ArrayList<String> allAnnotationlabels = new ArrayList<>();
+        int res = tagExp.executeUpdate();
+        tagExp.close();
 
-	    String findAllLabelsQuery = "SELECT Label FROM Annotation";
-	    PreparedStatement ps;
+        return res;
+    }
 
-	    try {
-	        ps = conn.prepareStatement(findAllLabelsQuery);
-	        ResultSet res = ps.executeQuery();
-	        while (res.next()) {
-	            allAnnotationlabels.add(res.getString("Label"));
-	        }
-	        res.close();
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	        return null;
-	    }
+    /**
+     * Deletes one annotation from a specific experiment.
+     *
+     * @param expID
+     *            the experiment to delete the annotation from.
+     * @param label
+     *            the name of the annotation.
+     * @return the number of tuples deleted from the database.
+     * @throws SQLException
+     *             if the query does not succeed
+     */
+    public int removeExperimentAnnotation(String expID, String label)
+            throws SQLException {
 
-	    return allAnnotationlabels;
-	}
+        String statementStr = "DELETE FROM Annotated_With "
+                + "WHERE (ExpID = ? AND Label = ?)";
 
-	/**
-	 * Gets the datatype of a given annotation.
-	 *
-	 * @param label
-	 *            annotation label.
-	 * @return the annotation's datatype (FREETEXT or DROPDOWN).
-	 *
-	 * @throws SQLException
-	 *             if the query does not succeed
-	 */
-	public Integer getAnnotationType(String label) throws SQLException {
+        PreparedStatement deleteTag = conn.prepareStatement(statementStr);
+        deleteTag.setString(1, expID);
+        deleteTag.setString(2, label);
 
-		Map<String, Integer> annotations = getAnnotations();
+        int res = deleteTag.executeUpdate();
+        deleteTag.close();
 
-		return annotations.get(label);
-	}
+        return res;
+    }
 
-	/**
-	 * Gets the default value for a annotation if there is one, If not it
-	 * returns NULL.
-	 *
-	 * @param annotationLabel
-	 *            the name of the annotation to check
-	 * @return The defult value or NULL.
-	 * @throws SQLException
-	 */
-	public String getDefaultAnnotationValue(String annotationLabel)
-			throws SQLException {
+    /**
+     * Gets all the annotation possibilities from the database.
+     *
+     * @return a Map with the label string as key and datatype as value.
+     *
+     *         The possible datatypes are FREETEXT and DROPDOWN.
+     * @throws SQLException
+     *             if the query does not succeed
+     */
+    public Map<String, Integer> getAnnotations() throws SQLException {
 
-	    String query = "SELECT DefaultValue FROM Annotation WHERE Label = ?";
+        HashMap<String, Integer> annotations = new HashMap<String, Integer>();
+        String query = "SELECT * FROM Annotation";
 
-	    PreparedStatement ps = conn.prepareStatement(query);
-	    ps.setString(1, annotationLabel);
+        Statement getAnnotations = conn.createStatement();
+        ResultSet rs = getAnnotations.executeQuery(query);
 
-	    ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            if (rs.getString("DataType").equalsIgnoreCase("FreeText")) {
+                annotations.put(rs.getString("Label"), Annotation.FREETEXT);
+            } else {
+                annotations.put(rs.getString("Label"), Annotation.DROPDOWN);
+            }
+        }
 
-	    while (rs.next()) {
-	        return rs.getString("DefaultValue");
-	    }
+        getAnnotations.close();
 
-	    return null;
-	}
+        return annotations;
+    }
 
-	/**
+    /**
+     * Creates an Annotation object from an annotation label.
+     *
+     * @param label
+     *            the name of the annotation to create the object for.
+     * @return the Annotation object. If the label does not exist, then null
+     *         will be returned.
+     * @throws SQLException
+     *             if the query does not succeed.
+     */
+    public Annotation getAnnotationObject(String label) throws SQLException {
+
+        String query = "SELECT * FROM Annotation "
+                + "LEFT JOIN Annotation_Choices "
+                + "ON (Annotation.Label = Annotation_Choices.Label) "
+                + "WHERE Annotation.Label = ?";
+
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setString(1, label);
+        ResultSet rs = stmt.executeQuery();
+
+        if (rs.next()) {
+            return new Annotation(rs);
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Creates a list of Annotation objects from a list of annotation labels.
+     *
+     * @param labels
+     *            the list of labels.
+     * @return will return a list with all the annotations with valid labels. If
+     *         the list with labels is empty or none of the labels are valid,
+     *         then it will return null.
+     * @throws SQLException
+     *             if the query does not succeed.
+     */
+    public List<Annotation> getAnnotationObject(List<String> labels)
+            throws SQLException {
+
+        List<Annotation> annotations = null;
+        Annotation annotation = null;
+
+        for (String label : labels) {
+            annotation = getAnnotationObject(label);
+            if (annotation != null) {
+                if (annotations == null) {
+                    annotations = new ArrayList<Annotation>();
+                }
+                annotations.add(annotation);
+            }
+        }
+
+        return annotations;
+    }
+
+    /**
+     * Finds all annotationLabels that exist in the database, example of labels:
+     * sex, tissue, etc...
+     *
+     * @return ArrayList<String> annotationLabels
+     */
+    public ArrayList<String> getAllAnnotationLabels() {
+
+        ArrayList<String> allAnnotationlabels = new ArrayList<>();
+
+        String findAllLabelsQuery = "SELECT Label FROM Annotation";
+        PreparedStatement ps;
+
+        try {
+            ps = conn.prepareStatement(findAllLabelsQuery);
+            ResultSet res = ps.executeQuery();
+            while (res.next()) {
+                allAnnotationlabels.add(res.getString("Label"));
+            }
+            res.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return allAnnotationlabels;
+    }
+
+    /**
+     * Gets the datatype of a given annotation.
+     *
+     * @param label
+     *            annotation label.
+     * @return the annotation's datatype (FREETEXT or DROPDOWN).
+     *
+     * @throws SQLException
+     *             if the query does not succeed
+     */
+    public Integer getAnnotationType(String label) throws SQLException {
+
+        Map<String, Integer> annotations = getAnnotations();
+
+        return annotations.get(label);
+    }
+
+    /**
+     * Gets the default value for a annotation if there is one, If not it
+     * returns NULL.
+     *
+     * @param annotationLabel
+     *            the name of the annotation to check
+     * @return The defult value or NULL.
+     * @throws SQLException
+     */
+    public String getDefaultAnnotationValue(String annotationLabel)
+            throws SQLException {
+
+        String query = "SELECT DefaultValue FROM Annotation WHERE Label = ?";
+
+        PreparedStatement ps = conn.prepareStatement(query);
+        ps.setString(1, annotationLabel);
+
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            return rs.getString("DefaultValue");
+        }
+
+        return null;
+    }
+
+    /**
      * Deletes an annotation from the list of possible annotations.
      *
      * @param label
@@ -679,95 +678,95 @@ public class DatabaseAccessor {
     }
 
     /**
-	 * Adds a free text annotation to the list of possible annotations.
-	 *
-	 * @param label
-	 *            the name of the annotation.
-	 * @param required
-	 *            if the annotation should be forced or not
-	 * @param defaultValue
-	 *            the default value this field should take or null if a default
-	 *            value is not required
-	 * @return the number of tuples updated in the database.
-	 * @throws SQLException
-	 *             if the query does not succeed
-	 */
-	public int addFreeTextAnnotation(String label, String defaultValue,
-	        boolean required) throws SQLException {
+     * Adds a free text annotation to the list of possible annotations.
+     *
+     * @param label
+     *            the name of the annotation.
+     * @param required
+     *            if the annotation should be forced or not
+     * @param defaultValue
+     *            the default value this field should take or null if a default
+     *            value is not required
+     * @return the number of tuples updated in the database.
+     * @throws SQLException
+     *             if the query does not succeed
+     */
+    public int addFreeTextAnnotation(String label, String defaultValue,
+            boolean required) throws SQLException {
 
-		String query = "INSERT INTO Annotation "
-	            + "VALUES (?, 'FreeText', ?, ?)";
+        String query = "INSERT INTO Annotation "
+                + "VALUES (?, 'FreeText', ?, ?)";
 
-		PreparedStatement addAnnotation = conn.prepareStatement(query);
-	    addAnnotation.setString(1, label);
-	    addAnnotation.setString(2, defaultValue);
-	    addAnnotation.setBoolean(3, required);
+        PreparedStatement addAnnotation = conn.prepareStatement(query);
+        addAnnotation.setString(1, label);
+        addAnnotation.setString(2, defaultValue);
+        addAnnotation.setBoolean(3, required);
 
-	    int res = addAnnotation.executeUpdate();
-	    addAnnotation.close();
+        int res = addAnnotation.executeUpdate();
+        addAnnotation.close();
 
-	    return res;
-	}
+        return res;
+    }
 
-	/**
-	 * Checks if a given annotation is required to be filled by the user.
-	 *
-	 * @param annotationLabel
-	 *            the name of the annotation to check
-	 * @return true if it is required, else false
-	 * @throws SQLException
-	 */
-	public boolean isAnnotationRequiered(String annotationLabel)
-			throws SQLException {
+    /**
+     * Checks if a given annotation is required to be filled by the user.
+     *
+     * @param annotationLabel
+     *            the name of the annotation to check
+     * @return true if it is required, else false
+     * @throws SQLException
+     */
+    public boolean isAnnotationRequiered(String annotationLabel)
+            throws SQLException {
 
-	    String query = "SELECT Required FROM Annotation WHERE Label = ?";
+        String query = "SELECT Required FROM Annotation WHERE Label = ?";
 
-	    PreparedStatement ps = conn.prepareStatement(query);
-	    ps.setString(1, annotationLabel);
+        PreparedStatement ps = conn.prepareStatement(query);
+        ps.setString(1, annotationLabel);
 
-	    ResultSet rs = ps.executeQuery();
-	    boolean isRequired = false;
+        ResultSet rs = ps.executeQuery();
+        boolean isRequired = false;
 
-	    while (rs.next()) {
-	        isRequired = rs.getBoolean("Required");
-	    }
+        while (rs.next()) {
+            isRequired = rs.getBoolean("Required");
+        }
 
-	    return isRequired;
-	}
+        return isRequired;
+    }
 
-	/**
-	 * Gets all the choices for a drop down annotation. Deprecated, use
-	 * {@link #getChoices(String) getChoices} instead.
-	 *
-	 * @param label
-	 *            the drop down annotation to get the choice for.
-	 * @return the choices.
-	 * @throws SQLException
-	 *             if the query does not succeed
-	 */
-	@Deprecated
-	public ArrayList<String> getDropDownAnnotations(String label)
-	        throws SQLException {
+    /**
+     * Gets all the choices for a drop down annotation. Deprecated, use
+     * {@link #getChoices(String) getChoices} instead.
+     *
+     * @param label
+     *            the drop down annotation to get the choice for.
+     * @return the choices.
+     * @throws SQLException
+     *             if the query does not succeed
+     */
+    @Deprecated
+    public ArrayList<String> getDropDownAnnotations(String label)
+            throws SQLException {
 
-	    String query = "SELECT Value FROM Annotation_Choices "
-	            + "WHERE (Label = ?)";
-	    ArrayList<String> dropDownStrings = new ArrayList<String>();
+        String query = "SELECT Value FROM Annotation_Choices "
+                + "WHERE (Label = ?)";
+        ArrayList<String> dropDownStrings = new ArrayList<String>();
 
-	    PreparedStatement getDropDownStrings = conn.prepareStatement(query);
-	    getDropDownStrings.setString(1, label);
+        PreparedStatement getDropDownStrings = conn.prepareStatement(query);
+        getDropDownStrings.setString(1, label);
 
-	    ResultSet rs = getDropDownStrings.executeQuery();
+        ResultSet rs = getDropDownStrings.executeQuery();
 
-	    while (rs.next()) {
-	        dropDownStrings.add(rs.getString("Value"));
-	    }
+        while (rs.next()) {
+            dropDownStrings.add(rs.getString("Value"));
+        }
 
-	    getDropDownStrings.close();
+        getDropDownStrings.close();
 
-	    return dropDownStrings;
-	}
+        return dropDownStrings;
+    }
 
-	/**
+    /**
      * Adds a drop down annotation to the list of possible annotations.
      *
      * @param label
@@ -831,174 +830,177 @@ public class DatabaseAccessor {
     }
 
     /**
-	 * Method to add a value to a existing DropDown annotation.
-	 *
-	 * @param label, the label of the chosen DropDown annotation.
-	 * @param value, the value that will be added to the DropDown annotation.
-	 * @return, Integer, how many rows that were added to the database.
-	 * @throws SQLException, if the value already exist or another SQL error.
-	 * @throws IOException, if the chosen label does not represent a DropDown
-	 * annotation.
-	 */
-	public int addDropDownAnnotationValue(String label, String value)
-			throws SQLException, IOException {
+     * Method to add a value to a existing DropDown annotation.
+     *
+     * @param label
+     *            , the label of the chosen DropDown annotation.
+     * @param value
+     *            , the value that will be added to the DropDown annotation.
+     * @return, Integer, how many rows that were added to the database.
+     * @throws SQLException
+     *             , if the value already exist or another SQL error.
+     * @throws IOException
+     *             , if the chosen label does not represent a DropDown
+     *             annotation.
+     */
+    public int addDropDownAnnotationValue(String label, String value)
+            throws SQLException, IOException {
 
-		String statementStr = "SELECT * FROM Annotation WHERE " +
-				"(label = ? AND datatype = 'DropDown')";
+        String statementStr = "SELECT * FROM Annotation WHERE "
+                + "(label = ? AND datatype = 'DropDown')";
 
-	    PreparedStatement checkTag = conn
-	            .prepareStatement(statementStr);
-	    checkTag.setString(1, label);
+        PreparedStatement checkTag = conn.prepareStatement(statementStr);
+        checkTag.setString(1, label);
 
-	    ResultSet rs = checkTag.executeQuery();
-	    boolean res = rs.next();
-	    checkTag.close();
+        ResultSet rs = checkTag.executeQuery();
+        boolean res = rs.next();
+        checkTag.close();
 
-	    if(!res) {
-	    	throw new IOException("The annotation of the chosen label" +
-	    			" is not of type DropDown");
-	    } else {
-	    	statementStr = "INSERT INTO Annotation_Choices (label , value) "
-	    			+ "VALUES (?,?)";
+        if (!res) {
+            throw new IOException("The annotation of the chosen label"
+                    + " is not of type DropDown");
+        } else {
+            statementStr = "INSERT INTO Annotation_Choices (label , value) "
+                    + "VALUES (?,?)";
 
-	    	PreparedStatement insertTag = conn
-	    			.prepareStatement(statementStr);
+            PreparedStatement insertTag = conn.prepareStatement(statementStr);
 
-	    	insertTag.setString(1, label);
-	    	insertTag.setString(2, value);
-	    	int ress = insertTag.executeUpdate();
-	    	insertTag.close();
+            insertTag.setString(1, label);
+            insertTag.setString(2, value);
+            int ress = insertTag.executeUpdate();
+            insertTag.close();
 
-	    	return ress;
-	    }
-	}
+            return ress;
+        }
+    }
 
-	/**
-	 * Method to remove a given annotation of a dropdown- annotation.
-	 *
-	 * @param label, the label of the chosen annotation
-	 * @param the value of the chosen annotation.
-	 * @return Integer, how many values that were deleted.
-	 * @throws SQLException
-	 * @throws IOException, throws an IOException if the chosen value to be
-	 * 			removed is the active DefaultValue of the chosen label.
-	 *
-	 */
-	public int removeAnnotationValue(String label, String value)
-			throws SQLException, IOException {
+    /**
+     * Method to remove a given annotation of a dropdown- annotation.
+     *
+     * @param label
+     *            , the label of the chosen annotation
+     * @param the
+     *            value of the chosen annotation.
+     * @return Integer, how many values that were deleted.
+     * @throws SQLException
+     * @throws IOException
+     *             , throws an IOException if the chosen value to be removed is
+     *             the active DefaultValue of the chosen label.
+     *
+     */
+    public int removeAnnotationValue(String label, String value)
+            throws SQLException, IOException {
 
-		String statementStr = "SELECT * FROM Annotation WHERE " +
-				"(label = ? AND defaultvalue = ?)";
+        String statementStr = "SELECT * FROM Annotation WHERE "
+                + "(label = ? AND defaultvalue = ?)";
 
-	    PreparedStatement checkTag = conn
-	            .prepareStatement(statementStr);
-	    checkTag.setString(1, label);
-	    checkTag.setString(2, value);
+        PreparedStatement checkTag = conn.prepareStatement(statementStr);
+        checkTag.setString(1, label);
+        checkTag.setString(2, value);
 
-	    ResultSet rs = checkTag.executeQuery();
+        ResultSet rs = checkTag.executeQuery();
 
-	    boolean res = rs.next();
-	    checkTag.close();
+        boolean res = rs.next();
+        checkTag.close();
 
-	    if(res) {
-	    	throw new IOException("The chosen value of the label is a" +
-	    			" default value. Change the default value of the label" +
-	    			" and run this method again.");
-	    } else {
-	    	statementStr = "DELETE FROM Annotation_Choices "
-	    			+ "WHERE (label = ? AND value = ?)";
+        if (res) {
+            throw new IOException("The chosen value of the label is a"
+                    + " default value. Change the default value of the label"
+                    + " and run this method again.");
+        } else {
+            statementStr = "DELETE FROM Annotation_Choices "
+                    + "WHERE (label = ? AND value = ?)";
 
-	    	PreparedStatement deleteTag = conn
-	    			.prepareStatement(statementStr);
-	    	deleteTag.setString(1, label);
-	    	deleteTag.setString(2, value);
+            PreparedStatement deleteTag = conn.prepareStatement(statementStr);
+            deleteTag.setString(1, label);
+            deleteTag.setString(2, value);
 
-	    	int ress = deleteTag.executeUpdate();
-	    	deleteTag.close();
+            int ress = deleteTag.executeUpdate();
+            deleteTag.close();
 
-	    	return ress;
-	    }
-	}
+            return ress;
+        }
+    }
 
-	/**
-	 * Changes the annotation Label value.
-	 *
-	 * @param String
-	 *            oldLabel
-	 * @param string
-	 *            newLabel
-	 * @return boolean true if changed succeeded, false if it failed.
-	 */
-	public boolean changeAnnotationLabel(String oldLabel, String newLabel) {
+    /**
+     * Changes the annotation Label value.
+     *
+     * @param String
+     *            oldLabel
+     * @param string
+     *            newLabel
+     * @return boolean true if changed succeeded, false if it failed.
+     */
+    public boolean changeAnnotationLabel(String oldLabel, String newLabel) {
 
-	    String changeLblQuery = "UPDATE Annotation SET Label = ?" +
-	    		" WHERE (Label =?)";
+        String changeLblQuery = "UPDATE Annotation SET Label = ?"
+                + " WHERE (Label =?)";
 
-	    PreparedStatement lblExp;
+        PreparedStatement lblExp;
 
-	    try {
-	        lblExp = conn.prepareStatement(changeLblQuery);
+        try {
+            lblExp = conn.prepareStatement(changeLblQuery);
 
-	        lblExp.setString(1, newLabel);
-	        lblExp.setString(2, oldLabel);
-	        lblExp.execute();
-	        return true;
+            lblExp.setString(1, newLabel);
+            lblExp.setString(2, oldLabel);
+            lblExp.execute();
+            return true;
 
-	    } catch (SQLException e) {
+        } catch (SQLException e) {
 
-	        System.out.println("Failed to Create changeLabel query");
-	        return false;
-	    }
-	}
+            System.out.println("Failed to Create changeLabel query");
+            return false;
+        }
+    }
 
-	/*
-	 * Changes the value of an annotation corresponding to it's label.
-	 * Parameters: label of annotation, the old value and the new value to
-	 * change to. Throws an SQLException if the new value already exists in the
-	 * choices table (changing all males to female, and female is already in the
-	 * table)
-	 *
-	 * @param String label
-	 *
-	 * @param String oldValue
-	 *
-	 * @param String newValue
-	 *
-	 * @throws SQLException
-	 */
-	public void changeAnnotationValue(String label, String oldValue,
-	        String newValue) throws SQLException {
+    /*
+     * Changes the value of an annotation corresponding to it's label.
+     * Parameters: label of annotation, the old value and the new value to
+     * change to. Throws an SQLException if the new value already exists in the
+     * choices table (changing all males to female, and female is already in the
+     * table)
+     *
+     * @param String label
+     *
+     * @param String oldValue
+     *
+     * @param String newValue
+     *
+     * @throws SQLException
+     */
+    public void changeAnnotationValue(String label, String oldValue,
+            String newValue) throws SQLException {
 
-	    String query = "UPDATE Annotation_Choices " + "SET Value = ? "
-	            + "WHERE Label = ? and Value = ?";
+        String query = "UPDATE Annotation_Choices " + "SET Value = ? "
+                + "WHERE Label = ? and Value = ?";
 
-	    String query2 = "UPDATE Annotated_With " + "SET Value = ? "
-	            + "WHERE Label = ? and Value = ?";
+        String query2 = "UPDATE Annotated_With " + "SET Value = ? "
+                + "WHERE Label = ? and Value = ?";
 
-	    String query3 = "UPDATE Annotation " + "SET DefaultValue = ? "
-	            + "WHERE Label = ? and DefaultValue = ?";
+        String query3 = "UPDATE Annotation " + "SET DefaultValue = ? "
+                + "WHERE Label = ? and DefaultValue = ?";
 
-	    PreparedStatement statement = conn.prepareStatement(query);
-	    ArrayList<String> parameters = new ArrayList<String>();
-	    parameters.add(newValue);
-	    parameters.add(label);
-	    parameters.add(oldValue);
-	    statement = bind(statement, parameters);
-	    statement.executeUpdate();
-	    statement.close();
+        PreparedStatement statement = conn.prepareStatement(query);
+        ArrayList<String> parameters = new ArrayList<String>();
+        parameters.add(newValue);
+        parameters.add(label);
+        parameters.add(oldValue);
+        statement = bind(statement, parameters);
+        statement.executeUpdate();
+        statement.close();
 
-	    statement = conn.prepareStatement(query2);
-	    statement = bind(statement, parameters);
-	    statement.executeUpdate();
-	    statement.close();
+        statement = conn.prepareStatement(query2);
+        statement = bind(statement, parameters);
+        statement.executeUpdate();
+        statement.close();
 
-	    statement = conn.prepareStatement(query3);
-	    statement = bind(statement, parameters);
-	    statement.executeUpdate();
-	    statement.close();
-	}
+        statement = conn.prepareStatement(query3);
+        statement = bind(statement, parameters);
+        statement.executeUpdate();
+        statement.close();
+    }
 
-	/**
+    /**
      * Gets all the choices for a drop down annotation.
      *
      * @param label
@@ -1028,486 +1030,517 @@ public class DatabaseAccessor {
     }
 
     /**
-	 * @param expID
-	 * @param fileType An Integer identifying the file type eg. FileTuple.RAW
-	 * @param fileName
-	 * @param inputFileName
-	 * @param metaData
-	 * @param author
-	 * @param uploader
-	 * @param isPrivate
-	 * @param genomeRelease
-	 * @return The FileTuple inserted in the database
-	 * @throws SQLException
-	 */
-	public FileTuple addNewFile(String expID, int fileType, String fileName,
-	        String inputFileName, String metaData, String author,
-	        String uploader, boolean isPrivate, String genomeRelease)
-	        throws SQLException {
+     * @param expID
+     *            The unique name of the experiment. OBS! If not null, this must
+     *            reference an experiment that has been previously added.
+     * @param fileType
+     *            An Integer identifying the file type eg. FileTuple.RAW
+     * @param fileName
+     * @param inputFileName
+     *            The name of the corresponding input file or null if there is
+     *            no corresponding input file
+     * @param metaData
+     *            The parameters used in file creation or null if not applicable
+     * @param author
+     * @param uploader
+     * @param isPrivate
+     * @param genomeRelease
+     *            The genome release version identifyer (eg. "hg38") or null if
+     *            not applicable. OBS! If not null, this must reference a genome
+     *            release that has been previously uploaded.
+     * @return The FileTuple inserted in the database or null if no file was
+     *         entered into the database.
+     * @throws SQLException
+     *             If the query could not be executed. (Probably because the
+     *             file already exists)
+     */
+    public FileTuple addNewFile(String expID, int fileType, String fileName,
+            String inputFileName, String metaData, String author,
+            String uploader, boolean isPrivate, String genomeRelease)
+            throws SQLException {
 
-	    String path = FilePathGenerator.GenerateFilePath(expID, fileType,
-	            fileName);
+        String path = FilePathGenerator.GenerateFilePath(expID, fileType,
+                fileName);
 
-	    String inputFilePath = FilePathGenerator.GenerateFilePath(expID,
-	            fileType, inputFileName);
+        String inputFilePath = FilePathGenerator.GenerateFilePath(expID,
+                fileType, inputFileName);
 
-	    String query = "INSERT INTO File "
-	            + "(Path, FileType, FileName, Date, MetaData, InputFilePath, "
-	            + "Author, Uploader, IsPrivate, ExpID, GRVersion) "
-	            + "VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?, ?, ?, ?, ?, ?)";
-	    PreparedStatement addFile = conn.prepareStatement(query);
-	    addFile.setString(1, path);
+        String query = "INSERT INTO File "
+                + "(Path, FileType, FileName, Date, MetaData, InputFilePath, "
+                + "Author, Uploader, IsPrivate, ExpID, GRVersion) "
+                + "VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?, ?, ?, ?, ?, ?)";
+        PreparedStatement addFile = conn.prepareStatement(query);
+        addFile.setString(1, path);
 
-	    switch (fileType) {
-		    case FileTuple.RAW:
-		        addFile.setString(2, "Raw");
-		        break;
-		    case FileTuple.PROFILE:
-		        addFile.setString(2, "Profile");
-		        break;
-		    case FileTuple.REGION:
-		        addFile.setString(2, "Region");
-		        break;
-		    default:
-		        addFile.setString(2, "Other");
-		        break;
-	    }
+        switch (fileType) {
+        case FileTuple.RAW:
+            addFile.setString(2, "Raw");
+            break;
+        case FileTuple.PROFILE:
+            addFile.setString(2, "Profile");
+            break;
+        case FileTuple.REGION:
+            addFile.setString(2, "Region");
+            break;
+        default:
+            addFile.setString(2, "Other");
+            break;
+        }
 
-	    addFile.setString(3, fileName);
-	    addFile.setString(4, metaData);
-	    addFile.setString(5, inputFilePath);
-	    addFile.setString(6, author);
-	    addFile.setString(7, uploader);
-	    addFile.setBoolean(8, isPrivate);
-	    addFile.setString(9, expID);
-	    addFile.setString(10, genomeRelease);
+        addFile.setString(3, fileName);
+        addFile.setString(4, metaData);
+        addFile.setString(5, inputFilePath);
+        addFile.setString(6, author);
+        addFile.setString(7, uploader);
+        addFile.setBoolean(8, isPrivate);
+        addFile.setString(9, expID);
+        addFile.setString(10, genomeRelease);
 
-	    addFile.executeUpdate();
-	    addFile.close();
+        addFile.executeUpdate();
+        addFile.close();
 
-	    Experiment exp;
+        return getFileTuple(path);
+    }
 
-	    try {
-	        exp = search(path + "[Path]").get(0);
-	        return exp.getFiles().get(0);
-	    } catch (IOException e) {
-	        e.printStackTrace();
-	    }
+    /**
+     * Returns the FileTuple object associated with the given filePath.
+     *
+     * @param filePath
+     * @return The corresponding FileTuple or null if no such file exists
+     * @throws SQLException
+     *             If the query could not be executed.
+     */
+    public FileTuple getFileTuple(String filePath) throws SQLException {
+        String query = "SELECT * FROM File WHERE Path = ?";
+        PreparedStatement getFile = conn.prepareStatement(query);
+        getFile.setString(1, filePath);
+        ResultSet rs = getFile.executeQuery();
+        if (rs.next()) {
+            return new FileTuple(rs);
+        }
+        return null;
+    }
 
-	    return null;
-	}
+    // Too many parameters. Should take a JSONObject or FileTuple
+    // instead.
+    /**
+     * Adds a file to the database. Users should migrate to serverAddFile(...)
+     * which returns the FileTuple added to the database.
+     *
+     * @param fileType
+     * @param fileName
+     * @param metaData
+     * @param author
+     * @param uploader
+     * @param isPrivate
+     * @param expID
+     * @param grVersion
+     * @return the number if tuples inserted to the database.
+     * @throws SQLException
+     *             if the query does not succeed
+     */
+    @Deprecated
+    public String addFile(String fileType, String fileName, String metaData,
+            String author, String uploader, boolean isPrivate, String expID,
+            String grVersion) throws SQLException {
 
-	// Too many parameters. Should take a JSONObject or FileTuple
-	// instead.
-	/**
-	 * Adds a file to the database. Users should migrate to serverAddFile(...)
-	 * which returns the FileTuple added to the database.
-	 *
-	 * @param fileType
-	 * @param fileName
-	 * @param metaData
-	 * @param author
-	 * @param uploader
-	 * @param isPrivate
-	 * @param expID
-	 * @param grVersion
-	 * @return the number if tuples inserted to the database.
-	 * @throws SQLException
-	 *             if the query does not succeed
-	 */
-	@Deprecated
-	public String addFile(String fileType, String fileName, String metaData,
-	        String author, String uploader, boolean isPrivate, String expID,
-	        String grVersion) throws SQLException {
+        String path = FilePathGenerator.GenerateFilePath(expID, fileType,
+                fileName);
 
-	    String path = FilePathGenerator.GenerateFilePath(expID, fileType,
-	            fileName);
+        String query = "INSERT INTO File "
+                + "(Path, FileType, FileName, Date, MetaData, InputFilePath, "
+                + "Author, Uploader, IsPrivate, ExpID, GRVersion) "
+                + "VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, NULL, ?, ?, ?, ?, ?)";
+        PreparedStatement addFile = conn.prepareStatement(query);
 
-	    String query = "INSERT INTO File "
-	            + "(Path, FileType, FileName, Date, MetaData, InputFilePath, "
-	            + "Author, Uploader, IsPrivate, ExpID, GRVersion) "
-	            + "VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, NULL, ?, ?, ?, ?, ?)";
-	    PreparedStatement addFile = conn.prepareStatement(query);
+        addFile.setString(1, path);
+        addFile.setString(2, fileType);
+        addFile.setString(3, fileName);
+        addFile.setString(4, metaData);
+        addFile.setString(5, author);
+        addFile.setString(6, uploader);
+        addFile.setBoolean(7, isPrivate);
+        addFile.setString(8, expID);
+        addFile.setString(9, grVersion);
 
-	    addFile.setString(1, path);
-	    addFile.setString(2, fileType);
-	    addFile.setString(3, fileName);
-	    addFile.setString(4, metaData);
-	    addFile.setString(5, author);
-	    addFile.setString(6, uploader);
-	    addFile.setBoolean(7, isPrivate);
-	    addFile.setString(8, expID);
-	    addFile.setString(9, grVersion);
+        addFile.executeUpdate();
+        addFile.close();
 
-	    addFile.executeUpdate();
-	    addFile.close();
+        return path;
+    }
 
-	    return path;
-	}
+    /**
+     * Adds a file to the database with URL. Use clientAddFile(...)
+     *
+     * @param fileType
+     * @param fileName
+     * @param metaData
+     * @param author
+     * @param uploader
+     * @param isPrivate
+     * @param expID
+     * @param grVersion
+     * @return the number if tuples inserted to the database.
+     * @throws SQLException
+     *             if the query does not succeed
+     */
+    @Deprecated
+    public String addFileURL(String fileType, String fileName, String metaData,
+            String author, String uploader, boolean isPrivate, String expID,
+            String grVersion) throws SQLException {
 
-	/**
-	 * Adds a file to the database with URL. Use clientAddFile(...)
-	 *
-	 * @param fileType
-	 * @param fileName
-	 * @param metaData
-	 * @param author
-	 * @param uploader
-	 * @param isPrivate
-	 * @param expID
-	 * @param grVersion
-	 * @return the number if tuples inserted to the database.
-	 * @throws SQLException
-	 *             if the query does not succeed
-	 */
-	 @Deprecated
-	public String addFileURL(String fileType, String fileName, String metaData,
-	        String author, String uploader, boolean isPrivate, String expID,
-	        String grVersion) throws SQLException {
+        String path = FilePathGenerator.GenerateFilePath(expID, fileType,
+                fileName);
+        String URL = ServerDependentValues.UploadURL;
 
-	    String path = FilePathGenerator.GenerateFilePath(expID, fileType,
-	            fileName);
-	    String URL = ServerDependentValues.UploadURL;
+        String query = "INSERT INTO File "
+                + "(Path, FileType, FileName, Date, MetaData, InputFilePath, "
+                + "Author, Uploader, IsPrivate, ExpID, GRVersion) "
+                + "VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, NULL, ?, ?, ?, ?, ?)";
+        PreparedStatement tagExp = conn.prepareStatement(query);
+        tagExp.setString(1, path);
+        tagExp.setString(2, fileType);
+        tagExp.setString(3, fileName);
+        tagExp.setString(4, metaData);
+        tagExp.setString(5, author);
+        tagExp.setString(6, uploader);
+        tagExp.setBoolean(7, isPrivate);
+        tagExp.setString(8, expID);
+        tagExp.setString(9, grVersion);
 
-	    String query = "INSERT INTO File "
-	            + "(Path, FileType, FileName, Date, MetaData, InputFilePath, "
-	            + "Author, Uploader, IsPrivate, ExpID, GRVersion) "
-	            + "VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, NULL, ?, ?, ?, ?, ?)";
-	    PreparedStatement tagExp = conn.prepareStatement(query);
-	    tagExp.setString(1, path);
-	    tagExp.setString(2, fileType);
-	    tagExp.setString(3, fileName);
-	    tagExp.setString(4, metaData);
-	    tagExp.setString(5, author);
-	    tagExp.setString(6, uploader);
-	    tagExp.setBoolean(7, isPrivate);
-	    tagExp.setString(8, expID);
-	    tagExp.setString(9, grVersion);
+        tagExp.executeUpdate();
+        tagExp.close();
 
-	    tagExp.executeUpdate();
-	    tagExp.close();
+        return URL + path;
+    }
 
-	    return URL + path;
-	}
+    /**
+     * Deletes a file from the database.
+     *
+     * @param path
+     *            the path to the file.
+     * @return the number of deleted tuples in the database.
+     * @throws SQLException
+     *             if the query does not succeed
+     */
+    public int deleteFile(String path) throws SQLException {
 
-	/**
-	 * Deletes a file from the database.
-	 *
-	 * @param path
-	 *            the path to the file.
-	 * @return the number of deleted tuples in the database.
-	 * @throws SQLException
-	 *             if the query does not succeed
-	 */
-	public int deleteFile(String path) throws SQLException {
+        String statementStr = "DELETE FROM File " + "WHERE (Path = ?)";
+        PreparedStatement deleteFile = conn.prepareStatement(statementStr);
 
-	    String statementStr = "DELETE FROM File " + "WHERE (Path = ?)";
-	    PreparedStatement deleteFile = conn.prepareStatement(statementStr);
+        deleteFile.setString(1, path);
+        int res = deleteFile.executeUpdate();
+        deleteFile.close();
 
-	    deleteFile.setString(1, path);
-	    int res = deleteFile.executeUpdate();
-	    deleteFile.close();
-
-	    return res;
-	}
+        return res;
+    }
 
     /**
      * Deletes a file from the database using the fileID.
-     * @param fileID the fileID of the file to be deleted.
+     *
+     * @param fileID
+     *            the fileID of the file to be deleted.
      * @return 1 if deletion was successful, else 0.
      * @throws SQLException
      */
     public int deleteFile(int fileID) throws SQLException {
 
-    	String query = "DELETE FROM File " +
-    			"WHERE FileID = ?";
+        String query = "DELETE FROM File " + "WHERE FileID = ?";
 
-    	PreparedStatement stmt = conn.prepareStatement(query);
-    	stmt.setInt(1, fileID);
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setInt(1, fileID);
 
-    	return stmt.executeUpdate();
+        return stmt.executeUpdate();
     }
 
-	/**
-	 * Checks if the file with the specified fileID exists in the database.
-	 * @param fileID the fileID of the file.
-	 * @return true if the file exists, else false.
-	 * @throws SQLException
-	 */
-	public boolean hasFile(int fileID) throws SQLException {
+    /**
+     * Checks if the file with the specified fileID exists in the database.
+     *
+     * @param fileID
+     *            the fileID of the file.
+     * @return true if the file exists, else false.
+     * @throws SQLException
+     */
+    public boolean hasFile(int fileID) throws SQLException {
 
-		String query = "SELECT fileID FROM File " +
-				"WHERE fileID = ?";
-		PreparedStatement stmt = conn.prepareStatement(query);
-		stmt.setInt(1, fileID);
+        String query = "SELECT fileID FROM File " + "WHERE fileID = ?";
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setInt(1, fileID);
 
-		ResultSet rs = stmt.executeQuery();
-		boolean res = rs.next();
+        ResultSet rs = stmt.executeQuery();
+        boolean res = rs.next();
 
-		if (rs.next()) {
-			res = false;
-		}
+        if (rs.next()) {
+            res = false;
+        }
 
-	    stmt.close();
+        stmt.close();
 
-	    return res;
-	}
+        return res;
+    }
 
-	/**
-	 * Checks if the file path is a valid file path. Not used.
-	 *
-	 * @param filePath
-	 * @return
-	 * @throws SQLException
-	 *             if the query does not succeed
-	 */
-	@Deprecated
-	public boolean isValidFilePath(String filePath) throws SQLException {
+    /**
+     * Checks if the file path is a valid file path. Not used.
+     *
+     * @param filePath
+     * @return
+     * @throws SQLException
+     *             if the query does not succeed
+     */
+    @Deprecated
+    public boolean isValidFilePath(String filePath) throws SQLException {
 
-	    PreparedStatement pStatement = null;
-	    String query = "SELECT * FROM File Where (Path = ?)";
+        PreparedStatement pStatement = null;
+        String query = "SELECT * FROM File Where (Path = ?)";
 
-	    pStatement = conn.prepareStatement(query);
-	    pStatement.setString(1, filePath);
+        pStatement = conn.prepareStatement(query);
+        pStatement.setString(1, filePath);
 
-	    ResultSet rs = pStatement.executeQuery();
+        ResultSet rs = pStatement.executeQuery();
 
-	    boolean res = rs.next();
-	    pStatement.close();
+        boolean res = rs.next();
+        pStatement.close();
 
-	    return res;
-	}
+        return res;
+    }
 
-	/**
-	 * Method to convert from raw data to profile data. Returns a list of
-	 * filepaths
-	 *
-	 * @param fileID
-	 * @param fileType
-	 * @param fileName
-	 * @param metaData
-	 * @param uploader
-	 * @param grVersion
-	 * @param expID
-	 * @return ArrayList<String>
-	 * @throws SQLException
-	 */
-	public ArrayList<String> process(String fileID, String fileType,
-	        String fileName, String metaData, String uploader,
-	        String grVersion, String expID) throws SQLException {
+    /**
+     * Method to convert from raw data to profile data. Returns a list of
+     * filepaths
+     *
+     * @param fileID
+     * @param fileType
+     * @param fileName
+     * @param metaData
+     * @param uploader
+     * @param grVersion
+     * @param expID
+     * @return ArrayList<String>
+     * @throws SQLException
+     */
+    public ArrayList<String> process(String fileID, String fileType,
+            String fileName, String metaData, String uploader,
+            String grVersion, String expID) throws SQLException {
 
-	    ArrayList<String> pathList = new ArrayList<String>();
-	    String ToPath;
+        ArrayList<String> pathList = new ArrayList<String>();
+        String ToPath;
 
-	    String SelectQuery = "SELECT Path, Author, IsPrivate FROM File" +
-	    		" WHERE (FileID = ?)";
-	    PreparedStatement ps = conn.prepareStatement(SelectQuery);
-	    int fID = Integer.parseInt(fileID);
-	    ps.setInt(1, fID);
+        String SelectQuery = "SELECT Path, Author, IsPrivate FROM File"
+                + " WHERE (FileID = ?)";
+        PreparedStatement ps = conn.prepareStatement(SelectQuery);
+        int fID = Integer.parseInt(fileID);
+        ps.setInt(1, fID);
 
-	    ResultSet rs = ps.executeQuery();
+        ResultSet rs = ps.executeQuery();
 
-	    String fromPath = null;
-	    boolean isPrivate = false;
-	    String author = null;
+        String fromPath = null;
+        boolean isPrivate = false;
+        String author = null;
 
-	    if (rs.next()) {
-	        fromPath = rs.getString("Path");
-	        author = rs.getString("Author");
-	        isPrivate = rs.getBoolean("IsPrivate");
-	    } else {
-	        throw new SQLException("Not a valid fileID");
-	    }
+        if (rs.next()) {
+            fromPath = rs.getString("Path");
+            author = rs.getString("Author");
+            isPrivate = rs.getBoolean("IsPrivate");
+        } else {
+            throw new SQLException("Not a valid fileID");
+        }
 
-	    ToPath = addFile(fileType, fileName, metaData, author, uploader,
-	            isPrivate, expID, grVersion);
-	    ps.close();
+        ToPath = addFile(fileType, fileName, metaData, author, uploader,
+                isPrivate, expID, grVersion);
+        ps.close();
 
-	    pathList.add(fromPath);
-	    pathList.add(ToPath);
+        pathList.add(fromPath);
+        pathList.add(ToPath);
 
-	    return pathList;
-	}
+        return pathList;
+    }
 
-	/**
-	 * Method for getting all stored versions of genome Releases in the database
-	 *
-	 * @return ArrayList<String> genome versions.
-	 * @throws SQLException
-	 */
-	public ArrayList<String> getStoredGenomeVersions() throws SQLException {
+    /**
+     * Method for getting all stored versions of genome Releases in the database
+     *
+     * @return ArrayList<String> genome versions.
+     * @throws SQLException
+     */
+    public ArrayList<String> getStoredGenomeVersions() throws SQLException {
 
-	    ArrayList<String> allVersions = new ArrayList<String>();
+        ArrayList<String> allVersions = new ArrayList<String>();
 
-	    String getGenVerQuery = "SELECT * FROM Genome_Release";
-	    PreparedStatement ps = conn.prepareStatement(getGenVerQuery);
+        String getGenVerQuery = "SELECT * FROM Genome_Release";
+        PreparedStatement ps = conn.prepareStatement(getGenVerQuery);
 
-	    ResultSet res = ps.executeQuery();
+        ResultSet res = ps.executeQuery();
 
-	    while (res.next()) {
-	        allVersions.add(res.getString("Version"));
-	    }
+        while (res.next()) {
+            allVersions.add(res.getString("Version"));
+        }
 
-	    return allVersions;
-	}
+        return allVersions;
+    }
 
-	/**
-	 * Add one genomerelease to the database.
-	 *
-	 * @param String
-	 *            genomeVersion.
-	 * @param String
-	 *            specie.
-	 * @return String filePath, the path where the genome Version file should be
-	 *         saved.
-	 * @throws SQLException
-	 *             if adding query failed.
-	 */
-	public String addGenomeRelease(String genomeVersion, String specie)
-	        throws SQLException {
+    /**
+     * Add one genomerelease to the database.
+     *
+     * @param String
+     *            genomeVersion.
+     * @param String
+     *            specie.
+     * @return String filePath, the path where the genome Version file should be
+     *         saved.
+     * @throws SQLException
+     *             if adding query failed.
+     */
+    public String addGenomeRelease(String genomeVersion, String specie)
+            throws SQLException {
 
-	    String filePath = "";
+        String filePath = "";
 
-	    String path = FilePathGenerator.GeneratePathForGenomeFiles(
-	            genomeVersion, specie);
+        String path = FilePathGenerator.GeneratePathForGenomeFiles(
+                genomeVersion, specie);
 
-	    String insertGenRelQuery = "INSERT INTO Genome_Release "
-	            + "(Version,Species,FilePath) " + "VALUES (?,?,?)";
+        String insertGenRelQuery = "INSERT INTO Genome_Release "
+                + "(Version,Species,FilePath) " + "VALUES (?,?,?)";
 
-	    PreparedStatement ps = conn.prepareStatement(insertGenRelQuery);
-	    ps.setString(1, genomeVersion);
-	    ps.setString(2, specie);
-	    ps.setString(3, path);
+        PreparedStatement ps = conn.prepareStatement(insertGenRelQuery);
+        ps.setString(1, genomeVersion);
+        ps.setString(2, specie);
+        ps.setString(3, path);
 
-	    ps.execute();
+        ps.execute();
 
-	    return filePath;
-	}
+        return filePath;
+    }
 
-	/**
-	 * Removes one specific genome version stored in the database.
-	 *
-	 * @param version
-	 *            , the genome version.
-	 * @param specie
-	 *            .
-	 * @return boolean, true if succeded, false if failed.
-	 */
-	public boolean removeGenomeRelease(String genomeVersion, String specie) {
+    /**
+     * Removes one specific genome version stored in the database.
+     *
+     * @param version
+     *            , the genome version.
+     * @param specie
+     *            .
+     * @return boolean, true if succeded, false if failed.
+     */
+    public boolean removeGenomeRelease(String genomeVersion, String specie) {
 
-	    String removeQuery = "DELETE FROM Genome_Release WHERE " +
-	    		"(Version = ? AND Species = ?)";
+        String removeQuery = "DELETE FROM Genome_Release WHERE "
+                + "(Version = ? AND Species = ?)";
 
-	    PreparedStatement ps;
+        PreparedStatement ps;
 
-	    try {
-	        ps = conn.prepareStatement(removeQuery);
+        try {
+            ps = conn.prepareStatement(removeQuery);
 
-	        ps.setString(1, genomeVersion);
-	        ps.setString(2, specie);
-	        ps.execute();
-	    } catch (SQLException e) {
-	        System.out.println("Failed to remove genome release!");
-	        return false;
-	    }
+            ps.setString(1, genomeVersion);
+            ps.setString(2, specie);
+            ps.execute();
+        } catch (SQLException e) {
+            System.out.println("Failed to remove genome release!");
+            return false;
+        }
 
-	    return true;
-	}
+        return true;
+    }
 
-	public String getChainFile(String fromVersion, String toVersion)
-			throws SQLException {
+    public String getChainFile(String fromVersion, String toVersion)
+            throws SQLException {
 
-	    String query = "SELECT FilePath FROM Chain_File WHERE (FromVersion = ?)" +
-	    		" AND (ToVersion = ?)";
-	    PreparedStatement ps = conn.prepareStatement(query);
+        String query = "SELECT FilePath FROM Chain_File WHERE (FromVersion = ?)"
+                + " AND (ToVersion = ?)";
+        PreparedStatement ps = conn.prepareStatement(query);
 
-	    ps.setString(1, fromVersion);
-	    ps.setString(2, toVersion);
+        ps.setString(1, fromVersion);
+        ps.setString(2, toVersion);
 
-	    ResultSet rs = ps.executeQuery();
-	    String res = null;
+        ResultSet rs = ps.executeQuery();
+        String res = null;
 
-	    if (rs.next()) {
+        if (rs.next()) {
 
-	        res = rs.getString("FilePath");
-	    }
+            res = rs.getString("FilePath");
+        }
 
-	    ps.close();
+        ps.close();
 
-	    return res;
-	}
+        return res;
+    }
 
-	/**
-	 * Adds a chain file to database for conversions. Parameters: Oldversion,
-	 * new version and filename. Returns: file path
-	 *
-	 * @param String fromVersion
-	 * @param String toVersion
-	 * @param String fileName
-	 * @return String file path
-	 * @throws SQLException
-	 */
-	public String addChainFile(String fromVersion, String toVersion,
-			String fileName) throws SQLException {
+    /**
+     * Adds a chain file to database for conversions. Parameters: Oldversion,
+     * new version and filename. Returns: file path
+     *
+     * @param String
+     *            fromVersion
+     * @param String
+     *            toVersion
+     * @param String
+     *            fileName
+     * @return String file path
+     * @throws SQLException
+     */
+    public String addChainFile(String fromVersion, String toVersion,
+            String fileName) throws SQLException {
 
-		String species = "";
-		String speciesQuery = "SELECT Species From Genome_Release"
-				+ " WHERE (version = ?)";
+        String species = "";
+        String speciesQuery = "SELECT Species From Genome_Release"
+                + " WHERE (version = ?)";
 
-		PreparedStatement speciesStat = conn.prepareStatement(speciesQuery);
-		speciesStat.setString(1, fromVersion);
+        PreparedStatement speciesStat = conn.prepareStatement(speciesQuery);
+        speciesStat.setString(1, fromVersion);
 
-		ResultSet rs = speciesStat.executeQuery();
+        ResultSet rs = speciesStat.executeQuery();
 
-		while(rs.next()) {
-			species = rs.getString("Species");
-		}
+        while (rs.next()) {
+            species = rs.getString("Species");
+        }
 
-	    String filePath = FilePathGenerator.GenerateChainFilePath(species,
-	    		fileName);
+        String filePath = FilePathGenerator.GenerateChainFilePath(species,
+                fileName);
 
-	    String insertQuery = "INSERT INTO Chain_File "
-	            + "(FromVersion, ToVersion, FilePath) VALUES (?, ?, ?)";
+        String insertQuery = "INSERT INTO Chain_File "
+                + "(FromVersion, ToVersion, FilePath) VALUES (?, ?, ?)";
 
-	    PreparedStatement insertStat = conn.prepareStatement(insertQuery);
-	    insertStat.setString(1, fromVersion);
-	    insertStat.setString(2, toVersion);
-	    insertStat.setString(3, filePath);
-	    insertStat.executeUpdate();
-	    insertStat.close();
+        PreparedStatement insertStat = conn.prepareStatement(insertQuery);
+        insertStat.setString(1, fromVersion);
+        insertStat.setString(2, toVersion);
+        insertStat.setString(3, filePath);
+        insertStat.executeUpdate();
+        insertStat.close();
 
-	    String URL = ServerDependentValues.UploadURL;
+        String URL = ServerDependentValues.UploadURL;
 
-	    return URL + filePath;
-	}
+        return URL + filePath;
+    }
 
-	/**
-	 * Deletes a chain_file from the database. You find the unique file
-	 * by sending in the genome version the file converts from and the
-	 * genome version the file converts to.
-	 * @param fromVersion - genome version the Chain_file converts from
-	 * @param toVersion - genome version the Chin_file converts to
-	 * @return the number of deleted tuples in the database. (Should be one if
-	 * success)
-	 * @throws SQLException - if the query does not succeed
-	 */
-	public int removeChainFile(String fromVersion, String toVersion)
-			throws SQLException{
+    /**
+     * Deletes a chain_file from the database. You find the unique file by
+     * sending in the genome version the file converts from and the genome
+     * version the file converts to.
+     *
+     * @param fromVersion
+     *            - genome version the Chain_file converts from
+     * @param toVersion
+     *            - genome version the Chin_file converts to
+     * @return the number of deleted tuples in the database. (Should be one if
+     *         success)
+     * @throws SQLException
+     *             - if the query does not succeed
+     */
+    public int removeChainFile(String fromVersion, String toVersion)
+            throws SQLException {
 
-	    String query = "DELETE FROM Chain_File WHERE (FromVersion = ?)" +
-	    		" AND (ToVersion = ?)";
+        String query = "DELETE FROM Chain_File WHERE (FromVersion = ?)"
+                + " AND (ToVersion = ?)";
 
-	    PreparedStatement ps = conn.prepareStatement(query);
-	    ps.setString(1, fromVersion);
-	    ps.setString(2, toVersion);
+        PreparedStatement ps = conn.prepareStatement(query);
+        ps.setString(1, fromVersion);
+        ps.setString(2, toVersion);
 
-	    int res =  ps.executeUpdate();
-	    ps.close();
+        int res = ps.executeUpdate();
+        ps.close();
 
-	    return res;
-	}
+        return res;
+    }
 
-	/**
+    /**
      * Checks so that the annotation value is valid.
      *
      * @param label
