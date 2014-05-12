@@ -36,13 +36,7 @@ public class AddFileToExperimentCommand extends Command {
 	private String fileName;
 
 	@Expose
-	private String size;
-
-	@Expose
  	private String type;
-
-	@Expose
-	private String fileType;
 
 	@Expose
 	private String metaData;
@@ -68,7 +62,7 @@ public class AddFileToExperimentCommand extends Command {
 	@Override
 	public boolean validate() {
 
-		if(experimentID == null || fileName == null || size == null || type == null || type != "raw" || type != "profile" || type != "region") {
+		if(experimentID == null || fileName == null || type == null) {
 			return false;
 		}
 		return true;
@@ -87,11 +81,6 @@ public class AddFileToExperimentCommand extends Command {
 	@Override
 	public Response execute() {
 
-		/*ArrayList<String> fileInfo = new ArrayList<String>();
-		fileInfo.add(fileName);
-		fileInfo.add(size);
-		fileInfo.add(type);*/
-
 		DatabaseAccessor accessor = null;
 		String response_url = null;
 		int filetype;
@@ -107,8 +96,8 @@ public class AddFileToExperimentCommand extends Command {
 		try {
 			accessor = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
 			//response_url = accessor.addFile(type, fileName, "metadata", "Jonas Markström", "Jonas Markström", false, experimentID, "v.123");
-			response_url = accessor.addFileURL(type, fileName, metaData, author, uploader, false, experimentID, grVersion);
-			return new AddFileToExperimentResponse(StatusCode.OK, response_url);
+			FileTuple ft = accessor.addNewFile(experimentID, filetype, fileName, "", metaData, author, uploader, false, grVersion);
+			return new AddFileToExperimentResponse(StatusCode.OK, ft.getUploadURL());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
