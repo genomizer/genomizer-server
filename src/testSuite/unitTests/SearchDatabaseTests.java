@@ -80,7 +80,7 @@ public class SearchDatabaseTests {
     @Test
     public void shouldBeAbleToSearchUsingPubMedString5() throws Exception {
         List<Experiment> experiments = dbac
-                .search("Human[Species] AND Umeå Uni[Author]");
+                .search("Human[Species] AND UmeÃ¥ Uni[Author]");
         assertEquals(1, experiments.size());
         assertEquals(1, experiments.get(0).getFiles().size());
         assertEquals("/var/www/data/Exp1/raw/file1.fastq", experiments.get(0).getFiles()
@@ -113,7 +113,7 @@ public class SearchDatabaseTests {
     @Test
     public void shouldBeAbleToSearch1() throws Exception {
         List<Experiment> experiments = dbac
-                .search("Human[Species] NOT Adult[Development Stage]");
+                .search("Exp1[ExpID] AND Raw[FileType]");
         for (Experiment e: experiments) {
             System.out.println(e.toString());
         }

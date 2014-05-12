@@ -3,120 +3,168 @@ package testSuite.unitTests;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.io.IOException;
 
-import javax.swing.filechooser.FileSystemView;
-
-import org.junit.*;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import database.FilePathGenerator;
+import database.FileTuple;
 
 public class TestFilePathGEN {
 
-	@Test
-	public void getCatFilePath() {
-		String generatedPath = FilePathGenerator.GenerateFilePath("CatTest",
-				"raw", "CatFacts.txt");
-		String expectedPath ="/var/www/data/CatTest/raw/CatFacts.txt";
+    private static String testFolderName = "Genomizer Test Folder - Dont be afraid to delete me";
 
-		System.out.println(expectedPath);
-		System.out.println(generatedPath);
+    private static FilePathGenerator fpg;
+    private static File testFolder;
 
-		assertEquals(expectedPath, generatedPath);
-	}
+    private static String testFolderPath;
 
-	/*
-	 * @Test public void hasDataRoute(){
-	 *
-	 * File f = new
-	 * File(FileSystemView.getFileSystemView().getHomeDirectory().getPath
-	 * ()+"/data/hej/vad/g�r/du/");
-	 *
-	 * System.out.println(FileSystemView.getFileSystemView().getHomeDirectory().
-	 * getPath());
-	 *
-	 * f.mkdirs();
-	 *
-	 * assertTrue(f.exists()); assertTrue(f.isDirectory());
-	 *
-	 *
-	 * }
-	 */
+    @BeforeClass
+    public static void setupClass() throws IOException {
 
-//	@Test
-//	public void testExperimentFolders() {
-//
-//		String expID = "kebab";
-//
-//		FilePathGenerator.GenerateExperimentFolders(expID);
-//
-//		File f = new File(FileSystemView.getFileSystemView().getHomeDirectory()
-//				.getPath()
-//				+ "/data/" + expID + "/raw/");
-//
-//		assertTrue(f.exists());
-//		assertTrue(f.isDirectory());
-//
-//		f = new File(FileSystemView.getFileSystemView().getHomeDirectory()
-//				.getPath()
-//				+ "/data/" + expID + "/profile/");
-//
-//		assertTrue(f.exists());
-//		assertTrue(f.isDirectory());
-//
-//		f = new File(FileSystemView.getFileSystemView().getHomeDirectory()
-//				.getPath()
-//				+ "/data/" + expID + "/region/");
-//
-//		assertTrue(f.exists());
-//		assertTrue(f.isDirectory());
-//	}
+        testFolderPath = System.getProperty("user.home") + File.separator
+                + testFolderName + File.separator;
 
-	@Test
-	public void testGeneratePathForGenomeFiles(){
+        testFolder = new File(testFolderPath);
 
-		String version = "F1.3";
-		String specie = "fly";
-		String expectedPath = "/var/www/data/genome_releases/fly/F1.3";
+        if (!testFolder.exists()) {
+            testFolder.mkdirs();
+        }
 
-		String generatedPath = FilePathGenerator.GeneratePathForGenomeFiles(
-											version,specie);
+        fpg = new FilePathGenerator(testFolder.toString() + File.separator);
+    }
 
-		System.out.println(expectedPath);
-		System.out.println(generatedPath);
+    @AfterClass
+    public static void teardownClass() {
+        recursiveDelete(testFolder);
+    }
+    
+    @Before
+    public void setup() {
+        fpg.generateExperimentFolders("Exp1");
+    }
+    
+    @After
+    public void teardown() {
+        recursiveDelete(testFolder);
+    }
 
-		assertEquals(expectedPath, generatedPath);
-	}
+    private static void recursiveDelete(File folder) {
+        File[] contents = folder.listFiles();
+        if (contents == null || contents.length == 0) {
+            folder.delete();
+        } else {
+            for (File f : contents) {
+                recursiveDelete(f);
+            }
+        }
+        folder.delete();
+    }
 
-	@Test
-	public void testGenerateGenomeReleaseFolders() {
+    @Test
+    public void shouldGenerateRightNumberOfExperimentFolders() throws Exception {
 
-		String specie = "cat";
+        testFolder = new File(testFolderPath);
+        assertEquals(1, testFolder.listFiles().length);
+        assertEquals(4, testFolder.listFiles()[0].listFiles().length);
+    }
 
-		FilePathGenerator.GenerateGenomeReleaseFolders(specie);
+    @Test
+    public void shouldGenerateFilePath() throws Exception {
+        String expID = "expID";
+        int fileType = FileTuple.RAW;
+        String fileName = "fileName";
+        String filePath = fpg.generateFilePath(expID, fileType, fileName);
+        assertEquals(testFolder.toString() + File.separator + expID
+                + File.separator + "raw" + File.separator + fileName, filePath);
+    }
 
-		File f = new File(FileSystemView.getFileSystemView().getHomeDirectory()
-				.getPath()
-				+ "/data/genome_releases/" + specie);
+    @Test(expected = IOException.class)
+    public void shouldThrowAnExceptionWhenSeperatorIsMissingFromHomeDir()
+            throws Exception {
+        new FilePathGenerator(testFolder.toString());
+    }
 
-		assertTrue(f.exists());
-		assertTrue(f.isDirectory());
-	}
+    @Test
+    public void shouldGenerateRightChainFolderPath() throws Exception {
+        String species = "Human";
+        String fromVersion = "v1";
+        String toVersion = "v2";
 
-	@Test
-	public void testGoodChars() {
-		boolean isOk = false;
-		isOk = FilePathGenerator.isNameOk("aaa");
+        String expectedFolderPath = testFolder.toString() + File.separator
+                + "chain_files" + File.separator + species + File.separator
+                + fromVersion + " - " + toVersion + File.separator;
 
-		assertTrue(isOk);
-	}
+        String chainFilePath = fpg.generateChainFolderPath(species,
+                fromVersion, toVersion);
 
+        assertEquals(expectedFolderPath, chainFilePath);
 
-	@Test
-	public void testBadChars() {
-		boolean isOk = false;
-		isOk = FilePathGenerator.isNameOk("?!//&/*\n");
+    }
 
-		assertFalse(isOk);
-	}
+    @Test
+    public void shouldGenerateRightGenomeReleaseFolderPath() throws Exception {
+        String version = "hg13";
+        String species = "Human";
+
+        String expectedGenomeReleaseFolderPath = testFolder + File.separator + "genome_releases" + File.separator + species + File.separator + version + File.separator;
+
+        String path = fpg.generateGenomeReleaseFolder(version, species);
+
+        assertEquals(expectedGenomeReleaseFolderPath, path);
+
+    }
+
+    @Test
+    public void shouldGenerateChainFileFolder() throws Exception {
+        String species = "Human";
+        String fromVersion = "v1";
+        String toVersion = "v2";
+
+        fpg.generateChainFolderPath(species, fromVersion, toVersion);
+
+        assertNotNull(searchForSubFolder(testFolder, "chain_files"));
+    }
+
+    @Test
+    public void shouldGenerateSpeciesFolderForChainFiles() throws Exception {
+        String species = "Human";
+        String fromVersion = "v1";
+        String toVersion = "v2";
+
+        fpg.generateChainFolderPath(species, fromVersion, toVersion);
+
+        File chainFileFolder = searchForSubFolder(testFolder, "chain_files");
+        assertNotNull(searchForSubFolder(chainFileFolder, species));
+    }
+
+    @Test
+    public void shouldGenerateFromVersionToVersionFolderForChainFiles()
+            throws Exception {
+        String species = "Human";
+        String fromVersion = "v1";
+        String toVersion = "v2";
+
+        fpg.generateChainFolderPath(species, fromVersion, toVersion);
+
+        File chainFileFolder = searchForSubFolder(testFolder, "chain_files");
+        File speciesFolder = searchForSubFolder(chainFileFolder, species);
+        assertNotNull(searchForSubFolder(speciesFolder, fromVersion + " - "
+                + toVersion));
+    }
+
+    private File searchForSubFolder(File folder, String name) {
+        for (File f : folder.listFiles()) {
+            if (f.getName().equals(name)) {
+                return f;
+            }
+        }
+        return null;
+    }
+
 
 }
