@@ -1,7 +1,5 @@
 package command;
 
-import java.util.ArrayList;
-
 import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
@@ -30,13 +28,14 @@ public class CommandHandler {
 	 * Method that starts the actual handling of JSON together
 	 * with the RESTful-header and converts them into commands
 	 * and runs them.
-	 * @param a json string.
+	 *
+	 * @param a JSON string.
 	 * @param a RESTful-header.
-	 * @param a enum that determines command type.
+	 * @param a enumeration that determines command type.
 	 */
-	public Response processNewCommand(String json, String restful, String username, CommandType cmdt) {	//TODO: Rename this method.
+	public Response processNewCommand(String json, String restful, String username, CommandType cmdt) {
 
-		//Get code from restful //TODO: add parser code....
+		//Get code from restful
 		Command myCom = createCommand(json, restful, username, cmdt);
 		System.out.println("rest: " + restful);
 
@@ -50,17 +49,17 @@ public class CommandHandler {
 
 	/**
 	 * Method used to create command objects together with CommandFactory.
-	 * @param a json string.
+	 *
+	 * @param a JSON string.
 	 * @param a RESTful-header.
-	 * @param a enum that determines command type.
-	 * @return
+	 * @param a enumeration that determines command type.
+	 * @return a Command of the correct type.
 	 */
 	private Command createCommand(String json, String restful, String username, CommandType cmdt) {
 
 		Command newCommand = null;
 		String parsedRest = parseRest(restful);
 
-		//TODO: Change to switch statement.
 		if(cmdt == CommandType.LOGIN_COMMAND) {
 
 			newCommand = cmdFactory.createLoginCommand(json);
@@ -150,6 +149,7 @@ public class CommandHandler {
 	/**
 	 * Method used to split a RESTful-header into smaller parts
 	 * and return them in a String array.
+	 *
 	 * @param RESTful-header
 	 * @return a String array with RESTful-header parts.
 	 */
@@ -169,5 +169,3 @@ public class CommandHandler {
 	}
 
 }
-
-
