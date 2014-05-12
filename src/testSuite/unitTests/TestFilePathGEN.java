@@ -2,6 +2,8 @@ package testSuite.unitTests;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
+
 import javax.swing.filechooser.FileSystemView;
 
 import org.junit.*;
@@ -11,24 +13,13 @@ import database.FilePathGenerator;
 public class TestFilePathGEN {
 
 	@Test
-<<<<<<< HEAD
+
 	public void getCatFilePath(){
 		String generatedPath = FilePathGenerator.GenerateFilePath("CatTest", "raw", "CatFacts.txt");
 		String expectedPath = FileSystemView.getFileSystemView().getHomeDirectory().getPath() + "/CatTest/raw/CatFacts.txt";
-=======
-	public void getCatFilePath() {
-		String generatedPath = FilePathGenerator.GenerateFilePath("CatTest",
-				"raw", "CatFacts.txt");
-		String expectedPath ="/var/www/data/CatTest/raw/CatFacts.txt";
 
-		System.out.println(expectedPath);
-		System.out.println(generatedPath);
-
->>>>>>> refs/remotes/origin/development
 		assertEquals(expectedPath, generatedPath);
 	}
-<<<<<<< HEAD
-=======
 
 	/*
 	 * @Test public void hasDataRoute(){
@@ -108,5 +99,22 @@ public class TestFilePathGEN {
 		assertTrue(f.isDirectory());
 	}
 
->>>>>>> refs/remotes/origin/development
+	@Test
+	public void testGoodChars() {
+		boolean isOk = false;
+		isOk = FilePathGenerator.isNameOk("aaa");
+
+		assertTrue(isOk);
+	}
+
+
+	@Test
+	public void testBadChars() {
+		boolean isOk = false;
+		isOk = FilePathGenerator.isNameOk("?!//&/*\n");
+
+		assertFalse(isOk);
+	}
+
 }
+

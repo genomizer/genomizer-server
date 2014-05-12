@@ -1,6 +1,7 @@
 package database;
 
 import java.io.File;
+import java.io.IOException;
 
 public class FilePathGenerator {
 
@@ -86,6 +87,31 @@ public class FilePathGenerator {
 		file.mkdirs();
 	}
 
+	public static String GenerateChainFilePath(String species, String fileName) {
+
+		String path = "";
+		StringBuilder dir = new StringBuilder();
+
+		dir.append(homeDir);
+		dir.append("data");
+		dir.append('/');
+		dir.append("genome_releases");
+		dir.append('/');
+		dir.append(species);
+		dir.append('/');
+		dir.append("chain_files");
+		dir.append('/');
+		dir.append(fileName);
+
+		File chainFolder = new File(dir.toString());
+
+		if (!chainFolder.exists()) {
+			chainFolder.mkdirs();
+		}
+
+		return dir.toString();
+	}
+
 	/**
 	 * Generates a filepath for where the genome release file should be stored.
 	 * @param String version, the genome version of the file,
@@ -105,6 +131,7 @@ public class FilePathGenerator {
 		dir.append(specie);
 		dir.append('/');
 		dir.append(version);
+		dir.append('/');
 		return dir.toString();
 	}
 
@@ -118,6 +145,35 @@ public class FilePathGenerator {
 
 		File file = new File(homeDir + "/data/genome_releases/" + specie);
 		file.mkdirs();
+	}
+
+	/**
+	 * Tests if the requested filename(not whole path) is valid on the server
+	 * file system or a file is already using that name. Returns true if the
+	 * name can be used, false if it cannot.
+	 *
+	 * @param String fileName
+	 * @return boolean
+	 */
+	public static boolean isNameOk(String fileName) {
+
+		File file = new File(homeDir + File.separator + fileName);
+		boolean isOk = false;
+
+		if (!file.exists()) {
+			try {
+				isOk = file.createNewFile() ;
+			} catch (IOException e) {
+				isOk = false;
+			}
+
+			if (isOk) {
+				file.delete();
+			}
+
+		}
+
+		return isOk;
 	}
 
 }
