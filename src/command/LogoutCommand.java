@@ -1,13 +1,10 @@
 package command;
 
 import authentication.Authenticate;
-import response.LoginResponse;
 import response.LogoutResponse;
 import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
-
-
 
 /**
  * Class used to represent a logout command.
@@ -20,7 +17,9 @@ public class LogoutCommand extends Command {
 	private String username;
 
 	public LogoutCommand(String username) {
+
 		this.username = username;
+
 	}
 
 	/**
