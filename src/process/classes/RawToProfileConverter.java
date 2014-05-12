@@ -56,65 +56,73 @@ public class RawToProfileConverter extends Executor {
 		this.parameters = parameters;
 		this.inFolder = inFolder;
 
-		if (inFiles.length == 0) {
-			return "No files found at path " + inFolder;
-		} else if (inFiles.length > 2) {
-			return "Experiment contains more than two raw files";
-		}
-
-		rawFile1 = inFiles[0].getName();
-		rawFile_1_Name = rawFile1.substring(0, rawFile1.length() - 6);
-
-		if (inFiles.length == 2) {
-			rawFile2 = inFiles[1].getName();
-			rawFile_2_Name = rawFile2.substring(0, rawFile2.length() - 6);
-		}
-
-		initiateConversionStrings(parameters, outFilePath);
-		System.out.println("Deletes directory");
-
-		makeConversionDirectories(remoteExecution + dir + "/sorted");
-
-		printTrace(parameters, inFolder, outFilePath);
-
-		if (fileDir.exists()) {
-			logString = runBowTie(rawFile1, rawFile_1_Name);
-			sortSamFile(rawFile_1_Name);
-			if (inFiles.length == 2) {
-				logString = logString + "\n"
-						+ runBowTie(rawFile2, rawFile_2_Name);
-				// Sets parameters for sorting second sam file
-				sortSamFile(rawFile_2_Name);
-			}// Sets parameters for sorting first sam file
-			logString = logString + "\n" + executeScript(parse(samToGff));
-			logString = logString + "\n" + executeScript(parse(gffToAllnusgr));
-			logString = logString + "\n" + executeScript(parse(smooth));
-			logString = logString + "\n" + executeScript(parse(step10));
-
-			if (parameters.length == 4) {
-				moveEndFiles(sortedDir
-						+ "reads_gff/allnucs_sgr/smoothed/Step10/", outFilePath);
-			} else {
-				doRatioCalculation(sortedDir
-						+ "reads_gff/allnucs_sgr/smoothed/Step10/", parameters);
-				moveEndFiles(
-						sortedDir
-								+ "reads_gff/allnucs_sgr/smoothed/Step10/ratios/smoothed/",
-						outFilePath);
-			}
-			/*
-			 * //Parameters for first sgr2wig execution sgr2wig =
-			 * "perl sgr2wig.pl " + sortedDir +
-			 * "/reads_gff/allnucs_sgr/smoothed/Step10/"+fileOne +" "+
-			 * outFile+fileOneName + ".wig"; // Step 7 outString = outString +
-			 * " " + executeScript(parse(sgr2wig));
-			 */
-			// cleanUp(cleanUpInitiator(remoteExecution+dir));
-
-			return logString;
+		if(verifyInData(parameters, inFolder, outFilePath) == false && !checkInFiles(inFiles)) {
+			logString =  "Indata is not in the correct format";
 		} else {
-			return "Failed to create directory " + fileDir.toString();
+
+			rawFile1 = inFiles[0].getName();
+			rawFile_1_Name = rawFile1.substring(0, rawFile1.length() - 6);
+			if (inFiles.length == 2) {
+				rawFile2 = inFiles[1].getName();
+				rawFile_2_Name = rawFile2.substring(0, rawFile2.length() - 6);
+			}
+
+			initiateConversionStrings(parameters, outFilePath);
+
+			makeConversionDirectories(remoteExecution + dir + "/sorted");
+			printTrace(parameters, inFolder, outFilePath);
+			if (fileDir.exists()) {
+				logString = runBowTie(rawFile1, rawFile_1_Name);
+				sortSamFile(rawFile_1_Name);
+				if (inFiles.length == 2) {
+					logString = logString + "\n"
+							+ runBowTie(rawFile2, rawFile_2_Name);
+					// Sets parameters for sorting second sam file
+					sortSamFile(rawFile_2_Name);
+				}// Sets parameters for sorting first sam file
+				logString = logString + "\n" + executeScript(parse(samToGff));
+				logString = logString + "\n"
+						+ executeScript(parse(gffToAllnusgr));
+				logString = logString + "\n" + executeScript(parse(smooth));
+				logString = logString + "\n" + executeScript(parse(step10));
+
+				if (parameters.length == 4) {
+					moveEndFiles(sortedDir
+							+ "reads_gff/allnucs_sgr/smoothed/Step10/",
+							outFilePath);
+				} else {
+					doRatioCalculation(sortedDir
+							+ "reads_gff/allnucs_sgr/smoothed/Step10/",
+							parameters);
+					moveEndFiles(
+							sortedDir
+									+ "reads_gff/allnucs_sgr/smoothed/Step10/ratios/smoothed/",
+							outFilePath);
+				}
+				/*
+				 * //Parameters for first sgr2wig execution sgr2wig =
+				 * "perl sgr2wig.pl " + sortedDir +
+				 * "/reads_gff/allnucs_sgr/smoothed/Step10/"+fileOne +" "+
+				 * outFile+fileOneNareturn logString;me + ".wig"; // Step 7
+				 * outString = outString + " " + executeScript(parse(sgr2wig));
+				 */
+				// cleanUp(cleanUpInitiator(remoteExecution+dir));
+
+			} else {
+				logString = logString +" "+"Failed to create directory " + fileDir.toString();
+			}
 		}
+		return logString;
+	}
+
+	private boolean checkInFiles(File[] inFiles) {
+		boolean checkInFiles = true;
+		if(inFiles == null) {
+			checkInFiles = false;
+		} else if (inFiles.length > 2 && inFiles.length < 1) {
+			checkInFiles = false;
+		}
+		return checkInFiles;
 	}
 
 	/**
@@ -165,7 +173,7 @@ public class RawToProfileConverter extends Executor {
 	 *            the name of the file with the file extension.
 	 * @param fileOneName
 	 *            the name of the file without the file extension.
-	 * @return the value that bowtie returns.
+	 * @return the value that bowtie returns.ckIfFolderExists(outFilePath)
 	 * @throws InterruptedException
 	 * @throws IOException
 	 */
@@ -226,6 +234,30 @@ public class RawToProfileConverter extends Executor {
 		}
 
 	}
+	private boolean verifyInData(String[] parameters, String inFolder,
+			String outFilePath) {
+
+		if (parameters == null) {
+			return false;
+		}
+		if (parameters.length != 4) {
+			if (parameters.length != 6) {
+				return false;
+			}
+		}
+
+		if (inFolder == null || outFilePath == null) {
+			return false;
+		}
+		return checkIfFolderExists(outFilePath) && checkIfFolderExists(inFolder);
+
+
+	}
+
+	private boolean checkIfFolderExists(String folder) {
+		File dir = new File(folder);
+		return dir.exists();
+	}
 
 	/**
 	 * Initiates strings that is used to run programs and scripts and also
@@ -243,7 +275,7 @@ public class RawToProfileConverter extends Executor {
 				+ "reads_gff/";
 		smooth = "perl smooth_v4.pl " + sortedDir + "reads_gff/allnucs_sgr/ "
 				+ parameters[2]; // Step 5
-		step10 = "perl AllSeqRegSGRtoPositionSGR_v1.pl" + parameters[3] + " "
+		step10 = "perl AllSeqRegSGRtoPositionSGR_v1.pl " + parameters[3] + " "
 				+ sortedDir + "reads_gff/allnucs_sgr/smoothed/"; // Step 6
 		// sgr2wig = "perl sgr2wig.pl " + sortedDir
 		// + "/reads_gff/allnucs_sgr/smoothed/Step10/*.sgr " + outFile

@@ -41,7 +41,7 @@ public abstract class Command {
 		this.header = header;
 
 		//Remove this line later, just for testing.
-		tstPrintJSON();
+		//tstPrintJSON();
 
 	}
 
