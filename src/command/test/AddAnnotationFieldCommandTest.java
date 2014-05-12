@@ -11,6 +11,7 @@ import com.google.gson.GsonBuilder;
 import command.AddAnnotationFieldCommand;
 import command.Command;
 
+//TODO: ADD ANNOTATION FREETEXT TEST.
 /**
  * Testclass used to test the AddAnnotationFieldCommand
  * class.

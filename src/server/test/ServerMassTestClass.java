@@ -108,6 +108,9 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 
 	}
 
+	//TODO: ADD FREETEXT ANNOTATION TEST.
+
+
 	/**
 	 * Used to test that get annotation information works.
 	 *
