@@ -9,6 +9,8 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import testSuite.TestInitializer;
+
 import database.DatabaseAccessor;
 import database.PubMedToSQLConverter;
 
@@ -50,9 +52,9 @@ public class PubMedToSQLConverterTests {
     @BeforeClass
     public static void setupBeforeClass() throws SQLException, IOException {
 
-        dbac = new DatabaseAccessor(SearchDatabaseTests.username,
-                SearchDatabaseTests.password, SearchDatabaseTests.host,
-                SearchDatabaseTests.database);
+        dbac = new DatabaseAccessor(TestInitializer.username,
+        		TestInitializer.password, TestInitializer.host,
+        		TestInitializer.database);
         pm2sql = new PubMedToSQLConverter();
     }
 
@@ -177,7 +179,7 @@ public class PubMedToSQLConverterTests {
         assertEquals("Sex", pm2sql.getParameters().get(2));
         assertEquals("Unknown", pm2sql.getParameters().get(3));
     }
-    
+
     @Test
     public void shouldConvertNOTInMultiPubMedString2() throws Exception {
 

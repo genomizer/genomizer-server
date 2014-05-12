@@ -1,10 +1,11 @@
 package testSuite.unitTests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.IOException;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -14,9 +15,10 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-
+import testSuite.TestInitializer;
 import database.DatabaseAccessor;
 import database.Experiment;
+import database.FileTuple;
 
 public class FileTableTests {
 
@@ -25,19 +27,23 @@ public class FileTableTests {
     private String testGenomePath;
     private String testPath;
     private String testName = "testFileName1";
-    private String testType = "testFileType1";
+    private String testInputFile = "testInputFile";
+    private String testType = "testFileType4";
+    private int testFileType = FileTuple.RAW;
     private String testAuthor = "testFileAuthor1";
     private String testUploader = "testUploader1";
     private String testMetaData = "testUploader1";
     private boolean testIsPrivate = false;
-    private String testExpId = "testExpId1";
+    private String testExpId = "testExpId2";
     private String testGRVersion = null;
+
+    private String testFileName = "testFileName3";
 
     @BeforeClass
     public static void setupTestCase() throws Exception {
-        dbac = new DatabaseAccessor(SearchDatabaseTests.username,
-                SearchDatabaseTests.password, SearchDatabaseTests.host,
-                SearchDatabaseTests.database);
+        dbac = new DatabaseAccessor(TestInitializer.username,
+        		TestInitializer.password, TestInitializer.host,
+        		TestInitializer.database);
     }
 
     @AfterClass
@@ -133,4 +139,32 @@ public class FileTableTests {
 		}
     }
 
+    @Test
+    public void shouldBeAbleToCheckIfFileExistsInDatabase() throws Exception {
+    	ArrayList<Experiment> experiments =
+    			(ArrayList<Experiment>) dbac.search(testPath + "[Path]");
+    	Experiment experiment = experiments.get(0);
+    	int fileID = experiment.getFiles().get(0).id;
+		assertTrue(dbac.hasFile(fileID));
+	}
+
+    @Test
+    public void shouldBeAbleToDeleteFileUsingFileID() throws Exception {
+    	FileTuple ft = dbac.addNewFile(testExpId, testFileType,
+    			testFileName, testInputFile, testMetaData, testAuthor,
+    			testUploader, testIsPrivate, testGRVersion);
+    	int fileID = ft.id;
+    	assertEquals(1, dbac.deleteFile(fileID));
+    	assertFalse(dbac.hasFile(fileID));
+
+	}
+
+    @Test
+    public void shouldReturnZeroIfFileToBeDeletedDoesNotExistInDatabase() throws Exception {
+    	if (dbac.hasFile(123)) {
+    		fail("Use another ID for the test, this one" +
+    				"exists in the database.");
+    	}
+    	assertEquals(0, dbac.deleteFile(123));
+	}
 }
