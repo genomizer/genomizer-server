@@ -1355,6 +1355,35 @@ public class DatabaseAccessor {
         return pathList;
     }
 
+    /**
+     * Gets the file path to a stored Genome Release
+     * @param genomeVersion - The version to get filepath to, should use getAllGenomeReleases()
+     * and let user choose a version
+     * @return - a file path
+     * @throws SQLException
+     */
+    public String getGenomeRelease(String genomeVersion) throws SQLException{
+
+        String query = "SELECT FilePath FROM Genome_Release WHERE (Version = ?)";
+
+        PreparedStatement ps = conn.prepareStatement(query);
+
+        ps.setString(1, genomeVersion);
+
+        ResultSet rs = ps.executeQuery();
+
+        String path = null;
+
+        if (rs.next()) {
+
+            path = rs.getString("FilePath");
+        }
+
+        ps.close();
+
+    	return path;
+    }
+
 
     /**
      * Add one genomerelease to the database.
