@@ -3,11 +3,13 @@ package server.test;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
+import response.StatusCode;
+
 import java.net.HttpURLConnection;
 
 import com.google.gson.JsonObject;
 
-//TODO: ADD DELETE ANNOTATION ON METHODS ADDING THEM. TESTS CAN NOT
+//TODO: ADD DELETE ANNOTATION ON METHODS ADDING THEM. TESTS CAN N200OT
 //		BE CHAINED SINCE NAME BECOMES DUPLICATES.
 
 /**
@@ -36,7 +38,7 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 		int loginResponseCode = sendLogin(jj);
 		sendLogout();
 
-		assertEquals(loginResponseCode, 200);
+		assertEquals(loginResponseCode, StatusCode.OK);
 
 	}
 
@@ -54,7 +56,7 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 		sendLogin(jj);
 		int logoutResponseCode = sendLogout();
 
-		assertEquals(logoutResponseCode, 200);
+		assertEquals(logoutResponseCode, StatusCode.OK);
 
 	}
 
@@ -115,10 +117,10 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 
 		int logoutResponseCode = sendLogout();
 
-		assertTrue(loginResponseCode == 200);
-		assertTrue(addAnnotationResponseCode == 201);
-		assertTrue(getAnnotationResponseCode == 200);
-		assertTrue(logoutResponseCode == 200);
+		assertTrue(loginResponseCode == StatusCode.OK);
+		assertTrue(addAnnotationResponseCode == StatusCode.CREATED);
+		assertTrue(getAnnotationResponseCode == StatusCode.OK);
+		assertTrue(logoutResponseCode == StatusCode.OK);
 
 	}
 
@@ -159,10 +161,10 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 
 		int logoutResponseCode = sendLogout();
 
-		assertTrue(loginResponseCode == 200);
-		assertTrue(addAnnotationResponseCode == 201);
-		assertTrue(getAnnotationResponseCode == 200);
-		assertTrue(logoutResponseCode == 200);
+		assertTrue(loginResponseCode == StatusCode.OK);
+		assertTrue(addAnnotationResponseCode == StatusCode.CREATED);
+		assertTrue(getAnnotationResponseCode == StatusCode.OK);
+		assertTrue(logoutResponseCode == StatusCode.OK);
 
 	}
 
@@ -232,7 +234,7 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 		sendLogout();//TODO: Delete not implemented properly yet. API is wrong.
 
 
-		assertTrue(responseCode == 201);
+		assertTrue(responseCode == StatusCode.CREATED);
 
 	}
 
@@ -260,7 +262,7 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 
 		sendLogout();
 
-		assertTrue(responseCode == 201);
+		assertTrue(responseCode == StatusCode.CREATED);
 
 	}
 	*/
@@ -301,7 +303,7 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 
 		sendLogout();
 
-		assertTrue(responseCode == 201);
+		assertTrue(responseCode == StatusCode.CREATED);
 
 	}
 
@@ -330,7 +332,7 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 
 		sendLogout();
 
-		assertTrue(responseCode == 200);
+		assertTrue(responseCode == StatusCode.OK);
 
 	}
 
