@@ -3,7 +3,6 @@ package server.test;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
-import java.io.DataOutputStream;
 import java.net.HttpURLConnection;
 
 import com.google.gson.JsonObject;
@@ -17,12 +16,10 @@ import com.google.gson.JsonObject;
 public class ServerMassTestClass extends ServerAbstractTestClass {
 
 	/**
-	 * Test case for login and logout from the server.
-	 *
-	 * @throws Exception
+	 * Method used to test the login response code.
 	 */
 	@Test
-	public void testLoginLogout() throws Exception {
+	public void testLoginResponseCode() throws Exception{
 
 		//Create JSON login object.
 		JsonObject jj = new JsonObject();
@@ -30,13 +27,50 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 		jj.addProperty("password", "losenord");
 
 		int loginResponseCode = sendLogin(jj);
-		int logoutResponseCode = sendLogout();
+		sendLogout();
 
 		assertEquals(loginResponseCode, 200);
-		assertNotNull(token);
+
+	}
+
+	/**
+	 * Method used to test the logout response code.
+	 */
+	@Test
+	public void testLogoutResponseCode() throws Exception {
+
+		//Create JSON login object.
+		JsonObject jj = new JsonObject();
+		jj.addProperty("username", "jonas");
+		jj.addProperty("password", "losenord");
+
+		sendLogin(jj);
+		int logoutResponseCode = sendLogout();
+
 		assertEquals(logoutResponseCode, 200);
 
 	}
+
+	/**
+	 * Test case for login and logout from the server.
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void testLoginLogoutTokenNotNull() throws Exception {
+
+		//Create JSON login object.
+		JsonObject jj = new JsonObject();
+		jj.addProperty("username", "jonas");
+		jj.addProperty("password", "losenord");
+
+		sendLogin(jj);
+		sendLogout();
+
+		assertNotNull(token);
+
+	}
+
 
 	/*TODO: When all checks on password/names works properly,
 	 * 		make sure that this test works.
@@ -92,21 +126,47 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 		con.setRequestProperty("Content-Type", "application/json");
 		con.setRequestProperty("Authorization", token.getToken());
 
-		String json_output = "{\"name\":\"species102\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
+		String json_output = "{\"name\":\"com_annofield_test\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
 
-		con.setDoOutput(true);
-		DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-		wr.write(json_output.getBytes());
-		wr.flush();
-		wr.close();
+		sendResponseString(con, json_output);
 
 		//Get responsecode and logout.
 		int responseCode = con.getResponseCode();
+
 		sendLogout();
 
 		assertTrue(responseCode == 201);
 
 	}
+
+	//TODO: Delete not implemented properly yet. API is wrong(2014-05-12).
+	/**
+	 * Testcase used to test that the delete annotation works.
+	 */
+	/*
+	@Test
+	public void testDeleteAnnotationFieldCommand() {
+
+		//Create JSON login object.
+		JsonObject jj = new JsonObject();
+		jj.addProperty("username", "jonas");
+		jj.addProperty("password", "losenord");
+
+		sendLogin(jj);
+
+		//Get connection and then add headers.
+		HttpURLConnection con = connect("DELETE", "http://scratchy.cs.umu.se:7000/annotation");
+		con.setRequestProperty("Content-Type", "application/json");
+		con.setRequestProperty("Authorization", token.getToken());
+
+		String json_output = "[{\"id\":1,\"values\":[\"man\",\"mouse\"]},{\"id\":2,\"values\":[]},{\"id\":3,\"values\":[\"leg\"]}]";
+
+		sendLogout();
+
+		assertTrue(responseCode == 201);
+
+	}
+	*/
 
 	/**
 	 * Testcase used to check that adding annotation freetext
@@ -133,16 +193,13 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 		con.setRequestProperty("Content-Type", "application/json");
 		con.setRequestProperty("Authorization", token.getToken());
 
-		String json_output = "{\"name\":\"ABC996\",\"type\":[\"freetext\"],\"default\":\"q\",\"forced\":false}";
+		String json_output = "{\"name\":\"com_freetext_test\",\"type\":[\"freetext\"],\"default\":\"q\",\"forced\":false}";
 
-		con.setDoOutput(true);
-		DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-		wr.write(json_output.getBytes());
-		wr.flush();
-		wr.close();
+		sendResponseString(con, json_output);
 
 		//Get responsecode and logout.
 		int responseCode = con.getResponseCode();
+
 		sendLogout();
 
 		assertTrue(responseCode == 201);
@@ -171,10 +228,6 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 		con.setRequestProperty("Authorization", token.getToken());
 
 		int responseCode = con.getResponseCode();
-
-		String tst = getResponseString(con);
-
-		System.out.println(tst);
 
 		sendLogout();
 
