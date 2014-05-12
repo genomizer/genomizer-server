@@ -29,11 +29,11 @@ public class ClientDummy {
 //	public static String host = "scratchy.cs.umu.se";
 
 
-	public static String url = "http://localhost:"+ port;
+	public static String url = "http://" + host + ":" + port;
 	public static Token token = null;
 
-	public static String expName = "spluttexp6663";
-	public static String filename = "spluttfile6663";
+	public static String expName = "spluttexp6669";
+	public static String filename = "spluttfile6669";
 
 
 	public static void main(String args[]) throws Exception {
@@ -43,9 +43,9 @@ public class ClientDummy {
 		//sendAddFileToExperiment();
 		sendAddExperiment();
 //		sendAddFileToExperiment();
-		sendProcessing();
+//		sendProcessing();
 		sendAddFileToExperiment();
-		sendDeleteExperiment();
+//		sendDeleteExperiment();
 //		sendProcessing();
 		//sendLogout();
 	}
