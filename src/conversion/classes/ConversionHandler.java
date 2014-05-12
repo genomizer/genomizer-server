@@ -67,16 +67,45 @@ public class ConversionHandler {
 
 
 
+
 	public String executeRegionDataConversion(String conversionName,
 			String inFile) {
-		switch (conversionName) {
-		case "":
+
+		//convert the outputfile to the inputfiles original filetype
+		switch(fileType){
+		case "wig":
+			typeConverter.bedToWig(outfileBed);
+			File file = new File(outfileBed);
+			file.delete();
+			break;
+		case "sgr":
+			typeConverter.bedToSgr(outfileBed);
+			File file = new File(outfileBed);
+			file.delete();
+			break;
+		case "bed":
+
 			break;
 
 		default:
 			throw new IllegalArgumentException();
 		}
+
 		return null;
+
+		}
+	public String checkFileType(String filePath){
+		String type = "";
+		if((filePath.length()-filePath.replaceAll("\\.","").length())>=1){
+			String[] splitArray = filePath.split("\\.");
+			int lengthOfArray = splitArray.length;
+			type = splitArray[lengthOfArray-1];
+			System.err.println(type);
+		}
+
+
+
+		return type;
 	}
 
 	// public void executeGenomeReleaseConversion(String chainfilePath, String

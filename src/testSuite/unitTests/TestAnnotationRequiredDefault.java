@@ -1,32 +1,40 @@
 package testSuite.unitTests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.sql.SQLException;
 
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import testSuite.TestInitializer;
 import database.DatabaseAccessor;
 
 public class TestAnnotationRequiredDefault {
 
-	private static DatabaseAccessor dbac;
+    private static DatabaseAccessor dbac;
+    private static TestInitializer ti;
 
-	@BeforeClass
-	public static void setUp(){
-		try {
-			dbac = new DatabaseAccessor("c5dv151_vt14", "shielohh", "postgres", "c5dv151_vt14");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
+    @BeforeClass
+    public static void setupBeforeClass() throws Exception {
+    	ti = new TestInitializer();
+    	dbac = ti.setup();
+    }
+
+    @AfterClass
+    public static void undoAllChanges() throws SQLException {
+    	ti.removeTuples();
+    }
 
 	@Test
 	public void testIsRequierdTrue(){
 		try {
-			assertTrue(dbac.isRequierd("Species"));
-			assertTrue(dbac.isRequierd("Tissue"));
+			assertTrue(dbac.isAnnotationRequiered("Species"));
+			assertTrue(dbac.isAnnotationRequiered("Tissue"));
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -36,8 +44,8 @@ public class TestAnnotationRequiredDefault {
 	@Test
 	public void testIsRequierdFalse(){
 		try {
-			assertFalse(dbac.isRequierd("Sex"));
-			assertFalse(dbac.isRequierd("Development Stage"));
+			assertFalse(dbac.isAnnotationRequiered("Sex"));
+			assertFalse(dbac.isAnnotationRequiered("Development Stage"));
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -48,7 +56,7 @@ public class TestAnnotationRequiredDefault {
 	public void testGetDefaultValue(){
 
 		try {
-			assertEquals("Human",dbac.getDefaultValue("Species"));
+			assertEquals("Unknown",dbac.getDefaultAnnotationValue("Sex"));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -59,7 +67,7 @@ public class TestAnnotationRequiredDefault {
 	public void testShouldGetNull(){
 
 		try {
-			assertNull(dbac.getDefaultValue("Tissue"));
+			assertNull(dbac.getDefaultAnnotationValue("Tissue"));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

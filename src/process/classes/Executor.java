@@ -15,6 +15,7 @@ public abstract class Executor {
 
 private final String FILEPATH = "resources/";
 
+
 	/**
 	 * Used to execute a program like bowtie
 	 *
@@ -29,6 +30,7 @@ private final String FILEPATH = "resources/";
 		command[0]=pathToExecutable.getAbsolutePath();
 		return executeCommand(command);
 	}
+
 
 	/**
 	 * Used to execute a script
@@ -48,6 +50,12 @@ private final String FILEPATH = "resources/";
 	/**
 	 * Used to parse a string and make it into a String array
 	 *
+=======
+
+	/**
+	 * Used to parse a string and make it into a String array
+	 *
+>>>>>>> origin/development
 	 * @param procedureParameters
 	 * @return
 	 */
@@ -61,6 +69,7 @@ private final String FILEPATH = "resources/";
 		}
 		return temp;
 	}
+
 
 	/**
 	 * Used to execute commands
@@ -93,7 +102,11 @@ private final String FILEPATH = "resources/";
 
 	/**
 	 * Used to execute shell command
+<<<<<<< HEAD
 	 *
+=======
+	 *
+>>>>>>> origin/development
 	 * @param command
 	 * @param dir
 	 * @param fileName
@@ -101,8 +114,8 @@ private final String FILEPATH = "resources/";
 	 * @throws InterruptedException
 	 * @throws IOException
 	 */
+
 	protected String executeShellCommand(String[] command, String dir, String fileName) throws InterruptedException, IOException{
-		System.out.println("DIR == == = = " + dir);
 		ProcessBuilder builder = new ProcessBuilder(command);
 
 		builder.directory( new File( FILEPATH ).getAbsoluteFile() );
@@ -111,7 +124,8 @@ private final String FILEPATH = "resources/";
 
 		Scanner s = new Scanner(process.getInputStream());
 		StringBuilder text = new StringBuilder();
-		File dirFile = new File(dir);
+		File dirFile = new File(FILEPATH+dir);
+
 
 		if(!dirFile.exists()) {
 			dirFile.mkdirs();
@@ -132,6 +146,7 @@ private final String FILEPATH = "resources/";
 		return text.toString();
 	}
 
+
 	/**
 	 * Used to make a File object which represents a folder.
 	 *
@@ -143,6 +158,7 @@ private final String FILEPATH = "resources/";
 		return new File(dirName.substring(0, dirName.length()-1));
 
 	}
+
 
 	/**
 	 * Deletes a folder and all its subfolders.
@@ -161,6 +177,24 @@ private final String FILEPATH = "resources/";
 			}
 		}
 		return dir.delete();
+	}
+
+	/**
+	 * Moves files from dirToFiles to dest.
+	 *
+	 * @param dirToFiles directory where files are
+	 * @param dest directory where files will be moved.
+	 */
+	protected void moveEndFiles(String dirToFiles, String dest) {
+		// sortedDir+"reads_gff/allnucs_sgr/smoothed/Step10/"
+		File[] filesInDir = new File("/" + dirToFiles).getAbsoluteFile()
+				.listFiles();
+		for (int i = 0; i < filesInDir.length; i++) {
+			if (!filesInDir[i].isDirectory()) {
+				if (filesInDir[i].renameTo(new File(dest
+						+ filesInDir[i].getName())));
+			}
+		}
 	}
 
 }
