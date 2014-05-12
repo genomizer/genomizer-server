@@ -60,6 +60,7 @@ public class DeleteAnnotationFieldCommand extends Command {
 //				}
 				result = db.deleteAnnotation(da.getId());
 			}
+			db.close();
 			if(result == 0) {
 				return new MinimalResponse(403);
 			} else {

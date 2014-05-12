@@ -81,7 +81,7 @@ public class AddFileToExperimentCommand extends Command {
 	@Override
 	public Response execute() {
 
-		DatabaseAccessor accessor = null;
+		DatabaseAccessor db = null;
 		String response_url = null;
 		int filetype;
 		if(type.equalsIgnoreCase("raw")) {
@@ -94,16 +94,27 @@ public class AddFileToExperimentCommand extends Command {
 			filetype = FileTuple.OTHER;
 		}
 		try {
-			accessor = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
+			db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
 			//response_url = accessor.addFile(type, fileName, "metadata", "Jonas Markström", "Jonas Markström", false, experimentID, "v.123");
-			FileTuple ft = accessor.addNewFile(experimentID, filetype, fileName, "", metaData, author, uploader, isPrivate, grVersion);
+
+			FileTuple ft = db.addNewFile(experimentID, filetype, fileName, "", metaData, author, uploader, false, grVersion);
+
 			return new AddFileToExperimentResponse(StatusCode.OK, ft.getUploadURL());
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
+		} finally{
+			try {
+				System.out.println("closing db");
+				db.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
+
+			}
 		}
 
-		return new MinimalResponse(StatusCode.BAD_REQUEST);
+
 
 
 	}

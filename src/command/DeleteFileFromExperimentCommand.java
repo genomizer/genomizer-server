@@ -41,17 +41,12 @@ public class DeleteFileFromExperimentCommand extends Command {
 		try {
 			db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
 			if(db.deleteFile(Integer.parseInt(fileID))==1){
-				System.out.println("return ok delete");
 				return new MinimalResponse(StatusCode.OK);
-
 			}else{
-				System.out.println("return unavailable delete");
 				return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-			System.out.println("return unavailable 2 delete");
 			return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
 		} finally {
 			try {
@@ -61,9 +56,6 @@ public class DeleteFileFromExperimentCommand extends Command {
 				return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
 			}
 		}
-		//Method not implemented, send appropriate response
-		//return 	new MinimalResponse(StatusCode.NO_CONTENT);
-
 	}
 
 }

@@ -50,7 +50,9 @@ public class AddExperimentCommand extends Command {
 
 	@Override
 	public response.Response execute() {
-		DatabaseAccessor db;
+
+		DatabaseAccessor db = null;
+
 		try {
 			System.out.println("execute add exp");
 			db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
@@ -67,10 +69,18 @@ public class AddExperimentCommand extends Command {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return 	new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
+			return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
 		} catch (IOException e) {
 			e.printStackTrace();
-			return 	new MinimalResponse(StatusCode.BAD_REQUEST);
+			return new MinimalResponse(StatusCode.BAD_REQUEST);
+		} finally{
+			try {
+				db.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
+			}
 		}
 	}
 
