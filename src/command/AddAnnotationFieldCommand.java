@@ -55,7 +55,6 @@ public class AddAnnotationFieldCommand extends Command {
 	 */
 	@Override
 	public boolean validate() {
-		//Check if name is to long, no types exists.
 		if(name.length() > 20 || type.size() < 1 ) {
 			return false;
 		}
