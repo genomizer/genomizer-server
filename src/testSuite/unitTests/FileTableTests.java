@@ -1,5 +1,6 @@
 package testSuite.unitTests;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -98,28 +99,13 @@ public class FileTableTests {
     @Test
     public void addRemoveGenomeReleaseTest() throws Exception {
 
-        ArrayList<String> genomeVersions;
-
         testGenomePath = dbac.addGenomeRelease("F2.3", "Fly", "File1.txt");
 
-        genomeVersions = dbac.getStoredGenomeVersions();
-        assertTrue(genomeVersions.contains("F2.3"));
+        String path = dbac.getGenomeRelease("F2.2");
+        assertNotNull(path);
 
         boolean succeed = dbac.removeGenomeRelease("F2.3", "Fly");
         assertTrue(succeed);
-    }
-
-    @Test
-    public void getStoredGenomeVersionsTest() throws Exception {
-
-        ArrayList<String> genomeVersions;
-
-            dbac.addGenomeRelease("chemicalX", "cat", "File1.txt");
-            genomeVersions = dbac.getStoredGenomeVersions();
-            assertTrue(genomeVersions.contains("chemicalX"));
-
-            // then remove inserted genome_Release
-            dbac.removeGenomeRelease("chemicalX", "cat");
     }
 
     @Test

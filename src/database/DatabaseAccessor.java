@@ -1560,28 +1560,34 @@ public class DatabaseAccessor {
     }
 
     /**
-     * Method for getting all stored versions of genome Releases in
-     * the database
-     * 
-     * @return ArrayList<String> genome versions.
+     * Gets the file path to a stored Genome Release
+     * @param genomeVersion - The version to get filepath to, should use getAllGenomeReleases()
+     * and let user choose a version
+     * @return - a file path
      * @throws SQLException
      */
-    public ArrayList<String> getStoredGenomeVersions()
-            throws SQLException {
 
-        ArrayList<String> allVersions = new ArrayList<String>();
+    public String getGenomeRelease(String genomeVersion) throws SQLException{
 
-        String getGenVerQuery = "SELECT * FROM Genome_Release";
-        PreparedStatement ps = conn.prepareStatement(getGenVerQuery);
+        String query = "SELECT FilePath FROM Genome_Release WHERE (Version = ?)";
 
-        ResultSet res = ps.executeQuery();
+        PreparedStatement ps = conn.prepareStatement(query);
 
-        while (res.next()) {
-            allVersions.add(res.getString("Version"));
+        ps.setString(1, genomeVersion);
+
+        ResultSet rs = ps.executeQuery();
+
+        String path = null;
+
+        if (rs.next()) {
+            path = rs.getString("FilePath");
         }
 
-        return allVersions;
+        ps.close();
+
+    	return path;
     }
+
 
     /**
      * Add one genomerelease to the database.
@@ -1602,7 +1608,7 @@ public class DatabaseAccessor {
                 genomeVersion, species);
 
         String insertGenRelQuery = "INSERT INTO Genome_Release "
-                + "(Version,Species,FilePath) " + "VALUES (?,?,?)";
+                + "(Version, Species, FilePath) " + "VALUES (?, ?, ?)";
 
         PreparedStatement ps = conn
                 .prepareStatement(insertGenRelQuery);

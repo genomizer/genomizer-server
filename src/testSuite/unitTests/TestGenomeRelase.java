@@ -31,5 +31,9 @@ public class TestGenomeRelase {
     public void getAllGenomeReleases() throws SQLException{
     	assertEquals(3,dbac.getAllGenomReleases("Human").size());
     }
-    
+
+    @Test
+    public void getGenomeRelease() throws SQLException{
+    	assertEquals("/var/www/data/GenomeRelease/Rat/rn5.fasta", dbac.getGenomeRelease("rn5"));
+    }
 }
