@@ -32,7 +32,7 @@ public class ProcessCommand extends Command {
 	@Expose
 	private String filename;
 	@Expose
-	private String fileid;
+	private String fileId;
 	@Expose
 	private String expid;
 	@Expose
@@ -79,7 +79,7 @@ public class ProcessCommand extends Command {
 			return false;
 		}
 
-		if(fileid == null){
+		if(fileId == null){
 			System.err.println("ProcessCommand - Validate\n" +
 					"fileid is null");
 			return false;
@@ -105,7 +105,7 @@ public class ProcessCommand extends Command {
 				genomeRelease.length() > MaxSize.GENOME_VERSION ||
 				filename.length() > MaxSize.FILE_FILENAME || filename.length() <= 0 ||
 				author.length() > MaxSize.FILE_AUTHOR ||
-				fileid.length() <= 0 ||
+				fileId.length() <= 0 ||
 				expid.length() > MaxSize.EXPID || expid.length() <= 0)
 
 		{
@@ -146,17 +146,17 @@ public class ProcessCommand extends Command {
 				//TODO Remove print for validating data.
 				System.out.println("Uploader of file: " + username);
 				System.out.println("filename:" + filename);
-				System.out.println("fileid:" + fileid);
+				System.out.println("fileid:" + fileId);
 				System.out.println("metadata:" + metadata);
 				System.out.println("username: " + username);
 				System.out.println("expid: " + expid);
-				System.out.println("fileid: " + fileid);
+				System.out.println("fileid: " + fileId);
 				System.out.println("genomeRelease: " + genomeRelease);
 				System.out.println("author:" + author);
 
 
 				//Profile hardcoded since in case "rawtoprofile"
-				ArrayList<String> filepaths = dbac.process(fileid, "profile", filename, metadata, username, genomeRelease, expid);
+				ArrayList<String> filepaths = dbac.process(fileId, "profile", filename, metadata, username, genomeRelease, expid);
 
 
 				System.err.println("Filepath[0]: " + filepaths.get(0));
@@ -217,7 +217,7 @@ public class ProcessCommand extends Command {
 				"metadata:" + metadata + "\n" +
 				"username: " + username + "\n" +
 				"expid: " + expid + "\n" +
-				"fileid: " + fileid + "\n" +
+				"fileid: " + fileId + "\n" +
 				"genomeRelease: " + genomeRelease + "\n" +
 				"author:" + author + "\n";
 	}
