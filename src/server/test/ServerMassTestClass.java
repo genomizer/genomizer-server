@@ -3,7 +3,6 @@ package server.test;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
-import java.io.DataOutputStream;
 import java.net.HttpURLConnection;
 
 import com.google.gson.JsonObject;
@@ -92,16 +91,13 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 		con.setRequestProperty("Content-Type", "application/json");
 		con.setRequestProperty("Authorization", token.getToken());
 
-		String json_output = "{\"name\":\"species102\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
+		String json_output = "{\"name\":\"species103\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
 
-		con.setDoOutput(true);
-		DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-		wr.write(json_output.getBytes());
-		wr.flush();
-		wr.close();
+		sendResponseString(con, json_output);
 
 		//Get responsecode and logout.
 		int responseCode = con.getResponseCode();
+
 		sendLogout();
 
 		assertTrue(responseCode == 201);
@@ -133,16 +129,13 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 		con.setRequestProperty("Content-Type", "application/json");
 		con.setRequestProperty("Authorization", token.getToken());
 
-		String json_output = "{\"name\":\"ABC996\",\"type\":[\"freetext\"],\"default\":\"q\",\"forced\":false}";
+		String json_output = "{\"name\":\"ABC998\",\"type\":[\"freetext\"],\"default\":\"q\",\"forced\":false}";
 
-		con.setDoOutput(true);
-		DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-		wr.write(json_output.getBytes());
-		wr.flush();
-		wr.close();
+		sendResponseString(con, json_output);
 
 		//Get responsecode and logout.
 		int responseCode = con.getResponseCode();
+
 		sendLogout();
 
 		assertTrue(responseCode == 201);
@@ -171,10 +164,6 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 		con.setRequestProperty("Authorization", token.getToken());
 
 		int responseCode = con.getResponseCode();
-
-		String tst = getResponseString(con);
-
-		System.out.println(tst);
 
 		sendLogout();
 
