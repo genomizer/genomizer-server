@@ -19,19 +19,12 @@ public class DeleteFileFromExperimentCommand extends Command {
 	/**
 	 * Used to validate the logout command.
 	 */
-	private String fileID;
-
 	public DeleteFileFromExperimentCommand(String restful){
-		fileID=restful;
-
+		setHeader(restful);
 	}
 
 	@Override
 	public boolean validate() {
-		if(fileID==null){
-			return false;
-		}
-
 		return true;
 	}
 
@@ -41,22 +34,26 @@ public class DeleteFileFromExperimentCommand extends Command {
 	@Override
 	public Response execute() {
 
+		DatabaseAccessor db = null;
+
 		try {
-			DatabaseAccessor accessor = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
-			if(accessor.deleteFile(fileID)==1){
+			db = initDB();
+			if(db.deleteFile(Integer.parseInt(header))==1){
 				return new MinimalResponse(StatusCode.OK);
 			}else{
-				//which response code is appropriate?
 				return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
+		} finally {
+			try {
+				db.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
+			}
 		}
-		//Method not implemented, send appropriate response
-		//return 	new MinimalResponse(StatusCode.NO_CONTENT);
-
 	}
 
 }

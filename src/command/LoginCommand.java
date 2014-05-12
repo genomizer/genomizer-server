@@ -19,10 +19,6 @@ public class LoginCommand extends Command {
 	@Expose
 	private String password;
 
-	/* This class responds on success only
-	 * with header = 200 (OK).
-	 * It handles both login/logut (if needed)
-	 */
 	/**
 	 * Empty constructor.
 	 */
@@ -39,7 +35,6 @@ public class LoginCommand extends Command {
 			return false;
 		}
 		return true;
-
 	}
 
 	@Override
@@ -49,18 +44,12 @@ public class LoginCommand extends Command {
 
 		if(Authenticate.userExists(username)){
 		//bugg if username is exactly the same as the UUID
-			System.out.println("USER ALREADY EXISTS, SENDS UUID ONCE MORE.");
 			rsp = new LoginResponse(200, Authenticate.getID(username));
 		}else{
 			String usrId = Authenticate.createUserID(username);
-
 			Authenticate.addUser(username,usrId);
-			System.out.println("USER CREATED.");
 			rsp = new LoginResponse(200, usrId);
 		}
-			// TODO Auto-generated method stub
-
-
 		return rsp;
 	}
 

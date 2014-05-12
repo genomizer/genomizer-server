@@ -68,18 +68,22 @@ public class SearchForExperimentsCommand extends Command {
 		}
 
 		try {
-			System.out.println("anno:" + annotations);
-			db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
+			db = initDB();
 			searchResult = db.search(annotations);
 		} catch (SQLException e) {
 			return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return new MinimalResponse(StatusCode.BAD_REQUEST);
+		} finally {
+			try {
+				db.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
+			}
 		}
-
 		SearchResponse response = new SearchResponse(searchResult);
-
 		return response;
 	}
 

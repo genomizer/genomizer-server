@@ -28,8 +28,6 @@ import database.FileTuple;
  */
 public class GetExperimentCommand extends Command {
 
-
-
 	/**
 	 * Empty constructor.
 	 */
@@ -45,7 +43,6 @@ public class GetExperimentCommand extends Command {
 		} else {
 			return true;
 		}
-
 	}
 
 	@Override
@@ -55,7 +52,7 @@ public class GetExperimentCommand extends Command {
 	    DatabaseAccessor db = null;
 
 		try {
-			db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
+			db = initDB();
 			exp = db.getExperiment(this.header);
 		} catch (SQLException e) {
 			return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
@@ -67,7 +64,6 @@ public class GetExperimentCommand extends Command {
 				return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
 			}
 		}
-
 		return new GetExperimentResponse(getInfo(exp), exp.getAnnotations(), exp.getFiles(), StatusCode.OK);
 	}
 
@@ -75,11 +71,6 @@ public class GetExperimentCommand extends Command {
 		ArrayList<String> info = new ArrayList<String>();
 		info.add(exp.getID());
 		return info;
-
 	}
-
-
-
-
 
 }

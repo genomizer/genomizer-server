@@ -1,15 +1,11 @@
 package command;
 
+import java.sql.SQLException;
+
 import response.Response;
+import server.DatabaseSettings;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-//import com.google.gson.Gson;
-//import com.google.gson.GsonBuilder;
-
-//TODO: Make interface?
-//TODO: Fix comments.
+import database.DatabaseAccessor;
 
 /**
  * Class used to represent a command in the software.
@@ -37,24 +33,13 @@ public abstract class Command {
 
 	//Method used to set header.
 	public void setHeader(String header) {
-
 		this.header = header;
-
-		//Remove this line later, just for testing.
-		//tstPrintJSON();
-
 	}
 
-	//Remove this method later. Just for testing.
-	public void tstPrintJSON() {
-
-		//Create the builder.
-	    final GsonBuilder builder = new GsonBuilder();
-	    builder.excludeFieldsWithoutExposeAnnotation();
-	    final Gson gson = builder.create();
-
-	    System.out.println(gson.toJson(this));
-
+	public DatabaseAccessor initDB() throws SQLException {
+		DatabaseAccessor db = null;
+		db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
+		return db;
 	}
 
 

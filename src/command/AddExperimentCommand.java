@@ -54,18 +54,15 @@ public class AddExperimentCommand extends Command {
 		DatabaseAccessor db = null;
 
 		try {
-			System.out.println("execute add exp");
-			db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
-			System.out.println("NAME: " + name);
+			db = initDB();
 			db.addExperiment(name);
-			System.out.println("added experiment name...");
 			for(Annotation annotation: annotations) {
 				System.out.println("annotation name: " +annotation.getName() + " annotation value: " + annotation.getValue());
 				db.annotateExperiment(name, annotation.getName(), annotation.getValue());
 				System.out.println("added annotation" + annotation.getName());
 			}
+			db.close();
 			return new MinimalResponse(StatusCode.CREATED);
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
@@ -76,7 +73,6 @@ public class AddExperimentCommand extends Command {
 			try {
 				db.close();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
 			}

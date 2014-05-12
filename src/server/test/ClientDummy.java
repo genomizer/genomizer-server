@@ -32,8 +32,8 @@ public class ClientDummy {
 	public static String url = "http://" + host + ":" + port;
 	public static Token token = null;
 
-	public static String expName = "spluttexp6669";
-	public static String filename = "spluttfile6669";
+	public static String expName = "huggaboy5";
+	public static String filename = "spluttfile66269";
 
 
 	public static void main(String args[]) throws Exception {
@@ -42,10 +42,10 @@ public class ClientDummy {
 		//sendGetAnnotationInformation();
 		//sendAddFileToExperiment();
 		sendAddExperiment();
-//		sendAddFileToExperiment();
-//		sendProcessing();
 		sendAddFileToExperiment();
-//		sendDeleteExperiment();
+//		sendProcessing();
+//		sendAddFileToExperiment();
+		sendDeleteExperiment();
 //		sendProcessing();
 		//sendLogout();
 	}
@@ -382,13 +382,11 @@ public class ClientDummy {
 
 		ja.addProperty("experimentID", expName);
 		ja.addProperty("fileName", "hugofiltest.txt");
-		ja.addProperty("size", "1mb");
 		ja.addProperty("type", "raw");
-		ja.addProperty("fileType", "unknown");
 		ja.addProperty("metaData", "not impl. yet");
 		ja.addProperty("author", "Jonas M");
 		ja.addProperty("uploader", "Jonas M");
-		ja.addProperty("isPrivate", "false");
+		ja.addProperty("isPrivate", false);
 		ja.addProperty("grVersion", "rn5");
 
 		String json_output = ja.toString();

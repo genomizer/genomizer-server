@@ -28,7 +28,6 @@ import server.DatabaseSettings;
  */
 public class AddFileToExperimentCommand extends Command {
 
-
 	@Expose
 	private String experimentID;
 
@@ -68,10 +67,10 @@ public class AddFileToExperimentCommand extends Command {
 		return true;
 	}
 
-
 	public void setUploader(String uploader) {
 		this.uploader = uploader;
 	}
+
 	/**
 	 * Adds all attributes an arraylist and
 	 * pass that and the experimentID to the database.
@@ -82,7 +81,6 @@ public class AddFileToExperimentCommand extends Command {
 	public Response execute() {
 
 		DatabaseAccessor db = null;
-		String response_url = null;
 		int filetype;
 		if(type.equalsIgnoreCase("raw")) {
 			filetype = FileTuple.RAW;
@@ -94,8 +92,7 @@ public class AddFileToExperimentCommand extends Command {
 			filetype = FileTuple.OTHER;
 		}
 		try {
-			db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
-			//response_url = accessor.addFile(type, fileName, "metadata", "Jonas Markström", "Jonas Markström", false, experimentID, "v.123");
+			db = initDB();
 			FileTuple ft = db.addNewFile(experimentID, filetype, fileName, "", metaData, author, uploader, false, grVersion);
 			return new AddFileToExperimentResponse(StatusCode.OK, ft.getUploadURL());
 		} catch (SQLException e) {
@@ -110,10 +107,6 @@ public class AddFileToExperimentCommand extends Command {
 
 			}
 		}
-
-
-
-
 	}
 
 
