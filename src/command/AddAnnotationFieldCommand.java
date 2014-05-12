@@ -58,53 +58,69 @@ public class AddAnnotationFieldCommand extends Command {
 		if(name.length() > 20 || type.size() < 1 ) {
 			return false;
 		}
+
 		return true;
+
 	}
 
 	/**
 	 * Method used to execute the command and add the
-	 * annotation field.
+	 * annoation field.
 	 */
 	@Override
 	public Response execute() {
 
-		DatabaseAccessor db = null;
 		Response rsp;
 		int addedAnnotations = 0;
 		int defaultValueIndex = 0;
-
+		DatabaseAccessor db = null;
 		try {
-			db = initDB();
+			//Get database access.
+			db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
+
 			for(int i = 0; i < type.size(); i++) {
 				if(type.get(i).equals(defaults)) {
 					defaultValueIndex = i;
 					break;
 				}
 			}
+
 			if(type.size() == 1 && type.get(0).equals("freetext")) {
+
 				addedAnnotations = db.addFreeTextAnnotation(name, defaults, forced);
+
 			} else {
+
 				//Add annotation field.
 				addedAnnotations = db.addDropDownAnnotation(name, type, defaultValueIndex, forced);
+
 			}
+
 			//Create response.
 			if(addedAnnotations != 0) {
-				rsp = new AddAnnotationFieldResponse(StatusCode.CREATED);
+				return new AddAnnotationFieldResponse(StatusCode.CREATED);
 			} else {
-				rsp = new MinimalResponse(StatusCode.BAD_REQUEST);
+				return new MinimalResponse(400);
 			}
 		} catch (SQLException e) {
-			rsp = new MinimalResponse(StatusCode.BAD_REQUEST);
+			e.printStackTrace();
+			return new MinimalResponse(400);
+
 		} catch (IOException e) {
-			rsp = new MinimalResponse(StatusCode.BAD_REQUEST);
-		} finally {
+			e.printStackTrace();
+			return new MinimalResponse(400);
+		} finally{
+
 			try {
 				db.close();
 			} catch (SQLException e) {
-				rsp = new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return new MinimalResponse(400);
 			}
+
 		}
-		return rsp;
+
 	}
 
 }

@@ -1,7 +1,5 @@
 package command;
 
-import java.util.ArrayList;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -22,7 +20,6 @@ public class CommandFactory {
 	 */
 	public CommandFactory() {
 
-		//Create the builder.
 	    builder = new GsonBuilder();
 	    builder.excludeFieldsWithoutExposeAnnotation();
 	    gson = builder.create();
@@ -31,28 +28,26 @@ public class CommandFactory {
 
 	/**
 	 * Used to create the command needed for login.
+	 *
 	 * @param json string to initiate class.
 	 * @return the actual command.
 	 */
 	public Command createLoginCommand(String json) {
 
-
-		//Create command with json.
 		final Command loginCmd = gson.fromJson(json, LoginCommand.class);
 
-		//Set headers
-		//loginCmd.setHeader(restful);
 		return loginCmd;
+
 	}
 
 	/**
 	 * Used to create logout command.
+	 *
 	 * @param RESTful-header.
 	 * @return a logout command.
 	 */
 	public Command createLogoutCommand(String username) {
 
-		//Create command with json.
 		final Command logoutCmd = new LogoutCommand(username);
 
 		return logoutCmd;
@@ -61,6 +56,7 @@ public class CommandFactory {
 
 	/**
 	 * Used to create the command needed for retrieving experiments.
+	 *
 	 * @param json string to initiate class.
 	 * @param restful tag to put into class.
 	 * @return the actual command.
@@ -71,6 +67,7 @@ public class CommandFactory {
 
 	/**
 	 * Used to create the command needed for adding experiments.
+	 *
 	 * @param json string to initiate class.
 	 * @return the actual command.
 	 */
@@ -83,7 +80,8 @@ public class CommandFactory {
 	}
 
 	/**
-	 * Used to create the command needed for updateing experiments.
+	 * Used to create the command needed for updating experiments.
+	 *
 	 * @param json string to initiate class.
 	 * @param restful tag to put into class.
 	 * @return the actual command.
@@ -95,7 +93,8 @@ public class CommandFactory {
 	}
 
 	/**
-	 * Used to create the command needed for removeing experiments.
+	 * Used to create the command needed for removing experiments.
+	 *
 	 * @param json string to initiate class.
 	 * @param restful tag to put into class.
 	 * @return the actual command.
@@ -108,6 +107,7 @@ public class CommandFactory {
 
 	/**
 	 * Used to create the command needed for retrieving experiment files.
+	 *
 	 * @param json string to initiate class.
 	 * @param restful tag to put into class.
 	 * @return the actual command.
@@ -120,6 +120,7 @@ public class CommandFactory {
 
 	/**
 	 * Used to create the command needed for adding files to experiments.
+	 *
 	 * @param json string to initiate class.
 	 * @return the actual command.
 	 */
@@ -133,6 +134,7 @@ public class CommandFactory {
 
 	/**
 	 * Used to create the command needed to update files in experiments.
+	 *
 	 * @param json string to initiate class.
 	 * @param restful tag to put into class.
 	 * @return the actual command.
@@ -145,6 +147,7 @@ public class CommandFactory {
 
 	/**
 	 * Used to create the command needed to remove files from experiments.
+	 *
 	 * @param json string to initiate class.
 	 * @param restful tag to put into class.
 	 * @return the actual command.
@@ -157,6 +160,7 @@ public class CommandFactory {
 
 	/**
 	 * Used to create the command needed for searching experiments.
+	 *
 	 * @param restful tag to put into class.
 	 * @return the actual command.
 	 * @throws SQLException
@@ -169,6 +173,7 @@ public class CommandFactory {
 
 	/**
 	 * Used to create the command needed for updating users.
+	 *
 	 * @param json string to initiate class.
 	 * @param restful tag to put into class.
 	 * @return the actual command.
@@ -181,6 +186,7 @@ public class CommandFactory {
 
 	/**
 	 * Used to create the command needed for deleting users.
+	 *
 	 * @param json string to initiate class.
 	 * @param restful tag to put into class.
 	 * @return the actual command.
@@ -191,9 +197,9 @@ public class CommandFactory {
 
 	}
 
-	//TODO: Refactor raw to profile command to process command.
 	/**
 	 * Used to create the command needed for converting raw to profile.
+	 *
 	 * @param json string to initiate class.
 	 * @param restful tag to put into class.
 	 * @param username
@@ -215,6 +221,7 @@ public class CommandFactory {
 
 	/**
 	 * Used to create the command needed to get annotation information.
+	 *
 	 * @param json string to initiate class.
 	 * @return the actual command.
 	 */
@@ -226,6 +233,7 @@ public class CommandFactory {
 
 	/**
 	 * Used to create a command needed to add annotation fields.
+	 *
 	 * @param json string to initiate class.
 	 * @param restful tag to put into class.
 	 * @return the actual command.
@@ -238,9 +246,9 @@ public class CommandFactory {
 
 	}
 
-
 	/**
 	 * Used to create the command needed to add annotation values.
+	 *
 	 * @param json string to initiate class.
 	 * @param restful tag to put into class.
 	 * @return the actual command.
@@ -253,6 +261,7 @@ public class CommandFactory {
 
 	/**
 	 * Used to create the command needed to remove annotation fields.
+	 *
 	 * @param json string to initiate class.
 	 * @param restful tag to put into class.
 	 * @return the actual command.
@@ -265,6 +274,7 @@ public class CommandFactory {
 
 	/**
 	 * Used to create the command needed to get annotation privileges.
+	 *
 	 * @param json string to initiate class.
 	 * @return the actual command.
 	 */
@@ -276,6 +286,7 @@ public class CommandFactory {
 
 	/**
 	 * Used to create the command needed to update annotation privileges.
+	 *
 	 * @param json string to initiate class.
 	 * @param restful tag to put into class.
 	 * @return the actual command.
