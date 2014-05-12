@@ -92,7 +92,48 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 		con.setRequestProperty("Content-Type", "application/json");
 		con.setRequestProperty("Authorization", token.getToken());
 
-		String json_output = "{\"name\":\"species100\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
+		String json_output = "{\"name\":\"species102\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
+
+		con.setDoOutput(true);
+		DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+		wr.write(json_output.getBytes());
+		wr.flush();
+		wr.close();
+
+		//Get responsecode and logout.
+		int responseCode = con.getResponseCode();
+		sendLogout();
+
+		assertTrue(responseCode == 201);
+
+	}
+
+	/**
+	 * Testcase used to check that adding annotation freetext
+	 * works properly.
+	 * @throws Exception
+	 */
+	@Test
+	public void testAddAnnotatinFieldFreeText() throws Exception {
+		/* Note: If the annotation freetext is added already, this test will not
+		 * 		 currently pass. Change the json_output name to something else
+		 * 		 in order to get it to work.remove the annotation
+		 *		 that was added to be able to test continuously.
+		 */
+
+		//Create JSON login object.
+		JsonObject jj = new JsonObject();
+		jj.addProperty("username", "jonas");
+		jj.addProperty("password", "losenord");
+
+		sendLogin(jj);
+
+		//Get connection and then add headers.
+		HttpURLConnection con = connect("POST", "http://scratchy.cs.umu.se:7000/annotation");
+		con.setRequestProperty("Content-Type", "application/json");
+		con.setRequestProperty("Authorization", token.getToken());
+
+		String json_output = "{\"name\":\"ABC996\",\"type\":[\"freetext\"],\"default\":\"q\",\"forced\":false}";
 
 		con.setDoOutput(true);
 		DataOutputStream wr = new DataOutputStream(con.getOutputStream());
@@ -131,7 +172,9 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 
 		int responseCode = con.getResponseCode();
 
+		String tst = getResponseString(con);
 
+		System.out.println(tst);
 
 		sendLogout();
 
