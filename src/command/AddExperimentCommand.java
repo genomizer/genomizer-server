@@ -26,9 +26,8 @@ public class AddExperimentCommand extends Command {
 	@Expose
 	private String name;
 
-	@SerializedName("created by")
 	@Expose
-	private String created_by;
+	private String createdBy;
 
 	@Expose
 	private ArrayList<Annotation> annotations = new ArrayList<Annotation>();
@@ -42,7 +41,7 @@ public class AddExperimentCommand extends Command {
 
 	@Override
 	public boolean validate() {
-		if(name == null || created_by == null || annotations == null) {
+		if(name == null || createdBy == null || annotations == null) {
 			return false;
 		} else {
 			return true;
@@ -52,13 +51,15 @@ public class AddExperimentCommand extends Command {
 	@Override
 	public response.Response execute() {
 		try {
+			System.out.println("execute add exp");
 			DatabaseAccessor db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
 			System.out.println("NAME: " + name);
 			db.addExperiment(name);
-
+			System.out.println("added experiment name...");
 			for(Annotation annotation: annotations) {
 				System.out.println("annotation name: " +annotation.getName() + " annotation value: " + annotation.getValue());
 				db.annotateExperiment(name, annotation.getName(), annotation.getValue());
+				System.out.println("added annotation" + annotation.getName());
 			}
 			return new MinimalResponse(StatusCode.CREATED);
 
