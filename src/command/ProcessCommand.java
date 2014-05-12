@@ -43,6 +43,17 @@ public class ProcessCommand extends Command {
 
 	}
 
+	/**
+	 * Method for validating the process command.
+	 *
+	 * Fields wich cannot be null:
+	 * - username, processtype, metadata, genomeRelease, filename, expid,
+	 *   fileId, parameters, author
+	 * If these fields are null, false is returned.
+	 *
+	 * Length of fields are also checked to match the lengths specified by
+	 * MaxSize class in the database package
+	 */
 	@Override
 	public boolean validate() {
 
@@ -114,13 +125,12 @@ public class ProcessCommand extends Command {
 			return false;
 		}
 
-		//TODO Lengths
-		//TODO Validate process command
 		return true;
 	}
 
 	/**
 	 * Method that runs when the processCommand is executed.
+	 *
 	 */
 	@Override
 	public Response execute() {
@@ -140,25 +150,13 @@ public class ProcessCommand extends Command {
 
 			switch(processtype){
 			case "rawtoprofile":
-				System.out.println("The process type was a rawtoprofile");
 				//The process type was a rawtoprofile
-
-				//TODO Remove print for validating data.
-				System.out.println("Uploader of file: " + username);
-				System.out.println("filename:" + filename);
-				System.out.println("fileid:" + fileId);
-				System.out.println("metadata:" + metadata);
-				System.out.println("username: " + username);
-				System.out.println("expid: " + expid);
-				System.out.println("fileid: " + fileId);
-				System.out.println("genomeRelease: " + genomeRelease);
-				System.out.println("author:" + author);
-
 
 				//Profile hardcoded since in case "rawtoprofile"
 				ArrayList<String> filepaths = dbac.process(fileId, "profile", filename, metadata, username, genomeRelease, expid);
 
 
+				//TODO Prints for checking what filepaths are given by database.
 				System.err.println("Filepath[0]: " + filepaths.get(0));
 				System.err.println("Filepath[1]: " + filepaths.get(1));
 
@@ -173,12 +171,12 @@ public class ProcessCommand extends Command {
 					System.out.println("Executed process");
 				} catch (InterruptedException e) {
 					// TODO Fix this
-					System.err.println("CATCH (IE) in ProcessCommand.Execute when running processHandler.executeProcess");
+					System.err.println("CATCH InterruptedException in ProcessCommand.Execute when running processHandler.executeProcess");
 					e.printStackTrace();
 					return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE);
 				} catch (IOException e) {
 					// TODO Fix this
-					System.err.println("CATCH (IO) in ProcessCommand.Execute when running processHandler.executeProcess");
+					System.err.println("CATCH IO exception in ProcessCommand.Execute when running processHandler.executeProcess");
 					e.printStackTrace();
 					return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE);
 				}
@@ -186,12 +184,11 @@ public class ProcessCommand extends Command {
 				break;
 			default:
 				System.err.println("Unknown process type in processcommand execute");
-				return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE);
-				//				break;
+				return new ProcessResponse(StatusCode.BAD_REQUEST);
 
 			}
 		} catch (SQLException e) {
-			System.err.println("Error in ProcessCommand execute:");
+			System.err.println("SQL Exception in ProcessCommand execute:");
 			e.printStackTrace();
 			return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE);
 		}
@@ -202,6 +199,7 @@ public class ProcessCommand extends Command {
 
 	/**
 	 * Set the username of the uploader wich will be added to the database annotation.
+	 *
 	 * @param username - the username of the uploader.
 	 */
 	public void setUsername(String username) {
@@ -209,6 +207,9 @@ public class ProcessCommand extends Command {
 
 	}
 
+	/**
+	 * Returns the process command fields as a formatted string.
+	 */
 	public String toString(){
 
 		return "Uploader of file: " + username + "\n" +
@@ -221,43 +222,4 @@ public class ProcessCommand extends Command {
 				"genomeRelease: " + genomeRelease + "\n" +
 				"author:" + author + "\n";
 	}
-
-	/*
-	public String getMetadata() {
-		return this.metadata;
-	}
-
-	public String[] getParameters() {
-		return this.parameters;
-	}
-
-	public String getGenomeRelease() {
-		return this.genomeRelease;
-	}
-
-	public String getProcessType() {
-		return this.processtype;
-	}
-
-	public void setProcessType(String processType) {
-		this.processtype = processType;
-
-	}
-
-	public String getUsername() {
-		return this.username;
-	}
-
-	public String getFilename() {
-		return this.filename;
-	}
-
-	public String getFilepath() {
-		return this.filepath;
-	}
-
-	public String getExpID() {
-		return this.expid;
-	}
-	 */
 }
