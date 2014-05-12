@@ -32,8 +32,8 @@ public class ClientDummy {
 	public static String url = "http://" + host + ":" + port;
 	public static Token token = null;
 
-	public static String expName = "huggaboy5";
-	public static String filename = "spluttfile66269";
+	public static String expName = "huggaboy7";
+	public static String filename = "spluttfile662693";
 
 
 	public static void main(String args[]) throws Exception {
@@ -42,7 +42,7 @@ public class ClientDummy {
 		//sendGetAnnotationInformation();
 		//sendAddFileToExperiment();
 		sendAddExperiment();
-		sendAddFileToExperiment();
+//		sendAddFileToExperiment();
 //		sendProcessing();
 //		sendAddFileToExperiment();
 		sendDeleteExperiment();

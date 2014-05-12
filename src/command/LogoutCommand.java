@@ -1,13 +1,10 @@
 package command;
 
 import authentication.Authenticate;
-import response.LoginResponse;
 import response.LogoutResponse;
 import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
-
-
 
 /**
  * Class used to represent a logout command.
@@ -17,11 +14,12 @@ import response.StatusCode;
  */
 public class LogoutCommand extends Command {
 
-
 	private String username;
 
 	public LogoutCommand(String username) {
+
 		this.username = username;
+
 	}
 
 	/**
@@ -29,12 +27,8 @@ public class LogoutCommand extends Command {
 	 */
 	@Override
 	public boolean validate() {
-
-		// TODO Auto-generated method stub
 		return true;
-
 	}
-
 
 	/**
 	 * Used to execute the logout command.
@@ -50,10 +44,6 @@ public class LogoutCommand extends Command {
 			System.out.println("USER ID NOT FOUND: " + id);
 			return 	new MinimalResponse(StatusCode.FILE_NOT_FOUND);
 		}
-
-		//Method not implemented, send appropriate response
-
-
 	}
 
 }

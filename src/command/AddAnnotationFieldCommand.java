@@ -55,16 +55,6 @@ public class AddAnnotationFieldCommand extends Command {
 	 */
 	@Override
 	public boolean validate() {
-
-		/* Restrictions on size on name? types?
-		 */
-		//Check if anything was not set.
-		/*
-		if(name == null || type == null || defaults == null || forced == null) {
-			return false;
-		}
-		*/
-		//Check if name is to long, no types exists.
 		if(name.length() > 20 || type.size() < 1 ) {
 			return false;
 		}
@@ -83,10 +73,10 @@ public class AddAnnotationFieldCommand extends Command {
 		Response rsp;
 		int addedAnnotations = 0;
 		int defaultValueIndex = 0;
-
+		DatabaseAccessor db = null;
 		try {
 			//Get database access.
-			DatabaseAccessor dbAccess = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
+			db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
 
 			for(int i = 0; i < type.size(); i++) {
 				if(type.get(i).equals(defaults)) {
@@ -97,29 +87,40 @@ public class AddAnnotationFieldCommand extends Command {
 
 			if(type.size() == 1 && type.get(0).equals("freetext")) {
 
-				addedAnnotations = dbAccess.addFreeTextAnnotation(name, defaults, forced);
+				addedAnnotations = db.addFreeTextAnnotation(name, defaults, forced);
 
 			} else {
 
 				//Add annotation field.
-				addedAnnotations = dbAccess.addDropDownAnnotation(name, type, defaultValueIndex, forced);
+				addedAnnotations = db.addDropDownAnnotation(name, type, defaultValueIndex, forced);
 
 			}
 
 			//Create response.
 			if(addedAnnotations != 0) {
-				rsp = new AddAnnotationFieldResponse(StatusCode.CREATED);
+				return new AddAnnotationFieldResponse(StatusCode.CREATED);
 			} else {
-				rsp = new MinimalResponse(400);
+				return new MinimalResponse(400);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			rsp = new MinimalResponse(400);
+			return new MinimalResponse(400);
+
 		} catch (IOException e) {
 			e.printStackTrace();
-			rsp = new MinimalResponse(400);
+			return new MinimalResponse(400);
+		} finally{
+
+			try {
+				db.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return new MinimalResponse(400);
+			}
+
 		}
-		return rsp;
+
 	}
 
 }

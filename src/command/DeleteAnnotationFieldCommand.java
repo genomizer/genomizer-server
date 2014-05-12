@@ -51,13 +51,9 @@ public class DeleteAnnotationFieldCommand extends Command {
 		int result = 0;
 
 		try {
-			db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
-			Map<String, Integer> currAnno = db.getAnnotations();
+			db = initDB();
 			//TODO: Add the label. API looks wierd currently.
 			for(DeleteAnnotationInfo da: deleteId) {
-//				if(currAnno.containsKey(da.getId())) {
-//					return new MinimalResponse(400);
-//				}
 				result = db.deleteAnnotation(da.getId());
 			}
 			db.close();
@@ -77,7 +73,6 @@ public class DeleteAnnotationFieldCommand extends Command {
 				return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
 			}
 		}
-		//Method not implemented, send appropriate response
-		return 	new MinimalResponse(StatusCode.NO_CONTENT);
+		return new MinimalResponse(StatusCode.BAD_REQUEST);
 	}
 }

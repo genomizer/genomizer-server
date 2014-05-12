@@ -32,7 +32,6 @@ public class DeleteExperimentCommand extends Command {
 		} else {
 			return true;
 		}
-
 	}
 
 	/**
@@ -43,9 +42,8 @@ public class DeleteExperimentCommand extends Command {
 		DatabaseAccessor db = null;
 
 		try {
-			db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
+			db = initDB();
 			int tup = db.deleteExperiment(this.header);
-			System.out.println(tup);
 		} catch (SQLException e) {
 			return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
 		} finally {
@@ -56,8 +54,7 @@ public class DeleteExperimentCommand extends Command {
 				return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
 			}
 		}
-
-		return new MinimalResponse(200);
+		return new MinimalResponse(StatusCode.OK);
 	}
 
 }
