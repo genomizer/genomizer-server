@@ -34,23 +34,14 @@ public class GetAnnotationInformationCommand extends Command {
 		Map<String, Integer> a = null;
 
 		try {
-			db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
+			db = initDB();
 			a = db.getAnnotations();
 			System.out.println("Got annotations.");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}finally{
-			try {
-				db.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
-			}
 		}
-		
-		
+
+
 		Iterator<String> keys = a.keySet().iterator();
 		ArrayList<String> annotation_names = new ArrayList<String>();
 		while(keys.hasNext()) {
@@ -69,8 +60,8 @@ public class GetAnnotationInformationCommand extends Command {
 
 				}
 			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
+				return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
 			}
 
 			AnnotationInformation annotation = new AnnotationInformation(0, annotation_names.get(i), values, true);
@@ -88,11 +79,11 @@ public class GetAnnotationInformationCommand extends Command {
 			annotations.get(i).setId(i);
 		}
 
-		/*for(int i = 0; i < annotations.size(); i++) {
-			System.out.println("\n" + annotations.get(i));
-
-		}*/
-
+		try {
+			db.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return new GetAnnotationInformationResponse(200, annotations);
 	}
 
@@ -104,7 +95,6 @@ public class GetAnnotationInformationCommand extends Command {
 
 			return arg0.getName().compareTo(arg1.getName());
 		}
-
 	}
 
 }

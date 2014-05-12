@@ -68,8 +68,7 @@ public class SearchForExperimentsCommand extends Command {
 		}
 
 		try {
-			System.out.println("anno:" + annotations);
-			db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
+			db = initDB();
 			searchResult = db.search(annotations);
 		} catch (SQLException e) {
 			return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
@@ -84,9 +83,7 @@ public class SearchForExperimentsCommand extends Command {
 				return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
 			}
 		}
-
 		SearchResponse response = new SearchResponse(searchResult);
-
 		return response;
 	}
 
