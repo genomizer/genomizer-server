@@ -22,16 +22,22 @@ import com.google.gson.*;
 
 public class ClientDummy {
 
-	public static Token token = null;
 	public static final int port = 7000;
+	public static String url = "http://localhost:"+ port;
+//	public static String url = "http://scratchy.cs.umu.se:"+ port;
+	public static Token token = null;
+	public static String expName = "hugotest17";
+
 
 	public static void main(String args[]) throws Exception {
 
 		sendLogin();
 		//sendGetAnnotationInformation();
 		//sendAddFileToExperiment();
-		//sendAddExperiment();
-		sendProcessing();
+		sendAddExperiment();
+		sendAddFileToExperiment();
+		sendDeleteExperiment();
+//		sendProcessing();
 		//sendLogout();
 	}
 
@@ -39,10 +45,7 @@ public class ClientDummy {
 
 	private static void sendLogin() throws Exception {
 
-		//String url = "http://scratchy.cs.umu.se:"+ port +"/login";
-		String url = "http://localhost:"+ port +"/login";
-
-		URL obj = new URL(url);
+		URL obj = new URL(url + "/login");
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
 		// optional default is GET
@@ -69,7 +72,6 @@ public class ClientDummy {
 		wr.flush();
 		wr.close();
 
-
 		int responseCode = con.getResponseCode();
 		System.out.println("\nSending 'GET' request to URL : " + url);
 		System.out.println("Response Code : " + responseCode);
@@ -88,17 +90,11 @@ public class ClientDummy {
 
 		Gson gson = new Gson();
 		token = gson.fromJson(response, Token.class);
-
-		System.out.println("TOKEN: " + token.getToken());
-
-
 	}
 
 	private static void sendGetAnnotationInformation() throws Exception {
-		//String url = "http://scratchy.cs.umu.se:"+port+"/annotation";
-		String url = "http://localhost:"+ port +"/annotation";
 
-		URL obj = new URL(url);
+		URL obj = new URL(url + "/annotation");
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
 		// optional default is GET
@@ -125,8 +121,6 @@ public class ClientDummy {
 
 		String response = responseBuffer.toString();
 
-
-
 		System.out.println("RESPONSE: " + response);
 
 	}
@@ -147,10 +141,7 @@ public class ClientDummy {
 		String genomeRelease = "hg38";
 		String author = "yuri";
 
-		String url = "http://localhost:"+ port +"/process";
-//		String url = "http://scratchy.cs.umu.se:7000/process";
-
-		URL obj = new URL(url);
+		URL obj = new URL(url + "/process");
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 		System.out.println("sendprocessing2");
 		// optional default is GET
@@ -207,10 +198,7 @@ public class ClientDummy {
 
 	private static void sendAddExperiment() throws Exception {
 
-		//String url = "http://scratchy.cs.umu.se:"+port+"/experiment";
-		String url = "http://localhost:"+ port +"/experiment";
-
-		URL obj = new URL(url);
+		URL obj = new URL(url + "/experiment");
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
 		// optional default is GET
@@ -219,23 +207,19 @@ public class ClientDummy {
 		//add request header
 		con.setRequestProperty("Authorization", token.getToken());
 		con.setRequestProperty("Content-Type", "application/json");
-		//con.setRequestProperty("Authorization", UUID.randomUUID().toString());
 		JsonObject ja=new JsonObject();
-//		JsonObject name=new JsonObject();
-		ja.addProperty("name", "Jonas2 2342324s2Experiment1");
-//		ja.add(name);
+		JsonObject name=new JsonObject();
+		ja.addProperty("name", expName);
 
-
-//		JsonObject createdBy=new JsonObject();
+		JsonObject createdBy=new JsonObject();
 		ja.addProperty("createdBy", "jonas");
-//		ja.add(createdBy);
 
 		JsonArray annotations = new JsonArray();
 
 		JsonObject ann1=new JsonObject();
-		//ann1.addProperty("id", 1);
-		ann1.addProperty("name", "pubmedId");
-		ann1.addProperty("value", "123");
+		ann1.addProperty("id", 1);
+		ann1.addProperty("name", "Development Stage");
+		ann1.addProperty("value", "aster");
 		annotations.add(ann1);
 
 		//JsonObject ann2=new JsonObject();
@@ -244,43 +228,43 @@ public class ClientDummy {
 		//ann2.addProperty("value", "raw");
 		//annotations.add(ann2);
 
-		JsonObject ann3=new JsonObject();
-		//ann3.addProperty("id", 3);
-		ann3.addProperty("name", "specie");
-		ann3.addProperty("value", "human");
-		annotations.add(ann3);
-
-
-		JsonObject ann4=new JsonObject();
-		//ann4.addProperty("id", 4);
-		ann4.addProperty("name", "genome release");
-		ann4.addProperty("value", "v.123");
-		annotations.add(ann4);
-
-
-		JsonObject ann5=new JsonObject();
-		//ann5.addProperty("id", 5);
-		ann5.addProperty("name", "cell line");
-		ann5.addProperty("value", "yes");
-		annotations.add(ann5);
-
-		JsonObject ann6=new JsonObject();
-		//ann6.addProperty("id", 6);
-		ann6.addProperty("name", "development stage");
-		ann6.addProperty("value", "larva");
-		annotations.add(ann6);
-
-		JsonObject ann7=new JsonObject();
-		//ann7.addProperty("id", 7);
-		ann7.addProperty("name", "sex");
-		ann7.addProperty("value", "male");
-		annotations.add(ann7);
-
-		JsonObject ann8=new JsonObject();
-		//ann8.addProperty("id", 8);
-		ann8.addProperty("name", "tissue");
-		ann8.addProperty("value", "eye");
-		annotations.add(ann8);
+//		JsonObject ann3=new JsonObject();
+//		ann3.addProperty("id", 3);
+//		ann3.addProperty("name", "specie");
+//		ann3.addProperty("value", "human");
+//		annotations.add(ann3);
+//
+//
+//		JsonObject ann4=new JsonObject();
+//		ann4.addProperty("id", 4);
+//		ann4.addProperty("name", "genome release");
+//		ann4.addProperty("value", "v.123");
+//		annotations.add(ann4);
+//
+//
+//		JsonObject ann5=new JsonObject();
+//		ann5.addProperty("id", 5);
+//		ann5.addProperty("name", "cell line");
+//		ann5.addProperty("value", "yes");
+//		annotations.add(ann5);
+//
+//		JsonObject ann6=new JsonObject();
+//		ann6.addProperty("id", 6);
+//		ann6.addProperty("name", "development stage");
+//		ann6.addProperty("value", "larva");
+//		annotations.add(ann6);
+//
+//		JsonObject ann7=new JsonObject();
+//		ann7.addProperty("id", 7);
+//		ann7.addProperty("name", "sex");
+//		ann7.addProperty("value", "male");
+//		annotations.add(ann7);
+//
+//		JsonObject ann8=new JsonObject();
+//		ann8.addProperty("id", 8);
+//		ann8.addProperty("name", "tissue");
+//		ann8.addProperty("value", "eye");
+//		annotations.add(ann8);
 
 		ja.add("annotations", annotations);
 
@@ -313,13 +297,42 @@ public class ClientDummy {
 
 	}
 
+	private static void sendDeleteExperiment() throws Exception {
+
+		URL obj = new URL(url + "/experiment/" + expName);
+		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+		// optional default is GET
+		con.setRequestMethod("DELETE");
+
+		//add request header
+		con.setRequestProperty("Authorization", token.getToken());
+		con.setRequestProperty("Content-Type", "application/json");
+
+		int responseCode = con.getResponseCode();
+		System.out.println("\nSending 'DELETE' request to URL : " + url + "/experiment/" + expName);
+		System.out.println("Response Code : " + responseCode);
+
+		BufferedReader in = new BufferedReader(
+		        new InputStreamReader(con.getInputStream()));
+		String inputLine;
+		StringBuffer responseBuffer = new StringBuffer();
+
+		while ((inputLine = in.readLine()) != null) {
+			responseBuffer.append(inputLine);
+		}
+		in.close();
+
+		String response = responseBuffer.toString();
+
+		System.out.println("RESPONSE: " + response);
+
+
+	}
+
 	private static void sendAddFileToExperiment() throws Exception {
 
-		//String url = "http://scratchy.cs.umu.se:"+port+"/file";
-		String url = "http://localhost:"+ port +"/file";
-		System.out.println("\nSending Add File To Experiment.");
-
-		URL obj = new URL(url);
+		URL obj = new URL(url + "/file");
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
 		// optional default is GET
@@ -331,8 +344,8 @@ public class ClientDummy {
 		//con.setRequestProperty("Authorization", UUID.randomUUID().toString());
 		JsonObject ja=new JsonObject();
 
-		ja.addProperty("experimentID", "Exp1");
-		ja.addProperty("fileName", "test1234561.txt");
+		ja.addProperty("experimentID", expName);
+		ja.addProperty("fileName", "hugofiltest.txt");
 		ja.addProperty("size", "1mb");
 		ja.addProperty("type", "raw");
 		ja.addProperty("fileType", "unknown");
