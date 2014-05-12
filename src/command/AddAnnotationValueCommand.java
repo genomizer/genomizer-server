@@ -43,19 +43,26 @@ public class AddAnnotationValueCommand extends Command {
 	@Override
 	public Response execute() {
 
-		DatabaseAccessor accessor = null;
+		DatabaseAccessor db = null;
 
 		try {
-			accessor = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
+			db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
 			System.out.println("Got annotations.");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return new MinimalResponse(StatusCode.NO_CONTENT);
+		} finally{
+			try {
+				db.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				return new MinimalResponse(StatusCode.NO_CONTENT);
+			}
 		}
 
 		//accessor.addDropDownAnnotation(label, choices, defaultValueIndex, required)
 		//Method not implemented, send appropriate response
-		return 	new MinimalResponse(StatusCode.NO_CONTENT);
+		return new MinimalResponse(StatusCode.NO_CONTENT);
 
 	}
 
