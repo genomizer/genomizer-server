@@ -151,7 +151,7 @@ public class CommandFactory {
 	 */
 	public Command createDeleteFileFromExperimentCommand(String json, String restful) {
 
-		return new DeleteFileFromExperimentCommand();
+		return new DeleteFileFromExperimentCommand(restful);
 
 	}
 
