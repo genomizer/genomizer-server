@@ -7,6 +7,9 @@ import java.net.HttpURLConnection;
 
 import com.google.gson.JsonObject;
 
+//TODO: ADD DELETE ANNOTATION ON METHODS ADDING THEM. TESTS CAN NOT
+//		BE CHAINED SINCE NAME BECOMES DUPLICATES.
+
 /**
  * Class used to test that the server works properly.
  *
@@ -14,6 +17,9 @@ import com.google.gson.JsonObject;
  * @version 1.0
  */
 public class ServerMassTestClass extends ServerAbstractTestClass {
+
+	private String AnnotationFieldFreetext = "com_AnnoFTTEST2";
+	private String AnnotationFieldNormal = "com_AnnoFDTEST2";
 
 	/**
 	 * Method used to test the login response code.
@@ -71,6 +77,93 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 
 	}
 
+	/**
+	 * Testcase used to test Login, add annotation field,
+	 * get annotation field and then logout.
+	 */
+	@Test
+	public void testChainAnnoLoginGetAddLogout() throws Exception {
+
+		//Create JSON login object.
+		JsonObject jj = new JsonObject();
+		jj.addProperty("username", "jonas");
+		jj.addProperty("password", "losenord");
+
+		int loginResponseCode = sendLogin(jj);
+
+		//Get connection and then add headers.
+		HttpURLConnection con = connect("GET", "http://scratchy.cs.umu.se:7000/annotation");
+		con.setRequestProperty("Content-Type", "application/json");
+		con.setRequestProperty("Authorization", token.getToken());
+
+		int getAnnotationResponseCode = con.getResponseCode();
+
+		//Get connection and then add headers.
+		con = connect("POST", "http://scratchy.cs.umu.se:7000/annotation");
+		con.setRequestProperty("Content-Type", "application/json");
+		con.setRequestProperty("Authorization", token.getToken());
+
+		String json_output = "{\"name\":\""
+				+ AnnotationFieldNormal
+				+ "\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
+
+		sendResponseString(con, json_output);
+
+		//Get AnnotationResponseCode
+		int addAnnotationResponseCode = con.getResponseCode();
+
+		int logoutResponseCode = sendLogout();
+
+		assertTrue(loginResponseCode == 200);
+		assertTrue(addAnnotationResponseCode == 201);
+		assertTrue(getAnnotationResponseCode == 200);
+		assertTrue(logoutResponseCode == 200);
+
+	}
+
+	/**
+	 * Testcase used to test Login, get annotation field,
+	 * add annotation field and then logout.
+	 */
+	@Test
+	public void testChainAnnoLoginAddGetLogout() throws Exception {
+
+		//Create JSON login object.
+		JsonObject jj = new JsonObject();
+		jj.addProperty("username", "jonas");
+		jj.addProperty("password", "losenord");
+
+		int loginResponseCode = sendLogin(jj);
+
+		//Get connection and then add headers.
+		HttpURLConnection con = connect("POST", "http://scratchy.cs.umu.se:7000/annotation");
+		con.setRequestProperty("Content-Type", "application/json");
+		con.setRequestProperty("Authorization", token.getToken());
+
+		String json_output = "{\"name\":\""
+				+ AnnotationFieldNormal
+				+ "\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
+
+		sendResponseString(con, json_output);
+
+		//Get AnnotationResponseCode
+		int addAnnotationResponseCode = con.getResponseCode();
+
+		//Get connection and then add headers.
+		con = connect("GET", "http://scratchy.cs.umu.se:7000/annotation");
+		con.setRequestProperty("Content-Type", "application/json");
+		con.setRequestProperty("Authorization", token.getToken());
+
+		int getAnnotationResponseCode = con.getResponseCode();
+
+		int logoutResponseCode = sendLogout();
+
+		assertTrue(loginResponseCode == 200);
+		assertTrue(addAnnotationResponseCode == 201);
+		assertTrue(getAnnotationResponseCode == 200);
+		assertTrue(logoutResponseCode == 200);
+
+	}
 
 	/*TODO: When all checks on password/names works properly,
 	 * 		make sure that this test works.
@@ -126,14 +219,17 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 		con.setRequestProperty("Content-Type", "application/json");
 		con.setRequestProperty("Authorization", token.getToken());
 
-		String json_output = "{\"name\":\"com_annofield_test\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
+		String json_output = "{\"name\":\""
+				+ AnnotationFieldNormal
+				+ "\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
 
 		sendResponseString(con, json_output);
 
 		//Get responsecode and logout.
 		int responseCode = con.getResponseCode();
 
-		sendLogout();
+		sendLogout();//TODO: Delete not implemented properly yet. API is wrong.
+
 
 		assertTrue(responseCode == 201);
 
@@ -193,7 +289,9 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 		con.setRequestProperty("Content-Type", "application/json");
 		con.setRequestProperty("Authorization", token.getToken());
 
-		String json_output = "{\"name\":\"com_freetext_test\",\"type\":[\"freetext\"],\"default\":\"q\",\"forced\":false}";
+		String json_output = "{\"name\":\""
+				+ AnnotationFieldFreetext
+				+ "\",\"type\":[\"freetext\"],\"default\":\"q\",\"forced\":false}";
 
 		sendResponseString(con, json_output);
 
