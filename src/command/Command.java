@@ -5,16 +5,7 @@ import java.sql.SQLException;
 import response.Response;
 import server.DatabaseSettings;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import database.DatabaseAccessor;
-
-//import com.google.gson.Gson;
-//import com.google.gson.GsonBuilder;
-
-//TODO: Make interface?
-//TODO: Fix comments.
 
 /**
  * Class used to represent a command in the software.
