@@ -9,6 +9,7 @@ import database.Experiment;
 import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
+import server.DatabaseSettings;
 
 /**
  * Class used to represent a remove experiment command.
@@ -39,14 +40,11 @@ public class DeleteExperimentCommand extends Command {
 	 */
 	public Response execute() {
 
-	    String username = "c5dv151_vt14";
-	    String password = "shielohh";
-	    String host = "postgres";
-	    String database = "c5dv151_vt14";
-	    DatabaseAccessor db = null;
 		try {
-			db = new DatabaseAccessor(username, password, host, database);
-			db.deleteExperiment(this.header);
+			DatabaseAccessor db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
+			System.out.println("deleting experiment");
+			int tup = db.deleteExperiment(this.header);
+			System.out.println(tup);
 		} catch (SQLException e) {
 			return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
 		}

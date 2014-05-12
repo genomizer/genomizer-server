@@ -38,11 +38,12 @@ public class CommandHandler {
 
 		//Get code from restful //TODO: add parser code....
 		Command myCom = createCommand(json, restful, username, cmdt);
-
+		System.out.println("rest: " + restful);
 
 		if (myCom.validate()) {
 			return myCom.execute();
 		} else {
+			System.out.println("not valid");
 			return new MinimalResponse(StatusCode.BAD_REQUEST);
 		}
 	}
