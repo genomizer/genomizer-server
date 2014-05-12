@@ -71,14 +71,11 @@ public class AddAnnotationFieldCommand extends Command {
 
 		DatabaseAccessor db = null;
 		Response rsp;
-		DatabaseAccessor dbAccess = null;
 		int addedAnnotations = 0;
 		int defaultValueIndex = 0;
 
 		try {
-			//Get database access.
-			dbAccess = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
-
+			db = initDB();
 			for(int i = 0; i < type.size(); i++) {
 				if(type.get(i).equals(defaults)) {
 					defaultValueIndex = i;
@@ -98,27 +95,16 @@ public class AddAnnotationFieldCommand extends Command {
 				rsp = new MinimalResponse(StatusCode.BAD_REQUEST);
 			}
 		} catch (SQLException e) {
-
 			rsp = new MinimalResponse(StatusCode.BAD_REQUEST);
-
 		} catch (IOException e) {
-
 			rsp = new MinimalResponse(StatusCode.BAD_REQUEST);
-
 		} finally {
-
 			try {
-
-				dbAccess.close();
-
+				db.close();
 			} catch (SQLException e) {
-
 				rsp = new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
-
 			}
-
 		}
-
 		return rsp;
 	}
 
