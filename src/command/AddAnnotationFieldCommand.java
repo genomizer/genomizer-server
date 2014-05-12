@@ -58,9 +58,11 @@ public class AddAnnotationFieldCommand extends Command {
 		/* Restrictions on size on name? types?
 		 */
 		//Check if anything was not set.
+		/*
 		if(name == null || type == null || defaults == null || forced == null) {
 			return false;
 		}
+		*/
 		//Check if name is to long, no types exists.
 		if(name.length() > 20 || type.size() < 1 ) {
 			return false;

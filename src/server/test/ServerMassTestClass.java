@@ -92,7 +92,7 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 		con.setRequestProperty("Content-Type", "application/json");
 		con.setRequestProperty("Authorization", token.getToken());
 
-		String json_output = "{\"name\":\"ABCDF\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
+		String json_output = "{\"name\":\"species100\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
 
 		con.setDoOutput(true);
 		DataOutputStream wr = new DataOutputStream(con.getOutputStream());
