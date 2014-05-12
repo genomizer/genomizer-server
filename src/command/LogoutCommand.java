@@ -1,6 +1,8 @@
 package command;
 
+import response.ErrorResponse;
 import response.Response;
+import response.StatusCode;
 
 /**
  * Class used to represent a logout command.
@@ -27,8 +29,8 @@ public class LogoutCommand extends Command {
 	@Override
 	public Response execute() {
 
-		// TODO Auto-generated method stub
-		return null;
+		//Method not implemented, send appropriate response
+		return 	new ErrorResponse(StatusCode.NO_CONTENT);
 
 	}
 

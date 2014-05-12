@@ -20,7 +20,7 @@ import com.google.gson.GsonBuilder;
 public abstract class Command {
 
 	//Used to get the header for the respons.
-	protected String header;
+	protected String[] header;
 
 	//Used to validate the class object.
 	public abstract boolean validate();
@@ -29,19 +29,19 @@ public abstract class Command {
 	public abstract Response execute();
 
 	//Method used to get the header.
-	public String getHeader() {
+	public String[] getHeader() {
 
 		return header;
 
 	}
 
 	//Method used to set header.
-	public void setHeader(String header) {
+	public void setHeader(String[] header) {
 
 		this.header = header;
 
 		//Remove this line later, just for testing.
-		tstPrintJSON();
+		//tstPrintJSON();
 
 	}
 

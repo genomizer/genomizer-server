@@ -1,8 +1,17 @@
 package command;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+
 import com.google.gson.annotations.Expose;
 
+import database.SearchResult;
+import databaseAccessor.DatabaseAccessor;
+
+import response.ErrorResponse;
 import response.Response;
+import response.SearchResponse;
+import response.StatusCode;
 
 /**
  * Class used to represent a command of the type Search.
@@ -16,9 +25,10 @@ public class SearchForExperimentsCommand extends Command {
 
 	/**
 	 * Empty constructor.
+	 * @param params
 	 */
-	public SearchForExperimentsCommand() {
-
+	public SearchForExperimentsCommand(String params) {
+		annotations = params;
 	}
 
 	/**
@@ -40,11 +50,25 @@ public class SearchForExperimentsCommand extends Command {
 	 */
 	@Override
 	public Response execute() {
+	    String username = "c5dv151_vt14";
+	    String password = "shielohh";
+	    String host = "postgres";
+	    String database = "c5dv151_vt14";
+	    DatabaseAccessor db = null;
+		try {
+			db = new DatabaseAccessor(username, password, host, database);
+		} catch (SQLException e) {
+			return new ErrorResponse(503);
+		}
+		SearchResult result = db.searchExperiment(annotations);
 
-		//SearchResult result = database.getsearchresult(annotations)
+		SearchResponse response = new SearchResponse();
 
-		// TODO Auto-generated method stub
-		return null;
+		//Method not implemented, send appropriate response
+		return 	new ErrorResponse(StatusCode.NO_CONTENT);
 	}
 
+	public String getAnnotations() {
+		return annotations;
+	}
 }

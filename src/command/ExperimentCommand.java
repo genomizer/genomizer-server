@@ -1,6 +1,8 @@
 package command;
 
+import response.ErrorResponse;
 import response.Response;
+import response.StatusCode;
 
 /**
  * Class used to represent a command handling experiments.
@@ -37,7 +39,7 @@ public class ExperimentCommand extends Command {
 
 		// TODO Auto-generated method stub
 
-		return null;
+		return 	new ErrorResponse(StatusCode.NO_CONTENT);
 
 	}
 

@@ -1,7 +1,9 @@
 package command;
 
 import response.AddAnnotationFieldResponse;
+import response.ErrorResponse;
 import response.Response;
+import response.StatusCode;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -57,7 +59,7 @@ public class AddAnnotationFieldCommand extends Command {
 
 		Response rsp;
 
-
+		// TODO: connect to database
 
 
 		//Need to get some kind of boolean as a response if success to add.
@@ -72,11 +74,12 @@ public class AddAnnotationFieldCommand extends Command {
 
 		} else {
 
-			rsp = new AddAnnotationFieldResponse(400);
+			rsp = new ErrorResponse(400);
 
 		}
 
-		return rsp;
+		//Method not implemented, send appropriate response
+		return 	new ErrorResponse(StatusCode.NO_CONTENT);
 
 	}
 

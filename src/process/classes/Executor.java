@@ -14,10 +14,11 @@ import java.util.StringTokenizer;
 public abstract class Executor {
 
 private final String FILEPATH = "resources/";
-	
+
+
 	/**
 	 * Used to execute a program like bowtie
-	 * 
+	 *
 	 * @param command
 	 * @return
 	 * @throws InterruptedException
@@ -29,10 +30,11 @@ private final String FILEPATH = "resources/";
 		command[0]=pathToExecutable.getAbsolutePath();
 		return executeCommand(command);
 	}
-	
+
+
 	/**
 	 * Used to execute a script
-	 * 
+	 *
 	 * @param command
 	 * @return
 	 * @throws InterruptedException
@@ -44,10 +46,16 @@ private final String FILEPATH = "resources/";
 		command[1]=pathToExecutable.getAbsolutePath();
 		return executeCommand(command);
 	}
-	
+
 	/**
 	 * Used to parse a string and make it into a String array
-	 * 
+	 *
+=======
+
+	/**
+	 * Used to parse a string and make it into a String array
+	 *
+>>>>>>> origin/development
 	 * @param procedureParameters
 	 * @return
 	 */
@@ -61,10 +69,11 @@ private final String FILEPATH = "resources/";
 		}
 		return temp;
 	}
-	
+
+
 	/**
 	 * Used to execute commands
-	 * 
+	 *
 	 * @param command
 	 * @return
 	 * @throws InterruptedException
@@ -93,7 +102,11 @@ private final String FILEPATH = "resources/";
 
 	/**
 	 * Used to execute shell command
-	 * 
+<<<<<<< HEAD
+	 *
+=======
+	 *
+>>>>>>> origin/development
 	 * @param command
 	 * @param dir
 	 * @param fileName
@@ -101,7 +114,8 @@ private final String FILEPATH = "resources/";
 	 * @throws InterruptedException
 	 * @throws IOException
 	 */
-	protected void executeShellCommand(String[] command, String dir, String fileName) throws InterruptedException, IOException{
+
+	protected String executeShellCommand(String[] command, String dir, String fileName) throws InterruptedException, IOException{
 		ProcessBuilder builder = new ProcessBuilder(command);
 
 		builder.directory( new File( FILEPATH ).getAbsoluteFile() );
@@ -111,6 +125,7 @@ private final String FILEPATH = "resources/";
 		Scanner s = new Scanner(process.getInputStream());
 		StringBuilder text = new StringBuilder();
 		File dirFile = new File(FILEPATH+dir);
+
 
 		if(!dirFile.exists()) {
 			dirFile.mkdirs();
@@ -130,10 +145,11 @@ private final String FILEPATH = "resources/";
 //		System.out.printf( "Process exited with result %d and output %s%n", result, text );
 		return text.toString();
 	}
-	
+
+
 	/**
 	 * Used to make a File object which represents a folder.
-	 * 
+	 *
 	 * @param dirName
 	 * @return
 	 */
@@ -142,10 +158,11 @@ private final String FILEPATH = "resources/";
 		return new File(dirName.substring(0, dirName.length()-1));
 
 	}
-	
+
+
 	/**
 	 * Deletes a folder and all its subfolders.
-	 * 
+	 *
 	 * @param dir
 	 * @return
 	 */
@@ -160,6 +177,24 @@ private final String FILEPATH = "resources/";
 			}
 		}
 		return dir.delete();
+	}
+
+	/**
+	 * Moves files from dirToFiles to dest.
+	 *
+	 * @param dirToFiles directory where files are
+	 * @param dest directory where files will be moved.
+	 */
+	protected void moveEndFiles(String dirToFiles, String dest) {
+		// sortedDir+"reads_gff/allnucs_sgr/smoothed/Step10/"
+		File[] filesInDir = new File("/" + dirToFiles).getAbsoluteFile()
+				.listFiles();
+		for (int i = 0; i < filesInDir.length; i++) {
+			if (!filesInDir[i].isDirectory()) {
+				if (filesInDir[i].renameTo(new File(dest
+						+ filesInDir[i].getName())));
+			}
+		}
 	}
 
 }

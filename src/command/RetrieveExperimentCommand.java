@@ -1,6 +1,8 @@
 package command;
 
+import response.ErrorResponse;
 import response.Response;
+import response.StatusCode;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -43,9 +45,8 @@ public class RetrieveExperimentCommand extends Command {
 	@Override
 	public Response execute() {
 
-		// TODO Auto-generated method stub
-		return null;
-
+		//Method not implemented, send appropriate response
+		return 	new ErrorResponse(StatusCode.NO_CONTENT);
 	}
 
 }

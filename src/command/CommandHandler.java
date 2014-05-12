@@ -2,9 +2,6 @@ package command;
 
 import response.Response;
 
-//TODO: Fix comments.
-//TODO: Check command types etc...
-
 /**
  * Should be used to handle and create different commands with
  * JSON and restful.
@@ -14,8 +11,7 @@ import response.Response;
  */
 public class CommandHandler {
 
-	//Threads
-
+	//TODO: Add threads?
 
 	private CommandFactory cmdFactory = new CommandFactory();
 
@@ -27,122 +23,144 @@ public class CommandHandler {
 	}
 
 	/**
-	 * Method that starts the actual handling of JSON and restful
-	 * and converts them into commands and runs them.
-	 * @param json
-	 * @param restful
-	 * @param cmdt
+	 * Method that starts the actual handling of JSON together
+	 * with the RESTful-header and converts them into commands
+	 * and runs them.
+	 * @param a json string.
+	 * @param a RESTful-header.
+	 * @param a enum that determines command type.
 	 */
-	public Response doStuff(String json, String restful, String uuid, CommandType cmdt) {	//TODO: Rename this method.
+	public Response processNewCommand(String json, String restful, String uuid, CommandType cmdt) {	//TODO: Rename this method.
 
 		//Get code from restful //TODO: add parser code....
-		Command myCom = createCommand(cmdt, json, restful);
+		Command myCom = createCommand(json, restful, cmdt);
 
-		//TODO: What kind of work? returns respons.
+		//TODO: Find out what type of work that needs to be done. (Slow? Fast?)
+		//Create a response to return.
 		Response rsp = myCom.execute();
 
-		//Return respons.
 		return rsp;
+
 	}
 
 	/**
-	 * Method used to create commands together with CommandFactory.
-	 * @param cmdt
-	 * @param json
-	 * @param restful
+	 * Method used to create command objects together with CommandFactory.
+	 * @param a json string.
+	 * @param a RESTful-header.
+	 * @param a enum that determines command type.
 	 * @return
 	 */
-	private Command createCommand(CommandType cmdt, String json, String restful) {
+	private Command createCommand(String json, String restful, CommandType cmdt) {
 
 		Command newCommand = null;
+		String[] parsedRest = parseRest(restful);
 
+		//TODO: Change to switch statement.
 		if(cmdt == CommandType.LOGIN_COMMAND) {
 
-			newCommand = cmdFactory.createLoginCommand(json, restful);
+			newCommand = cmdFactory.createLoginCommand(json, parsedRest);
 
 		} else if (cmdt == CommandType.LOGOUT_COMMAND) {
 
-			newCommand = cmdFactory.createLogoutCommand(restful);
+			newCommand = cmdFactory.createLogoutCommand(parsedRest);
 
 		} else if (cmdt == CommandType.RETRIEVE_EXPERIMENT_COMMAND) {
 
-			newCommand = cmdFactory.createRetrieveExperimentCommand(json, restful);
+			newCommand = cmdFactory.createRetrieveExperimentCommand(json, parsedRest);
 
 		} else if (cmdt == CommandType.ADD_EXPERIMENT_COMMAND) {
 
-			newCommand = null;
+			newCommand = cmdFactory.createAddExperimentCommand(json, parsedRest);
 
 		} else if (cmdt == CommandType.UPDATE_EXPERIMENT_COMMAND) {
 
-			newCommand = null;
+			newCommand = cmdFactory.createUpdateExperimentCommand(json, parsedRest);
 
 		} else if (cmdt == CommandType.REMOVE_EXPERIMENT_COMMAND) {
 
-			newCommand = null;
+			newCommand = cmdFactory.createRemoveExperimentCommand(json, parsedRest);
 
 		} else if (cmdt == CommandType.GET_FILE_FROM_EXPERIMENT_COMMAND) {
 
-			newCommand = cmdFactory.createGetFileFromExperimentCommand(json, restful);
+			newCommand = cmdFactory.createGetFileFromExperimentCommand(json, parsedRest);
 
 		} else if (cmdt == CommandType.ADD_FILE_TO_EXPERIMENT_COMMAND) {
 
-			newCommand = null;
+			newCommand = cmdFactory.createAddFileToExperimentCommand(json, parsedRest);
 
 		} else if (cmdt == CommandType.UPDATE_FILE_IN_EXPERIMENT_COMMAND) {
 
-			newCommand = null;
+			newCommand = cmdFactory.createUpdateFileInExperimentCommand(json, parsedRest);
 
 		} else if (cmdt == CommandType.DELETE_FILE_FROM_EXPERIMENT_COMMAND) {
 
-			newCommand = null;
+			newCommand = cmdFactory.createDeleteFileFromExperimentCommand(json, parsedRest);
 
 		} else if (cmdt == CommandType.SEARCH_FOR_EXPERIMENTS_COMMAND) {
 
-			newCommand = null;
-
-		} else if (cmdt == CommandType.CREATE_USER_COMMAND) {
-
-			newCommand = null;
+			newCommand = cmdFactory.createSearchForExperimentCommand(json, parsedRest);
 
 		} else if (cmdt == CommandType.UPDATE_USER_COMMAND) {
 
-			newCommand = null;
+			newCommand = cmdFactory.createUpdateUserCommand(json, parsedRest);
 
 		} else if (cmdt == CommandType.DELETE_USER_COMMAND) {
 
-			newCommand = null;
+			newCommand = cmdFactory.createDeleteUserCommand(json, parsedRest);
 
-		} else if (cmdt == CommandType.CONVERT_RAW_TO_PROFILE_COMMAND) {
+		} else if (cmdt == CommandType.PROCESS_COMMAND) {
 
-			newCommand = null;
+			newCommand = cmdFactory.createConvertRawToProfileCommand(json, parsedRest);
 
 		} else if (cmdt == CommandType.GET_ANNOTATION_INFORMATION_COMMAND) {
 
-			newCommand = null;
+			newCommand = cmdFactory.createGetAnnotationInformationCommand(json, parsedRest);
 
 		} else if (cmdt == CommandType.ADD_ANNOTATION_FIELD_COMMAND) {
 
-			newCommand = null;
+			newCommand = cmdFactory.createAddAnnotationFieldCommand(json, parsedRest);
 
 		} else if (cmdt == CommandType.ADD_ANNOTATION_VALUE_COMMAND) {
 
-			newCommand = null;
+			newCommand = cmdFactory.createAddAnnotationValueCommand(json, parsedRest);
 
 		} else if (cmdt == CommandType.REMOVE_ANNOTATION_FIELD_COMMAND) {
 
-			newCommand = null;
+			newCommand = cmdFactory.createRemoveAnnotationFieldCommand(json, parsedRest);
 
 		} else if (cmdt == CommandType.GET_ANNOTATION_PRIVILEGES_COMMAND) {
 
-			newCommand = null;
+			newCommand = cmdFactory.createGetAnnotationPrivilegesCommand(json, parsedRest);
 
 		} else if (cmdt == CommandType.UPDATE_ANNOTATION_PRIVILEGES_COMMAND) {
 
-			newCommand = null;
+			newCommand = cmdFactory.createUpdateAnnotationPrivilegesCommand(json, parsedRest);
 
 		}
 
 		return newCommand;
+
+	}
+
+	/**
+	 * Method used to split a RESTful-header into smaller parts
+	 * and return them in a String array.
+	 * @param RESTful-header
+	 * @return a String array with RESTful-header parts.
+	 */
+	public String[] parseRest(String restful) {
+
+		String[] split = restful.split("/");
+		String[] parsed = new String[split.length];
+
+		for(int i = 0; i < split.length-1; i++) {
+
+			parsed[i] = split[i+1];
+
+		}
+
+		return parsed;
+
 	}
 
 }

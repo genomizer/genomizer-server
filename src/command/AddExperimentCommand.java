@@ -1,5 +1,10 @@
 package command;
 
+import javax.xml.ws.Response;
+
+import response.ErrorResponse;
+import response.StatusCode;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -9,7 +14,7 @@ import com.google.gson.annotations.SerializedName;
  * @author tfy09jnn
  * @version 1.0
  */
-public class AddExperimentCommand {
+public class AddExperimentCommand extends Command {
 
 	@Expose
 	private String name;
@@ -27,6 +32,23 @@ public class AddExperimentCommand {
 	public AddExperimentCommand() {
 
 	}
+
+	@Override
+	public boolean validate() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public response.Response execute() {
+
+		//Method not implemented, send appropriate response
+		return 	new ErrorResponse(StatusCode.NO_CONTENT);
+	}
+
+
+
+
 
 
 }
