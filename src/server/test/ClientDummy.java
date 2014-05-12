@@ -23,10 +23,17 @@ import com.google.gson.*;
 public class ClientDummy {
 
 	public static final int port = 7000;
+
+
+	public static String host = "localhost";
+//	public static String host = "scratchy.cs.umu.se";
+
+
 	public static String url = "http://localhost:"+ port;
-//	public static String url = "http://scratchy.cs.umu.se:"+ port;
 	public static Token token = null;
-	public static String expName = "hugotest17";
+
+	public static String expName = "spluttexp6663";
+	public static String filename = "spluttfile6663";
 
 
 	public static void main(String args[]) throws Exception {
@@ -35,6 +42,8 @@ public class ClientDummy {
 		//sendGetAnnotationInformation();
 		//sendAddFileToExperiment();
 		sendAddExperiment();
+//		sendAddFileToExperiment();
+		sendProcessing();
 		sendAddFileToExperiment();
 		sendDeleteExperiment();
 //		sendProcessing();
@@ -45,7 +54,9 @@ public class ClientDummy {
 
 	private static void sendLogin() throws Exception {
 
-		URL obj = new URL(url + "/login");
+		String url = "http://" + host + ":" + port + "/login";
+		URL obj = new URL(url);
+
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
 		// optional default is GET
@@ -94,6 +105,11 @@ public class ClientDummy {
 
 	private static void sendGetAnnotationInformation() throws Exception {
 
+		String url = "http://" + host + ":" + port + "/annotation";
+//		String url = "http://scratchy.cs.umu.se:"+port+"/annotation";
+//		String url = "http://localhost:"+ port +"/annotation";
+
+
 		URL obj = new URL(url + "/annotation");
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
@@ -129,9 +145,9 @@ public class ClientDummy {
 
 		System.out.println("sendprocessing");
 		String username = "splutt";
-		String filename = "file666fffgg";
+//		String filename = filename;
 		String fileid = "1";
-		String expid = "Exp1";
+//		String expid = "Exp1";
 		String processtype = "rawtoprofile";
 		String parameters = "\"param1\"," +
 							"\"param2\"," +
@@ -141,8 +157,14 @@ public class ClientDummy {
 		String genomeRelease = "hg38";
 		String author = "yuri";
 
-		URL obj = new URL(url + "/process");
+
+//		String url = "http://localhost:"+ port +"/process";
+//		String url = "http://scratchy.cs.umu.se:7000/process";
+		String url = "http://" + host + ":" + port + "/process";
+		URL obj = new URL(url);
+
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
 		System.out.println("sendprocessing2");
 		// optional default is GET
 		con.setRequestMethod("PUT");
@@ -156,8 +178,8 @@ public class ClientDummy {
 
 		String json = "{" +
 				"\"filename\": \"" + filename + "\"," +
-				"\"fileid\": \"" + fileid + "\"," +
-				"\"expid\": \"" + expid + "\"," +
+				"\"fileId\": \"" + fileid + "\"," +
+				"\"expid\": \"" + expName + "\"," +
 				"\"processtype\": \"" + processtype + "\"," +
 				"\"parameters\": [" + parameters + "]," +
 				"\"metadata\": \"" + metadata + "\"," +
@@ -181,7 +203,9 @@ public class ClientDummy {
 		        new InputStreamReader(con.getInputStream()));
 		String inputLine;
 		StringBuffer responseBuffer = new StringBuffer();
+
 		System.out.println("sendprocessing6");
+
 		while ((inputLine = in.readLine()) != null) {
 			responseBuffer.append(inputLine);
 		}
@@ -197,6 +221,11 @@ public class ClientDummy {
 	}
 
 	private static void sendAddExperiment() throws Exception {
+
+//		String url = "http://scratchy.cs.umu.se:"+port+"/experiment";
+//		String url = "http://localhost:"+ port +"/experiment";
+		String url = "http://" + host + ":" + port + "/experiment";
+
 
 		URL obj = new URL(url + "/experiment");
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -332,7 +361,14 @@ public class ClientDummy {
 
 	private static void sendAddFileToExperiment() throws Exception {
 
-		URL obj = new URL(url + "/file");
+
+//		String url = "http://scratchy.cs.umu.se:"+port+"/file";
+//		String url = "http://localhost:"+ port +"/file";
+		String url = "http://" + host + ":" + port + "/file";
+		System.out.println("\nSending Add File To Experiment.");
+
+		URL obj = new URL(url);
+
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
 		// optional default is GET
@@ -387,7 +423,8 @@ public class ClientDummy {
 
 	private static void sendLogout() throws Exception {
 		//String url = "http://scratchy.cs.umu.se:"+port+"/login";
-		String url = "http://localhost:"+ port +"/login";
+//		String url = "http://localhost:"+ port +"/login";
+		String url = "http://" + host + ":" + port + "/login";
 
 		URL obj = new URL(url);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
