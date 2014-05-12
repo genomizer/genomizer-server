@@ -82,21 +82,19 @@ public class ConversionHandler {
 		switch(fileType){
 		case "wig":
 			typeConverter.bedToWig(outfileBed);
+			File file = new File(outfileBed);
+			file.delete();
 			break;
 		case "sgr":
 			typeConverter.bedToSgr(outfileBed);
+			File file = new File(outfileBed);
+			file.delete();
 			break;
-		case "gff3":
-			typeConverter.bedToGff3(outfileBed);
 		case "bed":
 			break;
 		default:
 			throw new IllegalArgumentException();
 		}
-
-		//delete the bedfile
-		File file = new File(outfileBed);
-		file.delete();
 
 		}
 	public String checkFileType(String filePath){
