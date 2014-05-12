@@ -1355,27 +1355,6 @@ public class DatabaseAccessor {
         return pathList;
     }
 
-    /**
-     * Method for getting all stored versions of genome Releases in the database
-     *
-     * @return ArrayList<String> genome versions.
-     * @throws SQLException
-     */
-    public ArrayList<String> getStoredGenomeVersions() throws SQLException {
-
-        ArrayList<String> allVersions = new ArrayList<String>();
-
-        String getGenVerQuery = "SELECT * FROM Genome_Release";
-        PreparedStatement ps = conn.prepareStatement(getGenVerQuery);
-
-        ResultSet res = ps.executeQuery();
-
-        while (res.next()) {
-            allVersions.add(res.getString("Version"));
-        }
-
-        return allVersions;
-    }
 
     /**
      * Add one genomerelease to the database.
