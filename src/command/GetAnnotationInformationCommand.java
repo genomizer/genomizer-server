@@ -13,7 +13,9 @@ import database.DatabaseAccessor;
 
 import response.AnnotationInformation;
 import response.GetAnnotationInformationResponse;
+import response.MinimalResponse;
 import response.Response;
+import response.StatusCode;
 import server.DatabaseSettings;
 
 public class GetAnnotationInformationCommand extends Command {
@@ -28,17 +30,27 @@ public class GetAnnotationInformationCommand extends Command {
 
 		ArrayList<AnnotationInformation> annotations = new ArrayList<AnnotationInformation>();
 
-		DatabaseAccessor accessor = null;
+		DatabaseAccessor db = null;
 		Map<String, Integer> a = null;
 
 		try {
-			accessor = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
-			a = accessor.getAnnotations();
+			db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
+			a = db.getAnnotations();
 			System.out.println("Got annotations.");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}finally{
+			try {
+				db.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
+			}
 		}
+		
+		
 		Iterator<String> keys = a.keySet().iterator();
 		ArrayList<String> annotation_names = new ArrayList<String>();
 		while(keys.hasNext()) {
@@ -48,11 +60,11 @@ public class GetAnnotationInformationCommand extends Command {
 		for(int i = 0; i < annotation_names.size(); i++) {
 			ArrayList<String> values = null;
 			try {
-				if(accessor.getAnnotationType(annotation_names.get(i)) == DatabaseAccessor.FREETEXT) {
+				if(db.getAnnotationType(annotation_names.get(i)) == DatabaseAccessor.FREETEXT) {
 					values = new ArrayList<String>();
 					values.add("freetext");
-				} else if(accessor.getAnnotationType(annotation_names.get(i)) == DatabaseAccessor.DROPDOWN) {
-					values = (ArrayList<String>) accessor.getChoices(annotation_names.get(i));
+				} else if(db.getAnnotationType(annotation_names.get(i)) == DatabaseAccessor.DROPDOWN) {
+					values = (ArrayList<String>) db.getChoices(annotation_names.get(i));
 				} else {
 
 				}
