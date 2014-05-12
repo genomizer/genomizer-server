@@ -90,7 +90,7 @@ public class AddDropDownValueTest {
 
     	int ress = 0;
     	try {
-			ress = addDropDownAnnotationValue(testLabel1, testDefValue1);
+			ress = dbac.addDropDownAnnotationValue(testLabel1, testDefValue1);
 		} catch (SQLException e) {
 		} catch (IOException e) {
 
@@ -103,7 +103,7 @@ public class AddDropDownValueTest {
     public void shouldThrowSQLException() {
     	boolean shouldBeTrue = false;
     	try {
-			addDropDownAnnotationValue(testLabel1, testChoices1.get(0));
+			dbac.addDropDownAnnotationValue(testLabel1, testChoices1.get(0));
 		} catch (SQLException e) {
 			shouldBeTrue = true;
 		} catch (IOException e) {
@@ -116,7 +116,7 @@ public class AddDropDownValueTest {
     public void shouldThrowIOException() {
     	boolean shouldBeTrue = false;
     	try {
-			addDropDownAnnotationValue(testLabel3, "something");
+			dbac.addDropDownAnnotationValue(testLabel3, "something");
 		} catch (SQLException e) {
 		} catch (IOException e) {
 			shouldBeTrue = true;
@@ -126,7 +126,9 @@ public class AddDropDownValueTest {
 
     /**
      * Method to add a value to a existing DropDown annotation.
-     *
+     * This method is not used in this test, it was used to contruct the method without
+     * writing it in the databaseaccessor class to avaoid merge problems with git.
+     * 
      * @param label, the label of the chosen DropDown annotation.
      * @param value, the value that will be added to the DropDown annotation.
      * @return, Integer, how many rows that were added to the database.

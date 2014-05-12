@@ -85,7 +85,7 @@ public class removeAnnotationValueTest {
     public void testRemoveDefaultValue() {
     	boolean shouldBeTrue = false;
     	try {
-			removeAnnotationValue(testLabel1, testDefValue1);
+			dbac.removeAnnotationValue(testLabel1, testDefValue1);
 		} catch (SQLException e) {
 			System.out.println("testRemovedefaultValue");
 		} catch (IOException e) {
@@ -97,7 +97,7 @@ public class removeAnnotationValueTest {
     @Test
     public void testRemoveAnnotationValue() {
     	try {
-			assertEquals(1, removeAnnotationValue(testLabel1, "Unknown"));
+			assertEquals(1, dbac.removeAnnotationValue(testLabel1, "Unknown"));
 		} catch (SQLException e) {
 			System.out.println("testRemoveAnnotationValue");
 		} catch (IOException e) {
@@ -108,7 +108,7 @@ public class removeAnnotationValueTest {
     @Test
     public void testRemoveNonExistentValue() {
     	try {
-			assertEquals(0, removeAnnotationValue(testLabel1, "Somethingthatdoesntexist"));
+			assertEquals(0, dbac.removeAnnotationValue(testLabel1, "Somethingthatdoesntexist"));
 		} catch (SQLException e) {
 			System.out.println("testRemoveNonExistentValue");
 		} catch (IOException e) {
@@ -120,7 +120,7 @@ public class removeAnnotationValueTest {
     public void testRemoveDefaultValue2() {
     	boolean shouldBeTrue = false;
     	try {
-			removeAnnotationValue(testLabel2, testDefValue2);
+			dbac.removeAnnotationValue(testLabel2, testDefValue2);
 		} catch (SQLException e) {
 			System.out.println("testRemovedefaultValue2");
 		} catch (IOException e) {
@@ -132,7 +132,7 @@ public class removeAnnotationValueTest {
     @Test
     public void testRemoveAnnotationValue2() {
     	try {
-			assertEquals(1, removeAnnotationValue(testLabel2, "Monkey"));
+			assertEquals(1, dbac.removeAnnotationValue(testLabel2, "Monkey"));
 		} catch (SQLException e) {
 			System.out.println("testRemoveAnnotationValue");
 		} catch (IOException e) {
@@ -143,7 +143,7 @@ public class removeAnnotationValueTest {
     @Test
     public void testRemoveNonExistentValue2() {
     	try {
-			assertEquals(0, removeAnnotationValue(testLabel2, "Somethingthatdoesntexist"));
+			assertEquals(0, dbac.removeAnnotationValue(testLabel2, "Somethingthatdoesntexist"));
 		} catch (SQLException e) {
 			System.out.println("testRemoveNonExistentValue");
 		} catch (IOException e) {
@@ -153,6 +153,8 @@ public class removeAnnotationValueTest {
 
     /**
      * Method to remove a given annotation of a dropdown- annotation.
+     * This method is not used in this test, it was used to contruct the method without
+     * writing it in the databaseaccessor class to avaoid merge problems with git.
      *
      * @param label, the label of the chosen annotation
      * @param the value of the chosen annotation.
