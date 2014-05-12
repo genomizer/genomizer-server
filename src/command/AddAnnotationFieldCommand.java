@@ -55,22 +55,11 @@ public class AddAnnotationFieldCommand extends Command {
 	 */
 	@Override
 	public boolean validate() {
-
-		/* Restrictions on size on name? types?
-		 */
-		//Check if anything was not set.
-		/*
-		if(name == null || type == null || defaults == null || forced == null) {
-			return false;
-		}
-		*/
 		//Check if name is to long, no types exists.
 		if(name.length() > 20 || type.size() < 1 ) {
 			return false;
 		}
-
 		return true;
-
 	}
 
 	/**
@@ -80,31 +69,24 @@ public class AddAnnotationFieldCommand extends Command {
 	@Override
 	public Response execute() {
 
+		DatabaseAccessor db = null;
 		Response rsp;
-		DatabaseAccessor dbAccess = null;
 		int addedAnnotations = 0;
 		int defaultValueIndex = 0;
 
 		try {
-			//Get database access.
-			dbAccess = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
-
+			db = initDB();
 			for(int i = 0; i < type.size(); i++) {
 				if(type.get(i).equals(defaults)) {
 					defaultValueIndex = i;
 					break;
 				}
 			}
-
 			if(type.size() == 1 && type.get(0).equals("freetext")) {
-
-				addedAnnotations = dbAccess.addFreeTextAnnotation(name, defaults, forced);
-
+				addedAnnotations = db.addFreeTextAnnotation(name, defaults, forced);
 			} else {
-
 				//Add annotation field.
-				addedAnnotations = dbAccess.addDropDownAnnotation(name, type, defaultValueIndex, forced);
-
+				addedAnnotations = db.addDropDownAnnotation(name, type, defaultValueIndex, forced);
 			}
 			//Create response.
 			if(addedAnnotations != 0) {
@@ -113,27 +95,16 @@ public class AddAnnotationFieldCommand extends Command {
 				rsp = new MinimalResponse(StatusCode.BAD_REQUEST);
 			}
 		} catch (SQLException e) {
-
 			rsp = new MinimalResponse(StatusCode.BAD_REQUEST);
-
 		} catch (IOException e) {
-
 			rsp = new MinimalResponse(StatusCode.BAD_REQUEST);
-
 		} finally {
-
 			try {
-
-				dbAccess.close();
-
+				db.close();
 			} catch (SQLException e) {
-
 				rsp = new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
-
 			}
-
 		}
-
 		return rsp;
 	}
 
