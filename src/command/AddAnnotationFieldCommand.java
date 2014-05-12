@@ -93,8 +93,18 @@ public class AddAnnotationFieldCommand extends Command {
 					break;
 				}
 			}
-			//Add annotation field.
-			addedAnnotations = dbAccess.addDropDownAnnotation(name, type, defaultValueIndex, forced);
+
+			if(type.size() == 1 && type.get(0).equals("freetext")) {
+
+				addedAnnotations = dbAccess.addFreeTextAnnotation(name, defaults, forced);
+
+			} else {
+
+				//Add annotation field.
+				addedAnnotations = dbAccess.addDropDownAnnotation(name, type, defaultValueIndex, forced);
+
+			}
+
 			//Create response.
 			if(addedAnnotations != 0) {
 				rsp = new AddAnnotationFieldResponse(StatusCode.CREATED);
