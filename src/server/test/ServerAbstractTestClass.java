@@ -21,10 +21,18 @@ public abstract class ServerAbstractTestClass {
 	//Token used to identify users.
 	protected Token token = null;
 
+	//Used together with add annotation field/freetext to change to unique names.
+	protected String AnnotationFieldFreetext = "com_AnnoFTTEST2";
+	protected String AnnotationFieldNormal = "com_AnnoFDTEST2";
+
+	//Server URL and port.
+	protected String port = "7000";
+	protected String serverURL = "http://scratchy.cs.umu.se:" + port;
+
 	/**
-	 * method used to set the token.
+	 * Method used to set the token.
 	 *
-	 * @param response
+	 * @param response from the server.
 	 */
 	public void setToken(String response) {
 
@@ -34,10 +42,11 @@ public abstract class ServerAbstractTestClass {
 	}
 
 	/**
-	 * Method used to send json.
+	 * Method used to send JSON.
+	 *
 	 * @param The connection to send to.
-	 * @param json_to_send
-	 * @throws IOException
+	 * @param json_to_send.
+	 * @throws IOException.
 	 */
 	public void sendResponseString(HttpURLConnection con, String json_to_send) throws IOException {
 
@@ -51,8 +60,9 @@ public abstract class ServerAbstractTestClass {
 
 	/**
 	 * Class used to get the response.
-	 * @param con
-	 * @return
+	 *
+	 * @param HTTP connection to get response from.
+	 * @return A string with the response.
 	 * @throws Exception
 	 */
 	public String getResponseString(HttpURLConnection con) throws Exception {
@@ -69,12 +79,12 @@ public abstract class ServerAbstractTestClass {
 
 		return responseBuffer.toString();
 	}
-
+	//Add request header
 	/**
 	 * Used to open a connection.
 	 *
 	 * @return the connection.
-	 * @throws Exception
+	 * @throws Exception.
 	 */
 	public HttpURLConnection connect(String reqMethod, String restful) throws Exception {
 
@@ -91,39 +101,23 @@ public abstract class ServerAbstractTestClass {
 	 * Used to handle the login attempt.
 	 *
 	 * @return integer representing the responseCode.
-	 * @throws Exception
+	 * @throws Exception.
 	 */
 	public int sendLogin(JsonObject jj) throws Exception {
 
-		//Get the connection.
-		HttpURLConnection con = connect("POST", "http://scratchy.cs.umu.se:7000/login");
-
-		//Add request header
+		//Get the connection and add request headers.
+		HttpURLConnection con = connect("POST", serverURL + "/login");
 		con.setRequestProperty("Content-Type", "application/json");
 
 		//Get JSON string.
 		String json_output = jj.toString();
 
 		//Write the JSON body.
-		con.setDoOutput(true);
-		DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-		wr.write(json_output.getBytes());
-		wr.flush();
-		wr.close();
+		sendResponseString(con, json_output);
 
 		int responseCode = con.getResponseCode();
 
-		BufferedReader in = new BufferedReader(
-		        new InputStreamReader(con.getInputStream()));
-		String inputLine;
-		StringBuffer responseBuffer = new StringBuffer();
-
-		while ((inputLine = in.readLine()) != null) {
-			responseBuffer.append(inputLine);
-		}
-		in.close();
-
-		String response = responseBuffer.toString();
+		String response =getResponseString(con);
 
 		Gson gson = new Gson();
 		token = gson.fromJson(response, Token.class);
@@ -136,14 +130,12 @@ public abstract class ServerAbstractTestClass {
 	 * Used to handle the logout attempt.
 	 *
 	 * @return integer representing the responseCode.
-	 * @throws Exception
+	 * @throws Exception.
 	 */
 	public int sendLogout() throws Exception {
 
-		//Get the connection.
-		HttpURLConnection con = connect("DELETE", "http://scratchy.cs.umu.se:7000/login");
-
-		//add request header
+		//Get the connection and add request headers.
+		HttpURLConnection con = connect("DELETE", serverURL + "/login");
 		con.setRequestProperty("Content-Type", "application/json");
 		con.setRequestProperty("Authorization", token.getToken());
 

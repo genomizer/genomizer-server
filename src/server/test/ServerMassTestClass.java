@@ -2,16 +2,17 @@ package server.test;
 
 import static org.junit.Assert.*;
 import org.junit.Test;
-
 import response.StatusCode;
-
 import java.net.HttpURLConnection;
 
 import com.google.gson.JsonObject;
 
-//TODO: ADD DELETE ANNOTATION ON METHODS ADDING THEM. TESTS CAN N200OT
-//		BE CHAINED SINCE NAME BECOMES DUPLICATES.
-
+/* TODO:	- Add delete annotation after each added one.
+ * 			- Implement more tests.
+ * 			- Add unimplemented tests.
+ * 			- Add login authorization tests when code is implemented.
+ * 			- Delete annotation test needs a rework, API is currently wrong.
+ */
 /**
  * Class used to test that the server works properly.
  *
@@ -20,12 +21,10 @@ import com.google.gson.JsonObject;
  */
 public class ServerMassTestClass extends ServerAbstractTestClass {
 
-	//These names must be unique.
-	private String AnnotationFieldFreetext = "com_AnnoFTTEST2";
-	private String AnnotationFieldNormal = "com_AnnoFDTEST2";
-
 	/**
 	 * Method used to test the login response code.
+	 *
+	 * @throws Exception
 	 */
 	@Test
 	public void testLoginResponseCode() throws Exception{
@@ -44,6 +43,8 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 
 	/**
 	 * Method used to test the logout response code.
+	 *
+	 * @throws Exception
 	 */
 	@Test
 	public void testLogoutResponseCode() throws Exception {
@@ -81,8 +82,10 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 	}
 
 	/**
-	 * Testcase used to test Login, add annotation field,
+	 * Test used to check Login, add annotation field,
 	 * get annotation field and then logout.
+	 *
+	 * @throws Exception
 	 */
 	@Test
 	public void testChainAnnoLoginGetAddLogout() throws Exception {
@@ -95,14 +98,14 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 		int loginResponseCode = sendLogin(jj);
 
 		//Get connection and then add headers.
-		HttpURLConnection con = connect("GET", "http://scratchy.cs.umu.se:7000/annotation");
+		HttpURLConnection con = connect("GET", serverURL + "/annotation");
 		con.setRequestProperty("Content-Type", "application/json");
 		con.setRequestProperty("Authorization", token.getToken());
 
 		int getAnnotationResponseCode = con.getResponseCode();
 
 		//Get connection and then add headers.
-		con = connect("POST", "http://scratchy.cs.umu.se:7000/annotation");
+		con = connect("POST", serverURL + "/annotation");
 		con.setRequestProperty("Content-Type", "application/json");
 		con.setRequestProperty("Authorization", token.getToken());
 
@@ -125,8 +128,10 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 	}
 
 	/**
-	 * Testcase used to test Login, get annotation field,
+	 * Test used to check Login, get annotation field,
 	 * add annotation field and then logout.
+	 *
+	 * @throws Exception
 	 */
 	@Test
 	public void testChainAnnoLoginAddGetLogout() throws Exception {
@@ -139,7 +144,7 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 		int loginResponseCode = sendLogin(jj);
 
 		//Get connection and then add headers.
-		HttpURLConnection con = connect("POST", "http://scratchy.cs.umu.se:7000/annotation");
+		HttpURLConnection con = connect("POST", serverURL + "/annotation");
 		con.setRequestProperty("Content-Type", "application/json");
 		con.setRequestProperty("Authorization", token.getToken());
 
@@ -153,7 +158,7 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 		int addAnnotationResponseCode = con.getResponseCode();
 
 		//Get connection and then add headers.
-		con = connect("GET", "http://scratchy.cs.umu.se:7000/annotation");
+		con = connect("GET", serverURL + "/annotation");
 		con.setRequestProperty("Content-Type", "application/json");
 		con.setRequestProperty("Authorization", token.getToken());
 
@@ -168,39 +173,37 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 
 	}
 
-	/*TODO: When all checks on password/names works properly,
-	 * 		make sure that this test works.
-	 */
 	/**
 	 * Used to test that a corrupted login attempt
 	 * does not pass.
 	 *
 	 * @throws Exception
 	 */
-
-	//@Test
-	//public void testCorruptedLogin() throws Exception {
+	@Test
+	public void testCorruptedLogin() throws Exception {
 		/* Note: This test should work, but the code that
 		 * 		 check the login is not implemented
 		 * 			2014-05-08, 15:00
 		 */
-
+		/*
 		//Create JSON corrupted login object.
-	//	JsonObject jj = new JsonObject();
-	//	jj.addProperty("username", "jonas");
-	//	jj.addProperty("password", "");
+		JsonObject jj = new JsonObject();
+		jj.addProperty("username", "jonas");
+		jj.addProperty("password", "");
 
-	//	int loginResponseCode = sendLogin(jj);
+		int loginResponseCode = sendLogin(jj);
 
-	//	assertFalse(loginResponseCode == 200);
+		assertFalse(loginResponseCode == StatusCode.OK);
+		*/
 
-	//}
+		fail("Not yet implemented.");
 
-	/*TODO: When deleteAnootationCommand works properly, remove the annotation
-	 *		that was added to be able to test continuously.
-	 */
+	}
+
 	/**
-	 * Used to test that a annotation field can be added.
+	 * Test used to check that a annotation field can be added.
+	 *
+	 * @throws Exception
 	 */
 	@Test
 	public void testAddAnnotationFieldCommand() throws Exception {
@@ -218,7 +221,7 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 		sendLogin(jj);
 
 		//Get connection and then add headers.
-		HttpURLConnection con = connect("POST", "http://scratchy.cs.umu.se:7000/annotation");
+		HttpURLConnection con = connect("POST", serverURL + "/annotation");
 		con.setRequestProperty("Content-Type", "application/json");
 		con.setRequestProperty("Authorization", token.getToken());
 
@@ -231,21 +234,20 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 		//Get responsecode and logout.
 		int responseCode = con.getResponseCode();
 
-		sendLogout();//TODO: Delete not implemented properly yet. API is wrong.
-
+		sendLogout();
 
 		assertTrue(responseCode == StatusCode.CREATED);
 
 	}
 
-	//TODO: Delete not implemented properly yet. API is wrong(2014-05-12).
 	/**
-	 * Testcase used to test that the delete annotation works.
+	 * Test used to check that the delete annotation works.
+	 *
+	 * @throws Exception
 	 */
-	/*
 	@Test
-	public void testDeleteAnnotationFieldCommand() {
-
+	public void testDeleteAnnotationFieldCommand() throws Exception {
+		/*
 		//Create JSON login object.
 		JsonObject jj = new JsonObject();
 		jj.addProperty("username", "jonas");
@@ -254,7 +256,7 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 		sendLogin(jj);
 
 		//Get connection and then add headers.
-		HttpURLConnection con = connect("DELETE", "http://scratchy.cs.umu.se:7000/annotation");
+		HttpURLConnection con = connect("DELETE", serverURL + "/annotation");
 		con.setRequestProperty("Content-Type", "application/json");
 		con.setRequestProperty("Authorization", token.getToken());
 
@@ -263,13 +265,14 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 		sendLogout();
 
 		assertTrue(responseCode == StatusCode.CREATED);
-
+		*/
+		fail("Not yet implemented.");
 	}
-	*/
 
 	/**
-	 * Testcase used to check that adding annotation freetext
+	 * Test used to check that adding annotation freetext
 	 * works properly.
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -288,7 +291,7 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 		sendLogin(jj);
 
 		//Get connection and then add headers.
-		HttpURLConnection con = connect("POST", "http://scratchy.cs.umu.se:7000/annotation");
+		HttpURLConnection con = connect("POST", serverURL + "/annotation");
 		con.setRequestProperty("Content-Type", "application/json");
 		con.setRequestProperty("Authorization", token.getToken());
 
@@ -308,11 +311,10 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 	}
 
 	/**
-	 * Used to test that get annotation information works.
+	 * Test used to check that get annotation information works.
 	 *
 	 * @throws Exception
 	 */
-
 	@Test
 	public void testGetAnnotationInformationCommand() throws Exception {
 
@@ -324,7 +326,7 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 		sendLogin(jj);
 
 		//Get connection and then add headers.
-		HttpURLConnection con = connect("GET", "http://scratchy.cs.umu.se:7000/annotation");
+		HttpURLConnection con = connect("GET", serverURL + "/annotation");
 		con.setRequestProperty("Content-Type", "application/json");
 		con.setRequestProperty("Authorization", token.getToken());
 
@@ -342,35 +344,33 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 	 *
 	 * @throws Exception
 	 */
-
-	//@Test
-	//public void testCorruptedGetAnnotationInformationCommand() throws Exception {
+	@Test
+	public void testCorruptedGetAnnotationInformationCommand() throws Exception {
 		/* Note: Not tested. Check what the server should respond if getting
 		 * 		 a wierd request of this kind.
 		 */
+		/*
+		Create JSON login object.
+		JsonObject jj = new JsonObject();
+		jj.addProperty("username", "jonas");
+		jj.addProperty("password", "losenord");
 
-		//Create JSON login object.
-	//	JsonObject jj = new JsonObject();
-	//	jj.addProperty("username", "jonas");
-	//	jj.addProperty("password", "losenord");
-
-	//	sendLogin(jj);
+		sendLogin(jj);
 
 		//Get connection and then add headers. (Added /corrupted)
-	//	HttpURLConnection con = connect("GET", "http://scratchy.cs.umu.se:7000/corrupted");
-	//	con.setRequestProperty("Content-Type", "application/json");
-	//	con.setRequestProperty("Authorization", token.getToken());
+		HttpURLConnection con = connect("GET", serverURL + "/corrupted");
+		con.setRequestProperty("Content-Type", "application/json");
+		con.setRequestProperty("Authorization", token.getToken());
 
-	//	int responseCode = con.getResponseCode();
+		int responseCode = con.getResponseCode();
 
-	//	sendLogout();
+		sendLogout();
 
-	//	assertTrue(responseCode == 204);
+		assertTrue(responseCode == 204);
 
-	//}
+		*/
+		fail("Not yet implemented.");
+
+	}
 
 }
-
-
-
-
