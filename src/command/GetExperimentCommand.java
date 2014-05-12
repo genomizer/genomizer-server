@@ -59,6 +59,13 @@ public class GetExperimentCommand extends Command {
 			exp = db.getExperiment(this.header);
 		} catch (SQLException e) {
 			return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
+		} finally{
+			try {
+				db.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
+			}
 		}
 
 		return new GetExperimentResponse(getInfo(exp), exp.getAnnotations(), exp.getFiles(), StatusCode.OK);
