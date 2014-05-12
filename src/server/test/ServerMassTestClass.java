@@ -18,6 +18,7 @@ import com.google.gson.JsonObject;
  */
 public class ServerMassTestClass extends ServerAbstractTestClass {
 
+	//These names must be unique.
 	private String AnnotationFieldFreetext = "com_AnnoFTTEST2";
 	private String AnnotationFieldNormal = "com_AnnoFDTEST2";
 
