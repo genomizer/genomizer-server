@@ -22,8 +22,8 @@ public abstract class ServerAbstractTestClass {
 	protected Token token = null;
 
 	//Used together with add annotation field/freetext to change to unique names.
-	protected String AnnotationFieldFreetext = "com_AnnoFTTEST2";
-	protected String AnnotationFieldNormal = "com_AnnoFDTEST2";
+	protected String AnnotationFieldFreetext = "com_AnnoFTTEST9";
+	protected String AnnotationFieldNormal = "com_AnnoFDTEST14";
 
 	//Server URL and port.
 	protected String port = "7000";

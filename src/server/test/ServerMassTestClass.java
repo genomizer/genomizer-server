@@ -81,14 +81,136 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 
 	}
 
+	//TODO: Check this test later to make sure it works properly.
 	/**
-	 * Test used to check Login, add annotation field,
-	 * get annotation field and then logout.
+	 * Test used to check if an added annotation freetext exists
+	 * when the server has responded.
 	 *
 	 * @throws Exception
 	 */
 	@Test
-	public void testChainAnnoLoginGetAddLogout() throws Exception {
+	public void testAnnotationFreetextAddAndExists() throws Exception {
+
+		//Create JSON login object.
+		JsonObject jj = new JsonObject();
+		jj.addProperty("username", "jonas");
+		jj.addProperty("password", "losenord");
+
+		sendLogin(jj);
+
+		//Get connection and then add headers.
+		HttpURLConnection con = connect("POST", serverURL + "/annotation");
+		con.setRequestProperty("Content-Type", "application/json");
+		con.setRequestProperty("Authorization", token.getToken());
+
+		String json_output = "{\"name\":\""
+				+ "aaaaaa567"
+				+ "\",\"type\":[\"freetext\"],\"default\":\"q\",\"forced\":true}";
+
+		sendResponseString(con, json_output);
+
+		//Get connection and then add headers.
+		con = connect("GET", serverURL + "/annotation");
+		con.setRequestProperty("Content-Type", "application/json");
+		con.setRequestProperty("Authorization", token.getToken());
+
+		String response = getResponseString(con);
+		System.out.println(response);
+		String responseChecker = "\"name\":\""
+				+ "aaaaaa56"
+				+ "\",\"values\":[\"freetext\"],\"forced\":true";
+		System.out.println(responseChecker);
+		boolean wasAdded = response.contains(responseChecker);
+
+		sendLogout();
+
+		assertTrue(wasAdded);
+
+	}
+
+	@Test
+	public void testContains() throws Exception {
+
+		//Create JSON login object.
+		JsonObject jj = new JsonObject();
+		jj.addProperty("username", "jonas");
+		jj.addProperty("password", "losenord");
+
+		sendLogin(jj);
+		//Get connection and then add headers.
+		HttpURLConnection con = connect("GET", serverURL + "/annotation");
+		con.setRequestProperty("Content-Type", "application/json");
+		con.setRequestProperty("Authorization", token.getToken());
+
+		String response = getResponseString(con);
+		System.out.println(response);
+		String responseChecker = "\"name\":\""
+				+ "ABC996"
+				+ "\",\"values\":[\"freetext\"],\"forced\":true";
+		System.out.println(responseChecker);
+		boolean wasAdded = response.contains(responseChecker);
+
+		sendLogout();
+
+		assertTrue(wasAdded);
+
+	}
+
+
+	/**
+	 * Test used to check if an added annotation field exists
+	 * when the server has responded.
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void testAnnotationFieldAddAndExists() throws Exception {
+
+		//Create JSON login object.
+		JsonObject jj = new JsonObject();
+		jj.addProperty("username", "jonas");
+		jj.addProperty("password", "losenord");
+
+		sendLogin(jj);
+
+		//Add the annotation.
+		//Get connection and then add headers.
+		HttpURLConnection con = connect("POST", serverURL + "/annotation");
+		con.setRequestProperty("Content-Type", "application/json");
+		con.setRequestProperty("Authorization", token.getToken());
+
+		String json_output = "{\"name\":\""
+				+ AnnotationFieldNormal
+				+ "\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
+
+		sendResponseString(con, json_output);
+
+		//Get connection and then add headers.
+		con = connect("GET", serverURL + "/annotation");
+		con.setRequestProperty("Content-Type", "application/json");
+		con.setRequestProperty("Authorization", token.getToken());
+
+		String response = getResponseString(con);
+		String responseChecker = "\"name\":\""
+				+ AnnotationFieldNormal
+				+ "\",\"values\":[\"fly\",\"rat\",\"human\"],\"forced\":true";
+		boolean wasAdded = response.contains(responseChecker);
+
+		sendLogout();
+
+		assertTrue(wasAdded);
+
+	}
+
+	/**
+	 * Test used to check Login, add annotation field,
+	 * get annotation field and then logout.
+	 * Here the codes are checked.
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void testChainStatusCodeAnnoLoginGetAddLogout() throws Exception {
 
 		//Create JSON login object.
 		JsonObject jj = new JsonObject();
@@ -130,11 +252,12 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 	/**
 	 * Test used to check Login, get annotation field,
 	 * add annotation field and then logout.
+	 * Here the codes are checked.
 	 *
 	 * @throws Exception
 	 */
 	@Test
-	public void testChainAnnoLoginAddGetLogout() throws Exception {
+	public void testChainStatusCodeAnnoLoginAddGetLogout() throws Exception {
 
 		//Create JSON login object.
 		JsonObject jj = new JsonObject();
@@ -206,7 +329,7 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 	 * @throws Exception
 	 */
 	@Test
-	public void testAddAnnotationFieldCommand() throws Exception {
+	public void testStatusCodeAddAnnotationFieldCommand() throws Exception {
 		/* Note: If the annotation field is added already, this test will not
 		 * 		 currently pass. Change the json_output name to something else
 		 * 		 in order to get it to work.remove the annotation
@@ -276,7 +399,7 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 	 * @throws Exception
 	 */
 	@Test
-	public void testAddAnnotatinFieldFreeText() throws Exception {
+	public void testStatusCodeAddAnnotatinFieldFreeText() throws Exception {
 		/* Note: If the annotation freetext is added already, this test will not
 		 * 		 currently pass. Change the json_output name to something else
 		 * 		 in order to get it to work.remove the annotation
