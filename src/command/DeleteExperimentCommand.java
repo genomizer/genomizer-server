@@ -40,13 +40,21 @@ public class DeleteExperimentCommand extends Command {
 	 */
 	public Response execute() {
 
+		DatabaseAccessor db = null;
+
 		try {
-			DatabaseAccessor db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
-			System.out.println("deleting experiment");
+			db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
 			int tup = db.deleteExperiment(this.header);
 			System.out.println(tup);
 		} catch (SQLException e) {
 			return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
+		} finally {
+			try {
+				db.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
+			}
 		}
 
 		return new MinimalResponse(200);

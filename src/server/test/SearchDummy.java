@@ -78,7 +78,7 @@ public class SearchDummy {
 
 	private static void sendSearchRequest() throws Exception {
 
-		String query = URLEncoder.encode("hugotest11[ExpID]", "UTF-8");
+		String query = URLEncoder.encode("Exp1[ExpID]", "UTF-8");
 //		String url = "http://scratchy.cs.umu.se:7000/search/?annotation=" + query;
 		String url = "http://localhost:7000/search/?annotations=" + query;
 

@@ -76,6 +76,13 @@ public class SearchForExperimentsCommand extends Command {
 		} catch (IOException e) {
 			e.printStackTrace();
 			return new MinimalResponse(StatusCode.BAD_REQUEST);
+		} finally {
+			try {
+				db.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
+			}
 		}
 
 		SearchResponse response = new SearchResponse(searchResult);

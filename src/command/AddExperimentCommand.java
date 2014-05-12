@@ -50,9 +50,10 @@ public class AddExperimentCommand extends Command {
 
 	@Override
 	public response.Response execute() {
+		DatabaseAccessor db;
 		try {
 			System.out.println("execute add exp");
-			DatabaseAccessor db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
+			db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
 			System.out.println("NAME: " + name);
 			db.addExperiment(name);
 			System.out.println("added experiment name...");
@@ -61,6 +62,7 @@ public class AddExperimentCommand extends Command {
 				db.annotateExperiment(name, annotation.getName(), annotation.getValue());
 				System.out.println("added annotation" + annotation.getName());
 			}
+			db.close();
 			return new MinimalResponse(StatusCode.CREATED);
 
 		} catch (SQLException e) {
