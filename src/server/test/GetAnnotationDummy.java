@@ -20,8 +20,8 @@ public class GetAnnotationDummy {
 
 	private static void sendLogin() throws Exception {
 
-//		String url = "http://scratchy.cs.umu.se:7000/login";
-		String url = "http://localhost:7001/login";
+		String url = "http://scratchy.cs.umu.se:7000/login";
+//		String url = "http://localhost:7001/login";
 
 		URL obj = new URL(url);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -77,8 +77,8 @@ public class GetAnnotationDummy {
 
 	private static void sendGetAnnotationRequest() throws Exception {
 
-//		String url = "http://scratchy.cs.umu.se:7000/annotation";
-		String url = "http://localhost:7001/annotation";
+		String url = "http://scratchy.cs.umu.se:7000/annotation";
+//		String url = "http://localhost:7001/annotation";
 
 		System.out.println(URLEncoder.encode(url, "UTF-8"));
 

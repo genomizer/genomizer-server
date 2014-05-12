@@ -2,6 +2,7 @@ package server.test;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -29,6 +30,22 @@ public abstract class ServerAbstractTestClass {
 
 		Gson gson = new Gson();
 		token = gson.fromJson(response, Token.class);
+
+	}
+
+	/**
+	 * Method used to send json.
+	 * @param The connection to send to.
+	 * @param json_to_send
+	 * @throws IOException
+	 */
+	public void sendResponseString(HttpURLConnection con, String json_to_send) throws IOException {
+
+		con.setDoOutput(true);
+		DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+		wr.write(json_to_send.getBytes());
+		wr.flush();
+		wr.close();
 
 	}
 

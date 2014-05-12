@@ -19,6 +19,7 @@ import database.DatabaseAccessor;
  *		 Test class vs the database.
  *		 Make JUnit test cases.
  *		 Add some more validation.
+ *		 REFACTOR CODE.
  */
 
 /**
