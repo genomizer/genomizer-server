@@ -188,7 +188,6 @@ public class Doorman {
 		} else {
 			System.out.println("FOUND LOGIN COMMAND.");
 		}
-		System.out.println("STarting scanner in exchange");
 		while(scanner.hasNext()) {
 			body = body.concat(" " + scanner.next());
 		}
@@ -201,10 +200,7 @@ public class Doorman {
 		} catch(Exception e ) {
 			e.printStackTrace();
 		}
-
-		System.out.println("BODY: " + body);
 		System.out.println("BEFORE PROCESS COMMAND...");
-
 		try {
 			response = commandHandler.processNewCommand(body, exchange.getRequestURI().toString(), username, type);
 		} catch(Exception e ) {
@@ -236,7 +232,6 @@ public class Doorman {
 			exchange.sendResponseHeaders(response.getCode(), body.getBytes().length);
 
 			OutputStream os = exchange.getResponseBody();
-			System.out.println("BODY_DOORMAN PRINT: " + body);
 			os.write(body.getBytes());
 			os.flush();
 			os.close();
