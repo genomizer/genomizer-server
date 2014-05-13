@@ -7,8 +7,10 @@ import com.google.gson.JsonObject;
 
 /* TODO:	- Add delete annotation after each added one.
  * 			- Add login authorization tests when code is implemented.
- *  		- Implement more tests.
  *  		- Make unimplemented tests work.
+ *  		- Implement more tests.
+ *  			- Login that sends no password in JSON.
+ *  			- Login that sends no username in JSON.
  */
 /**
  * Class used to test that login and logout works

@@ -8,8 +8,8 @@ import java.net.HttpURLConnection;
 import com.google.gson.JsonObject;
 
 /* TODO:	- Add delete annotation after each added one.
- * 			- Implement more tests.
  * 			- Add unimplemented tests.
+ * 			- Implement more tests.
  */
 /**
  * Class used to test that the server works properly when
@@ -20,6 +20,11 @@ import com.google.gson.JsonObject;
  */
 public class ServerChainTestClass extends ServerAbstractTestClass {
 
+	/* User story:	1. User logs in.
+	 * 				2. User checks available annotations.
+	 * 				3. User decides to add a new annotation field.
+	 * 				4. User logs out.
+	 */
 	/**
 	 * Test used to check Login, add annotation field,
 	 * get annotation field and then logout.
@@ -67,6 +72,11 @@ public class ServerChainTestClass extends ServerAbstractTestClass {
 
 	}
 
+	/* User story:	1. User logs in.
+	 * 				2. User decides to add a new annotation Field.
+	 * 				3. User check that the annotation field is added.
+	 * 				4. User logs out.
+	 */
 	/**
 	 * Test used to check Login, get annotation field,
 	 * add annotation field and then logout.
