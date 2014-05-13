@@ -1,85 +1,28 @@
 package server.test;
 
 import static org.junit.Assert.*;
-import org.junit.Test;
-import response.StatusCode;
+
 import java.net.HttpURLConnection;
+
+import org.junit.Test;
+
+import response.StatusCode;
 
 import com.google.gson.JsonObject;
 
 /* TODO:	- Add delete annotation after each added one.
- * 			- Implement more tests.
- * 			- Add unimplemented tests.
- * 			- Add login authorization tests when code is implemented.
- * 			- Delete annotation test needs a rework, API is currently wrong.
+ *  		- Implement more tests.
+ *  		- Make unimplemented tests work.
+ *  		- Delete annotation test needs a rework, API is currently wrong.
  */
 /**
- * Class used to test that the server works properly.
+ * Class used to test that the annotation handling works
+ * properly with the server.
  *
  * @author tfy09jnn
  * @version 1.0
  */
-public class ServerMassTestClass extends ServerAbstractTestClass {
-
-	/**
-	 * Method used to test the login response code.
-	 *
-	 * @throws Exception
-	 */
-	@Test
-	public void testLoginResponseCode() throws Exception{
-
-		//Create JSON login object.
-		JsonObject jj = new JsonObject();
-		jj.addProperty("username", "jonas");
-		jj.addProperty("password", "losenord");
-
-		int loginResponseCode = sendLogin(jj);
-		sendLogout();
-
-		assertEquals(loginResponseCode, StatusCode.OK);
-
-	}
-
-	/**
-	 * Method used to test the logout response code.
-	 *
-	 * @throws Exception
-	 */
-	@Test
-	public void testLogoutResponseCode() throws Exception {
-
-		//Create JSON login object.
-		JsonObject jj = new JsonObject();
-		jj.addProperty("username", "jonas");
-		jj.addProperty("password", "losenord");
-
-		sendLogin(jj);
-		int logoutResponseCode = sendLogout();
-
-		assertEquals(logoutResponseCode, StatusCode.OK);
-
-	}
-
-	/**
-	 * Test case for login and logout from the server.
-	 *
-	 * @throws Exception
-	 */
-	@Test
-	public void testLoginLogoutTokenNotNull() throws Exception {
-
-		//Create JSON login object.
-		JsonObject jj = new JsonObject();
-		jj.addProperty("username", "jonas");
-		jj.addProperty("password", "losenord");
-
-		sendLogin(jj);
-		sendLogout();
-
-		assertNotNull(token);
-
-	}
+public class ServerAnnotationTest extends ServerAbstractTestClass {
 
 	//TODO: Check this test later to make sure it works properly.
 	/**
@@ -128,35 +71,6 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 
 	}
 
-	@Test
-	public void testContains() throws Exception {
-
-		//Create JSON login object.
-		JsonObject jj = new JsonObject();
-		jj.addProperty("username", "jonas");
-		jj.addProperty("password", "losenord");
-
-		sendLogin(jj);
-		//Get connection and then add headers.
-		HttpURLConnection con = connect("GET", serverURL + "/annotation");
-		con.setRequestProperty("Content-Type", "application/json");
-		con.setRequestProperty("Authorization", token.getToken());
-
-		String response = getResponseString(con);
-		System.out.println(response);
-		String responseChecker = "\"name\":\""
-				+ "ABC996"
-				+ "\",\"values\":[\"freetext\"],\"forced\":true";
-		System.out.println(responseChecker);
-		boolean wasAdded = response.contains(responseChecker);
-
-		sendLogout();
-
-		assertTrue(wasAdded);
-
-	}
-
-
 	/**
 	 * Test used to check if an added annotation field exists
 	 * when the server has responded.
@@ -203,127 +117,6 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 	}
 
 	/**
-	 * Test used to check Login, add annotation field,
-	 * get annotation field and then logout.
-	 * Here the codes are checked.
-	 *
-	 * @throws Exception
-	 */
-	@Test
-	public void testChainStatusCodeAnnoLoginGetAddLogout() throws Exception {
-
-		//Create JSON login object.
-		JsonObject jj = new JsonObject();
-		jj.addProperty("username", "jonas");
-		jj.addProperty("password", "losenord");
-
-		int loginResponseCode = sendLogin(jj);
-
-		//Get connection and then add headers.
-		HttpURLConnection con = connect("GET", serverURL + "/annotation");
-		con.setRequestProperty("Content-Type", "application/json");
-		con.setRequestProperty("Authorization", token.getToken());
-
-		int getAnnotationResponseCode = con.getResponseCode();
-
-		//Get connection and then add headers.
-		con = connect("POST", serverURL + "/annotation");
-		con.setRequestProperty("Content-Type", "application/json");
-		con.setRequestProperty("Authorization", token.getToken());
-
-		String json_output = "{\"name\":\""
-				+ AnnotationFieldNormal
-				+ "\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
-
-		sendResponseString(con, json_output);
-
-		//Get AnnotationResponseCode
-		int addAnnotationResponseCode = con.getResponseCode();
-
-		int logoutResponseCode = sendLogout();
-
-		assertTrue(loginResponseCode == StatusCode.OK);
-		assertTrue(addAnnotationResponseCode == StatusCode.CREATED);
-		assertTrue(getAnnotationResponseCode == StatusCode.OK);
-		assertTrue(logoutResponseCode == StatusCode.OK);
-
-	}
-
-	/**
-	 * Test used to check Login, get annotation field,
-	 * add annotation field and then logout.
-	 * Here the codes are checked.
-	 *
-	 * @throws Exception
-	 */
-	@Test
-	public void testChainStatusCodeAnnoLoginAddGetLogout() throws Exception {
-
-		//Create JSON login object.
-		JsonObject jj = new JsonObject();
-		jj.addProperty("username", "jonas");
-		jj.addProperty("password", "losenord");
-
-		int loginResponseCode = sendLogin(jj);
-
-		//Get connection and then add headers.
-		HttpURLConnection con = connect("POST", serverURL + "/annotation");
-		con.setRequestProperty("Content-Type", "application/json");
-		con.setRequestProperty("Authorization", token.getToken());
-
-		String json_output = "{\"name\":\""
-				+ AnnotationFieldNormal
-				+ "\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
-
-		sendResponseString(con, json_output);
-
-		//Get AnnotationResponseCode
-		int addAnnotationResponseCode = con.getResponseCode();
-
-		//Get connection and then add headers.
-		con = connect("GET", serverURL + "/annotation");
-		con.setRequestProperty("Content-Type", "application/json");
-		con.setRequestProperty("Authorization", token.getToken());
-
-		int getAnnotationResponseCode = con.getResponseCode();
-
-		int logoutResponseCode = sendLogout();
-
-		assertTrue(loginResponseCode == StatusCode.OK);
-		assertTrue(addAnnotationResponseCode == StatusCode.CREATED);
-		assertTrue(getAnnotationResponseCode == StatusCode.OK);
-		assertTrue(logoutResponseCode == StatusCode.OK);
-
-	}
-
-	/**
-	 * Used to test that a corrupted login attempt
-	 * does not pass.
-	 *
-	 * @throws Exception
-	 */
-	@Test
-	public void testCorruptedLogin() throws Exception {
-		/* Note: This test should work, but the code that
-		 * 		 check the login is not implemented
-		 * 			2014-05-08, 15:00
-		 */
-		/*
-		//Create JSON corrupted login object.
-		JsonObject jj = new JsonObject();
-		jj.addProperty("username", "jonas");
-		jj.addProperty("password", "");
-
-		int loginResponseCode = sendLogin(jj);
-
-		assertFalse(loginResponseCode == StatusCode.OK);
-		*/
-
-		fail("Not yet implemented.");
-
-	}
-
-	/**
 	 * Test used to check that a annotation field can be added.
 	 *
 	 * @throws Exception
@@ -363,33 +156,33 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 
 	}
 
-	/**
-	 * Test used to check that the delete annotation works.
-	 *
-	 * @throws Exception
-	 */
+	//TODO: Remove this class when all other tests are done.
 	@Test
-	public void testDeleteAnnotationFieldCommand() throws Exception {
-		/*
+	public void testContains() throws Exception {
+
 		//Create JSON login object.
 		JsonObject jj = new JsonObject();
 		jj.addProperty("username", "jonas");
 		jj.addProperty("password", "losenord");
 
 		sendLogin(jj);
-
 		//Get connection and then add headers.
-		HttpURLConnection con = connect("DELETE", serverURL + "/annotation");
+		HttpURLConnection con = connect("GET", serverURL + "/annotation");
 		con.setRequestProperty("Content-Type", "application/json");
 		con.setRequestProperty("Authorization", token.getToken());
 
-		String json_output = "[{\"id\":1,\"values\":[\"man\",\"mouse\"]},{\"id\":2,\"values\":[]},{\"id\":3,\"values\":[\"leg\"]}]";
+		String response = getResponseString(con);
+		System.out.println(response);
+		String responseChecker = "\"name\":\""
+				+ "ABC996"
+				+ "\",\"values\":[\"freetext\"],\"forced\":true";
+		System.out.println(responseChecker);
+		boolean wasAdded = response.contains(responseChecker);
 
 		sendLogout();
 
-		assertTrue(responseCode == StatusCode.CREATED);
-		*/
-		fail("Not yet implemented.");
+		assertTrue(wasAdded);
+
 	}
 
 	/**
@@ -495,5 +288,35 @@ public class ServerMassTestClass extends ServerAbstractTestClass {
 		fail("Not yet implemented.");
 
 	}
+
+	/**
+	 * Test used to check that the delete annotation works.
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void testDeleteAnnotationFieldCommand() throws Exception {
+		/*
+		//Create JSON login object.
+		JsonObject jj = new JsonObject();
+		jj.addProperty("username", "jonas");
+		jj.addProperty("password", "losenord");
+
+		sendLogin(jj);
+
+		//Get connection and then add headers.
+		HttpURLConnection con = connect("DELETE", serverURL + "/annotation");
+		con.setRequestProperty("Content-Type", "application/json");
+		con.setRequestProperty("Authorization", token.getToken());
+
+		String json_output = "[{\"id\":1,\"values\":[\"man\",\"mouse\"]},{\"id\":2,\"values\":[]},{\"id\":3,\"values\":[\"leg\"]}]";
+
+		sendLogout();
+
+		assertTrue(responseCode == StatusCode.CREATED);
+		*/
+		fail("Not yet implemented.");
+	}
+
 
 }
