@@ -98,6 +98,9 @@ public class AddFileToExperimentCommand extends Command {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
 		} finally{
 			try {
 				db.close();

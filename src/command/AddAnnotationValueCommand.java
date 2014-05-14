@@ -1,5 +1,6 @@
 package command;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Map;
 
@@ -51,6 +52,9 @@ public class AddAnnotationValueCommand extends Command {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return new MinimalResponse(StatusCode.NO_CONTENT);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
 		} finally{
 			try {
 				db.close();

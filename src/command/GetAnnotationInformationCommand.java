@@ -1,5 +1,6 @@
 package command;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -36,11 +37,13 @@ public class GetAnnotationInformationCommand extends Command {
 		try {
 			db = initDB();
 			a = db.getAnnotations();
-			System.out.println("Got annotations.");
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return new MinimalResponse(StatusCode.BAD_REQUEST);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
 		}
-
 
 		Iterator<String> keys = a.keySet().iterator();
 		ArrayList<String> annotation_names = new ArrayList<String>();

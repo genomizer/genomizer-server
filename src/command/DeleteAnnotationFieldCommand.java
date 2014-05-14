@@ -1,5 +1,6 @@
 package command;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Map;
@@ -34,7 +35,7 @@ public class DeleteAnnotationFieldCommand extends Command {
 			return false;
 		}
 		for(DeleteAnnotationInfo da: deleteId) {
-			if(da.getId() == null) {
+			if(da.getName() == null) {
 				return false;
 			}
 		}
@@ -48,23 +49,21 @@ public class DeleteAnnotationFieldCommand extends Command {
 	public Response execute() {
 
 		DatabaseAccessor db = null;
-		int result = 0;
 
 		try {
 			db = initDB();
-			//TODO: Add the label. API looks wierd currently.
 			for(DeleteAnnotationInfo da: deleteId) {
-				result = db.deleteAnnotation(da.getId());
+				db.deleteAnnotation(da.getName());
 			}
 			db.close();
-			if(result == 0) {
-				return new MinimalResponse(403);
-			} else {
-				return new MinimalResponse(200);
-			}
+			return new MinimalResponse(200);
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return new MinimalResponse(StatusCode.BAD_REQUEST);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
 		} finally {
 			try {
 				db.close();
@@ -73,6 +72,6 @@ public class DeleteAnnotationFieldCommand extends Command {
 				return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
 			}
 		}
-		return new MinimalResponse(StatusCode.BAD_REQUEST);
 	}
+
 }
