@@ -4,6 +4,7 @@ package command;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Map.Entry;
 
 import process.classes.ProcessHandler;
 import response.ProcessResponse;
@@ -137,14 +138,15 @@ public class ProcessCommand extends Command {
 		System.out.println("-------------ProcessCommand - Execute----------------");
 
 
-		String[] parameters = {"param1","param2","param3"};
 
-		DatabaseAccessor dbac;
+
+		DatabaseAccessor db;
 		ProcessHandler processHandler;
+		Entry<String, String> filepaths;
 
 		try {
 
-			dbac = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
+			db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
 			System.out.println("created databaseaccesor");
 			processHandler = new ProcessHandler();
 
@@ -152,30 +154,23 @@ public class ProcessCommand extends Command {
 			case "rawtoprofile":
 				//The process type was a rawtoprofile
 
-				//Profile hardcoded since in case "rawtoprofile"
-				ArrayList<String> filepaths = dbac.process(fileId, "profile", filename, metadata, username, genomeRelease, expid);
+				filepaths = db.processRawToProfile(expid);
 
+				//TODO Ask database for path to genome release
 
-				//TODO Prints for checking what filepaths are given by database.
-				System.err.println("Filepath[0]: " + filepaths.get(0));
-				System.err.println("Filepath[1]: " + filepaths.get(1));
-
-				//Receive the path for the profile data from the database accessor.
-				//	String outfilepath = dbac.addFile("profile", filename, metadata, "yuri", username, false, expid, genomeRelease);
-
+				//Prints for checking what filepaths are given by database.
+				System.err.println("Filepath.getKey(): " + filepaths.getKey());
+				System.err.println("Filepath.getValue(): " + filepaths.getValue());
 
 				try {
-					System.out.println("Executing process");
-					String log = processHandler.executeProcess("rawToProfile", parameters, filepaths.get(0), filepaths.get(1));
-					System.err.println("AFter processHandler.executeProcess: " + log);
-					System.out.println("Executed process");
+					String log = processHandler.executeProcess("rawToProfile", parameters, filepaths.getKey(), filepaths.getValue());
 				} catch (InterruptedException e) {
-					// TODO Fix this
+					// TODO Close db accessor. Log response
 					System.err.println("CATCH InterruptedException in ProcessCommand.Execute when running processHandler.executeProcess");
 					e.printStackTrace();
 					return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE);
 				} catch (IOException e) {
-					// TODO Fix this
+					// TODO Close db accessor. Log response
 					System.err.println("CATCH IO exception in ProcessCommand.Execute when running processHandler.executeProcess");
 					e.printStackTrace();
 					return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE);
@@ -183,23 +178,37 @@ public class ProcessCommand extends Command {
 
 				break;
 			default:
+				// TODO Close db accessor. Log response
 				System.err.println("Unknown process type in processcommand execute");
 				return new ProcessResponse(StatusCode.BAD_REQUEST);
 
 			}
 		} catch (SQLException e) {
+			// TODO Close db accessor. Log response
 			System.err.println("SQL Exception in ProcessCommand execute:");
 			e.printStackTrace();
 			return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE);
 		} catch (IOException e1) {
-			e1.printStackTrace();
+			// TODO Close db accessor. Log response
 			System.err.println("IO Exception in ProcessCommand execute.");
 			e1.printStackTrace();
 			return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE);
 		}
 
-		//The execute executed correctly. Return created response.
+
+		//The execute executed correctly
+		try {
+			//TODO isPrivate hardcoded.
+			db.addGeneratedProfiles(expid, filepaths.getValue(), filepaths.getKey(), metadata, genomeRelease, username, false);
+		} catch (SQLException e) {
+			// TODO Close db accessor. Log response
+			System.err.println("SQL Exception in ProcessCommand execute when using addGeneratedProfiles:");
+			e.printStackTrace();
+		}
+
+		// TODO Close db accessor.
 		return new ProcessResponse(StatusCode.CREATED);
+
 	}
 
 	/**
