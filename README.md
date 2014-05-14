@@ -3,6 +3,44 @@ Genomizer Server
 This is the main repository for the server side of the Genomizer system. It is currently found
 at http://scratchy.cs.umu.se:7000.
 
+##Download instructions
+A jar of the current version of the server is available on scratchy.cs.umu.se at all times. To download it execute the following in
+a terminal:
+
+    scp -P 2222 pvt@scratchy.cs.umu.se:server.jar .
+    
+After entering the password this will download server.jar to your current directory. An alternative is to connect to 
+pvt@scratchy.cs.umu.se on port 2222
+using Filezilla or similar and choosing server.jar for download. There will also be other build versions there, with date and timestamp
+from when they where created.
+
+##Usage
+The server requires Java 1.7 to run. In the lab computers this is not the default, but it is installed and can be found at
+/usr/lib/jvm/java-7-openjdk-amd64. Either make a symbolic link to /usr/lib/jvm/java-7-openjdk-amd64/bin/java or enter the full path.
+
+Symbolic link
+
+    ln -s /usr/lib/jvm/java-7-openjdk-amd64/bin/java java7
+    ./java7 -jar server.jar
+Full path
+
+    /usr/lib/jvm/java-7-openjdk-amd64/bin/java -jar server.jar
+
+The program can be run with the following options:
+
+    -p [NUMBER]    The listening port for the server, default is 7000
+    
+    -d [DB]        DB can be either "test" or "global". Chooses which database to use, test is located at ITS and can only be reached
+                   using lab computers. Global is in MC333 and requires the server application to be started locally on that computer.
+                   
+    -f [FILE]      Reads the database information from a file. The file should contain a single line with 4 words, each separated by a space.
+                   It should be written in the following format: USERNAME PASSWORD DATABASE HOST
+
+If no options are used the server will listen on port 7000 and look for a file named "dbconfig" in the current folder
+to read database settings from. If the file doesn't exist, the server will use the database called "test". This is the same as running
+
+    /usr/lib/jvm/java-7-openjdk-amd64/bin/java -jar server.jar -p 7000 -d test
+
 ##Development
 All development is done in either of four branches, *communication*, *process*, *transfer* or *database*. When some feature
 is done in either of these branches it should be merged into the *development* branch.
