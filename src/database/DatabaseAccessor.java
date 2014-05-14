@@ -149,7 +149,7 @@ public class DatabaseAccessor {
         return searchExperiments(pubMedString);
     }
 
-    private boolean isPubMedStringValid(String pubMedString){
+    public boolean isPubMedStringValid(String pubMedString){
 
     	return false;
     }
