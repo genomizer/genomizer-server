@@ -1,8 +1,10 @@
 package command;
 
 import response.MinimalResponse;
+import response.ProcessResponse;
 import response.Response;
 import response.StatusCode;
+import server.WorkHandler;
 
 /**
  * Should be used to handle and create different commands with
@@ -16,12 +18,13 @@ public class CommandHandler {
 	//TODO: Add threads?
 
 	private CommandFactory cmdFactory = new CommandFactory();
-
+	//used to execute heavy work such as process commands execute
+	private WorkHandler heavyWorkThread = new WorkHandler();
 	/**
 	 * Empty constructor.
 	 */
 	public CommandHandler() {
-
+		heavyWorkThread.start();
 	}
 
 	/**
@@ -40,7 +43,14 @@ public class CommandHandler {
 		System.out.println("rest: " + restful);
 
 		if (myCom.validate()) {
-			return myCom.execute();
+			if(CommandType.PROCESS_COMMAND.equals(cmdt)){
+				//add the heavy command to the queue, executed when the
+				//command is at the head of the queue, return OK to tell the client
+				heavyWorkThread.addWork(myCom);
+				return new ProcessResponse(StatusCode.OK);
+			}else{
+				return myCom.execute();
+			}
 		} else {
 			System.out.println("not valid");
 			return new MinimalResponse(StatusCode.BAD_REQUEST);

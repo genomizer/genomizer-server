@@ -1,5 +1,6 @@
 package command;
 
+import java.io.IOException;
 import java.sql.SQLException;
 
 import response.Response;
@@ -36,7 +37,7 @@ public abstract class Command {
 		this.header = header;
 	}
 
-	public DatabaseAccessor initDB() throws SQLException {
+	public DatabaseAccessor initDB() throws SQLException, IOException {
 		DatabaseAccessor db = null;
 		db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
 		return db;

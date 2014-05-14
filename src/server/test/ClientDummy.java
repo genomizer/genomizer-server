@@ -35,45 +35,37 @@ public class ClientDummy {
 	public static String expName = "huggaboy7";
 	public static String filename = "spluttfile662693";
 
-
 	public static void main(String args[]) throws Exception {
 
 		sendLogin();
-		//sendGetAnnotationInformation();
-		//sendAddFileToExperiment();
-		sendAddExperiment();
+		sendGetAnnotationInformation();
+//		sendAddAnnotation();
+//		sendDeleteAnnotation();
+//		sendAddExperiment();
 //		sendAddFileToExperiment();
 //		sendProcessing();
-//		sendAddFileToExperiment();
-		sendDeleteExperiment();
-//		sendProcessing();
-		//sendLogout();
+//		sendDeleteExperiment();
+		sendLogout();
 	}
 
 
 
+	private static void sendAddAnnotation() {
+		// TODO Auto-generated method stub
+
+	}
+
 	private static void sendLogin() throws Exception {
 
-		String url = "http://" + host + ":" + port + "/login";
-		URL obj = new URL(url);
-
+		URL obj = new URL(url + "/login");
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
-		// optional default is GET
 		con.setRequestMethod("POST");
-
-		//add request header
 		con.setRequestProperty("Content-Type", "application/json");
-		//con.setRequestProperty("Authorization", UUID.randomUUID().toString());
 
 		JsonObject jj=new JsonObject();
 		jj.addProperty("username", "jonas");
 		jj.addProperty("password", "losenord");
-
-		System.out.println(String.valueOf(jj.toString().getBytes().length));
-//		con.setRequestProperty("Content-Length", String.valueOf(jj.toString().getBytes().length));
-
-		System.out.println(jj.toString());
 
 		String json_output = jj.toString();
 
@@ -83,61 +75,29 @@ public class ClientDummy {
 		wr.flush();
 		wr.close();
 
-		int responseCode = con.getResponseCode();
+		String response = printResponse(con);
 		System.out.println("\nSending 'GET' request to URL : " + url);
-		System.out.println("Response Code : " + responseCode);
-
-		BufferedReader in = new BufferedReader(
-		        new InputStreamReader(con.getInputStream()));
-		String inputLine;
-		StringBuffer responseBuffer = new StringBuffer();
-
-		while ((inputLine = in.readLine()) != null) {
-			responseBuffer.append(inputLine);
-		}
-		in.close();
-
-		String response = responseBuffer.toString();
+		System.out.println("RESPONSE: " + response);
 
 		Gson gson = new Gson();
 		token = gson.fromJson(response, Token.class);
+		System.out.println(token.getToken());
+
 	}
 
 	private static void sendGetAnnotationInformation() throws Exception {
 
-		String url = "http://" + host + ":" + port + "/annotation";
-//		String url = "http://scratchy.cs.umu.se:"+port+"/annotation";
-//		String url = "http://localhost:"+ port +"/annotation";
-
-
 		URL obj = new URL(url + "/annotation");
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
-		// optional default is GET
 		con.setRequestMethod("GET");
-
-		//add request header
 		con.setRequestProperty("Content-Type", "application/json");
 		con.setRequestProperty("Authorization", token.getToken());
-//		con.setRequestProperty("Content-Length", String.valueOf(jj.toString().getBytes().length));
 
 		int responseCode = con.getResponseCode();
 		System.out.println("\nSending 'GET' request to URL : " + url);
 		System.out.println("Response Code : " + responseCode);
-
-		BufferedReader in = new BufferedReader(
-		        new InputStreamReader(con.getInputStream()));
-		String inputLine;
-		StringBuffer responseBuffer = new StringBuffer();
-
-		while ((inputLine = in.readLine()) != null) {
-			responseBuffer.append(inputLine);
-		}
-		in.close();
-
-		String response = responseBuffer.toString();
-
-		System.out.println("RESPONSE: " + response);
+		System.out.println("RESPONSE: " + printResponse(con));
 
 	}
 
@@ -361,25 +321,14 @@ public class ClientDummy {
 
 	private static void sendAddFileToExperiment() throws Exception {
 
-
-//		String url = "http://scratchy.cs.umu.se:"+port+"/file";
-//		String url = "http://localhost:"+ port +"/file";
-		String url = "http://" + host + ":" + port + "/file";
-		System.out.println("\nSending Add File To Experiment.");
-
 		URL obj = new URL(url);
-
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
-		// optional default is GET
 		con.setRequestMethod("POST");
-
-		//add request header
 		con.setRequestProperty("Authorization", token.getToken());
 		con.setRequestProperty("Content-Type", "application/json");
-		//con.setRequestProperty("Authorization", UUID.randomUUID().toString());
-		JsonObject ja=new JsonObject();
 
+		JsonObject ja=new JsonObject();
 		ja.addProperty("experimentID", expName);
 		ja.addProperty("fileName", "hugofiltest.txt");
 		ja.addProperty("type", "raw");
@@ -399,48 +348,32 @@ public class ClientDummy {
 		wr.flush();
 		wr.close();
 
-
 		int responseCode = con.getResponseCode();
-		System.out.println("RESPONSE CODE: " + responseCode);
-
-		BufferedReader in = new BufferedReader(
-		        new InputStreamReader(con.getInputStream()));
-		String inputLine;
-		StringBuffer responseBuffer = new StringBuffer();
-
-		while ((inputLine = in.readLine()) != null) {
-			responseBuffer.append(inputLine);
-		}
-		in.close();
-
-		String response = responseBuffer.toString();
-		System.out.println(response.toString());
+		System.out.println("Response Code: " + responseCode);
+		System.out.println("Response Body: " + printResponse(con));
 
 
 	}
 
 	private static void sendLogout() throws Exception {
-		//String url = "http://scratchy.cs.umu.se:"+port+"/login";
-//		String url = "http://localhost:"+ port +"/login";
-		String url = "http://" + host + ":" + port + "/login";
-
-		URL obj = new URL(url);
+		URL obj = new URL(url + "/login");
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
-		// optional default is GET
 		con.setRequestMethod("DELETE");
-
-		//add request header
 		con.setRequestProperty("Content-Type", "application/json");
 		con.setRequestProperty("Authorization", token.getToken());
-//		con.setRequestProperty("Content-Length", String.valueOf(jj.toString().getBytes().length));
 
 		int responseCode = con.getResponseCode();
 		System.out.println("\nSending 'DELETE' request to URL : " + url);
 		System.out.println("Response Code : " + responseCode);
+		System.out.println("RESPONSE: " + printResponse(con));
 
-		BufferedReader in = new BufferedReader(
-		        new InputStreamReader(con.getInputStream()));
+	}
+
+	private static String printResponse(HttpURLConnection con) throws IOException {
+
+		int responseCode = con.getResponseCode();
+		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
 		String inputLine;
 		StringBuffer responseBuffer = new StringBuffer();
 
@@ -449,11 +382,7 @@ public class ClientDummy {
 		}
 		in.close();
 
-		String response = responseBuffer.toString();
-
-
-
-		System.out.println("RESPONSE: " + response);
-
+		return responseBuffer.toString();
 	}
+
 }
