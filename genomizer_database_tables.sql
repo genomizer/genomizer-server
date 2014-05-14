@@ -6,7 +6,7 @@ CREATE TABLE File
     FileName VARCHAR(32) NOT NULL,
     Date DATE NOT NULL,
     MetaData VARCHAR(256),
-    InputFilePath VARCHAR(128) UNIQUE,
+    InputFilePath VARCHAR(128),
     Author VARCHAR(32),
     Uploader VARCHAR(32) NOT NULL,
     IsPrivate BOOLEAN NOT NULL,
