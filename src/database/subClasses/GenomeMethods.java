@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import database.FilePathGenerator;
 import database.ServerDependentValues;
@@ -66,21 +67,27 @@ public class GenomeMethods {
     public String addGenomeRelease(String genomeVersion,
             String species, String filename) throws SQLException {
 
-        String folderPath = fpg.generateGenomeReleaseFolder(
-                genomeVersion, species);
+        String folderPath = fpg.generateGenomeReleaseFolder(genomeVersion,
+                species);
+
+        StringBuilder filePathBuilder = new StringBuilder(folderPath);
+        filePathBuilder.append(filename);
+
+        String filePath = filePathBuilder.toString();
 
         String insertGenRelQuery = "INSERT INTO Genome_Release "
                 + "(Version, Species, FilePath) " + "VALUES (?, ?, ?)";
 
-        PreparedStatement ps = conn
-                .prepareStatement(insertGenRelQuery);
+        PreparedStatement ps = conn.prepareStatement(insertGenRelQuery);
         ps.setString(1, genomeVersion);
         ps.setString(2, species);
-        ps.setString(3, folderPath + File.separator + filename);
+        ps.setString(3, filePath.toString());
 
         ps.execute();
 
-        return folderPath;
+        filePathBuilder.insert(0, ServerDependentValues.UploadURL);
+
+        return filePathBuilder.toString();
     }
 
     /**
@@ -110,14 +117,18 @@ public class GenomeMethods {
             System.out.println("Failed to remove genome release!");
             return false;
         }
-
         return true;
     }
 
-    public ArrayList<String> getAllGenomReleases(String species)
-            throws SQLException {
+    /**
+    *
+    * @param species
+    * @return
+    * @throws SQLException
+    */
+   public List<String> getAllGenomReleases(String species) throws SQLException {
 
-        ArrayList<String> genomes = new ArrayList<String>();
+        List<String> genomeVersions = new ArrayList<String>();
 
         String query = "SELECT Version FROM Genome_Release WHERE Species = ?";
 
@@ -128,11 +139,11 @@ public class GenomeMethods {
         ResultSet rs = ps.executeQuery();
 
         while (rs.next()) {
-            genomes.add(rs.getString("Version"));
+            genomeVersions.add(rs.getString("Version"));
         }
 
         ps.close();
-        return genomes;
+        return genomeVersions;
     }
 
     public String getChainFile(String fromVersion, String toVersion)
@@ -178,8 +189,7 @@ public class GenomeMethods {
         String speciesQuery = "SELECT Species From Genome_Release"
                 + " WHERE (version = ?)";
 
-        PreparedStatement speciesStat = conn
-                .prepareStatement(speciesQuery);
+        PreparedStatement speciesStat = conn.prepareStatement(speciesQuery);
         speciesStat.setString(1, fromVersion);
 
         ResultSet rs = speciesStat.executeQuery();
@@ -188,14 +198,13 @@ public class GenomeMethods {
             species = rs.getString("Species");
         }
 
-        String filePath = fpg.generateChainFolderPath(species,
-                fromVersion, toVersion) + fileName;
+        String filePath = fpg.generateChainFolderPath(species, fromVersion,
+                toVersion) + fileName;
 
         String insertQuery = "INSERT INTO Chain_File "
                 + "(FromVersion, ToVersion, FilePath) VALUES (?, ?, ?)";
 
-        PreparedStatement insertStat = conn
-                .prepareStatement(insertQuery);
+        PreparedStatement insertStat = conn.prepareStatement(insertQuery);
         insertStat.setString(1, fromVersion);
         insertStat.setString(2, toVersion);
         insertStat.setString(3, filePath);
@@ -236,5 +245,4 @@ public class GenomeMethods {
 
         return res;
     }
-
 }

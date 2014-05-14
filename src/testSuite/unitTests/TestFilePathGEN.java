@@ -42,12 +42,12 @@ public class TestFilePathGEN {
     public static void teardownClass() {
         recursiveDelete(testFolder);
     }
-    
+
     @Before
     public void setup() {
         fpg.generateExperimentFolders("Exp1");
     }
-    
+
     @After
     public void teardown() {
         recursiveDelete(testFolder);
@@ -112,7 +112,6 @@ public class TestFilePathGEN {
         String species = "Human";
 
         String expectedGenomeReleaseFolderPath = testFolder + File.separator + "genome_releases" + File.separator + species + File.separator + version + File.separator;
-
         String path = fpg.generateGenomeReleaseFolder(version, species);
 
         assertEquals(expectedGenomeReleaseFolderPath, path);

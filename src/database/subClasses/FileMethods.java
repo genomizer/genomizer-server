@@ -104,8 +104,7 @@ public class FileMethods {
      * filePath.
      *
      * @param filePath
-     * @return The corresponding FileTuple or null if no such file
-     *         exists
+     * @return The corresponding FileTuple or null if no such file exists
      * @throws SQLException
      *             If the query could not be executed.
      */
@@ -226,10 +225,8 @@ public class FileMethods {
      */
     public int deleteFile(String path) throws SQLException {
 
-        String statementStr = "DELETE FROM File "
-                + "WHERE (Path = ?)";
-        PreparedStatement deleteFile = conn
-                .prepareStatement(statementStr);
+    	String statementStr = "DELETE FROM File " + "WHERE (Path = ?)";
+        PreparedStatement deleteFile = conn.prepareStatement(statementStr);
 
         deleteFile.setString(1, path);
         int res = deleteFile.executeUpdate();
@@ -267,8 +264,7 @@ public class FileMethods {
      */
     public boolean hasFile(int fileID) throws SQLException {
 
-        String query = "SELECT fileID FROM File "
-                + "WHERE fileID = ?";
+    	String query = "SELECT fileID FROM File " + "WHERE fileID = ?";
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setInt(1, fileID);
 

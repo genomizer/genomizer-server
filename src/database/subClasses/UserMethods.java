@@ -130,11 +130,10 @@ public class UserMethods {
     public int resetPassword(String username, String newPassword)
             throws SQLException {
 
-        String query = "UPDATE User_Info SET Password = ? "
+    	String query = "UPDATE User_Info SET Password = ? "
                 + "WHERE (Username = ?)";
 
-        PreparedStatement resetPassword = conn
-                .prepareStatement(query);
+        PreparedStatement resetPassword = conn.prepareStatement(query);
         resetPassword.setString(1, newPassword);
         resetPassword.setString(2, username);
         int res = resetPassword.executeUpdate();
@@ -154,8 +153,7 @@ public class UserMethods {
      */
     public String getRole(String username) throws SQLException {
 
-        String query = "SELECT Role FROM User_Info "
-                + "WHERE (Username = ?)";
+    	String query = "SELECT Role FROM User_Info " + "WHERE (Username = ?)";
 
         PreparedStatement getRole = conn.prepareStatement(query);
         getRole.setString(1, username);

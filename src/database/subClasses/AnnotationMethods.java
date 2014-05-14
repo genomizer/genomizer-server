@@ -34,7 +34,7 @@ public class AnnotationMethods {
      */
     public Map<String, Integer> getAnnotations() throws SQLException {
 
-        HashMap<String, Integer> annotations = new HashMap<String, Integer>();
+    	HashMap<String, Integer> annotations = new HashMap<String, Integer>();
         String query = "SELECT * FROM Annotation";
 
         Statement getAnnotations = conn.createStatement();
@@ -42,11 +42,9 @@ public class AnnotationMethods {
 
         while (rs.next()) {
             if (rs.getString("DataType").equalsIgnoreCase("FreeText")) {
-                annotations.put(rs.getString("Label"),
-                        Annotation.FREETEXT);
+                annotations.put(rs.getString("Label"), Annotation.FREETEXT);
             } else {
-                annotations.put(rs.getString("Label"),
-                        Annotation.DROPDOWN);
+                annotations.put(rs.getString("Label"), Annotation.DROPDOWN);
             }
         }
 
@@ -232,8 +230,7 @@ public class AnnotationMethods {
         String query = "INSERT INTO Annotation "
                 + "VALUES (?, 'FreeText', ?, ?)";
 
-        PreparedStatement addAnnotation = conn
-                .prepareStatement(query);
+        PreparedStatement addAnnotation = conn.prepareStatement(query);
         addAnnotation.setString(1, label);
         addAnnotation.setString(2, defaultValue);
         addAnnotation.setBoolean(3, required);
@@ -322,12 +319,11 @@ public class AnnotationMethods {
             List<String> choices, int defaultValueIndex,
             boolean required) throws SQLException, IOException {
 
-        if (choices.isEmpty()) {
+    	if (choices.isEmpty()) {
             throw new IOException("Must specify at least one choice");
         }
 
-        if (defaultValueIndex < 0
-                || defaultValueIndex >= choices.size()) {
+        if (defaultValueIndex < 0 || defaultValueIndex >= choices.size()) {
             throw new IOException("Invalid default value index");
         }
 
@@ -348,8 +344,7 @@ public class AnnotationMethods {
         tuplesInserted += addAnnotation.executeUpdate();
         addAnnotation.close();
 
-        PreparedStatement addChoices = conn
-                .prepareStatement(choicesQuery);
+        PreparedStatement addChoices = conn.prepareStatement(choicesQuery);
         addChoices.setString(1, label);
 
         for (String choice : choices) {
@@ -358,8 +353,8 @@ public class AnnotationMethods {
                 tuplesInserted += addChoices.executeUpdate();
             } catch (SQLException e) {
                 /*
-                 * Ignore and try adding next choice. This is probably
-                 * due to the list of choices containing a duplicate.
+                 * Ignore and try adding next choice. This is probably due to
+                 * the list of choices containing a duplicate.
                  */
             }
         }
@@ -389,11 +384,10 @@ public class AnnotationMethods {
     public int addDropDownAnnotationValue(String label, String value)
             throws SQLException, IOException {
 
-        String statementStr = "SELECT * FROM Annotation WHERE "
+    	String statementStr = "SELECT * FROM Annotation WHERE "
                 + "(label = ? AND datatype = 'DropDown')";
 
-        PreparedStatement checkTag = conn
-                .prepareStatement(statementStr);
+        PreparedStatement checkTag = conn.prepareStatement(statementStr);
         checkTag.setString(1, label);
 
         ResultSet rs = checkTag.executeQuery();
@@ -401,15 +395,13 @@ public class AnnotationMethods {
         checkTag.close();
 
         if (!res) {
-            throw new IOException(
-                    "The annotation of the chosen label"
-                            + " is not of type DropDown");
+            throw new IOException("The annotation of the chosen label"
+                    + " is not of type DropDown");
         } else {
             statementStr = "INSERT INTO Annotation_Choices (label , value) "
                     + "VALUES (?,?)";
 
-            PreparedStatement insertTag = conn
-                    .prepareStatement(statementStr);
+            PreparedStatement insertTag = conn.prepareStatement(statementStr);
 
             insertTag.setString(1, label);
             insertTag.setString(2, value);
@@ -473,63 +465,66 @@ public class AnnotationMethods {
     }
 
     /**
-     * Changes the annotation Label value.
+     * Changes the annotation label.
+     *
+     * OBS! This changes the label for all experiments.
      *
      * @param String
      *            oldLabel
      * @param string
      *            newLabel
-     * @return boolean true if changed succeeded, false if it failed.
+     * @return the number of tuples updated
+     * @throws SQLException If the update fails
      */
-    public boolean changeAnnotationLabel(String oldLabel,
-            String newLabel) {
+    public int changeAnnotationLabel(String oldLabel, String newLabel)
+            throws SQLException {
 
-        String changeLblQuery = "UPDATE Annotation SET Label = ?"
+    	String changeLblQuery = "UPDATE Annotation SET Label = ?"
                 + " WHERE (Label =?)";
 
-        PreparedStatement lblExp;
+        PreparedStatement changeLabel;
 
-        try {
-            lblExp = conn.prepareStatement(changeLblQuery);
+        changeLabel = conn.prepareStatement(changeLblQuery);
 
-            lblExp.setString(1, newLabel);
-            lblExp.setString(2, oldLabel);
-            lblExp.execute();
-            return true;
-
-        } catch (SQLException e) {
-
-            System.out.println("Failed to Create changeLabel query");
-            return false;
-        }
+        changeLabel.setString(1, newLabel);
+        changeLabel.setString(2, oldLabel);
+        int res = changeLabel.executeUpdate();
+        changeLabel.close();
+        return res;
     }
 
-    /*
+    /**
      * Changes the value of an annotation corresponding to it's label.
-     * Parameters: label of annotation, the old value and the new
-     * value to change to. Throws an SQLException if the new value
-     * already exists in the choices table (changing all males to
-     * female, and female is already in the table)
      *
-     * @param String label
+     * Parameters: label of annotation, the old value and the new value to
+     * change to.
      *
-     * @param String oldValue
+     * OBS! This method changes the value for every experiment.
      *
-     * @param String newValue
+     * Throws an SQLException if the new value already exists in the choices
+     * table (changing all males to female, and female is already in the table)
+     *
+     * @param String
+     *            label
+     *boolean true if changed succeeded, false if it failed.
+     * @param String
+     *            oldValue
+     *
+     * @param String
+     *            newValue
      *
      * @throws SQLException
      */
     public void changeAnnotationValue(String label, String oldValue,
             String newValue) throws SQLException {
 
-        String query = "UPDATE Annotation_Choices "
-                + "SET Value = ? " + "WHERE Label = ? and Value = ?";
+    	String query = "UPDATE Annotation_Choices " + "SET Value = ? "
+                + "WHERE Label = ? and Value = ?";
 
         String query2 = "UPDATE Annotated_With " + "SET Value = ? "
                 + "WHERE Label = ? and Value = ?";
 
-        String query3 = "UPDATE Annotation "
-                + "SET DefaultValue = ? "
+        String query3 = "UPDATE Annotation " + "SET DefaultValue = ? "
                 + "WHERE Label = ? and DefaultValue = ?";
 
         PreparedStatement statement = conn.prepareStatement(query);
@@ -590,5 +585,4 @@ public class AnnotationMethods {
 
         return query;
     }
-
 }

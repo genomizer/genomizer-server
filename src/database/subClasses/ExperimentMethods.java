@@ -36,8 +36,7 @@ public class ExperimentMethods {
      */
     public Experiment getExperiment(String expID) throws SQLException {
 
-        String query = "SELECT ExpID FROM Experiment "
-                + "WHERE ExpID = ?";
+    	String query = "SELECT ExpID FROM Experiment " + "WHERE ExpID = ?";
 
         PreparedStatement getExp = conn.prepareStatement(query);
         getExp.setString(1, expID);
@@ -66,8 +65,7 @@ public class ExperimentMethods {
      */
     public int addExperiment(String expID) throws SQLException {
 
-        String query = "INSERT INTO Experiment "
-                + "(ExpID) VALUES (?)";
+        String query = "INSERT INTO Experiment " + "(ExpID) VALUES (?)";
         PreparedStatement addExp = conn.prepareStatement(query);
         addExp.setString(1, expID);
 
@@ -93,8 +91,7 @@ public class ExperimentMethods {
      */
     public int deleteExperiment(String expId) throws SQLException {
 
-        String statementStr = "DELETE FROM Experiment "
-                + "WHERE (ExpID = ?)";
+    	String statementStr = "DELETE FROM Experiment " + "WHERE (ExpID = ?)";
 
         PreparedStatement deleteExperiment = conn
                 .prepareStatement(statementStr);
@@ -104,7 +101,6 @@ public class ExperimentMethods {
         deleteExperiment.close();
 
         return res;
-
     }
 
     /**
@@ -119,8 +115,7 @@ public class ExperimentMethods {
      */
     public boolean hasExperiment(String expID) throws SQLException {
 
-        String query = "SELECT ExpID FROM Experiment "
-                + "WHERE ExpID = ?";
+    	String query = "SELECT ExpID FROM Experiment " + "WHERE ExpID = ?";
 
         PreparedStatement hasExp = conn.prepareStatement(query);
         hasExp.setString(1, expID);
@@ -189,15 +184,12 @@ public class ExperimentMethods {
     public int annotateExperiment(String expID, String label,
             String value) throws SQLException, IOException {
 
-        if (!isValidAnnotationValue(label, value)) {
-            throw new IOException(
-                    value
-                            + " is not a valid choice for the annotation type "
-                            + label);
+    	if (!isValidAnnotationValue(label, value)) {
+            throw new IOException(value
+                    +" is not a valid choice for the annotation type " + label);
         }
 
-        String query = "INSERT INTO Annotated_With "
-                + "VALUES (?, ?, ?)";
+        String query = "INSERT INTO Annotated_With " + "VALUES (?, ?, ?)";
         PreparedStatement tagExp = conn.prepareStatement(query);
         tagExp.setString(1, expID);
         tagExp.setString(2, label);
@@ -223,11 +215,10 @@ public class ExperimentMethods {
     public int removeExperimentAnnotation(String expID, String label)
             throws SQLException {
 
-        String statementStr = "DELETE FROM Annotated_With "
+    	String statementStr = "DELETE FROM Annotated_With "
                 + "WHERE (ExpID = ? AND Label = ?)";
 
-        PreparedStatement deleteTag = conn
-                .prepareStatement(statementStr);
+        PreparedStatement deleteTag = conn.prepareStatement(statementStr);
         deleteTag.setString(1, expID);
         deleteTag.setString(2, label);
 
@@ -277,14 +268,12 @@ public class ExperimentMethods {
 
         String query = "SELECT Label, Value FROM Annotated_With "
                 + "WHERE ExpID = ?";
-        PreparedStatement getExpAnnotations = conn
-                .prepareStatement(query);
+        PreparedStatement getExpAnnotations = conn.prepareStatement(query);
         getExpAnnotations.setString(1, e.getID());
         ResultSet rs = getExpAnnotations.executeQuery();
 
         while (rs.next()) {
-            e.addAnnotation(rs.getString("Label"),
-                    rs.getString("Value"));
+            e.addAnnotation(rs.getString("Label"), rs.getString("Value"));
         }
 
         getExpAnnotations.close();

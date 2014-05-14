@@ -1,6 +1,5 @@
 package testSuite.unitTests;
 
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -25,7 +24,6 @@ public class FileTableTests {
 
     private static DatabaseAccessor dbac;
 
-    private String testGenomePath;
     private String testPath;
     private String testName = "testFileName1";
     private String testInputFile = "testInputFile";
@@ -94,18 +92,6 @@ public class FileTableTests {
         } finally {
             assertTrue(dbac.hasExperiment(testExpId));
         }
-    }
-
-    @Test
-    public void addRemoveGenomeReleaseTest() throws Exception {
-
-        testGenomePath = dbac.addGenomeRelease("F2.3", "Fly", "File1.txt");
-
-        String path = dbac.getGenomeRelease("F2.2");
-        assertNotNull(path);
-
-        boolean succeed = dbac.removeGenomeRelease("F2.3", "Fly");
-        assertTrue(succeed);
     }
 
     @Test
