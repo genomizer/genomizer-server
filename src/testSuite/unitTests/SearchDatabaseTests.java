@@ -113,7 +113,7 @@ public class SearchDatabaseTests {
     @Test
     public void shouldBeAbleToSearch1() throws Exception {
         List<Experiment> experiments = dbac
-                .search("Human[Species] NOT Adult[Development Stage]");
+                .search("Exp1[ExpID] AND Raw[FileType]");
         for (Experiment e: experiments) {
             System.out.println(e.toString());
         }

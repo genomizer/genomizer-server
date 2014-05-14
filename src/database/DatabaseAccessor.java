@@ -1,5 +1,6 @@
 package database;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 
@@ -8,10 +9,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 
 /**
@@ -39,6 +42,11 @@ public class DatabaseAccessor {
     public static Integer DROPDOWN = 2;
 
     private Connection conn;
+
+    public static final String DATAFOLDER = File.separator + "var"
+            + File.separator + "www" + File.separator + "data" + File.separator;
+
+    private FilePathGenerator fpg;
     private PubMedToSQLConverter pm2sql;
 
     /**
@@ -59,7 +67,7 @@ public class DatabaseAccessor {
      * @throws IOException
      */
     public DatabaseAccessor(String username, String password, String host,
-            String database) throws SQLException {
+            String database) throws SQLException, IOException {
 
         String url = "jdbc:postgresql://" + host + "/" + database;
 
@@ -68,7 +76,14 @@ public class DatabaseAccessor {
         props.setProperty("password", password);
 
         conn = DriverManager.getConnection(url, props);
+
+        fpg = new FilePathGenerator(DATAFOLDER);
+
         pm2sql = new PubMedToSQLConverter();
+    }
+
+    public DatabaseAccessor() {
+
     }
 
     /**
@@ -339,7 +354,7 @@ public class DatabaseAccessor {
         PreparedStatement addExp = conn.prepareStatement(query);
         addExp.setString(1, expID);
 
-        FilePathGenerator.GenerateExperimentFolders(expID);
+        fpg.generateExperimentFolders(expID);
 
         int res = addExp.executeUpdate();
         addExp.close();
@@ -923,48 +938,52 @@ public class DatabaseAccessor {
     }
 
     /**
-     * Changes the annotation Label value.
+     * Changes the annotation label.
+     *
+     * OBS! This changes the label for all experiments.
      *
      * @param String
      *            oldLabel
      * @param string
      *            newLabel
-     * @return boolean true if changed succeeded, false if it failed.
+     * @return the number of tuples updated
+     * @throws SQLException If the update fails
      */
-    public boolean changeAnnotationLabel(String oldLabel, String newLabel) {
+    public int changeAnnotationLabel(String oldLabel, String newLabel)
+            throws SQLException {
 
         String changeLblQuery = "UPDATE Annotation SET Label = ?"
                 + " WHERE (Label =?)";
 
-        PreparedStatement lblExp;
+        PreparedStatement changeLabel;
 
-        try {
-            lblExp = conn.prepareStatement(changeLblQuery);
+        changeLabel = conn.prepareStatement(changeLblQuery);
 
-            lblExp.setString(1, newLabel);
-            lblExp.setString(2, oldLabel);
-            lblExp.execute();
-            return true;
-
-        } catch (SQLException e) {
-
-            System.out.println("Failed to Create changeLabel query");
-            return false;
-        }
+        changeLabel.setString(1, newLabel);
+        changeLabel.setString(2, oldLabel);
+        int res = changeLabel.executeUpdate();
+        changeLabel.close();
+        return res;
     }
 
-    /*
+    /**
      * Changes the value of an annotation corresponding to it's label.
      * Parameters: label of annotation, the old value and the new value to
-     * change to. Throws an SQLException if the new value already exists in the
-     * choices table (changing all males to female, and female is already in the
-     * table)
+     * change to.
      *
-     * @param String label
+     * OBS! This method changes the value for every experiment.
      *
-     * @param String oldValue
+     * Throws an SQLException if the new value already exists in the choices
+     * table (changing all males to female, and female is already in the table)
      *
-     * @param String newValue
+     * @param String
+     *            label
+     *boolean true if changed succeeded, false if it failed.
+     * @param String
+     *            oldValue
+     *
+     * @param String
+     *            newValue
      *
      * @throws SQLException
      */
@@ -1059,11 +1078,10 @@ public class DatabaseAccessor {
             String uploader, boolean isPrivate, String genomeRelease)
             throws SQLException {
 
-        String path = FilePathGenerator.GenerateFilePath(expID, fileType,
-                fileName);
+        String path = fpg.generateFilePath(expID, fileType, fileName);
 
-        String inputFilePath = FilePathGenerator.GenerateFilePath(expID,
-                fileType, inputFileName);
+        String inputFilePath = fpg.generateFilePath(expID, fileType,
+                inputFileName);
 
         String query = "INSERT INTO File "
                 + "(Path, FileType, FileName, Date, MetaData, InputFilePath, "
@@ -1144,8 +1162,7 @@ public class DatabaseAccessor {
             String author, String uploader, boolean isPrivate, String expID,
             String grVersion) throws SQLException {
 
-        String path = FilePathGenerator.GenerateFilePath(expID, fileType,
-                fileName);
+        String path = fpg.generateFilePath(expID, fileType, fileName);
 
         String query = "INSERT INTO File "
                 + "(Path, FileType, FileName, Date, MetaData, InputFilePath, "
@@ -1189,8 +1206,7 @@ public class DatabaseAccessor {
             String author, String uploader, boolean isPrivate, String expID,
             String grVersion) throws SQLException {
 
-        String path = FilePathGenerator.GenerateFilePath(expID, fileType,
-                fileName);
+        String path = fpg.generateFilePath(expID, fileType, fileName);
         String URL = ServerDependentValues.UploadURL;
 
         String query = "INSERT INTO File "
@@ -1305,6 +1321,8 @@ public class DatabaseAccessor {
     }
 
     /**
+     * Deprecated: Use ProcessRawToProfile(...)
+     *
      * Method to convert from raw data to profile data. Returns a list of
      * filepaths
      *
@@ -1318,6 +1336,7 @@ public class DatabaseAccessor {
      * @return ArrayList<String>
      * @throws SQLException
      */
+    @Deprecated
     public ArrayList<String> process(String fileID, String fileType,
             String fileName, String metaData, String uploader,
             String grVersion, String expID) throws SQLException {
@@ -1356,25 +1375,155 @@ public class DatabaseAccessor {
     }
 
     /**
-     * Method for getting all stored versions of genome Releases in the database
+     * Generates a folder where the profile files for a certain experiment
+     * should be stored.
      *
-     * @return ArrayList<String> genome versions.
+     * OBS! The files are not be added to the database at this point, and will
+     * therefore not be searchable the users. Upon successful processing the
+     * addGeneratedProfiles(...) method must be executed to add the files to the
+     * database.
+     *
+     * @param expId
+     *            The ID name of paththe experiment
+     * @return The path to the folder or null if there are no raw files for this
+     *         experiment.
      * @throws SQLException
+     *             If the database could not be accessed
      */
-    public ArrayList<String> getStoredGenomeVersions() throws SQLException {
+    public Entry<String, String> processRawToProfile(String expId)
+            throws SQLException {
 
-        ArrayList<String> allVersions = new ArrayList<String>();
-
-        String getGenVerQuery = "SELECT * FROM Genome_Release";
-        PreparedStatement ps = conn.prepareStatement(getGenVerQuery);
-
-        ResultSet res = ps.executeQuery();
-
-        while (res.next()) {
-            allVersions.add(res.getString("Version"));
+        List<Experiment> experiments;
+        try {
+            experiments = search(expId + "[ExpID] AND Raw[FileType]");
+        } catch (IOException e) {
+            System.err.println("Search query failed!");
+            return null;
         }
 
-        return allVersions;
+        if (experiments.isEmpty()) {
+            System.err.println("There are no raw files to process!");
+            return null;
+        }
+
+        Experiment e = experiments.get(0);
+
+        if (e.getFiles().isEmpty()) {
+            System.err.println("There are no raw files to process!");
+            return null;
+        }
+
+        FileTuple ft = e.getFiles().get(0);
+
+        String profileFolder = fpg.generateProfileFolder(expId);
+
+        return new SimpleEntry<String, String>(ft.getParentFolder(),
+                profileFolder);
+    }
+
+    /**
+     * Adds all the files in the specified folder to the database's File table.
+     * They will all be treated as profile files.
+     *
+     * @param expId
+     *            The ID name of the experiment
+     * @param folderPath
+     *            The path to the folder containing the profile files. (This
+     *            should be exactly the same path as returned by the
+     *            processRawToProfile(expId) method).
+     * @param inputFileName
+     *            The name of the input file or null if no input file was
+     *            generated.
+     * @param metaData
+     *            A String specifying the parameters used for processing the raw
+     *            file.
+     * @param genomeReleaseVersion
+     *            The genome release version used in processing. OBS! this is a
+     *            reference to a genome release stored in the database/on the
+     *            server and must therefore be valid.
+     * @param uploader
+     *            The user that commissioned the processing.
+     * @param isPrivate
+     *            True if the files are to be private to the uploader, otherwise
+     *            false.
+     * @throws SQLException
+     *             If the request uses invalid arguments or the database could
+     *             not be reached.
+     */
+    public void addGeneratedProfiles(String expId, String folderPath,
+            String inputFileName, String metaData, String genomeReleaseVersion,
+            String uploader, boolean isPrivate) throws SQLException {
+
+        File profileFolder = new File(folderPath);
+
+        for (File f : profileFolder.listFiles()) {
+
+            if (!f.getName().equals(inputFileName)) {
+                addGeneratedProfile(expId, f.getPath(), folderPath
+                        + inputFileName, metaData, genomeReleaseVersion,
+                        uploader, isPrivate);
+            }
+        }
+    }
+
+    private void addGeneratedProfile(String expId, String path,
+            String inputFilePath, String metaData, String genomeReleaseVersion,
+            String uploader, boolean isPrivate) throws SQLException {
+
+        String query = "INSERT INTO File "
+                + "(Path, FileType, FileName, Date, MetaData, InputFilePath, "
+                + "Author, Uploader, IsPrivate, ExpID, GRVersion) "
+                + "VALUES (?, 'Profile', ?, CURRENT_TIMESTAMP, ?, ?, 'Genomizer', ?, ?, ?, ?)";
+
+        PreparedStatement addFile = conn.prepareStatement(query);
+
+        addFile.setString(1, path);
+        addFile.setString(2, getFileName(path));
+        addFile.setString(3, metaData);
+        addFile.setString(4, inputFilePath);
+        addFile.setString(5, uploader);
+        addFile.setBoolean(6, isPrivate);
+        addFile.setString(7, expId);
+        addFile.setString(8, genomeReleaseVersion);
+
+        addFile.executeUpdate();
+        addFile.close();
+    }
+
+    private String getFileName(String path) {
+        int lastFileSeperatorIndex = path.lastIndexOf(File.separator);
+        return path.substring(lastFileSeperatorIndex + 1);
+    }
+
+    /**
+     * Gets the file path to a stored Genome Release
+     *
+     * @param genomeVersion
+     *            The genome release version.
+     * @return The file path to the genome release file or
+     * @throws SQLException
+     */
+
+    public String getGenomeReleaseFilePath(String genomeVersion)
+            throws SQLException {
+
+        String query = "SELECT FilePath FROM Genome_Release WHERE (Version = ?)";
+
+        PreparedStatement ps = conn.prepareStatement(query);
+
+        ps.setString(1, genomeVersion);
+
+        ResultSet rs = ps.executeQuery();
+
+        String path = null;
+
+        if (rs.next()) {
+            path = rs.getString("FilePath");
+        }
+
+        ps.close();
+
+        return path;
     }
 
     /**
@@ -1383,31 +1532,35 @@ public class DatabaseAccessor {
      * @param String
      *            genomeVersion.
      * @param String
-     *            specie.
-     * @return String filePath, the path where the genome Version file should be
-     *         saved.
+     *            species.
+     * @return String The uploadURL
      * @throws SQLException
      *             if adding query failed.
      */
-    public String addGenomeRelease(String genomeVersion, String specie)
-            throws SQLException {
+    public String addGenomeRelease(String genomeVersion, String species,
+            String filename) throws SQLException {
 
-        String filePath = "";
+        String folderPath = fpg.generateGenomeReleaseFolder(genomeVersion,
+                species);
 
-        String path = FilePathGenerator.GeneratePathForGenomeFiles(
-                genomeVersion, specie);
+        StringBuilder filePathBuilder = new StringBuilder(folderPath);
+        filePathBuilder.append(filename);
+
+        String filePath = filePathBuilder.toString();
 
         String insertGenRelQuery = "INSERT INTO Genome_Release "
-                + "(Version,Species,FilePath) " + "VALUES (?,?,?)";
+                + "(Version, Species, FilePath) " + "VALUES (?, ?, ?)";
 
         PreparedStatement ps = conn.prepareStatement(insertGenRelQuery);
         ps.setString(1, genomeVersion);
-        ps.setString(2, specie);
-        ps.setString(3, path);
+        ps.setString(2, species);
+        ps.setString(3, filePath.toString());
 
         ps.execute();
 
-        return filePath;
+        filePathBuilder.insert(0, ServerDependentValues.UploadURL);
+
+        return filePathBuilder.toString();
     }
 
     /**
@@ -1440,6 +1593,26 @@ public class DatabaseAccessor {
         return true;
     }
 
+    public List<String> getAllGenomReleases(String species) throws SQLException {
+
+        List<String> genomeVersions = new ArrayList<String>();
+
+        String query = "SELECT Version FROM Genome_Release WHERE Species = ?";
+
+        PreparedStatement ps = conn.prepareStatement(query);
+
+        ps.setString(1, species);
+
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            genomeVersions.add(rs.getString("Version"));
+        }
+
+        ps.close();
+        return genomeVersions;
+    }
+
     public String getChainFile(String fromVersion, String toVersion)
             throws SQLException {
 
@@ -1465,7 +1638,7 @@ public class DatabaseAccessor {
 
     /**
      * Adds a chain file to database for conversions. Parameters: Oldversion,
-     * new version and filename. Returns: file path
+     * new version and filename. Returns: upload URL
      *
      * @param String
      *            fromVersion
@@ -1473,7 +1646,7 @@ public class DatabaseAccessor {
      *            toVersion
      * @param String
      *            fileName
-     * @return String file path
+     * @return String upload URL
      * @throws SQLException
      */
     public String addChainFile(String fromVersion, String toVersion,
@@ -1492,8 +1665,8 @@ public class DatabaseAccessor {
             species = rs.getString("Species");
         }
 
-        String filePath = FilePathGenerator.GenerateChainFilePath(species,
-                fileName);
+        String filePath = fpg.generateChainFolderPath(species, fromVersion,
+                toVersion) + fileName;
 
         String insertQuery = "INSERT INTO Chain_File "
                 + "(FromVersion, ToVersion, FilePath) VALUES (?, ?, ?)";
@@ -1679,5 +1852,13 @@ public class DatabaseAccessor {
         }
 
         return query;
+    }
+
+    public void changeFileStorageRoot(String rootFolderPath) throws IOException {
+        fpg = new FilePathGenerator(rootFolderPath);
+    }
+
+    public FilePathGenerator getFilePathGenerator() {
+        return fpg;
     }
 }

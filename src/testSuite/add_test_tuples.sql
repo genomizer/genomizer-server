@@ -48,7 +48,7 @@ INSERT INTO Annotated_With  VALUES('Exp3', 'Development Stage', 'Child');
 
 INSERT INTO User_Info VALUES('user1', 'secret1', 'role1');
 
-INSERT INTO File VALUES(DEFAULT, '/var/www/data/Exp1/raw/file1.fastq', 'Raw', 'file1.fastq', CURRENT_TIMESTAMP, NULL, '/var/www/data//Exp1/raw/file1_input.fastq', 'Umeå Uni', 'user1', 'True', 'Exp1', NULL);
+INSERT INTO File VALUES(DEFAULT, '/var/www/data/Exp1/raw/file1.fastq', 'Raw', 'file1.fastq', CURRENT_TIMESTAMP, NULL, '/var/www/data/Exp1/raw/file1_input.fastq', 'Umeå Uni', 'user1', 'True', 'Exp1', NULL);
 
 INSERT INTO File VALUES(DEFAULT, '/var/www/data/Exp1/profile/file1.sam', 'Profile', 'file1.sam', CURRENT_TIMESTAMP, '-n 1 --best', '/var/www/data/Exp1/Profile/file1_input.sam', 'Genomizer', 'user1', 'false', 'Exp1', 'hg38');
 

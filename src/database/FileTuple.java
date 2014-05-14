@@ -1,5 +1,6 @@
 package database;
 
+import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
@@ -45,6 +46,11 @@ public class FileTuple {
 
     public String getUploadURL() {
         return ServerDependentValues.UploadURL+path;
+    }
+
+    public String getParentFolder() {
+        int filenameIndex = path.lastIndexOf(File.separator);
+        return path.substring(0, filenameIndex + 1);
     }
 }
 

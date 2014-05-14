@@ -194,9 +194,9 @@ public class ExperimentTests {
 
     	if(allLabelsBefore.contains(testLabelFT)){
 
-    		boolean succeed = dbac.changeAnnotationLabel(testLabelFT, newLabel);
+    		int res = dbac.changeAnnotationLabel(testLabelFT, newLabel);
 
-    		assertTrue(succeed);
+    		assertTrue(res > 0);
 
     		ArrayList<String> allLabelsAfter = dbac.getAllAnnotationLabels();
     		assertFalse(allLabelsAfter.contains(testLabelFT));

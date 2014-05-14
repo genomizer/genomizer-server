@@ -2,6 +2,7 @@ package testSuite.unitTests;
 
 import static org.junit.Assert.*;
 
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -19,6 +20,8 @@ public class AddNewFileTests {
 
     private static DatabaseAccessor dbac;
 
+    private static FilePathGenerator fpg;
+
     private String testFileName = "testFileName1";
     private int testFileType = FileTuple.RAW;
     private String testAuthor = "test File Author1";
@@ -35,6 +38,8 @@ public class AddNewFileTests {
         dbac = new DatabaseAccessor(TestInitializer.username,
                 TestInitializer.password, TestInitializer.host,
                 TestInitializer.database);
+
+        fpg = new FilePathGenerator(DatabaseAccessor.DATAFOLDER);
     }
 
     @AfterClass
@@ -66,9 +71,12 @@ public class AddNewFileTests {
     @Test
     public void testGetDeleteGetAddGetFile() throws Exception {
 
-        String expectedFilePath = FilePathGenerator.GenerateFilePath(testExpId,
+        String expectedFilePath = fpg.generateFilePath(testExpId,
                 testFileType, testFileName);
+        System.out.println(expectedFilePath);
+
         FileTuple ft = dbac.getFileTuple(expectedFilePath);
+
         assertEquals(expectedFilePath, ft.path);
 
         Experiment e = dbac.getExperiment(testExpId);
@@ -93,11 +101,14 @@ public class AddNewFileTests {
 
     @Test
     public void shouldContainRightAttributes() throws Exception {
-        String expectedFilePath = FilePathGenerator.GenerateFilePath(testExpId,
+        String expectedFilePath = fpg.generateFilePath(testExpId,
                 testFileType, testFileName);
-        String expectedInputFilePath = FilePathGenerator.GenerateFilePath(testExpId,
+
+        String expectedInputFilePath = fpg.generateFilePath(testExpId,
                 testFileType, testInputFileName);
+
         FileTuple ft = dbac.getFileTuple(expectedFilePath);
+
         assertEquals(expectedFilePath, ft.path);
         assertEquals(testExpId, ft.expId);
         assertEquals("Raw", ft.type);
