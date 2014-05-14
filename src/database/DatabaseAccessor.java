@@ -140,11 +140,18 @@ public class DatabaseAccessor {
     public List<Experiment> search(String pubMedString) throws IOException,
             SQLException {
 
+
+
         if (pm2sql.hasFileConstraint(pubMedString)) {
             return searchFiles(pubMedString);
         }
 
         return searchExperiments(pubMedString);
+    }
+
+    private boolean isPubMedStringValid(String pubMedString){
+
+    	return false;
     }
 
     /**
