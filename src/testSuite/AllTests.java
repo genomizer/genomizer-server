@@ -20,15 +20,15 @@ import testSuite.unitTests.TestGetAnnotationObject;
 import testSuite.unitTests.UpdateExperimentTest;
 import testSuite.unitTests.UserInfoTests;
 import testSuite.unitTests.removeAnnotationValueTest;
-
+import testSuite.unitTests.ProcessRawToProfileTests;
 
 
 @RunWith(Suite.class)
 @SuiteClasses({ AddAnnotationPossibilitiesTests.class, ExperimentTests.class, FileTableTests.class,
 				PubMedToSQLConverterTests.class, SearchDatabaseTests.class, AddNewFileTests.class,
 				TestAnnotationRequiredDefault.class, TestChainFiles.class, TestChangeAnnotationValue.class,
-				TestFileNameValidator.class, TestFilePathGEN.class, TestGetAnnotationObject.class, 
-				AddDropDownValueTest.class, removeAnnotationValueTest.class,
+				TestFileNameValidator.class, TestFilePathGEN.class, TestGetAnnotationObject.class,
+				AddDropDownValueTest.class, removeAnnotationValueTest.class, ProcessRawToProfileTests.class,
 				UpdateExperimentTest.class, UserInfoTests.class })
 public class AllTests {
 
