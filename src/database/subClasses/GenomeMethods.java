@@ -11,11 +11,24 @@ import java.util.List;
 import database.FilePathGenerator;
 import database.ServerDependentValues;
 
+/**
+ * Class that contains all the methods for adding,changing, getting and
+ * removing genome releases and chain files. This class is a subClass of
+ * databaseAcessor.java.
+ *
+ * date: 2014-05-14
+ * version: 1.0
+ */
 public class GenomeMethods {
 
 	private Connection conn;
 	private FilePathGenerator fpg;
 
+	/**
+	 * constructor for the genomeMethods class.
+	 * @param connection Connection, the database jdbc connection.
+	 * @param filePG FilePathGenerator, object reference to that class.
+	 */
 	public GenomeMethods(Connection connection, FilePathGenerator filePG){
 
 			conn = connection;
@@ -24,15 +37,16 @@ public class GenomeMethods {
 
 	/**
      * Gets the file path to a stored Genome Release
-     * @param genomeVersion - The version to get filepath to, should use getAllGenomeReleases()
+     * @param genomeVersion - The version to get filepath to,
+     * should use getAllGenomeReleases()
      * and let user choose a version
-     * @return - a file path
+     * @return String path - a file path
      * @throws SQLException
      */
 
     public String getGenomeRelease(String genomeVersion) throws SQLException{
 
-        String query = "SELECT FilePath FROM Genome_Release WHERE (Version = ?)";
+        String query ="SELECT FilePath FROM Genome_Release WHERE (Version = ?)";
 
         PreparedStatement ps = conn.prepareStatement(query);
 
@@ -121,9 +135,12 @@ public class GenomeMethods {
     }
 
     /**
-    *
-    * @param species
-    * @return
+    * method for getting all the genome releases currently stored in the
+    * database.
+    * @param species String, the name of the specie you want to get genome
+    * realeases for.
+    * @return genomeVersions List<String>, list of all the genome releases for
+    * a specific specie.
     * @throws SQLException
     */
    public List<String> getAllGenomReleases(String species) throws SQLException {
@@ -146,6 +163,14 @@ public class GenomeMethods {
         return genomeVersions;
     }
 
+   /**
+    * get a specific chainfile depending on from and to what genome release you
+    * want to convert between.
+    * @param fromVersion String, the name of the old genome release version
+    * @param toVersion String, the name of the new genome release version
+    * @return resFilePath String, the filePath of that chain file.
+    * @throws SQLException
+    */
     public String getChainFile(String fromVersion, String toVersion)
             throws SQLException {
 
@@ -157,16 +182,16 @@ public class GenomeMethods {
         ps.setString(2, toVersion);
 
         ResultSet rs = ps.executeQuery();
-        String res = null;
+        String resFilePath = null;
 
         if (rs.next()) {
 
-            res = rs.getString("FilePath");
+        	resFilePath = rs.getString("FilePath");
         }
 
         ps.close();
 
-        return res;
+        return resFilePath;
     }
 
     /**
@@ -232,6 +257,9 @@ public class GenomeMethods {
      */
     public int removeChainFile(String fromVersion, String toVersion)
             throws SQLException {
+
+
+
 
         String query = "DELETE FROM Chain_File WHERE (FromVersion = ?)"
                 + " AND (ToVersion = ?)";

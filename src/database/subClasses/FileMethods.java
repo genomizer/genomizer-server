@@ -11,12 +11,23 @@ import database.FileTuple;
 import database.ServerDependentValues;
 
 
-
+/**
+ * Class that contains all the methods for adding,changing, getting and
+ * removing Files in the database. This class is a subClass of
+ * databaseAcessor.java.
+ *
+ * date: 2014-05-14
+ * version: 1.0
+ */
 public class FileMethods {
 
 	private Connection conn;
 	private FilePathGenerator fpg;
 
+	/**
+	 * Constructor for the fileMethod object.
+	 * @param connection Connection, the connection to the database.
+	 */
 	public FileMethods(Connection connection, FilePathGenerator filePG){
 
 			conn = connection;
@@ -24,29 +35,29 @@ public class FileMethods {
 	}
 
 	 /**
-     * @param expID
+     * @param expID String
      *            The unique name of the experiment. OBS! If not null,
      *            this must reference an experiment that has been
      *            previously added.
-     * @param fileType
+     * @param fileType int
      *            An Integer identifying the file type eg.
      *            FileTuple.RAW
-     * @param fileName
-     * @param inputFileName
+     * @param fileName String
+     * @param inputFileName String
      *            The name of the corresponding input file or null if
      *            there is no corresponding input file
-     * @param metaData
+     * @param metaData String
      *            The parameters used in file creation or null if not
      *            applicable
-     * @param author
-     * @param uploader
-     * @param isPrivate
-     * @param genomeRelease
+     * @param author String
+     * @param uploader String
+     * @param isPrivate boolean
+     * @param genomeRelease String
      *            The genome release version identifyer (eg. "hg38")
      *            or null if not applicable. OBS! If not null, this
      *            must reference a genome release that has been
      *            previously uploaded.
-     * @return The FileTuple inserted in the database or null if no
+     * @return FileTuple - The FileTuple inserted in the database or null if no
      *         file was entered into the database.
      * @throws SQLException
      *             If the query could not be executed. (Probably
@@ -103,8 +114,9 @@ public class FileMethods {
      * Returns the FileTuple object associated with the given
      * filePath.
      *
-     * @param filePath
-     * @return The corresponding FileTuple or null if no such file exists
+     * @param filePath String
+     * @return FileTuple - The corresponding FileTuple or null if no such file
+     * 					   exists
      * @throws SQLException
      *             If the query could not be executed.
      */
@@ -217,9 +229,8 @@ public class FileMethods {
     /**
      * Deletes a file from the database.
      *
-     * @param path
-     *            the path to the file.
-     * @return the number of deleted tuples in the database.
+     * @param path String - the path to the file.
+     * @return int - the number of deleted tuples in the database.
      * @throws SQLException
      *             if the query does not succeed
      */
@@ -238,8 +249,7 @@ public class FileMethods {
     /**
      * Deletes a file from the database using the fileID.
      *
-     * @param fileID
-     *            the fileID of the file to be deleted.
+     * @param fileID int - the fileID of the file to be deleted.
      * @return 1 if deletion was successful, else 0.
      * @throws SQLException
      */
@@ -257,8 +267,7 @@ public class FileMethods {
      * Checks if the file with the specified fileID exists in the
      * database.
      *
-     * @param fileID
-     *            the fileID of the file.
+     * @param fileID int - the fileID of the file.
      * @return true if the file exists, else false.
      * @throws SQLException
      */

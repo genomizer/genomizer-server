@@ -13,10 +13,22 @@ import java.util.Map;
 
 import database.Annotation;
 
+/**
+ * Class that contains all the methods for adding,changing, getting and
+ * removing Annotations in the database. This class is a subClass of
+ * databaseAcessor.java.
+ *
+ * date: 2014-05-14
+ * version: 1.0
+ */
 public class AnnotationMethods {
 
 	private Connection conn;
 
+	/**
+	 * Constructor for the AnnotationMethod object.
+	 * @param connection Connection, the connection to the database.
+	 */
 	public AnnotationMethods(Connection connection){
 
 		conn = connection;
@@ -25,8 +37,8 @@ public class AnnotationMethods {
 	 /**
      * Gets all the annotation possibilities from the database.
      *
-     * @return a Map with the label string as key and datatype as
-     *         value.
+     * @return annotations Map<String, Integer> -
+     * 		   a Map with the label string as key and datatype as value.
      *
      *         The possible datatypes are FREETEXT and DROPDOWN.
      * @throws SQLException
@@ -56,10 +68,10 @@ public class AnnotationMethods {
     /**
      * Creates an Annotation object from an annotation label.
      *
-     * @param label
+     * @param label String -
      *            the name of the annotation to create the object for.
-     * @return the Annotation object. If the label does not exist,
-     *         then null will be returned.
+     * @return Annotation - the Annotation object. If the label does not
+     * 		   exist, then null will be returned.
      * @throws SQLException
      *             if the query does not succeed.
      */
@@ -88,9 +100,9 @@ public class AnnotationMethods {
      *
      * @param labels
      *            the list of labels.
-     * @return will return a list with all the annotations with valid
-     *         labels. If the list with labels is empty or none of the
-     *         labels are valid, then it will return null.
+     * @return annotations List<Annotation> - will return a list with all the
+     * 		   annotations with valid labels. If the list with labels is empty
+     * 		   or none of the labels are valid, then it will return null.
      * @throws SQLException
      *             if the query does not succeed.
      */
@@ -117,7 +129,7 @@ public class AnnotationMethods {
      * Finds all annotationLabels that exist in the database, example
      * of labels: sex, tissue, etc...
      *
-     * @return ArrayList<String> annotationLabels
+     * @return  annotationLabels ArrayList<String>
      */
     public ArrayList<String> getAllAnnotationLabels() {
 
@@ -146,7 +158,7 @@ public class AnnotationMethods {
      *
      * @param label
      *            annotation label.
-     * @return the annotation's datatype (FREETEXT or DROPDOWN).
+     * @return integer - the annotation's datatype (FREETEXT or DROPDOWN).
      *
      * @throws SQLException
      *             if the query does not succeed
@@ -163,9 +175,9 @@ public class AnnotationMethods {
      * Gets the default value for a annotation if there is one, If not
      * it returns NULL.
      *
-     * @param annotationLabel
+     * @param annotationLabel String -
      *            the name of the annotation to check
-     * @return The defult value or NULL.
+     * @return DefaultValue String - The defult value or NULL.
      * @throws SQLException
      */
     public String getDefaultAnnotationValue(String annotationLabel)
@@ -188,9 +200,9 @@ public class AnnotationMethods {
     /**
      * Deletes an annotation from the list of possible annotations.
      *
-     * @param label
+     * @param label String -
      *            the label of the annotation to delete.
-     * @return the number of tuples deleted in the database.
+     * @return res integer - the number of tuples deleted in the database.
      * @throws SQLException
      *             if the query does not succeed
      */
@@ -212,14 +224,14 @@ public class AnnotationMethods {
      * Adds a free text annotation to the list of possible
      * annotations.
      *
-     * @param label
+     * @param label String
      *            the name of the annotation.
-     * @param required
+     * @param required boolean
      *            if the annotation should be forced or not
-     * @param defaultValue
+     * @param defaultValue String
      *            the default value this field should take or null if
      *            a default value is not required
-     * @return the number of tuples updated in the database.
+     * @return res int - the number of tuples updated in the database.
      * @throws SQLException
      *             if the query does not succeed
      */
@@ -245,9 +257,9 @@ public class AnnotationMethods {
      * Checks if a given annotation is required to be filled by the
      * user.
      *
-     * @param annotationLabel
+     * @param annotationLabel String -
      *            the name of the annotation to check
-     * @return true if it is required, else false
+     * @return boolean - true if it is required, else false
      * @throws SQLException
      */
     public boolean isAnnotationRequiered(String annotationLabel)
@@ -272,9 +284,9 @@ public class AnnotationMethods {
      * Gets all the choices for a drop down annotation. Deprecated,
      * use {@link #getChoices(String) getChoices} instead.
      *
-     * @param label
+     * @param label String
      *            the drop down annotation to get the choice for.
-     * @return the choices.
+     * @return theChoices ArrayList<String> - all the choices.
      * @throws SQLException
      *             if the query does not succeed
      */
@@ -305,11 +317,12 @@ public class AnnotationMethods {
      * Adds a drop down annotation to the list of possible
      * annotations.
      *
-     * @param label
+     * @param label String -
      *            the name of the annotation.
-     * @param choices
+     * @param choices List<String> -
      *            the possible values for the annotation.
-     * @return the number of tuples inserted into the database.
+     * @return tuplesInserted int - the number of tuples inserted into the
+     * 		   database.
      * @throws SQLException
      *             if the query does not succeed
      * @throws IOException
@@ -368,12 +381,12 @@ public class AnnotationMethods {
     /**
      * Method to add a value to a existing DropDown annotation.
      *
-     * @param label
+     * @param label String
      *            , the label of the chosen DropDown annotation.
-     * @param value
+     * @param value String
      *            , the value that will be added to the DropDown
      *            annotation.
-     * @return, Integer, how many rows that were added to the
+     * @return Integer, how many rows that were added to the
      *          database.
      * @throws SQLException
      *             , if the value already exist or another SQL error.
@@ -415,17 +428,14 @@ public class AnnotationMethods {
     /**
      * Method to remove a given annotation of a dropdown- annotation.
      *
-     * @param label
-     *            , the label of the chosen annotation
-     * @param the
-     *            value of the chosen annotation.
+     * @param label String - the label of the chosen annotation
+     * @param value String - the value of the chosen annotation.
      * @return Integer, how many values that were deleted.
      * @throws SQLException
      * @throws IOException
      *             , throws an IOException if the chosen value to be
      *             removed is the active DefaultValue of the chosen
      *             label.
-     *
      */
     public int removeAnnotationValue(String label, String value)
             throws SQLException, IOException {
@@ -469,11 +479,10 @@ public class AnnotationMethods {
      *
      * OBS! This changes the label for all experiments.
      *
-     * @param String
-     *            oldLabel
-     * @param string
-     *            newLabel
-     * @return the number of tuples updated
+     * @param oldLabel String
+     * @param newLabel string
+     *
+     * @return res int - the number of tuples updated
      * @throws SQLException If the update fails
      */
     public int changeAnnotationLabel(String oldLabel, String newLabel)
@@ -504,14 +513,9 @@ public class AnnotationMethods {
      * Throws an SQLException if the new value already exists in the choices
      * table (changing all males to female, and female is already in the table)
      *
-     * @param String
-     *            label
-     *boolean true if changed succeeded, false if it failed.
-     * @param String
-     *            oldValue
-     *
-     * @param String
-     *            newValue
+     * @param label String - the label name.
+     * @param oldValue String - the name of the old annotation value.
+     * @param newValue String - the name of the new annotation value.
      *
      * @throws SQLException
      */
@@ -550,9 +554,8 @@ public class AnnotationMethods {
     /**
      * Gets all the choices for a drop down annotation.
      *
-     * @param label
-     *            the drop down annotation to get the choice for.
-     * @return the choices.
+     * @param label String - the drop down annotation to get the choice for.
+     * @return choices List<String> - the choices for one annotation label.
      * @throws SQLException
      *             if the query does not succeed
      */
@@ -576,6 +579,16 @@ public class AnnotationMethods {
         return choices;
     }
 
+    /**
+     * binds a sql prepared query statement with parameters, example:
+     * "UPDATE Annotation_Choices SET Value = ? WHERE Label = ? and Value = ?;"
+     * and the questionmarks are the parameters.
+     * @param query PreparedStatement
+     * @param params List<String> - the parameters connected to the query, size
+     * 		  of list must be equal to nr of questionmarks in query.
+     * @return query PreparedStatement
+     * @throws SQLException
+     */
     public PreparedStatement bind(PreparedStatement query,
             List<String> params) throws SQLException {
 
