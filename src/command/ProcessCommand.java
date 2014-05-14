@@ -111,7 +111,7 @@ public class ProcessCommand extends Command {
 
 		//TODO Hardcoded. Not using CanBeNull class
 		if(username.length() > MaxSize.USERNAME || username.length() <= 0 ||
-				processtype.length() > MaxSize.FILE_FILETYPE || processtype.length() <= 0 ||
+				processtype.length() <= 0 ||
 				metadata.length() > MaxSize.FILE_METADATA ||
 				genomeRelease.length() > MaxSize.GENOME_VERSION ||
 				filename.length() > MaxSize.FILE_FILENAME || filename.length() <= 0 ||
@@ -144,7 +144,7 @@ public class ProcessCommand extends Command {
 
 		try {
 
-			dbac = new  DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
+			dbac = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
 			System.out.println("created databaseaccesor");
 			processHandler = new ProcessHandler();
 
@@ -190,6 +190,11 @@ public class ProcessCommand extends Command {
 		} catch (SQLException e) {
 			System.err.println("SQL Exception in ProcessCommand execute:");
 			e.printStackTrace();
+			return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+			System.err.println("IO Exception in ProcessCommand execute.");
+			e1.printStackTrace();
 			return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE);
 		}
 
