@@ -23,6 +23,7 @@ import testSuite.unitTests.UpdateExperimentTest;
 import testSuite.unitTests.UserInfoTests;
 import testSuite.unitTests.removeAnnotationValueTest;
 
+
 @RunWith(Suite.class)
 @SuiteClasses({ AddAnnotationPossibilitiesTests.class, ExperimentTests.class,
         FileTableTests.class, PubMedToSQLConverterTests.class,
@@ -33,6 +34,7 @@ import testSuite.unitTests.removeAnnotationValueTest;
         AddDropDownValueTest.class, removeAnnotationValueTest.class,
         UpdateExperimentTest.class, UserInfoTests.class,
         ProcessRawToProfileTests.class, GenomeReleaseTableTests.class })
+
 public class AllTests {
 
 }
