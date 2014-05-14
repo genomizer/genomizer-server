@@ -1,5 +1,6 @@
 package command;
 
+import java.io.IOException;
 import java.sql.SQLException;
 
 import database.DatabaseAccessor;
@@ -46,6 +47,9 @@ public class DeleteFileFromExperimentCommand extends Command {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
+		} catch (IOException e) {
+			//Todo, use error message
+			return new MinimalResponse(StatusCode.BAD_REQUEST);
 		} finally {
 			try {
 				db.close();

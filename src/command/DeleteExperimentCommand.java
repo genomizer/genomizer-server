@@ -45,12 +45,17 @@ public class DeleteExperimentCommand extends Command {
 			db = initDB();
 			int tup = db.deleteExperiment(this.header);
 		} catch (SQLException e) {
+			//Todo, use error message
 			return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
+		} catch (IOException e) {
+			//Todo, use error message
+			return new MinimalResponse(StatusCode.BAD_REQUEST);
 		} finally {
 			try {
 				db.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
+				//Todo, use error message
 				return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
 			}
 		}
