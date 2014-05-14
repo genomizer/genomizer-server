@@ -1,20 +1,25 @@
 #!/bin/bash
 
+username=$1
+password=$2
+
 ant jar
-dateres=server_$(date +%d%m_%H%M).jar
-mv server.jar $dateres
+filename=server_$(date +%d%m_%H%M).jar
+mv server.jar $filename
 
 /usr/bin/expect <<EOF
 
-spawn scp -P 2250 $dateres pvt@scratchy.cs.umu.se:
+spawn scp -P 2222 $filename $username@scratchy.cs.umu.se:
 expect "password:"
 sleep 1
-send "pvt\r"
-spawn ssh pvt@scratchy.cs.umu.se -p 2250
+send "$password\r"
+spawn ssh $username@scratchy.cs.umu.se -p 2222
 expect "password:"
 sleep 1
-send "pvt\r"
+send "$password\r"
 sleep 1
+send "yes | cp $filename server.jar\r"
+
 interact
 
 EOF
