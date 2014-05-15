@@ -277,7 +277,7 @@ public class CommandFactory {
 	 */
 	public Command createDeleteGenomeReleaseCommand(String restful) {
 
-		final Command deleteGenomeReleaseCmd = new DeleteGenomeReleaseCommand(restful, null);
+		final Command deleteGenomeReleaseCmd = new DeleteGenomeReleaseCommand(restful);
 
 		return deleteGenomeReleaseCmd;
 
