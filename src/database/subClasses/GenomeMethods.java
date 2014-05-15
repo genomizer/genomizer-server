@@ -1,5 +1,6 @@
 package database.subClasses;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -240,9 +241,9 @@ public class GenomeMethods {
     }
 
     /**
-     * Deletes a chain_file from the database. You find the unique file by
-     * sending in the genome version the file converts from and the genome
-     * version the file converts to.
+     * Deletes a chain_file from the database and the physical file on the
+     * system. You find the unique file by sending in the genome version the
+     * file converts from and the genome version the file converts to.
      *
      * @param fromVersion
      *            - genome version the Chain_file converts from
@@ -254,7 +255,7 @@ public class GenomeMethods {
      *             - if the query does not succeed
      */
     public int removeChainFile(String fromVersion, String toVersion)
-            throws Exception {
+            throws SQLException {
 
     	String filePath = getChainFile(fromVersion, toVersion);
 
@@ -264,13 +265,12 @@ public class GenomeMethods {
         PreparedStatement deleteStatement = conn.prepareStatement(query);
         deleteStatement.setString(1, fromVersion);
         deleteStatement.setString(2, toVersion);
-
-        int resCount = 0;
+        int resCount = deleteStatement.executeUpdate();
+    	deleteStatement.close();
+    	System.out.println("Filepath: " + filePath);
         File chainFile = new File(filePath);
         if (chainFile.exists() && chainFile.canWrite()) {
-        	chainFile.delete();
-        	resCount = deleteStatement.executeUpdate();
-        	deleteStatement.close();
+       		chainFile.delete();
         }
 
         return resCount;
