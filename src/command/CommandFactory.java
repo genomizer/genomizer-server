@@ -268,7 +268,7 @@ public class CommandFactory {
 	 */
 	public Command createRemoveAnnotationFieldCommand(String json, String restful) {
 
-		return new DeleteAnnotationFieldCommand();
+		return new DeleteAnnotationFieldCommand(restful);
 
 	}
 
@@ -294,6 +294,34 @@ public class CommandFactory {
 	public Command createUpdateAnnotationPrivilegesCommand(String json, String restful) {
 
 		return new UpdateAnnotationPrivilegesCommand();
+
+	}
+
+	/**
+	 * Used to create the command needed to add genome releases.
+	 *
+	 * @param json string to initiate class.
+	 * @return the actual command.
+	 */
+	public Command createAddGenomeReleaseCommand(String json) {
+
+		final Command addGenomeReleaseCmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
+
+		return addGenomeReleaseCmd;
+
+	}
+
+	/**
+	 * Used to create the command needed to delete genome releases.
+	 *
+	 * @param json string to initiate class.
+	 * @return the actual command.
+	 */
+	public Command createDeleteGenomeReleaseCommand(String json) {
+
+		final Command deleteGenomeReleaseCmd = gson.fromJson(json, DeleteGenomeReleaseCommand.class);
+
+		return deleteGenomeReleaseCmd;
 
 	}
 

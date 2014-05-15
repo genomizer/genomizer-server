@@ -2,16 +2,10 @@ package command;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Map;
-
-import com.google.gson.annotations.Expose;
-
 import database.DatabaseAccessor;
 import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
-import server.DatabaseSettings;
 
 /**
  * Class used to represent a logout command.
@@ -21,8 +15,9 @@ import server.DatabaseSettings;
  */
 public class DeleteAnnotationFieldCommand extends Command {
 
-	@Expose
-	private ArrayList<DeleteAnnotationInfo> deleteId = new ArrayList<DeleteAnnotationInfo>();
+	public DeleteAnnotationFieldCommand(String restful) {
+		header = restful;
+	}
 
 	/**
 	 * Used to validate the logout command.
@@ -31,13 +26,8 @@ public class DeleteAnnotationFieldCommand extends Command {
 	 */
 	@Override
 	public boolean validate() {
-		if(deleteId == null) {
+		if(header == null) {
 			return false;
-		}
-		for(DeleteAnnotationInfo da: deleteId) {
-			if(da.getName() == null) {
-				return false;
-			}
 		}
 		return true;
 	}
@@ -52,14 +42,13 @@ public class DeleteAnnotationFieldCommand extends Command {
 
 		try {
 			db = initDB();
-			for(DeleteAnnotationInfo da: deleteId) {
-				db.deleteAnnotation(da.getName());
-			}
+			db.deleteAnnotation(header);
 			db.close();
 			return new MinimalResponse(200);
-
 		} catch (SQLException e) {
+			System.out.println("ERROR CODE: " + e.getErrorCode());
 			e.printStackTrace();
+			System.out.println("ERROR MESS: "+ e.getMessage());
 			return new MinimalResponse(StatusCode.BAD_REQUEST);
 		} catch (IOException e) {
 			e.printStackTrace();
