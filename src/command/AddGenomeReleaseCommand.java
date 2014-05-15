@@ -1,8 +1,8 @@
 package command;
 
-import com.google.gson.annotations.Expose;
-
+import response.MinimalResponse;
 import response.Response;
+import response.StatusCode;
 
 /**
  * Class used to handle adding a genome release.
@@ -12,20 +12,28 @@ import response.Response;
  */
 public class AddGenomeReleaseCommand extends Command {
 
-	@Expose
-	String temporaryString = null;
 
-
+	/**
+	 * Method used to validate the command.
+	 */
 	@Override
 	public boolean validate() {
-		// TODO Auto-generated method stub
+
 		return false;
 	}
 
+	/**
+	 * method used to execute the actual command.
+	 */
 	@Override
 	public Response execute() {
-		// TODO Auto-generated method stub
-		return null;
+
+		Response rsp = null;
+
+		rsp = new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
+
+
+		return rsp;
 	}
 
 }

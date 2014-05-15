@@ -18,7 +18,9 @@ public class AddGenomeReleaseTest {
 	 */
 	@Test
 	public void testCreateNotNull() {
+
 		fail("Not yet implemented");
+
 	}
 
 	/**
@@ -26,6 +28,8 @@ public class AddGenomeReleaseTest {
 	 */
 	@Test
 	public void testValidate() {
+
+
 
 	}
 
