@@ -27,6 +27,8 @@ public class RawToProfileConverter extends Executor {
 	private String rawFile_1_Name;
 	private String rawFile_2_Name;
 	private String logString;
+	private RawToProfileProcessChecker checker;
+	private String filesToBeMoved = null;
 
 	/**
 	 * Takes a string array that contains bowtie parameters and then follows a
@@ -52,14 +54,15 @@ public class RawToProfileConverter extends Executor {
 	 */
 	public String procedure(String[] parameters, String inFolder,
 			String outFilePath) throws InterruptedException, IOException {
-		File[] inFiles = new File("/" + inFolder).listFiles();
+		checker = RawToProfileProcessChecker.rawToProfileCheckerFactory();
+
+		File[] inFiles = new File(inFolder).listFiles();
 		this.parameters = parameters;
 		this.inFolder = inFolder;
-
-		if(verifyInData(parameters, inFolder, outFilePath) == false && !checkInFiles(inFiles)) {
+		if(verifyInData(parameters, inFolder, outFilePath) == false || !CorrectInfiles(inFiles)) {
 			logString =  "Indata is not in the correct format";
 		} else {
-
+			checker.calculateWhichProcessesToRun(parameters);
 			rawFile1 = inFiles[0].getName();
 			rawFile_1_Name = rawFile1.substring(0, rawFile1.length() - 6);
 			if (inFiles.length == 2) {
@@ -72,32 +75,46 @@ public class RawToProfileConverter extends Executor {
 			makeConversionDirectories(remoteExecution + dir + "/sorted");
 			printTrace(parameters, inFolder, outFilePath);
 			if (fileDir.exists()) {
-				logString = runBowTie(rawFile1, rawFile_1_Name);
-				sortSamFile(rawFile_1_Name);
-				if (inFiles.length == 2) {
+				if(checker.shouldRunBowTie()) {
+					logString = runBowTie(rawFile1, rawFile_1_Name);
+					System.out.println("nu körs sortering");
+					sortSamFile(rawFile_1_Name);
+					if (inFiles.length == 2) {
+						logString = logString + "\n"
+								+ runBowTie(rawFile2, rawFile_2_Name);
+						// Sets parameters for sorting second sam file
+						sortSamFile(rawFile_2_Name);
+					}// Sets parameters for sorting first sam file
+					filesToBeMoved = sortedDir;
+				}
+				if(checker.shouldRunSamToGff()) {
+					logString = logString + "\n" + executeScript(parse(samToGff));
+					filesToBeMoved = sortedDir
+							+ "reads_gff/";
+				}
+				if(checker.shouldRunGffToAllnusgr()) {
 					logString = logString + "\n"
-							+ runBowTie(rawFile2, rawFile_2_Name);
-					// Sets parameters for sorting second sam file
-					sortSamFile(rawFile_2_Name);
-				}// Sets parameters for sorting first sam file
-				logString = logString + "\n" + executeScript(parse(samToGff));
-				logString = logString + "\n"
 						+ executeScript(parse(gffToAllnusgr));
-				logString = logString + "\n" + executeScript(parse(smooth));
-				logString = logString + "\n" + executeScript(parse(step10));
-
-				if (parameters.length == 4) {
-					moveEndFiles(sortedDir
-							+ "reads_gff/allnucs_sgr/smoothed/Step10/",
-							outFilePath);
-				} else {
+					filesToBeMoved = sortedDir
+							+ "reads_gff/allnucs_sgr/";
+				}
+				if(checker.shouldRunSmoothing()) {
+					logString = logString + "\n" + executeScript(parse(smooth));
+					filesToBeMoved = sortedDir
+							+ "reads_gff/allnucs_sgr/smoothed/";
+				}
+				if(checker.shouldRunStep()) {
+					logString = logString + "\n" + executeScript(parse(step10));
+					filesToBeMoved = sortedDir
+					+ "reads_gff/allnucs_sgr/smoothed/Step10/";
+				}
+				if(checker.shouldRunRatioCalc()) {
 					doRatioCalculation(sortedDir
 							+ "reads_gff/allnucs_sgr/smoothed/Step10/",
 							parameters);
-					moveEndFiles(
-							sortedDir
-									+ "reads_gff/allnucs_sgr/smoothed/Step10/ratios/smoothed/",
-							outFilePath);
+
+							filesToBeMoved = sortedDir
+									+ "reads_gff/allnucs_sgr/smoothed/Step10/ratios/smoothed/";
 				}
 				/*
 				 * //Parameters for first sgr2wig execution sgr2wig =
@@ -107,19 +124,25 @@ public class RawToProfileConverter extends Executor {
 				 * outString = outString + " " + executeScript(parse(sgr2wig));
 				 */
 				// cleanUp(cleanUpInitiator(remoteExecution+dir));
+				/*
+				moveEndFiles(filesToBeMoved,
+						outFilePath);*/
 
 			} else {
 				logString = logString +" "+"Failed to create directory " + fileDir.toString();
 			}
 		}
+		System.out.println("logString = " +logString);
 		return logString;
 	}
 
-	private boolean checkInFiles(File[] inFiles) {
+	private boolean CorrectInfiles(File[] inFiles) {
 		boolean checkInFiles = true;
 		if(inFiles == null) {
+			System.out.println("infiles == null");
 			checkInFiles = false;
 		} else if (inFiles.length > 2 && inFiles.length < 1) {
+			System.out.println("infiles length bad");
 			checkInFiles = false;
 		}
 		return checkInFiles;
@@ -238,15 +261,20 @@ public class RawToProfileConverter extends Executor {
 			String outFilePath) {
 
 		if (parameters == null) {
+			System.out.println("param == null");
 			return false;
 		}
-		if (parameters.length != 4) {
-			if (parameters.length != 6) {
-				return false;
-			}
+		if (parameters.length < 0) {
+			System.out.println("param < 0");
+			return false;
+
+		} else if (parameters.length > 8) {
+			System.out.println("param > 8");
+			return false;
 		}
 
 		if (inFolder == null || outFilePath == null) {
+			System.out.println("inFOlder || outFolder == null");
 			return false;
 		}
 		return checkIfFolderExists(outFilePath) && checkIfFolderExists(inFolder);
@@ -256,6 +284,7 @@ public class RawToProfileConverter extends Executor {
 
 	private boolean checkIfFolderExists(String folder) {
 		File dir = new File(folder);
+		System.out.println("dire.exists = "+dir.exists());
 		return dir.exists();
 	}
 
@@ -267,7 +296,7 @@ public class RawToProfileConverter extends Executor {
 	 * @param outFile
 	 */
 	private void initiateConversionStrings(String[] parameters, String outFile) {
-		remoteExecution = "/scratch/resources/";
+		remoteExecution = "";
 		dir = "results_" + Thread.currentThread().getId() + "/";
 		sortedDir = remoteExecution + dir + "sorted/";
 		samToGff = "perl sam_to_readsgff_v1.pl " + sortedDir;
