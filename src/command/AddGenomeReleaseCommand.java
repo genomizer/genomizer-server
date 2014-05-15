@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
 
 import database.DatabaseAccessor;
 
@@ -12,6 +11,8 @@ import response.AddGenomeReleaseResponse;
 import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
+
+//TODO: Add validation code on lengths etc.
 
 /**
  * Class used to handle adding a genome release.
@@ -21,17 +22,14 @@ import response.StatusCode;
  */
 public class AddGenomeReleaseCommand extends Command {
 
-	//TODO: Check API on names on JSON stuff. Also check in factory.
-	@SerializedName("genomeversion")
-	@Expose
-	private String genomeVersion = null;
-
-	@Expose
-	private String species = null;
-
-	@SerializedName("filename")
 	@Expose
 	private String fileName = null;
+
+	@Expose
+	private String specie = null;
+
+	@Expose
+	private String genomeVersion = null;
 
 	/**
 	 * Method used to validate the command.
@@ -39,7 +37,13 @@ public class AddGenomeReleaseCommand extends Command {
 	@Override
 	public boolean validate() {
 
-		return false;
+		if( (fileName == null) || (specie == null) || (genomeVersion == null) ) {
+
+			return false;
+
+		}
+
+		return true;
 
 	}
 
@@ -55,7 +59,7 @@ public class AddGenomeReleaseCommand extends Command {
 		try {
 
 			db = initDB();
-			String filePath = db.addGenomeRelease(genomeVersion, species, fileName);
+			String filePath = db.addGenomeRelease(genomeVersion, specie, fileName);
 			rsp = new AddGenomeReleaseResponse(StatusCode.CREATED, filePath);
 
 		} catch (SQLException e) {

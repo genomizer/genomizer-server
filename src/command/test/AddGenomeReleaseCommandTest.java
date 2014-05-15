@@ -11,6 +11,8 @@ import com.google.gson.GsonBuilder;
 import command.AddGenomeReleaseCommand;
 import command.Command;
 
+//TODO: Add validation for size of fileName, specie and genomveVersion etc.
+
 /**
  * Class used to test the AddGenomeRelease class.
  *
@@ -53,7 +55,7 @@ public class AddGenomeReleaseCommandTest {
 	@Test
 	public void testAddGenomeReleaseJSON() {
 
-		String json = "{\"genomeversion\":\"GV 1.0\",\"species\":\"human\",\"filename\":\"abc123\"}";
+		String json = "{\"fileName\":\"abc123\",\"specie\":\"human\",\"genomeVersion\":\"GV 1.0\"}";
 		final Command cmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
 	    String json2 = gson.toJson(cmd);
 
@@ -62,13 +64,46 @@ public class AddGenomeReleaseCommandTest {
 	}
 
 	/**
-	 * Test used to check that the validate method.
+	 * Test used to check that the validate method returns false
+	 * if fileName is null.
 	 */
 	@Test
-	public void testValidate() {
+	public void testValidateFileNameNull() {
 
-		fail("Not yet implemented");
+		String json = "{\"fileName\":null,\"specie\":\"human\",\"genomeVersion\":\"GV 1.0\"}";
+		final Command cmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
+
+		assertFalse(cmd.validate());
+
+	}
+
+	/**
+	 * Test used to check that the validate method returns false
+	 * if specie is null.
+	 */
+	@Test
+	public void testValidateSpecieNull() {
+
+		String json = "{\"fileName\":\"abc123\",\"specie\":null,\"genomeVersion\":\"GV 1.0\"}";
+		final Command cmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
+
+		assertFalse(cmd.validate());
+
+	}
+
+	/**
+	 * Test used to check that the validate method returns false
+	 * if genomeVersion is null.
+	 */
+	@Test
+	public void testValidateGenomeVersionNull() {
+
+		String json = "{\"fileName\":\"abc123\",\"specie\":\"human\",\"genomeVersion\":null}";
+		final Command cmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
+
+		assertFalse(cmd.validate());
 
 	}
 
 }
+
