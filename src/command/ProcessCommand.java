@@ -25,6 +25,8 @@ public class ProcessCommand extends Command {
 
 	private String username;
 
+	private long timestamp;
+
 	//Following fields corresponds to the JSON body of a process command.
 	@Expose
 	private String processtype;
@@ -307,5 +309,12 @@ public class ProcessCommand extends Command {
 //				"fileid: " + fileId + "\n" +
 				"genomeRelease: " + genomeRelease + "\n" +
 				"author:" + author + "\n";
+	}
+
+	public void setTimestamp(long currentTimeMillis) {
+		this.timestamp = currentTimeMillis;
+	}
+	public long getTimestamp(){
+		return this.timestamp;
 	}
 }
