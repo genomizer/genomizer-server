@@ -3,8 +3,6 @@ package command;
 import java.io.IOException;
 import java.sql.SQLException;
 
-import com.google.gson.annotations.Expose;
-
 import database.DatabaseAccessor;
 import response.DeleteGenomeReleaseResponse;
 import response.MinimalResponse;
@@ -21,11 +19,16 @@ import response.StatusCode;
  */
 public class DeleteGenomeReleaseCommand extends Command {
 
-	@Expose
 	private String genomeVersion = null;
 
-	@Expose
 	private String specie = null;
+
+	public DeleteGenomeReleaseCommand(String genomeVersion, String specie) {
+
+		this.genomeVersion = genomeVersion;
+		this.genomeVersion = specie;
+
+	}
 
 	/**
 	 * Method used to validate the command.
