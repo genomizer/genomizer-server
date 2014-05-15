@@ -6,7 +6,6 @@ package command;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Map.Entry;
 
 import process.classes.ProcessHandler;
@@ -16,8 +15,6 @@ import response.StatusCode;
 import server.DatabaseSettings;
 import server.ResponseLogger;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.annotations.Expose;
 import database.*;
 
@@ -36,10 +33,6 @@ public class ProcessCommand extends Command {
 	private String[] parameters;
 	@Expose
 	private String genomeRelease;
-//	@Expose
-//	private String filename;
-//	@Expose
-//	private String fileId;
 	@Expose
 	private String expid;
 	@Expose
@@ -170,7 +163,6 @@ public class ProcessCommand extends Command {
 		DatabaseAccessor db = null;
 		ProcessHandler processHandler;
 		Entry<String, String> filepaths;
-		String genomePath;
 
 		try {
 
@@ -191,7 +183,7 @@ public class ProcessCommand extends Command {
 				System.err.println("Filepath.getValue(): " + filepaths.getValue());
 
 				try {
-					String log = processHandler.executeProcess("rawToProfile", parameters, filepaths.getKey(), filepaths.getValue());
+					processHandler.executeProcess("rawToProfile", parameters, filepaths.getKey(), filepaths.getValue());
 				} catch (InterruptedException e) {
 					// TODO Log response
 					System.err.println("CATCH InterruptedException in ProcessCommand.Execute when running processHandler.executeProcess");

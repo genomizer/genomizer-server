@@ -40,20 +40,27 @@ public class WorkHandler extends Thread{
 	public void run(){
 		System.out.println(Thread.currentThread().getName());
 
-		while(true){
-			if(!workQueue.isEmpty()){
-				ProcessCommand work = workQueue.poll();
-				System.out.println("The processcommand is going to be executed");
-				ProcessStatus stat = processStatus.get(work);
-				stat.status = "Started";
-				Response resp = work.execute();
-				if (resp.getCode()==StatusCode.CREATED){
-					stat.status = "Finished";
-				}else{
-					stat.status = "Crashed";
+			while(true){
+				System.out.println("loop");
+				if(!workQueue.isEmpty()){
+					ProcessCommand work = workQueue.poll();
+					System.out.println("The processcommand is going to be executed");
+					ProcessStatus stat = processStatus.get(work);
+					try{
+					stat.status = "Started";
+					}catch(NullPointerException e){
+						e.printStackTrace();
+					}
+					Response resp = work.execute();
+					System.err.println("AFTER EXECUTE PROCESS");
+					if (resp.getCode()==StatusCode.CREATED){
+						stat.status = "Finished";
+					}else{
+						stat.status = "Crashed";
+					}
 				}
 			}
-		}
+
 	}
 
 	public Collection<ProcessStatus> getProcessStatus() {
