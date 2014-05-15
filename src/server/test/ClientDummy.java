@@ -218,7 +218,7 @@ public class ClientDummy {
 	}
 
 	private static void sendDeleteAnnotation() throws Exception {
-		URL obj = new URL(url + "/annotation/testanno1");
+		URL obj = new URL(url + "/annotation/testanno221");
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
 		con.setRequestMethod("DELETE");
