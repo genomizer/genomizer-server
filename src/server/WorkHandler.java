@@ -1,5 +1,6 @@
 package server;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -12,23 +13,24 @@ import response.StatusCode;
 import command.Command;
 import command.GetAnnotationInformationCommand;
 import command.ProcessCommand;
+import command.ProcessStatus;
 
 
 public class WorkHandler extends Thread{
 
 	private Queue<ProcessCommand> workQueue;
-	private TreeMap<ProcessCommand,String> processStatus;
+	private HashMap<ProcessCommand,ProcessStatus> processStatus;
 
 	//A queue as a linked list
 	public WorkHandler(){
 		workQueue = new LinkedList<ProcessCommand>();
-		processStatus=new TreeMap<ProcessCommand, String>();
+		processStatus=new HashMap<ProcessCommand, ProcessStatus>();
 	}
 
 	//Add a command to the queue
 	public void addWork(ProcessCommand command) {
 		workQueue.add(command);
-		processStatus.put(command, "Waiting");
+		processStatus.put(command, new ProcessStatus(command));
 	}
 
 	//The thread runs all the time and checks if the queue is empty
@@ -42,22 +44,20 @@ public class WorkHandler extends Thread{
 			if(!workQueue.isEmpty()){
 				ProcessCommand work = workQueue.poll();
 				System.out.println("The processcommand is going to be executed");
-				processStatus.put(work,"Started");
+				ProcessStatus stat = processStatus.get(work);
+				stat.status = "Started";
 				Response resp = work.execute();
 				if (resp.getCode()==StatusCode.CREATED){
-					processStatus.put(work,"Finished");
+					stat.status = "Finished";
 				}else{
-					processStatus.put(work,"Crashed");
+					stat.status = "Crashed";
 				}
-					//else if (503)
-					//map.put(work,"crashed")
-
 			}
 		}
 	}
 
-	public TreeMap<ProcessCommand, String> getProcessStatus() {
-		return processStatus;
+	public Collection<ProcessStatus> getProcessStatus() {
+		return processStatus.values();
 	}
 }
 

@@ -1,9 +1,12 @@
 package command;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.TreeMap;
 
+import response.MinimalResponse;
 import response.Response;
+import response.StatusCode;
 import server.WorkHandler;
 
 public class GetProcessStatusCommand extends Command {
@@ -21,9 +24,9 @@ public class GetProcessStatusCommand extends Command {
 
 	@Override
 	public Response execute() {
+//		return new MinimalResponse(StatusCode.NO_CONTENT);
 
-		TreeMap<ProcessCommand,String> processStatus = workHandler.getProcessStatus();
-
+		Collection<ProcessStatus> processStatus = workHandler.getProcessStatus();
 
 		return null;
 	}
