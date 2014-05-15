@@ -100,7 +100,7 @@ public class ClientDummy {
 		String author = "yuri";*/
 
 
-		String username = "splutt";
+		String username = "jonas";
 		String filename = "filename1234";
 		String fileid = "1";
 		String expid = "Exp1";
