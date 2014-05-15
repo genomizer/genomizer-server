@@ -1,4 +1,4 @@
-package server.test;
+package server.test.dummies;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -6,7 +6,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 
-public class ServerCmd {
+public class testSettings {
+	public static final int port = 7000;
+	public static String host = "localhost";
+//	public static String host = "scratchy.cs.umu.se";
+	public static String url = "http://" + host + ":" + port;
 
 	static String printResponse(HttpURLConnection con) throws IOException {
 		int responseCode = con.getResponseCode();
@@ -30,4 +34,5 @@ public class ServerCmd {
 		wr.close();
 
 	}
+
 }

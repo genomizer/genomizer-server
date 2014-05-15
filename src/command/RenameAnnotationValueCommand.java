@@ -21,9 +21,6 @@ public class RenameAnnotationValueCommand extends Command {
 
 	@Override
 	public boolean validate() {
-		if(name == null || oldValue == null || newValue == null) {
-			return false;
-		}
 		return true;
 	}
 

@@ -9,62 +9,62 @@ import java.util.ArrayList;
 import java.util.List;
 
 import database.FilePathGenerator;
+import database.Genome;
 import database.ServerDependentValues;
 
 /**
- * Class that contains all the methods for adding,changing, getting and
- * removing genome releases and chain files. This class is a subClass of
+ * Class that contains all the methods for adding,changing, getting and removing
+ * genome releases and chain files. This class is a subClass of
  * databaseAcessor.java.
  *
- * date: 2014-05-14
- * version: 1.0
+ * date: 2014-05-14 version: 1.0
  */
 public class GenomeMethods {
 
-	private Connection conn;
-	private FilePathGenerator fpg;
+    private Connection conn;
+    private FilePathGenerator fpg;
 
-	/**
-	 * constructor for the genomeMethods class.
-	 * @param connection Connection, the database jdbc connection.
-	 * @param filePG FilePathGenerator, object reference to that class.
-	 */
-	public GenomeMethods(Connection connection, FilePathGenerator filePG){
+    /**
+     * constructor for the genomeMethods class.
+     *
+     * @param connection
+     *            Connection, the database jdbc connection.
+     * @param filePG
+     *            FilePathGenerator, object reference to that class.
+     */
+    public GenomeMethods(Connection connection, FilePathGenerator filePG) {
+        conn = connection;
+        fpg = filePG;
+    }
 
-			conn = connection;
-			fpg = filePG;
-	}
-
-	/**
+    /**
      * Gets the file path to a stored Genome Release
-     * @param genomeVersion - The version to get filepath to,
-     * should use getAllGenomeReleases()
-     * and let user choose a version
+     *
+     * @param genomeVersion
+     *            - The version to get filepath to, should use
+     *            getAllGenomeReleases() and let user choose a version
      * @return String path - a file path
      * @throws SQLException
      */
 
-    public String getGenomeRelease(String genomeVersion) throws SQLException{
+    public Genome getGenomeRelease(String genomeVersion) throws SQLException {
 
-        String query ="SELECT FilePath FROM Genome_Release WHERE (Version = ?)";
+        String query = "SELECT * FROM Genome_Release WHERE (Version = ?)";
 
-        PreparedStatement ps = conn.prepareStatement(query);
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setString(1, genomeVersion);
+        ResultSet rs = stmt.executeQuery();
 
-        ps.setString(1, genomeVersion);
-
-        ResultSet rs = ps.executeQuery();
-
-        String path = null;
-
+        Genome genome = null
+        		;
         if (rs.next()) {
-            path = rs.getString("FilePath");
+        	genome = new Genome(rs);
         }
 
-        ps.close();
+        stmt.close();
 
-    	return path;
+        return genome;
     }
-
 
     /**
      * Add one genomerelease to the database.
@@ -73,13 +73,12 @@ public class GenomeMethods {
      *            genomeVersion.
      * @param String
      *            species.
-     * @return String The path to the folder where the genome release
-     *         files should be saved.
+     * @return String The upload URL.
      * @throws SQLException
      *             if adding query failed.
      */
-    public String addGenomeRelease(String genomeVersion,
-            String species, String filename) throws SQLException {
+    public String addGenomeRelease(String genomeVersion, String species,
+            String filename) throws SQLException {
 
         String folderPath = fpg.generateGenomeReleaseFolder(genomeVersion,
                 species);
@@ -89,18 +88,18 @@ public class GenomeMethods {
 
         String filePath = filePathBuilder.toString();
 
-        String insertGenRelQuery = "INSERT INTO Genome_Release "
+        String query = "INSERT INTO Genome_Release "
                 + "(Version, Species, FilePath) " + "VALUES (?, ?, ?)";
 
-        PreparedStatement ps = conn.prepareStatement(insertGenRelQuery);
-        ps.setString(1, genomeVersion);
-        ps.setString(2, species);
-        ps.setString(3, filePath.toString());
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setString(1, genomeVersion);
+        stmt.setString(2, species);
+        stmt.setString(3, filePath.toString());
 
-        ps.execute();
+        stmt.execute();
 
         filePathBuilder.insert(0, ServerDependentValues.UploadURL);
-
+        stmt.close();
         return filePathBuilder.toString();
     }
 
@@ -113,20 +112,20 @@ public class GenomeMethods {
      *            .
      * @return boolean, true if succeded, false if failed.
      */
-    public boolean removeGenomeRelease(String genomeVersion,
-            String specie) {
+    public boolean removeGenomeRelease(String genomeVersion, String specie) {
 
-        String removeQuery = "DELETE FROM Genome_Release WHERE "
-                + "(Version = ? AND Species = ?)";
+        String query = "DELETE FROM Genome_Release " +
+        		"WHERE (Version = ? AND Species = ?)";
 
-        PreparedStatement ps;
+        PreparedStatement stmt;
 
         try {
-            ps = conn.prepareStatement(removeQuery);
+            stmt = conn.prepareStatement(query);
 
-            ps.setString(1, genomeVersion);
-            ps.setString(2, specie);
-            ps.execute();
+            stmt.setString(1, genomeVersion);
+            stmt.setString(2, specie);
+            stmt.execute();
+            stmt.close();
         } catch (SQLException e) {
             System.out.println("Failed to remove genome release!");
             return false;
@@ -135,68 +134,95 @@ public class GenomeMethods {
     }
 
     /**
-    * method for getting all the genome releases currently stored in the
-    * database.
-    * @param species String, the name of the specie you want to get genome
-    * realeases for.
-    * @return genomeVersions List<String>, list of all the genome releases for
-    * a specific specie.
-    * @throws SQLException
-    */
-   public List<String> getAllGenomReleases(String species) throws SQLException {
+     * method for getting all the genome releases for a species currently stored in the
+     * database.
+     *
+     * @param species
+     *            String, the name of the specie you want to get genome
+     *            realeases for.
+     * @return genomelist ArrayList<Genome>, list of all the genome releases for
+     *         a specific specie.
+     * @throws SQLException
+     */
+   public ArrayList<Genome> getAllGenomReleasesForSpecies(String species) throws SQLException {
 
-        List<String> genomeVersions = new ArrayList<String>();
+        ArrayList<Genome> genomeList = new ArrayList<Genome>();
+        String query = "SELECT * FROM Genome_Release WHERE Species = ?";
 
-        String query = "SELECT Version FROM Genome_Release WHERE Species = ?";
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setString(1, species);
+        ResultSet rs = stmt.executeQuery();
 
-        PreparedStatement ps = conn.prepareStatement(query);
-
-        ps.setString(1, species);
-
-        ResultSet rs = ps.executeQuery();
-
+        Genome genome=null;
         while (rs.next()) {
-            genomeVersions.add(rs.getString("Version"));
+        	genome = new Genome(rs);
+        	genomeList.add(genome);
         }
 
-        ps.close();
-        return genomeVersions;
+        stmt.close();
+        return genomeList;
     }
 
    /**
-    * get a specific chainfile depending on from and to what genome release you
-    * want to convert between.
-    * @param fromVersion String, the name of the old genome release version
-    * @param toVersion String, the name of the new genome release version
-    * @return resFilePath String, the filePath of that chain file.
+    * method for getting all the genome releases currently stored in the
+    * database.
+    *
+    * @return genomeList List<Genome>, list of all the genome releases.
     * @throws SQLException
     */
+  public ArrayList<Genome> getAllGenomReleases() throws SQLException {
+
+      ArrayList<Genome> genomeList = new ArrayList<Genome>();
+      String query = "SELECT * FROM Genome_Release";
+
+      PreparedStatement stmt = conn.prepareStatement(query);
+      ResultSet rs = stmt.executeQuery();
+
+      Genome genome=null;
+      while (rs.next()) {
+      	genome = new Genome(rs);
+      	genomeList.add(genome);
+      }
+
+      stmt.close();
+      return genomeList;
+  }
+
+    /**
+     * get a specific chainfile depending on from and to what genome release you
+     * want to convert between.
+     *
+     * @param fromVersion
+     *            String, the name of the old genome release version
+     * @param toVersion
+     *            String, the name of the new genome release version
+     * @return resFilePath String, the filePath of that chain file.
+     * @throws SQLException
+     */
     public String getChainFile(String fromVersion, String toVersion)
             throws SQLException {
 
         String query = "SELECT FilePath FROM Chain_File WHERE (FromVersion = ?)"
                 + " AND (ToVersion = ?)";
-        PreparedStatement ps = conn.prepareStatement(query);
+        PreparedStatement stmt = conn.prepareStatement(query);
 
-        ps.setString(1, fromVersion);
-        ps.setString(2, toVersion);
-
-        ResultSet rs = ps.executeQuery();
+        stmt.setString(1, fromVersion);
+        stmt.setString(2, toVersion);
+        ResultSet rs = stmt.executeQuery();
         String resFilePath = null;
 
         if (rs.next()) {
-
         	resFilePath = rs.getString("FilePath");
         }
 
-        ps.close();
+        stmt.close();
 
         return resFilePath;
     }
 
     /**
-     * Adds a chain file to database for conversions. Parameters:
-     * Oldversion, new version and filename. Returns: upload URL
+     * Adds a chain file to database for conversions. Parameters: Oldversion,
+     * new version and filename. Returns: upload URL
      *
      * @param String
      *            fromVersion
@@ -222,6 +248,7 @@ public class GenomeMethods {
         while (rs.next()) {
             species = rs.getString("Species");
         }
+        speciesStat.close();
 
         String filePath = fpg.generateChainFolderPath(species, fromVersion,
                 toVersion) + fileName;
@@ -242,35 +269,38 @@ public class GenomeMethods {
     }
 
     /**
-     * Deletes a chain_file from the database. You find the unique
-     * file by sending in the genome version the file converts from
-     * and the genome version the file converts to.
+     * Deletes a chain_file from the database and the physical file on the
+     * system. You find the unique file by sending in the genome version the
+     * file converts from and the genome version the file converts to.
      *
      * @param fromVersion
      *            - genome version the Chain_file converts from
      * @param toVersion
      *            - genome version the Chin_file converts to
-     * @return the number of deleted tuples in the database. (Should
-     *         be one if success)
+     * @return the number of deleted tuples in the database. (Should be one if
+     *         success)
      * @throws SQLException
      *             - if the query does not succeed
      */
     public int removeChainFile(String fromVersion, String toVersion)
             throws SQLException {
 
-
-
+    	String filePath = getChainFile(fromVersion, toVersion);
 
         String query = "DELETE FROM Chain_File WHERE (FromVersion = ?)"
                 + " AND (ToVersion = ?)";
 
-        PreparedStatement ps = conn.prepareStatement(query);
-        ps.setString(1, fromVersion);
-        ps.setString(2, toVersion);
+        PreparedStatement deleteStatement = conn.prepareStatement(query);
+        deleteStatement.setString(1, fromVersion);
+        deleteStatement.setString(2, toVersion);
+        int resCount = deleteStatement.executeUpdate();
+    	deleteStatement.close();
+    	System.out.println("Filepath: " + filePath);
+        File chainFile = new File(filePath);
+        if (chainFile.exists() && chainFile.canWrite()) {
+       		chainFile.delete();
+        }
 
-        int res = ps.executeUpdate();
-        ps.close();
-
-        return res;
+        return resCount;
     }
 }

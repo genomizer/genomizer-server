@@ -34,8 +34,8 @@ public class ProcessRawToProfileTests {
         testFolderPath = System.getProperty("user.home")
                 + File.separator + testFolderName + File.separator;
 
-        dbac.changeFileStorageRoot(testFolderPath);
         fpg = dbac.getFilePathGenerator();
+        fpg.setRootDirectory(testFolderPath);
     }
 
     @AfterClass

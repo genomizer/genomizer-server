@@ -14,12 +14,11 @@ import java.util.Map;
 import database.Annotation;
 
 /**
- * Class that contains all the methods for adding,changing, getting and
- * removing Annotations in the database. This class is a subClass of
+ * Class that contains all the methods for adding,changing, getting and removing
+ * Annotations in the database. This class is a subClass of
  * databaseAcessor.java.
  *
- * date: 2014-05-14
- * version: 1.0
+ * date: 2014-05-14 version: 1.0
  */
 public class AnnotationMethods {
 
@@ -27,291 +26,299 @@ public class AnnotationMethods {
 
 	/**
 	 * Constructor for the AnnotationMethod object.
-	 * @param connection Connection, the connection to the database.
+	 *
+	 * @param connection
+	 *            Connection, the connection to the database.
 	 */
-	public AnnotationMethods(Connection connection){
+	public AnnotationMethods(Connection connection) {
 
 		conn = connection;
 	}
 
-	 /**
-     * Gets all the annotation possibilities from the database.
-     *
-     * @return annotations Map<String, Integer> -
-     * 		   a Map with the label string as key and datatype as value.
-     *
-     *         The possible datatypes are FREETEXT and DROPDOWN.
-     * @throws SQLException
-     *             if the query does not succeed
-     */
-    public Map<String, Integer> getAnnotations() throws SQLException {
+	/**
+	 * Gets all the annotation possibilities from the database.
+	 *
+	 * @return annotations Map<String, Integer> a Map with the label string as
+	 *         key and datatype as value. The possible datatypes are FREETEXT
+	 *         and DROPDOWN.
+	 * @throws SQLException
+	 *             if the query does not succeed
+	 */
+	public Map<String, Integer> getAnnotations() throws SQLException {
 
-    	HashMap<String, Integer> annotations = new HashMap<String, Integer>();
-        String query = "SELECT * FROM Annotation";
+		HashMap<String, Integer> annotations = new HashMap<String, Integer>();
+		String query = "SELECT * FROM Annotation";
+		Statement stmt = conn.createStatement();
+		ResultSet rs = stmt.executeQuery(query);
 
-        Statement getAnnotations = conn.createStatement();
-        ResultSet rs = getAnnotations.executeQuery(query);
+		while (rs.next()) {
+			if (rs.getString("DataType").equalsIgnoreCase("FreeText")) {
+				annotations.put(rs.getString("Label"), Annotation.FREETEXT);
+			} else {
+				annotations.put(rs.getString("Label"), Annotation.DROPDOWN);
+			}
+		}
 
-        while (rs.next()) {
-            if (rs.getString("DataType").equalsIgnoreCase("FreeText")) {
-                annotations.put(rs.getString("Label"), Annotation.FREETEXT);
-            } else {
-                annotations.put(rs.getString("Label"), Annotation.DROPDOWN);
-            }
-        }
+		stmt.close();
 
-        getAnnotations.close();
+		return annotations;
+	}
 
-        return annotations;
-    }
+	/**
+	 * Creates an Annotation object from an annotation label.
+	 *
+	 * @param label
+	 *            Stringthe name of the annotation to create the object for.
+	 * @return Annotation - the Annotation object. If the label does not exist,
+	 *         then null will be returned.
+	 * @throws SQLException
+	 *             if the query does not succeed.
+	 */
+	public Annotation getAnnotationObject(String label) throws SQLException {
 
-    /**
-     * Creates an Annotation object from an annotation label.
-     *
-     * @param label String -
-     *            the name of the annotation to create the object for.
-     * @return Annotation - the Annotation object. If the label does not
-     * 		   exist, then null will be returned.
-     * @throws SQLException
-     *             if the query does not succeed.
-     */
-    public Annotation getAnnotationObject(String label)
-            throws SQLException {
+		String query = "SELECT * FROM Annotation "
+				+ "LEFT JOIN Annotation_Choices "
+				+ "ON (Annotation.Label = Annotation_Choices.Label) "
+				+ "WHERE Annotation.Label = ?";
 
-        String query = "SELECT * FROM Annotation "
-                + "LEFT JOIN Annotation_Choices "
-                + "ON (Annotation.Label = Annotation_Choices.Label) "
-                + "WHERE Annotation.Label = ?";
+		PreparedStatement stmt = conn.prepareStatement(query);
+		stmt.setString(1, label);
+		ResultSet rs = stmt.executeQuery();
 
-        PreparedStatement stmt = conn.prepareStatement(query);
-        stmt.setString(1, label);
-        ResultSet rs = stmt.executeQuery();
+		if (rs.next()) {
+			Annotation anno = new Annotation(rs);
+			stmt.close();
+			return anno;
+		} else {
+			stmt.close();
+			return null;
+		}
+	}
 
-        if (rs.next()) {
-            return new Annotation(rs);
-        } else {
-            return null;
-        }
-    }
+	/**
+	 * Creates a list of Annotation objects from a list of annotation labels.
+	 *
+	 * @param labels
+	 *            the list of labels.
+	 * @return annotations List<Annotation> - will return a list with all the
+	 *         annotations with valid labels. If the list with labels is empty
+	 *         or none of the labels are valid, then it will return null.
+	 * @throws SQLException
+	 *             if the query does not succeed.
+	 */
+	public List<Annotation> getAnnotationObjects(List<String> labels)
+			throws SQLException {
 
-    /**
-     * Creates a list of Annotation objects from a list of annotation
-     * labels.
-     *
-     * @param labels
-     *            the list of labels.
-     * @return annotations List<Annotation> - will return a list with all the
-     * 		   annotations with valid labels. If the list with labels is empty
-     * 		   or none of the labels are valid, then it will return null.
-     * @throws SQLException
-     *             if the query does not succeed.
-     */
-    public List<Annotation> getAnnotationObjects(List<String> labels)
-            throws SQLException {
+		List<Annotation> annotationsList = null;
+		Annotation annotation = null;
 
-        List<Annotation> annotations = null;
-        Annotation annotation = null;
+		for (String label : labels) {
+			annotation = getAnnotationObject(label);
+			if (annotation != null) {
+				if (annotationsList == null) {
+					annotationsList = new ArrayList<Annotation>();
+				}
+				annotationsList.add(annotation);
+			}
+		}
 
-        for (String label : labels) {
-            annotation = getAnnotationObject(label);
-            if (annotation != null) {
-                if (annotations == null) {
-                    annotations = new ArrayList<Annotation>();
-                }
-                annotations.add(annotation);
-            }
-        }
+		return annotationsList;
+	}
 
-        return annotations;
-    }
+	/**
+	 * Finds all annotationLabels that exist in the database, example of labels:
+	 * sex, tissue, etc...
+	 *
+	 * @return annotationLabels ArrayList<String>
+	 */
+	public ArrayList<String> getAllAnnotationLabels() {
 
-    /**
-     * Finds all annotationLabels that exist in the database, example
-     * of labels: sex, tissue, etc...
-     *
-     * @return  annotationLabels ArrayList<String>
-     */
-    public ArrayList<String> getAllAnnotationLabels() {
+		ArrayList<String> annotationLabelList = new ArrayList<>();
 
-        ArrayList<String> allAnnotationlabels = new ArrayList<>();
+		String query = "SELECT Label FROM Annotation";
+		PreparedStatement stmt;
 
-        String findAllLabelsQuery = "SELECT Label FROM Annotation";
-        PreparedStatement ps;
+		try {
+			stmt = conn.prepareStatement(query);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				annotationLabelList.add(rs.getString("Label"));
+			}
+			stmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
 
-        try {
-            ps = conn.prepareStatement(findAllLabelsQuery);
-            ResultSet res = ps.executeQuery();
-            while (res.next()) {
-                allAnnotationlabels.add(res.getString("Label"));
-            }
-            res.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
+		return annotationLabelList;
+	}
 
-        return allAnnotationlabels;
-    }
+	/**
+	 * Gets the datatype of a given annotation.
+	 *
+	 * @param label
+	 *            annotation label.
+	 * @return integer - the annotation's datatype (FREETEXT or DROPDOWN).
+	 *
+	 * @throws SQLException
+	 *             if the query does not succeed
+	 */
+	public Integer getAnnotationType(String label) throws SQLException {
 
-    /**
-     * Gets the datatype of a given annotation.
-     *
-     * @param label
-     *            annotation label.
-     * @return integer - the annotation's datatype (FREETEXT or DROPDOWN).
-     *
-     * @throws SQLException
-     *             if the query does not succeed
-     */
-    public Integer getAnnotationType(String label)
-            throws SQLException {
+		Map<String, Integer> annotations = getAnnotations();
+		return annotations.get(label);
+	}
 
-        Map<String, Integer> annotations = getAnnotations();
+	/**
+	 * Gets the default value for a annotation if there is one, If not it
+	 * returns NULL.
+	 *
+	 * @param annotationLabel
+	 *            String - the name of the annotation to check
+	 * @return DefaultValue String - The defult value or NULL.
+	 * @throws SQLException
+	 */
+	public String getDefaultAnnotationValue(String annotationLabel)
+			throws SQLException {
 
-        return annotations.get(label);
-    }
+		String query = "SELECT DefaultValue FROM Annotation WHERE Label = ?";
+		PreparedStatement stmt = conn.prepareStatement(query);
+		stmt.setString(1, annotationLabel);
 
-    /**
-     * Gets the default value for a annotation if there is one, If not
-     * it returns NULL.
-     *
-     * @param annotationLabel String -
-     *            the name of the annotation to check
-     * @return DefaultValue String - The defult value or NULL.
-     * @throws SQLException
-     */
-    public String getDefaultAnnotationValue(String annotationLabel)
-            throws SQLException {
+		ResultSet rs = stmt.executeQuery();
 
-        String query = "SELECT DefaultValue FROM Annotation WHERE Label = ?";
+		while (rs.next()) {
+			String value = rs.getString("DefaultValue");
+			stmt.close();
+			return value;
+		}
 
-        PreparedStatement ps = conn.prepareStatement(query);
-        ps.setString(1, annotationLabel);
+		stmt.close();
+		return null;
+	}
 
-        ResultSet rs = ps.executeQuery();
+	/**
+	 * Deletes an annotation from the list of possible annotations.
+	 *
+	 * @param label
+	 *            String - the label of the annotation to delete.
+	 * @return res integer - the number of tuples deleted in the database.
+	 * @throws SQLException
+	 *             if the query does not succeed
+	 */
+	public int deleteAnnotation(String label) throws SQLException {
 
-        while (rs.next()) {
-            return rs.getString("DefaultValue");
-        }
+		String query = "DELETE FROM Annotation " + "WHERE (Label = ?)";
+		PreparedStatement stmt = conn
+				.prepareStatement(query);
+		stmt.setString(1, label);
 
-        return null;
-    }
+		int rs = stmt.executeUpdate();
+		stmt.close();
 
-    /**
-     * Deletes an annotation from the list of possible annotations.
-     *
-     * @param label String -
-     *            the label of the annotation to delete.
-     * @return res integer - the number of tuples deleted in the database.
-     * @throws SQLException
-     *             if the query does not succeed
-     */
-    public int deleteAnnotation(String label) throws SQLException {
+		return rs;
+	}
 
-        String statementStr = "DELETE FROM Annotation "
-                + "WHERE (Label = ?)";
-        PreparedStatement deleteAnnotation = conn
-                .prepareStatement(statementStr);
-        deleteAnnotation.setString(1, label);
+	/**
+	 * Adds a free text annotation to the list of possible annotations.
+	 *
+	 * @param label
+	 *            String the name of the annotation.
+	 * @param required
+	 *            boolean if the annotation should be forced or not
+	 * @param defaultValue
+	 *            String the default value this field should take or null if a
+	 *            default value is not required
+	 * @return res int - the number of tuples updated in the database.
+	 * @throws SQLException
+	 *             if the query does not succeed
+	 * @throws IOException
+	 */
+	public int addFreeTextAnnotation(String label, String defaultValue,
+			boolean required) throws SQLException, IOException {
 
-        int res = deleteAnnotation.executeUpdate();
-        deleteAnnotation.close();
+		if(!isValidChoice(label)) {
+    		throw new IOException("Lable contains invalid characters");
+    	}
 
-        return res;
-    }
+    	if(defaultValue != null) {
+    		if(!isValidChoice(defaultValue)) {
+    			throw new IOException("defaultValue contains invalid characters");
+    		}
+    	}
 
-    /**
-     * Adds a free text annotation to the list of possible
-     * annotations.
-     *
-     * @param label String
-     *            the name of the annotation.
-     * @param required boolean
-     *            if the annotation should be forced or not
-     * @param defaultValue String
-     *            the default value this field should take or null if
-     *            a default value is not required
-     * @return res int - the number of tuples updated in the database.
-     * @throws SQLException
-     *             if the query does not succeed
-     */
-    public int addFreeTextAnnotation(String label,
-            String defaultValue, boolean required)
-            throws SQLException {
+		String query = "INSERT INTO Annotation "
+				+ "VALUES (?, 'FreeText', ?, ?)";
 
-        String query = "INSERT INTO Annotation "
-                + "VALUES (?, 'FreeText', ?, ?)";
+		PreparedStatement stmt = conn.prepareStatement(query);
+		stmt.setString(1, label);
+		stmt.setString(2, defaultValue);
+		stmt.setBoolean(3, required);
 
-        PreparedStatement addAnnotation = conn.prepareStatement(query);
-        addAnnotation.setString(1, label);
-        addAnnotation.setString(2, defaultValue);
-        addAnnotation.setBoolean(3, required);
+		int rs = stmt.executeUpdate();
+		stmt.close();
 
-        int res = addAnnotation.executeUpdate();
-        addAnnotation.close();
+		return rs;
+	}
 
-        return res;
-    }
+	/**
+	 * Checks if a given annotation is required to be filled by the user.
+	 *
+	 * @param annotationLabel
+	 *            String - the name of the annotation to check
+	 * @return boolean - true if it is required, else false
+	 * @throws SQLException
+	 */
+	public boolean isAnnotationRequiered(String annotationLabel)
+			throws SQLException {
 
-    /**
-     * Checks if a given annotation is required to be filled by the
-     * user.
-     *
-     * @param annotationLabel String -
-     *            the name of the annotation to check
-     * @return boolean - true if it is required, else false
-     * @throws SQLException
-     */
-    public boolean isAnnotationRequiered(String annotationLabel)
-            throws SQLException {
+		String query = "SELECT Required FROM Annotation WHERE Label = ?";
 
-        String query = "SELECT Required FROM Annotation WHERE Label = ?";
+		PreparedStatement stmt = conn.prepareStatement(query);
+		stmt.setString(1, annotationLabel);
 
-        PreparedStatement ps = conn.prepareStatement(query);
-        ps.setString(1, annotationLabel);
+		ResultSet rs = stmt.executeQuery();
+		boolean isRequired = false;
 
-        ResultSet rs = ps.executeQuery();
-        boolean isRequired = false;
+		while (rs.next()) {
+			isRequired = rs.getBoolean("Required");
+		}
 
-        while (rs.next()) {
-            isRequired = rs.getBoolean("Required");
-        }
+		stmt.close();
+		return isRequired;
+	}
 
-        return isRequired;
-    }
+	/**
+	 * Gets all the choices for a drop down annotation. Deprecated, use
+	 * {@link #getChoices(String) getChoices} instead.
+	 *
+	 * @param label
+	 *            String the drop down annotation to get the choice for.
+	 * @return theChoices ArrayList<String> - all the choices.
+	 * @throws SQLException
+	 *             if the query does not succeed
+	 */
+	@Deprecated
+	public ArrayList<String> getDropDownAnnotations(String label)
+			throws SQLException {
 
-    /**
-     * Gets all the choices for a drop down annotation. Deprecated,
-     * use {@link #getChoices(String) getChoices} instead.
-     *
-     * @param label String
-     *            the drop down annotation to get the choice for.
-     * @return theChoices ArrayList<String> - all the choices.
-     * @throws SQLException
-     *             if the query does not succeed
-     */
-    @Deprecated
-    public ArrayList<String> getDropDownAnnotations(String label)
-            throws SQLException {
+		ArrayList<String> dropDownLabelsList = new ArrayList<String>();
+		String query = "SELECT Value FROM Annotation_Choices "
+				+ "WHERE (Label = ?)";
 
-        String query = "SELECT Value FROM Annotation_Choices "
-                + "WHERE (Label = ?)";
-        ArrayList<String> dropDownStrings = new ArrayList<String>();
+		PreparedStatement stmt = conn.prepareStatement(query);
+		stmt.setString(1, label);
 
-        PreparedStatement getDropDownStrings = conn
-                .prepareStatement(query);
-        getDropDownStrings.setString(1, label);
+		ResultSet rs = stmt.executeQuery();
 
-        ResultSet rs = getDropDownStrings.executeQuery();
+		while (rs.next()) {
+			dropDownLabelsList.add(rs.getString("Value"));
+		}
 
-        while (rs.next()) {
-            dropDownStrings.add(rs.getString("Value"));
-        }
+		stmt.close();
 
-        getDropDownStrings.close();
-
-        return dropDownStrings;
-    }
+		return dropDownLabelsList;
+	}
 
     /**
      * Adds a drop down annotation to the list of possible
@@ -332,50 +339,60 @@ public class AnnotationMethods {
             List<String> choices, int defaultValueIndex,
             boolean required) throws SQLException, IOException {
 
+    	if(!isValidChoice(label)) {
+    		throw new IOException("Lable contains invalid characters");
+    	}
+
     	if (choices.isEmpty()) {
             throw new IOException("Must specify at least one choice");
         }
 
-        if (defaultValueIndex < 0 || defaultValueIndex >= choices.size()) {
-            throw new IOException("Invalid default value index");
-        }
+    	for(int i = 0; i < choices.size(); i++) {
+    		if(!isValidChoice(choices.get(i))) {
+    			throw new IOException("Choices contains invalid characters");
+    		}
+    	}
 
-        int tuplesInserted = 0;
+		if (defaultValueIndex < 0 || defaultValueIndex >= choices.size()) {
+			throw new IOException("Invalid default value index");
+		}
 
-        String annotationQuery = "INSERT INTO Annotation "
-                + "VALUES (?, 'DropDown', ?, ?)";
+		int tuplesInserted = 0;
 
-        String choicesQuery = "INSERT INTO Annotation_Choices "
-                + "(Label, Value) VALUES (?, ?)";
+		String annotationQuery = "INSERT INTO Annotation "
+				+ "VALUES (?, 'DropDown', ?, ?)";
 
-        PreparedStatement addAnnotation = conn
-                .prepareStatement(annotationQuery);
+		String choicesQuery = "INSERT INTO Annotation_Choices "
+				+ "(Label, Value) VALUES (?, ?)";
 
-        addAnnotation.setString(1, label);
-        addAnnotation.setString(2, choices.get(defaultValueIndex));
-        addAnnotation.setBoolean(3, required);
-        tuplesInserted += addAnnotation.executeUpdate();
-        addAnnotation.close();
+		PreparedStatement addAnnoStatement = conn
+				.prepareStatement(annotationQuery);
 
-        PreparedStatement addChoices = conn.prepareStatement(choicesQuery);
-        addChoices.setString(1, label);
+		addAnnoStatement.setString(1, label);
+		addAnnoStatement.setString(2, choices.get(defaultValueIndex));
+		addAnnoStatement.setBoolean(3, required);
+		tuplesInserted += addAnnoStatement.executeUpdate();
+		addAnnoStatement.close();
 
-        for (String choice : choices) {
-            addChoices.setString(2, choice);
-            try {
-                tuplesInserted += addChoices.executeUpdate();
-            } catch (SQLException e) {
-                /*
-                 * Ignore and try adding next choice. This is probably due to
-                 * the list of choices containing a duplicate.
-                 */
-            }
-        }
+		PreparedStatement addChoicesStatement
+				= conn.prepareStatement(choicesQuery);
+		addChoicesStatement.setString(1, label);
 
-        addChoices.close();
+		for (String choice : choices) {
+			addChoicesStatement.setString(2, choice);
+			try {
+				tuplesInserted += addChoicesStatement.executeUpdate();
+			} catch (SQLException e) {
+				/*
+				 * Ignore and try adding next choice. This is probably due to
+				 * the list of choices containing a duplicate.
+				 */
+			}
+		}
 
-        return tuplesInserted;
+		addChoicesStatement.close();
 
+		return tuplesInserted;
     }
 
     /**
@@ -397,82 +414,83 @@ public class AnnotationMethods {
     public int addDropDownAnnotationValue(String label, String value)
             throws SQLException, IOException {
 
-    	String statementStr = "SELECT * FROM Annotation WHERE "
-                + "(label = ? AND datatype = 'DropDown')";
+    	if(!isValidChoice(value)) {
+    		throw new IOException("Value contains invalid characters");
+    	}
 
-        PreparedStatement checkTag = conn.prepareStatement(statementStr);
-        checkTag.setString(1, label);
+		String query = "SELECT * FROM Annotation WHERE "
+				+ "(label = ? AND datatype = 'DropDown')";
 
-        ResultSet rs = checkTag.executeQuery();
-        boolean res = rs.next();
-        checkTag.close();
+		PreparedStatement checkTagStatement = conn.prepareStatement(query);
+		checkTagStatement.setString(1, label);
 
-        if (!res) {
-            throw new IOException("The annotation of the chosen label"
-                    + " is not of type DropDown");
-        } else {
-            statementStr = "INSERT INTO Annotation_Choices (label , value) "
-                    + "VALUES (?,?)";
+		ResultSet rs = checkTagStatement.executeQuery();
+		boolean hasResult = rs.next();
+		checkTagStatement.close();
 
-            PreparedStatement insertTag = conn.prepareStatement(statementStr);
+		if (!hasResult) {
+			throw new IOException("The annotation of the chosen label"
+					+ " is not of type DropDown");
+		} else {
+			query = "INSERT INTO Annotation_Choices (label , value) "
+					+ "VALUES (?,?)";
 
-            insertTag.setString(1, label);
-            insertTag.setString(2, value);
-            int ress = insertTag.executeUpdate();
-            insertTag.close();
+			PreparedStatement insertTagStatement = conn.prepareStatement(query);
 
-            return ress;
-        }
-    }
+			insertTagStatement.setString(1, label);
+			insertTagStatement.setString(2, value);
+			int resCount = insertTagStatement.executeUpdate();
+			insertTagStatement.close();
 
-    /**
-     * Method to remove a given annotation of a dropdown- annotation.
-     *
-     * @param label String - the label of the chosen annotation
-     * @param value String - the value of the chosen annotation.
-     * @return Integer, how many values that were deleted.
-     * @throws SQLException
-     * @throws IOException
-     *             , throws an IOException if the chosen value to be
-     *             removed is the active DefaultValue of the chosen
-     *             label.
-     */
-    public int removeAnnotationValue(String label, String value)
-            throws SQLException, IOException {
+			return resCount;
+		}
+	}
 
-        String statementStr = "SELECT * FROM Annotation WHERE "
-                + "(label = ? AND defaultvalue = ?)";
+	/**
+	 * Method to remove a given annotation of a dropdown- annotation.
+	 *
+	 * @param label
+	 *            String - the label of the chosen annotation
+	 * @param value
+	 *            String - the value of the chosen annotation.
+	 * @return Integer, how many values that were deleted.
+	 * @throws SQLException
+	 * @throws IOException
+	 *             , throws an IOException if the chosen value to be removed is
+	 *             the active DefaultValue of the chosen label.
+	 */
+	public int removeAnnotationValue(String label, String value)
+			throws SQLException, IOException {
 
-        PreparedStatement checkTag = conn
-                .prepareStatement(statementStr);
-        checkTag.setString(1, label);
-        checkTag.setString(2, value);
+		String query = "SELECT * FROM Annotation WHERE "
+				+ "(label = ? AND defaultvalue = ?)";
 
-        ResultSet rs = checkTag.executeQuery();
+		PreparedStatement checkTagStatement = conn.prepareStatement(query);
+		checkTagStatement.setString(1, label);
+		checkTagStatement.setString(2, value);
 
-        boolean res = rs.next();
-        checkTag.close();
+		ResultSet rs = checkTagStatement.executeQuery();
 
-        if (res) {
-            throw new IOException(
-                    "The chosen value of the label is a"
-                            + " default value. Change the default value of "
-                            + "the label and run this method again.");
-        } else {
-            statementStr = "DELETE FROM Annotation_Choices "
-                    + "WHERE (label = ? AND value = ?)";
+		boolean hasResult = rs.next();
+		checkTagStatement.close();
 
-            PreparedStatement deleteTag = conn
-                    .prepareStatement(statementStr);
-            deleteTag.setString(1, label);
-            deleteTag.setString(2, value);
+		if (hasResult) {
+			throw new IOException("The chosen value of the label is a"
+					+ " default value. Change the default value of "
+					+ "the label and run this method again.");
+		} else {
+			query = "DELETE FROM Annotation_Choices "
+					+ "WHERE (label = ? AND value = ?)";
 
-            int ress = deleteTag.executeUpdate();
-            deleteTag.close();
+			PreparedStatement deleteTagStatement = conn.prepareStatement(query);
+			deleteTagStatement.setString(1, label);
+			deleteTagStatement.setString(2, value);
 
-            return ress;
-        }
-    }
+			int resCount = deleteTagStatement.executeUpdate();
+			deleteTagStatement.close();
+			return resCount;
+		}
+	}
 
     /**
      * Changes the annotation label.
@@ -484,23 +502,26 @@ public class AnnotationMethods {
      *
      * @return res int - the number of tuples updated
      * @throws SQLException If the update fails
+     * @throws IOException
      */
     public int changeAnnotationLabel(String oldLabel, String newLabel)
-            throws SQLException {
+            throws SQLException, IOException {
 
-    	String changeLblQuery = "UPDATE Annotation SET Label = ?"
-                + " WHERE (Label =?)";
+    	if(!isValidChoice(newLabel)) {
+    		throw new IOException("The new Lable contains invalid characters");
+    	}
 
-        PreparedStatement changeLabel;
+		String query = "UPDATE Annotation SET Label = ? WHERE (Label =?)";
 
-        changeLabel = conn.prepareStatement(changeLblQuery);
+		PreparedStatement stmt;
+		stmt = conn.prepareStatement(query);
+		stmt.setString(1, newLabel);
+		stmt.setString(2, oldLabel);
 
-        changeLabel.setString(1, newLabel);
-        changeLabel.setString(2, oldLabel);
-        int res = changeLabel.executeUpdate();
-        changeLabel.close();
-        return res;
-    }
+		int resCount = stmt.executeUpdate();
+		stmt.close();
+		return resCount;
+	}
 
     /**
      * Changes the value of an annotation corresponding to it's label.
@@ -518,84 +539,110 @@ public class AnnotationMethods {
      * @param newValue String - the name of the new annotation value.
      *
      * @throws SQLException
+     * @throws IOException
      */
     public void changeAnnotationValue(String label, String oldValue,
-            String newValue) throws SQLException {
+            String newValue) throws SQLException, IOException {
 
-    	String query = "UPDATE Annotation_Choices " + "SET Value = ? "
-                + "WHERE Label = ? and Value = ?";
+    	if(!isValidChoice(newValue)) {
+    		throw new IOException("New value contains invalid characters");
+    	}
 
-        String query2 = "UPDATE Annotated_With " + "SET Value = ? "
-                + "WHERE Label = ? and Value = ?";
+		String query = "UPDATE Annotation_Choices " + "SET Value = ? "
+				+ "WHERE Label = ? and Value = ?";
 
-        String query3 = "UPDATE Annotation " + "SET DefaultValue = ? "
-                + "WHERE Label = ? and DefaultValue = ?";
+		String query2 = "UPDATE Annotated_With " + "SET Value = ? "
+				+ "WHERE Label = ? and Value = ?";
 
-        PreparedStatement statement = conn.prepareStatement(query);
-        ArrayList<String> parameters = new ArrayList<String>();
-        parameters.add(newValue);
-        parameters.add(label);
-        parameters.add(oldValue);
-        statement = bind(statement, parameters);
-        statement.executeUpdate();
-        statement.close();
+		String query3 = "UPDATE Annotation " + "SET DefaultValue = ? "
+				+ "WHERE Label = ? and DefaultValue = ?";
 
-        statement = conn.prepareStatement(query2);
-        statement = bind(statement, parameters);
-        statement.executeUpdate();
-        statement.close();
+		PreparedStatement stmt = conn.prepareStatement(query);
+		ArrayList<String> parameterList = new ArrayList<String>();
+		parameterList.add(newValue);
+		parameterList.add(label);
+		parameterList.add(oldValue);
+		stmt = bind(stmt, parameterList);
+		stmt.executeUpdate();
+		stmt.close();
 
-        statement = conn.prepareStatement(query3);
-        statement = bind(statement, parameters);
-        statement.executeUpdate();
-        statement.close();
-    }
+		stmt = conn.prepareStatement(query2);
+		stmt = bind(stmt, parameterList);
+		stmt.executeUpdate();
+		stmt.close();
 
-    /**
-     * Gets all the choices for a drop down annotation.
-     *
-     * @param label String - the drop down annotation to get the choice for.
-     * @return choices List<String> - the choices for one annotation label.
-     * @throws SQLException
-     *             if the query does not succeed
-     */
-    public List<String> getChoices(String label) throws SQLException {
+		stmt = conn.prepareStatement(query3);
+		stmt = bind(stmt, parameterList);
+		stmt.executeUpdate();
+		stmt.close();
+	}
 
-        String query = "SELECT Value FROM Annotation_Choices "
-                + "WHERE Label = ?";
-        List<String> choices = new ArrayList<String>();
+	/**
+	 * Gets all the choices for a drop down annotation.
+	 *
+	 * @param label
+	 *            String - the drop down annotation to get the choice for.
+	 * @return choices List<String> - the choices for one annotation label.
+	 * @throws SQLException
+	 *             if the query does not succeed
+	 */
+	public List<String> getChoices(String label) throws SQLException {
 
-        PreparedStatement getChoices = conn.prepareStatement(query);
-        getChoices.setString(1, label);
+		String query = "SELECT Value FROM Annotation_Choices "
+				+ "WHERE Label = ?";
+		List<String> choicesList = new ArrayList<String>();
 
-        ResultSet rs = getChoices.executeQuery();
+		PreparedStatement getChoices = conn.prepareStatement(query);
+		getChoices.setString(1, label);
 
-        while (rs.next()) {
-            choices.add(rs.getString("Value"));
-        }
+		ResultSet rs = getChoices.executeQuery();
 
-        getChoices.close();
+		while (rs.next()) {
+			choicesList.add(rs.getString("Value"));
+		}
 
-        return choices;
-    }
+		getChoices.close();
 
-    /**
-     * binds a sql prepared query statement with parameters, example:
-     * "UPDATE Annotation_Choices SET Value = ? WHERE Label = ? and Value = ?;"
-     * and the questionmarks are the parameters.
-     * @param query PreparedStatement
-     * @param params List<String> - the parameters connected to the query, size
-     * 		  of list must be equal to nr of questionmarks in query.
-     * @return query PreparedStatement
-     * @throws SQLException
-     */
-    public PreparedStatement bind(PreparedStatement query,
-            List<String> params) throws SQLException {
+		return choicesList;
+	}
 
-        for (int i = 0; i < params.size(); i++) {
-            query.setString(i + 1, params.get(i));
-        }
+	/**
+	 * binds a sql prepared query statement with parameters, example:
+	 * "UPDATE Annotation_Choices SET Value = ? WHERE Label = ? and Value = ?;"
+	 * and the questionmarks are the parameters.
+	 *
+	 * @param query
+	 *            PreparedStatement
+	 * @param params
+	 *            List<String> - the parameters connected to the query, size of
+	 *            list must be equal to nr of questionmarks in query.
+	 * @return query PreparedStatement
+	 * @throws SQLException
+	 */
+	public PreparedStatement bind(PreparedStatement query, List<String> params)
+			throws SQLException {
+
+		for (int i = 0; i < params.size(); i++) {
+			query.setString(i + 1, params.get(i));
+		}
 
         return query;
+    }
+
+    /**
+     * private method to check if the annotation contains invalid
+     * characters ('(', ')', '[' and ']'.
+     *
+     * @param annotation
+     * @return
+     */
+    private boolean isValidChoice(String annotation) {
+
+    	if(annotation.contains("(") || annotation.contains(")") ||
+    			annotation.contains("[") || annotation.contains("]")) {
+    		return false;
+    	}
+
+    	return true;
     }
 }
