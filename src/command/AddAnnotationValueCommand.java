@@ -2,16 +2,12 @@ package command;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Map;
 
 import com.google.gson.annotations.Expose;
-
 import database.DatabaseAccessor;
-
 import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
-import server.DatabaseSettings;
 
 /**
  * Class used to represent a logout command.
@@ -25,15 +21,16 @@ public class AddAnnotationValueCommand extends Command {
 	private String name;
 
 	@Expose
-	private String newValue;
+	private String value;
 
 	/**
 	 * Used to validate the logout command.
 	 */
 	@Override
 	public boolean validate() {
-
-		// TODO Auto-generated method stub
+		if(value == null || name == null) {
+			return false;
+		}
 		return true;
 
 	}
@@ -47,8 +44,8 @@ public class AddAnnotationValueCommand extends Command {
 		DatabaseAccessor db = null;
 
 		try {
-			db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
-			System.out.println("Got annotations.");
+			db = initDB();
+			db.addDropDownAnnotationValue(name, value);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return new MinimalResponse(StatusCode.NO_CONTENT);
@@ -63,11 +60,7 @@ public class AddAnnotationValueCommand extends Command {
 				return new MinimalResponse(StatusCode.NO_CONTENT);
 			}
 		}
-
-		//accessor.addDropDownAnnotation(label, choices, defaultValueIndex, required)
-		//Method not implemented, send appropriate response
-		return new MinimalResponse(StatusCode.NO_CONTENT);
-
+		return new MinimalResponse(StatusCode.OK);
 	}
 
 }
