@@ -50,11 +50,12 @@ public class ResponseLoggerTest {
 
 	@Test
 	public void shouldNotLogBADREQUESTError(){
+		ResponseLogger.reset();
 		String username = "splutt";
 		Response r = new MinimalResponse(StatusCode.BAD_REQUEST);
 
 		assertFalse(ResponseLogger.log(username, r));
-
+		ResponseLogger.reset();
 
 	}
 

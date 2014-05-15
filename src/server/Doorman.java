@@ -141,6 +141,9 @@ public class Doorman {
 							exchange(exchange, CommandType.ADD_ANNOTATION_VALUE_COMMAND);
 						}
 						break;
+					case "/genomeRelease":
+						exchange(exchange, CommandType.ADD_GENOME_RELEASE_COMMAND);
+						break;
 					}
 					break;
 
@@ -166,6 +169,9 @@ public class Doorman {
 						} else if (fullPath.startsWith("/annotation/value")) {
 							exchange(exchange, CommandType.DELETE_ANNOTATION_VALUE_COMMAND);
 						}
+						break;
+					case "/genomeRelease":
+						exchange(exchange, CommandType.DELETE_GENOME_RELEASE_COMMAND);
 						break;
 					}
 					break;
