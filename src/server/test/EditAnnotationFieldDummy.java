@@ -75,7 +75,7 @@ public class EditAnnotationFieldDummy {
 		System.out.println("Response Body: " + printResponse(con));
 	}
 
-	private static void sendDeleteAnnotation() throws Exception {
+	static void sendDeleteAnnotation() throws Exception {
 		URL obj = new URL(url + "/annotation/testanno221");
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
@@ -88,8 +88,8 @@ public class EditAnnotationFieldDummy {
 		System.out.println("Response Body: " + printResponse(con));
 	}
 
-	private static void sendAddAnnotation() throws Exception {
-		URL obj = new URL(url + "/annotation");
+	static void sendAddAnnotation() throws Exception {
+		URL obj = new URL(url + "/annotation/field");
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
 		con.setRequestMethod("POST");

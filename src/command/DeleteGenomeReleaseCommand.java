@@ -3,8 +3,6 @@ package command;
 import java.io.IOException;
 import java.sql.SQLException;
 
-import com.google.gson.annotations.Expose;
-
 import database.DatabaseAccessor;
 import response.DeleteGenomeReleaseResponse;
 import response.MinimalResponse;
@@ -21,11 +19,23 @@ import response.StatusCode;
  */
 public class DeleteGenomeReleaseCommand extends Command {
 
-	@Expose
 	private String genomeVersion = null;
 
-	@Expose
 	private String specie = null;
+
+	/**
+	 * Constructor used to initiate the class.
+	 *
+	 * @param restful string to split.
+	 */
+	public DeleteGenomeReleaseCommand(String restful) {
+
+		String[] split = restful.split("/");
+
+		this.genomeVersion = split[split.length-1];
+		this.specie = split[split.length-2];
+
+	}
 
 	/**
 	 * Method used to validate the command.

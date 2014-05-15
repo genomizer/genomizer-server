@@ -9,6 +9,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import command.Command;
+import command.CommandHandler;
 import command.DeleteGenomeReleaseCommand;
 
 //TODO: Add more tests on validation.
@@ -43,23 +44,8 @@ public class DeleteGenomeReleaseCommandTest {
 	@Test
 	public void testCreateNotNull() {
 
-		DeleteGenomeReleaseCommand cmd = new DeleteGenomeReleaseCommand();
+		DeleteGenomeReleaseCommand cmd = new DeleteGenomeReleaseCommand("/123/345");
 		assertNotNull(cmd);
-
-	}
-
-	/**
-	 * Test used to check that convertion to JSON works
-	 * properly.
-	 */
-	@Test
-	public void testDeleteGenomeReleaseJSON() {
-
-		String json = "{\"genomeVersion\":\"GV 1.0\",\"specie\":\"human\"}";
-		final Command cmd = gson.fromJson(json, DeleteGenomeReleaseCommand.class);
-	    String json2 = gson.toJson(cmd);
-
-	    assertEquals(json2, json);
 
 	}
 

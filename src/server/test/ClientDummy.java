@@ -46,7 +46,7 @@ public class ClientDummy {
 
 
 
-	private static void sendLogin() throws Exception {
+	static void sendLogin() throws Exception {
 
 		URL obj = new URL(url + "/login");
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
