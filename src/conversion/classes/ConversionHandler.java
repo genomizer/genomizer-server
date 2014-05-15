@@ -3,6 +3,8 @@ package conversion.classes;
 import java.io.File;
 import java.io.IOException;
 
+import conversion.classes.ProfileDataConverter;
+
 public class ConversionHandler {
 	public ConversionHandler createConversionHandler() {
 		return new ConversionHandler();
@@ -45,7 +47,6 @@ public class ConversionHandler {
 					throw new IllegalArgumentException();
 				}
 		return "success";
-
 	}
 
 	private boolean checkValidity(String conversionName, String inFile,
