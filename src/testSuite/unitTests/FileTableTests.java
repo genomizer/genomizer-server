@@ -71,6 +71,7 @@ public class FileTableTests {
     	}
     	dbac.deleteExperiment(testExpId);
         dbac.close();
+        recursiveDelete(testFolder);
     }
 
 
@@ -158,5 +159,17 @@ public class FileTableTests {
     private void addMockFile(String folderPath, String filename1) throws IOException {
         File file1 = new File(folderPath + filename1);
         file1.createNewFile();
+    }
+
+    private static void recursiveDelete(File folder) {
+        File[] contents = folder.listFiles();
+        if (contents == null || contents.length == 0) {
+            folder.delete();
+        } else {
+            for (File f : contents) {
+                recursiveDelete(f);
+            }
+        }
+        folder.delete();
     }
 }

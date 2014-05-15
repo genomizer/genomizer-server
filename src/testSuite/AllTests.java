@@ -6,10 +6,12 @@ import org.junit.runners.Suite.SuiteClasses;
 
 import testSuite.unitTests.AddAnnotationPossibilitiesTests;
 import testSuite.unitTests.AddDropDownValueTest;
+import testSuite.unitTests.ChangeAnnotationLabelTest;
 import testSuite.unitTests.ExperimentTests;
 import testSuite.unitTests.FileTableTests;
 import testSuite.unitTests.GenomeReleaseTableTests;
 import testSuite.unitTests.ProcessRawToProfileTests;
+import testSuite.unitTests.PubMedIsValidTest;
 import testSuite.unitTests.PubMedToSQLConverterTests;
 import testSuite.unitTests.SearchDatabaseTests;
 import testSuite.unitTests.AddNewFileTests;
@@ -33,7 +35,8 @@ import testSuite.unitTests.removeAnnotationValueTest;
         TestFilePathGEN.class, TestGetAnnotationObject.class,
         AddDropDownValueTest.class, removeAnnotationValueTest.class,
         UpdateExperimentTest.class, UserInfoTests.class,
-        ProcessRawToProfileTests.class, GenomeReleaseTableTests.class})
+        ProcessRawToProfileTests.class, GenomeReleaseTableTests.class,
+        ChangeAnnotationLabelTest.class, PubMedIsValidTest.class})
 
 public class AllTests {
 
