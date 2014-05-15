@@ -268,7 +268,7 @@ public class CommandFactory {
 	 */
 	public Command createRemoveAnnotationFieldCommand(String json, String restful) {
 
-		return new DeleteAnnotationFieldCommand();
+		return new DeleteAnnotationFieldCommand(restful);
 
 	}
 
