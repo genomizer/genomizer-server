@@ -1,5 +1,8 @@
 package command;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import response.MinimalResponse;
 import response.ProcessResponse;
 import response.Response;
@@ -150,6 +153,29 @@ public class CommandHandler {
 
 //		return parsed[parsed.length - 1];
 
+	}
+
+	/**
+	 * Method used to split restful headers.
+	 *
+	 * @param restful to split.
+	 * @param expectedLength of the header.
+	 * @return null if wrongly formatted, else arraylist.
+	 */
+	private ArrayList<String> addRestful(String restful, int expectedLength) {
+
+		ArrayList<String> rest = null;
+
+		if(restful != null) {
+			rest = new ArrayList<String>(Arrays.asList(restful.split("/")));;
+			rest.remove(0);
+			if(rest.size() != expectedLength) {
+				rest = null;
+			}
+
+		}
+
+		return rest;
 	}
 
 }
