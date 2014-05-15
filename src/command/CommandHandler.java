@@ -154,6 +154,10 @@ public class CommandHandler {
 
 			newCommand = cmdFactory.createAddGenomeReleaseCommand(json);
 
+		} else if (cmdt == CommandType.DELETE_GENOME_RELEASE_COMMAND) {
+
+			newCommand = cmdFactory.createDeleteGenomeReleaseCommand(json);
+
 		}
 
 		return newCommand;

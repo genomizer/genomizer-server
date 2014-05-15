@@ -5,15 +5,15 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 /**
- * Class used to test the AddGenomeRelease class.
+ * Class used to test the DeleteGenomeReleaseCommand class.
  *
  * @author tfy09jnn
  * @version 1.0
  */
-public class AddGenomeReleaseTest {
+public class DeleteGenomeReleaseCommandTest {
 
 	/**
-	 * Method used to check that the created command
+	 * Test used to check that creation works and
 	 * is not null.
 	 */
 	@Test

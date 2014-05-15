@@ -11,7 +11,7 @@ public class AddGenomeReleaseResponse extends Response {
 	/**
 	 * Constructor used to initiate the command.
 	 *
-	 * @param code to send as a response.
+	 * @param code to send as a responsecode.
 	 */
 	public AddGenomeReleaseResponse(int code) {
 
