@@ -31,8 +31,8 @@ public class GenomeMethods {
 	 */
 	public GenomeMethods(Connection connection, FilePathGenerator filePG){
 
-			conn = connection;
-			fpg = filePG;
+		conn = connection;
+		fpg = filePG;
 	}
 
 	/**
@@ -48,23 +48,19 @@ public class GenomeMethods {
 
         String query ="SELECT FilePath FROM Genome_Release WHERE (Version = ?)";
 
-        PreparedStatement ps = conn.prepareStatement(query);
-
-        ps.setString(1, genomeVersion);
-
-        ResultSet rs = ps.executeQuery();
-
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setString(1, genomeVersion);
+        ResultSet rs = stmt.executeQuery();
         String path = null;
 
         if (rs.next()) {
             path = rs.getString("FilePath");
         }
 
-        ps.close();
+        stmt.close();
 
     	return path;
     }
-
 
     /**
      * Add one genomerelease to the database.
@@ -89,18 +85,18 @@ public class GenomeMethods {
 
         String filePath = filePathBuilder.toString();
 
-        String insertGenRelQuery = "INSERT INTO Genome_Release "
+        String query = "INSERT INTO Genome_Release "
                 + "(Version, Species, FilePath) " + "VALUES (?, ?, ?)";
 
-        PreparedStatement ps = conn.prepareStatement(insertGenRelQuery);
-        ps.setString(1, genomeVersion);
-        ps.setString(2, species);
-        ps.setString(3, filePath.toString());
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setString(1, genomeVersion);
+        stmt.setString(2, species);
+        stmt.setString(3, filePath.toString());
 
-        ps.execute();
+        stmt.execute();
 
         filePathBuilder.insert(0, ServerDependentValues.UploadURL);
-
+        stmt.close();
         return filePathBuilder.toString();
     }
 
@@ -116,17 +112,18 @@ public class GenomeMethods {
     public boolean removeGenomeRelease(String genomeVersion,
             String specie) {
 
-        String removeQuery = "DELETE FROM Genome_Release WHERE "
-                + "(Version = ? AND Species = ?)";
+        String query = "DELETE FROM Genome_Release " +
+        		"WHERE (Version = ? AND Species = ?)";
 
-        PreparedStatement ps;
+        PreparedStatement stmt;
 
         try {
-            ps = conn.prepareStatement(removeQuery);
+            stmt = conn.prepareStatement(query);
 
-            ps.setString(1, genomeVersion);
-            ps.setString(2, specie);
-            ps.execute();
+            stmt.setString(1, genomeVersion);
+            stmt.setString(2, specie);
+            stmt.execute();
+            stmt.close();
         } catch (SQLException e) {
             System.out.println("Failed to remove genome release!");
             return false;
@@ -138,29 +135,26 @@ public class GenomeMethods {
     * method for getting all the genome releases currently stored in the
     * database.
     * @param species String, the name of the specie you want to get genome
-    * realeases for.
+    * 		releases for.
     * @return genomeVersions List<String>, list of all the genome releases for
-    * a specific specie.
+    * 		a specific species.
     * @throws SQLException
     */
    public List<String> getAllGenomReleases(String species) throws SQLException {
 
-        List<String> genomeVersions = new ArrayList<String>();
-
+        List<String> versionsList = new ArrayList<String>();
         String query = "SELECT Version FROM Genome_Release WHERE Species = ?";
 
-        PreparedStatement ps = conn.prepareStatement(query);
-
-        ps.setString(1, species);
-
-        ResultSet rs = ps.executeQuery();
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setString(1, species);
+        ResultSet rs = stmt.executeQuery();
 
         while (rs.next()) {
-            genomeVersions.add(rs.getString("Version"));
+            versionsList.add(rs.getString("Version"));
         }
 
-        ps.close();
-        return genomeVersions;
+        stmt.close();
+        return versionsList;
     }
 
    /**
@@ -176,20 +170,18 @@ public class GenomeMethods {
 
         String query = "SELECT FilePath FROM Chain_File WHERE (FromVersion = ?)"
                 + " AND (ToVersion = ?)";
-        PreparedStatement ps = conn.prepareStatement(query);
+        PreparedStatement stmt = conn.prepareStatement(query);
 
-        ps.setString(1, fromVersion);
-        ps.setString(2, toVersion);
-
-        ResultSet rs = ps.executeQuery();
+        stmt.setString(1, fromVersion);
+        stmt.setString(2, toVersion);
+        ResultSet rs = stmt.executeQuery();
         String resFilePath = null;
 
         if (rs.next()) {
-
         	resFilePath = rs.getString("FilePath");
         }
 
-        ps.close();
+        stmt.close();
 
         return resFilePath;
     }
@@ -222,6 +214,7 @@ public class GenomeMethods {
         while (rs.next()) {
             species = rs.getString("Species");
         }
+        speciesStat.close();
 
         String filePath = fpg.generateChainFolderPath(species, fromVersion,
                 toVersion) + fileName;
@@ -258,19 +251,16 @@ public class GenomeMethods {
     public int removeChainFile(String fromVersion, String toVersion)
             throws SQLException {
 
-
-
-
         String query = "DELETE FROM Chain_File WHERE (FromVersion = ?)"
                 + " AND (ToVersion = ?)";
 
-        PreparedStatement ps = conn.prepareStatement(query);
-        ps.setString(1, fromVersion);
-        ps.setString(2, toVersion);
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setString(1, fromVersion);
+        stmt.setString(2, toVersion);
 
-        int res = ps.executeUpdate();
-        ps.close();
+        int resCount = stmt.executeUpdate();
+        stmt.close();
 
-        return res;
+        return resCount;
     }
 }
