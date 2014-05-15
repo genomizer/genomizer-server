@@ -21,6 +21,7 @@ public class DeleteGenomeReleaseResponseTest {
 	public void testCreateNotNull() {
 
 		Response rsp = new DeleteGenomeReleaseResponse(StatusCode.OK);
+
 		assertNotNull(rsp);
 
 	}
@@ -33,6 +34,7 @@ public class DeleteGenomeReleaseResponseTest {
 	public void testGetResponseCode() {
 
 		Response rsp = new DeleteGenomeReleaseResponse(StatusCode.OK);
+
 		assertEquals(StatusCode.OK, rsp.getCode());
 
 	}

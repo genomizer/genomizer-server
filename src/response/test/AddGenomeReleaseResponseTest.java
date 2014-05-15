@@ -64,7 +64,7 @@ public class AddGenomeReleaseResponseTest {
 	@Test
 	public void testResponseJSON() {
 
-		String json = "{\"filepath\":\"abc123\"}";
+		String json = "{\"filePath\":\"abc123\"}";
 		Response rsp = new AddGenomeReleaseResponse(StatusCode.OK, "ABC");
 		rsp = gson.fromJson(json, AddGenomeReleaseResponse.class);
 	    String json2 = gson.toJson(rsp);
@@ -74,7 +74,3 @@ public class AddGenomeReleaseResponseTest {
 	}
 
 }
-
-
-
-
