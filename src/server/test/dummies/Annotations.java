@@ -125,7 +125,7 @@ public class Annotations {
 		URL obj = new URL(testSettings.url + "/annotation/value/" + name + "/" + value);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
-		con.setRequestMethod("PUT");
+		con.setRequestMethod("DELETE");
 		con.setRequestProperty("Content-Type", "application/json");
 		con.setRequestProperty("Authorization", Login.getToken());
 		con.setRequestProperty("Content-Type", "application/json");
