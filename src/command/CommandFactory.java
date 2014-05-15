@@ -265,7 +265,8 @@ public class CommandFactory {
 	}
 
 	public Command creatRenameAnnotationValueCommand(String json) {
-		return new RenameAnnotationValueCommand();
+		Command command = gson.fromJson(json, RenameAnnotationValueCommand.class);
+		return command;
 	}
 
 	/**
@@ -288,7 +289,6 @@ public class CommandFactory {
 	}
 
 	public Command createEditAnnotationFieldCommand(String json) {
-		// TODO Auto-generated method stub
 		Command command = gson.fromJson(json, EditAnnotationFieldCommand.class);
 		return command;
 	}
