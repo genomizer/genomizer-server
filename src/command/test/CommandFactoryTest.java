@@ -4,9 +4,14 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import command.Command;
 import command.CommandFactory;
 
+/**
+ * Testclass used to test the CommandFactory class.
+ *
+ * @author tfy09jnn
+ * @version 1.0
+ */
 public class CommandFactoryTest {
 
 	/**
@@ -23,28 +28,27 @@ public class CommandFactoryTest {
 	/**
 	 * Test creation of upload command.
 	 */
-//	@Test
-//	public void testCreateAddExperimentCommand() {
-//
-//		CommandFactory cmdf = new CommandFactory();
-//		String json = "JSON_STRING";
-//		String[] restful = {"1", "2"};
-//		assertNotNull(cmdf.createAddExperimentCommand(json, restful));
-//
-//	}
+	@Test
+	public void testCreateAddExperimentCommand() {
+
+		CommandFactory cmdf = new CommandFactory();
+		String json = "JSON_STRING";
+		assertNotNull(cmdf.createAddExperimentCommand(json));
+
+	}
 
 	/**
 	 * Test creation of Retrieve experiment command.
 	 */
-//	@Test
-//	public void testCreateRetrieveExperimentCommand() {
-//
-//		CommandFactory cmdf = new CommandFactory();
-//		String json = "JSON_STRING";
-//		String[] restful = {"1", "2"};
-//		assertNotNull(cmdf.createRetrieveExperimentCommand(json, restful));
-//
-//	}
+	@Test
+	public void testCreateRetrieveExperimentCommand() {
+
+		CommandFactory cmdf = new CommandFactory();
+		String json = "JSON_STRING";
+		String restful = "ABCDEF";
+		assertNotNull(cmdf.createRetrieveExperimentCommand(json, restful));
+
+	}
 
 	/**
 	 * Test creation of login command.
