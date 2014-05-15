@@ -19,4 +19,8 @@ public abstract class Response {
 		return code;
 	}
 
+	public String toString(){
+		return getBody() + code;
+	}
+
 }

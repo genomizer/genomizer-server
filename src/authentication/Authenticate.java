@@ -24,7 +24,6 @@ public class Authenticate {
 	}
 
 	static public boolean userExists(String username){
-		System.out.println(activeUsersID);
 		return activeUsersID.containsValue(username);
 
 	}
