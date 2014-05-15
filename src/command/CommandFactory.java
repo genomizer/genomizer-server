@@ -282,4 +282,9 @@ public class CommandFactory {
 
 	}
 
+	public Command createDeleteAnnotationValueCommand(String json,
+			String value, String name) {
+		return new DeleteAnnotationValueCommand(value, name);
+	}
+
 }

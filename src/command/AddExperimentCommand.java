@@ -3,16 +3,9 @@ package command;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
-import javax.xml.ws.Response;
-
 import response.MinimalResponse;
 import response.StatusCode;
-import server.DatabaseSettings;
-
 import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
 import database.DatabaseAccessor;
 
 /**
