@@ -86,8 +86,11 @@ public class AnnotationMethods {
 		ResultSet rs = stmt.executeQuery();
 
 		if (rs.next()) {
-			return new Annotation(rs);
+			Annotation anno = new Annotation(rs);
+			stmt.close();
+			return anno;
 		} else {
+			stmt.close();
 			return null;
 		}
 	}
@@ -141,7 +144,7 @@ public class AnnotationMethods {
 			while (rs.next()) {
 				annotationLabelList.add(rs.getString("Label"));
 			}
-			rs.close();
+			stmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
@@ -185,9 +188,12 @@ public class AnnotationMethods {
 		ResultSet rs = stmt.executeQuery();
 
 		while (rs.next()) {
-			return rs.getString("DefaultValue");
+			String value = rs.getString("DefaultValue");
+			stmt.close();
+			return value;
 		}
 
+		stmt.close();
 		return null;
 	}
 
@@ -267,6 +273,7 @@ public class AnnotationMethods {
 			isRequired = rs.getBoolean("Required");
 		}
 
+		stmt.close();
 		return isRequired;
 	}
 
