@@ -4,13 +4,14 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
 
 import database.DatabaseAccessor;
 import response.DeleteGenomeReleaseResponse;
 import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
+
+//TODO: Add more validation code.
 
 /**
  * Class used to delete a genome release.
@@ -20,7 +21,6 @@ import response.StatusCode;
  */
 public class DeleteGenomeReleaseCommand extends Command {
 
-	@SerializedName("genomeversion")
 	@Expose
 	private String genomeVersion = null;
 
@@ -33,7 +33,11 @@ public class DeleteGenomeReleaseCommand extends Command {
 	@Override
 	public boolean validate() {
 
-		return false;
+		if( (genomeVersion == null) || (specie == null) ) {
+			return false;
+		}
+
+		return true;
 
 	}
 

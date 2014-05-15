@@ -11,6 +11,8 @@ import com.google.gson.GsonBuilder;
 import command.Command;
 import command.DeleteGenomeReleaseCommand;
 
+//TODO: Add more tests on validation.
+
 /**
  * Class used to test the DeleteGenomeReleaseCommand class.
  *
@@ -53,7 +55,7 @@ public class DeleteGenomeReleaseCommandTest {
 	@Test
 	public void testDeleteGenomeReleaseJSON() {
 
-		String json = "{\"genomeversion\":\"GV 1.0\",\"specie\":\"human\"}";
+		String json = "{\"genomeVersion\":\"GV 1.0\",\"specie\":\"human\"}";
 		final Command cmd = gson.fromJson(json, DeleteGenomeReleaseCommand.class);
 	    String json2 = gson.toJson(cmd);
 
@@ -62,13 +64,32 @@ public class DeleteGenomeReleaseCommandTest {
 	}
 
 	/**
-	 * Method used to test the validate method.
+	 * Test used to check that the validate method returns false
+	 * if genomeVersion is null.
 	 */
 	@Test
-	public void testValidate() {
+	public void testValidateGenomeVersionNull() {
 
-		fail("Not yet implemented");
+		String json = "{\"genomeVersion\":null,\"specie\":\"human\"}";
+		final Command cmd = gson.fromJson(json, DeleteGenomeReleaseCommand.class);
+
+		assertFalse(cmd.validate());
+
+	}
+
+	/**
+	 * Test used to check that the validate method returns false
+	 * if specie is null.
+	 */
+	@Test
+	public void testValidateSpecieNull() {
+
+		String json = "{\"genomeVersion\":\"GV 1.0\",\"specie\":null}";
+		final Command cmd = gson.fromJson(json, DeleteGenomeReleaseCommand.class);
+
+		assertFalse(cmd.validate());
 
 	}
 
 }
+

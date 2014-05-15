@@ -56,9 +56,12 @@ public class AddAnnotationFieldCommandTest {
 	    //Create JSON input, serialize, de-serialize and then check for equality.
 	    String json = "{\"name\":\"species\",\"type\":[\"freetext\"],\"default\":null,\"forced\":true}";
 	    final Command aafc = gson.fromJson(json, AddAnnotationFieldCommand.class);
+
+	    //Need to remove default since it doesn't appear if null.
+	    String jsonCompare = "{\"name\":\"species\",\"type\":[\"freetext\"],\"forced\":true}";
 	    String json2 = gson.toJson(aafc);
 
-	    assertEquals(json2, json);
+	    assertEquals(json2, jsonCompare);
 
 	}
 
