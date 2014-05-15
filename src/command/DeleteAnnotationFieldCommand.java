@@ -59,6 +59,7 @@ public class DeleteAnnotationFieldCommand extends Command {
 			return new MinimalResponse(200);
 
 		} catch (SQLException e) {
+			System.out.println("ERROR CODE: " + e.getErrorCode());
 			e.printStackTrace();
 			return new MinimalResponse(StatusCode.BAD_REQUEST);
 		} catch (IOException e) {

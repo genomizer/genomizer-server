@@ -15,18 +15,11 @@ import com.google.gson.annotations.SerializedName;
 
 import database.DatabaseAccessor;
 
-/* TODO: Fix error handling in execute method.
- *		 Test class vs the database.
- *		 Make JUnit test cases.
- *		 Add some more validation.
- *		 REFACTOR CODE.
- */
-
 /**
  * Class used to add annotation fields.
  *
- * @author tfy09jnn
- * @version 1.0
+ * @author tfy09jnn, Hugo Källström
+ * @version 1.1
  */
 public class AddAnnotationFieldCommand extends Command {
 
@@ -58,9 +51,7 @@ public class AddAnnotationFieldCommand extends Command {
 		if(name.length() > 20 || type.size() < 1 ) {
 			return false;
 		}
-
 		return true;
-
 	}
 
 	/**
@@ -70,57 +61,47 @@ public class AddAnnotationFieldCommand extends Command {
 	@Override
 	public Response execute() {
 
-		Response rsp;
 		int addedAnnotations = 0;
 		int defaultValueIndex = 0;
 		DatabaseAccessor db = null;
-		try {
-			//Get database access.
-			db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
 
+		try {
+			db = initDB();
 			for(int i = 0; i < type.size(); i++) {
 				if(type.get(i).equals(defaults)) {
 					defaultValueIndex = i;
 					break;
 				}
 			}
-
 			if(type.size() == 1 && type.get(0).equals("freetext")) {
-
 				addedAnnotations = db.addFreeTextAnnotation(name, defaults, forced);
-
 			} else {
-
-				//Add annotation field.
 				addedAnnotations = db.addDropDownAnnotation(name, type, defaultValueIndex, forced);
-
 			}
-
-			//Create response.
 			if(addedAnnotations != 0) {
 				return new AddAnnotationFieldResponse(StatusCode.CREATED);
 			} else {
-				return new MinimalResponse(400);
+				return new MinimalResponse(StatusCode.BAD_REQUEST);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return new MinimalResponse(400);
+			/* Catch dubplicate key*/
+			if(e.getErrorCode() == 0) {
+				return new MinimalResponse(StatusCode.BAD_REQUEST);
+			} else {
+				return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
+			}
 
 		} catch (IOException e) {
 			e.printStackTrace();
-			return new MinimalResponse(400);
+			return new MinimalResponse(StatusCode.BAD_REQUEST);
 		} finally{
-
 			try {
 				db.close();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
-				return new MinimalResponse(400);
+				return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
 			}
-
 		}
-
 	}
-
 }
