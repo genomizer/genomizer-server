@@ -6,9 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import database.DatabaseAccessor;
 
@@ -17,7 +15,6 @@ import response.GetAnnotationInformationResponse;
 import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
-import server.DatabaseSettings;
 
 public class GetAnnotationInformationCommand extends Command {
 
