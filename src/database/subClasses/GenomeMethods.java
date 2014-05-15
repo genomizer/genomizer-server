@@ -290,7 +290,7 @@ public class GenomeMethods {
 		File chainFile = new File(filePath);
 
         if (chainFile.exists() ) {
-        	chainFile.delete();
+        	recursiveDelete(chainFile);
         }
 
 		String query = "DELETE FROM Chain_File WHERE (FromVersion = ?)"
@@ -303,5 +303,17 @@ public class GenomeMethods {
 		deleteStatement.close();
 
         return resCount;
+    }
+
+    private static void recursiveDelete(File folder) {
+        File[] contents = folder.listFiles();
+        if (contents == null || contents.length == 0) {
+            folder.delete();
+        } else {
+            for (File f : contents) {
+                recursiveDelete(f);
+            }
+        }
+        folder.delete();
     }
 }
