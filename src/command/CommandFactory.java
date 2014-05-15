@@ -297,4 +297,18 @@ public class CommandFactory {
 
 	}
 
+	/**
+	 * Used to create the command needed to add genome releases.
+	 *
+	 * @param json string to initiate class.
+	 * @return the actual command.
+	 */
+	public Command createAddGenomeReleaseCommand(String json) {
+
+		final Command addGenomeReleaseCmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
+
+		return addGenomeReleaseCmd;
+
+	}
+
 }
