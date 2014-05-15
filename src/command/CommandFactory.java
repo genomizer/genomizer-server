@@ -181,6 +181,7 @@ public class CommandFactory {
 //		processCommand.setProcessType(restful[2]);
 //		processCommand.setFileID(restful[3]);
 		processCommand.setUsername(username);
+		System.err.println("Username: " + username);
 		//Create from json
 		//set userID
 		//set fileID
