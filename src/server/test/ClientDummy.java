@@ -198,22 +198,13 @@ public class ClientDummy {
 	}
 
 	private static void sendDeleteAnnotation() throws Exception {
-		URL obj = new URL(url + "/annotation");
+		URL obj = new URL(url + "/annotation/testanno1");
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
 		con.setRequestMethod("DELETE");
 		con.setRequestProperty("Content-Type", "application/json");
 		con.setRequestProperty("Authorization", token.getToken());
 		con.setRequestProperty("Content-Type", "application/json");
-
-		JsonObject jj=new JsonObject();
-		JsonArray ja = new JsonArray();
-		JsonObject element = new JsonObject();
-		element.addProperty("name", "testanno1");
-		ja.add(element);
-		jj.add("deleteID", ja);
-
-		sendToServer(con, jj.toString());
 
 		System.out.println("\nSending 'DELETE' request to URL : " + url);
 		System.out.println("Response Body: " + printResponse(con));
