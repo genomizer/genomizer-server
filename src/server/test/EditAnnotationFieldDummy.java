@@ -88,8 +88,8 @@ public class EditAnnotationFieldDummy {
 		System.out.println("Response Body: " + printResponse(con));
 	}
 
-	private static void sendAddAnnotation() throws Exception {
-		URL obj = new URL(url + "/annotation");
+	static void sendAddAnnotation() throws Exception {
+		URL obj = new URL(url + "/annotation/field");
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
 		con.setRequestMethod("POST");
