@@ -534,9 +534,10 @@ public class DatabaseAccessor {
      * @return res int - the number of tuples updated in the database.
      * @throws SQLException
      *             if the query does not succeed
+     * @throws IOException
      */
     public int addFreeTextAnnotation(String label, String defaultValue,
-            boolean required) throws SQLException {
+            boolean required) throws SQLException, IOException {
 
         return annoMethods.addFreeTextAnnotation(label, defaultValue, required);
     }
@@ -646,9 +647,10 @@ public class DatabaseAccessor {
      *
      * @return res int - the number of tuples updated
      * @throws SQLException If the update fails
+     * @throws IOException
      */
     public int changeAnnotationLabel(String oldLabel, String newLabel)
-            throws SQLException {
+            throws SQLException, IOException {
 
         return annoMethods.changeAnnotationLabel(oldLabel, newLabel);
     }
@@ -669,9 +671,10 @@ public class DatabaseAccessor {
      * @param newValue String - the name of the new annotation value.
      *
      * @throws SQLException
+     * @throws IOException
      */
     public void changeAnnotationValue(String label, String oldValue,
-            String newValue) throws SQLException {
+            String newValue) throws SQLException, IOException {
 
        annoMethods.changeAnnotationValue(label, oldValue, newValue);
     }
