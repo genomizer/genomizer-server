@@ -101,11 +101,13 @@ public class DatabaseAccessor {
     /**
      * Closes the connection to the database, releasing all resources it uses.
      *
-     * @throws SQLException
-     *             if a database access error occurs
      */
-    public void close() throws SQLException {
-        conn.close();
+    public void close() {
+        try {
+            conn.close();
+        } catch (SQLException e) {
+            System.err.println("Could not close database connection");
+        }
     }
 
     /**
