@@ -44,8 +44,6 @@ public class ClientDummy {
 		sendLogout();
 	}
 
-
-
 	static void sendLogin() throws Exception {
 
 		URL obj = new URL(url + "/login");

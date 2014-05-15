@@ -46,7 +46,7 @@ public class CommandHandler {
 			if(CommandType.PROCESS_COMMAND.equals(cmdt)){
 				//add the heavy command to the queue, executed when the
 				//command is at the head of the queue, return OK to tell the client
-				heavyWorkThread.addWork(myCom);
+				heavyWorkThread.addWork((ProcessCommand)myCom);
 				return new ProcessResponse(StatusCode.OK);
 			}else{
 				return myCom.execute();
@@ -71,7 +71,8 @@ public class CommandHandler {
 
 		if (cmdt == CommandType.DELETE_ANNOTATION_VALUE_COMMAND) {
 			String[] rest = restful.split("/");
-			newCommand = cmdFactory.createDeleteAnnotationValueCommand(json, rest[3], rest[4]);
+			System.out.println("split: " + rest[0] + rest[1] + rest[2]);
+			newCommand = cmdFactory.createDeleteAnnotationValueCommand(json, rest[2], rest[3]);
 		}
 		String parsedRest = parseRest(restful);
 
