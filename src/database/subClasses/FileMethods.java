@@ -233,7 +233,9 @@ public class FileMethods {
     }
 
     /**
-     * Deletes a file from the database.
+     * Deletes a file from the database and the disk.
+     * Should throw an IOException if the method failed to delete the file
+     * from disk.
      *
      * @param path String - the path to the file.
      * @return int - the number of deleted tuples in the database.
@@ -258,8 +260,9 @@ public class FileMethods {
     }
 
     /**
-     * Deletes a file from the database using the fileID.
-     *
+     * Deletes a file from the database and the disk using the fileID.
+     * Should throw an IOException if the method failed to delete the file
+     * from disk.
      * @param fileID int - the fileID of the file to be deleted.
      * @return 1 if deletion was successful, else 0.
      * @throws SQLException
