@@ -142,7 +142,7 @@ public class ClientDummy {
 
 		//int responseCode = con.getResponseCode();
 		System.out.println("\nSending 'PUT' request to URL : " + url);
-		System.out.println("Reponse Body: " + printResponse(con));
+//		System.out.println("Reponse Body: " + printResponse(con));
 	}
 
 	private static void sendAddExperiment() throws Exception {
@@ -258,7 +258,7 @@ public class ClientDummy {
 		con.setRequestProperty("Authorization", token.getToken());
 
 		System.out.println("\nSending 'DELETE' request to URL : " + url);
-		System.out.println("Response Body: " + printResponse(con));
+//		System.out.println("Response Body: " + printResponse(con));
 	}
 
 	private static String printResponse(HttpURLConnection con) throws IOException {
