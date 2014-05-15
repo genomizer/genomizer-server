@@ -1,15 +1,9 @@
 package command.test;
 
 import static org.junit.Assert.*;
-
-import org.junit.Before;
 import org.junit.Test;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import command.Command;
-import command.CommandHandler;
 import command.DeleteGenomeReleaseCommand;
 
 //TODO: Add more tests on validation.
@@ -22,21 +16,6 @@ import command.DeleteGenomeReleaseCommand;
  */
 public class DeleteGenomeReleaseCommandTest {
 
-	//Builder used with almost all tests.
-	public Gson gson = null;
-
-	/**
-	 * Setup method to initiate GSON builder.
-	 */
-	@Before
-	public void setUp() {
-
-	    final GsonBuilder builder = new GsonBuilder();
-	    builder.excludeFieldsWithoutExposeAnnotation();
-	    gson = builder.create();
-
-	}
-
 	/**
 	 * Test used to check that creation works and
 	 * is not null.
@@ -44,7 +23,7 @@ public class DeleteGenomeReleaseCommandTest {
 	@Test
 	public void testCreateNotNull() {
 
-		DeleteGenomeReleaseCommand cmd = new DeleteGenomeReleaseCommand("hg 123","hello");
+		DeleteGenomeReleaseCommand cmd = new DeleteGenomeReleaseCommand("Specie", "GenomeRelease");
 		assertNotNull(cmd);
 
 	}
@@ -56,9 +35,7 @@ public class DeleteGenomeReleaseCommandTest {
 	@Test
 	public void testValidateGenomeVersionNull() {
 
-		String json = "{\"genomeVersion\":null,\"specie\":\"human\"}";
-		final Command cmd = gson.fromJson(json, DeleteGenomeReleaseCommand.class);
-
+		final Command cmd = new DeleteGenomeReleaseCommand("Human", "null");
 		assertFalse(cmd.validate());
 
 	}
@@ -70,21 +47,8 @@ public class DeleteGenomeReleaseCommandTest {
 	@Test
 	public void testValidateSpecieNull() {
 
-		String json = "{\"genomeVersion\":\"GV 1.0\",\"specie\":null}";
-		final Command cmd = gson.fromJson(json, DeleteGenomeReleaseCommand.class);
-
+		final Command cmd = new DeleteGenomeReleaseCommand("null", "GRelease");
 		assertFalse(cmd.validate());
-
-	}
-
-	@Test
-	public void testTmp() {
-
-		String hello = "/genomeRelease/<species>/<version-id>";
-		CommandHandler cmd = new CommandHandler();
-
-		String abc = cmd.parseRest(hello);
-		System.out.println("String is :" + abc);
 
 	}
 

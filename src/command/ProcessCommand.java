@@ -1,5 +1,8 @@
 package command;
 
+/**
+ * @author Robin Ödling - c11rog
+ */
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -11,6 +14,7 @@ import response.ProcessResponse;
 import response.Response;
 import response.StatusCode;
 import server.DatabaseSettings;
+import server.ResponseLogger;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -169,7 +173,6 @@ public class ProcessCommand extends Command {
 		try {
 
 			db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
-			System.out.println("created databaseaccesor");
 			processHandler = new ProcessHandler();
 
 			switch(processtype){
@@ -191,11 +194,13 @@ public class ProcessCommand extends Command {
 					// TODO Log response
 					System.err.println("CATCH InterruptedException in ProcessCommand.Execute when running processHandler.executeProcess");
 					e.printStackTrace();
+					ResponseLogger.log(username, new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, e.getMessage()));
 					return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE);
-				} catch (IOException e) {
+				} catch (IOException e1) {
 					// TODO Log response
 					System.err.println("CATCH IO exception in ProcessCommand.Execute when running processHandler.executeProcess");
-					e.printStackTrace();
+					e1.printStackTrace();
+					ResponseLogger.log(username, new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, e1.getMessage()));
 					return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE);
 				} finally{
 					db.close();
@@ -206,6 +211,7 @@ public class ProcessCommand extends Command {
 				// TODO Log response
 				System.err.println("Unknown process type in processcommand execute");
 				db.close();
+				ResponseLogger.log(username, new ProcessResponse(StatusCode.BAD_REQUEST, "Unknown process type in processcommand execute"));
 				return new ProcessResponse(StatusCode.BAD_REQUEST);
 
 			}
@@ -213,17 +219,20 @@ public class ProcessCommand extends Command {
 			// TODO Log response
 			System.err.println("SQL Exception in ProcessCommand execute:");
 			e.printStackTrace();
+			ResponseLogger.log(username, new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, e.getMessage()));
 			return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE);
 		} catch (IOException e1) {
 			// TODO Log response
 			System.err.println("IO Exception in ProcessCommand execute.");
 			e1.printStackTrace();
+			ResponseLogger.log(username, new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, e1.getMessage()));
 			return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE);
 		} finally {
 			try {
 				db.close();
 			} catch (SQLException e) {
 				System.err.println("Could not close Database accessor1");
+				ResponseLogger.log(username, new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, "Could not close Database accessor"));
 				e.printStackTrace();
 			}
 		}
@@ -237,11 +246,15 @@ public class ProcessCommand extends Command {
 			// TODO Log response
 			System.err.println("SQL Exception in ProcessCommand execute when using addGeneratedProfiles:");
 			e.printStackTrace();
+			ResponseLogger.log(username, new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, e.getMessage()));
+			return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE);
+
 		} finally {
 			try {
 				db.close();
 			} catch (SQLException e) {
 				System.err.println("Could not close Database accessor2");
+				ResponseLogger.log(username, new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, "Could not close Database accessor"));
 				e.printStackTrace();
 			}
 		}
@@ -250,9 +263,12 @@ public class ProcessCommand extends Command {
 			db.close();
 		} catch (SQLException e) {
 			System.err.println("Could not close Database accessor3");
+			ResponseLogger.log(username, new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, "Could not close Database accessor"));
 			e.printStackTrace();
 		}
+		ResponseLogger.log(username, new ProcessResponse(StatusCode.CREATED, "raw to profile processing completed"));
 		return new ProcessResponse(StatusCode.CREATED);
+
 
 	}
 

@@ -23,10 +23,15 @@ public class DeleteGenomeReleaseCommand extends Command {
 
 	private String specie = null;
 
-	public DeleteGenomeReleaseCommand(String genomeVersion, String specie) {
+	/**
+	 * Constructor used to initiate the class.
+	 *
+	 * @param restful string to split.
+	 */
+	public DeleteGenomeReleaseCommand(String specie, String genomeVersion) {
 
 		this.genomeVersion = genomeVersion;
-		this.genomeVersion = specie;
+		this.specie = specie;
 
 	}
 
@@ -36,7 +41,7 @@ public class DeleteGenomeReleaseCommand extends Command {
 	@Override
 	public boolean validate() {
 
-		if( (genomeVersion == null) || (specie == null) ) {
+		if( (genomeVersion.equals("null")) || (specie.equals("null")) ) {
 			return false;
 		}
 

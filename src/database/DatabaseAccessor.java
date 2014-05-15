@@ -101,11 +101,13 @@ public class DatabaseAccessor {
     /**
      * Closes the connection to the database, releasing all resources it uses.
      *
-     * @throws SQLException
-     *             if a database access error occurs
      */
-    public void close() throws SQLException {
-        conn.close();
+    public void close() {
+        try {
+            conn.close();
+        } catch (SQLException e) {
+            System.err.println("Could not close database connection");
+        }
     }
 
     /**
@@ -140,7 +142,7 @@ public class DatabaseAccessor {
     public List<Experiment> search(String pubMedString) throws IOException,
             SQLException {
 
-
+    	isPubMedStringValid(pubMedString);
 
         if (pm2sql.hasFileConstraint(pubMedString)) {
             return searchFiles(pubMedString);
@@ -149,10 +151,43 @@ public class DatabaseAccessor {
         return searchExperiments(pubMedString);
     }
 
-    public boolean isPubMedStringValid(String pubMedString){
+	/**
+	 * Internal method!
+	 *
+	 * Checks that the pubmed string is valid.
+	 *
+	 * @param pubMedString
+	 * @return true if ok else throws Exception
+	 * @throws IOException
+	 */
+	public boolean isPubMedStringValid(String pubMedString) throws IOException {
 
-    	return false;
-    }
+		int squareBracketsStart = 0, squareBracketsStop = 0;
+		char last = 0;
+
+		for (int i = 0; i < pubMedString.length(); i++) {
+
+			if (squareBracketsStart + squareBracketsStop != 0) {
+				if (last == pubMedString.charAt(i)) {
+					throw new IOException("Missformed PubMed String");
+				}
+			}
+			if (pubMedString.charAt(i) == '[') {
+				squareBracketsStart++;
+				last = pubMedString.charAt(i);
+
+			} else if (pubMedString.charAt(i) == ']') {
+				squareBracketsStop++;
+				last = pubMedString.charAt(i);
+			}
+		}
+
+		if (squareBracketsStart == squareBracketsStop) {
+			return true;
+		} else {
+			throw new IOException("Missformed PubMed String");
+		}
+	}
 
     /**
      * Returns an ArrayList which contains the usernames of all the
@@ -499,9 +534,10 @@ public class DatabaseAccessor {
      * @return res int - the number of tuples updated in the database.
      * @throws SQLException
      *             if the query does not succeed
+     * @throws IOException
      */
     public int addFreeTextAnnotation(String label, String defaultValue,
-            boolean required) throws SQLException {
+            boolean required) throws SQLException, IOException {
 
         return annoMethods.addFreeTextAnnotation(label, defaultValue, required);
     }
@@ -611,9 +647,10 @@ public class DatabaseAccessor {
      *
      * @return res int - the number of tuples updated
      * @throws SQLException If the update fails
+     * @throws IOException
      */
     public int changeAnnotationLabel(String oldLabel, String newLabel)
-            throws SQLException {
+            throws SQLException, IOException {
 
         return annoMethods.changeAnnotationLabel(oldLabel, newLabel);
     }
@@ -634,9 +671,10 @@ public class DatabaseAccessor {
      * @param newValue String - the name of the new annotation value.
      *
      * @throws SQLException
+     * @throws IOException
      */
     public void changeAnnotationValue(String label, String oldValue,
-            String newValue) throws SQLException {
+            String newValue) throws SQLException, IOException {
 
        annoMethods.changeAnnotationValue(label, oldValue, newValue);
     }
@@ -967,11 +1005,11 @@ public class DatabaseAccessor {
      * @param genomeVersion - The version to get filepath to,
      * should use getAllGenomeReleases()
      * and let user choose a version
-     * @return String path - a file path
+     * @return Genome - a genome object
      * @throws SQLException
      */
 
-    public String getGenomeReleaseFilePath(String genomeVersion)
+    public Genome getGenomeRelease(String genomeVersion)
             throws SQLException {
 
         return genMethods.getGenomeRelease(genomeVersion);
@@ -1010,7 +1048,7 @@ public class DatabaseAccessor {
     }
 
     /**
-    * method for getting all the genome releases currently stored in the
+    * method for getting all the genome releases for a species currently stored in the
     * database.
     * @param species String, the name of the specie you want to get genome
     * realeases for.
@@ -1018,10 +1056,22 @@ public class DatabaseAccessor {
     * a specific specie.
     * @throws SQLException
     */
-    public List<String> getAllGenomReleases(String species) throws SQLException {
+    public ArrayList<Genome> getAllGenomReleasesForSpecies(String species) throws SQLException {
 
-        return genMethods.getAllGenomReleases(species);
+        return genMethods.getAllGenomReleasesForSpecies(species);
     }
+
+    /**
+    * method for getting all the genome releases currently stored in the
+    * database.
+    * @return genomeList ArrayList<Genome>, list of all the genome releases.
+    * @throws SQLException
+    */
+    public ArrayList<Genome> getAllGenomReleases() throws SQLException {
+
+        return genMethods.getAllGenomReleases();
+    }
+
 
     /**
      * get a specific chainfile depending on from and to what genome release you
@@ -1149,15 +1199,6 @@ public class DatabaseAccessor {
         experiments.add(exp);
 
         return experiments;
-    }
-
-    /**
-     *
-     * @param rootFolderPath
-     * @throws IOException
-     */
-    public void changeFileStorageRoot(String rootFolderPath) throws IOException {
-        fpg = new FilePathGenerator(rootFolderPath);
     }
 
     /**
