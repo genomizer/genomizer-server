@@ -287,4 +287,10 @@ public class CommandFactory {
 		return new DeleteAnnotationValueCommand(value, name);
 	}
 
+	public Command createEditAnnotationFieldCommand(String json) {
+		// TODO Auto-generated method stub
+		Command command = gson.fromJson(json, EditAnnotationFieldCommand.class);
+		return command;
+	}
+
 }

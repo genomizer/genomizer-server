@@ -3,5 +3,8 @@ bin/
 *.iml
 .idea/
 .idea
+junit/
+server*.jar
 *.orig
 .classpath
+*~
