@@ -106,7 +106,6 @@ public class Doorman {
 					case "/annotation":
 						String fullPath = exchange.getRequestURI().toString();
 						if (fullPath.startsWith("/annotation/field")) {
-							System.out.println("hejehej");
 							exchange(exchange, CommandType.RENAME_ANNOTATION_FIELD_COMMAND);
 						} else if (fullPath.startsWith("/annotation/value")) {
 							exchange(exchange, CommandType.RENAME_ANNOTATION_VALUE_COMMAND);
@@ -138,6 +137,7 @@ public class Doorman {
 						if (fullPath.startsWith("/annotation/field")) {
 							exchange(exchange, CommandType.ADD_ANNOTATION_FIELD_COMMAND);
 						} else if (fullPath.startsWith("/annotation/value")) {
+							System.out.println("post");
 							exchange(exchange, CommandType.ADD_ANNOTATION_VALUE_COMMAND);
 						}
 						break;
@@ -167,6 +167,7 @@ public class Doorman {
 						if (fullPath.startsWith("/annotation/field")) {
 							exchange(exchange, CommandType.REMOVE_ANNOTATION_FIELD_COMMAND);
 						} else if (fullPath.startsWith("/annotation/value")) {
+							System.out.println("delete");
 							exchange(exchange, CommandType.DELETE_ANNOTATION_VALUE_COMMAND);
 						}
 						break;
