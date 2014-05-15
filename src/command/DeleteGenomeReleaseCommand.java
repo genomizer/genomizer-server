@@ -1,5 +1,6 @@
 package command;
 
+import database.DatabaseAccessor;
 import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
@@ -19,6 +20,7 @@ public class DeleteGenomeReleaseCommand extends Command {
 	public boolean validate() {
 
 		return false;
+
 	}
 
 	/**
@@ -28,10 +30,15 @@ public class DeleteGenomeReleaseCommand extends Command {
 	public Response execute() {
 
 		Response rsp = null;
+		DatabaseAccessor db;
+
+
+		//Add implementation code.
 
 		rsp = new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
 
 		return rsp;
+
 	}
 
 }
