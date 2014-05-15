@@ -1,5 +1,6 @@
 package command;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,6 +57,9 @@ public class GetExperimentCommand extends Command {
 			exp = db.getExperiment(this.header);
 		} catch (SQLException e) {
 			return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
+		} catch (IOException e) {
+			//Todo, use error message
+			return new MinimalResponse(StatusCode.BAD_REQUEST);
 		} finally{
 			try {
 				db.close();

@@ -3,6 +3,8 @@
 username=$1
 password=$2
 
+export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
+
 ant jar
 filename=server_$(date +%d%m_%H%M).jar
 mv server.jar $filename
