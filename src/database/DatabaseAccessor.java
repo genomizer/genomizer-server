@@ -1045,7 +1045,7 @@ public class DatabaseAccessor {
     }
 
     /**
-    * method for getting all the genome releases currently stored in the
+    * method for getting all the genome releases for a species currently stored in the
     * database.
     * @param species String, the name of the specie you want to get genome
     * realeases for.
@@ -1053,10 +1053,22 @@ public class DatabaseAccessor {
     * a specific specie.
     * @throws SQLException
     */
-    public List<String> getAllGenomReleases(String species) throws SQLException {
+    public ArrayList<Genome> getAllGenomReleasesForSpecies(String species) throws SQLException {
 
-        return genMethods.getAllGenomReleases(species);
+        return genMethods.getAllGenomReleasesForSpecies(species);
     }
+
+    /**
+    * method for getting all the genome releases currently stored in the
+    * database.
+    * @return genomeList ArrayList<Genome>, list of all the genome releases.
+    * @throws SQLException
+    */
+    public ArrayList<Genome> getAllGenomReleases() throws SQLException {
+
+        return genMethods.getAllGenomReleases();
+    }
+
 
     /**
      * get a specific chainfile depending on from and to what genome release you

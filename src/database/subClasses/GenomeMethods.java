@@ -49,7 +49,7 @@ public class GenomeMethods {
 
     public Genome getGenomeRelease(String genomeVersion) throws SQLException {
 
-        String query = "SELECT FilePath FROM Genome_Release WHERE (Version = ?)";
+        String query = "SELECT * FROM Genome_Release WHERE (Version = ?)";
 
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setString(1, genomeVersion);
@@ -73,8 +73,7 @@ public class GenomeMethods {
      *            genomeVersion.
      * @param String
      *            species.
-     * @return String The path to the folder where the genome release files
-     *         should be saved.
+     * @return String The upload URL.
      * @throws SQLException
      *             if adding query failed.
      */
@@ -135,32 +134,59 @@ public class GenomeMethods {
     }
 
     /**
-     * method for getting all the genome releases currently stored in the
+     * method for getting all the genome releases for a species currently stored in the
      * database.
      *
      * @param species
      *            String, the name of the specie you want to get genome
      *            realeases for.
-     * @return genomeVersions List<String>, list of all the genome releases for
+     * @return genomelist ArrayList<Genome>, list of all the genome releases for
      *         a specific specie.
      * @throws SQLException
      */
-   public List<String> getAllGenomReleases(String species) throws SQLException {
+   public ArrayList<Genome> getAllGenomReleasesForSpecies(String species) throws SQLException {
 
-        List<String> versionsList = new ArrayList<String>();
-        String query = "SELECT Version FROM Genome_Release WHERE Species = ?";
+        ArrayList<Genome> genomeList = new ArrayList<Genome>();
+        String query = "SELECT * FROM Genome_Release WHERE Species = ?";
 
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setString(1, species);
         ResultSet rs = stmt.executeQuery();
 
+        Genome genome=null;
         while (rs.next()) {
-            versionsList.add(rs.getString("Version"));
+        	genome = new Genome(rs);
+        	genomeList.add(genome);
         }
 
         stmt.close();
-        return versionsList;
+        return genomeList;
     }
+
+   /**
+    * method for getting all the genome releases currently stored in the
+    * database.
+    *
+    * @return genomeList List<Genome>, list of all the genome releases.
+    * @throws SQLException
+    */
+  public ArrayList<Genome> getAllGenomReleases() throws SQLException {
+
+      ArrayList<Genome> genomeList = new ArrayList<Genome>();
+      String query = "SELECT * FROM Genome_Release";
+
+      PreparedStatement stmt = conn.prepareStatement(query);
+      ResultSet rs = stmt.executeQuery();
+
+      Genome genome=null;
+      while (rs.next()) {
+      	genome = new Genome(rs);
+      	genomeList.add(genome);
+      }
+
+      stmt.close();
+      return genomeList;
+  }
 
     /**
      * get a specific chainfile depending on from and to what genome release you

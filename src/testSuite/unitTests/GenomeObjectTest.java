@@ -28,6 +28,6 @@ public class GenomeObjectTest {
 
 	@Test
 	public void test(){
-
+		
 	}
 }
