@@ -14,6 +14,7 @@ import response.ProcessResponse;
 import response.Response;
 import response.StatusCode;
 import server.DatabaseSettings;
+import server.ResponseLogger;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -194,6 +195,7 @@ public class ProcessCommand extends Command {
 					// TODO Log response
 					System.err.println("CATCH InterruptedException in ProcessCommand.Execute when running processHandler.executeProcess");
 					e.printStackTrace();
+					ResponseLogger.log(username, new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE));
 					return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE);
 				} catch (IOException e) {
 					// TODO Log response
