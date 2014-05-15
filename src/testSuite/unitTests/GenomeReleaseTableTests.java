@@ -72,7 +72,7 @@ public class GenomeReleaseTableTests {
 
     @Test
     public void shouldReturnSpecificGenomeVersionFilePath() throws Exception {
-        Genome genome = dbac.getGenomeReleaseFilePath("hg38");
+        Genome genome = dbac.getGenomeRelease("hg38");
         assertEquals("/var/www/data/GenomeRelease/Human/hg38.fasta", genome.filePath);
     }
 
@@ -87,14 +87,23 @@ public class GenomeReleaseTableTests {
     public void shouldUpdateDatabaseUponAdd() throws Exception {
         dbac.addGenomeRelease("hg40", "Human", "hg40.fasta");
         String expectedFilePath = fpg.generateGenomeReleaseFolder("hg40", "Human") + "hg40.fasta";
-        Genome genome = dbac.getGenomeReleaseFilePath("hg40");
+        Genome genome = dbac.getGenomeRelease("hg40");
         assertEquals(expectedFilePath, genome.filePath);
     }
 
     @Test
     public void shouldReturnNullForInvalidVersionOponGet() throws Exception {
-        Genome genome = dbac.getGenomeReleaseFilePath("hg50");
+        Genome genome = dbac.getGenomeRelease("hg50");
         assertNull(genome);
     }
 
+    @Test
+    public void shouldReturnFileName() throws Exception {
+    	dbac.addGenomeRelease("rn50", "Rat", "aRatFile.fasta");
+    	Genome genome = dbac.getGenomeRelease("rn50");
+    	assertEquals(genome.fileName,"aRatFile.fasta");
+    	assertEquals(genome.species,"Rat");
+    	assertEquals(genome.version,"rn50");
+
+    }
 }

@@ -14,6 +14,6 @@ public class Genome {
 		version = resSet.getString("Version");
 		species = resSet.getString("Species");
 		filePath = resSet.getString("FilePath");
-		fileName = filePath.substring(filePath.lastIndexOf('/'));
+		fileName = filePath.substring(filePath.lastIndexOf('/')+1);
 	}
 }

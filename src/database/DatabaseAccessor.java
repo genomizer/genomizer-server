@@ -1005,11 +1005,11 @@ public class DatabaseAccessor {
      * @param genomeVersion - The version to get filepath to,
      * should use getAllGenomeReleases()
      * and let user choose a version
-     * @return String path - a file path
+     * @return Genome - a genome object
      * @throws SQLException
      */
 
-    public Genome getGenomeReleaseFilePath(String genomeVersion)
+    public Genome getGenomeRelease(String genomeVersion)
             throws SQLException {
 
         return genMethods.getGenomeRelease(genomeVersion);
