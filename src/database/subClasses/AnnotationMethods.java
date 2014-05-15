@@ -232,9 +232,20 @@ public class AnnotationMethods {
 	 * @return res int - the number of tuples updated in the database.
 	 * @throws SQLException
 	 *             if the query does not succeed
+	 * @throws IOException
 	 */
 	public int addFreeTextAnnotation(String label, String defaultValue,
-			boolean required) throws SQLException {
+			boolean required) throws SQLException, IOException {
+
+		if(!isValidChoice(label)) {
+    		throw new IOException("Lable contains invalid characters");
+    	}
+
+    	if(defaultValue != null) {
+    		if(!isValidChoice(defaultValue)) {
+    			throw new IOException("defaultValue contains invalid characters");
+    		}
+    	}
 
 		String query = "INSERT INTO Annotation "
 				+ "VALUES (?, 'FreeText', ?, ?)";
@@ -309,27 +320,38 @@ public class AnnotationMethods {
 		return dropDownLabelsList;
 	}
 
-	/**
-	 * Adds a drop down annotation to the list of possible annotations.
-	 *
-	 * @param label
-	 *            String - the name of the annotation.
-	 * @param choices
-	 *            List<String> - the possible values for the annotation.
-	 * @return tuplesInserted int - the number of tuples inserted into the
-	 *         database.
-	 * @throws SQLException
-	 *             if the query does not succeed
-	 * @throws IOException
-	 *             if the choices are invalid
-	 */
-	public int addDropDownAnnotation(String label, List<String> choices,
-			int defaultValueIndex, boolean required) throws SQLException,
-			IOException {
+    /**
+     * Adds a drop down annotation to the list of possible
+     * annotations.
+     *
+     * @param label String -
+     *            the name of the annotation.
+     * @param choices List<String> -
+     *            the possible values for the annotation.
+     * @return tuplesInserted int - the number of tuples inserted into the
+     * 		   database.
+     * @throws SQLException
+     *             if the query does not succeed
+     * @throws IOException
+     *             if the choices are invalid
+     */
+    public int addDropDownAnnotation(String label,
+            List<String> choices, int defaultValueIndex,
+            boolean required) throws SQLException, IOException {
 
-		if (choices.isEmpty()) {
-			throw new IOException("Must specify at least one choice");
-		}
+    	if(!isValidChoice(label)) {
+    		throw new IOException("Lable contains invalid characters");
+    	}
+
+    	if (choices.isEmpty()) {
+            throw new IOException("Must specify at least one choice");
+        }
+
+    	for(int i = 0; i < choices.size(); i++) {
+    		if(!isValidChoice(choices.get(i))) {
+    			throw new IOException("Choices contains invalid characters");
+    		}
+    	}
 
 		if (defaultValueIndex < 0 || defaultValueIndex >= choices.size()) {
 			throw new IOException("Invalid default value index");
@@ -371,26 +393,30 @@ public class AnnotationMethods {
 		addChoicesStatement.close();
 
 		return tuplesInserted;
+    }
 
-	}
+    /**
+     * Method to add a value to a existing DropDown annotation.
+     *
+     * @param label String
+     *            , the label of the chosen DropDown annotation.
+     * @param value String
+     *            , the value that will be added to the DropDown
+     *            annotation.
+     * @return Integer, how many rows that were added to the
+     *          database.
+     * @throws SQLException
+     *             , if the value already exist or another SQL error.
+     * @throws IOException
+     *             , if the chosen label does not represent a DropDown
+     *             annotation.
+     */
+    public int addDropDownAnnotationValue(String label, String value)
+            throws SQLException, IOException {
 
-	/**
-	 * Method to add a value to a existing DropDown annotation.
-	 *
-	 * @param label
-	 *            String , the label of the chosen DropDown annotation.
-	 * @param value
-	 *            String , the value that will be added to the DropDown
-	 *            annotation.
-	 * @return Integer, how many rows that were added to the database.
-	 * @throws SQLException
-	 *             , if the value already exist or another SQL error.
-	 * @throws IOException
-	 *             , if the chosen label does not represent a DropDown
-	 *             annotation.
-	 */
-	public int addDropDownAnnotationValue(String label, String value)
-			throws SQLException, IOException {
+    	if(!isValidChoice(value)) {
+    		throw new IOException("Value contains invalid characters");
+    	}
 
 		String query = "SELECT * FROM Annotation WHERE "
 				+ "(label = ? AND datatype = 'DropDown')";
@@ -462,27 +488,28 @@ public class AnnotationMethods {
 
 			int resCount = deleteTagStatement.executeUpdate();
 			deleteTagStatement.close();
-
 			return resCount;
 		}
 	}
 
-	/**
-	 * Changes the annotation label.
-	 *
-	 * OBS! This changes the label for all experiments.
-	 *
-	 * @param oldLabel
-	 *            String
-	 * @param newLabel
-	 *            string
-	 *
-	 * @return res int - the number of tuples updated
-	 * @throws SQLException
-	 *             If the update fails
-	 */
-	public int changeAnnotationLabel(String oldLabel, String newLabel)
-			throws SQLException {
+    /**
+     * Changes the annotation label.
+     *
+     * OBS! This changes the label for all experiments.
+     *
+     * @param oldLabel String
+     * @param newLabel string
+     *
+     * @return res int - the number of tuples updated
+     * @throws SQLException If the update fails
+     * @throws IOException
+     */
+    public int changeAnnotationLabel(String oldLabel, String newLabel)
+            throws SQLException, IOException {
+
+    	if(!isValidChoice(newLabel)) {
+    		throw new IOException("The new Lable contains invalid characters");
+    	}
 
 		String query = "UPDATE Annotation SET Label = ? WHERE (Label =?)";
 
@@ -496,28 +523,30 @@ public class AnnotationMethods {
 		return resCount;
 	}
 
-	/**
-	 * Changes the value of an annotation corresponding to it's label.
-	 *
-	 * Parameters: label of annotation, the old value and the new value to
-	 * change to.
-	 *
-	 * OBS! This method changes the value for every experiment.
-	 *
-	 * Throws an SQLException if the new value already exists in the choices
-	 * table (changing all males to female, and female is already in the table)
-	 *
-	 * @param label
-	 *            String - the label name.
-	 * @param oldValue
-	 *            String - the name of the old annotation value.
-	 * @param newValue
-	 *            String - the name of the new annotation value.
-	 *
-	 * @throws SQLException
-	 */
-	public void changeAnnotationValue(String label, String oldValue,
-			String newValue) throws SQLException {
+    /**
+     * Changes the value of an annotation corresponding to it's label.
+     *
+     * Parameters: label of annotation, the old value and the new value to
+     * change to.
+     *
+     * OBS! This method changes the value for every experiment.
+     *
+     * Throws an SQLException if the new value already exists in the choices
+     * table (changing all males to female, and female is already in the table)
+     *
+     * @param label String - the label name.
+     * @param oldValue String - the name of the old annotation value.
+     * @param newValue String - the name of the new annotation value.
+     *
+     * @throws SQLException
+     * @throws IOException
+     */
+    public void changeAnnotationValue(String label, String oldValue,
+            String newValue) throws SQLException, IOException {
+
+    	if(!isValidChoice(newValue)) {
+    		throw new IOException("New value contains invalid characters");
+    	}
 
 		String query = "UPDATE Annotation_Choices " + "SET Value = ? "
 				+ "WHERE Label = ? and Value = ?";
@@ -597,6 +626,23 @@ public class AnnotationMethods {
 			query.setString(i + 1, params.get(i));
 		}
 
-		return query;
-	}
+        return query;
+    }
+
+    /**
+     * private method to check if the annotation contains invalid
+     * characters ('(', ')', '[' and ']'.
+     *
+     * @param annotation
+     * @return
+     */
+    private boolean isValidChoice(String annotation) {
+
+    	if(annotation.contains("(") || annotation.contains(")") ||
+    			annotation.contains("[") || annotation.contains("]")) {
+    		return false;
+    	}
+
+    	return true;
+    }
 }

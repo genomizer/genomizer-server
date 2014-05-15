@@ -5,7 +5,7 @@ import java.io.IOException;
 
 public class FilePathGenerator {
 
-    private final String homeDir;
+    private String rootDir;
 
     private static String rawFolderName = "raw";
     private static String profileFolderName = "profile";
@@ -14,12 +14,12 @@ public class FilePathGenerator {
 
     private static String genomeReleaseFolderName = "genome_releases";
 
-    public FilePathGenerator(String homeDir) throws IOException {
+    public FilePathGenerator(String rootDir) throws IOException {
         String regex = "([a-zA-Z]:)?(/[a-zA-Z0-9._\" \"-]+)+/?";
-        if (homeDir.endsWith(File.separator) && homeDir.matches(regex)) {
-            this.homeDir = homeDir;
+        if (rootDir.endsWith(File.separator) && rootDir.matches(regex)) {
+            this.rootDir = rootDir;
         } else {
-            throw new IOException("homeDir has the wrong format. Make sure it" +
+            throw new IOException("rootDir has the wrong format. Make sure it" +
             		"ends with a separator.");
         }
     }
@@ -44,7 +44,7 @@ public class FilePathGenerator {
 
         StringBuilder filePath = new StringBuilder();
 
-        filePath.append(homeDir);
+        filePath.append(rootDir);
         filePath.append(expID);
         filePath.append(File.separator);
         filePath.append(fileType);
@@ -57,11 +57,11 @@ public class FilePathGenerator {
 
         StringBuilder filePath = new StringBuilder();
 
-        
+
 
         switch (fileType) {
         case FileTuple.RAW:
-            filePath.append(homeDir);
+            filePath.append(rootDir);
             filePath.append(expID);
             filePath.append(File.separator);
             filePath.append(rawFolderName);
@@ -70,13 +70,13 @@ public class FilePathGenerator {
             filePath.append(generateProfileFolder(expID));
             break;
         case FileTuple.REGION:
-            filePath.append(homeDir);
+            filePath.append(rootDir);
             filePath.append(expID);
             filePath.append(File.separator);
             filePath.append(regionFolderName);
             break;
         default:
-            filePath.append(homeDir);
+            filePath.append(rootDir);
             filePath.append(expID);
             filePath.append(File.separator);
             filePath.append(unknownFolderName);
@@ -97,19 +97,19 @@ public class FilePathGenerator {
      */
     public void generateExperimentFolders(String expID) {
 
-        File file = new File(homeDir + expID + File.separator + rawFolderName
+        File file = new File(rootDir + expID + File.separator + rawFolderName
                 + File.separator);
         file.mkdirs();
 
-        file = new File(homeDir + expID + File.separator + profileFolderName
+        file = new File(rootDir + expID + File.separator + profileFolderName
                 + File.separator);
         file.mkdirs();
 
-        file = new File(homeDir + expID + File.separator + regionFolderName
+        file = new File(rootDir + expID + File.separator + regionFolderName
                 + File.separator);
         file.mkdirs();
 
-        file = new File(homeDir + expID + File.separator + unknownFolderName
+        file = new File(rootDir + expID + File.separator + unknownFolderName
                 + File.separator);
         file.mkdirs();
     }
@@ -128,7 +128,7 @@ public class FilePathGenerator {
 
         StringBuilder folderPath = new StringBuilder();
 
-        folderPath.append(homeDir);
+        folderPath.append(rootDir);
         folderPath.append("chain_files");
         folderPath.append(File.separator);
         folderPath.append(species);
@@ -161,7 +161,7 @@ public class FilePathGenerator {
 
         StringBuilder folderPath = new StringBuilder();
 
-        folderPath.append(homeDir);
+        folderPath.append(rootDir);
         folderPath.append(genomeReleaseFolderName);
         folderPath.append(File.separator);
         folderPath.append(species);
@@ -182,7 +182,7 @@ public class FilePathGenerator {
 
         StringBuilder folderPath = new StringBuilder();
 
-        folderPath.append(homeDir);
+        folderPath.append(rootDir);
         folderPath.append(expId);
         folderPath.append(File.separator);
         folderPath.append(profileFolderName);
@@ -197,12 +197,22 @@ public class FilePathGenerator {
             profileFolder = new File(folderPath.toString()
                     + folderNumber.toString() + File.separator);
         }
-        
+
         profileFolder.mkdirs();
 
         folderPath.append(folderNumber.toString());
         folderPath.append(File.separator);
         return folderPath.toString();
+    }
+
+    public void setRootDirectory(String rootDir) throws IOException {
+        String regex = "([a-zA-Z]:)?(/[a-zA-Z0-9._\" \"-]+)+/?";
+        if (rootDir.endsWith(File.separator) && rootDir.matches(regex)) {
+            this.rootDir = rootDir;
+        } else {
+            throw new IOException("Root directory has the wrong format. Make sure it" +
+            		"ends with a separator.");
+        }
     }
 
     /**

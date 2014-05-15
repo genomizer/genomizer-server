@@ -1,5 +1,6 @@
 package database.subClasses;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -232,7 +233,9 @@ public class FileMethods {
     }
 
     /**
-     * Deletes a file from the database.
+     * Deletes a file from the database and the disk.
+     * Should throw an IOException if the method failed to delete the file
+     * from disk.
      *
      * @param path String - the path to the file.
      * @return int - the number of deleted tuples in the database.
@@ -240,10 +243,15 @@ public class FileMethods {
      *             if the query does not succeed
      */
     public int deleteFile(String path) throws SQLException {
+    	File fileToDelete = new File(path);
+        if (fileToDelete.exists()) {
+        	fileToDelete.delete();
+        }
 
-    	String stmt = "DELETE FROM File " + "WHERE (Path = ?)";
-        PreparedStatement deleteFile = conn.prepareStatement(stmt);
-
+        String statementStr = "DELETE FROM File "
+                + "WHERE (Path = ?)";
+        PreparedStatement deleteFile = conn
+                .prepareStatement(statementStr);
         deleteFile.setString(1, path);
         int resCount = deleteFile.executeUpdate();
         deleteFile.close();
@@ -252,23 +260,34 @@ public class FileMethods {
     }
 
     /**
-     * Deletes a file from the database using the fileID.
-     *
+     * Deletes a file from the database and the disk using the fileID.
+     * Should throw an IOException if the method failed to delete the file
+     * from disk.
      * @param fileID int - the fileID of the file to be deleted.
      * @return 1 if deletion was successful, else 0.
      * @throws SQLException
      */
     public int deleteFile(int fileID) throws SQLException {
 
-        String query = "DELETE FROM File " + "WHERE FileID = ?";
+    	String query1 = "SELECT Path FROM File " +
+    			"WHERE FileID = ?";
+    	String query2 = "DELETE FROM File " + "WHERE FileID = ?";
+    	int res = 0;
 
-        PreparedStatement stmt = conn.prepareStatement(query);
-        stmt.setInt(1, fileID);
-
-        int resCount = stmt.executeUpdate();
-        stmt.close();
-
-        return resCount;
+    	PreparedStatement stmt = conn.prepareStatement(query1);
+    	stmt.setInt(1, fileID);
+    	ResultSet rs = stmt.executeQuery();
+    	if (rs.next()) {
+    		File fileToDelete = new File(rs.getString("Path"));
+    		if (fileToDelete.exists()) {
+    	        fileToDelete.delete();
+    		}
+	        stmt = conn.prepareStatement(query2);
+	        stmt.setInt(1, fileID);
+	        res = stmt.executeUpdate();
+	        stmt.close();
+    	}
+    	return res;
     }
 
     /**
@@ -375,5 +394,4 @@ public class FileMethods {
 
         return pathList;
     }
-
 }
