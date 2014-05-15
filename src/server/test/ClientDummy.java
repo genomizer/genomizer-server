@@ -39,7 +39,7 @@ public class ClientDummy {
 //		sendDeleteAnnotation();
 //		sendAddExperiment();
 //		sendAddFileToExperiment();
-		sendProcessing();
+//		sendProcessing();
 //		sendDeleteExperiment();
 		sendLogout();
 	}
