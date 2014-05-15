@@ -44,7 +44,7 @@ public class DeleteGenomeReleaseCommand extends Command {
 	public Response execute() {
 
 		Response rsp = null;
-		DatabaseAccessor db;
+		DatabaseAccessor db = null;
 
 		//Add implementation code.
 		try {
@@ -69,6 +69,18 @@ public class DeleteGenomeReleaseCommand extends Command {
 		} catch (IOException e) {
 
 			rsp = new MinimalResponse(StatusCode.BAD_REQUEST);
+
+		} finally {
+
+			try {
+
+				db.close();
+
+			} catch (SQLException e) {
+
+				rsp = new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
+
+			}
 
 		}
 

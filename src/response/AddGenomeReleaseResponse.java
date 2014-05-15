@@ -1,6 +1,7 @@
 package response;
 
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 /**
  * Class that represents an actual response.
@@ -10,6 +11,7 @@ import com.google.gson.annotations.Expose;
  */
 public class AddGenomeReleaseResponse extends Response {
 
+	@SerializedName("filepath")
 	@Expose
 	private String filePath = null;
 
