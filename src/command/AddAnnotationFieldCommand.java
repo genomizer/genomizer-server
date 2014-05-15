@@ -3,16 +3,12 @@ package command;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
 import response.AddAnnotationFieldResponse;
 import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
-import server.DatabaseSettings;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
 import database.DatabaseAccessor;
 
 /**

@@ -68,6 +68,11 @@ public class CommandHandler {
 	private Command createCommand(String json, String restful, String username, CommandType cmdt) {
 
 		Command newCommand = null;
+
+		if (cmdt == CommandType.DELETE_ANNOTATION_VALUE_COMMAND) {
+			String[] rest = restful.split("/");
+			newCommand = cmdFactory.createDeleteAnnotationValueCommand(json, rest[3], rest[4]);
+		}
 		String parsedRest = parseRest(restful);
 
 		if(cmdt == CommandType.LOGIN_COMMAND) {

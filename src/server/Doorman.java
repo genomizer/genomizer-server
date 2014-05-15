@@ -159,7 +159,7 @@ public class Doorman {
 						exchange(exchange, CommandType.REMOVE_ANNOTATION_FIELD_COMMAND);
 						break;
 					case "/annotation/value":
-						exchange(exchange, CommandType.REMOVE_ANNOTATION_VALUE_COMMAND);
+						exchange(exchange, CommandType.DELETE_ANNOTATION_VALUE_COMMAND);
 						break;
 
 					}

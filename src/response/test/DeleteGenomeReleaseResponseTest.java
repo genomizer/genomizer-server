@@ -1,9 +1,7 @@
 package response.test;
 
 import static org.junit.Assert.*;
-
 import org.junit.Test;
-
 import response.DeleteGenomeReleaseResponse;
 import response.Response;
 import response.StatusCode;
