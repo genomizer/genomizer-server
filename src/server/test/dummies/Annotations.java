@@ -10,6 +10,8 @@ import com.google.gson.JsonPrimitive;
 
 public class Annotations {
 
+	static Token token;
+
 	static void sendGetAnnotationInformation() throws Exception {
 
 		URL obj = new URL(testSettings.url + "/annotation");
@@ -17,7 +19,7 @@ public class Annotations {
 
 		con.setRequestMethod("GET");
 		con.setRequestProperty("Content-Type", "application/json");
-		con.setRequestProperty("Authorization", Login.getToken());
+		con.setRequestProperty("Authorization", token.getToken());
 
 		System.out.println("\nSending 'GET' request to URL : " + testSettings.url);
 		System.out.println("Response Body: " +testSettings. printResponse(con));
@@ -31,7 +33,6 @@ public class Annotations {
 		con.setRequestProperty("Content-Type", "application/json");
 		con.setRequestProperty("Authorization", Login.getToken());
 		con.setRequestProperty("Content-Type", "application/json");
-
 		JsonObject jj=new JsonObject();
 		jj.addProperty("name", name);
 		JsonArray ja = new JsonArray();
@@ -125,7 +126,7 @@ public class Annotations {
 		URL obj = new URL(testSettings.url + "/annotation/value/" + name + "/" + value);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
-		con.setRequestMethod("PUT");
+		con.setRequestMethod("DELETE");
 		con.setRequestProperty("Content-Type", "application/json");
 		con.setRequestProperty("Authorization", Login.getToken());
 		con.setRequestProperty("Content-Type", "application/json");

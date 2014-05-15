@@ -42,7 +42,7 @@ public class Login {
 		con.setRequestMethod("DELETE");
 		con.setRequestProperty("Content-Type", "application/json");
 		con.setRequestProperty("Authorization", token.getToken());
-
+		System.out.println(token.getToken());
 		System.out.println("\nSending 'DELETE' request to URL : " + testSettings.url);
 		System.out.println("Response Body: " + testSettings.printResponse(con));
 	}
