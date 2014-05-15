@@ -36,8 +36,8 @@ public class ResponseLoggerTest {
 	public void shouldLogBADREQUESTandOKResponse(){
 		String username = "splutt";
 		Authenticate.addUser(username, "");
-		Response r1 = new MinimalResponse(StatusCode.BAD_REQUEST, "Här är det fel1");
-		Response r2 = new MinimalResponse(StatusCode.OK, "Här är det inte fel");
+		Response r1 = new MinimalResponse(StatusCode.BAD_REQUEST);
+		Response r2 = new MinimalResponse(StatusCode.OK);
 
 		if(ResponseLogger.log(username, r1) && ResponseLogger.log(username, r2)){
 			assertEquals(StatusCode.BAD_REQUEST, ResponseLogger.getUserLog(username).get(0).getCode());

@@ -173,7 +173,6 @@ public class ProcessCommand extends Command {
 		try {
 
 			db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
-			System.out.println("created databaseaccesor");
 			processHandler = new ProcessHandler();
 
 			switch(processtype){
@@ -182,8 +181,8 @@ public class ProcessCommand extends Command {
 
 				filepaths = db.processRawToProfile(expid);
 
-				genomePath = db.getGenomeReleaseFilePath(genomeRelease);
-				parameters[2] = genomePath;
+				Genome g = db.getGenomeRelease(genomeRelease);
+				parameters[2] = g.filePath;
 
 				//Prints for checking what filepaths are given by database.
 				System.err.println("Filepath.getKey(): " + filepaths.getKey());
@@ -195,12 +194,15 @@ public class ProcessCommand extends Command {
 					// TODO Log response
 					System.err.println("CATCH InterruptedException in ProcessCommand.Execute when running processHandler.executeProcess");
 					e.printStackTrace();
-					ResponseLogger.log(username, new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE));
+					System.err.println("Logging uname: " + username);
+					ResponseLogger.log(username, new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, e.getMessage()));
 					return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE);
-				} catch (IOException e) {
+				} catch (IOException e1) {
 					// TODO Log response
 					System.err.println("CATCH IO exception in ProcessCommand.Execute when running processHandler.executeProcess");
-					e.printStackTrace();
+					e1.printStackTrace();
+					System.err.println("Logging uname: " + username);
+					ResponseLogger.log(username, new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, e1.getMessage()));
 					return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE);
 				} finally{
 					db.close();
@@ -211,6 +213,8 @@ public class ProcessCommand extends Command {
 				// TODO Log response
 				System.err.println("Unknown process type in processcommand execute");
 				db.close();
+				System.err.println("Logging uname: " + username);
+				ResponseLogger.log(username, new ProcessResponse(StatusCode.BAD_REQUEST, "Unknown process type in processcommand execute"));
 				return new ProcessResponse(StatusCode.BAD_REQUEST);
 
 			}
@@ -218,17 +222,24 @@ public class ProcessCommand extends Command {
 			// TODO Log response
 			System.err.println("SQL Exception in ProcessCommand execute:");
 			e.printStackTrace();
+			System.err.println("Logging uname: " + username);
+			System.err.println("Logging uname: " + username);
+			ResponseLogger.log(username, new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, e.getMessage()));
 			return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE);
 		} catch (IOException e1) {
 			// TODO Log response
 			System.err.println("IO Exception in ProcessCommand execute.");
 			e1.printStackTrace();
+			System.err.println("Logging uname: " + username);
+			ResponseLogger.log(username, new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, e1.getMessage()));
 			return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE);
 		} finally {
 			try {
 				db.close();
 			} catch (SQLException e) {
 				System.err.println("Could not close Database accessor1");
+				System.err.println("Logging uname: " + username);
+				ResponseLogger.log(username, new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, "Could not close Database accessor"));
 				e.printStackTrace();
 			}
 		}
@@ -242,11 +253,17 @@ public class ProcessCommand extends Command {
 			// TODO Log response
 			System.err.println("SQL Exception in ProcessCommand execute when using addGeneratedProfiles:");
 			e.printStackTrace();
+			System.err.println("Logging uname: " + username);
+			ResponseLogger.log(username, new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, e.getMessage()));
+			return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE);
+
 		} finally {
 			try {
 				db.close();
 			} catch (SQLException e) {
 				System.err.println("Could not close Database accessor2");
+				System.err.println("Logging uname: " + username);
+				ResponseLogger.log(username, new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, "Could not close Database accessor"));
 				e.printStackTrace();
 			}
 		}
@@ -255,9 +272,14 @@ public class ProcessCommand extends Command {
 			db.close();
 		} catch (SQLException e) {
 			System.err.println("Could not close Database accessor3");
+			System.err.println("Logging uname: " + username);
+			ResponseLogger.log(username, new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, "Could not close Database accessor"));
 			e.printStackTrace();
 		}
+		System.err.println("Logging created uname: " + username);
+		ResponseLogger.log(username, new ProcessResponse(StatusCode.CREATED, "raw to profile processing completed"));
 		return new ProcessResponse(StatusCode.CREATED);
+
 
 	}
 

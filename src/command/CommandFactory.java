@@ -181,6 +181,7 @@ public class CommandFactory {
 //		processCommand.setProcessType(restful[2]);
 //		processCommand.setFileID(restful[3]);
 		processCommand.setUsername(username);
+		System.err.println("Username: " + username);
 		//Create from json
 		//set userID
 		//set fileID
@@ -218,7 +219,8 @@ public class CommandFactory {
 	 * @return the actual command.
 	 */
 	public Command createAddAnnotationValueCommand(String json, String restful) {
-		return new AddAnnotationValueCommand();
+		Command AddAnnotationValueCommand = gson.fromJson(json, AddAnnotationValueCommand.class);
+		return AddAnnotationValueCommand;
 	}
 
 	/**

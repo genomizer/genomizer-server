@@ -242,6 +242,8 @@ public class Doorman {
 		}
 
 
+
+
 	}
 
 	private void respond(HttpExchange exchange, Response response) throws IOException {
@@ -261,5 +263,7 @@ public class Doorman {
 			os.close();
 		}
 		System.out.println("END OF EXCHANGE\n------------------");
+		//TODO REmove print
+		ResponseLogger.printUserLog("jonas");
 	}
 }

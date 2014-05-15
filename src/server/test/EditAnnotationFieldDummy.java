@@ -64,8 +64,8 @@ public class EditAnnotationFieldDummy {
 		con.setRequestProperty("Authorization", token.getToken());
 
 		JsonObject jj=new JsonObject();
-		jj.addProperty("oldName", "field123");
-		jj.addProperty("newName", "Field123");
+		jj.addProperty("oldName", "Field123");
+		jj.addProperty("newName", "field123");
 
 		System.out.println(jj.toString());
 

@@ -1,25 +1,34 @@
 package server;
 
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Queue;
+import java.util.TreeMap;
+
+import response.Response;
+import response.StatusCode;
 
 import command.Command;
 import command.GetAnnotationInformationCommand;
+import command.ProcessCommand;
 
 
 public class WorkHandler extends Thread{
 
-	private Queue<Command> workQueue;
+	private Queue<ProcessCommand> workQueue;
+	private TreeMap<ProcessCommand,String> processStatus;
 
 	//A queue as a linked list
 	public WorkHandler(){
-		workQueue = new LinkedList<Command>();
+		workQueue = new LinkedList<ProcessCommand>();
+		processStatus=new TreeMap<ProcessCommand, String>();
 	}
 
 	//Add a command to the queue
-	public void addWork(Command command) {
+	public void addWork(ProcessCommand command) {
 		workQueue.add(command);
-
+		processStatus.put(command, "Waiting");
 	}
 
 	//The thread runs all the time and checks if the queue is empty
@@ -28,43 +37,27 @@ public class WorkHandler extends Thread{
 	@Override
 	public void run(){
 		System.out.println(Thread.currentThread().getName());
-		
+
 		while(true){
 			if(!workQueue.isEmpty()){
-				Command work = workQueue.poll();
+				ProcessCommand work = workQueue.poll();
 				System.out.println("The processcommand is going to be executed");
-				//work.execute();
+				processStatus.put(work,"Started");
+				Response resp = work.execute();
+				if (resp.getCode()==StatusCode.CREATED){
+					processStatus.put(work,"Finished");
+				}else{
+					processStatus.put(work,"Crashed");
+				}
+					//else if (503)
+					//map.put(work,"crashed")
+
 			}
 		}
 	}
 
-	/*public static void main(String [] args){
-		WorkHandler workHandler = new WorkHandler();
-		System.out.println(Thread.currentThread().getName());
-		workHandler.start();
-
-
-			workHandler.addWork(new GetAnnotationInformationCommand());
-			//System.out.println("added");
-			workHandler.addWork(new GetAnnotationInformationCommand());
-	
-			try {
-				workHandler.sleep(20);
-				workHandler.addWork(new GetAnnotationInformationCommand());
-				workHandler.addWork(new GetAnnotationInformationCommand());
-			
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			workHandler.addWork(new GetAnnotationInformationCommand());
-			workHandler.addWork(new GetAnnotationInformationCommand());
-		
-			
-
-
-	}*/
-
-
+	public TreeMap<ProcessCommand, String> getProcessStatus() {
+		return processStatus;
+	}
 }
 

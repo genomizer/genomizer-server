@@ -1,10 +1,10 @@
-package server.test;
+package server.test.dummies;
 
 import com.google.gson.annotations.Expose;
 
 public class Token {
 
-	@Expose static String token;
+	@Expose String token;
 
 	 public String getToken() {
 		return token;
