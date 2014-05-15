@@ -62,7 +62,7 @@ public class GenomeReleaseTableTests {
     private boolean searchGenomeForVersion(List<Genome> genomeList, String version) {
 
         for (int i=0;i<genomeList.size();i++){
-        	if (genomeList.get(i).version.equals(version)){
+        	if (genomeList.get(i).genomeVersion.equals(version)){
         		return true;
         	}
         }
@@ -73,7 +73,7 @@ public class GenomeReleaseTableTests {
     @Test
     public void shouldReturnSpecificGenomeVersionFilePath() throws Exception {
         Genome genome = dbac.getGenomeRelease("hg38");
-        assertEquals("/var/www/data/GenomeRelease/Human/hg38.fasta", genome.filePath);
+        assertEquals("/var/www/data/GenomeRelease/Human/hg38.fasta", genome.path);
     }
 
     @Test
@@ -88,7 +88,7 @@ public class GenomeReleaseTableTests {
         dbac.addGenomeRelease("hg40", "Human", "hg40.fasta");
         String expectedFilePath = fpg.generateGenomeReleaseFolder("hg40", "Human") + "hg40.fasta";
         Genome genome = dbac.getGenomeRelease("hg40");
-        assertEquals(expectedFilePath, genome.filePath);
+        assertEquals(expectedFilePath, genome.path);
     }
 
     @Test
@@ -102,8 +102,8 @@ public class GenomeReleaseTableTests {
     	dbac.addGenomeRelease("rn50", "Rat", "aRatFile.fasta");
     	Genome genome = dbac.getGenomeRelease("rn50");
     	assertEquals(genome.fileName,"aRatFile.fasta");
-    	assertEquals(genome.species,"Rat");
-    	assertEquals(genome.version,"rn50");
+    	assertEquals(genome.specie,"Rat");
+    	assertEquals(genome.genomeVersion,"rn50");
 
     }
 }

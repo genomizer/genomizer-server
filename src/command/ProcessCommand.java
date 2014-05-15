@@ -184,7 +184,7 @@ public class ProcessCommand extends Command {
 				filepaths = db.processRawToProfile(expid);
 
 				Genome g = db.getGenomeRelease(genomeRelease);
-				parameters[2] = g.filePath;
+				parameters[2] = g.path;
 
 				//Prints for checking what filepaths are given by database.
 				System.err.println("Filepath.getKey(): " + filepaths.getKey());

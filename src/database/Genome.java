@@ -5,15 +5,15 @@ import java.sql.SQLException;
 
 public class Genome {
 
-	public final String version;
-	public final String species;
-	public final String filePath;
+	public final String genomeVersion;
+	public final String specie;
+	public final String path;
 	public final String fileName;
 
 	public Genome(ResultSet resSet) throws SQLException {
-		version = resSet.getString("Version");
-		species = resSet.getString("Species");
-		filePath = resSet.getString("FilePath");
-		fileName = filePath.substring(filePath.lastIndexOf('/')+1);
+		genomeVersion = resSet.getString("Version");
+		specie = resSet.getString("Species");
+		path = resSet.getString("FilePath");
+		fileName = path.substring(path.lastIndexOf('/')+1);
 	}
 }
