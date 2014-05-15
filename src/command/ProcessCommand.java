@@ -108,7 +108,18 @@ public class ProcessCommand extends Command {
 			return false;
 		}
 
+		switch (processtype) {
+		case "rawtoprofile":
+			if(parameters.length != 8){
+				return false;
+			}
+		case "profiletoregion":
+			//TODO Implement parameter size
+		default:
+			break;
+		}
 
+		
 
 		//TODO Hardcoded. Not using CanBeNull class
 		if(username.length() > MaxSize.USERNAME || username.length() <= 0 ||
@@ -128,6 +139,8 @@ public class ProcessCommand extends Command {
 
 		return true;
 	}
+	
+	private 
 
 	/**
 	 * Method that runs when the processCommand is executed.
@@ -143,6 +156,7 @@ public class ProcessCommand extends Command {
 		DatabaseAccessor db;
 		ProcessHandler processHandler;
 		Entry<String, String> filepaths;
+		String genomePath;
 
 		try {
 
@@ -156,7 +170,8 @@ public class ProcessCommand extends Command {
 
 				filepaths = db.processRawToProfile(expid);
 
-				//TODO Ask database for path to genome release
+				genomePath = db.getGenomeReleaseFilePath(genomeRelease);
+				parameters[2] = genomePath;
 
 				//Prints for checking what filepaths are given by database.
 				System.err.println("Filepath.getKey(): " + filepaths.getKey());

@@ -31,6 +31,7 @@ public class WorkHandler extends Thread{
 		while(true){
 			if(!workQueue.isEmpty()){
 				Command work = workQueue.poll();
+				System.out.println("The processcommand is going to be executed");
 				work.execute();
 			}
 		}
