@@ -23,10 +23,17 @@ public class DeleteGenomeReleaseCommand extends Command {
 
 	private String specie = null;
 
-	public DeleteGenomeReleaseCommand(String genomeVersion, String specie) {
+	/**
+	 * Constructor used to initiate the class.
+	 *
+	 * @param restful string to split.
+	 */
+	public DeleteGenomeReleaseCommand(String restful) {
 
-		this.genomeVersion = genomeVersion;
-		this.genomeVersion = specie;
+		String[] split = restful.split("/");
+
+		this.genomeVersion = split[split.length-1];
+		this.specie = split[split.length-2];
 
 	}
 

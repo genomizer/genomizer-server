@@ -44,7 +44,7 @@ public class DeleteGenomeReleaseCommandTest {
 	@Test
 	public void testCreateNotNull() {
 
-		DeleteGenomeReleaseCommand cmd = new DeleteGenomeReleaseCommand("hg 123","hello");
+		DeleteGenomeReleaseCommand cmd = new DeleteGenomeReleaseCommand("/123/345");
 		assertNotNull(cmd);
 
 	}
@@ -74,17 +74,6 @@ public class DeleteGenomeReleaseCommandTest {
 		final Command cmd = gson.fromJson(json, DeleteGenomeReleaseCommand.class);
 
 		assertFalse(cmd.validate());
-
-	}
-
-	@Test
-	public void testTmp() {
-
-		String hello = "/genomeRelease/<species>/<version-id>";
-		CommandHandler cmd = new CommandHandler();
-
-		String abc = cmd.parseRest(hello);
-		System.out.println("String is :" + abc);
 
 	}
 
