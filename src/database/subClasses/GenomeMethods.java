@@ -249,17 +249,24 @@ public class GenomeMethods {
      *             - if the query does not succeed
      */
     public int removeChainFile(String fromVersion, String toVersion)
-            throws SQLException {
+            throws Exception {
+
+    	String filePath = getChainFile(fromVersion, toVersion);
 
         String query = "DELETE FROM Chain_File WHERE (FromVersion = ?)"
                 + " AND (ToVersion = ?)";
 
-        PreparedStatement stmt = conn.prepareStatement(query);
-        stmt.setString(1, fromVersion);
-        stmt.setString(2, toVersion);
+        PreparedStatement deleteStatement = conn.prepareStatement(query);
+        deleteStatement.setString(1, fromVersion);
+        deleteStatement.setString(2, toVersion);
 
-        int resCount = stmt.executeUpdate();
-        stmt.close();
+        int resCount = 0;
+        File chainFile = new File(filePath);
+        if (chainFile.exists() && chainFile.canWrite()) {
+        	chainFile.delete();
+        	resCount = deleteStatement.executeUpdate();
+        	deleteStatement.close();
+        }
 
         return resCount;
     }
