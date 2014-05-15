@@ -28,19 +28,19 @@ public class UserMethods {
      */
     public List<String> getUsers() throws SQLException {
 
-        ArrayList<String> users = new ArrayList<String>();
+        ArrayList<String> usersList = new ArrayList<String>();
         String query = "SELECT Username FROM User_Info";
 
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(query);
 
         while (rs.next()) {
-            users.add(rs.getString("Username"));
+            usersList.add(rs.getString("Username"));
         }
 
         stmt.close();
 
-        return users;
+        return usersList;
     }
 
     /**
@@ -57,15 +57,15 @@ public class UserMethods {
     public void addUser(String username, String password, String role)
             throws SQLException {
 
-        String userString = "INSERT INTO User_Info "
-                + "(Username, Password, Role) VALUES " + "(?, ?, ?)";
+        String query = "INSERT INTO User_Info (Username, Password, Role) " +
+        		"VALUES " + "(?, ?, ?)";
 
-        PreparedStatement addUser = conn.prepareStatement(userString);
-        addUser.setString(1, username);
-        addUser.setString(2, password);
-        addUser.setString(3, role);
-        addUser.executeUpdate();
-        addUser.close();
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setString(1, username);
+        stmt.setString(2, password);
+        stmt.setString(3, role);
+        stmt.executeUpdate();
+        stmt.close();
     }
 
     /**
@@ -78,14 +78,13 @@ public class UserMethods {
      */
     public void deleteUser(String username) throws SQLException {
 
-        String statementStr = "DELETE FROM User_Info "
+        String query = "DELETE FROM User_Info "
                 + "WHERE (Username = ?)";
 
-        PreparedStatement deleteUser = conn
-                .prepareStatement(statementStr);
-        deleteUser.setString(1, username);
-        deleteUser.executeUpdate();
-        deleteUser.close();
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setString(1, username);
+        stmt.executeUpdate();
+        stmt.close();
     }
 
     /**
@@ -102,16 +101,16 @@ public class UserMethods {
         String query = "SELECT Password FROM User_Info "
                 + "WHERE (Username = ?)";
 
-        PreparedStatement getPassword = conn.prepareStatement(query);
-        getPassword.setString(1, user);
-        ResultSet rs = getPassword.executeQuery();
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setString(1, user);
+        ResultSet rs = stmt.executeQuery();
         String pass = null;
 
         if (rs.next()) {
             pass = rs.getString("password");
         }
 
-        getPassword.close();
+        stmt.close();
 
         return pass;
     }
@@ -133,13 +132,13 @@ public class UserMethods {
     	String query = "UPDATE User_Info SET Password = ? "
                 + "WHERE (Username = ?)";
 
-        PreparedStatement resetPassword = conn.prepareStatement(query);
-        resetPassword.setString(1, newPassword);
-        resetPassword.setString(2, username);
-        int res = resetPassword.executeUpdate();
-        resetPassword.close();
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setString(1, newPassword);
+        stmt.setString(2, username);
+        int resCount = stmt.executeUpdate();
+        stmt.close();
 
-        return res;
+        return resCount;
     }
 
     /**
@@ -155,16 +154,16 @@ public class UserMethods {
 
     	String query = "SELECT Role FROM User_Info " + "WHERE (Username = ?)";
 
-        PreparedStatement getRole = conn.prepareStatement(query);
-        getRole.setString(1, username);
-        ResultSet rs = getRole.executeQuery();
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setString(1, username);
+        ResultSet rs = stmt.executeQuery();
         String role = null;
 
         if (rs.next()) {
             role = rs.getString("Role");
         }
 
-        getRole.close();
+        stmt.close();
 
         return role;
     }
@@ -186,14 +185,14 @@ public class UserMethods {
         String query = "UPDATE User_Info SET Role = ? "
                 + "WHERE (Username = ?)";
 
-        PreparedStatement setRole = conn.prepareStatement(query);
-        setRole.setString(1, role);
-        setRole.setString(2, username);
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setString(1, role);
+        stmt.setString(2, username);
 
-        int res = setRole.executeUpdate();
-        setRole.close();
+        int resCount = stmt.executeUpdate();
+        stmt.close();
 
-        return res;
+        return resCount;
     }
 
 }
