@@ -103,11 +103,14 @@ public class Doorman {
 						System.out.println("found process RESTful");
 						exchange(exchange, CommandType.PROCESS_COMMAND);
 						break;
-					case "/annotation/field":
-						exchange(exchange, CommandType.RENAME_ANNOTATION_FIELD_COMMAND);
-						break;
-					case "/annotation/value":
-						exchange(exchange, CommandType.RENAME_ANNOTATION_VALUE_COMMAND);
+					case "/annotation":
+						String fullPath = exchange.getRequestURI().toString();
+						if (fullPath.startsWith("/annotation/field")) {
+							System.out.println("hejehej");
+							exchange(exchange, CommandType.RENAME_ANNOTATION_FIELD_COMMAND);
+						} else if (fullPath.startsWith("/annotation/value")) {
+							exchange(exchange, CommandType.RENAME_ANNOTATION_VALUE_COMMAND);
+						}
 						break;
 					case "/sysadm":
 						exchange(exchange, CommandType.UPDATE_ANNOTATION_PRIVILEGES_COMMAND);
@@ -130,13 +133,14 @@ public class Doorman {
 					case "/user":
 						exchange(exchange, CommandType.CREATE_USER_COMMAND);
 						break;
-					case "/annotation/field":
-						exchange(exchange, CommandType.ADD_ANNOTATION_FIELD_COMMAND);
+					case "/annotation":
+						String fullPath = exchange.getRequestURI().toString();
+						if (fullPath.startsWith("/annotation/field")) {
+							exchange(exchange, CommandType.ADD_ANNOTATION_FIELD_COMMAND);
+						} else if (fullPath.startsWith("/annotation/value")) {
+							exchange(exchange, CommandType.ADD_ANNOTATION_VALUE_COMMAND);
+						}
 						break;
-					case "/annotation/value":
-						exchange(exchange, CommandType.ADD_ANNOTATION_VALUE_COMMAND);
-						break;
-
 					}
 					break;
 
@@ -155,13 +159,14 @@ public class Doorman {
 					case "/user":
 						exchange(exchange, CommandType.DELETE_USER_COMMAND);
 						break;
-					case "/annotation/field":
-						exchange(exchange, CommandType.REMOVE_ANNOTATION_FIELD_COMMAND);
+					case "/annotation":
+						String fullPath = exchange.getRequestURI().toString();
+						if (fullPath.startsWith("/annotation/field")) {
+							exchange(exchange, CommandType.REMOVE_ANNOTATION_FIELD_COMMAND);
+						} else if (fullPath.startsWith("/annotation/value")) {
+							exchange(exchange, CommandType.DELETE_ANNOTATION_VALUE_COMMAND);
+						}
 						break;
-					case "/annotation/value":
-						exchange(exchange, CommandType.DELETE_ANNOTATION_VALUE_COMMAND);
-						break;
-
 					}
 					break;
 				}

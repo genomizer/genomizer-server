@@ -111,6 +111,8 @@ public class CommandHandler {
 			newCommand = cmdFactory.createAddAnnotationValueCommand(json, parsedRest);
 		} else if (cmdt == CommandType.RENAME_ANNOTATION_VALUE_COMMAND) {
 			newCommand = cmdFactory.creatRenameAnnotationValueCommand(json);
+		} else if (cmdt == CommandType.RENAME_ANNOTATION_FIELD_COMMAND) {
+			newCommand = cmdFactory.createEditAnnotationFieldCommand(json);
 		} else if (cmdt == CommandType.REMOVE_ANNOTATION_FIELD_COMMAND) {
 			newCommand = cmdFactory.createRemoveAnnotationFieldCommand(json, parsedRest);
 		} else if (cmdt == CommandType.GET_ANNOTATION_PRIVILEGES_COMMAND) {
