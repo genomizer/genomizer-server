@@ -1006,7 +1006,7 @@ public class DatabaseAccessor {
      * @throws SQLException
      */
 
-    public String getGenomeReleaseFilePath(String genomeVersion)
+    public Genome getGenomeReleaseFilePath(String genomeVersion)
             throws SQLException {
 
         return genMethods.getGenomeRelease(genomeVersion);
