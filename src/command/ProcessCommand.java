@@ -1,5 +1,8 @@
 package command;
 
+/**
+ * @author Robin Ödling - c11rog
+ */
 
 import java.io.IOException;
 import java.sql.SQLException;
