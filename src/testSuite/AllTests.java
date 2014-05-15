@@ -6,6 +6,7 @@ import org.junit.runners.Suite.SuiteClasses;
 
 import testSuite.unitTests.AddAnnotationPossibilitiesTests;
 import testSuite.unitTests.AddDropDownValueTest;
+import testSuite.unitTests.ChangeAnnotationLabelTest;
 import testSuite.unitTests.ExperimentTests;
 import testSuite.unitTests.FileTableTests;
 import testSuite.unitTests.GenomeReleaseTableTests;
@@ -33,7 +34,8 @@ import testSuite.unitTests.removeAnnotationValueTest;
         TestFilePathGEN.class, TestGetAnnotationObject.class,
         AddDropDownValueTest.class, removeAnnotationValueTest.class,
         UpdateExperimentTest.class, UserInfoTests.class,
-        ProcessRawToProfileTests.class, GenomeReleaseTableTests.class })
+        ProcessRawToProfileTests.class, GenomeReleaseTableTests.class,
+        ChangeAnnotationLabelTest.class})
 
 public class AllTests {
 
