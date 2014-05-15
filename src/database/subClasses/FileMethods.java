@@ -1,5 +1,6 @@
 package database.subClasses;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -30,8 +31,8 @@ public class FileMethods {
 	 */
 	public FileMethods(Connection connection, FilePathGenerator filePG){
 
-			conn = connection;
-			fpg = filePG;
+		conn = connection;
+		fpg = filePG;
 	}
 
 	 /**
@@ -77,35 +78,35 @@ public class FileMethods {
                 + "(Path, FileType, FileName, Date, MetaData, InputFilePath, "
                 + "Author, Uploader, IsPrivate, ExpID, GRVersion) "
                 + "VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?, ?, ?, ?, ?, ?)";
-        PreparedStatement addFile = conn.prepareStatement(query);
-        addFile.setString(1, path);
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setString(1, path);
 
         switch (fileType) {
         case FileTuple.RAW:
-            addFile.setString(2, "Raw");
+            stmt.setString(2, "Raw");
             break;
         case FileTuple.PROFILE:
-            addFile.setString(2, "Profile");
+            stmt.setString(2, "Profile");
             break;
         case FileTuple.REGION:
-            addFile.setString(2, "Region");
+            stmt.setString(2, "Region");
             break;
         default:
-            addFile.setString(2, "Other");
+            stmt.setString(2, "Other");
             break;
         }
 
-        addFile.setString(3, fileName);
-        addFile.setString(4, metaData);
-        addFile.setString(5, inputFilePath);
-        addFile.setString(6, author);
-        addFile.setString(7, uploader);
-        addFile.setBoolean(8, isPrivate);
-        addFile.setString(9, expID);
-        addFile.setString(10, genomeRelease);
+        stmt.setString(3, fileName);
+        stmt.setString(4, metaData);
+        stmt.setString(5, inputFilePath);
+        stmt.setString(6, author);
+        stmt.setString(7, uploader);
+        stmt.setBoolean(8, isPrivate);
+        stmt.setString(9, expID);
+        stmt.setString(10, genomeRelease);
 
-        addFile.executeUpdate();
-        addFile.close();
+        stmt.executeUpdate();
+        stmt.close();
 
         return getFileTuple(path);
     }
@@ -122,13 +123,17 @@ public class FileMethods {
      */
     public FileTuple getFileTuple(String filePath)
             throws SQLException {
+
         String query = "SELECT * FROM File WHERE Path = ?";
-        PreparedStatement getFile = conn.prepareStatement(query);
-        getFile.setString(1, filePath);
-        ResultSet rs = getFile.executeQuery();
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setString(1, filePath);
+        ResultSet rs = stmt.executeQuery();
         if (rs.next()) {
-            return new FileTuple(rs);
+        	FileTuple fileTuple = new FileTuple(rs);
+            stmt.close();
+        	return fileTuple;
         }
+        stmt.close();
         return null;
     }
 
@@ -163,20 +168,20 @@ public class FileMethods {
                 + "(Path, FileType, FileName, Date, MetaData, InputFilePath, "
                 + "Author, Uploader, IsPrivate, ExpID, GRVersion) "
                 + "VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, NULL, ?, ?, ?, ?, ?)";
-        PreparedStatement addFile = conn.prepareStatement(query);
+        PreparedStatement stmt = conn.prepareStatement(query);
 
-        addFile.setString(1, path);
-        addFile.setString(2, fileType);
-        addFile.setString(3, fileName);
-        addFile.setString(4, metaData);
-        addFile.setString(5, author);
-        addFile.setString(6, uploader);
-        addFile.setBoolean(7, isPrivate);
-        addFile.setString(8, expID);
-        addFile.setString(9, grVersion);
+        stmt.setString(1, path);
+        stmt.setString(2, fileType);
+        stmt.setString(3, fileName);
+        stmt.setString(4, metaData);
+        stmt.setString(5, author);
+        stmt.setString(6, uploader);
+        stmt.setBoolean(7, isPrivate);
+        stmt.setString(8, expID);
+        stmt.setString(9, grVersion);
 
-        addFile.executeUpdate();
-        addFile.close();
+        stmt.executeUpdate();
+        stmt.close();
 
         return path;
     }
@@ -209,25 +214,28 @@ public class FileMethods {
                 + "(Path, FileType, FileName, Date, MetaData, InputFilePath, "
                 + "Author, Uploader, IsPrivate, ExpID, GRVersion) "
                 + "VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, NULL, ?, ?, ?, ?, ?)";
-        PreparedStatement tagExp = conn.prepareStatement(query);
-        tagExp.setString(1, path);
-        tagExp.setString(2, fileType);
-        tagExp.setString(3, fileName);
-        tagExp.setString(4, metaData);
-        tagExp.setString(5, author);
-        tagExp.setString(6, uploader);
-        tagExp.setBoolean(7, isPrivate);
-        tagExp.setString(8, expID);
-        tagExp.setString(9, grVersion);
 
-        tagExp.executeUpdate();
-        tagExp.close();
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setString(1, path);
+        stmt.setString(2, fileType);
+        stmt.setString(3, fileName);
+        stmt.setString(4, metaData);
+        stmt.setString(5, author);
+        stmt.setString(6, uploader);
+        stmt.setBoolean(7, isPrivate);
+        stmt.setString(8, expID);
+        stmt.setString(9, grVersion);
+
+        stmt.executeUpdate();
+        stmt.close();
 
         return URL + path;
     }
 
     /**
-     * Deletes a file from the database.
+     * Deletes a file from the database and the disk.
+     * Should throw an IOException if the method failed to delete the file
+     * from disk.
      *
      * @param path String - the path to the file.
      * @return int - the number of deleted tuples in the database.
@@ -235,32 +243,51 @@ public class FileMethods {
      *             if the query does not succeed
      */
     public int deleteFile(String path) throws SQLException {
+    	File fileToDelete = new File(path);
+        if (fileToDelete.exists()) {
+        	fileToDelete.delete();
+        }
 
-    	String statementStr = "DELETE FROM File " + "WHERE (Path = ?)";
-        PreparedStatement deleteFile = conn.prepareStatement(statementStr);
-
+        String statementStr = "DELETE FROM File "
+                + "WHERE (Path = ?)";
+        PreparedStatement deleteFile = conn
+                .prepareStatement(statementStr);
         deleteFile.setString(1, path);
-        int res = deleteFile.executeUpdate();
+        int resCount = deleteFile.executeUpdate();
         deleteFile.close();
 
-        return res;
+        return resCount;
     }
 
     /**
-     * Deletes a file from the database using the fileID.
-     *
+     * Deletes a file from the database and the disk using the fileID.
+     * Should throw an IOException if the method failed to delete the file
+     * from disk.
      * @param fileID int - the fileID of the file to be deleted.
      * @return 1 if deletion was successful, else 0.
      * @throws SQLException
      */
     public int deleteFile(int fileID) throws SQLException {
 
-        String query = "DELETE FROM File " + "WHERE FileID = ?";
+    	String query1 = "SELECT Path FROM File " +
+    			"WHERE FileID = ?";
+    	String query2 = "DELETE FROM File " + "WHERE FileID = ?";
+    	int res = 0;
 
-        PreparedStatement stmt = conn.prepareStatement(query);
-        stmt.setInt(1, fileID);
-
-        return stmt.executeUpdate();
+    	PreparedStatement stmt = conn.prepareStatement(query1);
+    	stmt.setInt(1, fileID);
+    	ResultSet rs = stmt.executeQuery();
+    	if (rs.next()) {
+    		File fileToDelete = new File(rs.getString("Path"));
+    		if (fileToDelete.exists()) {
+    	        fileToDelete.delete();
+    		}
+	        stmt = conn.prepareStatement(query2);
+	        stmt.setInt(1, fileID);
+	        res = stmt.executeUpdate();
+	        stmt.close();
+    	}
+    	return res;
     }
 
     /**
@@ -278,15 +305,15 @@ public class FileMethods {
         stmt.setInt(1, fileID);
 
         ResultSet rs = stmt.executeQuery();
-        boolean res = rs.next();
+        boolean hasResult = rs.next();
 
         if (rs.next()) {
-            res = false;
+            hasResult = false;
         }
 
         stmt.close();
 
-        return res;
+        return hasResult;
     }
 
     /**
@@ -301,18 +328,17 @@ public class FileMethods {
     public boolean isValidFilePath(String filePath)
             throws SQLException {
 
-        PreparedStatement pStatement = null;
+        PreparedStatement stmt = null;
         String query = "SELECT * FROM File Where (Path = ?)";
 
-        pStatement = conn.prepareStatement(query);
-        pStatement.setString(1, filePath);
+        stmt = conn.prepareStatement(query);
+        stmt.setString(1, filePath);
+        ResultSet rs = stmt.executeQuery();
 
-        ResultSet rs = pStatement.executeQuery();
+        boolean resCount = rs.next();
+        stmt.close();
 
-        boolean res = rs.next();
-        pStatement.close();
-
-        return res;
+        return resCount;
     }
 
     /**
@@ -337,15 +363,15 @@ public class FileMethods {
             String grVersion, String expID) throws SQLException {
 
         ArrayList<String> pathList = new ArrayList<String>();
-        String ToPath;
+        String toPath;
 
-        String SelectQuery = "SELECT Path, Author, IsPrivate FROM File"
+        String query = "SELECT Path, Author, IsPrivate FROM File"
                 + " WHERE (FileID = ?)";
-        PreparedStatement ps = conn.prepareStatement(SelectQuery);
+        PreparedStatement stmt = conn.prepareStatement(query);
         int fID = Integer.parseInt(fileID);
-        ps.setInt(1, fID);
+        stmt.setInt(1, fID);
 
-        ResultSet rs = ps.executeQuery();
+        ResultSet rs = stmt.executeQuery();
 
         String fromPath = null;
         boolean isPrivate = false;
@@ -359,14 +385,13 @@ public class FileMethods {
             throw new SQLException("Not a valid fileID");
         }
 
-        ToPath = addFile(fileType, fileName, metaData, author,
+        toPath = addFile(fileType, fileName, metaData, author,
                 uploader, isPrivate, expID, grVersion);
-        ps.close();
+        stmt.close();
 
         pathList.add(fromPath);
-        pathList.add(ToPath);
+        pathList.add(toPath);
 
         return pathList;
     }
-
 }

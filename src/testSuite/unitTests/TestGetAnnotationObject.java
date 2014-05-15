@@ -39,10 +39,12 @@ public class TestGetAnnotationObject {
     	Annotation annotation = dbac.getAnnotationObject(label);
     	ArrayList<String> choices = (ArrayList<String>) annotation.getPossibleValues();
 
+    	assertEquals(4, choices.size());
     	assertTrue(choices.contains("Female"));
     	assertTrue(choices.contains("Male"));
     	assertTrue(choices.contains("Unknown"));
     	assertTrue(choices.contains("Does not matter"));
+    	
 	}
 
     @Test

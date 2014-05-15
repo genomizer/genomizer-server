@@ -15,6 +15,7 @@ import org.junit.Test;
 import testSuite.TestInitializer;
 import database.DatabaseAccessor;
 import database.FilePathGenerator;
+import database.Genome;
 import database.ServerDependentValues;
 
 public class GenomeReleaseTableTests {
@@ -44,43 +45,65 @@ public class GenomeReleaseTableTests {
 
     @Test
     public void shouldReturnRightNumberOfGenomeVersion() throws Exception {
-        List<String> versions = dbac.getAllGenomReleases("Human");
+        List<Genome> versions = dbac.getAllGenomReleasesForSpecies("Human");
         assertEquals(3, versions.size());
     }
 
     @Test
     public void shouldReturnRightNamesOfGenomeVersions() throws Exception {
-        List<String> versions = dbac.getAllGenomReleases("Human");
-        assertTrue(versions.contains("hg38"));
-        assertTrue(versions.contains("hg19"));
-        assertTrue(versions.contains("hg18"));
+        List<Genome> genomeList = dbac.getAllGenomReleasesForSpecies("Human");
+
+        assertTrue(searchGenomeForVersion(genomeList, "hg38"));
+        assertTrue(searchGenomeForVersion(genomeList, "hg19"));
+        assertTrue(searchGenomeForVersion(genomeList, "hg18"));
+
     }
-    
+
+    private boolean searchGenomeForVersion(List<Genome> genomeList, String version) {
+
+        for (int i=0;i<genomeList.size();i++){
+        	if (genomeList.get(i).version.equals(version)){
+        		return true;
+        	}
+        }
+
+    	return false;
+    }
+
     @Test
     public void shouldReturnSpecificGenomeVersionFilePath() throws Exception {
-        String path = dbac.getGenomeReleaseFilePath("hg38");
-        assertEquals("/var/www/data/GenomeRelease/Human/hg38.fasta", path);
+        Genome genome = dbac.getGenomeRelease("hg38");
+        assertEquals("/var/www/data/GenomeRelease/Human/hg38.fasta", genome.filePath);
     }
-    
+
     @Test
     public void shouldReturnUploadURLUponAdd() throws Exception {
         String uploadURL = dbac.addGenomeRelease("hg39", "Human", "hg39.fasta");
         String expectedUploadURL = ServerDependentValues.UploadURL + fpg.generateGenomeReleaseFolder("hg39", "Human") + "hg39.fasta";
         assertEquals(expectedUploadURL, uploadURL);
     }
-    
+
     @Test
     public void shouldUpdateDatabaseUponAdd() throws Exception {
         dbac.addGenomeRelease("hg40", "Human", "hg40.fasta");
         String expectedFilePath = fpg.generateGenomeReleaseFolder("hg40", "Human") + "hg40.fasta";
-        String genomeReleaseFilePath = dbac.getGenomeReleaseFilePath("hg40");
-        assertEquals(expectedFilePath, genomeReleaseFilePath);
-    }
-    
-    @Test
-    public void shouldReturnNullForInvalidVersionOponGet() throws Exception {
-        String genomeReleaseFilePath = dbac.getGenomeReleaseFilePath("hg50");
-        assertNull(genomeReleaseFilePath);
+        Genome genome = dbac.getGenomeRelease("hg40");
+        assertEquals(expectedFilePath, genome.filePath);
     }
 
+    @Test
+    public void shouldReturnNullForInvalidVersionOponGet() throws Exception {
+        Genome genome = dbac.getGenomeRelease("hg50");
+        assertNull(genome);
+    }
+
+    @Test
+    public void shouldReturnFileName() throws Exception {
+    	dbac.addGenomeRelease("rn50", "Rat", "aRatFile.fasta");
+    	Genome genome = dbac.getGenomeRelease("rn50");
+    	assertEquals(genome.fileName,"aRatFile.fasta");
+    	assertEquals(genome.species,"Rat");
+    	assertEquals(genome.version,"rn50");
+
+    }
 }
