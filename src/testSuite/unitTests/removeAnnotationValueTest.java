@@ -151,6 +151,15 @@ public class removeAnnotationValueTest {
 		}
     }
 
+    @Test
+    public void testRemoveAnnotationWithWhiteSpace()
+    		throws SQLException, IOException {
+    	dbac.addFreeTextAnnotation("hej svejs", null, false);
+    	dbac.addDropDownAnnotation("hej po dig", testChoices1, 0, false);
+    	dbac.deleteAnnotation("hej svejs");
+    	dbac.deleteAnnotation("hej po dig");
+    }
+
     /**
      * Method to remove a given annotation of a dropdown- annotation.
      * This method is not used in this test, it was used to contruct the method without

@@ -1,5 +1,8 @@
 package command;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import response.MinimalResponse;
 import response.ProcessResponse;
 import response.Response;
@@ -46,7 +49,7 @@ public class CommandHandler {
 			if(CommandType.PROCESS_COMMAND.equals(cmdt)){
 				//add the heavy command to the queue, executed when the
 				//command is at the head of the queue, return OK to tell the client
-				heavyWorkThread.addWork(myCom);
+				heavyWorkThread.addWork((ProcessCommand)myCom);
 				return new ProcessResponse(StatusCode.OK);
 			}else{
 				return myCom.execute();
@@ -71,7 +74,8 @@ public class CommandHandler {
 
 		if (cmdt == CommandType.DELETE_ANNOTATION_VALUE_COMMAND) {
 			String[] rest = restful.split("/");
-			newCommand = cmdFactory.createDeleteAnnotationValueCommand(json, rest[3], rest[4]);
+			System.out.println("split: " + rest[0] + rest[1] + rest[2]);
+			newCommand = cmdFactory.createDeleteAnnotationValueCommand(json, rest[2], rest[3]);
 		}
 		String parsedRest = parseRest(restful);
 
@@ -149,6 +153,29 @@ public class CommandHandler {
 
 //		return parsed[parsed.length - 1];
 
+	}
+
+	/**
+	 * Method used to split restful headers.
+	 *
+	 * @param restful to split.
+	 * @param expectedLength of the header.
+	 * @return null if wrongly formatted, else arraylist.
+	 */
+	private ArrayList<String> addRestful(String restful, int expectedLength) {
+
+		ArrayList<String> rest = null;
+
+		if(restful != null) {
+			rest = new ArrayList<String>(Arrays.asList(restful.split("/")));;
+			rest.remove(0);
+			if(rest.size() != expectedLength) {
+				rest = null;
+			}
+
+		}
+
+		return rest;
 	}
 
 }

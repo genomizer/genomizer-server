@@ -96,7 +96,6 @@ public class AddAnnotationFieldCommand extends Command {
 				db.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
-				return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
 			}
 		}
 	}

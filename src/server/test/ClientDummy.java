@@ -44,8 +44,6 @@ public class ClientDummy {
 		sendLogout();
 	}
 
-
-
 	static void sendLogin() throws Exception {
 
 		URL obj = new URL(url + "/login");
@@ -100,7 +98,7 @@ public class ClientDummy {
 		String author = "yuri";*/
 
 
-		String username = "splutt";
+		String username = "jonas";
 		String filename = "filename1234";
 		String fileid = "1";
 		String expid = "Exp1";
@@ -144,7 +142,7 @@ public class ClientDummy {
 
 		//int responseCode = con.getResponseCode();
 		System.out.println("\nSending 'PUT' request to URL : " + url);
-		System.out.println("Reponse Body: " + printResponse(con));
+//		System.out.println("Reponse Body: " + printResponse(con));
 	}
 
 	private static void sendAddExperiment() throws Exception {
@@ -260,7 +258,7 @@ public class ClientDummy {
 		con.setRequestProperty("Authorization", token.getToken());
 
 		System.out.println("\nSending 'DELETE' request to URL : " + url);
-		System.out.println("Response Body: " + printResponse(con));
+//		System.out.println("Response Body: " + printResponse(con));
 	}
 
 	private static String printResponse(HttpURLConnection con) throws IOException {

@@ -38,14 +38,16 @@ public class ResponseLogger {
 
 	public static void printUserLog(String username){
 		if(usermap.containsKey(username)){
-			System.out.println("---Printing " + username + " log---");
+			System.err.println("---Printing " + username + " log---");
 
 			int i = 0;
 			for(Response r : usermap.get(username)){
-				System.out.print("Log " + i + ": " + r);
+				System.err.print("Log " + i + ": " + r);
 				i++;
 			}
 
+		}else{
+			System.err.println("User " + username + " does not exist in log");
 		}
 
 	}
