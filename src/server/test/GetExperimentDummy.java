@@ -29,15 +29,7 @@ public class GetExperimentDummy {
 	public static void main(String args[]) throws Exception {
 
 		sendLogin();
-//		sendGetAnnotationInformation();
-//		sendAddAnnotation();
-//		sendDeleteAnnotation();
-//		sendAddExperiment();
-//		sendAddFileToExperiment();
 //		sendProcessing();
-//		sendDeleteExperiment();
-		sendGetExperiment();
-		sendLogout();
 	}
 
 
@@ -66,34 +58,7 @@ public class GetExperimentDummy {
 
 	}
 
-	private static void sendGetExperiment() throws Exception {
 
-		URL obj = new URL(url + "/experiment/Exp1");
-		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
-		con.setRequestMethod("GET");
-		con.setRequestProperty("Content-Type", "application/json");
-		con.setRequestProperty("Authorization", token.getToken());
-
-		String response = printResponse(con);
-		System.out.println("\nSending 'GET' request to URL : " + url);
-		System.out.println("Response Body: " + response);
-
-
-	}
-
-	private static void sendGetAnnotationInformation() throws Exception {
-
-		URL obj = new URL(url + "/annotation");
-		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
-		con.setRequestMethod("GET");
-		con.setRequestProperty("Content-Type", "application/json");
-		con.setRequestProperty("Authorization", token.getToken());
-
-		System.out.println("\nSending 'GET' request to URL : " + url);
-		System.out.println("Response Body: " + printResponse(con));
-	}
 
 	private static void sendProcessing() throws Exception {
 
@@ -159,121 +124,8 @@ public class GetExperimentDummy {
 		System.out.println("Reponse Body: " + printResponse(con));
 	}
 
-	private static void sendAddExperiment() throws Exception {
 
-		URL obj = new URL(url + "/experiment");
-		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
-		con.setRequestMethod("POST");
-		con.setRequestProperty("Authorization", token.getToken());
-		con.setRequestProperty("Content-Type", "application/json");
-
-		JsonObject ja=new JsonObject();
-		JsonObject name=new JsonObject();
-		ja.addProperty("name", expName);
-		JsonObject createdBy=new JsonObject();
-		ja.addProperty("createdBy", "jonas");
-		JsonArray annotations = new JsonArray();
-		JsonObject ann1=new JsonObject();
-		ann1.addProperty("id", 1);
-		ann1.addProperty("name", "Development Stage");
-		ann1.addProperty("value", "aster");
-		annotations.add(ann1);
-		ja.add("annotations", annotations);
-		sendToServer(con, ja.toString());
-
-		int responseCode = con.getResponseCode();
-		System.out.println("Response Body: " + printResponse(con));
-	}
-
-	private static void sendDeleteExperiment() throws Exception {
-
-		URL obj = new URL(url + "/experiment/" + expName);
-		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
-		con.setRequestMethod("DELETE");
-		con.setRequestProperty("Authorization", token.getToken());
-		con.setRequestProperty("Content-Type", "application/json");
-
-		System.out.println("\nSending 'DELETE' request to URL : " + url + "/experiment/" + expName);
-		System.out.println("Response Body: " + printResponse(con));
-	}
-
-	private static void sendAddFileToExperiment() throws Exception {
-
-		URL obj = new URL(url);
-		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
-		con.setRequestMethod("POST");
-		con.setRequestProperty("Authorization", token.getToken());
-		con.setRequestProperty("Content-Type", "application/json");
-
-		JsonObject ja=new JsonObject();
-		ja.addProperty("experimentID", expName);
-		ja.addProperty("fileName", "hugofiltest.txt");
-		ja.addProperty("type", "raw");
-		ja.addProperty("metaData", "not impl. yet");
-		ja.addProperty("author", "Jonas M");
-		ja.addProperty("uploader", "Jonas M");
-		ja.addProperty("isPrivate", false);
-		ja.addProperty("grVersion", "rn5");
-
-		String json_output = ja.toString();
-		System.out.println("JSON: " + json_output);
-		sendToServer(con, json_output);
-
-		System.out.println("Response Body: " + printResponse(con));
-	}
-
-	private static void sendDeleteAnnotation() throws Exception {
-		URL obj = new URL(url + "/annotation/testanno221");
-		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
-		con.setRequestMethod("DELETE");
-		con.setRequestProperty("Content-Type", "application/json");
-		con.setRequestProperty("Authorization", token.getToken());
-		con.setRequestProperty("Content-Type", "application/json");
-
-		System.out.println("\nSending 'DELETE' request to URL : " + url);
-		System.out.println("Response Body: " + printResponse(con));
-	}
-
-	private static void sendAddAnnotation() throws Exception {
-		URL obj = new URL(url + "/annotation");
-		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
-		con.setRequestMethod("POST");
-		con.setRequestProperty("Content-Type", "application/json");
-		con.setRequestProperty("Authorization", token.getToken());
-		con.setRequestProperty("Content-Type", "application/json");
-
-		JsonObject jj=new JsonObject();
-		jj.addProperty("name", "testanno1");
-		JsonArray ja = new JsonArray();
-		JsonPrimitive element = new JsonPrimitive("val1");
-		ja.add(element);
-		jj.add("type", ja);
-		jj.addProperty("default", "val1");
-		jj.addProperty("forced", false);
-
-		sendToServer(con, jj.toString());
-
-		System.out.println("\nSending 'POST' request to URL : " + url);
-		System.out.println("Response Body: " + printResponse(con));
-
-	}
-
-	private static void sendLogout() throws Exception {
-		URL obj = new URL(url + "/login");
-		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
-		con.setRequestMethod("DELETE");
-		con.setRequestProperty("Content-Type", "application/json");
-		con.setRequestProperty("Authorization", token.getToken());
-
-		System.out.println("\nSending 'DELETE' request to URL : " + url);
-		System.out.println("Response Body: " + printResponse(con));
-	}
 
 	private static String printResponse(HttpURLConnection con) throws IOException {
 		int responseCode = con.getResponseCode();
