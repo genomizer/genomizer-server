@@ -15,6 +15,7 @@ using Filezilla or similar and choosing server.jar for download. There will also
 from when they where created.
 
 ##Usage
+Warning! If the server is run on your local computer, uploading and downloading files probably wont work.
 The server requires Java 1.7 to run. In the lab computers this is not the default, but it is installed and can be found at
 /usr/lib/jvm/java-7-openjdk-amd64. Either make a symbolic link to /usr/lib/jvm/java-7-openjdk-amd64/bin/java or enter the full path.
 
