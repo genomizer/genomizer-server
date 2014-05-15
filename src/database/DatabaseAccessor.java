@@ -1142,15 +1142,6 @@ public class DatabaseAccessor {
 
     /**
      *
-     * @param rootFolderPath
-     * @throws IOException
-     */
-    public void changeFileStorageRoot(String rootFolderPath) throws IOException {
-        fpg = new FilePathGenerator(rootFolderPath);
-    }
-
-    /**
-     *
      * @return
      */
     public FilePathGenerator getFilePathGenerator() {

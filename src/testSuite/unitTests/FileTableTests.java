@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -18,49 +19,73 @@ import org.junit.Test;
 import testSuite.TestInitializer;
 import database.DatabaseAccessor;
 import database.Experiment;
+import database.FilePathGenerator;
 import database.FileTuple;
 
 public class FileTableTests {
 
     private static DatabaseAccessor dbac;
 
-    private String testPath;
     private String testName = "testFileName1";
     private String testInputFile = "testInputFile";
     private String testType = "testFileType4";
     private int testFileType = FileTuple.RAW;
     private String testAuthor = "testFileAuthor1";
     private String testUploader = "testUploader1";
-    private String testMetaData = "testUploader1";
+    private String testMetaData = "testMetaData";
     private boolean testIsPrivate = false;
-    private String testExpId = "testExpId2";
+    private static String testExpId = "testExpId2";
     private String testGRVersion = null;
+    private static FileTuple ft;
 
-    private String testFileName = "testFileName3";
+    private static String testFolderName = "Genomizer Test Folder - Dont be afraid to delete me";
+    private static File testFolder;
+    private static String testFolderPath;
+    private static FilePathGenerator fpg;
 
     @BeforeClass
     public static void setupTestCase() throws Exception {
         dbac = new DatabaseAccessor(TestInitializer.username,
                 TestInitializer.password, TestInitializer.host,
                 TestInitializer.database);
+
+        testFolderPath = System.getProperty("user.home") + File.separator
+                + testFolderName + File.separator;
+
+        testFolder = new File(testFolderPath);
+
+        if (!testFolder.exists()) {
+            testFolder.mkdirs();
+        }
+
+        fpg = dbac.getFilePathGenerator();
+        fpg.setRootDirectory(testFolderPath);
+
+        dbac.addExperiment(testExpId);
     }
 
     @AfterClass
     public static void undoAllChanges() throws SQLException {
+    	if (dbac.hasFile(ft.id)) {
+    		dbac.deleteFile(ft.id);
+    	}
+    	dbac.deleteExperiment(testExpId);
         dbac.close();
     }
 
+
     @Before
     public void setup() throws SQLException, IOException {
-        dbac.addExperiment(testExpId);
-        testPath = dbac.addFile(testType, testName, testMetaData, testAuthor,
-                testUploader, testIsPrivate, testExpId, testGRVersion);
+		ft = dbac.addNewFile(testExpId, testFileType, testName, testInputFile,
+		  		testMetaData, testAuthor, testUploader, testIsPrivate,
+		  		testGRVersion);
     }
 
     @After
     public void teardown() throws SQLException {
-        dbac.deleteFile(testPath);
-        dbac.deleteExperiment(testExpId);
+    	if (dbac.hasFile(ft.id)) {
+    		dbac.deleteFile(ft.id);
+    	}
     }
 
     @Test
@@ -68,22 +93,23 @@ public class FileTableTests {
 
         Experiment e = dbac.getExperiment(testExpId);
         assertEquals(1, e.getFiles().size());
-        assertEquals(testPath, e.getFiles().get(0).path);
+        assertEquals(ft.path, e.getFiles().get(0).path);
 
-        dbac.deleteFile(testPath);
+        dbac.deleteFile(ft.path);
         e = dbac.getExperiment(testExpId);
         assertEquals(0, e.getFiles().size());
 
-        testPath = dbac.addFile(testType, testName, testMetaData, testAuthor,
+        String testPath = dbac.addFile(testType, testName, testMetaData, testAuthor,
                 testUploader, testIsPrivate, testExpId, testGRVersion);
         e = dbac.getExperiment(testExpId);
         assertEquals(1, e.getFiles().size());
         assertEquals(testPath, e.getFiles().get(0).path);
+        dbac.deleteFile(testPath);
     }
 
     @Test(expected = SQLException.class)
     public void shouldNotBeAbleToDeleteAnExperimentContainingAFile()
-            throws Exception {
+    		throws SQLException {
 
         try {
             dbac.deleteExperiment(testExpId);
@@ -97,7 +123,7 @@ public class FileTableTests {
     @Test
     public void shouldBeAbleToCheckIfFileExistsInDatabase() throws Exception {
         ArrayList<Experiment> experiments = (ArrayList<Experiment>) dbac
-                .search(testPath + "[Path]");
+                .search(ft.path + "[Path]");
         Experiment experiment = experiments.get(0);
         int fileID = experiment.getFiles().get(0).id;
         assertTrue(dbac.hasFile(fileID));
@@ -105,13 +131,9 @@ public class FileTableTests {
 
     @Test
     public void shouldBeAbleToDeleteFileUsingFileID() throws Exception {
-        FileTuple ft = dbac.addNewFile(testExpId, testFileType, testFileName,
-                testInputFile, testMetaData, testAuthor, testUploader,
-                testIsPrivate, testGRVersion);
         int fileID = ft.id;
         assertEquals(1, dbac.deleteFile(fileID));
         assertFalse(dbac.hasFile(fileID));
-
     }
 
     @Test
@@ -122,5 +144,19 @@ public class FileTableTests {
                     + "exists in the database.");
         }
         assertEquals(0, dbac.deleteFile(123));
+    }
+
+    @Test
+    public void shouldRemoveFileFromDisk() throws Exception {
+		addMockFile(ft.getParentFolder(), testName);
+		File fileToDelete = new File(ft.path);
+		assertTrue(fileToDelete.exists());
+		assertEquals(1, dbac.deleteFile(ft.path));
+		assertFalse(fileToDelete.exists());
+	}
+
+    private void addMockFile(String folderPath, String filename1) throws IOException {
+        File file1 = new File(folderPath + filename1);
+        file1.createNewFile();
     }
 }

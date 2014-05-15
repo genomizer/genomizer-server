@@ -1,5 +1,6 @@
 package database.subClasses;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -224,13 +225,21 @@ public class FileMethods {
      *             if the query does not succeed
      */
     public int deleteFile(String path) throws SQLException {
-
-    	String statementStr = "DELETE FROM File " + "WHERE (Path = ?)";
-        PreparedStatement deleteFile = conn.prepareStatement(statementStr);
+    	File fileToDelete = new File(path);
+        if (fileToDelete.exists()) {
+        	fileToDelete.delete();
+        }
+        
+        String statementStr = "DELETE FROM File "
+                + "WHERE (Path = ?)";
+        PreparedStatement deleteFile = conn
+                .prepareStatement(statementStr);
 
         deleteFile.setString(1, path);
         int res = deleteFile.executeUpdate();
         deleteFile.close();
+
+
 
         return res;
     }
@@ -245,12 +254,25 @@ public class FileMethods {
      */
     public int deleteFile(int fileID) throws SQLException {
 
-        String query = "DELETE FROM File " + "WHERE FileID = ?";
+    	String query1 = "SELECT Path FROM File " +
+    			"WHERE FileID = ?";
+    	String query2 = "DELETE FROM File " + "WHERE FileID = ?";
+    	int res = 0;
 
-        PreparedStatement stmt = conn.prepareStatement(query);
-        stmt.setInt(1, fileID);
-
-        return stmt.executeUpdate();
+    	PreparedStatement stmt = conn.prepareStatement(query1);
+    	stmt.setInt(1, fileID);
+    	ResultSet rs = stmt.executeQuery();
+    	if (rs.next()) {
+    		File fileToDelete = new File(rs.getString("Path"));
+    		if (fileToDelete.exists()) {
+    	        fileToDelete.delete();
+    		}
+	        stmt = conn.prepareStatement(query2);
+	        stmt.setInt(1, fileID);
+	        res = stmt.executeUpdate();
+	        stmt.close();
+    	}
+    	return res;
     }
 
     /**
@@ -359,5 +381,4 @@ public class FileMethods {
 
         return pathList;
     }
-
 }
