@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import command.DeleteGenomeReleaseCommand;
+
 /**
  * Class used to test the DeleteGenomeReleaseCommand class.
  *
@@ -19,7 +21,8 @@ public class DeleteGenomeReleaseCommandTest {
 	@Test
 	public void testCreateNotNull() {
 
-		fail("Not yet implemented");
+		DeleteGenomeReleaseCommand cmd = new DeleteGenomeReleaseCommand();
+		assertNotNull(cmd);
 
 	}
 
