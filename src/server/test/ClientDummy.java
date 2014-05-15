@@ -38,12 +38,12 @@ public class ClientDummy {
 	public static void main(String args[]) throws Exception {
 
 		sendLogin();
-		sendGetAnnotationInformation();
+//		sendGetAnnotationInformation();
 //		sendAddAnnotation();
-		sendDeleteAnnotation();
+//		sendDeleteAnnotation();
 //		sendAddExperiment();
 //		sendAddFileToExperiment();
-//		sendProcessing();
+		sendProcessing();
 //		sendDeleteExperiment();
 		sendLogout();
 	}
@@ -90,7 +90,7 @@ public class ClientDummy {
 	private static void sendProcessing() throws Exception {
 
 		System.out.println("sendprocessing");
-		String username = "splutt";
+	/*	String username = "splutt";
 //		String filename = filename;
 		String fileid = "1";
 //		String expid = "Exp1";
@@ -99,6 +99,24 @@ public class ClientDummy {
 							"\"param2\"," +
 							"\"param3\"," +
 							"\"param4\"";
+		String metadata = "astringofmetadata";
+		String genomeRelease = "hg38";
+		String author = "yuri";*/
+
+
+		String username = "splutt";
+		String filename = "filename1234";
+		String fileid = "1";
+		String expid = "Exp1";
+		String processtype = "rawtoprofile";
+		String parameters = "\"param1\"," +
+				"\"param2\"," +
+				"\"param3\"," +
+				"\"param4\"," +
+				"\"param5\"," +
+				"\"param6\"," +
+				"\"param7\"," +
+				"\"param8\"";
 		String metadata = "astringofmetadata";
 		String genomeRelease = "hg38";
 		String author = "yuri";
@@ -120,13 +138,15 @@ public class ClientDummy {
 				"\"genomeRelease\": \"" + genomeRelease + "\"," +
 				"\"author\": \"" + author + "\"}";
 
-		con.setDoOutput(true);
+
+		sendToServer(con, json);
+		/*con.setDoOutput(true);
 		DataOutputStream wr = new DataOutputStream(con.getOutputStream());
 		wr.write(json.getBytes());
 		wr.flush();
-		wr.close();
+		wr.close();*/
 
-		int responseCode = con.getResponseCode();
+		//int responseCode = con.getResponseCode();
 		System.out.println("\nSending 'PUT' request to URL : " + url);
 		System.out.println("Reponse Body: " + printResponse(con));
 	}

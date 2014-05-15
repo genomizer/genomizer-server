@@ -268,4 +268,18 @@ public class CommandFactory {
 		return new RenameAnnotationValueCommand();
 	}
 
+	/**
+	 * Used to create the command needed to delete genome releases.
+	 *
+	 * @param json string to initiate class.
+	 * @return the actual command.
+	 */
+	public Command createDeleteGenomeReleaseCommand(String json) {
+
+		final Command deleteGenomeReleaseCmd = gson.fromJson(json, DeleteGenomeReleaseCommand.class);
+
+		return deleteGenomeReleaseCmd;
+
+	}
+
 }

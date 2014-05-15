@@ -4,13 +4,15 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import command.AddGenomeReleaseCommand;
+
 /**
  * Class used to test the AddGenomeRelease class.
  *
  * @author tfy09jnn
  * @version 1.0
  */
-public class AddGenomeReleaseTest {
+public class AddGenomeReleaseCommandTest {
 
 	/**
 	 * Method used to check that the created command
@@ -19,7 +21,8 @@ public class AddGenomeReleaseTest {
 	@Test
 	public void testCreateNotNull() {
 
-		fail("Not yet implemented");
+		AddGenomeReleaseCommand cmd = new AddGenomeReleaseCommand();
+		assertNotNull(cmd);
 
 	}
 
@@ -29,7 +32,7 @@ public class AddGenomeReleaseTest {
 	@Test
 	public void testValidate() {
 
-
+		fail("Not yet implemented");
 
 	}
 
