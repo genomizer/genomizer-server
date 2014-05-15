@@ -11,6 +11,7 @@ import testSuite.unitTests.ExperimentTests;
 import testSuite.unitTests.FileTableTests;
 import testSuite.unitTests.GenomeReleaseTableTests;
 import testSuite.unitTests.ProcessRawToProfileTests;
+import testSuite.unitTests.PubMedIsValidTest;
 import testSuite.unitTests.PubMedToSQLConverterTests;
 import testSuite.unitTests.SearchDatabaseTests;
 import testSuite.unitTests.AddNewFileTests;
@@ -35,7 +36,7 @@ import testSuite.unitTests.removeAnnotationValueTest;
         AddDropDownValueTest.class, removeAnnotationValueTest.class,
         UpdateExperimentTest.class, UserInfoTests.class,
         ProcessRawToProfileTests.class, GenomeReleaseTableTests.class,
-        ChangeAnnotationLabelTest.class})
+        ChangeAnnotationLabelTest.class, PubMedIsValidTest.class})
 
 public class AllTests {
 
