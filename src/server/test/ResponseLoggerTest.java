@@ -36,8 +36,8 @@ public class ResponseLoggerTest {
 	public void shouldLogBADREQUESTandOKResponse(){
 		String username = "splutt";
 		Authenticate.addUser(username, "");
-		Response r1 = new MinimalResponse(StatusCode.BAD_REQUEST);
-		Response r2 = new MinimalResponse(StatusCode.OK);
+		Response r1 = new MinimalResponse(StatusCode.BAD_REQUEST, "Här är det fel1");
+		Response r2 = new MinimalResponse(StatusCode.OK, "Här är det inte fel");
 
 		if(ResponseLogger.log(username, r1) && ResponseLogger.log(username, r2)){
 			assertEquals(StatusCode.BAD_REQUEST, ResponseLogger.getUserLog(username).get(0).getCode());
@@ -50,11 +50,12 @@ public class ResponseLoggerTest {
 
 	@Test
 	public void shouldNotLogBADREQUESTError(){
+		ResponseLogger.reset();
 		String username = "splutt";
 		Response r = new MinimalResponse(StatusCode.BAD_REQUEST);
 
 		assertFalse(ResponseLogger.log(username, r));
-
+		ResponseLogger.reset();
 
 	}
 
