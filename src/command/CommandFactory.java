@@ -265,7 +265,8 @@ public class CommandFactory {
 	}
 
 	public Command creatRenameAnnotationValueCommand(String json) {
-		return new RenameAnnotationValueCommand();
+		Command command = gson.fromJson(json, RenameAnnotationValueCommand.class);
+		return command;
 	}
 
 	/**
@@ -280,6 +281,16 @@ public class CommandFactory {
 
 		return deleteGenomeReleaseCmd;
 
+	}
+
+	public Command createDeleteAnnotationValueCommand(String json,
+			String value, String name) {
+		return new DeleteAnnotationValueCommand(value, name);
+	}
+
+	public Command createEditAnnotationFieldCommand(String json) {
+		Command command = gson.fromJson(json, EditAnnotationFieldCommand.class);
+		return command;
 	}
 
 }

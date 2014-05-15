@@ -27,16 +27,12 @@ public class ClientDummy {
 
 	public static String host = "localhost";
 //	public static String host = "scratchy.cs.umu.se";
-
-
 	public static String url = "http://" + host + ":" + port;
 	public static Token token = null;
-
 	public static String expName = "huggaboy7";
 	public static String filename = "spluttfile662693";
 
 	public static void main(String args[]) throws Exception {
-
 		sendLogin();
 //		sendGetAnnotationInformation();
 //		sendAddAnnotation();

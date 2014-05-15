@@ -30,10 +30,10 @@ public class ProcessCommand extends Command {
 	private String[] parameters;
 	@Expose
 	private String genomeRelease;
-	@Expose
-	private String filename;
-	@Expose
-	private String fileId;
+//	@Expose
+//	private String filename;
+//	@Expose
+//	private String fileId;
 	@Expose
 	private String expid;
 	@Expose
@@ -79,21 +79,10 @@ public class ProcessCommand extends Command {
 					"genomerelease is null");
 			return false;
 		}
-		if(filename == null){
-			System.err.println("ProcessCommand - Validate\n" +
-					"filename is null");
-			return false;
-		}
 
 		if(expid == null){
 			System.err.println("ProcessCommand - Validate\n" +
 					"expid is null");
-			return false;
-		}
-
-		if(fileId == null){
-			System.err.println("ProcessCommand - Validate\n" +
-					"fileid is null");
 			return false;
 		}
 
@@ -119,28 +108,47 @@ public class ProcessCommand extends Command {
 			break;
 		}
 
-		
-
-		//TODO Hardcoded. Not using CanBeNull class
-		if(username.length() > MaxSize.USERNAME || username.length() <= 0 ||
-				processtype.length() <= 0 ||
-				metadata.length() > MaxSize.FILE_METADATA ||
-				genomeRelease.length() > MaxSize.GENOME_VERSION ||
-				filename.length() > MaxSize.FILE_FILENAME || filename.length() <= 0 ||
-				author.length() > MaxSize.FILE_AUTHOR ||
-				fileId.length() <= 0 ||
-				expid.length() > MaxSize.EXPID || expid.length() <= 0)
-
-		{
-			System.err.println("ProcessCommand - Validate\n" +
-					"Wrong lengths of annotations. Could not continue");
+		if(username.length() > MaxSize.USERNAME || username.length() <= 0){
+			System.err.println("Username has the wrong length of annotation");
+			return false;
+		}
+		if(processtype.length() <= 0){
+			System.err.println("Processtype has the wrong length of annotation");
 			return false;
 		}
 
+		if(metadata.length() > MaxSize.FILE_METADATA || doesNotHaveCorrectLength(metadata, CanBeNull.FILE_METADATA)){
+			System.err.println("Metadata [" + metadata + "] has the wrong length of annotation");
+			return false;
+		}
+		if(genomeRelease.length() > MaxSize.GENOME_VERSION || doesNotHaveCorrectLength(genomeRelease, CanBeNull.GENOME_VERSION)){
+			System.err.println("GenomeRelease has the wrong length of annotation");
+			return false;
+		}
+		if(author.length() > MaxSize.FILE_AUTHOR || doesNotHaveCorrectLength(author, CanBeNull.FILE_AUTHOR)){
+			System.err.println("Author has the wrong length of annotation");
+			return false;
+		}
+		if(expid.length() > MaxSize.EXPID || doesNotHaveCorrectLength(expid, CanBeNull.EXPID)){
+			System.err.println("Expid has the wrong length of annotation");
+			return false;
+		}
+
+
 		return true;
 	}
-	
-	private 
+
+	private boolean doesNotHaveCorrectLength(String field, boolean canBeNull){
+		System.out.println("field: "+ field + " length: " + field.length() + " canbenull: " + canBeNull);
+		if(field.length() <= 0){
+			if(canBeNull == false){
+				return true;
+			}else{
+				return false;
+			}
+		}
+		return false;
+	}
 
 	/**
 	 * Method that runs when the processCommand is executed.
@@ -153,7 +161,7 @@ public class ProcessCommand extends Command {
 
 
 
-		DatabaseAccessor db;
+		DatabaseAccessor db = null;
 		ProcessHandler processHandler;
 		Entry<String, String> filepaths;
 		String genomePath;
@@ -180,34 +188,44 @@ public class ProcessCommand extends Command {
 				try {
 					String log = processHandler.executeProcess("rawToProfile", parameters, filepaths.getKey(), filepaths.getValue());
 				} catch (InterruptedException e) {
-					// TODO Close db accessor. Log response
+					// TODO Log response
 					System.err.println("CATCH InterruptedException in ProcessCommand.Execute when running processHandler.executeProcess");
 					e.printStackTrace();
 					return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE);
 				} catch (IOException e) {
-					// TODO Close db accessor. Log response
+					// TODO Log response
 					System.err.println("CATCH IO exception in ProcessCommand.Execute when running processHandler.executeProcess");
 					e.printStackTrace();
 					return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE);
+				} finally{
+					db.close();
 				}
 
 				break;
 			default:
-				// TODO Close db accessor. Log response
+				// TODO Log response
 				System.err.println("Unknown process type in processcommand execute");
+				db.close();
 				return new ProcessResponse(StatusCode.BAD_REQUEST);
 
 			}
 		} catch (SQLException e) {
-			// TODO Close db accessor. Log response
+			// TODO Log response
 			System.err.println("SQL Exception in ProcessCommand execute:");
 			e.printStackTrace();
 			return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE);
 		} catch (IOException e1) {
-			// TODO Close db accessor. Log response
+			// TODO Log response
 			System.err.println("IO Exception in ProcessCommand execute.");
 			e1.printStackTrace();
 			return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE);
+		} finally {
+			try {
+				db.close();
+			} catch (SQLException e) {
+				System.err.println("Could not close Database accessor1");
+				e.printStackTrace();
+			}
 		}
 
 
@@ -216,12 +234,24 @@ public class ProcessCommand extends Command {
 			//TODO isPrivate hardcoded.
 			db.addGeneratedProfiles(expid, filepaths.getValue(), filepaths.getKey(), metadata, genomeRelease, username, false);
 		} catch (SQLException e) {
-			// TODO Close db accessor. Log response
+			// TODO Log response
 			System.err.println("SQL Exception in ProcessCommand execute when using addGeneratedProfiles:");
 			e.printStackTrace();
+		} finally {
+			try {
+				db.close();
+			} catch (SQLException e) {
+				System.err.println("Could not close Database accessor2");
+				e.printStackTrace();
+			}
 		}
 
-		// TODO Close db accessor.
+		try {
+			db.close();
+		} catch (SQLException e) {
+			System.err.println("Could not close Database accessor3");
+			e.printStackTrace();
+		}
 		return new ProcessResponse(StatusCode.CREATED);
 
 	}
@@ -242,12 +272,12 @@ public class ProcessCommand extends Command {
 	public String toString(){
 
 		return "Uploader of file: " + username + "\n" +
-				"Filename: " + filename + "\n" +
+//				"Filename: " + filename + "\n" +
 				"Processtype: " + processtype + "\n" +
 				"metadata:" + metadata + "\n" +
 				"username: " + username + "\n" +
 				"expid: " + expid + "\n" +
-				"fileid: " + fileId + "\n" +
+//				"fileid: " + fileId + "\n" +
 				"genomeRelease: " + genomeRelease + "\n" +
 				"author:" + author + "\n";
 	}
