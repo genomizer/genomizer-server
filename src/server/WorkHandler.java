@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
+import java.util.TreeMap;
 
 import response.Response;
 import response.StatusCode;
@@ -16,12 +17,12 @@ import command.ProcessCommand;
 public class WorkHandler extends Thread{
 
 	private Queue<ProcessCommand> workQueue;
-	private Map<ProcessCommand,String> processStatus;
+	private TreeMap<ProcessCommand,String> processStatus;
 
 	//A queue as a linked list
 	public WorkHandler(){
 		workQueue = new LinkedList<ProcessCommand>();
-		processStatus=new HashMap<ProcessCommand, String>();
+		processStatus=new TreeMap<ProcessCommand, String>();
 	}
 
 	//Add a command to the queue
@@ -55,33 +56,8 @@ public class WorkHandler extends Thread{
 		}
 	}
 
-	/*public static void main(String [] args){
-		WorkHandler workHandler = new WorkHandler();
-		System.out.println(Thread.currentThread().getName());
-		workHandler.start();
-
-
-			workHandler.addWork(new GetAnnotationInformationCommand());
-			//System.out.println("added");
-			workHandler.addWork(new GetAnnotationInformationCommand());
-
-			try {
-				workHandler.sleep(20);
-				workHandler.addWork(new GetAnnotationInformationCommand());
-				workHandler.addWork(new GetAnnotationInformationCommand());
-
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			workHandler.addWork(new GetAnnotationInformationCommand());
-			workHandler.addWork(new GetAnnotationInformationCommand());
-
-
-
-
-	}*/
-
-
+	public TreeMap<ProcessCommand, String> getProcessStatus() {
+		return processStatus;
+	}
 }
 

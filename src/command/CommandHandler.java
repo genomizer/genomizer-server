@@ -46,7 +46,7 @@ public class CommandHandler {
 			if(CommandType.PROCESS_COMMAND.equals(cmdt)){
 				//add the heavy command to the queue, executed when the
 				//command is at the head of the queue, return OK to tell the client
-				heavyWorkThread.addWork(myCom);
+				heavyWorkThread.addWork((ProcessCommand)myCom);
 				return new ProcessResponse(StatusCode.OK);
 			}else{
 				return myCom.execute();
