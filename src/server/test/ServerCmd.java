@@ -8,7 +8,7 @@ import java.net.HttpURLConnection;
 
 public class ServerCmd {
 
-	private static String printResponse(HttpURLConnection con) throws IOException {
+	static String printResponse(HttpURLConnection con) throws IOException {
 		int responseCode = con.getResponseCode();
 		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
 		String inputLine;
@@ -22,7 +22,7 @@ public class ServerCmd {
 		return responseBuffer.toString();
 	}
 
-	private static void sendToServer(HttpURLConnection con, String json_output) throws IOException {
+	static void sendToServer(HttpURLConnection con, String json_output) throws IOException {
 		con.setDoOutput(true);
 		DataOutputStream wr = new DataOutputStream(con.getOutputStream());
 		wr.write(json_output.getBytes());
