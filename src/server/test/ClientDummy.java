@@ -142,7 +142,7 @@ public class ClientDummy {
 
 		//int responseCode = con.getResponseCode();
 		System.out.println("\nSending 'PUT' request to URL : " + url);
-//		System.out.println("Reponse Body: " + printResponse(con));
+		System.out.println("Reponse Body: " + printResponse(con));
 	}
 
 	private static void sendAddExperiment() throws Exception {

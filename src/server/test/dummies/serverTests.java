@@ -5,6 +5,9 @@ public class serverTests {
 
 	public static void main(String args[]) throws Exception {
 		Login.login();
+<<<<<<< HEAD
+/*
+=======
 
 //		Annotations.sendDeleteAnnotation("test4");
 		testAnnotations();
@@ -14,6 +17,7 @@ public class serverTests {
 	}
 
 	private static void testAnnotations() throws Exception{
+>>>>>>> branch 'communication' of https://github.com/genomizer/genomizer-server.git
 		Annotations.sendDeleteAnnotation("test3");
 		Annotations.sendAddAnnotation("test3");
 		Annotations.sendRenameAnnotationField("test3", "test4");
@@ -23,5 +27,13 @@ public class serverTests {
 		Annotations.sendDeleteAnnotation("test4");
 		Experiment.sendAddExperiment("testExp22");
 		Experiment.sendDeleteExperiment("testExp22");
+<<<<<<< HEAD
+		*/
+		Process.process();
+
+
+		Login.logout();
+=======
+>>>>>>> branch 'communication' of https://github.com/genomizer/genomizer-server.git
 	}
 }
