@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import database.FilePathGenerator;
+import database.Genome;
 import database.ServerDependentValues;
 
 /**
@@ -46,22 +47,23 @@ public class GenomeMethods {
      * @throws SQLException
      */
 
-    public String getGenomeRelease(String genomeVersion) throws SQLException {
+    public Genome getGenomeRelease(String genomeVersion) throws SQLException {
 
         String query = "SELECT FilePath FROM Genome_Release WHERE (Version = ?)";
 
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setString(1, genomeVersion);
         ResultSet rs = stmt.executeQuery();
-        String path = null;
 
+        Genome genome = null
+        		;
         if (rs.next()) {
-            path = rs.getString("FilePath");
+        	genome = new Genome(rs);
         }
 
         stmt.close();
 
-        return path;
+        return genome;
     }
 
     /**
