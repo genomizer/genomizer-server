@@ -4,9 +4,11 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 import database.DatabaseAccessor;
 
+import response.AddGenomeReleaseResponse;
 import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
@@ -20,12 +22,14 @@ import response.StatusCode;
 public class AddGenomeReleaseCommand extends Command {
 
 	//TODO: Check API on names on JSON stuff. Also check in factory.
+	@SerializedName("genomeversion")
 	@Expose
 	private String genomeVersion = null;
 
 	@Expose
 	private String species = null;
 
+	@SerializedName("filename")
 	@Expose
 	private String fileName = null;
 
@@ -48,16 +52,11 @@ public class AddGenomeReleaseCommand extends Command {
 		Response rsp = null;
 		DatabaseAccessor db = null;
 
-		return rsp = new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
-		/*
-
 		try {
 
 			db = initDB();
-			String savePath = db.addGenomeRelease(genomeVersion, species, fileName);
-
-			//Do something with string.
-
+			String filePath = db.addGenomeRelease(genomeVersion, species, fileName);
+			rsp = new AddGenomeReleaseResponse(StatusCode.CREATED, filePath);
 
 		} catch (SQLException e) {
 			//Takes care of the duplicate key.
@@ -90,7 +89,7 @@ public class AddGenomeReleaseCommand extends Command {
 		}
 
 		return rsp;
-	*/
+
 	}
 
 }
