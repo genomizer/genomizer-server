@@ -122,7 +122,9 @@ public class CommandHandler {
 		} else if (cmdt == CommandType.ADD_GENOME_RELEASE_COMMAND) {
 			newCommand = cmdFactory.createAddGenomeReleaseCommand(json);
 		} else if (cmdt == CommandType.DELETE_GENOME_RELEASE_COMMAND) {
-			newCommand = cmdFactory.createDeleteGenomeReleaseCommand(json);
+
+			String[] rest = restful.split("/");
+			newCommand = cmdFactory.createDeleteGenomeReleaseCommand(rest[2], rest[3]);
 		}
 		return newCommand;
 	}

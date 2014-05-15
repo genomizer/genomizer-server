@@ -275,9 +275,9 @@ public class CommandFactory {
 	 * @param json string to initiate class.
 	 * @return the actual command.
 	 */
-	public Command createDeleteGenomeReleaseCommand(String restful) {
+	public Command createDeleteGenomeReleaseCommand(String specie, String genomeVersion) {
 
-		final Command deleteGenomeReleaseCmd = new DeleteGenomeReleaseCommand(restful);
+		final Command deleteGenomeReleaseCmd = new DeleteGenomeReleaseCommand(specie, genomeVersion);
 
 		return deleteGenomeReleaseCmd;
 
