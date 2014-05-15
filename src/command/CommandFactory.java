@@ -19,11 +19,9 @@ public class CommandFactory {
 	 * Constructor that creates the gson builder.
 	 */
 	public CommandFactory() {
-
 	    builder = new GsonBuilder();
 	    builder.excludeFieldsWithoutExposeAnnotation();
 	    gson = builder.create();
-
 	}
 
 	/**
@@ -33,11 +31,8 @@ public class CommandFactory {
 	 * @return the actual command.
 	 */
 	public Command createLoginCommand(String json) {
-
 		final Command loginCmd = gson.fromJson(json, LoginCommand.class);
-
 		return loginCmd;
-
 	}
 
 	/**
@@ -47,11 +42,8 @@ public class CommandFactory {
 	 * @return a logout command.
 	 */
 	public Command createLogoutCommand(String username) {
-
 		final Command logoutCmd = new LogoutCommand(username);
-
 		return logoutCmd;
-
 	}
 
 	/**
@@ -72,11 +64,8 @@ public class CommandFactory {
 	 * @return the actual command.
 	 */
 	public Command createAddExperimentCommand(String json) {
-
 		final Command addExperimentCmd = gson.fromJson(json, AddExperimentCommand.class);
-
 		return addExperimentCmd;
-
 	}
 
 	/**
@@ -87,9 +76,7 @@ public class CommandFactory {
 	 * @return the actual command.
 	 */
 	public Command createUpdateExperimentCommand(String json, String restful) {
-
 		return new UpdateExperimentCommand();
-
 	}
 
 	/**
@@ -100,9 +87,7 @@ public class CommandFactory {
 	 * @return the actual command.
 	 */
 	public Command createRemoveExperimentCommand(String json, String restful) {
-
 		return new DeleteExperimentCommand(restful);
-
 	}
 
 	/**
@@ -113,9 +98,7 @@ public class CommandFactory {
 	 * @return the actual command.
 	 */
 	public Command createGetFileFromExperimentCommand(String json, String restful) {
-
 		return new GetFileFromExperimentCommand(restful);
-
 	}
 
 	/**
@@ -125,11 +108,8 @@ public class CommandFactory {
 	 * @return the actual command.
 	 */
 	public Command createAddFileToExperimentCommand(String json) {
-
 		final Command addFileToExperimentCmd = gson.fromJson(json, AddFileToExperimentCommand.class);
-
 		return addFileToExperimentCmd;
-
 	}
 
 	/**
@@ -140,9 +120,7 @@ public class CommandFactory {
 	 * @return the actual command.
 	 */
 	public Command createUpdateFileInExperimentCommand(String json, String restful) {
-
 		return new UpdateFileInExperimentCommand();
-
 	}
 
 	/**
@@ -153,9 +131,7 @@ public class CommandFactory {
 	 * @return the actual command.
 	 */
 	public Command createDeleteFileFromExperimentCommand(String json, String restful) {
-
 		return new DeleteFileFromExperimentCommand(restful);
-
 	}
 
 	/**
@@ -168,7 +144,6 @@ public class CommandFactory {
 	public Command createSearchForExperimentCommand(String restful) {
 		int index = restful.indexOf("=");
 		return new SearchForExperimentsCommand(restful.substring(index+1));
-
 	}
 
 	/**
@@ -179,9 +154,7 @@ public class CommandFactory {
 	 * @return the actual command.
 	 */
 	public Command createUpdateUserCommand(String json, String restful) {
-
 		return new UpdateUserCommand();
-
 	}
 
 	/**
@@ -192,9 +165,7 @@ public class CommandFactory {
 	 * @return the actual command.
 	 */
 	public Command createDeleteUserCommand(String json, String restful) {
-
 		return new DeleteUserCommand();
-
 	}
 
 	/**
@@ -206,7 +177,6 @@ public class CommandFactory {
 	 * @return the actual command.
 	 */
 	public Command createProcessCommand(String json, String username) {
-
 		ProcessCommand processCommand = gson.fromJson(json, ProcessCommand.class);
 //		processCommand.setProcessType(restful[2]);
 //		processCommand.setFileID(restful[3]);
@@ -216,7 +186,6 @@ public class CommandFactory {
 		//set fileID
 		//set processType
 		return processCommand;
-
 	}
 
 	/**
@@ -226,9 +195,7 @@ public class CommandFactory {
 	 * @return the actual command.
 	 */
 	public Command createGetAnnotationInformationCommand(String json) {
-
 		return new GetAnnotationInformationCommand();
-
 	}
 
 	/**
@@ -239,11 +206,8 @@ public class CommandFactory {
 	 * @return the actual command.
 	 */
 	public Command createAddAnnotationFieldCommand(String json, String restful) {
-
 		final Command AddAnnotationFieldCmd = gson.fromJson(json, AddAnnotationFieldCommand.class);
-
 		return AddAnnotationFieldCmd;
-
 	}
 
 	/**
@@ -254,9 +218,7 @@ public class CommandFactory {
 	 * @return the actual command.
 	 */
 	public Command createAddAnnotationValueCommand(String json, String restful) {
-
 		return new AddAnnotationValueCommand();
-
 	}
 
 	/**
@@ -267,9 +229,7 @@ public class CommandFactory {
 	 * @return the actual command.
 	 */
 	public Command createRemoveAnnotationFieldCommand(String json, String restful) {
-
-		return new DeleteAnnotationFieldCommand();
-
+		return new DeleteAnnotationFieldCommand(restful);
 	}
 
 	/**
@@ -279,9 +239,7 @@ public class CommandFactory {
 	 * @return the actual command.
 	 */
 	public Command createGetAnnotationPrivilegesCommand(String json) {
-
 		return new GetAnnotationPrivilegesCommand();
-
 	}
 
 	/**
@@ -292,9 +250,7 @@ public class CommandFactory {
 	 * @return the actual command.
 	 */
 	public Command createUpdateAnnotationPrivilegesCommand(String json, String restful) {
-
 		return new UpdateAnnotationPrivilegesCommand();
-
 	}
 
 	/**
@@ -304,10 +260,25 @@ public class CommandFactory {
 	 * @return the actual command.
 	 */
 	public Command createAddGenomeReleaseCommand(String json) {
-
 		final Command addGenomeReleaseCmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
-
 		return addGenomeReleaseCmd;
+	}
+
+	public Command creatRenameAnnotationValueCommand(String json) {
+		return new RenameAnnotationValueCommand();
+	}
+
+	/**
+	 * Used to create the command needed to delete genome releases.
+	 *
+	 * @param json string to initiate class.
+	 * @return the actual command.
+	 */
+	public Command createDeleteGenomeReleaseCommand(String json) {
+
+		final Command deleteGenomeReleaseCmd = gson.fromJson(json, DeleteGenomeReleaseCommand.class);
+
+		return deleteGenomeReleaseCmd;
 
 	}
 
