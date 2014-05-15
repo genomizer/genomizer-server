@@ -50,12 +50,12 @@ public class DatabaseAccessorThreadTests {
 	}
 
 	@Test
-	public void addOneFileFromCurrentThread() throws SQLException, IOException{
+	public void addNRemoveOneFileFromCurrentThread() throws SQLException, IOException{
 
 		DatabaseAccessor dbac = new DatabaseAccessor(username, password, host, database);
 
-		String fileName = "StressTest" + 0 + "_t:9.hej";
-		String filePath = "Stress" + 0 + "_t:9.hej";
+		String fileName = "StressTest0_t:9.hej";
+		String filePath = "Stress0_t:9.hej";
 
 
 		dbac.addGenomeRelease("hg38", "Fly", "hg38.gr");
@@ -67,58 +67,65 @@ public class DatabaseAccessorThreadTests {
 		List<Experiment> resExp = dbac.search("Claes[Uploader]");
 
 		assertEquals(1,resExp.size());
+		assertEquals(fileName,resExp.get(0).getFiles().get(0).filename);
+
+		dbac.deleteFile(resExp.get(0).getFiles().get(0).id);
+		dbac.deleteExperiment("Exp1");
+		dbac.removeGenomeRelease("hg38", "Fly");
 
 		dbac.close();
-
 	}
 
+    @Test
+    public void addNRemoveFileFromSepparateThreads() throws SQLException, IOException {
 
-
-
-
-
-    @Ignore
-    public void stressTestAddAndRemoveFiles() {
-
-    	int currentWorkedFile = 0;
-    	int nrOfThreads = 1;
-    	Runnable theAddRun = new myRunnable();
+    	ArrayList<Runnable> allRunnables = new ArrayList<Runnable>();
     	ArrayList<Thread> allThreads = new ArrayList<Thread>();
 
-    	//adding with multi-threaded adds.
+    	//specify the number of threads. 1 = works, 1< = nope.
+    	int nrOfThreads = 1;
 
-    	//for(int i=0;i<nrOfThreads;i++){
-    		allThreads.add(new Thread(theAddRun));
-    	//}
+    	for(int i=0;i<nrOfThreads;i++){
+    		allRunnables.add(new myRunnable());
+    		allThreads.add(new Thread(allRunnables.get(i)));
+    	}
+
+    	DatabaseAccessor dbac = new DatabaseAccessor(username, password,
+    			host, database);
+
+    	dbac.addGenomeRelease("hg38", "Fly", "hg38.gr");
+    	dbac.addExperiment("Exp1");
 
     	// start all the threads
-    	//for(int i=0;i<nrOfThreads;i++){
-    		allThreads.get(0).start();
-    	//}
+    	for(int i=0;i<nrOfThreads;i++){
+    		allThreads.get(i).start();
+    	}
 
-    	//removing
-    	/*try {
+    	try {
+    		//wait some time to be sure that threads are done.
+    		Thread.sleep(2000);
+    	} catch (InterruptedException e) {
+    		e.printStackTrace();
+    	}
 
-    		List<Experiment> resFiles;
-			try {
-				resFiles = dbac.search("Claes[Uploader]");
+    	List<Experiment> resExp = dbac.search("Claes[Uploader]");
 
-				for(int j=0;j<resFiles.get(0).getFiles().size();j++){
 
-					currentWorkedFile = resFiles.get(0).getFiles().get(j).id;
-					dbac.deleteFile(currentWorkedFile);
+    	//THINGS BELOW DOESN'T WORK FOR MORE SEPPARATE THREADS THAN ONE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-				}
-			} catch (IOException e) {
+    	//all files added to db by sepparate threads, threads counting from 9.
+    	for(int i=9;i<nrOfThreads+9;i++){	//hard coded thread nr, fix later :D
+    		String fileName1 = "StressTest0_t:"+ i + ".hej";
 
-				System.err.println("Failed to search the database for the " +
-								    "added files!");
-				fail();
-			}
-		} catch (SQLException e) {
-			System.err.println("Failed to Delete the file: "+currentWorkedFile);
-			fail();
-		}*/
+    		assertEquals(1,resExp.size());
+    		assertEquals(fileName1,resExp.get(0).getFiles().get(0).filename);
+    	}
+
+    	dbac.deleteFile(resExp.get(0).getFiles().get(0).id);
+
+    	dbac.deleteExperiment("Exp1");
+    	dbac.removeGenomeRelease("hg38", "Fly");
+    	dbac.close();
     }
 
     //class where threads will add files to database.
@@ -128,41 +135,32 @@ public class DatabaseAccessorThreadTests {
 
 			System.err.println("Started thread nr: " + Thread.currentThread().getId());
 
-			int nrOfFiles = 3, nr = 0;
-			String fileName = "";
-			String filePath = "";
+			int nrOfFiles = 1, nr = 0;
 
 		    try {
 		    	System.err.println("--z<<<<<<<<<<<<<<<<<<<<<<<--");
-		    	DatabaseAccessor dataAccess = new DatabaseAccessor(username,
-		    										password,host,database);
+		    	DatabaseAccessor dbac2 = new DatabaseAccessor(username, password,
+		    			host, database);
 
 		    	System.err.println("-------------------");
-				//adding files
+		    	//adding files
 		    	for(int i=0;i<nrOfFiles;i++){
-	    			nr = i+1;
-	    			System.err.println("thread: " +
-	    					Thread.currentThread().getId() +" loop lap: " + nr);
+		    		nr = i+1;
+System.err.println("thread: " + Thread.currentThread().getId() +" loop lap: " + nr);
 
+		    		dbac2.addNewFile("Exp1", 1,
+		    		"StressTest" + i + "_t:" + Thread.currentThread().getId() +
+		    		".hej" , "Stress" + i + "_t:" +
+		    		Thread.currentThread().getId(),
+		    		"-m -a -te","Smurf", "Claes", true,"hg38");
 
-	    			fileName = "StressTest" + i + "_t:" +
-	    						 Thread.currentThread().getId() +".hej";
-	    			filePath = "Stress" + i + "_t:" +
-	    						 Thread.currentThread().getId();
-
-	    			dataAccess.addNewFile("Exp1", 1, fileName , filePath,
-	    									"-m -a -te","Smurf", "Claes", true,
-	    										"hg38");
-	    			System.err.println("SUCCESS!!");
 		    	}
-
-		    	dataAccess.close();
+		    	dbac2.close();
 
 		    } catch (SQLException e) {
 		    	System.err.println("Failed to add so many files at the " +
 		    			"same time!, Expcetion thrown when " +
-		    			"adding the " + nr + " file: " +
-		    			fileName);
+		    			"adding the " + nr + "file.");
 		    	e.printStackTrace();
 		    	fail();
 		    } catch (IOException e){
