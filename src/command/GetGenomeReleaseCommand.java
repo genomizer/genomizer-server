@@ -36,17 +36,8 @@ public class GetGenomeReleaseCommand extends Command{
 		try {
 			db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
 			ArrayList<Genome> genomeReleases=db.getAllGenomReleases();
-			JsonArray arr = new JsonArray();
-			
-			
-			for(int i =0; i<genomeReleases.size();i++){
-				Gson gson = new GsonBuilder().create();
-				JsonElement elem = gson.toJsonTree(genomeReleases.get(i), Genome.class);
-				arr.add(elem);
-			}
-			
-			String jsonOutput=arr.toString();
-			return new GetGenomeReleaseRespons(StatusCode.OK, jsonOutput);
+			return new GetGenomeReleaseRespons(StatusCode.OK, genomeReleases);
+
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
