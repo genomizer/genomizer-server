@@ -28,12 +28,10 @@ public class DeleteGenomeReleaseCommand extends Command {
 	 *
 	 * @param restful string to split.
 	 */
-	public DeleteGenomeReleaseCommand(String restful) {
+	public DeleteGenomeReleaseCommand(String specie, String genomeVersion) {
 
-		String[] split = restful.split("/");
-
-		this.genomeVersion = split[split.length-1];
-		this.specie = split[split.length-2];
+		this.genomeVersion = genomeVersion;
+		this.specie = specie;
 
 	}
 
@@ -43,7 +41,7 @@ public class DeleteGenomeReleaseCommand extends Command {
 	@Override
 	public boolean validate() {
 
-		if( (genomeVersion == null) || (specie == null) ) {
+		if( (genomeVersion.equals("null")) || (specie.equals("null")) ) {
 			return false;
 		}
 

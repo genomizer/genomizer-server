@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import command.Command;
+import command.GetAnnotationInformationCommand;
 
 
 public class WorkHandler extends Thread{
@@ -27,12 +28,12 @@ public class WorkHandler extends Thread{
 	@Override
 	public void run(){
 		System.out.println(Thread.currentThread().getName());
-
+		
 		while(true){
 			if(!workQueue.isEmpty()){
 				Command work = workQueue.poll();
 				System.out.println("The processcommand is going to be executed");
-				work.execute();
+				//work.execute();
 			}
 		}
 	}
@@ -43,10 +44,23 @@ public class WorkHandler extends Thread{
 		workHandler.start();
 
 
-			workHandler.addWork(new Command("lol"));
-			workHandler.addWork(new Command("lol"));
-			workHandler.addWork(new CommandMock("lol"));
-			workHandler.addWork(new CommandMock("lol"));
+			workHandler.addWork(new GetAnnotationInformationCommand());
+			//System.out.println("added");
+			workHandler.addWork(new GetAnnotationInformationCommand());
+	
+			try {
+				workHandler.sleep(20);
+				workHandler.addWork(new GetAnnotationInformationCommand());
+				workHandler.addWork(new GetAnnotationInformationCommand());
+			
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			workHandler.addWork(new GetAnnotationInformationCommand());
+			workHandler.addWork(new GetAnnotationInformationCommand());
+		
+			
 
 
 	}*/
