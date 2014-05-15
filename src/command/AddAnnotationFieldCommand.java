@@ -92,7 +92,11 @@ public class AddAnnotationFieldCommand extends Command {
 			e.printStackTrace();
 			return new MinimalResponse(StatusCode.BAD_REQUEST);
 		} finally{
-			db.close();
+			try {
+				db.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 }
