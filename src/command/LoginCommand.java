@@ -44,9 +44,11 @@ public class LoginCommand extends Command {
 
 		if(Authenticate.userExists(username)){
 		//bugg if username is exactly the same as the UUID
+			System.err.println("userexists: " + Authenticate.getID(username));
 			rsp = new LoginResponse(200, Authenticate.getID(username));
 		}else{
 			String usrId = Authenticate.createUserID(username);
+			System.err.println("userdoesnotexists: " + usrId + "usrname: " + username);
 			Authenticate.addUser(username,usrId);
 			rsp = new LoginResponse(200, usrId);
 		}

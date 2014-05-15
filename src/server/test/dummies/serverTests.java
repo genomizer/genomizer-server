@@ -5,7 +5,7 @@ public class serverTests {
 
 	public static void main(String args[]) throws Exception {
 		Login.login();
-
+/*
 		Annotations.sendDeleteAnnotation("test3");
 		Annotations.sendAddAnnotation("test3");
 		Annotations.sendRenameAnnotationField("test3", "test4");
@@ -15,6 +15,8 @@ public class serverTests {
 		Annotations.sendDeleteAnnotation("test4");
 		Experiment.sendAddExperiment("testExp22");
 		Experiment.sendDeleteExperiment("testExp22");
+		*/
+		Process.process();
 
 
 		Login.logout();

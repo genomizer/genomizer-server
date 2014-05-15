@@ -216,7 +216,9 @@ public class Doorman {
 		Response response = null;
 
 		try {
+			System.out.println("getting username: " + uuid);
 		username = Authenticate.getUsername(uuid);
+		System.err.println("username: " + username);
 		} catch(Exception e ) {
 			e.printStackTrace();
 		}
@@ -264,6 +266,6 @@ public class Doorman {
 		}
 		System.out.println("END OF EXCHANGE\n------------------");
 		//TODO REmove print
-		ResponseLogger.printUserLog("jonas");
+		ResponseLogger.printUserLog("test");
 	}
 }

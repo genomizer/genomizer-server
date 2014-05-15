@@ -48,7 +48,7 @@ public class Login {
 	}
 
 	static String getToken() {
-		return token.toString();
+		return token.getToken();
 	}
 
 }
