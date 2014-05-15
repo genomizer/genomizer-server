@@ -142,7 +142,7 @@ public class DatabaseAccessor {
     public List<Experiment> search(String pubMedString) throws IOException,
             SQLException {
 
-
+    	isPubMedStringValid(pubMedString);
 
         if (pm2sql.hasFileConstraint(pubMedString)) {
             return searchFiles(pubMedString);
@@ -151,10 +151,43 @@ public class DatabaseAccessor {
         return searchExperiments(pubMedString);
     }
 
-    public boolean isPubMedStringValid(String pubMedString){
+	/**
+	 * Internal method!
+	 *
+	 * Checks that the pubmed string is valid.
+	 *
+	 * @param pubMedString
+	 * @return true if ok else throws Exception
+	 * @throws IOException
+	 */
+	public boolean isPubMedStringValid(String pubMedString) throws IOException {
 
-    	return false;
-    }
+		int squareBracketsStart = 0, squareBracketsStop = 0;
+		char last = 0;
+
+		for (int i = 0; i < pubMedString.length(); i++) {
+
+			if (squareBracketsStart + squareBracketsStop != 0) {
+				if (last == pubMedString.charAt(i)) {
+					throw new IOException("Missformed PubMed String");
+				}
+			}
+			if (pubMedString.charAt(i) == '[') {
+				squareBracketsStart++;
+				last = pubMedString.charAt(i);
+
+			} else if (pubMedString.charAt(i) == ']') {
+				squareBracketsStop++;
+				last = pubMedString.charAt(i);
+			}
+		}
+
+		if (squareBracketsStart == squareBracketsStop) {
+			return true;
+		} else {
+			throw new IOException("Missformed PubMed String");
+		}
+	}
 
     /**
      * Returns an ArrayList which contains the usernames of all the
