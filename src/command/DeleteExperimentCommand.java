@@ -6,6 +6,7 @@ import java.util.List;
 
 import database.DatabaseAccessor;
 import database.Experiment;
+import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
@@ -43,20 +44,20 @@ public class DeleteExperimentCommand extends Command {
 
 		try {
 			db = initDB();
-			int tup = db.deleteExperiment(this.header);
+			int tuples = db.deleteExperiment(header);
+			if(tuples == 0) {
+				return new ErrorResponse(StatusCode.BAD_REQUEST, "The experiment " + header + " does not exist and can not be deleted");
+			}
 		} catch (SQLException e) {
-			//Todo, use error message
-			return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
+			return new ErrorResponse(StatusCode.BAD_REQUEST, Integer.toString(e.getErrorCode()));
 		} catch (IOException e) {
-			//Todo, use error message
-			return new MinimalResponse(StatusCode.BAD_REQUEST);
+			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
 		} finally {
 			try {
 				db.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
-				//Todo, use error message
-				return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
+				return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, "Could not close database connection");
 			}
 		}
 		return new MinimalResponse(StatusCode.OK);

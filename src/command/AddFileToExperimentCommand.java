@@ -15,6 +15,7 @@ import database.DatabaseAccessor;
 import database.FileTuple;
 
 import response.AddFileToExperimentResponse;
+import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
@@ -72,7 +73,7 @@ public class AddFileToExperimentCommand extends Command {
 	}
 
 	/**
-	 * Adds all attributes an arraylist and
+	 * Adds all attributes to an arraylist and
 	 * pass that and the experimentID to the database.
 	 * A filepath is returned and sent to the client as
 	 * a URL.
@@ -93,21 +94,20 @@ public class AddFileToExperimentCommand extends Command {
 		}
 		try {
 			db = initDB();
-			FileTuple ft = db.addNewFile(experimentID, filetype, fileName, "", metaData, author, uploader, false, grVersion);
+			FileTuple ft = db.addNewFile(experimentID, filetype, fileName, "", metaData, author, uploader, isPrivate, grVersion);
 			return new AddFileToExperimentResponse(StatusCode.OK, ft.getUploadURL());
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
+			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
 		} catch (IOException e) {
 			e.printStackTrace();
-			return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
+			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, e.getMessage());
 		} finally{
 			try {
 				db.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
-				return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
-
+				return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, e.getMessage());
 			}
 		}
 	}

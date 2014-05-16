@@ -1,11 +1,14 @@
 package server.test.dummies;
 
+import java.io.IOException;
+
 
 public class serverTests {
 
 	public static void main(String args[]) throws Exception {
-		Login.login("Robban");
 
+
+		Login.login("Splutt");
 
 //		Annotations.sendDeleteAnnotation("testanno space2");
 //		Annotations.sendDeleteAnnotation("testanno space");
@@ -16,6 +19,7 @@ public class serverTests {
 
 		GenomeRelease.sendGetGenomeRelease();
 		GenomeRelease.sendGetGenomeReleaseSpecies();
+
 
 //		Annotations.sendRenameAnnotationValue("testanno space2", "val space", "newval space");
 //		Annotations.sendDeleteAnnotationValue("testanno space2", "newval space");

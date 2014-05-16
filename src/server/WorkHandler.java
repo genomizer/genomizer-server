@@ -44,7 +44,6 @@ public class WorkHandler extends Thread{
 		while(true){
 			try {
 				Thread.sleep(1000);
-				System.err.println("loop");
 			} catch (InterruptedException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();

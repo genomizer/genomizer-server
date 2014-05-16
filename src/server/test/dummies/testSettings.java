@@ -12,18 +12,27 @@ public class testSettings {
 	public static String host = "scratchy.cs.umu.se";
 	public static String url = "http://" + host + ":" + port;
 
-	static String printResponse(HttpURLConnection con) throws IOException {
-		int responseCode = con.getResponseCode();
-		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-		String inputLine;
-		StringBuffer responseBuffer = new StringBuffer();
+	static String printResponse(HttpURLConnection con) throws IOException{
 
-		while ((inputLine = in.readLine()) != null) {
-			responseBuffer.append(inputLine);
-		}
-		in.close();
-		System.out.println("Response Code: " + responseCode);
-		return responseBuffer.toString();
+		StringBuffer responseBuffer = null;
+		BufferedReader in = null;
+		int responseCode = 0;
+
+			if((responseCode = con.getResponseCode()) >= 400) {
+				in = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+			} else {
+				in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+			}
+
+			String inputLine;
+			responseBuffer = new StringBuffer();
+
+			while ((inputLine = in.readLine()) != null) {
+				responseBuffer.append(inputLine);
+			}
+			in.close();
+			System.out.println("Response Code: " + responseCode);
+			return responseBuffer.toString();
 	}
 
 	static void sendToServer(HttpURLConnection con, String json_output) throws IOException {

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 import database.DatabaseAccessor;
+import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
@@ -42,20 +43,19 @@ public class DeleteFileFromExperimentCommand extends Command {
 			if(db.deleteFile(Integer.parseInt(header))==1){
 				return new MinimalResponse(StatusCode.OK);
 			}else{
-				return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
+				return new ErrorResponse(StatusCode.BAD_REQUEST, "The file " + header + " does not exist and can not be deleted");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
+			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, e.getMessage());
 		} catch (IOException e) {
-			//Todo, use error message
-			return new MinimalResponse(StatusCode.BAD_REQUEST);
+			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
 		} finally {
 			try {
 				db.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
-				return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
+				return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, "Could not close database connection");
 			}
 		}
 	}
