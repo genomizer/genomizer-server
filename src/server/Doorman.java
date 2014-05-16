@@ -101,8 +101,12 @@ public class Doorman {
 						exchange(exchange, CommandType.UPDATE_USER_COMMAND);
 						break;
 					case "/process":
-						System.out.println("found process RESTful");
-						exchange(exchange, CommandType.PROCESS_COMMAND);
+
+						String processPath = exchange.getRequestURI().toString();
+
+						if (processPath.startsWith("/process/rawtoprofile")) {
+							exchange(exchange, CommandType.PROCESS_COMMAND);
+						}//Add if else for more process types.
 						break;
 					case "/annotation":
 						String fullPath = exchange.getRequestURI().toString();

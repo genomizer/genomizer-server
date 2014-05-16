@@ -106,7 +106,7 @@ public class CommandHandler {
 		} else if (cmdt == CommandType.DELETE_USER_COMMAND) {
 			newCommand = cmdFactory.createDeleteUserCommand(json, parsedRest);
 		} else if (cmdt == CommandType.PROCESS_COMMAND) {
-			newCommand = cmdFactory.createProcessCommand(json, username);
+			newCommand = cmdFactory.createProcessCommand(json, username, parsedRest);
 		} else if (cmdt == CommandType.GET_ANNOTATION_INFORMATION_COMMAND) {
 			newCommand = cmdFactory.createGetAnnotationInformationCommand(json);
 		} else if (cmdt == CommandType.ADD_ANNOTATION_FIELD_COMMAND) {
