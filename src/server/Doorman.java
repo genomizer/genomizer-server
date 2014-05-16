@@ -82,6 +82,13 @@ public class Doorman {
 					case "/annotation":
 						exchange(exchange, CommandType.GET_ANNOTATION_INFORMATION_COMMAND);
 						break;
+					case "/genomeRelease":
+						String fullPath = exchange.getRequestURI().toString();
+						if(fullPath.contains("/genomeRelease/")){
+							exchange(exchange, CommandType.GET_GENOME_RELEASE_SPECIES_COMMAND);
+						}else{
+							exchange(exchange, CommandType.GET_ALL_GENOME_RELEASE_COMMAND);
+						}
 					case "/sysadm":
 						exchange(exchange, CommandType.GET_ANNOTATION_PRIVILEGES_COMMAND);
 						break;
