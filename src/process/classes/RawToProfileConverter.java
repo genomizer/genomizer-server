@@ -1,4 +1,4 @@
-package process.classes;
+package src.process.classes;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -59,9 +59,13 @@ public class RawToProfileConverter extends Executor {
 		File[] inFiles = new File(inFolder).listFiles();
 		this.parameters = parameters;
 		this.inFolder = inFolder;
+
 		if(verifyInData(parameters, inFolder, outFilePath) == false || !CorrectInfiles(inFiles)) {
 			logString =  "Indata is not in the correct format";
 		} else {
+			initiateConversionStrings(parameters, outFilePath);
+			System.out.println("convdir=" + remoteExecution + dir + "/sorted");
+			makeConversionDirectories(remoteExecution+"resources/" + dir + "/sorted");
 			checker.calculateWhichProcessesToRun(parameters);
 			rawFile1 = inFiles[0].getName();
 			rawFile_1_Name = rawFile1.substring(0, rawFile1.length() - 6);
@@ -72,7 +76,6 @@ public class RawToProfileConverter extends Executor {
 
 			initiateConversionStrings(parameters, outFilePath);
 
-			makeConversionDirectories(remoteExecution + dir + "/sorted");
 			printTrace(parameters, inFolder, outFilePath);
 			if (fileDir.exists()) {
 				if(checker.shouldRunBowTie()) {
@@ -109,6 +112,8 @@ public class RawToProfileConverter extends Executor {
 					+ "reads_gff/allnucs_sgr/smoothed/Step10/";
 				}
 				if(checker.shouldRunRatioCalc()) {
+					System.out.println("RATODID = " + sortedDir
+							+ "reads_gff/allnucs_sgr/smoothed/Step10/");
 					doRatioCalculation(sortedDir
 							+ "reads_gff/allnucs_sgr/smoothed/Step10/",
 							parameters);
@@ -123,10 +128,13 @@ public class RawToProfileConverter extends Executor {
 				 * outFile+fileOneNareturn logString;me + ".wig"; // Step 7
 				 * outString = outString + " " + executeScript(parse(sgr2wig));
 				 */
-				// cleanUp(cleanUpInitiator(remoteExecution+dir));
-				/*
-				moveEndFiles(filesToBeMoved,
-						outFilePath);*/
+
+				System.out.println("logString = " +logString);
+				System.out.println("filesToBeMoved = " + "resources/"+ filesToBeMoved);
+				moveEndFiles("resources/" + filesToBeMoved,
+						outFilePath);
+
+				cleanUp(cleanUpInitiator(remoteExecution + "resources/"  + dir));
 
 			} else {
 				logString = logString +" "+"Failed to create directory " + fileDir.toString();
@@ -162,11 +170,11 @@ public class RawToProfileConverter extends Executor {
 	private void doRatioCalculation(String dirPath, String[] parameters)
 			throws InterruptedException, IOException {
 		String ratioCalc = "perl ratio_calculator_v2.pl " + dirPath + " "
-				+ parameters[4];
+				+ parameters[6];
 		String smooth = "perl smooth_v4.pl " + dirPath + "ratios/" + " "
-				+ parameters[5];
-		executeScript(parse(ratioCalc));
-		executeScript(parse(smooth));
+				+ parameters[7];
+		logString = logString + executeScript(parse(ratioCalc));
+		logString = logString + executeScript(parse(smooth));
 
 	}
 
@@ -186,6 +194,29 @@ public class RawToProfileConverter extends Executor {
 		System.out.println("BOWTIE = "
 				+ parse(parameters[0] + " " + inFolder + "/" + rawFile1 + " "
 						+ dir + rawFile_1_Name + ".sam"));
+	}
+
+	/**
+	 * Initiates strings that is used to run programs and scripts and also
+	 * strings that specifies directories
+	 *
+	 * @param parameters
+	 * @param outFile
+	 */
+	private void initiateConversionStrings(String[] parameters, String outFile) {
+		remoteExecution = "";
+		dir = "results_" + Thread.currentThread().getId() + "/";
+		sortedDir = remoteExecution + dir + "sorted/";
+		samToGff = "perl sam_to_readsgff_v1.pl " + sortedDir;
+		gffToAllnusgr = "perl readsgff_to_allnucsgr_v1.pl " + sortedDir
+				+ "reads_gff/";
+		smooth = "perl smooth_v4.pl " + sortedDir + "reads_gff/allnucs_sgr/ "
+				+ parameters[2]; // Step 5
+		step10 = "perl AllSeqRegSGRtoPositionSGR_v1.pl " + parameters[3] + " "
+				+ sortedDir + "reads_gff/allnucs_sgr/smoothed/"; // Step 6
+		// sgr2wig = "perl sgr2wig.pl " + sortedDir
+		// + "/reads_gff/allnucs_sgr/smoothed/Step10/*.sgr " + outFile
+		// + "test.wig";
 	}
 
 	/**
@@ -288,26 +319,5 @@ public class RawToProfileConverter extends Executor {
 		return dir.exists();
 	}
 
-	/**
-	 * Initiates strings that is used to run programs and scripts and also
-	 * strings that specifies directories
-	 *
-	 * @param parameters
-	 * @param outFile
-	 */
-	private void initiateConversionStrings(String[] parameters, String outFile) {
-		remoteExecution = "";
-		dir = "results_" + Thread.currentThread().getId() + "/";
-		sortedDir = remoteExecution + dir + "sorted/";
-		samToGff = "perl sam_to_readsgff_v1.pl " + sortedDir;
-		gffToAllnusgr = "perl readsgff_to_allnucsgr_v1.pl " + sortedDir
-				+ "reads_gff/";
-		smooth = "perl smooth_v4.pl " + sortedDir + "reads_gff/allnucs_sgr/ "
-				+ parameters[2]; // Step 5
-		step10 = "perl AllSeqRegSGRtoPositionSGR_v1.pl " + parameters[3] + " "
-				+ sortedDir + "reads_gff/allnucs_sgr/smoothed/"; // Step 6
-		// sgr2wig = "perl sgr2wig.pl " + sortedDir
-		// + "/reads_gff/allnucs_sgr/smoothed/Step10/*.sgr " + outFile
-		// + "test.wig";
-	}
+
 }

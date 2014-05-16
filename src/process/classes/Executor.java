@@ -1,4 +1,4 @@
-package process.classes;
+package src.process.classes;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -186,13 +186,14 @@ private final String FILEPATH = "resources/";
 	 * @param dest directory where files will be moved.
 	 */
 	protected void moveEndFiles(String dirToFiles, String dest) {
-		// sortedDir+"reads_gff/allnucs_sgr/smoothed/Step10/"
-		File[] filesInDir = new File("/" + dirToFiles).getAbsoluteFile()
+		File[] filesInDir = new File(dirToFiles).getAbsoluteFile()
 				.listFiles();
-		for (int i = 0; i < filesInDir.length; i++) {
-			if (!filesInDir[i].isDirectory()) {
-				if (filesInDir[i].renameTo(new File(dest
-						+ filesInDir[i].getName())));
+		if(filesInDir != null) {
+			for (int i = 0; i < filesInDir.length; i++) {
+				if (!filesInDir[i].isDirectory()) {
+					if (filesInDir[i].renameTo(new File(dest
+							+ filesInDir[i].getName())));
+				}
 			}
 		}
 	}

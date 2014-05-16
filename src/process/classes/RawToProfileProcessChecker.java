@@ -1,4 +1,4 @@
-package process.classes;
+package src.process.classes;
 
 public class RawToProfileProcessChecker {
 	private boolean shouldRunBowTie;
@@ -41,6 +41,7 @@ public class RawToProfileProcessChecker {
 		if((parameters[6] != "") && (parameters[7] != "") && (shouldRunStep10)) {
 			shouldRunRatioCalculation = true;
 		}
+
 	}
 
 	public boolean shouldRunBowTie(){
