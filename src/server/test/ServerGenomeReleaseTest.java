@@ -64,14 +64,13 @@ public class ServerGenomeReleaseTest extends ServerAbstractTestClass {
 		con.setRequestProperty("Content-Type", "application/json");
 		con.setRequestProperty("Authorization", token.getToken());
 
-		String json_output = "{\"fileName\":\"com_TestFile\", \"specie\":\"human\",\"genomeVersion\": \"hg38\"}";
+		String json_output = "{\"fileName\":\"com_TestFile\",\"specie\":\"human\",\"genomeVersion\":\"hg38\"}";
 
 		sendResponseString(con, json_output);
-
 		int responseCode = con.getResponseCode();
-		
+
 		System.out.println("response: " + responseCode);
-		
+
 		assertEquals(responseCode, StatusCode.CREATED);
 
 	}

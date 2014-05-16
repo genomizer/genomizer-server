@@ -19,7 +19,7 @@ import com.google.gson.JsonObject;
 public abstract class ServerAbstractTestClass {
 
 	//Token used to identify users.
-	protected Token token = null;
+	public static Token token = null;
 
 	//Used together with add annotation field/freetext to change to unique names.
 	protected String AnnotationFieldFreetext = "com_AnnoFTTEST9";
@@ -31,7 +31,7 @@ public abstract class ServerAbstractTestClass {
 
 	/**
 	 * Method used to set the token.
-	 *
+	 *arg0
 	 * @param response from the server.
 	 */
 	public void setToken(String response) {
