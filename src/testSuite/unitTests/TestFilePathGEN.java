@@ -99,7 +99,7 @@ public class TestFilePathGEN {
                 + "chain_files" + File.separator + species + File.separator
                 + fromVersion + " - " + toVersion + File.separator;
 
-        String chainFilePath = fpg.generateChainFolderPath(species,
+        String chainFilePath = fpg.getChainFolderPath(species,
                 fromVersion, toVersion);
 
         assertEquals(expectedFolderPath, chainFilePath);
@@ -124,7 +124,7 @@ public class TestFilePathGEN {
         String fromVersion = "v1";
         String toVersion = "v2";
 
-        fpg.generateChainFolderPath(species, fromVersion, toVersion);
+        fpg.generateChainFolder(species, fromVersion, toVersion);
 
         assertNotNull(searchForSubFolder(testFolder, "chain_files"));
     }
@@ -135,7 +135,7 @@ public class TestFilePathGEN {
         String fromVersion = "v1";
         String toVersion = "v2";
 
-        fpg.generateChainFolderPath(species, fromVersion, toVersion);
+        fpg.generateChainFolder(species, fromVersion, toVersion);
 
         File chainFileFolder = searchForSubFolder(testFolder, "chain_files");
         assertNotNull(searchForSubFolder(chainFileFolder, species));
@@ -148,7 +148,7 @@ public class TestFilePathGEN {
         String fromVersion = "v1";
         String toVersion = "v2";
 
-        fpg.generateChainFolderPath(species, fromVersion, toVersion);
+        fpg.generateChainFolder(species, fromVersion, toVersion);
 
         File chainFileFolder = searchForSubFolder(testFolder, "chain_files");
         File speciesFolder = searchForSubFolder(chainFileFolder, species);
