@@ -2,6 +2,7 @@ package testSuite.unitTests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -30,6 +31,7 @@ public class ExperimentTests {
 
     private static String testExpId = "testExpId1";
     private static String testExpId2 = "testExpId2";
+    private static String testExpIdWrongCase = "TESTEXPid1";
 
     private static String testLabelFT = "testLabelFT1";
     private static String testValueFT = "testValueFT1";
@@ -273,6 +275,18 @@ public class ExperimentTests {
 		dbac.deleteExperiment(testExpId);
 		assertFalse(dir.exists());
 	}
+    
+    @Test
+    public void shouldGetExperimentDespiteWrongCase() throws Exception {
+        Experiment e = dbac.getExperiment(testExpIdWrongCase);
+        assertNotNull(e);
+        assertEquals(testExpId, e.getID());
+    }
+    
+    @Test
+    public void shouldReturnNullIfExperimentDoesNotExist() throws Exception {
+        assertNull(dbac.getExperiment("pang"));
+    }
 
     private void addMockFile(String folderPath, String filename1) throws IOException {
         File file1 = new File(folderPath + filename1);

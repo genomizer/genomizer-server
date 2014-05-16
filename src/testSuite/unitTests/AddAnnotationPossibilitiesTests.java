@@ -129,7 +129,7 @@ public class AddAnnotationPossibilitiesTests {
 
     }
     
-    @Test(expected=SQLException.class)
+    @Test(expected=IOException.class)
     public void shouldThrowAnExceptionWhenAddingADropDownAnnotationThatAlreadyExists() 
     		throws SQLException, IOException {
         ArrayList<String> otherChoices = new ArrayList<String>();
@@ -147,7 +147,7 @@ public class AddAnnotationPossibilitiesTests {
     	assertEquals(3, choices.size());
 	}
     
-    @Test(expected=SQLException.class)
+    @Test(expected=IOException.class)
     public void shouldThrowAnExceptionWhenAddingADropDownChoiceThatAlreadyExist() throws Exception {
     	dbac.addDropDownAnnotation(testLabelDD, testChoices, 0, false);
     	dbac.addDropDownAnnotationValue(testLabelDD, testChoice);
