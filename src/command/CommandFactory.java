@@ -174,15 +174,17 @@ public class CommandFactory {
 	 * @param json string to initiate class.
 	 * @param restful tag to put into class.
 	 * @param username
+	 * @param parsedRest
 	 * @return the actual command.
 	 */
-	public Command createProcessCommand(String json, String username) {
+	public Command createProcessCommand(String json, String username, String parsedRest) {
 		ProcessCommand processCommand = gson.fromJson(json, ProcessCommand.class);
 //		processCommand.setProcessType(restful[2]);
 //		processCommand.setFileID(restful[3]);
 		processCommand.setUsername(username);
 		processCommand.setTimestamp(System.currentTimeMillis());
-		System.err.println("Username: " + username);
+		processCommand.setProcessType(parsedRest);
+		System.err.println("Username: " + username + "");
 		//Create from json
 		//set userID
 		//set fileID

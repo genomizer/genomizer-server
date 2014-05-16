@@ -16,7 +16,6 @@ public class Process {
 		String filename = "filename1234";
 		String fileid = "1";
 		String expid = "Exp1";
-		String processtype = "rawtoprofile";
 		String parameters = "\"param1\"," +
 				"\"param2\"," +
 				"\"param3\"," +
@@ -26,11 +25,11 @@ public class Process {
 				"\"param7\"," +
 				"\"param8\"";
 		String metadata = "astringofmetadata";
-		String genomeRelease = "hg38";
+		String genomeVersion = "hg38";
 		String author = "yuri";
 
 
-		URL obj = new URL(testSettings.url + "/process");
+		URL obj = new URL(testSettings.url + "/process/rawtoprofile");
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
 		con.setRequestMethod("PUT");
@@ -40,10 +39,9 @@ public class Process {
 				"\"filename\": \"" + filename + "\"," +
 				"\"fileId\": \"" + fileid + "\"," +
 				"\"expid\": \"" + expid + "\"," +
-				"\"processtype\": \"" + processtype + "\"," +
 				"\"parameters\": [" + parameters + "]," +
 				"\"metadata\": \"" + metadata + "\"," +
-				"\"genomeRelease\": \"" + genomeRelease + "\"," +
+				"\"genomeVersion\": \"" + genomeVersion + "\"," +
 				"\"author\": \"" + author + "\"}";
 
 
