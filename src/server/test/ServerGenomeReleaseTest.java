@@ -18,15 +18,8 @@ import com.google.gson.JsonObject;
  */
 public class ServerGenomeReleaseTest extends ServerAbstractTestClass {
 
-
-	/**
-	 * Method used to test that a genome release can be added
-	 * and returns the proper response code.
-	 * @throws Exception
-	 */
-	/*
 	@Test
-	public void testAddGenomeRelease() throws Exception {
+	public void testAddDeleteAddDelete() throws Exception {
 
 		//Create JSON login object.
 		JsonObject jj = new JsonObject();
@@ -34,52 +27,50 @@ public class ServerGenomeReleaseTest extends ServerAbstractTestClass {
 		jj.addProperty("password", "losenord");
 		sendLogin(jj);
 
-		//Get connection and then add headers.
-		HttpURLConnection con = connect("POST", serverURL + "/genomeRelease");
-		con.setRequestProperty("Content-Type", "application/json");
-		con.setRequestProperty("Authorization", token.getToken());
+		boolean firstAdd = addGenomeRelease();
+		boolean firstRemove = deleteGenomeRelease();
 
-		String json_output = "{\"fileName\":\"com_TestFile\", \"specie\":\"human\",\"genomeVersion\": \"hg38\"}";
+		boolean secondAdd = addGenomeRelease();
+		boolean secondDelete = deleteGenomeRelease();
 
-		sendResponseString(con, json_output);
+		sendLogout();
 
-		String response = getResponseString(con);
-
-		System.out.println("Response filename is: " + response);
-
+		assertTrue(firstAdd);
+		assertTrue(firstRemove);
+		assertTrue(secondAdd);
+		assertTrue(secondDelete);
 
 	}
-	*/
-	@Test
-	public void testAddGenomeReleaseResponseCode() throws Exception {
 
-		//Create JSON login object.
-		JsonObject jj = new JsonObject();
-		jj.addProperty("username", "jonas");
-		jj.addProperty("password", "losenord");
-		sendLogin(jj);
-
+	private boolean deleteGenomeRelease() throws Exception  {
 		//Get connection and then add headers.
-		HttpURLConnection con = connect("POST", serverURL + "/genomeRelease");
-		con.setRequestProperty("Content-Type", "application/json");
+		HttpURLConnection con = connect("DELETE", serverURL + "/genomeRelease/human/hg385");
 		con.setRequestProperty("Authorization", token.getToken());
-
-		String json_output = "{\"fileName\":\"com_TestFile\", \"specie\":\"human\",\"genomeVersion\": \"hg38\"}";
-
-		sendResponseString(con, json_output);
 
 		int responseCode = con.getResponseCode();
-		
-		System.out.println("response: " + responseCode);
-		
-		assertEquals(responseCode, StatusCode.CREATED);
 
+		if(responseCode == StatusCode.OK) {
+			return true;
+		}
+		return false;
 	}
 
+	private boolean addGenomeRelease() throws Exception {
 
-	@Test
-	public void test() {
-		fail("Not yet implemented");
+		//Get connection and then add headers.
+		HttpURLConnection con = connect("POST", serverURL + "/genomeRelease");
+		con.setRequestProperty("Content-Type", "application/json");
+		con.setRequestProperty("Authorization", token.getToken());
+
+		String json_output = "{\"fileName\":\"com_TestFile385\",\"specie\":\"human\",\"genomeVersion\":\"hg385\"}";
+
+		sendResponseString(con, json_output);
+		int responseCode = con.getResponseCode();
+
+		if(responseCode == StatusCode.CREATED) {
+			return true;
+		}
+		return false;
 	}
 
 }

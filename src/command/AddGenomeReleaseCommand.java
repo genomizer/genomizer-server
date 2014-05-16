@@ -57,7 +57,7 @@ public class AddGenomeReleaseCommand extends Command {
 		DatabaseAccessor db = null;
 
 		try {
-
+			System.out.println("GENOMERELEASECOMMAND CREATED! NOW EXECUTED");
 			db = initDB();
 			String filePath = db.addGenomeRelease(genomeVersion, specie, fileName);
 			rsp = new AddGenomeReleaseResponse(StatusCode.CREATED, filePath);
@@ -67,7 +67,7 @@ public class AddGenomeReleaseCommand extends Command {
 			if(e.getErrorCode() == 0) {
 
 				rsp = new MinimalResponse(StatusCode.BAD_REQUEST);
-
+				System.out.println("DUPLICATE");
 			} else {
 
 				rsp = new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
@@ -75,7 +75,7 @@ public class AddGenomeReleaseCommand extends Command {
 			}
 
 		} catch (IOException e) {
-
+			System.out.println("IOEXCEPTION.");
 			rsp = new MinimalResponse(StatusCode.BAD_REQUEST);
 
 		} finally {
@@ -85,7 +85,7 @@ public class AddGenomeReleaseCommand extends Command {
 				db.close();
 
 			} catch (SQLException e) {
-
+				System.out.println("ERROR CLOSEING.");
 				rsp = new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
 
 			}
