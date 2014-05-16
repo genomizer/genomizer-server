@@ -53,7 +53,7 @@ public class CommandFactory {
 	 * @param restful tag to put into class.
 	 * @return the actual command.
 	 */
-	public Command createRetrieveExperimentCommand(String json, String restful) {
+	public Command createGetExperimentCommand(String restful) {
 		return new GetExperimentCommand(restful);
 	}
 
@@ -86,7 +86,7 @@ public class CommandFactory {
 	 * @param restful tag to put into class.
 	 * @return the actual command.
 	 */
-	public Command createRemoveExperimentCommand(String json, String restful) {
+	public Command createDeleteExperimentCommand(String json, String restful) {
 		return new DeleteExperimentCommand(restful);
 	}
 
@@ -174,15 +174,17 @@ public class CommandFactory {
 	 * @param json string to initiate class.
 	 * @param restful tag to put into class.
 	 * @param username
+	 * @param parsedRest
 	 * @return the actual command.
 	 */
-	public Command createProcessCommand(String json, String username) {
+	public Command createProcessCommand(String json, String username, String parsedRest) {
 		ProcessCommand processCommand = gson.fromJson(json, ProcessCommand.class);
 //		processCommand.setProcessType(restful[2]);
 //		processCommand.setFileID(restful[3]);
 		processCommand.setUsername(username);
 		processCommand.setTimestamp(System.currentTimeMillis());
-		System.err.println("Username: " + username);
+		processCommand.setProcessType(parsedRest);
+		System.err.println("Username: " + username + "");
 		//Create from json
 		//set userID
 		//set fileID
@@ -288,6 +290,7 @@ public class CommandFactory {
 
 	public Command createDeleteAnnotationValueCommand(String json,
 			String value, String name) {
+
 		return new DeleteAnnotationValueCommand(value, name);
 	}
 

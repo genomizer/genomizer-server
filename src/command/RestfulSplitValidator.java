@@ -52,13 +52,13 @@ public class RestfulSplitValidator {
 			expectedLength = 1;
 		} else if (cmdt == CommandType.LOGOUT_COMMAND) {
 			expectedLength = 1;
-		} else if (cmdt == CommandType.RETRIEVE_EXPERIMENT_COMMAND) {
+		} else if (cmdt == CommandType.GET_EXPERIMENT_COMMAND) {
 			expectedLength = 2;
 		} else if (cmdt == CommandType.ADD_EXPERIMENT_COMMAND) {
 			expectedLength = 1;
 		} else if (cmdt == CommandType.UPDATE_EXPERIMENT_COMMAND) {
 			expectedLength = 2;
-		} else if (cmdt == CommandType.REMOVE_EXPERIMENT_COMMAND) {
+		} else if (cmdt == CommandType.DELETE_EXPERIMENT_COMMAND) {
 			expectedLength = 2;
 		} else if (cmdt == CommandType.GET_FILE_FROM_EXPERIMENT_COMMAND) {
 			expectedLength = 2;

@@ -46,7 +46,7 @@ public class CommandFactoryTest {
 		CommandFactory cmdf = new CommandFactory();
 		String json = "JSON_STRING";
 		String restful = "ABCDEF";
-		assertNotNull(cmdf.createRetrieveExperimentCommand(json, restful));
+		assertNotNull(cmdf.createGetExperimentCommand(json, restful));
 
 	}
 

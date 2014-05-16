@@ -40,6 +40,7 @@ public class WorkHandler extends Thread{
 	public void run(){
 		System.out.println(Thread.currentThread().getName());
 
+
 		while(true){
 			if(!workQueue.isEmpty()){
 				ProcessCommand work = workQueue.poll();

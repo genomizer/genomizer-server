@@ -71,7 +71,7 @@ public class Doorman {
 				case "GET":
 					switch(exchange.getHttpContext().getPath()) {
 					case "/experiment":
-						exchange(exchange, CommandType.RETRIEVE_EXPERIMENT_COMMAND);
+						exchange(exchange, CommandType.GET_EXPERIMENT_COMMAND);
 						break;
 					case "/file":
 						exchange(exchange, CommandType.GET_FILE_FROM_EXPERIMENT_COMMAND);
@@ -101,8 +101,12 @@ public class Doorman {
 						exchange(exchange, CommandType.UPDATE_USER_COMMAND);
 						break;
 					case "/process":
-						System.out.println("found process RESTful");
-						exchange(exchange, CommandType.PROCESS_COMMAND);
+
+						String processPath = exchange.getRequestURI().toString();
+
+						if (processPath.startsWith("/process/rawtoprofile")) {
+							exchange(exchange, CommandType.PROCESS_COMMAND);
+						}//Add if else for more process types.
 						break;
 					case "/annotation":
 						String fullPath = exchange.getRequestURI().toString();
@@ -155,7 +159,7 @@ public class Doorman {
 						exchange(exchange, CommandType.LOGOUT_COMMAND);
 						break;
 					case "/experiment":
-						exchange(exchange, CommandType.REMOVE_EXPERIMENT_COMMAND);
+						exchange(exchange, CommandType.DELETE_EXPERIMENT_COMMAND);
 						break;
 					case "/file":
 						exchange(exchange, CommandType.DELETE_FILE_FROM_EXPERIMENT_COMMAND);
@@ -229,7 +233,9 @@ public class Doorman {
 		System.out.println("BEFORE PROCESS COMMAND...");
 
 		try {
-			response = commandHandler.processNewCommand(body, exchange.getRequestURI().toString(), username, type);
+			String header = URLDecoder.decode(exchange.getRequestURI().toString(), "UTF-8");
+			response = commandHandler.processNewCommand(body, header, username, type);
+
 		} catch(Exception e ) {
 			e.printStackTrace();
 		}
