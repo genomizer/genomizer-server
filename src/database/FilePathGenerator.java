@@ -12,7 +12,8 @@ public class FilePathGenerator {
     private static String regionFolderName = "region";
     private static String unknownFolderName = "unknown";
 
-    private static String genomeReleaseFolderName = "genome_releases";
+    private static String genomeReleasesFolderName = "genome_releases";
+    private static String chainFilesFolderName = "chain_files";
 
     public FilePathGenerator(String rootDir) throws IOException {
         String regex = "([a-zA-Z]:)?(/[a-zA-Z0-9._\" \"-]+)+/?";
@@ -25,9 +26,71 @@ public class FilePathGenerator {
     }
 
     /**
+     * Used when first adding a new experiment. Creates a folder for the
+     * experiment and subfolders for files
+     * 
+     * @param expID
+     *            - the ID for the experiment.
+     */
+    public void generateExperimentFolders(String expID) {
+
+        File file = new File(getRawFolderPath(expID));
+        file.mkdirs();
+
+        file = new File(getProfileFolderPath(expID));
+        file.mkdirs();
+
+        file = new File(getRegionFolderPath(expID));
+        file.mkdirs();
+
+        file = new File(getUnknownFolderPath(expID));
+        file.mkdirs();
+    }
+    
+    public String getRawFolderPath(String expID) {
+
+        StringBuilder rawFolderPathBuilder = new StringBuilder(rootDir);
+        rawFolderPathBuilder.append(expID);
+        rawFolderPathBuilder.append(File.separator);
+        rawFolderPathBuilder.append(rawFolderName);
+        rawFolderPathBuilder.append(File.separator);
+        return rawFolderPathBuilder.toString();
+    }
+
+    public String getProfileFolderPath(String expID) {
+
+        StringBuilder profileFolderPathBuilder = new StringBuilder(rootDir);
+        profileFolderPathBuilder.append(expID);
+        profileFolderPathBuilder.append(File.separator);
+        profileFolderPathBuilder.append(profileFolderName);
+        profileFolderPathBuilder.append(File.separator);
+        return profileFolderPathBuilder.toString();
+    }
+
+    public String getRegionFolderPath(String expID) {
+
+        StringBuilder regionFolderPathBuilder = new StringBuilder(rootDir);
+        regionFolderPathBuilder.append(expID);
+        regionFolderPathBuilder.append(File.separator);
+        regionFolderPathBuilder.append(regionFolderName);
+        regionFolderPathBuilder.append(File.separator);
+        return regionFolderPathBuilder.toString();
+    }
+    
+    private String getUnknownFolderPath(String expID) {
+
+        StringBuilder unknownFolderPathBuilder = new StringBuilder(rootDir);
+        unknownFolderPathBuilder.append(expID);
+        unknownFolderPathBuilder.append(File.separator);
+        unknownFolderPathBuilder.append(unknownFolderName);
+        unknownFolderPathBuilder.append(File.separator);
+        return unknownFolderPathBuilder.toString();
+    }
+
+    /**
      * Used when uploading and downloading files. Returns a Dir string where the
      * file is or where is should be saved.
-     *
+     * 
      * @param expID
      *            - the ID for the experiment.
      * @param fileType
@@ -36,97 +99,64 @@ public class FilePathGenerator {
      *            - the name of the file.
      * @return the string for the file.
      */
-    @Deprecated
-    public String generateFilePath(String expID, String fileType,
-            String fileName) {
-
-        fileType = fileType.toLowerCase();
-
-        StringBuilder filePath = new StringBuilder();
-
-        filePath.append(rootDir);
-        filePath.append(expID);
-        filePath.append(File.separator);
-        filePath.append(fileType);
-        filePath.append(File.separator);
-        filePath.append(fileName);
-        return filePath.toString();
-    }
 
     public String generateFilePath(String expID, int fileType, String fileName) {
 
-        StringBuilder filePath = new StringBuilder();
+        String folderPath;
 
         switch (fileType) {
         case FileTuple.RAW:
-            filePath.append(rootDir);
-            filePath.append(expID);
-            filePath.append(File.separator);
-            filePath.append(rawFolderName);
-            filePath.append(File.separator);
+            folderPath = getRawFolderPath(expID);
             break;
         case FileTuple.PROFILE:
-            filePath.append(generateProfileFolder(expID));
+            folderPath = getProfileFolderPath(expID);
+            folderPath = generateNewProfileSubFolder(folderPath);
             break;
         case FileTuple.REGION:
-            filePath.append(rootDir);
-            filePath.append(expID);
-            filePath.append(File.separator);
-            filePath.append(regionFolderName);
-            filePath.append(File.separator);
+            folderPath = getRegionFolderPath(expID);
             break;
         default:
-            filePath.append(rootDir);
-            filePath.append(expID);
-            filePath.append(File.separator);
-            filePath.append(unknownFolderName);
-            filePath.append(File.separator);
+            folderPath = getUnknownFolderPath(expID);
             break;
         }
 
-        filePath.append(fileName);
-        return filePath.toString();
+        return folderPath + fileName;
     }
 
-    /**
-     * Used when first adding a new experiment. Creates a folder for the
-     * experiment and subfolders for files
-     *
-     * @param expID
-     *            - the ID for the experiment.
-     */
-    public void generateExperimentFolders(String expID) {
+    public String generateNewProfileSubFolder(String folderPath) {
+        
+        File profileFolder = new File(folderPath);
 
-        File file = new File(rootDir + expID + File.separator + rawFolderName
-                + File.separator);
-        file.mkdirs();
+        Integer folderNumber = profileFolder.list().length;
+        
+        File newProfileFolder = new File(folderPath + folderNumber.toString() + File.separator);
 
-        file = new File(rootDir + expID + File.separator + profileFolderName
-                + File.separator);
-        file.mkdirs();
+        while (newProfileFolder.exists()) {
+            folderNumber++;
+            newProfileFolder = new File(folderPath + folderNumber.toString() + File.separator);
+        }
 
-        file = new File(rootDir + expID + File.separator + regionFolderName
-                + File.separator);
-        file.mkdirs();
+        newProfileFolder.mkdirs();
 
-        file = new File(rootDir + expID + File.separator + unknownFolderName
-                + File.separator);
-        file.mkdirs();
+        return newProfileFolder.getPath() + File.separator;
     }
 
     /**
      * Creates the folder for chainfiles and returns the path to it.
-     *
-     * @param String species
-     * @param String fromVersion
-     * @param String toVersion
+     * 
+     * @param String
+     *            species
+     * @param String
+     *            fromVersion
+     * @param String
+     *            toVersion
      * @return String folderPath
      */
     public String generateChainFolder(String species, String fromVersion,
             String toVersion) {
 
-        String chainFolderPath = getChainFolderPath(species,
-                fromVersion, toVersion);
+        String chainFolderPath = getChainFolderPath(species, fromVersion,
+                toVersion);
 
         File chainFolder = new File(chainFolderPath);
 
@@ -138,9 +168,8 @@ public class FilePathGenerator {
     }
 
     /**
-     * Gets the path to the folder where the chain files should
-     * be stored.
-     *
+     * Gets the path to the folder where the chain files should be stored.
+     * 
      * @param species
      * @param fromVersion
      * @param toVersion
@@ -152,7 +181,7 @@ public class FilePathGenerator {
         StringBuilder folderPath = new StringBuilder();
 
         folderPath.append(rootDir);
-        folderPath.append("chain_files");
+        folderPath.append(chainFilesFolderName);
         folderPath.append(File.separator);
         folderPath.append(species);
         folderPath.append(File.separator);
@@ -167,7 +196,7 @@ public class FilePathGenerator {
     /**
      * Creates and returns the path to the folder where the genome release files
      * should be stored.
-     *
+     * 
      * @param String
      *            version, the genome version of the file,
      * @param String
@@ -192,43 +221,11 @@ public class FilePathGenerator {
         StringBuilder folderPath = new StringBuilder();
 
         folderPath.append(rootDir);
-        folderPath.append(genomeReleaseFolderName);
+        folderPath.append(genomeReleasesFolderName);
         folderPath.append(File.separator);
         folderPath.append(species);
         folderPath.append(File.separator);
         folderPath.append(version);
-        folderPath.append(File.separator);
-        return folderPath.toString();
-    }
-
-    public String generateProfileFolder(String expId) {
-
-        StringBuilder folderPath = new StringBuilder();
-
-        folderPath.append(rootDir);
-        folderPath.append(expId);
-        folderPath.append(File.separator);
-        folderPath.append(profileFolderName);
-        folderPath.append(File.separator);
-
-        File profileFolder = new File(folderPath.toString());
-        if (!profileFolder.exists()) {
-            profileFolder.mkdirs();
-        }
-
-        Integer folderNumber = profileFolder.list().length;
-        File profileSubFolder = new File(folderPath.toString()
-                + folderNumber.toString() + File.separator);
-
-        while (profileSubFolder.exists()) {
-            folderNumber++;
-            profileSubFolder = new File(folderPath.toString()
-                    + folderNumber.toString() + File.separator);
-        }
-
-        profileSubFolder.mkdirs();
-
-        folderPath.append(folderNumber.toString());
         folderPath.append(File.separator);
         return folderPath.toString();
     }
@@ -245,37 +242,6 @@ public class FilePathGenerator {
     }
 
     public String getRootDirectory() {
-    	return rootDir;
+        return rootDir;
     }
-
-    /**
-     * Tests if the requested filename(not whole path) is valid on the server
-     * file system or a file is already using that name. Returns true if the
-     * name can be used, false if it cannot.
-     *
-     * @param String
-     *            fileName
-     * @return boolean
-     */
-    // public boolean isNameOk(String fileName) {
-    //
-    // File file = new File(homeDir + fileName);
-    // boolean isOk = false;
-    //
-    // if (!file.exists()) {
-    // try {
-    // isOk = file.createNewFile();
-    // } catch (IOException e) {
-    // isOk = false;
-    // }
-    //
-    // if (isOk) {
-    // file.delete();
-    // }
-    //
-    // }
-    //
-    // return isOk;
-    // }
-
 }
