@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import com.google.gson.annotations.Expose;
 
 import database.DatabaseAccessor;
+import database.MaxSize;
 
 import response.AddGenomeReleaseResponse;
 import response.ErrorResponse;
@@ -37,10 +38,20 @@ public class AddGenomeReleaseCommand extends Command {
 	@Override
 	public boolean validate() {
 
-		if( (fileName == null) || (specie == null) || (genomeVersion == null) ) {
-
+		if(fileName == null || specie == null || genomeVersion == null) {
 			return false;
+		}
 
+		if(fileName.length() > MaxSize.GENOME_FILEPATH || fileName.length() < 1) {
+			return false;
+		}
+
+		if(specie.length() > MaxSize.GENOME_SPECIES || specie.length() < 1) {
+			return false;
+		}
+
+		if(genomeVersion.length() > MaxSize.GENOME_VERSION || genomeVersion.length() < 1) {
+			return false;
 		}
 
 		return true;
