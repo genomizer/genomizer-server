@@ -124,7 +124,7 @@ public class FileMethods {
     public FileTuple getFileTuple(String filePath)
             throws SQLException {
 
-        String query = "SELECT * FROM File WHERE Path = ?";
+        String query = "SELECT * FROM File WHERE Path ~~* ?";
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setString(1, filePath);
         ResultSet rs = stmt.executeQuery();
@@ -249,7 +249,7 @@ public class FileMethods {
         }
 
         String statementStr = "DELETE FROM File "
-                + "WHERE (Path = ?)";
+                + "WHERE (Path ~~* ?)";
         PreparedStatement deleteFile = conn
                 .prepareStatement(statementStr);
         deleteFile.setString(1, path);
@@ -329,7 +329,7 @@ public class FileMethods {
             throws SQLException {
 
         PreparedStatement stmt = null;
-        String query = "SELECT * FROM File Where (Path = ?)";
+        String query = "SELECT * FROM File Where (Path ~~* ?)";
 
         stmt = conn.prepareStatement(query);
         stmt.setString(1, filePath);

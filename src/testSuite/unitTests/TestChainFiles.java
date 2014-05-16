@@ -77,7 +77,7 @@ public class TestChainFiles {
 
         String filePath = dbac.getChainFile(fromVersion, toVersion);
 
-        assertEquals("/var/www/data/Chain_File/Human/hg19 - hg38/hg19ToHg38.over.chain", filePath);
+        assertEquals("/var/www/data/chain_files/Human/hg19 - hg38/hg19ToHg38.over.chain", filePath); // From add_test_tuples.sql
     }
 
     @Test
