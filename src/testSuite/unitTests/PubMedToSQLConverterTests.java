@@ -31,19 +31,19 @@ public class PubMedToSQLConverterTests {
     public String multipleExpConstraintsPmStrNOT = "Human[Species] NOT Unknown[Sex]";
 
     private String sqlFragmentForExpSearch = "SELECT ExpID FROM Experiment NATURAL JOIN Annotated_With "
-            + "WHERE Label = ? AND Value = ?";
+            + "WHERE Label ~~* ? AND Value ~~* ?";
 
     private String sqlFragmentForExpSearchNegated = "SELECT ExpID FROM Experiment AS E "
             + "WHERE NOT EXISTS (SELECT * FROM Annotated_With AS A "
-            + "WHERE E.ExpID = A.ExpID AND Label = ? AND Value = ?)";
+            + "WHERE E.ExpID ~~* A.ExpID AND Label ~~* ? AND Value ~~* ?)";
 
     private String sqlFragmentForExpAttrInFileSearch = "SELECT * FROM File AS F "
             + "WHERE EXISTS (SELECT * FROM Annotated_With AS A "
-            + "WHERE F.ExpID = A.ExpID AND " + "A.Label = ? AND A.Value = ?)";
+            + "WHERE F.ExpID ~~* A.ExpID AND " + "A.Label ~~* ? AND A.Value ~~* ?)";
 
     private String sqlFragmentForExpAttrInFileSearchNegated = "SELECT * FROM File AS F "
             + "WHERE NOT EXISTS (SELECT * FROM Annotated_With AS A "
-            + "WHERE F.ExpID = A.ExpID AND " + "A.Label = ? AND A.Value = ?)";
+            + "WHERE F.ExpID ~~* A.ExpID AND " + "A.Label ~~* ? AND A.Value ~~* ?)";
 
     private String sqlFragmentForFileAttr = "SELECT * FROM File " + "WHERE ";
 
@@ -119,7 +119,7 @@ public class PubMedToSQLConverterTests {
 
         String query = pm2sql.convertFileSearch(fileConstraintPmStr);
 
-        String expected = sqlFragmentForFileAttr + "Author = ?"
+        String expected = sqlFragmentForFileAttr + "Author ~~* ?"
                 + orderBySqlFragment;
 
         assertEquals(expected, query);
@@ -136,7 +136,7 @@ public class PubMedToSQLConverterTests {
 
         // (Ruaridh Watt[Author] OR (Human[Species] AND Arm[Tissue]))
 
-        String expected = "(" + sqlFragmentForFileAttr + "Author = ?"
+        String expected = "(" + sqlFragmentForFileAttr + "Author ~~* ?"
                 + "\nUNION\n" + "(" + sqlFragmentForExpAttrInFileSearch
                 + "\nINTERSECT\n" + sqlFragmentForExpAttrInFileSearch + "))"
                 + orderBySqlFragment;

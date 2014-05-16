@@ -72,7 +72,7 @@ public class GenomeReleaseTableTests {
 
     @Test
     public void shouldReturnSpecificGenomeVersionFilePath() throws Exception {
-        Genome genome = dbac.getGenomeRelease("hg38");
+        Genome genome = dbac.getGenomeRelease("Hg38");
         assertEquals("/var/www/data/GenomeRelease/Human/hg38.fasta", genome.path);
     }
 

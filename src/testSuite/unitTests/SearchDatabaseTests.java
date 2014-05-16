@@ -2,6 +2,7 @@ package testSuite.unitTests;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -32,7 +33,7 @@ public class SearchDatabaseTests {
     @Test
     public void shouldBeAbleToSearchForExperimentUsingPubMedString()
             throws Exception {
-        List<Experiment> experiments = dbac.search("Exp1[ExpID]");
+        List<Experiment> experiments = dbac.search("EXp1[ExpID]");
         assertEquals(1, experiments.size());
         assertEquals(2, experiments.get(0).getFiles().size());
     }
@@ -80,7 +81,7 @@ public class SearchDatabaseTests {
     @Test
     public void shouldBeAbleToSearchUsingPubMedString5() throws Exception {
         List<Experiment> experiments = dbac
-                .search("Human[Species] AND Umeå Uni[Author]");
+                .search("Human[SpeCies] AND Umeå Uni[Author]");
         assertEquals(1, experiments.size());
         assertEquals(1, experiments.get(0).getFiles().size());
         assertEquals("/var/www/data/Exp1/raw/file1.fastq", experiments.get(0).getFiles()
@@ -90,7 +91,7 @@ public class SearchDatabaseTests {
     @Test
     public void shouldBeAbleToSearchUsingPubMedString6() throws Exception {
         List<Experiment> experiments = dbac
-                .search("Human[Species] NOT Child[Development Stage]");
+                .search("Human[SpEcies] NOT Child[Development Stage]");
         assertEquals(1, experiments.size());
         assertEquals("Adult", experiments.get(0).getAnnotations().get("Development Stage"));
     }
@@ -98,22 +99,42 @@ public class SearchDatabaseTests {
     @Test
     public void shouldBeAbleToSearchStartingWithNot() throws Exception {
         List<Experiment> experiments = dbac
-                .search("NOT Child[Development Stage]");
+                .search("NOT ChiLd[Development Stage]");
         assertEquals(2, experiments.size());
     }
 
     @Test
     public void shouldBeAbleToSearchUsingNOT() throws Exception {
         List<Experiment> experiments = dbac
-                .search("Child[Development Stage] NOT Human[Species]");
+                .search("CHild[Development Stage] NOT Human[Species]");
         assertEquals(1, experiments.size());
         assertEquals("Rat", experiments.get(0).getAnnotations().get("Species"));
     }
 
+//    @Test
+//    public void shouldBeAbleToSearch1() throws Exception {
+//        List<Experiment> experiments = dbac
+//                .search("Exp1[ExpID] AND Raw[FileType]");
+//        for (Experiment e: experiments) {
+//            System.out.println(e.toString());
+//        }
+//    }
+    
     @Test
-    public void shouldBeAbleToSearch1() throws Exception {
+    public void shouldBeAbleToSearchCaseInsensitive() 
+    		throws IOException, SQLException {
         List<Experiment> experiments = dbac
-                .search("Exp1[ExpID] AND Raw[FileType]");
+                .search("EXp1[ExpID] AND RaW[FileType]");
+        for (Experiment e: experiments) {
+            System.out.println(e.toString());
+        }
+    }
+    
+    @Test
+    public void shouldBeAbleToSearchMoreCaseInsensitive() 
+    		throws IOException, SQLException {
+        List<Experiment> experiments = dbac
+                .search("ExP1[ExpID] AND RAw[FileType] AND /var/www/data/Exp1/raw/file1_input.fastq[FilePath]");
         for (Experiment e: experiments) {
             System.out.println(e.toString());
         }

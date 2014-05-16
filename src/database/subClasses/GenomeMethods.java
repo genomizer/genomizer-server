@@ -49,7 +49,7 @@ public class GenomeMethods {
 
     public Genome getGenomeRelease(String genomeVersion) throws SQLException {
 
-        String query = "SELECT * FROM Genome_Release WHERE (Version = ?)";
+        String query = "SELECT * FROM Genome_Release WHERE (Version ~~* ?)";
 
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setString(1, genomeVersion);
@@ -115,7 +115,7 @@ public class GenomeMethods {
     public boolean removeGenomeRelease(String genomeVersion, String specie) {
 
         String query = "DELETE FROM Genome_Release " +
-        		"WHERE (Version = ? AND Species = ?)";
+        		"WHERE (Version ~~* ? AND Species ~~* ?)";
 
         PreparedStatement stmt;
 
@@ -147,7 +147,7 @@ public class GenomeMethods {
    public ArrayList<Genome> getAllGenomReleasesForSpecies(String species) throws SQLException {
 
         ArrayList<Genome> genomeList = new ArrayList<Genome>();
-        String query = "SELECT * FROM Genome_Release WHERE Species = ?";
+        String query = "SELECT * FROM Genome_Release WHERE Species ~~* ?";
 
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setString(1, species);
@@ -202,8 +202,8 @@ public class GenomeMethods {
     public String getChainFile(String fromVersion, String toVersion)
             throws SQLException {
 
-        String query = "SELECT FilePath FROM Chain_File WHERE (FromVersion = ?)"
-                + " AND (ToVersion = ?)";
+        String query = "SELECT FilePath FROM Chain_File WHERE (FromVersion ~~* ?)"
+                + " AND (ToVersion ~~* ?)";
         PreparedStatement stmt = conn.prepareStatement(query);
 
         stmt.setString(1, fromVersion);
@@ -238,7 +238,7 @@ public class GenomeMethods {
 
         String species = "";
         String speciesQuery = "SELECT Species From Genome_Release"
-                + " WHERE (version = ?)";
+                + " WHERE (version ~~* ?)";
 
         PreparedStatement speciesStat = conn.prepareStatement(speciesQuery);
         speciesStat.setString(1, fromVersion);
@@ -293,8 +293,8 @@ public class GenomeMethods {
         	recursiveDelete(chainFile);
         }
 
-		String query = "DELETE FROM Chain_File WHERE (FromVersion = ?)"
-			+ " AND (ToVersion = ?)";
+		String query = "DELETE FROM Chain_File WHERE (FromVersion ~~* ?)"
+			+ " AND (ToVersion ~~* ?)";
 
 		PreparedStatement deleteStatement = conn.prepareStatement(query);
 		deleteStatement.setString(1, fromVersion);
