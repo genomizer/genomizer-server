@@ -19,13 +19,13 @@ import database.subClasses.*;
 
 /**
  * PREREQUISITES: The construction parameters must reference a postgresql
- * database with the genomizer database tables preloaded. This is done by
+ * database with the Genomizer database tables preloaded. This is done by
  * running the genomizer_database_tables.sql.
  *
  * DatabaseAccessor manipulates the underlying postgresql database using SQL
  * commands.
  *
- * Developed by the Datastorage group for the Genomizer Project, Software
+ * Developed by the Data storage group for the Genomizer Project, Software
  * Engineering course at Umeå University 2014.
  *
  * @author dv12rwt, Ruaridh Watt
@@ -58,17 +58,17 @@ public class DatabaseAccessor {
 	/**
 	 * Creates a databaseAccessor that opens a connection to a database.
 	 *
-	 * @param username
+	 * @param String username
 	 *            - The username to log in to the database as. Should be
 	 *            "c5dv151_vt14" as of now.
-	 * @param password
+	 * @param String password
 	 *            - The password to log in to the database. Should be "shielohh"
 	 *            as of now.
-	 * @param host
+	 * @param String host
 	 *            - The name of the database management system. Will problebly
 	 *            always be "postgres" unless the DMS is switched with something
 	 *            else.
-	 * @param database
+	 * @param String database
 	 * @throws SQLException
 	 * @throws IOException
 	 */
@@ -82,9 +82,7 @@ public class DatabaseAccessor {
 		props.setProperty("password", password);
 
 		conn = DriverManager.getConnection(url, props);
-
 		fpg = new FilePathGenerator(DATAFOLDER);
-
 		pm2sql = new PubMedToSQLConverter();
 
 		userMethods = new UserMethods(conn);
@@ -101,12 +99,10 @@ public class DatabaseAccessor {
 	/**
 	 * Closes the connection to the database, releasing all resources it uses.
 	 * @throws SQLException
-	 *
 	 */
 	public void close() throws SQLException {
 
 		conn.close();
-
 	}
 
 	/**
@@ -116,6 +112,7 @@ public class DatabaseAccessor {
 	 * @return boolean, true if it is connected, otherwise false.
 	 */
 	public boolean isConnected() {
+
 		return conn != null;
 	}
 
@@ -126,7 +123,6 @@ public class DatabaseAccessor {
 	 * <Value>[<Label>] <AND|OR> <Value>[<Label>] ...
 	 *
 	 * Round brackets should be used to disambiguate the logical expression.
-	 *
 	 * Example: "(Human[Species] OR Fly[Species]) AND Joe Bloggs[Uploader]"
 	 *
 	 * @param pubMedString
@@ -229,7 +225,6 @@ public class DatabaseAccessor {
 	public void deleteUser(String username) throws SQLException {
 
 		userMethods.deleteUser(username);
-
 	}
 
 	/**
@@ -632,7 +627,6 @@ public class DatabaseAccessor {
 
 	/**
 	 * Changes the annotation label.
-	 *
 	 * OBS! This changes the label for all experiments.
 	 *
 	 * @param oldLabel
@@ -653,7 +647,6 @@ public class DatabaseAccessor {
 
 	/**
 	 * Changes the value of an annotation corresponding to it's label.
-	 *
 	 * Parameters: label of annotation, the old value and the new value to
 	 * change to.
 	 *
@@ -923,11 +916,8 @@ public class DatabaseAccessor {
 	}
 
 	/**
-	 * <<<<<<< HEAD Adds all the files in the specified folder to the database's
-	 * File table. They will all be treated as profile files. ======= Adds all
-	 * the files in the specified folder to the database's File table. They will
-	 * all be treated as profile files. >>>>>>>
-	 * 788f07a10737996a72576dbd675418e8313f65f3
+	 * Adds all the files in the specified folder to the database's File table.
+	 * They will all be treated as profile files.
 	 *
 	 * @param expId
 	 *            The ID name of the experiment
@@ -977,7 +967,8 @@ public class DatabaseAccessor {
 		String query = "INSERT INTO File "
 				+ "(Path, FileType, FileName, Date, MetaData, InputFilePath, "
 				+ "Author, Uploader, IsPrivate, ExpID, GRVersion) "
-				+ "VALUES (?, 'Profile', ?, CURRENT_TIMESTAMP, ?, ?, 'Genomizer', ?, ?, ?, ?)";
+				+ "VALUES (?, 'Profile', ?, CURRENT_TIMESTAMP, ?, ?, "
+				+ "'Genomizer', ?, ?, ?, ?)";
 
 		PreparedStatement addFile = conn.prepareStatement(query);
 
@@ -995,6 +986,7 @@ public class DatabaseAccessor {
 	}
 
 	private String getFileName(String path) {
+
 		int lastFileSeperatorIndex = path.lastIndexOf(File.separator);
 		return path.substring(lastFileSeperatorIndex + 1);
 	}
@@ -1015,7 +1007,7 @@ public class DatabaseAccessor {
 	}
 
 	/**
-	 * Add one genomerelease to the database.
+	 * Add one genome release to the database.
 	 *
 	 * @param String
 	 *            genomeVersion.
@@ -1037,25 +1029,26 @@ public class DatabaseAccessor {
 	 *
 	 * @param version
 	 *            , the genome version.
-	 * @param specie
+	 * @param species
 	 *            .
-	 * @return boolean, true if succeded, false if failed.
+	 * @return boolean, true if succeeded, false if failed.
 	 * @throws SQLException
 	 */
-	public boolean removeGenomeRelease(String genomeVersion, String specie) throws SQLException {
+	public boolean removeGenomeRelease(String genomeVersion, String species)
+			throws SQLException {
 
-		return genMethods.removeGenomeRelease(genomeVersion, specie);
+		return genMethods.removeGenomeRelease(genomeVersion, species);
 	}
 
 	/**
-	 * method for getting all the genome releases for a species currently stored
+	 * Method for getting all the genome releases for a species currently stored
 	 * in the database.
 	 *
 	 * @param species
 	 *            String, the name of the specie you want to get genome
-	 *            realeases for.
+	 *            releases for.
 	 * @return genomeVersions List<String>, list of all the genome releases for
-	 *         a specific specie.
+	 *         a specific species.
 	 * @throws SQLException
 	 */
 	public ArrayList<Genome> getAllGenomReleasesForSpecies(String species)
@@ -1065,7 +1058,7 @@ public class DatabaseAccessor {
 	}
 
 	/**
-	 * method for getting all the genome releases currently stored in the
+	 * mMethod for getting all the genome releases currently stored in the
 	 * database.
 	 *
 	 * @return genomeList ArrayList<Genome>, list of all the genome releases.
@@ -1077,8 +1070,8 @@ public class DatabaseAccessor {
 	}
 
 	/**
-	 * get a specific chainfile depending on from and to what genome release you
-	 * want to convert between.
+	 * get a specific chain file depending on from and to what genome release
+	 * you want to convert between.
 	 *
 	 * @param fromVersion
 	 *            String, the name of the old genome release version
@@ -1133,7 +1126,6 @@ public class DatabaseAccessor {
 	}
 
 	/**
-	 *
 	 * @param pubMedString
 	 * @return
 	 * @throws IOException
@@ -1162,7 +1154,6 @@ public class DatabaseAccessor {
 	}
 
 	/**
-	 *
 	 * @param pubMedString
 	 * @return
 	 * @throws IOException
@@ -1208,8 +1199,8 @@ public class DatabaseAccessor {
 	}
 
 	/**
-	 *
-	 * @return
+	 * Get's the filePathGenerator object.
+	 * @return FilePathGenerator
 	 */
 	public FilePathGenerator getFilePathGenerator() {
 		return fpg;
