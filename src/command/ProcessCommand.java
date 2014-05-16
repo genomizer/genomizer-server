@@ -24,15 +24,15 @@ public class ProcessCommand extends Command {
 
 	private long timestamp;
 
-	//Following fields corresponds to the JSON body of a process command.
-	@Expose
 	private String processtype;
+
+	//Following fields corresponds to the JSON body of a process command.
 	@Expose
 	private String metadata;
 	@Expose
 	private String[] parameters;
 	@Expose
-	private String genomeRelease;
+	private String genomeVersion;
 	@Expose
 	private String expid;
 	@Expose
@@ -73,7 +73,7 @@ public class ProcessCommand extends Command {
 					"metadata is null");
 			return false;
 		}
-		if(genomeRelease == null){
+		if(genomeVersion == null){
 			System.err.println("ProcessCommand - Validate\n" +
 					"genomerelease is null");
 			return false;
@@ -120,7 +120,7 @@ public class ProcessCommand extends Command {
 			System.err.println("Metadata [" + metadata + "] has the wrong length of annotation");
 			return false;
 		}
-		if(genomeRelease.length() > MaxSize.GENOME_VERSION || doesNotHaveCorrectLength(genomeRelease, CanBeNull.GENOME_VERSION)){
+		if(genomeVersion.length() > MaxSize.GENOME_VERSION || doesNotHaveCorrectLength(genomeVersion, CanBeNull.GENOME_VERSION)){
 			System.err.println("GenomeRelease has the wrong length of annotation");
 			return false;
 		}
@@ -148,11 +148,31 @@ public class ProcessCommand extends Command {
 		}
 		return false;
 	}
+	/**
+	 * Execute to simulate flow.
+	 */
+	@Override
+	public Response execute(){
+		System.err.println("Executing process command");
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		System.err.println("Logging created uname: " + username);
+		ResponseLogger.log(username, new ProcessResponse(StatusCode.CREATED, "raw to profile processing completed"));
+		ResponseLogger.printUserLog(username);
+		return new ProcessResponse(StatusCode.CREATED);
+	}
+
 
 	/**
 	 * Method that runs when the processCommand is executed.
 	 *
 	 */
+	/*
 	@Override
 	public Response execute() {
 		System.out.println("-------------ProcessCommand - Execute----------------");
@@ -275,7 +295,7 @@ public class ProcessCommand extends Command {
 		return new ProcessResponse(StatusCode.CREATED);
 
 
-	}
+	}*/
 
 	/**
 	 * Set the username of the uploader wich will be added to the database annotation.
@@ -299,7 +319,7 @@ public class ProcessCommand extends Command {
 				"username: " + username + "\n" +
 				"expid: " + expid + "\n" +
 //				"fileid: " + fileId + "\n" +
-				"genomeRelease: " + genomeRelease + "\n" +
+				"genomeRelease: " + genomeVersion + "\n" +
 				"author:" + author + "\n";
 	}
 
@@ -308,5 +328,10 @@ public class ProcessCommand extends Command {
 	}
 	public long getTimestamp(){
 		return this.timestamp;
+	}
+
+	public void setProcessType(String processtype) {
+		this.processtype = processtype;
+
 	}
 }

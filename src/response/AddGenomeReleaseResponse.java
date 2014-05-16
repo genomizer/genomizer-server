@@ -11,17 +11,17 @@ import com.google.gson.annotations.Expose;
 public class AddGenomeReleaseResponse extends Response {
 
 	@Expose
-	private String filePath = null;
+	private String URLupload = null;
 
 	/**
 	 * Constructor used to initiate the command.
 	 *
 	 * @param code to send as a responsecode.
 	 */
-	public AddGenomeReleaseResponse(int code, String filePath) {
+	public AddGenomeReleaseResponse(int code, String URLupload) {
 
 		this.code = code;
-		this.filePath = filePath;
+		this.URLupload = URLupload;
 
 	}
 

@@ -17,7 +17,7 @@ public class Experiment {
 		con.setRequestProperty("Content-Type", "application/json");
 		con.setRequestProperty("Authorization", Login.getToken());
 
-		System.out.println("\nSending 'GET' request to URL : " + testSettings.url);
+		System.out.println("\nSending 'GET' request to URL : " + testSettings.url + "/experiment" + "/" + expName);
 		System.out.println("Response Body: " + testSettings.printResponse(con));
 	}
 
@@ -44,6 +44,7 @@ public class Experiment {
 		ja.add("annotations", annotations);
 		testSettings.sendToServer(con, ja.toString());
 
+		System.out.println("\nSending 'POST' request to URL : " + testSettings.url + "/experiment");
 		System.out.println("Response Body: " + testSettings.printResponse(con));
 	}
 
