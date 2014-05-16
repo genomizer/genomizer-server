@@ -53,7 +53,7 @@ public class CommandFactory {
 	 * @param restful tag to put into class.
 	 * @return the actual command.
 	 */
-	public Command createRetrieveExperimentCommand(String json, String restful) {
+	public Command createGetExperimentCommand(String restful) {
 		return new GetExperimentCommand(restful);
 	}
 
@@ -86,7 +86,7 @@ public class CommandFactory {
 	 * @param restful tag to put into class.
 	 * @return the actual command.
 	 */
-	public Command createRemoveExperimentCommand(String json, String restful) {
+	public Command createDeleteExperimentCommand(String json, String restful) {
 		return new DeleteExperimentCommand(restful);
 	}
 
@@ -290,6 +290,7 @@ public class CommandFactory {
 
 	public Command createDeleteAnnotationValueCommand(String json,
 			String value, String name) {
+
 		return new DeleteAnnotationValueCommand(value, name);
 	}
 

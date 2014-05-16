@@ -28,7 +28,7 @@ public class Login {
 		testSettings.sendToServer(con, jj.toString());
 		String response = testSettings.printResponse(con);
 
-		System.out.println("\nSending 'GET' request to URL : " + testSettings.url);
+		System.out.println("\nSending 'GET' request to URL : " + testSettings.url + "/login");
 		System.out.println("Response Body: " + response);
 
 		Gson gson = new Gson();
@@ -44,7 +44,7 @@ public class Login {
 		con.setRequestProperty("Content-Type", "application/json");
 		con.setRequestProperty("Authorization", token.getToken());
 		System.out.println(token.getToken());
-		System.out.println("\nSending 'DELETE' request to URL : " + testSettings.url);
+		System.out.println("\nSending 'DELETE' request to URL : " + testSettings.url + "/logout");
 		System.out.println("Response Body: " + testSettings.printResponse(con));
 
 	}

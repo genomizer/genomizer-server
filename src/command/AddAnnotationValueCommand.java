@@ -5,6 +5,7 @@ import java.sql.SQLException;
 
 import com.google.gson.annotations.Expose;
 import database.DatabaseAccessor;
+import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
@@ -51,7 +52,7 @@ public class AddAnnotationValueCommand extends Command {
 			return new MinimalResponse(StatusCode.NO_CONTENT);
 		} catch (IOException e) {
 			e.printStackTrace();
-			return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
+			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, "Database unavailable");
 		} finally{
 			try {
 				db.close();

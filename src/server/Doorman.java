@@ -71,7 +71,7 @@ public class Doorman {
 				case "GET":
 					switch(exchange.getHttpContext().getPath()) {
 					case "/experiment":
-						exchange(exchange, CommandType.RETRIEVE_EXPERIMENT_COMMAND);
+						exchange(exchange, CommandType.GET_EXPERIMENT_COMMAND);
 						break;
 					case "/file":
 						exchange(exchange, CommandType.GET_FILE_FROM_EXPERIMENT_COMMAND);
@@ -159,7 +159,7 @@ public class Doorman {
 						exchange(exchange, CommandType.LOGOUT_COMMAND);
 						break;
 					case "/experiment":
-						exchange(exchange, CommandType.REMOVE_EXPERIMENT_COMMAND);
+						exchange(exchange, CommandType.DELETE_EXPERIMENT_COMMAND);
 						break;
 					case "/file":
 						exchange(exchange, CommandType.DELETE_FILE_FROM_EXPERIMENT_COMMAND);
@@ -233,7 +233,9 @@ public class Doorman {
 		System.out.println("BEFORE PROCESS COMMAND...");
 
 		try {
-			response = commandHandler.processNewCommand(body, exchange.getRequestURI().toString(), username, type);
+			String header = URLDecoder.decode(exchange.getRequestURI().toString(), "UTF-8");
+			response = commandHandler.processNewCommand(body, header, username, type);
+
 		} catch(Exception e ) {
 			e.printStackTrace();
 		}

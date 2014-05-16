@@ -16,12 +16,14 @@ import database.FileTuple;
 
 public class GetExperimentResponse extends Response {
 
+	JsonObject obj;
+
 	public GetExperimentResponse(ArrayList<String> info, Map<String, String> annotations, List<FileTuple> list, int code) {
 		this.code = code;
 
-		JsonObject obj = new JsonObject();
-		obj.addProperty("name", "testExp");
-		obj.addProperty("createdBy", "hugga");
+		obj = new JsonObject();
+		obj.addProperty("name", info.get(0));
+		obj.addProperty("createdBy", "tester");
 		JsonArray fileArray = new JsonArray();
 		for (FileTuple ft: list) {
 			GsonBuilder gsonBuilder = new GsonBuilder();
@@ -42,5 +44,10 @@ public class GetExperimentResponse extends Response {
 		}
 
 		obj.add("annotations", annotationArray);
+	}
+
+	@Override
+	public String getBody() {
+		return obj.toString();
 	}
 }
