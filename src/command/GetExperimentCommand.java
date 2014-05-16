@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
@@ -33,7 +34,7 @@ public class GetExperimentCommand extends Command {
 	 * Empty constructor.
 	 */
 	public GetExperimentCommand(String rest) {
-		this.header = rest;
+		header = rest;
 	}
 
 	@Override
@@ -49,18 +50,15 @@ public class GetExperimentCommand extends Command {
 
 		try {
 			db = initDB();
-			exp = db.getExperiment(this.header);
-		} catch (SQLException e) {
-			return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
-		} catch (IOException e) {
-			//Todo, use error message
-			return new MinimalResponse(StatusCode.BAD_REQUEST);
+			exp = db.getExperiment(header);
+		} catch (SQLException | IOException e) {
+			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
 		} finally{
 			try {
 				db.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
-				return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
+				return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, "Could not close database connection");
 			}
 		}
 		return new GetExperimentResponse(getInfo(exp), exp.getAnnotations(), exp.getFiles(), StatusCode.OK);

@@ -40,19 +40,15 @@ public class LoginCommand extends Command {
 	@Override
 	public Response execute() {
 
-		Response rsp;
-
-		if(Authenticate.userExists(username)){
-		//bugg if username is exactly the same as the UUID
+		if(Authenticate.userExists(username)) {
 			System.err.println("userexists: " + Authenticate.getID(username));
-			rsp = new LoginResponse(200, Authenticate.getID(username));
-		}else{
+			return new LoginResponse(200, Authenticate.getID(username));
+		} else {
 			String usrId = Authenticate.createUserID(username);
 			System.err.println("userdoesnotexists: " + usrId + "usrname: " + username);
 			Authenticate.addUser(username,usrId);
-			rsp = new LoginResponse(200, usrId);
+			return new LoginResponse(200, usrId);
 		}
-		return rsp;
 	}
 
 }

@@ -1,11 +1,10 @@
 package command;
 
 import authentication.Authenticate;
-import response.LogoutResponse;
+import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
-import server.ResponseLogger;
 
 /**
  * Class used to represent a logout command.
@@ -37,13 +36,11 @@ public class LogoutCommand extends Command {
 	@Override
 	public Response execute() {
 		String id = Authenticate.getID(username);
-		if(Authenticate.idExists(id)){
+		if(Authenticate.idExists(id)) {
 			Authenticate.deleteUser(id);
-			System.out.println("USER ID DELETED: " + id);
-			return new LogoutResponse(StatusCode.OK);
+			return new MinimalResponse(StatusCode.OK);
 		} else {
-			System.out.println("USER ID NOT FOUND: " + id);
-			return 	new MinimalResponse(StatusCode.FILE_NOT_FOUND);
+			return 	new ErrorResponse(StatusCode.FILE_NOT_FOUND, "User not found");
 		}
 	}
 

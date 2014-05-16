@@ -2,7 +2,10 @@ package command;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+
 import database.DatabaseAccessor;
+import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
@@ -42,23 +45,26 @@ public class DeleteAnnotationFieldCommand extends Command {
 
 		try {
 			db = initDB();
-			db.deleteAnnotation(header);
-			db.close();
-			return new MinimalResponse(200);
+			ArrayList<String> annotations = db.getAllAnnotationLabels();
+
+			if(annotations.contains(header)) {
+				db.deleteAnnotation(header);
+				return new MinimalResponse(200);
+			} else {
+				return new ErrorResponse(StatusCode.BAD_REQUEST, "The annotation " + header + " does not exist and can not be deleted");
+			}
 		} catch (SQLException e) {
-			System.out.println("ERROR CODE: " + e.getErrorCode());
 			e.printStackTrace();
-			System.out.println("ERROR MESS: "+ e.getMessage());
-			return new MinimalResponse(StatusCode.BAD_REQUEST);
+			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
 		} catch (IOException e) {
 			e.printStackTrace();
-			return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
+			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, e.getMessage());
 		} finally {
 			try {
 				db.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
-				return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
+				return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, "Could not close database connection");
 			}
 		}
 	}

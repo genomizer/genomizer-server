@@ -10,7 +10,7 @@ public abstract class Response {
 	public String getBody() {
 
 		GsonBuilder gsonBuilder = new GsonBuilder();
-		Gson gson = gsonBuilder.excludeFieldsWithoutExposeAnnotation().create();
+		Gson gson = gsonBuilder.excludeFieldsWithoutExposeAnnotation().disableHtmlEscaping().create();
 		String jsonString = gson.toJson(this);
 		return jsonString + "\n";
 	}
