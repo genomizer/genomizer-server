@@ -5,7 +5,6 @@ import response.LogoutResponse;
 import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
-import server.ResponseLogger;
 
 /**
  * Class used to represent a logout command.
