@@ -576,9 +576,9 @@ public class DatabaseAccessor {
 	 *
 	 * @param String label
 	 *            the name of the annotation.
-	 * @param choices
-	 *            List<String> - the possible values for the annotation.
-	 * @return tuplesInserted int - the number of tuples inserted into the
+	 * @param List<String>
+	 *            the possible values for the annotation.
+	 * @return int, the number of tuples inserted into the
 	 *         database.
 	 * @throws SQLException
 	 *             if the query does not succeed
@@ -596,12 +596,13 @@ public class DatabaseAccessor {
 	/**
 	 * Method to add a value to a existing DropDown annotation.
 	 *
-	 * @param label
-	 *            String , the label of the chosen DropDown annotation.
-	 * @param value
-	 *            String , the value that will be added to the DropDown
+	 * @param String label
+	 *            the label of the chosen DropDown annotation.
+	 * @param String value
+	 *            the value that will be added to the DropDown
 	 *            annotation.
-	 * @return Integer, how many rows that were added to the database.
+	 * @return int
+	 *            how many rows that were added to the database.
 	 * @throws SQLException
 	 *             , if the value already exist or another SQL error.
 	 * @throws IOException
@@ -617,11 +618,12 @@ public class DatabaseAccessor {
 	/**
 	 * Method to remove a given annotation of a dropdown- annotation.
 	 *
-	 * @param label
-	 *            String - the label of the chosen annotation
-	 * @param value
-	 *            String - the value of the chosen annotation.
-	 * @return Integer, how many values that were deleted.
+	 * @param String label
+	 *            the label of the chosen annotation
+	 * @param String value
+	 *            the value of the chosen annotation.
+	 * @return Integer
+	 *            how many values that were deleted.
 	 * @throws SQLException
 	 * @throws IOException
 	 *             , throws an IOException if the chosen value to be removed is
@@ -637,12 +639,10 @@ public class DatabaseAccessor {
 	 * Changes the annotation label.
 	 * OBS! This changes the label for all experiments.
 	 *
-	 * @param oldLabel
-	 *            String
-	 * @param newLabel
-	 *            string
-	 *
-	 * @return res int - the number of tuples updated
+	 * @param String oldLabel
+	 * @param String newLabel
+	 * @return int
+	 * 			the number of tuples updated
 	 * @throws SQLException
 	 *             If the update fails
 	 * @throws IOException
@@ -663,12 +663,12 @@ public class DatabaseAccessor {
 	 * Throws an SQLException if the new value already exists in the choices
 	 * table (changing all males to female, and female is already in the table)
 	 *
-	 * @param label
-	 *            String - the label name.
-	 * @param oldValue
-	 *            String - the name of the old annotation value.
-	 * @param newValue
-	 *            String - the name of the new annotation value.
+	 * @param String label
+	 *          the label name.
+	 * @param String oldValue
+	 *            the name of the old annotation value.
+	 * @param String newValue
+	 *            the name of the new annotation value.
 	 *
 	 * @throws SQLException
 	 * @throws IOException
@@ -682,9 +682,10 @@ public class DatabaseAccessor {
 	/**
 	 * Gets all the choices for a drop down annotation.
 	 *
-	 * @param label
-	 *            String - the drop down annotation to get the choice for.
-	 * @return choices List<String> - the choices for one annotation label.
+	 * @param String label
+	 *            the drop down annotation to get the choice for.
+	 * @return List<String>
+	 *            the choices for one annotation label.
 	 * @throws SQLException
 	 *             if the query does not succeed
 	 */
@@ -694,31 +695,27 @@ public class DatabaseAccessor {
 	}
 
 	/**
-	 * @param expID
-	 *            String The unique name of the experiment. OBS! If not null,
+	 * @param String expID
+	 *            The unique name of the experiment. OBS! If not null,
 	 *            this must reference an experiment that has been previously
 	 *            added.
-	 * @param fileType
-	 *            int An Integer identifying the file type eg. FileTuple.RAW
-	 * @param fileName
-	 *            String
-	 * @param inputFileName
-	 *            String The name of the corresponding input file or null if
+	 * @param int fileType
+	 *            An Integer identifying the file type eg. FileTuple.RAW
+	 * @param String fileName
+	 * @param String inputFileName
+	 *            The name of the corresponding input file or null if
 	 *            there is no corresponding input file
-	 * @param metaData
-	 *            String The parameters used in file creation or null if not
-	 *            applicable
-	 * @param author
-	 *            String
-	 * @param uploader
-	 *            String
-	 * @param isPrivate
-	 *            boolean
-	 * @param genomeRelease
-	 *            String The genome release version identifyer (eg. "hg38") or
+	 * @param String metaData
+	 *            The parameters used in file creation or null if not applicable
+	 * @param String author
+	 * @param String uploader
+	 * @param boolean isPrivate
+	 * @param String genomeRelease
+	 *            The genome release version identifyer (eg. "hg38") or
 	 *            null if not applicable. OBS! If not null, this must reference
 	 *            a genome release that has been previously uploaded.
-	 * @return FileTuple - The FileTuple inserted in the database or null if no
+	 * @return FileTuple
+	 *         The FileTuple inserted in the database or null if no
 	 *         file was entered into the database.
 	 * @throws SQLException
 	 *             If the query could not be executed. (Probably because the
@@ -736,10 +733,9 @@ public class DatabaseAccessor {
 	/**
 	 * Returns the FileTuple object associated with the given filePath.
 	 *
-	 * @param filePath
-	 *            String
-	 * @return FileTuple - The corresponding FileTuple or null if no such file
-	 *         exists
+	 * @param String filePath
+	 * @return FileTuple
+	 * 		   The corresponding FileTuple or null if no such file exists
 	 * @throws SQLException
 	 *             If the query could not be executed.
 	 */
@@ -752,14 +748,14 @@ public class DatabaseAccessor {
 	 * Adds a file to the database. Users should migrate to addNewFile(...)
 	 * which returns the FileTuple added to the database.
 	 *
-	 * @param fileType
-	 * @param fileName
-	 * @param metaData
-	 * @param author
-	 * @param uploader
-	 * @param isPrivate
-	 * @param expID
-	 * @param grVersion
+	 * @param String fileType
+	 * @param String fileName
+	 * @param String metaData
+	 * @param String author
+	 * @param String uploader
+	 * @param boolean isPrivate
+	 * @param String expID
+	 * @param String grVersion
 	 * @return the number if tuples inserted to the database.
 	 * @throws SQLException
 	 *             if the query does not succeed
@@ -776,15 +772,15 @@ public class DatabaseAccessor {
 	/**
 	 * Adds a file to the database with URL. Use addNewFile(...) instead.
 	 *
-	 * @param fileType
-	 * @param fileName
-	 * @param metaData
-	 * @param author
-	 * @param uploader
-	 * @param isPrivate
-	 * @param expID
-	 * @param grVersion
-	 * @return the number if tuples inserted to the database.
+	 * @param String fileType
+	 * @param String fileName
+	 * @param String metaData
+	 * @param String author
+	 * @param String uploader
+	 * @param boolean isPrivate
+	 * @param String expID
+	 * @param String grVersion
+	 * @return int, the number if tuples inserted to the database.
 	 * @throws SQLException
 	 *             if the query does not succeed
 	 */
@@ -800,9 +796,9 @@ public class DatabaseAccessor {
 	/**
 	 * Deletes a file from the database.
 	 *
-	 * @param path
-	 *            String - the path to the file.
-	 * @return int - the number of deleted tuples in the database.
+	 * @param String path
+	 *         the path to the file.
+	 * @return int, the number of deleted tuples in the database.
 	 * @throws SQLException
 	 *             if the query does not succeed
 	 */
@@ -814,9 +810,8 @@ public class DatabaseAccessor {
 	/**
 	 * Deletes a file from the database using the fileID.
 	 *
-	 * @param fileID
-	 *            int - the fileID of the file to be deleted.
-	 * @return 1 if deletion was successful, else 0.
+	 * @param int fileID, the fileID of the file to be deleted.
+	 * @return int, 1 if deletion was successful, else 0.
 	 * @throws SQLException
 	 */
 	public int deleteFile(int fileID) throws SQLException {
@@ -827,9 +822,8 @@ public class DatabaseAccessor {
 	/**
 	 * Checks if the file with the specified fileID exists in the database.
 	 *
-	 * @param fileID
-	 *            int - the fileID of the file.
-	 * @return true if the file exists, else false.
+	 * @param int fileID, the fileID of the file.
+	 * @return boolean, true if the file exists, else false.
 	 * @throws SQLException
 	 */
 	public boolean hasFile(int fileID) throws SQLException {
@@ -841,7 +835,7 @@ public class DatabaseAccessor {
 	 * Checks if the file path is a valid file path. Not used.
 	 *
 	 * @param filePath
-	 * @return
+	 * @return boolean
 	 * @throws SQLException
 	 *             if the query does not succeed
 	 */
@@ -857,13 +851,13 @@ public class DatabaseAccessor {
 	 * Method to convert from raw data to profile data. Returns a list of
 	 * filepaths
 	 *
-	 * @param fileID
-	 * @param fileType
-	 * @param fileName
-	 * @param metaData
-	 * @param uploader
-	 * @param grVersion
-	 * @param expID
+	 * @param String fileID
+	 * @param String fileType
+	 * @param String fileName
+	 * @param String metaData
+	 * @param String uploader
+	 * @param String grVersion
+	 * @param String expID
 	 * @return ArrayList<String>
 	 * @throws SQLException
 	 */
@@ -885,9 +879,10 @@ public class DatabaseAccessor {
 	 * addGeneratedProfiles(...) method must be executed to add the files to the
 	 * database.
 	 *
-	 * @param expId
+	 * @param String expId
 	 *            The ID name of paththe experiment
-	 * @return The path to the folder or null if there are no raw files for this
+	 * @return String
+	 *         The path to the folder or null if there are no raw files for this
 	 *         experiment.
 	 * @throws SQLException
 	 *             If the database could not be accessed
@@ -927,25 +922,25 @@ public class DatabaseAccessor {
 	 * Adds all the files in the specified folder to the database's File table.
 	 * They will all be treated as profile files.
 	 *
-	 * @param expId
+	 * @param String expId
 	 *            The ID name of the experiment
-	 * @param folderPath
+	 * @param String folderPath
 	 *            The path to the folder containing the profile files. (This
 	 *            should be exactly the same path as returned by the
 	 *            processRawToProfile(expId) method).
-	 * @param inputFileName
+	 * @param String inputFileName
 	 *            The name of the input file or null if no input file was
 	 *            generated.
-	 * @param metaData
+	 * @param String metaData
 	 *            A String specifying the parameters used for processing the raw
 	 *            file.
-	 * @param genomeReleaseVersion
+	 * @param String genomeReleaseVersion
 	 *            The genome release version used in processing. OBS! this is a
 	 *            reference to a genome release stored in the database/on the
 	 *            server and must therefore be valid.
-	 * @param uploader
+	 * @param String uploader
 	 *            The user that commissioned the processing.
-	 * @param isPrivate
+	 * @param boolean isPrivate
 	 *            True if the files are to be private to the uploader, otherwise
 	 *            false.
 	 * @throws SQLException
@@ -1002,10 +997,11 @@ public class DatabaseAccessor {
 	/**
 	 * Gets the file path to a stored Genome Release
 	 *
-	 * @param genomeVersion
+	 * @param String genomeVersion
 	 *            - The version to get filepath to, should use
 	 *            getAllGenomeReleases() and let user choose a version
-	 * @return Genome - a genome object
+	 * @return Genome
+	 *           a genome object
 	 * @throws SQLException
 	 */
 
@@ -1017,11 +1013,10 @@ public class DatabaseAccessor {
 	/**
 	 * Add one genome release to the database.
 	 *
-	 * @param String
-	 *            genomeVersion.
-	 * @param String
-	 *            species.
-	 * @return String The path to the folder where the genome release files
+	 * @param String genomeVersion
+	 * @param String species
+	 * @return String
+	 * 			 The path to the folder where the genome release files
 	 *         should be saved.
 	 * @throws SQLException
 	 *             if adding query failed.
@@ -1035,10 +1030,10 @@ public class DatabaseAccessor {
 	/**
 	 * Removes one specific genome version stored in the database.
 	 *
-	 * @param version
+	 * @param String version
 	 *            , the genome version.
-	 * @param species
-	 *            .
+	 * @param String species
+	 *
 	 * @return boolean, true if succeeded, false if failed.
 	 * @throws SQLException
 	 */
@@ -1052,10 +1047,10 @@ public class DatabaseAccessor {
 	 * Method for getting all the genome releases for a species currently stored
 	 * in the database.
 	 *
-	 * @param species
-	 *            String, the name of the specie you want to get genome
+	 * @param String species
+	 *            the name of the specie you want to get genome
 	 *            releases for.
-	 * @return genomeVersions List<String>, list of all the genome releases for
+	 * @return List<String>, list of all the genome releases for
 	 *         a specific species.
 	 * @throws SQLException
 	 */
@@ -1069,7 +1064,7 @@ public class DatabaseAccessor {
 	 * mMethod for getting all the genome releases currently stored in the
 	 * database.
 	 *
-	 * @return genomeList ArrayList<Genome>, list of all the genome releases.
+	 * @return ArrayList<Genome>, list of all the genome releases.
 	 * @throws SQLException
 	 */
 	public ArrayList<Genome> getAllGenomReleases() throws SQLException {
@@ -1081,10 +1076,10 @@ public class DatabaseAccessor {
 	 * get a specific chain file depending on from and to what genome release
 	 * you want to convert between.
 	 *
-	 * @param fromVersion
-	 *            String, the name of the old genome release version
-	 * @param toVersion
-	 *            String, the name of the new genome release version
+	 * @param String fromVersion
+	 *            the name of the old genome release version
+	 * @param String toVersion
+	 *            the name of the new genome release version
 	 * @return resFilePath String, the filePath of that chain file.
 	 * @throws SQLException
 	 */
