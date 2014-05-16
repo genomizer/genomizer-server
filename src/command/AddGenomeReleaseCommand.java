@@ -13,7 +13,7 @@ import response.ErrorResponse;
 import response.Response;
 import response.StatusCode;
 
-//TODO: Add validation code on lengths etc. Better error response messages.
+//TODO: Better error response messages.
 
 /**
  * Class used to handle adding a genome release.

@@ -112,8 +112,10 @@ public class CommandFactoryTest {
 	public void testCreateProcessCommand() {
 
 		CommandFactory cmdf = new CommandFactory();
-		String json = "{\"expid\":\"Exp1\",\"processtype\":\"rawtoprofile\",\"parameters\":[\"-a -m 1 --best -p 10 -v 2 -q -S\",\"d_melanogaster_fb5_22\"" +
-				",\"y\",\"y\",\"10 1 5 0 0\",\"y 10\",\"single 4 0\",\"150 1 7 0 0\"],\"metadata\": \"astringofmetadata\",\"genomeRelease\":" +
+		String json = "{\"expid\":\"Exp1\",\"processtype\":\"rawtoprofile\"," +
+				"\"parameters\":[\"-a -m 1 --best -p 10 -v 2 -q -S\",\"d_melanogaster_fb5_22\"" +
+				",\"y\",\"y\",\"10 1 5 0 0\",\"y 10\",\"single 4 0\",\"150 1 7 0 0\"]," +
+				"\"metadata\": \"astringofmetadata\",\"genomeRelease\":" +
 				"\"hg38\",\"author\": \"yuri\"}";
 		String username = "tmpUsername";
 		String parsedRestful = "parsed";
