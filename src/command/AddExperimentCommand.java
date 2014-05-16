@@ -3,6 +3,8 @@ package command;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import response.ErrorResponse;
 import response.MinimalResponse;
 import response.StatusCode;
 import com.google.gson.annotations.Expose;
@@ -58,7 +60,7 @@ public class AddExperimentCommand extends Command {
 			return new MinimalResponse(StatusCode.CREATED);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
+			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
 		} catch (IOException e) {
 			e.printStackTrace();
 			return new MinimalResponse(StatusCode.BAD_REQUEST);

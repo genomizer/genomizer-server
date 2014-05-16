@@ -250,10 +250,6 @@ public class Doorman {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-
-
-
 	}
 
 	private void respond(HttpExchange exchange, Response response) throws IOException {
