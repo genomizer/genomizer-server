@@ -298,5 +298,13 @@ public class CommandFactory {
 		Command command = gson.fromJson(json, EditAnnotationFieldCommand.class);
 		return command;
 	}
+	
+	public Command createGetAllGenomeReleasesCommand(){
+		return new GetGenomeReleaseCommand();
+	}
+	
+	public Command createGetGenomeReleasesSpeciesCommand(String species){
+		return new GetGenomeReleaseSpeciesCommand(species);
+	}
 
 }

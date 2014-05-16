@@ -1,10 +1,9 @@
-package command.test;
+package command;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import command.Command;
 
 import response.ErrorResponse;
 import response.GetGenomeReleaseRespons;

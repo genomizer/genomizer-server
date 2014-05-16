@@ -32,7 +32,8 @@ public class CommandFactoryTest {
 	public void testCreateAddExperimentCommand() {
 
 		CommandFactory cmdf = new CommandFactory();
-		String json = "JSON_STRING";
+		String json = "{\"name\":\"experimentId\",\"createdBy\":\"user\",\"annotations\":[{\"name\":\"pubmedId\",\"value\":\"abc123\"}]}";
+
 		assertNotNull(cmdf.createAddExperimentCommand(json));
 
 	}
@@ -44,130 +45,80 @@ public class CommandFactoryTest {
 	public void testCreateRetrieveExperimentCommand() {
 
 		CommandFactory cmdf = new CommandFactory();
-		String json = "JSON_STRING";
 		String restful = "ABCDEF";
-		assertNotNull(cmdf.createGetExperimentCommand(json, restful));
+		assertNotNull(cmdf.createGetExperimentCommand(restful));
 
 	}
 
 	/**
 	 * Test creation of login command.
 	 */
-//	@Test
-//	public void testCreateLoginCommand() {
-//
-//		CommandFactory cmdf = new CommandFactory();
-//		String json = "JSON_STRING";
-//		String[] restful = {"1", "2"};
-//		Command cmd = cmdf.createLoginCommand(json, restful);
-//		assertNotNull(cmd);
-//
-//	}
+	@Test
+	public void testCreateLoginCommand() {
+
+		CommandFactory cmdf = new CommandFactory();
+		String json = "{\"username\":\"uname\",\"password\":\"pw\"}";
+		assertNotNull(cmdf.createLoginCommand(json));
+
+	}
 
 	/**
 	 * Test creation of logout command.
 	 */
-//	@Test
-//	public void testCreateLogoutCommand() {
-//
-//		CommandFactory cmdf = new CommandFactory();
-//		String[] restful = {"1", "2"};
-//		assertNotNull(cmdf.createLogoutCommand());
-//
-//	}
+	@Test
+	public void testCreateLogoutCommand() {
+
+		CommandFactory cmdf = new CommandFactory();
+		String username = "ABCD";
+
+		assertNotNull(cmdf.createLogoutCommand(username));
+
+	}
 
 	/**
-	 * Test creation of sysadmin command.
+	 * Test that creation of AddGenomeReleaseCommand is not
+	 * null.
 	 */
-//	@Test
-//	public void testCreateSysadmCommand() {
-//
-//		CommandFactory cmdf = new CommandFactory();
-//		String json = "JSON_STRING";
-//		String[] restful = {"1", "2"};
-//		assertNotNull(cmdf.createSysadmCommand(json, restful));
-//
-//	}
+	@Test
+	public void testCreateAddGenomeReleaseCommand() {
+
+		CommandFactory cmdf = new CommandFactory();
+		String json = "{\"fileName\":\"abc123\",\"specie\":\"human\",\"genomeVersion\":\"GV 1.0\"}";
+
+		assertNotNull(cmdf.createAddGenomeReleaseCommand(json));
+
+	}
 
 	/**
-	 * Test creation of process command.
+	 * Test that creation of AddGenomeReleaseCommand is not
+	 * null.
 	 */
-//	@Test
-//	public void testCreateProcessCommand() {
-//
-//		CommandFactory cmdf = new CommandFactory();
-//		String json = "{\"parameters\": " +
-//											"[\"param1\"," +
-//											"\"param2\"," +
-//											"\"param3\"," +
-//											"\"param4\"]," +
-//						"\"metadata\": \"astringofmetadata\"," +
-//						"\"genomeRelease\": \"hg38\"}";
-//
-//
-//		String[] restful = {"1", "2"};
-//		assertNotNull(cmdf.createProcessCommand(json, restful));
-//
-//	}
+	@Test
+	public void testCreateDeleteGenomeReleaseCommand() {
+
+		CommandFactory cmdf = new CommandFactory();
+		String specie = "tempSpecie";
+		String genomeVersion = "tmpGenomeVersion";
+
+		assertNotNull(cmdf.createDeleteGenomeReleaseCommand(specie, genomeVersion));
+
+	}
 
 	/**
-	 * Test creation of experiment command.
+	 * Test that creation of process command is not
+	 * null.
 	 */
-//	@Test
-//	public void testCreateExperimentCommand() {
-//
-//		CommandFactory cmdf = new CommandFactory();
-//		String json = "JSON_STRING";
-//		String[] restful = {"1", "2"};
-//		assertNotNull(cmdf.createExperimentCommand(json, restful));
-//
-//	}
+	@Test
+	public void testCreateProcessCommand() {
 
-	/**
-	 * Test creation of user command.
-	 */
-//	@Test
-//	public void testCreateUserCommand() {
-//
-//		CommandFactory cmdf = new CommandFactory();
-//		String json = "JSON_STRING";
-//		String[] restful = {"1", "2"};
-//		assertNotNull(cmdf.createUserCommand(json, restful));
-//
-//	}
+		CommandFactory cmdf = new CommandFactory();
+		String json = "{\"expid\":\"Exp1\",\"processtype\":\"rawtoprofile\",\"parameters\":[\"-a -m 1 --best -p 10 -v 2 -q -S\",\"d_melanogaster_fb5_22\"" +
+				",\"y\",\"y\",\"10 1 5 0 0\",\"y 10\",\"single 4 0\",\"150 1 7 0 0\"],\"metadata\": \"astringofmetadata\",\"genomeRelease\":" +
+				"\"hg38\",\"author\": \"yuri\"}";
+		String username = "tmpUsername";
+		String parsedRestful = "parsed";
+		assertNotNull(cmdf.createProcessCommand(json, username, parsedRestful));
 
-	/**
-	 * Test creation of search command.
-	 */
-//	@Test
-//	public void testCreateSearchCommand() {
-//
-//		CommandFactory cmdf = new CommandFactory();
-//		String json = "JSON_STRING";
-//		String[] restful = {"1", "2"};
-//		assertNotNull(cmdf.createSearchCommand(json, restful));
-//
-//	}
-
-	/**
-	 * Test creation of download command.
-	 */
-//	@Test
-//	public void testCreateDownloadCommand() {
-//
-//		CommandFactory cmdf = new CommandFactory();
-//		String json = "JSON_STRING";
-//		String[] restful = {"1", "2"};
-//		assertNotNull(cmdf.createDownloadCommand(json, restful));
-//
-//	}
-
-//	@Test
-//	public void testParseID() {
-//		String restful = "/file/421";
-//		CommandFactory cmdf = new CommandFactory();
-//		String id = cmdf.parseID(restful);
-//		assertEquals("421", id);
-//	}
+	}
 
 }
