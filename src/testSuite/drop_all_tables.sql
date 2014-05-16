@@ -1,0 +1,12 @@
+DROP TABLE File cascade;
+DROP TABLE Experiment cascade;
+DROP TABLE Annotation cascade;
+DROP TABLE Annotated_With cascade;
+DROP TABLE Annotation_Choices;
+DROP TABLE User_Info cascade;
+DROP TABLE Working_On cascade;
+DROP TABLE Workspace cascade;
+DROP TABLE Used_In cascade;
+DROP TABLE Published_In cascade;
+DROP TABLE Genome_Release cascade;
+DROP TABLE Chain_File cascade;

@@ -79,7 +79,7 @@ public class AnnotationMethods {
 		String query = "SELECT * FROM Annotation "
 				+ "LEFT JOIN Annotation_Choices "
 				+ "ON (Annotation.Label = Annotation_Choices.Label) "
-				+ "WHERE Annotation.Label = ?";
+				+ "WHERE Annotation.Label ~~* ?";
 
 		PreparedStatement stmt = conn.prepareStatement(query);
 		stmt.setString(1, label);
@@ -181,7 +181,7 @@ public class AnnotationMethods {
 	public String getDefaultAnnotationValue(String annotationLabel)
 			throws SQLException {
 
-		String query = "SELECT DefaultValue FROM Annotation WHERE Label = ?";
+		String query = "SELECT DefaultValue FROM Annotation WHERE Label ~~* ?";
 		PreparedStatement stmt = conn.prepareStatement(query);
 		stmt.setString(1, annotationLabel);
 
@@ -208,7 +208,7 @@ public class AnnotationMethods {
 	 */
 	public int deleteAnnotation(String label) throws SQLException {
 
-		String query = "DELETE FROM Annotation " + "WHERE (Label = ?)";
+		String query = "DELETE FROM Annotation " + "WHERE (Label ~~* ?)";
 		PreparedStatement stmt = conn
 				.prepareStatement(query);
 		stmt.setString(1, label);
@@ -272,7 +272,7 @@ public class AnnotationMethods {
 	public boolean isAnnotationRequiered(String annotationLabel)
 			throws SQLException {
 
-		String query = "SELECT Required FROM Annotation WHERE Label = ?";
+		String query = "SELECT Required FROM Annotation WHERE Label ~~* ?";
 
 		PreparedStatement stmt = conn.prepareStatement(query);
 		stmt.setString(1, annotationLabel);
@@ -304,7 +304,7 @@ public class AnnotationMethods {
 
 		ArrayList<String> dropDownLabelsList = new ArrayList<String>();
 		String query = "SELECT Value FROM Annotation_Choices "
-				+ "WHERE (Label = ?)";
+				+ "WHERE (Label ~~* ?)";
 
 		PreparedStatement stmt = conn.prepareStatement(query);
 		stmt.setString(1, label);
@@ -419,7 +419,7 @@ public class AnnotationMethods {
     	}
 
 		String query = "SELECT * FROM Annotation WHERE "
-				+ "(label = ? AND datatype = 'DropDown')";
+				+ "(label ~~* ? AND datatype = 'DropDown')";
 
 		PreparedStatement checkTagStatement = conn.prepareStatement(query);
 		checkTagStatement.setString(1, label);
@@ -463,7 +463,7 @@ public class AnnotationMethods {
 			throws SQLException, IOException {
 
 		String query = "SELECT * FROM Annotation WHERE "
-				+ "(label = ? AND defaultvalue = ?)";
+				+ "(label ~~* ? AND defaultvalue ~~* ?)";
 
 		PreparedStatement checkTagStatement = conn.prepareStatement(query);
 		checkTagStatement.setString(1, label);
@@ -480,7 +480,7 @@ public class AnnotationMethods {
 					+ "the label and run this method again.");
 		} else {
 			query = "DELETE FROM Annotation_Choices "
-					+ "WHERE (label = ? AND value = ?)";
+					+ "WHERE (label ~~* ? AND value ~~* ?)";
 
 			PreparedStatement deleteTagStatement = conn.prepareStatement(query);
 			deleteTagStatement.setString(1, label);
@@ -511,7 +511,7 @@ public class AnnotationMethods {
     		throw new IOException("The new Lable contains invalid characters");
     	}
 
-		String query = "UPDATE Annotation SET Label = ? WHERE (Label =?)";
+		String query = "UPDATE Annotation SET Label = ? WHERE (Label ~~* ?)";
 
 		PreparedStatement stmt;
 		stmt = conn.prepareStatement(query);
@@ -549,13 +549,13 @@ public class AnnotationMethods {
     	}
 
 		String query = "UPDATE Annotation_Choices " + "SET Value = ? "
-				+ "WHERE Label = ? and Value = ?";
+				+ "WHERE Label ~~* ? and Value ~~* ?";
 
 		String query2 = "UPDATE Annotated_With " + "SET Value = ? "
-				+ "WHERE Label = ? and Value = ?";
+				+ "WHERE Label ~~* ? and Value ~~* ?";
 
 		String query3 = "UPDATE Annotation " + "SET DefaultValue = ? "
-				+ "WHERE Label = ? and DefaultValue = ?";
+				+ "WHERE Label ~~* ? and DefaultValue ~~* ?";
 
 		PreparedStatement stmt = conn.prepareStatement(query);
 		ArrayList<String> parameterList = new ArrayList<String>();
@@ -589,7 +589,7 @@ public class AnnotationMethods {
 	public List<String> getChoices(String label) throws SQLException {
 
 		String query = "SELECT Value FROM Annotation_Choices "
-				+ "WHERE Label = ?";
+				+ "WHERE Label ~~* ?";
 		List<String> choicesList = new ArrayList<String>();
 
 		PreparedStatement getChoices = conn.prepareStatement(query);

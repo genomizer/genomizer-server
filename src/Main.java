@@ -33,7 +33,8 @@ public class Main {
 		String smoothingParam = "10 1 5 0 0";
 		String yString = "y 10";
 		ProcessHandler p = new ProcessHandler();
-		String[] para = new String[] {bowTie, genome, smoothingParam, yString};
+
+		String[] para = new String[] {bowTie, genome, "y", "", "", "", "", ""};
 		try {
 			System.out.println("nu executar vi");
 

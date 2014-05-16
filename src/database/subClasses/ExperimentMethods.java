@@ -37,7 +37,7 @@ public class ExperimentMethods {
      */
     public Experiment getExperiment(String expID) throws SQLException {
 
-    	String query = "SELECT ExpID FROM Experiment " + "WHERE ExpID = ?";
+    	String query = "SELECT ExpID FROM Experiment " + "WHERE ExpID ~~* ?";
 
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setString(1, expID);
@@ -94,7 +94,7 @@ public class ExperimentMethods {
      */
     public int deleteExperiment(String expId, String rootDir) throws SQLException {
 
-    	String query = "DELETE FROM Experiment " + "WHERE (ExpID = ?)";
+    	String query = "DELETE FROM Experiment " + "WHERE ExpID ~~* ?";
 
         PreparedStatement stmt = conn
                 .prepareStatement(query);
@@ -120,7 +120,7 @@ public class ExperimentMethods {
      */
     public boolean hasExperiment(String expID) throws SQLException {
 
-    	String query = "SELECT ExpID FROM Experiment " + "WHERE ExpID = ?";
+    	String query = "SELECT ExpID FROM Experiment " + "WHERE ExpID ~~* ?";
 
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setString(1, expID);
@@ -156,7 +156,7 @@ public class ExperimentMethods {
         }
 
         String query = "UPDATE Annotated_With SET Value = ?" +
-        		" WHERE (Label = ?) AND (ExpID = ?)";
+        		" WHERE (Label ~~* ?) AND (ExpID ~~* ?)";
 
         PreparedStatement stmt = conn.prepareStatement(query);
 
@@ -220,7 +220,7 @@ public class ExperimentMethods {
             throws SQLException {
 
     	String query = "DELETE FROM Annotated_With "
-                + "WHERE (ExpID = ? AND Label = ?)";
+                + "WHERE (ExpID ~~* ? AND Label ~~* ?)";
 
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setString(1, expID);
@@ -243,7 +243,7 @@ public class ExperimentMethods {
      */
     public Experiment fillFiles(Experiment e) throws SQLException {
 
-        String query = "SELECT * FROM File " + "WHERE ExpID = ?";
+        String query = "SELECT * FROM File " + "WHERE ExpID ~~* ?";
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setString(1, e.getID());
         ResultSet rs = stmt.executeQuery();
@@ -271,7 +271,7 @@ public class ExperimentMethods {
             throws SQLException {
 
         String query = "SELECT Label, Value FROM Annotated_With "
-                + "WHERE ExpID = ?";
+                + "WHERE ExpID ~~* ?";
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setString(1, e.getID());
         ResultSet rs = stmt.executeQuery();

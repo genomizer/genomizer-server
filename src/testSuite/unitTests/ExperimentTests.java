@@ -123,6 +123,16 @@ public class ExperimentTests {
         e = dbac.getExperiment(testExpId);
         assertEquals(testExpId, e.getID());
     }
+  
+    @Test
+    public void shouldReturnZeroOnRemovingNonExistantExp() throws Exception {
+        assertEquals(0, dbac.deleteExperiment("pang"));
+    }
+    
+    @Test
+    public void shouldReturnOneOnRemovingExp() throws Exception {
+        assertEquals(1, dbac.deleteExperiment(testExpId));
+    }
 
     @Test
     public void shouldBeAbleToAnnotateExperimentFreeText()
