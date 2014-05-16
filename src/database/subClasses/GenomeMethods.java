@@ -6,7 +6,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
 import database.FilePathGenerator;
 import database.Genome;
@@ -110,8 +109,10 @@ public class GenomeMethods {
      * @param specie
      *            .
      * @return boolean true if succeded, false if failed.
+     * @throws SQLException
      */
-    public boolean removeGenomeRelease(String genomeVersion, String species) {
+    public boolean removeGenomeRelease(String genomeVersion, String species)
+            throws SQLException {
 
         File genomeReleaseFolder = new File(fpg.getGenomeReleaseFolderPath(
                 genomeVersion, species));
@@ -124,16 +125,12 @@ public class GenomeMethods {
 
         PreparedStatement stmt;
 
-        try {
-            stmt = conn.prepareStatement(query);
-            stmt.setString(1, genomeVersion);
-            stmt.setString(2, species);
-            stmt.executeUpdate();
-            stmt.close();
-            return true;
-        } catch (SQLException e) {
-            return false;
-        }
+        stmt = conn.prepareStatement(query);
+        stmt.setString(1, genomeVersion);
+        stmt.setString(2, species);
+        int res = stmt.executeUpdate();
+        stmt.close();
+        return res > 0;
     }
 
     /**
@@ -254,7 +251,7 @@ public class GenomeMethods {
         }
         speciesStat.close();
 
-        String filePath = fpg.generateChainFolderPath(species, fromVersion,
+        String filePath = fpg.getChainFolderPath(species, fromVersion,
                 toVersion) + fileName;
 
         String insertQuery = "INSERT INTO Chain_File "
@@ -290,11 +287,18 @@ public class GenomeMethods {
             throws SQLException {
 
         int resCount = 0;
-        String filePath = getChainFile(fromVersion, toVersion);
-        File chainFile = new File(filePath);
 
-        if (chainFile.exists()) {
-            recursiveDelete(chainFile);
+        String filePath = getChainFile(fromVersion, toVersion);
+
+        if (filePath == null) {
+            return 0;
+        }
+
+        File chainFile = new File(filePath);
+        File chainFolder = chainFile.getParentFile();
+
+        if (chainFolder.exists()) {
+            recursiveDelete(chainFolder);
         }
 
         String query = "DELETE FROM Chain_File WHERE (FromVersion = ?)"

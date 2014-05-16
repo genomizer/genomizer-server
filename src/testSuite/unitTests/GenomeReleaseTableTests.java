@@ -61,12 +61,6 @@ public class GenomeReleaseTableTests {
     }
 
     @Test
-    public void shouldReturnRightNumberOfGenomeVersion() throws Exception {
-        List<Genome> versions = dbac.getAllGenomReleasesForSpecies("Human");
-        assertEquals(3, versions.size());
-    }
-
-    @Test
     public void shouldReturnRightNamesOfGenomeVersions() throws Exception {
         List<Genome> genomeList = dbac.getAllGenomReleasesForSpecies("Human");
 
@@ -120,6 +114,7 @@ public class GenomeReleaseTableTests {
     @Test
     public void shouldDeleteFromBothDatabaseAndFileSystem() throws Exception {
         dbac.addGenomeRelease("hg41", "Human", "hg41.txt");
+
         String genomeReleaseFolderPath = fpg.generateGenomeReleaseFolder(
                 "hg41", "Human");
         addMockFile(genomeReleaseFolderPath, "hg41.txt");
@@ -131,9 +126,10 @@ public class GenomeReleaseTableTests {
         assertTrue(genomeReleaseFile.exists());
 
         dbac.removeGenomeRelease("hg41", "Human");
-        Genome g = dbac.getGenomeRelease("hg41");
 
+        Genome g = dbac.getGenomeRelease("hg41");
         assertNull(g);
+
         assertFalse(genomeReleaseFolder.exists());
     }
 

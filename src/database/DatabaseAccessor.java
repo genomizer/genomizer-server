@@ -1040,8 +1040,9 @@ public class DatabaseAccessor {
 	 * @param specie
 	 *            .
 	 * @return boolean, true if succeded, false if failed.
+	 * @throws SQLException
 	 */
-	public boolean removeGenomeRelease(String genomeVersion, String specie) {
+	public boolean removeGenomeRelease(String genomeVersion, String specie) throws SQLException {
 
 		return genMethods.removeGenomeRelease(genomeVersion, specie);
 	}

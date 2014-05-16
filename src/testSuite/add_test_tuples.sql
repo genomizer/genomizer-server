@@ -10,10 +10,10 @@ INSERT INTO Genome_Release VALUES('rn5', 'Rat', '/var/www/data/GenomeRelease/Rat
 INSERT INTO Genome_Release VALUES('rn4', 'Rat', '/var/www/data/GenomeRelease/Rat/rn4.fasta');
 INSERT INTO Genome_Release VALUES('rn3', 'Rat', '/var/www/data/GenomeRelease/Rat/rn3.fasta');
 
-INSERT INTO Chain_File VALUES('rn3', 'rn4', '/var/www/data/Chain_File/Rat/rn3-rn4.fasta');
-INSERT INTO Chain_File VALUES('rn4', 'rn5', '/var/www/data/Chain_File/Rat/rn4-rn5.fasta');
-INSERT INTO Chain_File VALUES('hg19', 'hg38', '/var/www/data/Chain_File/Human/hg19-hg38.fasta');
-INSERT INTO Chain_File VALUES('hg18', 'hg19', '/var/www/data/Chain_File/Human/hg18-hg19.fasta');
+INSERT INTO Chain_File VALUES('rn3', 'rn4', '/var/www/data/Chain_File/Rat/rn3 - rn4/rn3ToRn4.over.chain');
+INSERT INTO Chain_File VALUES('rn4', 'rn5', '/var/www/data/Chain_File/Rat/rn4 - rn5/rn4ToRn5.over.chain');
+INSERT INTO Chain_File VALUES('hg19', 'hg38', '/var/www/data/Chain_File/Human/hg19 - hg38/hg19ToHg38.over.chain');
+INSERT INTO Chain_File VALUES('hg18', 'hg19', '/var/www/data/Chain_File/Human/hg18 - hg19/hg18ToHg19.over.chain');
 
 INSERT INTO Annotation VALUES('Species', 'DropDown', NULL, TRUE);
 INSERT INTO Annotation_Choices VALUES('Species', 'Human');

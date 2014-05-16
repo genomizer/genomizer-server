@@ -113,7 +113,30 @@ public class FilePathGenerator {
     }
 
     /**
-     * Creates and returns the path to the folder where the chain files should
+     * Creates the folder for chainfiles and returns the path to it.
+     *
+     * @param String species
+     * @param String fromVersion
+     * @param String toVersion
+     * @return String folderPath
+     */
+    public String generateChainFolder(String species, String fromVersion,
+            String toVersion) {
+
+        String chainFolderPath = getChainFolderPath(species,
+                fromVersion, toVersion);
+
+        File chainFolder = new File(chainFolderPath);
+
+        if (!chainFolder.exists()) {
+            chainFolder.mkdirs();
+        }
+
+        return chainFolderPath;
+    }
+
+    /**
+     * Gets the path to the folder where the chain files should
      * be stored.
      *
      * @param species
@@ -121,7 +144,7 @@ public class FilePathGenerator {
      * @param toVersion
      * @return The path to the folder where the chain files should be stored.
      */
-    public String generateChainFolderPath(String species, String fromVersion,
+    public String getChainFolderPath(String species, String fromVersion,
             String toVersion) {
 
         StringBuilder folderPath = new StringBuilder();
@@ -135,12 +158,6 @@ public class FilePathGenerator {
         folderPath.append(" - ");
         folderPath.append(toVersion);
         folderPath.append(File.separator);
-
-        File chainFolder = new File(folderPath.toString());
-
-        if (!chainFolder.exists()) {
-            chainFolder.mkdirs();
-        }
 
         return folderPath.toString();
     }
@@ -224,7 +241,7 @@ public class FilePathGenerator {
                             + "ends with a separator.");
         }
     }
-    
+
     public String getRootDirectory() {
     	return rootDir;
     }
