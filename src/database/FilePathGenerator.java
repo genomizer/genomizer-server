@@ -188,17 +188,23 @@ public class FilePathGenerator {
         folderPath.append(profileFolderName);
         folderPath.append(File.separator);
 
-        Integer folderNumber = new File(folderPath.toString()).list().length;
-        File profileFolder = new File(folderPath.toString()
+        File profileFolder = new File(folderPath.toString());
+        if (!profileFolder.exists()) {
+            profileFolder.mkdirs();
+        }
+
+
+        Integer folderNumber = profileFolder.list().length;
+        File profileSubFolder = new File(folderPath.toString()
                 + folderNumber.toString() + File.separator);
 
-        while (profileFolder.exists()) {
+        while (profileSubFolder.exists()) {
             folderNumber++;
-            profileFolder = new File(folderPath.toString()
+            profileSubFolder = new File(folderPath.toString()
                     + folderNumber.toString() + File.separator);
         }
 
-        profileFolder.mkdirs();
+        profileSubFolder.mkdirs();
 
         folderPath.append(folderNumber.toString());
         folderPath.append(File.separator);
