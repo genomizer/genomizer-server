@@ -52,6 +52,16 @@ public class ResponseLogger {
 
 	}
 
+	public static void printLog(){
+		System.err.println("---Printing log--");
+		for(String user : usermap.keySet()){
+			System.err.println("User: " + user);
+			for(Response r : usermap.get(user)){
+				System.err.println(r);
+			}
+		}
+	}
+
 	public static void reset() {
 		usermap.clear();
 

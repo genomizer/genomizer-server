@@ -48,22 +48,12 @@ public class ResponseLoggerTest {
 		}
 	}
 
-	@Test
-	public void shouldNotLogBADREQUESTError(){
-		ResponseLogger.reset();
-		String username = "splutt";
-		Response r = new MinimalResponse(StatusCode.BAD_REQUEST);
 
-		assertFalse(ResponseLogger.log(username, r));
-		ResponseLogger.reset();
-
-	}
 
 	@Test
 	public void shouldLogBADREQUESTError() {
 		//		ResponseLogger logger = new ResponseLogger();
 		String username = "splutt";
-		Authenticate.addUser(username, "");
 
 		Response r = new MinimalResponse(StatusCode.BAD_REQUEST);
 
@@ -81,7 +71,6 @@ public class ResponseLoggerTest {
 		//		ResponseLogger logger = new ResponseLogger();
 
 		String username = "splutt";
-		Authenticate.addUser(username, "");
 		Response r1 = new MinimalResponse(StatusCode.BAD_REQUEST);
 		Response r2 = new MinimalResponse(StatusCode.BAD_REQUEST);
 

@@ -10,7 +10,7 @@ public class Process {
 
 
 
-	public static void process() throws IOException{
+	public static void sendRawToProfile() throws IOException{
 
 		String expid = "Exp1";
 		String parameters = "\"param1\"," +
