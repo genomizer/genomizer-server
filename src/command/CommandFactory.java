@@ -1,5 +1,7 @@
 package command;
 
+import server.WorkHandler;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -298,13 +300,17 @@ public class CommandFactory {
 		Command command = gson.fromJson(json, EditAnnotationFieldCommand.class);
 		return command;
 	}
-	
+
 	public Command createGetAllGenomeReleasesCommand(){
 		return new GetGenomeReleaseCommand();
 	}
-	
+
 	public Command createGetGenomeReleasesSpeciesCommand(String species){
 		return new GetGenomeReleaseSpeciesCommand(species);
+	}
+
+	public Command createGetProcessStatusCommand(WorkHandler workHandler) {
+		return new GetProcessStatusCommand(workHandler);
 	}
 
 }

@@ -46,7 +46,7 @@ public class ServerMain {
 				DatabaseSettings.host = "postgres";
 			} else if (database.equals("global")) {
 				//not tested
-				DatabaseSettings.username = "pvt";
+				DatabaseSettings.username = "postgres";
 				DatabaseSettings.password = "pvt";
 				DatabaseSettings.database = "genomizer";
 				DatabaseSettings.host = "localhost:6000";

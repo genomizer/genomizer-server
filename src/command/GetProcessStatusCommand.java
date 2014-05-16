@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.TreeMap;
 
+import response.GetProcessStatusResponse;
 import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
@@ -24,11 +25,8 @@ public class GetProcessStatusCommand extends Command {
 
 	@Override
 	public Response execute() {
-//		return new MinimalResponse(StatusCode.NO_CONTENT);
-
 		Collection<ProcessStatus> processStatus = workHandler.getProcessStatus();
-
-		return null;
+		return new GetProcessStatusResponse(processStatus);
 	}
 
 }
