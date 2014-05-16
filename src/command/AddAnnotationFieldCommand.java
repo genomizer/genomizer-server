@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import response.AddAnnotationFieldResponse;
+import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
@@ -77,15 +78,15 @@ public class AddAnnotationFieldCommand extends Command {
 			if(addedAnnotations != 0) {
 				return new AddAnnotationFieldResponse(StatusCode.CREATED);
 			} else {
-				return new MinimalResponse(StatusCode.BAD_REQUEST);
+				return new ErrorResponse(StatusCode.BAD_REQUEST, "Annotation could not be added, database error.");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 			/* Catch dubplicate key*/
 			if(e.getErrorCode() == 0) {
-				return new MinimalResponse(StatusCode.BAD_REQUEST);
+				return new ErrorResponse(StatusCode.BAD_REQUEST, "The annotation " + name + " already exists.");
 			} else {
-				return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
+				return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, "Database unavailable");
 			}
 
 		} catch (IOException e) {
