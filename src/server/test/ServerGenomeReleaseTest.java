@@ -18,6 +18,11 @@ import com.google.gson.JsonObject;
  */
 public class ServerGenomeReleaseTest extends ServerAbstractTestClass {
 
+	/**
+	 * Test method that checks if adding and deleting is working properly.
+	 *
+	 * @throws Exception
+	 */
 	@Test
 	public void testAddDeleteAddDelete() throws Exception {
 
@@ -42,6 +47,12 @@ public class ServerGenomeReleaseTest extends ServerAbstractTestClass {
 
 	}
 
+	/**
+	 * Method used to delete a genome release.
+	 *
+	 * @return boolean depending on result.
+	 * @throws Exception
+	 */
 	private boolean deleteGenomeRelease() throws Exception  {
 		//Get connection and then add headers.
 		HttpURLConnection con = connect("DELETE", serverURL + "/genomeRelease/human/hg385");
@@ -55,6 +66,12 @@ public class ServerGenomeReleaseTest extends ServerAbstractTestClass {
 		return false;
 	}
 
+	/**
+	 * Method used to add a genome release.
+	 *
+	 * @return boolean depending on result.
+	 * @throws Exception
+	 */
 	private boolean addGenomeRelease() throws Exception {
 
 		//Get connection and then add headers.
