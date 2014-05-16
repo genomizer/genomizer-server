@@ -1,3 +1,7 @@
+
+
+
+
 import java.io.IOException;
 
 import process.classes.Executor;
@@ -28,12 +32,12 @@ public class Main {
 
 		String genome = "/home/c11/c11oan/edu/PVT/genomizer-server/reads/d_melanogaster_fb5_22";
 		String bowTie = "-a -m 1 --best -p 10 -v 2 -q  -S ";
-		String inFile = "/scratch/reads";
-		String outFile = "/scratch/";
+		String inFile = "/home/c11/c11oan/edu/raw/";
+		String outFile = "/home/c11/c11oan/edu/outFile/";
 		String smoothingParam = "10 1 5 0 0";
 		String yString = "y 10";
 		ProcessHandler p = new ProcessHandler();
-		String[] para = new String[] {bowTie, genome, smoothingParam, yString};
+		String[] para = new String[] {bowTie, genome, "y", "y", "", "", "", ""};
 		try {
 			System.out.println("nu executar vi");
 
