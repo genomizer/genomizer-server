@@ -66,7 +66,7 @@ public class Doorman {
 			public void handle(HttpExchange exchange) throws IOException {
 
 				System.out.println("\n-----------------\nNEW EXCHANGE: " + exchange.getHttpContext().getPath());
-
+System.out.println("LOOOOL: " + exchange.getRequestMethod());
 				switch(exchange.getRequestMethod()) {
 				case "GET":
 					switch(exchange.getHttpContext().getPath()) {
@@ -84,7 +84,7 @@ public class Doorman {
 						break;
 					case "/genomeRelease":
 						String fullPath = exchange.getRequestURI().toString();
-						if(fullPath.contains("/genomeRelease/")){
+						if(fullPath.startsWith("/genomeRelease/")){
 							exchange(exchange, CommandType.GET_GENOME_RELEASE_SPECIES_COMMAND);
 						}else{
 							exchange(exchange, CommandType.GET_ALL_GENOME_RELEASE_COMMAND);
