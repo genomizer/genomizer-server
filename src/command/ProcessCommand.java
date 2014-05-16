@@ -226,7 +226,6 @@ public class ProcessCommand extends Command {
 
 				break;
 			default:
-				// TODO Log response
 				System.err.println("Unknown process type in processcommand execute");
 				db.close();
 				System.err.println("Logging uname: " + username);
@@ -235,7 +234,6 @@ public class ProcessCommand extends Command {
 
 			}
 		} catch (SQLException e) {
-			// TODO Log response
 			System.err.println("SQL Exception in ProcessCommand execute:");
 			e.printStackTrace();
 			System.err.println("Logging uname: " + username);
@@ -243,7 +241,6 @@ public class ProcessCommand extends Command {
 			ResponseLogger.log(username, new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, e.getMessage()));
 			return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE);
 		} catch (IOException e1) {
-			// TODO Log response
 			System.err.println("IO Exception in ProcessCommand execute.");
 			e1.printStackTrace();
 			System.err.println("Logging uname: " + username);
@@ -266,7 +263,6 @@ public class ProcessCommand extends Command {
 			//TODO isPrivate hardcoded.
 			db.addGeneratedProfiles(expid, filepaths.getValue(), filepaths.getKey(), metadata, genomeVersion, username, false);
 		} catch (SQLException e) {
-			// TODO Log response
 			System.err.println("SQL Exception in ProcessCommand execute when using addGeneratedProfiles:");
 			e.printStackTrace();
 			System.err.println("Logging uname: " + username);
