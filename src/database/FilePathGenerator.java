@@ -214,6 +214,10 @@ public class FilePathGenerator {
             		"ends with a separator.");
         }
     }
+    
+    public String getRootDirectory() {
+    	return rootDir;
+    }
 
     /**
      * Tests if the requested filename(not whole path) is valid on the server

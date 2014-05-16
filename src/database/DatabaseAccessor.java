@@ -335,7 +335,7 @@ public class DatabaseAccessor {
 	 */
 	public int deleteExperiment(String expId) throws SQLException {
 
-		return expMethods.deleteExperiment(expId);
+		return expMethods.deleteExperiment(expId, fpg.getRootDirectory());
 	}
 
 	/**
@@ -411,6 +411,7 @@ public class DatabaseAccessor {
 
 		return expMethods.removeExperimentAnnotation(expID, label);
 	}
+
 
 	/**
 	 * Gets all the annotation possibilities from the database.

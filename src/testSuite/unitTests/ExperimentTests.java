@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -16,17 +17,21 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.postgresql.util.PSQLException;
 
 import testSuite.TestInitializer;
 
 import database.DatabaseAccessor;
 import database.Experiment;
+import database.FilePathGenerator;
+import database.FileTuple;
 
 public class ExperimentTests {
 
     private static DatabaseAccessor dbac;
 
     private static String testExpId = "testExpId1";
+    private static String testExpId2 = "testExpId2";
 
     private static String testLabelFT = "testLabelFT1";
     private static String testValueFT = "testValueFT1";
@@ -35,6 +40,21 @@ public class ExperimentTests {
 	private static String newLabel = "Tis";					//for changeLabel
     private static List<String> testChoices;
 
+    private static FileTuple ft;
+    private static String testName = "testFileName1";
+    private static String testInputFile = "testInputFile";
+    private static int testFileType = FileTuple.RAW;
+    private static String testAuthor = "testFileAuthor1";
+    private static String testUploader = "testUploader1";
+    private static String testMetaData = "testMetaData";
+    private static boolean testIsPrivate = false;
+    private static String testGRVersion = null;
+
+    private static FilePathGenerator fpg;
+    private static String testFolderPath;
+    private static File testFolder;
+    private static String testFolderName = "Genomizer Test Folder - Dont be afraid to delete me";
+
     @BeforeClass
     public static void setupTestCase() throws Exception {
         dbac = new DatabaseAccessor(TestInitializer.username, TestInitializer.password, TestInitializer.host,
@@ -42,11 +62,26 @@ public class ExperimentTests {
         testChoices = new ArrayList<String>();
         testChoices.add(testChoice);
         testChoices.add(testChoice + "2");
+
+        testFolderPath = System.getProperty("user.home") + File.separator
+                + testFolderName + File.separator;
+
+        testFolder = new File(testFolderPath);
+
+        if (!testFolder.exists()) {
+            testFolder.mkdirs();
+        }
+
+        fpg = dbac.getFilePathGenerator();
+        fpg.setRootDirectory(testFolderPath);
     }
 
     @AfterClass
     public static void undoAllChanges() throws SQLException {
+        dbac.deleteFile(ft.id);
+        dbac.deleteExperiment(testExpId2);
         dbac.close();
+        recursiveDelete(testFolder);
     }
 
     @Before
@@ -207,4 +242,40 @@ public class ExperimentTests {
     	}
     }
 
+    @Test(expected = SQLException.class)
+    public void shouldNotDeleteDirectoryContainingFile() throws Exception {
+    	dbac.addExperiment(testExpId2);
+		ft = dbac.addNewFile(testExpId2, testFileType, testName, testInputFile,
+		  		testMetaData, testAuthor, testUploader, testIsPrivate,
+		  		testGRVersion);
+    	fpg.generateExperimentFolders(testExpId2);
+		addMockFile(ft.getParentFolder(), testName);
+		dbac.deleteExperiment(testExpId2);
+	}
+    
+    @Test
+    public void shouldDeleteDirectories() throws Exception {
+		fpg.generateExperimentFolders(testExpId);
+		File dir = new File(testFolderPath + testExpId);
+		assertTrue(dir.exists());
+		dbac.deleteExperiment(testExpId);
+		assertFalse(dir.exists());
+	}
+
+    private void addMockFile(String folderPath, String filename1) throws IOException {
+        File file1 = new File(folderPath + filename1);
+        file1.createNewFile();
+    }
+
+    private static void recursiveDelete(File folder) {
+        File[] contents = folder.listFiles();
+        if (contents == null || contents.length == 0) {
+            folder.delete();
+        } else {
+            for (File f : contents) {
+                recursiveDelete(f);
+            }
+        }
+        folder.delete();
+    }
 }
