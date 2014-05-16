@@ -128,6 +128,10 @@ public class CommandHandler {
 
 			String[] rest = restful.split("/");
 			newCommand = cmdFactory.createDeleteGenomeReleaseCommand(rest[2], rest[3]);
+		} else if(cmdt==CommandType.GET_ALL_GENOME_RELEASE_COMMAND) {
+			newCommand=cmdFactory.createGetAllGenomeReleasesCommand();
+		} else if(cmdt==CommandType.GET_GENOME_RELEASE_SPECIES_COMMAND) {
+			newCommand=cmdFactory.createGetGenomeReleasesSpeciesCommand(parsedRest);
 		}
 		return newCommand;
 	}

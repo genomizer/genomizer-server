@@ -5,8 +5,6 @@ import static org.junit.Assert.*;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Properties;
@@ -160,53 +158,4 @@ public class removeAnnotationValueTest {
     	dbac.deleteAnnotation("hej po dig");
     }
 
-    /**
-     * Method to remove a given annotation of a dropdown- annotation.
-     * This method is not used in this test, it was used to contruct the method without
-     * writing it in the databaseaccessor class to avaoid merge problems with git.
-     *
-     * @param label, the label of the chosen annotation
-     * @param the value of the chosen annotation.
-     * @return boolean, true if a value was removed, false if not. This could be
-     *         if no matching value was found in the database.
-     * @throws SQLException
-     * @throws IOException, throws an IOException if the chosen value to be
-     * 			removed is the active DefaultValue of the chosen label.
-     *
-     */
-    private int removeAnnotationValue(String label, String value)
-    		throws SQLException, IOException {
-
-    	String statementStr = "SELECT * FROM Annotation WHERE " +
-    			"(label = ? AND defaultvalue = ?)";
-
-        PreparedStatement checkTag = conn
-                .prepareStatement(statementStr);
-        checkTag.setString(1, label);
-        checkTag.setString(2, value);
-
-        ResultSet rs = checkTag.executeQuery();
-
-        boolean res = rs.next();
-        checkTag.close();
-
-        if(res) {
-        	throw new IOException("The chosen value of the label is a default " +
-        			"value. Change the default value of the label and run this " +
-        			"method again.");
-        } else {
-
-        	statementStr = "DELETE FROM Annotation_Choices "
-        			+ "WHERE (label = ? AND value = ?)";
-
-        	PreparedStatement deleteTag = conn
-        			.prepareStatement(statementStr);
-        	deleteTag.setString(1, label);
-        	deleteTag.setString(2, value);
-        	int ress = deleteTag.executeUpdate();
-        	deleteTag.close();
-
-        	return ress;
-        }
-    }
 }

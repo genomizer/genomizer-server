@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import org.junit.Test;
 
 import command.Command;
-import command.test.GetGenomeReleaseSpeciesCommand;
+import command.GetGenomeReleaseSpeciesCommand;
 
 import database.DatabaseAccessor;
 import database.Genome;
@@ -24,18 +24,18 @@ public class GetGenomReleaseResponsTest {
 
 	@Test
 	public void testIfResponseCodeIsCorrectForExisting() {
-		
-	
-		
+
+
+
 		ArrayList<Genome> genomeList;
 		try {
-			
+
 			DatabaseAccessor db=new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
 			//genomeList = db.getAllGenomReleases();
 			Command cmd=new GetGenomeReleaseSpeciesCommand("mouseTEST");
 			Response rsp=cmd.execute();
 			assertEquals(StatusCode.OK, rsp.getCode());
-					
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -43,23 +43,23 @@ public class GetGenomReleaseResponsTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	@Test
 	public void testIfResponseCodeIsCorrectNotExisting() {
-		
-	
-		
+
+
+
 		ArrayList<Genome> genomeList;
 		try {
-			
+
 			DatabaseAccessor db=new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
 			//genomeList = db.getAllGenomReleases();
 			Command cmd=new GetGenomeReleaseSpeciesCommand("hej");
 			Response rsp=cmd.execute();
 			assertEquals(StatusCode.BAD_REQUEST, rsp.getCode());
-					
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -67,31 +67,31 @@ public class GetGenomReleaseResponsTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
-	
+
 	@Test
 	public void testPrintResponse() {
-		
-		
+
+
 		ArrayList<Genome> genomeList;
 		try {
 			DatabaseAccessor db=new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
-			//genomeList = db.getAllGenomReleases();
-			
+			genomeList = db.getAllGenomReleases();
+
 		/*	for(int i=0; i<db.getAllAnnotationLabels().size();i++){
 				System.out.println(db.getAllAnnotationLabels().get(i));
 			}
 			*/
 			/*for(int i=0; i<db.getChoices("SpeciesTEST").size();i++){
 				System.out.println(db.getChoices("SpeciesTEST"));
-	
+
 			}*/
-			
-			genomeList =db.getAllGenomReleasesForSpecies("Human");
+
+			//genomeList =db.getAllGenomReleasesForSpecies("Human");
 			GetGenomeReleaseRespons gResp=new GetGenomeReleaseRespons(StatusCode.OK,genomeList);
 			System.out.println(gResp.getBody());
-					
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -99,6 +99,6 @@ public class GetGenomReleaseResponsTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 }

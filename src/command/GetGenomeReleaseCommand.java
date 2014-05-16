@@ -21,7 +21,7 @@ import server.DatabaseSettings;
 public class GetGenomeReleaseCommand extends Command{
 
 	//private String species;
-	public GetGenomeReleaseCommand(String restful) {
+	public GetGenomeReleaseCommand() {
 		//species=restful;
 	}
 
