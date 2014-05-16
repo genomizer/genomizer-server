@@ -184,7 +184,7 @@ public class CommandFactory {
 		processCommand.setUsername(username);
 		processCommand.setTimestamp(System.currentTimeMillis());
 		processCommand.setProcessType(parsedRest);
-		System.err.println("Username: " + username + "");
+		System.err.println("Username: " + username + " timestamp: " + System.currentTimeMillis() + " parsedRest: " + parsedRest);
 		//Create from json
 		//set userID
 		//set fileID

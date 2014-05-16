@@ -5,6 +5,7 @@ import response.LogoutResponse;
 import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
+import server.ResponseLogger;
 
 /**
  * Class used to represent a logout command.
@@ -39,6 +40,7 @@ public class LogoutCommand extends Command {
 		if(Authenticate.idExists(id)){
 			Authenticate.deleteUser(id);
 			System.out.println("USER ID DELETED: " + id);
+			ResponseLogger.printUserLog("test");
 			return new LogoutResponse(StatusCode.OK);
 		} else {
 			System.out.println("USER ID NOT FOUND: " + id);

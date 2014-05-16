@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import server.ResponseLogger;
 import server.test.dummies.Token;
 
 import com.google.gson.Gson;
@@ -45,6 +46,7 @@ public class Login {
 		System.out.println(token.getToken());
 		System.out.println("\nSending 'DELETE' request to URL : " + testSettings.url + "/logout");
 		System.out.println("Response Body: " + testSettings.printResponse(con));
+
 	}
 
 	static String getToken() {
