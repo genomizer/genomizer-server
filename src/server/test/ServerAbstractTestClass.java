@@ -27,7 +27,8 @@ public abstract class ServerAbstractTestClass {
 
 	//Server URL and port.
 	protected String port = "7000";
-	protected String serverURL = "http://scratchy.cs.umu.se:" + port;
+	//protected String serverURL = "http://scratchy.cs.umu.se:" + port;
+	protected String serverURL = "http://localhost:" + port;
 
 	/**
 	 * Method used to set the token.
