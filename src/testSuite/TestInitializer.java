@@ -1,6 +1,7 @@
 package testSuite;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
@@ -127,6 +128,18 @@ public class TestInitializer {
             Statement statement = conn.createStatement();
             statement.execute(s);
         }
+    }
+
+    public void recursiveDelete(File folder) {
+        File[] contents = folder.listFiles();
+        if (contents == null || contents.length == 0) {
+            folder.delete();
+        } else {
+            for (File f : contents) {
+                recursiveDelete(f);
+            }
+        }
+        folder.delete();
     }
 }
 
