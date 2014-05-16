@@ -40,17 +40,15 @@ public class WorkHandler extends Thread{
 	public void run(){
 		System.out.println(Thread.currentThread().getName());
 
-			while(true){
-				System.out.println("loop");
-				if(!workQueue.isEmpty()){
-					ProcessCommand work = workQueue.poll();
-					System.out.println("The processcommand is going to be executed");
-					ProcessStatus stat = processStatus.get(work);
-					try{
+		while(true){
+			System.out.println("loop");
+			if(!workQueue.isEmpty()){
+				ProcessCommand work = workQueue.poll();
+				System.out.println("The processcommand is going to be executed");
+				ProcessStatus stat = processStatus.get(work);
+				try{
 					stat.status = "Started";
-					}catch(NullPointerException e){
-						e.printStackTrace();
-					}
+
 					Response resp = work.execute();
 					System.err.println("AFTER EXECUTE PROCESS");
 					if (resp.getCode()==StatusCode.CREATED){
@@ -58,8 +56,11 @@ public class WorkHandler extends Thread{
 					}else{
 						stat.status = "Crashed";
 					}
+				}catch(NullPointerException e){
+					e.printStackTrace();
 				}
 			}
+		}
 
 	}
 

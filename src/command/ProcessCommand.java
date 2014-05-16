@@ -148,11 +148,29 @@ public class ProcessCommand extends Command {
 		}
 		return false;
 	}
+	/**
+	 * Execute to simulate flow.
+	 */
+	@Override
+	public Response execute(){
+		try {
+			Thread.sleep(20000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		System.err.println("Logging created uname: " + username);
+		ResponseLogger.log(username, new ProcessResponse(StatusCode.CREATED, "raw to profile processing completed"));
+		return new ProcessResponse(StatusCode.CREATED);
+	}
+
 
 	/**
 	 * Method that runs when the processCommand is executed.
 	 *
 	 */
+	/*
 	@Override
 	public Response execute() {
 		System.out.println("-------------ProcessCommand - Execute----------------");
@@ -275,7 +293,7 @@ public class ProcessCommand extends Command {
 		return new ProcessResponse(StatusCode.CREATED);
 
 
-	}
+	}*/
 
 	/**
 	 * Set the username of the uploader wich will be added to the database annotation.
