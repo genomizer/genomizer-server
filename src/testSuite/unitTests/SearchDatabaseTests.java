@@ -58,7 +58,7 @@ public class SearchDatabaseTests {
     @Test
     public void shouldBeAbleToSearchUsingPubMedString2() throws Exception {
         List<Experiment> experiments = dbac
-                .search("Human[Species] AND Does not matter[Sex]");
+                .search("HumaN[Species] AND Does not matter[SEx]");
         assertEquals(1, experiments.size());
         assertEquals("Exp2", experiments.get(0).getID());
     }
@@ -91,7 +91,7 @@ public class SearchDatabaseTests {
     @Test
     public void shouldBeAbleToSearchUsingPubMedString6() throws Exception {
         List<Experiment> experiments = dbac
-                .search("Human[SpEcies] NOT Child[Development Stage]");
+                .search("Human[SpEcies] NOT ChiLd[Development Stage]");
         assertEquals(1, experiments.size());
         assertEquals("Adult", experiments.get(0).getAnnotations().get("Development Stage"));
     }
@@ -106,7 +106,7 @@ public class SearchDatabaseTests {
     @Test
     public void shouldBeAbleToSearchUsingNOT() throws Exception {
         List<Experiment> experiments = dbac
-                .search("CHild[Development Stage] NOT Human[Species]");
+                .search("CHild[Development Stage] NOT HumAn[Species]");
         assertEquals(1, experiments.size());
         assertEquals("Rat", experiments.get(0).getAnnotations().get("Species"));
     }
@@ -119,9 +119,9 @@ public class SearchDatabaseTests {
 //            System.out.println(e.toString());
 //        }
 //    }
-    
+
     @Test
-    public void shouldBeAbleToSearchCaseInsensitive() 
+    public void shouldBeAbleToSearchCaseInsensitive()
     		throws IOException, SQLException {
         List<Experiment> experiments = dbac
                 .search("EXp1[ExpID] AND RaW[FileType]");
@@ -129,9 +129,9 @@ public class SearchDatabaseTests {
             System.out.println(e.toString());
         }
     }
-    
+
     @Test
-    public void shouldBeAbleToSearchMoreCaseInsensitive() 
+    public void shouldBeAbleToSearchMoreCaseInsensitive()
     		throws IOException, SQLException {
         List<Experiment> experiments = dbac
                 .search("ExP1[ExpID] AND RAw[FileType] AND /var/www/data/Exp1/raw/file1_input.fastq[FilePath]");
