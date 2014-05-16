@@ -83,7 +83,8 @@ public class ExperimentMethods {
      *
      * @param expId
      *            the experiment ID.
-     * @param rootDir 
+     * @param rootDir
+     * 			  the root directory.
      * @return the number of tuples deleted.
      * @throws SQLException
      *             if the query does not succeed. Occurs if Experiment
@@ -101,7 +102,7 @@ public class ExperimentMethods {
 
         int rs = stmt.executeUpdate();
         stmt.close();
-        
+
         recursiveDelete(new File(rootDir + expId));
 
         return rs;
@@ -302,6 +303,10 @@ public class ExperimentMethods {
                 || annoMethods.getChoices(label).contains(value);
     }
 
+    /**
+     * Recursively deletes a folder with all it's subfolders and files.
+     * @param folder the folder to delete.
+     */
     private static void recursiveDelete(File folder) {
         File[] contents = folder.listFiles();
         if (contents == null || contents.length == 0) {

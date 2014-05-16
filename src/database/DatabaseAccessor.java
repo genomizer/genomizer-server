@@ -747,10 +747,8 @@ public class DatabaseAccessor {
 		return fileMethods.getFileTuple(filePath);
 	}
 
-	// Too many parameters. Should take a JSONObject or FileTuple
-	// instead.
 	/**
-	 * Adds a file to the database. Users should migrate to serverAddFile(...)
+	 * Adds a file to the database. Users should migrate to addNewFile(...)
 	 * which returns the FileTuple added to the database.
 	 *
 	 * @param fileType
@@ -775,7 +773,7 @@ public class DatabaseAccessor {
 	}
 
 	/**
-	 * Adds a file to the database with URL. Use clientAddFile(...)
+	 * Adds a file to the database with URL. Use addNewFile(...) instead.
 	 *
 	 * @param fileType
 	 * @param fileName

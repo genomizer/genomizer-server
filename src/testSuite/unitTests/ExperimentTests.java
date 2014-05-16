@@ -17,10 +17,8 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.postgresql.util.PSQLException;
 
 import testSuite.TestInitializer;
-
 import database.DatabaseAccessor;
 import database.Experiment;
 import database.FilePathGenerator;
@@ -54,6 +52,8 @@ public class ExperimentTests {
     private static String testFolderPath;
     private static File testFolder;
     private static String testFolderName = "Genomizer Test Folder - Dont be afraid to delete me";
+    
+    private static TestInitializer ti;
 
     @BeforeClass
     public static void setupTestCase() throws Exception {
@@ -74,6 +74,8 @@ public class ExperimentTests {
 
         fpg = dbac.getFilePathGenerator();
         fpg.setRootDirectory(testFolderPath);
+        
+        ti = new TestInitializer();
     }
 
     @AfterClass
@@ -81,7 +83,7 @@ public class ExperimentTests {
         dbac.deleteFile(ft.id);
         dbac.deleteExperiment(testExpId2);
         dbac.close();
-        recursiveDelete(testFolder);
+        ti.recursiveDelete(testFolder);
     }
 
     @Before
@@ -252,7 +254,7 @@ public class ExperimentTests {
 		addMockFile(ft.getParentFolder(), testName);
 		dbac.deleteExperiment(testExpId2);
 	}
-    
+
     @Test
     public void shouldDeleteDirectories() throws Exception {
 		fpg.generateExperimentFolders(testExpId);
@@ -265,17 +267,5 @@ public class ExperimentTests {
     private void addMockFile(String folderPath, String filename1) throws IOException {
         File file1 = new File(folderPath + filename1);
         file1.createNewFile();
-    }
-
-    private static void recursiveDelete(File folder) {
-        File[] contents = folder.listFiles();
-        if (contents == null || contents.length == 0) {
-            folder.delete();
-        } else {
-            for (File f : contents) {
-                recursiveDelete(f);
-            }
-        }
-        folder.delete();
     }
 }
