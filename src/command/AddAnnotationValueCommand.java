@@ -2,9 +2,11 @@ package command;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 
 import com.google.gson.annotations.Expose;
 import database.DatabaseAccessor;
+import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
@@ -45,19 +47,23 @@ public class AddAnnotationValueCommand extends Command {
 
 		try {
 			db = initDB();
+			List<String> values = db.getChoices(name);
+			if(values.contains(value)) {
+				return new ErrorResponse(StatusCode.BAD_REQUEST, "The annotation " + name + " already contains the value " + value);
+			}
 			db.addDropDownAnnotationValue(name, value);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return new MinimalResponse(StatusCode.NO_CONTENT);
+			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
 		} catch (IOException e) {
 			e.printStackTrace();
-			return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
+			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, "Database unavailable");
 		} finally{
 			try {
 				db.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
-				return new MinimalResponse(StatusCode.NO_CONTENT);
+				return new ErrorResponse(StatusCode.NO_CONTENT, e.getMessage());
 			}
 		}
 		return new MinimalResponse(StatusCode.OK);

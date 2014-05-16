@@ -7,11 +7,7 @@ import java.util.UUID;
 
 public class Authenticate {
 
-	static private HashMap<String, String> activeUsersID = new HashMap<String,String>();
-
-	public Authenticate(){
-	//	activeUsersID=new ArrayList<String>();
-	}
+	private static HashMap<String, String> activeUsersID = new HashMap<String,String>();
 
 	static public String createUserID(String username){
 		String uid =UUID.randomUUID().toString();

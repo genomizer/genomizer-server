@@ -66,12 +66,12 @@ public class Doorman {
 			public void handle(HttpExchange exchange) throws IOException {
 
 				System.out.println("\n-----------------\nNEW EXCHANGE: " + exchange.getHttpContext().getPath());
-
+System.out.println("LOOOOL: " + exchange.getRequestMethod());
 				switch(exchange.getRequestMethod()) {
 				case "GET":
 					switch(exchange.getHttpContext().getPath()) {
 					case "/experiment":
-						exchange(exchange, CommandType.RETRIEVE_EXPERIMENT_COMMAND);
+						exchange(exchange, CommandType.GET_EXPERIMENT_COMMAND);
 						break;
 					case "/file":
 						exchange(exchange, CommandType.GET_FILE_FROM_EXPERIMENT_COMMAND);
@@ -82,6 +82,13 @@ public class Doorman {
 					case "/annotation":
 						exchange(exchange, CommandType.GET_ANNOTATION_INFORMATION_COMMAND);
 						break;
+					case "/genomeRelease":
+						String fullPath = exchange.getRequestURI().toString();
+						if(fullPath.startsWith("/genomeRelease/")){
+							exchange(exchange, CommandType.GET_GENOME_RELEASE_SPECIES_COMMAND);
+						}else{
+							exchange(exchange, CommandType.GET_ALL_GENOME_RELEASE_COMMAND);
+						}
 					case "/sysadm":
 						exchange(exchange, CommandType.GET_ANNOTATION_PRIVILEGES_COMMAND);
 						break;
@@ -159,7 +166,7 @@ public class Doorman {
 						exchange(exchange, CommandType.LOGOUT_COMMAND);
 						break;
 					case "/experiment":
-						exchange(exchange, CommandType.REMOVE_EXPERIMENT_COMMAND);
+						exchange(exchange, CommandType.DELETE_EXPERIMENT_COMMAND);
 						break;
 					case "/file":
 						exchange(exchange, CommandType.DELETE_FILE_FROM_EXPERIMENT_COMMAND);
@@ -233,7 +240,9 @@ public class Doorman {
 		System.out.println("BEFORE PROCESS COMMAND...");
 
 		try {
-			response = commandHandler.processNewCommand(body, exchange.getRequestURI().toString(), username, type);
+			String header = URLDecoder.decode(exchange.getRequestURI().toString(), "UTF-8");
+			response = commandHandler.processNewCommand(body, header, username, type);
+
 		} catch(Exception e ) {
 			e.printStackTrace();
 		}
@@ -248,10 +257,6 @@ public class Doorman {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-
-
-
 	}
 
 	private void respond(HttpExchange exchange, Response response) throws IOException {

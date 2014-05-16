@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -18,15 +19,17 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import testSuite.TestInitializer;
-
 import database.DatabaseAccessor;
 import database.Experiment;
+import database.FilePathGenerator;
+import database.FileTuple;
 
 public class ExperimentTests {
 
     private static DatabaseAccessor dbac;
 
     private static String testExpId = "testExpId1";
+    private static String testExpId2 = "testExpId2";
 
     private static String testLabelFT = "testLabelFT1";
     private static String testValueFT = "testValueFT1";
@@ -35,6 +38,23 @@ public class ExperimentTests {
 	private static String newLabel = "Tis";					//for changeLabel
     private static List<String> testChoices;
 
+    private static FileTuple ft;
+    private static String testName = "testFileName1";
+    private static String testInputFile = "testInputFile";
+    private static int testFileType = FileTuple.RAW;
+    private static String testAuthor = "testFileAuthor1";
+    private static String testUploader = "testUploader1";
+    private static String testMetaData = "testMetaData";
+    private static boolean testIsPrivate = false;
+    private static String testGRVersion = null;
+
+    private static FilePathGenerator fpg;
+    private static String testFolderPath;
+    private static File testFolder;
+    private static String testFolderName = "Genomizer Test Folder - Dont be afraid to delete me";
+    
+    private static TestInitializer ti;
+
     @BeforeClass
     public static void setupTestCase() throws Exception {
         dbac = new DatabaseAccessor(TestInitializer.username, TestInitializer.password, TestInitializer.host,
@@ -42,11 +62,28 @@ public class ExperimentTests {
         testChoices = new ArrayList<String>();
         testChoices.add(testChoice);
         testChoices.add(testChoice + "2");
+
+        testFolderPath = System.getProperty("user.home") + File.separator
+                + testFolderName + File.separator;
+
+        testFolder = new File(testFolderPath);
+
+        if (!testFolder.exists()) {
+            testFolder.mkdirs();
+        }
+
+        fpg = dbac.getFilePathGenerator();
+        fpg.setRootDirectory(testFolderPath);
+        
+        ti = new TestInitializer();
     }
 
     @AfterClass
     public static void undoAllChanges() throws SQLException {
+        dbac.deleteFile(ft.id);
+        dbac.deleteExperiment(testExpId2);
         dbac.close();
+        ti.recursiveDelete(testFolder);
     }
 
     @Before
@@ -85,6 +122,16 @@ public class ExperimentTests {
         assertTrue(dbac.hasExperiment(testExpId));
         e = dbac.getExperiment(testExpId);
         assertEquals(testExpId, e.getID());
+    }
+  
+    @Test
+    public void shouldReturnZeroOnRemovingNonExistantExp() throws Exception {
+        assertEquals(0, dbac.deleteExperiment("pang"));
+    }
+    
+    @Test
+    public void shouldReturnOneOnRemovingExp() throws Exception {
+        assertEquals(1, dbac.deleteExperiment(testExpId));
     }
 
     @Test
@@ -207,4 +254,28 @@ public class ExperimentTests {
     	}
     }
 
+    @Test(expected = SQLException.class)
+    public void shouldNotDeleteDirectoryContainingFile() throws Exception {
+    	dbac.addExperiment(testExpId2);
+		ft = dbac.addNewFile(testExpId2, testFileType, testName, testInputFile,
+		  		testMetaData, testAuthor, testUploader, testIsPrivate,
+		  		testGRVersion);
+    	fpg.generateExperimentFolders(testExpId2);
+		addMockFile(ft.getParentFolder(), testName);
+		dbac.deleteExperiment(testExpId2);
+	}
+
+    @Test
+    public void shouldDeleteDirectories() throws Exception {
+		fpg.generateExperimentFolders(testExpId);
+		File dir = new File(testFolderPath + testExpId);
+		assertTrue(dir.exists());
+		dbac.deleteExperiment(testExpId);
+		assertFalse(dir.exists());
+	}
+
+    private void addMockFile(String folderPath, String filename1) throws IOException {
+        File file1 = new File(folderPath + filename1);
+        file1.createNewFile();
+    }
 }

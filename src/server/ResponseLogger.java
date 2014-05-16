@@ -17,16 +17,15 @@ public class ResponseLogger {
 	}
 
 	public static boolean log(String username, Response r) {
-		if(!Authenticate.userExists(username)){
-			return false;
-		}
 
 		if(!usermap.containsKey(username)){
+			System.err.println("usermap did not contain: " + username);
 			usermap.put(username, new ArrayList<Response>());
 		}
 
-		ArrayList<Response> tmp = getUserLog(username);
+		ArrayList<Response> tmp = usermap.get(username);
 		tmp.add(r);
+		System.err.println("put: " + username + ", tmpsize:" + tmp.size());
 		usermap.put(username,tmp);
 		return true;
 
@@ -37,6 +36,7 @@ public class ResponseLogger {
 	}
 
 	public static void printUserLog(String username){
+		System.err.println("printuserlog:" + username);
 		if(usermap.containsKey(username)){
 			System.err.println("---Printing " + username + " log---");
 
@@ -50,6 +50,16 @@ public class ResponseLogger {
 			System.err.println("User " + username + " does not exist in log");
 		}
 
+	}
+
+	public static void printLog(){
+		System.err.println("---Printing log--");
+		for(String user : usermap.keySet()){
+			System.err.println("User: " + user);
+			for(Response r : usermap.get(user)){
+				System.err.println(r);
+			}
+		}
 	}
 
 	public static void reset() {

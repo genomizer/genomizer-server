@@ -1,5 +1,6 @@
 package database.subClasses;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -36,7 +37,7 @@ public class ExperimentMethods {
      */
     public Experiment getExperiment(String expID) throws SQLException {
 
-    	String query = "SELECT ExpID FROM Experiment " + "WHERE ExpID = ?";
+    	String query = "SELECT ExpID FROM Experiment " + "WHERE ExpID ~~* ?";
 
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setString(1, expID);
@@ -82,6 +83,8 @@ public class ExperimentMethods {
      *
      * @param expId
      *            the experiment ID.
+     * @param rootDir
+     * 			  the root directory.
      * @return the number of tuples deleted.
      * @throws SQLException
      *             if the query does not succeed. Occurs if Experiment
@@ -89,9 +92,9 @@ public class ExperimentMethods {
      *             an experiment must be deleted first before an
      *             experiment can be deleted from the database)
      */
-    public int deleteExperiment(String expId) throws SQLException {
+    public int deleteExperiment(String expId, String rootDir) throws SQLException {
 
-    	String query = "DELETE FROM Experiment " + "WHERE (ExpID = ?)";
+    	String query = "DELETE FROM Experiment " + "WHERE ExpID ~~* ?";
 
         PreparedStatement stmt = conn
                 .prepareStatement(query);
@@ -99,6 +102,8 @@ public class ExperimentMethods {
 
         int rs = stmt.executeUpdate();
         stmt.close();
+
+        recursiveDelete(new File(rootDir + expId));
 
         return rs;
     }
@@ -115,7 +120,7 @@ public class ExperimentMethods {
      */
     public boolean hasExperiment(String expID) throws SQLException {
 
-    	String query = "SELECT ExpID FROM Experiment " + "WHERE ExpID = ?";
+    	String query = "SELECT ExpID FROM Experiment " + "WHERE ExpID ~~* ?";
 
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setString(1, expID);
@@ -151,7 +156,7 @@ public class ExperimentMethods {
         }
 
         String query = "UPDATE Annotated_With SET Value = ?" +
-        		" WHERE (Label = ?) AND (ExpID = ?)";
+        		" WHERE (Label ~~* ?) AND (ExpID ~~* ?)";
 
         PreparedStatement stmt = conn.prepareStatement(query);
 
@@ -215,7 +220,7 @@ public class ExperimentMethods {
             throws SQLException {
 
     	String query = "DELETE FROM Annotated_With "
-                + "WHERE (ExpID = ? AND Label = ?)";
+                + "WHERE (ExpID ~~* ? AND Label ~~* ?)";
 
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setString(1, expID);
@@ -238,7 +243,7 @@ public class ExperimentMethods {
      */
     public Experiment fillFiles(Experiment e) throws SQLException {
 
-        String query = "SELECT * FROM File " + "WHERE ExpID = ?";
+        String query = "SELECT * FROM File " + "WHERE ExpID ~~* ?";
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setString(1, e.getID());
         ResultSet rs = stmt.executeQuery();
@@ -266,7 +271,7 @@ public class ExperimentMethods {
             throws SQLException {
 
         String query = "SELECT Label, Value FROM Annotated_With "
-                + "WHERE ExpID = ?";
+                + "WHERE ExpID ~~* ?";
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setString(1, e.getID());
         ResultSet rs = stmt.executeQuery();
@@ -296,6 +301,22 @@ public class ExperimentMethods {
 
         return annoMethods.getAnnotationType(label) == Annotation.FREETEXT
                 || annoMethods.getChoices(label).contains(value);
+    }
+
+    /**
+     * Recursively deletes a folder with all it's subfolders and files.
+     * @param folder the folder to delete.
+     */
+    private static void recursiveDelete(File folder) {
+        File[] contents = folder.listFiles();
+        if (contents == null || contents.length == 0) {
+            folder.delete();
+        } else {
+            for (File f : contents) {
+                recursiveDelete(f);
+            }
+        }
+        folder.delete();
     }
 
 }

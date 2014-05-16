@@ -150,13 +150,14 @@ public class ProcessCommand extends Command {
 		}
 		return false;
 	}
+
 	/**
 	 * Execute to simulate flow.
 	 */
 	/*
 	@Override
 	public Response execute(){
-		System.err.println("Executing process command");
+//		System.err.println("Executing process command");
 		try {
 			Thread.sleep(5000);
 		} catch (InterruptedException e) {
@@ -166,7 +167,6 @@ public class ProcessCommand extends Command {
 
 		System.err.println("Logging created uname: " + username);
 		ResponseLogger.log(username, new ProcessResponse(StatusCode.CREATED, "raw to profile processing completed"));
-		ResponseLogger.printUserLog(username);
 		return new ProcessResponse(StatusCode.CREATED);
 	}*/
 

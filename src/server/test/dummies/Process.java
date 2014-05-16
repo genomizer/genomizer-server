@@ -10,11 +10,8 @@ public class Process {
 
 
 
-	public static void process() throws IOException{
+	public static void sendRawToProfile() throws IOException{
 
-
-		String filename = "filename1234";
-		String fileid = "1";
 		String expid = "Exp1";
 		String parameters = "\"param1\"," +
 				"\"param2\"," +
@@ -36,8 +33,6 @@ public class Process {
 		con.setRequestProperty("Authorization", Login.getToken());
 
 		String json = "{" +
-				"\"filename\": \"" + filename + "\"," +
-				"\"fileId\": \"" + fileid + "\"," +
 				"\"expid\": \"" + expid + "\"," +
 				"\"parameters\": [" + parameters + "]," +
 				"\"metadata\": \"" + metadata + "\"," +

@@ -2,10 +2,12 @@ package command;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 
 import response.Response;
 import com.google.gson.annotations.Expose;
 import database.DatabaseAccessor;
+import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
@@ -34,13 +36,25 @@ public class DeleteAnnotationValueCommand extends Command {
 
 		try {
 			db = initDB();
-			db.removeAnnotationValue(name, value);
+			List<String> values = db.getChoices(name);
+			if(values.contains(value)) {
+				db.removeAnnotationValue(name, value);
+			} else {
+				return new ErrorResponse(StatusCode.BAD_REQUEST, "The value " + value + " does not exist in " + name + " and can not be deleted");
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return new MinimalResponse(StatusCode.NO_CONTENT);
+			return new ErrorResponse(StatusCode.NO_CONTENT, e.getMessage());
 		} catch (IOException e) {
 			e.printStackTrace();
-			return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
+			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, e.getMessage());
+		} finally {
+			try {
+				db.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, "Could not close database connection");
+			}
 		}
 		return new MinimalResponse(StatusCode.OK);
 	}

@@ -4,12 +4,11 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 import database.DatabaseAccessor;
+import database.MaxSize;
 import response.DeleteGenomeReleaseResponse;
-import response.MinimalResponse;
+import response.ErrorResponse;
 import response.Response;
 import response.StatusCode;
-
-//TODO: Add more validation code.
 
 /**
  * Class used to delete a genome release.
@@ -41,7 +40,19 @@ public class DeleteGenomeReleaseCommand extends Command {
 	@Override
 	public boolean validate() {
 
-		if( (genomeVersion.equals("null")) || (specie.equals("null")) ) {
+		if(genomeVersion == null || specie == null) {
+			return false;
+		}
+
+		if(genomeVersion.equals("null") || specie.equals("null")) {
+			return false;
+		}
+
+		if(genomeVersion.length() > MaxSize.GENOME_VERSION || genomeVersion.length() < 1) {
+			return false;
+		}
+
+		if(specie.length() > MaxSize.GENOME_SPECIES || specie.length() < 1) {
 			return false;
 		}
 
@@ -58,7 +69,6 @@ public class DeleteGenomeReleaseCommand extends Command {
 		Response rsp = null;
 		DatabaseAccessor db = null;
 
-		//Add implementation code.
 		try {
 
 			db = initDB();
@@ -70,17 +80,16 @@ public class DeleteGenomeReleaseCommand extends Command {
 
 			} else {
 
-				rsp = new MinimalResponse(StatusCode.BAD_REQUEST);
-
+				rsp = new ErrorResponse(StatusCode.BAD_REQUEST, "Removeing did not work.");
 			}
 
 		} catch (SQLException e) {
 
-			rsp = new MinimalResponse(StatusCode.BAD_REQUEST);
+			return new ErrorResponse(StatusCode.BAD_REQUEST, "Database error.");
 
 		} catch (IOException e) {
 
-			rsp = new MinimalResponse(StatusCode.BAD_REQUEST);
+			return new ErrorResponse(StatusCode.BAD_REQUEST, "IOException.");
 
 		} finally {
 
@@ -90,7 +99,7 @@ public class DeleteGenomeReleaseCommand extends Command {
 
 			} catch (SQLException e) {
 
-				rsp = new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
+				return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, "Error closeing database");
 
 			}
 

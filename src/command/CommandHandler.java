@@ -43,12 +43,12 @@ public class CommandHandler {
 
 		//Get code from restful
 		Command myCom = createCommand(json, restful, username, cmdt);
-		System.out.println("rest: " + restful);
 
 		if (myCom.validate()) {
 			if(CommandType.PROCESS_COMMAND.equals(cmdt)){
 				//add the heavy command to the queue, executed when the
 				//command is at the head of the queue, return OK to tell the client
+				System.err.println("Adding processCommand to workqueue");
 				heavyWorkThread.addWork((ProcessCommand)myCom);
 				return new ProcessResponse(StatusCode.OK);
 			}else{
@@ -74,7 +74,6 @@ public class CommandHandler {
 
 		if (cmdt == CommandType.DELETE_ANNOTATION_VALUE_COMMAND) {
 			String[] rest = restful.split("/");
-			System.out.println("split: " + rest[0] + rest[1] + rest[2]);
 			newCommand = cmdFactory.createDeleteAnnotationValueCommand(json, rest[2], rest[3]);
 		}
 		String parsedRest = parseRest(restful);
@@ -83,14 +82,14 @@ public class CommandHandler {
 			newCommand = cmdFactory.createLoginCommand(json);
 		} else if (cmdt == CommandType.LOGOUT_COMMAND) {
 			newCommand = cmdFactory.createLogoutCommand(username);
-		} else if (cmdt == CommandType.RETRIEVE_EXPERIMENT_COMMAND) {
-			newCommand = cmdFactory.createRetrieveExperimentCommand(json, parsedRest);
+		} else if (cmdt == CommandType.GET_EXPERIMENT_COMMAND) {
+			newCommand = cmdFactory.createGetExperimentCommand(parsedRest);
 		} else if (cmdt == CommandType.ADD_EXPERIMENT_COMMAND) {
 			newCommand = cmdFactory.createAddExperimentCommand(json);
 		} else if (cmdt == CommandType.UPDATE_EXPERIMENT_COMMAND) {
 			newCommand = cmdFactory.createUpdateExperimentCommand(json, parsedRest);
-		} else if (cmdt == CommandType.REMOVE_EXPERIMENT_COMMAND) {
-			newCommand = cmdFactory.createRemoveExperimentCommand(json, parsedRest);
+		} else if (cmdt == CommandType.DELETE_EXPERIMENT_COMMAND) {
+			newCommand = cmdFactory.createDeleteExperimentCommand(json, parsedRest);
 		} else if (cmdt == CommandType.GET_FILE_FROM_EXPERIMENT_COMMAND) {
 			newCommand = cmdFactory.createGetFileFromExperimentCommand(json, parsedRest);
 		} else if (cmdt == CommandType.ADD_FILE_TO_EXPERIMENT_COMMAND) {
@@ -126,9 +125,12 @@ public class CommandHandler {
 		} else if (cmdt == CommandType.ADD_GENOME_RELEASE_COMMAND) {
 			newCommand = cmdFactory.createAddGenomeReleaseCommand(json);
 		} else if (cmdt == CommandType.DELETE_GENOME_RELEASE_COMMAND) {
-
 			String[] rest = restful.split("/");
 			newCommand = cmdFactory.createDeleteGenomeReleaseCommand(rest[2], rest[3]);
+		} else if(cmdt==CommandType.GET_ALL_GENOME_RELEASE_COMMAND) {
+			newCommand=cmdFactory.createGetAllGenomeReleasesCommand();
+		} else if(cmdt==CommandType.GET_GENOME_RELEASE_SPECIES_COMMAND) {
+			newCommand=cmdFactory.createGetGenomeReleasesSpeciesCommand(parsedRest);
 		}
 		return newCommand;
 	}

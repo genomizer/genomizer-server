@@ -11,6 +11,7 @@ import java.util.Map;
 import database.DatabaseAccessor;
 
 import response.AnnotationInformation;
+import response.ErrorResponse;
 import response.GetAnnotationInformationResponse;
 import response.MinimalResponse;
 import response.Response;
@@ -36,10 +37,10 @@ public class GetAnnotationInformationCommand extends Command {
 			a = db.getAnnotations();
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return new MinimalResponse(StatusCode.BAD_REQUEST);
+			return new ErrorResponse(StatusCode.BAD_REQUEST, "Database error");
 		} catch (IOException e) {
 			e.printStackTrace();
-			return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
+			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, "Database error");
 		}
 
 		Iterator<String> keys = a.keySet().iterator();
@@ -83,6 +84,7 @@ public class GetAnnotationInformationCommand extends Command {
 			db.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, "Could not close database connection");
 		}
 		return new GetAnnotationInformationResponse(200, annotations);
 	}

@@ -12,6 +12,7 @@ import com.google.gson.JsonElement;
 
 import database.DatabaseAccessor;
 import database.Genome;
+import response.ErrorResponse;
 import response.GetGenomeReleaseRespons;
 import response.Response;
 import response.StatusCode;
@@ -19,15 +20,15 @@ import server.DatabaseSettings;
 
 public class GetGenomeReleaseCommand extends Command{
 
-	private String species;
-	public GetGenomeReleaseCommand(String restful) {
-		species=restful;
+	//private String species;
+	public GetGenomeReleaseCommand() {
+		//species=restful;
 	}
 
 	@Override
 	public boolean validate() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
@@ -53,7 +54,7 @@ public class GetGenomeReleaseCommand extends Command{
 				e.printStackTrace();
 			}
 		}
-		return null;
+		return new ErrorResponse(StatusCode.BAD_REQUEST, "Something went wrong");
 	}
 
 }

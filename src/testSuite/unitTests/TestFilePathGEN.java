@@ -16,11 +16,97 @@ import database.FileTuple;
 
 public class TestFilePathGEN {
 
-	@Test
+    private static String testFolderName = "Genomizer Test Folder - Dont be afraid to delete me";
 
+<<<<<<< HEAD
 	public void getCatFilePath(){
 		String generatedPath = FilePathGenerator.GenerateFilePath("CatTest", "raw", "CatFacts.txt");
 		String expectedPath = FileSystemView.getFileSystemView().getHomeDirectory().getPath() + "/CatTest/raw/CatFacts.txt";
+=======
+    private static FilePathGenerator fpg;
+    private static File testFolder;
+
+    private static String testFolderPath;
+
+    @BeforeClass
+    public static void setupClass() throws IOException {
+
+        testFolderPath = System.getProperty("user.home") + File.separator
+                + testFolderName + File.separator;
+
+        testFolder = new File(testFolderPath);
+
+        if (!testFolder.exists()) {
+            testFolder.mkdirs();
+        }
+
+        fpg = new FilePathGenerator(testFolder.toString() + File.separator);
+    }
+
+    @AfterClass
+    public static void teardownClass() {
+        recursiveDelete(testFolder);
+    }
+
+    @Before
+    public void setup() {
+        fpg.generateExperimentFolders("Exp1");
+    }
+
+    @After
+    public void teardown() {
+        recursiveDelete(testFolder);
+    }
+
+    private static void recursiveDelete(File folder) {
+        File[] contents = folder.listFiles();
+        if (contents == null || contents.length == 0) {
+            folder.delete();
+        } else {
+            for (File f : contents) {
+                recursiveDelete(f);
+            }
+        }
+        folder.delete();
+    }
+
+    @Test
+    public void shouldGenerateRightNumberOfExperimentFolders() throws Exception {
+
+        testFolder = new File(testFolderPath);
+        assertEquals(1, testFolder.listFiles().length);
+        assertEquals(4, testFolder.listFiles()[0].listFiles().length);
+    }
+
+    @Test
+    public void shouldGenerateFilePath() throws Exception {
+        String expID = "expID";
+        int fileType = FileTuple.RAW;
+        String fileName = "fileName";
+        String filePath = fpg.generateFilePath(expID, fileType, fileName);
+        assertEquals(testFolder.toString() + File.separator + expID
+                + File.separator + "raw" + File.separator + fileName, filePath);
+    }
+
+    @Test(expected = IOException.class)
+    public void shouldThrowAnExceptionWhenSeperatorIsMissingFromHomeDir()
+            throws Exception {
+        new FilePathGenerator(testFolder.toString());
+    }
+
+    @Test
+    public void shouldGenerateRightChainFolderPath() throws Exception {
+        String species = "Human";
+        String fromVersion = "v1";
+        String toVersion = "v2";
+
+        String expectedFolderPath = testFolder.toString() + File.separator
+                + "chain_files" + File.separator + species + File.separator
+                + fromVersion + " - " + toVersion + File.separator;
+
+        String chainFilePath = fpg.getChainFolderPath(species,
+                fromVersion, toVersion);
+>>>>>>> refs/remotes/origin/development
 
         assertEquals(expectedFolderPath, chainFilePath);
 
@@ -45,7 +131,7 @@ public class TestFilePathGEN {
         String fromVersion = "v1";
         String toVersion = "v2";
 
-        fpg.generateChainFolderPath(species, fromVersion, toVersion);
+        fpg.generateChainFolder(species, fromVersion, toVersion);
 
         assertNotNull(searchForSubFolder(testFolder, "chain_files"));
     }
@@ -56,7 +142,7 @@ public class TestFilePathGEN {
         String fromVersion = "v1";
         String toVersion = "v2";
 
-        fpg.generateChainFolderPath(species, fromVersion, toVersion);
+        fpg.generateChainFolder(species, fromVersion, toVersion);
 
         File chainFileFolder = searchForSubFolder(testFolder, "chain_files");
         assertNotNull(searchForSubFolder(chainFileFolder, species));
@@ -69,7 +155,7 @@ public class TestFilePathGEN {
         String fromVersion = "v1";
         String toVersion = "v2";
 
-        fpg.generateChainFolderPath(species, fromVersion, toVersion);
+        fpg.generateChainFolder(species, fromVersion, toVersion);
 
         File chainFileFolder = searchForSubFolder(testFolder, "chain_files");
         File speciesFolder = searchForSubFolder(chainFileFolder, species);

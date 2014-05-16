@@ -3,6 +3,8 @@ package command;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import response.ErrorResponse;
 import response.MinimalResponse;
 import response.StatusCode;
 import com.google.gson.annotations.Expose;
@@ -50,15 +52,13 @@ public class AddExperimentCommand extends Command {
 			db = initDB();
 			db.addExperiment(name);
 			for(Annotation annotation: annotations) {
-				System.out.println("annotation name: " +annotation.getName() + " annotation value: " + annotation.getValue());
 				db.annotateExperiment(name, annotation.getName(), annotation.getValue());
-				System.out.println("added annotation" + annotation.getName());
 			}
 			db.close();
 			return new MinimalResponse(StatusCode.CREATED);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
+			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
 		} catch (IOException e) {
 			e.printStackTrace();
 			return new MinimalResponse(StatusCode.BAD_REQUEST);

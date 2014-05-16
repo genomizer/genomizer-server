@@ -53,7 +53,7 @@ public class CommandFactory {
 	 * @param restful tag to put into class.
 	 * @return the actual command.
 	 */
-	public Command createRetrieveExperimentCommand(String json, String restful) {
+	public Command createGetExperimentCommand(String restful) {
 		return new GetExperimentCommand(restful);
 	}
 
@@ -86,7 +86,7 @@ public class CommandFactory {
 	 * @param restful tag to put into class.
 	 * @return the actual command.
 	 */
-	public Command createRemoveExperimentCommand(String json, String restful) {
+	public Command createDeleteExperimentCommand(String json, String restful) {
 		return new DeleteExperimentCommand(restful);
 	}
 
@@ -184,7 +184,7 @@ public class CommandFactory {
 		processCommand.setUsername(username);
 		processCommand.setTimestamp(System.currentTimeMillis());
 		processCommand.setProcessType(parsedRest);
-		System.err.println("Username: " + username + "");
+		System.err.println("Username: " + username + " timestamp: " + System.currentTimeMillis() + " parsedRest: " + parsedRest);
 		//Create from json
 		//set userID
 		//set fileID
@@ -290,12 +290,21 @@ public class CommandFactory {
 
 	public Command createDeleteAnnotationValueCommand(String json,
 			String value, String name) {
+
 		return new DeleteAnnotationValueCommand(value, name);
 	}
 
 	public Command createEditAnnotationFieldCommand(String json) {
 		Command command = gson.fromJson(json, EditAnnotationFieldCommand.class);
 		return command;
+	}
+	
+	public Command createGetAllGenomeReleasesCommand(){
+		return new GetGenomeReleaseCommand();
+	}
+	
+	public Command createGetGenomeReleasesSpeciesCommand(String species){
+		return new GetGenomeReleaseSpeciesCommand(species);
 	}
 
 }
