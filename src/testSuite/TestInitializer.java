@@ -130,6 +130,10 @@ public class TestInitializer {
         }
     }
 
+    /**
+     * Recursively deletes a folder with all it's subfolders and files.
+     * @param folder the folder to delete.
+     */
     public void recursiveDelete(File folder) {
         File[] contents = folder.listFiles();
         if (contents == null || contents.length == 0) {
