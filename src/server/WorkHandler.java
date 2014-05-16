@@ -41,7 +41,6 @@ public class WorkHandler extends Thread{
 		System.out.println(Thread.currentThread().getName());
 
 			while(true){
-				System.out.println("loop");
 				if(!workQueue.isEmpty()){
 					ProcessCommand work = workQueue.poll();
 					System.out.println("The processcommand is going to be executed");

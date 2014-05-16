@@ -3,6 +3,7 @@ package server.test.dummies;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -71,8 +72,11 @@ public class Annotations {
 	}
 
 	static void sendDeleteAnnotation(String name) throws Exception {
-		URL obj = new URL(testSettings.url + "/annotation/field/" + name);
+		URL obj = new URL(testSettings.url + "/annotation/field/" + URLEncoder.encode(name, "UTF-8"));
+		//URL obj = new URL(testSettings.url + "/annotation/field/" + name);
+
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
 
 		con.setRequestMethod("DELETE");
 		con.setRequestProperty("Content-Type", "application/json");

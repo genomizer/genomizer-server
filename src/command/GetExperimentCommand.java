@@ -38,12 +38,7 @@ public class GetExperimentCommand extends Command {
 
 	@Override
 	public boolean validate() {
-
-		if(this.header == null) {
-			return false;
-		} else {
-			return true;
-		}
+		return true;
 	}
 
 	@Override
