@@ -154,7 +154,7 @@ public class ProcessCommand extends Command {
 	@Override
 	public Response execute(){
 		try {
-			Thread.sleep(20000);
+			Thread.sleep(5000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -162,6 +162,7 @@ public class ProcessCommand extends Command {
 
 		System.err.println("Logging created uname: " + username);
 		ResponseLogger.log(username, new ProcessResponse(StatusCode.CREATED, "raw to profile processing completed"));
+		ResponseLogger.printUserLog(username);
 		return new ProcessResponse(StatusCode.CREATED);
 	}
 
