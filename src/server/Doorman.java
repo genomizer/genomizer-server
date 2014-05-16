@@ -92,6 +92,9 @@ System.out.println("LOOOOL: " + exchange.getRequestMethod());
 					case "/sysadm":
 						exchange(exchange, CommandType.GET_ANNOTATION_PRIVILEGES_COMMAND);
 						break;
+					case "/process":
+						exchange(exchange, CommandType.GET_PROCESS_STATUS_COMMAND);
+						break;
 					}
 					break;
 

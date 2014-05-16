@@ -31,7 +31,8 @@ public class serverTests {
 //		Experiment.sendGetExperiment("testExp22");
 //		Experiment.sendDeleteExperiment("testExp22");
 
-		Process.sendRawToProfile();
+//		Process.sendRawToProfile();
+//		Process.sendGetProcessStatus();
 
 		Login.logout();
 
