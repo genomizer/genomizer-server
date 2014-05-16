@@ -12,7 +12,7 @@ import response.ErrorResponse;
 import response.Response;
 import response.StatusCode;
 
-//TODO: Add validation code on lengths etc.
+//TODO: Add validation code on lengths etc. Better error response messages.
 
 /**
  * Class used to handle adding a genome release.
@@ -63,7 +63,7 @@ public class AddGenomeReleaseCommand extends Command {
 			rsp = new AddGenomeReleaseResponse(StatusCode.CREATED, filePath);
 
 		} catch (SQLException e) {
-			//Takes care of the duplicate key.
+
 			if(e.getErrorCode() == 0) {
 
 				rsp = new ErrorResponse(StatusCode.BAD_REQUEST, "Duplicate values.");
