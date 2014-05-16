@@ -1,9 +1,10 @@
-package src.process.classes;
+package process.classes;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+
 
 /**
  * Class used to create profile data from .fastq format.
@@ -121,13 +122,7 @@ public class RawToProfileConverter extends Executor {
 							filesToBeMoved = sortedDir
 									+ "reads_gff/allnucs_sgr/smoothed/Step10/ratios/smoothed/";
 				}
-				/*
-				 * //Parameters for first sgr2wig execution sgr2wig =
-				 * "perl sgr2wig.pl " + sortedDir +
-				 * "/reads_gff/allnucs_sgr/smoothed/Step10/"+fileOne +" "+
-				 * outFile+fileOneNareturn logString;me + ".wig"; // Step 7
-				 * outString = outString + " " + executeScript(parse(sgr2wig));
-				 */
+
 
 				System.out.println("logString = " +logString);
 				System.out.println("filesToBeMoved = " + "resources/"+ filesToBeMoved);

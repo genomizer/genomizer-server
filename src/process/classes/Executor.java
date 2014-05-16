@@ -1,4 +1,4 @@
-package src.process.classes;
+package process.classes;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;

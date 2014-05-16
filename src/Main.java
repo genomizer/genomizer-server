@@ -1,11 +1,11 @@
-package src;
+
 
 
 
 import java.io.IOException;
 
-import src.process.classes.Executor;
-import src.process.classes.ProcessHandler;
+import process.classes.Executor;
+import process.classes.ProcessHandler;
 
 //Class to make initial commit
 public class Main {
@@ -37,7 +37,7 @@ public class Main {
 		String smoothingParam = "10 1 5 0 0";
 		String yString = "y 10";
 		ProcessHandler p = new ProcessHandler();
-		String[] para = new String[] {bowTie, genome, "", "", "", "", "", ""};
+		String[] para = new String[] {bowTie, genome, "y", "y", "", "", "", ""};
 		try {
 			System.out.println("nu executar vi");
 
