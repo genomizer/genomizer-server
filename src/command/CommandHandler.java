@@ -43,10 +43,6 @@ public class CommandHandler {
 
 		//Get code from restful
 		Command myCom = createCommand(json, restful, username, cmdt);
-		System.out.println("commandtype: " + cmdt);
-		System.out.println("json: " + json.toString());
-		System.out.println("username: " + username);
-		System.out.println("rest: " + restful);
 
 		if (myCom.validate()) {
 			if(CommandType.PROCESS_COMMAND.equals(cmdt)){
