@@ -4,7 +4,7 @@ package server.test.dummies;
 public class serverTests {
 
 	public static void main(String args[]) throws Exception {
-		Login.login();
+		Login.login("splutt");
 //
 //		Annotations.sendDeleteAnnotation("testanno space");
 //		Annotations.sendAddAnnotation("testanno space");
@@ -13,10 +13,11 @@ public class serverTests {
 //		Annotations.sendRenameAnnotationValue("testanno space2", "val space", "newval space");
 //		Annotations.sendDeleteAnnotationValue("testanno space2", "newval space");
 //		Annotations.sendDeleteAnnotation("testanno space2");
-		Experiment.sendDeleteExperiment("testExp22");
-		Experiment.sendAddExperiment("testExp22");
-		Experiment.sendGetExperiment("testExp22");
-		Experiment.sendDeleteExperiment("testExp22");
+//		Experiment.sendDeleteExperiment("testExp22");
+//		Experiment.sendAddExperiment("testExp22");
+//		Experiment.sendGetExperiment("testExp22");
+//		Experiment.sendDeleteExperiment("testExp22");
+		Process.sendRawToProfile();
 
 		Login.logout();
 

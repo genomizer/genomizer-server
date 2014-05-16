@@ -66,6 +66,7 @@ public class WorkHandler extends Thread{
 				}catch(NullPointerException e){
 					e.printStackTrace();
 				}
+				ResponseLogger.printLog();
 			}
 		}
 
