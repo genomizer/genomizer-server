@@ -6,7 +6,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
 import database.FilePathGenerator;
 import database.Genome;
@@ -55,10 +54,9 @@ public class GenomeMethods {
         stmt.setString(1, genomeVersion);
         ResultSet rs = stmt.executeQuery();
 
-        Genome genome = null
-        		;
+        Genome genome = null;
         if (rs.next()) {
-        	genome = new Genome(rs);
+            genome = new Genome(rs);
         }
 
         stmt.close();
@@ -107,35 +105,37 @@ public class GenomeMethods {
      * Removes one specific genome version stored in the database.
      *
      * @param version
-     *            , the genome version.
+     *            the genome version.
      * @param specie
      *            .
-     * @return boolean, true if succeded, false if failed.
+     * @return boolean true if succeded, false if failed.
+     * @throws SQLException
      */
-    public boolean removeGenomeRelease(String genomeVersion, String specie) {
+    public boolean removeGenomeRelease(String genomeVersion, String species)
+            throws SQLException {
 
-        String query = "DELETE FROM Genome_Release " +
-        		"WHERE (Version = ? AND Species = ?)";
+        File genomeReleaseFolder = new File(fpg.getGenomeReleaseFolderPath(
+                genomeVersion, species));
+        if (genomeReleaseFolder.exists()) {
+            recursiveDelete(genomeReleaseFolder);
+        }
+
+        String query = "DELETE FROM Genome_Release "
+                + "WHERE (Version = ? AND Species = ?)";
 
         PreparedStatement stmt;
 
-        try {
-            stmt = conn.prepareStatement(query);
-
-            stmt.setString(1, genomeVersion);
-            stmt.setString(2, specie);
-            stmt.execute();
-            stmt.close();
-        } catch (SQLException e) {
-            System.out.println("Failed to remove genome release!");
-            return false;
-        }
-        return true;
+        stmt = conn.prepareStatement(query);
+        stmt.setString(1, genomeVersion);
+        stmt.setString(2, species);
+        int res = stmt.executeUpdate();
+        stmt.close();
+        return res > 0;
     }
 
     /**
-     * method for getting all the genome releases for a species currently stored in the
-     * database.
+     * method for getting all the genome releases for a species currently stored
+     * in the database.
      *
      * @param species
      *            String, the name of the specie you want to get genome
@@ -144,7 +144,8 @@ public class GenomeMethods {
      *         a specific specie.
      * @throws SQLException
      */
-   public ArrayList<Genome> getAllGenomReleasesForSpecies(String species) throws SQLException {
+    public ArrayList<Genome> getAllGenomReleasesForSpecies(String species)
+            throws SQLException {
 
         ArrayList<Genome> genomeList = new ArrayList<Genome>();
         String query = "SELECT * FROM Genome_Release WHERE Species = ?";
@@ -153,40 +154,40 @@ public class GenomeMethods {
         stmt.setString(1, species);
         ResultSet rs = stmt.executeQuery();
 
-        Genome genome=null;
+        Genome genome = null;
         while (rs.next()) {
-        	genome = new Genome(rs);
-        	genomeList.add(genome);
+            genome = new Genome(rs);
+            genomeList.add(genome);
         }
 
         stmt.close();
         return genomeList;
     }
 
-   /**
-    * method for getting all the genome releases currently stored in the
-    * database.
-    *
-    * @return genomeList List<Genome>, list of all the genome releases.
-    * @throws SQLException
-    */
-  public ArrayList<Genome> getAllGenomReleases() throws SQLException {
+    /**
+     * method for getting all the genome releases currently stored in the
+     * database.
+     *
+     * @return genomeList List<Genome>, list of all the genome releases.
+     * @throws SQLException
+     */
+    public ArrayList<Genome> getAllGenomReleases() throws SQLException {
 
-      ArrayList<Genome> genomeList = new ArrayList<Genome>();
-      String query = "SELECT * FROM Genome_Release";
+        ArrayList<Genome> genomeList = new ArrayList<Genome>();
+        String query = "SELECT * FROM Genome_Release";
 
-      PreparedStatement stmt = conn.prepareStatement(query);
-      ResultSet rs = stmt.executeQuery();
+        PreparedStatement stmt = conn.prepareStatement(query);
+        ResultSet rs = stmt.executeQuery();
 
-      Genome genome=null;
-      while (rs.next()) {
-      	genome = new Genome(rs);
-      	genomeList.add(genome);
-      }
+        Genome genome = null;
+        while (rs.next()) {
+            genome = new Genome(rs);
+            genomeList.add(genome);
+        }
 
-      stmt.close();
-      return genomeList;
-  }
+        stmt.close();
+        return genomeList;
+    }
 
     /**
      * get a specific chainfile depending on from and to what genome release you
@@ -212,7 +213,7 @@ public class GenomeMethods {
         String resFilePath = null;
 
         if (rs.next()) {
-        	resFilePath = rs.getString("FilePath");
+            resFilePath = rs.getString("FilePath");
         }
 
         stmt.close();
@@ -250,7 +251,7 @@ public class GenomeMethods {
         }
         speciesStat.close();
 
-        String filePath = fpg.generateChainFolderPath(species, fromVersion,
+        String filePath = fpg.getChainFolderPath(species, fromVersion,
                 toVersion) + fileName;
 
         String insertQuery = "INSERT INTO Chain_File "
@@ -285,27 +286,34 @@ public class GenomeMethods {
     public int removeChainFile(String fromVersion, String toVersion)
             throws SQLException {
 
-		int resCount = 0;
-	    String filePath = getChainFile(fromVersion, toVersion);
-		File chainFile = new File(filePath);
+        int resCount = 0;
 
-        if (chainFile.exists() ) {
-        	recursiveDelete(chainFile);
+        String filePath = getChainFile(fromVersion, toVersion);
+
+        if (filePath == null) {
+            return 0;
         }
 
-		String query = "DELETE FROM Chain_File WHERE (FromVersion = ?)"
-			+ " AND (ToVersion = ?)";
+        File chainFile = new File(filePath);
+        File chainFolder = chainFile.getParentFile();
 
-		PreparedStatement deleteStatement = conn.prepareStatement(query);
-		deleteStatement.setString(1, fromVersion);
-		deleteStatement.setString(2, toVersion);
-		resCount = deleteStatement.executeUpdate();
-		deleteStatement.close();
+        if (chainFolder.exists()) {
+            recursiveDelete(chainFolder);
+        }
+
+        String query = "DELETE FROM Chain_File WHERE (FromVersion = ?)"
+                + " AND (ToVersion = ?)";
+
+        PreparedStatement deleteStatement = conn.prepareStatement(query);
+        deleteStatement.setString(1, fromVersion);
+        deleteStatement.setString(2, toVersion);
+        resCount = deleteStatement.executeUpdate();
+        deleteStatement.close();
 
         return resCount;
     }
 
-    private static void recursiveDelete(File folder) {
+    private void recursiveDelete(File folder) {
         File[] contents = folder.listFiles();
         if (contents == null || contents.length == 0) {
             folder.delete();

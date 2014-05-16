@@ -42,6 +42,8 @@ public class FileTableTests {
     private static File testFolder;
     private static String testFolderPath;
     private static FilePathGenerator fpg;
+    
+    private static TestInitializer ti;
 
     @BeforeClass
     public static void setupTestCase() throws Exception {
@@ -62,6 +64,8 @@ public class FileTableTests {
         fpg.setRootDirectory(testFolderPath);
 
         dbac.addExperiment(testExpId);
+        
+        ti = new TestInitializer();
     }
 
     @AfterClass
@@ -71,7 +75,7 @@ public class FileTableTests {
     	}
     	dbac.deleteExperiment(testExpId);
         dbac.close();
-        recursiveDelete(testFolder);
+        ti.recursiveDelete(testFolder);
     }
 
 
@@ -159,17 +163,5 @@ public class FileTableTests {
     private void addMockFile(String folderPath, String filename1) throws IOException {
         File file1 = new File(folderPath + filename1);
         file1.createNewFile();
-    }
-
-    private static void recursiveDelete(File folder) {
-        File[] contents = folder.listFiles();
-        if (contents == null || contents.length == 0) {
-            folder.delete();
-        } else {
-            for (File f : contents) {
-                recursiveDelete(f);
-            }
-        }
-        folder.delete();
     }
 }
