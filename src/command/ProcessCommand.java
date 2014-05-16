@@ -148,12 +148,14 @@ public class ProcessCommand extends Command {
 		}
 		return false;
 	}
+
 	/**
 	 * Execute to simulate flow.
 	 */
+	/*
 	@Override
 	public Response execute(){
-		System.err.println("Executing process command");
+//		System.err.println("Executing process command");
 		try {
 			Thread.sleep(5000);
 		} catch (InterruptedException e) {
@@ -163,16 +165,15 @@ public class ProcessCommand extends Command {
 
 		System.err.println("Logging created uname: " + username);
 		ResponseLogger.log(username, new ProcessResponse(StatusCode.CREATED, "raw to profile processing completed"));
-		ResponseLogger.printUserLog(username);
 		return new ProcessResponse(StatusCode.CREATED);
-	}
+	}*/
 
 
 	/**
 	 * Method that runs when the processCommand is executed.
 	 *
 	 */
-	/*
+
 	@Override
 	public Response execute() {
 		System.out.println("-------------ProcessCommand - Execute----------------");
@@ -195,7 +196,7 @@ public class ProcessCommand extends Command {
 
 				filepaths = db.processRawToProfile(expid);
 
-				Genome g = db.getGenomeRelease(genomeRelease);
+				Genome g = db.getGenomeRelease(genomeVersion);
 				parameters[2] = g.path;
 
 				//Prints for checking what filepaths are given by database.
@@ -262,7 +263,7 @@ public class ProcessCommand extends Command {
 		//The execute executed correctly
 		try {
 			//TODO isPrivate hardcoded.
-			db.addGeneratedProfiles(expid, filepaths.getValue(), filepaths.getKey(), metadata, genomeRelease, username, false);
+			db.addGeneratedProfiles(expid, filepaths.getValue(), filepaths.getKey(), metadata, genomeVersion, username, false);
 		} catch (SQLException e) {
 			// TODO Log response
 			System.err.println("SQL Exception in ProcessCommand execute when using addGeneratedProfiles:");
@@ -295,7 +296,7 @@ public class ProcessCommand extends Command {
 		return new ProcessResponse(StatusCode.CREATED);
 
 
-	}*/
+	}
 
 	/**
 	 * Set the username of the uploader wich will be added to the database annotation.

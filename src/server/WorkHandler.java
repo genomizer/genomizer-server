@@ -42,6 +42,13 @@ public class WorkHandler extends Thread{
 
 
 		while(true){
+			try {
+				Thread.sleep(1000);
+				System.err.println("loop");
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			if(!workQueue.isEmpty()){
 				ProcessCommand work = workQueue.poll();
 				System.out.println("The processcommand is going to be executed");
@@ -59,6 +66,7 @@ public class WorkHandler extends Thread{
 				}catch(NullPointerException e){
 					e.printStackTrace();
 				}
+				ResponseLogger.printLog();
 			}
 		}
 

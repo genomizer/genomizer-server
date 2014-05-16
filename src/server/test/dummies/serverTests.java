@@ -4,7 +4,7 @@ package server.test.dummies;
 public class serverTests {
 
 	public static void main(String args[]) throws Exception {
-		Login.login();
+		Login.login("Splutt");
 
 		Annotations.sendDeleteAnnotation("testanno space2");
 		Annotations.sendDeleteAnnotation("testanno space");

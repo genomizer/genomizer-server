@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import server.ResponseLogger;
 import server.test.dummies.Token;
 
 import com.google.gson.Gson;
@@ -13,7 +14,7 @@ public class Login {
 
 	public static Token token = null;
 
-	static void login() throws IOException {
+	static void login(String username) throws IOException {
 		URL obj = new URL(testSettings.url + "/login");
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
@@ -21,7 +22,7 @@ public class Login {
 		con.setRequestProperty("Content-Type", "application/json");
 
 		JsonObject jj=new JsonObject();
-		jj.addProperty("username", "test");
+		jj.addProperty("username", username);
 		jj.addProperty("password", "losenord");
 
 		testSettings.sendToServer(con, jj.toString());
@@ -45,6 +46,7 @@ public class Login {
 		System.out.println(token.getToken());
 		System.out.println("\nSending 'DELETE' request to URL : " + testSettings.url + "/logout");
 		System.out.println("Response Body: " + testSettings.printResponse(con));
+
 	}
 
 	static String getToken() {
