@@ -58,7 +58,6 @@ public class DeleteGenomeReleaseCommand extends Command {
 		Response rsp = null;
 		DatabaseAccessor db = null;
 
-		//Add implementation code.
 		try {
 
 			db = initDB();
