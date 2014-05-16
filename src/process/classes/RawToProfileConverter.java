@@ -129,7 +129,7 @@ public class RawToProfileConverter extends Executor {
 				moveEndFiles("resources/" + filesToBeMoved,
 						outFilePath);
 
-				cleanUp(cleanUpInitiator(remoteExecution + "resources/"  + dir));
+				//cleanUp(cleanUpInitiator(remoteExecution + "resources/"  + dir));
 
 			} else {
 				logString = logString +" "+"Failed to create directory " + fileDir.toString();
