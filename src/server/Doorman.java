@@ -41,6 +41,7 @@ public class Doorman {
 		httpServer.createContext("/user", createHandler());
 		httpServer.createContext("/process", createHandler());
 		httpServer.createContext("/sysadm", createHandler());
+		httpServer.createContext("/genomeRelease", createHandler());
 
 		httpServer.setExecutor(new Executor() {
 			@Override
