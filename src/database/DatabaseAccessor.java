@@ -125,9 +125,10 @@ public class DatabaseAccessor {
 	 * Round brackets should be used to disambiguate the logical expression.
 	 * Example: "(Human[Species] OR Fly[Species]) AND Joe Bloggs[Uploader]"
 	 *
-	 * @param pubMedString
+	 * @param String pubMedString
 	 *            The String containing the search criteria in PubMed format.
-	 * @return A List of experiments containing file that fullfill the criteria
+	 * @return List<Experiment>
+	 * 		   A List of experiments containing file that fullfill the criteria
 	 *         specifies in the pubMedString.
 	 * @throws IOException
 	 *             If the pubMedString is not in the right format
@@ -151,8 +152,9 @@ public class DatabaseAccessor {
 	 *
 	 * Checks that the pubmed string is valid.
 	 *
-	 * @param pubMedString
-	 * @return true if ok else throws Exception
+	 * @param String pubMedString
+	 * @return boolean
+	 * 		       true if ok else throws Exception
 	 * @throws IOException
 	 */
 	public boolean isPubMedStringValid(String pubMedString) throws IOException {
@@ -188,7 +190,7 @@ public class DatabaseAccessor {
 	 * Returns an ArrayList which contains the usernames of all the users in the
 	 * database in the form of strings.
 	 *
-	 * @return an ArrayList of usernames.
+	 * @return List<String>, an ArrayList of usernames.
 	 * @throws SQLException
 	 *             if the query does not succeed
 	 */
@@ -217,7 +219,7 @@ public class DatabaseAccessor {
 	/**
 	 * Deletes a user from the database.
 	 *
-	 * @param username
+	 * @param String username
 	 *            the username of the user to be deleted.
 	 * @throws SQLException
 	 *             if the query does not succeed
@@ -244,11 +246,11 @@ public class DatabaseAccessor {
 	/**
 	 * Changes the password for a user.
 	 *
-	 * @param username
+	 * @param String username
 	 *            the user to change the password for.
-	 * @param newPassword
+	 * @param String newPassword
 	 *            the new password.
-	 * @return the number of tuples updated in the database.
+	 * @return int, the number of tuples updated in the database.
 	 * @throws SQLException
 	 *             if the query does not succeed
 	 */
@@ -261,9 +263,9 @@ public class DatabaseAccessor {
 	/**
 	 * Gets the role (permissions) for a user.
 	 *
-	 * @param username
+	 * @param String username
 	 *            the user to get the role for.
-	 * @return the role as a string.
+	 * @return String, the role as a string.
 	 * @throws SQLException
 	 *             if the query does not succeed
 	 */
@@ -275,11 +277,11 @@ public class DatabaseAccessor {
 	/**
 	 * Sets the role (permissions) for the user.
 	 *
-	 * @param username
+	 * @param String username
 	 *            the user to set the role for.
-	 * @param role
+	 * @param String role
 	 *            the role to set for the user.
-	 * @return returns the number of tuples updated in the database.
+	 * @return int, returns the number of tuples updated in the database.
 	 * @throws SQLException
 	 *             if the query does not succeed
 	 */
@@ -291,9 +293,9 @@ public class DatabaseAccessor {
 	/**
 	 * Gets an experiment from the database.
 	 *
-	 * @param expID
+	 * @param String expID
 	 *            the ID of the experiment.
-	 * @return an Experiment object.
+	 * @return Experiment, an Experiment object.
 	 * @throws SQLException
 	 *             if the query does not succeed
 	 */
@@ -305,9 +307,9 @@ public class DatabaseAccessor {
 	/**
 	 * Adds an experiment ID to the database.
 	 *
-	 * @param expID
+	 * @param String expID
 	 *            the ID for the experiment.
-	 * @return the number of tuples inserted in the database.
+	 * @return int, the number of tuples inserted in the database.
 	 * @throws SQLException
 	 *             if the query does not succeed
 	 */
@@ -319,9 +321,9 @@ public class DatabaseAccessor {
 	/**
 	 * Deletes an experiment from the database.
 	 *
-	 * @param expId
+	 * @param String expId
 	 *            the experiment ID.
-	 * @return the number of tuples deleted.
+	 * @return int, the number of tuples deleted.
 	 * @throws SQLException
 	 *             if the query does not succeed. Occurs if Experiment contains
 	 *             at least one file. (All files relating to an experiment must
@@ -336,9 +338,10 @@ public class DatabaseAccessor {
 	/**
 	 * Checks if a given experiment ID exists in the database.
 	 *
-	 * @param expID
+	 * @param String expID
 	 *            the experiment ID to look for.
-	 * @return true if the experiment exists in the database, else false.
+	 * @return boolean,
+	 *             true if the experiment exists in the database, else false.
 	 * @throws SQLException
 	 *             if the query does not succeed
 	 */
@@ -350,13 +353,13 @@ public class DatabaseAccessor {
 	/**
 	 * Updates a value of a single annotation of a unique experiment
 	 *
-	 * @param expID
+	 * @param String, expID
 	 *            the name of the experiment to annotate.
-	 * @param label
+	 * @param String label
 	 *            the annotation to set.
-	 * @param value
+	 * @param String value
 	 *            the value of the annotation.
-	 * @return the number of tuples updated in the database.
+	 * @return int, the number of tuples updated in the database.
 	 * @throws SQLException
 	 *             if the query does not succeed
 	 * @throws IOException
@@ -372,13 +375,13 @@ public class DatabaseAccessor {
 	 * Annotates an experiment with the given label and value. Checks so that
 	 * the value is valid if it is a drop down annotation.
 	 *
-	 * @param expID
+	 * @param String expID
 	 *            the name of the experiment to annotate.
-	 * @param label
+	 * @param String label
 	 *            the annotation to set.
-	 * @param value
+	 * @param String value
 	 *            the value of the annotation.
-	 * @return the number of tuples updated in the database.
+	 * @return int, the number of tuples updated in the database.
 	 * @throws SQLException
 	 *             if the query does not succeed
 	 * @throws IOException
@@ -393,11 +396,11 @@ public class DatabaseAccessor {
 	/**
 	 * Deletes one annotation from a specific experiment.
 	 *
-	 * @param expID
+	 * @param String expID
 	 *            the experiment to delete the annotation from.
-	 * @param label
+	 * @param String label
 	 *            the name of the annotation.
-	 * @return the number of tuples deleted from the database.
+	 * @return int, the number of tuples deleted from the database.
 	 * @throws SQLException
 	 *             if the query does not succeed
 	 */
@@ -411,7 +414,7 @@ public class DatabaseAccessor {
 	/**
 	 * Gets all the annotation possibilities from the database.
 	 *
-	 * @return annotations Map<String, Integer> - a Map with the label string as
+	 * @return HashMap<String, Integer>, a Map with the label string as
 	 *         key and datatype as value.
 	 *
 	 *         The possible datatypes are FREETEXT and DROPDOWN.
@@ -426,9 +429,10 @@ public class DatabaseAccessor {
 	/**
 	 * Creates an Annotation object from an annotation label.
 	 *
-	 * @param label
-	 *            String - the name of the annotation to create the object for.
-	 * @return Annotation - the Annotation object. If the label does not exist,
+	 * @param String label,
+	 *            the name of the annotation to create the object for.
+	 * @return Annotation,
+	 * 		   the Annotation object. If the label does not exist,
 	 *         then null will be returned.
 	 * @throws SQLException
 	 *             if the query does not succeed.
@@ -441,9 +445,9 @@ public class DatabaseAccessor {
 	/**
 	 * Creates a list of Annotation objects from a list of annotation labels.
 	 *
-	 * @param labels
+	 * @param String labels,
 	 *            the list of labels.
-	 * @return annotations List<Annotation> - will return a list with all the
+	 * @return List<Annotation> - will return a list with all the
 	 *         annotations with valid labels. If the list with labels is empty
 	 *         or none of the labels are valid, then it will return null.
 	 * @throws SQLException
@@ -460,7 +464,7 @@ public class DatabaseAccessor {
 	 * sex, tissue, etc... Finds all annotationLabels that exist in the
 	 * database, example of labels: sex, tissue, etc...
 	 *
-	 * @return annotationLabels ArrayList<String>
+	 * @return ArrayList<String>
 	 */
 	public ArrayList<String> getAllAnnotationLabels() {
 
@@ -470,9 +474,9 @@ public class DatabaseAccessor {
 	/**
 	 * Gets the datatype of a given annotation.
 	 *
-	 * @param label
+	 * @param String label,
 	 *            annotation label.
-	 * @return integer - the annotation's datatype (FREETEXT or DROPDOWN).
+	 * @return Integer - the annotation's datatype (FREETEXT or DROPDOWN).
 	 *
 	 * @throws SQLException
 	 *             if the query does not succeed
@@ -486,9 +490,9 @@ public class DatabaseAccessor {
 	 * Gets the default value for a annotation if there is one, If not it
 	 * returns NULL.
 	 *
-	 * @param annotationLabel
-	 *            String - the name of the annotation to check
-	 * @return DefaultValue String - The defult value or NULL.
+	 * @param String annotationLabel,
+	 *              the name of the annotation to check
+	 * @return String - The defult value or NULL.
 	 * @throws SQLException
 	 */
 	public String getDefaultAnnotationValue(String annotationLabel)
@@ -500,9 +504,10 @@ public class DatabaseAccessor {
 	/**
 	 * Deletes an annotation from the list of possible annotations.
 	 *
-	 * @param label
-	 *            String - the label of the annotation to delete.
-	 * @return res integer - the number of tuples deleted in the database.
+	 * @param String label
+	 *             the label of the annotation to delete.
+	 * @return int
+	 * 			   the number of tuples deleted in the database.
 	 * @throws SQLException
 	 *             if the query does not succeed
 	 */
@@ -514,16 +519,17 @@ public class DatabaseAccessor {
 	/**
 	 * Adds a free text annotation to the list of possible annotations.
 	 *
-	 * @param label
+	 * @param String label
 	 *            String the name of the annotation.
-	 * @param required
+	 * @param boolean required
 	 *            boolean if the annotation should be forced or not
-	 * @param defaultValue
+	 * @param String defaultValue
 	 *            String the default value this field should take or null if a
 	 *            default value is not required
-	 * @return res int - the number of tuples updated in the database.
+	 * @return int
+	 *            the number of tuples updated in the database.
 	 * @throws SQLException
-	 *             if the query does not succeed
+	 *            if the query does not succeed
 	 * @throws IOException
 	 */
 	public int addFreeTextAnnotation(String label, String defaultValue,
@@ -535,9 +541,10 @@ public class DatabaseAccessor {
 	/**
 	 * Checks if a given annotation is required to be filled by the user.
 	 *
-	 * @param annotationLabel
-	 *            String - the name of the annotation to check
-	 * @return boolean - true if it is required, else false
+	 * @param String annotationLabel
+	 *            the name of the annotation to check
+	 * @return boolean
+	 *            true if it is required, else false
 	 * @throws SQLException
 	 */
 	public boolean isAnnotationRequiered(String annotationLabel)
@@ -550,9 +557,10 @@ public class DatabaseAccessor {
 	 * Gets all the choices for a drop down annotation. Deprecated, use
 	 * {@link #getChoices(String) getChoices} instead.
 	 *
-	 * @param label
-	 *            String the drop down annotation to get the choice for.
-	 * @return theChoices ArrayList<String> - all the choices.
+	 * @param String label
+	 *         the drop down annotation to get the choice for.
+	 * @return ArrayList<String>
+	 *         all the choices.
 	 * @throws SQLException
 	 *             if the query does not succeed
 	 */
@@ -566,8 +574,8 @@ public class DatabaseAccessor {
 	/**
 	 * Adds a drop down annotation to the list of possible annotations.
 	 *
-	 * @param label
-	 *            String - the name of the annotation.
+	 * @param String label
+	 *            the name of the annotation.
 	 * @param choices
 	 *            List<String> - the possible values for the annotation.
 	 * @return tuplesInserted int - the number of tuples inserted into the
