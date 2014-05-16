@@ -114,19 +114,16 @@ public class GenomeMethods {
     public boolean removeGenomeRelease(String genomeVersion, String species)
             throws SQLException {
 
-<<<<<<< HEAD
+
         String query = "DELETE FROM Genome_Release " +
         		"WHERE (Version ~~* ? AND Species ~~* ?)";
-=======
+
         File genomeReleaseFolder = new File(fpg.getGenomeReleaseFolderPath(
                 genomeVersion, species));
         if (genomeReleaseFolder.exists()) {
             recursiveDelete(genomeReleaseFolder);
         }
->>>>>>> 9a423531dcdfa601b5459da4c01e0358fcf5a883
 
-        String query = "DELETE FROM Genome_Release "
-                + "WHERE (Version = ? AND Species = ?)";
 
         PreparedStatement stmt;
 
@@ -299,10 +296,10 @@ public class GenomeMethods {
             return 0;
         }
 
-<<<<<<< HEAD
+
 		String query = "DELETE FROM Chain_File WHERE (FromVersion ~~* ?)"
 			+ " AND (ToVersion ~~* ?)";
-=======
+
         File chainFile = new File(filePath);
         File chainFolder = chainFile.getParentFile();
 
@@ -310,9 +307,7 @@ public class GenomeMethods {
             recursiveDelete(chainFolder);
         }
 
-        String query = "DELETE FROM Chain_File WHERE (FromVersion = ?)"
-                + " AND (ToVersion = ?)";
->>>>>>> 9a423531dcdfa601b5459da4c01e0358fcf5a883
+
 
         PreparedStatement deleteStatement = conn.prepareStatement(query);
         deleteStatement.setString(1, fromVersion);
