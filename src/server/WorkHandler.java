@@ -47,6 +47,9 @@ public class WorkHandler extends Thread{
 				ProcessStatus stat = processStatus.get(work);
 				try{
 					stat.status = "Started";
+					work.setFilePaths();
+					stat.outputFiles = work.getFilePaths();
+					stat.timeStarted = System.currentTimeMillis();
 
 					Response resp = work.execute();
 					System.err.println("AFTER EXECUTE PROCESS");
@@ -55,7 +58,15 @@ public class WorkHandler extends Thread{
 					}else{
 						stat.status = "Crashed";
 					}
+					stat.timeFinished = System.currentTimeMillis();
 				}catch(NullPointerException e){
+					e.printStackTrace();
+				}
+			} else {
+				try {
+					Thread.sleep(500);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}

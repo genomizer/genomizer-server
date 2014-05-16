@@ -26,6 +26,8 @@ public class ProcessCommand extends Command {
 
 	private String processtype;
 
+	private Entry<String,String> filepaths;
+
 	//Following fields corresponds to the JSON body of a process command.
 	@Expose
 	private String metadata;
@@ -151,6 +153,7 @@ public class ProcessCommand extends Command {
 	/**
 	 * Execute to simulate flow.
 	 */
+	/*
 	@Override
 	public Response execute(){
 		System.err.println("Executing process command");
@@ -165,14 +168,14 @@ public class ProcessCommand extends Command {
 		ResponseLogger.log(username, new ProcessResponse(StatusCode.CREATED, "raw to profile processing completed"));
 		ResponseLogger.printUserLog(username);
 		return new ProcessResponse(StatusCode.CREATED);
-	}
+	}*/
 
 
 	/**
 	 * Method that runs when the processCommand is executed.
 	 *
 	 */
-	/*
+
 	@Override
 	public Response execute() {
 		System.out.println("-------------ProcessCommand - Execute----------------");
@@ -182,7 +185,6 @@ public class ProcessCommand extends Command {
 
 		DatabaseAccessor db = null;
 		ProcessHandler processHandler;
-		Entry<String, String> filepaths;
 
 		try {
 
@@ -193,9 +195,9 @@ public class ProcessCommand extends Command {
 			case "rawtoprofile":
 				//The process type was a rawtoprofile
 
-				filepaths = db.processRawToProfile(expid);
+				//filepaths = db.processRawToProfile(expid);
 
-				Genome g = db.getGenomeRelease(genomeRelease);
+				Genome g = db.getGenomeRelease(genomeVersion);
 				parameters[2] = g.path;
 
 				//Prints for checking what filepaths are given by database.
@@ -262,7 +264,7 @@ public class ProcessCommand extends Command {
 		//The execute executed correctly
 		try {
 			//TODO isPrivate hardcoded.
-			db.addGeneratedProfiles(expid, filepaths.getValue(), filepaths.getKey(), metadata, genomeRelease, username, false);
+			db.addGeneratedProfiles(expid, filepaths.getValue(), filepaths.getKey(), metadata, genomeVersion, username, false);
 		} catch (SQLException e) {
 			// TODO Log response
 			System.err.println("SQL Exception in ProcessCommand execute when using addGeneratedProfiles:");
@@ -295,7 +297,7 @@ public class ProcessCommand extends Command {
 		return new ProcessResponse(StatusCode.CREATED);
 
 
-	}*/
+	}
 
 	/**
 	 * Set the username of the uploader wich will be added to the database annotation.
@@ -334,4 +336,33 @@ public class ProcessCommand extends Command {
 		this.processtype = processtype;
 
 	}
+
+	public String getAuthor() {
+		return author;
+	}
+
+	public String getExpId() {
+		return expid;
+	}
+
+	public void setFilePaths() {
+		DatabaseAccessor db = null;
+		try {
+			db = initDB();
+			filepaths = db.processRawToProfile(expid);
+		} catch (SQLException | IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				db.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public String[] getFilePaths() {
+		return new String[] {filepaths.getKey(), filepaths.getValue()};
+	}
+
 }

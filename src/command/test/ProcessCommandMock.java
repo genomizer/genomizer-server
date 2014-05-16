@@ -1,5 +1,6 @@
 package command.test;
 
+import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
@@ -16,11 +17,23 @@ public class ProcessCommandMock extends ProcessCommand {
 	public Response execute() {
 		try {
 			Thread.sleep(1000);
+			if (this.getAuthor().equals("philge")) {
+				return new ErrorResponse(StatusCode.METHOD_NOT_ALLOWED, "Something bad happened");
+			}
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return new MinimalResponse(StatusCode.OK);
+		return new MinimalResponse(StatusCode.CREATED);
+	}
+
+	@Override
+	public void setFilePaths() {
+
+	}
+
+	@Override
+	public String[] getFilePaths() {
+		return new String[] {"file1", "file2"};
 	}
 
 }
