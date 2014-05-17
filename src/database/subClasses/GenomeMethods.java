@@ -124,7 +124,6 @@ public class GenomeMethods {
             recursiveDelete(genomeReleaseFolder);
         }
 
-
         PreparedStatement stmt;
 
         stmt = conn.prepareStatement(query);

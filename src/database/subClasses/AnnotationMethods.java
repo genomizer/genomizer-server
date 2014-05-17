@@ -254,7 +254,7 @@ public class AnnotationMethods {
         if (!isValidChoice(label)) {
             throw new IOException("Lable contains invalid characters");
         }
-        
+
         Annotation a = getAnnotationObject(label);
         if (a != null) {
             throw new IOException("This annotation already exists");
@@ -365,7 +365,7 @@ public class AnnotationMethods {
         if (!isValidChoice(label)) {
             throw new IOException("Lable contains invalid characters");
         }
-        
+
         Annotation a = getAnnotationObject(label);
         if (a != null) {
             throw new IOException("This annotation already exists.");
@@ -510,10 +510,10 @@ public class AnnotationMethods {
         checkTagStatement.close();
 
         if (hasResult) {
-            throw new IOException(
-                    "The chosen value of the label is a"
-                            + " default value. Change the default value of "
-                            + "the label and run this method again.");
+            throw new IOException(value
+                    + " is the default setting for " + label
+                    + " and can therefore not be removed.\n"
+                    + "A new default value must first be set.");
         } else {
             query = "DELETE FROM Annotation_Choices "
                     + "WHERE (label ~~* ? AND value ~~* ?)";
@@ -548,8 +548,9 @@ public class AnnotationMethods {
             throws SQLException, IOException {
 
         if (!isValidChoice(newLabel)) {
-            throw new IOException(
-                    "The new Lable contains invalid characters");
+            throw new IOException(newLabel
+                    + " contains invalid characters.\n" +
+                    "Brackets cannot be used in annotations.");
         }
 
         String query = "UPDATE Annotation SET Label = ? WHERE (Label ~~* ?)";
@@ -590,8 +591,9 @@ public class AnnotationMethods {
             String newValue) throws SQLException, IOException {
 
         if (!isValidChoice(newValue)) {
-            throw new IOException(
-                    "New value contains invalid characters");
+            throw new IOException(newValue
+                    + " contains invalid characters.\n" +
+                    "Brackets cannot be used in annotations.");
         }
 
         String query = "UPDATE Annotation_Choices "
@@ -688,6 +690,10 @@ public class AnnotationMethods {
      * @return
      */
     private boolean isValidChoice(String annotation) {
+
+        if (annotation == null) {
+            return false;
+        }
 
         if (annotation.contains("(") || annotation.contains(")")
                 || annotation.contains("[")

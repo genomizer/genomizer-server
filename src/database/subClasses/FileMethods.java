@@ -1,73 +1,90 @@
 package database.subClasses;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
+import database.Experiment;
 import database.FilePathGenerator;
 import database.FileTuple;
-import database.ServerDependentValues;
-
 
 /**
- * Class that contains all the methods for adding,changing, getting and
- * removing Files in the database. This class is a subClass of
+ * Class that contains all the methods for adding,changing, getting
+ * and removing Files in the database. This class is a subClass of
  * databaseAcessor.java.
- *
- * date: 2014-05-14
- * version: 1.0
+ * 
+ * date: 2014-05-14 version: 1.0
  */
 public class FileMethods {
 
-	private Connection conn;
-	private FilePathGenerator fpg;
+    private Connection conn;
+    private FilePathGenerator fpg;
+    private ExperimentMethods expMethods;
 
-	/**
-	 * Constructor for the fileMethod object.
-	 * @param connection Connection, the connection to the database.
-	 */
-	public FileMethods(Connection connection, FilePathGenerator filePG){
+    /**
+     * Constructor for the fileMethod object.
+     * 
+     * @param connection
+     *            Connection, the connection to the database.
+     */
+    public FileMethods(Connection connection,
+            FilePathGenerator filePG, ExperimentMethods expMethods) {
+        conn = connection;
+        fpg = filePG;
+        this.expMethods = expMethods;
+    }
 
-		conn = connection;
-		fpg = filePG;
-	}
-
-	 /**
-     * @param expID String
-     *            The unique name of the experiment. OBS! If not null,
-     *            this must reference an experiment that has been
-     *            previously added.
-     * @param fileType int
-     *            An Integer identifying the file type eg.
+    /**
+     * @param expID
+     *            String The unique name of the experiment. OBS! If
+     *            not null, this must reference an experiment that has
+     *            been previously added.
+     * @param fileType
+     *            int An Integer identifying the file type eg.
      *            FileTuple.RAW
-     * @param fileName String
-     * @param inputFileName String
-     *            The name of the corresponding input file or null if
-     *            there is no corresponding input file
-     * @param metaData String
-     *            The parameters used in file creation or null if not
-     *            applicable
-     * @param author String
-     * @param uploader String
-     * @param isPrivate boolean
-     * @param genomeRelease String
-     *            The genome release version identifyer (eg. "hg38")
-     *            or null if not applicable. OBS! If not null, this
-     *            must reference a genome release that has been
+     * @param fileName
+     *            String
+     * @param inputFileName
+     *            String The name of the corresponding input file or
+     *            null if there is no corresponding input file
+     * @param metaData
+     *            String The parameters used in file creation or null
+     *            if not applicable
+     * @param author
+     *            String
+     * @param uploader
+     *            String
+     * @param isPrivate
+     *            boolean
+     * @param genomeRelease
+     *            String The genome release version identifyer (eg.
+     *            "hg38") or null if not applicable. OBS! If not null,
+     *            this must reference a genome release that has been
      *            previously uploaded.
-     * @return FileTuple - The FileTuple inserted in the database or null if no
-     *         file was entered into the database.
+     * @return FileTuple - The FileTuple inserted in the database or
+     *         null if no file was entered into the database.
      * @throws SQLException
-     *             If the query could not be executed. (Probably
-     *             because the file already exists)
+     *             If the query could not be executed. Possible
+     *             reasons: Duplicate file, Does not reference a valid
+     *             GenomeRelease.
+     * @throws IOException
+     *             If the experiment does not exist.
      */
     public FileTuple addNewFile(String expID, int fileType,
             String fileName, String inputFileName, String metaData,
             String author, String uploader, boolean isPrivate,
-            String genomeRelease) throws SQLException {
+            String genomeRelease) throws SQLException, IOException {
+
+        Experiment e = expMethods.getExperiment(expID);
+        if (e == null) {
+            throw new IOException("The experiment " + expID
+                    + " does not exist!");
+        }
+
+        expID = e.getID();
 
         String path = fpg.generateFilePath(expID, fileType, fileName);
 
@@ -114,10 +131,11 @@ public class FileMethods {
     /**
      * Returns the FileTuple object associated with the given
      * filePath.
-     *
-     * @param filePath String
-     * @return FileTuple - The corresponding FileTuple or null if no such file
-     * 					   exists
+     * 
+     * @param filePath
+     *            String
+     * @return FileTuple - The corresponding FileTuple or null if no
+     *         such file exists
      * @throws SQLException
      *             If the query could not be executed.
      */
@@ -129,28 +147,28 @@ public class FileMethods {
         stmt.setString(1, filePath);
         ResultSet rs = stmt.executeQuery();
         if (rs.next()) {
-        	FileTuple fileTuple = new FileTuple(rs);
+            FileTuple fileTuple = new FileTuple(rs);
             stmt.close();
-        	return fileTuple;
+            return fileTuple;
         }
         stmt.close();
         return null;
     }
 
     /**
-     * Deletes a file from the database and the disk.
-     * Should throw an IOException if the method failed to delete the file
-     * from disk.
-     *
-     * @param path String - the path to the file.
+     * Deletes a file from the database and the disk. Should throw an
+     * IOException if the method failed to delete the file from disk.
+     * 
+     * @param path
+     *            String - the path to the file.
      * @return int - the number of deleted tuples in the database.
      * @throws SQLException
      *             if the query does not succeed
      */
     public int deleteFile(String path) throws SQLException {
-    	File fileToDelete = new File(path);
+        File fileToDelete = new File(path);
         if (fileToDelete.exists()) {
-        	fileToDelete.delete();
+            fileToDelete.delete();
         }
 
         String statementStr = "DELETE FROM File "
@@ -166,46 +184,49 @@ public class FileMethods {
 
     /**
      * Deletes a file from the database and the disk using the fileID.
-     * Should throw an IOException if the method failed to delete the file
-     * from disk.
-     * @param fileID int - the fileID of the file to be deleted.
+     * Should throw an IOException if the method failed to delete the
+     * file from disk.
+     * 
+     * @param fileID
+     *            int - the fileID of the file to be deleted.
      * @return 1 if deletion was successful, else 0.
      * @throws SQLException
      */
     public int deleteFile(int fileID) throws SQLException {
 
-    	String query1 = "SELECT Path FROM File " +
-    			"WHERE FileID = ?";
-    	String query2 = "DELETE FROM File " + "WHERE FileID = ?";
-    	int res = 0;
+        String query1 = "SELECT Path FROM File " + "WHERE FileID = ?";
+        String query2 = "DELETE FROM File " + "WHERE FileID = ?";
+        int res = 0;
 
-    	PreparedStatement stmt = conn.prepareStatement(query1);
-    	stmt.setInt(1, fileID);
-    	ResultSet rs = stmt.executeQuery();
-    	if (rs.next()) {
-    		File fileToDelete = new File(rs.getString("Path"));
-    		if (fileToDelete.exists()) {
-    	        fileToDelete.delete();
-    		}
-	        stmt = conn.prepareStatement(query2);
-	        stmt.setInt(1, fileID);
-	        res = stmt.executeUpdate();
-	        stmt.close();
-    	}
-    	return res;
+        PreparedStatement stmt = conn.prepareStatement(query1);
+        stmt.setInt(1, fileID);
+        ResultSet rs = stmt.executeQuery();
+        if (rs.next()) {
+            File fileToDelete = new File(rs.getString("Path"));
+            if (fileToDelete.exists()) {
+                fileToDelete.delete();
+            }
+            stmt = conn.prepareStatement(query2);
+            stmt.setInt(1, fileID);
+            res = stmt.executeUpdate();
+            stmt.close();
+        }
+        return res;
     }
 
     /**
      * Checks if the file with the specified fileID exists in the
      * database.
-     *
-     * @param fileID int - the fileID of the file.
+     * 
+     * @param fileID
+     *            int - the fileID of the file.
      * @return true if the file exists, else false.
      * @throws SQLException
      */
     public boolean hasFile(int fileID) throws SQLException {
 
-    	String query = "SELECT fileID FROM File " + "WHERE fileID = ?";
+        String query = "SELECT fileID FROM File "
+                + "WHERE fileID = ?";
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setInt(1, fileID);
 
@@ -223,7 +244,7 @@ public class FileMethods {
 
     /**
      * Checks if the file path is a valid file path. Not used.
-     *
+     * 
      * @param filePath
      * @return
      * @throws SQLException

@@ -41,11 +41,19 @@ public class FileTuple {
     }
 
     public String getDownloadURL() {
-        return ServerDependentValues.DownLoadURL+path;
+        return ServerDependentValues.DownloadURL+path;
     }
 
     public String getUploadURL() {
         return ServerDependentValues.UploadURL+path;
+    }
+    
+    public String getInputFileUploadURL() {
+        return ServerDependentValues.UploadURL+inputFilePath;
+    }
+    
+    public String getInputFileDownloadURL() {
+        return ServerDependentValues.DownloadURL+inputFilePath;
     }
 
     public String getParentFolder() {

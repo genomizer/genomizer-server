@@ -91,7 +91,7 @@ public class DatabaseAccessor {
         userMethods = new UserMethods(conn);
         annoMethods = new AnnotationMethods(conn);
         expMethods = new ExperimentMethods(conn, fpg, annoMethods);
-        fileMethods = new FileMethods(conn, fpg);
+        fileMethods = new FileMethods(conn, fpg, expMethods);
         genMethods = new GenomeMethods(conn, fpg);
     }
 
@@ -323,11 +323,12 @@ public class DatabaseAccessor {
      * @return int - the number of tuples inserted in the database.
      * @throws SQLException
      *             - if the query does not succeed
-     * @throws IOException 
+     * @throws IOException
      * @throws DuplicatePrimaryKeyException
      *             If the experiment already exists.
      */
-    public int addExperiment(String expID) throws SQLException, IOException {
+    public int addExperiment(String expID) throws SQLException,
+            IOException {
 
         return expMethods.addExperiment(expID);
     }
@@ -595,8 +596,9 @@ public class DatabaseAccessor {
         return annoMethods.addDropDownAnnotation(label, choices,
                 defaultValueIndex, required);
     }
-    
-// All methods checked up to here! Ruaridh ----------------------------------------------------------
+
+    // All methods checked up to here! Ruaridh
+    // ----------------------------------------------------------
 
     /**
      * Method to add a value to a existing DropDown annotation.
@@ -727,13 +729,16 @@ public class DatabaseAccessor {
      * @return FileTuple - The FileTuple inserted in the database or
      *         null if no file was entered into the database.
      * @throws SQLException
-     *             - If the query could not be executed. (Probably
-     *             because the file already exists)
+     *             - If the query could not be executed. Possible
+     *             reasons: Duplicate file, Does not reference a valid
+     *             GenomeRelease.
+     * @throws IOException
+     *             If the experiment does not exist.
      */
     public FileTuple addNewFile(String expID, int fileType,
             String fileName, String inputFileName, String metaData,
             String author, String uploader, boolean isPrivate,
-            String genomeRelease) throws SQLException {
+            String genomeRelease) throws SQLException, IOException {
 
         return fileMethods.addNewFile(expID, fileType, fileName,
                 inputFileName, metaData, author, uploader, isPrivate,
@@ -797,21 +802,6 @@ public class DatabaseAccessor {
     }
 
     /**
-     * Checks if the file path is a valid file path. Not used.
-     * 
-     * @param filePath
-     * @return boolean
-     * @throws SQLException
-     *             - if the query does not succeed
-     */
-    @Deprecated
-    public boolean isValidFilePath(String filePath)
-            throws SQLException {
-
-        return fileMethods.isValidFilePath(filePath);
-    }
-
-    /**
      * Generates a folder where the profile files for a certain
      * experiment should be stored.
      * 
@@ -838,14 +828,14 @@ public class DatabaseAccessor {
             return null;
         }
 
-        if (experiments.isEmpty()) {
+        if (experiments == null || experiments.isEmpty()) {
             System.err.println("There are no raw files to process!");
             return null;
         }
 
         Experiment e = experiments.get(0);
 
-        if (e.getFiles().isEmpty()) {
+        if (e.getFiles() == null || e.getFiles().isEmpty()) {
             System.err.println("There are no raw files to process!");
             return null;
         }
@@ -888,14 +878,26 @@ public class DatabaseAccessor {
      *        to the uploader, otherwise false.
      * @throws SQLException
      *             - If the request uses invalid arguments or the
-     *             database could not be reached.
+     *             database could not be reached. Possible reasons:
+     *             invalid genomeRelease.
      */
     public void addGeneratedProfiles(String expId, String folderPath,
             String inputFileName, String metaData,
             String genomeReleaseVersion, String uploader,
             boolean isPrivate) throws SQLException {
 
+        Experiment e = expMethods.getExperiment(expId);
+        if (e == null) {
+            return;
+        }
+
+        expId = e.getID();
+
         File profileFolder = new File(folderPath);
+
+        if (!profileFolder.exists()) {
+            return;
+        }
 
         for (File f : profileFolder.listFiles()) {
 
