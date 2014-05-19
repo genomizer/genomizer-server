@@ -158,4 +158,34 @@ public class AddAnnotationPossibilitiesTests {
     	String newChoice = "newChoice";
     	dbac.addDropDownAnnotationValue(testLabelFT, newChoice);
 	}
+    
+    @Test
+    public void shouldRemoveSteelmountainAnnotation() 
+    		throws SQLException, IOException {
+    	String annotation = "@@@@@@2$???";
+    	dbac.addFreeTextAnnotation(annotation, null, false);
+    	
+        Map<String, Integer> annotations = dbac.getAnnotations();
+        assertTrue(annotations.containsKey(annotation));
+        int i = dbac.deleteAnnotation(annotation);
+        assertEquals(1,i);
+        annotations = dbac.getAnnotations();
+        assertFalse(annotations.containsKey(annotation));
+    	
+    }
+    
+    @Test
+    public void shouldRemoveSteelmountainAnotherAnnotation() 
+    		throws SQLException, IOException {
+    	String annotation = "¡!";
+    	dbac.addFreeTextAnnotation(annotation, null, false);
+    	
+        Map<String, Integer> annotations = dbac.getAnnotations();
+        assertTrue(annotations.containsKey(annotation));
+        int i = dbac.deleteAnnotation(annotation);
+        assertEquals(1,i);
+        annotations = dbac.getAnnotations();
+        assertFalse(annotations.containsKey(annotation));
+    	
+    }
 }
