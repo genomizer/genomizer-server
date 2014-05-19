@@ -422,7 +422,7 @@ public class RawToProfileConverter extends Executor {
 	 */
 	private void sortSamFile(String unsortedSamFileName)
 			throws ProcessException {
-		String sortSam = "sort " +"results_1/" + unsortedSamFileName
+		String sortSam = "sort " + dir + unsortedSamFileName
 				+ ".sam" + " -k 3,3 -k 4,4n";
 		System.out.println("sortSam " + sortSam);
 		try {
