@@ -162,4 +162,26 @@ public class FileTableTests {
         File file1 = new File(folderPath + filename1);
         file1.createNewFile();
     }
+
+    @Test
+    public void shouldBeInProgressAfterAddition() throws Exception {
+
+        Experiment e = dbac.getExperiment(testExpId);
+
+        ft = e.getFiles().get(0);
+
+        assertEquals("In Progress", ft.status);
+    }
+
+    @Test
+    public void shouldBeDoneAfterCallingReadyForDownload() throws Exception {
+
+        dbac.fileReadyForDownload(ft.id);
+
+        Experiment e = dbac.getExperiment(testExpId);
+
+        ft = e.getFiles().get(0);
+
+        assertEquals("Done", ft.status);
+    }
 }
