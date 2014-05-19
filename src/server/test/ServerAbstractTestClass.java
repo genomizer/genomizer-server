@@ -11,7 +11,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 /**
- * Abstract class used for testing the server.
+ * Abstract class used for server testing.
  *
  * @author tfy09jnn
  * @version 1.0
@@ -46,7 +46,7 @@ public abstract class ServerAbstractTestClass {
 	 * Method used to send JSON.
 	 *
 	 * @param The connection to send to.
-	 * @param json_to_send.
+	 * @param the JSON string to send.
 	 * @throws IOException.
 	 */
 	public void sendResponseString(HttpURLConnection con, String json_to_send) throws IOException {
@@ -84,6 +84,8 @@ public abstract class ServerAbstractTestClass {
 	/**
 	 * Used to open a connection.
 	 *
+	 * @param the request method as a string.
+	 * @param the restful header to attach.
 	 * @return the connection.
 	 * @throws Exception.
 	 */
@@ -97,8 +99,9 @@ public abstract class ServerAbstractTestClass {
 	}
 
 	/**
-	 * Used to handle the login attempt.
+	 * Used to handle server login attempt.
 	 *
+	 * @param JSON object to send to the server.
 	 * @return integer representing the responseCode.
 	 * @throws Exception.
 	 */
@@ -118,7 +121,7 @@ public abstract class ServerAbstractTestClass {
 	}
 
 	/**
-	 * Used to handle the logout attempt.
+	 * Used to handle the server logout attempt.
 	 *
 	 * @return integer representing the responseCode.
 	 * @throws Exception.
