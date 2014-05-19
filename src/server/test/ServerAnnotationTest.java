@@ -113,28 +113,6 @@ public class ServerAnnotationTest extends ServerAbstractTestClass {
 
 	}
 
-	//TODO: Remove this class when all other tests are done.
-	@Test
-	public void testContains() throws Exception {
-
-		JsonObject jj = new JsonObject();
-		jj.addProperty("username", "jonas");
-		jj.addProperty("password", "losenord");
-
-		sendLogin(jj);
-
-		String response = sendGetAnnotationInfo();
-		String responseChecker = "\"name\":\""
-		+ "ABC996"
-		+ "\",\"values\":[\"freetext\"],\"forced\":true";
-
-		boolean wasAdded = response.contains(responseChecker);
-		sendLogout();
-
-		assertTrue(wasAdded);
-
-	}
-
 	/**
 	* Test used to check that adding annotation freetext
 	* works properly.
@@ -193,6 +171,7 @@ public class ServerAnnotationTest extends ServerAbstractTestClass {
 		con.setRequestProperty("Authorization", token.getToken());
 
 		return con.getResponseCode();
+
 	}
 
 	/**
@@ -208,6 +187,7 @@ public class ServerAnnotationTest extends ServerAbstractTestClass {
 		con.setRequestProperty("Authorization", token.getToken());
 
 		return getResponseString(con);
+
 	}
 
 	/**
@@ -225,6 +205,7 @@ public class ServerAnnotationTest extends ServerAbstractTestClass {
 		sendResponseString(con, json);
 
 		return con.getResponseCode();
+
 	}
 
 }
