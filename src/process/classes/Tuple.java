@@ -1,3 +1,4 @@
+package process.classes;
 
 public class Tuple {
     private String chromosome;
