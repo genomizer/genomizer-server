@@ -14,7 +14,7 @@ public class Process {
 
 	public static void sendRawToProfile() throws IOException{
 
-		String expid = "Exp1";
+		String expid = "riktigaRawFiles";
 		String parameters = "\"-a -m 1 --best -p 10 -v 2 -q  -S \"," +
 				"\"\"," +
 				"\"y\"," +
@@ -24,8 +24,8 @@ public class Process {
 				"\"\"," +
 				"\"\"";
 		String metadata = "astringofmetadata";
-		String genomeVersion = "rn5";
-		String author = "yuri";
+		String genomeVersion = "dm3";
+		String author = "robinodling";
 
 
 		URL obj = new URL(testSettings.url + "/process/rawtoprofile");

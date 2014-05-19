@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Map.Entry;
 
+import process.classes.ProcessException;
 import process.classes.ProcessHandler;
 import response.ProcessResponse;
 import response.Response;
@@ -199,8 +200,8 @@ public class ProcessCommand extends Command {
 
 
 				Genome g = db.getGenomeRelease(genomeVersion);
-			//	parameters[1] = g.path;
-				parameters[1] = "/var/www/data/genome_releases/Rat/d_melanogaster_fb5_22";
+				parameters[1] = g.path;
+				//parameters[1] = "/var/www/data/genome_releases/Rat/d_melanogaster_fb5_22";
 
 
 				//Prints for checking what filepaths are given by database.
@@ -209,21 +210,16 @@ public class ProcessCommand extends Command {
 
 				try {
 
-					//processHandler.executeProcess("rawToProfile", parameters, filepaths.getKey(), filepaths.getValue());
-					processHandler.executeProcess("rawToProfile", parameters, "/home/pvt/infileDir", "/home/pvt/outfileDir/");
+					processHandler.executeProcess("rawToProfile", parameters, filepaths.getKey(), filepaths.getValue());
+					//processHandler.executeProcess("rawToProfile", parameters, "/home/pvt/infileDir", "/home/pvt/outfileDir/");
 					System.out.println("------------------Running execute with parameters:--------------------");
 					for(String s : parameters){
 						System.out.println("Parameter: " + s);
 					}
-
-				} catch (InterruptedException e) {
+				} catch (ProcessException e) {
 					e.printStackTrace();
-					ResponseLogger.log(username, "InterruptedException: " + e.getMessage());
+					ResponseLogger.log(username, "Process Exception: " + e.getMessage());
 					return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, e.getMessage());
-				} catch (IOException e1) {
-					e1.printStackTrace();
-					ResponseLogger.log(username, "IOException: " + e1.getMessage());
-					return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, e1.getMessage());
 				} finally{
 					db.close();
 				}
@@ -257,6 +253,7 @@ public class ProcessCommand extends Command {
 		//The execute executed correctly
 		try {
 			//TODO isPrivate hardcoded.
+			//TODO Check if the connection is open
 			db.addGeneratedProfiles(expid, filepaths.getValue(), filepaths.getKey(), metadata, genomeVersion, username, false);
 		} catch (SQLException e) {
 			e.printStackTrace();

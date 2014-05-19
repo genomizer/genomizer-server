@@ -9,15 +9,15 @@ public class serverTests {
 
 
 		Login.login("Splutt");
-		Annotations.sendGetAnnotationInformation();
-		Annotations.sendDeleteAnnotation("testanno space2");
-		Annotations.sendAddAnnotation("testanno space");
-		Annotations.sendRenameAnnotationField("testanno space", "testanno space2");
-		Annotations.sendAddAnnotationValue("testanno space2", "val space");
-		Annotations.sendAddAnnotationValue("testanno space2", "val space");
-		Annotations.sendRenameAnnotationValue("testanno space2", "val space", "newval space");
-		Annotations.sendDeleteAnnotationValue("testanno space2", "newval space");
-		Annotations.sendGetAnnotationInformation();
+//		Annotations.sendGetAnnotationInformation();
+//		Annotations.sendDeleteAnnotation("testanno space2");
+//		Annotations.sendAddAnnotation("testanno space");
+//		Annotations.sendRenameAnnotationField("testanno space", "testanno space2");
+//		Annotations.sendAddAnnotationValue("testanno space2", "val space");
+//	Annotations.sendAddAnnotationValue("testanno space2", "val space");
+//		Annotations.sendRenameAnnotationValue("testanno space2", "val space", "newval space");
+//	Annotations.sendDeleteAnnotationValue("testanno space2", "newval space");
+//		Annotations.sendGetAnnotationInformation();
 //		Annotations.sendDeleteAnnotation("testanno space2");
 
 //		Experiment.sendDeleteExperiment("testExp22");
@@ -30,7 +30,7 @@ public class serverTests {
 //		GenomeRelease.sendGetGenomeReleaseSpecies();
 
 //		Process.sendRawToProfile();
-//		Process.sendGetProcessStatus();
+		Process.sendGetProcessStatus();
 
 		Login.logout();
 
