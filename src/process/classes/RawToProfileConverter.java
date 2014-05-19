@@ -55,8 +55,7 @@ public class RawToProfileConverter extends Executor {
 	 * @throws IllegalAccessException
 	 */
 	public String procedure(String[] parameters, String inFolder,
-			String outFilePath) throws InterruptedException, IOException,
-			IllegalAccessException {
+			String outFilePath) {
 		checker = RawToProfileProcessChecker.rawToProfileCheckerFactory();
 
 		File[] inFiles = new File(inFolder).listFiles();
@@ -86,33 +85,89 @@ public class RawToProfileConverter extends Executor {
 			printTrace(parameters, inFolder, outFilePath);
 			if (fileDir.exists()) {
 				if (checker.shouldRunBowTie()) {
-					logString = runBowTie(rawFile1, rawFile_1_Name);
+					try {
+						logString = runBowTie(rawFile1, rawFile_1_Name);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					System.out.println("nu körs sortering");
-					sortSamFile(rawFile_1_Name);
+					try {
+						sortSamFile(rawFile_1_Name);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					if (inFiles.length == 2) {
-						logString = logString + "\n"
-								+ runBowTie(rawFile2, rawFile_2_Name);
+						try {
+							logString = logString + "\n"
+									+ runBowTie(rawFile2, rawFile_2_Name);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						// Sets parameters for sorting second sam file
-						sortSamFile(rawFile_2_Name);
+						try {
+							sortSamFile(rawFile_2_Name);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}// Sets parameters for sorting first sam file
 					filesToBeMoved = sortedDir;
 				}
 				if (checker.shouldRunSamToGff()) {
 					System.out.println("RUN SAMTOGFF");
 					System.out.println("samToGff " + samToGff);
-					logString = logString + "\n"
-							+ executeScript(parse(samToGff));
+					try {
+						logString = logString + "\n"
+								+ executeScript(parse(samToGff));
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					filesToBeMoved = sortedDir + "reads_gff/";
 				}
 				if (checker.shouldRunGffToAllnusgr()) {
 					System.out.println("RUN GFF TO ALLNUCSGR");
-					logString = logString + "\n"
-							+ executeScript(parse(gffToAllnusgr));
+					try {
+						logString = logString + "\n"
+								+ executeScript(parse(gffToAllnusgr));
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					filesToBeMoved = sortedDir + "reads_gff/allnucs_sgr/";
 				}
 				if (checker.shouldRunSmoothing()) {
 					System.out.println("RUNSMOOTHING");
-					runSmoothing(parameters, false);
+					try {
+						runSmoothing(parameters, false);
+					} catch (IllegalAccessException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 
 					filesToBeMoved = sortedDir
 							+ "reads_gff/allnucs_sgr/smoothed/";
@@ -131,10 +186,26 @@ public class RawToProfileConverter extends Executor {
 
 					System.out.println("RATODID = " + sortedDir
 							+ "reads_gff/allnucs_sgr/smoothed/");
-					doRatioCalculation(sortedDir
-							+ "reads_gff/allnucs_sgr/smoothed/", parameters);
+					try {
+						doRatioCalculation(sortedDir
+								+ "reads_gff/allnucs_sgr/smoothed/", parameters);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 
-					runSmoothing(parameters, true);
+					try {
+						runSmoothing(parameters, true);
+					} catch (IllegalAccessException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					filesToBeMoved = sortedDir
 							+ "reads_gff/allnucs_sgr/smoothed/ratios/smoothed/";
 				}
