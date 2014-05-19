@@ -34,7 +34,7 @@ public class ClientDummy {
 
 	public static void main(String args[]) throws Exception {
 		sendLogin();
-//		sendGetAnnotationInformation();
+		sendGetAnnotationInformation();
 //		sendAddAnnotation();
 //		sendDeleteAnnotation();
 //		sendAddExperiment();

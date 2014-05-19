@@ -6,10 +6,6 @@ import com.google.gson.annotations.Expose;
 
 public class AnnotationInformation {
 
-
-	@Expose
-	private int id;
-
 	@Expose
 	private String name;
 
@@ -19,17 +15,12 @@ public class AnnotationInformation {
 	@Expose
 	private boolean forced;
 
-	public AnnotationInformation(int id, String name,
+	public AnnotationInformation(String name,
 			ArrayList<String> values, boolean forced) {
 
-		this.id = id;
 		this.name = name;
 		this.values = values;
 		this.forced = forced;
-	}
-
-	public int getId() {
-		return id;
 	}
 
 	public String getName() {
@@ -49,12 +40,8 @@ public class AnnotationInformation {
 		return forced;
 	}
 
-	public void setId(int newid) {
-		id = newid;
-	}
-
 	public String toString() {
-		String returnstring = "ID: " + id + "\nNAME: " + name + "\nFORCED: " + forced + "\nVALUES:\n" ;
+		String returnstring = "NAME: " + name + "\nFORCED: " + forced + "\nVALUES:\n" ;
 
 		if(values != null) {
 			for(int i = 0; i < values.size(); i++) {

@@ -67,7 +67,7 @@ public class GetAnnotationInformationCommand extends Command {
 				values = (ArrayList<String>) annotationObject.getPossibleValues();
 			}
 
-			AnnotationInformation annotation = new AnnotationInformation(0, annotationObject.label, values, annotationObject.isRequired);
+			AnnotationInformation annotation = new AnnotationInformation(annotationObject.label, values, annotationObject.isRequired);
 			annotations.add(annotation);
 
 		}
@@ -77,12 +77,6 @@ public class GetAnnotationInformationCommand extends Command {
 	    AnnotationInformation expId = new AnnotationInformation(0, "ExpID", vals, false);
 		annotations.add(expId);*/
 
-		Collections.sort(annotations, new compareAnnotations());
-
-		for(int i = 0; i < annotations.size(); i++) {
-			annotations.get(i).setId(i);
-		}
-
 		try {
 			db.close();
 		} catch (SQLException e) {
@@ -90,16 +84,6 @@ public class GetAnnotationInformationCommand extends Command {
 			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, "Could not close database connection");
 		}
 		return new GetAnnotationInformationResponse(200, annotations);
-	}
-
-	private class compareAnnotations implements Comparator<AnnotationInformation> {
-
-		@Override
-		public int compare(AnnotationInformation arg0,
-				AnnotationInformation arg1) {
-
-			return arg0.getName().compareTo(arg1.getName());
-		}
 	}
 
 }
