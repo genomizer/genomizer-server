@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-
 /**
  * Class used to create profile data from .fastq format.
  *
@@ -18,7 +17,7 @@ public class RawToProfileConverter extends Executor {
 	private String sortedDir;
 	private String samToGff;
 	private String gffToAllnusgr;
-	private String smooth;
+	// private String smooth;
 	private String step10;
 	private File fileDir;
 	private String inFolder;
@@ -30,6 +29,7 @@ public class RawToProfileConverter extends Executor {
 	private String logString;
 	private RawToProfileProcessChecker checker;
 	private String filesToBeMoved = null;
+	private String filesToBeMovedverify;
 
 	/**
 	 * Takes a string array that contains bowtie parameters and then follows a
@@ -52,21 +52,27 @@ public class RawToProfileConverter extends Executor {
 	 *            Filepath to where the .wig file should be placed.
 	 * @throws InterruptedException
 	 * @throws IOException
+	 * @throws IllegalAccessException
 	 */
 	public String procedure(String[] parameters, String inFolder,
-			String outFilePath) throws InterruptedException, IOException {
+			String outFilePath) throws InterruptedException, IOException,
+			IllegalAccessException {
 		checker = RawToProfileProcessChecker.rawToProfileCheckerFactory();
 
 		File[] inFiles = new File(inFolder).listFiles();
+		System.out.println(inFolder);
+
 		this.parameters = parameters;
 		this.inFolder = inFolder;
 
-		if(verifyInData(parameters, inFolder, outFilePath) == false || !CorrectInfiles(inFiles)) {
-			logString =  "Indata is not in the correct format";
+		if (verifyInData(parameters, inFolder, outFilePath) == false
+				|| !CorrectInfiles(inFiles)) {
+			logString = "Indata is not in the correct format";
 		} else {
 			initiateConversionStrings(parameters, outFilePath);
 			System.out.println("convdir=" + remoteExecution + dir + "/sorted");
-			makeConversionDirectories(remoteExecution+"resources/" + dir + "/sorted");
+			makeConversionDirectories(remoteExecution + "resources/" + dir
+					+ "/sorted");
 			checker.calculateWhichProcessesToRun(parameters);
 			rawFile1 = inFiles[0].getName();
 			rawFile_1_Name = rawFile1.substring(0, rawFile1.length() - 6);
@@ -79,7 +85,7 @@ public class RawToProfileConverter extends Executor {
 
 			printTrace(parameters, inFolder, outFilePath);
 			if (fileDir.exists()) {
-				if(checker.shouldRunBowTie()) {
+				if (checker.shouldRunBowTie()) {
 					logString = runBowTie(rawFile1, rawFile_1_Name);
 					System.out.println("nu körs sortering");
 					sortSamFile(rawFile_1_Name);
@@ -91,57 +97,125 @@ public class RawToProfileConverter extends Executor {
 					}// Sets parameters for sorting first sam file
 					filesToBeMoved = sortedDir;
 				}
-				if(checker.shouldRunSamToGff()) {
-					logString = logString + "\n" + executeScript(parse(samToGff));
-					filesToBeMoved = sortedDir
-							+ "reads_gff/";
-				}
-				if(checker.shouldRunGffToAllnusgr()) {
+				if (checker.shouldRunSamToGff()) {
+					System.out.println("RUN SAMTOGFF");
+					System.out.println("samToGff " + samToGff);
 					logString = logString + "\n"
-						+ executeScript(parse(gffToAllnusgr));
-					filesToBeMoved = sortedDir
-							+ "reads_gff/allnucs_sgr/";
+							+ executeScript(parse(samToGff));
+					filesToBeMoved = sortedDir + "reads_gff/";
 				}
-				if(checker.shouldRunSmoothing()) {
-					logString = logString + "\n" + executeScript(parse(smooth));
+				if (checker.shouldRunGffToAllnusgr()) {
+					System.out.println("RUN GFF TO ALLNUCSGR");
+					logString = logString + "\n"
+							+ executeScript(parse(gffToAllnusgr));
+					filesToBeMoved = sortedDir + "reads_gff/allnucs_sgr/";
+				}
+				if (checker.shouldRunSmoothing()) {
+					System.out.println("RUNSMOOTHING");
+					runSmoothing(parameters, false);
+
 					filesToBeMoved = sortedDir
 							+ "reads_gff/allnucs_sgr/smoothed/";
+					// // smooth.smoothing(intParams, , outPath, stepSize)
+					// //
+					// // logString = logString + "\n" +
+					// // executeScript(parse(smooth));
 				}
-				if(checker.shouldRunStep()) {
-					logString = logString + "\n" + executeScript(parse(step10));
-					filesToBeMoved = sortedDir
-					+ "reads_gff/allnucs_sgr/smoothed/Step10/";
-				}
-				if(checker.shouldRunRatioCalc()) {
+				// if(checker.shouldRunStep()) {
+				// logString = logString + "\n" + executeScript(parse(step10));
+				// filesToBeMoved = sortedDir
+				// + "reads_gff/allnucs_sgr/smoothed/";
+				// }
+				if (checker.shouldRunRatioCalc()) {
+					System.out.println("RUN RATIO CALC");
+
 					System.out.println("RATODID = " + sortedDir
-							+ "reads_gff/allnucs_sgr/smoothed/Step10/");
+							+ "reads_gff/allnucs_sgr/smoothed/");
 					doRatioCalculation(sortedDir
-							+ "reads_gff/allnucs_sgr/smoothed/Step10/",
-							parameters);
+							+ "reads_gff/allnucs_sgr/smoothed/", parameters);
 
-							filesToBeMoved = sortedDir
-									+ "reads_gff/allnucs_sgr/smoothed/Step10/ratios/smoothed/";
+					runSmoothing(parameters, true);
+					filesToBeMoved = sortedDir
+							+ "reads_gff/allnucs_sgr/smoothed/ratios/smoothed/";
 				}
 
+				System.out.println("logString = " + logString);
 
-				System.out.println("logString = " +logString);
-				System.out.println("filesToBeMoved = " + "resources/"+ filesToBeMoved);
-				moveEndFiles("resources/" + filesToBeMoved,
-						outFilePath);
+				moveEndFiles("resources/" + filesToBeMoved, outFilePath);
 
-				//cleanUp(cleanUpInitiator(remoteExecution + "resources/"  + dir));
+				cleanUp(cleanUpInitiator(remoteExecution + "resources/" + dir));
 
 			} else {
-				logString = logString +" "+"Failed to create directory " + fileDir.toString();
+				logString = logString + " " + "Failed to create directory "
+						+ fileDir.toString();
 			}
 		}
-		System.out.println("logString = " +logString);
+		System.out.println("logString = " + logString);
 		return logString;
+	}
+
+	private void runSmoothing(String[] parameters, boolean isRatioCalc)
+			throws IllegalAccessException, IOException {
+
+		String[] parameterArray;
+		int stepSize;
+
+		File[] filesToSmooth;
+		File file;
+
+		if (isRatioCalc) {
+			parameterArray = parse(parameters[7]);
+			stepSize = 1;
+			filesToSmooth = new File("resources/" + sortedDir
+					+ "reads_gff/allnucs_sgr/smoothed/ratios").listFiles();
+			file = new File("resources/" + sortedDir
+					+ "reads_gff/allnucs_sgr/smoothed/ratios/smoothed");
+
+		} else {
+			filesToSmooth = new File("resources/" + sortedDir
+					+ "reads_gff/allnucs_sgr").listFiles();
+			file = new File("resources/" + sortedDir
+					+ "reads_gff/allnucs_sgr/smoothed");
+
+			stepSize = Integer.parseInt(parse(parameters[5])[1]);
+			parameterArray = parse(parameters[4]);
+		}
+
+		int[] intParams = new int[parameterArray.length];
+		for (int i = 0; i < parameterArray.length; i++) {
+			intParams[i] = Integer.parseInt(parameterArray[i]);
+		}
+
+		if (!file.exists()) {
+			file.mkdirs();
+		}
+
+		SmoothingAndStep smooth = new SmoothingAndStep();
+		for (int i = 0; i < filesToSmooth.length; i++) {
+			if (filesToSmooth[i].isFile() && isSgr(filesToSmooth[i].getName())) {
+				String inFile = filesToSmooth[i].getAbsoluteFile().toString();
+				String outFile = filesToSmooth[i].getName();
+
+				if (stepSize != 1) {
+					outFile = outFile.substring(0, outFile.length() - 4)
+							+ "_step" + stepSize + ".sgr";
+				} else {
+					// TODO Fix filename to have parameters...
+				}
+				outFile = file.toString() + "/" + outFile;
+
+				smooth.smoothing(intParams, inFile, outFile, stepSize);
+			}
+		}
+	}
+
+	private boolean isSgr(String name) {
+		return name.endsWith(".sgr");
 	}
 
 	private boolean CorrectInfiles(File[] inFiles) {
 		boolean checkInFiles = true;
-		if(inFiles == null) {
+		if (inFiles == null) {
 			System.out.println("infiles == null");
 			checkInFiles = false;
 		} else if (inFiles.length > 2 && inFiles.length < 1) {
@@ -166,11 +240,10 @@ public class RawToProfileConverter extends Executor {
 			throws InterruptedException, IOException {
 		String ratioCalc = "perl ratio_calculator_v2.pl " + dirPath + " "
 				+ parameters[6];
-		String smooth = "perl smooth_v4.pl " + dirPath + "ratios/" + " "
-				+ parameters[7];
+		// String smooth = "perl smooth_v4.pl " + dirPath + "ratios/" + " "
+		// + parameters[7];
 		logString = logString + executeScript(parse(ratioCalc));
-		logString = logString + executeScript(parse(smooth));
-
+		// logString = logString + executeScript(parse(smooth));
 	}
 
 	/**
@@ -205,10 +278,11 @@ public class RawToProfileConverter extends Executor {
 		samToGff = "perl sam_to_readsgff_v1.pl " + sortedDir;
 		gffToAllnusgr = "perl readsgff_to_allnucsgr_v1.pl " + sortedDir
 				+ "reads_gff/";
-		smooth = "perl smooth_v4.pl " + sortedDir + "reads_gff/allnucs_sgr/ "
-				+ parameters[2]; // Step 5
-		step10 = "perl AllSeqRegSGRtoPositionSGR_v1.pl " + parameters[3] + " "
-				+ sortedDir + "reads_gff/allnucs_sgr/smoothed/"; // Step 6
+		// step10 = "perl AllSeqRegSGRtoPositionSGR_v1.pl " + parameters[3] +
+		// " "
+		// + sortedDir + "reads_gff/allnucs_sgr/smoothed/"; // Step 6
+		// smooth = "perl smooth_v4.pl " + sortedDir + "reads_gff/allnucs_sgr/ "
+		// + parameters[2]; // Step 5
 		// sgr2wig = "perl sgr2wig.pl " + sortedDir
 		// + "/reads_gff/allnucs_sgr/smoothed/Step10/*.sgr " + outFile
 		// + "test.wig";
@@ -264,8 +338,9 @@ public class RawToProfileConverter extends Executor {
 			throws InterruptedException, IOException {
 		String sortSam = "sort " + remoteExecution + dir + unsortedSamFileName
 				+ ".sam" + " -k 3,3 -k 4,4n";
-		executeShellCommand(parse(sortSam), remoteExecution + dir + "sorted/",
-				unsortedSamFileName + "_sorted.sam");
+		System.out.println("sortSam " + sortSam);
+		executeShellCommand(parse(sortSam), remoteExecution + "resources/"
+				+ dir + "sorted/", unsortedSamFileName + "_sorted.sam");
 
 	}
 
@@ -277,12 +352,14 @@ public class RawToProfileConverter extends Executor {
 	 *            the directory to create if it doesnt exist
 	 */
 	private void makeConversionDirectories(String directoryPath) {
+		System.out.println("dire path " + directoryPath);
 		fileDir = new File(directoryPath);
 		if (!fileDir.exists()) {
 			fileDir.mkdirs();
 		}
 
 	}
+
 	private boolean verifyInData(String[] parameters, String inFolder,
 			String outFilePath) {
 
@@ -303,16 +380,19 @@ public class RawToProfileConverter extends Executor {
 			System.out.println("inFOlder || outFolder == null");
 			return false;
 		}
-		return checkIfFolderExists(outFilePath) && checkIfFolderExists(inFolder);
 
+		if (!checkIfFolderExists(outFilePath) && checkIfFolderExists(inFolder)) {
+			System.out.println("Folders does not exist");
+			return false;
+		}
+
+		return true;
 
 	}
 
 	private boolean checkIfFolderExists(String folder) {
 		File dir = new File(folder);
-		System.out.println("dire.exists = "+dir.exists());
+		System.out.println("dire.exists = " + dir.exists());
 		return dir.exists();
 	}
-
-
 }
