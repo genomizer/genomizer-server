@@ -40,7 +40,11 @@ public class GetGenomeReleaseSpeciesCommand extends Command{
 	}
 
 	/**
+	 * Connects to the database, retrieves all the genomeReleases for a
+	 * specific species from
+	 * the db and creates a response depending on the return value from the database
 	 *
+	 * If the species asked for doesn't exist in the database, a bad request respons is returned
 	 */
 	@Override
 	public Response execute() {
