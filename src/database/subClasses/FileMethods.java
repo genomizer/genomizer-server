@@ -170,7 +170,7 @@ public class FileMethods {
     public FileTuple getFileTuple(int fileID)
             throws SQLException {
 
-        String query = "SELECT * FROM File WHERE FileID ~~* ?";
+        String query = "SELECT * FROM File WHERE FileID = ?";
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setInt(1, fileID);
         ResultSet rs = stmt.executeQuery();
