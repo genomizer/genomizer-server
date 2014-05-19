@@ -28,7 +28,8 @@ public class serverTests {
 
 //		Experiment.sendDeleteExperiment("testExp22");
 //		Experiment.sendAddExperiment("testExp22");
-//		Experiment.sendGetExperiment("testExp22");
+		Experiment.sendGetExperiment("testExp22");
+		Experiment.sendGetExperiment("testExp22gfert3453");
 //		Experiment.sendDeleteExperiment("testExp22");
 
 //		Process.sendRawToProfile();
