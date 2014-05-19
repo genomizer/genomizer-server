@@ -25,7 +25,6 @@ public abstract class ServerAbstractTestClass {
 	protected String AnnotationFieldFreetext = "com_AnnoFTTEST9";
 	protected String AnnotationFieldNormal = "com_AnnoFDTEST14";
 
-	//Server URL and port.
 	protected String port = "7000";
 	protected String serverURL = "http://scratchy.cs.umu.se:" + port;
 	//protected String serverURL = "http://localhost:" + port;
@@ -80,7 +79,7 @@ public abstract class ServerAbstractTestClass {
 
 		return responseBuffer.toString();
 	}
-	//Add request header
+
 	/**
 	 * Used to open a connection.
 	 *
@@ -91,8 +90,6 @@ public abstract class ServerAbstractTestClass {
 
 		URL obj = new URL(restful);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
-		//Set the request property.
 		con.setRequestMethod(reqMethod);
 
 		return con;
@@ -106,22 +103,14 @@ public abstract class ServerAbstractTestClass {
 	 */
 	public int sendLogin(JsonObject jj) throws Exception {
 
-		//Get the connection and add request headers.
 		HttpURLConnection con = connect("POST", serverURL + "/login");
 		con.setRequestProperty("Content-Type", "application/json");
-
-		//Get JSON string.
 		String json_output = jj.toString();
-
-		//Write the JSON body.
 		sendResponseString(con, json_output);
 
 		int responseCode = con.getResponseCode();
-
-		String response =getResponseString(con);
-
-		Gson gson = new Gson();
-		token = gson.fromJson(response, Token.class);
+		String response = getResponseString(con);
+		setToken(response);
 
 		return responseCode;
 
@@ -135,7 +124,6 @@ public abstract class ServerAbstractTestClass {
 	 */
 	public int sendLogout() throws Exception {
 
-		//Get the connection and add request headers.
 		HttpURLConnection con = connect("DELETE", serverURL + "/login");
 		con.setRequestProperty("Content-Type", "application/json");
 		con.setRequestProperty("Authorization", token.getToken());
