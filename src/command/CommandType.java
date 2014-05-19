@@ -1,6 +1,13 @@
 package command;
 
+/**
+ * Enumeration class used to identify different commands.
+ *
+ * @author tfy09jnn
+ * @version1.0
+ */
 public enum CommandType {
+
 	LOGIN_COMMAND,
 	LOGOUT_COMMAND,
 	GET_EXPERIMENT_COMMAND,
@@ -30,4 +37,5 @@ public enum CommandType {
 	DELETE_GENOME_RELEASE_COMMAND,
 	GET_ALL_GENOME_RELEASE_COMMAND,
 	GET_GENOME_RELEASE_SPECIES_COMMAND;
+
 }
