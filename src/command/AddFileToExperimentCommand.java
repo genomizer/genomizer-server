@@ -1,25 +1,17 @@
 package command;
 
 import java.io.IOException;
-import java.io.OutputStream;
-import java.net.InetAddress;
-import java.net.Socket;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Map;
 
 import com.google.gson.annotations.Expose;
-import com.google.gson.*;
 
 import database.DatabaseAccessor;
 import database.FileTuple;
 
 import response.AddFileToExperimentResponse;
 import response.ErrorResponse;
-import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
-import server.DatabaseSettings;
 
 /**
  * Class used to represent a command of the type Addfile.

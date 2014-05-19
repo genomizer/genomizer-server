@@ -27,6 +27,7 @@ public class CommandHandlerTest {
 
 	@Test
 	public void testProcessNewCommand() {
+		//TODO: Implement
 		fail("Not yet implemented");
 	}
 
