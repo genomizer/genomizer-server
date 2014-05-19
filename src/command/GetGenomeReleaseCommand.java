@@ -18,19 +18,33 @@ import response.Response;
 import response.StatusCode;
 import server.DatabaseSettings;
 
+/**
+ *A command which is used to get all the genome versions
+ *currently stored in the database. It takes no account of species.
+ *
+ */
+
 public class GetGenomeReleaseCommand extends Command{
 
-	//private String species;
+	/**
+	 * Empty constructor, used to get an object of GetGenomeReleaseCommand
+	 */
 	public GetGenomeReleaseCommand() {
-		//species=restful;
 	}
 
+	/**
+	 * Validation is always true, this command is always sent to the database
+	 * because the command can't be corrupt.
+	 */
 	@Override
 	public boolean validate() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 
+	/**
+	 * Connects to the database, retrieves all the genomeReleases from
+	 * the db and creates a response depending on the return value from the database
+	 */
 	@Override
 	public Response execute() {
 		DatabaseAccessor db=null;
