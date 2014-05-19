@@ -763,6 +763,24 @@ public class DatabaseAccessor {
         return fileMethods.getFileTuple(filePath);
     }
 
+
+    /**
+     * Returns the FileTuple object associated with the given
+     * filePath.
+     *
+     * @param String
+     *            filePath
+     * @return FileTuple - The corresponding FileTuple or null if no
+     *         such file exists
+     * @throws SQLException
+     *             - If the query could not be executed.
+     */
+    public FileTuple getFileTuple(int fileID)
+            throws SQLException {
+
+        return fileMethods.getFileTuple(fileID);
+    }
+
     /**
      * Deletes a file from the database.
      *

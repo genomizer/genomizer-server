@@ -155,6 +155,34 @@ public class FileMethods {
         return null;
     }
 
+
+    /**
+     * Returns the FileTuple object associated with the given
+     * fileID.
+     *
+     * @param fileID
+     *            int
+     * @return FileTuple - The corresponding FileTuple or null if no
+     *         such file exists
+     * @throws SQLException
+     *             If the query could not be executed.
+     */
+    public FileTuple getFileTuple(int fileID)
+            throws SQLException {
+
+        String query = "SELECT * FROM File WHERE FileID ~~* ?";
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setInt(1, fileID);
+        ResultSet rs = stmt.executeQuery();
+        if (rs.next()) {
+            FileTuple fileTuple = new FileTuple(rs);
+            stmt.close();
+            return fileTuple;
+        }
+        stmt.close();
+        return null;
+    }
+
     /**
      * Deletes a file from the database and the disk. Should throw an
      * IOException if the method failed to delete the file from disk.
