@@ -15,6 +15,15 @@ import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
 
+/**
+ * Edits the label of an annotation. The object is generated
+ * directly from JSON with parameters oldName and newName.
+ * oldName must be an existing annotation label and
+ * newName can't be the label of an existing annotation.
+ *
+ * @author ens10olm
+ *
+ */
 public class EditAnnotationFieldCommand extends Command {
 
 	@Expose
@@ -34,6 +43,12 @@ public class EditAnnotationFieldCommand extends Command {
 		return false;
 	}
 
+	/**
+	 * Changes the label of annotation oldName to newName. All database entries
+	 * will be affected by the change. Will return a bad request response if
+	 * either parameter is invalid, and an OK response if the modification
+	 * succeeded.
+	 */
 	@Override
 	public Response execute() {
 		DatabaseAccessor db = null;
