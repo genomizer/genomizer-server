@@ -28,9 +28,8 @@ public class FilePathGenerator {
     /**
      * Used when first adding a new experiment. Creates a folder for the
      * experiment and subfolders for files
-     * 
-     * @param expID
-     *            - the ID for the experiment.
+     *
+     * @param String expID, the ID for the experiment
      */
     public void generateExperimentFolders(String expID) {
 
@@ -46,7 +45,13 @@ public class FilePathGenerator {
         file = new File(getUnknownFolderPath(expID));
         file.mkdirs();
     }
-    
+
+    /**
+     * Gets the path to the RAW folder of an experiment.
+     *
+     * @param String expID, the ID for the experiment
+     * @return String path to RAW folder
+     */
     public String getRawFolderPath(String expID) {
 
         StringBuilder rawFolderPathBuilder = new StringBuilder(rootDir);
@@ -57,6 +62,12 @@ public class FilePathGenerator {
         return rawFolderPathBuilder.toString();
     }
 
+    /**
+     * Gets the path to the profile folder of an experiment.
+     *
+     * @param String expID, the ID for the experiment
+     * @return String path to profile folder
+     */
     public String getProfileFolderPath(String expID) {
 
         StringBuilder profileFolderPathBuilder = new StringBuilder(rootDir);
@@ -67,6 +78,12 @@ public class FilePathGenerator {
         return profileFolderPathBuilder.toString();
     }
 
+    /**
+     * Gets the path to the region folder of an experiment.
+     *
+     * @param String expID, the ID for the experiment
+     * @return String, path to region folder
+     */
     public String getRegionFolderPath(String expID) {
 
         StringBuilder regionFolderPathBuilder = new StringBuilder(rootDir);
@@ -76,8 +93,14 @@ public class FilePathGenerator {
         regionFolderPathBuilder.append(File.separator);
         return regionFolderPathBuilder.toString();
     }
-    
-    private String getUnknownFolderPath(String expID) {
+
+    /**
+     * Gets the path to the unknown folder (misc files) of an experiment.
+     *
+     * @param String expID, the ID for the experiment
+     * @return String path to unknown folder
+     */
+    public String getUnknownFolderPath(String expID) {
 
         StringBuilder unknownFolderPathBuilder = new StringBuilder(rootDir);
         unknownFolderPathBuilder.append(expID);
@@ -90,14 +113,11 @@ public class FilePathGenerator {
     /**
      * Used when uploading and downloading files. Returns a Dir string where the
      * file is or where is should be saved.
-     * 
-     * @param expID
-     *            - the ID for the experiment.
-     * @param fileType
-     *            - the type of the file.
-     * @param fileName
-     *            - the name of the file.
-     * @return the string for the file.
+     *
+     * @param String expID, the ID for the experiment.
+     * @param String fileType, the type of the file.
+     * @param String fileName, the name of the file.
+     * @return String the path for the file.
      */
 
     public String generateFilePath(String expID, int fileType, String fileName) {
@@ -123,12 +143,19 @@ public class FilePathGenerator {
         return folderPath + fileName;
     }
 
+    /**
+     * Creates subfolders in profile folder. Adds a number at the end of the
+     * subfolder name according to the number of folders already there.
+     *
+     * @param String folderPath
+     * @return String path to the subfolder
+     */
     public String generateNewProfileSubFolder(String folderPath) {
-        
+
         File profileFolder = new File(folderPath);
 
         Integer folderNumber = profileFolder.list().length;
-        
+
         File newProfileFolder = new File(folderPath + folderNumber.toString() + File.separator);
 
         while (newProfileFolder.exists()) {
@@ -143,7 +170,7 @@ public class FilePathGenerator {
 
     /**
      * Creates the folder for chainfiles and returns the path to it.
-     * 
+     *
      * @param String
      *            species
      * @param String
@@ -169,11 +196,11 @@ public class FilePathGenerator {
 
     /**
      * Gets the path to the folder where the chain files should be stored.
-     * 
-     * @param species
-     * @param fromVersion
-     * @param toVersion
-     * @return The path to the folder where the chain files should be stored.
+     *
+     * @param String species
+     * @param String fromVersion
+     * @param String toVersion
+     * @return String The path to the folder where the chain files should be stored.
      */
     public String getChainFolderPath(String species, String fromVersion,
             String toVersion) {
@@ -196,7 +223,7 @@ public class FilePathGenerator {
     /**
      * Creates and returns the path to the folder where the genome release files
      * should be stored.
-     * 
+     *
      * @param String
      *            version, the genome version of the file,
      * @param String
@@ -216,6 +243,13 @@ public class FilePathGenerator {
         return genomeReleaseFolderPath;
     }
 
+    /**
+     * Gets the filepath to the genome release folder.
+     *
+     * @param String version
+     * @param String species
+     * @return String path to genome folder
+     */
     public String getGenomeReleaseFolderPath(String version, String species) {
 
         StringBuilder folderPath = new StringBuilder();
@@ -230,6 +264,12 @@ public class FilePathGenerator {
         return folderPath.toString();
     }
 
+    /**
+     * Sets the root directory where all data is stored.
+     *
+     * @param String rootDir
+     * @throws IOException
+     */
     public void setRootDirectory(String rootDir) throws IOException {
         String regex = "([a-zA-Z]:)?(/[a-zA-Z0-9._\" \"-]+)+/?";
         if (rootDir.endsWith(File.separator) && rootDir.matches(regex)) {
@@ -241,6 +281,11 @@ public class FilePathGenerator {
         }
     }
 
+    /**
+     * Returns the path to the root folder.
+     *
+     * @return String rootpath
+     */
     public String getRootDirectory() {
         return rootDir;
     }
