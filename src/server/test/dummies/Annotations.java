@@ -20,7 +20,7 @@ public class Annotations {
 
 		con.setRequestMethod("GET");
 		con.setRequestProperty("Content-Type", "application/json");
-		con.setRequestProperty("Authorization", token.getToken());
+		con.setRequestProperty("Authorization", Login.getToken());
 
 		System.out.println("\nSending 'GET' request to URL : " + testSettings.url);
 		System.out.println("Response Body: " +testSettings. printResponse(con));
@@ -67,7 +67,7 @@ public class Annotations {
 
 		testSettings.sendToServer(con, jj.toString());
 
-		System.out.println("\nSending 'GET' request to URL : " + testSettings.url);
+		System.out.println("\nSending 'PUT' request to URL : " + testSettings.url);
 		System.out.println("Response Body: " + testSettings.printResponse(con));
 	}
 
@@ -127,7 +127,7 @@ public class Annotations {
 	}
 
 	static void sendDeleteAnnotationValue(String name, String value) throws IOException {
-		URL obj = new URL(testSettings.url + "/annotation/value/" + name + "/" + value);
+		URL obj = new URL(testSettings.url + "/annotation/value/" + URLEncoder.encode(name, "UTF-8") + "/" + URLEncoder.encode(value, "UTF-8"));
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
 		con.setRequestMethod("DELETE");
@@ -135,7 +135,7 @@ public class Annotations {
 		con.setRequestProperty("Authorization", Login.getToken());
 		con.setRequestProperty("Content-Type", "application/json");
 
-		System.out.println("\nSending 'PUT' request to URL : " + testSettings.url);
+		System.out.println("\nSending 'DELETE' request to URL : " + testSettings.url);
 		System.out.println("Response Body: " + testSettings.printResponse(con));
 	}
 }

@@ -58,8 +58,7 @@ public class CommandFactoryTest {
 	@Test
 	public void testCreateLogoutCommandNotNull() {
 
-		String username = "UserName";
-		assertNotNull(cmdf.createLogoutCommand(username));
+		assertNotNull(cmdf.createLogoutCommand("userName"));
 
 	}
 
@@ -69,8 +68,7 @@ public class CommandFactoryTest {
 	@Test
 	public void testCreateGetExperimentCommandNotNull() {
 
-		String restful = "RESTFUL";
-		assertNotNull(cmdf.createGetExperimentCommand(restful));
+		assertNotNull(cmdf.createGetExperimentCommand("restful"));
 
 	}
 
@@ -94,8 +92,7 @@ public class CommandFactoryTest {
 
 		String json = "{\"name\": \"experimentId\",\"createdBy\":\"user\",\"annotations\":"
 				+ "[{\"name\":\"pubmedId\",\"value\":\"abc123\"}]}";
-		String restful = "/experiment/id123";
-		assertNotNull(cmdf.createUpdateExperimentCommand(json, restful));
+		assertNotNull(cmdf.createUpdateExperimentCommand(json, "/experiment/id123"));
 
 	}
 
@@ -105,9 +102,7 @@ public class CommandFactoryTest {
 	@Test
 	public void testDeleteExperimentCommandNotNull() {
 
-		String restful = "/experiment/id123";
-		String json = "NONE";
-		assertNotNull(cmdf.createDeleteExperimentCommand(json, restful));
+		assertNotNull(cmdf.createDeleteExperimentCommand("NONE", "/experiment/id123"));
 
 	}
 
@@ -117,9 +112,7 @@ public class CommandFactoryTest {
 	@Test
 	public void testGetFileFromExperimentCommandNotNull() {
 
-		String restful = "/file/myFileId";
-		String json = "NONE";
-		assertNotNull(cmdf.createGetFileFromExperimentCommand(json, restful));
+		assertNotNull(cmdf.createGetFileFromExperimentCommand("NONE", "/file/myFileId"));
 
 	}
 
@@ -142,11 +135,10 @@ public class CommandFactoryTest {
 	@Test
 	public void testUpdateFileInExperimentCommandNotNull() {
 
-		String restful = "/file/myFileId";
 		String json = "{\"experimentID\":\"id\",\"fileName\":\"name\",\"type\":\"raw\","
 				+ "\"metaData\":\"metameta\",\"author\":\"name\",\"uploader\":\"user1\","
 				+ "\"isPrivate\":\"bool\",\"grVersion\":\"releaseNr\"}";
-		assertNotNull(cmdf.createUpdateFileInExperimentCommand(json, restful));
+		assertNotNull(cmdf.createUpdateFileInExperimentCommand(json, "/file/myFileId"));
 
 	}
 
@@ -156,9 +148,7 @@ public class CommandFactoryTest {
 	@Test
 	public void testDeleteFileFromExperimentCommandNotNull() {
 
-		String restful = "/file/myFileId";
-		String json = "NONE";
-		assertNotNull(cmdf.createDeleteFileFromExperimentCommand(json, restful));
+		assertNotNull(cmdf.createDeleteFileFromExperimentCommand("NONE", "/file/myFileId"));
 
 	}
 
@@ -168,8 +158,7 @@ public class CommandFactoryTest {
 	@Test
 	public void testSearchForExperimentCommandNotNull() {
 
-		String restful = "/search/?annotations=pubmedStyleQuery";
-		assertNotNull(cmdf.createSearchForExperimentCommand(restful));
+		assertNotNull(cmdf.createSearchForExperimentCommand("/search/?annotations=pubmedStyleQuery"));
 
 	}
 
@@ -179,11 +168,10 @@ public class CommandFactoryTest {
 	@Test
 	public void testUpdateUserCommandNotNull() {
 
-		String restful = "/user";
 		String json = "{\"username\":\"uname\",\"password\":\"pw\","
 				+ "\"privileges\":\"basic\",\"name\":\"John Johnson\","
 				+ "\"email\":\"john@mail.com\"}";
-		assertNotNull(cmdf.createUpdateUserCommand(json, restful));
+		assertNotNull(cmdf.createUpdateUserCommand(json, "/user"));
 
 	}
 
@@ -193,8 +181,7 @@ public class CommandFactoryTest {
 	@Test
 	public void testDeleteUserCommandNotNull() {
 
-		String restful = "/user";
-		assertNotNull(cmdf.createDeleteUserCommand(null, restful));
+		assertNotNull(cmdf.createDeleteUserCommand(null, "/user"));
 
 	}
 
@@ -210,9 +197,7 @@ public class CommandFactoryTest {
 				",\"y\",\"y\",\"10 1 5 0 0\",\"y 10\",\"single 4 0\",\"150 1 7 0 0\"]," +
 				"\"metadata\": \"astringofmetadata\",\"genomeRelease\":" +
 				"\"hg38\",\"author\": \"yuri\"}";
-		String username = "tmpUsername";
-		String parsedRestful = "parsed";
-		assertNotNull(cmdf.createProcessCommand(json, username, parsedRestful));
+		assertNotNull(cmdf.createProcessCommand(json, "userName", "parsedRestful"));
 
 	}
 
@@ -232,10 +217,9 @@ public class CommandFactoryTest {
 	@Test
 	public void testAddAnnotationFieldCommandNotNull() {
 
-		String restful = "/annotation/field";
 		String json = "{\"name\":\"species\",\"type\":[\"fly\",\"rat\",\"human\"],"
 				+ "\"default\":\"human\",\"forced\":false}";
-		assertNotNull(cmdf.createAddAnnotationFieldCommand(json, restful));
+		assertNotNull(cmdf.createAddAnnotationFieldCommand(json, "/annotation/field"));
 
 	}
 
@@ -245,9 +229,8 @@ public class CommandFactoryTest {
 	@Test
 	public void testAddAnnotationValueCommandNotNull() {
 
-		String restful = "/annotation/value";
 		String json = "{\"name\":\"species\",\"value\":\"mouse\"}";
-		assertNotNull(cmdf.createAddAnnotationValueCommand(json, restful));
+		assertNotNull(cmdf.createAddAnnotationValueCommand(json, "/annotation/value"));
 
 	}
 
@@ -257,9 +240,8 @@ public class CommandFactoryTest {
 	@Test
 	public void testRemoveAnnotationFieldCommandNotNull() {
 
-		String restful = "/annotation/field/myFieldName";
-		String json = "NONE";
-		assertNotNull(cmdf.createRemoveAnnotationFieldCommand(json, restful));
+		String[] insert = {"NONE","/annotation/field/myFieldName"};
+		assertNotNull(cmdf.createRemoveAnnotationFieldCommand(insert[0], insert[1]));
 
 	}
 
@@ -268,7 +250,6 @@ public class CommandFactoryTest {
 	 */
 	@Test
 	public void testGetAnnotationPrivilegesCommandNotNull() {
-
 		//TODO: implement.
 		fail("Not yet implemented.");
 
@@ -311,9 +292,7 @@ public class CommandFactoryTest {
 	@Test
 	public void testCreateDeleteGenomeReleaseCommand() {
 
-		String specie = "tempSpecie";
-		String genomeVersion = "tmpGenomeVersion";
-		assertNotNull(cmdf.createDeleteGenomeReleaseCommand(specie, genomeVersion));
+		assertNotNull(cmdf.createDeleteGenomeReleaseCommand("specie", "genVersion"));
 
 	}
 
@@ -322,8 +301,9 @@ public class CommandFactoryTest {
 	 */
 	@Test
 	public void testDeleteAnnotationValueCommandNotNull() {
-		//TODO: Implement.
-		fail("Not yet implemented.");
+
+		assertNotNull(cmdf.createDeleteAnnotationValueCommand("NONE", "valueName", "fieldName"));
+
 	}
 
 	/**
@@ -331,10 +311,8 @@ public class CommandFactoryTest {
 	 */
 	@Test
 	public void testEditAnnotationFieldCommandNotNull() {
-
 		//TODO: Implement
 		fail("Not implemented yet.");
-
 	}
 
 	/**
@@ -353,8 +331,7 @@ public class CommandFactoryTest {
 	@Test
 	public void testGetGenomeReleaseSpeciesCommandNotNull() {
 
-		String species = "mySpeices";
-		assertNotNull(cmdf.createGetGenomeReleasesSpeciesCommand(species));
+		assertNotNull(cmdf.createGetGenomeReleasesSpeciesCommand("species"));
 
 	}
 
@@ -363,8 +340,9 @@ public class CommandFactoryTest {
 	 */
 	@Test
 	public void testGetProcessStatusCommandNotNull() {
-		//TODO: Implement.
-		fail("Not yet implemented.");
+
+		assertNotNull(cmdf.createGetProcessStatusCommand(null));
+
 	}
 
 	/**
@@ -373,8 +351,7 @@ public class CommandFactoryTest {
 	@Test
 	public void testCreateRetrieveExperimentCommand() {
 
-		String restful = "ABCDEF";
-		assertNotNull(cmdf.createGetExperimentCommand(restful));
+		assertNotNull(cmdf.createGetExperimentCommand("restful"));
 
 	}
 

@@ -18,8 +18,6 @@ import server.WorkHandler;
  */
 public class CommandHandler {
 
-	//TODO: Add threads?
-
 	private CommandFactory cmdFactory = new CommandFactory();
 	//used to execute heavy work such as process commands execute
 	private WorkHandler heavyWorkThread = new WorkHandler();
@@ -76,7 +74,7 @@ public class CommandHandler {
 
 		if (cmdt == CommandType.DELETE_ANNOTATION_VALUE_COMMAND) {
 			String[] rest = restful.split("/");
-			newCommand = cmdFactory.createDeleteAnnotationValueCommand(json, rest[2], rest[3]);
+			newCommand = cmdFactory.createDeleteAnnotationValueCommand(json, rest[3], rest[4]);
 		}
 		String parsedRest = parseRest(restful);
 

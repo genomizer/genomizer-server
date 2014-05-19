@@ -66,7 +66,6 @@ public class Doorman {
 			public void handle(HttpExchange exchange) throws IOException {
 
 				System.out.println("\n-----------------\nNEW EXCHANGE: " + exchange.getHttpContext().getPath());
-System.out.println("LOOOOL: " + exchange.getRequestMethod());
 				switch(exchange.getRequestMethod()) {
 				case "GET":
 					switch(exchange.getHttpContext().getPath()) {
