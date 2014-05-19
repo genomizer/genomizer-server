@@ -1,8 +1,14 @@
 package server;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Scanner;
 
 import authentication.Authenticate;
 
@@ -10,10 +16,42 @@ import response.Response;
 
 public class ResponseLogger {
 
+
+	private static String logFile = System.getProperty("user.dir") + "/errorLog.txt";
+
 	private static HashMap<String, ArrayList<Response>> usermap = new HashMap<String,ArrayList<Response>>();
 
 	public ResponseLogger(){
 
+	}
+
+	public static void log(String username, String logText){
+
+		File file = new File(logFile);
+
+		try{
+			file.createNewFile();
+
+			BufferedWriter out = new BufferedWriter(new FileWriter(logFile, true));
+			out.write(logText);
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+
+		}
+	}
+	public static void log(String username, Response response){
+		File file = new File(logFile);
+
+		try{
+			file.createNewFile();
+			BufferedWriter out = new BufferedWriter(new FileWriter(logFile, true));
+			out.write(response.toString());
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+
+		}
 	}
 
 	/**
@@ -22,7 +60,7 @@ public class ResponseLogger {
 	 * @param username - The username of the user calling the process.
 	 * @param response - The response to be logged.
 	 * @return Returns true if the
-	 */
+	 *//*
 	public static void log(String username, Response response) {
 
 		if(!usermap.containsKey(username)){
@@ -37,6 +75,7 @@ public class ResponseLogger {
 
 
 	}
+	  */
 
 	/**
 	 * Method for getting a specific users log.
