@@ -71,8 +71,10 @@ public class AddAnnotationFieldCommand extends Command {
 				}
 			}
 			if(type.size() == 1 && type.get(0).equals("freetext")) {
+				System.out.println(forced);
 				addedAnnotations = db.addFreeTextAnnotation(name, defaults, forced);
 			} else {
+				System.out.println(forced);
 				addedAnnotations = db.addDropDownAnnotation(name, type, defaultValueIndex, forced);
 			}
 			if(addedAnnotations != 0) {

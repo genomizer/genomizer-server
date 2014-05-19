@@ -20,7 +20,7 @@ public class Annotations {
 
 		con.setRequestMethod("GET");
 		con.setRequestProperty("Content-Type", "application/json");
-		con.setRequestProperty("Authorization", token.getToken());
+		con.setRequestProperty("Authorization", Login.getToken());
 
 		System.out.println("\nSending 'GET' request to URL : " + testSettings.url);
 		System.out.println("Response Body: " +testSettings. printResponse(con));
