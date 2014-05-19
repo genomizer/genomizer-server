@@ -4,6 +4,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Stack;
+
+import command.ProcessCommand;
 
 /**
  * Class used to create profile data from .fastq format.
@@ -30,6 +33,12 @@ public class RawToProfileConverter extends Executor {
 	private RawToProfileProcessChecker checker;
 	private String filesToBeMoved = null;
 	private String filesToBeMovedverify;
+	private Stack<String> toBeRemoved;
+
+	public RawToProfileConverter() {
+		super();
+		toBeRemoved = new Stack<String>();
+	}
 
 	/**
 	 * Takes a string array that contains bowtie parameters and then follows a
@@ -50,27 +59,29 @@ public class RawToProfileConverter extends Executor {
 	 *            The filepath to the file to create a wig from
 	 * @param outFile
 	 *            Filepath to where the .wig file should be placed.
-	 * @throws InterruptedException
-	 * @throws IOException
-	 * @throws IllegalAccessException
+	 * @throws ProcessException
 	 */
 	public String procedure(String[] parameters, String inFolder,
-			String outFilePath) {
+			String outFilePath) throws ProcessException {
 		checker = RawToProfileProcessChecker.rawToProfileCheckerFactory();
-
+		if(inFolder != null) {
+			inFolder = validateInFolder(inFolder);
+		}
 		File[] inFiles = new File(inFolder).listFiles();
-		System.out.println(inFolder);
+
+		System.out.println("EFTER BORTAGANDE AV SLASHET = " + inFolder);
 
 		this.parameters = parameters;
 		this.inFolder = inFolder;
 
 		if (verifyInData(parameters, inFolder, outFilePath) == false
 				|| !CorrectInfiles(inFiles)) {
-			logString = "Indata is not in the correct format";
+			throw new ProcessException("");
+			// TODO: Specify exception
 		} else {
 			initiateConversionStrings(parameters, outFilePath);
 			System.out.println("convdir=" + remoteExecution + dir + "/sorted");
-			makeConversionDirectories(remoteExecution + "resources/" + dir
+			makeConversionDirectories(remoteExecution  + dir
 					+ "/sorted");
 			checker.calculateWhichProcessesToRun(parameters);
 			rawFile1 = inFiles[0].getName();
@@ -84,137 +95,100 @@ public class RawToProfileConverter extends Executor {
 
 			printTrace(parameters, inFolder, outFilePath);
 			if (fileDir.exists()) {
+				System.out.println("FILEDIR EXISTS (" + fileDir.toString() + ")");
 				if (checker.shouldRunBowTie()) {
+					System.out.println("SHOULD RUN BOWTIE");
 					try {
 						logString = runBowTie(rawFile1, rawFile_1_Name);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						System.out.println(logString);
+					} catch (ProcessException e) {
+						throw new ProcessException("");
+						// TODO: Specify exception
 					}
 					System.out.println("nu körs sortering");
 					try {
 						sortSamFile(rawFile_1_Name);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+					} catch (ProcessException e) {
+						throw new ProcessException("");
+						// TODO: Specify exception
 					}
 					if (inFiles.length == 2) {
 						try {
 							logString = logString + "\n"
 									+ runBowTie(rawFile2, rawFile_2_Name);
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+						} catch (ProcessException e) {
+							throw new ProcessException("");
+							// TODO: Specify exception
 						}
-						// Sets parameters for sorting second sam file
 						try {
 							sortSamFile(rawFile_2_Name);
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+						} catch (ProcessException e) {
+							throw new ProcessException("");
+							// TODO: Specify exception
 						}
 					}// Sets parameters for sorting first sam file
+					toBeRemoved.push(remoteExecution + dir);
 					filesToBeMoved = sortedDir;
+					toBeRemoved.push(filesToBeMoved);
 				}
-				if (checker.shouldRunSamToGff()) {
-					System.out.println("RUN SAMTOGFF");
-					System.out.println("samToGff " + samToGff);
-					try {
-						logString = logString + "\n"
-								+ executeScript(parse(samToGff));
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					filesToBeMoved = sortedDir + "reads_gff/";
-				}
-				if (checker.shouldRunGffToAllnusgr()) {
-					System.out.println("RUN GFF TO ALLNUCSGR");
-					try {
-						logString = logString + "\n"
-								+ executeScript(parse(gffToAllnusgr));
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					filesToBeMoved = sortedDir + "reads_gff/allnucs_sgr/";
-				}
-				if (checker.shouldRunSmoothing()) {
-					System.out.println("RUNSMOOTHING");
-					try {
-						runSmoothing(parameters, false);
-					} catch (IllegalAccessException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+//				if (checker.shouldRunSamToGff()) {
+//					System.out.println("RUN SAMTOGFF");
+//					System.out.println("samToGff " + samToGff);
+//					try {
+//						logString = logString + "\n"
+//								+ executeScript(parse(samToGff));
+//						System.out.println("SAMTOGFF LOGSTRING = " + logString);
+//					} catch (InterruptedException e) {
+//						throw new ProcessException("");
+//						// TODO: Specify exception
+//					} catch (IOException e) {
+//						throw new ProcessException("");
+//						// TODO: Specify exception
+//					}
+//					filesToBeMoved = sortedDir + "reads_gff/";
+//					toBeRemoved.push(filesToBeMoved);
+//				}
+//				if (checker.shouldRunGffToAllnusgr()) {
+//					System.out.println("RUN GFF TO ALLNUCSGR");
+//					try {
+//						logString = logString + "\n"
+//								+ executeScript(parse(gffToAllnusgr));
+//					} catch (InterruptedException e) {
+//						throw new ProcessException("");
+//						// TODO: Specify exception
+//					} catch (IOException e) {
+//						throw new ProcessException("");
+//						// TODO: Specify exception
+//					}
+//					filesToBeMoved = sortedDir + "reads_gff/allnucs_sgr/";
+//				}
+//				if (checker.shouldRunSmoothing()) {
+//					System.out.println("RUNSMOOTHING");
+//
+//					runSmoothing(parameters, false);
+//
+//					filesToBeMoved = sortedDir
+//							+ "reads_gff/allnucs_sgr/smoothed/";
+//					toBeRemoved.push(filesToBeMoved);
+//				}
+//
+//				if (checker.shouldRunRatioCalc()) {
+//					System.out.println("RUN RATIO CALC");
+//
+//					doRatioCalculation(sortedDir
+//							+ "reads_gff/allnucs_sgr/smoothed/", parameters);
+//
+//					runSmoothing(parameters, true);
+//					toBeRemoved.push(sortedDir
+//							+ "reads_gff/allnucs_sgr/smoothed/ratios/");
+//					filesToBeMoved = sortedDir
+//							+ "reads_gff/allnucs_sgr/smoothed/ratios/smoothed/";
+//					toBeRemoved.push(filesToBeMoved);
+//				}
 
-					filesToBeMoved = sortedDir
-							+ "reads_gff/allnucs_sgr/smoothed/";
-					// // smooth.smoothing(intParams, , outPath, stepSize)
-					// //
-					// // logString = logString + "\n" +
-					// // executeScript(parse(smooth));
-				}
-				// if(checker.shouldRunStep()) {
-				// logString = logString + "\n" + executeScript(parse(step10));
-				// filesToBeMoved = sortedDir
-				// + "reads_gff/allnucs_sgr/smoothed/";
-				// }
-				if (checker.shouldRunRatioCalc()) {
-					System.out.println("RUN RATIO CALC");
-
-					System.out.println("RATODID = " + sortedDir
-							+ "reads_gff/allnucs_sgr/smoothed/");
-					try {
-						doRatioCalculation(sortedDir
-								+ "reads_gff/allnucs_sgr/smoothed/", parameters);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-
-					try {
-						runSmoothing(parameters, true);
-					} catch (IllegalAccessException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					filesToBeMoved = sortedDir
-							+ "reads_gff/allnucs_sgr/smoothed/ratios/smoothed/";
-				}
-
-				System.out.println("logString = " + logString);
-
-				moveEndFiles("resources/" + filesToBeMoved, outFilePath);
-
-				cleanUp(cleanUpInitiator(remoteExecution + "resources/" + dir));
+				moveEndFiles(filesToBeMoved, outFilePath);
+				removeTemp(toBeRemoved);
+				//cleanUp(cleanUpInitiator(remoteExecution + "resources/" + dir));
 
 			} else {
 				logString = logString + " " + "Failed to create directory "
@@ -225,8 +199,18 @@ public class RawToProfileConverter extends Executor {
 		return logString;
 	}
 
+	private String validateInFolder(String folderString) {
+		if(folderString != null) {
+			if (folderString.endsWith("/")) {
+				return folderString.substring(0, folderString.length() - 1);
+			} else
+				return folderString;
+		}
+		return null;
+	}
+
 	private void runSmoothing(String[] parameters, boolean isRatioCalc)
-			throws IllegalAccessException, IOException {
+			throws ProcessException {
 
 		String[] parameterArray;
 		int stepSize;
@@ -237,15 +221,15 @@ public class RawToProfileConverter extends Executor {
 		if (isRatioCalc) {
 			parameterArray = parse(parameters[7]);
 			stepSize = 1;
-			filesToSmooth = new File("resources/" + sortedDir
+			filesToSmooth = new File(sortedDir
 					+ "reads_gff/allnucs_sgr/smoothed/ratios").listFiles();
-			file = new File("resources/" + sortedDir
+			file = new File(sortedDir
 					+ "reads_gff/allnucs_sgr/smoothed/ratios/smoothed");
 
 		} else {
-			filesToSmooth = new File("resources/" + sortedDir
+			filesToSmooth = new File(sortedDir
 					+ "reads_gff/allnucs_sgr").listFiles();
-			file = new File("resources/" + sortedDir
+			file = new File( sortedDir
 					+ "reads_gff/allnucs_sgr/smoothed");
 
 			stepSize = Integer.parseInt(parse(parameters[5])[1]);
@@ -275,7 +259,18 @@ public class RawToProfileConverter extends Executor {
 				}
 				outFile = file.toString() + "/" + outFile;
 
-				smooth.smoothing(intParams, inFile, outFile, stepSize);
+				try {
+					smooth.smoothing(intParams, inFile, outFile, stepSize);
+				} catch (IllegalAccessException e) {
+					throw new ProcessException("");
+					// TODO: Specify exception
+				} catch (IllegalArgumentException e) {
+					throw new ProcessException("");
+					// TODO: Specify exception
+				} catch (IOException e) {
+					throw new ProcessException("");
+					// TODO: Specify exception
+				}
 			}
 		}
 	}
@@ -304,17 +299,23 @@ public class RawToProfileConverter extends Executor {
 	 *            the path to where the files used to run ratio calculation is
 	 * @param parameters
 	 *            contains the parameters for the two scripts
-	 * @throws InterruptedException
-	 * @throws IOException
+	 * @throws ProcessException
 	 */
 	private void doRatioCalculation(String dirPath, String[] parameters)
-			throws InterruptedException, IOException {
+			throws ProcessException {
 		String ratioCalc = "perl ratio_calculator_v2.pl " + dirPath + " "
 				+ parameters[6];
 		// String smooth = "perl smooth_v4.pl " + dirPath + "ratios/" + " "
 		// + parameters[7];
-		logString = logString + executeScript(parse(ratioCalc));
-		// logString = logString + executeScript(parse(smooth));
+		try {
+			logString = logString + executeScript(parse(ratioCalc));
+		} catch (InterruptedException e) {
+			throw new ProcessException("");
+			// TODO: Specify exception
+		} catch (IOException e) {
+			throw new ProcessException("");
+			// TODO: Specify exception
+		}
 	}
 
 	/**
@@ -343,14 +344,15 @@ public class RawToProfileConverter extends Executor {
 	 * @param outFile
 	 */
 	private void initiateConversionStrings(String[] parameters, String outFile) {
-		remoteExecution = "";
+		remoteExecution = "/scratch/resources/";
 		dir = "results_" + Thread.currentThread().getId() + "/";
 		sortedDir = remoteExecution + dir + "sorted/";
 		samToGff = "perl sam_to_readsgff_v1.pl " + sortedDir;
 		gffToAllnusgr = "perl readsgff_to_allnucsgr_v1.pl " + sortedDir
 				+ "reads_gff/";
 		// step10 = "perl AllSeqRegSGRtoPositionSGR_v1.pl " + parameters[3] +
-		// " "
+		// " " * @throws ProcessException
+
 		// + sortedDir + "reads_gff/allnucs_sgr/smoothed/"; // Step 6
 		// smooth = "perl smooth_v4.pl " + sortedDir + "reads_gff/allnucs_sgr/ "
 		// + parameters[2]; // Step 5
@@ -370,15 +372,24 @@ public class RawToProfileConverter extends Executor {
 	 * @return the value that bowtie returns.ckIfFolderExists(outFilePath)
 	 * @throws InterruptedException
 	 * @throws IOException
+	 * @throws ProcessException
 	 */
 	private String runBowTie(String fileOne, String fileOneName)
-			throws InterruptedException, IOException {
+			throws ProcessException {
 		String[] bowTieParameters = parse("bowtie " + parameters[0] + " "
 				+ parameters[1] + " " + inFolder + "/" + fileOne + " "
 				+ remoteExecution + dir + fileOneName + ".sam");
 
 		printStringArray(bowTieParameters);
-		return executeProgram(bowTieParameters);
+		try {
+			return executeProgram(bowTieParameters);
+		} catch (InterruptedException e) {
+			throw new ProcessException("");
+			// TODO: Specify exception
+		} catch (IOException e) {
+			throw new ProcessException("");
+			// TODO: Specify exception
+		}
 	}
 
 	/**
@@ -402,16 +413,23 @@ public class RawToProfileConverter extends Executor {
 	 *
 	 * @param unsortedSamFileName
 	 *            the name of the unsorted sam file
-	 * @throws InterruptedException
-	 * @throws IOException
+	 * @throws ProcessException
 	 */
 	private void sortSamFile(String unsortedSamFileName)
-			throws InterruptedException, IOException {
+			throws ProcessException {
 		String sortSam = "sort " + remoteExecution + dir + unsortedSamFileName
 				+ ".sam" + " -k 3,3 -k 4,4n";
 		System.out.println("sortSam " + sortSam);
-		executeShellCommand(parse(sortSam), remoteExecution + "resources/"
-				+ dir + "sorted/", unsortedSamFileName + "_sorted.sam");
+		try {
+			executeShellCommand(parse(sortSam), remoteExecution
+					+ dir + "sorted/", unsortedSamFileName + "_sorted.sam");
+		} catch (IOException e) {
+			throw new ProcessException("");
+			// TODO: Specify exception
+		} catch (InterruptedException e) {
+			throw new ProcessException("");
+			// TODO: Specify exception
+		}
 
 	}
 
@@ -435,7 +453,7 @@ public class RawToProfileConverter extends Executor {
 			String outFilePath) {
 
 		if (parameters == null) {
-			System.out.println("param == null");
+			System.out.println("Parameters is null");
 			return false;
 		}
 		if (parameters.length < 0) {
