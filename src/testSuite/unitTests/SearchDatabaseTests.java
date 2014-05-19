@@ -33,7 +33,7 @@ public class SearchDatabaseTests {
     @Test
     public void shouldBeAbleToSearchForExperimentUsingPubMedString()
             throws Exception {
-        List<Experiment> experiments = dbac.search("EXp1[ExpID]");
+        List<Experiment> experiments = dbac.search("Exp1[EXpid]");
         assertEquals(1, experiments.size());
         assertEquals(2, experiments.get(0).getFiles().size());
     }
@@ -42,7 +42,7 @@ public class SearchDatabaseTests {
     public void shouldBeAbleToSearchForFilesUsingPubMedString()
             throws Exception {
         List<Experiment> experiments = dbac
-                .search("/var/www/data/Exp2/raw/file1.fastq[Path]");
+                .search("/var/www/data/Exp2/raw/file1.fastq[PaTH]");
         assertEquals(1, experiments.size());
         assertEquals(1, experiments.get(0).getFiles().size());
     }
@@ -66,14 +66,14 @@ public class SearchDatabaseTests {
     @Test
     public void shouldBeAbleToSearchUsingPubMedString3() throws Exception {
         List<Experiment> experiments = dbac
-                .search("Human[Species] OR Rat[Species]");
+                .search("Human[SpeciEs] OR Rat[SpeciEs]");
         assertEquals(3, experiments.size());
     }
 
     @Test
     public void shouldBeAbleToSearchUsingPubMedString4() throws Exception {
         List<Experiment> experiments = dbac
-                .search("Human[Species] AND Child[Development Stage]");
+                .search("Human[Species] AND Child[DeveLopmeNt Stage]");
         assertEquals(1, experiments.size());
         assertEquals("Exp2", experiments.get(0).getID());
     }
@@ -81,7 +81,7 @@ public class SearchDatabaseTests {
     @Test
     public void shouldBeAbleToSearchUsingPubMedString5() throws Exception {
         List<Experiment> experiments = dbac
-                .search("Human[SpeCies] AND Umeå Uni[Author]");
+                .search("Human[SpeCies] AND Umeå uni[author]");
         assertEquals(1, experiments.size());
         assertEquals(1, experiments.get(0).getFiles().size());
         assertEquals("/var/www/data/Exp1/raw/file1.fastq", experiments.get(0).getFiles()
@@ -91,7 +91,7 @@ public class SearchDatabaseTests {
     @Test
     public void shouldBeAbleToSearchUsingPubMedString6() throws Exception {
         List<Experiment> experiments = dbac
-                .search("Human[SpEcies] NOT ChiLd[Development Stage]");
+                .search("Human[SpEcies] NOT ChiLd[DeveLopment Stage]");
         assertEquals(1, experiments.size());
         assertEquals("Adult", experiments.get(0).getAnnotations().get("Development Stage"));
     }
@@ -124,7 +124,7 @@ public class SearchDatabaseTests {
     public void shouldBeAbleToSearchCaseInsensitive()
     		throws IOException, SQLException {
         List<Experiment> experiments = dbac
-                .search("EXp1[ExpID] AND RaW[FileType]");
+                .search("EXp1[ExPiD] AND RaW[FileTYPE]");
         for (Experiment e: experiments) {
             System.out.println(e.toString());
         }

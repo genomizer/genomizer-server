@@ -58,9 +58,9 @@ public class PubMedToSQLConverter {
     private String orderBySqlFragment = "\nORDER BY ExpID";
 
     // file attributes to be checked
-    private final String[] fileAttributesArray = { "FileID", "Path",
-            "FileType", "Date", "MetaData", "Author", "Uploader", "ExpID",
-            "GRVersion", "FileName" };
+    private final String[] fileAttributesArray = { "fileid", "path",
+            "filetype", "date", "metadata", "author", "uploader", "expid",
+            "grversion", "filename" };
     private HashSet<String> fileAttributes;
 
     private String queryResult;
@@ -174,7 +174,7 @@ public class PubMedToSQLConverter {
         String label = labelValue.getKey();
         String value = labelValue.getValue();
 
-        if (fileAttributes.contains(label)) {
+        if (fileAttributes.contains(label.toLowerCase())) {
             sb.append(sqlFragmentForFileAttr);
             sb.append(label);
             sb.append(" <> ?");
@@ -232,8 +232,8 @@ public class PubMedToSQLConverter {
         SimpleEntry<String, String> labelValue = getLabelValuePair(s);
         String label = labelValue.getKey();
         String value = labelValue.getValue();
-
-        if (fileAttributes.contains(label)) {
+        
+        if (fileAttributes.contains(label.toLowerCase())) {
             sb.append(sqlFragmentForFileAttr);
             sb.append(label);
             sb.append(" ~~* ?");
@@ -302,7 +302,7 @@ public class PubMedToSQLConverter {
             pubMedString = pubMedString
                     .substring(pubMedString.indexOf('[') + 1);
             String label = pubMedString.substring(0, pubMedString.indexOf(']'));
-            if (fileAttributes.contains(label)) {
+            if (fileAttributes.contains(label.toLowerCase())) {
                 return true;
             }
         }
