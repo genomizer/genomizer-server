@@ -5,7 +5,7 @@ import response.Response;
 import response.StatusCode;
 
 /**
- * Class used to represent a logout command.
+ * Class used to represent a delete user command.
  *
  * @author tfy09jnn
  * @version 1.0
@@ -13,7 +13,7 @@ import response.StatusCode;
 public class DeleteUserCommand extends Command {
 
 	/**
-	 * Used to validate the logout command.
+	 * Used to validate DeleteUserCommand.
 	 */
 	@Override
 	public boolean validate() {
@@ -24,7 +24,7 @@ public class DeleteUserCommand extends Command {
 	}
 
 	/**
-	 * Used to execute the logout command.
+	 * Used to execute the actual removal of the user.
 	 */
 	@Override
 	public Response execute() {

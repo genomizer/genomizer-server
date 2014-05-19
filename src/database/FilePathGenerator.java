@@ -63,6 +63,7 @@ public class FilePathGenerator {
             filePath.append(expID);
             filePath.append(File.separator);
             filePath.append(rawFolderName);
+            filePath.append(File.separator);
             break;
         case FileTuple.PROFILE:
             filePath.append(generateProfileFolder(expID));
@@ -72,16 +73,17 @@ public class FilePathGenerator {
             filePath.append(expID);
             filePath.append(File.separator);
             filePath.append(regionFolderName);
+            filePath.append(File.separator);
             break;
         default:
             filePath.append(rootDir);
             filePath.append(expID);
             filePath.append(File.separator);
             filePath.append(unknownFolderName);
+            filePath.append(File.separator);
             break;
         }
 
-        filePath.append(File.separator);
         filePath.append(fileName);
         return filePath.toString();
     }
