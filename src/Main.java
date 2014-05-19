@@ -33,8 +33,8 @@ public class Main {
 
 		String genome = "indexes/d_melanogaster_fb5_22";
 		String bowTie = "-a -m 1 --best -p 10 -v 2 -q  -S ";
-		String inFile = "/scratch/infolder/";
-		String outFile = "/scratch/outfile/";
+		String inFile = "/home/dv12/dv12cjn/edu/PVT/genomizer-server/resources/infolder/";
+		String outFile = "/home/dv12/dv12cjn/edu/PVT/genomizer-server/resources/";
 		String smoothingParam = "10 1 5 0 0";
 		String yString = "y 10";
 		ProcessHandler p = new ProcessHandler();

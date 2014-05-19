@@ -112,7 +112,7 @@ public abstract class Executor {
 			String fileName) throws IOException, InterruptedException {
 		ProcessBuilder builder = new ProcessBuilder(command);
 
-		builder.directory(new File(dir).getAbsoluteFile());
+		builder.directory(new File(FILEPATH).getAbsoluteFile());
 		builder.redirectErrorStream(true);
 		Process process;
 			process = builder.start();
@@ -120,7 +120,7 @@ public abstract class Executor {
 
 		Scanner s = new Scanner(process.getInputStream());
 		StringBuilder text = new StringBuilder();
-		File dirFile = new File(dir);
+		File dirFile = new File(FILEPATH + dir);
 
 		if (!dirFile.exists()) {
 			dirFile.mkdirs();
