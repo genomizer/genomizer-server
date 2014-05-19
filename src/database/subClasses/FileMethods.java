@@ -15,7 +15,7 @@ import database.FileTuple;
  * Class that contains all the methods for adding,changing, getting
  * and removing Files in the database. This class is a subClass of
  * databaseAcessor.java.
- * 
+ *
  * date: 2014-05-14 version: 1.0
  */
 public class FileMethods {
@@ -26,7 +26,7 @@ public class FileMethods {
 
     /**
      * Constructor for the fileMethod object.
-     * 
+     *
      * @param connection
      *            Connection, the connection to the database.
      */
@@ -131,7 +131,7 @@ public class FileMethods {
     /**
      * Returns the FileTuple object associated with the given
      * filePath.
-     * 
+     *
      * @param filePath
      *            String
      * @return FileTuple - The corresponding FileTuple or null if no
@@ -155,10 +155,38 @@ public class FileMethods {
         return null;
     }
 
+
+    /**
+     * Returns the FileTuple object associated with the given
+     * fileID.
+     *
+     * @param fileID
+     *            int
+     * @return FileTuple - The corresponding FileTuple or null if no
+     *         such file exists
+     * @throws SQLException
+     *             If the query could not be executed.
+     */
+    public FileTuple getFileTuple(int fileID)
+            throws SQLException {
+
+        String query = "SELECT * FROM File WHERE FileID ~~* ?";
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setInt(1, fileID);
+        ResultSet rs = stmt.executeQuery();
+        if (rs.next()) {
+            FileTuple fileTuple = new FileTuple(rs);
+            stmt.close();
+            return fileTuple;
+        }
+        stmt.close();
+        return null;
+    }
+
     /**
      * Deletes a file from the database and the disk. Should throw an
      * IOException if the method failed to delete the file from disk.
-     * 
+     *
      * @param path
      *            String - the path to the file.
      * @return int - the number of deleted tuples in the database.
@@ -186,7 +214,7 @@ public class FileMethods {
      * Deletes a file from the database and the disk using the fileID.
      * Should throw an IOException if the method failed to delete the
      * file from disk.
-     * 
+     *
      * @param fileID
      *            int - the fileID of the file to be deleted.
      * @return 1 if deletion was successful, else 0.
@@ -217,7 +245,7 @@ public class FileMethods {
     /**
      * Checks if the file with the specified fileID exists in the
      * database.
-     * 
+     *
      * @param fileID
      *            int - the fileID of the file.
      * @return true if the file exists, else false.
@@ -244,7 +272,7 @@ public class FileMethods {
 
     /**
      * Checks if the file path is a valid file path. Not used.
-     * 
+     *
      * @param filePath
      * @return
      * @throws SQLException
