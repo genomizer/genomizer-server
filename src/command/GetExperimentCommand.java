@@ -62,7 +62,7 @@ public class GetExperimentCommand extends Command {
 			}
 		}
 		if(exp == null) {
-			return new ErrorResponse(StatusCode.BAD_REQUEST, "Experiment gotten from database is null. Not found or does not exist.");
+			return new ErrorResponse(StatusCode.BAD_REQUEST, "Experiment requested from database is null, not found or does not exist.");
 		}
 		return new GetExperimentResponse(getInfo(exp), exp.getAnnotations(), exp.getFiles(), StatusCode.OK);
 	}
