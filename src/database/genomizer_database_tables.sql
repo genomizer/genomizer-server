@@ -110,7 +110,7 @@ CREATE TABLE Genome_Release_Files
     FileName VARCHAR(128) NOT NULL,
     Status VARCHAR(16) DEFAULT 'In Progress',
     CONSTRAINT pkey_version_filename PRIMARY KEY(Version, FileName),
-    CONSTRAINT fkey_version FOREIGN KEY (Version) REFERENCES Genome_Release(Version)
+    CONSTRAINT fkey_version FOREIGN KEY (Version) REFERENCES Genome_Release(Version) ON DELETE CASCADE
 );
 
 CREATE TABLE Chain_File
@@ -130,7 +130,7 @@ CREATE TABLE Chain_File_Files
     FileName VARCHAR(128) NOT NULL,
     Status VARCHAR(16) DEFAULT 'In Progress',
     CONSTRAINT pkey_chain_file_files PRIMARY KEY(ID, fileName),
-    CONSTRAINT fkey_ID FOREIGN KEY (ID) REFERENCES Chain_File(ID)
+    CONSTRAINT fkey_ID FOREIGN KEY (ID) REFERENCES Chain_File(ID) ON DELETE CASCADE
 );
 
 

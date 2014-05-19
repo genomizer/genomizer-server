@@ -61,6 +61,20 @@ public class GenomeReleaseTableTests {
     }
 
     @Test
+    public void testGetDeleteGetAddGet() throws Exception {
+        Genome g = dbac.getGenomeRelease("hg19");
+        assertEquals("hg19", g.genomeVersion);
+
+        dbac.removeGenomeRelease("hg19");
+        g = dbac.getGenomeRelease("hg19");
+        assertNull(g);
+
+        dbac.addGenomeRelease("hg19", "Human", "hg19.txt");
+        g = dbac.getGenomeRelease("hg19");
+        assertEquals("hg19", g.genomeVersion);
+    }
+
+    @Test
     public void shouldReturnRightNamesOfGenomeVersions() throws Exception {
         List<Genome> genomeList = dbac.getAllGenomReleasesForSpecies("Human");
 
@@ -71,11 +85,11 @@ public class GenomeReleaseTableTests {
     }
 
     @Test
-    public void shouldReturnSpecificGenomeVersionFilePath() throws Exception {
+    public void shouldReturnSpecificGenomeVersionFolderPath() throws Exception {
 
         Genome genome = dbac.getGenomeRelease("hg38");
-        assertEquals("/var/www/data/genome_releases/Human/hg38.fasta",
-                genome.path); // From add_test_tuples.sql
+        assertEquals("/var/www/data/genome_releases/Human/hg38/",
+                genome.folderPath); // From add_test_tuples.sql
     }
 
     @Test
@@ -90,10 +104,10 @@ public class GenomeReleaseTableTests {
     @Test
     public void shouldUpdateDatabaseUponAdd() throws Exception {
         dbac.addGenomeRelease("hg40", "Human", "hg40.fasta");
-        String expectedFilePath = fpg.generateGenomeReleaseFolder("hg40",
-                "Human") + "hg40.fasta";
+        String expectedFolderPath = fpg.getGenomeReleaseFolderPath("hg40",
+                "Human");
         Genome genome = dbac.getGenomeRelease("hg40");
-        assertEquals(expectedFilePath, genome.path);
+        assertEquals(expectedFolderPath, genome.folderPath);
     }
 
     @Test
@@ -106,8 +120,10 @@ public class GenomeReleaseTableTests {
     public void shouldReturnFileName() throws Exception {
         dbac.addGenomeRelease("rn50", "Rat", "aRatFile.fasta");
         Genome genome = dbac.getGenomeRelease("rn50");
-        assertEquals(genome.fileName, "aRatFile.fasta");
-        assertEquals(genome.specie, "Rat");
+
+        assertEquals(1, genome.getFilesWithStatus().size());
+        assertNotNull(genome.getFilesWithStatus().get("aRatFile.fasta"));
+        assertEquals(genome.species, "Rat");
         assertEquals(genome.genomeVersion, "rn50");
 
     }
@@ -126,12 +142,43 @@ public class GenomeReleaseTableTests {
         File genomeReleaseFile = new File(genomeReleaseFolderPath + "hg41.txt");
         assertTrue(genomeReleaseFile.exists());
 
-        dbac.removeGenomeRelease("hg41", "Human");
+        dbac.removeGenomeRelease("hg41");
 
         Genome g = dbac.getGenomeRelease("hg41");
         assertNull(g);
 
         assertFalse(genomeReleaseFolder.exists());
+    }
+    
+    @Test
+    public void shouldBeAbleToGetDownloadURLs() throws Exception {
+        Genome g = dbac.getGenomeRelease("hg38");
+        assertEquals(2, g.getFilesWithStatus().size());
+        String downloadURL = getDownloadURL(g, "hg38.fasta");
+        assertEquals(ServerDependentValues.DownloadURL + g.folderPath + "hg38.fasta", downloadURL);
+    }
+
+    private String getDownloadURL(Genome g, String string) {
+        for (String s: g.getDownloadURLs()) {
+            if (s.endsWith(string)) {
+                return s;
+            }
+        }
+        return null;
+    }
+    
+    @Test
+    public void shouldBeAbleToGetAllSpeciesThatHaveAGenomeRelease() throws Exception {
+        List<String> species = dbac.getAllGenomReleaseSpecies();
+        assertEquals(2, species.size());
+    }
+    
+    @Test
+    public void shouldBeAbleToGetAllGenomeReleases() throws Exception {
+        ti.removeTuplesKeepConnection();
+        ti.addTuples();
+        List<Genome> genomes = dbac.getAllGenomReleases();
+        assertEquals(6, genomes.size());
     }
 
     private boolean searchGenomeForVersion(List<Genome> genomeList,

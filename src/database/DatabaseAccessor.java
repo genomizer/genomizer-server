@@ -989,10 +989,9 @@ public class DatabaseAccessor {
      * @return boolean - true if succeeded, false if failed.
      * @throws SQLException
      */
-    public boolean removeGenomeRelease(String genomeVersion,
-            String species) throws SQLException {
+    public boolean removeGenomeRelease(String genomeVersion) throws SQLException {
 
-        return genMethods.removeGenomeRelease(genomeVersion, species);
+        return genMethods.removeGenomeRelease(genomeVersion);
     }
 
     /**
@@ -1019,10 +1018,15 @@ public class DatabaseAccessor {
      * @return ArrayList<Genome> - list of all the genome releases
      * @throws SQLException
      */
-    public ArrayList<Genome> getAllGenomReleases()
+    public List<Genome> getAllGenomReleases()
             throws SQLException {
 
         return genMethods.getAllGenomReleases();
+    }
+    
+    public List<String> getAllGenomReleaseSpecies() throws SQLException {
+
+        return genMethods.getAllGenomReleaseSpecies();
     }
 
     /**

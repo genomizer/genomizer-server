@@ -3,7 +3,7 @@ INSERT INTO Experiment VALUES('Exp2');
 INSERT INTO Experiment VALUES('Exp3');
 INSERT INTO Experiment VALUES('Exp4');
 
-INSERT INTO Genome_Release VALUES('hg38', 'Human', '/var/www/data/genome_releases/Human/h38/');
+INSERT INTO Genome_Release VALUES('hg38', 'Human', '/var/www/data/genome_releases/Human/hg38/');
 INSERT INTO Genome_Release VALUES('hg19', 'Human', '/var/www/data/genome_releases/Human/hg19/');
 INSERT INTO Genome_Release VALUES('hg18', 'Human', '/var/www/data/genome_releases/Human/hg18/');
 INSERT INTO Genome_Release VALUES('rn5', 'Rat', '/var/www/data/genome_releases/Rat/rn5/');
@@ -21,8 +21,8 @@ INSERT INTO Genome_Release_Files VALUES('rn3', 'rn3.fasta', DEFAULT);
 
 INSERT INTO Chain_File VALUES(DEFAULT, 'rn3', 'rn4', '/var/www/data/chain_files/Rat/rn3 - rn4/');
 INSERT INTO Chain_File VALUES(DEFAULT, 'rn4', 'rn5', '/var/www/data/chain_files/Rat/rn4 - rn5/');
-INSERT INTO Chain_File VALUES(DEFAULT, 'hg19', 'hg38', '/var/www/data/chain_files/Human/hg19 - hg38/');
-INSERT INTO Chain_File VALUES(DEFAULT, 'hg18', 'hg19', '/var/www/data/chain_files/Human/hg18 - hg19/');
+INSERT INTO Chain_File VALUES(DEFAULT, 'hg18', 'hg38', '/var/www/data/chain_files/Human/hg18 - hg38/');
+INSERT INTO Chain_File VALUES(DEFAULT, 'hg38', 'hg18', '/var/www/data/chain_files/Human/hg38 - hg18/');
 
 INSERT INTO Annotation VALUES('Species', 'DropDown', NULL, TRUE);
 INSERT INTO Annotation_Choices VALUES('Species', 'Human');
