@@ -15,7 +15,8 @@ import command.CommandFactory;
 public class CommandFactoryTest {
 
 	/**
-	 * Test object creation.
+	 * Test object creation of CommandFactory and that
+	 * it's not null.
 	 */
 	@Test
 	public void testCommandFactory() {
@@ -26,10 +27,48 @@ public class CommandFactoryTest {
 	}
 
 	/**
-	 * Test creation of upload command.
+	 * Test creation of LoginCommand and that it's not null.
 	 */
 	@Test
-	public void testCreateAddExperimentCommand() {
+	public void testCreateLoginCommandNotNull() {
+
+		CommandFactory cmdf = new CommandFactory();
+		String json = "{\"username\":\"uname\",\"password\":\"pw\"}";
+		assertNotNull(cmdf.createLoginCommand(json));
+
+	}
+
+	/**
+	 * Test creation of LogoutCommand and that it's not null.
+	 */
+	@Test
+	public void testCreateLogoutCommandNotNull() {
+
+		CommandFactory cmdf = new CommandFactory();
+		String username = "ABCD";
+
+		assertNotNull(cmdf.createLogoutCommand(username));
+
+	}
+
+	/**
+	 * Test creation of GetExperimentCommand and that it's not null.
+	 */
+	@Test
+	public void testCreateGetExperimentCommandNotNull() {
+
+		CommandFactory cmdf = new CommandFactory();
+		String restful = "RESTFUL";
+
+		assertNotNull(cmdf.createGetExperimentCommand(restful));
+
+	}
+
+	/**
+	 * Test creation of AddExperimentCommand and that it's not null.
+	 */
+	@Test
+	public void testCreateAddExperimentCommandNotNull() {
 
 		CommandFactory cmdf = new CommandFactory();
 		String json = "{\"name\":\"experimentId\",\"createdBy\":\"user\",\"annotations\":[{\"name\":\"pubmedId\",\"value\":\"abc123\"}]}";
@@ -39,7 +78,22 @@ public class CommandFactoryTest {
 	}
 
 	/**
-	 * Test creation of Retrieve experiment command.
+	 * Test creation of UpdateExperimentCommand and that it's not null.
+	 */
+	@Test
+	public void testCreateUpdateExperimentCommandNotNull() {
+
+		CommandFactory cmdf = new CommandFactory();
+		String json = "{\"name\": \"experimentId\",\"createdBy\":\"user\",\"annotations\":"
+				+ "[{\"name\":\"pubmedId\",\"value\":\"abc123\"}]}";
+		String restful = "/experiment/id123";
+
+		assertNotNull(cmdf.createUpdateExperimentCommand(json, restful));
+
+	}
+
+	/**
+	 * Test creation of Retrieve experiment command and that it's not null.
 	 */
 	@Test
 	public void testCreateRetrieveExperimentCommand() {
@@ -47,31 +101,6 @@ public class CommandFactoryTest {
 		CommandFactory cmdf = new CommandFactory();
 		String restful = "ABCDEF";
 		assertNotNull(cmdf.createGetExperimentCommand(restful));
-
-	}
-
-	/**
-	 * Test creation of login command.
-	 */
-	@Test
-	public void testCreateLoginCommand() {
-
-		CommandFactory cmdf = new CommandFactory();
-		String json = "{\"username\":\"uname\",\"password\":\"pw\"}";
-		assertNotNull(cmdf.createLoginCommand(json));
-
-	}
-
-	/**
-	 * Test creation of logout command.
-	 */
-	@Test
-	public void testCreateLogoutCommand() {
-
-		CommandFactory cmdf = new CommandFactory();
-		String username = "ABCD";
-
-		assertNotNull(cmdf.createLogoutCommand(username));
 
 	}
 
