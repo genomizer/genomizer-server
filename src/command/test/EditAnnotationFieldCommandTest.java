@@ -11,7 +11,6 @@ import com.google.gson.JsonObject;
 
 import command.Command;
 import command.CommandFactory;
-import command.EditAnnotationFieldCommand;
 
 public class EditAnnotationFieldCommandTest {
 

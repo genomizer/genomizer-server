@@ -18,8 +18,6 @@ import server.WorkHandler;
  */
 public class CommandHandler {
 
-	//TODO: Add threads?
-
 	private CommandFactory cmdFactory = new CommandFactory();
 	//used to execute heavy work such as process commands execute
 	private WorkHandler heavyWorkThread = new WorkHandler();
