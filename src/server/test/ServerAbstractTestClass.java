@@ -30,9 +30,10 @@ public abstract class ServerAbstractTestClass {
 	//protected String serverURL = "http://localhost:" + port;
 
 	/**
-	 * Method used to set the token.
-	 *arg0
-	 * @param response from the server.
+	 * Method used to set the token that represents the users
+	 * identification.
+	 *
+	 * @param String containing the identification.
 	 */
 	public void setToken(String response) {
 
