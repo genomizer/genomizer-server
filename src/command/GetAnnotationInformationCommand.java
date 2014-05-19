@@ -50,29 +50,32 @@ public class GetAnnotationInformationCommand extends Command {
 		}
 
 		for(int i = 0; i < annotation_names.size(); i++) {
-			ArrayList<String> values = null;
-			try {
-				if(db.getAnnotationType(annotation_names.get(i)) == DatabaseAccessor.FREETEXT) {
-					values = new ArrayList<String>();
-					values.add("freetext");
-				} else if(db.getAnnotationType(annotation_names.get(i)) == DatabaseAccessor.DROPDOWN) {
-					values = (ArrayList<String>) db.getChoices(annotation_names.get(i));
-				} else {
 
-				}
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-				return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
+			database.Annotation annotationObject = null;
+			ArrayList<String> values = new ArrayList<String>();
+
+			try {
+				annotationObject = db.getAnnotationObject(annotation_names.get(i));
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 
-			AnnotationInformation annotation = new AnnotationInformation(0, annotation_names.get(i), values, true);
+			if(annotationObject.dataType == database.Annotation.FREETEXT) {
+				values.add("freetext");
+			} else if(annotationObject.dataType == database.Annotation.DROPDOWN) {
+				values = (ArrayList<String>) annotationObject.getPossibleValues();
+			}
+
+			AnnotationInformation annotation = new AnnotationInformation(0, annotationObject.label, values, annotationObject.isRequired);
 			annotations.add(annotation);
+
 		}
 
-	    ArrayList<String> vals = new ArrayList<String>();
+		/*ArrayList<String> vals = new ArrayList<String>();
 	    vals.add("freetext");
 	    AnnotationInformation expId = new AnnotationInformation(0, "ExpID", vals, false);
-		annotations.add(expId);
+		annotations.add(expId);*/
 
 		Collections.sort(annotations, new compareAnnotations());
 
