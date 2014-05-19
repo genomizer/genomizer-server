@@ -18,27 +18,27 @@ public class RawToProfileProcessChecker {
 	}
 
 	public void calculateWhichProcessesToRun(String[] parameters) {
-		if((parameters[0] != "") && (parameters[1] != "")) {
+		if((!parameters[0].equals("")) && (!parameters[1].equals(""))) {
 			shouldRunBowTie = true;
 		}
 
-		if(parameters[2] != "" && shouldRunBowTie) {
+		if(!parameters[2].equals("") && shouldRunBowTie) {
 			shouldRunSamToGff = true;
 		}
 
-		if((parameters[3] != "") && (shouldRunBowTie) && (shouldRunSamToGff)) {
+		if((!parameters[3].equals("")) && (shouldRunBowTie) && (shouldRunSamToGff)) {
 			shouldRunGffToAllnusgr = true;
 		}
 
-		if((parameters[4] != "") && (shouldRunGffToAllnusgr)) {
+		if((!parameters[4].equals("")) && (shouldRunGffToAllnusgr)) {
 			shouldRunSmoothing = true;
 		}
 
-		if((parameters[5] != "") && (shouldRunSmoothing)) {
+		if((!parameters[5].equals("")) && (shouldRunSmoothing)) {
 			shouldRunStep10 = true;
 		}
 
-		if((parameters[6] != "") && (parameters[7] != "") && (shouldRunStep10)) {
+		if((!parameters[6].equals("")) && (!parameters[7].equals("")) && (shouldRunStep10)) {
 			shouldRunRatioCalculation = true;
 		}
 

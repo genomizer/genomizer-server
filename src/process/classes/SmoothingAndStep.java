@@ -43,10 +43,8 @@ public class SmoothingAndStep {
      * stepSize:  Flag that tells if the user wants to do stepping. Should be
      * 		  1 if the user wants no stepping. Have to be larger than 0.
      */
-    public double smoothing(int[] params, String inPath, String outPath, int stepSize) throws IllegalAccessException, IOException {
-	if (params==null||params[2]>=params[0] || stepSize < 1 || params[0] < 1 ){
-	    throw new IllegalArgumentException();
-	}
+    public double smoothing(int[] params, String inPath, String outPath, int stepSize) throws IllegalAccessException, IOException, IllegalArgumentException {
+	validateInput(params, stepSize);
 
 	data = new ArrayList<Tuple>();
 	readSumValue = 0;
@@ -81,9 +79,8 @@ public class SmoothingAndStep {
 
 	    data.remove(0);
 	}
-	bw.close();
-	br.close();
-	data.clear();
+	tearDown();
+
 	return readSumValue/noOfValues;
     }
 
@@ -201,6 +198,18 @@ public class SmoothingAndStep {
     private double median (double[] array){
 	Arrays.sort(array);
 	return (array[(array.length-1)/2]+array[array.length/2])/2;
+    }
+
+    private void tearDown() throws IOException {
+	bw.close();
+	br.close();
+	data.clear();
+    }
+
+    private void validateInput(int[] params, int stepSize) throws IllegalArgumentException {
+	if (params==null||params[2]>=params[0] || stepSize < 1 || params[0] < 1 ){
+	    throw new IllegalArgumentException();
+	}
     }
 }
 

@@ -5,9 +5,7 @@ import org.junit.Test;
 import response.StatusCode;
 import com.google.gson.JsonObject;
 
-/* TODO:	- Add delete annotation after each added one.
- * 			- Add login authorization tests when code is implemented.
- *  		- Make unimplemented tests work.
+/* TODO:	- Add login authorization tests when code is implemented.
  *  		- Implement more tests.
  *  			- Login that sends no password in JSON.
  *  			- Login that sends no username in JSON.
@@ -81,34 +79,4 @@ public class ServerLoginLogoutTest extends ServerAbstractTestClass {
 
 	}
 
-
-	/**
-	 * Used to test that a corrupted login attempt
-	 * does not pass.
-	 *
-	 * @throws Exception
-	 */
-	/*
-	@Test
-	public void testCorruptedLogin() throws Exception {
-	*/
-		/* Note: This test should work, but the code that
-		 * 		 check the login is not implemented
-		 * 			2014-05-08, 15:00
-		 */
-		/*
-		//Create JSON corrupted login object.
-		JsonObject jj = new JsonObject();
-		jj.addProperty("username", "jonas");
-		jj.addProperty("password", "");
-
-		int loginResponseCode = sendLogin(jj);
-
-		assertFalse(loginResponseCode == StatusCode.OK);
-		*/
-	/*
-		fail("Not yet implemented.");
-
-	}
-	*/
 }
