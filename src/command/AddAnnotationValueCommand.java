@@ -66,7 +66,7 @@ public class AddAnnotationValueCommand extends Command {
 				return new ErrorResponse(StatusCode.NO_CONTENT, e.getMessage());
 			}
 		}
-		return new MinimalResponse(StatusCode.OK);
+		return new MinimalResponse(StatusCode.CREATED);
 	}
 
 }

@@ -10,6 +10,13 @@ import response.Response;
 import response.StatusCode;
 import server.WorkHandler;
 
+/**
+ * Fetches status of all processes that have been added to the server.
+ * Will be reset when the server restarts. A process can have one
+ * of four states: Waiting, Started, Finished and Crashed.
+ * @author ens10olm
+ *
+ */
 public class GetProcessStatusCommand extends Command {
 
 	private WorkHandler workHandler;

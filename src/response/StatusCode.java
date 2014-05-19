@@ -1,5 +1,9 @@
 package response;
 
+/**
+ * Contains all HTTP response codes that are used by the server.
+ * @author ens10olm
+ */
 public class StatusCode {
 
 	public static final int OK = 200;

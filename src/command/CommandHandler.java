@@ -74,7 +74,7 @@ public class CommandHandler {
 
 		if (cmdt == CommandType.DELETE_ANNOTATION_VALUE_COMMAND) {
 			String[] rest = restful.split("/");
-			newCommand = cmdFactory.createDeleteAnnotationValueCommand(json, rest[2], rest[3]);
+			newCommand = cmdFactory.createDeleteAnnotationValueCommand(json, rest[3], rest[4]);
 		}
 		String parsedRest = parseRest(restful);
 
