@@ -155,6 +155,22 @@ public class TestFilePathGEN {
         assertNotNull(searchForSubFolder(speciesFolder, fromVersion + " - "
                 + toVersion));
     }
+    
+    @Test
+    public void shouldGenerateRightProfileFolderPath()
+            throws Exception {
+        String profFolderPath = fpg.generateFilePath("Exp1", FileTuple.PROFILE, "prof.sam");
+        assertEquals(testFolderPath + "Exp1/profile/0/prof.sam", profFolderPath);
+        
+    }
+    
+    @Test
+    public void shouldGenerateRightRegionFolderPath()
+            throws Exception {
+        String regFolderPath = fpg.generateFilePath("Exp1", FileTuple.REGION, "reg.sam");
+        assertEquals(testFolderPath + "Exp1/region/reg.sam", regFolderPath);
+        
+    }
 
     private File searchForSubFolder(File folder, String name) {
         for (File f : folder.listFiles()) {
