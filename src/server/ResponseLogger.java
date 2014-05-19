@@ -5,10 +5,15 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Scanner;
+
+import javax.swing.text.DateFormatter;
 
 import authentication.Authenticate;
 
@@ -28,32 +33,36 @@ public class ResponseLogger {
 	public static void log(String username, String logText){
 
 		File file = new File(logFile);
-
+		String timeString = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date(System.currentTimeMillis()));
+		String text = timeString + " | " + username + " | " + logText;
 		try{
+
 			file.createNewFile();
 
 			BufferedWriter out = new BufferedWriter(new FileWriter(logFile, true));
-			out.write(logText);
+			out.write(text + "\n");
 			out.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 
 		}
 	}
+/*
 	public static void log(String username, Response response){
+		System.err.println("LOGFILEDIR: " + logFile);
 		File file = new File(logFile);
 
 		try{
 			file.createNewFile();
 			BufferedWriter out = new BufferedWriter(new FileWriter(logFile, true));
-			out.write(response.toString());
+			out.write(response.toString() + "\n");
 			out.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 
 		}
 	}
-
+*/
 	/**
 	 * Method for logging a response for a specific user.
 	 *
