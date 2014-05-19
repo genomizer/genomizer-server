@@ -37,7 +37,11 @@ public class DeleteAnnotationValueCommand extends Command {
 		try {
 			db = initDB();
 			List<String> values = db.getChoices(name);
+			System.out.println("values ::: " + values);
+			System.out.println("name ::: " + name);
+			System.out.println("value ::: " + value);
 			if(values.contains(value)) {
+				System.out.println("contains");
 				db.removeAnnotationValue(name, value);
 			} else {
 				return new ErrorResponse(StatusCode.BAD_REQUEST, "The value " + value + " does not exist in " + name + " and can not be deleted");
