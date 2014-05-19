@@ -16,32 +16,51 @@ import database.DatabaseAccessor;
  */
 public abstract class Command {
 
-	//Used to get the header for the respons.
+	//Used to get the header for the response.
 	protected String header;
 
-	//Used to validate the class object.
+	//Method used to validate the class object.
 	public abstract boolean validate();
 
 	//Method used to run command.
 	public abstract Response execute();
 
-	//Method used to get the header.
+	/**
+	 * Method used to get the header.
+	 *
+	 * @return the header that is set.
+	 */
 	public String getHeader() {
 
 		return header;
 
 	}
 
-	//Method used to set header.
+	/**
+	 * Method used to set the restful header.
+	 *
+	 * @param the header as a string.
+	 */
 	public void setHeader(String header) {
+
 		this.header = header;
+
 	}
 
+	/**
+	 * Method used to connect to the database.
+	 *
+	 * @return a database accessor class.
+	 * @throws SQLException
+	 * @throws IOException
+	 */
 	public DatabaseAccessor initDB() throws SQLException, IOException {
+
 		DatabaseAccessor db = null;
 		db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
-		return db;
-	}
 
+		return db;
+
+	}
 
 }

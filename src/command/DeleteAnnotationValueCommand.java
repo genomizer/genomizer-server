@@ -5,11 +5,11 @@ import java.sql.SQLException;
 import java.util.List;
 
 import response.Response;
-import com.google.gson.annotations.Expose;
+
 import database.DatabaseAccessor;
 import response.ErrorResponse;
 import response.MinimalResponse;
-import response.Response;
+
 import response.StatusCode;
 
 public class DeleteAnnotationValueCommand extends Command {

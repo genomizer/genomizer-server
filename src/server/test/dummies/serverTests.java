@@ -9,7 +9,7 @@ public class serverTests {
 
 
 		Login.login("Splutt");
-
+		Annotations.sendGetAnnotationInformation();
 //		Annotations.sendDeleteAnnotation("testanno space2");
 //		Annotations.sendDeleteAnnotation("testanno space");
 //		Annotations.sendAddAnnotation("testanno space");
