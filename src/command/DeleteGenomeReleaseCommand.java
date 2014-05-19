@@ -95,7 +95,9 @@ public class DeleteGenomeReleaseCommand extends Command {
 
 			try {
 
-				db.close();
+				if(db.isConnected()) {
+					db.close();
+				}
 
 			} catch (SQLException e) {
 
