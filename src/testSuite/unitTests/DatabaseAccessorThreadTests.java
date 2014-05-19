@@ -76,15 +76,20 @@ public class DatabaseAccessorThreadTests {
 		dbac.close();
 	}
 
+	/*
+	 * Test if 10 threads can add 10 files at once. Note that nr of threads and
+	 * nr of files can be changed.
+	 */
     @Test
     public void addNRemoveFileFromSepparateThreads() throws SQLException, IOException {
 
     	ArrayList<Runnable> allRunnables = new ArrayList<Runnable>();
     	ArrayList<Thread> allThreads = new ArrayList<Thread>();
     	String experimentId = "Exper1";
+    	int nrOfFiles = 10;
 
     	//specify the number of threads.
-    	int nrOfThreads = 80;
+    	int nrOfThreads = 10;
 
     	for(int i=0;i<nrOfThreads;i++){
     		allRunnables.add(new myRunnable());
@@ -112,14 +117,14 @@ public class DatabaseAccessorThreadTests {
     	List<Experiment> resExp = dbac.search("Claes[Uploader]");
 
     	//all files added to db by sepparate threads, threads counting from 9.
-    	for(int i=9;i<nrOfThreads+9;i++){	//hard coded thread nr, fix later :D
+    	for(int i=9;i<(nrOfThreads * nrOfFiles)+9;i++){	//hard coded thread nr, fix later :D
 
     		assertEquals(1,resExp.size());
     		assertEquals(experimentId,resExp.get(0).getFiles().get(i-9).expId);
     		assertEquals("Claes",resExp.get(0).getFiles().get(i-9).uploader);
     	}
 
-    	for(int i=9;i<nrOfThreads+9;i++){	//hard coded thread nr, fix later :D
+    	for(int i=9;i<(nrOfThreads * nrOfFiles)+9;i++){	//hard coded thread nr, fix later :D
 
     		dbac.deleteFile(resExp.get(0).getFiles().get(i-9).id);
     	}
@@ -134,12 +139,9 @@ public class DatabaseAccessorThreadTests {
 
 		public void run(){
 
-			System.err.println("Started thread nr: " + Thread.currentThread().getId());
-
-			int nrOfFiles = 1, nr = 0;
+			int nrOfFiles = 10, nr = 0;
 
 		    try {
-		    	System.err.println("--z<<<<<<<<<<<<<<<<<<<<<<<--");
 		    	DatabaseAccessor dbac2 = new DatabaseAccessor(username, password,
 		    			host, database);
 
