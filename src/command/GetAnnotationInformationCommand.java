@@ -50,35 +50,32 @@ public class GetAnnotationInformationCommand extends Command {
 		}
 
 		for(int i = 0; i < annotation_names.size(); i++) {
-			ArrayList<String> values = null;
-			try {
-				if(db.getAnnotationType(annotation_names.get(i)) == DatabaseAccessor.FREETEXT) {
-					values = new ArrayList<String>();
-					values.add("freetext");
-				} else if(db.getAnnotationType(annotation_names.get(i)) == DatabaseAccessor.DROPDOWN) {
-					values = (ArrayList<String>) db.getChoices(annotation_names.get(i));
-				} else {
 
-				}
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-				return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
+			database.Annotation annotationObject = null;
+			ArrayList<String> values = new ArrayList<String>();
+
+			try {
+				annotationObject = db.getAnnotationObject(annotation_names.get(i));
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 
-			AnnotationInformation annotation = new AnnotationInformation(0, annotation_names.get(i), values, true);
+			if(annotationObject.dataType == database.Annotation.FREETEXT) {
+				values.add("freetext");
+			} else if(annotationObject.dataType == database.Annotation.DROPDOWN) {
+				values = (ArrayList<String>) annotationObject.getPossibleValues();
+			}
+
+			AnnotationInformation annotation = new AnnotationInformation(annotationObject.label, values, annotationObject.isRequired);
 			annotations.add(annotation);
+
 		}
 
-	    ArrayList<String> vals = new ArrayList<String>();
+		/*ArrayList<String> vals = new ArrayList<String>();
 	    vals.add("freetext");
 	    AnnotationInformation expId = new AnnotationInformation(0, "ExpID", vals, false);
-		annotations.add(expId);
-
-		Collections.sort(annotations, new compareAnnotations());
-
-		for(int i = 0; i < annotations.size(); i++) {
-			annotations.get(i).setId(i);
-		}
+		annotations.add(expId);*/
 
 		try {
 			db.close();
@@ -87,16 +84,6 @@ public class GetAnnotationInformationCommand extends Command {
 			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, "Could not close database connection");
 		}
 		return new GetAnnotationInformationResponse(200, annotations);
-	}
-
-	private class compareAnnotations implements Comparator<AnnotationInformation> {
-
-		@Override
-		public int compare(AnnotationInformation arg0,
-				AnnotationInformation arg1) {
-
-			return arg0.getName().compareTo(arg1.getName());
-		}
 	}
 
 }

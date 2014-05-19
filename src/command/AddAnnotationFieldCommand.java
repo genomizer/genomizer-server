@@ -53,7 +53,7 @@ public class AddAnnotationFieldCommand extends Command {
 
 	/**
 	 * Method used to execute the command and add the
-	 * annoation field.
+	 * annotation field.
 	 */
 	@Override
 	public Response execute() {

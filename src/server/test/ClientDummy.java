@@ -25,8 +25,8 @@ public class ClientDummy {
 	public static final int port = 7000;
 
 
-	public static String host = "localhost";
-//	public static String host = "scratchy.cs.umu.se";
+//	public static String host = "localhost";
+	public static String host = "scratchy.cs.umu.se";
 	public static String url = "http://" + host + ":" + port;
 	public static Token token = null;
 	public static String expName = "huggaboy7";
@@ -34,7 +34,7 @@ public class ClientDummy {
 
 	public static void main(String args[]) throws Exception {
 		sendLogin();
-//		sendGetAnnotationInformation();
+		sendGetAnnotationInformation();
 //		sendAddAnnotation();
 //		sendDeleteAnnotation();
 //		sendAddExperiment();
@@ -258,7 +258,7 @@ public class ClientDummy {
 		con.setRequestProperty("Authorization", token.getToken());
 
 		System.out.println("\nSending 'DELETE' request to URL : " + url);
-//		System.out.println("Response Body: " + printResponse(con));
+		System.out.println("Response Body: " + printResponse(con));
 	}
 
 	private static String printResponse(HttpURLConnection con) throws IOException {

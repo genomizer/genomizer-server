@@ -18,8 +18,6 @@ import server.WorkHandler;
  */
 public class CommandHandler {
 
-	//TODO: Add threads?
-
 	private CommandFactory cmdFactory = new CommandFactory();
 	//used to execute heavy work such as process commands execute
 	private WorkHandler heavyWorkThread = new WorkHandler();
@@ -71,6 +69,8 @@ public class CommandHandler {
 	private Command createCommand(String json, String restful, String username, CommandType cmdt) {
 
 		Command newCommand = null;
+
+		ArrayList<String> restPieces = splittRestful(restful);
 
 		if (cmdt == CommandType.DELETE_ANNOTATION_VALUE_COMMAND) {
 			String[] rest = restful.split("/");
@@ -163,20 +163,15 @@ public class CommandHandler {
 	 * Method used to split restful headers.
 	 *
 	 * @param restful to split.
-	 * @param expectedLength of the header.
-	 * @return null if wrongly formatted, else arraylist.
+	 * @return ArrayList with the splitted header.
 	 */
-	private ArrayList<String> addRestful(String restful, int expectedLength) {
+	private ArrayList<String> splittRestful(String restful) {
 
 		ArrayList<String> rest = null;
 
 		if(restful != null) {
 			rest = new ArrayList<String>(Arrays.asList(restful.split("/")));;
 			rest.remove(0);
-			if(rest.size() != expectedLength) {
-				rest = null;
-			}
-
 		}
 
 		return rest;

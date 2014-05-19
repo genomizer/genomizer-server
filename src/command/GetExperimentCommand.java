@@ -61,6 +61,9 @@ public class GetExperimentCommand extends Command {
 				return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, "Could not close database connection");
 			}
 		}
+		if(exp == null) {
+			return new ErrorResponse(StatusCode.BAD_REQUEST, "Experiment gotten from database is null. Not found or does not exist.");
+		}
 		return new GetExperimentResponse(getInfo(exp), exp.getAnnotations(), exp.getFiles(), StatusCode.OK);
 	}
 

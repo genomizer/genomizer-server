@@ -2,10 +2,12 @@ package command.test;
 
 import static org.junit.Assert.*;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import command.CommandFactory;
 
+//TODO: Implement missing unit tests, make sure all methods in commandfactory are tested.
 /**
  * Testclass used to test the CommandFactory class.
  *
@@ -14,93 +16,172 @@ import command.CommandFactory;
  */
 public class CommandFactoryTest {
 
+	private CommandFactory cmdf = null;
+
 	/**
-	 * Test object creation.
+	 * Used before each test to create the commandFactory.
+	 */
+	@Before
+	public void setUp() {
+
+		cmdf = new CommandFactory();
+
+	}
+
+	/**
+	 * Test object creation of CommandFactory and that
+	 * it's not null.
 	 */
 	@Test
 	public void testCommandFactory() {
 
-		CommandFactory cmdf = new CommandFactory();
+		cmdf = null;
+		cmdf = new CommandFactory();
 		assertNotNull(cmdf);
 
 	}
 
 	/**
-	 * Test creation of upload command.
+	 * Test creation of LoginCommand and that it's not null.
 	 */
 	@Test
-	public void testCreateAddExperimentCommand() {
+	public void testCreateLoginCommandNotNull() {
 
-		CommandFactory cmdf = new CommandFactory();
-		String json = "{\"name\":\"experimentId\",\"createdBy\":\"user\",\"annotations\":[{\"name\":\"pubmedId\",\"value\":\"abc123\"}]}";
-
-		assertNotNull(cmdf.createAddExperimentCommand(json));
-
-	}
-
-	/**
-	 * Test creation of Retrieve experiment command.
-	 */
-	@Test
-	public void testCreateRetrieveExperimentCommand() {
-
-		CommandFactory cmdf = new CommandFactory();
-		String restful = "ABCDEF";
-		assertNotNull(cmdf.createGetExperimentCommand(restful));
-
-	}
-
-	/**
-	 * Test creation of login command.
-	 */
-	@Test
-	public void testCreateLoginCommand() {
-
-		CommandFactory cmdf = new CommandFactory();
 		String json = "{\"username\":\"uname\",\"password\":\"pw\"}";
 		assertNotNull(cmdf.createLoginCommand(json));
 
 	}
 
 	/**
-	 * Test creation of logout command.
+	 * Test creation of LogoutCommand and that it's not null.
 	 */
 	@Test
-	public void testCreateLogoutCommand() {
+	public void testCreateLogoutCommandNotNull() {
 
-		CommandFactory cmdf = new CommandFactory();
-		String username = "ABCD";
-
-		assertNotNull(cmdf.createLogoutCommand(username));
+		assertNotNull(cmdf.createLogoutCommand("userName"));
 
 	}
 
 	/**
-	 * Test that creation of AddGenomeReleaseCommand is not
-	 * null.
+	 * Test creation of GetExperimentCommand and that it's not null.
 	 */
 	@Test
-	public void testCreateAddGenomeReleaseCommand() {
+	public void testCreateGetExperimentCommandNotNull() {
 
-		CommandFactory cmdf = new CommandFactory();
-		String json = "{\"fileName\":\"abc123\",\"specie\":\"human\",\"genomeVersion\":\"GV 1.0\"}";
-
-		assertNotNull(cmdf.createAddGenomeReleaseCommand(json));
+		assertNotNull(cmdf.createGetExperimentCommand("restful"));
 
 	}
 
 	/**
-	 * Test that creation of AddGenomeReleaseCommand is not
-	 * null.
+	 * Test creation of AddExperimentCommand and that it's not null.
 	 */
 	@Test
-	public void testCreateDeleteGenomeReleaseCommand() {
+	public void testCreateAddExperimentCommandNotNull() {
 
-		CommandFactory cmdf = new CommandFactory();
-		String specie = "tempSpecie";
-		String genomeVersion = "tmpGenomeVersion";
+		String json = "{\"name\":\"experimentId\",\"createdBy\":\"user\",\"annotations\":"
+				+ "[{\"name\":\"pubmedId\",\"value\":\"abc123\"}]}";
+		assertNotNull(cmdf.createAddExperimentCommand(json));
 
-		assertNotNull(cmdf.createDeleteGenomeReleaseCommand(specie, genomeVersion));
+	}
+
+	/**
+	 * Test creation of UpdateExperimentCommand and that it's not null.
+	 */
+	@Test
+	public void testCreateUpdateExperimentCommandNotNull() {
+
+		String json = "{\"name\": \"experimentId\",\"createdBy\":\"user\",\"annotations\":"
+				+ "[{\"name\":\"pubmedId\",\"value\":\"abc123\"}]}";
+		assertNotNull(cmdf.createUpdateExperimentCommand(json, "/experiment/id123"));
+
+	}
+
+	/**
+	 * Test creation of DeleteExperimentCommand and that it's not null.
+	 */
+	@Test
+	public void testDeleteExperimentCommandNotNull() {
+
+		assertNotNull(cmdf.createDeleteExperimentCommand("NONE", "/experiment/id123"));
+
+	}
+
+	/**
+	 * Test creation of GetFileFromExperimentCommand and that it's not null.
+	 */
+	@Test
+	public void testGetFileFromExperimentCommandNotNull() {
+
+		assertNotNull(cmdf.createGetFileFromExperimentCommand("NONE", "/file/myFileId"));
+
+	}
+
+	/**
+	 * Test creation of AddFileToExperimentCommand and that it's not null.
+	 */
+	@Test
+	public void testAddFileToExperimentCommandNotNull() {
+
+		String json = "{\"experimentID\":\"id\",\"fileName\":\"name\",\"type\":\"raw\","
+				+ "\"metaData\":\"metameta\",\"author\":\"name\",\"uploader\":\"user1\","
+				+ "\"isPrivate\":\"bool\",\"grVersion\":\"releaseNr\"}";
+		assertNotNull(cmdf.createAddFileToExperimentCommand(json));
+
+	}
+
+	/**
+	 * Test creation of UpdateFileInExperimentCommand and that it's not null.
+	 */
+	@Test
+	public void testUpdateFileInExperimentCommandNotNull() {
+
+		String json = "{\"experimentID\":\"id\",\"fileName\":\"name\",\"type\":\"raw\","
+				+ "\"metaData\":\"metameta\",\"author\":\"name\",\"uploader\":\"user1\","
+				+ "\"isPrivate\":\"bool\",\"grVersion\":\"releaseNr\"}";
+		assertNotNull(cmdf.createUpdateFileInExperimentCommand(json, "/file/myFileId"));
+
+	}
+
+	/**
+	 * Test creation of DeleteFileFromExperimentCommand and that it's not null.
+	 */
+	@Test
+	public void testDeleteFileFromExperimentCommandNotNull() {
+
+		assertNotNull(cmdf.createDeleteFileFromExperimentCommand("NONE", "/file/myFileId"));
+
+	}
+
+	/**
+	 * Test creation of SearchForExperimentCommand and that it's not null.
+	 */
+	@Test
+	public void testSearchForExperimentCommandNotNull() {
+
+		assertNotNull(cmdf.createSearchForExperimentCommand("/search/?annotations=pubmedStyleQuery"));
+
+	}
+
+	/**
+	 * Test creation of UpdateUserCommand and that it's not null.
+	 */
+	@Test
+	public void testUpdateUserCommandNotNull() {
+
+		String json = "{\"username\":\"uname\",\"password\":\"pw\","
+				+ "\"privileges\":\"basic\",\"name\":\"John Johnson\","
+				+ "\"email\":\"john@mail.com\"}";
+		assertNotNull(cmdf.createUpdateUserCommand(json, "/user"));
+
+	}
+
+	/**
+	 * Test creation of DeleteUserCommand and that it's not null.
+	 */
+	@Test
+	public void testDeleteUserCommandNotNull() {
+
+		assertNotNull(cmdf.createDeleteUserCommand(null, "/user"));
 
 	}
 
@@ -111,15 +192,166 @@ public class CommandFactoryTest {
 	@Test
 	public void testCreateProcessCommand() {
 
-		CommandFactory cmdf = new CommandFactory();
 		String json = "{\"expid\":\"Exp1\",\"processtype\":\"rawtoprofile\"," +
 				"\"parameters\":[\"-a -m 1 --best -p 10 -v 2 -q -S\",\"d_melanogaster_fb5_22\"" +
 				",\"y\",\"y\",\"10 1 5 0 0\",\"y 10\",\"single 4 0\",\"150 1 7 0 0\"]," +
 				"\"metadata\": \"astringofmetadata\",\"genomeRelease\":" +
 				"\"hg38\",\"author\": \"yuri\"}";
-		String username = "tmpUsername";
-		String parsedRestful = "parsed";
-		assertNotNull(cmdf.createProcessCommand(json, username, parsedRestful));
+		assertNotNull(cmdf.createProcessCommand(json, "userName", "parsedRestful"));
+
+	}
+
+	/**
+	 * Test creation of GetAnnotationInformationCommand and that it's not null.
+	 */
+	@Test
+	public void testGetAnnotationInformationCommandNotNull() {
+
+		assertNotNull(cmdf.createGetAnnotationInformationCommand(null));
+
+	}
+
+	/**
+	 * Test creation of AddAnnotationFieldCommand and that it's not null.
+	 */
+	@Test
+	public void testAddAnnotationFieldCommandNotNull() {
+
+		String json = "{\"name\":\"species\",\"type\":[\"fly\",\"rat\",\"human\"],"
+				+ "\"default\":\"human\",\"forced\":false}";
+		assertNotNull(cmdf.createAddAnnotationFieldCommand(json, "/annotation/field"));
+
+	}
+
+	/**
+	 * Test creation of AddAnnotationValueCommand and that it's not null.
+	 */
+	@Test
+	public void testAddAnnotationValueCommandNotNull() {
+
+		String json = "{\"name\":\"species\",\"value\":\"mouse\"}";
+		assertNotNull(cmdf.createAddAnnotationValueCommand(json, "/annotation/value"));
+
+	}
+
+	/**
+	 * Test creation of RemoveAnnotationFieldCommand and that it's not null.
+	 */
+	@Test
+	public void testRemoveAnnotationFieldCommandNotNull() {
+
+		String[] insert = {"NONE","/annotation/field/myFieldName"};
+		assertNotNull(cmdf.createRemoveAnnotationFieldCommand(insert[0], insert[1]));
+
+	}
+
+	/**
+	 * Test creation of GetAnnotationPrivilegesCommand and that it's not null.
+	 */
+	@Test
+	public void testGetAnnotationPrivilegesCommandNotNull() {
+		//TODO: implement.
+		fail("Not yet implemented.");
+
+	}
+
+	/**
+	 * Test creation of UpdateAnnotationPrivilegesCommand and that it's not null.
+	 */
+	@Test
+	public void testUpdateAnnotationPrivilegesCommandNotNull() {
+		//TODO: Implement.
+		fail("Not yet implemented.");
+	}
+
+	/**
+	 * Test that creation of AddGenomeReleaseCommand is not
+	 * null.
+	 */
+	@Test
+	public void testCreateAddGenomeReleaseCommand() {
+
+		String json = "{\"fileName\":\"abc123\",\"specie\":\"human\",\"genomeVersion\":\"GV 1.0\"}";
+		assertNotNull(cmdf.createAddGenomeReleaseCommand(json));
+
+	}
+
+	/**
+	 * Test creation of RenameAnnotationValueCommand and that it's not null.
+	 */
+	@Test
+	public void testRenameAnnotationValueCommandNotNull() {
+		//TODO: Implement.
+		fail("Not yet implemented.");
+	}
+
+	/**
+	 * Test that creation of AddGenomeReleaseCommand is not
+	 * null.
+	 */
+	@Test
+	public void testCreateDeleteGenomeReleaseCommand() {
+
+		assertNotNull(cmdf.createDeleteGenomeReleaseCommand("specie", "genVersion"));
+
+	}
+
+	/**
+	 * Test creation of DeleteAnnotationValueCommand and that it's not null.
+	 */
+	@Test
+	public void testDeleteAnnotationValueCommandNotNull() {
+
+		assertNotNull(cmdf.createDeleteAnnotationValueCommand("NONE", "valueName", "fieldName"));
+
+	}
+
+	/**
+	 * Test creation of EditAnnotationFieldCommand and that it's not null.
+	 */
+	@Test
+	public void testEditAnnotationFieldCommandNotNull() {
+		//TODO: Implement
+		fail("Not implemented yet.");
+	}
+
+	/**
+	 * Test creation of GetAllGenomeReleasesCommand and that it's not null.
+	 */
+	@Test
+	public void testGetAllGenomeReleasesCommandNotNull() {
+
+		assertNotNull(cmdf.createGetAllGenomeReleasesCommand());
+
+	}
+
+	/**
+	 * Test creation of GetGenomeReleaseSpeciesCommand and that it's not null.
+	 */
+	@Test
+	public void testGetGenomeReleaseSpeciesCommandNotNull() {
+
+		assertNotNull(cmdf.createGetGenomeReleasesSpeciesCommand("species"));
+
+	}
+
+	/**
+	 * Test creation of GetProcessStatusCommand and that it's not null.
+	 */
+	@Test
+	public void testGetProcessStatusCommandNotNull() {
+
+		assertNotNull(cmdf.createGetProcessStatusCommand(null));
+
+	}
+
+	/**
+	 * Test creation of Retrieve experiment command and that it's not null.
+	 */
+	@Test
+	public void testCreateRetrieveExperimentCommand() {
+
+		assertNotNull(cmdf.createGetExperimentCommand("restful"));
 
 	}
 

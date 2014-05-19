@@ -15,16 +15,16 @@ public class Process {
 	public static void sendRawToProfile() throws IOException{
 
 		String expid = "Exp1";
-		String parameters = "\"param1\"," +
-				"\"param2\"," +
-				"\"param3\"," +
-				"\"param4\"," +
-				"\"param5\"," +
-				"\"param6\"," +
-				"\"param7\"," +
-				"\"param8\"";
+		String parameters = "\"-a -m 1 --best -p 10 -v 2 -q  -S \"," +
+				"\"\"," +
+				"\"y\"," +
+				"\"\"," +
+				"\"\"," +
+				"\"\"," +
+				"\"\"," +
+				"\"\"";
 		String metadata = "astringofmetadata";
-		String genomeVersion = "hg38";
+		String genomeVersion = "rn5";
 		String author = "yuri";
 
 

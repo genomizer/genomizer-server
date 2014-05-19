@@ -11,7 +11,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 /**
- * Abstract class used for testing the server.
+ * Abstract class used for server testing.
  *
  * @author tfy09jnn
  * @version 1.0
@@ -25,15 +25,15 @@ public abstract class ServerAbstractTestClass {
 	protected String AnnotationFieldFreetext = "com_AnnoFTTEST9";
 	protected String AnnotationFieldNormal = "com_AnnoFDTEST14";
 
-	//Server URL and port.
 	protected String port = "7000";
 	protected String serverURL = "http://scratchy.cs.umu.se:" + port;
 	//protected String serverURL = "http://localhost:" + port;
 
 	/**
-	 * Method used to set the token.
-	 *arg0
-	 * @param response from the server.
+	 * Method used to set the token that represents the users
+	 * identification.
+	 *
+	 * @param String containing the identification.
 	 */
 	public void setToken(String response) {
 
@@ -46,7 +46,7 @@ public abstract class ServerAbstractTestClass {
 	 * Method used to send JSON.
 	 *
 	 * @param The connection to send to.
-	 * @param json_to_send.
+	 * @param the JSON string to send.
 	 * @throws IOException.
 	 */
 	public void sendResponseString(HttpURLConnection con, String json_to_send) throws IOException {
@@ -80,10 +80,12 @@ public abstract class ServerAbstractTestClass {
 
 		return responseBuffer.toString();
 	}
-	//Add request header
+
 	/**
 	 * Used to open a connection.
 	 *
+	 * @param the request method as a string.
+	 * @param the restful header to attach.
 	 * @return the connection.
 	 * @throws Exception.
 	 */
@@ -91,51 +93,41 @@ public abstract class ServerAbstractTestClass {
 
 		URL obj = new URL(restful);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
-		//Set the request property.
 		con.setRequestMethod(reqMethod);
 
 		return con;
 	}
 
 	/**
-	 * Used to handle the login attempt.
+	 * Used to handle server login attempt.
 	 *
+	 * @param JSON object to send to the server.
 	 * @return integer representing the responseCode.
 	 * @throws Exception.
 	 */
 	public int sendLogin(JsonObject jj) throws Exception {
 
-		//Get the connection and add request headers.
 		HttpURLConnection con = connect("POST", serverURL + "/login");
 		con.setRequestProperty("Content-Type", "application/json");
-
-		//Get JSON string.
 		String json_output = jj.toString();
-
-		//Write the JSON body.
 		sendResponseString(con, json_output);
 
 		int responseCode = con.getResponseCode();
-
-		String response =getResponseString(con);
-
-		Gson gson = new Gson();
-		token = gson.fromJson(response, Token.class);
+		String response = getResponseString(con);
+		setToken(response);
 
 		return responseCode;
 
 	}
 
 	/**
-	 * Used to handle the logout attempt.
+	 * Used to handle the server logout attempt.
 	 *
 	 * @return integer representing the responseCode.
 	 * @throws Exception.
 	 */
 	public int sendLogout() throws Exception {
 
-		//Get the connection and add request headers.
 		HttpURLConnection con = connect("DELETE", serverURL + "/login");
 		con.setRequestProperty("Content-Type", "application/json");
 		con.setRequestProperty("Authorization", token.getToken());

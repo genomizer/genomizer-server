@@ -197,24 +197,32 @@ public class ProcessCommand extends Command {
 
 				//filepaths = db.processRawToProfile(expid);
 
+
 				Genome g = db.getGenomeRelease(genomeVersion);
-				parameters[2] = g.path;
+			//	parameters[1] = g.path;
+				parameters[1] = "/var/www/data/genome_releases/Rat/d_melanogaster_fb5_22";
+
 
 				//Prints for checking what filepaths are given by database.
-				System.err.println("Filepath.getKey(): " + filepaths.getKey());
-				System.err.println("Filepath.getValue(): " + filepaths.getValue());
+			//	System.err.println("Filepath.getKey(): " + filepaths.getKey());
+			//	System.err.println("Filepath.getValue(): " + filepaths.getValue());
 
 				try {
-					processHandler.executeProcess("rawToProfile", parameters, filepaths.getKey(), filepaths.getValue());
+
+					//processHandler.executeProcess("rawToProfile", parameters, filepaths.getKey(), filepaths.getValue());
+					processHandler.executeProcess("rawToProfile", parameters, "/home/pvt/infileDir", "/home/pvt/outfileDir/");
+					System.out.println("------------------Running execute with parameters:--------------------");
+					for(String s : parameters){
+						System.out.println("Parameter: " + s);
+					}
+
 				} catch (InterruptedException e) {
-					// TODO Log response
 					System.err.println("CATCH InterruptedException in ProcessCommand.Execute when running processHandler.executeProcess");
 					e.printStackTrace();
 					System.err.println("Logging uname: " + username);
 					ResponseLogger.log(username, new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, e.getMessage()));
 					return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE);
 				} catch (IOException e1) {
-					// TODO Log response
 					System.err.println("CATCH IO exception in ProcessCommand.Execute when running processHandler.executeProcess");
 					e1.printStackTrace();
 					System.err.println("Logging uname: " + username);
