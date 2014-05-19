@@ -12,6 +12,7 @@ CREATE TABLE File
     IsPrivate BOOLEAN NOT NULL,
     ExpID VARCHAR(64),
     GRVersion VARCHAR(16),
+    Status VARCHAR(16) DEFAULT 'In Progress',
     CONSTRAINT pkey_file PRIMARY KEY(FileID)
 );
 
@@ -97,18 +98,47 @@ CREATE TABLE Genome_Release
 (
     Version VARCHAR(16) NOT NULL,
     Species VARCHAR(32) NOT NULL,
-    FilePath VARCHAR(128) NOT NULL,
+    FolderPath VARCHAR(128) NOT NULL,
     CONSTRAINT pkey_genome_release PRIMARY KEY(Version)
 );
 
 ALTER TABLE File ADD CONSTRAINT fkey_grversion FOREIGN KEY (GRVersion) REFERENCES Genome_Release(Version);
 
+CREATE TABLE Genome_Release_Files
+(
+    Version VARCHAR(16) NOT NULL,
+    FileName VARCHAR(128) NOT NULL,
+    Status VARCHAR(16) DEFAULT 'In Progress',
+    CONSTRAINT pkey_version_filename PRIMARY KEY(Version, FileName),
+    CONSTRAINT fkey_version FOREIGN KEY (Version) REFERENCES Genome_Release(Version)
+);
+
 CREATE TABLE Chain_File
 (
+    ID SERIAL NOT NULL,
     FromVersion VARCHAR(16) NOT NULL,
     ToVersion VARCHAR(16) NOT NULL,
-    FilePath VARCHAR(128) NOT NULL,
-    CONSTRAINT pkey_chain_file PRIMARY KEY(FromVersion, ToVersion),
-    CONSTRAINT fkey_fromversion FOREIGN KEY (FromVersion) REFERENCES Genome_Release(Version),
-    CONSTRAINT fkey_toversion FOREIGN KEY (ToVersion) REFERENCES Genome_Release(Version)
+    FolderPath VARCHAR(128) NOT NULL,
+    CONSTRAINT pkey_chain_file PRIMARY KEY(ID),
+    CONSTRAINT fkey_from_version FOREIGN KEY (FromVersion) REFERENCES Genome_Release(Version),
+    CONSTRAINT fkey_to_version FOREIGN KEY (ToVersion) REFERENCES Genome_Release(Version)
 );
+
+CREATE TABLE Chain_File_Files
+(
+    ID SERIAL NOT NULL,
+    FileName VARCHAR(128) NOT NULL,
+    Status VARCHAR(16) DEFAULT 'In Progress',
+    CONSTRAINT pkey_chain_file_files PRIMARY KEY(ID, fileName),
+    CONSTRAINT fkey_ID FOREIGN KEY (ID) REFERENCES Chain_File(ID)
+);
+
+
+
+
+
+
+
+
+
+

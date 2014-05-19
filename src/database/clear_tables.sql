@@ -1,5 +1,7 @@
 DELETE FROM File;
+DELETE FROM Chain_File_Files;
 DELETE FROM Chain_File;
+DELETE FROM Genome_Release_Files;
 DELETE FROM Genome_Release;
 DELETE FROM Experiment;
 DELETE FROM User_Info;
