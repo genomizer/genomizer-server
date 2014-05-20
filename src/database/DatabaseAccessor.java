@@ -619,10 +619,10 @@ public class DatabaseAccessor {
      *             - throws an IOException if the chosen value to be removed is
      *             the active DefaultValue of the chosen label.
      */
-    public int removeAnnotationValue(String label, String value)
+    public int removeDropDownAnnotationValue(String label, String value)
             throws SQLException, IOException {
 
-        return annoMethods.removeAnnotationValue(label, value);
+        return annoMethods.removeDropDownAnnotationValue(label, value);
     }
 
     /**
@@ -810,11 +810,15 @@ public class DatabaseAccessor {
 
     /**
      * Changes the Filename for a specific file with given fileID.
+     * This method affects bothe the saved file name, but also the entries
+     * path and fileName in database.
      * @return resCount int, the number of rows affected by the change.
      * @throws SQLException if failed to send query,
+     * @throws IOException  if the chosen new file name already exist as a
+     * 						stored file.
      */
     public int changeFileName(int fileID, String newFileName)
-    								throws SQLException{
+    								throws SQLException, IOException{
 
     	return fileMethods.changeFileName(fileID, newFileName);
     }
