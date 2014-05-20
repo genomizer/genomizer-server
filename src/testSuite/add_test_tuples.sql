@@ -19,10 +19,10 @@ INSERT INTO Genome_Release_Files VALUES('rn5', 'rn5.fasta', DEFAULT);
 INSERT INTO Genome_Release_Files VALUES('rn4', 'rn4.fasta', DEFAULT);
 INSERT INTO Genome_Release_Files VALUES('rn3', 'rn3.fasta', DEFAULT);
 
-INSERT INTO Chain_File VALUES(DEFAULT, 'rn3', 'rn4', '/var/www/data/chain_files/Rat/rn3 - rn4/');
-INSERT INTO Chain_File VALUES(DEFAULT, 'rn4', 'rn5', '/var/www/data/chain_files/Rat/rn4 - rn5/');
-INSERT INTO Chain_File VALUES(DEFAULT, 'hg18', 'hg38', '/var/www/data/chain_files/Human/hg18 - hg38/');
-INSERT INTO Chain_File VALUES(DEFAULT, 'hg38', 'hg18', '/var/www/data/chain_files/Human/hg38 - hg18/');
+INSERT INTO Chain_File VALUES('rn3', 'rn4', '/var/www/data/chain_files/Rat/rn3 - rn4/');
+INSERT INTO Chain_File VALUES('rn4', 'rn5', '/var/www/data/chain_files/Rat/rn4 - rn5/');
+INSERT INTO Chain_File VALUES('hg18', 'hg38', '/var/www/data/chain_files/Human/hg18 - hg38/');
+INSERT INTO Chain_File VALUES('hg38', 'hg18', '/var/www/data/chain_files/Human/hg38 - hg18/');
 
 INSERT INTO Annotation VALUES('Species', 'DropDown', NULL, TRUE);
 INSERT INTO Annotation_Choices VALUES('Species', 'Human');
