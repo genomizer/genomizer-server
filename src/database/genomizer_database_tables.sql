@@ -56,6 +56,8 @@ CREATE TABLE User_Info
     Username VARCHAR(32) NOT NULL,
     Password VARCHAR(32) NOT NULL,
     Role VARCHAR(32) NOT NULL,
+    FullName VARCHAR(62),
+    Email VARCHAR(62),
     CONSTRAINT pkey_user_info PRIMARY KEY(Username)
 );
 
