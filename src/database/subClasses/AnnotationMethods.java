@@ -524,13 +524,7 @@ public class AnnotationMethods {
             throws SQLException, IOException {
 
     	//Check if value is a dropdown choice and used on any experiments
-    	String dependQuery = "SELECT * From Experiment " +
-    			"JOIN Annotated_With ON" +
-    			"Experiment.ExpID = Annotated_With.ExpID " +
-    			"JOIN Annotation ON" +
-    			"Annotated_With.Label = Annotation.Label" +
-    			"JOIN Annotation_Choices ON" +
-    			"Annotation.Label = Annotation_Choices.Label " +
+    	String dependQuery = "SELECT * FROM Annotated_With " +
     			"WHERE (label ~~* ? AND value ~~* ?)";
 
     	PreparedStatement dependencyStatement = conn
