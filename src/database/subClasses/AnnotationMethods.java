@@ -254,6 +254,10 @@ public class AnnotationMethods {
             String defaultValue, boolean required)
             throws SQLException, IOException {
 
+    	if(!isNotDate(label)) {
+            throw new IOException("Can not add annotation named 'date'");
+    	}
+
         if (!isValidChoice(label)) {
             throw new IOException("Lable contains invalid characters");
         }
@@ -364,6 +368,10 @@ public class AnnotationMethods {
     public int addDropDownAnnotation(String label,
             List<String> choices, int defaultValueIndex,
             boolean required) throws SQLException, IOException {
+
+    	if(!isNotDate(label)) {
+            throw new IOException("Can not add annotation named 'date'");
+    	}
 
         if (!isValidChoice(label)) {
             throw new IOException("Lable contains invalid characters");
@@ -694,6 +702,13 @@ public class AnnotationMethods {
         }
 
         return query;
+    }
+
+    private boolean isNotDate(String label) {
+        if(label.toLowerCase().equals("date")) {
+        	return false;
+        }
+        return true;
     }
 
     /**
