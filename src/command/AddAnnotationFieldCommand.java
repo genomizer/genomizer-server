@@ -51,6 +51,12 @@ public class AddAnnotationFieldCommand extends Command {
 		if(name.indexOf('/') != -1) {
 			return false;
 		}
+		for(int i = 0; i < type.size(); i++) {
+
+			if(type.get(i).indexOf("/") != -1) {
+				return false;
+			}
+		}
 		return true;
 	}
 

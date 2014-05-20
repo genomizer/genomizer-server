@@ -62,6 +62,10 @@ public class CreateUserCommand extends Command {
 			return false;
 		}
 
+		if(username.indexOf('/') != -1) {
+			return false;
+		}
+
 		return true;
 
 	}

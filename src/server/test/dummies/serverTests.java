@@ -10,7 +10,7 @@ public class serverTests {
 		//renameannotest();
 
 		specialannotest();
-		processtest();
+		//processtest();
 
 
 		Login.logout();
@@ -38,7 +38,7 @@ public class serverTests {
 	}
 
 	public static void specialannotest() throws Exception {
-		Annotations.sendAddAnnotation("@@@@@/@2$????");
+		Annotations.sendAddAnnotation("@@@@@234@2$????");
 		//Annotations.sendGetAnnotationInformation();
 		//Annotations.sendDeleteAnnotation("@/@@@@@2$????");
 		//Annotations.sendGetAnnotationInformation();

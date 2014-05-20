@@ -36,6 +36,9 @@ public class AddAnnotationValueCommand extends Command {
 		if(name.indexOf('/') != -1) {
 			return false;
 		}
+		if(value.indexOf('/') != -1) {
+			return false;
+		}
 		return true;
 
 	}
