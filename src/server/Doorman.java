@@ -88,6 +88,7 @@ public class Doorman {
 						}else{
 							exchange(exchange, CommandType.GET_ALL_GENOME_RELEASE_COMMAND);
 						}
+						break;
 					case "/sysadm":
 						exchange(exchange, CommandType.GET_ANNOTATION_PRIVILEGES_COMMAND);
 						break;

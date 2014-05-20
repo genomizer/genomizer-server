@@ -8,9 +8,10 @@ import java.net.HttpURLConnection;
 
 public class testSettings {
 	public static final int port = 7000;
-//	public static String host = "localhost";
-	public static String host = "scratchy.cs.umu.se";
-	public static String url = "http://" + host + ":" + port;
+	public static String host = "localhost";
+//	public static final String host = "scratchy.cs.umu.se";
+	public static final String url = "http://" + testSettings.host + ":" + testSettings.port;
+//	public static String url = "http://asds:" + port;
 
 	static String printResponse(HttpURLConnection con) throws IOException{
 
@@ -18,21 +19,21 @@ public class testSettings {
 		BufferedReader in = null;
 		int responseCode = 0;
 
-			if((responseCode = con.getResponseCode()) >= 400) {
-				in = new BufferedReader(new InputStreamReader(con.getErrorStream()));
-			} else {
-				in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-			}
+		if((responseCode = con.getResponseCode()) >= 400) {
+			in = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+		} else {
+			in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+		}
 
-			String inputLine;
-			responseBuffer = new StringBuffer();
+		String inputLine;
+		responseBuffer = new StringBuffer();
 
-			while ((inputLine = in.readLine()) != null) {
-				responseBuffer.append(inputLine);
-			}
-			in.close();
-			System.out.println("Response Code: " + responseCode);
-			return responseBuffer.toString();
+		while ((inputLine = in.readLine()) != null) {
+			responseBuffer.append(inputLine);
+		}
+		in.close();
+		System.out.println("Response Code: " + responseCode);
+		return responseBuffer.toString();
 	}
 
 	static void sendToServer(HttpURLConnection con, String json_output) throws IOException {
