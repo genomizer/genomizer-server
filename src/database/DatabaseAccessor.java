@@ -897,24 +897,9 @@ public class DatabaseAccessor {
      */
     public void addGeneratedProfiles(String folderPath, String inputFileName) throws SQLException, IOException {
 
-        String query = "SELECT * FROM File WHERE Path = ?";
-
         String filePath = folderPath + "processing...";
 
-        PreparedStatement ps = conn.prepareStatement(query);
-
-        ps.setString(1, filePath);
-
-        ResultSet rs = ps.executeQuery();
-
-        FileTuple pft;
-
-        if (rs.next()) {
-            pft = new FileTuple(rs);
-        } else {
-            ps.close();
-            throw new IOException("The process has not been started");
-        }
+        FileTuple pft = getFileFromPath(filePath);
 
         fileMethods.deleteFile(pft.id);
 
@@ -932,6 +917,43 @@ public class DatabaseAccessor {
                         pft.uploader, pft.isPrivate);
             }
         }
+    }
+
+    public int removeIncompleteProfileProcess(String folderPath) throws SQLException, IOException {
+
+        File profileFolder = new File(folderPath);
+
+        if (profileFolder.exists()) {
+            recursiveDelete(profileFolder);
+        }
+
+        String filePath = folderPath + "processing...";
+
+        FileTuple pft = getFileFromPath(filePath);
+
+        return fileMethods.deleteFile(pft.id);
+    }
+
+    private FileTuple getFileFromPath(String filePath) throws SQLException, IOException {
+
+        String query = "SELECT * FROM File WHERE Path = ?";
+
+        PreparedStatement ps = conn.prepareStatement(query);
+
+        ps.setString(1, filePath);
+
+        ResultSet rs = ps.executeQuery();
+
+        FileTuple pft;
+
+        if (rs.next()) {
+            pft = new FileTuple(rs);
+            ps.close();
+            return pft;
+        }
+
+        ps.close();
+        throw new IOException("There is no database entry for this path");
     }
 
     private void addGeneratedProfile(String expId, String path,
@@ -1193,5 +1215,21 @@ public class DatabaseAccessor {
      */
     public FilePathGenerator getFilePathGenerator() {
         return fpg;
+    }
+
+    /**
+     * Recursively deletes a folder with all it's subfolders and files.
+     * @param folder the folder to delete.
+     */
+    public void recursiveDelete(File folder) {
+        File[] contents = folder.listFiles();
+        if (contents == null || contents.length == 0) {
+            folder.delete();
+        } else {
+            for (File f : contents) {
+                recursiveDelete(f);
+            }
+        }
+        folder.delete();
     }
 }

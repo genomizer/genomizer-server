@@ -228,7 +228,6 @@ public class AnnotationMethods {
      * @throws SQLException
      *             if the query does not succeed
      * @throws IOException
-     * @throws Exception
      *             if label = "Species"
      */
     public int deleteAnnotation(String label) throws SQLException, IOException {
