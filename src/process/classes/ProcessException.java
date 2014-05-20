@@ -2,8 +2,17 @@ package process.classes;
 
 public class ProcessException extends Exception {
 
-    public ProcessException(String string) {
-	// TODO Auto-generated constructor stub
-    }
+
+
+	private String message;
+	public ProcessException(String string) {
+		message = string;
+	}
+
+	@Override
+	public String getMessage() {
+		return "ProcessException: "+message;
+	}
+
 
 }
