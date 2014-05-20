@@ -6,8 +6,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -17,27 +21,33 @@ import database.Annotation;
  * Class that contains all the methods for adding,changing, getting
  * and removing Annotations in the database. This class is a subClass
  * of databaseAcessor.java.
- * 
+ *
  * date: 2014-05-14 version: 1.0
  */
 public class AnnotationMethods {
 
     private Connection conn;
+	private final String[] fileAttributesArray = { "fileid", "date", "path", "filetype",
+			"metadata", "author", "uploader", "expid", "grversion", "filename" };
+	private HashSet<String> fileAttributes;
 
     /**
      * Constructor for the AnnotationMethod object.
-     * 
+     *
      * @param connection
      *            Connection, the connection to the database.
      */
     public AnnotationMethods(Connection connection) {
-
+		fileAttributes = new HashSet<String>();
+		for (int i = 0; i < fileAttributesArray.length; i++) {
+			fileAttributes.add(fileAttributesArray[i]);
+		}
         conn = connection;
     }
 
     /**
      * Gets all the annotation possibilities from the database.
-     * 
+     *
      * @return annotations Map<String, Integer> a Map with the label
      *         string as key and datatype as value. The possible
      *         datatypes are FREETEXT and DROPDOWN.
@@ -68,7 +78,7 @@ public class AnnotationMethods {
 
     /**
      * Creates an Annotation object from an annotation label.
-     * 
+     *
      * @param label
      *            Stringthe name of the annotation to create the
      *            object for.
@@ -102,7 +112,7 @@ public class AnnotationMethods {
     /**
      * Creates a list of Annotation objects from a list of annotation
      * labels.
-     * 
+     *
      * @param labels
      *            the list of labels.
      * @return annotations List<Annotation> - will return a list with
@@ -134,7 +144,7 @@ public class AnnotationMethods {
     /**
      * Finds all annotationLabels that exist in the database, example
      * of labels: sex, tissue, etc...
-     * 
+     *
      * @return annotationLabels ArrayList<String>
      */
     public ArrayList<String> getAllAnnotationLabels() {
@@ -161,12 +171,12 @@ public class AnnotationMethods {
 
     /**
      * Gets the datatype of a given annotation.
-     * 
+     *
      * @param label
      *            annotation label.
      * @return integer - the annotation's datatype (FREETEXT or
      *         DROPDOWN).
-     * 
+     *
      * @throws SQLException
      *             if the query does not succeed
      */
@@ -183,7 +193,7 @@ public class AnnotationMethods {
     /**
      * Gets the default value for a annotation if there is one, If not
      * it returns NULL.
-     * 
+     *
      * @param annotationLabel
      *            String - the name of the annotation to check
      * @return DefaultValue String - The defult value or NULL.
@@ -210,23 +220,32 @@ public class AnnotationMethods {
 
     /**
      * Deletes an annotation from the list of possible annotations.
-     * 
+     * Label SPECIES can't be changed because of dependencies in other tables.
+     *
      * @param label
      *            String - the label of the annotation to delete.
      * @return res integer - the number of tuples deleted in the
      *         database.
      * @throws SQLException
      *             if the query does not succeed
+     * @throws Exception
+     *             if label = "Species"
      */
-    public int deleteAnnotation(String label) throws SQLException {
+    public int deleteAnnotation(String label) throws SQLException, Exception {
 
-        String query = "DELETE FROM Annotation "
-                + "WHERE (Label ~~* ?)";
-        PreparedStatement stmt = conn.prepareStatement(query);
-        stmt.setString(1, label);
+    	String query = "DELETE FROM Annotation "
+    			+ "WHERE (Label ~~* ?)";
+    	PreparedStatement stmt;
+    	int rs = 0;
 
-        int rs = stmt.executeUpdate();
-        stmt.close();
+    	if (label.toLowerCase().contentEquals("species")) {
+    		throw new Exception ("Can't remove annotation 'Species'");
+    	} else {
+    		stmt = conn.prepareStatement(query);
+    		stmt.setString(1, label);
+    		rs = stmt.executeUpdate();
+    		stmt.close();
+    	}
 
         return rs;
     }
@@ -234,7 +253,7 @@ public class AnnotationMethods {
     /**
      * Adds a free text annotation to the list of possible
      * annotations.
-     * 
+     *
      * @param label
      *            String the name of the annotation.
      * @param required
@@ -250,6 +269,10 @@ public class AnnotationMethods {
     public int addFreeTextAnnotation(String label,
             String defaultValue, boolean required)
             throws SQLException, IOException {
+
+    	if(isFileAnnotation(label)) {
+            throw new IOException("The given annotation is a file- annotation.'");
+    	}
 
         if (!isValidChoice(label)) {
             throw new IOException("Lable contains invalid characters");
@@ -284,7 +307,7 @@ public class AnnotationMethods {
     /**
      * Checks if a given annotation is required to be filled by the
      * user.
-     * 
+     *
      * @param annotationLabel
      *            String - the name of the annotation to check
      * @return boolean - true if it is required, else false
@@ -312,7 +335,7 @@ public class AnnotationMethods {
     /**
      * Gets all the choices for a drop down annotation. Deprecated,
      * use {@link #getChoices(String) getChoices} instead.
-     * 
+     *
      * @param label
      *            String the drop down annotation to get the choice
      *            for.
@@ -345,7 +368,7 @@ public class AnnotationMethods {
     /**
      * Adds a drop down annotation to the list of possible
      * annotations.
-     * 
+     *
      * @param label
      *            String - the name of the annotation.
      * @param choices
@@ -361,6 +384,10 @@ public class AnnotationMethods {
     public int addDropDownAnnotation(String label,
             List<String> choices, int defaultValueIndex,
             boolean required) throws SQLException, IOException {
+
+    	if(isFileAnnotation(label)) {
+            throw new IOException("The given annotation is a file- annotation.'");
+    	}
 
         if (!isValidChoice(label)) {
             throw new IOException("Lable contains invalid characters");
@@ -427,7 +454,7 @@ public class AnnotationMethods {
 
     /**
      * Method to add a value to a existing DropDown annotation.
-     * 
+     *
      * @param label
      *            String , the label of the chosen DropDown
      *            annotation.
@@ -481,7 +508,7 @@ public class AnnotationMethods {
 
     /**
      * Method to remove a given annotation of a dropdown- annotation.
-     * 
+     *
      * @param label
      *            String - the label of the chosen annotation
      * @param value
@@ -531,64 +558,73 @@ public class AnnotationMethods {
 
     /**
      * Changes the annotation label.
-     * 
-     * OBS! This changes the label for all experiments.
-     * 
+     *
+     * OBS! This changes the label for all experiments. Label SPECIES can't be
+     * changed because of dependencies in other tables. If the Species label
+     * can be changed to another, it becomes removable.
+     *
      * @param oldLabel
      *            String
      * @param newLabel
      *            string
-     * 
+     *
      * @return res int - the number of tuples updated
      * @throws SQLException
      *             If the update fails
      * @throws IOException
+     * @throws Exception
+     *             if label = "Species"
      */
     public int changeAnnotationLabel(String oldLabel, String newLabel)
-            throws SQLException, IOException {
+            throws SQLException, IOException, Exception {
 
-        if (!isValidChoice(newLabel)) {
-            throw new IOException(newLabel
-                    + " contains invalid characters.\n" +
-                    "Brackets cannot be used in annotations.");
-        }
+    	if (oldLabel.toLowerCase().contentEquals("species")) {
+    		throw new Exception ("Can't change label on annotation 'Species'");
+    	} else {
+    		if (!isValidChoice(newLabel)) {
+    			throw new IOException(newLabel
+    					+ " contains invalid characters.\n" +
+    					"Brackets cannot be used in annotations.");
+    		}
 
-        String query = "UPDATE Annotation SET Label = ? WHERE (Label ~~* ?)";
+    		String query = "UPDATE Annotation SET Label = ? WHERE (Label ~~* ?)";
 
-        PreparedStatement stmt;
-        stmt = conn.prepareStatement(query);
-        stmt.setString(1, newLabel);
-        stmt.setString(2, oldLabel);
+    		PreparedStatement stmt;
+    		stmt = conn.prepareStatement(query);
+    		stmt.setString(1, newLabel);
+    		stmt.setString(2, oldLabel);
 
-        int resCount = stmt.executeUpdate();
-        stmt.close();
-        return resCount;
+    		int resCount = stmt.executeUpdate();
+    		stmt.close();
+    		return resCount;
+    	}
     }
 
     /**
      * Changes the value of an annotation corresponding to it's label.
-     * 
+     *
      * Parameters: label of annotation, the old value and the new
      * value to change to.
-     * 
+     *
      * OBS! This method changes the value for every experiment.
-     * 
+     *
      * Throws an SQLException if the new value already exists in the
      * choices table (changing all males to female, and female is
      * already in the table)
-     * 
+     *
      * @param label
      *            String - the label name.
      * @param oldValue
      *            String - the name of the old annotation value.
      * @param newValue
      *            String - the name of the new annotation value.
-     * 
+     *
      * @throws SQLException
      * @throws IOException
+     * @throws ParseException
      */
     public void changeAnnotationValue(String label, String oldValue,
-            String newValue) throws SQLException, IOException {
+            String newValue) throws SQLException, IOException, ParseException {
 
         if (!isValidChoice(newValue)) {
             throw new IOException(newValue
@@ -629,7 +665,7 @@ public class AnnotationMethods {
 
     /**
      * Gets all the choices for a drop down annotation.
-     * 
+     *
      * @param label
      *            String - the drop down annotation to get the choice
      *            for.
@@ -662,7 +698,7 @@ public class AnnotationMethods {
      * binds a sql prepared query statement with parameters, example:
      * "UPDATE Annotation_Choices SET Value = ? WHERE Label = ? and Value = ?;"
      * and the questionmarks are the parameters.
-     * 
+     *
      * @param query
      *            PreparedStatement
      * @param params
@@ -671,21 +707,39 @@ public class AnnotationMethods {
      *            questionmarks in query.
      * @return query PreparedStatement
      * @throws SQLException
+     * @throws ParseException
      */
     public PreparedStatement bind(PreparedStatement query,
-            List<String> params) throws SQLException {
+            List<String> params) throws SQLException, ParseException {
 
         for (int i = 0; i < params.size(); i++) {
-            query.setString(i + 1, params.get(i));
+        	if(isInteger(params.get(i))) {
+        		query.setInt(i + 1, Integer.parseInt(params.get(i)));
+        	} else if(isValidDate(params.get(i)))  {
+        		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        		java.util.Date date = df.parse(params.get(i));
+        		java.sql.Date sDate = new java.sql.Date(date.getTime());
+        		query.setDate(i + 1, sDate);
+        	} else {
+        		query.setString(i + 1, params.get(i));
+        	}
         }
 
         return query;
     }
 
+    private boolean isFileAnnotation(String label) {
+
+    	if(fileAttributes.contains(label.toLowerCase())) {
+    		return true;
+    	}
+        return false;
+    }
+
     /**
      * private method to check if the annotation contains invalid
      * characters ('(', ')', '[' and ']'.
-     * 
+     *
      * @param annotation
      * @return
      */
@@ -702,5 +756,25 @@ public class AnnotationMethods {
         }
 
         return true;
+    }
+
+    private boolean isInteger(String s) {
+        try {
+            Integer.parseInt(s);
+        } catch(NumberFormatException e) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean isValidDate(String dateString) {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            df.parse(dateString);
+            return true;
+        } catch (ParseException e) {
+            return false;
+        }
     }
 }

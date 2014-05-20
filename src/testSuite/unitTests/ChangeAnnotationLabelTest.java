@@ -57,7 +57,7 @@ public class ChangeAnnotationLabelTest {
     }
 
     @After
-    public void teardown() throws SQLException {
+    public void teardown() throws SQLException, Exception {
     	dbac.deleteExperiment("Exp1");
         dbac.deleteAnnotation(testLabel2);
         dbac.deleteAnnotation(testLabel3);
@@ -70,7 +70,7 @@ public class ChangeAnnotationLabelTest {
      *
      */
     @Test
-    public void shouldChangeChosenLabel() throws IOException {
+    public void shouldChangeChosenLabel() throws IOException, Exception{
     	try {
 			assertTrue(1 == dbac.changeAnnotationLabel(testLabel1, "HEJSAN"));
 			assertNotNull(dbac.getAnnotationObject("HEJSAN"));
@@ -80,6 +80,18 @@ public class ChangeAnnotationLabelTest {
 			e.printStackTrace();
 		}
     }
+
+    @Test(expected = Exception.class)
+    public void shouldNotBeAbleToRenameSpeciesAnnotationLabel() throws Exception {
+    	String label = "Species";
+    	dbac.changeAnnotationLabel(label, "SomeLabel");
+	}
+
+    @Test(expected = Exception.class)
+    public void shouldNotBeAbleToRemoveSpeciesAnnotationLabel() throws Exception {
+    	String label = "Species";
+    	dbac.deleteAnnotation(label);
+	}
 
 //    /**
 //     * Test to check if the new label name has the same drop down

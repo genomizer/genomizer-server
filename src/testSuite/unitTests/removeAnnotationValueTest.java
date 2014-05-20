@@ -69,7 +69,7 @@ public class removeAnnotationValueTest {
     }
 
     @After
-    public void teardown() throws SQLException {
+    public void teardown() throws SQLException, Exception {
         dbac.deleteAnnotation(testLabel1);
         dbac.deleteAnnotation(testLabel2);
     }
@@ -151,7 +151,7 @@ public class removeAnnotationValueTest {
 
     @Test
     public void testRemoveAnnotationWithWhiteSpace()
-    		throws SQLException, IOException {
+    		throws Exception {
     	dbac.addFreeTextAnnotation("hej svejs", null, false);
     	dbac.addDropDownAnnotation("hej po dig", testChoices1, 0, false);
     	dbac.deleteAnnotation("hej svejs");

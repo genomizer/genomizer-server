@@ -8,6 +8,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.List;
@@ -114,9 +115,14 @@ public class DatabaseAccessor {
      * database.
      *
      * @return boolean - true if it is connected, otherwise false.
+     * @throws SQLException
      */
-    public boolean isConnected() {
-        return conn != null;
+    public boolean isConnected() throws SQLException {
+        if(conn.isClosed()){
+        	return false;
+        } else {
+        	return true;
+        }
     }
 
     /**
@@ -137,9 +143,12 @@ public class DatabaseAccessor {
      *             - If the pubMedString is not in the right format
      * @throws SQLException
      *             - if the query does not succeed
+     * @throws ParseException
+     * 			   - if the Date is not in the right format. (yyyy-mm-dd).
      */
-    public List<Experiment> search(String pubMedString) throws IOException,
-            SQLException {
+
+    public List<Experiment> search(String pubMedString)
+            throws IOException, SQLException, ParseException {
 
         isPubMedStringValid(pubMedString);
 
@@ -503,14 +512,17 @@ public class DatabaseAccessor {
 
     /**
      * Deletes an annotation from the list of possible annotations.
+     * Label SPECIES can't be changed because of dependencies in other tables.
      *
      * @param String
      *            label - the label of the annotation to delete.
      * @return int - the number of tuples deleted in the database.
      * @throws SQLException
-     *             - if the query does not succeed
+     *             if the query does not succeed
+     * @throws Exception
+     *             if label = "Species"
      */
-    public int deleteAnnotation(String label) throws SQLException {
+    public int deleteAnnotation(String label) throws SQLException, Exception {
 
         return annoMethods.deleteAnnotation(label);
     }
@@ -527,7 +539,8 @@ public class DatabaseAccessor {
      * @return int - the number of tuples updated in the database.
      * @throws SQLException
      *             - if the query does not succeed
-     * @throws IOException
+     * @throws IOException, if the label is an existing file- annotation
+     * 					or contains invalid characters.
      */
     public int addFreeTextAnnotation(String label, String defaultValue,
             boolean required) throws SQLException, IOException {
@@ -560,7 +573,9 @@ public class DatabaseAccessor {
      * @throws SQLException
      *             - if the query does not succeed
      * @throws IOException
-     *             - if the choices are invalid
+     *             - if the label is an existing fileannotation or
+     *             contains invalid characters. Also if one or more of
+     *             the values contains invalid characters.
      */
     public int addDropDownAnnotation(String label, List<String> choices,
             int defaultValueIndex, boolean required) throws SQLException,
@@ -611,8 +626,19 @@ public class DatabaseAccessor {
     }
 
     /**
+<<<<<<< HEAD
      * Changes the annotation label. OBS! This changes the label for all
      * experiments.
+=======
+     * Changes the annotation label.
+     *
+     * OBS! This changes the label for all experiments. Label SPECIES can't be
+     * changed because of dependencies in other tables. If the Species label
+     * can be changed to another, it becomes removable.
+     *
+     * Changes the annotation label. OBS! This changes the label for
+     * all experiments.
+>>>>>>> branch 'database' of https://github.com/genomizer/genomizer-server.git
      *
      * @param String
      *            oldLabel
@@ -620,11 +646,13 @@ public class DatabaseAccessor {
      *            newLabel
      * @return int - the number of tuples updated
      * @throws SQLException
-     *             - If the update fails
+     *             If the update fails
      * @throws IOException
+     * @throws Exception
+     *             if label = "Species"
      */
     public int changeAnnotationLabel(String oldLabel, String newLabel)
-            throws SQLException, IOException {
+            throws SQLException, Exception {
 
         return annoMethods.changeAnnotationLabel(oldLabel, newLabel);
     }
@@ -647,11 +675,13 @@ public class DatabaseAccessor {
      *            newValue - the name of the new annotation value.
      * @throws SQLException
      * @throws IOException
+     * @throws ParseException, if The user tries to add the Date annotation.
      */
     public void changeAnnotationValue(String label, String oldValue,
-            String newValue) throws SQLException, IOException {
+            String newValue) throws SQLException, IOException, ParseException {
 
-        annoMethods.changeAnnotationValue(label, oldValue, newValue);
+		annoMethods.changeAnnotationValue(label, oldValue, newValue);
+
     }
 
     /**
@@ -796,13 +826,18 @@ public class DatabaseAccessor {
      *         for this experiment.
      * @throws SQLException
      *             - If the database could not be accessed
-     * @throws IOException
+     * @throws ParseException
      */
     public Entry<String, String> processRawToProfile(String expId,
             String metaData, String uploader, boolean isPrivate,
             String grVersion) throws SQLException, IOException {
 
-        List<Experiment> experiments = search(expId + "[ExpID] AND Raw[FileType]");
+        List<Experiment> experiments = null;
+        try {
+            experiments = search(expId + "[ExpID] AND Raw[FileType]");
+        } catch (ParseException e) {
+            // no date used
+        }
 
         if (experiments == null || experiments.isEmpty()) {
             throw new IOException("There are no raw files to process!");
@@ -1068,9 +1103,10 @@ public class DatabaseAccessor {
      * @return List<Experiment>
      * @throws IOException
      * @throws SQLException
+     * @throws ParseException
      */
     private List<Experiment> searchExperiments(String pubMedString)
-            throws IOException, SQLException {
+            throws IOException, SQLException, ParseException {
 
         String query = pm2sql.convertExperimentSearch(pubMedString);
         List<String> params = pm2sql.getParameters();
@@ -1097,9 +1133,10 @@ public class DatabaseAccessor {
      * @return List<Experiment>
      * @throws IOException
      * @throws SQLException
+     * @throws ParseException
      */
     private List<Experiment> searchFiles(String pubMedString)
-            throws IOException, SQLException {
+            throws IOException, SQLException, ParseException {
 
         String query = pm2sql.convertFileSearch(pubMedString);
         List<String> params = pm2sql.getParameters();
