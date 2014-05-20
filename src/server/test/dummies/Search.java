@@ -8,8 +8,8 @@ import java.net.URLEncoder;
 
 public class Search {
 
-	static void sendSearchRequest() throws Exception {
-		URL obj = new URL(testSettings.url);
+	static void sendSearchRequest(String query) throws Exception {
+		URL obj = new URL(testSettings.url + "/search/?annotations=" + query);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 		con.setRequestMethod("GET");
 
