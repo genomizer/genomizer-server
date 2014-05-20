@@ -560,7 +560,8 @@ public class DatabaseAccessor {
      * @return int - the number of tuples updated in the database.
      * @throws SQLException
      *             - if the query does not succeed
-     * @throws IOException
+     * @throws IOException, if the label is an existing file- annotation
+     * 					or contains invalid characters.
      */
     public int addFreeTextAnnotation(String label,
             String defaultValue, boolean required)
@@ -598,7 +599,9 @@ public class DatabaseAccessor {
      * @throws SQLException
      *             - if the query does not succeed
      * @throws IOException
-     *             - if the choices are invalid
+     *             - if the label is an existing fileannotation or
+     *             contains invalid characters. Also if one or more of
+     *             the values contains invalid characters.
      */
     public int addDropDownAnnotation(String label,
             List<String> choices, int defaultValueIndex,
