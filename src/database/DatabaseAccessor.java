@@ -19,13 +19,13 @@ import database.subClasses.*;
 
 /**
  * PREREQUISITES: The construction parameters must reference a postgresql
- * database with the genomizer database tables preloaded. This is done by
+ * database with the Genomizer database tables preloaded. This is done by
  * running the genomizer_database_tables.sql.
  *
  * DatabaseAccessor manipulates the underlying postgresql database using SQL
  * commands.
  *
- * Developed by the Datastorage group for the Genomizer Project, Software
+ * Developed by the Data storage group for the Genomizer Project, Software
  * Engineering course at Umeå University 2014.
  *
  * @author dv12rwt, Ruaridh Watt
@@ -34,7 +34,6 @@ import database.subClasses.*;
  * @author dv12can, Carl Alexandersson
  * @author yhi04jeo, Jonas Engbo
  * @author oi11mhn, Mattias Hinnerson
- *
  */
 public class DatabaseAccessor {
 
@@ -58,17 +57,18 @@ public class DatabaseAccessor {
 	/**
 	 * Creates a databaseAccessor that opens a connection to a database.
 	 *
-	 * @param username
-	 *            - The username to log in to the database as. Should be
-	 *            "c5dv151_vt14" as of now.
-	 * @param password
-	 *            - The password to log in to the database. Should be "shielohh"
-	 *            as of now.
-	 * @param host
-	 *            - The name of the database management system. Will problebly
-	 *            always be "postgres" unless the DMS is switched with something
-	 *            else.
-	 * @param database
+	 * @param String
+	 *            username - The username to log in to the database as. Should
+	 *            be "c5dv151_vt14" as of now.
+	 * @param String
+	 *            password - The password to log in to the database. Should be
+	 *            "shielohh" as of now.
+	 * @param String
+	 *            host - The name of the database management system. Will
+	 *            problebly always be "postgres" unless the DMS is switched with
+	 *            something else.
+	 * @param String
+	 *            database - The name of the database
 	 * @throws SQLException
 	 * @throws IOException
 	 */
@@ -82,9 +82,7 @@ public class DatabaseAccessor {
 		props.setProperty("password", password);
 
 		conn = DriverManager.getConnection(url, props);
-
 		fpg = new FilePathGenerator(DATAFOLDER);
-
 		pm2sql = new PubMedToSQLConverter();
 
 		userMethods = new UserMethods(conn);
@@ -100,22 +98,22 @@ public class DatabaseAccessor {
 
 	/**
 	 * Closes the connection to the database, releasing all resources it uses.
-	 * @throws SQLException
 	 *
+	 * @throws SQLException
 	 */
 	public void close() throws SQLException {
 
 		conn.close();
-
 	}
 
 	/**
 	 * Public method to check if the instance of the class is connected to a
 	 * database.
 	 *
-	 * @return boolean, true if it is connected, otherwise false.
+	 * @return boolean - true if it is connected, otherwise false.
 	 */
 	public boolean isConnected() {
+
 		return conn != null;
 	}
 
@@ -126,17 +124,17 @@ public class DatabaseAccessor {
 	 * <Value>[<Label>] <AND|OR> <Value>[<Label>] ...
 	 *
 	 * Round brackets should be used to disambiguate the logical expression.
-	 *
 	 * Example: "(Human[Species] OR Fly[Species]) AND Joe Bloggs[Uploader]"
 	 *
-	 * @param pubMedString
-	 *            The String containing the search criteria in PubMed format.
-	 * @return A List of experiments containing file that fullfill the criteria
-	 *         specifies in the pubMedString.
+	 * @param String
+	 *            pubMedString - The String containing the search criteria in
+	 *            PubMed format.
+	 * @return List<Experiment> - A List of experiments containing file that
+	 *         fullfill the criteria specifies in the pubMedString.
 	 * @throws IOException
-	 *             If the pubMedString is not in the right format
+	 *             - If the pubMedString is not in the right format
 	 * @throws SQLException
-	 *             if the query does not succeed
+	 *             - if the query does not succeed
 	 */
 	public List<Experiment> search(String pubMedString) throws IOException,
 			SQLException {
@@ -151,12 +149,11 @@ public class DatabaseAccessor {
 	}
 
 	/**
-	 * Internal method!
+	 * Internal method! Checks that the pubmed string is valid.
 	 *
-	 * Checks that the pubmed string is valid.
-	 *
-	 * @param pubMedString
-	 * @return true if ok else throws Exception
+	 * @param String
+	 *            pubMedString
+	 * @return boolean - true if ok else throws Exception
 	 * @throws IOException
 	 */
 	public boolean isPubMedStringValid(String pubMedString) throws IOException {
@@ -192,9 +189,9 @@ public class DatabaseAccessor {
 	 * Returns an ArrayList which contains the usernames of all the users in the
 	 * database in the form of strings.
 	 *
-	 * @return an ArrayList of usernames.
+	 * @return List<String> - an ArrayList of usernames
 	 * @throws SQLException
-	 *             if the query does not succeed
+	 *             - if the query does not succeed
 	 */
 	public List<String> getUsers() throws SQLException {
 
@@ -205,11 +202,11 @@ public class DatabaseAccessor {
 	 * Method to add a new user to the database.
 	 *
 	 * @param String
-	 *            the username
+	 *            - the username
 	 * @param String
-	 *            the password
+	 *            - the password
 	 * @param String
-	 *            the role given to the user ie. "Admin"
+	 *            - the role given to the user ie. "Admin"
 	 * @throws SQLException
 	 */
 	public void addUser(String username, String password, String role)
@@ -221,25 +218,24 @@ public class DatabaseAccessor {
 	/**
 	 * Deletes a user from the database.
 	 *
-	 * @param username
-	 *            the username of the user to be deleted.
+	 * @param String
+	 *            username - the username of the user to be deleted.
 	 * @throws SQLException
-	 *             if the query does not succeed
+	 *             - if the query does not succeed
 	 */
 	public void deleteUser(String username) throws SQLException {
 
 		userMethods.deleteUser(username);
-
 	}
 
 	/**
 	 * Returns the password for the given user. Used for login.
 	 *
-	 * @param user
-	 *            - the username as string
+	 * @param String
+	 *            user - the username as string
 	 * @return String - the password
 	 * @throws SQLException
-	 *             if the query does not succeed
+	 *             - if the query does not succeed
 	 */
 	public String getPassword(String user) throws SQLException {
 
@@ -249,13 +245,13 @@ public class DatabaseAccessor {
 	/**
 	 * Changes the password for a user.
 	 *
-	 * @param username
-	 *            the user to change the password for.
-	 * @param newPassword
-	 *            the new password.
-	 * @return the number of tuples updated in the database.
+	 * @param String
+	 *            username - the user to change the password for
+	 * @param String
+	 *            newPassword - the new password
+	 * @return int - the number of tuples updated in the database
 	 * @throws SQLException
-	 *             if the query does not succeed
+	 *             - if the query does not succeed
 	 */
 	public int resetPassword(String username, String newPassword)
 			throws SQLException {
@@ -266,11 +262,11 @@ public class DatabaseAccessor {
 	/**
 	 * Gets the role (permissions) for a user.
 	 *
-	 * @param username
-	 *            the user to get the role for.
-	 * @return the role as a string.
+	 * @param String
+	 *            username - the user to get the role for
+	 * @return String - the role as a string
 	 * @throws SQLException
-	 *             if the query does not succeed
+	 *             - if the query does not succeed
 	 */
 	public String getRole(String username) throws SQLException {
 
@@ -280,13 +276,13 @@ public class DatabaseAccessor {
 	/**
 	 * Sets the role (permissions) for the user.
 	 *
-	 * @param username
-	 *            the user to set the role for.
-	 * @param role
-	 *            the role to set for the user.
-	 * @return returns the number of tuples updated in the database.
+	 * @param String
+	 *            username - the user to set the role for
+	 * @param String
+	 *            role - the role to set for the user
+	 * @return int - returns the number of tuples updated in the database
 	 * @throws SQLException
-	 *             if the query does not succeed
+	 *             - if the query does not succeed
 	 */
 	public int setRole(String username, String role) throws SQLException {
 
@@ -296,11 +292,11 @@ public class DatabaseAccessor {
 	/**
 	 * Gets an experiment from the database.
 	 *
-	 * @param expID
-	 *            the ID of the experiment.
-	 * @return an Experiment object.
+	 * @param String
+	 *            expID - the ID of the experiment
+	 * @return Experiment - an Experiment object
 	 * @throws SQLException
-	 *             if the query does not succeed
+	 *             - if the query does not succeed
 	 */
 	public Experiment getExperiment(String expID) throws SQLException {
 
@@ -310,11 +306,11 @@ public class DatabaseAccessor {
 	/**
 	 * Adds an experiment ID to the database.
 	 *
-	 * @param expID
-	 *            the ID for the experiment.
-	 * @return the number of tuples inserted in the database.
+	 * @param String
+	 *            expID - the ID for the experiment.
+	 * @return int - the number of tuples inserted in the database.
 	 * @throws SQLException
-	 *             if the query does not succeed
+	 *             - if the query does not succeed
 	 */
 	public int addExperiment(String expID) throws SQLException {
 
@@ -324,14 +320,14 @@ public class DatabaseAccessor {
 	/**
 	 * Deletes an experiment from the database.
 	 *
-	 * @param expId
-	 *            the experiment ID.
-	 * @return the number of tuples deleted.
+	 * @param String
+	 *            expId - the experiment ID.
+	 * @return int - the number of tuples deleted.
 	 * @throws SQLException
-	 *             if the query does not succeed. Occurs if Experiment contains
-	 *             at least one file. (All files relating to an experiment must
-	 *             be deleted first before an experiment can be deleted from the
-	 *             database)
+	 *             - if the query does not succeed. Occurs if Experiment
+	 *             contains at least one file. (All files relating to an
+	 *             experiment must be deleted first before an experiment can be
+	 *             deleted from the database)
 	 */
 	public int deleteExperiment(String expId) throws SQLException {
 
@@ -341,11 +337,12 @@ public class DatabaseAccessor {
 	/**
 	 * Checks if a given experiment ID exists in the database.
 	 *
-	 * @param expID
-	 *            the experiment ID to look for.
-	 * @return true if the experiment exists in the database, else false.
+	 * @param String
+	 *            expID - the experiment ID to look for.
+	 * @return boolean - true if the experiment exists in the database, else
+	 *         false.
 	 * @throws SQLException
-	 *             if the query does not succeed
+	 *             - if the query does not succeed
 	 */
 	public boolean hasExperiment(String expID) throws SQLException {
 
@@ -355,17 +352,17 @@ public class DatabaseAccessor {
 	/**
 	 * Updates a value of a single annotation of a unique experiment
 	 *
-	 * @param expID
-	 *            the name of the experiment to annotate.
-	 * @param label
-	 *            the annotation to set.
-	 * @param value
-	 *            the value of the annotation.
-	 * @return the number of tuples updated in the database.
+	 * @param String
+	 *            expID - the name of the experiment to annotate.
+	 * @param String
+	 *            label - the annotation to set.
+	 * @param String
+	 *            value - the value of the annotation.
+	 * @return int - the number of tuples updated in the database.
 	 * @throws SQLException
-	 *             if the query does not succeed
+	 *             - if the query does not succeed
 	 * @throws IOException
-	 *             if the value is invalid for the annotation type.
+	 *             - if the value is invalid for the annotation type.
 	 */
 	public int updateExperiment(String expID, String label, String value)
 			throws SQLException, IOException {
@@ -377,17 +374,17 @@ public class DatabaseAccessor {
 	 * Annotates an experiment with the given label and value. Checks so that
 	 * the value is valid if it is a drop down annotation.
 	 *
-	 * @param expID
-	 *            the name of the experiment to annotate.
-	 * @param label
-	 *            the annotation to set.
-	 * @param value
-	 *            the value of the annotation.
-	 * @return the number of tuples updated in the database.
+	 * @param String
+	 *            expID - the name of the experiment to annotate
+	 * @param String
+	 *            label - the annotation to set
+	 * @param String
+	 *            value - the value of the annotation
+	 * @return int - the number of tuples updated in the database
 	 * @throws SQLException
-	 *             if the query does not succeed
+	 *             - if the query does not succeed
 	 * @throws IOException
-	 *             if the value is invalid for the annotation type.
+	 *             - if the value is invalid for the annotation type
 	 */
 	public int annotateExperiment(String expID, String label, String value)
 			throws SQLException, IOException {
@@ -398,13 +395,13 @@ public class DatabaseAccessor {
 	/**
 	 * Deletes one annotation from a specific experiment.
 	 *
-	 * @param expID
-	 *            the experiment to delete the annotation from.
-	 * @param label
-	 *            the name of the annotation.
-	 * @return the number of tuples deleted from the database.
+	 * @param String
+	 *            expID - the experiment to delete the annotation from
+	 * @param String
+	 *            label - the name of the annotation
+	 * @return int - the number of tuples deleted from the database
 	 * @throws SQLException
-	 *             if the query does not succeed
+	 *             - if the query does not succeed
 	 */
 	public int removeExperimentAnnotation(String expID, String label)
 			throws SQLException {
@@ -412,16 +409,14 @@ public class DatabaseAccessor {
 		return expMethods.removeExperimentAnnotation(expID, label);
 	}
 
-
 	/**
 	 * Gets all the annotation possibilities from the database.
 	 *
-	 * @return annotations Map<String, Integer> - a Map with the label string as
-	 *         key and datatype as value.
-	 *
-	 *         The possible datatypes are FREETEXT and DROPDOWN.
+	 * @return HashMap<String, Integer> - a Map with the label string as key and
+	 *         datatype as value. The possible datatypes are FREETEXT and
+	 *         DROPDOWN.
 	 * @throws SQLException
-	 *             if the query does not succeed
+	 *             - if the query does not succeed
 	 */
 	public Map<String, Integer> getAnnotations() throws SQLException {
 
@@ -431,12 +426,12 @@ public class DatabaseAccessor {
 	/**
 	 * Creates an Annotation object from an annotation label.
 	 *
-	 * @param label
-	 *            String - the name of the annotation to create the object for.
+	 * @param String
+	 *            label - the name of the annotation to create the object for.
 	 * @return Annotation - the Annotation object. If the label does not exist,
 	 *         then null will be returned.
 	 * @throws SQLException
-	 *             if the query does not succeed.
+	 *             - if the query does not succeed.
 	 */
 	public Annotation getAnnotationObject(String label) throws SQLException {
 
@@ -446,13 +441,13 @@ public class DatabaseAccessor {
 	/**
 	 * Creates a list of Annotation objects from a list of annotation labels.
 	 *
-	 * @param labels
-	 *            the list of labels.
-	 * @return annotations List<Annotation> - will return a list with all the
-	 *         annotations with valid labels. If the list with labels is empty
-	 *         or none of the labels are valid, then it will return null.
+	 * @param String
+	 *            labels - the list of labels.
+	 * @return List<Annotation> - will return a list with all the annotations
+	 *         with valid labels. If the list with labels is empty or none of
+	 *         the labels are valid, then it will return null.
 	 * @throws SQLException
-	 *             if the query does not succeed.
+	 *             - if the query does not succeed.
 	 */
 	public List<Annotation> getAnnotationObjects(List<String> labels)
 			throws SQLException {
@@ -465,7 +460,7 @@ public class DatabaseAccessor {
 	 * sex, tissue, etc... Finds all annotationLabels that exist in the
 	 * database, example of labels: sex, tissue, etc...
 	 *
-	 * @return annotationLabels ArrayList<String>
+	 * @return ArrayList<String>
 	 */
 	public ArrayList<String> getAllAnnotationLabels() {
 
@@ -475,12 +470,11 @@ public class DatabaseAccessor {
 	/**
 	 * Gets the datatype of a given annotation.
 	 *
-	 * @param label
-	 *            annotation label.
-	 * @return integer - the annotation's datatype (FREETEXT or DROPDOWN).
-	 *
+	 * @param String
+	 *            label - annotation label.
+	 * @return Integer - the annotation's datatype (FREETEXT or DROPDOWN).
 	 * @throws SQLException
-	 *             if the query does not succeed
+	 *             - if the query does not succeed
 	 */
 	public Integer getAnnotationType(String label) throws SQLException {
 
@@ -491,9 +485,9 @@ public class DatabaseAccessor {
 	 * Gets the default value for a annotation if there is one, If not it
 	 * returns NULL.
 	 *
-	 * @param annotationLabel
-	 *            String - the name of the annotation to check
-	 * @return DefaultValue String - The defult value or NULL.
+	 * @param String
+	 *            annotationLabel -the name of the annotation to check
+	 * @return String - The defult value or NULL.
 	 * @throws SQLException
 	 */
 	public String getDefaultAnnotationValue(String annotationLabel)
@@ -505,11 +499,11 @@ public class DatabaseAccessor {
 	/**
 	 * Deletes an annotation from the list of possible annotations.
 	 *
-	 * @param label
-	 *            String - the label of the annotation to delete.
-	 * @return res integer - the number of tuples deleted in the database.
+	 * @param String
+	 *            label - the label of the annotation to delete.
+	 * @return int - the number of tuples deleted in the database.
 	 * @throws SQLException
-	 *             if the query does not succeed
+	 *             - if the query does not succeed
 	 */
 	public int deleteAnnotation(String label) throws SQLException {
 
@@ -519,16 +513,15 @@ public class DatabaseAccessor {
 	/**
 	 * Adds a free text annotation to the list of possible annotations.
 	 *
-	 * @param label
-	 *            String the name of the annotation.
-	 * @param required
-	 *            boolean if the annotation should be forced or not
-	 * @param defaultValue
-	 *            String the default value this field should take or null if a
-	 *            default value is not required
-	 * @return res int - the number of tuples updated in the database.
+	 * @param String
+	 *            label - the name of the annotation.
+	 * @param boolean required - if the annotation should be forced or not
+	 * @param String
+	 *            defaultValue - the default value this field should take or
+	 *            null if a default value is not required
+	 * @return int - the number of tuples updated in the database.
 	 * @throws SQLException
-	 *             if the query does not succeed
+	 *             - if the query does not succeed
 	 * @throws IOException
 	 */
 	public int addFreeTextAnnotation(String label, String defaultValue,
@@ -540,8 +533,8 @@ public class DatabaseAccessor {
 	/**
 	 * Checks if a given annotation is required to be filled by the user.
 	 *
-	 * @param annotationLabel
-	 *            String - the name of the annotation to check
+	 * @param String
+	 *            annotationLabel - the name of the annotation to check
 	 * @return boolean - true if it is required, else false
 	 * @throws SQLException
 	 */
@@ -555,11 +548,11 @@ public class DatabaseAccessor {
 	 * Gets all the choices for a drop down annotation. Deprecated, use
 	 * {@link #getChoices(String) getChoices} instead.
 	 *
-	 * @param label
-	 *            String the drop down annotation to get the choice for.
-	 * @return theChoices ArrayList<String> - all the choices.
+	 * @param String
+	 *            label - the drop down annotation to get the choice for.
+	 * @return ArrayList<String> - all the choices.
 	 * @throws SQLException
-	 *             if the query does not succeed
+	 *             - if the query does not succeed
 	 */
 	@Deprecated
 	public ArrayList<String> getDropDownAnnotations(String label)
@@ -571,16 +564,15 @@ public class DatabaseAccessor {
 	/**
 	 * Adds a drop down annotation to the list of possible annotations.
 	 *
-	 * @param label
-	 *            String - the name of the annotation.
-	 * @param choices
-	 *            List<String> - the possible values for the annotation.
-	 * @return tuplesInserted int - the number of tuples inserted into the
-	 *         database.
+	 * @param String
+	 *            label - the name of the annotation
+	 * @param List
+	 *            <String> - the possible values for the annotation
+	 * @return int - the number of tuples inserted into the database
 	 * @throws SQLException
-	 *             if the query does not succeed
+	 *             - if the query does not succeed
 	 * @throws IOException
-	 *             if the choices are invalid
+	 *             - if the choices are invalid
 	 */
 	public int addDropDownAnnotation(String label, List<String> choices,
 			int defaultValueIndex, boolean required) throws SQLException,
@@ -593,16 +585,16 @@ public class DatabaseAccessor {
 	/**
 	 * Method to add a value to a existing DropDown annotation.
 	 *
-	 * @param label
-	 *            String , the label of the chosen DropDown annotation.
-	 * @param value
-	 *            String , the value that will be added to the DropDown
-	 *            annotation.
-	 * @return Integer, how many rows that were added to the database.
+	 * @param String
+	 *            label - the label of the chosen DropDown annotation
+	 * @param String
+	 *            value - the value that will be added to the DropDown
+	 *            annotation
+	 * @return int - how many rows that were added to the database.
 	 * @throws SQLException
-	 *             , if the value already exist or another SQL error.
+	 *             - if the value already exist or another SQL error.
 	 * @throws IOException
-	 *             , if the chosen label does not represent a DropDown
+	 *             - if the chosen label does not represent a DropDown
 	 *             annotation.
 	 */
 	public int addDropDownAnnotationValue(String label, String value)
@@ -614,14 +606,14 @@ public class DatabaseAccessor {
 	/**
 	 * Method to remove a given annotation of a dropdown- annotation.
 	 *
-	 * @param label
-	 *            String - the label of the chosen annotation
-	 * @param value
-	 *            String - the value of the chosen annotation.
-	 * @return Integer, how many values that were deleted.
+	 * @param String
+	 *            label - the label of the chosen annotation
+	 * @param String
+	 *            value - the value of the chosen annotation.
+	 * @return Integer - how many values that were deleted.
 	 * @throws SQLException
 	 * @throws IOException
-	 *             , throws an IOException if the chosen value to be removed is
+	 *             - throws an IOException if the chosen value to be removed is
 	 *             the active DefaultValue of the chosen label.
 	 */
 	public int removeAnnotationValue(String label, String value)
@@ -631,18 +623,16 @@ public class DatabaseAccessor {
 	}
 
 	/**
-	 * Changes the annotation label.
+	 * Changes the annotation label. OBS! This changes the label for all
+	 * experiments.
 	 *
-	 * OBS! This changes the label for all experiments.
-	 *
-	 * @param oldLabel
-	 *            String
-	 * @param newLabel
-	 *            string
-	 *
-	 * @return res int - the number of tuples updated
+	 * @param String
+	 *            oldLabel
+	 * @param String
+	 *            newLabel
+	 * @return int - the number of tuples updated
 	 * @throws SQLException
-	 *             If the update fails
+	 *             - If the update fails
 	 * @throws IOException
 	 */
 	public int changeAnnotationLabel(String oldLabel, String newLabel)
@@ -653,7 +643,6 @@ public class DatabaseAccessor {
 
 	/**
 	 * Changes the value of an annotation corresponding to it's label.
-	 *
 	 * Parameters: label of annotation, the old value and the new value to
 	 * change to.
 	 *
@@ -662,13 +651,12 @@ public class DatabaseAccessor {
 	 * Throws an SQLException if the new value already exists in the choices
 	 * table (changing all males to female, and female is already in the table)
 	 *
-	 * @param label
-	 *            String - the label name.
-	 * @param oldValue
-	 *            String - the name of the old annotation value.
-	 * @param newValue
-	 *            String - the name of the new annotation value.
-	 *
+	 * @param String
+	 *            label - the label name.
+	 * @param String
+	 *            oldValue - the name of the old annotation value.
+	 * @param String
+	 *            newValue - the name of the new annotation value.
 	 * @throws SQLException
 	 * @throws IOException
 	 */
@@ -681,11 +669,11 @@ public class DatabaseAccessor {
 	/**
 	 * Gets all the choices for a drop down annotation.
 	 *
-	 * @param label
-	 *            String - the drop down annotation to get the choice for.
-	 * @return choices List<String> - the choices for one annotation label.
+	 * @param String
+	 *            label - the drop down annotation to get the choice for.
+	 * @return List<String> - the choices for one annotation label.
 	 * @throws SQLException
-	 *             if the query does not succeed
+	 *             - if the query does not succeed
 	 */
 	public List<String> getChoices(String label) throws SQLException {
 
@@ -693,34 +681,33 @@ public class DatabaseAccessor {
 	}
 
 	/**
-	 * @param expID
-	 *            String The unique name of the experiment. OBS! If not null,
+	 * @param String
+	 *            expID - The unique name of the experiment. OBS! If not null,
 	 *            this must reference an experiment that has been previously
 	 *            added.
-	 * @param fileType
-	 *            int An Integer identifying the file type eg. FileTuple.RAW
-	 * @param fileName
-	 *            String
-	 * @param inputFileName
-	 *            String The name of the corresponding input file or null if
-	 *            there is no corresponding input file
-	 * @param metaData
-	 *            String The parameters used in file creation or null if not
+	 * @param int fileType - An Integer identifying the file type eg.
+	 *        FileTuple.RAW
+	 * @param String
+	 *            fileName
+	 * @param String
+	 *            inputFileName - The name of the corresponding input file or
+	 *            null if there is no corresponding input file
+	 * @param String
+	 *            metaData - The parameters used in file creation or null if not
 	 *            applicable
-	 * @param author
-	 *            String
-	 * @param uploader
-	 *            String
-	 * @param isPrivate
-	 *            boolean
-	 * @param genomeRelease
-	 *            String The genome release version identifyer (eg. "hg38") or
-	 *            null if not applicable. OBS! If not null, this must reference
-	 *            a genome release that has been previously uploaded.
+	 * @param String
+	 *            author
+	 * @param String
+	 *            uploader
+	 * @param boolean isPrivate
+	 * @param String
+	 *            genomeRelease - The genome release version identifyer (eg.
+	 *            "hg38") or null if not applicable. OBS! If not null, this must
+	 *            reference a genome release that has been previously uploaded.
 	 * @return FileTuple - The FileTuple inserted in the database or null if no
 	 *         file was entered into the database.
 	 * @throws SQLException
-	 *             If the query could not be executed. (Probably because the
+	 *             - If the query could not be executed. (Probably because the
 	 *             file already exists)
 	 */
 	public FileTuple addNewFile(String expID, int fileType, String fileName,
@@ -735,12 +722,12 @@ public class DatabaseAccessor {
 	/**
 	 * Returns the FileTuple object associated with the given filePath.
 	 *
-	 * @param filePath
-	 *            String
+	 * @param String
+	 *            filePath
 	 * @return FileTuple - The corresponding FileTuple or null if no such file
 	 *         exists
 	 * @throws SQLException
-	 *             If the query could not be executed.
+	 *             - If the query could not be executed.
 	 */
 	public FileTuple getFileTuple(String filePath) throws SQLException {
 
@@ -751,17 +738,24 @@ public class DatabaseAccessor {
 	 * Adds a file to the database. Users should migrate to addNewFile(...)
 	 * which returns the FileTuple added to the database.
 	 *
-	 * @param fileType
-	 * @param fileName
-	 * @param metaData
-	 * @param author
-	 * @param uploader
-	 * @param isPrivate
-	 * @param expID
-	 * @param grVersion
-	 * @return the number if tuples inserted to the database.
+	 * @param String
+	 *            fileType
+	 * @param String
+	 *            fileName
+	 * @param String
+	 *            metaData
+	 * @param String
+	 *            author
+	 * @param String
+	 *            uploader
+	 * @param boolean isPrivate
+	 * @param String
+	 *            expID
+	 * @param String
+	 *            grVersion
+	 * @return int - the number if tuples inserted to the database.
 	 * @throws SQLException
-	 *             if the query does not succeed
+	 *             - if the query does not succeed
 	 */
 	@Deprecated
 	public String addFile(String fileType, String fileName, String metaData,
@@ -775,17 +769,24 @@ public class DatabaseAccessor {
 	/**
 	 * Adds a file to the database with URL. Use addNewFile(...) instead.
 	 *
-	 * @param fileType
-	 * @param fileName
-	 * @param metaData
-	 * @param author
-	 * @param uploader
-	 * @param isPrivate
-	 * @param expID
-	 * @param grVersion
-	 * @return the number if tuples inserted to the database.
+	 * @param String
+	 *            fileType
+	 * @param String
+	 *            fileName
+	 * @param String
+	 *            metaData
+	 * @param String
+	 *            author
+	 * @param String
+	 *            uploader
+	 * @param boolean isPrivate
+	 * @param String
+	 *            expID
+	 * @param String
+	 *            grVersion
+	 * @return int - the number if tuples inserted to the database.
 	 * @throws SQLException
-	 *             if the query does not succeed
+	 *             - if the query does not succeed
 	 */
 	@Deprecated
 	public String addFileURL(String fileType, String fileName, String metaData,
@@ -799,11 +800,11 @@ public class DatabaseAccessor {
 	/**
 	 * Deletes a file from the database.
 	 *
-	 * @param path
-	 *            String - the path to the file.
+	 * @param String
+	 *            path - the path to the file.
 	 * @return int - the number of deleted tuples in the database.
 	 * @throws SQLException
-	 *             if the query does not succeed
+	 *             - if the query does not succeed
 	 */
 	public int deleteFile(String path) throws SQLException {
 
@@ -813,9 +814,8 @@ public class DatabaseAccessor {
 	/**
 	 * Deletes a file from the database using the fileID.
 	 *
-	 * @param fileID
-	 *            int - the fileID of the file to be deleted.
-	 * @return 1 if deletion was successful, else 0.
+	 * @param int fileID - the fileID of the file to be deleted.
+	 * @return int - 1 if deletion was successful, else 0.
 	 * @throws SQLException
 	 */
 	public int deleteFile(int fileID) throws SQLException {
@@ -826,9 +826,8 @@ public class DatabaseAccessor {
 	/**
 	 * Checks if the file with the specified fileID exists in the database.
 	 *
-	 * @param fileID
-	 *            int - the fileID of the file.
-	 * @return true if the file exists, else false.
+	 * @param int fileID - the fileID of the file.
+	 * @return boolean - true if the file exists, else false.
 	 * @throws SQLException
 	 */
 	public boolean hasFile(int fileID) throws SQLException {
@@ -840,9 +839,9 @@ public class DatabaseAccessor {
 	 * Checks if the file path is a valid file path. Not used.
 	 *
 	 * @param filePath
-	 * @return
+	 * @return boolean
 	 * @throws SQLException
-	 *             if the query does not succeed
+	 *             - if the query does not succeed
 	 */
 	@Deprecated
 	public boolean isValidFilePath(String filePath) throws SQLException {
@@ -856,13 +855,20 @@ public class DatabaseAccessor {
 	 * Method to convert from raw data to profile data. Returns a list of
 	 * filepaths
 	 *
-	 * @param fileID
-	 * @param fileType
-	 * @param fileName
-	 * @param metaData
-	 * @param uploader
-	 * @param grVersion
-	 * @param expID
+	 * @param String
+	 *            fileID
+	 * @param String
+	 *            fileType
+	 * @param String
+	 *            fileName
+	 * @param String
+	 *            metaData
+	 * @param String
+	 *            uploader
+	 * @param String
+	 *            grVersion
+	 * @param String
+	 *            expID
 	 * @return ArrayList<String>
 	 * @throws SQLException
 	 */
@@ -884,12 +890,12 @@ public class DatabaseAccessor {
 	 * addGeneratedProfiles(...) method must be executed to add the files to the
 	 * database.
 	 *
-	 * @param expId
-	 *            The ID name of paththe experiment
-	 * @return The path to the folder or null if there are no raw files for this
-	 *         experiment.
+	 * @param String
+	 *            expId - The ID name of paththe experiment
+	 * @return String - The path to the folder or null if there are no raw files
+	 *         for this experiment.
 	 * @throws SQLException
-	 *             If the database could not be accessed
+	 *             - If the database could not be accessed
 	 */
 	public Entry<String, String> processRawToProfile(String expId)
 			throws SQLException {
@@ -923,35 +929,32 @@ public class DatabaseAccessor {
 	}
 
 	/**
-	 * <<<<<<< HEAD Adds all the files in the specified folder to the database's
-	 * File table. They will all be treated as profile files. ======= Adds all
-	 * the files in the specified folder to the database's File table. They will
-	 * all be treated as profile files. >>>>>>>
-	 * 788f07a10737996a72576dbd675418e8313f65f3
+	 * Adds all the files in the specified folder to the database's File table.
+	 * They will all be treated as profile files.
 	 *
-	 * @param expId
-	 *            The ID name of the experiment
-	 * @param folderPath
-	 *            The path to the folder containing the profile files. (This
-	 *            should be exactly the same path as returned by the
-	 *            processRawToProfile(expId) method).
-	 * @param inputFileName
-	 *            The name of the input file or null if no input file was
-	 *            generated.
-	 * @param metaData
-	 *            A String specifying the parameters used for processing the raw
-	 *            file.
-	 * @param genomeReleaseVersion
-	 *            The genome release version used in processing. OBS! this is a
-	 *            reference to a genome release stored in the database/on the
-	 *            server and must therefore be valid.
-	 * @param uploader
-	 *            The user that commissioned the processing.
-	 * @param isPrivate
-	 *            True if the files are to be private to the uploader, otherwise
-	 *            false.
+	 * @param String
+	 *            expId - The ID name of the experiment
+	 * @param String
+	 *            folderPath - The path to the folder containing the profile
+	 *            files. (This should be exactly the same path as returned by
+	 *            the processRawToProfile(expId) method)
+	 * @param String
+	 *            inputFileName - The name of the input file or null if no input
+	 *            file was generated
+	 * @param String
+	 *            metaData - A String specifying the parameters used for
+	 *            processing the raw file.
+	 * @param String
+	 *            genomeReleaseVersion - The genome release version used in
+	 *            processing. OBS! this is a reference to a genome release
+	 *            stored in the database/on the server and must therefore be
+	 *            valid.
+	 * @param String
+	 *            uploader - The user that commissioned the processing
+	 * @param boolean isPrivate - True if the files are to be private to the
+	 *        uploader, otherwise false.
 	 * @throws SQLException
-	 *             If the request uses invalid arguments or the database could
+	 *             - If the request uses invalid arguments or the database could
 	 *             not be reached.
 	 */
 	public void addGeneratedProfiles(String expId, String folderPath,
@@ -977,7 +980,8 @@ public class DatabaseAccessor {
 		String query = "INSERT INTO File "
 				+ "(Path, FileType, FileName, Date, MetaData, InputFilePath, "
 				+ "Author, Uploader, IsPrivate, ExpID, GRVersion) "
-				+ "VALUES (?, 'Profile', ?, CURRENT_TIMESTAMP, ?, ?, 'Genomizer', ?, ?, ?, ?)";
+				+ "VALUES (?, 'Profile', ?, CURRENT_TIMESTAMP, ?, ?, "
+				+ "'Genomizer', ?, ?, ?, ?)";
 
 		PreparedStatement addFile = conn.prepareStatement(query);
 
@@ -995,6 +999,7 @@ public class DatabaseAccessor {
 	}
 
 	private String getFileName(String path) {
+
 		int lastFileSeperatorIndex = path.lastIndexOf(File.separator);
 		return path.substring(lastFileSeperatorIndex + 1);
 	}
@@ -1002,8 +1007,8 @@ public class DatabaseAccessor {
 	/**
 	 * Gets the file path to a stored Genome Release
 	 *
-	 * @param genomeVersion
-	 *            - The version to get filepath to, should use
+	 * @param String
+	 *            genomeVersion, The version to get filepath to, should use
 	 *            getAllGenomeReleases() and let user choose a version
 	 * @return Genome - a genome object
 	 * @throws SQLException
@@ -1015,16 +1020,16 @@ public class DatabaseAccessor {
 	}
 
 	/**
-	 * Add one genomerelease to the database.
+	 * Add one genome release to the database.
 	 *
 	 * @param String
-	 *            genomeVersion.
+	 *            genomeVersion
 	 * @param String
-	 *            species.
-	 * @return String The path to the folder where the genome release files
+	 *            species
+	 * @return String - The path to the folder where the genome release files
 	 *         should be saved.
 	 * @throws SQLException
-	 *             if adding query failed.
+	 *             - if adding query failed.
 	 */
 	public String addGenomeRelease(String genomeVersion, String species,
 			String filename) throws SQLException {
@@ -1035,27 +1040,29 @@ public class DatabaseAccessor {
 	/**
 	 * Removes one specific genome version stored in the database.
 	 *
-	 * @param version
-	 *            , the genome version.
-	 * @param specie
-	 *            .
-	 * @return boolean, true if succeded, false if failed.
+	 * @param String
+	 *            version - the genome version.
+	 * @param String
+	 *            species
+	 *
+	 * @return boolean - true if succeeded, false if failed.
 	 * @throws SQLException
 	 */
-	public boolean removeGenomeRelease(String genomeVersion, String specie) throws SQLException {
+	public boolean removeGenomeRelease(String genomeVersion, String species)
+			throws SQLException {
 
-		return genMethods.removeGenomeRelease(genomeVersion, specie);
+		return genMethods.removeGenomeRelease(genomeVersion, species);
 	}
 
 	/**
-	 * method for getting all the genome releases for a species currently stored
+	 * Method for getting all the genome releases for a species currently stored
 	 * in the database.
 	 *
-	 * @param species
-	 *            String, the name of the specie you want to get genome
-	 *            realeases for.
-	 * @return genomeVersions List<String>, list of all the genome releases for
-	 *         a specific specie.
+	 * @param String
+	 *            species - the name of the species you want to get genome
+	 *            releases for.
+	 * @return List<String> - list of all the genome releases for a specific
+	 *         species.
 	 * @throws SQLException
 	 */
 	public ArrayList<Genome> getAllGenomReleasesForSpecies(String species)
@@ -1065,10 +1072,10 @@ public class DatabaseAccessor {
 	}
 
 	/**
-	 * method for getting all the genome releases currently stored in the
+	 * Method for getting all the genome releases currently stored in the
 	 * database.
 	 *
-	 * @return genomeList ArrayList<Genome>, list of all the genome releases.
+	 * @return ArrayList<Genome> - list of all the genome releases
 	 * @throws SQLException
 	 */
 	public ArrayList<Genome> getAllGenomReleases() throws SQLException {
@@ -1077,14 +1084,14 @@ public class DatabaseAccessor {
 	}
 
 	/**
-	 * get a specific chainfile depending on from and to what genome release you
-	 * want to convert between.
+	 * Get a specific chain file depending on from and to what genome release
+	 * you want to convert between.
 	 *
-	 * @param fromVersion
-	 *            String, the name of the old genome release version
-	 * @param toVersion
-	 *            String, the name of the new genome release version
-	 * @return resFilePath String, the filePath of that chain file.
+	 * @param String
+	 *            fromVersion - the name of the old genome release version
+	 * @param String
+	 *            toVersion - the name of the new genome release version
+	 * @return String - the filePath of that chain file
 	 * @throws SQLException
 	 */
 	public String getChainFile(String fromVersion, String toVersion)
@@ -1117,12 +1124,12 @@ public class DatabaseAccessor {
 	 * sending in the genome version the file converts from and the genome
 	 * version the file converts to.
 	 *
-	 * @param fromVersion
-	 *            - genome version the Chain_file converts from
-	 * @param toVersion
-	 *            - genome version the Chin_file converts to
-	 * @return the number of deleted tuples in the database. (Should be one if
-	 *         success)
+	 * @param String
+	 *            fromVersion - genome version the Chain_file converts from
+	 * @param String
+	 *            toVersion - genome version the Chin_file converts to
+	 * @return int - the number of deleted tuples in the database. (Should be
+	 *         one if success)
 	 * @throws SQLException
 	 *             - if the query does not succeed
 	 */
@@ -1133,9 +1140,9 @@ public class DatabaseAccessor {
 	}
 
 	/**
-	 *
-	 * @param pubMedString
-	 * @return
+	 * @param String
+	 *            pubMedString
+	 * @return List<Experiment>
 	 * @throws IOException
 	 * @throws SQLException
 	 */
@@ -1162,9 +1169,9 @@ public class DatabaseAccessor {
 	}
 
 	/**
-	 *
-	 * @param pubMedString
-	 * @return
+	 * @param String
+	 *            pubMedString
+	 * @return List<Experiment>
 	 * @throws IOException
 	 * @throws SQLException
 	 */
@@ -1208,8 +1215,9 @@ public class DatabaseAccessor {
 	}
 
 	/**
+	 * Get's the filePathGenerator object.
 	 *
-	 * @return
+	 * @return FilePathGenerator
 	 */
 	public FilePathGenerator getFilePathGenerator() {
 		return fpg;
