@@ -119,9 +119,14 @@ public class DatabaseAccessor {
      * connected to a database.
      *
      * @return boolean - true if it is connected, otherwise false.
+     * @throws SQLException
      */
-    public boolean isConnected() {
-        return conn != null;
+    public boolean isConnected() throws SQLException {
+        if(conn.isClosed()){
+        	return false;
+        } else {
+        	return true;
+        }
     }
 
     /**
@@ -1041,7 +1046,7 @@ public class DatabaseAccessor {
 
         return genMethods.getAllGenomReleases();
     }
-    
+
     public List<String> getAllGenomReleaseSpecies() throws SQLException {
 
         return genMethods.getAllGenomReleaseSpecies();
