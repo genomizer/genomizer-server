@@ -77,7 +77,7 @@ public class RawToProfileConverter extends Executor {
 
 		if (verifyInData(parameters, inFolder, outFilePath) == false
 				|| !CorrectInfiles(inFiles)) {
-			throw new ProcessException("");
+			throw new ProcessException("Wrong format of input data");
 			// TODO: Specify exception
 		} else {
 			initiateConversionStrings(parameters, outFilePath);
@@ -140,10 +140,10 @@ public class RawToProfileConverter extends Executor {
 								+ executeScript(parse(samToGff));
 						System.out.println("SAMTOGFF LOGSTRING = " + logString);
 					} catch (InterruptedException e) {
-						throw new ProcessException("");
+						throw new ProcessException("Process interrupted while creating GFF file");
 						// TODO: Specify exception
 					} catch (IOException e) {
-						throw new ProcessException("");
+						throw new ProcessException("Could not run gff conversion, please check your input and permissions");
 						// TODO: Specify exception
 					}
 					filesToBeMoved = sortedDirPath + "reads_gff/";
@@ -155,10 +155,10 @@ public class RawToProfileConverter extends Executor {
 						logString = logString + "\n"
 								+ executeScript(parse(gffToAllnusgr));
 					} catch (InterruptedException e) {
-						throw new ProcessException("");
+						throw new ProcessException("Process interrupted while converting to SGR format");
 						// TODO: Specify exception
 					} catch (IOException e) {
-						throw new ProcessException("");
+						throw new ProcessException("Could not run SGR conversion, please check your input and permissions");
 						// TODO: Specify exception
 					}
 					filesToBeMoved = sortedDirPath + "reads_gff/allnucs_sgr/";
@@ -314,10 +314,10 @@ public class RawToProfileConverter extends Executor {
 		try {
 			logString = logString + executeScript(parse(ratioCalc));
 		} catch (InterruptedException e) {
-			throw new ProcessException("");
+			throw new ProcessException("Process interrupted while running ratio calculation on files in folder " + dirPath);
 			// TODO: Specify exception
 		} catch (IOException e) {
-			throw new ProcessException("");
+			throw new ProcessException("Could not read or write to files while running ratio calculation in folder: " + dirPath);
 			// TODO: Specify exception
 		}
 	}
@@ -389,10 +389,10 @@ public class RawToProfileConverter extends Executor {
 		try {
 			return executeProgram(bowTieParameters);
 		} catch (InterruptedException e) {
-			throw new ProcessException("");
+			throw new ProcessException("Process interrupted while running bowtie on file: " + fileOneName);
 			// TODO: Specify exception
 		} catch (IOException e) {
-			throw new ProcessException("");
+			throw new ProcessException("Could not run bowTie on file: " + fileOneName + ", please check your input and permissions");
 			// TODO: Specify exception
 		}
 	}
@@ -422,7 +422,7 @@ public class RawToProfileConverter extends Executor {
 	 */
 	private void sortSamFile(String unsortedSamFileName)
 			throws ProcessException {
-		String sortSam = "sort " +"results_1/" + unsortedSamFileName
+		String sortSam = "sort " + dir + unsortedSamFileName
 				+ ".sam" + " -k 3,3 -k 4,4n";
 		System.out.println("sortSam " + sortSam);
 		try {
@@ -431,10 +431,12 @@ public class RawToProfileConverter extends Executor {
 			executeShellCommand(parse(sortSam), remoteExecution
 					+ dir + "sorted/", unsortedSamFileName + "_sorted.sam");
 		} catch (IOException e) {
-			throw new ProcessException("");
+			throw new ProcessException("Could not read file: " + remoteExecution
+					+ dir + "sorted/"+ unsortedSamFileName + ".sam");
 			// TODO: Specify exception
 		} catch (InterruptedException e) {
-			throw new ProcessException("");
+			throw new ProcessException("Process interrupted by external " +
+					"source while sorting sam file");
 			// TODO: Specify exception
 		}
 
@@ -460,7 +462,7 @@ public class RawToProfileConverter extends Executor {
 			String outFilePath) {
 
 		if (parameters == null) {
-			System.out.println("Parameters is null");
+			System.out.println("Parameters are null");
 			return false;
 		}
 		if (parameters.length < 0) {
