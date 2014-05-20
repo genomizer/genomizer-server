@@ -842,6 +842,17 @@ public class DatabaseAccessor {
     }
 
     /**
+     * Changes the Filename for a specific file with given fileID.
+     * @return resCount int, the number of rows affected by the change.
+     * @throws SQLException if failed to send query,
+     */
+    public int changeFileName(int fileID, String newFileName)
+    								throws SQLException{
+
+    	return fileMethods.changeFileName(fileID, newFileName);
+    }
+
+    /**
      * Generates a folder where the profile files for a certain
      * experiment should be stored.
      *
