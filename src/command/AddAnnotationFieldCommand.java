@@ -48,6 +48,9 @@ public class AddAnnotationFieldCommand extends Command {
 		if(name.length() > 20 || type.size() < 1 ) {
 			return false;
 		}
+		if(name.indexOf('/') != -1) {
+			return false;
+		}
 		return true;
 	}
 

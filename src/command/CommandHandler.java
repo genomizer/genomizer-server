@@ -3,6 +3,7 @@ package command;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import response.ErrorResponse;
 import response.MinimalResponse;
 import response.ProcessResponse;
 import response.Response;
@@ -42,6 +43,11 @@ public class CommandHandler {
 		//Get code from restful
 		Command myCom = createCommand(json, restful, username, cmdt);
 
+		if(myCom == null) {
+			System.out.println("COMMAND IS NULL, COULD NOT CREATE A COMMAND FROM JSON AND RESTFUL.");
+			return new ErrorResponse(StatusCode.BAD_REQUEST, "Could not create a command from request. Bad format on restful.");
+		}
+
 		if (myCom.validate()) {
 			if(CommandType.PROCESS_COMMAND.equals(cmdt)){
 				//add the heavy command to the queue, executed when the
@@ -70,7 +76,9 @@ public class CommandHandler {
 
 		Command newCommand = null;
 
-		ArrayList<String> restPieces = splittRestful(restful);
+		ArrayList<String> restPieces = splittRestful(restful, cmdt);
+
+		int nrOfRestfuls = restPieces.size();
 
 		if (cmdt == CommandType.DELETE_ANNOTATION_VALUE_COMMAND) {
 			String[] rest = restful.split("/");
@@ -78,62 +86,64 @@ public class CommandHandler {
 		}
 		String parsedRest = parseRest(restful);
 
-		if(cmdt == CommandType.LOGIN_COMMAND) {
+
+
+		if(cmdt == CommandType.LOGIN_COMMAND && nrOfRestfuls == RestfulSizes.LOGIN_COMMAND) {
 			newCommand = cmdFactory.createLoginCommand(json);
-		} else if (cmdt == CommandType.LOGOUT_COMMAND) {
+		} else if (cmdt == CommandType.LOGOUT_COMMAND && nrOfRestfuls == RestfulSizes.LOGOUT_COMMAND) {
 			newCommand = cmdFactory.createLogoutCommand(username);
-		} else if (cmdt == CommandType.GET_EXPERIMENT_COMMAND) {
+		} else if (cmdt == CommandType.GET_EXPERIMENT_COMMAND && nrOfRestfuls == RestfulSizes.GET_EXPERIMENT_COMMAND) {
 			newCommand = cmdFactory.createGetExperimentCommand(parsedRest);
-		} else if (cmdt == CommandType.ADD_EXPERIMENT_COMMAND) {
+		} else if (cmdt == CommandType.ADD_EXPERIMENT_COMMAND && nrOfRestfuls == RestfulSizes.ADD_EXPERIMENT_COMMAND) {
 			newCommand = cmdFactory.createAddExperimentCommand(json);
-		} else if (cmdt == CommandType.UPDATE_EXPERIMENT_COMMAND) {
+		} else if (cmdt == CommandType.UPDATE_EXPERIMENT_COMMAND && nrOfRestfuls == RestfulSizes.UPDATE_EXPERIMENT_COMMAND) {
 			newCommand = cmdFactory.createUpdateExperimentCommand(json, parsedRest);
-		} else if (cmdt == CommandType.DELETE_EXPERIMENT_COMMAND) {
+		} else if (cmdt == CommandType.DELETE_EXPERIMENT_COMMAND && nrOfRestfuls == RestfulSizes.DELETE_EXPERIMENT_COMMAND) {
 			newCommand = cmdFactory.createDeleteExperimentCommand(json, parsedRest);
-		} else if (cmdt == CommandType.GET_FILE_FROM_EXPERIMENT_COMMAND) {
+		} else if (cmdt == CommandType.GET_FILE_FROM_EXPERIMENT_COMMAND && nrOfRestfuls == RestfulSizes.GET_FILE_FROM_EXPERIMENT_COMMAND) {
 			newCommand = cmdFactory.createGetFileFromExperimentCommand(json, parsedRest);
-		} else if (cmdt == CommandType.ADD_FILE_TO_EXPERIMENT_COMMAND) {
+		} else if (cmdt == CommandType.ADD_FILE_TO_EXPERIMENT_COMMAND && nrOfRestfuls == RestfulSizes.ADD_FILE_TO_EXPERIMENT_COMMAND) {
 			newCommand = cmdFactory.createAddFileToExperimentCommand(json);
-		} else if (cmdt == CommandType.UPDATE_FILE_IN_EXPERIMENT_COMMAND) {
+		} else if (cmdt == CommandType.UPDATE_FILE_IN_EXPERIMENT_COMMAND && nrOfRestfuls == RestfulSizes.UPDATE_FILE_IN_EXPERIMENT_COMMAND) {
 			newCommand = cmdFactory.createUpdateFileInExperimentCommand(json, parsedRest);
-		} else if (cmdt == CommandType.DELETE_FILE_FROM_EXPERIMENT_COMMAND) {
+		} else if (cmdt == CommandType.DELETE_FILE_FROM_EXPERIMENT_COMMAND && nrOfRestfuls == RestfulSizes.DELETE_FILE_FROM_EXPERIMENT_COMMAND) {
 			newCommand = cmdFactory.createDeleteFileFromExperimentCommand(json, parsedRest);
-		} else if (cmdt == CommandType.SEARCH_FOR_EXPERIMENTS_COMMAND) {
+		} else if (cmdt == CommandType.SEARCH_FOR_EXPERIMENTS_COMMAND && nrOfRestfuls == RestfulSizes.SEARCH_FOR_EXPERIMENTS_COMMAND) {
 			newCommand = cmdFactory.createSearchForExperimentCommand(parsedRest);
-		} else if (cmdt == CommandType.UPDATE_USER_COMMAND) {
+		} else if (cmdt == CommandType.UPDATE_USER_COMMAND && nrOfRestfuls == RestfulSizes.UPDATE_USER_COMMAND) {
 			newCommand = cmdFactory.createUpdateUserCommand(json, parsedRest);
-		} else if (cmdt == CommandType.DELETE_USER_COMMAND) {
+		} else if (cmdt == CommandType.DELETE_USER_COMMAND && nrOfRestfuls == RestfulSizes.DELETE_USER_COMMAND) {
 			newCommand = cmdFactory.createDeleteUserCommand(parsedRest);
-		} else if (cmdt == CommandType.PROCESS_COMMAND) {
+		} else if (cmdt == CommandType.PROCESS_COMMAND && nrOfRestfuls == RestfulSizes.PROCESS_COMMAND) {
 			newCommand = cmdFactory.createProcessCommand(json, username, parsedRest);
-		} else if (cmdt == CommandType.GET_PROCESS_STATUS_COMMAND) {
+		} else if (cmdt == CommandType.GET_PROCESS_STATUS_COMMAND && nrOfRestfuls == RestfulSizes.GET_PROCESS_STATUS_COMMAND) {
 			newCommand = cmdFactory.createGetProcessStatusCommand(heavyWorkThread);
-		} else if (cmdt == CommandType.GET_ANNOTATION_INFORMATION_COMMAND) {
+		} else if (cmdt == CommandType.GET_ANNOTATION_INFORMATION_COMMAND && nrOfRestfuls == RestfulSizes.GET_ANNOTATION_INFORMATION_COMMAND) {
 			newCommand = cmdFactory.createGetAnnotationInformationCommand(json);
-		} else if (cmdt == CommandType.ADD_ANNOTATION_FIELD_COMMAND) {
+		} else if (cmdt == CommandType.ADD_ANNOTATION_FIELD_COMMAND && nrOfRestfuls == RestfulSizes.ADD_ANNOTATION_FIELD_COMMAND) {
 			newCommand = cmdFactory.createAddAnnotationFieldCommand(json, parsedRest);
-		} else if (cmdt == CommandType.ADD_ANNOTATION_VALUE_COMMAND) {
+		} else if (cmdt == CommandType.ADD_ANNOTATION_VALUE_COMMAND && nrOfRestfuls == RestfulSizes.ADD_ANNOTATION_VALUE_COMMAND) {
 			newCommand = cmdFactory.createAddAnnotationValueCommand(json, parsedRest);
-		} else if (cmdt == CommandType.RENAME_ANNOTATION_VALUE_COMMAND) {
+		} else if (cmdt == CommandType.RENAME_ANNOTATION_VALUE_COMMAND && nrOfRestfuls == RestfulSizes.RENAME_ANNOTATION_VALUE_COMMAND) {
 			newCommand = cmdFactory.creatRenameAnnotationValueCommand(json);
-		} else if (cmdt == CommandType.RENAME_ANNOTATION_FIELD_COMMAND) {
+		} else if (cmdt == CommandType.RENAME_ANNOTATION_FIELD_COMMAND && nrOfRestfuls == RestfulSizes.RENAME_ANNOTATION_FIELD_COMMAND) {
 			newCommand = cmdFactory.createEditAnnotationFieldCommand(json);
-		} else if (cmdt == CommandType.REMOVE_ANNOTATION_FIELD_COMMAND) {
+		} else if (cmdt == CommandType.REMOVE_ANNOTATION_FIELD_COMMAND && nrOfRestfuls == RestfulSizes.REMOVE_ANNOTATION_FIELD_COMMAND) {
 			newCommand = cmdFactory.createRemoveAnnotationFieldCommand(json, parsedRest);
-		} else if (cmdt == CommandType.GET_ANNOTATION_PRIVILEGES_COMMAND) {
+		} else if (cmdt == CommandType.GET_ANNOTATION_PRIVILEGES_COMMAND && nrOfRestfuls == RestfulSizes.GET_ANNOTATION_PRIVILEGES_COMMAND) {
 			newCommand = cmdFactory.createGetAnnotationPrivilegesCommand(json);
-		} else if (cmdt == CommandType.UPDATE_ANNOTATION_PRIVILEGES_COMMAND) {
+		} else if (cmdt == CommandType.UPDATE_ANNOTATION_PRIVILEGES_COMMAND && nrOfRestfuls == RestfulSizes.UPDATE_ANNOTATION_PRIVILEGES_COMMAND) {
 			newCommand = cmdFactory.createUpdateAnnotationPrivilegesCommand(json, parsedRest);
-		} else if (cmdt == CommandType.ADD_GENOME_RELEASE_COMMAND) {
+		} else if (cmdt == CommandType.ADD_GENOME_RELEASE_COMMAND && nrOfRestfuls == RestfulSizes.ADD_GENOME_RELEASE_COMMAND) {
 			newCommand = cmdFactory.createAddGenomeReleaseCommand(json);
-		} else if (cmdt == CommandType.DELETE_GENOME_RELEASE_COMMAND) {
+		} else if (cmdt == CommandType.DELETE_GENOME_RELEASE_COMMAND && nrOfRestfuls == RestfulSizes.DELETE_GENOME_RELEASE_COMMAND) {
 			String[] rest = restful.split("/");
 			newCommand = cmdFactory.createDeleteGenomeReleaseCommand(rest[2], rest[3]);
-		} else if(cmdt==CommandType.GET_ALL_GENOME_RELEASE_COMMAND) {
+		} else if(cmdt==CommandType.GET_ALL_GENOME_RELEASE_COMMAND && nrOfRestfuls == RestfulSizes.GET_ALL_GENOME_RELEASE_COMMAND) {
 			newCommand=cmdFactory.createGetAllGenomeReleasesCommand();
-		} else if(cmdt==CommandType.GET_GENOME_RELEASE_SPECIES_COMMAND) {
+		} else if(cmdt==CommandType.GET_GENOME_RELEASE_SPECIES_COMMAND && nrOfRestfuls == RestfulSizes.GET_GENOME_RELEASE_SPECIES_COMMAND) {
 			newCommand=cmdFactory.createGetGenomeReleasesSpeciesCommand(parsedRest);
-		} else if(cmdt==CommandType.CREATE_USER_COMMAND) {
+		} else if(cmdt==CommandType.CREATE_USER_COMMAND && nrOfRestfuls == RestfulSizes.CREATE_USER_COMMAND) {
 			newCommand=cmdFactory.createCreateUserCommand(json);
 		}
 		return newCommand;
@@ -167,7 +177,7 @@ public class CommandHandler {
 	 * @param restful to split.
 	 * @return ArrayList with the splitted header.
 	 */
-	private ArrayList<String> splittRestful(String restful) {
+	private ArrayList<String> splittRestful(String restful, CommandType cmdt) {
 
 		ArrayList<String> rest = null;
 

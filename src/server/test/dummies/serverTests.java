@@ -5,11 +5,13 @@ public class serverTests {
 	public static void main(String args[]) throws Exception {
 		Login.login("Splutt");
 
-		usertests();
+		//usertests();
 
-		processtest();
-		searchtest("");
-		renameannotest();
+		//processtest();
+		//searchtest("");
+		//renameannotest();
+
+		specialannotest();
 
 		Login.logout();
 	}
@@ -35,11 +37,11 @@ public class serverTests {
 
 	}
 
-	public void specialannotest() throws Exception {
-		Annotations.sendAddAnnotation("@/@@@@@2$????");
-		Annotations.sendGetAnnotationInformation();
-		Annotations.sendDeleteAnnotation("@/@@@@@2$????");
-		Annotations.sendGetAnnotationInformation();
+	public static void specialannotest() throws Exception {
+		Annotations.sendAddAnnotation("@@@@@/@2$????");
+		//Annotations.sendGetAnnotationInformation();
+		//Annotations.sendDeleteAnnotation("@/@@@@@2$????");
+		//Annotations.sendGetAnnotationInformation();
 	}
 	public void exptest() throws Exception {
 		Experiment.sendDeleteExperiment("testExp22");
