@@ -523,6 +523,30 @@ public class AnnotationMethods {
     public int removeDropDownAnnotationValue(String label, String value)
             throws SQLException, IOException {
 
+    	//Check if value is a dropdown choice and used on any experiments
+    	String dependQuery = "SELECT * From Experiment " +
+    			"JOIN Annotated_With ON" +
+    			"Experiment.ExpID = Annotated_With.ExpID " +
+    			"JOIN Annotation ON" +
+    			"Annotated_With.Label = Annotation.Label" +
+    			"JOIN Annotation_Choices ON" +
+    			"Annotation.Label = Annotation_Choices.Label " +
+    			"WHERE (label ~~* ? AND value ~~* ?)";
+
+    	PreparedStatement dependencyStatement = conn
+                .prepareStatement(dependQuery);
+        dependencyStatement.setString(1, label);
+        dependencyStatement.setString(2, value);
+        ResultSet res = dependencyStatement.executeQuery();
+
+        boolean hasDependency = res.next();
+        dependencyStatement.close();
+        if (hasDependency) {
+            throw new IOException(value
+                    + " is used in other experiments under label " + label
+                    + " and can therefore not be removed.");
+        }
+
         String query = "SELECT * FROM Annotation WHERE "
                 + "(label ~~* ? AND defaultvalue ~~* ?)";
 
@@ -530,7 +554,6 @@ public class AnnotationMethods {
                 .prepareStatement(query);
         checkTagStatement.setString(1, label);
         checkTagStatement.setString(2, value);
-
         ResultSet rs = checkTagStatement.executeQuery();
 
         boolean hasResult = rs.next();

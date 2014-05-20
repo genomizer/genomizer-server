@@ -61,4 +61,10 @@ public class removeAnnotationValueTest {
     	assertEquals(0, res);
     }
 
+    @Test
+    public void shouldNotRemoveUsedValue() throws SQLException, IOException {
+    	int res = dbac.removeDropDownAnnotationValue("Species", "Human");
+    	assertEquals(0, res);
+    }
+
 }
