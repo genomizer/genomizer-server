@@ -90,16 +90,20 @@ public class GenomeMethods {
         StringBuilder filePathBuilder = new StringBuilder(folderPath);
         filePathBuilder.append(filename);
 
-        String query = "INSERT INTO Genome_Release "
-                + "(Version, Species, FolderPath) " + "VALUES (?, ?, ?)";
+        PreparedStatement stmt;
+        
+        if (getGenomeRelease(genomeVersion) == null) {
+            String query = "INSERT INTO Genome_Release "
+                    + "(Version, Species, FolderPath) " + "VALUES (?, ?, ?)";
 
-        PreparedStatement stmt = conn.prepareStatement(query);
-        stmt.setString(1, genomeVersion);
-        stmt.setString(2, species);
-        stmt.setString(3, folderPath);
+            stmt = conn.prepareStatement(query);
+            stmt.setString(1, genomeVersion);
+            stmt.setString(2, species);
+            stmt.setString(3, folderPath);
 
-        stmt.executeUpdate();
-        stmt.close();
+            stmt.executeUpdate();
+            stmt.close();
+        }
 
         String query2 = "INSERT INTO Genome_Release_Files " +
                 "(Version, FileName) VALUES (?, ?)";
