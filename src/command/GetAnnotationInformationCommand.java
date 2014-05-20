@@ -3,20 +3,22 @@ package command;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Map;
-
 import database.DatabaseAccessor;
-
 import response.AnnotationInformation;
 import response.ErrorResponse;
 import response.GetAnnotationInformationResponse;
-import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
 
+/**
+ * Class used to handle get annotation information from the
+ * database.
+ *
+ * @author
+ * @version 1.0
+ */
 public class GetAnnotationInformationCommand extends Command {
 
 	@Override
