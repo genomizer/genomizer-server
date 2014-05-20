@@ -65,7 +65,7 @@ public class RawToProfileConverter extends Executor {
 	public String procedure(String[] parameters, String inFolder,
 			String outFilePath) throws ProcessException {
 		checker = RawToProfileProcessChecker.rawToProfileCheckerFactory();
-		if(inFolder != null) {
+		if (inFolder != null) {
 			inFolder = validateInFolder(inFolder);
 		}
 		File[] inFiles = new File(inFolder).listFiles();
@@ -81,7 +81,7 @@ public class RawToProfileConverter extends Executor {
 		} else {
 			initiateConversionStrings(parameters, outFilePath);
 			System.out.println("convdir=" + remoteExecution + dir + "/sorted");
-			makeConversionDirectories(remoteExecution  + "resources/"+dir
+			makeConversionDirectories(remoteExecution + "resources/" + dir
 					+ "/sorted");
 			checker.calculateWhichProcessesToRun(parameters);
 			rawFile1 = inFiles[0].getName();
@@ -95,45 +95,29 @@ public class RawToProfileConverter extends Executor {
 
 			printTrace(parameters, inFolder, outFilePath);
 			if (fileDir.exists()) {
-				System.out.println("FILEDIR EXISTS (" + fileDir.toString() + ")");
+				System.out.println("FILEDIR EXISTS (" + fileDir.toString()
+						+ ")");
 				if (checker.shouldRunBowTie()) {
 					System.out.println("SHOULD RUN BOWTIE");
-					try {
 						logString = runBowTie(rawFile1, rawFile_1_Name);
 						System.out.println(logString);
-					} catch (ProcessException e) {
-						throw new ProcessException("");
-						// TODO: Specify exception
-					}
 
-					checkBowTieFile("resources/" + dir+rawFile_1_Name+".sam", rawFile_1_Name);
+
+					checkBowTieFile("resources/" + dir + rawFile_1_Name
+							+ ".sam", rawFile_1_Name);
 
 					System.out.println("nu körs sortering");
-					try {
 						sortSamFile(rawFile_1_Name);
-					} catch (ProcessException e) {
-						throw new ProcessException("");
-						// TODO: Specify exception
-					}
 					if (inFiles.length == 2) {
-						try {
 							logString = logString + "\n"
 									+ runBowTie(rawFile2, rawFile_2_Name);
-						} catch (ProcessException e) {
-							throw new ProcessException("");
-							// TODO: Specify exception
-						}
 
-						checkBowTieFile("resources/"+dir+rawFile_2_Name+".sam", rawFile_2_Name);
+						checkBowTieFile("resources/" + dir + rawFile_2_Name
+								+ ".sam", rawFile_2_Name);
 
-						try {
 							sortSamFile(rawFile_2_Name);
-						} catch (ProcessException e) {
-							throw new ProcessException("");
-							// TODO: Specify exception
-						}
 					}// Sets parameters for sorting first sam file
-					toBeRemoved.push(remoteExecution+ "resources/" + dir);
+					toBeRemoved.push(remoteExecution + "resources/" + dir);
 					filesToBeMoved = sortedDirPath;
 					toBeRemoved.push(filesToBeMoved);
 				}
@@ -145,27 +129,27 @@ public class RawToProfileConverter extends Executor {
 								+ executeScript(parse(samToGff));
 						System.out.println("SAMTOGFF LOGSTRING = " + logString);
 					} catch (InterruptedException e) {
-						throw new ProcessException("Process interrupted while creating GFF file");
-						// TODO: Specify exception
+						throw new ProcessException(
+								"Process interrupted while creating GFF file");
 					} catch (IOException e) {
-						throw new ProcessException("Could not run gff conversion, please check your input and permissions");
-						// TODO: Specify exception
+						throw new ProcessException(
+								"Could not run gff conversion, please check your input and permissions");
 					}
 					filesToBeMoved = sortedDirPath + "reads_gff/";
 					toBeRemoved.push(filesToBeMoved);
 				}
-				if (checker.shouldRunGffToAllnusgr			// TODO: Specify exception
-()) {
+				if (checker.shouldRunGffToAllnusgr
+						()) {
 					System.out.println("RUN GFF TO ALLNUCSGR");
 					try {
 						logString = logString + "\n"
 								+ executeScript(parse(gffToAllnusgr));
 					} catch (InterruptedException e) {
-						throw new ProcessException("Process interrupted while converting to SGR format");
-						// TODO: Specify exception
+						throw new ProcessException(
+								"Process interrupted while converting to SGR format");
 					} catch (IOException e) {
-						throw new ProcessException("Could not run SGR conversion, please check your input and permissions");
-						// TODO: Specify exception
+						throw new ProcessException(
+								"Could not run SGR conversion, please check your input and permissions");
 					}
 					filesToBeMoved = sortedDirPath + "reads_gff/allnucs_sgr/";
 					toBeRemoved.push(filesToBeMoved);
@@ -196,9 +180,10 @@ public class RawToProfileConverter extends Executor {
 
 				moveEndFiles(filesToBeMoved, outFilePath);
 				removeTemp(toBeRemoved);
-				//cleanUp(cleanUpInitiator(remoteExecution + "resources/" + dir));
+				// cleanUp(cleanUpInitiator(remoteExecution + "resources/" +
+				// dir));
 
-			} else {			// TODO: Specify exception
+			} else {
 
 				logString = logString + " " + "Failed to create directory "
 						+ fileDir.toString();
@@ -208,15 +193,17 @@ public class RawToProfileConverter extends Executor {
 		return logString;
 	}
 
-	private void checkBowTieFile(String dir, String fileName) throws ProcessException {
+	private void checkBowTieFile(String dir, String fileName)
+			throws ProcessException {
 		File bowTie = new File(dir);
-		if(!bowTie.exists() || bowTie.length() == 0) {
-			throw new ProcessException("Bowtie failed to run on file : " + fileName);
+		if (!bowTie.exists() || bowTie.length() == 0) {
+			throw new ProcessException("Bowtie failed to run on file : "
+					+ fileName);
 		}
 	}
 
 	private String validateInFolder(String folderString) {
-		if(folderString != null) {
+		if (folderString != null) {
 			if (folderString.endsWith("/")) {
 				return folderString.substring(0, folderString.length() - 1);
 			} else
@@ -227,7 +214,6 @@ public class RawToProfileConverter extends Executor {
 
 	private void runSmoothing(String[] parameters, boolean isRatioCalc)
 			throws ProcessException {
-		// TODO: Specify exception
 
 		String[] parameterArray;
 		int stepSize;
@@ -246,7 +232,7 @@ public class RawToProfileConverter extends Executor {
 		} else {
 			filesToSmooth = new File(sortedDirCommands
 					+ "reads_gff/allnucs_sgr").listFiles();
-			file = new File( sortedDirCommands
+			file = new File(sortedDirCommands
 					+ "reads_gff/allnucs_sgr/smoothed");
 
 			stepSize = Integer.parseInt(parse(parameters[5])[1]);
@@ -263,10 +249,12 @@ public class RawToProfileConverter extends Executor {
 		}
 
 		SmoothingAndStep smooth = new SmoothingAndStep();
-		if(filesToSmooth != null) {
+		if (filesToSmooth != null) {
 			for (int i = 0; i < filesToSmooth.length; i++) {
-				if (filesToSmooth[i].isFile() && isSgr(filesToSmooth[i].getName())) {
-					String inFile = filesToSmooth[i].getAbsoluteFile().toString();
+				if (filesToSmooth[i].isFile()
+						&& isSgr(filesToSmooth[i].getName())) {
+					String inFile = filesToSmooth[i].getAbsoluteFile()
+							.toString();
 					String outFile = filesToSmooth[i].getName();
 
 					if (stepSize != 1) {
@@ -277,18 +265,7 @@ public class RawToProfileConverter extends Executor {
 					}
 					outFile = file.toString() + "/" + outFile;
 
-					try {
-						smooth.smoothing(intParams, inFile, outFile, stepSize);
-					} catch (IllegalAccessException e) {
-						throw new ProcessException("");
-						// TODO: Specify exception
-					} catch (IllegalArgumentException e) {
-						throw new ProcessException("");
-						// TODO: Specify exception
-					} catch (IOException e) {
-						throw new ProcessException("");
-						// TODO: Specify exception
-					}
+					smooth.smoothing(intParams, inFile, outFile, stepSize);
 				}
 			}
 		}
@@ -329,11 +306,13 @@ public class RawToProfileConverter extends Executor {
 		try {
 			logString = logString + executeScript(parse(ratioCalc));
 		} catch (InterruptedException e) {
-			throw new ProcessException("Process interrupted while running ratio calculation on files in folder " + dirPath);
-			// TODO: Specify exception
+			throw new ProcessException(
+					"Process interrupted while running ratio calculation on files in folder "
+							+ dirPath);
 		} catch (IOException e) {
-			throw new ProcessException("Could not read or write to files while running ratio calculation in folder: " + dirPath);
-			// TODO: Specify exception
+			throw new ProcessException(
+					"Could not read or write to files while running ratio calculation in folder: "
+							+ dirPath);
 		}
 	}
 
@@ -397,18 +376,19 @@ public class RawToProfileConverter extends Executor {
 	private String runBowTie(String fileOne, String fileOneName)
 			throws ProcessException {
 		String[] bowTieParameters = parse("bowtie " + parameters[0] + " "
-				+ parameters[1] + " " + inFolder + "/" + fileOne + " "
-				+  dir + fileOneName + ".sam");
+				+ parameters[1] + " " + inFolder + "/" + fileOne + " " + dir
+				+ fileOneName + ".sam");
 
 		printStringArray(bowTieParameters);
 		try {
 			return executeProgram(bowTieParameters);
 		} catch (InterruptedException e) {
-			throw new ProcessException("Process interrupted while running bowtie on file: " + fileOneName);
-			// TODO: Specify exception
+			throw new ProcessException(
+					"Process interrupted while running bowtie on file: "
+							+ fileOneName);
 		} catch (IOException e) {
-			throw new ProcessException("Could not run bowTie on file: " + fileOneName + ", please check your input and permissions");
-			// TODO: Specify exception
+			throw new ProcessException("Could not run bowTie on file: "
+					+ fileOneName + ", please check your input and permissions");
 		}
 	}
 
@@ -437,22 +417,21 @@ public class RawToProfileConverter extends Executor {
 	 */
 	private void sortSamFile(String unsortedSamFileName)
 			throws ProcessException {
-		String sortSam = "sort " + dir + unsortedSamFileName
-				+ ".sam" + " -k 3,3 -k 4,4n";
+		String sortSam = "sort " + dir + unsortedSamFileName + ".sam"
+				+ " -k 3,3 -k 4,4n";
 		System.out.println("sortSam " + sortSam);
 		try {
-			System.out.println("SORTSAM == = = = =" + remoteExecution
-					+ dir + "sorted/"+ unsortedSamFileName);
-			executeShellCommand(parse(sortSam), remoteExecution
-					+ dir + "sorted/", unsortedSamFileName + "_sorted.sam");
+			System.out.println("SORTSAM == = = = =" + remoteExecution + dir
+					+ "sorted/" + unsortedSamFileName);
+			executeShellCommand(parse(sortSam), remoteExecution + dir
+					+ "sorted/", unsortedSamFileName + "_sorted.sam");
 		} catch (IOException e) {
-			throw new ProcessException("Could not read file: " + remoteExecution
-					+ dir + "sorted/"+ unsortedSamFileName + ".sam");
-			// TODO: Specify exception
+			throw new ProcessException("Could not read file: "
+					+ remoteExecution + dir + "sorted/" + unsortedSamFileName
+					+ ".sam");
 		} catch (InterruptedException e) {
-			throw new ProcessException("Process interrupted by external " +
-					"source while sorting sam file");
-			// TODO: Specify exception
+			throw new ProcessException("Process interrupted by external "
+					+ "source while sorting sam file");
 		}
 
 	}
