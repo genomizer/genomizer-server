@@ -33,7 +33,6 @@ public class SearchResponse extends Response {
 				Gson gson = gsonBuilder.setPrettyPrinting().create();
 				FileInformation fileInfo = new FileInformation(tup);
 				JsonElement fileJson = gson.toJsonTree(fileInfo);
-				fileJson.toString();
 				files.add(fileJson);
 
 			}
