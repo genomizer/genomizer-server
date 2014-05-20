@@ -619,10 +619,10 @@ public class DatabaseAccessor {
      *             - throws an IOException if the chosen value to be removed is
      *             the active DefaultValue of the chosen label.
      */
-    public int removeAnnotationValue(String label, String value)
+    public int removeDropDownAnnotationValue(String label, String value)
             throws SQLException, IOException {
 
-        return annoMethods.removeAnnotationValue(label, value);
+        return annoMethods.removeDropDownAnnotationValue(label, value);
     }
 
     /**

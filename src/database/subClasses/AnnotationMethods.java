@@ -520,7 +520,7 @@ public class AnnotationMethods {
      *             removed is the active DefaultValue of the chosen
      *             label.
      */
-    public int removeAnnotationValue(String label, String value)
+    public int removeDropDownAnnotationValue(String label, String value)
             throws SQLException, IOException {
 
         String query = "SELECT * FROM Annotation WHERE "
