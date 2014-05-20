@@ -1,3 +1,4 @@
+package process.classes;
 
 public class Tuple {
     private String chromosome;
@@ -6,12 +7,14 @@ public class Tuple {
     private double newSignal;
 
 
-    public Tuple(String strLine) {
-	String[] tokens = strLine.split("\t");
-	chromosome = tokens[0];
-	position = Integer.parseInt(tokens[1]);
-	signal = Double.parseDouble(tokens[2]);
-	newSignal = signal;
+    public Tuple(String strLine) throws NumberFormatException {
+
+	    String[] tokens = strLine.split("\t");
+	    chromosome = tokens[0];
+	    position = Integer.parseInt(tokens[1]);
+	    signal = Double.parseDouble(tokens[2]);
+	    newSignal = signal;
+
 
     }
 

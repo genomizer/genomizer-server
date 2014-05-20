@@ -8,7 +8,7 @@ public class ProcessHandler {
 		return new ProcessHandler();
 	}
 	//SPRINT 1: Let procedureParams be empty!
-	public String executeProcess(String processName, String[] procedureParams, String inFile, String outFile) throws InterruptedException, IOException {
+	public String executeProcess(String processName, String[] procedureParams, String inFile, String outFile) throws ProcessException {
 		switch(processName){
 		case "rawToProfile":
 			RawToProfileConverter rawToProfileConverter = new RawToProfileConverter();

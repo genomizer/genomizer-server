@@ -43,10 +43,8 @@ public class SmoothingAndStep {
      * stepSize:  Flag that tells if the user wants to do stepping. Should be
      * 		  1 if the user wants no stepping. Have to be larger than 0.
      */
-    public double smoothing(int[] params, String inPath, String outPath, int stepSize) throws IllegalAccessException, IOException {
-	if (params==null||params[2]>=params[0] || stepSize < 1 || params[0] < 1 ){
-	    throw new IllegalArgumentException();
-	}
+    public double smoothing(int[] params, String inPath, String outPath, int stepSize) throws ProcessException {
+	validateInput(params, stepSize);
 
 	data = new ArrayList<Tuple>();
 	readSumValue = 0;
@@ -54,46 +52,48 @@ public class SmoothingAndStep {
 	String strLine;
 	this.stepSize = stepSize;
 
-	setupBuffertReader(inPath);
-	setupBuffertWriter(outPath);
+	try {
+	    setupBuffertReader(inPath);
+	    setupBuffertWriter(outPath);
 
-	for(int i = 0; i<params[0]; i++){
-	    if((strLine = br.readLine()) != null){
-		addLine(strLine);
+	    for(int i = 0; i<params[0]; i++){
+
+		if((strLine = br.readLine()) != null){
+		    addLine(strLine);
+		}
 	    }
-	}
-	smoothOneRow(params,params[0]);
-
-	while((strLine = br.readLine()) != null){
-	    shiftLeft(strLine, params);
 	    smoothOneRow(params,params[0]);
-	}
 
-	data.remove(0);
-	int dataSize = data.size();
-	for (int i = 0;i<(dataSize-params[2]);i++){
-	    smoothOneRow(params,dataSize-i);
-	    data.remove(0);
-	}
-	dataSize = data.size();
-	for (int j = 0; j < dataSize;j++){
-	    writeToFile(params);
+	    while((strLine = br.readLine()) != null){
+		shiftLeft(strLine, params);
+		smoothOneRow(params,params[0]);
+	    }
 
 	    data.remove(0);
+	    int dataSize = data.size();
+	    for (int i = 0;i<(dataSize-params[2]);i++){
+		smoothOneRow(params,dataSize-i);
+		data.remove(0);
+	    }
+	    dataSize = data.size();
+	    for (int j = 0; j < dataSize;j++){
+		writeToFile(params);
+
+		data.remove(0);
+	    }
+	    tearDown();
+
+	} catch (IOException e) {
+	    throw new ProcessException("IOException when reading/writing in Smoothing: "+ e.getMessage());
 	}
-	bw.close();
-	br.close();
-	data.clear();
 	return readSumValue/noOfValues;
     }
 
-    private void smoothOneRow(int[] params, int noOfRowsToSmooth) throws IllegalAccessException, IOException {
+    private void smoothOneRow(int[] params, int noOfRowsToSmooth) throws IOException {
 	if(params[1]==1){
 	    smoothMedian(noOfRowsToSmooth, params);
 	} else if(params[1]==0){
 	    smoothTrimmedMean(noOfRowsToSmooth, params);
-	} else {
-	    throw new IllegalAccessException();
 	}
 	writeToFile(params);
     }
@@ -145,7 +145,7 @@ public class SmoothingAndStep {
 	}
     }
 
-    private void shiftLeft(String strLine, int[] params) throws IllegalAccessException, IOException {
+    private void shiftLeft(String strLine, int[] params) throws IOException  {
 	addLine(strLine);
 	data.remove(0);
 
@@ -154,7 +154,7 @@ public class SmoothingAndStep {
 	}
     }
 
-    private void chromosomeChange(int[] params) throws IllegalAccessException, IOException {
+    private void chromosomeChange(int[] params) throws IOException {
 
 	for (int i = 0;i<(params[0]-params[2]-1);i++){
 	    smoothOneRow(params,params[0]-i);
@@ -201,6 +201,46 @@ public class SmoothingAndStep {
     private double median (double[] array){
 	Arrays.sort(array);
 	return (array[(array.length-1)/2]+array[array.length/2])/2;
+    }
+
+    private void tearDown() throws IOException {
+	bw.close();
+	br.close();
+	data.clear();
+    }
+
+    private void validateInput(int[] params, int stepSize) throws ProcessException {
+	//	if (params==null||params[2]>=params[0] || stepSize < 1 || params[0] < 1 ){
+	//	    throw new ProcessException("");
+	//	}
+	if(!(params[1] == 0 || params[1] == 1)){
+	    throw new ProcessException("Undefined smoothing type, should be either 1 for median or 0 for trimmed mean");
+	}
+	if(params==null){
+	    throw new ProcessException("Params array is null");
+	}
+	if(params[0]<=params[2]){
+	    throw new ProcessException("Minimum positions to smooth should not be larger than window size");
+	}
+	if(stepSize < 1){
+	    throw new ProcessException("stepSize needs to be 1 for no stepping or larger than 1 for stepping");
+	}
+	if(params[0] < 1){
+	    throw new ProcessException("Window size needs to be atleast 1 or larger");
+	}
+	if(params[2] < 0){
+	    throw new ProcessException("Minimum positions to smooth needs to be positive or 0");
+	}
+	if(!(params[3] == 0 || params[1] == 1)){
+	    throw new ProcessException("Print total mean flag must be either 0 or 1");
+	}
+	if(!(params[4] == 0 || params[1] == 1)){
+	    throw new ProcessException("The flag print zeroes should be either 1 for yes or 0 for no");
+	}
+
+
+
+
     }
 }
 
