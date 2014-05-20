@@ -9,6 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import database.ChainFile;
 import database.FilePathGenerator;
 import database.Genome;
 import database.ServerDependentValues;
@@ -209,25 +210,27 @@ public class GenomeMethods {
      * @return resFilePath String, the filePath of that chain file.
      * @throws SQLException
      */
-    public String getChainFile(String fromVersion, String toVersion)
+    public ChainFile getChainFile(String fromVersion, String toVersion)
             throws SQLException {
 
-        String query = "SELECT FilePath FROM Chain_File WHERE (FromVersion ~~* ?)"
-                + " AND (ToVersion ~~* ?)";
+        String query = "SELECT * FROM Chain_File NATURAL JOIN Chain_File_Files" +
+        		" WHERE (FromVersion ~~* ?)" +
+                " AND (ToVersion ~~* ?)";
         PreparedStatement stmt = conn.prepareStatement(query);
 
         stmt.setString(1, fromVersion);
         stmt.setString(2, toVersion);
         ResultSet rs = stmt.executeQuery();
-        String resFilePath = null;
+
+        ChainFile cf = null;
 
         if (rs.next()) {
-            resFilePath = rs.getString("FilePath");
+            cf = new ChainFile(rs);
         }
 
         stmt.close();
 
-        return resFilePath;
+        return cf;
     }
 
     /**
@@ -255,23 +258,37 @@ public class GenomeMethods {
 
         ResultSet rs = speciesStat.executeQuery();
 
-        while (rs.next()) {
+        if (rs.next()) {
             species = rs.getString("Species");
         }
         speciesStat.close();
 
-        String filePath = fpg.getChainFolderPath(species, fromVersion,
-                toVersion) + fileName;
+        String filePath = fpg.generateChainFolder(species, fromVersion,
+                toVersion);
 
         String insertQuery = "INSERT INTO Chain_File "
-                + "(FromVersion, ToVersion, FilePath) VALUES (?, ?, ?)";
+                + "(FromVersion, ToVersion, FolderPath) VALUES (?, ?, ?)";
 
-        PreparedStatement insertStat = conn.prepareStatement(insertQuery);
-        insertStat.setString(1, fromVersion);
-        insertStat.setString(2, toVersion);
-        insertStat.setString(3, filePath);
-        insertStat.executeUpdate();
-        insertStat.close();
+        String insertQuery2 = "INSERT INTO Chain_File_Files " +
+        		"(FromVersion, ToVersion, FileName) " +
+        		"VALUES (?, ?, ?)";
+
+        ChainFile cf = getChainFile(fromVersion, toVersion);
+        if (cf == null) {
+	        PreparedStatement insertStat = conn.prepareStatement(insertQuery);
+	        insertStat.setString(1, fromVersion);
+	        insertStat.setString(2, toVersion);
+	        insertStat.setString(3, filePath);
+	        insertStat.executeUpdate();
+	        insertStat.close();
+        }
+
+        PreparedStatement stmt = conn.prepareStatement(insertQuery2);
+        stmt.setString(1, fromVersion);
+        stmt.setString(2, toVersion);
+        stmt.setString(3, fileName);
+        stmt.executeUpdate();
+        stmt.close();
 
         String URL = ServerDependentValues.UploadURL;
 
@@ -297,11 +314,12 @@ public class GenomeMethods {
 
         int resCount = 0;
 
-        String filePath = getChainFile(fromVersion, toVersion);
+        ChainFile cf = getChainFile(fromVersion, toVersion);
 
-        if (filePath == null) {
+        if (cf == null) {
             return 0;
         }
+        String filePath = cf.folderPath;
 
 
 		String query = "DELETE FROM Chain_File WHERE (FromVersion ~~* ?)"
@@ -313,8 +331,6 @@ public class GenomeMethods {
         if (chainFolder.exists()) {
             recursiveDelete(chainFolder);
         }
-
-
 
         PreparedStatement deleteStatement = conn.prepareStatement(query);
         deleteStatement.setString(1, fromVersion);

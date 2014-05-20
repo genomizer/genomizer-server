@@ -810,11 +810,15 @@ public class DatabaseAccessor {
 
     /**
      * Changes the Filename for a specific file with given fileID.
+     * This method affects bothe the saved file name, but also the entries
+     * path and fileName in database.
      * @return resCount int, the number of rows affected by the change.
      * @throws SQLException if failed to send query,
+     * @throws IOException  if the chosen new file name already exist as a
+     * 						stored file.
      */
     public int changeFileName(int fileID, String newFileName)
-    								throws SQLException{
+    								throws SQLException, IOException{
 
     	return fileMethods.changeFileName(fileID, newFileName);
     }
@@ -1076,17 +1080,19 @@ public class DatabaseAccessor {
     }
 
     /**
-     * Get a specific chain file depending on from and to what genome release
-     * you want to convert between.
+     * Get a specific chain file depending on from and to what genome
+     * release you want to convert between.
      *
      * @param String
-     *            fromVersion - the name of the old genome release version
+     *            fromVersion - the name of the old genome release
+     *            version
      * @param String
-     *            toVersion - the name of the new genome release version
+     *            toVersion - the name of the new genome release
+     *            version
      * @return String - the filePath of that chain file
      * @throws SQLException
      */
-    public String getChainFile(String fromVersion, String toVersion)
+    public ChainFile getChainFile(String fromVersion, String toVersion)
             throws SQLException {
 
         return genMethods.getChainFile(fromVersion, toVersion);
