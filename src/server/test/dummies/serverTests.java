@@ -6,11 +6,12 @@ public class serverTests {
 		Login.login("Splutt");
 
 		searchtest("");
+		renameannotest();
 
 		Login.logout();
 	}
 
-	public void renameannotest() throws Exception {
+	public static void renameannotest() throws Exception {
 		Annotations.sendGetAnnotationInformation();
 		Annotations.sendDeleteAnnotation("testanno space2");
 		Annotations.sendAddAnnotation("testanno space");
