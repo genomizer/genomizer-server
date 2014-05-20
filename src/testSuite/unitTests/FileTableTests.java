@@ -208,8 +208,7 @@ public class FileTableTests {
 
     	res = dbac.search("Claes[Uploader]");
     	assertEquals("final1",res.get(0).getFiles().get(0).filename);
-    	assertEquals("/home/oi11/oi11mhn/Genomizer Test Folder - " +
-    					"Dont be afraid to delete me/expert1/raw/final1",
+    	assertEquals(testFolderPath + "expert1/raw/final1",
     						res.get(0).getFiles().get(0).path);
     	assertFalse(res.get(0).getFiles().get(0).filename.equals("temp1"));
 
