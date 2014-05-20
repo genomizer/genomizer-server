@@ -47,9 +47,10 @@ public class removeAnnotationValueTest {
         dbac.removeDropDownAnnotationValue("Sex", "Unknown");
     }
 
-    @Test (expected = IOException.class)
+    @Test
     public void testRemoveAnnotationValue() throws Exception {
-    	dbac.removeDropDownAnnotationValue("Sex", "Does not matter");
+    	int res = dbac.removeDropDownAnnotationValue("Species", "Fly");
+    	assertEquals(1, res);
     }
 
     @Test
