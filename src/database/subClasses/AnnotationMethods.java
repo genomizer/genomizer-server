@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -26,6 +27,9 @@ import database.Annotation;
 public class AnnotationMethods {
 
     private Connection conn;
+	private final String[] fileAttributesArray = { "fileid", "date", "path", "filetype",
+			"metadata", "author", "uploader", "expid", "grversion", "filename" };
+	private HashSet<String> fileAttributes;
 
     /**
      * Constructor for the AnnotationMethod object.
@@ -34,7 +38,10 @@ public class AnnotationMethods {
      *            Connection, the connection to the database.
      */
     public AnnotationMethods(Connection connection) {
-
+		fileAttributes = new HashSet<String>();
+		for (int i = 0; i < fileAttributesArray.length; i++) {
+			fileAttributes.add(fileAttributesArray[i]);
+		}
         conn = connection;
     }
 
@@ -213,6 +220,7 @@ public class AnnotationMethods {
 
     /**
      * Deletes an annotation from the list of possible annotations.
+     * Label SPECIES can't be changed because of dependencies in other tables.
      *
      * @param label
      *            String - the label of the annotation to delete.
@@ -220,16 +228,24 @@ public class AnnotationMethods {
      *         database.
      * @throws SQLException
      *             if the query does not succeed
+     * @throws Exception
+     *             if label = "Species"
      */
-    public int deleteAnnotation(String label) throws SQLException {
+    public int deleteAnnotation(String label) throws SQLException, Exception {
 
-        String query = "DELETE FROM Annotation "
-                + "WHERE (Label ~~* ?)";
-        PreparedStatement stmt = conn.prepareStatement(query);
-        stmt.setString(1, label);
+    	String query = "DELETE FROM Annotation "
+    			+ "WHERE (Label ~~* ?)";
+    	PreparedStatement stmt;
+    	int rs = 0;
 
-        int rs = stmt.executeUpdate();
-        stmt.close();
+    	if (label.toLowerCase().contentEquals("species")) {
+    		throw new Exception ("Can't remove annotation 'Species'");
+    	} else {
+    		stmt = conn.prepareStatement(query);
+    		stmt.setString(1, label);
+    		rs = stmt.executeUpdate();
+    		stmt.close();
+    	}
 
         return rs;
     }
@@ -254,8 +270,8 @@ public class AnnotationMethods {
             String defaultValue, boolean required)
             throws SQLException, IOException {
 
-    	if(!isNotDate(label)) {
-            throw new IOException("Can not add annotation named 'date'");
+    	if(isFileAnnotation(label)) {
+            throw new IOException("The given annotation is a file- annotation.'");
     	}
 
         if (!isValidChoice(label)) {
@@ -369,8 +385,8 @@ public class AnnotationMethods {
             List<String> choices, int defaultValueIndex,
             boolean required) throws SQLException, IOException {
 
-    	if(!isNotDate(label)) {
-            throw new IOException("Can not add annotation named 'date'");
+    	if(isFileAnnotation(label)) {
+            throw new IOException("The given annotation is a file- annotation.'");
     	}
 
         if (!isValidChoice(label)) {
@@ -543,7 +559,9 @@ public class AnnotationMethods {
     /**
      * Changes the annotation label.
      *
-     * OBS! This changes the label for all experiments.
+     * OBS! This changes the label for all experiments. Label SPECIES can't be
+     * changed because of dependencies in other tables. If the Species label
+     * can be changed to another, it becomes removable.
      *
      * @param oldLabel
      *            String
@@ -554,26 +572,32 @@ public class AnnotationMethods {
      * @throws SQLException
      *             If the update fails
      * @throws IOException
+     * @throws Exception
+     *             if label = "Species"
      */
     public int changeAnnotationLabel(String oldLabel, String newLabel)
-            throws SQLException, IOException {
+            throws SQLException, IOException, Exception {
 
-        if (!isValidChoice(newLabel)) {
-            throw new IOException(newLabel
-                    + " contains invalid characters.\n" +
-                    "Brackets cannot be used in annotations.");
-        }
+    	if (oldLabel.toLowerCase().contentEquals("species")) {
+    		throw new Exception ("Can't change label on annotation 'Species'");
+    	} else {
+    		if (!isValidChoice(newLabel)) {
+    			throw new IOException(newLabel
+    					+ " contains invalid characters.\n" +
+    					"Brackets cannot be used in annotations.");
+    		}
 
-        String query = "UPDATE Annotation SET Label = ? WHERE (Label ~~* ?)";
+    		String query = "UPDATE Annotation SET Label = ? WHERE (Label ~~* ?)";
 
-        PreparedStatement stmt;
-        stmt = conn.prepareStatement(query);
-        stmt.setString(1, newLabel);
-        stmt.setString(2, oldLabel);
+    		PreparedStatement stmt;
+    		stmt = conn.prepareStatement(query);
+    		stmt.setString(1, newLabel);
+    		stmt.setString(2, oldLabel);
 
-        int resCount = stmt.executeUpdate();
-        stmt.close();
-        return resCount;
+    		int resCount = stmt.executeUpdate();
+    		stmt.close();
+    		return resCount;
+    	}
     }
 
     /**
@@ -704,11 +728,12 @@ public class AnnotationMethods {
         return query;
     }
 
-    private boolean isNotDate(String label) {
-        if(label.toLowerCase().equals("date")) {
-        	return false;
-        }
-        return true;
+    private boolean isFileAnnotation(String label) {
+
+    	if(fileAttributes.contains(label.toLowerCase())) {
+    		return true;
+    	}
+        return false;
     }
 
     /**

@@ -531,14 +531,17 @@ public class DatabaseAccessor {
 
     /**
      * Deletes an annotation from the list of possible annotations.
+     * Label SPECIES can't be changed because of dependencies in other tables.
      *
      * @param String
      *            label - the label of the annotation to delete.
      * @return int - the number of tuples deleted in the database.
      * @throws SQLException
-     *             - if the query does not succeed
+     *             if the query does not succeed
+     * @throws Exception
+     *             if label = "Species"
      */
-    public int deleteAnnotation(String label) throws SQLException {
+    public int deleteAnnotation(String label) throws SQLException, Exception {
 
         return annoMethods.deleteAnnotation(label);
     }
@@ -557,7 +560,8 @@ public class DatabaseAccessor {
      * @return int - the number of tuples updated in the database.
      * @throws SQLException
      *             - if the query does not succeed
-     * @throws IOException
+     * @throws IOException, if the label is an existing file- annotation
+     * 					or contains invalid characters.
      */
     public int addFreeTextAnnotation(String label,
             String defaultValue, boolean required)
@@ -595,7 +599,9 @@ public class DatabaseAccessor {
      * @throws SQLException
      *             - if the query does not succeed
      * @throws IOException
-     *             - if the choices are invalid
+     *             - if the label is an existing fileannotation or
+     *             contains invalid characters. Also if one or more of
+     *             the values contains invalid characters.
      */
     public int addDropDownAnnotation(String label,
             List<String> choices, int defaultValueIndex,
@@ -647,6 +653,12 @@ public class DatabaseAccessor {
     }
 
     /**
+     * Changes the annotation label.
+     *
+     * OBS! This changes the label for all experiments. Label SPECIES can't be
+     * changed because of dependencies in other tables. If the Species label
+     * can be changed to another, it becomes removable.
+     *
      * Changes the annotation label. OBS! This changes the label for
      * all experiments.
      *
@@ -656,11 +668,13 @@ public class DatabaseAccessor {
      *            newLabel
      * @return int - the number of tuples updated
      * @throws SQLException
-     *             - If the update fails
+     *             If the update fails
      * @throws IOException
+     * @throws Exception
+     *             if label = "Species"
      */
     public int changeAnnotationLabel(String oldLabel, String newLabel)
-            throws SQLException, IOException {
+            throws SQLException, Exception {
 
         return annoMethods.changeAnnotationLabel(oldLabel, newLabel);
     }

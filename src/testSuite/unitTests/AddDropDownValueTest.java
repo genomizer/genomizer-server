@@ -74,7 +74,7 @@ public class AddDropDownValueTest {
     }
 
     @After
-    public void teardown() throws SQLException {
+    public void teardown() throws SQLException, Exception{
         dbac.deleteAnnotation(testLabel1);
         dbac.deleteAnnotation(testLabel2);
         dbac.deleteAnnotation(testLabel3);
@@ -128,7 +128,7 @@ public class AddDropDownValueTest {
      * Method to add a value to a existing DropDown annotation.
      * This method is not used in this test, it was used to contruct the method without
      * writing it in the databaseaccessor class to avaoid merge problems with git.
-     * 
+     *
      * @param label, the label of the chosen DropDown annotation.
      * @param value, the value that will be added to the DropDown annotation.
      * @return, Integer, how many rows that were added to the database.

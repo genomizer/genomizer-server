@@ -49,7 +49,7 @@ public class AddAnnotationPossibilitiesTests {
     }
 
     @After
-    public void teardown() throws SQLException {
+    public void teardown() throws SQLException, Exception {
         dbac.deleteAnnotation(testLabelFT);
         dbac.deleteAnnotation(testLabelDD);
     }
@@ -159,15 +159,16 @@ public class AddAnnotationPossibilitiesTests {
     	dbac.addDropDownAnnotationValue(testLabelFT, newChoice);
 	}
 
+
     @Test(expected = IOException.class)
     public void shouldNotBeAbleToAddDate() throws SQLException, IOException {
     	dbac.addFreeTextAnnotation("Date", "2014-11-11", false);
     }
 
-    @Test
-    public void shouldRemoveSteelmountainAnnotation()
-    		throws SQLException, IOException {
-    	String annotation = "@@@@@@2$???";
+	@Test
+	public void shouldRemoveSteelmountainAnnotation()
+			throws SQLException, IOException, Exception {
+       	String annotation = "@@@@@@2$???";
     	dbac.addFreeTextAnnotation(annotation, null, false);
 
         Map<String, Integer> annotations = dbac.getAnnotations();
@@ -181,7 +182,7 @@ public class AddAnnotationPossibilitiesTests {
 
     @Test
     public void shouldRemoveSteelmountainAnotherAnnotation()
-    		throws SQLException, IOException {
+    		throws SQLException, IOException, Exception {
     	String annotation = "¡!";
     	dbac.addFreeTextAnnotation(annotation, null, false);
 
@@ -191,6 +192,5 @@ public class AddAnnotationPossibilitiesTests {
         assertEquals(1,i);
         annotations = dbac.getAnnotations();
         assertFalse(annotations.containsKey(annotation));
-
     }
 }

@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +12,6 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import database.DatabaseAccessor;
@@ -19,11 +19,10 @@ import database.Experiment;
 
 public class DatabaseAccessorThreadTests {
 
-	public static String username = "genomizer";
-	public static String password = "genomizer";
-	public static String host = "85.226.111.95";
-	public static String database = "genomizer_threads";
-
+    public static String username = "genomizer";
+    public static String password = "genomizer";
+    public static String host = "85.226.111.95";
+    public static String database = "genomizer_testdb";
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -50,7 +49,7 @@ public class DatabaseAccessorThreadTests {
 	}
 
 	@Test
-	public void addNRemoveOneFileFromCurrentThread() throws SQLException, IOException{
+	public void addNRemoveOneFileFromCurrentThread() throws SQLException, IOException, ParseException{
 
 		DatabaseAccessor dbac = new DatabaseAccessor(username, password, host, database);
 
@@ -71,7 +70,7 @@ public class DatabaseAccessorThreadTests {
 
 		dbac.deleteFile(resExp.get(0).getFiles().get(0).id);
 		dbac.deleteExperiment("Exper1");
-		dbac.removeGenomeRelease("banan", "Fly");
+		dbac.removeGenomeRelease("banan");
 
 		dbac.close();
 	}
@@ -81,7 +80,7 @@ public class DatabaseAccessorThreadTests {
 	 * nr of files can be changed.
 	 */
     @Test
-    public void addNRemoveFileFromSepparateThreads() throws SQLException, IOException {
+    public void addNRemoveFileFromSepparateThreads() throws SQLException, IOException, ParseException {
 
     	ArrayList<Runnable> allRunnables = new ArrayList<Runnable>();
     	ArrayList<Thread> allThreads = new ArrayList<Thread>();
@@ -130,7 +129,7 @@ public class DatabaseAccessorThreadTests {
     	}
 
     	dbac.deleteExperiment(experimentId);
-    	dbac.removeGenomeRelease("banan", "Fly");
+    	dbac.removeGenomeRelease("banan");
     	dbac.close();
     }
 
