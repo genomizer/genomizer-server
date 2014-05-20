@@ -11,6 +11,7 @@ import testSuite.unitTests.ExperimentTests;
 import testSuite.unitTests.FileTableTests;
 import testSuite.unitTests.GenomeReleaseTableTests;
 import testSuite.unitTests.GitHubIssuesTests;
+import testSuite.unitTests.MockUserTests;
 import testSuite.unitTests.ProcessRawToProfileTests;
 import testSuite.unitTests.PubMedIsValidTest;
 import testSuite.unitTests.PubMedToSQLConverterTests;
@@ -26,19 +27,20 @@ import testSuite.unitTests.UpdateExperimentTest;
 import testSuite.unitTests.UserInfoTests;
 import testSuite.unitTests.removeAnnotationValueTest;
 
-
 @RunWith(Suite.class)
-@SuiteClasses({ AddAnnotationPossibilitiesTests.class, ExperimentTests.class,
-        AddDropDownValueTest.class, FileTableTests.class, PubMedToSQLConverterTests.class,
+@SuiteClasses({ AddAnnotationPossibilitiesTests.class,
+        ExperimentTests.class, AddDropDownValueTest.class,
+        FileTableTests.class, PubMedToSQLConverterTests.class,
         SearchDatabaseTests.class, AddNewFileTests.class,
         TestAnnotationRequiredDefault.class, TestChainFiles.class,
         TestChangeAnnotationValue.class, TestFileNameValidator.class,
         TestFilePathGEN.class, TestGetAnnotationObject.class,
         AddDropDownValueTest.class, removeAnnotationValueTest.class,
         UpdateExperimentTest.class, UserInfoTests.class,
-        ProcessRawToProfileTests.class, GenomeReleaseTableTests.class,
-        ChangeAnnotationLabelTest.class, PubMedIsValidTest.class, GitHubIssuesTests.class})
-
+        ProcessRawToProfileTests.class,
+        GenomeReleaseTableTests.class,
+        ChangeAnnotationLabelTest.class, PubMedIsValidTest.class,
+        GitHubIssuesTests.class, MockUserTests.class })
 public class AllTests {
 
 }
