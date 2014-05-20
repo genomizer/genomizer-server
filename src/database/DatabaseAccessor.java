@@ -228,9 +228,9 @@ public class DatabaseAccessor {
      * @throws SQLException
      * @throws DuplicatePrimaryKeyException
      */
-    public void addUser(String username, String password, String role)
+    public void addUser(String username, String password, String role, String fullName, String email)
             throws SQLException {
-        userMethods.addUser(username, password, role);
+        userMethods.addUser(username, password, role, fullName, email);
     }
 
     /**
