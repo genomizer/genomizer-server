@@ -117,22 +117,22 @@ CREATE TABLE Genome_Release_Files
 
 CREATE TABLE Chain_File
 (
-    ID SERIAL NOT NULL,
     FromVersion VARCHAR(16) NOT NULL,
     ToVersion VARCHAR(16) NOT NULL,
     FolderPath VARCHAR(128) NOT NULL,
-    CONSTRAINT pkey_chain_file PRIMARY KEY(ID),
+    CONSTRAINT pkey_chain_file PRIMARY KEY(FromVersion, ToVersion),
     CONSTRAINT fkey_from_version FOREIGN KEY (FromVersion) REFERENCES Genome_Release(Version),
     CONSTRAINT fkey_to_version FOREIGN KEY (ToVersion) REFERENCES Genome_Release(Version)
 );
 
 CREATE TABLE Chain_File_Files
 (
-    ID SERIAL NOT NULL,
+    FromVersion VARCHAR(16) NOT NULL,
+    ToVersion VARCHAR(16) NOT NULL,
     FileName VARCHAR(128) NOT NULL,
     Status VARCHAR(16) DEFAULT 'In Progress',
-    CONSTRAINT pkey_chain_file_files PRIMARY KEY(ID, fileName),
-    CONSTRAINT fkey_ID FOREIGN KEY (ID) REFERENCES Chain_File(ID) ON DELETE CASCADE
+    CONSTRAINT pkey_chain_file_files PRIMARY KEY(FromVersion, ToVersion, fileName),
+    CONSTRAINT fkey_from_version_to_version FOREIGN KEY (FromVersion, ToVersion) REFERENCES Chain_File(FromVersion, ToVersion) ON DELETE CASCADE
 );
 
 

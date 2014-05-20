@@ -88,8 +88,10 @@ public class FileMethods {
 
         String path = fpg.generateFilePath(expID, fileType, fileName);
 
-        String inputFilePath = fpg.generateFilePath(expID, fileType,
-                inputFileName);
+        String inputFilePath = null;
+        if (inputFileName != null) {
+            inputFilePath = getParentFolder(path) + inputFileName;
+        }
 
         String query = "INSERT INTO File "
                 + "(Path, FileType, FileName, Date, MetaData, InputFilePath, "
@@ -126,6 +128,11 @@ public class FileMethods {
         stmt.close();
 
         return getFileTuple(path);
+    }
+
+    private String getParentFolder(String filePath) {
+        int filenameIndex = filePath.lastIndexOf(File.separator);
+        return filePath.substring(0, filenameIndex + 1);
     }
 
     /**

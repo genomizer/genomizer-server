@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -26,6 +27,9 @@ import database.Annotation;
 public class AnnotationMethods {
 
     private Connection conn;
+	private final String[] fileAttributesArray = { "fileid", "date", "path", "filetype",
+			"metadata", "author", "uploader", "expid", "grversion", "filename" };
+	private HashSet<String> fileAttributes;
 
     /**
      * Constructor for the AnnotationMethod object.
@@ -34,7 +38,10 @@ public class AnnotationMethods {
      *            Connection, the connection to the database.
      */
     public AnnotationMethods(Connection connection) {
-
+		fileAttributes = new HashSet<String>();
+		for (int i = 0; i < fileAttributesArray.length; i++) {
+			fileAttributes.add(fileAttributesArray[i]);
+		}
         conn = connection;
     }
 
@@ -263,8 +270,8 @@ public class AnnotationMethods {
             String defaultValue, boolean required)
             throws SQLException, IOException {
 
-    	if(!isNotDate(label)) {
-            throw new IOException("Can not add annotation named 'date'");
+    	if(isFileAnnotation(label)) {
+            throw new IOException("The given annotation is a file- annotation.'");
     	}
 
         if (!isValidChoice(label)) {
@@ -378,8 +385,8 @@ public class AnnotationMethods {
             List<String> choices, int defaultValueIndex,
             boolean required) throws SQLException, IOException {
 
-    	if(!isNotDate(label)) {
-            throw new IOException("Can not add annotation named 'date'");
+    	if(isFileAnnotation(label)) {
+            throw new IOException("The given annotation is a file- annotation.'");
     	}
 
         if (!isValidChoice(label)) {
@@ -721,11 +728,12 @@ public class AnnotationMethods {
         return query;
     }
 
-    private boolean isNotDate(String label) {
-        if(label.toLowerCase().equals("date")) {
-        	return false;
-        }
-        return true;
+    private boolean isFileAnnotation(String label) {
+
+    	if(fileAttributes.contains(label.toLowerCase())) {
+    		return true;
+    	}
+        return false;
     }
 
     /**
