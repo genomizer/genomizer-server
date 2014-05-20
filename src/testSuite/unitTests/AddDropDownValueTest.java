@@ -35,6 +35,15 @@ public class AddDropDownValueTest {
     	int ress = 0;
 		ress = dbac.addDropDownAnnotationValue("Species", "tjo");
     	assertEquals(ress, 1);
+		List<String> list = dbac.getChoices("Species");
+		boolean exists = false;
+
+		for(int i = 0; i < list.size(); i++) {
+			if(list.get(i).toLowerCase().equals("tjo")) {
+				exists = true;
+			}
+		}
+		assertTrue(exists);
     }
 
     @Test(expected = SQLException.class)
@@ -47,18 +56,5 @@ public class AddDropDownValueTest {
     @Test(expected = IOException.class)
     public void shouldThrowIOException() throws SQLException, IOException {
 		dbac.addDropDownAnnotationValue("moho", "something");
-    }
-
-    @Test
-    public void shouldExistAddedTuple() throws SQLException {
-		List<String> list = dbac.getChoices("Species");
-		boolean exists = false;
-
-		for(int i = 0; i < list.size(); i++) {
-			if(list.get(i).toLowerCase().equals("tjo")) {
-				exists = true;
-			}
-		}
-		assertTrue(exists);
     }
 }

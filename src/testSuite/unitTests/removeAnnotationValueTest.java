@@ -44,21 +44,24 @@ public class removeAnnotationValueTest {
 
     @Test (expected = IOException.class)
     public void testRemoveDefaultValue() throws Exception {
-        dbac.removeAnnotationValue("Sex", "Unknown");
+        dbac.removeDropDownAnnotationValue("Sex", "Unknown");
     }
 
     @Test
     public void testRemoveAnnotationValue() throws Exception {
-    	int res = dbac.removeAnnotationValue("Sex", "Does not matter");
+    	int res = dbac.removeDropDownAnnotationValue("Species", "Fly");
     	assertEquals(1, res);
-    	List<String> choices = dbac.getChoices("Sex");
-    	assertEquals(3, choices.size());
     }
 
     @Test
     public void testRemoveNonExistentValue() throws Exception {
-    	int res = dbac.removeAnnotationValue("Sex", "nonexistatnt");
+    	int res = dbac.removeDropDownAnnotationValue("Sex", "nonexistatnt");
     	assertEquals(0, res);
+    }
+
+    @Test (expected = IOException.class)
+    public void shouldNotRemoveUsedValue() throws SQLException, IOException {
+    	dbac.removeDropDownAnnotationValue("Species", "Human");
     }
 
 }
