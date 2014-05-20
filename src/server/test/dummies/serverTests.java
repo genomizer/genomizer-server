@@ -7,22 +7,12 @@ public class serverTests {
 
 	public static void main(String args[]) throws Exception {
 		Login.login("Splutt");
-		System.out.println("LOGGED IN.");
-//		Annotations.sendAddAnnotation("@/@@@@@2$????");
-//		Annotations.sendGetAnnotationInformation();
-//		Annotations.sendDeleteAnnotation("@/@@@@@2$????");
-//		Annotations.sendGetAnnotationInformation();
 
-		GenomeRelease.sendGetGenomeRelease();
-		GenomeRelease.sendGetGenomeReleaseSpecies();
-
-//		Process.sendRawToProfile();
-//		Process.sendGetProcessStatus();
 
 		Login.logout();
 	}
 
-	public void annotest() throws Exception {
+	public void renameannotest() throws Exception {
 		Annotations.sendGetAnnotationInformation();
 		Annotations.sendDeleteAnnotation("testanno space2");
 		Annotations.sendAddAnnotation("testanno space");
@@ -34,11 +24,30 @@ public class serverTests {
 		Annotations.sendGetAnnotationInformation();
 		Annotations.sendDeleteAnnotation("testanno space2");
 	}
+
+
+
+	public void specialannotest() throws Exception {
+		Annotations.sendAddAnnotation("@/@@@@@2$????");
+		Annotations.sendGetAnnotationInformation();
+		Annotations.sendDeleteAnnotation("@/@@@@@2$????");
+		Annotations.sendGetAnnotationInformation();
+	}
 	public void exptest() throws Exception {
 		Experiment.sendDeleteExperiment("testExp22");
 		Experiment.sendAddExperiment("testExp22");
 		Experiment.sendGetExperiment("testExp22");
 		Experiment.sendGetExperiment("testExp22gfert3453");
 		Experiment.sendDeleteExperiment("testExp22");
+	}
+
+	public void genometest() throws Exception {
+		GenomeRelease.sendGetGenomeRelease();
+		GenomeRelease.sendGetGenomeReleaseSpecies();
+	}
+
+	public void processtest() throws Exception {
+		Process.sendRawToProfile();
+		Process.sendGetProcessStatus();
 	}
 }
