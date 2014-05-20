@@ -21,17 +21,17 @@ import database.DatabaseAccessor;
 public class AddAnnotationFieldCommand extends Command {
 
 	@Expose
-	private String name = null;
+	private String name;
 
 	@Expose
 	private ArrayList<String> type = new ArrayList<String>();
 
 	@SerializedName("default")
 	@Expose
-	private String defaults = null;
+	private String defaults;
 
 	@Expose
-	private Boolean forced = false;;
+	private Boolean forced;
 
 	/**
 	 * Empty constructor.
@@ -45,7 +45,6 @@ public class AddAnnotationFieldCommand extends Command {
 	 */
 	@Override
 	public boolean validate() {
-
 		if(name.length() > 20 || type.size() < 1 ) {
 			return false;
 		}
@@ -72,10 +71,8 @@ public class AddAnnotationFieldCommand extends Command {
 				}
 			}
 			if(type.size() == 1 && type.get(0).equals("freetext")) {
-				System.out.println(forced);
 				addedAnnotations = db.addFreeTextAnnotation(name, defaults, forced);
 			} else {
-				System.out.println(forced);
 				addedAnnotations = db.addDropDownAnnotation(name, type, defaultValueIndex, forced);
 			}
 			if(addedAnnotations != 0) {

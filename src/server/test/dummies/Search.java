@@ -16,23 +16,9 @@ public class Search {
 		con.setRequestProperty("Content-Type", "application/json");
 		con.setRequestProperty("Authorization", Login.getToken());
 		int responseCode = con.getResponseCode();
-		System.out.println("\nSending 'GET' request to URL : " + testSettings.url);
+		System.out.println("\nSending 'GET' request to URL : " + obj.toString());
 		System.out.println("Response Code : " + responseCode);
-
-		BufferedReader in = new BufferedReader(
-		        new InputStreamReader(con.getInputStream()));
-		String inputLine;
-		StringBuffer responseBuffer = new StringBuffer();
-
-		while ((inputLine = in.readLine()) != null) {
-			responseBuffer.append(inputLine);
-			responseBuffer.append("\n");
-		}
-		in.close();
-
-		String response = responseBuffer.toString();
-
-		System.out.println("RESPONSE: " + response);
+		System.out.println("RESPONSE: " +testSettings.printResponse(con));
 
 	}
 
