@@ -62,6 +62,18 @@ public class FileTuple {
         int filenameIndex = path.lastIndexOf(File.separator);
         return path.substring(0, filenameIndex + 1);
     }
+
+    @Override
+    public String toString() {
+        return "FileTuple [id=" + id + ", path=" + path + ", inputFilePath="
+                + inputFilePath + ", type=" + type + ", filename=" + filename
+                + ", date=" + date + ", metaData=" + metaData + ", author="
+                + author + ", uploader=" + uploader + ", isPrivate="
+                + isPrivate + ", expId=" + expId + ", grVersion=" + grVersion
+                + ", status=" + status + "]";
+    }
+
+
 }
 
 
