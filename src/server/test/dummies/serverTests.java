@@ -8,7 +8,7 @@ public class serverTests {
 	public static void main(String args[]) throws Exception {
 		Login.login("Splutt");
 
-		renameannotest();
+		usertests();
 
 		Login.logout();
 	}
@@ -26,7 +26,13 @@ public class serverTests {
 		Annotations.sendDeleteAnnotation("testanno space2");
 	}
 
+	public static void usertests() throws Exception {
+		User.sendDeleteUser("c11jmm");
+		User.sendCreateUser("c11jmm", "bajs", "minion", "Jonas Erik Markström", "c11jmm@cs.umu.se");
+		User.sendCreateUser("c11jmm", "bajs", "minion", "Jonas Erik Markström", "c11jmm@cs.umu.se"); // Trying to create duplicate user, should give error.
+		User.sendDeleteUser("c11jmm");
 
+	}
 
 	public void specialannotest() throws Exception {
 		Annotations.sendAddAnnotation("@/@@@@@2$????");

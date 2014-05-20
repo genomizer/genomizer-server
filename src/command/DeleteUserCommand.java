@@ -1,5 +1,13 @@
 package command;
 
+import java.io.IOException;
+import java.sql.SQLException;
+
+import com.google.gson.annotations.Expose;
+
+import database.DatabaseAccessor;
+
+import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
@@ -15,9 +23,19 @@ public class DeleteUserCommand extends Command {
 	/**
 	 * Used to validate DeleteUserCommand.
 	 */
+
+	public String username;
+
+	public DeleteUserCommand(String restful) {
+		username=restful;
+	}
+
 	@Override
 	public boolean validate() {
 
+		if(username == null) {
+			return false;
+		}
 		// TODO Auto-generated method stub
 		return true;
 
@@ -29,8 +47,21 @@ public class DeleteUserCommand extends Command {
 	@Override
 	public Response execute() {
 
-		//Method not implemented, send appropriate response
-		return 	new MinimalResponse(StatusCode.NO_CONTENT);
+		DatabaseAccessor db = null;
+		System.out.println("DELETING USER: " + username);
+		try {
+			db = initDB();
+		} catch (SQLException e) {
+			return new ErrorResponse(StatusCode.BAD_REQUEST, "Error when intiating daabaseaccessor. " + e.getMessage());
+		} catch (IOException e)  {
+			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
+		}
+		try {
+			db.deleteUser(username);
+		} catch (SQLException e) {
+			return new ErrorResponse(StatusCode.BAD_REQUEST, "Error when removing user from database, user probably don't exists. " + e.getMessage());
+		}
+		return new MinimalResponse(StatusCode.OK);
 
 	}
 
