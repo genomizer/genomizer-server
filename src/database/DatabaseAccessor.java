@@ -8,6 +8,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.List;
@@ -119,9 +120,14 @@ public class DatabaseAccessor {
      * connected to a database.
      *
      * @return boolean - true if it is connected, otherwise false.
+     * @throws SQLException
      */
-    public boolean isConnected() {
-        return conn != null;
+    public boolean isConnected() throws SQLException {
+        if(conn.isClosed()){
+        	return false;
+        } else {
+        	return true;
+        }
     }
 
     /**
@@ -145,9 +151,11 @@ public class DatabaseAccessor {
      *             - If the pubMedString is not in the right format
      * @throws SQLException
      *             - if the query does not succeed
+     * @throws ParseException
+     * 			   - if the Date is not in the right format. (yyyy-mm-dd).
      */
     public List<Experiment> search(String pubMedString)
-            throws IOException, SQLException {
+            throws IOException, SQLException, ParseException {
 
         isPubMedStringValid(pubMedString);
 
@@ -676,11 +684,13 @@ public class DatabaseAccessor {
      *            newValue - the name of the new annotation value.
      * @throws SQLException
      * @throws IOException
+     * @throws ParseException, if The user tries to add the Date annotation.
      */
     public void changeAnnotationValue(String label, String oldValue,
-            String newValue) throws SQLException, IOException {
+            String newValue) throws SQLException, IOException, ParseException {
 
-        annoMethods.changeAnnotationValue(label, oldValue, newValue);
+		annoMethods.changeAnnotationValue(label, oldValue, newValue);
+
     }
 
     /**
@@ -835,9 +845,10 @@ public class DatabaseAccessor {
      *         raw files for this experiment.
      * @throws SQLException
      *             - If the database could not be accessed
+     * @throws ParseException
      */
     public Entry<String, String> processRawToProfile(String expId)
-            throws SQLException {
+            throws SQLException, ParseException {
 
         List<Experiment> experiments;
         try {
@@ -1041,7 +1052,7 @@ public class DatabaseAccessor {
 
         return genMethods.getAllGenomReleases();
     }
-    
+
     public List<String> getAllGenomReleaseSpecies() throws SQLException {
 
         return genMethods.getAllGenomReleaseSpecies();
@@ -1113,9 +1124,10 @@ public class DatabaseAccessor {
      * @return List<Experiment>
      * @throws IOException
      * @throws SQLException
+     * @throws ParseException
      */
     private List<Experiment> searchExperiments(String pubMedString)
-            throws IOException, SQLException {
+            throws IOException, SQLException, ParseException {
 
         String query = pm2sql.convertExperimentSearch(pubMedString);
         List<String> params = pm2sql.getParameters();
@@ -1142,9 +1154,10 @@ public class DatabaseAccessor {
      * @return List<Experiment>
      * @throws IOException
      * @throws SQLException
+     * @throws ParseException
      */
     private List<Experiment> searchFiles(String pubMedString)
-            throws IOException, SQLException {
+            throws IOException, SQLException, ParseException {
 
         String query = pm2sql.convertFileSearch(pubMedString);
         List<String> params = pm2sql.getParameters();

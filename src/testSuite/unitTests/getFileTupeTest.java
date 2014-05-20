@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.List;
 
 import org.junit.AfterClass;
@@ -31,7 +32,7 @@ public class getFileTupeTest {
     }
 
     @Test
-    public void testGetFileTupleID() throws IOException, SQLException {
+    public void testGetFileTupleID() throws IOException, SQLException, ParseException {
     	List<Experiment> elist = dbac.search("exp2[expid] AND UCSC[author]");
 
     	int id = elist.get(0).getFiles().get(0).id;
@@ -42,7 +43,7 @@ public class getFileTupeTest {
     }
 
     @Test
-    public void testGetFilePath() throws IOException, SQLException {
+    public void testGetFilePath() throws IOException, SQLException, ParseException {
     	List<Experiment> elist = dbac.search("exp3[expid] AND genomizer[author]");
 
     	String path = elist.get(0).getFiles().get(0).path;
