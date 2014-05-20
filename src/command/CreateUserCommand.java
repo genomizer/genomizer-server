@@ -1,9 +1,16 @@
 package command;
 
+import java.io.IOException;
+import java.sql.SQLException;
+
 import com.google.gson.annotations.Expose;
 
+import database.DatabaseAccessor;
+import database.FileTuple;
 import database.MaxSize;
 
+import response.AddFileToExperimentResponse;
+import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
@@ -65,8 +72,20 @@ public class CreateUserCommand extends Command {
 	@Override
 	public Response execute() {
 
-		//Method not implemented, send appropriate response
-		return 	new MinimalResponse(StatusCode.NO_CONTENT);
+		DatabaseAccessor db = null;
+		try {
+			db = initDB();
+		} catch (SQLException e) {
+			return new ErrorResponse(StatusCode.BAD_REQUEST, "Error when intiating daabaseaccessor. " + e.getMessage());
+		} catch (IOException e)  {
+			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
+		}
+		try {
+			db.addUser(username, password, privileges);
+		} catch (SQLException e) {
+			return new ErrorResponse(StatusCode.BAD_REQUEST, "Error when adding user to database, user probably already exists. " + e.getMessage());
+		}
+		return new MinimalResponse(StatusCode.CREATED);
 
 	}
 

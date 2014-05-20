@@ -103,7 +103,7 @@ public class CommandHandler {
 		} else if (cmdt == CommandType.UPDATE_USER_COMMAND) {
 			newCommand = cmdFactory.createUpdateUserCommand(json, parsedRest);
 		} else if (cmdt == CommandType.DELETE_USER_COMMAND) {
-			newCommand = cmdFactory.createDeleteUserCommand(json, parsedRest);
+			newCommand = cmdFactory.createDeleteUserCommand(parsedRest);
 		} else if (cmdt == CommandType.PROCESS_COMMAND) {
 			newCommand = cmdFactory.createProcessCommand(json, username, parsedRest);
 		} else if (cmdt == CommandType.GET_PROCESS_STATUS_COMMAND) {
@@ -133,6 +133,8 @@ public class CommandHandler {
 			newCommand=cmdFactory.createGetAllGenomeReleasesCommand();
 		} else if(cmdt==CommandType.GET_GENOME_RELEASE_SPECIES_COMMAND) {
 			newCommand=cmdFactory.createGetGenomeReleasesSpeciesCommand(parsedRest);
+		} else if(cmdt==CommandType.CREATE_USER_COMMAND) {
+			newCommand=cmdFactory.createCreateUserCommand(json);
 		}
 		return newCommand;
 	}

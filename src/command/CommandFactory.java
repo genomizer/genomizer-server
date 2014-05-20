@@ -160,14 +160,26 @@ public class CommandFactory {
 	}
 
 	/**
+	 * Used to create the command needed for creatig a user.
+	 *
+	 * @param json string to initiate class.
+	 * @param restful tag to put into class.
+	 * @return the actual command.
+	 */
+	public Command createCreateUserCommand(String json) {
+		final Command createUserCmd = gson.fromJson(json, CreateUserCommand.class);
+		return createUserCmd;
+	}
+
+	/**
 	 * Used to create the command needed for deleting users.
 	 *
 	 * @param json string to initiate class.
 	 * @param restful tag to put into class.
 	 * @return the actual command.
 	 */
-	public Command createDeleteUserCommand(String json, String restful) {
-		return new DeleteUserCommand();
+	public Command createDeleteUserCommand(String username) {
+		return new DeleteUserCommand(username);
 	}
 
 	/**
