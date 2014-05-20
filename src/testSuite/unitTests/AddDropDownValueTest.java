@@ -13,7 +13,6 @@ import database.DatabaseAccessor;
 
 public class AddDropDownValueTest {
 
-
 	private static DatabaseAccessor dbac;
 	private static TestInitializer ti;
 

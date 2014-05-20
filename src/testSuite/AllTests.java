@@ -28,7 +28,7 @@ import testSuite.unitTests.removeAnnotationValueTest;
 
 @RunWith(Suite.class)
 @SuiteClasses({ AddAnnotationPossibilitiesTests.class, ExperimentTests.class,
-        FileTableTests.class, PubMedToSQLConverterTests.class,
+        AddDropDownValueTest.class, FileTableTests.class, PubMedToSQLConverterTests.class,
         SearchDatabaseTests.class, AddNewFileTests.class,
         TestAnnotationRequiredDefault.class, TestChainFiles.class,
         TestChangeAnnotationValue.class, TestFileNameValidator.class,
