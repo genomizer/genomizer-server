@@ -53,6 +53,13 @@ public class MockUserTests {
         assertEquals("My First Experiment", e.getID());
         assertEquals(0, e.getFiles().size());
     }
+    
+    @Test
+    public void searchForEmptyExperiment() throws Exception {
+        dbac.addExperiment("Ex1");
+        List<Experiment> exs = dbac.search("ex1[expid]");
+        assertEquals(1, exs.size());
+    }
 
     @Test (expected = IOException.class)
     public void tryToAddSameExperimentAgain() throws Exception {
@@ -97,6 +104,58 @@ public class MockUserTests {
         
         dbac.addDropDownAnnotation("Sex", choices, 2, false);
         dbac.addDropDownAnnotation("sex", choices, 0, false);
+    }
+    
+    @Test
+    public void annotateExperimentFT() throws Exception {
+        dbac.addExperiment("My First Experiment");
+        dbac.addFreeTextAnnotation("Tissue", null, true);
+        dbac.annotateExperiment("My First Experiment", "Tissue", "Heart");
+        Experiment e = dbac.getExperiment("My First Experiment");
+        assertEquals("Heart", e.getAnnotations().get("Tissue"));
+    }
+    
+    @Test
+    public void annotateExperimentDD() throws Exception {
+        if (dbac.getExperiment("My first experiment") == null) {
+            dbac.addExperiment("My First Experiment");
+        }
+        
+        ArrayList<String> choices = new ArrayList<String>();
+        choices.add("male");
+        choices.add("female");
+        choices.add("unknown");
+        
+        dbac.addDropDownAnnotation("Sex", choices, 2, false);
+        dbac.annotateExperiment("My First Experiment", "Sex", "Male");
+        Experiment e = dbac.getExperiment("My First Experiment");
+        assertEquals("male", e.getAnnotations().get("Sex"));
+    }
+    
+    @Test (expected = IOException.class)
+    public void annotateExperimentInvalidChoiceDD() throws Exception {
+        dbac.addExperiment("My First Experiment");
+        
+        ArrayList<String> choices = new ArrayList<String>();
+        choices.add("male");
+        choices.add("female");
+        choices.add("unknown");
+        
+        dbac.addDropDownAnnotation("Sex", choices, 2, false);
+        dbac.annotateExperiment("My First Experiment", "Sex", "Alien");
+    }
+    
+    @Test
+    public void annotateExperimentFTandDD() throws Exception {
+        
+        annotateExperimentFT();
+        
+        annotateExperimentDD();
+        
+        Experiment e = dbac.getExperiment("My First Experiment");
+        assertEquals(2, e.getAnnotations().size());
+        assertEquals("male", e.getAnnotations().get("Sex"));
+        assertEquals("Heart", e.getAnnotations().get("Tissue"));
     }
 
 }

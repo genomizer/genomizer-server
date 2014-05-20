@@ -9,330 +9,370 @@ import java.util.HashSet;
 import java.util.List;
 
 /**
- * Converts a String containing search parameters to an SQL query for the
- * Genomizer database.
- *
+ * Converts a String containing search parameters to an SQL query for
+ * the Genomizer database.
+ * 
  * The search string must be in PubMed format.
- *
- * Example: "(Human[Species] OR Fly[Species]) AND Joe Bloggs[Uploader]"
- *
+ * 
+ * Example:
+ * "(Human[Species] OR Fly[Species]) AND Joe Bloggs[Uploader]"
+ * 
  * Before choosing a convert method (convertFileSearch or
- * convertExperimentSearch) check if the PubMed string contains file constraints
- * by calling the hasFileConstraints method. If the PubMedString does not
- * contain any file constraints the convertExperimentSearch should be used.
- *
+ * convertExperimentSearch) check if the PubMed string contains file
+ * constraints by calling the hasFileConstraints method. If the
+ * PubMedString does not contain any file constraints the
+ * convertExperimentSearch should be used.
+ * 
  * @author dv12rwt, Ruaridh Watt
  * @author dv12kko, Kenny Kunto
  * @author dv12ann, André Niklasson
  * @author dv12can, Carl Alexandersson
  * @author yhi04jeo, Jonas Engbo
  * @author oi11mhn, Mattias Hinnerson
- *
+ * 
  */
 public class PubMedToSQLConverter {
 
-	private static final String AND = " AND ";
-	private static final String INTERSECT = "\nINTERSECT\n"; // Will replace AND
+    private static final String AND = " AND ";
+    private static final String INTERSECT = "\nINTERSECT\n"; // Will
+                                                             // replace
+                                                             // AND
 
-	private static final String OR = " OR ";
-	private static final String UNION = "\nUNION\n"; // Will replace OR
+    private static final String OR = " OR ";
+    private static final String UNION = "\nUNION\n"; // Will replace
+                                                     // OR
 
-	private static final String NOT = " NOT ";
+    private static final String NOT = " NOT ";
 
-	// sql fragments
-	private String sqlFragmentForExpSearch = "SELECT ExpID FROM Experiment "
-			+ "NATURAL JOIN Annotated_With "
-			+ "WHERE Label ~~* ? AND Value ~~* ?";
+    // sql fragments
+    private String sqlFragmentForExpSearch = "SELECT ExpID FROM Experiment "
+            + "NATURAL JOIN Annotated_With "
+            + "WHERE Label ~~* ? AND Value ~~* ?";
 
-	private String sqlFragmentForExpSearchNegated = "SELECT ExpID FROM Experiment AS E "
-			+ "WHERE NOT EXISTS (SELECT * FROM Annotated_With AS A "
-			+ "WHERE E.ExpID = A.ExpID AND Label ~~* ? AND Value ~~* ?)";
+    private String sqlFragmentForExpSearchNegated = "SELECT ExpID FROM Experiment AS E "
+            + "WHERE NOT EXISTS (SELECT * FROM Annotated_With AS A "
+            + "WHERE E.ExpID = A.ExpID AND Label ~~* ? AND Value ~~* ?)";
 
-	private String sqlFragmentForExpAttrInFileSearch = "SELECT * FROM File AS F "
-			+ "WHERE EXISTS (SELECT * FROM Annotated_With AS A "
-			+ "WHERE F.ExpID = A.ExpID AND "
-			+ "A.Label ~~* ? AND A.Value ~~* ?)";
+    private String sqlFragmentForExpAttrInFileSearch = "SELECT * FROM File AS F "
+            + "WHERE EXISTS (SELECT * FROM Annotated_With AS A "
+            + "WHERE F.ExpID = A.ExpID AND "
+            + "A.Label ~~* ? AND A.Value ~~* ?)";
 
-	private String sqlFragmentForExpAttrInFileSearchNegated = "SELECT * FROM File AS F "
-			+ "WHERE NOT EXISTS (SELECT * FROM Annotated_With AS A "
-			+ "WHERE F.ExpID = A.ExpID AND "
-			+ "A.Label ~~* ? AND A.Value ~~* ?)";
+    private String sqlFragmentForExpAttrInFileSearchNegated = "SELECT * FROM File AS F "
+            + "WHERE NOT EXISTS (SELECT * FROM Annotated_With AS A "
+            + "WHERE F.ExpID = A.ExpID AND "
+            + "A.Label ~~* ? AND A.Value ~~* ?)";
 
-	private String sqlFragmentForFileAttr = "SELECT * FROM File " + "WHERE ";
+    private String sqlFragmentForExpIdSearch = "SELECT ExpID FROM Experiment "
+            + "WHERE ExpID ~~* ?";
 
-	private String orderBySqlFragment = "\nORDER BY ExpID";
+    private String sqlFragmentForExpIdSearchNegated = "SELECT ExpID FROM Experiment "
+            + "WHERE NOT ExpID ~~* ?";
 
-	// file attributes to be checked
-	private final String[] fileAttributesArray = { "path", "filetype",
-			"metadata", "author", "uploader", "expid", "grversion", "filename" };
+    private String sqlFragmentForFileAttr = "SELECT * FROM File "
+            + "WHERE ";
 
-	private final String[] fileNotStringAttributesArray = { "fileid", "date" };
-	private HashSet<String> fileNotStringAttributes;
+    private String orderBySqlFragment = "\nORDER BY ExpID";
 
-	private HashSet<String> fileAttributes;
+    // file attributes to be checked
+    private final String[] fileAttributesArray = { "path",
+            "filetype", "metadata", "author", "uploader",
+            "grversion", "filename" };
 
-	private String queryResult;
-	private List<String> parametersResult;
+    private final String[] fileNotStringAttributesArray = { "fileid",
+            "date" };
+    private HashSet<String> fileNotStringAttributes;
 
-	public PubMedToSQLConverter() {
+    private HashSet<String> fileAttributes;
 
-		fileAttributes = new HashSet<String>();
-		for (int i = 0; i < fileAttributesArray.length; i++) {
-			fileAttributes.add(fileAttributesArray[i]);
-		}
+    private String queryResult;
+    private List<String> parametersResult;
 
-		parametersResult = new ArrayList<String>();
-		fileNotStringAttributes = new HashSet<String>();
-		for (int i = 0; i < fileNotStringAttributesArray.length; i++) {
-			fileNotStringAttributes.add(fileNotStringAttributesArray[i]);
-		}
+    public PubMedToSQLConverter() {
 
-	}
+        fileAttributes = new HashSet<String>();
+        for (int i = 0; i < fileAttributesArray.length; i++) {
+            fileAttributes.add(fileAttributesArray[i]);
+        }
 
-	/**
-	 * Converts a PubMed String to an sql query.
-	 *
-	 * The resulting query should only be used if the PubMed string specifies at
-	 * least one file constraint (can be checked with hasFileConstraint(String
-	 * pubMedString)).
-	 *
-	 * The resulting query will not return experiments with no files.
-	 *
-	 * @param pmStr
-	 *            A String specifying the search criteria in PubMed format.
-	 * @return An sql String that can be used to search files in the Genomizer
-	 *         database. The sql query will return all file tuples that satisfy
-	 *         the criteria.
-	 * @throws IOException
-	 *             If the search String is not in PubMed format.
-	 * @throws ParseException
-	 */
-	public String convertFileSearch(String pmStr)
-			throws IOException, ParseException {
+        parametersResult = new ArrayList<String>();
+        fileNotStringAttributes = new HashSet<String>();
+        for (int i = 0; i < fileNotStringAttributesArray.length; i++) {
+            fileNotStringAttributes
+                    .add(fileNotStringAttributesArray[i]);
+        }
 
-		parametersResult.clear();
+    }
 
-		StringBuilder sqlQuery = new StringBuilder();
+    /**
+     * Converts a PubMed String to an sql query.
+     * 
+     * The resulting query should only be used if the PubMed string
+     * specifies at least one file constraint (can be checked with
+     * hasFileConstraint(String pubMedString)).
+     * 
+     * The resulting query will not return experiments with no files.
+     * 
+     * @param pmStr
+     *            A String specifying the search criteria in PubMed
+     *            format.
+     * @return An sql String that can be used to search files in the
+     *         Genomizer database. The sql query will return all file
+     *         tuples that satisfy the criteria.
+     * @throws IOException
+     *             If the search String is not in PubMed format.
+     * @throws ParseException
+     */
+    public String convertFileSearch(String pmStr) throws IOException,
+            ParseException {
 
-		if (pmStr.startsWith("NOT ")) {
-			pmStr = " " + pmStr;
-		}
+        parametersResult.clear();
 
-		while (pmStr.length() > 0) {
-			if (startsWithRoundBracket(pmStr)) {
-				pmStr = moveFirstChar(pmStr, sqlQuery);
-			} else if (startsWithConj(pmStr)) {
-				pmStr = moveConj(pmStr, sqlQuery);
-			} else if (pmStr.startsWith(NOT)) {
-				pmStr = moveNotStatement(pmStr, sqlQuery);
-			} else {
-				pmStr = moveConstraint(pmStr, sqlQuery);
-			}
-		}
-		sqlQuery.append(orderBySqlFragment);
+        StringBuilder sqlQuery = new StringBuilder();
 
-		return sqlQuery.toString();
-	}
+        if (pmStr.startsWith("NOT ")) {
+            pmStr = " " + pmStr;
+        }
 
-	/**
-	 * Converts a PubMed String to an sql query.
-	 *
-	 * The resulting query should only be used if the PubMed string does not
-	 * specify a file constraint (can be checked with hasFileConstraint(String
-	 * pubMedString)).
-	 *
-	 * @param pmStr
-	 *            A String specifying the search criteria in PubMed format.
-	 * @return An sql String that can be used to search files in the Genomizer
-	 *         database.
-	 * @throws IOException
-	 *             If the search String is not in PubMed format.
-	 */
-	public String convertExperimentSearch(String pmStr) throws IOException {
+        while (pmStr.length() > 0) {
+            if (startsWithRoundBracket(pmStr)) {
+                pmStr = moveFirstChar(pmStr, sqlQuery);
+            } else if (startsWithConj(pmStr)) {
+                pmStr = moveConj(pmStr, sqlQuery);
+            } else if (pmStr.startsWith(NOT)) {
+                pmStr = moveNotStatement(pmStr, sqlQuery);
+            } else {
+                pmStr = moveConstraint(pmStr, sqlQuery);
+            }
+        }
+        sqlQuery.append(orderBySqlFragment);
 
-		parametersResult.clear();
-		StringBuilder sqlQuery = new StringBuilder();
+        return sqlQuery.toString();
+    }
 
-		if (pmStr.startsWith("NOT ")) {
-			pmStr = " " + pmStr;
-		}
+    /**
+     * Converts a PubMed String to an sql query.
+     * 
+     * The resulting query should only be used if the PubMed string
+     * does not specify a file constraint (can be checked with
+     * hasFileConstraint(String pubMedString)).
+     * 
+     * @param pmStr
+     *            A String specifying the search criteria in PubMed
+     *            format.
+     * @return An sql String that can be used to search files in the
+     *         Genomizer database.
+     * @throws IOException
+     *             If the search String is not in PubMed format.
+     */
+    public String convertExperimentSearch(String pmStr)
+            throws IOException {
 
-		while (pmStr.length() > 0) {
-			if (startsWithRoundBracket(pmStr)) {
-				pmStr = moveFirstChar(pmStr, sqlQuery);
-			} else if (startsWithConj(pmStr)) {
-				pmStr = moveConj(pmStr, sqlQuery);
-			} else if (pmStr.startsWith(NOT)) {
-				pmStr = moveExperimentNotStatement(pmStr, sqlQuery);
-			} else {
-				pmStr = moveExperimentConstraint(pmStr, sqlQuery);
-			}
-		}
+        parametersResult.clear();
+        StringBuilder sqlQuery = new StringBuilder();
 
-		sqlQuery.append(orderBySqlFragment);
-		return sqlQuery.toString();
-	}
+        if (pmStr.startsWith("NOT ")) {
+            pmStr = " " + pmStr;
+        }
 
-	private String moveNotStatement(String s, StringBuilder sb)
-			throws IOException {
-		if (sb.length() > 0) {
-			sb.append(INTERSECT);
-		}
-		s = s.substring(NOT.length());
-		return moveNegatedConstraint(s, sb);
-	}
+        while (pmStr.length() > 0) {
+            if (startsWithRoundBracket(pmStr)) {
+                pmStr = moveFirstChar(pmStr, sqlQuery);
+            } else if (startsWithConj(pmStr)) {
+                pmStr = moveConj(pmStr, sqlQuery);
+            } else if (pmStr.startsWith(NOT)) {
+                pmStr = moveExperimentNotStatement(pmStr, sqlQuery);
+            } else {
+                pmStr = moveExperimentConstraint(pmStr, sqlQuery);
+            }
+        }
 
-	private String moveNegatedConstraint(String s, StringBuilder sb)
-			throws IOException {
+        sqlQuery.append(orderBySqlFragment);
+        return sqlQuery.toString();
+    }
 
-		SimpleEntry<String, String> labelValue = getLabelValuePair(s);
-		String label = labelValue.getKey();
-		String value = labelValue.getValue();
+    private String moveNotStatement(String s, StringBuilder sb)
+            throws IOException {
+        if (sb.length() > 0) {
+            sb.append(INTERSECT);
+        }
+        s = s.substring(NOT.length());
+        return moveNegatedConstraint(s, sb);
+    }
 
-		if (fileAttributes.contains(label.toLowerCase())
-				|| fileNotStringAttributes.contains(label.toLowerCase())) {
-			sb.append(sqlFragmentForFileAttr);
-			sb.append(label);
-			sb.append(" <> ?");
-			parametersResult.add(value);
-		} else {
-			sb.append(sqlFragmentForExpAttrInFileSearchNegated);
-			parametersResult.add(label);
-			parametersResult.add(value);
-		}
+    private String moveNegatedConstraint(String s, StringBuilder sb)
+            throws IOException {
 
-		return removeLeadingConstraint(s);
-	}
+        SimpleEntry<String, String> labelValue = getLabelValuePair(s);
+        String label = labelValue.getKey();
+        String value = labelValue.getValue();
 
-	private String moveExperimentNotStatement(String s, StringBuilder sb)
-			throws IOException {
+        if (fileAttributes.contains(label.toLowerCase())
+                || label.equalsIgnoreCase("expid")) {
+            sb.append(sqlFragmentForFileAttr);
+            sb.append(label);
+            sb.append(" NOT ~~* ?");
+            parametersResult.add(value);
+        } else if (fileNotStringAttributes.contains(label
+                .toLowerCase())) {
+            sb.append(sqlFragmentForFileAttr);
+            sb.append(label);
+            sb.append(" <> ?");
+            parametersResult.add(value);
+        } else {
+            sb.append(sqlFragmentForExpAttrInFileSearchNegated);
+            parametersResult.add(label);
+            parametersResult.add(value);
+        }
 
-		if (sb.length() > 0) {
-			sb.append(INTERSECT);
-		}
-		s = s.substring(NOT.length());
-		return moveNegatedExperimentConstraint(s, sb);
-	}
+        return removeLeadingConstraint(s);
+    }
 
-	private String moveNegatedExperimentConstraint(String s, StringBuilder sb)
-			throws IOException {
+    private String moveExperimentNotStatement(String s,
+            StringBuilder sb) throws IOException {
 
-		SimpleEntry<String, String> labelValuePair = getLabelValuePair(s);
-		String label = labelValuePair.getKey();
-		String value = labelValuePair.getValue();
+        if (sb.length() > 0) {
+            sb.append(INTERSECT);
+        }
+        s = s.substring(NOT.length());
+        return moveNegatedExperimentConstraint(s, sb);
+    }
 
-		sb.append(sqlFragmentForExpSearchNegated);
-		parametersResult.add(label);
-		parametersResult.add(value);
+    private String moveNegatedExperimentConstraint(String s,
+            StringBuilder sb) throws IOException {
 
-		return removeLeadingConstraint(s);
-	}
+        SimpleEntry<String, String> labelValuePair = getLabelValuePair(s);
+        String label = labelValuePair.getKey();
+        String value = labelValuePair.getValue();
 
-	private String moveExperimentConstraint(String s, StringBuilder sb)
-			throws IOException {
+        if (label.equalsIgnoreCase("expid")) {
+            sb.append(sqlFragmentForExpIdSearchNegated);
+            parametersResult.add(value);
+        } else {
+            sb.append(sqlFragmentForExpSearchNegated);
+            parametersResult.add(label);
+            parametersResult.add(value);
+        }
 
-		SimpleEntry<String, String> labelValuePair = getLabelValuePair(s);
-		String label = labelValuePair.getKey();
-		String value = labelValuePair.getValue();
+        return removeLeadingConstraint(s);
+    }
 
-		sb.append(sqlFragmentForExpSearch);
-		parametersResult.add(label);
-		parametersResult.add(value);
+    private String moveExperimentConstraint(String s, StringBuilder sb)
+            throws IOException {
 
-		return removeLeadingConstraint(s);
-	}
+        SimpleEntry<String, String> labelValuePair = getLabelValuePair(s);
+        String label = labelValuePair.getKey();
+        String value = labelValuePair.getValue();
 
-	private String moveConstraint(String s, StringBuilder sb)
-			throws IOException, ParseException {
+        if (label.equalsIgnoreCase("expid")) {
+            sb.append(sqlFragmentForExpIdSearch);
+            parametersResult.add(value);
+        } else {
+            sb.append(sqlFragmentForExpSearch);
+            parametersResult.add(label);
+            parametersResult.add(value);
+        }
 
-		SimpleEntry<String, String> labelValue = getLabelValuePair(s);
-		String label = labelValue.getKey();
-		String value = labelValue.getValue();
+        return removeLeadingConstraint(s);
+    }
 
-		if (fileAttributes.contains(label.toLowerCase())) {
-			sb.append(sqlFragmentForFileAttr);
-			sb.append(label);
-			sb.append(" ~~* ?");
-			parametersResult.add(value);
-		} else if (fileNotStringAttributes.contains(label.toLowerCase())) {
-			sb.append(sqlFragmentForFileAttr);
-			sb.append(label);
-			if(label.toLowerCase().equals("date") && !isValidDate(value)) {
-				throw new ParseException("Date is not in the right format!", 0);
-			}
-			sb.append(" = ?");
-			parametersResult.add(value);
-		} else {
-			sb.append(sqlFragmentForExpAttrInFileSearch);
-			parametersResult.add(label);
-			parametersResult.add(value);
-		}
+    private String moveConstraint(String s, StringBuilder sb)
+            throws IOException, ParseException {
 
-		return removeLeadingConstraint(s);
-	}
+        SimpleEntry<String, String> labelValue = getLabelValuePair(s);
+        String label = labelValue.getKey();
+        String value = labelValue.getValue();
 
-	private String removeLeadingConstraint(String s) {
-		return s.substring(s.indexOf(']') + 1);
-	}
+        if (fileAttributes.contains(label.toLowerCase())
+                || label.equalsIgnoreCase("expid")) {
+            sb.append(sqlFragmentForFileAttr);
+            sb.append(label);
+            sb.append(" ~~* ?");
+            parametersResult.add(value);
+        } else if (fileNotStringAttributes.contains(label
+                .toLowerCase())) {
+            sb.append(sqlFragmentForFileAttr);
+            sb.append(label);
+            if (label.toLowerCase().equals("date")
+                    && !isValidDate(value)) {
+                throw new ParseException(
+                        "Date is not in the right format!", 0);
+            }
+            sb.append(" = ?");
+            parametersResult.add(value);
+        } else {
+            sb.append(sqlFragmentForExpAttrInFileSearch);
+            parametersResult.add(label);
+            parametersResult.add(value);
+        }
 
-	private SimpleEntry<String, String> getLabelValuePair(String s)
-			throws IOException {
-		int leftSqBrIndex = s.indexOf('[');
-		int rightSqBrIndex = s.indexOf(']');
+        return removeLeadingConstraint(s);
+    }
 
-		if (leftSqBrIndex == -1 || rightSqBrIndex == -1) {
-			throw new IOException("PubMed String is in wrong format");
-		}
+    private String removeLeadingConstraint(String s) {
+        return s.substring(s.indexOf(']') + 1);
+    }
 
-		String label = s.substring(leftSqBrIndex + 1, rightSqBrIndex);
-		String value = s.substring(0, leftSqBrIndex);
+    private SimpleEntry<String, String> getLabelValuePair(String s)
+            throws IOException {
+        int leftSqBrIndex = s.indexOf('[');
+        int rightSqBrIndex = s.indexOf(']');
 
-		return new SimpleEntry<String, String>(label, value);
-	}
+        if (leftSqBrIndex == -1 || rightSqBrIndex == -1) {
+            throw new IOException("PubMed String is in wrong format");
+        }
 
-	private String moveConj(String s, StringBuilder sb) {
-		if (s.startsWith(OR)) {
-			sb.append(UNION);
-			return s.substring(OR.length());
-		}
-		sb.append(INTERSECT);
-		return s.substring(AND.length());
-	}
+        String label = s.substring(leftSqBrIndex + 1, rightSqBrIndex);
+        String value = s.substring(0, leftSqBrIndex);
 
-	private boolean startsWithConj(String s) {
-		return (s.startsWith(AND) || s.startsWith(OR));
-	}
+        return new SimpleEntry<String, String>(label, value);
+    }
 
-	private String moveFirstChar(String s, StringBuilder sb) {
-		sb.append(s.charAt(0));
-		return s.substring(1);
-	}
+    private String moveConj(String s, StringBuilder sb) {
+        if (s.startsWith(OR)) {
+            sb.append(UNION);
+            return s.substring(OR.length());
+        }
+        sb.append(INTERSECT);
+        return s.substring(AND.length());
+    }
 
-	private boolean startsWithRoundBracket(String s) {
-		return (s.charAt(0) == '(' || s.charAt(0) == ')');
-	}
+    private boolean startsWithConj(String s) {
+        return (s.startsWith(AND) || s.startsWith(OR));
+    }
 
-	public List<String> getParameters() {
-		return parametersResult;
-	}
+    private String moveFirstChar(String s, StringBuilder sb) {
+        sb.append(s.charAt(0));
+        return s.substring(1);
+    }
 
-	public String getQuery() {
-		return queryResult;
-	}
+    private boolean startsWithRoundBracket(String s) {
+        return (s.charAt(0) == '(' || s.charAt(0) == ')');
+    }
 
-	public boolean hasFileConstraint(String pubMedString) {
+    public List<String> getParameters() {
+        return parametersResult;
+    }
 
-		while (pubMedString.indexOf('[') != -1) {
-			pubMedString = pubMedString
-					.substring(pubMedString.indexOf('[') + 1);
-			String label = pubMedString.substring(0, pubMedString.indexOf(']'));
-			if (fileAttributes.contains(label.toLowerCase()) ||
-					fileNotStringAttributes.contains(label.toLowerCase())) {
-				return true;
-			}
-		}
-		return false;
-	}
+    public String getQuery() {
+        return queryResult;
+    }
+
+    public boolean hasFileConstraint(String pubMedString) {
+
+        while (pubMedString.indexOf('[') != -1) {
+            pubMedString = pubMedString.substring(pubMedString
+                    .indexOf('[') + 1);
+            String label = pubMedString.substring(0,
+                    pubMedString.indexOf(']'));
+            if (fileAttributes.contains(label.toLowerCase())
+                    || fileNotStringAttributes.contains(label
+                            .toLowerCase())) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     private boolean isValidDate(String dateString) {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");

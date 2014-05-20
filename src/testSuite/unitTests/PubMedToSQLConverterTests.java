@@ -195,5 +195,10 @@ public class PubMedToSQLConverterTests {
         assertEquals("Species", pm2sql.getParameters().get(1));
         assertEquals("Human", pm2sql.getParameters().get(2));
     }
+    
+    @Test
+    public void printTest() throws Exception {
+        System.out.println(pm2sql.convertFileSearch("exp2[expid] NOT ruaridh[author] NOT Human[Species]"));
+    }
 
 }
