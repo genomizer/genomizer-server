@@ -1,9 +1,15 @@
 package command;
 
+import java.lang.reflect.Type;
+
 import server.WorkHandler;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
 
 /**
  * Used to create and return different commands that
@@ -271,6 +277,21 @@ public class CommandFactory {
 	public Command createUpdateAnnotationPrivilegesCommand(String json, String restful) {
 		return new UpdateAnnotationPrivilegesCommand();
 	}
+
+	/**
+	 * Used to create the command needed to update user privileges.
+	 *
+	 * @param json string to initiate class.
+	 * @param restful tag to put into class.
+	 * @return the actual command.
+	 */
+	public Command createUpdateUserPrivilegesCommand(String json, String username) {
+		Command updateUserPrivilegesCommand = gson.fromJson(json, UpdateUserPrivilegesCommand.class);
+		((UpdateUserPrivilegesCommand)updateUserPrivilegesCommand).setUsername(username);
+		return updateUserPrivilegesCommand;
+	}
+
+
 
 	/**
 	 * Used to create the command needed to add genome releases.

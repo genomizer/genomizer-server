@@ -22,7 +22,8 @@ public class RestfulSizes {
 	public static final int ADD_ANNOTATION_VALUE_COMMAND = 2;
 	public static final int REMOVE_ANNOTATION_FIELD_COMMAND = 3;
 	public static final int GET_ANNOTATION_PRIVILEGES_COMMAND = 2;
-	public static final int UPDATE_ANNOTATION_PRIVILEGES_COMMAND = 2;
+	public static final int UPDATE_ANNOTATION_PRIVILEGES_COMMAND = 3;
+	public static final int UPDATE_USER_PRIVILEGES_COMMAND = 3;
 	public static final int ADD_GENOME_RELEASE_COMMAND = 1;
 	public static final int RENAME_ANNOTATION_VALUE_COMMAND = 2;
 	public static final int RENAME_ANNOTATION_FIELD_COMMAND = 2;
