@@ -290,4 +290,25 @@ public class FileMethods {
 
         return resCount;
     }
+
+    /**
+     * Changes the Filename for a specific file with given fileID.
+     * @return resCount int, the number of rows affected by the change.
+     * @throws SQLException if failed to send query,
+     */
+    public int changeFileName(int fileID, String newFileName)
+    								throws SQLException{
+
+    	String chFileNameQuery = "UPDATE File SET FileName = ? " +
+    									"WHERE FileID = ?";
+
+    	PreparedStatement nameUpdate = conn.prepareStatement(chFileNameQuery);
+    	nameUpdate.setString(1, newFileName);
+    	nameUpdate.setInt(2, fileID);
+
+    	int resCount = nameUpdate.executeUpdate();
+    	nameUpdate.close();
+
+    	return resCount;
+    }
 }

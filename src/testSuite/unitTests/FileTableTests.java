@@ -8,7 +8,9 @@ import static org.junit.Assert.fail;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -184,4 +186,26 @@ public class FileTableTests {
 
         assertEquals("Done", ft.status);
     }
+
+    @Test
+    public void changeFileNameTest() throws SQLException, IOException, ParseException{
+    	dbac.addGenomeRelease("te34","Dog","te34.txt");
+    	dbac.addExperiment("expert1");
+    	dbac.addNewFile("expert1",1,"temp1","temp2","-a -g","Claes","Claes",
+    						false,"te34");
+    	List<Experiment> res = dbac.search("Claes[Uploader]");
+
+    	int rowCount = dbac.changeFileName(res.get(0).getFiles().get(0).id,
+    											"final1");
+    	assertEquals(1,rowCount);
+
+    	res = dbac.search("Claes[Uploader]");
+    	assertEquals("final1",res.get(0).getFiles().get(0).filename);
+    	assertFalse(res.get(0).getFiles().get(0).filename.equals("temp1"));
+
+    	dbac.deleteFile(res.get(0).getFiles().get(0).id);
+    	dbac.deleteExperiment("expert1");
+    	dbac.removeGenomeRelease("te34");
+    }
+
 }

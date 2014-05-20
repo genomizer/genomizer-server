@@ -220,9 +220,9 @@ public class DatabaseAccessor {
      * @throws SQLException
      * @throws DuplicatePrimaryKeyException
      */
-    public void addUser(String username, String password, String role)
+    public void addUser(String username, String password, String role, String fullName, String email)
             throws SQLException {
-        userMethods.addUser(username, password, role);
+        userMethods.addUser(username, password, role, fullName, email);
     }
 
     /**
@@ -730,6 +730,12 @@ public class DatabaseAccessor {
                 metaData, author, uploader, isPrivate, genomeRelease);
     }
 
+    /**
+     *
+     * @param fileID
+     * @return
+     * @throws SQLException
+     */
     public int fileReadyForDownload(int fileID) throws SQLException {
         return fileMethods.fileReadyForDownload(fileID);
     }
@@ -803,8 +809,19 @@ public class DatabaseAccessor {
     }
 
     /**
-     * Generates a folder where the profile files for a certain experiment
-     * should be stored.
+     * Changes the Filename for a specific file with given fileID.
+     * @return resCount int, the number of rows affected by the change.
+     * @throws SQLException if failed to send query,
+     */
+    public int changeFileName(int fileID, String newFileName)
+    								throws SQLException{
+
+    	return fileMethods.changeFileName(fileID, newFileName);
+    }
+
+    /**
+     * Generates a folder where the profile files for a certain
+     * experiment should be stored.
      *
      * OBS! The files are not be added to the database at this point, and will
      * therefore not be searchable the users. Upon successful processing the
