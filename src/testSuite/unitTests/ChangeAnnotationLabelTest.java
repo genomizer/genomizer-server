@@ -81,6 +81,18 @@ public class ChangeAnnotationLabelTest {
 		}
     }
 
+    @Test(expected = Exception.class)
+    public void shouldNotBeAbleToRenameSpeciesAnnotationLabel() throws Exception {
+    	String label = "Species";
+    	dbac.changeAnnotationLabel(label, "SomeLabel");
+	}
+
+    @Test(expected = Exception.class)
+    public void shouldNotBeAbleToRemoveSpeciesAnnotationLabel() throws Exception {
+    	String label = "Species";
+    	dbac.deleteAnnotation(label);
+	}
+
 //    /**
 //     * Test to check if the new label name has the same drop down
 //     * value as the previous label.

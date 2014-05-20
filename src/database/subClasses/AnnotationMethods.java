@@ -210,6 +210,7 @@ public class AnnotationMethods {
 
     /**
      * Deletes an annotation from the list of possible annotations.
+     * Label SPECIES can't be changed because of dependencies in other tables.
      *
      * @param label
      *            String - the label of the annotation to delete.
@@ -538,7 +539,9 @@ public class AnnotationMethods {
     /**
      * Changes the annotation label.
      *
-     * OBS! This changes the label for all experiments.
+     * OBS! This changes the label for all experiments. Label SPECIES can't be
+     * changed because of dependencies in other tables. If the Species label
+     * can be changed to another, it becomes removable.
      *
      * @param oldLabel
      *            String
@@ -551,24 +554,28 @@ public class AnnotationMethods {
      * @throws IOException
      */
     public int changeAnnotationLabel(String oldLabel, String newLabel)
-            throws SQLException, IOException {
+            throws SQLException, IOException, Exception {
 
-        if (!isValidChoice(newLabel)) {
-            throw new IOException(newLabel
-                    + " contains invalid characters.\n" +
-                    "Brackets cannot be used in annotations.");
-        }
+    	if (oldLabel.toLowerCase().contentEquals("species")) {
+    		throw new Exception ("Can't change label on annotation 'Species'");
+    	} else {
+    		if (!isValidChoice(newLabel)) {
+    			throw new IOException(newLabel
+    					+ " contains invalid characters.\n" +
+    					"Brackets cannot be used in annotations.");
+    		}
 
-        String query = "UPDATE Annotation SET Label = ? WHERE (Label ~~* ?)";
+    		String query = "UPDATE Annotation SET Label = ? WHERE (Label ~~* ?)";
 
-        PreparedStatement stmt;
-        stmt = conn.prepareStatement(query);
-        stmt.setString(1, newLabel);
-        stmt.setString(2, oldLabel);
+    		PreparedStatement stmt;
+    		stmt = conn.prepareStatement(query);
+    		stmt.setString(1, newLabel);
+    		stmt.setString(2, oldLabel);
 
-        int resCount = stmt.executeUpdate();
-        stmt.close();
-        return resCount;
+    		int resCount = stmt.executeUpdate();
+    		stmt.close();
+    		return resCount;
+    	}
     }
 
     /**
