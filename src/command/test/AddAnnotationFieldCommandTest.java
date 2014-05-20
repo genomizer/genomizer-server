@@ -20,6 +20,7 @@ import command.Command;
  */
 public class AddAnnotationFieldCommandTest {
 
+	//Builder used with almost all tests.
 	public Gson gson = null;
 
 	/**
@@ -35,7 +36,7 @@ public class AddAnnotationFieldCommandTest {
 	}
 
 	/**
-	 * Test that checks that created object is not null.
+	 * Test creating and not null.
 	 */
 	@Test
 	public void testCreateAddAnnotationFieldCommand() {
@@ -52,10 +53,14 @@ public class AddAnnotationFieldCommandTest {
 	@Test
 	public void testAddAnnotationFieldCommandFreetextJSON() {
 
+	    //Create JSON input, serialize, de-serialize and then check for equality.
 	    String json = "{\"name\":\"species\",\"type\":[\"freetext\"],\"default\":null,\"forced\":true}";
 	    final Command aafc = gson.fromJson(json, AddAnnotationFieldCommand.class);
+
+	    //Need to remove default since it doesn't appear if null.
 	    String jsonCompare = "{\"name\":\"species\",\"type\":[\"freetext\"],\"forced\":true}";
 	    String json2 = gson.toJson(aafc);
+
 	    assertEquals(json2, jsonCompare);
 
 	}
@@ -67,9 +72,11 @@ public class AddAnnotationFieldCommandTest {
 	@Test
 	public void testAddAnnotationFieldCommandJSON() {
 
+	    //Create JSON input, serialize, de-serialize and then check for equality.
 	    String json = "{\"name\":\"species\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
 		final Command aafc = gson.fromJson(json, AddAnnotationFieldCommand.class);
 		String json2 = gson.toJson(aafc);
+
 		assertEquals(json2, json);
 
 	}
@@ -81,10 +88,18 @@ public class AddAnnotationFieldCommandTest {
 	 */
 	@Test
 	public void testValidationNullValues() {
+		/* In this test, default is removed from the
+		 * JSON string before serialization.
+		 */
 
+		/*
+		//Create input string with null values.
 	    String json = "{\"name\":\"species\",\"type\":[\"fly\",\"rat\",\"human\"],\"forced\":true}";
 	    final Command aafc = gson.fromJson(json, AddAnnotationFieldCommand.class);
+
 		assertFalse(aafc.validate());
+		*/
+		fail("Not yet implemented.");
 
 	}
 
@@ -94,8 +109,10 @@ public class AddAnnotationFieldCommandTest {
 	@Test
 	public void testValidateNameIsToLong() {
 
+		//Create input string with null values.
 	    String json = "{\"name\":\"This is a long name. Really long. Probably to long.\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
 	    final Command aafc = gson.fromJson(json, AddAnnotationFieldCommand.class);
+
 		assertFalse(aafc.validate());
 
 	}
@@ -106,8 +123,10 @@ public class AddAnnotationFieldCommandTest {
 	@Test
 	public void testValidateNoTypes() {
 
+		//Create input string with no values in type.
 		String json = "{\"name\":\"species\",\"type\":[],\"default\":\"human\",\"forced\":true}";
 	    final Command aafc = gson.fromJson(json, AddAnnotationFieldCommand.class);
+
 		assertFalse(aafc.validate());
 
 	}
@@ -119,8 +138,10 @@ public class AddAnnotationFieldCommandTest {
 	@Test
 	public void testValidationProperJSON() {
 
+		//Create properly formatted JSON string.
 	    String json = "{\"name\":\"species\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
 	    final Command aafc = gson.fromJson(json, AddAnnotationFieldCommand.class);
+
 		assertTrue(aafc.validate());
 
 	}

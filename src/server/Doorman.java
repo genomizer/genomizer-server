@@ -88,6 +88,7 @@ public class Doorman {
 						}else{
 							exchange(exchange, CommandType.GET_ALL_GENOME_RELEASE_COMMAND);
 						}
+						break;
 					case "/sysadm":
 						exchange(exchange, CommandType.GET_ANNOTATION_PRIVILEGES_COMMAND);
 						break;
@@ -115,7 +116,7 @@ public class Doorman {
 
 						if (processPath.startsWith("/process/rawtoprofile")) {
 							exchange(exchange, CommandType.PROCESS_COMMAND);
-						}//Add if else for more process types.
+						}
 						break;
 					case "/annotation":
 						String fullPath = exchange.getRequestURI().toString();
@@ -151,7 +152,6 @@ public class Doorman {
 						if (fullPath.startsWith("/annotation/field")) {
 							exchange(exchange, CommandType.ADD_ANNOTATION_FIELD_COMMAND);
 						} else if (fullPath.startsWith("/annotation/value")) {
-							System.out.println("post");
 							exchange(exchange, CommandType.ADD_ANNOTATION_VALUE_COMMAND);
 						}
 						break;
@@ -181,7 +181,6 @@ public class Doorman {
 						if (fullPath.startsWith("/annotation/field")) {
 							exchange(exchange, CommandType.REMOVE_ANNOTATION_FIELD_COMMAND);
 						} else if (fullPath.startsWith("/annotation/value")) {
-							System.out.println("delete");
 							exchange(exchange, CommandType.DELETE_ANNOTATION_VALUE_COMMAND);
 						}
 						break;
@@ -220,9 +219,7 @@ public class Doorman {
 				return;
 			}
 		} else {
-			System.out.println("FOUND LOGIN COMMAND.");
 		}
-		System.out.println("STarting scanner in exchange");
 		while(scanner.hasNext()) {
 			body = body.concat(" " + scanner.next());
 		}
@@ -231,15 +228,13 @@ public class Doorman {
 		Response response = null;
 
 		try {
-			System.out.println("getting username: " + uuid);
 		username = Authenticate.getUsername(uuid);
-		System.err.println("username: " + username);
+		System.err.println("Username: " + username + "\n");
 		} catch(Exception e ) {
 			e.printStackTrace();
 		}
 
-		System.out.println("BODY: " + body);
-		System.out.println("BEFORE PROCESS COMMAND...");
+		System.out.println("Body from client: " + body);
 
 		try {
 			String header = URLDecoder.decode(exchange.getRequestURI().toString(), "UTF-8");
@@ -248,7 +243,6 @@ public class Doorman {
 		} catch(Exception e ) {
 			e.printStackTrace();
 		}
-		System.out.println("AFTER PROCESS COMMAND.");
 
 		//TODO Should there be some error checking?
 
@@ -267,12 +261,11 @@ public class Doorman {
 			exchange.sendResponseHeaders(response.getCode(), 0);
 
 		} else {
-
 			body = response.getBody();
+			System.out.println("Response: " + body.toString());
 			exchange.sendResponseHeaders(response.getCode(), body.getBytes().length);
 
 			OutputStream os = exchange.getResponseBody();
-			System.out.println("BODY_DOORMAN PRINT: " + body);
 			os.write(body.getBytes());
 			os.flush();
 			os.close();
