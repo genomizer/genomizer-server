@@ -21,17 +21,17 @@ import database.DatabaseAccessor;
 public class AddAnnotationFieldCommand extends Command {
 
 	@Expose
-	private String name;
+	private String name = null;
 
 	@Expose
 	private ArrayList<String> type = new ArrayList<String>();
 
 	@SerializedName("default")
 	@Expose
-	private String defaults;
+	private String defaults = null;
 
 	@Expose
-	private Boolean forced;
+	private Boolean forced = false;;
 
 	/**
 	 * Empty constructor.
@@ -45,6 +45,7 @@ public class AddAnnotationFieldCommand extends Command {
 	 */
 	@Override
 	public boolean validate() {
+
 		if(name.length() > 20 || type.size() < 1 ) {
 			return false;
 		}
