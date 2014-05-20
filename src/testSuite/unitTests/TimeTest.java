@@ -25,41 +25,41 @@ public class TimeTest {
     private static DatabaseAccessor dbac;
 
 
-  
-    
+
+
     @BeforeClass
     public static void setup() throws SQLException, IOException {
         dbac = new DatabaseAccessor(TestInitializer.username,
         		TestInitializer.password, TestInitializer.host,
         		TestInitializer.database);
     }
-    
+
     @AfterClass
     public static void tearDown(){
     	dbac.close();
     }
-    
+
     @Test
     public void ShouldStillBeConnectedAfter15Minutes() throws SQLException{
-    	
+    	/*
     	assertTrue(dbac.isConnected());
-    	
-    	if(dbac.isConnected()){
-    		System.out.println("True");
-    	}else{
-    		System.out.println("False");
-    	}
-    	
+
     	dbac.close();
-    	
-    	if(dbac.isConnected()){
-    		System.out.println("True");
-    	}else{
-    		System.out.println("False");
-    	}
-    	
-    	
-    	assertFalse(dbac.isConnected());
+
+    	assertFalse(dbac.isConnected());*/
+
+    	assertTrue(dbac.isConnected());
+
+    	try {
+			Thread.sleep(15*1000*60);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+    	assertTrue(dbac.isConnected());
     }
-    
+
+
+
 }
