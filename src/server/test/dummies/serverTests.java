@@ -1,14 +1,15 @@
 package server.test.dummies;
 
-import java.io.IOException;
-
-
 public class serverTests {
 
 	public static void main(String args[]) throws Exception {
 		Login.login("Splutt");
 
 		usertests();
+
+		processtest();
+		searchtest("");
+		renameannotest();
 
 		Login.logout();
 	}
@@ -48,12 +49,16 @@ public class serverTests {
 		Experiment.sendDeleteExperiment("testExp22");
 	}
 
+	public static void searchtest(String query) throws Exception {
+		Search.sendSearchRequest(query);
+	}
+
 	public void genometest() throws Exception {
 		GenomeRelease.sendGetGenomeRelease();
 		GenomeRelease.sendGetGenomeReleaseSpecies();
 	}
 
-	public void processtest() throws Exception {
+	public static void processtest() throws Exception {
 		Process.sendRawToProfile();
 		Process.sendGetProcessStatus();
 	}

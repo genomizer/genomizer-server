@@ -48,6 +48,42 @@ public class Process {
 		System.out.println("Reponse Body: " + testSettings.printResponse(con));
 	}
 
+	public static void sendRawToProfileGet0() throws IOException{
+
+		String expid = "Exp3";
+		String parameters = "\"-a -m 1 --best\"," +
+				"\"\"," +
+				"\"\"," +
+				"\"\"," +
+				"\"\"," +
+				"\"\"," +
+				"\"\"," +
+				"\"\"";
+		String metadata = "astringofmetadata";
+		String genomeVersion = "hg38";
+		String author = "UCSC";
+
+
+		URL obj = new URL(testSettings.url + "/process/rawtoprofile");
+		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+		con.setRequestMethod("PUT");
+		con.setRequestProperty("Authorization", Login.getToken());
+
+		String json = "{" +
+				"\"expid\": \"" + expid + "\"," +
+				"\"parameters\": [" + parameters + "]," +
+				"\"metadata\": \"" + metadata + "\"," +
+				"\"genomeVersion\": \"" + genomeVersion + "\"," +
+				"\"author\": \"" + author + "\"}";
+
+
+		testSettings.sendToServer(con, json);
+
+		System.out.println("\nSending 'PUT' request to URL : " + testSettings.url);
+		System.out.println("Reponse Body: " + testSettings.printResponse(con));
+	}
+
 	public static void sendGetProcessStatus() throws Exception {
 		URL obj = new URL(testSettings.url + "/process");
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();

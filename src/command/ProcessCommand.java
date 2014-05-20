@@ -196,17 +196,19 @@ public class ProcessCommand extends Command {
 			case "rawtoprofile":
 				//The process type was a rawtoprofile
 
-				//filepaths = db.processRawToProfile(expid);
+				filepaths = db.processRawToProfile(expid);
 
-
+				if(!db.isConnected()){
+					db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
+				}
 				Genome g = db.getGenomeRelease(genomeVersion);
 				parameters[1] = g.path;
 				//parameters[1] = "/var/www/data/genome_releases/Rat/d_melanogaster_fb5_22";
 
 
 				//Prints for checking what filepaths are given by database.
-			//	System.err.println("Filepath.getKey(): " + filepaths.getKey());
-			//	System.err.println("Filepath.getValue(): " + filepaths.getValue());
+				//	System.err.println("Filepath.getKey(): " + filepaths.getKey());
+				//	System.err.println("Filepath.getValue(): " + filepaths.getValue());
 
 				try {
 
@@ -219,9 +221,8 @@ public class ProcessCommand extends Command {
 				} catch (ProcessException e) {
 					e.printStackTrace();
 					ResponseLogger.log(username, "Process Exception: " + e.getMessage());
-					return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, e.getMessage());
-				} finally{
 					db.close();
+					return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, e.getMessage());
 				}
 
 				break;
@@ -235,18 +236,23 @@ public class ProcessCommand extends Command {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			ResponseLogger.log(username, "SQL Exception in ProcessCommand execute:" + e.getMessage());
+			try {
+				db.close();
+			} catch (SQLException e1) {
+				ResponseLogger.log(username, "Could not close Database accessor2: " + e1.getMessage());
+				e.printStackTrace();
+			}
 			return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, "SQL Exception in ProcessCommand execute:" + e.getMessage());
 		} catch (IOException e1) {
 			e1.printStackTrace();
 			ResponseLogger.log(username, "IO Exception in ProcessCommand execute." + e1.getMessage());
-			return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE);
-		} finally {
 			try {
 				db.close();
 			} catch (SQLException e) {
 				ResponseLogger.log(username, "Could not close Database accessor2: " + e.getMessage());
 				e.printStackTrace();
 			}
+			return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE);
 		}
 
 
@@ -254,18 +260,30 @@ public class ProcessCommand extends Command {
 		try {
 			//TODO isPrivate hardcoded.
 			//TODO Check if the connection is open
+			if(!db.isConnected()){
+				db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
+			}
 			db.addGeneratedProfiles(expid, filepaths.getValue(), filepaths.getKey(), metadata, genomeVersion, username, false);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			ResponseLogger.log(username, "SQL Exception in ProcessCommand execute when using addGeneratedProfiles: " + e.getMessage());
-			return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE);
-		} finally {
 			try {
 				db.close();
-			} catch (SQLException e) {
-				ResponseLogger.log(username, "Could not close Database accessor" + e.getMessage());
+			} catch (SQLException e1) {
+				ResponseLogger.log(username, "Could not close Database accessor" + e1.getMessage());
 				e.printStackTrace();
 			}
+			return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, "SQL Exception in ProcessCommand execute when using addGeneratedProfiles: " + e.getMessage());
+		} catch (IOException e) {
+			e.printStackTrace();
+			ResponseLogger.log(username, "IO Exception in ProcessCommand execute when creating new DatabaseAccesor before addGeneratedProfiles: " + e.getMessage());
+			try {
+				db.close();
+			} catch (SQLException e1) {
+				ResponseLogger.log(username, "Could not close Database accessor" + e1.getMessage());
+				e.printStackTrace();
+			}
+			return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, "IO Exception in ProcessCommand execute when creating new DatabaseAccesor before addGeneratedProfiles: " + e.getMessage());
 		}
 
 		try {
@@ -297,12 +315,12 @@ public class ProcessCommand extends Command {
 	public String toString(){
 
 		return "Uploader of file: " + username + "\n" +
-//				"Filename: " + filename + "\n" +
+				//				"Filename: " + filename + "\n" +
 				"Processtype: " + processtype + "\n" +
 				"metadata:" + metadata + "\n" +
 				"username: " + username + "\n" +
 				"expid: " + expid + "\n" +
-//				"fileid: " + fileId + "\n" +
+				//				"fileid: " + fileId + "\n" +
 				"genomeRelease: " + genomeVersion + "\n" +
 				"author:" + author + "\n";
 	}
