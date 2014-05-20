@@ -78,7 +78,6 @@ public class RawToProfileConverter extends Executor {
 		if (verifyInData(parameters, inFolder, outFilePath) == false
 				|| !CorrectInfiles(inFiles)) {
 			throw new ProcessException("Wrong format of input data");
-			// TODO: Specify exception
 		} else {
 			initiateConversionStrings(parameters, outFilePath);
 			System.out.println("convdir=" + remoteExecution + dir + "/sorted");
@@ -106,6 +105,9 @@ public class RawToProfileConverter extends Executor {
 						throw new ProcessException("");
 						// TODO: Specify exception
 					}
+
+					checkBowTieFile("resources/" + dir+rawFile_1_Name+".sam", rawFile_1_Name);
+
 					System.out.println("nu körs sortering");
 					try {
 						sortSamFile(rawFile_1_Name);
@@ -121,6 +123,9 @@ public class RawToProfileConverter extends Executor {
 							throw new ProcessException("");
 							// TODO: Specify exception
 						}
+
+						checkBowTieFile("resources/"+dir+rawFile_2_Name+".sam", rawFile_2_Name);
+
 						try {
 							sortSamFile(rawFile_2_Name);
 						} catch (ProcessException e) {
@@ -149,7 +154,8 @@ public class RawToProfileConverter extends Executor {
 					filesToBeMoved = sortedDirPath + "reads_gff/";
 					toBeRemoved.push(filesToBeMoved);
 				}
-				if (checker.shouldRunGffToAllnusgr()) {
+				if (checker.shouldRunGffToAllnusgr			// TODO: Specify exception
+()) {
 					System.out.println("RUN GFF TO ALLNUCSGR");
 					try {
 						logString = logString + "\n"
@@ -192,13 +198,21 @@ public class RawToProfileConverter extends Executor {
 				removeTemp(toBeRemoved);
 				//cleanUp(cleanUpInitiator(remoteExecution + "resources/" + dir));
 
-			} else {
+			} else {			// TODO: Specify exception
+
 				logString = logString + " " + "Failed to create directory "
 						+ fileDir.toString();
 			}
 		}
 		System.out.println("logString = " + logString);
 		return logString;
+	}
+
+	private void checkBowTieFile(String dir, String fileName) throws ProcessException {
+		File bowTie = new File(dir);
+		if(!bowTie.exists() || bowTie.length() == 0) {
+			throw new ProcessException("Bowtie failed to run on file : " + fileName);
+		}
 	}
 
 	private String validateInFolder(String folderString) {
@@ -213,6 +227,7 @@ public class RawToProfileConverter extends Executor {
 
 	private void runSmoothing(String[] parameters, boolean isRatioCalc)
 			throws ProcessException {
+		// TODO: Specify exception
 
 		String[] parameterArray;
 		int stepSize;
