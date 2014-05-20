@@ -58,11 +58,11 @@ public class DatabaseAccessorThreadTests {
 		String filePath = "Stress0_t:9.hej";
 
 
-		dbac.addGenomeRelease("hg38", "Fly", "hg38.gr");
-		dbac.addExperiment("Exp1");
+		dbac.addGenomeRelease("banan", "Fly", "banan38.gr");
+		dbac.addExperiment("Exper1");
 
-		dbac.addNewFile("Exp1", 1, fileName , filePath,
-								"-m -a -te","Smurf", "Claes", true,"hg38");
+		dbac.addNewFile("Exper1", 1, fileName , filePath,
+								"-m -a -te","Smurf", "Claes", true,"banan");
 
 		List<Experiment> resExp = dbac.search("Claes[Uploader]");
 
@@ -70,20 +70,26 @@ public class DatabaseAccessorThreadTests {
 		assertEquals(fileName,resExp.get(0).getFiles().get(0).filename);
 
 		dbac.deleteFile(resExp.get(0).getFiles().get(0).id);
-		dbac.deleteExperiment("Exp1");
-		dbac.removeGenomeRelease("hg38", "Fly");
+		dbac.deleteExperiment("Exper1");
+		dbac.removeGenomeRelease("banan", "Fly");
 
 		dbac.close();
 	}
 
+	/*
+	 * Test if 10 threads can add 10 files at once. Note that nr of threads and
+	 * nr of files can be changed.
+	 */
     @Test
     public void addNRemoveFileFromSepparateThreads() throws SQLException, IOException {
 
     	ArrayList<Runnable> allRunnables = new ArrayList<Runnable>();
     	ArrayList<Thread> allThreads = new ArrayList<Thread>();
+    	String experimentId = "Exper1";
+    	int nrOfFiles = 10;
 
-    	//specify the number of threads. 1 = works, 1< = nope.
-    	int nrOfThreads = 1;
+    	//specify the number of threads.
+    	int nrOfThreads = 10;
 
     	for(int i=0;i<nrOfThreads;i++){
     		allRunnables.add(new myRunnable());
@@ -93,8 +99,8 @@ public class DatabaseAccessorThreadTests {
     	DatabaseAccessor dbac = new DatabaseAccessor(username, password,
     			host, database);
 
-    	dbac.addGenomeRelease("hg38", "Fly", "hg38.gr");
-    	dbac.addExperiment("Exp1");
+    	dbac.addGenomeRelease("banan", "Fly", "banan38.gr");
+    	dbac.addExperiment(experimentId);
 
     	// start all the threads
     	for(int i=0;i<nrOfThreads;i++){
@@ -110,21 +116,21 @@ public class DatabaseAccessorThreadTests {
 
     	List<Experiment> resExp = dbac.search("Claes[Uploader]");
 
-
-    	//THINGS BELOW DOESN'T WORK FOR MORE SEPPARATE THREADS THAN ONE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
     	//all files added to db by sepparate threads, threads counting from 9.
-    	for(int i=9;i<nrOfThreads+9;i++){	//hard coded thread nr, fix later :D
-    		String fileName1 = "StressTest0_t:"+ i + ".hej";
+    	for(int i=9;i<(nrOfThreads * nrOfFiles)+9;i++){	//hard coded thread nr, fix later :D
 
     		assertEquals(1,resExp.size());
-    		assertEquals(fileName1,resExp.get(0).getFiles().get(0).filename);
+    		assertEquals(experimentId,resExp.get(0).getFiles().get(i-9).expId);
+    		assertEquals("Claes",resExp.get(0).getFiles().get(i-9).uploader);
     	}
 
-    	dbac.deleteFile(resExp.get(0).getFiles().get(0).id);
+    	for(int i=9;i<(nrOfThreads * nrOfFiles)+9;i++){	//hard coded thread nr, fix later :D
 
-    	dbac.deleteExperiment("Exp1");
-    	dbac.removeGenomeRelease("hg38", "Fly");
+    		dbac.deleteFile(resExp.get(0).getFiles().get(i-9).id);
+    	}
+
+    	dbac.deleteExperiment(experimentId);
+    	dbac.removeGenomeRelease("banan", "Fly");
     	dbac.close();
     }
 
@@ -133,26 +139,21 @@ public class DatabaseAccessorThreadTests {
 
 		public void run(){
 
-			System.err.println("Started thread nr: " + Thread.currentThread().getId());
-
-			int nrOfFiles = 1, nr = 0;
+			int nrOfFiles = 10, nr = 0;
 
 		    try {
-		    	System.err.println("--z<<<<<<<<<<<<<<<<<<<<<<<--");
 		    	DatabaseAccessor dbac2 = new DatabaseAccessor(username, password,
 		    			host, database);
 
-		    	System.err.println("-------------------");
 		    	//adding files
 		    	for(int i=0;i<nrOfFiles;i++){
 		    		nr = i+1;
-System.err.println("thread: " + Thread.currentThread().getId() +" loop lap: " + nr);
 
-		    		dbac2.addNewFile("Exp1", 1,
+		    		dbac2.addNewFile("Exper1", 1,
 		    		"StressTest" + i + "_t:" + Thread.currentThread().getId() +
 		    		".hej" , "Stress" + i + "_t:" +
 		    		Thread.currentThread().getId(),
-		    		"-m -a -te","Smurf", "Claes", true,"hg38");
+		    		"-m -a -te","Smurf", "Claes", true,"banan");
 
 		    	}
 		    	dbac2.close();

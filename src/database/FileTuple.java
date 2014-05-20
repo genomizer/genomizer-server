@@ -24,6 +24,7 @@ public class FileTuple {
     public final Boolean isPrivate;
     public final String expId;
     public final String grVersion;
+    public final String status;
 
     public FileTuple(ResultSet resSet) throws SQLException {
         id = resSet.getInt("FileID");
@@ -38,22 +39,23 @@ public class FileTuple {
         isPrivate = resSet.getBoolean("IsPrivate");
         expId = resSet.getString("ExpID");
         grVersion = resSet.getString("GRVersion");
+        status = resSet.getString("Status");
     }
 
     public String getDownloadURL() {
-        return ServerDependentValues.DownLoadURL+path;
+        return ServerDependentValues.DownloadURL + path;
     }
 
     public String getUploadURL() {
-        return ServerDependentValues.UploadURL+path;
+        return ServerDependentValues.UploadURL + path;
     }
 
     public String getInputFileUploadURL() {
-        return ServerDependentValues.UploadURL+inputFilePath;
+        return ServerDependentValues.UploadURL + inputFilePath;
     }
 
     public String getInputFileDownloadURL() {
-        return ServerDependentValues.DownLoadURL+inputFilePath;
+        return ServerDependentValues.DownloadURL + inputFilePath;
     }
 
     public String getParentFolder() {

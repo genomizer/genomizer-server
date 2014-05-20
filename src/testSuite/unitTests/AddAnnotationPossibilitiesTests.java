@@ -159,10 +159,16 @@ public class AddAnnotationPossibilitiesTests {
     	dbac.addDropDownAnnotationValue(testLabelFT, newChoice);
 	}
 
-    @Test
-    public void shouldRemoveSteelmountainAnnotation()
-    		throws SQLException, IOException, Exception {
-    	String annotation = "@@@@@@2$???";
+
+    @Test(expected = IOException.class)
+    public void shouldNotBeAbleToAddDate() throws SQLException, IOException {
+    	dbac.addFreeTextAnnotation("Date", "2014-11-11", false);
+    }
+
+	@Test
+	public void shouldRemoveSteelmountainAnnotation()
+			throws SQLException, IOException, Exception {
+       	String annotation = "@@@@@@2$???";
     	dbac.addFreeTextAnnotation(annotation, null, false);
 
         Map<String, Integer> annotations = dbac.getAnnotations();
@@ -186,6 +192,5 @@ public class AddAnnotationPossibilitiesTests {
         assertEquals(1,i);
         annotations = dbac.getAnnotations();
         assertFalse(annotations.containsKey(annotation));
-
     }
 }

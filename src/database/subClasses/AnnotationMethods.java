@@ -6,7 +6,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -260,6 +263,10 @@ public class AnnotationMethods {
             String defaultValue, boolean required)
             throws SQLException, IOException {
 
+    	if(!isNotDate(label)) {
+            throw new IOException("Can not add annotation named 'date'");
+    	}
+
         if (!isValidChoice(label)) {
             throw new IOException("Lable contains invalid characters");
         }
@@ -370,6 +377,10 @@ public class AnnotationMethods {
     public int addDropDownAnnotation(String label,
             List<String> choices, int defaultValueIndex,
             boolean required) throws SQLException, IOException {
+
+    	if(!isNotDate(label)) {
+            throw new IOException("Can not add annotation named 'date'");
+    	}
 
         if (!isValidChoice(label)) {
             throw new IOException("Lable contains invalid characters");
@@ -603,9 +614,10 @@ public class AnnotationMethods {
      *
      * @throws SQLException
      * @throws IOException
+     * @throws ParseException
      */
     public void changeAnnotationValue(String label, String oldValue,
-            String newValue) throws SQLException, IOException {
+            String newValue) throws SQLException, IOException, ParseException {
 
         if (!isValidChoice(newValue)) {
             throw new IOException(newValue
@@ -688,15 +700,32 @@ public class AnnotationMethods {
      *            questionmarks in query.
      * @return query PreparedStatement
      * @throws SQLException
+     * @throws ParseException
      */
     public PreparedStatement bind(PreparedStatement query,
-            List<String> params) throws SQLException {
+            List<String> params) throws SQLException, ParseException {
 
         for (int i = 0; i < params.size(); i++) {
-            query.setString(i + 1, params.get(i));
+        	if(isInteger(params.get(i))) {
+        		query.setInt(i + 1, Integer.parseInt(params.get(i)));
+        	} else if(isValidDate(params.get(i)))  {
+        		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        		java.util.Date date = df.parse(params.get(i));
+        		java.sql.Date sDate = new java.sql.Date(date.getTime());
+        		query.setDate(i + 1, sDate);
+        	} else {
+        		query.setString(i + 1, params.get(i));
+        	}
         }
 
         return query;
+    }
+
+    private boolean isNotDate(String label) {
+        if(label.toLowerCase().equals("date")) {
+        	return false;
+        }
+        return true;
     }
 
     /**
@@ -719,5 +748,25 @@ public class AnnotationMethods {
         }
 
         return true;
+    }
+
+    private boolean isInteger(String s) {
+        try {
+            Integer.parseInt(s);
+        } catch(NumberFormatException e) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean isValidDate(String dateString) {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            df.parse(dateString);
+            return true;
+        } catch (ParseException e) {
+            return false;
+        }
     }
 }

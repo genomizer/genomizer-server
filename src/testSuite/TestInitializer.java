@@ -115,6 +115,13 @@ public class TestInitializer {
         }
         dbac.close();
     }
+    
+    public void removeTuplesKeepConnection() throws SQLException {
+        for (String s : clearTablesSqlStrings) {
+            Statement statement = conn.createStatement();
+            statement.execute(s);
+        }
+    }
 
     /**
      * Adds all test tuples to the test database.

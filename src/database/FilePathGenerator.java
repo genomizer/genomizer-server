@@ -154,6 +154,10 @@ public class FilePathGenerator {
 
         File profileFolder = new File(folderPath);
 
+        if (!profileFolder.exists()) {
+            profileFolder.mkdirs();
+        }
+
         Integer folderNumber = profileFolder.list().length;
 
         File newProfileFolder = new File(folderPath + folderNumber.toString() + File.separator);

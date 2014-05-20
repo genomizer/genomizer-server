@@ -8,6 +8,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.List;
@@ -119,9 +120,14 @@ public class DatabaseAccessor {
      * connected to a database.
      *
      * @return boolean - true if it is connected, otherwise false.
+     * @throws SQLException
      */
-    public boolean isConnected() {
-        return conn != null;
+    public boolean isConnected() throws SQLException {
+        if(conn.isClosed()){
+        	return false;
+        } else {
+        	return true;
+        }
     }
 
     /**
@@ -145,9 +151,11 @@ public class DatabaseAccessor {
      *             - If the pubMedString is not in the right format
      * @throws SQLException
      *             - if the query does not succeed
+     * @throws ParseException
+     * 			   - if the Date is not in the right format. (yyyy-mm-dd).
      */
     public List<Experiment> search(String pubMedString)
-            throws IOException, SQLException {
+            throws IOException, SQLException, ParseException {
 
         isPubMedStringValid(pubMedString);
 
@@ -525,10 +533,9 @@ public class DatabaseAccessor {
      * Deletes an annotation from the list of possible annotations.
      * Label SPECIES can't be changed because of dependencies in other tables.
      *
-     * @param label
-     *            String - the label of the annotation to delete.
-     * @return res integer - the number of tuples deleted in the
-     *         database.
+     * @param String
+     *            label - the label of the annotation to delete.
+     * @return int - the number of tuples deleted in the database.
      * @throws SQLException
      *             if the query does not succeed
      * @throws Exception
@@ -601,9 +608,6 @@ public class DatabaseAccessor {
                 defaultValueIndex, required);
     }
 
-    // All methods checked up to here! Ruaridh
-    // ----------------------------------------------------------
-
     /**
      * Method to add a value to a existing DropDown annotation.
      *
@@ -652,12 +656,14 @@ public class DatabaseAccessor {
      * changed because of dependencies in other tables. If the Species label
      * can be changed to another, it becomes removable.
      *
-     * @param oldLabel
-     *            String
-     * @param newLabel
-     *            string
+     * Changes the annotation label. OBS! This changes the label for
+     * all experiments.
      *
-     * @return res int - the number of tuples updated
+     * @param String
+     *            oldLabel
+     * @param String
+     *            newLabel
+     * @return int - the number of tuples updated
      * @throws SQLException
      *             If the update fails
      * @throws IOException
@@ -689,11 +695,13 @@ public class DatabaseAccessor {
      *            newValue - the name of the new annotation value.
      * @throws SQLException
      * @throws IOException
+     * @throws ParseException, if The user tries to add the Date annotation.
      */
     public void changeAnnotationValue(String label, String oldValue,
-            String newValue) throws SQLException, IOException {
+            String newValue) throws SQLException, IOException, ParseException {
 
-        annoMethods.changeAnnotationValue(label, oldValue, newValue);
+		annoMethods.changeAnnotationValue(label, oldValue, newValue);
+
     }
 
     /**
@@ -755,6 +763,10 @@ public class DatabaseAccessor {
                 genomeRelease);
     }
 
+    public int fileReadyForDownload(int fileID) throws SQLException {
+        return fileMethods.fileReadyForDownload(fileID);
+    }
+
     /**
      * Returns the FileTuple object associated with the given
      * filePath.
@@ -770,6 +782,24 @@ public class DatabaseAccessor {
             throws SQLException {
 
         return fileMethods.getFileTuple(filePath);
+    }
+
+
+    /**
+     * Returns the FileTuple object associated with the given
+     * filePath.
+     *
+     * @param String
+     *            filePath
+     * @return FileTuple - The corresponding FileTuple or null if no
+     *         such file exists
+     * @throws SQLException
+     *             - If the query could not be executed.
+     */
+    public FileTuple getFileTuple(int fileID)
+            throws SQLException {
+
+        return fileMethods.getFileTuple(fileID);
     }
 
     /**
@@ -826,9 +856,10 @@ public class DatabaseAccessor {
      *         raw files for this experiment.
      * @throws SQLException
      *             - If the database could not be accessed
+     * @throws ParseException
      */
     public Entry<String, String> processRawToProfile(String expId)
-            throws SQLException {
+            throws SQLException, ParseException {
 
         List<Experiment> experiments;
         try {
@@ -998,10 +1029,9 @@ public class DatabaseAccessor {
      * @return boolean - true if succeeded, false if failed.
      * @throws SQLException
      */
-    public boolean removeGenomeRelease(String genomeVersion,
-            String species) throws SQLException {
+    public boolean removeGenomeRelease(String genomeVersion) throws SQLException {
 
-        return genMethods.removeGenomeRelease(genomeVersion, species);
+        return genMethods.removeGenomeRelease(genomeVersion);
     }
 
     /**
@@ -1028,10 +1058,15 @@ public class DatabaseAccessor {
      * @return ArrayList<Genome> - list of all the genome releases
      * @throws SQLException
      */
-    public ArrayList<Genome> getAllGenomReleases()
+    public List<Genome> getAllGenomReleases()
             throws SQLException {
 
         return genMethods.getAllGenomReleases();
+    }
+
+    public List<String> getAllGenomReleaseSpecies() throws SQLException {
+
+        return genMethods.getAllGenomReleaseSpecies();
     }
 
     /**
@@ -1100,9 +1135,10 @@ public class DatabaseAccessor {
      * @return List<Experiment>
      * @throws IOException
      * @throws SQLException
+     * @throws ParseException
      */
     private List<Experiment> searchExperiments(String pubMedString)
-            throws IOException, SQLException {
+            throws IOException, SQLException, ParseException {
 
         String query = pm2sql.convertExperimentSearch(pubMedString);
         List<String> params = pm2sql.getParameters();
@@ -1129,9 +1165,10 @@ public class DatabaseAccessor {
      * @return List<Experiment>
      * @throws IOException
      * @throws SQLException
+     * @throws ParseException
      */
     private List<Experiment> searchFiles(String pubMedString)
-            throws IOException, SQLException {
+            throws IOException, SQLException, ParseException {
 
         String query = pm2sql.convertFileSearch(pubMedString);
         List<String> params = pm2sql.getParameters();
