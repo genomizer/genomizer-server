@@ -8,7 +8,7 @@ public class serverTests {
 	public static void main(String args[]) throws Exception {
 		Login.login("Splutt");
 
-
+		processtest();
 
 
 		Login.logout();
@@ -51,7 +51,7 @@ public class serverTests {
 		GenomeRelease.sendGetGenomeReleaseSpecies();
 	}
 
-	public void processtest() throws Exception {
+	public static void processtest() throws Exception {
 		Process.sendRawToProfile();
 		Process.sendGetProcessStatus();
 	}
