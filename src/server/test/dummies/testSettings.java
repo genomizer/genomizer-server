@@ -19,7 +19,7 @@ public class testSettings {
 
 		StringBuffer responseBuffer = null;
 		BufferedReader in = null;
-		int responseCode = 0;
+		int responseCode = 77;
 
 		if((responseCode = con.getResponseCode()) >= 400) {
 			in = new BufferedReader(new InputStreamReader(con.getErrorStream()));

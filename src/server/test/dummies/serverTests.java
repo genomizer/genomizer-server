@@ -5,13 +5,13 @@ public class serverTests {
 	public static void main(String args[]) throws Exception {
 		Login.login("Splutt");
 
-		//usertests();
-
 		//processtest();
 		//searchtest("");
 		//renameannotest();
 
 		specialannotest();
+		processtest();
+
 
 		Login.logout();
 	}
