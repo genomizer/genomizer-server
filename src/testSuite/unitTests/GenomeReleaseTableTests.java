@@ -14,6 +14,7 @@ import org.junit.Test;
 
 import testSuite.TestInitializer;
 import database.DatabaseAccessor;
+import database.Experiment;
 import database.FilePathGenerator;
 import database.Genome;
 import database.ServerDependentValues;
@@ -149,7 +150,22 @@ public class GenomeReleaseTableTests {
 
         assertFalse(genomeReleaseFolder.exists());
     }
-    
+
+    @Test
+    public void shouldNotDeleteGenomReleaseWhenFileNeedsIt() throws Exception{
+
+    	dbac.addGenomeRelease("dependency1", "Superman", "dependency1.txt");
+
+    	dbac.addNewFile("Expert1", 1, "Expert1", "Expert1", "-h -g -at", "Claes", "Claes", false, "dependency1");
+
+
+
+    	List<Experiment> res = dbac.search("Expert1[expID]");
+    	dbac.deleteFile(res.get(0).getFiles().get(0).id);
+    	dbac.removeGenomeRelease("dependency1");
+
+    }
+
     @Test
     public void shouldBeAbleToGetDownloadURLs() throws Exception {
         Genome g = dbac.getGenomeRelease("hg38");
@@ -166,13 +182,13 @@ public class GenomeReleaseTableTests {
         }
         return null;
     }
-    
+
     @Test
     public void shouldBeAbleToGetAllSpeciesThatHaveAGenomeRelease() throws Exception {
         List<String> species = dbac.getAllGenomReleaseSpecies();
         assertEquals(2, species.size());
     }
-    
+
     @Test
     public void shouldBeAbleToGetAllGenomeReleases() throws Exception {
         ti.removeTuplesKeepConnection();
