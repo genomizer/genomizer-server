@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.List;
 
 import org.junit.After;
@@ -151,19 +153,26 @@ public class GenomeReleaseTableTests {
         assertFalse(genomeReleaseFolder.exists());
     }
 
-    @Test
-    public void shouldNotDeleteGenomReleaseWhenFileNeedsIt() throws Exception{
+    @Test(expected = SQLException.class)
+    public void shouldNotDeleteGenomReleaseWhenFileNeedsIt() throws
+    								SQLException, IOException, ParseException{
 
     	dbac.addGenomeRelease("dependency1", "Superman", "dependency1.txt");
+    	dbac.addExperiment("Expert1");
+    	dbac.addNewFile("Expert1", 1, "Expert1", "Expert1", "-h -g -at",
+    						"Claes", "Claes", false, "dependency1");
 
-    	dbac.addNewFile("Expert1", 1, "Expert1", "Expert1", "-h -g -at", "Claes", "Claes", false, "dependency1");
+    	assertNotNull(dbac.getExperiment("Expert1"));
+    	assertNotNull(dbac.getGenomeRelease("dependency1"));
 
-
-
-    	List<Experiment> res = dbac.search("Expert1[expID]");
-    	dbac.deleteFile(res.get(0).getFiles().get(0).id);
+    	//this should fail since key dependency exist.
     	dbac.removeGenomeRelease("dependency1");
 
+    	List<Experiment> res = dbac.search("Expert1[expID]");
+    	assertNotNull(res.get(0).getFiles().get(0));
+
+    	dbac.deleteFile(res.get(0).getFiles().get(0).id);
+    	dbac.removeGenomeRelease("dependency1");
     }
 
     @Test
@@ -186,7 +195,7 @@ public class GenomeReleaseTableTests {
     @Test
     public void shouldBeAbleToGetAllSpeciesThatHaveAGenomeRelease() throws Exception {
         List<String> species = dbac.getAllGenomReleaseSpecies();
-        assertEquals(2, species.size());
+        assertEquals(3, species.size());
     }
 
     @Test
