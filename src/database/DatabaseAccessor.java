@@ -519,10 +519,10 @@ public class DatabaseAccessor {
      * @return int - the number of tuples deleted in the database.
      * @throws SQLException
      *             if the query does not succeed
-     * @throws Exception
+     * @throws IOException
      *             if label = "Species"
      */
-    public int deleteAnnotation(String label) throws SQLException, Exception {
+    public int deleteAnnotation(String label) throws SQLException, IOException {
 
         return annoMethods.deleteAnnotation(label);
     }
@@ -626,19 +626,11 @@ public class DatabaseAccessor {
     }
 
     /**
-<<<<<<< HEAD
-     * Changes the annotation label. OBS! This changes the label for all
-     * experiments.
-=======
      * Changes the annotation label.
      *
      * OBS! This changes the label for all experiments. Label SPECIES can't be
      * changed because of dependencies in other tables. If the Species label
      * can be changed to another, it becomes removable.
-     *
-     * Changes the annotation label. OBS! This changes the label for
-     * all experiments.
->>>>>>> branch 'database' of https://github.com/genomizer/genomizer-server.git
      *
      * @param String
      *            oldLabel
@@ -648,11 +640,10 @@ public class DatabaseAccessor {
      * @throws SQLException
      *             If the update fails
      * @throws IOException
-     * @throws Exception
-     *             if label = "Species"
+     *             if label = "Species" or the new label contains invalid characters.
      */
     public int changeAnnotationLabel(String oldLabel, String newLabel)
-            throws SQLException, Exception {
+            throws SQLException, IOException {
 
         return annoMethods.changeAnnotationLabel(oldLabel, newLabel);
     }
@@ -988,6 +979,10 @@ public class DatabaseAccessor {
             String filename) throws SQLException {
 
         return genMethods.addGenomeRelease(genomeVersion, species, filename);
+    }
+
+    public int genomeReleaseFileUploaded(String version, String fileName) throws SQLException {
+        return genMethods.fileReadyForDownload(version, fileName);
     }
 
     /**

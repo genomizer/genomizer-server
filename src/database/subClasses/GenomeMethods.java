@@ -114,6 +114,21 @@ public class GenomeMethods {
         return filePathBuilder.toString();
     }
 
+    public int fileReadyForDownload(String version, String fileName) throws SQLException {
+
+        String statusUpdateString = "UPDATE Genome_Release_Files SET Status = 'Done' " +
+                "WHERE Version = ? AND FileName = ?";
+
+        PreparedStatement statusUpdate = conn.prepareStatement(statusUpdateString);
+        statusUpdate.setString(1, version);
+        statusUpdate.setString(2, fileName);
+
+        int resCount = statusUpdate.executeUpdate();
+        statusUpdate.close();
+
+        return resCount;
+    }
+
     /**
      * Removes one specific genome version stored in the database.
      *

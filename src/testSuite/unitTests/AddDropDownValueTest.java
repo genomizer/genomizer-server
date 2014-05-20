@@ -27,7 +27,7 @@ public class AddDropDownValueTest {
 	private static DatabaseAccessor dbac;
 
 	private static String testLabel1 = "Sex";
-	private static String testLabel2 = "Species";
+	private static String testLabel2 = "Type";
 	private static String testLabel3 = "Tissue";
 	private static String testDefValue1 = "tjo";
 	private static String testDefValue3 = "Arm";
@@ -80,10 +80,6 @@ public class AddDropDownValueTest {
         dbac.deleteAnnotation(testLabel3);
     }
 
-    @Test
-    public void testConnection() {
-    	assertNotNull(conn);
-    }
 
     @Test
     public void testIfCorrectDataType() {
