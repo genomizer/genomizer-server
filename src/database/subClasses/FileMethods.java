@@ -293,11 +293,17 @@ public class FileMethods {
 
     /**
      * Changes the Filename for a specific file with given fileID.
+     * This method affects bothe the saved file name, but also the entries
+     * path and fileName in database.
      * @return resCount int, the number of rows affected by the change.
      * @throws SQLException if failed to send query,
+     * @throws IOException  if the chosen new file name already exist as a
+     * 						stored file.
      */
     public int changeFileName(int fileID, String newFileName)
-    								throws SQLException{
+    								throws SQLException, IOException{
+
+    	String oldFilePath = "";
 
     	String chFileNameQuery = "UPDATE File SET FileName = ? " +
     									"WHERE FileID = ?";
@@ -305,9 +311,43 @@ public class FileMethods {
     	PreparedStatement nameUpdate = conn.prepareStatement(chFileNameQuery);
     	nameUpdate.setString(1, newFileName);
     	nameUpdate.setInt(2, fileID);
-
     	int resCount = nameUpdate.executeUpdate();
+
+    	// search for current filepath.
+    	String searchPathQuery = "SELECT Path FROM File WHERE fileID = ?";
+    	PreparedStatement pathFind = conn.prepareStatement(searchPathQuery);
+    	pathFind.setInt(1, fileID);
+    	ResultSet res = pathFind.executeQuery();
+
+    	if (res.next()) {
+    		oldFilePath = res.getString("Path");
+        }
+
+    	String folderPath = getParentFolder(oldFilePath);
+    	String newFilePath = folderPath + newFileName;
+
+    	//change name on the actual stored file.
+    	File oldfile = new File(oldFilePath);
+    	File newFile = new File(newFilePath);
+
+    	if(newFile.exists()) throw new java.io.IOException("New file exists");
+
+    	if(!oldfile.exists()) throw new java.io.IOException("Old file " +
+    													    "does not exists");
+
+    	oldfile.renameTo(newFile);
+
+    	//change filepath entry in database.
+    	String chFilePathQuery = "UPDATE File SET Path = ? " +
+    								"WHERE FileID = ?";
+
+    	PreparedStatement pathUpdate = conn.prepareStatement(chFilePathQuery);
+    	pathUpdate.setString(1, newFilePath);
+    	pathUpdate.setInt(2, fileID);
+    	pathUpdate.executeUpdate();
+
     	nameUpdate.close();
+    	pathUpdate.close();
 
     	return resCount;
     }
