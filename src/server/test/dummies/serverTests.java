@@ -7,7 +7,6 @@ public class serverTests {
 
 		searchtest("");
 
-
 		Login.logout();
 	}
 
@@ -24,13 +23,14 @@ public class serverTests {
 		Annotations.sendDeleteAnnotation("testanno space2");
 	}
 
-	public static void specialannotest() throws Exception {
+
+
+	public void specialannotest() throws Exception {
 		Annotations.sendAddAnnotation("@/@@@@@2$????");
 		Annotations.sendGetAnnotationInformation();
 		Annotations.sendDeleteAnnotation("@/@@@@@2$????");
 		Annotations.sendGetAnnotationInformation();
 	}
-
 	public void exptest() throws Exception {
 		Experiment.sendDeleteExperiment("testExp22");
 		Experiment.sendAddExperiment("testExp22");

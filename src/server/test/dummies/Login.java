@@ -17,7 +17,6 @@ public class Login {
 	static void login(String username) throws IOException {
 		URL obj = new URL(testSettings.url + "/login");
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
 		con.setRequestMethod("POST");
 		con.setRequestProperty("Content-Type", "application/json");
 
@@ -26,7 +25,12 @@ public class Login {
 		jj.addProperty("password", "losenord");
 
 		testSettings.sendToServer(con, jj.toString());
-		String response = testSettings.printResponse(con);
+		String response = null;
+		try {
+			response = testSettings.printResponse(con);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
 
 		System.out.println("\nSending 'GET' request to URL : " + testSettings.url + "/login");
 		System.out.println("Response Body: " + response);
