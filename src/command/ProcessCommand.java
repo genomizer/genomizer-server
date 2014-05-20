@@ -147,25 +147,6 @@ public class ProcessCommand extends Command {
 		return false;
 	}
 
-	/**
-	 * Execute to simulate flow.
-	 */
-	/*
-	@Override
-	public Response execute(){
-//		System.err.println("Executing process command");
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		System.err.println("Logging created uname: " + username);
-		ResponseLogger.log(username, new ProcessResponse(StatusCode.CREATED, "raw to profile processing completed"));
-		return new ProcessResponse(StatusCode.CREATED);
-	}*/
-
 
 	/**
 	 * Method that runs when the processCommand is executed.
