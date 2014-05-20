@@ -10,6 +10,7 @@ import java.net.URLDecoder;
 import database.DatabaseAccessor;
 import database.Experiment;
 
+import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
 import response.SearchResponse;
@@ -54,22 +55,23 @@ public class SearchForExperimentsCommand extends Command {
 
 	    DatabaseAccessor db = null;
 	    List<Experiment> searchResult = null;
+	    System.out.println(annotations);
+	    if(annotations.equals("")) {
+	    	return new ErrorResponse(StatusCode.BAD_REQUEST, "Please specify a search string");
+	    }
 
 		try {
 			annotations = URLDecoder.decode(annotations, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
-			return new MinimalResponse(StatusCode.BAD_REQUEST);
+			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
 		}
 
 		try {
 			db = initDB();
 			searchResult = db.search(annotations);
-		} catch (SQLException e) {
-			return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return new MinimalResponse(StatusCode.BAD_REQUEST);
+		} catch (SQLException | IOException e) {
+			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, e.getMessage());
 		} finally {
 			try {
 				db.close();

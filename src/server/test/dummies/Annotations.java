@@ -22,7 +22,7 @@ public class Annotations {
 		con.setRequestProperty("Content-Type", "application/json");
 		con.setRequestProperty("Authorization", Login.getToken());
 
-		System.out.println("\nSending 'GET' request to URL : " + testSettings.url);
+		System.out.println("\nSending 'GET' request to URL : " + obj.toString());
 		System.out.println("Response Body: " +testSettings. printResponse(con));
 	}
 
@@ -45,7 +45,7 @@ public class Annotations {
 
 		testSettings.sendToServer(con, jj.toString());
 
-		System.out.println("\nSending 'POST' request to URL : " + testSettings.url);
+		System.out.println("\nSending 'POST' request to URL : " + obj.toString());
 		System.out.println("Response Body: " + testSettings.printResponse(con));
 
 	}
@@ -67,7 +67,7 @@ public class Annotations {
 
 		testSettings.sendToServer(con, jj.toString());
 
-		System.out.println("\nSending 'PUT' request to URL : " + testSettings.url);
+		System.out.println("\nSending 'PUT' request to URL : " + obj.toString());
 		System.out.println("Response Body: " + testSettings.printResponse(con));
 	}
 
@@ -83,7 +83,7 @@ public class Annotations {
 		con.setRequestProperty("Authorization", Login.getToken());
 		con.setRequestProperty("Content-Type", "application/json");
 
-		System.out.println("\nSending 'DELETE' request to URL : " + testSettings.url);
+		System.out.println("\nSending 'DELETE' request to URL : " + obj.toString());
 		System.out.println("Response Body: " + testSettings.printResponse(con));
 	}
 
@@ -102,7 +102,7 @@ public class Annotations {
 
 		testSettings.sendToServer(con, jj.toString());
 
-		System.out.println("\nSending 'POST' request to URL : " + testSettings.url);
+		System.out.println("\nSending 'POST' request to URL : " + obj.toString());
 		System.out.println("Response Body: " + testSettings.printResponse(con));
 	}
 
@@ -122,7 +122,7 @@ public class Annotations {
 
 		testSettings.sendToServer(con, jj.toString());
 
-		System.out.println("\nSending 'PUT' request to URL : " + testSettings.url);
+		System.out.println("\nSending 'PUT' request to URL : " + obj.toString());
 		System.out.println("Response Body: " + testSettings.printResponse(con));
 	}
 
@@ -135,7 +135,7 @@ public class Annotations {
 		con.setRequestProperty("Authorization", Login.getToken());
 		con.setRequestProperty("Content-Type", "application/json");
 
-		System.out.println("\nSending 'DELETE' request to URL : " + testSettings.url);
+		System.out.println("\nSending 'DELETE' request to URL : " + obj.toString());
 		System.out.println("Response Body: " + testSettings.printResponse(con));
 	}
 }

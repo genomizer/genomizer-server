@@ -1,14 +1,11 @@
 package server.test.dummies;
 
-import java.io.IOException;
-
-
 public class serverTests {
 
 	public static void main(String args[]) throws Exception {
 		Login.login("Splutt");
 
-
+		searchtest("");
 
 
 		Login.logout();
@@ -27,7 +24,7 @@ public class serverTests {
 		Annotations.sendDeleteAnnotation("testanno space2");
 	}
 
-	public void specialannotest() throws Exception {
+	public static void specialannotest() throws Exception {
 		Annotations.sendAddAnnotation("@/@@@@@2$????");
 		Annotations.sendGetAnnotationInformation();
 		Annotations.sendDeleteAnnotation("@/@@@@@2$????");
@@ -42,8 +39,8 @@ public class serverTests {
 		Experiment.sendDeleteExperiment("testExp22");
 	}
 
-	public void searchtest() throws Exception {
-		Search.sendSearchRequest("Exp1[ExpID]");
+	public static void searchtest(String query) throws Exception {
+		Search.sendSearchRequest(query);
 	}
 
 	public void genometest() throws Exception {
