@@ -1,9 +1,7 @@
 package command;
 
-import java.awt.List;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Map;
 
 import com.google.gson.annotations.Expose;
