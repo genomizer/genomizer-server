@@ -239,7 +239,8 @@ public class RawToProfileConverter extends Executor {
 			parameterArray = parse(parameters[4]);
 		}
 
-		int[] intParams = new int[parameterArray.length];
+		int[] intParams = 		// TODO Auto-generated method stub
+new int[parameterArray.length];
 		for (int i = 0; i < parameterArray.length; i++) {
 			intParams[i] = Integer.parseInt(parameterArray[i]);
 		}
@@ -375,9 +376,13 @@ public class RawToProfileConverter extends Executor {
 	 */
 	private String runBowTie(String fileOne, String fileOneName)
 			throws ProcessException {
-		String[] bowTieParameters = parse("bowtie " + parameters[0] + " "
+		String bowTieParams = checkBowTieProcessors(parameters[0]);
+
+		String[] bowTieParameters = parse("bowtie " + bowTieParams + " "
 				+ parameters[1] + " " + inFolder + "/" + fileOne + " " + dir
 				+ fileOneName + ".sam");
+
+
 
 		printStringArray(bowTieParameters);
 		try {
@@ -390,6 +395,26 @@ public class RawToProfileConverter extends Executor {
 			throw new ProcessException("Could not run bowTie on file: "
 					+ fileOneName + ", please check your input and permissions");
 		}
+	}
+
+	private String checkBowTieProcessors(String params) {
+		String[] bowTieParams = parse(params);
+
+		for(int i = 0; i < bowTieParams.length; i++) {
+			if(bowTieParams[i].equals("-p")) {
+
+				int nrOfProc = Runtime.getRuntime().availableProcessors()-2;
+				if(nrOfProc < 1) {
+					nrOfProc = 1;
+				}
+				bowTieParams[i+1] = Integer.toString(nrOfProc);
+			}
+		}
+		String bowTieString = "";
+		for(int i = 0; i < bowTieParams.length; i++) {
+			bowTieString += bowTieParams[i] +" ";
+		}
+		return bowTieString;
 	}
 
 	/**
