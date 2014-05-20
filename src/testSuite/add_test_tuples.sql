@@ -55,7 +55,7 @@ INSERT INTO Annotated_With  VALUES('Exp2', 'Development Stage', 'Child');
 INSERT INTO Annotated_With  VALUES('Exp3', 'Species', 'Rat');
 INSERT INTO Annotated_With  VALUES('Exp3', 'Development Stage', 'Child');
 
-INSERT INTO User_Info VALUES('user1', 'secret1', 'role1');
+INSERT INTO User_Info VALUES('user1', 'secret1', 'role1','Carl Bertill Jonsson','sexy@cs.umu.se');
 
 INSERT INTO File VALUES(DEFAULT, '/var/www/data/Exp1/raw/file1.fastq', 'Raw', 'file1.fastq', CURRENT_TIMESTAMP, NULL, '/var/www/data/Exp1/raw/file1_input.fastq', 'Umeå Uni', 'user1', 'True', 'Exp1', NULL, DEFAULT);
 
