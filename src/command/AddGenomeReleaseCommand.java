@@ -54,6 +54,10 @@ public class AddGenomeReleaseCommand extends Command {
 			return false;
 		}
 
+		if(genomeVersion.indexOf('/') != -1) {
+			return false;
+		}
+
 		return true;
 
 	}
