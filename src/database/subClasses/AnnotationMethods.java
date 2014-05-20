@@ -218,6 +218,8 @@ public class AnnotationMethods {
      *         database.
      * @throws SQLException
      *             if the query does not succeed
+     * @throws Exception
+     *             if label = "Species"
      */
     public int deleteAnnotation(String label) throws SQLException, Exception {
 
@@ -552,6 +554,8 @@ public class AnnotationMethods {
      * @throws SQLException
      *             If the update fails
      * @throws IOException
+     * @throws Exception
+     *             if label = "Species"
      */
     public int changeAnnotationLabel(String oldLabel, String newLabel)
             throws SQLException, IOException, Exception {

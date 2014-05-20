@@ -49,7 +49,7 @@ public class AddAnnotationPossibilitiesTests {
     }
 
     @After
-    public void teardown() throws SQLException {
+    public void teardown() throws SQLException, Exception {
         dbac.deleteAnnotation(testLabelFT);
         dbac.deleteAnnotation(testLabelDD);
     }
@@ -161,7 +161,7 @@ public class AddAnnotationPossibilitiesTests {
 
     @Test
     public void shouldRemoveSteelmountainAnnotation()
-    		throws SQLException, IOException {
+    		throws SQLException, IOException, Exception {
     	String annotation = "@@@@@@2$???";
     	dbac.addFreeTextAnnotation(annotation, null, false);
 
@@ -176,7 +176,7 @@ public class AddAnnotationPossibilitiesTests {
 
     @Test
     public void shouldRemoveSteelmountainAnotherAnnotation()
-    		throws SQLException, IOException {
+    		throws SQLException, IOException, Exception {
     	String annotation = "¡!";
     	dbac.addFreeTextAnnotation(annotation, null, false);
 

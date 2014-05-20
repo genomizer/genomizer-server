@@ -54,7 +54,7 @@ public class ExperimentTests {
     private static String testFolderPath;
     private static File testFolder;
     private static String testFolderName = "Genomizer Test Folder - Dont be afraid to delete me";
-    
+
     private static TestInitializer ti;
 
     @BeforeClass
@@ -76,7 +76,7 @@ public class ExperimentTests {
 
         fpg = dbac.getFilePathGenerator();
         fpg.setRootDirectory(testFolderPath);
-        
+
         ti = new TestInitializer();
     }
 
@@ -96,7 +96,7 @@ public class ExperimentTests {
     }
 
     @After
-    public void teardown() throws SQLException {
+    public void teardown() throws SQLException, Exception {
         dbac.deleteExperiment(testExpId);
         dbac.deleteAnnotation(testLabelFT);
         dbac.deleteAnnotation(testLabelDD);
@@ -125,12 +125,12 @@ public class ExperimentTests {
         e = dbac.getExperiment(testExpId);
         assertEquals(testExpId, e.getID());
     }
-  
+
     @Test
     public void shouldReturnZeroOnRemovingNonExistantExp() throws Exception {
         assertEquals(0, dbac.deleteExperiment("pang"));
     }
-    
+
     @Test
     public void shouldReturnOneOnRemovingExp() throws Exception {
         assertEquals(1, dbac.deleteExperiment(testExpId));
@@ -275,14 +275,14 @@ public class ExperimentTests {
 		dbac.deleteExperiment(testExpId);
 		assertFalse(dir.exists());
 	}
-    
+
     @Test
     public void shouldGetExperimentDespiteWrongCase() throws Exception {
         Experiment e = dbac.getExperiment(testExpIdWrongCase);
         assertNotNull(e);
         assertEquals(testExpId, e.getID());
     }
-    
+
     @Test
     public void shouldReturnNullIfExperimentDoesNotExist() throws Exception {
         assertNull(dbac.getExperiment("pang"));
