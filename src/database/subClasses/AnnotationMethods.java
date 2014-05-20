@@ -9,7 +9,6 @@ import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -228,10 +227,11 @@ public class AnnotationMethods {
      *         database.
      * @throws SQLException
      *             if the query does not succeed
+     * @throws IOException
      * @throws Exception
      *             if label = "Species"
      */
-    public int deleteAnnotation(String label) throws SQLException, Exception {
+    public int deleteAnnotation(String label) throws SQLException, IOException {
 
     	String query = "DELETE FROM Annotation "
     			+ "WHERE (Label ~~* ?)";
@@ -239,7 +239,7 @@ public class AnnotationMethods {
     	int rs = 0;
 
     	if (label.toLowerCase().contentEquals("species")) {
-    		throw new Exception ("Can't remove annotation 'Species'");
+    		throw new IOException ("Can't remove annotation 'Species'");
     	} else {
     		stmt = conn.prepareStatement(query);
     		stmt.setString(1, label);
@@ -520,8 +520,26 @@ public class AnnotationMethods {
      *             removed is the active DefaultValue of the chosen
      *             label.
      */
-    public int removeAnnotationValue(String label, String value)
+    public int removeDropDownAnnotationValue(String label, String value)
             throws SQLException, IOException {
+
+    	//Check if value is a dropdown choice and used on any experiments
+    	String dependQuery = "SELECT * FROM Annotated_With " +
+    			"WHERE (label ~~* ? AND value ~~* ?)";
+
+    	PreparedStatement dependencyStatement = conn
+                .prepareStatement(dependQuery);
+        dependencyStatement.setString(1, label);
+        dependencyStatement.setString(2, value);
+        ResultSet res = dependencyStatement.executeQuery();
+
+        boolean hasDependency = res.next();
+        dependencyStatement.close();
+        if (hasDependency) {
+            throw new IOException(value
+                    + " is used in other experiments under label " + label
+                    + " and can therefore not be removed.");
+        }
 
         String query = "SELECT * FROM Annotation WHERE "
                 + "(label ~~* ? AND defaultvalue ~~* ?)";
@@ -530,7 +548,6 @@ public class AnnotationMethods {
                 .prepareStatement(query);
         checkTagStatement.setString(1, label);
         checkTagStatement.setString(2, value);
-
         ResultSet rs = checkTagStatement.executeQuery();
 
         boolean hasResult = rs.next();
@@ -576,10 +593,10 @@ public class AnnotationMethods {
      *             if label = "Species"
      */
     public int changeAnnotationLabel(String oldLabel, String newLabel)
-            throws SQLException, IOException, Exception {
+            throws SQLException, IOException {
 
     	if (oldLabel.toLowerCase().contentEquals("species")) {
-    		throw new Exception ("Can't change label on annotation 'Species'");
+    		throw new IOException ("Can't change label on annotation 'Species'");
     	} else {
     		if (!isValidChoice(newLabel)) {
     			throw new IOException(newLabel

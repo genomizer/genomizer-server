@@ -206,6 +206,15 @@ public class GenomeReleaseTableTests {
         assertEquals(6, genomes.size());
     }
 
+
+    public void shouldBeAbleToSetStatusDone() throws Exception {
+        ti.removeTuplesKeepConnection();
+        dbac.addGenomeRelease("V1", "Frog", "Froggy1.txt");
+        dbac.genomeReleaseFileUploaded("V1", "Froggy1.txt");
+        Genome g = dbac.getGenomeRelease("V1");
+        assertEquals("Done", g.getFilesWithStatus().get("Froggy1.txt"));
+    }
+
     private boolean searchGenomeForVersion(List<Genome> genomeList,
             String version) {
 

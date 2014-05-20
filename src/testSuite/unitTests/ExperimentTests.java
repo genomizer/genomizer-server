@@ -222,20 +222,6 @@ public class ExperimentTests {
     }
 
     @Test
-    public void getAllAnnotationLabelsTest(){
-
-    	ArrayList<String> allAnnotationlabels = dbac.getAllAnnotationLabels();
-
-    	/*should be equal to 6 iff 4 entries in database,
-    	  and 2 adds in beginning every testrun.*/
-        assertEquals(2, allAnnotationlabels.size());
-
-    	//a bit hardcoded, works if database contains this values before.
-    	assertTrue(allAnnotationlabels.contains(testLabelDD));
-    	assertTrue(allAnnotationlabels.contains(testLabelFT));
-    }
-
-    @Test
     public void changeFromOldLabelToNewLabelTest()
     		throws Exception{
 

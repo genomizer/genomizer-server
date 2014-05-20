@@ -10,6 +10,7 @@ import testSuite.unitTests.ChangeAnnotationLabelTest;
 import testSuite.unitTests.ExperimentTests;
 import testSuite.unitTests.FileTableTests;
 import testSuite.unitTests.GenomeReleaseTableTests;
+import testSuite.unitTests.GitHubIssuesTests;
 import testSuite.unitTests.ProcessRawToProfileTests;
 import testSuite.unitTests.PubMedIsValidTest;
 import testSuite.unitTests.PubMedToSQLConverterTests;
@@ -28,7 +29,7 @@ import testSuite.unitTests.removeAnnotationValueTest;
 
 @RunWith(Suite.class)
 @SuiteClasses({ AddAnnotationPossibilitiesTests.class, ExperimentTests.class,
-        FileTableTests.class, PubMedToSQLConverterTests.class,
+        AddDropDownValueTest.class, FileTableTests.class, PubMedToSQLConverterTests.class,
         SearchDatabaseTests.class, AddNewFileTests.class,
         TestAnnotationRequiredDefault.class, TestChainFiles.class,
         TestChangeAnnotationValue.class, TestFileNameValidator.class,
@@ -36,7 +37,7 @@ import testSuite.unitTests.removeAnnotationValueTest;
         AddDropDownValueTest.class, removeAnnotationValueTest.class,
         UpdateExperimentTest.class, UserInfoTests.class,
         ProcessRawToProfileTests.class, GenomeReleaseTableTests.class,
-        ChangeAnnotationLabelTest.class, PubMedIsValidTest.class})
+        ChangeAnnotationLabelTest.class, PubMedIsValidTest.class, GitHubIssuesTests.class})
 
 public class AllTests {
 

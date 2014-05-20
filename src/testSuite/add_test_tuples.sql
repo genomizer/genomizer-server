@@ -24,6 +24,14 @@ INSERT INTO Chain_File VALUES('rn4', 'rn5', '/var/www/data/chain_files/Rat/rn4 -
 INSERT INTO Chain_File VALUES('hg18', 'hg38', '/var/www/data/chain_files/Human/hg18 - hg38/');
 INSERT INTO Chain_File VALUES('hg38', 'hg18', '/var/www/data/chain_files/Human/hg38 - hg18/');
 
+INSERT INTO Chain_File_Files VALUES('rn3', 'rn4', 'rn3ToRn4.chain.over', DEFAULT);
+INSERT INTO Chain_File_Files VALUES('rn3', 'rn4', 'rn3ToRn4.chain(2).over', DEFAULT);
+INSERT INTO Chain_File_Files VALUES('rn3', 'rn4', 'rn3ToRn4.chain(3).over', DEFAULT);
+INSERT INTO Chain_File_Files VALUES('rn4', 'rn5', 'rn4ToRn5.over.chain', DEFAULT);
+INSERT INTO Chain_File_Files VALUES('hg18', 'hg38', 'hg18ToHg38.over.chain', DEFAULT);
+INSERT INTO Chain_File_Files VALUES('hg38', 'hg18', 'hg38ToHg18.over.chain', DEFAULT);
+INSERT INTO Chain_File_Files VALUES('hg38', 'hg18', 'hg38ToHg18.over(2).chain', DEFAULT);
+
 INSERT INTO Annotation VALUES('Species', 'DropDown', NULL, TRUE);
 INSERT INTO Annotation_Choices VALUES('Species', 'Human');
 INSERT INTO Annotation_Choices VALUES('Species', 'Fly');
