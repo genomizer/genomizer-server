@@ -1054,17 +1054,19 @@ public class DatabaseAccessor {
     }
 
     /**
-     * Get a specific chain file depending on from and to what genome release
-     * you want to convert between.
+     * Get a specific chain file depending on from and to what genome
+     * release you want to convert between.
      *
      * @param String
-     *            fromVersion - the name of the old genome release version
+     *            fromVersion - the name of the old genome release
+     *            version
      * @param String
-     *            toVersion - the name of the new genome release version
+     *            toVersion - the name of the new genome release
+     *            version
      * @return String - the filePath of that chain file
      * @throws SQLException
      */
-    public String getChainFile(String fromVersion, String toVersion)
+    public ChainFile getChainFile(String fromVersion, String toVersion)
             throws SQLException {
 
         return genMethods.getChainFile(fromVersion, toVersion);

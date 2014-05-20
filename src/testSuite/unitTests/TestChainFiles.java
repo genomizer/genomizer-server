@@ -1,19 +1,24 @@
 package testSuite.unitTests;
 
-import static org.junit.Assert.*;
-
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.HashMap;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import testSuite.TestInitializer;
+import database.ChainFile;
 import database.DatabaseAccessor;
 import database.FilePathGenerator;
+import database.ServerDependentValues;
 
 public class TestChainFiles {
 
@@ -47,37 +52,32 @@ public class TestChainFiles {
     public static void undoAllChanges() throws SQLException {
         ti.removeTuples();
 
-        recursiveDelete(testFolder);
+        ti.recursiveDelete(testFolder);
     }
 
     @Test
     public void addChain_file() throws SQLException {
 
-        String fromVersion = "hg18";
+        String fromVersion = "hg19";
         String toVersion = "hg38";
         String fileName = "chainHuman";
 
         String filePath = dbac.addChainFile(fromVersion, toVersion, fileName);
-        System.out.println(filePath);
         assertEquals(
-                "http://scratchy.cs.umu.se:8000/upload.php?path="
-                		+ testFolderPath
-                		+ "chain_files/Human/"
-                        + fromVersion
-                        + " - "
-                        + toVersion
-                        + File.separator
-                        + "chainHuman", filePath);
+                ServerDependentValues.UploadURL
+                		+ fpg.getChainFolderPath("Human", fromVersion, toVersion)
+                        , filePath);
     }
 
     @Test
     public void shouldGetRightChainFilePath() throws Exception {
-        String fromVersion = "hg19";
+        String fromVersion = "hg18";
         String toVersion = "hg38";
 
-        String filePath = dbac.getChainFile(fromVersion, toVersion);
+        ChainFile cf = dbac.getChainFile(fromVersion, toVersion);
+        String filePath = cf.folderPath;
 
-        assertEquals("/var/www/data/chain_files/Human/hg19 - hg38/hg19ToHg38.over.chain", filePath); // From add_test_tuples.sql
+        assertEquals("/var/www/data/chain_files/Human/hg18 - hg38/", filePath); // From add_test_tuples.sql
     }
 
     @Test
@@ -85,14 +85,14 @@ public class TestChainFiles {
         String fromVersion = "hg99";
         String toVersion = "hg38";
 
-        String filePath = dbac.getChainFile(fromVersion, toVersion);
+        ChainFile cf = dbac.getChainFile(fromVersion, toVersion);
 
-        assertNull(filePath);
+        assertNull(cf);
     }
 
     @Test
     public void removeChainFileFromDatabase() throws SQLException {
-        String fromVersion = "hg19";
+        String fromVersion = "hg18";
         String toVersion = "hg38";
 
         assertEquals(1, dbac.removeChainFile(fromVersion, toVersion));
@@ -120,21 +120,29 @@ public class TestChainFiles {
 
     }
 
+    @Test
+    public void shouldBeAbleToAddMultipleChainFileFiles() throws Exception {
+        String fromVersion = "rn4";
+        String toVersion = "rn5";
+        String testName1 = "testName1";
+        String testName2 = "testName2";
+        String testName3 = "testName3";
+
+		dbac.addChainFile(fromVersion, toVersion, testName1);
+		dbac.addChainFile(fromVersion, toVersion, testName2);
+		dbac.addChainFile(fromVersion, toVersion, testName3);
+
+		ChainFile cf = dbac.getChainFile(fromVersion, toVersion);
+		HashMap<String, String> files = (HashMap<String, String>) cf.getFilesWithStatus();
+
+		assertTrue(files.containsKey(testName1));
+		assertTrue(files.containsKey(testName2));
+		assertTrue(files.containsKey(testName3));
+	}
+
     private void addMockFile(String folderPath, String filename1)
             throws IOException {
         File file1 = new File(folderPath + filename1);
         file1.createNewFile();
-    }
-
-    private static void recursiveDelete(File folder) {
-        File[] contents = folder.listFiles();
-        if (contents == null || contents.length == 0) {
-            folder.delete();
-        } else {
-            for (File f : contents) {
-                recursiveDelete(f);
-            }
-        }
-        folder.delete();
     }
 }
