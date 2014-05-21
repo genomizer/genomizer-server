@@ -72,8 +72,8 @@ public class PubMedToSQLConverterTests {
 
         assertEquals(expected, query);
         assertEquals(2, pm2sql.getParameters().size());
-        assertEquals("Species", pm2sql.getParameters().get(0));
-        assertEquals("Human", pm2sql.getParameters().get(1));
+        assertEquals("Species", pm2sql.getParameters().get(0).getKey());
+        assertEquals("Human", pm2sql.getParameters().get(1).getKey());
     }
 
     @Test
@@ -87,10 +87,10 @@ public class PubMedToSQLConverterTests {
 
         assertEquals(expected, query);
         assertEquals(4, pm2sql.getParameters().size());
-        assertEquals("Species", pm2sql.getParameters().get(0));
-        assertEquals("Human", pm2sql.getParameters().get(1));
-        assertEquals("Sex", pm2sql.getParameters().get(2));
-        assertEquals("Unknown", pm2sql.getParameters().get(3));
+        assertEquals("Species", pm2sql.getParameters().get(0).getKey());
+        assertEquals("Human", pm2sql.getParameters().get(1).getKey());
+        assertEquals("Sex", pm2sql.getParameters().get(2).getKey());
+        assertEquals("Unknown", pm2sql.getParameters().get(3).getKey());
     }
 
     @Test
@@ -106,12 +106,12 @@ public class PubMedToSQLConverterTests {
 
         assertEquals(expected, query);
         assertEquals(6, pm2sql.getParameters().size());
-        assertEquals("Species", pm2sql.getParameters().get(0));
-        assertEquals("Human", pm2sql.getParameters().get(1));
-        assertEquals("Sex", pm2sql.getParameters().get(2));
-        assertEquals("Unknown", pm2sql.getParameters().get(3));
-        assertEquals("Tissue", pm2sql.getParameters().get(4));
-        assertEquals("Arm", pm2sql.getParameters().get(5));
+        assertEquals("Species", pm2sql.getParameters().get(0).getKey());
+        assertEquals("Human", pm2sql.getParameters().get(1).getKey());
+        assertEquals("Sex", pm2sql.getParameters().get(2).getKey());
+        assertEquals("Unknown", pm2sql.getParameters().get(3).getKey());
+        assertEquals("Tissue", pm2sql.getParameters().get(4).getKey());
+        assertEquals("Arm", pm2sql.getParameters().get(5).getKey());
     }
 
     @Test
@@ -124,7 +124,7 @@ public class PubMedToSQLConverterTests {
 
         assertEquals(expected, query);
         assertEquals(1, pm2sql.getParameters().size());
-        assertEquals("Ruaridh Watt", pm2sql.getParameters().get(0));
+        assertEquals("Ruaridh Watt", pm2sql.getParameters().get(0).getKey());
     }
 
     @Test
@@ -143,11 +143,11 @@ public class PubMedToSQLConverterTests {
 
         assertEquals(expected, query);
         assertEquals(5, pm2sql.getParameters().size());
-        assertEquals("Ruaridh Watt", pm2sql.getParameters().get(0));
-        assertEquals("Species", pm2sql.getParameters().get(1));
-        assertEquals("Human", pm2sql.getParameters().get(2));
-        assertEquals("Tissue", pm2sql.getParameters().get(3));
-        assertEquals("Arm", pm2sql.getParameters().get(4));
+        assertEquals("Ruaridh Watt", pm2sql.getParameters().get(0).getKey());
+        assertEquals("Species", pm2sql.getParameters().get(1).getKey());
+        assertEquals("Human", pm2sql.getParameters().get(2).getKey());
+        assertEquals("Tissue", pm2sql.getParameters().get(3).getKey());
+        assertEquals("Arm", pm2sql.getParameters().get(4).getKey());
     }
 
     @Test
@@ -159,8 +159,8 @@ public class PubMedToSQLConverterTests {
 
         assertEquals(expected, query);
         assertEquals(2, pm2sql.getParameters().size());
-        assertEquals("Species", pm2sql.getParameters().get(0));
-        assertEquals("Human", pm2sql.getParameters().get(1));
+        assertEquals("Species", pm2sql.getParameters().get(0).getKey());
+        assertEquals("Human", pm2sql.getParameters().get(1).getKey());
     }
 
     @Test
@@ -174,10 +174,10 @@ public class PubMedToSQLConverterTests {
 
         assertEquals(expected, query);
         assertEquals(4, pm2sql.getParameters().size());
-        assertEquals("Species", pm2sql.getParameters().get(0));
-        assertEquals("Human", pm2sql.getParameters().get(1));
-        assertEquals("Sex", pm2sql.getParameters().get(2));
-        assertEquals("Unknown", pm2sql.getParameters().get(3));
+        assertEquals("Species", pm2sql.getParameters().get(0).getKey());
+        assertEquals("Human", pm2sql.getParameters().get(1).getKey());
+        assertEquals("Sex", pm2sql.getParameters().get(2).getKey());
+        assertEquals("Unknown", pm2sql.getParameters().get(3).getKey());
     }
 
     @Test
@@ -191,14 +191,14 @@ public class PubMedToSQLConverterTests {
 
         assertEquals(expected, query);
         assertEquals(3, pm2sql.getParameters().size());
-        assertEquals("Ruaridh", pm2sql.getParameters().get(0));
-        assertEquals("Species", pm2sql.getParameters().get(1));
-        assertEquals("Human", pm2sql.getParameters().get(2));
+        assertEquals("Ruaridh", pm2sql.getParameters().get(0).getKey());
+        assertEquals("Species", pm2sql.getParameters().get(1).getKey());
+        assertEquals("Human", pm2sql.getParameters().get(2).getKey());
     }
     
     @Test
     public void printTest() throws Exception {
-        System.out.println(pm2sql.convertFileSearch("exp2[expid] NOT ruaridh[author] NOT Human[Species]"));
+        System.out.println(pm2sql.convertFileSearch("sgfsa[Path]"));
     }
 
 }

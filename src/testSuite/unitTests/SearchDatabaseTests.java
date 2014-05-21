@@ -85,7 +85,7 @@ public class SearchDatabaseTests {
     @Test
     public void shouldBeAbleToSearchUsingPubMedString5() throws Exception {
         List<Experiment> experiments = dbac
-                .search("Human[SpeCies] AND Umeå uni[author]");
+                .search("Human[SpeCies] AND UmeÃ¥ uni[author]");
         assertEquals(1, experiments.size());
         assertEquals(1, experiments.get(0).getFiles().size());
         assertEquals("/var/www/data/Exp1/raw/file1.fastq", experiments.get(0).getFiles()
@@ -149,7 +149,7 @@ public class SearchDatabaseTests {
             throws Exception {
     	List<Experiment> elist = dbac.search("exp2[expid]");
     	Date date = elist.get(0).getFiles().get(0).date;
-    	SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+    	SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd");
 
     	String query = df.format(date) + "[date]";
     	List<Experiment> experiments = dbac.search(query);
@@ -171,6 +171,15 @@ public class SearchDatabaseTests {
 
     	assertEquals(experiments.get(0).getFiles().get(0).author, "UCSC");
     	assertEquals(elist.get(0).getFiles().get(0).expId, "Exp2");
+    }
+    
+    @Test
+    public void shouldBeAbleToSearchOnPath()
+            throws Exception {
+
+        List<Experiment> elist = dbac.search("/var/www/data/Exp1/raw/file1.fastq[path]");
+
+        assertEquals(1, elist.size());
     }
 }
 

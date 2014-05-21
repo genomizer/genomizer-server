@@ -22,13 +22,13 @@ import database.subClasses.*;
  * PREREQUISITES: The construction parameters must reference a postgresql
  * database with the Genomizer database tables preloaded. This is done by
  * running the genomizer_database_tables.sql.
- *
+ * 
  * DatabaseAccessor manipulates the underlying postgresql database using SQL
  * commands.
- *
+ * 
  * Developed by the Data storage group for the Genomizer Project, Software
  * Engineering course at Umeå University 2014.
- *
+ * 
  * @author dv12rwt, Ruaridh Watt
  * @author dv12kko, Kenny Kunto
  * @author dv12ann, André Niklasson
@@ -40,24 +40,21 @@ public class DatabaseAccessor {
 
     public static Integer FREETEXT = 1;
     public static Integer DROPDOWN = 2;
-
     private Connection conn;
-
     public static final String DATAFOLDER = File.separator + "var"
             + File.separator + "www" + File.separator + "data" + File.separator;
-
     private FilePathGenerator fpg;
     private PubMedToSQLConverter pm2sql;
-
     private UserMethods userMethods;
     private ExperimentMethods expMethods;
     private AnnotationMethods annoMethods;
     private FileMethods fileMethods;
     private GenomeMethods genMethods;
 
+
     /**
      * Creates a databaseAccessor that opens a connection to a database.
-     *
+     * 
      * @param String
      *            username - The username to log in to the database as. Should
      *            be "c5dv151_vt14" as of now.
@@ -75,17 +72,17 @@ public class DatabaseAccessor {
      */
     public DatabaseAccessor(String username, String password, String host,
             String database) throws SQLException, IOException {
-
+        
         String url = "jdbc:postgresql://" + host + "/" + database;
-
+        
         Properties props = new Properties();
         props.setProperty("user", username);
         props.setProperty("password", password);
-
+        
         conn = DriverManager.getConnection(url, props);
+        
         fpg = new FilePathGenerator(DATAFOLDER);
         pm2sql = new PubMedToSQLConverter();
-
         userMethods = new UserMethods(conn);
         annoMethods = new AnnotationMethods(conn);
         expMethods = new ExperimentMethods(conn, fpg, annoMethods);
@@ -93,14 +90,9 @@ public class DatabaseAccessor {
         genMethods = new GenomeMethods(conn, fpg);
     }
 
-    public DatabaseAccessor() {
-
-    }
 
     /**
      * Closes the connection to the database, releasing all resources it uses.
-     *
-     * @throws SQLException
      */
     public void close() {
         try {
@@ -110,30 +102,31 @@ public class DatabaseAccessor {
         }
     }
 
+
     /**
      * Public method to check if the instance of the class is connected to a
      * database.
-     *
+     * 
      * @return boolean - true if it is connected, otherwise false.
-     * @throws SQLException
      */
-    public boolean isConnected() throws SQLException {
-        if (conn.isClosed()) {
+    public boolean isConnected() {
+        try {
+            return !conn.isClosed();
+        } catch (SQLException e) {
             return false;
-        } else {
-            return true;
         }
     }
+
 
     /**
      * Searches the database for Experiments. The search criteria are specified
      * in a String that has the same format as that used by PubMed:
-     *
-     * <Value>[<Label>] <AND|OR> <Value>[<Label>] ...
-     *
+     * 
+     * <NOT> <Value>[<Label>] <AND|OR|NOT> <Value>[<Label>] ...
+     * 
      * Round brackets should be used to disambiguate the logical expression.
      * Example: "(Human[Species] OR Fly[Species]) AND Joe Bloggs[Uploader]"
-     *
+     * 
      * @param String
      *            pubMedString - The String containing the search criteria in
      *            PubMed format.
@@ -146,34 +139,28 @@ public class DatabaseAccessor {
      * @throws ParseException
      *             - if the Date is not in the right format. (yyyy-mm-dd).
      */
-
     public List<Experiment> search(String pubMedString) throws IOException,
             SQLException, ParseException {
-
         isPubMedStringValid(pubMedString);
-
         if (pm2sql.hasFileConstraint(pubMedString)) {
             return searchFiles(pubMedString);
         }
-
         return searchExperiments(pubMedString);
     }
 
+
     /**
      * Internal method! Checks that the pubmed string is valid.
-     *
+     * 
      * @param String
      *            pubMedString
      * @return boolean - true if ok else throws Exception
      * @throws IOException
      */
     public boolean isPubMedStringValid(String pubMedString) throws IOException {
-
         int squareBracketsStart = 0, squareBracketsStop = 0;
         char last = 0;
-
         for (int i = 0; i < pubMedString.length(); i++) {
-
             if (squareBracketsStart + squareBracketsStop != 0) {
                 if (last == pubMedString.charAt(i)) {
                     throw new IOException("Missformed PubMed String");
@@ -182,13 +169,11 @@ public class DatabaseAccessor {
             if (pubMedString.charAt(i) == '[') {
                 squareBracketsStart++;
                 last = pubMedString.charAt(i);
-
             } else if (pubMedString.charAt(i) == ']') {
                 squareBracketsStop++;
                 last = pubMedString.charAt(i);
             }
         }
-
         if (squareBracketsStart == squareBracketsStop) {
             return true;
         } else {
@@ -196,10 +181,11 @@ public class DatabaseAccessor {
         }
     }
 
+
     /**
      * Returns an ArrayList which contains the usernames of all the users in the
      * database in the form of strings.
-     *
+     * 
      * @return List<String> - an ArrayList of usernames
      * @throws SQLException
      *             - if the query does not succeed
@@ -208,9 +194,10 @@ public class DatabaseAccessor {
         return userMethods.getUsers();
     }
 
+
     /**
      * Method to add a new user to the database.
-     *
+     * 
      * @param String
      *            - the username
      * @param String
@@ -225,9 +212,10 @@ public class DatabaseAccessor {
         userMethods.addUser(username, password, role, fullName, email);
     }
 
+
     /**
      * Deletes a user from the database.
-     *
+     * 
      * @param String
      *            username - the username of the user to be deleted.
      * @throws SQLException
@@ -237,9 +225,10 @@ public class DatabaseAccessor {
         userMethods.deleteUser(username);
     }
 
+
     /**
      * Returns the password for the given user. Used for login.
-     *
+     * 
      * @param String
      *            user - the username as string
      * @return String - the password
@@ -247,13 +236,13 @@ public class DatabaseAccessor {
      *             - if the query does not succeed
      */
     public String getPassword(String user) throws SQLException {
-
         return userMethods.getPassword(user);
     }
 
+
     /**
      * Changes the password for a user.
-     *
+     * 
      * @param String
      *            username - the user to change the password for
      * @param String
@@ -264,13 +253,13 @@ public class DatabaseAccessor {
      */
     public int resetPassword(String username, String newPassword)
             throws SQLException {
-
         return userMethods.resetPassword(username, newPassword);
     }
 
+
     /**
      * Gets the role (permissions) for a user.
-     *
+     * 
      * @param String
      *            username - the user to get the role for
      * @return String - the role as a string
@@ -278,13 +267,13 @@ public class DatabaseAccessor {
      *             - if the query does not succeed
      */
     public String getRole(String username) throws SQLException {
-
         return userMethods.getRole(username);
     }
 
+
     /**
      * Sets the role (permissions) for the user.
-     *
+     * 
      * @param String
      *            username - the user to set the role for
      * @param String
@@ -294,13 +283,13 @@ public class DatabaseAccessor {
      *             - if the query does not succeed
      */
     public int setRole(String username, String role) throws SQLException {
-
         return userMethods.setRole(username, role);
     }
 
+
     /**
      * Gets an experiment from the database.
-     *
+     * 
      * @param String
      *            expID - the ID of the experiment
      * @return Experiment - an Experiment object or null if the experiment does
@@ -309,13 +298,13 @@ public class DatabaseAccessor {
      *             - if the query does not succeed
      */
     public Experiment getExperiment(String expID) throws SQLException {
-
         return expMethods.getExperiment(expID);
     }
 
+
     /**
      * Adds an experiment ID to the database.
-     *
+     * 
      * @param String
      *            expID - the ID for the experiment.
      * @return int - the number of tuples inserted in the database.
@@ -326,13 +315,13 @@ public class DatabaseAccessor {
      *             If the experiment already exists.
      */
     public int addExperiment(String expID) throws SQLException, IOException {
-
         return expMethods.addExperiment(expID);
     }
 
+
     /**
      * Deletes an experiment from the database.
-     *
+     * 
      * @param String
      *            expId - the experiment ID.
      * @return int - the number of tuples deleted.
@@ -343,13 +332,13 @@ public class DatabaseAccessor {
      *             deleted from the database)
      */
     public int deleteExperiment(String expId) throws SQLException {
-
         return expMethods.deleteExperiment(expId, fpg.getRootDirectory());
     }
 
+
     /**
      * Checks if a given experiment ID exists in the database.
-     *
+     * 
      * @param String
      *            expID - the experiment ID to look for.
      * @return boolean - true if the experiment exists in the database, else
@@ -358,13 +347,13 @@ public class DatabaseAccessor {
      *             - if the query does not succeed
      */
     public boolean hasExperiment(String expID) throws SQLException {
-
         return getExperiment(expID) != null;
     }
 
+
     /**
      * Updates a value of a single annotation of a unique experiment
-     *
+     * 
      * @param String
      *            expID - the name of the experiment to annotate.
      * @param String
@@ -379,14 +368,14 @@ public class DatabaseAccessor {
      */
     public int updateExperiment(String expID, String label, String value)
             throws SQLException, IOException {
-
         return expMethods.updateExperiment(expID, label, value);
     }
+
 
     /**
      * Annotates an experiment with the given label and value. Checks so that
      * the value is valid if it is a drop down annotation.
-     *
+     * 
      * @param String
      *            expID - the name of the experiment to annotate
      * @param String
@@ -401,13 +390,13 @@ public class DatabaseAccessor {
      */
     public int annotateExperiment(String expID, String label, String value)
             throws SQLException, IOException {
-
         return expMethods.annotateExperiment(expID, label, value);
     }
 
+
     /**
      * Deletes one annotation from a specific experiment.
-     *
+     * 
      * @param String
      *            expID - the experiment to delete the annotation from
      * @param String
@@ -418,13 +407,13 @@ public class DatabaseAccessor {
      */
     public int removeExperimentAnnotation(String expID, String label)
             throws SQLException {
-
         return expMethods.removeExperimentAnnotation(expID, label);
     }
 
+
     /**
      * Gets all the annotation possibilities from the database.
-     *
+     * 
      * @return HashMap<String, Integer> - a Map with the label string as key and
      *         datatype as value. The possible datatypes are FREETEXT and
      *         DROPDOWN.
@@ -432,13 +421,13 @@ public class DatabaseAccessor {
      *             - if the query does not succeed
      */
     public Map<String, Integer> getAnnotations() throws SQLException {
-
         return annoMethods.getAnnotations();
     }
 
+
     /**
      * Creates an Annotation object from an annotation label.
-     *
+     * 
      * @param String
      *            label - the name of the annotation to create the object for.
      * @return Annotation - the Annotation object. If the label does not exist,
@@ -447,13 +436,13 @@ public class DatabaseAccessor {
      *             - if the query does not succeed.
      */
     public Annotation getAnnotationObject(String label) throws SQLException {
-
         return annoMethods.getAnnotationObject(label);
     }
 
+
     /**
      * Creates a list of Annotation objects from a list of annotation labels.
-     *
+     * 
      * @param String
      *            labels - the list of labels.
      * @return List<Annotation> - will return a list with all the annotations
@@ -464,25 +453,25 @@ public class DatabaseAccessor {
      */
     public List<Annotation> getAnnotationObjects(List<String> labels)
             throws SQLException {
-
         return annoMethods.getAnnotationObjects(labels);
     }
+
 
     /**
      * Finds all annotationLabels that exist in the database, example of labels:
      * sex, tissue, etc... Finds all annotationLabels that exist in the
      * database, example of labels: sex, tissue, etc...
-     *
+     * 
      * @return ArrayList<String>
      */
     public ArrayList<String> getAllAnnotationLabels() {
-
         return annoMethods.getAllAnnotationLabels();
     }
 
+
     /**
      * Gets the datatype of a given annotation.
-     *
+     * 
      * @param String
      *            label - annotation label.
      * @return The integer value of the annotation type (FREETEXT or DROPDOWN)
@@ -491,14 +480,14 @@ public class DatabaseAccessor {
      *             - if the query does not succeed
      */
     public Integer getAnnotationType(String label) throws SQLException {
-
         return annoMethods.getAnnotationType(label);
     }
+
 
     /**
      * Gets the default value for a annotation if there is one, If not it
      * returns NULL.
-     *
+     * 
      * @param String
      *            annotationLabel -the name of the annotation to check
      * @return String - The defult value or NULL.
@@ -506,14 +495,14 @@ public class DatabaseAccessor {
      */
     public String getDefaultAnnotationValue(String annotationLabel)
             throws SQLException {
-
         return annoMethods.getDefaultAnnotationValue(annotationLabel);
     }
+
 
     /**
      * Deletes an annotation from the list of possible annotations. Label
      * SPECIES can't be changed because of dependencies in other tables.
-     *
+     * 
      * @param String
      *            label - the label of the annotation to delete.
      * @return int - the number of tuples deleted in the database.
@@ -523,13 +512,13 @@ public class DatabaseAccessor {
      *             if label = "Species"
      */
     public int deleteAnnotation(String label) throws SQLException, IOException {
-
         return annoMethods.deleteAnnotation(label);
     }
 
+
     /**
      * Adds a free text annotation to the list of possible annotations.
-     *
+     * 
      * @param String
      *            label - the name of the annotation.
      * @param boolean required - if the annotation should be forced or not
@@ -545,13 +534,13 @@ public class DatabaseAccessor {
      */
     public int addFreeTextAnnotation(String label, String defaultValue,
             boolean required) throws SQLException, IOException {
-
         return annoMethods.addFreeTextAnnotation(label, defaultValue, required);
     }
 
+
     /**
      * Checks if a given annotation is required to be filled by the user.
-     *
+     * 
      * @param String
      *            annotationLabel - the name of the annotation to check
      * @return boolean - true if it is required, else false
@@ -559,13 +548,13 @@ public class DatabaseAccessor {
      */
     public boolean isAnnotationRequiered(String annotationLabel)
             throws SQLException {
-
         return annoMethods.isAnnotationRequiered(annotationLabel);
     }
 
+
     /**
      * Adds a drop down annotation to the list of possible annotations.
-     *
+     * 
      * @param String
      *            label - the name of the annotation
      * @param List
@@ -581,14 +570,14 @@ public class DatabaseAccessor {
     public int addDropDownAnnotation(String label, List<String> choices,
             int defaultValueIndex, boolean required) throws SQLException,
             IOException {
-
         return annoMethods.addDropDownAnnotation(label, choices,
                 defaultValueIndex, required);
     }
 
+
     /**
      * Method to add a value to a existing DropDown annotation.
-     *
+     * 
      * @param String
      *            label - the label of the chosen DropDown annotation
      * @param String
@@ -603,13 +592,13 @@ public class DatabaseAccessor {
      */
     public int addDropDownAnnotationValue(String label, String value)
             throws SQLException, IOException {
-
         return annoMethods.addDropDownAnnotationValue(label, value);
     }
 
+
     /**
      * Method to remove a given annotation of a dropdown- annotation.
-     *
+     * 
      * @param String
      *            label - the label of the chosen annotation
      * @param String
@@ -622,17 +611,17 @@ public class DatabaseAccessor {
      */
     public int removeDropDownAnnotationValue(String label, String value)
             throws SQLException, IOException {
-
         return annoMethods.removeDropDownAnnotationValue(label, value);
     }
 
+
     /**
      * Changes the annotation label.
-     *
+     * 
      * OBS! This changes the label for all experiments. Label SPECIES can't be
      * changed because of dependencies in other tables. If the Species label can
      * be changed to another, it becomes removable.
-     *
+     * 
      * @param String
      *            oldLabel
      * @param String
@@ -646,20 +635,20 @@ public class DatabaseAccessor {
      */
     public int changeAnnotationLabel(String oldLabel, String newLabel)
             throws SQLException, IOException {
-
         return annoMethods.changeAnnotationLabel(oldLabel, newLabel);
     }
+
 
     /**
      * Changes the value of an annotation corresponding to it's label.
      * Parameters: label of annotation, the old value and the new value to
      * change to.
-     *
+     * 
      * OBS! This method changes the value for every experiment.
-     *
+     * 
      * Throws an SQLException if the new value already exists in the choices
      * table (changing all males to female, and female is already in the table)
-     *
+     * 
      * @param String
      *            label - the label name.
      * @param String
@@ -673,14 +662,13 @@ public class DatabaseAccessor {
      */
     public void changeAnnotationValue(String label, String oldValue,
             String newValue) throws SQLException, IOException, ParseException {
-
         annoMethods.changeAnnotationValue(label, oldValue, newValue);
-
     }
+
 
     /**
      * Gets all the choices for a drop down annotation.
-     *
+     * 
      * @param String
      *            label - the drop down annotation to get the choice for.
      * @return List<String> - the choices for one annotation label.
@@ -688,9 +676,9 @@ public class DatabaseAccessor {
      *             - if the query does not succeed
      */
     public List<String> getChoices(String label) throws SQLException {
-
         return annoMethods.getChoices(label);
     }
+
 
     /**
      * @param String
@@ -728,13 +716,13 @@ public class DatabaseAccessor {
             String inputFileName, String metaData, String author,
             String uploader, boolean isPrivate, String genomeRelease)
             throws SQLException, IOException {
-
         return fileMethods.addNewFile(expID, fileType, fileName, inputFileName,
                 metaData, author, uploader, isPrivate, genomeRelease);
     }
 
+
     /**
-     *
+     * 
      * @param fileID
      * @return
      * @throws SQLException
@@ -743,9 +731,10 @@ public class DatabaseAccessor {
         return fileMethods.fileReadyForDownload(fileID);
     }
 
+
     /**
      * Returns the FileTuple object associated with the given filePath.
-     *
+     * 
      * @param String
      *            filePath
      * @return FileTuple - The corresponding FileTuple or null if no such file
@@ -754,13 +743,13 @@ public class DatabaseAccessor {
      *             - If the query could not be executed.
      */
     public FileTuple getFileTuple(String filePath) throws SQLException {
-
         return fileMethods.getFileTuple(filePath);
     }
 
+
     /**
      * Returns the FileTuple object associated with the given filePath.
-     *
+     * 
      * @param String
      *            filePath
      * @return FileTuple - The corresponding FileTuple or null if no such file
@@ -769,13 +758,13 @@ public class DatabaseAccessor {
      *             - If the query could not be executed.
      */
     public FileTuple getFileTuple(int fileID) throws SQLException {
-
         return fileMethods.getFileTuple(fileID);
     }
 
+
     /**
      * Deletes a file from the database.
-     *
+     * 
      * @param String
      *            path - the path to the file.
      * @return int - the number of deleted tuples in the database.
@@ -783,39 +772,39 @@ public class DatabaseAccessor {
      *             - if the query does not succeed
      */
     public int deleteFile(String path) throws SQLException {
-
         return fileMethods.deleteFile(path);
     }
 
+
     /**
      * Deletes a file from the database using the fileID.
-     *
+     * 
      * @param int fileID - the fileID of the file to be deleted.
      * @return int - 1 if deletion was successful, else 0.
      * @throws SQLException
      */
     public int deleteFile(int fileID) throws SQLException {
-
         return fileMethods.deleteFile(fileID);
     }
 
+
     /**
      * Checks if the file with the specified fileID exists in the database.
-     *
+     * 
      * @param int fileID - the fileID of the file.
      * @return boolean - true if the file exists, else false.
      * @throws SQLException
      */
     public boolean hasFile(int fileID) throws SQLException {
-
         return fileMethods.hasFile(fileID);
     }
+
 
     /**
      * Changes the Filename for a specific file with given fileID. This method
      * affects bothe the saved file name, but also the entries path and fileName
      * in database.
-     *
+     * 
      * @return resCount int, the number of rows affected by the change.
      * @throws SQLException
      *             if failed to send query,
@@ -824,19 +813,19 @@ public class DatabaseAccessor {
      */
     public int changeFileName(int fileID, String newFileName)
             throws SQLException, IOException {
-
         return fileMethods.changeFileName(fileID, newFileName);
     }
+
 
     /**
      * Generates a folder where the profile files for a certain experiment
      * should be stored.
-     *
+     * 
      * OBS! The files are not be added to the database at this point, and will
      * therefore not be searchable the users. Upon successful processing the
      * addGeneratedProfiles(...) method must be executed to add the files to the
      * database.
-     *
+     * 
      * @param String
      *            expId - The ID name of paththe experiment
      * @return String - The path to the folder or null if there are no raw files
@@ -848,34 +837,27 @@ public class DatabaseAccessor {
      */
     public Entry<String, String> processRawToProfile(String expId)
             throws IOException, SQLException {
-
         Experiment e = expMethods.getExperiment(expId);
-
         if (e == null) {
             throw new IOException("Invalid experiment ID");
         }
-
         if (e.getFiles() == null || e.getFiles().isEmpty()) {
             throw new IOException("There are no raw files to process!");
         }
-
         List<FileTuple> fileTuples = e.getFiles();
-
         FileTuple rawFileTuple = getRawFileTuple(fileTuples);
-
         if (rawFileTuple == null) {
             throw new IOException(expId + " has no raw files to process!");
         }
-
         String profileFolderPath = fpg.generateNewProfileSubFolder(fpg
                 .getProfileFolderPath(e.getID()));
-
         return new SimpleEntry<String, String>(rawFileTuple.getParentFolder(),
                 profileFolderPath);
     }
 
+
     private FileTuple getRawFileTuple(List<FileTuple> fileTuples) {
-        for (FileTuple ft: fileTuples) {
+        for (FileTuple ft : fileTuples) {
             if (ft.type.equalsIgnoreCase("raw")) {
                 return ft;
             }
@@ -883,10 +865,11 @@ public class DatabaseAccessor {
         return null;
     }
 
+
     /**
      * Adds all the files in the specified folder to the database's File table.
      * They will all be treated as profile files.
-     *
+     * 
      * @param String
      *            expId - The ID name of the experiment
      * @param String
@@ -917,30 +900,25 @@ public class DatabaseAccessor {
             String inputFileName, String metaData, String grVersion,
             String uploader, boolean isPrivate) throws SQLException,
             IOException {
-
         Experiment e = expMethods.getExperiment(expId);
-
         File profileFolder = new File(folderPath);
-
         if (!profileFolder.exists()) {
             throw new IOException("There are no profiles in this folder!");
         }
-
         for (File f : profileFolder.listFiles()) {
-
             if (!f.getName().equals(inputFileName)) {
                 FileTuple ft = fileMethods.addNewFile(e.getID(),
                         FileTuple.PROFILE, f.getName(), inputFileName,
-                        metaData, "Genomizer", uploader, isPrivate,
-                        grVersion);
+                        metaData, "Genomizer", uploader, isPrivate, grVersion);
                 fileMethods.fileReadyForDownload(ft.id);
             }
         }
     }
 
+
     /**
      * Not used in Genomizer 2014
-     *
+     * 
      * @param folderPath
      * @return
      * @throws SQLException
@@ -948,23 +926,19 @@ public class DatabaseAccessor {
      */
     public int removeIncompleteProfileProcess(String folderPath)
             throws SQLException, IOException {
-
         File profileFolder = new File(folderPath);
-
         if (profileFolder.exists()) {
             recursiveDelete(profileFolder);
         }
-
         String filePath = folderPath + "processing...";
-
         FileTuple pft = getFileFromPath(filePath);
-
         return fileMethods.deleteFile(pft.id);
     }
 
+
     /**
      * Not used in 2014.
-     *
+     * 
      * @param filePath
      * @return
      * @throws SQLException
@@ -972,45 +946,38 @@ public class DatabaseAccessor {
      */
     private FileTuple getFileFromPath(String filePath) throws SQLException,
             IOException {
-
         String query = "SELECT * FROM File WHERE Path = ?";
-
         PreparedStatement ps = conn.prepareStatement(query);
-
         ps.setString(1, filePath);
-
         ResultSet rs = ps.executeQuery();
-
         FileTuple pft;
-
         if (rs.next()) {
             pft = new FileTuple(rs);
             ps.close();
             return pft;
         }
-
         ps.close();
         throw new IOException("There is no database entry for this path");
     }
 
+
     /**
      * Gets the file path to a stored Genome Release
-     *
+     * 
      * @param String
      *            genomeVersion, The version to get filepath to, should use
      *            getAllGenomeReleases() and let user choose a version
      * @return Genome - a genome object
      * @throws SQLException
      */
-
     public Genome getGenomeRelease(String genomeVersion) throws SQLException {
-
         return genMethods.getGenomeRelease(genomeVersion);
     }
 
+
     /**
      * Add one genome release to the database.
-     *
+     * 
      * @param String
      *            genomeVersion
      * @param String
@@ -1022,36 +989,37 @@ public class DatabaseAccessor {
      */
     public String addGenomeRelease(String genomeVersion, String species,
             String filename) throws SQLException {
-
         return genMethods.addGenomeRelease(genomeVersion, species, filename);
     }
+
 
     public int genomeReleaseFileUploaded(String version, String fileName)
             throws SQLException {
         return genMethods.fileReadyForDownload(version, fileName);
     }
 
+
     /**
      * Removes one specific genome version stored in the database.
-     *
+     * 
      * @param String
      *            version - the genome version.
      * @param String
      *            species
-     *
+     * 
      * @return boolean - true if succeeded, false if failed.
      * @throws SQLException
      */
     public boolean removeGenomeRelease(String genomeVersion)
             throws SQLException {
-
         return genMethods.removeGenomeRelease(genomeVersion);
     }
+
 
     /**
      * Method for getting all the genome releases for a species currently stored
      * in the database.
-     *
+     * 
      * @param String
      *            species - the name of the species you want to get genome
      *            releases for.
@@ -1061,31 +1029,31 @@ public class DatabaseAccessor {
      */
     public ArrayList<Genome> getAllGenomReleasesForSpecies(String species)
             throws SQLException {
-
         return genMethods.getAllGenomReleasesForSpecies(species);
     }
+
 
     /**
      * Method for getting all the genome releases currently stored in the
      * database.
-     *
+     * 
      * @return ArrayList<Genome> - list of all the genome releases
      * @throws SQLException
      */
     public List<Genome> getAllGenomReleases() throws SQLException {
-
         return genMethods.getAllGenomReleases();
     }
 
-    public List<String> getAllGenomReleaseSpecies() throws SQLException {
 
+    public List<String> getAllGenomReleaseSpecies() throws SQLException {
         return genMethods.getAllGenomReleaseSpecies();
     }
+
 
     /**
      * Get a specific chain file depending on from and to what genome release
      * you want to convert between.
-     *
+     * 
      * @param String
      *            fromVersion - the name of the old genome release version
      * @param String
@@ -1095,14 +1063,14 @@ public class DatabaseAccessor {
      */
     public ChainFile getChainFile(String fromVersion, String toVersion)
             throws SQLException {
-
         return genMethods.getChainFile(fromVersion, toVersion);
     }
+
 
     /**
      * Adds a chain file to database for conversions. Parameters: Oldversion,
      * new version and filename. Returns: upload URL
-     *
+     * 
      * @param String
      *            fromVersion
      * @param String
@@ -1114,15 +1082,15 @@ public class DatabaseAccessor {
      */
     public String addChainFile(String fromVersion, String toVersion,
             String fileName) throws SQLException {
-
         return genMethods.addChainFile(fromVersion, toVersion, fileName);
     }
+
 
     /**
      * Deletes a chain_file from the database. You find the unique file by
      * sending in the genome version the file converts from and the genome
      * version the file converts to.
-     *
+     * 
      * @param String
      *            fromVersion - genome version the Chain_file converts from
      * @param String
@@ -1134,9 +1102,9 @@ public class DatabaseAccessor {
      */
     public int removeChainFile(String fromVersion, String toVersion)
             throws SQLException {
-
         return genMethods.removeChainFile(fromVersion, toVersion);
     }
+
 
     /**
      * @param String
@@ -1147,26 +1115,27 @@ public class DatabaseAccessor {
      * @throws ParseException
      */
     private List<Experiment> searchExperiments(String pubMedString)
-            throws IOException, SQLException, ParseException {
-
+            throws IOException, SQLException {
+        
         String query = pm2sql.convertExperimentSearch(pubMedString);
-        List<String> params = pm2sql.getParameters();
-
-        PreparedStatement getFiles = conn.prepareStatement(query);
-        getFiles = annoMethods.bind(getFiles, params);
-
-        ResultSet rs = getFiles.executeQuery();
+        
+        List<Entry<String, String>> params = pm2sql.getParameters();
+        
+        PreparedStatement getExperiments = conn.prepareStatement(query);
+        
+        getExperiments = annoMethods.bind(getExperiments, params);
+        
+        ResultSet rs = getExperiments.executeQuery();
         ArrayList<Experiment> experiments = new ArrayList<Experiment>();
-
         while (rs.next()) {
             Experiment exp = new Experiment(rs.getString("ExpID"));
             exp = expMethods.fillAnnotations(exp);
             exp = expMethods.fillFiles(exp);
             experiments.add(exp);
         }
-
         return experiments;
     }
+
 
     /**
      * @param String
@@ -1177,29 +1146,27 @@ public class DatabaseAccessor {
      * @throws ParseException
      */
     private List<Experiment> searchFiles(String pubMedString)
-            throws IOException, SQLException, ParseException {
-
+            throws IOException, SQLException {
+        
         String query = pm2sql.convertFileSearch(pubMedString);
-        List<String> params = pm2sql.getParameters();
-
+        
+        List<Entry<String, String>> params = pm2sql.getParameters();
+        
         PreparedStatement getFiles = conn.prepareStatement(query);
+        
         getFiles = annoMethods.bind(getFiles, params);
-
         ResultSet rs = getFiles.executeQuery();
+        
         ArrayList<Experiment> experiments = new ArrayList<Experiment>();
-
         if (!rs.next()) {
             return experiments;
         }
-
         String expId = rs.getString("ExpId");
         Experiment exp = new Experiment(expId);
         exp = expMethods.fillAnnotations(exp);
         exp.addFile(new FileTuple(rs));
-
         while (rs.next()) {
             expId = rs.getString("ExpId");
-
             if (exp.getID().equals(expId)) {
                 exp.addFile(new FileTuple(rs));
             } else {
@@ -1209,24 +1176,24 @@ public class DatabaseAccessor {
                 exp.addFile(new FileTuple(rs));
             }
         }
-
         experiments.add(exp);
-
         return experiments;
     }
 
+
     /**
      * Get's the filePathGenerator object.
-     *
+     * 
      * @return FilePathGenerator
      */
     public FilePathGenerator getFilePathGenerator() {
         return fpg;
     }
 
+
     /**
      * Recursively deletes a folder with all it's subfolders and files.
-     *
+     * 
      * @param folder
      *            the folder to delete.
      */
