@@ -1,7 +1,6 @@
 package testSuite.unitTests;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -60,7 +59,7 @@ public class ProcessRawToProfileTests {
     public void shouldGenerateRightFolderPaths() throws Exception {
         fpg.generateExperimentFolders("Exp1");
 
-        Entry<String, String> folderPaths = dbac.processRawToProfile("Exp1", "-n1", "Ruaridh", true, "hg38");
+        Entry<String, String> folderPaths = dbac.processRawToProfile("Exp1");
 
         String expectedRawFolderPath = "/var/www/data/Exp1/raw/"; // From
                                                                   // add_test_tuples.sql
@@ -70,24 +69,6 @@ public class ProcessRawToProfileTests {
         assertEquals(expectedRawFolderPath, folderPaths.getKey());
         assertEquals(expectedProfileFolderPath,
                 folderPaths.getValue());
-    }
-
-    @Test
-    public void shouldAddAProcessingFileToDB() throws Exception {
-        fpg.generateExperimentFolders("Exp1");
-        dbac.processRawToProfile("Exp1", "-n1", "Ruaridh", true, "hg38");
-        Experiment e = dbac.getExperiment("Exp1");
-        List<FileTuple> fts = e.getFiles();
-        assertEquals(3, fts.size());
-        FileTuple ft = searchFileTuples("processing...", fts);
-        assertNotNull(ft);
-        System.out.println(ft.expId);
-        System.out.println(ft.path);
-        System.out.println(ft.author);
-        System.out.println(ft.grVersion);
-        System.out.println(ft.inputFilePath);
-        System.out.println(ft.metaData);
-        System.out.println(ft.status);
     }
 
     private FileTuple searchFileTuples(String string, List<FileTuple> fts) {
@@ -103,12 +84,12 @@ public class ProcessRawToProfileTests {
     public void shouldBeAbleToAddProcessedProfiles() throws Exception {
 
         fpg.generateExperimentFolders("Exp1");
-        Entry<String, String> folderPaths = dbac.processRawToProfile("Exp1", "-n1", "Ruaridh", true, "hg38");
+        Entry<String, String> folderPaths = dbac.processRawToProfile("Exp1");
 
         addMockFiles(folderPaths.getValue(), "prof1.sam",
                 "prof2.sam", "input.sam");
 
-        dbac.addGeneratedProfiles(folderPaths.getValue(), "input.sam");
+        dbac.addGeneratedProfiles("Exp1", folderPaths.getValue(), "input.sam", "-n1", "hg38", "Ruaridh", false);
 
         List<Experiment> experiments = dbac.search("Exp1[ExpID] AND prof1.sam[FileName]");
         assertEquals(1, experiments.size());
@@ -121,7 +102,7 @@ public class ProcessRawToProfileTests {
 
         experiments = dbac.search("Exp1[ExpID] AND input.sam[FileName]");
         assertEquals(0, experiments.size());
-        
+
         experiments = dbac.search("Exp1[ExpID] AND processing...[FileName]");
         assertEquals(0, experiments.size());
     }

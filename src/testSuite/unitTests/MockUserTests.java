@@ -389,8 +389,7 @@ public class MockUserTests {
         addTwoGenomeReleaseFiles();
 
         Entry<String, String> folders = dbac
-                .processRawToProfile("My First Experiment", "-n1",
-                        "Ruaridh", true, "hg38");
+                .processRawToProfile("My First Experiment");
 
         String expectedRawFolder = testFolderPath
                 + "My First Experiment" + File.separator + "raw"
@@ -402,12 +401,6 @@ public class MockUserTests {
 
         assertEquals(expectedRawFolder, folders.getKey());
         assertEquals(expectedProfileFolder, folders.getValue());
-
-        List<Experiment> exps = dbac
-                .search("my first experiment[expid] AND profile[filetype]");
-        assertEquals(1, exps.size());
-        FileTuple ft = exps.get(0).getFiles().get(0);
-        assertEquals("In Progress", ft.status);
     }
 
     @Test
@@ -416,13 +409,12 @@ public class MockUserTests {
         addTwoGenomeReleaseFiles();
 
         Entry<String, String> folders = dbac
-                .processRawToProfile("My First Experiment", "-n1",
-                        "Ruaridh", true, "hg38");
+                .processRawToProfile("My First Experiment");
 
         addMockFile(folders.getValue(), "Prof1.sam");
         addMockFile(folders.getValue(), "Prof2.sam");
 
-        dbac.addGeneratedProfiles(folders.getValue(), null);
+        dbac.addGeneratedProfiles("My First Experiment", folders.getValue(), null, "-n1", "hg38", "Ruaridh", true);
 
         List<Experiment> exps = dbac
                 .search("my first experiment[expid]");
