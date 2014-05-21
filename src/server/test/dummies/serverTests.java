@@ -1,14 +1,18 @@
 package server.test.dummies;
 
+import authentication.PasswordHash;
+
 public class serverTests {
 
 	public static void main(String args[]) throws Exception {
-		Login.login("Splutt");
+
+		Login.login("Splutt", "hejhej"); // Should fail to login since user don't exist.
+		Login.login("epicon", "umea@2014");
 
 		//processtest();
 		//searchtest("");
 		//renameannotest();
-		usertests();
+		//usertests();
 		//specialannotest();
 		//processtest();
 

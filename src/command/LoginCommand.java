@@ -1,7 +1,10 @@
 package command;
+import response.ErrorResponse;
 import response.LoginResponse;
 import response.Response;
+import response.StatusCode;
 import authentication.Authenticate;
+import authentication.LoginAttempt;
 
 import com.google.gson.annotations.Expose;
 
@@ -40,14 +43,14 @@ public class LoginCommand extends Command {
 	@Override
 	public Response execute() {
 
-		if(Authenticate.userExists(username)) {
-			System.err.println("userexists: " + Authenticate.getID(username));
-			return new LoginResponse(200, Authenticate.getID(username));
+		LoginAttempt login = Authenticate.login(username, password);
+
+		if(login.wasSuccessful()) {
+			System.err.println("LOGIN WAS SUCCESSFUL FOR: "+ username + ". GAVE UUID: " + Authenticate.getID(username));
+			return new LoginResponse(200, login.getUUID());
 		} else {
-			String usrId = Authenticate.createUserID(username);
-			System.err.println("userdoesnotexists: " + usrId + "usrname: " + username);
-			Authenticate.addUser(username,usrId);
-			return new LoginResponse(200, usrId);
+			System.err.println("LOGIN WAS UNSUCCESSFUL FOR: " + username + ". REASON: " + login.getErrorMessage());
+			return new ErrorResponse(StatusCode.BAD_REQUEST, login.getErrorMessage());
 		}
 	}
 
