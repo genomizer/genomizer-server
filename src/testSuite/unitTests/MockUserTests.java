@@ -1,12 +1,13 @@
 package testSuite.unitTests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 
 import org.junit.After;
@@ -16,7 +17,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import testSuite.TestInitializer;
-
+import database.Annotation;
 import database.DatabaseAccessor;
 import database.Experiment;
 import database.FilePathGenerator;
@@ -114,6 +115,36 @@ public class MockUserTests {
         assertTrue(annotationLabels.contains("Sex"));
     }
 
+    @Test
+    public void addSpeciesDDAnnotation() throws Exception {
+        ArrayList<String> choices = new ArrayList<String>();
+        choices.add("Human");
+        choices.add("Fly");
+        choices.add("Rat");
+
+        dbac.addDropDownAnnotation("Species", choices, 1, true);
+
+        List<String> annotationLabels = dbac.getAllAnnotationLabels();
+        assertTrue(annotationLabels.contains("Species"));
+        List<String> annotationChoices = dbac.getChoices("Species");
+        assertEquals(3, annotationChoices.size());
+        assertTrue(annotationChoices.contains("Human"));
+    }
+
+    @Test (expected = IOException.class)
+    public void attemptToRemoveSpeciesAnnotation() throws Exception {
+        addSpeciesDDAnnotation();
+        dbac.deleteAnnotation("Species");
+    }
+
+    @Test (expected = IOException.class)
+    public void speciesRemainsAfterAttemptedDelete() throws Exception {
+        attemptToRemoveSpeciesAnnotation();
+        Annotation a = dbac.getAnnotationObject("Species");
+        assertNotNull(a);
+        assertEquals("Species", a.label);
+    }
+
     @Test(expected = IOException.class)
     public void addDuplicateDropDownAnnotation() throws Exception {
         ArrayList<String> choices = new ArrayList<String>();
@@ -179,6 +210,34 @@ public class MockUserTests {
     }
 
     @Test
+    public void removeAnnotationChoice() throws Exception {
+        addDropDownAnnotation();
+        dbac.removeDropDownAnnotationValue("sex", "male");
+        Annotation a = dbac.getAnnotationObject("sex");
+        assertEquals(2, a.getPossibleValues().size());
+    }
+
+    @Test (expected = IOException.class)
+    public void attemptToRemoveDefaultAnnotationChoice() throws Exception {
+        addDropDownAnnotation();
+        dbac.removeDropDownAnnotationValue("sex", "unknown");
+        Annotation a = dbac.getAnnotationObject("sex");
+        assertEquals(2, a.getPossibleValues().size());
+    }
+
+    @Test (expected = IOException.class)
+    public void attemptToRemoveAnnotationValueUsedByExperiment() throws Exception {
+        annotateExperimentFTandDD();
+        dbac.removeDropDownAnnotationValue("sex", "male");
+    }
+
+    @Test (expected = IOException.class)
+    public void attemptToRemoveAnnotationUsedByExperiment() throws Exception {
+        annotateExperimentFTandDD();
+        dbac.deleteAnnotation("sex");
+    }
+
+    @Test
     public void addRawFiles() throws Exception {
         annotateExperimentFTandDD();
 
@@ -208,6 +267,18 @@ public class MockUserTests {
     }
 
     @Test
+    public void rawFileUploadDone() throws Exception {
+        annotateExperimentFTandDD();
+        FileTuple ft = dbac.addNewFile("my first experiment",
+                FileTuple.RAW, "rawFile.fastq", "rawInput.fasta",
+                null, "Umu", "Ruaridh", false, null);
+        dbac.fileReadyForDownload(ft.id);
+        ft = dbac.getFileTuple(ft.id);
+        assertEquals("Done", ft.status);
+    }
+
+
+    @Test
     public void addGenomeReleaseFile() throws Exception {
         String uploadURL = dbac.addGenomeRelease("hg38", "Human",
                 "hg38.fasta");
@@ -218,6 +289,25 @@ public class MockUserTests {
                 + "hg38.fasta";
 
         assertEquals(expectedUploadURL, uploadURL);
+    }
+
+    @Test
+    public void changeSpeciesAnnotationValue() throws Exception {
+        addSpeciesDDAnnotation();
+        addGenomeReleaseFile();
+        dbac.changeAnnotationValue("Species", "Human", "Homosapien");
+        Genome g = dbac.getGenomeRelease("hg38");
+        assertEquals("Homosapien", g.species);
+    }
+
+    @Test
+    public void changeOtherAnnotationValue() throws Exception {
+        annotateExperimentFTandDD();
+        addSpeciesDDAnnotation();
+        addGenomeReleaseFile();
+        dbac.changeAnnotationValue("Sex", "male", "man");
+        Genome g = dbac.getGenomeRelease("hg38");
+        assertEquals("Human", g.species);
     }
 
     @Test
@@ -347,7 +437,7 @@ public class MockUserTests {
         ft = getFileTuple("Prof2.sam", fts);
         assertNotNull(ft);
         assertEquals("Done", ft.status);
-        
+
         System.out.println(ft.toString());
     }
 
