@@ -305,14 +305,6 @@ public class FileMethods {
 
     	String oldFilePath = "";
 
-    	String chFileNameQuery = "UPDATE File SET FileName = ? " +
-    									"WHERE FileID = ?";
-
-    	PreparedStatement nameUpdate = conn.prepareStatement(chFileNameQuery);
-    	nameUpdate.setString(1, newFileName);
-    	nameUpdate.setInt(2, fileID);
-    	int resCount = nameUpdate.executeUpdate();
-
     	// search for current filepath.
     	String searchPathQuery = "SELECT Path FROM File WHERE fileID = ?";
     	PreparedStatement pathFind = conn.prepareStatement(searchPathQuery);
@@ -334,6 +326,14 @@ public class FileMethods {
 
     	if(!oldfile.exists()) throw new java.io.IOException("Old file " +
     													    "does not exists");
+
+    	String chFileNameQuery = "UPDATE File SET FileName = ? " +
+    			"WHERE FileID = ?";
+
+    	PreparedStatement nameUpdate = conn.prepareStatement(chFileNameQuery);
+    	nameUpdate.setString(1, newFileName);
+    	nameUpdate.setInt(2, fileID);
+    	int resCount = nameUpdate.executeUpdate();
 
     	oldfile.renameTo(newFile);
 
