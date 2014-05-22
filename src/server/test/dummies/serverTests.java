@@ -7,11 +7,12 @@ public class serverTests {
 	public static void main(String args[]) throws Exception {
 
 //		Login.login("Splutt", "hejhej"); // Should fail to login since user don't exist.
-		Login.login("epicon2", "umea@2014");
+		Login.login("JonasMarkstrom", "umea@2014");
+
 
 		//processtest();
 		//searchtest("");
-		renameannotest();
+		//renameannotest();
 		//usertests();
 		//specialannotest();
 		//processtest();
