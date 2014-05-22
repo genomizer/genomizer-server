@@ -99,7 +99,9 @@ public class Authenticate {
 	}
 
 	static public void updateLatestRequest(String uuid) {
-		latestRequests.put(uuid, new Date());
+		if(latestRequests.containsKey(uuid)) {
+			latestRequests.put(uuid, new Date());
+		}
 	}
 
 	/**

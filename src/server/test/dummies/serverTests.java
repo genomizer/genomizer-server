@@ -7,11 +7,11 @@ public class serverTests {
 	public static void main(String args[]) throws Exception {
 
 //		Login.login("Splutt", "hejhej"); // Should fail to login since user don't exist.
-		Login.login("epicon", "umea@2014");
+		Login.login("epicon2", "umea@2014");
 
 		//processtest();
 		//searchtest("");
-		//renameannotest();
+		renameannotest();
 		//usertests();
 		//specialannotest();
 		//processtest();
@@ -28,8 +28,8 @@ public class serverTests {
 		Annotations.sendAddAnnotationValue("testanno space2", "val space");
 		Annotations.sendRenameAnnotationValue("testanno space2", "val space", "newval space");
 		Annotations.sendDeleteAnnotationValue("testanno space2", "newval space");
-		Annotations.sendGetAnnotationInformation();
 		Annotations.sendDeleteAnnotation("testanno space2");
+		Annotations.sendGetAnnotationInformation();
 	}
 
 	public static void usertests() throws Exception {
