@@ -51,20 +51,18 @@ public class HackingTest {
         ti.recursiveDelete(testFolder);
     }
 
-	@Test
+    @Test(expected = IOException.class)
 	public void testAddingExperimentWithEmptyName() throws SQLException, IOException {
 		dbac.addExperiment("");
-		assertNull(dbac.getExperiment(""));
 	}
 
-	@Test
+    @Test(expected = IOException.class)
 	public void testAddingDropDownWithEmptyLabel() throws SQLException, IOException {
 		List<String> choices = new ArrayList<String>();
 		choices.add("Choice1");
 		choices.add("Choice2");
 
-		dbac.addDropDownAnnotation("", choices, 0, true);
-		assertNull(dbac.getAnnotationObject(""));
+		dbac.addDropDownAnnotation("", choices, 0, true);		
 	}
 
 	@Test(expected = IOException.class)
@@ -78,24 +76,17 @@ public class HackingTest {
 
 	@Test(expected = IOException.class)
 	public void testAddingFreeTextAnnotationWithEmptyLabel() throws SQLException, IOException {
-
 		dbac.addFreeTextAnnotation("", "hej", true);
 	}
 
 	@Test(expected = IOException.class)
 	public void testAddingFreeTextAnnotationWithEmptyValue() throws SQLException, IOException {
-
 		dbac.addFreeTextAnnotation("anno2", "", true);
 	}
 
-	@Test
+	@Test(expected = IOException.class)
 	public void testAddUserWithEmptyName() throws SQLException {
-		List<String> userList;
-
 		dbac.addUser("", "1234", "Admin", "Bert Larsson", "sdsdfsfsdf");
-		userList = dbac.getUsers();
-
-		assertFalse(userList.contains(""));
 	}
 
 	@Test(expected = IOException.class)
@@ -128,5 +119,26 @@ public class HackingTest {
 	public void testRemoveDropDownAnnotationValueFromAnnotationDoesntExist() throws SQLException, IOException {
 		dbac.removeDropDownAnnotationValue("whaaat", "dfsdf");
 	}
+
+	@Test(expected = IOException.class)
+	public void testAnnotatWithNonExistentExperiment() throws SQLException, IOException {
+		dbac.annotateExperiment("blaj", "sdfdfs", "dfdf");
+	}
+
+	@Test(expected = IOException.class)
+	public void testAnnotatWithNonExistentAnnotationLabel() throws SQLException, IOException {
+		dbac.addExperiment("xp2");
+		dbac.annotateExperiment("xp2", "sdfdfs", "dfdf");
+	}
+
+	// Add tests for remove files if theye are in use or not
+
+
+
+
+
+
+
+
 
 }
