@@ -189,13 +189,19 @@ public class GenomeReleaseTableTests {
         assertEquals(6, genomes.size());
     }
 
-
+    @Test
     public void shouldBeAbleToSetStatusDone() throws Exception {
         ti.removeTuplesKeepConnection();
         dbac.addGenomeRelease("V1", "Frog", "Froggy1.txt");
         dbac.genomeReleaseFileUploaded("V1", "Froggy1.txt");
         Genome g = dbac.getGenomeRelease("V1");
         assertEquals("Done", g.getFilesWithStatus().get("Froggy1.txt"));
+    }
+    
+    @Test
+    public void shouldGetFilePrefix() throws Exception {
+        Genome g = dbac.getGenomeRelease("hg19");
+        assertEquals("hg19", g.getFilePrefix());
     }
 
     private boolean searchGenomeForVersion(List<Genome> genomeList,
