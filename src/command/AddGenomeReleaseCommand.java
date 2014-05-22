@@ -15,8 +15,6 @@ import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
 
-//TODO: Better error response messages.
-
 /**
  * Class used to handle adding a genome release.
  *
@@ -26,16 +24,13 @@ import response.StatusCode;
 public class AddGenomeReleaseCommand extends Command {
 
 	@Expose
-	private String fileName = null;
+	private String version = null;
 
 	@Expose
-	private String specie = null;
+	private String species = null;
 
 	@Expose
-	private String genomeVersion = null;
-
-	@Expose
-	private ArrayList<String> fileNames = null;
+	private ArrayList<String> files = new ArrayList<String>();
 
 	/**
 	 * Method used to validate the command.
@@ -43,25 +38,27 @@ public class AddGenomeReleaseCommand extends Command {
 	@Override
 	public boolean validate() {
 
-		//TODO: Add validation on the arraylist.
-
-		if(fileName == null || specie == null || genomeVersion == null) {
+		if(files == null || species == null || version == null) {
+			return false;
+		}
+		if(files.size() == 0) {
+			return false;
+		}
+		for(int i = 0; i < files.size(); i++) {
+			int sizeCheck = files.get(i).length();
+			if(sizeCheck > MaxSize.GENOME_FILEPATH || sizeCheck < 1) {
+				return false;
+			}
+		}
+		if(species.length() > MaxSize.GENOME_SPECIES || species.length() < 1) {
 			return false;
 		}
 
-		if(fileName.length() > MaxSize.GENOME_FILEPATH || fileName.length() < 1) {
+		if(version.length() > MaxSize.GENOME_VERSION || version.length() < 1) {
 			return false;
 		}
 
-		if(specie.length() > MaxSize.GENOME_SPECIES || specie.length() < 1) {
-			return false;
-		}
-
-		if(genomeVersion.length() > MaxSize.GENOME_VERSION || genomeVersion.length() < 1) {
-			return false;
-		}
-
-		if(genomeVersion.indexOf('/') != -1) {
+		if(version.indexOf('/') != -1) {
 			return false;
 		}
 
@@ -82,7 +79,7 @@ public class AddGenomeReleaseCommand extends Command {
 
 			db = initDB();
 			//TODO: Call proper database method.
-			//ArrayList<String> filePaths = db.addGenomeRelease(genomeVersion, species, filename);
+			//ArrayList<String> filePaths = db.addGenomeRelease(version, species, files);
 
 			//rsp = new AddGenomeReleaseResponse(StatusCode.CREATED, filePaths);
 			rsp = new MinimalResponse(StatusCode.NO_CONTENT);
