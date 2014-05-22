@@ -130,9 +130,15 @@ public class UserMethods {
 	 * @return the number of tuples updated in the database.
 	 * @throws SQLException
 	 *             if the query does not succeed
+	 * @throws IOException
 	 */
 	public int resetPassword(String username, String newPassword)
-			throws SQLException {
+			throws SQLException, IOException {
+
+		if (username == null || username.contentEquals("") ||
+				newPassword == null || newPassword.contentEquals("")) {
+			throw new IOException("Invalid arguments");
+		}
 
 		String query = "UPDATE User_Info SET Password = ? "
 				+ "WHERE (Username = ?)";
