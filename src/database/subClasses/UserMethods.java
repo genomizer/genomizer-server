@@ -59,6 +59,9 @@ public class UserMethods {
 			String fullName, String email) throws SQLException, IOException {
 
 		isValidArgument(username);
+		isValidArgument(password);
+		isValidArgument(role);
+		isValidArgument(fullName);
 
 		String query = "INSERT INTO User_Info (Username, Password, Role) "
 				+ "VALUES " + "(?, ?, ?)";
