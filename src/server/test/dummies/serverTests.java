@@ -6,11 +6,11 @@ public class serverTests {
 
 	public static void main(String args[]) throws Exception {
 
-		Login.login("epicon2", "umea@2014");
+		Login.login("huggab0y", "umea@2014");
 
 		//processtest();
 		//searchtest("");
-	//	renameannotest();
+	    //renameannotest();
 		//usertests();
 		//specialannotest();
 		//processtest();

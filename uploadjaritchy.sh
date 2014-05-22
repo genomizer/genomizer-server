@@ -11,11 +11,11 @@ mv server.jar $filename
 
 /usr/bin/expect <<EOF
 
-spawn scp -P 2200 $filename $username@scratchy.cs.umu.se:
+spawn scp -P 2222 $filename $username@itchy.cs.umu.se:
 expect "password:"
 sleep 1
 send "$password\r"
-spawn ssh $username@scratchy.cs.umu.se -p 2200
+spawn ssh $username@itchy.cs.umu.se -p 2222
 expect "password:"
 sleep 1
 send "$password\r"
