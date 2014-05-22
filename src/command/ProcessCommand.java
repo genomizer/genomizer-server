@@ -262,6 +262,12 @@ public class ProcessCommand extends Command {
 					"author: " + author + "\n" +
 					e.getMessage());
 			db.close();
+			return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, "SQL Exception in ProcessCommand execute when running " + processtype + " on experiment" + expid + "\n"+
+					"metadata: " + metadata + "\n"+
+					"parameters: " + parameters + "\n" +
+					"genomeVersion: " + genomeVersion + "\n" +
+					"author: " + author + "\n" +
+					e.getMessage());
 		} catch (IOException e1) {
 			e1.printStackTrace();
 			ResponseLogger.log(username, "IO Exception in ProcessCommand execute when running " + processtype + " on experiment" + expid + "\n"+
