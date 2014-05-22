@@ -49,7 +49,7 @@ public class AddAnnotationPossibilitiesTests {
     }
 
     @After
-    public void teardown() throws SQLException {
+    public void teardown() throws SQLException, Exception {
         dbac.deleteAnnotation(testLabelFT);
         dbac.deleteAnnotation(testLabelDD);
     }
@@ -128,16 +128,16 @@ public class AddAnnotationPossibilitiesTests {
         assertTrue(choices.isEmpty());
 
     }
-    
-    @Test(expected=SQLException.class)
-    public void shouldThrowAnExceptionWhenAddingADropDownAnnotationThatAlreadyExists() 
+
+    @Test(expected=IOException.class)
+    public void shouldThrowAnExceptionWhenAddingADropDownAnnotationThatAlreadyExists()
     		throws SQLException, IOException {
         ArrayList<String> otherChoices = new ArrayList<String>();
         otherChoices.add(testChoice);
         otherChoices.add(testChoice + "2");
     	dbac.addDropDownAnnotation(testLabelDD, otherChoices, 0, false);
     }
-    
+
     @Test
     public void shouldBeAbleToAddADropDownAnnotationChoice() throws Exception {
     	String newChoice = "newChoice";
@@ -146,16 +146,51 @@ public class AddAnnotationPossibilitiesTests {
     	assertTrue(choices.contains(newChoice));
     	assertEquals(3, choices.size());
 	}
-    
-    @Test(expected=SQLException.class)
+
+    @Test(expected=IOException.class)
     public void shouldThrowAnExceptionWhenAddingADropDownChoiceThatAlreadyExist() throws Exception {
     	dbac.addDropDownAnnotation(testLabelDD, testChoices, 0, false);
     	dbac.addDropDownAnnotationValue(testLabelDD, testChoice);
 	}
-    
+
     @Test(expected = IOException.class)
     public void shouldThrowAnExceptionWhenTryingToAddAChoiceForANoneDropDownAnnotation() throws Exception {
     	String newChoice = "newChoice";
     	dbac.addDropDownAnnotationValue(testLabelFT, newChoice);
 	}
+
+
+    @Test(expected = IOException.class)
+    public void shouldNotBeAbleToAddDate() throws SQLException, IOException {
+    	dbac.addFreeTextAnnotation("Date", "2014-11-11", false);
+    }
+
+	@Test
+	public void shouldRemoveSteelmountainAnnotation()
+			throws SQLException, IOException, Exception {
+       	String annotation = "@@@@@@2$???";
+    	dbac.addFreeTextAnnotation(annotation, null, false);
+
+        Map<String, Integer> annotations = dbac.getAnnotations();
+        assertTrue(annotations.containsKey(annotation));
+        int i = dbac.deleteAnnotation(annotation);
+        assertEquals(1,i);
+        annotations = dbac.getAnnotations();
+        assertFalse(annotations.containsKey(annotation));
+
+    }
+
+    @Test
+    public void shouldRemoveSteelmountainAnotherAnnotation()
+    		throws SQLException, IOException, Exception {
+    	String annotation = "¡!";
+    	dbac.addFreeTextAnnotation(annotation, null, false);
+
+        Map<String, Integer> annotations = dbac.getAnnotations();
+        assertTrue(annotations.containsKey(annotation));
+        int i = dbac.deleteAnnotation(annotation);
+        assertEquals(1,i);
+        annotations = dbac.getAnnotations();
+        assertFalse(annotations.containsKey(annotation));
+    }
 }
