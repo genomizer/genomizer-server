@@ -228,10 +228,11 @@ public class DatabaseAccessor {
      * @param String
      *            - the role given to the user ie. "Admin"
      * @throws SQLException
+     * @throws IOException
      * @throws DuplicatePrimaryKeyException
      */
     public void addUser(String username, String password, String role,
-            String fullName, String email) throws SQLException {
+            String fullName, String email) throws SQLException, IOException {
         userMethods.addUser(username, password, role, fullName, email);
     }
 
@@ -1081,7 +1082,8 @@ public class DatabaseAccessor {
      *            fromVersion - the name of the old genome release version
      * @param String
      *            toVersion - the name of the new genome release version
-     * @return String - the filePath of that chain file
+     * @return a ChainFile object containing all information about
+     * 		the chain file.
      * @throws SQLException
      */
     public ChainFile getChainFile(String fromVersion, String toVersion)
