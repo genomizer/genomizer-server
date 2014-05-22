@@ -117,8 +117,27 @@ public class TestChainFiles {
         assertNull(dbac.getChainFile("rn3", "rn5"));
         assertFalse(mockFile.exists());
         assertFalse(folder.exists());
-
     }
+
+    @Test
+    public void chainFileObjectShouldContainExpectedValues() throws Exception {
+        String fromVersion = "rn3";
+        String toVersion = "rn5";
+        String testName1 = "testName1";
+        String testName2 = "testName2";
+
+        dbac.addChainFile(fromVersion, toVersion, testName1);
+        dbac.addChainFile(fromVersion, toVersion, testName2);
+        ChainFile cf = dbac.getChainFile(fromVersion, toVersion);
+
+        assertEquals(fromVersion, cf.fromVersion);
+        assertEquals(toVersion, cf.toVersion);
+        assertEquals(testFolderPath + "chain_files/Rat/" + fromVersion + 
+        		" - " + toVersion + "/", cf.folderPath);
+        assertEquals(2, cf.getFilesWithStatus().size());
+        assertTrue(cf.getFilesWithStatus().containsKey(testName1));
+        assertTrue(cf.getFilesWithStatus().containsKey(testName2));
+	}
 
     @Test
     public void shouldBeAbleToAddMultipleChainFileFiles() throws Exception {
