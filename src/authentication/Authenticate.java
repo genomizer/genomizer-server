@@ -1,7 +1,12 @@
 package authentication;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.UUID;
@@ -17,41 +22,52 @@ import database.DatabaseAccessor;
  */
 public class Authenticate {
 
-	private static HashMap<String, String> activeUsersID = new HashMap<String,String>();
+	private static HashMap<String, String> activeUsersID = new HashMap<String, String>();
+	private static HashMap<String, Date> latestRequests = new HashMap<String, Date>();
 
 	static public LoginAttempt login(String username, String password) {
-		DatabaseAccessor db = null;
+
+		BufferedReader br = null;
+		String file_password = null;
 		try {
-			db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
-		} catch (SQLException e) {
-			return new LoginAttempt(false, null, "SQLException when initiating database accessor. " + e.getMessage());
-		} catch (IOException e) {
-			return new LoginAttempt(false, null, "IOException when initiating database accessor. " + e.getMessage());
+			br = new BufferedReader(new FileReader("client_password.txt"));
+		} catch (FileNotFoundException e) {
+			System.err.println("ERROR: COULD NOT FIND PASSWORD.TXT-FILE.\n" + e.getMessage());
+			return new LoginAttempt(false, null, "Internal server error.");
 		}
+	    try {
+	        StringBuilder sb = new StringBuilder();
+	        String line = br.readLine();
 
-		String hashed_password = PasswordHash.toHash(password);
-		String database_password = null;
-		try {
-			database_password = db.getPassword(username);
-		} catch (SQLException e) {
-			return new LoginAttempt(false, null, "SQLException when getting password. " + e.getMessage());
+	        while (line != null) {
+	            sb.append(line);
+	            sb.append(System.lineSeparator());
+	            line = br.readLine();
+	        }
+	        file_password = sb.toString();
+	    } catch (IOException e) {
+	    	System.err.println("ERROR: IOEXCEPTION WHEN READING PASSWORD.TXT-FILE.\n" + e.getMessage());
+	    	return new LoginAttempt(false, null, "Internal server error.");
 		}
+	    try {
+	    	br.close();
+	    } catch (IOException e) {
+	    	System.err.println("ERROR: IOEXCEPTION WHEN CLOSING STREAM AFTER READING PASSWORD.TXT-FILE." + e.getMessage());
+	    	return new LoginAttempt(false, null, "Internal server error.");
+	    }
 
-		if(database_password == null) {
-			return new LoginAttempt(false, null, "User not found.");
-		}
+	    file_password = file_password.replaceAll("\r", "");
+	    file_password = file_password.replaceAll("\n", "");
 
-		if(hashed_password == null) {
-			return new LoginAttempt(false, null, "Could not hash password.");
-		}
+	    if(!password.equals(file_password)) {
+	    	return new LoginAttempt(false, null, "Wrong password.");
+	    }
 
-		if(database_password.equals(hashed_password)) {
+	    return new LoginAttempt(true, addUser(username), null);
+	}
 
-			String user_uuid = addUser(username);
-			return new LoginAttempt(true, user_uuid, null);
-		}
-
-		return new LoginAttempt(false, null, "Wrong password.");
+	public static HashMap<String, Date> getLatestRequestsMap() {
+		return latestRequests;
 	}
 
 	/**
@@ -69,15 +85,21 @@ public class Authenticate {
 				next_uuid = uuids.next();
 			}
 
+			updateLatestRequest(next_uuid);
 			return next_uuid;
 		}
 
 		String uuid = UUID.randomUUID().toString();
 
 		activeUsersID.put(uuid, username);
+		updateLatestRequest(uuid);
 
 		return uuid;
 
+	}
+
+	static public void updateLatestRequest(String uuid) {
+		latestRequests.put(uuid, new Date());
 	}
 
 	/**
@@ -129,7 +151,7 @@ public class Authenticate {
 	static public void deleteUser(String id) {
 
 		activeUsersID.remove(id);
-
+		latestRequests.remove(id);
 	}
 
 	/**
