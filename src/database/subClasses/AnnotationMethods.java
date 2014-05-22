@@ -621,6 +621,11 @@ public class AnnotationMethods {
     public int changeAnnotationLabel(String oldLabel, String newLabel)
             throws SQLException, IOException {
 
+    	if (oldLabel == null || oldLabel.contentEquals("")
+    			|| newLabel == null || newLabel.contentEquals("")) {
+    		throw new IOException("Invalid parameters");
+    	}
+
         if (oldLabel.toLowerCase().contentEquals("species")) {
             throw new IOException("Can't change label on annotation 'Species'");
         } else if (isFileAnnotation(newLabel)){

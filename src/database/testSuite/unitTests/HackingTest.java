@@ -51,10 +51,25 @@ public class HackingTest {
         ti.recursiveDelete(testFolder);
     }
 
+    //Experiment
+
     @Test(expected = IOException.class)
 	public void testAddingExperimentWithEmptyName() throws SQLException, IOException {
 		dbac.addExperiment("");
 	}
+
+    @Test(expected = IOException.class)
+    public void testAnnotatWithNonExistentExperiment() throws SQLException, IOException {
+    	dbac.annotateExperiment("blaj", "sdfdfs", "dfdf");
+    }
+
+    @Test(expected = IOException.class)
+    public void testAnnotatWithNonExistentAnnotationLabel() throws SQLException, IOException {
+    	dbac.addExperiment("xp2");
+    	dbac.annotateExperiment("xp2", "sdfdfs", "dfdf");
+    }
+
+    //Annotation
 
     @Test(expected = IOException.class)
 	public void testAddingDropDownWithEmptyLabel() throws SQLException, IOException {
@@ -85,6 +100,13 @@ public class HackingTest {
 	}
 
 	@Test(expected = IOException.class)
+	public void testChangeAnnotationLabelToEmptyLabel() throws SQLException, IOException {
+		dbac.changeAnnotationLabel("", "value");
+	}
+
+	//User
+
+	@Test(expected = IOException.class)
 	public void testAddUserWithEmptyName() throws SQLException, IOException {
 		dbac.addUser("", "1234", "Admin", "Bert Larsson", "sdsdfsfsdf");
 	}
@@ -101,30 +123,10 @@ public class HackingTest {
 	}
 
 	@Test(expected = IOException.class)
-	public void testAnnotatWithNonExistentExperiment() throws SQLException, IOException {
-		dbac.annotateExperiment("blaj", "sdfdfs", "dfdf");
-	}
-
-	@Test(expected = IOException.class)
-	public void testAnnotatWithNonExistentAnnotationLabel() throws SQLException, IOException {
-		dbac.addExperiment("xp2");
-		dbac.annotateExperiment("xp2", "sdfdfs", "dfdf");
-	}
-
-	@Test(expected = IOException.class)
 	public void testChangeToEmptyPassword() throws SQLException, IOException {
 		dbac.addUser("Rolf", "1234", "Admin", "Rolf Persson", "dffddf@mail.com");
 		dbac.resetPassword("Rolf", "");
 	}
 
 	// Add tests for remove files if theye are in use or not
-
-
-
-
-
-
-
-
-
 }
