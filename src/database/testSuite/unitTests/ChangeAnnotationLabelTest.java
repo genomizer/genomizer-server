@@ -1,5 +1,6 @@
 package database.testSuite.unitTests;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -11,6 +12,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import database.Annotation;
 import database.DatabaseAccessor;
 import database.testSuite.TestInitializer;
 
@@ -56,6 +58,22 @@ public class ChangeAnnotationLabelTest {
             throws Exception {
         String label = "Species";
         dbac.deleteAnnotation(label);
+    }
+
+    @Test
+    public void testChangeAnnotationRequiredField() throws SQLException, IOException{
+
+    	dbac.addFreeTextAnnotation("Test", "jepp", false);
+    	Annotation testAnno = dbac.getAnnotationObject("Test");
+    	assertFalse(testAnno.isRequired);
+
+    	dbac.changeAnnotationRequiredField("Test", true);
+    	testAnno = dbac.getAnnotationObject("Test");
+    	assertTrue(testAnno.isRequired);
+
+    	dbac.changeAnnotationRequiredField("Test", true);
+    	testAnno = dbac.getAnnotationObject("Test");
+    	assertTrue(testAnno.isRequired);
     }
 
 }

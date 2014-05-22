@@ -77,6 +77,13 @@ public class GenomeReleaseTableTests {
         assertEquals("hg19", g.genomeVersion);
     }
 
+    @Test(expected = SQLException.class)
+    public void shouldThrowExceptionWhenAddFileAlreadyExist() throws SQLException {
+
+    	dbac.addGenomeRelease("test12", "Bear", "test12.txt");
+    	dbac.addGenomeRelease("test12", "Bear", "test12.txt");
+    }
+
     @Test
     public void shouldReturnRightNamesOfGenomeVersions() throws Exception {
         List<Genome> genomeList = dbac.getAllGenomReleasesForSpecies("Human");
