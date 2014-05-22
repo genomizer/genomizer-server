@@ -9,11 +9,13 @@ public class Tuple {
 
     public Tuple(String strLine) throws NumberFormatException {
 
-	    String[] tokens = strLine.split("\t");
+	String[] tokens = strLine.split("\t");
+	if(tokens.length == 3){
 	    chromosome = tokens[0];
 	    position = Integer.parseInt(tokens[1]);
 	    signal = Double.parseDouble(tokens[2]);
 	    newSignal = signal;
+	}
 
 
     }
@@ -46,6 +48,9 @@ public class Tuple {
     }
 
     public String toString(){
+	if(chromosome == null){
+	    return "";
+	}
 	if ((newSignal == Math.floor(newSignal))) {
 	    return chromosome + "\t" + position + "\t" + (int)newSignal+ "\n";
 	} else {
