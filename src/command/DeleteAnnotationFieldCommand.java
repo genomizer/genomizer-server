@@ -60,12 +60,7 @@ public class DeleteAnnotationFieldCommand extends Command {
 			e.printStackTrace();
 			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, e.getMessage());
 		} finally {
-			try {
-				db.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-				return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, "Could not close database connection");
-			}
+			db.close();
 		}
 	}
 
