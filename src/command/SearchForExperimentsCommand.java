@@ -3,6 +3,7 @@ package command;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.List;
 
 import java.net.URLDecoder;
@@ -72,13 +73,10 @@ public class SearchForExperimentsCommand extends Command {
 			searchResult = db.search(annotations);
 		} catch (SQLException | IOException e) {
 			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, e.getMessage());
+		} catch (ParseException e) {
+			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, e.getMessage());
 		} finally {
-			try {
-				db.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-				return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
-			}
+			db.close();
 		}
 		SearchResponse response = new SearchResponse(searchResult);
 		return response;

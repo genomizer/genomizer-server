@@ -15,8 +15,6 @@ import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
 
-//TODO: Add better validation.
-
 /**
  * Class used to represent a create user command.
  *
@@ -85,7 +83,7 @@ public class CreateUserCommand extends Command {
 			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
 		}
 		try {
-			db.addUser(username, password, privileges);
+			db.addUser(username, password, privileges, name, email);
 		} catch (SQLException e) {
 			return new ErrorResponse(StatusCode.BAD_REQUEST, "Error when adding user to database, user probably already exists. " + e.getMessage());
 		}

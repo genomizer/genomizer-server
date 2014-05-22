@@ -6,10 +6,8 @@ public class serverTests {
 
 	public static void main(String args[]) throws Exception {
 
-		Login.login("Splutt", "hejhej"); // Should fail to login since user don't exist.
+//		Login.login("Splutt", "hejhej"); // Should fail to login since user don't exist.
 		Login.login("epicon", "umea@2014");
-		Login.login("yuri", "umea@2014");
-		Login.login("filch", "umea@2014");
 
 		//processtest();
 		//searchtest("");
@@ -17,7 +15,6 @@ public class serverTests {
 		//usertests();
 		//specialannotest();
 		//processtest();
-
 
 		Login.logout();
 	}
@@ -51,6 +48,7 @@ public class serverTests {
 		//Annotations.sendDeleteAnnotation("@/@@@@@2$????");
 		//Annotations.sendGetAnnotationInformation();
 	}
+
 	public void exptest() throws Exception {
 		Experiment.sendDeleteExperiment("testExp22");
 		Experiment.sendAddExperiment("testExp22");

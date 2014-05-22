@@ -2,6 +2,7 @@ package command;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,16 +48,11 @@ public class RenameAnnotationValueCommand extends Command {
 				return new ErrorResponse(StatusCode.BAD_REQUEST, "The annotation " + name + " does not");
 			}
 
-		} catch (SQLException | IOException e) {
+		} catch (SQLException | IOException | ParseException e) {
 			e.printStackTrace();
 			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
 		} finally {
-			try {
-				db.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-				return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, "Could not close database connection");
-			}
+			db.close();
 		}
 	}
 

@@ -22,9 +22,6 @@ public class AddExperimentCommand extends Command {
 	private String name;
 
 	@Expose
-	private String createdBy;
-
-	@Expose
 	private ArrayList<Annotation> annotations = new ArrayList<Annotation>();
 
 	/**
@@ -39,12 +36,11 @@ public class AddExperimentCommand extends Command {
 		if(name.indexOf('/') != -1) {
 			return false;
 		}
-		if(name == null || createdBy == null || annotations == null) {
+		if(name == null || annotations == null) {
 			return false;
 		} else {
 			return true;
 		}
-
 	}
 
 	@Override
@@ -67,18 +63,7 @@ public class AddExperimentCommand extends Command {
 			e.printStackTrace();
 			return new MinimalResponse(StatusCode.BAD_REQUEST);
 		} finally{
-			try {
 				db.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-				return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
-			}
 		}
 	}
-
-
-
-
-
-
 }

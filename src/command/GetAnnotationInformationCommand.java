@@ -32,19 +32,26 @@ public class GetAnnotationInformationCommand extends Command {
 		DatabaseAccessor db = null;
 		Map<String, Integer> a = null;
 
+
+
 		try {
 			db = initDB();
-			a = db.getAnnotations();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return new ErrorResponse(StatusCode.BAD_REQUEST, "Database error");
-		} catch (IOException e) {
-			e.printStackTrace();
-			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, "Database error");
 		}
+		catch(SQLException | IOException e){
+			return new ErrorResponse(StatusCode.BAD_REQUEST, "Could not initialize db: " + e.getMessage());
+		}
+
+		try {
+			a = db.getAnnotations();
+		}
+		catch(SQLException e){
+			return new ErrorResponse(StatusCode.BAD_REQUEST, "Could not get annotations: " + e.getMessage());
+		}
+
 
 		Iterator<String> keys = a.keySet().iterator();
 		ArrayList<String> annotation_names = new ArrayList<String>();
+
 		while(keys.hasNext()) {
 			annotation_names.add(keys.next());
 		}
@@ -71,19 +78,8 @@ public class GetAnnotationInformationCommand extends Command {
 			annotations.add(annotation);
 
 		}
-
-		/*ArrayList<String> vals = new ArrayList<String>();
-	    vals.add("freetext");
-	    AnnotationInformation expId = new AnnotationInformation(0, "ExpID", vals, false);
-		annotations.add(expId);*/
-
-		try {
-			db.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, "Could not close database connection");
-		}
-		return new GetAnnotationInformationResponse(200, annotations);
+		db.close();
+		return new GetAnnotationInformationResponse(StatusCode.OK, annotations);
 	}
 
 }

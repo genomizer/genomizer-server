@@ -24,8 +24,6 @@ public class SearchResponse extends Response {
 		for (Experiment exp : searchResult) {
 			JsonObject expJson = new JsonObject();
 			expJson.addProperty("name", exp.getID());
-			expJson.addProperty("created by", "");
-
 
 			JsonArray files = new JsonArray();
 			for (FileTuple tup : exp.getFiles()) {
