@@ -689,6 +689,17 @@ public class DatabaseAccessor {
         annoMethods.changeAnnotationValue(label, oldValue, newValue);
     }
 
+    /**
+     * Method that changes the Required field to the selected boolean.
+     * @param AnnoLabel String, the name of the annotation to change required
+     * 							for.
+     * @return resCount int, the numer of rows affected by the change.
+     * @throws SQLException, will be thrown if the psql query fails.
+     */
+    public int changeAnnotationRequiredField(String annoLabel,
+    											boolean required) throws SQLException{
+    	return annoMethods.changeAnnotationRequiredField(annoLabel,required);
+    }
 
     /**
      * Gets all the choices for a drop down annotation.
@@ -1033,9 +1044,10 @@ public class DatabaseAccessor {
      *
      * @return boolean - true if succeeded, false if failed.
      * @throws SQLException
+     * @throws IOException
      */
     public boolean removeGenomeRelease(String genomeVersion)
-            throws SQLException {
+            throws SQLException, IOException {
         return genMethods.removeGenomeRelease(genomeVersion);
     }
 

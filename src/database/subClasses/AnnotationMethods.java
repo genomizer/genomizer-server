@@ -722,6 +722,26 @@ public class AnnotationMethods {
         }
     }
 
+    /**
+     * Method that changes the Required field to the selected boolean.
+     * @param AnnoLabel String, the name of the annotation to change required
+     * 							for.
+     * @return resCount int, the numer of rows affected by the change.
+     * @throws SQLException, will be thrown if the psql query fails.
+     */
+    public int changeAnnotationRequiredField(String AnnoLabel,
+    											boolean required) throws SQLException{
+
+    	String changeRequired = "UPDATE Annotation SET Required = ? WHERE (Label = ?)";
+    	PreparedStatement changeReq = conn.prepareStatement(changeRequired);
+
+    	changeReq.setBoolean(1, required);
+    	changeReq.setString(2, AnnoLabel);
+
+    	int resCount = changeReq.executeUpdate();
+    	changeReq.close();
+        return resCount;
+    }
 
     private PreparedStatement bindStrings(PreparedStatement stmt,
             ArrayList<String> parameterList) throws SQLException {
