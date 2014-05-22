@@ -6,12 +6,15 @@ import java.security.NoSuchAlgorithmException;
 
 public class PasswordHash
 {
-    public static String toHash(String password) {
+
+    public static String toSaltedMD5Hash(String password) {
+    	String salt = getSalt();
+    	String salted_password = password + salt;
     	try {
             // Create MessageDigest instance for MD5
             MessageDigest md = MessageDigest.getInstance("MD5");
             //Add password bytes to digest
-            md.update(password.getBytes());
+            md.update(salted_password.getBytes());
             //Get the hash's bytes
             byte[] bytes = md.digest();
             //This bytes[] has bytes in decimal format;
@@ -30,5 +33,9 @@ public class PasswordHash
         }
     	return null;
     }
+
+	private static String getSalt() {
+		return "genomizer";
+	}
 
 }
