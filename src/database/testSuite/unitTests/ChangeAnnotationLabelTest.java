@@ -58,4 +58,12 @@ public class ChangeAnnotationLabelTest {
         dbac.deleteAnnotation(label);
     }
 
+    @Test(expected = IOException.class)
+    public void shouldNotBeAbleToChangeAnnotationToFileAnno()
+            throws Exception {
+        String label = "Author";
+        dbac.changeAnnotationLabel("Sex", label);
+        assertNull(dbac.getAnnotationObject(label));
+    }
+
 }

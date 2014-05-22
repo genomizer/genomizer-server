@@ -610,7 +610,10 @@ public class AnnotationMethods {
 
         if (oldLabel.toLowerCase().contentEquals("species")) {
             throw new IOException("Can't change label on annotation 'Species'");
-        } else {
+        } else if (isFileAnnotation(newLabel)){
+        	throw new IOException("Can't change label name to a file- annotation name.");
+        }
+        else {
             if (!isValidChoice(newLabel)) {
                 throw new IOException(newLabel
                         + " contains invalid characters.\n"
