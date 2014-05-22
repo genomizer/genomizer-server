@@ -85,7 +85,7 @@ public class SearchDatabaseTests {
     @Test
     public void shouldBeAbleToSearchUsingPubMedString5() throws Exception {
         List<Experiment> experiments = dbac
-                .search("Human[SpeCies] AND UmeÃ¥ uni[author]");
+                .search("Human[SpeCies] AND Umeå uni[author]");
         assertEquals(1, experiments.size());
         assertEquals(1, experiments.get(0).getFiles().size());
         assertEquals("/var/www/data/Exp1/raw/file1.fastq", experiments.get(0).getFiles()
@@ -172,7 +172,7 @@ public class SearchDatabaseTests {
     	assertEquals(experiments.get(0).getFiles().get(0).author, "UCSC");
     	assertEquals(elist.get(0).getFiles().get(0).expId, "Exp2");
     }
-    
+
     @Test
     public void shouldBeAbleToSearchOnPath()
             throws Exception {
@@ -180,6 +180,25 @@ public class SearchDatabaseTests {
         List<Experiment> elist = dbac.search("/var/www/data/Exp1/raw/file1.fastq[path]");
 
         assertEquals(1, elist.size());
+    }
+
+    @Test
+    public void shouldGetAllExperimentsWhenSearchingAnEmptySring() throws Exception {
+        List<Experiment> exps = dbac.search("");
+        assertEquals(4, exps.size());
+        Experiment e = getExp("Exp1", exps);
+        assertEquals(4, e.getAnnotations().size());
+        assertEquals(2, e.getFiles().size());
+        e.toString();
+    }
+
+    private Experiment getExp(String string, List<Experiment> exps) {
+        for (Experiment e: exps) {
+            if (e.getID().equalsIgnoreCase(string)) {
+                return e;
+            }
+        }
+        return null;
     }
 }
 

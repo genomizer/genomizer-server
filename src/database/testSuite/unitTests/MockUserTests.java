@@ -352,12 +352,12 @@ public class MockUserTests {
         addGenomeReleaseFile();
 
         String uploadURL = dbac.addGenomeRelease("hg38", "Human",
-                "hg38(2).fasta");
+                "hg38.2.fasta");
 
         String expectedUploadURL = ServerDependentValues.UploadURL
                 + testFolderPath + "genome_releases" + File.separator
                 + "Human" + File.separator + "hg38" + File.separator
-                + "hg38(2).fasta";
+                + "hg38.2.fasta";
 
         assertEquals(expectedUploadURL, uploadURL);
     }
@@ -371,6 +371,7 @@ public class MockUserTests {
 
         assertEquals(2, g.getFilesWithStatus().size());
         assertEquals(2, g.getDownloadURLs().size());
+        assertEquals("hg38", g.getFilePrefix());
     }
 
     @Test

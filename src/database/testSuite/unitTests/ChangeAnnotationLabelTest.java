@@ -1,9 +1,6 @@
 package database.testSuite.unitTests;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -60,6 +57,7 @@ public class ChangeAnnotationLabelTest {
         dbac.deleteAnnotation(label);
     }
 
+
     @Test
     public void testChangeAnnotationRequiredField() throws SQLException, IOException{
 
@@ -74,6 +72,14 @@ public class ChangeAnnotationLabelTest {
     	dbac.changeAnnotationRequiredField("Test", true);
     	testAnno = dbac.getAnnotationObject("Test");
     	assertTrue(testAnno.isRequired);
+    }
+
+    @Test(expected = IOException.class)
+    public void shouldNotBeAbleToChangeAnnotationToFileAnno()
+            throws Exception {
+        String label = "Author";
+        dbac.changeAnnotationLabel("Sex", label);
+        assertNull(dbac.getAnnotationObject(label));
     }
 
 }

@@ -281,6 +281,13 @@ public class AnnotationMethods {
     public int addFreeTextAnnotation(String label, String defaultValue,
             boolean required) throws SQLException, IOException {
 
+    	if (label==null || label.isEmpty()) {
+    		throw new IOException("Invalid Label");
+    	}
+    	if (defaultValue!=null && defaultValue.isEmpty()) {
+    		throw new IOException("Invalid DefaultValue");
+    	}
+
         if (isFileAnnotation(label)) {
             throw new IOException(
                     "The given annotation is a file- annotation.'");
@@ -396,6 +403,11 @@ public class AnnotationMethods {
             int defaultValueIndex, boolean required) throws SQLException,
             IOException {
 
+    	if (label==null || label.isEmpty()) {
+    		throw new IOException("Invalid Label");
+    	}
+
+
         if (isFileAnnotation(label)) {
             throw new IOException(
                     "The given annotation is a file- annotation.'");
@@ -480,6 +492,15 @@ public class AnnotationMethods {
      */
     public int addDropDownAnnotationValue(String label, String value)
             throws SQLException, IOException {
+
+
+
+    	if (label==null || label.isEmpty()) {
+    		throw new IOException("Invalid Label");
+    	}
+    	if (value==null || value.isEmpty()) {
+    		throw new IOException("Invalid Value");
+    	}
 
         if (!isValidChoice(value)) {
             throw new IOException("Value contains invalid characters");
@@ -600,9 +621,17 @@ public class AnnotationMethods {
     public int changeAnnotationLabel(String oldLabel, String newLabel)
             throws SQLException, IOException {
 
+    	if (oldLabel == null || oldLabel.contentEquals("")
+    			|| newLabel == null || newLabel.contentEquals("")) {
+    		throw new IOException("Invalid parameters");
+    	}
+
         if (oldLabel.toLowerCase().contentEquals("species")) {
             throw new IOException("Can't change label on annotation 'Species'");
-        } else {
+        } else if (isFileAnnotation(newLabel)){
+        	throw new IOException("Can't change label name to a file- annotation name.");
+        }
+        else {
             if (!isValidChoice(newLabel)) {
                 throw new IOException(newLabel
                         + " contains invalid characters.\n"
@@ -840,4 +869,5 @@ public class AnnotationMethods {
 
         return true;
     }
+
 }
