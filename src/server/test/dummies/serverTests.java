@@ -1,13 +1,18 @@
 package server.test.dummies;
 
+import authentication.PasswordHash;
+
 public class serverTests {
 
 	public static void main(String args[]) throws Exception {
-		Login.login("Splutt");
+
+		Login.login("Splutt", "hejhej"); // Should fail to login since user don't exist.
+		Login.login("epicon", "umea@2014");
 
 		Annotations.sendAddAnnotation("Su");
 		Annotations.sendRenameAnnotationField("Su", "Super");
 		Annotations.sendDeleteAnnotation("Super");
+
 
 		Login.logout();
 	}
@@ -29,6 +34,8 @@ public class serverTests {
 		User.sendDeleteUser("c11jmm");
 		User.sendCreateUser("c11jmm", "bajs", "minion", "Jonas Erik Markström", "c11jmm@cs.umu.se");
 		User.sendCreateUser("c11jmm", "bajs", "minion", "Jonas Erik Markström", "c11jmm@cs.umu.se"); // Trying to create duplicate user, should give error.
+		Administrator.sendUpdateUserPrivileges("c11jmm", "basic");
+		Administrator.sendUpdateUserPrivileges("c11jmm2", "mastah"); // User does not exist, should return error code.
 		User.sendDeleteUser("c11jmm");
 
 	}
@@ -39,6 +46,7 @@ public class serverTests {
 		//Annotations.sendDeleteAnnotation("@/@@@@@2$????");
 		//Annotations.sendGetAnnotationInformation();
 	}
+
 	public void exptest() throws Exception {
 		Experiment.sendDeleteExperiment("testExp22");
 		Experiment.sendAddExperiment("testExp22");

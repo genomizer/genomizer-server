@@ -82,8 +82,7 @@ public class Doorman {
 						exchange(exchange, CommandType.GET_ANNOTATION_INFORMATION_COMMAND);
 						break;
 					case "/genomeRelease":
-						String fullPath = exchange.getRequestURI().toString();
-						if(fullPath.startsWith("/genomeRelease/")){
+						if(exchange.getRequestURI().toString().startsWith("/genomeRelease/")){
 							exchange(exchange, CommandType.GET_GENOME_RELEASE_SPECIES_COMMAND);
 						}else{
 							exchange(exchange, CommandType.GET_ALL_GENOME_RELEASE_COMMAND);
@@ -119,15 +118,18 @@ public class Doorman {
 						}
 						break;
 					case "/annotation":
-						String fullPath = exchange.getRequestURI().toString();
-						if (fullPath.startsWith("/annotation/field")) {
+						if (exchange.getRequestURI().toString().startsWith("/annotation/field")) {
 							exchange(exchange, CommandType.RENAME_ANNOTATION_FIELD_COMMAND);
-						} else if (fullPath.startsWith("/annotation/value")) {
+						} else if (exchange.getRequestURI().toString().startsWith("/annotation/value")) {
 							exchange(exchange, CommandType.RENAME_ANNOTATION_VALUE_COMMAND);
 						}
 						break;
 					case "/sysadm":
-						exchange(exchange, CommandType.UPDATE_ANNOTATION_PRIVILEGES_COMMAND);
+						if (exchange.getRequestURI().toString().startsWith("/sysadm/annpriv")) {
+							exchange(exchange, CommandType.UPDATE_ANNOTATION_PRIVILEGES_COMMAND);
+						} else if (exchange.getRequestURI().toString().startsWith("/sysadm/usrpriv")) {
+							exchange(exchange, CommandType.UPDATE_USER_PRIVILEGES_COMMAND);
+						}
 						break;
 					}
 					break;
@@ -148,10 +150,9 @@ public class Doorman {
 						exchange(exchange, CommandType.CREATE_USER_COMMAND);
 						break;
 					case "/annotation":
-						String fullPath = exchange.getRequestURI().toString();
-						if (fullPath.startsWith("/annotation/field")) {
+						if (exchange.getRequestURI().toString().startsWith("/annotation/field")) {
 							exchange(exchange, CommandType.ADD_ANNOTATION_FIELD_COMMAND);
-						} else if (fullPath.startsWith("/annotation/value")) {
+						} else if (exchange.getRequestURI().toString().startsWith("/annotation/value")) {
 							exchange(exchange, CommandType.ADD_ANNOTATION_VALUE_COMMAND);
 						}
 						break;
@@ -177,10 +178,9 @@ public class Doorman {
 						exchange(exchange, CommandType.DELETE_USER_COMMAND);
 						break;
 					case "/annotation":
-						String fullPath = exchange.getRequestURI().toString();
-						if (fullPath.startsWith("/annotation/field")) {
+						if (exchange.getRequestURI().toString().startsWith("/annotation/field")) {
 							exchange(exchange, CommandType.REMOVE_ANNOTATION_FIELD_COMMAND);
-						} else if (fullPath.startsWith("/annotation/value")) {
+						} else if (exchange.getRequestURI().toString().startsWith("/annotation/value")) {
 							exchange(exchange, CommandType.DELETE_ANNOTATION_VALUE_COMMAND);
 						}
 						break;

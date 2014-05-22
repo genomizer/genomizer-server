@@ -14,7 +14,7 @@ public class Login {
 
 	public static Token token = null;
 
-	static void login(String username) throws IOException {
+	static void login(String username, String password) throws IOException {
 		URL obj = new URL(testSettings.url + "/login");
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 		con.setRequestMethod("POST");
@@ -22,7 +22,7 @@ public class Login {
 
 		JsonObject jj=new JsonObject();
 		jj.addProperty("username", username);
-		jj.addProperty("password", "losenord");
+		jj.addProperty("password", password);
 
 		testSettings.sendToServer(con, jj.toString());
 		String response = null;
@@ -37,7 +37,7 @@ public class Login {
 
 		Gson gson = new Gson();
 		token = gson.fromJson(response, Token.class);
-		System.out.println(token.getToken());
+		//System.out.println(token.getToken());
 	}
 
 	static void logout() throws IOException {

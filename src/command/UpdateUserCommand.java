@@ -1,21 +1,40 @@
 package command;
 
+import com.google.gson.annotations.Expose;
+
 import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
 
 public class UpdateUserCommand extends Command {
 
+	@Expose
+	public String old_username = null;
+	@Expose
+	public String old_password = null;
+	@Expose
+	public String new_username = null;
+	@Expose
+	public String new_password = null;
+	@Expose
+	public String new_name = null;
+	@Expose
+	public String new_email = null;
+
+
 	@Override
 	public boolean validate() {
-		// TODO Auto-generated method stub
+		if(old_username == null | old_password == null | new_username == null | new_password == null) {
+			return false;
+		}
 		return true;
 	}
 
 	@Override
 	public Response execute() {
 
-		//Method not implemented, send appropriate response
+
+
 		return 	new MinimalResponse(StatusCode.NO_CONTENT);
 
 	}

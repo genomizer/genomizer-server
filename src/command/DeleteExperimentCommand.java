@@ -76,19 +76,7 @@ public class DeleteExperimentCommand extends Command {
 			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
 
 		} finally {
-
-			try {
-
-				db.close();
-
-			} catch (SQLException e) {
-
-				e.printStackTrace();
-
-				return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, "Could not close database connection");
-
-			}
-
+			db.close();
 		}
 
 		return new MinimalResponse(StatusCode.OK);

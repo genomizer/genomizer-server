@@ -273,6 +273,21 @@ public class CommandFactory {
 	}
 
 	/**
+	 * Used to create the command needed to update user privileges.
+	 *
+	 * @param json string to initiate class.
+	 * @param restful tag to put into class.
+	 * @return the actual command.
+	 */
+	public Command createUpdateUserPrivilegesCommand(String json, String username) {
+		Command updateUserPrivilegesCommand = gson.fromJson(json, UpdateUserPrivilegesCommand.class);
+		((UpdateUserPrivilegesCommand)updateUserPrivilegesCommand).setUsername(username);
+		return updateUserPrivilegesCommand;
+	}
+
+
+
+	/**
 	 * Used to create the command needed to add genome releases.
 	 *
 	 * @param json string to initiate class.

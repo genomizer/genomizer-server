@@ -2,6 +2,7 @@ package testSuite.unitTests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -30,6 +31,7 @@ public class ExperimentTests {
 
     private static String testExpId = "testExpId1";
     private static String testExpId2 = "testExpId2";
+    private static String testExpIdWrongCase = "TESTEXPid1";
 
     private static String testLabelFT = "testLabelFT1";
     private static String testValueFT = "testValueFT1";
@@ -52,7 +54,7 @@ public class ExperimentTests {
     private static String testFolderPath;
     private static File testFolder;
     private static String testFolderName = "Genomizer Test Folder - Dont be afraid to delete me";
-    
+
     private static TestInitializer ti;
 
     @BeforeClass
@@ -74,7 +76,7 @@ public class ExperimentTests {
 
         fpg = dbac.getFilePathGenerator();
         fpg.setRootDirectory(testFolderPath);
-        
+
         ti = new TestInitializer();
     }
 
@@ -94,7 +96,7 @@ public class ExperimentTests {
     }
 
     @After
-    public void teardown() throws SQLException {
+    public void teardown() throws SQLException, Exception {
         dbac.deleteExperiment(testExpId);
         dbac.deleteAnnotation(testLabelFT);
         dbac.deleteAnnotation(testLabelDD);
@@ -123,12 +125,12 @@ public class ExperimentTests {
         e = dbac.getExperiment(testExpId);
         assertEquals(testExpId, e.getID());
     }
-  
+
     @Test
     public void shouldReturnZeroOnRemovingNonExistantExp() throws Exception {
         assertEquals(0, dbac.deleteExperiment("pang"));
     }
-    
+
     @Test
     public void shouldReturnOneOnRemovingExp() throws Exception {
         assertEquals(1, dbac.deleteExperiment(testExpId));
@@ -220,20 +222,6 @@ public class ExperimentTests {
     }
 
     @Test
-    public void getAllAnnotationLabelsTest(){
-
-    	ArrayList<String> allAnnotationlabels = dbac.getAllAnnotationLabels();
-
-    	/*should be equal to 6 iff 4 entries in database,
-    	  and 2 adds in beginning every testrun.*/
-        assertEquals(2, allAnnotationlabels.size());
-
-    	//a bit hardcoded, works if database contains this values before.
-    	assertTrue(allAnnotationlabels.contains(testLabelDD));
-    	assertTrue(allAnnotationlabels.contains(testLabelFT));
-    }
-
-    @Test
     public void changeFromOldLabelToNewLabelTest()
     		throws Exception{
 
@@ -273,6 +261,18 @@ public class ExperimentTests {
 		dbac.deleteExperiment(testExpId);
 		assertFalse(dir.exists());
 	}
+
+    @Test
+    public void shouldGetExperimentDespiteWrongCase() throws Exception {
+        Experiment e = dbac.getExperiment(testExpIdWrongCase);
+        assertNotNull(e);
+        assertEquals(testExpId, e.getID());
+    }
+
+    @Test
+    public void shouldReturnNullIfExperimentDoesNotExist() throws Exception {
+        assertNull(dbac.getExperiment("pang"));
+    }
 
     private void addMockFile(String folderPath, String filename1) throws IOException {
         File file1 = new File(folderPath + filename1);

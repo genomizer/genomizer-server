@@ -1,8 +1,13 @@
 package authentication;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.UUID;
+
+import server.DatabaseSettings;
+import database.DatabaseAccessor;
 
 /**
  * Class used to authenticate users and privileges.
@@ -14,19 +19,39 @@ public class Authenticate {
 
 	private static HashMap<String, String> activeUsersID = new HashMap<String,String>();
 
-	/**
-	 * method used to create a user identification.
-	 *
-	 * @param username to create the identification for.
-	 *
-	 * @return String with the identification.
-	 */
-	static public String createUserID(String username) {
+	static public LoginAttempt login(String username, String password) {
+		DatabaseAccessor db = null;
+		try {
+			db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
+		} catch (SQLException e) {
+			return new LoginAttempt(false, null, "SQLException when initiating database accessor. " + e.getMessage());
+		} catch (IOException e) {
+			return new LoginAttempt(false, null, "IOException when initiating database accessor. " + e.getMessage());
+		}
 
-		String uid = UUID.randomUUID().toString();
+		String hashed_password = PasswordHash.toHash(password);
+		String database_password = null;
+		try {
+			database_password = db.getPassword(username);
+		} catch (SQLException e) {
+			return new LoginAttempt(false, null, "SQLException when getting password. " + e.getMessage());
+		}
 
-		return UUID.fromString(uid).toString();
+		if(database_password == null) {
+			return new LoginAttempt(false, null, "User not found.");
+		}
 
+		if(hashed_password == null) {
+			return new LoginAttempt(false, null, "Could not hash password.");
+		}
+
+		if(database_password.equals(hashed_password)) {
+
+			String user_uuid = addUser(username);
+			return new LoginAttempt(true, user_uuid, null);
+		}
+
+		return new LoginAttempt(false, null, "Wrong password.");
 	}
 
 	/**
@@ -35,9 +60,23 @@ public class Authenticate {
 	 * @param username to add as logged in.
 	 * @param userID to add as logged in.
 	 */
-	static public void addUser(String username,String userID) {
+	static public String addUser(String username) {
 
-		activeUsersID.put(userID, username);
+		if(activeUsersID.containsValue(username)) {
+			Iterator<String> uuids = activeUsersID.keySet().iterator();
+			String next_uuid = uuids.next();
+			while(!activeUsersID.get(next_uuid).equals(username)) {
+				next_uuid = uuids.next();
+			}
+
+			return next_uuid;
+		}
+
+		String uuid = UUID.randomUUID().toString();
+
+		activeUsersID.put(uuid, username);
+
+		return uuid;
 
 	}
 
