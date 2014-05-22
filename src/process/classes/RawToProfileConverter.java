@@ -94,9 +94,9 @@ public class RawToProfileConverter extends Executor {
 				if (checker.shouldRunBowTie()) {
 					System.out.println("Running Bowtie");
 					logString = runBowTie(rawFile1, rawFile_1_Name);
-					// System.out.println(logString);
+					 System.out.println(logString);
 
-					checkBowTieFile("resources/" + dir + rawFile_1_Name
+					checkBowTieFile(remoteExecution+"resources/" + dir + rawFile_1_Name
 							+ ".sam", rawFile_1_Name);
 
 					System.out.println("Running SortSam");
@@ -105,7 +105,7 @@ public class RawToProfileConverter extends Executor {
 						logString = logString + "\n"
 								+ runBowTie(rawFile2, rawFile_2_Name);
 
-						checkBowTieFile("resources/" + dir + rawFile_2_Name
+						checkBowTieFile(remoteExecution+"resources/" + dir + rawFile_2_Name
 								+ ".sam", rawFile_2_Name);
 
 						sortSamFile(rawFile_2_Name);
@@ -385,10 +385,15 @@ public class RawToProfileConverter extends Executor {
 			throws ProcessException {
 		String bowTieParams = checkBowTieProcessors(parameters[0]);
 
+		// used to run remotely
+//		String[] bowTieParameters = parse("bowtie " + bowTieParams + " "
+//				+ parameters[1] + " " + inFolder + "/" + fileOne + " " + remoteExecution+"resources/"+dir
+//				+ fileOneName + ".sam");
+
+		//Ordinary
 		String[] bowTieParameters = parse("bowtie " + bowTieParams + " "
 				+ parameters[1] + " " + inFolder + "/" + fileOne + " " + dir
 				+ fileOneName + ".sam");
-
 		try {
 			return executeProgram(bowTieParameters);
 		} catch (InterruptedException e) {
@@ -464,7 +469,6 @@ public class RawToProfileConverter extends Executor {
 
 	/**
 	 * Creates the working directory for the procedure to put its files in.
-	 *
 	 *
 	 * @param directoryPath
 	 *            the directory to create if it doesnt exist

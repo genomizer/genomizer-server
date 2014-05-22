@@ -186,7 +186,7 @@ public class PubMedToSQLConverterTests {
         String query = pm2sql
                 .convertFileSearch("NOT Ruaridh[Author] NOT Human[Species]");
 
-        String expected = sqlFragmentForFileAttr + "Author <> ?" + "\nINTERSECT\n"
+        String expected = sqlFragmentForFileAttr + "Author NOT ~~* ?" + "\nINTERSECT\n"
                 + sqlFragmentForExpAttrInFileSearchNegated + orderBySqlFragment;
 
         assertEquals(expected, query);
@@ -194,6 +194,11 @@ public class PubMedToSQLConverterTests {
         assertEquals("Ruaridh", pm2sql.getParameters().get(0));
         assertEquals("Species", pm2sql.getParameters().get(1));
         assertEquals("Human", pm2sql.getParameters().get(2));
+    }
+    
+    @Test
+    public void printTest() throws Exception {
+        System.out.println(pm2sql.convertFileSearch("exp2[expid] NOT ruaridh[author] NOT Human[Species]"));
     }
 
 }
