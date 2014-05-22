@@ -8,6 +8,8 @@ public class serverTests {
 
 		Login.login("Splutt", "hejhej"); // Should fail to login since user don't exist.
 		Login.login("epicon", "umea@2014");
+		Login.login("yuri", "umea@2014");
+		Login.login("filch", "umea@2014");
 
 		//processtest();
 		//searchtest("");

@@ -9,6 +9,8 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.ParseException;
 
+import authentication.InactiveUuidsRemover;
+
 import command.CommandHandler;
 
 import server.DatabaseSettings;
@@ -61,6 +63,7 @@ public class ServerMain {
 		try {
 			Doorman doorman = new Doorman(commandHandler, port);
 			doorman.start();
+			(new Thread(new InactiveUuidsRemover())).start();
 			System.out.println("Doorman started on port " + port);
 			System.out.println("Database:");
 			System.out.println("  username " + DatabaseSettings.username);
