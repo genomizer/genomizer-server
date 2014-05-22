@@ -93,16 +93,8 @@ public class DeleteGenomeReleaseCommand extends Command {
 
 		} finally {
 
-			try {
-
-				if(db.isConnected()) {
-					db.close();
-				}
-
-			} catch (SQLException e) {
-
-				return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, "Error closeing database");
-
+			if(db.isConnected()) {
+				db.close();
 			}
 
 		}
