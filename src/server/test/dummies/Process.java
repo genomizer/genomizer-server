@@ -14,17 +14,17 @@ public class Process {
 
 	public static void sendRawToProfile() throws IOException{
 
-		String expid = "riktigaRawFiles";
+		String expid = "RealRawFiles";
 		String parameters = "\"-a -m 1 --best -p 10 -v 2 -q  -S \"," +
 				"\"\"," +
 				"\"y\"," +
-				"\"y\"," +
-				"\"10 1 5 0 0\"," +
-				"\"y 10\"," +
+				"\"\"," +
+				"\"\"," +
+				"\"\"," +
 				"\"\"," +
 				"\"\"";
 		String metadata = "astringofmetadata";
-		String genomeVersion = "dm3";
+		String genomeVersion = "fb5";
 		String author = "robinodling";
 
 
