@@ -52,32 +52,29 @@ public class GetGenomeReleaseSpeciesCommand extends Command{
 
 		try {
 			db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
-			if(db.getChoices("Species").contains(species)){
-				ArrayList<Genome> genomeReleases=db.getAllGenomReleasesForSpecies(species);
-				return new GetGenomeReleaseRespons(StatusCode.OK, genomeReleases);
+			try{
+				if(db.getChoices("Species").contains(species)){
+					ArrayList<Genome> genomeReleases=db.getAllGenomReleasesForSpecies(species);
+					return new GetGenomeReleaseRespons(StatusCode.OK, genomeReleases);
 
-			}else{
-				return new ErrorResponse(StatusCode.BAD_REQUEST, "The species you are asking for has no genome version released");
-			}
+				}else{
+					return new ErrorResponse(StatusCode.BAD_REQUEST, "The species you are asking for has no genome version released");
+				}
+				}catch (SQLException e){
+					return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, "Query did not succed" + e.getMessage());
+				}
 
 			//ArrayList<Genome> genomeReleases=db.getAllGenomReleasesForSpecies(species);
 			//return new GetGenomeReleaseRespons(StatusCode.OK, genomeReleases);
 
 		} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, "DatabaseAccessor could not be created: " + e.getMessage());
 		} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, "The species you are asking for has no genome version released");
 		}finally{
-			try {
-				db.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			db.close();
 		}
-		return null;
+
 	}
 
 }

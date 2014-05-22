@@ -52,27 +52,23 @@ public class GetGenomeReleaseCommand extends Command{
 	public Response execute() {
 		DatabaseAccessor db=null;
 		try {
-
 			db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
-			ArrayList<Genome> genomeReleases=db.getAllGenomReleases();
+			try{
+				ArrayList<Genome> genomeReleases = (ArrayList<Genome>) db.getAllGenomReleases();
+				return new GetGenomeReleaseRespons(StatusCode.OK, genomeReleases);
+			}catch(SQLException e){
+				return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, "Could not fetch all genome releases: " + e.getMessage());
+			}
 
-			return new GetGenomeReleaseRespons(StatusCode.OK, genomeReleases);
+
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, "SQLException - Could not create connection to database: " + e.getMessage());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, "EOException - Could not create connection to database: " + e.getMessage());
 		} finally {
-			try {
-				db.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			db.close();
 		}
-		return new ErrorResponse(StatusCode.BAD_REQUEST, "Something went wrong");
 	}
 
 }

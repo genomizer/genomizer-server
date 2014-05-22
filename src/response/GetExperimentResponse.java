@@ -18,7 +18,7 @@ public class GetExperimentResponse extends Response {
 
 	JsonObject obj;
 
-	public GetExperimentResponse(ArrayList<String> info, Map<String, String> annotations, List<FileTuple> list, int code) {
+	public GetExperimentResponse(int code, ArrayList<String> info, Map<String, String> annotations, List<FileTuple> list) {
 		this.code = code;
 
 		obj = new JsonObject();

@@ -52,8 +52,15 @@ public class EditAnnotationFieldCommand extends Command {
 	@Override
 	public Response execute() {
 		DatabaseAccessor db = null;
+
 		try {
 			db = initDB();
+		}
+		catch(SQLException | IOException e){
+			return new ErrorResponse(StatusCode.BAD_REQUEST, "Could not initialize db: " + e.getMessage());
+		}
+
+		try {
 			Map<String,Integer> anno = db.getAnnotations();
 
 			if (!anno.containsKey(oldName)) {
@@ -61,15 +68,18 @@ public class EditAnnotationFieldCommand extends Command {
 			} else if (anno.containsKey(newName)) {
 				return new ErrorResponse(StatusCode.BAD_REQUEST, "The annotation field " + newName + " already exists in the database");
 			}
-			db.changeAnnotationLabel(oldName, newName);
-		} catch (IOException | SQLException e) {
-			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, e.getMessage());
-		} finally {
+
 			try {
-				db.close();
-			} catch (SQLException e) {
-				return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, e.getMessage());
+				db.changeAnnotationLabel(oldName, newName);
+			} catch (IOException | SQLException e) {
+				return new ErrorResponse(StatusCode.BAD_REQUEST, "Could not change annotation label: " + e.getMessage());
 			}
+
+		}
+		catch(SQLException e){
+			return new ErrorResponse(StatusCode.BAD_REQUEST, "Could not get annotations: " + e.getMessage());
+		}finally{
+			db.close();
 		}
 
 		return new MinimalResponse(StatusCode.OK);
