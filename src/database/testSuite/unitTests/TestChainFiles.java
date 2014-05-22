@@ -1,4 +1,4 @@
-package testSuite.unitTests;
+package database.testSuite.unitTests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -14,11 +14,11 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import testSuite.TestInitializer;
 import database.ChainFile;
 import database.DatabaseAccessor;
 import database.FilePathGenerator;
 import database.ServerDependentValues;
+import database.testSuite.TestInitializer;
 
 public class TestChainFiles {
 

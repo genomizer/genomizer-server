@@ -1,4 +1,4 @@
-package testSuite;
+package database.testSuite;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -14,8 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import testSuite.unitTests.SearchDatabaseTests;
 import database.DatabaseAccessor;
+import database.testSuite.unitTests.SearchDatabaseTests;
 
 /**
  * Create an instance of this class if you want to use the test tuples in

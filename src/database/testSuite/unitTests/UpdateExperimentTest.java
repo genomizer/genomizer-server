@@ -1,4 +1,4 @@
-package testSuite.unitTests;
+package database.testSuite.unitTests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -11,10 +11,10 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import testSuite.TestInitializer;
 import database.Annotation;
 import database.DatabaseAccessor;
 import database.Experiment;
+import database.testSuite.TestInitializer;
 
 public class UpdateExperimentTest {
 

@@ -1,4 +1,4 @@
-package testSuite.unitTests;
+package database.testSuite.unitTests;
 
 import static org.junit.Assert.*;
 
@@ -14,10 +14,10 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import testSuite.TestInitializer;
 
 
 import database.DatabaseAccessor;
+import database.testSuite.TestInitializer;
 
 public class AddAnnotationPossibilitiesTests {
 
