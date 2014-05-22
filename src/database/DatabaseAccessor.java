@@ -1082,7 +1082,8 @@ public class DatabaseAccessor {
      *            fromVersion - the name of the old genome release version
      * @param String
      *            toVersion - the name of the new genome release version
-     * @return String - the filePath of that chain file
+     * @return a ChainFile object containing all information about
+     * 		the chain file.
      * @throws SQLException
      */
     public ChainFile getChainFile(String fromVersion, String toVersion)
