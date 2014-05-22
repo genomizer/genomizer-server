@@ -45,7 +45,7 @@ public class AddAnnotationFieldCommand extends Command {
 	 */
 	@Override
 	public boolean validate() {
-		if(name.length() > 20 || type.size() < 1 ) {
+		if(name.length() > 40 || type.size() < 1 ) {
 			return false;
 		}
 		if(name.indexOf('/') != -1) {
