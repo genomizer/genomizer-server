@@ -95,16 +95,8 @@ public class AddGenomeReleaseCommand extends Command {
 
 		} finally {
 
-			try {
-
-				if(db.isConnected()) {
-					db.close();
-				}
-
-			} catch (SQLException e) {
-
-				rsp = new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, "Error cloeseing the database.");
-
+			if(db.isConnected()) {
+				db.close();
 			}
 
 		}
