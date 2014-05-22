@@ -178,7 +178,39 @@ public class ProcessCommand extends Command {
 					db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
 				}
 				Genome g = db.getGenomeRelease(genomeVersion);
-				parameters[1] = g.folderPath;
+
+				String genomeFolderPath = g.folderPath;
+				String genomeFilePrefix = g.getFilePrefix();
+
+				if(genomeFolderPath == null){
+					ResponseLogger.log(username, "Could not get genome folder path when " + processtype + " on experiment" + expid + "\n"+
+							"metadata: " + metadata + "\n"+
+							"parameters: " + parameters + "\n" +
+							"genomeFilePrefix: " + genomeFilePrefix + "\n" +
+							"genomeVersion: " + genomeVersion + "\n");
+					db.close();
+					return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, "Could not get genome folder path when " + processtype + " on experiment" + expid + "\n"+
+							"metadata: " + metadata + "\n"+
+							"parameters: " + parameters + "\n" +
+							"genomeFilePrefix: " + genomeFilePrefix + "\n" +
+							"genomeVersion: " + genomeVersion + "\n");
+				}
+
+				if(genomeFilePrefix == null){
+					ResponseLogger.log(username, "Could not get genome file prefix when " + processtype + " on experiment" + expid + "\n"+
+							"metadata: " + metadata + "\n"+
+							"parameters: " + parameters + "\n" +
+							"genomeFolderPath: " + genomeFolderPath + "\n" +
+							"genomeVersion: " + genomeVersion + "\n");
+					db.close();
+					return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, "Could not get genome file prefix when " + processtype + " on experiment" + expid + "\n"+
+							"metadata: " + metadata + "\n"+
+							"parameters: " + parameters + "\n" +
+							"genomeFolderPath: " + genomeFolderPath + "\n" +
+							"genomeVersion: " + genomeVersion + "\n");
+				}
+
+				parameters[1] = genomeFolderPath + genomeFilePrefix;
 				//parameters[1] = "/var/www/data/genome_releases/Rat/d_melanogaster_fb5_22";
 
 

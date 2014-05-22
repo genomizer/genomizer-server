@@ -231,10 +231,10 @@ public class SmoothingAndStep {
 	if(params[2] < 0){
 	    throw new ProcessException("Minimum positions to smooth needs to be positive or 0");
 	}
-	if(!(params[3] == 0 || params[1] == 1)){
+	if(!(params[3] == 0 || params[3] == 1)){
 	    throw new ProcessException("Print total mean flag must be either 0 or 1");
 	}
-	if(!(params[4] == 0 || params[1] == 1)){
+	if(!(params[4] == 0 || params[4] == 1)){
 	    throw new ProcessException("The flag print zeroes should be either 1 for yes or 0 for no");
 	}
 
