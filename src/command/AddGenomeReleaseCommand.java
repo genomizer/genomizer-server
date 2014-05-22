@@ -10,6 +10,7 @@ import database.MaxSize;
 
 import response.AddGenomeReleaseResponse;
 import response.ErrorResponse;
+import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
 
@@ -32,11 +33,16 @@ public class AddGenomeReleaseCommand extends Command {
 	@Expose
 	private String genomeVersion = null;
 
+	@Expose
+	private int fileNumber = 0;
+
 	/**
 	 * Method used to validate the command.
 	 */
 	@Override
 	public boolean validate() {
+
+		//TODO: Add validation on the integer.
 
 		if(fileName == null || specie == null || genomeVersion == null) {
 			return false;
@@ -74,8 +80,11 @@ public class AddGenomeReleaseCommand extends Command {
 		try {
 
 			db = initDB();
-			String filePath = db.addGenomeRelease(genomeVersion, specie, fileName);
-			rsp = new AddGenomeReleaseResponse(StatusCode.CREATED, filePath);
+			//TODO: Call proper database method.
+			//String filePath = db.addGenomeRelease(genomeVersion, specie, fileName);
+			//ArrayList<String> filePaths = db.addGenomeRelease(genomeVersion, species, filename);
+			//rsp = new AddGenomeReleaseResponse(StatusCode.CREATED, filePath);
+			rsp = new MinimalResponse(StatusCode.NO_CONTENT);
 
 		} catch (SQLException e) {
 
