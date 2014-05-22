@@ -2,6 +2,7 @@ package command;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import com.google.gson.annotations.Expose;
 
@@ -10,6 +11,7 @@ import database.MaxSize;
 
 import response.AddGenomeReleaseResponse;
 import response.ErrorResponse;
+import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
 
@@ -32,11 +34,16 @@ public class AddGenomeReleaseCommand extends Command {
 	@Expose
 	private String genomeVersion = null;
 
+	@Expose
+	private ArrayList<String> fileNames = null;
+
 	/**
 	 * Method used to validate the command.
 	 */
 	@Override
 	public boolean validate() {
+
+		//TODO: Add validation on the arraylist.
 
 		if(fileName == null || specie == null || genomeVersion == null) {
 			return false;
@@ -74,8 +81,11 @@ public class AddGenomeReleaseCommand extends Command {
 		try {
 
 			db = initDB();
-			String filePath = db.addGenomeRelease(genomeVersion, specie, fileName);
-			rsp = new AddGenomeReleaseResponse(StatusCode.CREATED, filePath);
+			//TODO: Call proper database method.
+			//ArrayList<String> filePaths = db.addGenomeRelease(genomeVersion, species, filename);
+
+			//rsp = new AddGenomeReleaseResponse(StatusCode.CREATED, filePaths);
+			rsp = new MinimalResponse(StatusCode.NO_CONTENT);
 
 		} catch (SQLException e) {
 
@@ -95,16 +105,8 @@ public class AddGenomeReleaseCommand extends Command {
 
 		} finally {
 
-			try {
-
-				if(db.isConnected()) {
-					db.close();
-				}
-
-			} catch (SQLException e) {
-
-				rsp = new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, "Error cloeseing the database.");
-
+			if(db.isConnected()) {
+				db.close();
 			}
 
 		}

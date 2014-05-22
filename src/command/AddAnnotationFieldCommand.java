@@ -11,6 +11,7 @@ import response.StatusCode;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import database.DatabaseAccessor;
+import database.MaxSize;
 
 /**
  * Class used to add annotation fields.
@@ -21,17 +22,17 @@ import database.DatabaseAccessor;
 public class AddAnnotationFieldCommand extends Command {
 
 	@Expose
-	private String name;
+	private String name = null;;
 
 	@Expose
 	private ArrayList<String> type = new ArrayList<String>();
 
 	@SerializedName("default")
 	@Expose
-	private String defaults;
+	private String defaults = null;
 
 	@Expose
-	private Boolean forced;
+	private Boolean forced = null;
 
 	/**
 	 * Empty constructor.
@@ -45,7 +46,14 @@ public class AddAnnotationFieldCommand extends Command {
 	 */
 	@Override
 	public boolean validate() {
-		if(name.length() > 40 || type.size() < 1 ) {
+
+		if(name == null || defaults == null || type.size() < 1) {
+			return false;
+		}
+		if(name.length() < 1 || name.length() > MaxSize.ANNOTATION_LABEL) {
+			return false;
+		}
+		if(defaults.length() < 1 || defaults.length() > MaxSize.ANNOTATION_DEFAULTVALUE) {
 			return false;
 		}
 		if(name.indexOf('/') != -1) {
