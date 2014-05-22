@@ -52,12 +52,12 @@ public class WorkHandler extends Thread{
 				ProcessCommand work = workQueue.poll();
 				System.out.println("The processcommand is going to be executed");
 				ProcessStatus stat = processStatus.get(work);
-				try{
-					stat.status = "Started";
-					work.setFilePaths();
-					stat.outputFiles = work.getFilePaths();
-					stat.timeStarted = System.currentTimeMillis();
+				stat.status = "Started";
+				work.setFilePaths();
+				stat.outputFiles = work.getFilePaths();
+				stat.timeStarted = System.currentTimeMillis();
 
+				try{
 					Response resp = work.execute();
 					System.err.println("AFTER EXECUTE PROCESS");
 					if (resp.getCode()==StatusCode.CREATED){
@@ -65,10 +65,11 @@ public class WorkHandler extends Thread{
 					}else{
 						stat.status = "Crashed";
 					}
-					stat.timeFinished = System.currentTimeMillis();
-				}catch(NullPointerException e){
-					e.printStackTrace();
+				} catch(NullPointerException e){
+					stat.status = "Crashed";
 				}
+
+				stat.timeFinished = System.currentTimeMillis();
 				ResponseLogger.printLog();
 			} else {
 				try {
