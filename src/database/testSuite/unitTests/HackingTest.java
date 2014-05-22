@@ -62,7 +62,7 @@ public class HackingTest {
 		choices.add("Choice1");
 		choices.add("Choice2");
 
-		dbac.addDropDownAnnotation("", choices, 0, true);		
+		dbac.addDropDownAnnotation("", choices, 0, true);
 	}
 
 	@Test(expected = IOException.class)
@@ -85,39 +85,19 @@ public class HackingTest {
 	}
 
 	@Test(expected = IOException.class)
-	public void testAddUserWithEmptyName() throws SQLException {
+	public void testAddUserWithEmptyName() throws SQLException, IOException {
 		dbac.addUser("", "1234", "Admin", "Bert Larsson", "sdsdfsfsdf");
 	}
 
 	@Test(expected = IOException.class)
-	public void testAddUserWithEmptyPassword() throws SQLException {
+	public void testAddUserWithEmptyPassword() throws SQLException, IOException {
 		dbac.addUser("Herbert", "", "Admin", "Herbert Svensson", "sdsdfsfsdf");
 	}
 
 	@Test(expected = SQLException.class)
-	public void testAddSeveralUsersWithSameName() throws SQLException {
+	public void testAddSeveralUsersWithSameName() throws SQLException, IOException {
 		dbac.addUser("Rune", "blabla", "Admin", "Rune Karlsson", "sdsdfsfsdf");
 		dbac.addUser("Rune", "blabla", "Admin", "Rune Karlsson", "sdsdfsfsdf");
-	}
-
-	@Test(expected = IOException.class)
-	public void testRemoveChainFilesWithEmptyVersions() throws SQLException {
-		dbac.removeChainFile("", "");
-	}
-
-	@Test(expected = IOException.class)
-	public void testRemoveChainFilesWithEmptyFromVersion() throws SQLException {
-		dbac.removeChainFile("", "hej");
-	}
-
-	@Test(expected = IOException.class)
-	public void testRemoveChainFilesWithEmptyToVersion() throws SQLException {
-		dbac.removeChainFile("hej", "");
-	}
-
-	@Test(expected = IOException.class)
-	public void testRemoveDropDownAnnotationValueFromAnnotationDoesntExist() throws SQLException, IOException {
-		dbac.removeDropDownAnnotationValue("whaaat", "dfsdf");
 	}
 
 	@Test(expected = IOException.class)
