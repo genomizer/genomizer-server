@@ -5,13 +5,9 @@ public class serverTests {
 	public static void main(String args[]) throws Exception {
 		Login.login("Splutt");
 
-		//processtest();
-		//searchtest("");
-		//renameannotest();
-
-		specialannotest();
-		//processtest();
-
+		Annotations.sendAddAnnotation("Su");
+		Annotations.sendRenameAnnotationField("Su", "Super");
+		Annotations.sendDeleteAnnotation("Super");
 
 		Login.logout();
 	}

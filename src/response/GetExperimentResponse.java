@@ -23,7 +23,6 @@ public class GetExperimentResponse extends Response {
 
 		obj = new JsonObject();
 		obj.addProperty("name", info.get(0));
-		obj.addProperty("createdBy", "tester");
 		JsonArray fileArray = new JsonArray();
 		for (FileTuple ft: list) {
 			GsonBuilder gsonBuilder = new GsonBuilder();
