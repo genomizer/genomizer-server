@@ -228,10 +228,11 @@ public class DatabaseAccessor {
      * @param String
      *            - the role given to the user ie. "Admin"
      * @throws SQLException
+     * @throws IOException
      * @throws DuplicatePrimaryKeyException
      */
     public void addUser(String username, String password, String role,
-            String fullName, String email) throws SQLException {
+            String fullName, String email) throws SQLException, IOException {
         userMethods.addUser(username, password, role, fullName, email);
     }
 
