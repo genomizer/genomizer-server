@@ -7,14 +7,17 @@ public class serverTests {
 	public static void main(String args[]) throws Exception {
 
 //		Login.login("Splutt", "hejhej"); // Should fail to login since user don't exist.
-		Login.login("epicon2", "umea@2014");
+		Login.login("servergroup", "umea@2014");
 
 		//processtest();
 		//searchtest("");
-		renameannotest();
+		//renameannotest();
 		//usertests();
 		//specialannotest();
-		//processtest();
+		processtest();
+		//for(int i = 0; i < 100; i++)
+		//	Process.sendGetProcessStatus();
+		//Annotations.sendGetAnnotationInformation();
 
 		Login.logout();
 	}
