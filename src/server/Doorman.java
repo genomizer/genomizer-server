@@ -205,6 +205,7 @@ public class Doorman {
 		if(type != CommandType.LOGIN_COMMAND) {
 			try {
 				uuid =  exchange.getRequestHeaders().get("Authorization").get(0);
+				Authenticate.updateLatestRequest(uuid);
 			} catch(NullPointerException e) {
 				System.out.println("Unauthorized request!");
 				Response errorResponse = new MinimalResponse(StatusCode.UNAUTHORIZED);
@@ -270,6 +271,7 @@ public class Doorman {
 			os.flush();
 			os.close();
 		}
+
 		System.out.println("END OF EXCHANGE\n------------------");
 	}
 }

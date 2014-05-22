@@ -50,7 +50,7 @@ public class LoginCommand extends Command {
 			return new LoginResponse(200, login.getUUID());
 		} else {
 			System.err.println("LOGIN WAS UNSUCCESSFUL FOR: " + username + ". REASON: " + login.getErrorMessage());
-			return new ErrorResponse(StatusCode.BAD_REQUEST, login.getErrorMessage());
+			return new ErrorResponse(StatusCode.UNAUTHORIZED, login.getErrorMessage());
 		}
 	}
 
