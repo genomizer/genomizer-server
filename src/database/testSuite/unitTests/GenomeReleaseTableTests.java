@@ -1,11 +1,14 @@
 package database.testSuite.unitTests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.text.ParseException;
 import java.util.List;
 
 import org.junit.After;
@@ -15,7 +18,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import database.DatabaseAccessor;
-import database.Experiment;
 import database.FilePathGenerator;
 import database.Genome;
 import database.ServerDependentValues;
@@ -197,11 +199,17 @@ public class GenomeReleaseTableTests {
         Genome g = dbac.getGenomeRelease("V1");
         assertEquals("Done", g.getFilesWithStatus().get("Froggy1.txt"));
     }
-    
+
     @Test
     public void shouldGetFilePrefix() throws Exception {
-        Genome g = dbac.getGenomeRelease("hg19");
-        assertEquals("hg19", g.getFilePrefix());
+        Genome g = dbac.getGenomeRelease("hg38");
+        assertEquals("hg38", g.getFilePrefix());
+    }
+
+    @Test
+    public void shouldGetNullFilePrefixWhenNoFiles() throws Exception {
+        Genome g = dbac.getGenomeRelease("rn6");
+        assertNull(g.getFilePrefix());
     }
 
     private boolean searchGenomeForVersion(List<Genome> genomeList,
