@@ -12,6 +12,7 @@ import database.testSuite.unitTests.ExperimentTests;
 import database.testSuite.unitTests.FileTableTests;
 import database.testSuite.unitTests.GenomeReleaseTableTests;
 import database.testSuite.unitTests.GitHubIssuesTests;
+import database.testSuite.unitTests.HackingTest;
 import database.testSuite.unitTests.MockUserTests;
 import database.testSuite.unitTests.ProcessRawToProfileTests;
 import database.testSuite.unitTests.PubMedIsValidTest;
@@ -41,7 +42,7 @@ import database.testSuite.unitTests.removeAnnotationValueTest;
         ProcessRawToProfileTests.class,
         GenomeReleaseTableTests.class,
         ChangeAnnotationLabelTest.class, PubMedIsValidTest.class,
-        GitHubIssuesTests.class, MockUserTests.class })
+        GitHubIssuesTests.class, MockUserTests.class , HackingTest.class})
 public class AllTests {
 
 }
