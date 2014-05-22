@@ -24,6 +24,7 @@ public class FileTuple {
     public final Boolean isPrivate;
     public final String expId;
     public final String grVersion;
+    public final String status;
 
     public FileTuple(ResultSet resSet) throws SQLException {
         id = resSet.getInt("FileID");
@@ -38,20 +39,41 @@ public class FileTuple {
         isPrivate = resSet.getBoolean("IsPrivate");
         expId = resSet.getString("ExpID");
         grVersion = resSet.getString("GRVersion");
+        status = resSet.getString("Status");
     }
 
     public String getDownloadURL() {
-        return ServerDependentValues.DownLoadURL+path;
+        return ServerDependentValues.DownloadURL + path;
     }
 
     public String getUploadURL() {
-        return ServerDependentValues.UploadURL+path;
+        return ServerDependentValues.UploadURL + path;
+    }
+
+    public String getInputFileUploadURL() {
+        return ServerDependentValues.UploadURL + inputFilePath;
+    }
+
+    public String getInputFileDownloadURL() {
+        return ServerDependentValues.DownloadURL + inputFilePath;
     }
 
     public String getParentFolder() {
         int filenameIndex = path.lastIndexOf(File.separator);
         return path.substring(0, filenameIndex + 1);
     }
+
+    @Override
+    public String toString() {
+        return "FileTuple [id=" + id + ", path=" + path + ", inputFilePath="
+                + inputFilePath + ", type=" + type + ", filename=" + filename
+                + ", date=" + date + ", metaData=" + metaData + ", author="
+                + author + ", uploader=" + uploader + ", isPrivate="
+                + isPrivate + ", expId=" + expId + ", grVersion=" + grVersion
+                + ", status=" + status + "]";
+    }
+
+
 }
 
 

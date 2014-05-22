@@ -69,6 +69,45 @@ public class TestInitializer {
         return dbac;
     }
 
+    public DatabaseAccessor setupWithoutAddingTuples() throws Exception {
+        dbac = new DatabaseAccessor(TestInitializer.username,
+                TestInitializer.password, TestInitializer.host,
+                TestInitializer.database);
+
+        String url = "jdbc:postgresql://" + TestInitializer.host +
+                "/" + TestInitializer.database;
+        Properties props = new Properties();
+        props.setProperty("user", TestInitializer.username);
+        props.setProperty("password", TestInitializer.password);
+
+        conn = DriverManager.getConnection(url, props);
+
+        addTuplesSqlStrings = buildSqlStringsFromFile(addTestTuplesPath);
+
+        clearTablesSqlStrings = buildSqlStringsFromFile(clearTablesPath);
+
+        return dbac;
+    }
+
+    public DatabaseAccessor setupWithoutAddingTuples(String database) throws Exception {
+        dbac = new DatabaseAccessor(TestInitializer.username,
+                TestInitializer.password, TestInitializer.host, database);
+
+        String url = "jdbc:postgresql://" + TestInitializer.host +
+                "/" + database;
+        Properties props = new Properties();
+        props.setProperty("user", TestInitializer.username);
+        props.setProperty("password", TestInitializer.password);
+
+        conn = DriverManager.getConnection(url, props);
+
+        addTuplesSqlStrings = buildSqlStringsFromFile(addTestTuplesPath);
+
+        clearTablesSqlStrings = buildSqlStringsFromFile(clearTablesPath);
+
+        return dbac;
+    }
+
     /**
      * Builds a list of strings from a sql file so that they can be executed
      * with jdbc.
@@ -114,6 +153,13 @@ public class TestInitializer {
             statement.execute(s);
         }
         dbac.close();
+    }
+
+    public void removeTuplesKeepConnection() throws SQLException {
+        for (String s : clearTablesSqlStrings) {
+            Statement statement = conn.createStatement();
+            statement.execute(s);
+        }
     }
 
     /**

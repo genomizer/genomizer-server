@@ -24,6 +24,8 @@ public class UserInfoTests {
     private static String testUser = "testUser1";
     private static String testPassword = "testPassword1";
     private static String testRole = "testRole1";
+    private static String testFullName = "Testis Test";
+    private static String testEmail = "test@cs.umu.se";
 
     @BeforeClass
     public static void setupTestCase() throws Exception {
@@ -38,7 +40,7 @@ public class UserInfoTests {
 
     @Before
     public void setup() throws SQLException {
-        dbac.addUser(testUser, testPassword, testRole);
+        dbac.addUser(testUser, testPassword, testRole, testFullName, testEmail);
     }
 
     @After
@@ -61,7 +63,7 @@ public class UserInfoTests {
         users = dbac.getUsers();
         assertFalse(users.contains(testUser));
 
-        dbac.addUser(testUser, testPassword, testRole);
+        dbac.addUser(testUser, testPassword, testRole, testFullName, testEmail);
         users = dbac.getUsers();
         assertTrue(users.contains(testUser));
     }
