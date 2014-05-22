@@ -281,8 +281,12 @@ public class AnnotationMethods {
     public int addFreeTextAnnotation(String label, String defaultValue,
             boolean required) throws SQLException, IOException {
 
-    	isValidArgument(label);
-    	isValidArgument(defaultValue);
+    	if (label==null || label.isEmpty()) {
+    		throw new IOException("Invalid Label");
+    	}
+    	if (defaultValue!=null && defaultValue.isEmpty()) {
+    		throw new IOException("Invalid DefaultValue");
+    	}
 
         if (isFileAnnotation(label)) {
             throw new IOException(
@@ -399,7 +403,10 @@ public class AnnotationMethods {
             int defaultValueIndex, boolean required) throws SQLException,
             IOException {
 
-    	isValidArgument(label);
+    	if (label==null || label.isEmpty()) {
+    		throw new IOException("Invalid Label");
+    	}
+
 
         if (isFileAnnotation(label)) {
             throw new IOException(
@@ -486,8 +493,14 @@ public class AnnotationMethods {
     public int addDropDownAnnotationValue(String label, String value)
             throws SQLException, IOException {
 
-    	isValidArgument(label);
-    	isValidArgument(value);
+
+
+    	if (label==null || label.isEmpty()) {
+    		throw new IOException("Invalid Label");
+    	}
+    	if (value==null || value.isEmpty()) {
+    		throw new IOException("Invalid Value");
+    	}
 
         if (!isValidChoice(value)) {
             throw new IOException("Value contains invalid characters");
@@ -829,9 +842,4 @@ public class AnnotationMethods {
         return true;
     }
 
-    private void isValidArgument(String arg) throws IOException {
-    	if (arg.contentEquals("") || arg == null) {
-    		throw new IOException("Invalid argument(s)");
-    	}
-    }
 }
