@@ -6,13 +6,8 @@ public class serverTests {
 
 	public static void main(String args[]) throws Exception {
 
-		Login.login("Splutt", "hejhej"); // Should fail to login since user don't exist.
+//		Login.login("Splutt", "hejhej"); // Should fail to login since user don't exist.
 		Login.login("epicon", "umea@2014");
-
-		Annotations.sendAddAnnotation("Su");
-		Annotations.sendRenameAnnotationField("Su", "Super");
-		Annotations.sendDeleteAnnotation("Super");
-
 
 		Login.logout();
 	}
