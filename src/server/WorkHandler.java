@@ -28,7 +28,7 @@ public class WorkHandler extends Thread{
 	}
 
 	//Add a command to the queue
-	public void addWork(ProcessCommand command) {
+	public synchronized void addWork(ProcessCommand command) {
 		workQueue.add(command);
 		processStatus.put(command, new ProcessStatus(command));
 	}
