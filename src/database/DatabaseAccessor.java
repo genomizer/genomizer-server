@@ -1033,9 +1033,10 @@ public class DatabaseAccessor {
      *
      * @return boolean - true if succeeded, false if failed.
      * @throws SQLException
+     * @throws IOException
      */
     public boolean removeGenomeRelease(String genomeVersion)
-            throws SQLException {
+            throws SQLException, IOException {
         return genMethods.removeGenomeRelease(genomeVersion);
     }
 
