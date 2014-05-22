@@ -1,4 +1,4 @@
-package testSuite.unitTests;
+package database.testSuite.unitTests;
 
 import static org.junit.Assert.*;
 

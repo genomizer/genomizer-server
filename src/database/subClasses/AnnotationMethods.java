@@ -2,10 +2,12 @@ package database.subClasses;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -13,14 +15,16 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import database.Annotation;
+import database.PubMedToSQLConverter;
 
 /**
  * Class that contains all the methods for adding,changing, getting and removing
  * Annotations in the database. This class is a subClass of
  * databaseAcessor.java.
- *
+ * 
  * date: 2014-05-14 version: 1.0
  */
 public class AnnotationMethods {
@@ -31,9 +35,10 @@ public class AnnotationMethods {
             "filename" };
     private HashSet<String> fileAttributes;
 
+
     /**
      * Constructor for the AnnotationMethod object.
-     *
+     * 
      * @param connection
      *            Connection, the connection to the database.
      */
@@ -45,9 +50,10 @@ public class AnnotationMethods {
         conn = connection;
     }
 
+
     /**
      * Gets all the annotation possibilities from the database.
-     *
+     * 
      * @return annotations Map<String, Integer> a Map with the label string as
      *         key and datatype as value. The possible datatypes are FREETEXT
      *         and DROPDOWN.
@@ -74,9 +80,10 @@ public class AnnotationMethods {
         return annotations;
     }
 
+
     /**
      * Creates an Annotation object from an annotation label.
-     *
+     * 
      * @param label
      *            Stringthe name of the annotation to create the object for.
      * @return Annotation - the Annotation object. If the label does not exist,
@@ -105,9 +112,10 @@ public class AnnotationMethods {
         }
     }
 
+
     /**
      * Creates a list of Annotation objects from a list of annotation labels.
-     *
+     * 
      * @param labels
      *            the list of labels.
      * @return annotations List<Annotation> - will return a list with all the
@@ -135,10 +143,11 @@ public class AnnotationMethods {
         return annotationsList;
     }
 
+
     /**
      * Finds all annotationLabels that exist in the database, example of labels:
      * sex, tissue, etc...
-     *
+     * 
      * @return annotationLabels ArrayList<String>
      */
     public ArrayList<String> getAllAnnotationLabels() {
@@ -163,13 +172,14 @@ public class AnnotationMethods {
         return annotationLabelList;
     }
 
+
     /**
      * Gets the datatype of a given annotation.
-     *
+     * 
      * @param label
      *            annotation label.
      * @return integer - the annotation's datatype (FREETEXT or DROPDOWN).
-     *
+     * 
      * @throws SQLException
      *             if the query does not succeed
      */
@@ -182,10 +192,11 @@ public class AnnotationMethods {
         return a.dataType;
     }
 
+
     /**
      * Gets the default value for a annotation if there is one, If not it
      * returns NULL.
-     *
+     * 
      * @param annotationLabel
      *            String - the name of the annotation to check
      * @return DefaultValue String - The defult value or NULL.
@@ -210,10 +221,11 @@ public class AnnotationMethods {
         return null;
     }
 
+
     /**
      * Deletes an annotation from the list of possible annotations. Label
      * SPECIES can't be changed because of dependencies in other tables.
-     *
+     * 
      * @param label
      *            String - the label of the annotation to delete.
      * @return res integer - the number of tuples deleted in the database.
@@ -250,9 +262,10 @@ public class AnnotationMethods {
         return res;
     }
 
+
     /**
      * Adds a free text annotation to the list of possible annotations.
-     *
+     * 
      * @param label
      *            String the name of the annotation.
      * @param required
@@ -303,9 +316,10 @@ public class AnnotationMethods {
         return rs;
     }
 
+
     /**
      * Checks if a given annotation is required to be filled by the user.
-     *
+     * 
      * @param annotationLabel
      *            String - the name of the annotation to check
      * @return boolean - true if it is required, else false
@@ -330,10 +344,11 @@ public class AnnotationMethods {
         return isRequired;
     }
 
+
     /**
      * Gets all the choices for a drop down annotation. Deprecated, use
      * {@link #getChoices(String) getChoices} instead.
-     *
+     * 
      * @param label
      *            String the drop down annotation to get the choice for.
      * @return theChoices ArrayList<String> - all the choices.
@@ -362,9 +377,10 @@ public class AnnotationMethods {
         return dropDownLabelsList;
     }
 
+
     /**
      * Adds a drop down annotation to the list of possible annotations.
-     *
+     * 
      * @param label
      *            String - the name of the annotation.
      * @param choices
@@ -446,9 +462,10 @@ public class AnnotationMethods {
         return tuplesInserted;
     }
 
+
     /**
      * Method to add a value to a existing DropDown annotation.
-     *
+     * 
      * @param label
      *            String , the label of the chosen DropDown annotation.
      * @param value
@@ -496,9 +513,10 @@ public class AnnotationMethods {
         }
     }
 
+
     /**
      * Method to remove a given annotation of a dropdown- annotation.
-     *
+     * 
      * @param label
      *            String - the label of the chosen annotation
      * @param value
@@ -559,18 +577,19 @@ public class AnnotationMethods {
         }
     }
 
+
     /**
      * Changes the annotation label.
-     *
+     * 
      * OBS! This changes the label for all experiments. Label SPECIES can't be
      * changed because of dependencies in other tables. If the Species label can
      * be changed to another, it becomes removable.
-     *
+     * 
      * @param oldLabel
      *            String
      * @param newLabel
      *            string
-     *
+     * 
      * @return res int - the number of tuples updated
      * @throws SQLException
      *             If the update fails
@@ -603,24 +622,25 @@ public class AnnotationMethods {
         }
     }
 
+
     /**
      * Changes the value of an annotation corresponding to it's label.
-     *
+     * 
      * Parameters: label of annotation, the old value and the new value to
      * change to.
-     *
+     * 
      * OBS! This method changes the value for every experiment.
-     *
+     * 
      * Throws an SQLException if the new value already exists in the choices
      * table (changing all males to female, and female is already in the table)
-     *
+     * 
      * @param label
      *            String - the label name.
      * @param oldValue
      *            String - the name of the old annotation value.
      * @param newValue
      *            String - the name of the new annotation value.
-     *
+     * 
      * @throws SQLException
      * @throws IOException
      * @throws ParseException
@@ -650,17 +670,17 @@ public class AnnotationMethods {
         parameterList.add(newValue);
         parameterList.add(label);
         parameterList.add(oldValue);
-        stmt = bind(stmt, parameterList);
+        stmt = bindStrings(stmt, parameterList);
         stmt.executeUpdate();
         stmt.close();
 
         stmt = conn.prepareStatement(query2);
-        stmt = bind(stmt, parameterList);
+        stmt = bindStrings(stmt, parameterList);
         stmt.executeUpdate();
         stmt.close();
 
         stmt = conn.prepareStatement(query3);
-        stmt = bind(stmt, parameterList);
+        stmt = bindStrings(stmt, parameterList);
         stmt.executeUpdate();
         stmt.close();
 
@@ -673,9 +693,22 @@ public class AnnotationMethods {
         }
     }
 
+
+    private PreparedStatement bindStrings(PreparedStatement stmt,
+            ArrayList<String> parameterList) throws SQLException {
+
+        int i = 1;
+        for (String s : parameterList) {
+            stmt.setString(i, s);
+            i++;
+        }
+        return stmt;
+    }
+
+
     /**
      * Gets all the choices for a drop down annotation.
-     *
+     * 
      * @param label
      *            String - the drop down annotation to get the choice for.
      * @return choices List<String> - the choices for one annotation label.
@@ -702,11 +735,12 @@ public class AnnotationMethods {
         return choicesList;
     }
 
+
     /**
      * binds a sql prepared query statement with parameters, example:
      * "UPDATE Annotation_Choices SET Value = ? WHERE Label = ? and Value = ?;"
      * and the questionmarks are the parameters.
-     *
+     * 
      * @param query
      *            PreparedStatement
      * @param params
@@ -714,26 +748,48 @@ public class AnnotationMethods {
      *            list must be equal to nr of questionmarks in query.
      * @return query PreparedStatement
      * @throws SQLException
+     * @throws IOException
      * @throws ParseException
      */
-    public PreparedStatement bind(PreparedStatement query, List<String> params)
-            throws SQLException, ParseException {
+    public PreparedStatement bind(PreparedStatement query,
+            List<Entry<String, String>> params) throws SQLException,
+            IOException {
+        int i = 1;
 
-        for (int i = 0; i < params.size(); i++) {
-            if (isInteger(params.get(i))) {
-                query.setInt(i + 1, Integer.parseInt(params.get(i)));
-            } else if (isValidDate(params.get(i))) {
-                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-                java.util.Date date = df.parse(params.get(i));
-                java.sql.Date sDate = new java.sql.Date(date.getTime());
-                query.setDate(i + 1, sDate);
-            } else {
-                query.setString(i + 1, params.get(i));
+        for (Entry<String, String> entry : params) {
+
+            switch (entry.getValue()) {
+                case PubMedToSQLConverter.STRING_PARAM:
+                    query.setString(i, entry.getKey());
+                    break;
+                case PubMedToSQLConverter.DATE_PARAM:
+                    try {
+                        DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+                        java.util.Date ud = df.parse(entry.getKey());
+                        Date d = new Date(ud.getTime());
+                        query.setDate(i, d);
+                    } catch (ParseException e) {
+                        throw new IOException(
+                                "Date in wrong format. Use yyyy/MM/dd");
+                    }
+                    break;
+                case PubMedToSQLConverter.INT_PARAM:
+                    try {
+                        Integer n = Integer.parseInt(entry.getKey());
+                        query.setInt(i, n);
+                    } catch (NumberFormatException e) {
+                        throw new IOException("File ID number in wrong format");
+                    }
+                    break;
+                default:
+                    query.setString(i, entry.getKey());
+                    break;
             }
+            i++;
         }
-
         return query;
     }
+
 
     private boolean isFileAnnotation(String label) {
 
@@ -743,10 +799,11 @@ public class AnnotationMethods {
         return false;
     }
 
+
     /**
      * private method to check if the annotation contains invalid characters
      * ('(', ')', '[' and ']'.
-     *
+     * 
      * @param annotation
      * @return
      */
@@ -762,25 +819,5 @@ public class AnnotationMethods {
         }
 
         return true;
-    }
-
-    private boolean isInteger(String s) {
-        try {
-            Integer.parseInt(s);
-        } catch (NumberFormatException e) {
-            return false;
-        }
-
-        return true;
-    }
-
-    private boolean isValidDate(String dateString) {
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            df.parse(dateString);
-            return true;
-        } catch (ParseException e) {
-            return false;
-        }
     }
 }

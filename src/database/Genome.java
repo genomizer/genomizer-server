@@ -40,4 +40,13 @@ public class Genome {
         }
         return downloadURLs;
     }
+
+    public String getFilePrefix() {
+        if (files.isEmpty()) {
+            return null;
+        }
+        String fileName = files.entrySet().iterator().next().getKey();
+        int indexOfFirstDot = fileName.indexOf('.');
+        return fileName.substring(0, indexOfFirstDot);
+    }
 }
