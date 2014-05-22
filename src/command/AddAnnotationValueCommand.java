@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.google.gson.annotations.Expose;
 import database.DatabaseAccessor;
+import database.MaxSize;
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
@@ -31,6 +32,12 @@ public class AddAnnotationValueCommand extends Command {
 	@Override
 	public boolean validate() {
 		if(value == null || name == null) {
+			return false;
+		}
+		if(value.length() < 1 || value.length() > MaxSize.ANNOTATION_VALUE) {
+			return false;
+		}
+		if(name.length() < 1 || name.length() > MaxSize.ANNOTATION_LABEL) {
 			return false;
 		}
 		if(name.indexOf('/') != -1) {
