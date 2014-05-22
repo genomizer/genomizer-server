@@ -70,7 +70,15 @@ public class ExperimentMethods {
      *             If the experiment already exists.
      */
     public int addExperiment(String expID) throws SQLException, IOException {
-        isValidArgument(expID);
+
+    	if (expID == null || expID.contentEquals("")) {
+    		throw new IOException("Invalid parameter");
+    	}
+    	
+    	Experiment e = getExperiment(expID);
+    	if (e != null) {
+    		throw new IOException(expID + " already exists");
+    	}
 
         String query = "INSERT INTO Experiment "
                 + "(ExpID) VALUES (?)";

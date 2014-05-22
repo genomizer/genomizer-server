@@ -111,6 +111,12 @@ public class HackingTest {
 		dbac.annotateExperiment("xp2", "sdfdfs", "dfdf");
 	}
 
+	@Test(expected = IOException.class)
+	public void testChangeToEmptyPassword() throws SQLException, IOException {
+		dbac.addUser("Rolf", "1234", "Admin", "Rolf Persson", "dffddf@mail.com");
+		dbac.resetPassword("Rolf", "");
+	}
+
 	// Add tests for remove files if theye are in use or not
 
 

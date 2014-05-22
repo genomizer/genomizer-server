@@ -274,12 +274,12 @@ public class DatabaseAccessor {
      * @return int - the number of tuples updated in the database
      * @throws SQLException
      *             - if the query does not succeed
+     * @throws IOException - if an argument is empty or null
      */
     public int resetPassword(String username, String newPassword)
-            throws SQLException {
+            throws SQLException, IOException {
         return userMethods.resetPassword(username, newPassword);
     }
-
 
     /**
      * Gets the role (permissions) for a user.
