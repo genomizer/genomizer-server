@@ -38,7 +38,9 @@ public class DeleteAnnotationValueCommand extends Command {
 			db = initDB();
 			List<String> values = db.getChoices(name);
 			if(values.contains(value)) {
-				db.removeAnnotationValue(name, value);
+
+				db.removeDropDownAnnotationValue(name, value);
+
 			} else {
 				return new ErrorResponse(StatusCode.BAD_REQUEST, "The value " + value + " does not exist in " + name + " and can not be deleted");
 			}
@@ -49,12 +51,7 @@ public class DeleteAnnotationValueCommand extends Command {
 			e.printStackTrace();
 			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, e.getMessage());
 		} finally {
-			try {
-				db.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-				return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, "Could not close database connection");
-			}
+			db.close();
 		}
 		return new MinimalResponse(StatusCode.OK);
 	}

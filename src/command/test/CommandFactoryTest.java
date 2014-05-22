@@ -181,7 +181,7 @@ public class CommandFactoryTest {
 	@Test
 	public void testDeleteUserCommandNotNull() {
 
-		assertNotNull(cmdf.createDeleteUserCommand(null, "/user"));
+		assertNotNull(cmdf.createDeleteUserCommand("/user"));
 
 	}
 
