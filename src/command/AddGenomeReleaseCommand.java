@@ -2,6 +2,7 @@ package command;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import com.google.gson.annotations.Expose;
 
@@ -34,7 +35,7 @@ public class AddGenomeReleaseCommand extends Command {
 	private String genomeVersion = null;
 
 	@Expose
-	private int fileNumber = 0;
+	private ArrayList<String> fileNames = null;
 
 	/**
 	 * Method used to validate the command.
@@ -42,7 +43,7 @@ public class AddGenomeReleaseCommand extends Command {
 	@Override
 	public boolean validate() {
 
-		//TODO: Add validation on the integer.
+		//TODO: Add validation on the arraylist.
 
 		if(fileName == null || specie == null || genomeVersion == null) {
 			return false;
@@ -81,9 +82,9 @@ public class AddGenomeReleaseCommand extends Command {
 
 			db = initDB();
 			//TODO: Call proper database method.
-			//String filePath = db.addGenomeRelease(genomeVersion, specie, fileName);
 			//ArrayList<String> filePaths = db.addGenomeRelease(genomeVersion, species, filename);
-			//rsp = new AddGenomeReleaseResponse(StatusCode.CREATED, filePath);
+
+			//rsp = new AddGenomeReleaseResponse(StatusCode.CREATED, filePaths);
 			rsp = new MinimalResponse(StatusCode.NO_CONTENT);
 
 		} catch (SQLException e) {
