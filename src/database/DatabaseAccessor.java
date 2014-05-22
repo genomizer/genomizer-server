@@ -141,11 +141,34 @@ public class DatabaseAccessor {
      */
     public List<Experiment> search(String pubMedString) throws IOException,
             SQLException, ParseException {
+
+        if (pubMedString.isEmpty()) {
+            return getAllExperiments();
+        }
+
         isPubMedStringValid(pubMedString);
+
         if (pm2sql.hasFileConstraint(pubMedString)) {
             return searchFiles(pubMedString);
         }
         return searchExperiments(pubMedString);
+    }
+
+
+    private List<Experiment> getAllExperiments() throws SQLException {
+        String query = "SELECT * FROM Experiment";
+        PreparedStatement ps = conn.prepareStatement(query);
+        ResultSet rs = ps.executeQuery();
+
+        Experiment e;
+        List<Experiment> exps = new ArrayList<Experiment>();
+        while (rs.next()) {
+            e = new Experiment(rs.getString("ExpID"));
+            e = expMethods.fillAnnotations(e);
+            e = expMethods.fillFiles(e);
+            exps.add(e);
+        }
+        return exps;
     }
 
 
