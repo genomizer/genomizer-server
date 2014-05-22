@@ -429,11 +429,11 @@ public class MockUserTests {
         FileTuple ft = getFileTuple("Prof1.sam", fts);
         assertNotNull(ft);
         assertEquals("Done", ft.status);
+        System.out.println(ft.toString());
 
         ft = getFileTuple("Prof2.sam", fts);
         assertNotNull(ft);
         assertEquals("Done", ft.status);
-
         System.out.println(ft.toString());
     }
 
