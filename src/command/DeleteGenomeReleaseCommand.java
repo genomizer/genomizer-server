@@ -72,7 +72,7 @@ public class DeleteGenomeReleaseCommand extends Command {
 		try {
 
 			db = initDB();
-			boolean result = db.removeGenomeRelease(genomeVersion, specie);
+			boolean result = db.removeGenomeRelease(genomeVersion);
 
 			if(result) {
 

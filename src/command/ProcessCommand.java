@@ -178,7 +178,7 @@ public class ProcessCommand extends Command {
 					db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
 				}
 				Genome g = db.getGenomeRelease(genomeVersion);
-				parameters[1] = g.path;
+				parameters[1] = g.folderPath;
 				//parameters[1] = "/var/www/data/genome_releases/Rat/d_melanogaster_fb5_22";
 
 
@@ -229,23 +229,7 @@ public class ProcessCommand extends Command {
 					"genomeVersion: " + genomeVersion + "\n" +
 					"author: " + author + "\n" +
 					e.getMessage());
-			try {
-				db.close();
-			} catch (SQLException e1) {
-				ResponseLogger.log(username, "Could not close Database accessor2when running " + processtype + " on experiment" + expid + "\n"+
-						"metadata: " + metadata + "\n"+
-						"parameters: " + parameters + "\n" +
-						"genomeVersion: " + genomeVersion + "\n" +
-						"author: " + author + "\n" +
-						e1.getMessage());
-				e1.printStackTrace();
-				return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, "SQL Exception in ProcessCommand execute when running " + processtype + " on experiment" + expid + "\n"+
-					"metadata: " + metadata + "\n"+
-					"parameters: " + parameters + "\n" +
-					"genomeVersion: " + genomeVersion + "\n" +
-					"author: " + author + "\n" +
-					e.getMessage());
-			}
+			db.close();
 		} catch (IOException e1) {
 			e1.printStackTrace();
 			ResponseLogger.log(username, "IO Exception in ProcessCommand execute when running " + processtype + " on experiment" + expid + "\n"+
@@ -254,17 +238,7 @@ public class ProcessCommand extends Command {
 					"genomeVersion: " + genomeVersion + "\n" +
 					"author: " + author + "\n" +
 					e1.getMessage());
-			try {
-				db.close();
-			} catch (SQLException e) {
-				ResponseLogger.log(username, "Could not close Database accessor2 when running " + processtype + " on experiment" + expid + "\n"+
-					"metadata: " + metadata + "\n"+
-					"parameters: " + parameters + "\n" +
-					"genomeVersion: " + genomeVersion + "\n" +
-					"author: " + author + "\n" +
-					e.getMessage());
-				e.printStackTrace();
-			}
+			db.close();
 			return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, "IO Exception in ProcessCommand execute when running " + processtype + " on experiment" + expid + "\n"+
 					"metadata: " + metadata + "\n"+
 					"parameters: " + parameters + "\n" +
@@ -290,17 +264,7 @@ public class ProcessCommand extends Command {
 					"genomeVersion: " + genomeVersion + "\n" +
 					"author: " + author + "\n" +
 					e.getMessage());
-			try {
-				db.close();
-			} catch (SQLException e1) {
-				ResponseLogger.log(username, "Could not close Database accessor running " + processtype + " on experiment" + expid + "\n"+
-					"metadata: " + metadata + "\n"+
-					"parameters: " + parameters + "\n" +
-					"genomeVersion: " + genomeVersion + "\n" +
-					"author: " + author + "\n" +
-					e1.getMessage());
-				e1.printStackTrace();
-			}
+			db.close();
 			return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, "SQL Exception in ProcessCommand execute when using addGeneratedProfiles with " + processtype + " on experiment" + expid + "\n"+
 					"metadata: " + metadata + "\n"+
 					"parameters: " + parameters + "\n" +
@@ -315,17 +279,7 @@ public class ProcessCommand extends Command {
 					"genomeVersion: " + genomeVersion + "\n" +
 					"author: " + author + "\n" +
 					e.getMessage());
-			try {
-				db.close();
-			} catch (SQLException e1) {
-				ResponseLogger.log(username, "Could not close Database accessor running " + processtype + " on experiment" + expid + "\n"+
-					"metadata: " + metadata + "\n"+
-					"parameters: " + parameters + "\n" +
-					"genomeVersion: " + genomeVersion + "\n" +
-					"author: " + author + "\n" +
-					e1.getMessage());
-				e1.printStackTrace();
-			}
+			db.close();
 			return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, "IO Exception in ProcessCommand execute when creating new DatabaseAccesor before addGeneratedProfiles running " + processtype + " on experiment" + expid + "\n"+
 					"metadata: " + metadata + "\n"+
 					"parameters: " + parameters + "\n" +
@@ -334,17 +288,7 @@ public class ProcessCommand extends Command {
 					e.getMessage());
 		}
 
-		try {
-			db.close();
-		} catch (SQLException e) {
-			ResponseLogger.log(username, "Could not close Database accessor3 running " + processtype + " on experiment" + expid + "\n"+
-					"metadata: " + metadata + "\n"+
-					"parameters: " + parameters + "\n" +
-					"genomeVersion: " + genomeVersion + "\n" +
-					"author: " + author + "\n" +
-					e.getMessage());
-			e.printStackTrace();
-		}
+		db.close();
 
 		ResponseLogger.log(username, "Raw to profile processing completed running " + processtype + " on experiment" + expid + "\n"+
 					"metadata: " + metadata + "\n"+
@@ -414,11 +358,7 @@ public class ProcessCommand extends Command {
 		} catch (SQLException | IOException e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				db.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			db.close();
 		}
 	}
 
