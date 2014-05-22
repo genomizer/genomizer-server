@@ -1,5 +1,7 @@
 package response;
 
+import java.util.ArrayList;
+
 import com.google.gson.annotations.Expose;
 
 /**
@@ -11,14 +13,14 @@ import com.google.gson.annotations.Expose;
 public class AddGenomeReleaseResponse extends Response {
 
 	@Expose
-	private String URLupload = null;
+	private ArrayList<String> URLupload = null;
 
 	/**
 	 * Constructor used to initiate the command.
 	 *
 	 * @param code to send as a responsecode.
 	 */
-	public AddGenomeReleaseResponse(int code, String URLupload) {
+	public AddGenomeReleaseResponse(int code, ArrayList<String> URLupload) {
 
 		this.code = code;
 		this.URLupload = URLupload;
