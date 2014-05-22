@@ -1,4 +1,4 @@
-package testSuite;
+package database.testSuite;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -14,8 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import testSuite.unitTests.SearchDatabaseTests;
 import database.DatabaseAccessor;
+import database.testSuite.unitTests.SearchDatabaseTests;
 
 /**
  * Create an instance of this class if you want to use the test tuples in
@@ -31,8 +31,8 @@ public class TestInitializer {
     public static String host = "85.226.111.95";
     public static String database = "genomizer_testdb";
 
-    private String addTestTuplesPath = "/testSuite/add_test_tuples.sql";
-    private String clearTablesPath = "/testSuite/clear_tables.sql";
+    private String addTestTuplesPath = "/database/testSuite/add_test_tuples.sql";
+    private String clearTablesPath = "/database/testSuite/clear_tables.sql";
 
     private DatabaseAccessor dbac;
     private Connection conn;

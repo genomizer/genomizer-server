@@ -1,4 +1,4 @@
-package testSuite.unitTests;
+package database.testSuite.unitTests;
 
 import static org.junit.Assert.assertEquals;
 
@@ -13,9 +13,9 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import testSuite.TestInitializer;
 import database.DatabaseAccessor;
 import database.Experiment;
+import database.testSuite.TestInitializer;
 
 public class SearchDatabaseTests {
 
@@ -149,7 +149,7 @@ public class SearchDatabaseTests {
             throws Exception {
     	List<Experiment> elist = dbac.search("exp2[expid]");
     	Date date = elist.get(0).getFiles().get(0).date;
-    	SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+    	SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd");
 
     	String query = df.format(date) + "[date]";
     	List<Experiment> experiments = dbac.search(query);
@@ -171,6 +171,34 @@ public class SearchDatabaseTests {
 
     	assertEquals(experiments.get(0).getFiles().get(0).author, "UCSC");
     	assertEquals(elist.get(0).getFiles().get(0).expId, "Exp2");
+    }
+
+    @Test
+    public void shouldBeAbleToSearchOnPath()
+            throws Exception {
+
+        List<Experiment> elist = dbac.search("/var/www/data/Exp1/raw/file1.fastq[path]");
+
+        assertEquals(1, elist.size());
+    }
+
+    @Test
+    public void shouldGetAllExperimentsWhenSearchingAnEmptySring() throws Exception {
+        List<Experiment> exps = dbac.search("");
+        assertEquals(4, exps.size());
+        Experiment e = getExp("Exp1", exps);
+        assertEquals(4, e.getAnnotations().size());
+        assertEquals(2, e.getFiles().size());
+        e.toString();
+    }
+
+    private Experiment getExp(String string, List<Experiment> exps) {
+        for (Experiment e: exps) {
+            if (e.getID().equalsIgnoreCase(string)) {
+                return e;
+            }
+        }
+        return null;
     }
 }
 
