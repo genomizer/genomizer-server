@@ -41,7 +41,6 @@ public class AddExperimentCommand extends Command {
 		} else {
 			return true;
 		}
-
 	}
 
 	@Override
@@ -64,18 +63,7 @@ public class AddExperimentCommand extends Command {
 			e.printStackTrace();
 			return new MinimalResponse(StatusCode.BAD_REQUEST);
 		} finally{
-			try {
 				db.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-				return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
-			}
 		}
 	}
-
-
-
-
-
-
 }

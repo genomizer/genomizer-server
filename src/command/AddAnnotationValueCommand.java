@@ -14,8 +14,8 @@ import response.StatusCode;
 /**
  * Class used to represent a logout command.
  *
- * @author tfy09jnn
- * @version 1.0
+ * @author tfy09jnn, Hugo Källström
+ * @version 1.1
  */
 public class AddAnnotationValueCommand extends Command {
 
@@ -40,7 +40,6 @@ public class AddAnnotationValueCommand extends Command {
 			return false;
 		}
 		return true;
-
 	}
 
 	/**
@@ -65,12 +64,7 @@ public class AddAnnotationValueCommand extends Command {
 			e.printStackTrace();
 			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, "Database unavailable");
 		} finally{
-			try {
-				db.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-				return new ErrorResponse(StatusCode.NO_CONTENT, e.getMessage());
-			}
+			db.close();
 		}
 		return new MinimalResponse(StatusCode.CREATED);
 	}
