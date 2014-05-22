@@ -33,14 +33,15 @@ public class AddExperimentCommand extends Command {
 
 	@Override
 	public boolean validate() {
-		if(name.indexOf('/') != -1) {
-			return false;
-		}
-		if(name == null || annotations == null) {
+		if(name == null || annotations == null || name.indexOf('/') != -1) {
 			return false;
 		} else {
 			return true;
 		}
+		/*if(name.indexOf('/') != -1) {
+			return false;
+		}*/
+
 	}
 
 	@Override
