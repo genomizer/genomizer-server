@@ -155,6 +155,11 @@ public class DatabaseAccessor {
     }
 
 
+    /**
+     * Gets all experiments.
+     * @return a list of Experiment objects.
+     * @throws SQLException
+     */
     private List<Experiment> getAllExperiments() throws SQLException {
         String query = "SELECT * FROM Experiment";
         PreparedStatement ps = conn.prepareStatement(query);
@@ -180,7 +185,7 @@ public class DatabaseAccessor {
      * @return boolean - true if ok else throws Exception
      * @throws IOException
      */
-    public boolean isPubMedStringValid(String pubMedString) throws IOException {
+    protected boolean isPubMedStringValid(String pubMedString) throws IOException {
         int squareBracketsStart = 0, squareBracketsStop = 0;
         char last = 0;
         for (int i = 0; i < pubMedString.length(); i++) {
@@ -757,9 +762,9 @@ public class DatabaseAccessor {
 
 
     /**
-     *
-     * @param fileID
-     * @return
+     * Sets the status of a file to "Done".
+     * @param fileID the ID of the file to set to "Done".
+     * @return the number of tuples updated.
      * @throws SQLException
      */
     public int fileReadyForDownload(int fileID) throws SQLException {
@@ -783,14 +788,14 @@ public class DatabaseAccessor {
 
 
     /**
-     * Returns the FileTuple object associated with the given filePath.
+     * Returns the FileTuple object associated with the given fileID.
      *
-     * @param String
-     *            filePath
+     * @param fileID
+     *            int
      * @return FileTuple - The corresponding FileTuple or null if no such file
      *         exists
      * @throws SQLException
-     *             - If the query could not be executed.
+     *             If the query could not be executed.
      */
     public FileTuple getFileTuple(int fileID) throws SQLException {
         return fileMethods.getFileTuple(fileID);
@@ -837,7 +842,7 @@ public class DatabaseAccessor {
 
     /**
      * Changes the Filename for a specific file with given fileID. This method
-     * affects bothe the saved file name, but also the entries path and fileName
+     * affects both the saved file name, but also the entries path and fileName
      * in database.
      *
      * @return resCount int, the number of rows affected by the change.
@@ -862,7 +867,7 @@ public class DatabaseAccessor {
      * database.
      *
      * @param String
-     *            expId - The ID name of paththe experiment
+     *            expId - The ID name of the experiment
      * @return String - The path to the folder or null if there are no raw files
      *         for this experiment.
      * @throws IOException
@@ -1027,7 +1032,13 @@ public class DatabaseAccessor {
         return genMethods.addGenomeRelease(genomeVersion, species, filename);
     }
 
-
+    /**
+     * Sets the status for a genome release file to "Done".
+     * @param version the file version.
+     * @param fileName the file name.
+     * @return the number of tuples updated.
+     * @throws SQLException
+     */
     public int genomeReleaseFileUploaded(String version, String fileName)
             throws SQLException {
         return genMethods.fileReadyForDownload(version, fileName);
@@ -1059,8 +1070,8 @@ public class DatabaseAccessor {
      * @param String
      *            species - the name of the species you want to get genome
      *            releases for.
-     * @return List<String> - list of all the genome releases for a specific
-     *         species.
+     * @return genomelist ArrayList<Genome>, list of all the genome releases for
+     *         a specific species.
      * @throws SQLException
      */
     public ArrayList<Genome> getAllGenomReleasesForSpecies(String species)

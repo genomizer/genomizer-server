@@ -120,6 +120,13 @@ public class GenomeMethods {
         return filePathBuilder.toString();
     }
 
+    /**
+     * Sets the status for a genome release file to "Done".
+     * @param version the file version.
+     * @param fileName the file name.
+     * @return the number of tuples updated.
+     * @throws SQLException
+     */
     public int fileReadyForDownload(String version, String fileName) throws SQLException {
 
         String statusUpdateString = "UPDATE Genome_Release_Files SET Status = 'Done' " +
@@ -188,14 +195,14 @@ public class GenomeMethods {
     }
 
     /**
-     * method for getting all the genome releases for a species currently stored
+     * Method for getting all the genome releases for a species currently stored
      * in the database.
      *
      * @param species
-     *            String, the name of the specie you want to get genome
+     *            String, the name of the species you want to get genome
      *            realeases for.
      * @return genomelist ArrayList<Genome>, list of all the genome releases for
-     *         a specific specie.
+     *         a specific species.
      * @throws SQLException
      */
     public ArrayList<Genome> getAllGenomReleasesForSpecies(String species)
