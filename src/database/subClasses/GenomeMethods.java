@@ -1,6 +1,7 @@
 package database.subClasses;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -91,7 +92,7 @@ public class GenomeMethods {
         filePathBuilder.append(filename);
 
         PreparedStatement stmt;
-        
+
         if (getGenomeRelease(genomeVersion) == null) {
             String query = "INSERT INTO Genome_Release "
                     + "(Version, Species, FolderPath) " + "VALUES (?, ?, ?)";
@@ -143,9 +144,14 @@ public class GenomeMethods {
      *            .
      * @return boolean true if succeded, false if failed.
      * @throws SQLException
+     * @throws IOException
      */
     public boolean removeGenomeRelease(String genomeVersion)
-            throws SQLException {
+            throws SQLException, IOException {
+
+        if (isGenomeVersionUsed(genomeVersion)) {
+            throw new IOException(genomeVersion + " is used by at least one file and can therefore not be removed");
+        }
 
         Genome g = getGenomeRelease(genomeVersion);
 
@@ -168,6 +174,14 @@ public class GenomeMethods {
         return res > 0;
     }
 
+    private boolean isGenomeVersionUsed(String genomeVersion) throws SQLException {
+        String query = "SELECT * FROM File WHERE GRVersion = ?";
+        PreparedStatement ps = conn.prepareStatement(query);
+        ps.setString(1, genomeVersion);
+        ResultSet rs = ps.executeQuery();
+        return (rs.next());
+    }
+
     /**
      * method for getting all the genome releases for a species currently stored
      * in the database.
@@ -185,7 +199,7 @@ public class GenomeMethods {
         String query = "SELECT * FROM Genome_Release " +
                 "JOIN Genome_Release_Files " +
                 "ON (Genome_Release.Version = Genome_Release_Files.Version) " +
-                "WHERE (Genome_Release.Species ~~* ?)";
+                "WHERE (Genome_Release.Species ~~* ?) ORDER BY Genome_Release.Version";
 
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setString(1, species);

@@ -50,6 +50,9 @@ public class Genome {
        // String fileName = files.entrySet().iterator().next().getKey();
         String fileName = files.get(0);
         int indexOfFirstDot = fileName.indexOf('.');
+        if (indexOfFirstDot == -1) {
+            return null;
+        }
         return fileName.substring(0, indexOfFirstDot);
     }
 }
