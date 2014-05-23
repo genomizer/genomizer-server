@@ -38,6 +38,16 @@ public class AddExperimentCommandTest {
 	}
 	
 	@Test
+	public void testOkExperimentValidation2() {
+		String json = "{\"name\":\"expID\",\"annotations\":[{\"name\":\"pub\",\"value\":\"ab\"}," +
+				"{\"name\":\"pub\",\"value\":\"ab\"},{\"name\":\"pub\",\"value\":\"ab\"}]}";
+		
+		final Command aefc = gson.fromJson(json,AddExperimentCommand.class);
+		   
+		assertTrue(aefc.validate());
+	}
+	
+	@Test
 	public void testNullExperimentIDValidation() {
 		String json = "{\"annotations\":[{\"name\":\"pub\",\"value\":\"ab\"}," +
 				"{\"name\":\"pub\",\"value\":\"ab\"},{\"name\":\"pub\",\"value\":\"ab\"}," +
@@ -52,17 +62,15 @@ public class AddExperimentCommandTest {
 	
 	//TEST NÄR INTE ALLA ANNOTATIONER FINNS!?
 	
-	/*@Test
-	public void testNullAnnotationValidation() {
+	@Test
+	public void testMissingAnnotationValueValidation() {
 		//String json = "{\"name\":\"expID\",\"annotations\":[{\"name\":\"pub\",\"value\":\"ab\"}]}";
 		String json = "{\"name\":\"expID\",\"annotations\":[{\"value\":\"ab\"}," +
 				"{\"name\":\"pub\",\"value\":\"ab\"},{\"name\":\"pub\",\"value\":\"ab\"}," +
-				"{\"name\":\"pub\",\"value\":\"ab\"},{\"name\":\"pub\",\"value\":\"ab\"}," +
-				"{\"name\":\"pub\",\"value\":\"ab\"},{\"name\":\"pub\",\"value\":\"ab\"}," +
-				"{\"name\":\"pub\",\"value\":\"ab\"}]}";
+				"{\"name\":\"pub\",\"value\":\"\"}]}";
 		final Command aefc = gson.fromJson(json,AddExperimentCommand.class);
 		   
 		assertFalse(aefc.validate());
-	}*/
+	}
 
 }
