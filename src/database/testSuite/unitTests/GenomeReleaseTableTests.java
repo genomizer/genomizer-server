@@ -24,20 +24,17 @@ import database.ServerDependentValues;
 import database.testSuite.TestInitializer;
 
 public class GenomeReleaseTableTests {
-
     public static TestInitializer ti;
     public static DatabaseAccessor dbac;
     public static FilePathGenerator fpg;
 
-    private static String testFolderName =
-    		"Genomizer Test Folder - Dont be afraid to delete me";
+    private static String testFolderName = "Genomizer Test Folder - Dont be afraid to delete me";
     private static File testFolder;
     private static String testFolderPath;
 
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
-
-    	ti = new TestInitializer();
+        ti = new TestInitializer();
         dbac = ti.setupWithoutAddingTuples();
         fpg = dbac.getFilePathGenerator();
 
@@ -56,26 +53,22 @@ public class GenomeReleaseTableTests {
 
     @AfterClass
     public static void tearDownAfterClass() throws Exception {
-
-    	recursiveDelete(testFolder);
+        recursiveDelete(testFolder);
     }
 
     @Before
     public void setUp() throws Exception {
-
-    	ti.addTuples();
+        ti.addTuples();
     }
 
     @After
     public void tearDown() throws Exception {
-
-    	ti.removeTuplesKeepConnection();
+        ti.removeTuplesKeepConnection();
     }
 
     @Test
     public void testGetDeleteGetAddGet() throws Exception {
-
-    	Genome g = dbac.getGenomeRelease("hg19");
+        Genome g = dbac.getGenomeRelease("hg19");
         assertEquals("hg19", g.genomeVersion);
 
         dbac.removeGenomeRelease("hg19");
@@ -89,7 +82,7 @@ public class GenomeReleaseTableTests {
 
     @Test(expected = SQLException.class)
     public void shouldThrowExceptionWhenAddFileAlreadyExist()
-    		throws SQLException {
+    									throws SQLException {
 
     	dbac.addGenomeRelease("test12", "Bear", "test12.txt");
     	dbac.addGenomeRelease("test12", "Bear", "test12.txt");
@@ -97,19 +90,20 @@ public class GenomeReleaseTableTests {
 
     @Test
     public void shouldReturnNullWhenGenomeReleaseDontExist()
-    		throws SQLException, IOException {
+    									throws SQLException, IOException {
 
     	assertFalse(dbac.removeGenomeRelease("thisFileMightNotExist"));
+
     }
 
     @Test
     public void shouldReturnRightNamesOfGenomeVersions() throws Exception {
-
-    	List<Genome> genomeList = dbac.getAllGenomReleasesForSpecies("Human");
+        List<Genome> genomeList = dbac.getAllGenomReleasesForSpecies("Human");
 
         assertTrue(searchGenomeForVersion(genomeList, "hg38"));
         assertTrue(searchGenomeForVersion(genomeList, "hg19"));
         assertTrue(searchGenomeForVersion(genomeList, "hg18"));
+
     }
 
     @Test
@@ -122,8 +116,7 @@ public class GenomeReleaseTableTests {
 
     @Test
     public void shouldReturnUploadURLUponAdd() throws Exception {
-
-    	String uploadURL = dbac.addGenomeRelease("hg39", "Human", "hg39.fasta");
+        String uploadURL = dbac.addGenomeRelease("hg39", "Human", "hg39.fasta");
         String expectedUploadURL = ServerDependentValues.UploadURL
                 + fpg.generateGenomeReleaseFolder("hg39", "Human")
                 + "hg39.fasta";
@@ -132,8 +125,7 @@ public class GenomeReleaseTableTests {
 
     @Test
     public void shouldUpdateDatabaseUponAdd() throws Exception {
-
-    	dbac.addGenomeRelease("hg40", "Human", "hg40.fasta");
+        dbac.addGenomeRelease("hg40", "Human", "hg40.fasta");
         String expectedFolderPath = fpg.getGenomeReleaseFolderPath("hg40",
                 "Human");
         Genome genome = dbac.getGenomeRelease("hg40");
@@ -142,29 +134,27 @@ public class GenomeReleaseTableTests {
 
     @Test
     public void shouldReturnNullForInvalidVersionOponGet() throws Exception {
-
-    	Genome genome = dbac.getGenomeRelease("hg50");
+        Genome genome = dbac.getGenomeRelease("hg50");
         assertNull(genome);
     }
 
     @Test
     public void shouldReturnFileName() throws Exception {
-
-    	dbac.addGenomeRelease("rn50", "Rat", "aRatFile.fasta");
+        dbac.addGenomeRelease("rn50", "Rat", "aRatFile.fasta");
         Genome genome = dbac.getGenomeRelease("rn50");
 
         assertEquals(1, genome.getFilesWithStatus().size());
         assertNotNull(genome.getFilesWithStatus().get("aRatFile.fasta"));
         assertEquals(genome.species, "Rat");
         assertEquals(genome.genomeVersion, "rn50");
+
     }
 
     @Test
     public void shouldDeleteFromBothDatabaseAndFileSystem() throws Exception {
+        dbac.addGenomeRelease("hg41", "Human", "hg41.txt");
 
-    	dbac.addGenomeRelease("hg41", "Human", "hg41.txt");
-
-    	String genomeReleaseFolderPath = fpg.generateGenomeReleaseFolder(
+        String genomeReleaseFolderPath = fpg.generateGenomeReleaseFolder(
                 "hg41", "Human");
         addMockFile(genomeReleaseFolderPath, "hg41.txt");
 
@@ -184,32 +174,35 @@ public class GenomeReleaseTableTests {
 
     @Test(expected = IOException.class)
     public void shouldNotDeleteGenomReleaseWhenFileNeedsIt() throws Exception{
-
     	dbac.removeGenomeRelease("hg38");
     }
 
     @Test
     public void shouldBeAbleToGetDownloadURLs() throws Exception {
-
-    	Genome g = dbac.getGenomeRelease("hg38");
+        Genome g = dbac.getGenomeRelease("hg38");
         assertEquals(2, g.getFilesWithStatus().size());
         String downloadURL = getDownloadURL(g, "hg38.fasta");
-        assertEquals(ServerDependentValues.DownloadURL + g.folderPath +
-        		"hg38.fasta", downloadURL);
+        assertEquals(ServerDependentValues.DownloadURL + g.folderPath + "hg38.fasta", downloadURL);
+    }
+
+    private String getDownloadURL(Genome g, String string) {
+        for (String s: g.getDownloadURLs()) {
+            if (s.endsWith(string)) {
+                return s;
+            }
+        }
+        return null;
     }
 
     @Test
-    public void shouldBeAbleToGetAllSpeciesThatHaveAGenomeRelease()
-    		throws Exception {
-
-    	List<String> species = dbac.getAllGenomReleaseSpecies();
+    public void shouldBeAbleToGetAllSpeciesThatHaveAGenomeRelease() throws Exception {
+        List<String> species = dbac.getAllGenomReleaseSpecies();
         assertEquals(2, species.size());
     }
 
     @Test
     public void shouldBeAbleToGetAllGenomeReleases() throws Exception {
-
-    	ti.removeTuplesKeepConnection();
+        ti.removeTuplesKeepConnection();
         ti.addTuples();
         List<Genome> genomes = dbac.getAllGenomReleases();
         assertEquals(6, genomes.size());
@@ -217,8 +210,7 @@ public class GenomeReleaseTableTests {
 
     @Test
     public void shouldBeAbleToSetStatusDone() throws Exception {
-
-    	ti.removeTuplesKeepConnection();
+        ti.removeTuplesKeepConnection();
         dbac.addGenomeRelease("V1", "Frog", "Froggy1.txt");
         dbac.genomeReleaseFileUploaded("V1", "Froggy1.txt");
         Genome g = dbac.getGenomeRelease("V1");
@@ -227,22 +219,18 @@ public class GenomeReleaseTableTests {
 
     @Test
     public void shouldGetFilePrefix() throws Exception {
-
-    	Genome g = dbac.getGenomeRelease("hg38");
+        Genome g = dbac.getGenomeRelease("hg38");
         assertEquals("hg38", g.getFilePrefix());
     }
 
-    private String getDownloadURL(Genome g, String string) {
+    @Test
+    public void shouldReturnNullIfSearchGenomReleaseThatDontExist()
+    											throws SQLException{
 
-		for (String s: g.getDownloadURLs()) {
-	        if (s.endsWith(string)) {
-	            return s;
-	        }
-	    }
-	    return null;
-	}
+    	assertNull(dbac.getAllGenomReleasesForSpecies("Dog"));
+    }
 
-	private boolean searchGenomeForVersion(List<Genome> genomeList,
+    private boolean searchGenomeForVersion(List<Genome> genomeList,
             String version) {
 
         for (int i = 0; i < genomeList.size(); i++) {
@@ -256,23 +244,19 @@ public class GenomeReleaseTableTests {
 
     private static void addMockFile(String folderPath, String filename1)
             throws IOException {
-
-    	File file1 = new File(folderPath + filename1);
+        File file1 = new File(folderPath + filename1);
         file1.createNewFile();
     }
 
     private static void recursiveDelete(File folder) {
-
-    	File[] contents = folder.listFiles();
-
-    	if (contents == null || contents.length == 0) {
+        File[] contents = folder.listFiles();
+        if (contents == null || contents.length == 0) {
             folder.delete();
         } else {
             for (File f : contents) {
                 recursiveDelete(f);
             }
         }
-
-    	folder.delete();
+        folder.delete();
     }
 }

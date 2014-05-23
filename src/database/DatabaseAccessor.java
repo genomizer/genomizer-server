@@ -1068,11 +1068,12 @@ public class DatabaseAccessor {
      * Method for getting all the genome releases for a species currently stored
      * in the database.
      *
-     * @param String
-     *            species - the name of the species you want to get genome
-     *            releases for.
+     * @param species
+     *            String, the name of the species you want to get genome
+     *            realeases for.
      * @return genomelist ArrayList<Genome>, list of all the genome releases for
-     *         a specific species.
+     *         a specific species. Returns NULL if the specified specie did NOT
+     *         have a genomeRelase entry in the database.
      * @throws SQLException
      */
     public ArrayList<Genome> getAllGenomReleasesForSpecies(String species)
