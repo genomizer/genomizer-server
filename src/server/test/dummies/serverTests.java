@@ -63,9 +63,10 @@ public class serverTests {
 	}
 
 	public static void genometest() throws Exception {
-		GenomeRelease.sendGetGenomeRelease();
-		GenomeRelease.sendAddGenomeRelease("Fly");
-		GenomeRelease.sendGetGenomeReleaseSpecies("Fly");
+		GenomeRelease.sendDeleteGenomeReleaseSpecies("asd");
+//		GenomeRelease.sendGetGenomeRelease();
+//		GenomeRelease.sendAddGenomeRelease("Fly");
+//		GenomeRelease.sendGetGenomeReleaseSpecies("Fly");
 	}
 
 	public static void processtest() throws Exception {
