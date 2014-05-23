@@ -14,7 +14,7 @@ import database.FileTuple;
 /**
  * Class that contains all the methods for adding,changing, getting and removing
  * Files in the database. This class is a subClass of databaseAcessor.java.
- * 
+ *
  * date: 2014-05-14 version: 1.0
  */
 public class FileMethods {
@@ -26,7 +26,7 @@ public class FileMethods {
 
     /**
      * Constructor for the fileMethod object.
-     * 
+     *
      * @param connection
      *            Connection, the connection to the database.
      */
@@ -154,7 +154,7 @@ public class FileMethods {
         int filenameIndex = filePath.lastIndexOf(File.separator);
         return filePath.substring(0, filenameIndex + 1);
     }
-    
+
     private String getFileName(String filePath) {
         int filenameIndex = filePath.lastIndexOf(File.separator);
         return filePath.substring(filenameIndex + 1);
@@ -163,7 +163,7 @@ public class FileMethods {
 
     /**
      * Returns the FileTuple object associated with the given filePath.
-     * 
+     *
      * @param filePath
      *            String
      * @return FileTuple - The corresponding FileTuple or null if no such file
@@ -189,7 +189,7 @@ public class FileMethods {
 
     /**
      * Returns the FileTuple object associated with the given fileID.
-     * 
+     *
      * @param fileID
      *            int
      * @return FileTuple - The corresponding FileTuple or null if no such file
@@ -216,7 +216,7 @@ public class FileMethods {
     /**
      * Deletes a file from the database and the disk. Should throw an
      * IOException if the method failed to delete the file from disk.
-     * 
+     *
      * @param path
      *            String - the path to the file.
      * @return int - the number of deleted tuples in the database.
@@ -242,7 +242,7 @@ public class FileMethods {
     /**
      * Deletes a file from the database and the disk using the fileID. Should
      * throw an IOException if the method failed to delete the file from disk.
-     * 
+     *
      * @param fileID
      *            int - the fileID of the file to be deleted.
      * @return 1 if deletion was successful, else 0.
@@ -273,7 +273,7 @@ public class FileMethods {
 
     /**
      * Checks if the file with the specified fileID exists in the database.
-     * 
+     *
      * @param fileID
      *            int - the fileID of the file.
      * @return true if the file exists, else false.
@@ -318,7 +318,7 @@ public class FileMethods {
      * Changes the Filename for a specific file with given fileID. This method
      * affects bothe the saved file name, but also the entries path and fileName
      * in database.
-     * 
+     *
      * @return resCount int, the number of rows affected by the change.
      * @throws SQLException
      *             if failed to send query,
@@ -382,7 +382,7 @@ public class FileMethods {
     public FileTuple addGeneratedFile(String expId, int fileType,
             String filePath, String inputFileName, String metaData,
             String uploader, boolean isPrivate, String grVersion) throws SQLException, IOException {
-        
+
         Experiment e = expMethods.getExperiment(expId);
         if (e == null) {
             throw new IOException("The experiment " + expId
@@ -397,8 +397,8 @@ public class FileMethods {
 
         String query = "INSERT INTO File "
                 + "(Path, FileType, FileName, Date, MetaData, InputFilePath, "
-                + "Author, Uploader, IsPrivate, ExpID, GRVersion) "
-                + "VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?, 'Genomizer', ?, ?, ?, ?)";
+                + "Author, Uploader, IsPrivate, ExpID, GRVersion, Status) "
+                + "VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?, 'Genomizer', ?, ?, ?, ?, 'Done')";
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setString(1, filePath);
 

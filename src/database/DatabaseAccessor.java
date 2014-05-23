@@ -945,7 +945,6 @@ public class DatabaseAccessor {
                 FileTuple ft = fileMethods.addGeneratedFile(e.getID(),
                         FileTuple.PROFILE, f.getPath(), inputFileName,
                         metaData, uploader, isPrivate, grVersion);
-                fileMethods.fileReadyForDownload(ft.id);
             }
         }
     }
