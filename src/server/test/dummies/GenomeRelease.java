@@ -22,8 +22,8 @@ public class GenomeRelease {
 		System.out.println("Response Body: " +testSettings. printResponse(con));
 	}
 
-	static void sendGetGenomeReleaseSpecies() throws Exception {
-		URL obj = new URL(testSettings.url + "/genomeRelease/Human");
+	static void sendGetGenomeReleaseSpecies(String specie) throws Exception {
+		URL obj = new URL(testSettings.url + "/genomeRelease/" + specie);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
 		con.setRequestMethod("GET");
