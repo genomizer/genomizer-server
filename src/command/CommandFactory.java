@@ -340,4 +340,8 @@ public class CommandFactory {
 		return new GetProcessStatusCommand(workHandler);
 	}
 
+	public Command createIsTokenValidCommand(String uuid) {
+		return new IsTokenValidCommand(uuid);
+	}
+
 }

@@ -42,6 +42,7 @@ public class Doorman {
 		httpServer.createContext("/process", createHandler());
 		httpServer.createContext("/sysadm", createHandler());
 		httpServer.createContext("/genomeRelease", createHandler());
+		httpServer.createContext("/token", createHandler());
 
 		httpServer.setExecutor(new Executor() {
 			@Override
@@ -94,6 +95,8 @@ public class Doorman {
 					case "/process":
 						exchange(exchange, CommandType.GET_PROCESS_STATUS_COMMAND);
 						break;
+					case "/token":
+						exchange(exchange, CommandType.IS_TOKEN_VALID_COMMAND);
 					}
 					break;
 
@@ -229,7 +232,7 @@ public class Doorman {
 		Response response = null;
 
 		try {
-		username = Authenticate.getUsername(uuid);
+		//username = Authenticate.getUsername(uuid);
 		System.err.println("Username: " + username + "\n");
 		} catch(Exception e ) {
 			e.printStackTrace();
@@ -239,7 +242,7 @@ public class Doorman {
 
 		try {
 			String header = URLDecoder.decode(exchange.getRequestURI().toString(), "UTF-8");
-			response = commandHandler.processNewCommand(body, header, username, type);
+			response = commandHandler.processNewCommand(body, header, uuid, type);
 
 		} catch(Exception e ) {
 			e.printStackTrace();
