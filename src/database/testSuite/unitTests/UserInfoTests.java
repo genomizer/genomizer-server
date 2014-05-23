@@ -102,4 +102,9 @@ public class UserInfoTests {
 
     }
 
+    @Test(expected = SQLException.class)
+    public void testBiggerThanMaxSize() throws SQLException, IOException{
+    	dbac.addUser("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "passwd", "Admin", "Aaaaaaa bbbbbb", null);
+    }
+
 }

@@ -38,7 +38,7 @@ public class MockUserTests {
     public static void setUpBeforeClass() {
         ti = new TestInitializer();
         try {
-            dbac = ti.setupWithoutAddingTuples("genomizer");
+            dbac = ti.setupWithoutAddingTuples();
 
             testFolderPath = System.getProperty("user.home")
                     + File.separator + testFolderName
@@ -289,6 +289,9 @@ public class MockUserTests {
                 + "hg38.fasta";
 
         assertEquals(expectedUploadURL, uploadURL);
+        Genome g = dbac.getGenomeRelease("hg38");
+        assertEquals(1, g.getFilesWithStatus().size());
+        assertEquals("hg38", g.getFilePrefix());
     }
 
     @Test
@@ -426,11 +429,11 @@ public class MockUserTests {
         FileTuple ft = getFileTuple("Prof1.sam", fts);
         assertNotNull(ft);
         assertEquals("Done", ft.status);
+        System.out.println(ft.toString());
 
         ft = getFileTuple("Prof2.sam", fts);
         assertNotNull(ft);
         assertEquals("Done", ft.status);
-
         System.out.println(ft.toString());
     }
 

@@ -35,7 +35,7 @@ public class GenomeReleaseTableTests {
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
         ti = new TestInitializer();
-        dbac = ti.setup();
+        dbac = ti.setupWithoutAddingTuples();
         fpg = dbac.getFilePathGenerator();
 
         testFolderPath = System.getProperty("user.home") + File.separator
@@ -53,16 +53,17 @@ public class GenomeReleaseTableTests {
 
     @AfterClass
     public static void tearDownAfterClass() throws Exception {
-        ti.removeTuples();
         recursiveDelete(testFolder);
     }
 
     @Before
     public void setUp() throws Exception {
+        ti.addTuples();
     }
 
     @After
     public void tearDown() throws Exception {
+        ti.removeTuplesKeepConnection();
     }
 
     @Test
@@ -175,7 +176,7 @@ public class GenomeReleaseTableTests {
         assertFalse(genomeReleaseFolder.exists());
     }
 
-    @Test(expected = SQLException.class)
+    @Test(expected = IOException.class)
     public void shouldNotDeleteGenomReleaseWhenFileNeedsIt() throws Exception{
     	dbac.removeGenomeRelease("hg38");
     }
@@ -224,12 +225,6 @@ public class GenomeReleaseTableTests {
     public void shouldGetFilePrefix() throws Exception {
         Genome g = dbac.getGenomeRelease("hg38");
         assertEquals("hg38", g.getFilePrefix());
-    }
-
-    @Test
-    public void shouldGetNullFilePrefixWhenNoFiles() throws Exception {
-        Genome g = dbac.getGenomeRelease("rn6");
-        assertNull(g.getFilePrefix());
     }
 
     private boolean searchGenomeForVersion(List<Genome> genomeList,
