@@ -74,7 +74,7 @@ public class ExperimentMethods {
     	if (expID == null || expID.contentEquals("")) {
     		throw new IOException("Invalid parameter");
     	}
-    	
+
     	Experiment e = getExperiment(expID);
     	if (e != null) {
     		throw new IOException(expID + " already exists");
@@ -313,6 +313,7 @@ public class ExperimentMethods {
     }
 
     private String matchChoice(String value, List<String> choices) {
+
         for (String s : choices) {
             if (value.equalsIgnoreCase(s)) {
                 return s;
@@ -329,7 +330,9 @@ public class ExperimentMethods {
      *            the folder to delete.
      */
     private static void recursiveDelete(File folder) {
+
         File[] contents = folder.listFiles();
+
         if (contents == null || contents.length == 0) {
             folder.delete();
         } else {
@@ -337,13 +340,7 @@ public class ExperimentMethods {
                 recursiveDelete(f);
             }
         }
+
         folder.delete();
     }
-
-    private void isValidArgument(String arg) throws IOException {
-    	if (arg.contentEquals("") || arg == null) {
-    		throw new IOException("Invalid argument(s)");
-    	}
-    }
-
 }
