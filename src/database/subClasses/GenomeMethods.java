@@ -45,7 +45,7 @@ public class GenomeMethods {
      * @param genomeVersion
      *            - The version to get filepath to, should use
      *            getAllGenomeReleases() and let user choose a version
-     * @return String path - a file path
+     * @return String path - a file path, NULL if it was not found.
      * @throws SQLException
      */
 
@@ -91,7 +91,7 @@ public class GenomeMethods {
         filePathBuilder.append(filename);
 
         PreparedStatement stmt;
-        
+
         if (getGenomeRelease(genomeVersion) == null) {
             String query = "INSERT INTO Genome_Release "
                     + "(Version, Species, FolderPath) " + "VALUES (?, ?, ?)";

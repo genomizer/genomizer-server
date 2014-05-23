@@ -80,10 +80,23 @@ public class GenomeReleaseTableTests {
     }
 
     @Test(expected = SQLException.class)
-    public void shouldThrowExceptionWhenAddFileAlreadyExist() throws SQLException {
+    public void shouldThrowExceptionWhenAddFileAlreadyExist()
+    									throws SQLException {
 
     	dbac.addGenomeRelease("test12", "Bear", "test12.txt");
     	dbac.addGenomeRelease("test12", "Bear", "test12.txt");
+    }
+
+
+    /*
+     * Forstätt arbeta här sen!!!!!!!!!!!!!11
+     */
+    @Test
+    public void shouldReturnNullWhenGenomeReleaseDontExist()
+    									throws SQLException {
+
+    	assertNull(dbac.removeGenomeRelease("thisFileMightNotExist"));
+
     }
 
     @Test
