@@ -54,17 +54,17 @@ public class HackingTest {
     //Experiment
 
     @Test(expected = IOException.class)
-	public void testAddingExperimentWithEmptyName() throws SQLException, IOException {
+	public void shouldNotAddExperimentWithEmptyName() throws SQLException, IOException {
 		dbac.addExperiment("");
 	}
 
     @Test(expected = IOException.class)
-    public void testAnnotatWithNonExistentExperiment() throws SQLException, IOException {
+    public void shouldNotAnnotateWithNonExistentExperiment() throws SQLException, IOException {
     	dbac.annotateExperiment("blaj", "sdfdfs", "dfdf");
     }
 
     @Test(expected = IOException.class)
-    public void testAnnotatWithNonExistentAnnotationLabel() throws SQLException, IOException {
+    public void shouldNotAnnotateWithNonExistentAnnotationLabel() throws SQLException, IOException {
     	dbac.addExperiment("xp2");
     	dbac.annotateExperiment("xp2", "sdfdfs", "dfdf");
     }
@@ -72,7 +72,7 @@ public class HackingTest {
     //Annotation
 
     @Test(expected = IOException.class)
-	public void testAddingDropDownWithEmptyLabel() throws SQLException, IOException {
+	public void shouldNotAddDropDownWithEmptyLabel() throws SQLException, IOException {
 		List<String> choices = new ArrayList<String>();
 		choices.add("Choice1");
 		choices.add("Choice2");
@@ -81,7 +81,7 @@ public class HackingTest {
 	}
 
 	@Test(expected = IOException.class)
-	public void testAddingDropDownAnnotationWithEmptyValue() throws SQLException, IOException {
+	public void shouldNotAddDropDownAnnotationWithEmptyValue() throws SQLException, IOException {
 		List<String> choices = new ArrayList<String>();
 		choices.add("Choice1");
 
@@ -90,40 +90,40 @@ public class HackingTest {
 	}
 
 	@Test(expected = IOException.class)
-	public void testAddingFreeTextAnnotationWithEmptyLabel() throws SQLException, IOException {
+	public void shouldNotAddFreeTextAnnotationWithEmptyLabel() throws SQLException, IOException {
 		dbac.addFreeTextAnnotation("", "hej", true);
 	}
 
 	@Test(expected = IOException.class)
-	public void testAddingFreeTextAnnotationWithEmptyValue() throws SQLException, IOException {
+	public void shouldNotAddingFreeTextAnnotationWithEmptyValue() throws SQLException, IOException {
 		dbac.addFreeTextAnnotation("anno2", "", true);
 	}
 
 	@Test(expected = IOException.class)
-	public void testChangeAnnotationLabelToEmptyLabel() throws SQLException, IOException {
+	public void shouldNotChangeAnnotationLabelToEmptyLabel() throws SQLException, IOException {
 		dbac.changeAnnotationLabel("", "value");
 	}
 
 	//User
 
 	@Test(expected = IOException.class)
-	public void testAddUserWithEmptyName() throws SQLException, IOException {
+	public void shouldNotAddUserWithEmptyName() throws SQLException, IOException {
 		dbac.addUser("", "1234", "Admin", "Bert Larsson", "sdsdfsfsdf");
 	}
 
 	@Test(expected = IOException.class)
-	public void testAddUserWithEmptyPassword() throws SQLException, IOException {
+	public void shouldNotAddUserWithEmptyPassword() throws SQLException, IOException {
 		dbac.addUser("Herbert", "", "Admin", "Herbert Svensson", "sdsdfsfsdf");
 	}
 
 	@Test(expected = SQLException.class)
-	public void testAddSeveralUsersWithSameName() throws SQLException, IOException {
+	public void shouldNotAddSeveralUsersWithSameName() throws SQLException, IOException {
 		dbac.addUser("Rune", "blabla", "Admin", "Rune Karlsson", "sdsdfsfsdf");
 		dbac.addUser("Rune", "blabla", "Admin", "Rune Karlsson", "sdsdfsfsdf");
 	}
 
 	@Test(expected = IOException.class)
-	public void testChangeToEmptyPassword() throws SQLException, IOException {
+	public void shouldNotChangeToEmptyPassword() throws SQLException, IOException {
 		dbac.addUser("Rolf", "1234", "Admin", "Rolf Persson", "dffddf@mail.com");
 		dbac.resetPassword("Rolf", "");
 	}

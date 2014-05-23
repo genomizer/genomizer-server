@@ -15,7 +15,7 @@ import database.DatabaseAccessor;
 import database.Experiment;
 import database.testSuite.TestInitializer;
 
-public class TestChangeAnnotationValue {
+public class ChangeAnnotationValueTest {
 
     private static DatabaseAccessor dbac;
     private static TestInitializer ti;

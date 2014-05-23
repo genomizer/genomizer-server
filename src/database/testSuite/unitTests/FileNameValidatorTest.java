@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import unused.FileValidator;
 
-public class TestFileNameValidator {
+public class FileNameValidatorTest {
 
 	private FileValidator validator;
 
