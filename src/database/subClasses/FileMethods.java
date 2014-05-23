@@ -245,7 +245,12 @@ public class FileMethods {
     }
 
     /**
+<<<<<<< HEAD
+     * Deletes a file from the database and the disk using the fileID. Should
+     * throw an IOException if the method failed to delete the file from disk.
+=======
      * Deletes a file from the database and the disk using the fileID.
+>>>>>>> branch 'database' of https://github.com/genomizer/genomizer-server.git
      *
      * @param fileID
      *            int - the fileID of the file to be deleted.
@@ -330,6 +335,13 @@ public class FileMethods {
 
         return hasResult;
     }
+
+    /**
+     * Sets the status of a file to "Done".
+     * @param fileID the ID of the file to set to "Done".
+     * @return the number of tuples updated.
+     * @throws SQLException
+     */
 
     public int fileReadyForDownload(int fileID) throws SQLException {
 
