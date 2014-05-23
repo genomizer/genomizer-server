@@ -206,7 +206,7 @@ public class UserMethods {
 	}
 
 	private void isValidArgument(String arg) throws IOException {
-    	if (arg.contentEquals("") || arg == null) {
+    	if (arg == null || arg.contentEquals("")) {
     		throw new IOException("Invalid argument(s)");
     	}
     }
