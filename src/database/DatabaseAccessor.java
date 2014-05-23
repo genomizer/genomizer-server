@@ -805,8 +805,9 @@ public class DatabaseAccessor {
      * @return int - the number of deleted tuples in the database.
      * @throws SQLException
      *             - if the query does not succeed
+     * @throws IOException
      */
-    public int deleteFile(String path) throws SQLException {
+    public int deleteFile(String path) throws SQLException, IOException {
         return fileMethods.deleteFile(path);
     }
 
@@ -817,8 +818,9 @@ public class DatabaseAccessor {
      * @param int fileID - the fileID of the file to be deleted.
      * @return int - 1 if deletion was successful, else 0.
      * @throws SQLException
+     * @throws IOException
      */
-    public int deleteFile(int fileID) throws SQLException {
+    public int deleteFile(int fileID) throws SQLException, IOException {
         return fileMethods.deleteFile(fileID);
     }
 

@@ -168,7 +168,7 @@ public class FileMethods {
      */
     public FileTuple getFileTuple(String filePath) throws SQLException {
 
-        String query = "SELECT * FROM File WHERE Path ~~* ?";
+        String query = "SELECT * FROM File WHERE Path = ?";
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setString(1, filePath);
         ResultSet rs = stmt.executeQuery();
