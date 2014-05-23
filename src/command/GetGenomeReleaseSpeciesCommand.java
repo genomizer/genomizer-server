@@ -41,9 +41,7 @@ public class GetGenomeReleaseSpeciesCommand extends Command{
 	/**
 	 * Connects to the database, retrieves all the genomeReleases for a
 	 * specific species from
-	 * the db and creates a response depending on the return value from the database
-	 *
-	 * If the species asked for doesn't exist in the database, a bad request respons is returned
+	 * the db and creates a response depending on the return value from the database.
 	 */
 	@Override
 	public Response execute() {
@@ -51,22 +49,12 @@ public class GetGenomeReleaseSpeciesCommand extends Command{
 
 		try {
 			db = initDB();
-			try{
-				if(db.getChoices("Species").contains(species)){
-					ArrayList<Genome> genomeReleases=db.getAllGenomReleasesForSpecies(species);
-					return new GetGenomeReleaseRespons(StatusCode.OK, genomeReleases);
-
-				}else{
-					return new ErrorResponse(StatusCode.BAD_REQUEST, "The species you are asking for has no genome version released");
-				}
-				}catch (SQLException e){
-					return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, "Query did not succed" + e.getMessage());
-				}
-
+			ArrayList<Genome> genomeReleases=db.getAllGenomReleasesForSpecies(species);
+			return new GetGenomeReleaseRespons(StatusCode.OK, genomeReleases);
 		} catch (SQLException e) {
 			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, "DatabaseAccessor could not be created: " + e.getMessage());
 		} catch (IOException e) {
-			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, "The species you are asking for has no genome version released");
+			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, species + " has no genome version released");
 		}finally{
 			db.close();
 		}
