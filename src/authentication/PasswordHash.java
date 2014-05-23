@@ -7,6 +7,10 @@ import java.security.NoSuchAlgorithmException;
 public class PasswordHash
 {
 
+	public static void main(String args[]) {
+		System.out.println(toSaltedMD5Hash("umea@2014"));
+	}
+
     public static String toSaltedMD5Hash(String password) {
     	String salt = getSalt();
     	String salted_password = password + salt;
