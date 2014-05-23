@@ -70,6 +70,7 @@ public class DeleteGenomeReleaseCommand extends Command {
 
 		try {
 			db = initDB();
+			System.out.println(genomeVersion);
 			boolean result = db.removeGenomeRelease(genomeVersion);
 			if(result) {
 				return new DeleteGenomeReleaseResponse(StatusCode.OK);
