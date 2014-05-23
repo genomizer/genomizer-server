@@ -20,7 +20,7 @@ import database.FilePathGenerator;
 import database.ServerDependentValues;
 import database.testSuite.TestInitializer;
 
-public class TestChainFiles {
+public class ChainFilesTest {
 
     private static DatabaseAccessor dbac;
     private static TestInitializer ti;
