@@ -35,6 +35,7 @@ public class AddNewFileTests {
 
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
+
         dbac = new DatabaseAccessor(TestInitializer.username,
                 TestInitializer.password, TestInitializer.host,
                 TestInitializer.database);
@@ -44,11 +45,13 @@ public class AddNewFileTests {
 
     @AfterClass
     public static void tearDownAfterClass() throws Exception {
+
         dbac.close();
     }
 
     @Before
     public void setUp() throws Exception {
+
         dbac.addExperiment(testExpId);
         ft = dbac.addNewFile(testExpId, testFileType, testFileName,
                 testInputFileName, testMetaData, testAuthor, testUploader,
@@ -57,6 +60,7 @@ public class AddNewFileTests {
 
     @After
     public void tearDown() throws Exception {
+
         dbac.deleteFile(ft.path);
         dbac.deleteExperiment(testExpId);
     }

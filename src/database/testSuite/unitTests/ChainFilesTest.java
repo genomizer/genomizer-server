@@ -25,13 +25,15 @@ public class ChainFilesTest {
     private static DatabaseAccessor dbac;
     private static TestInitializer ti;
 
-    private static String testFolderName = "Genomizer Test Folder - Dont be afraid to delete me";
+    private static String testFolderName =
+    		"Genomizer Test Folder - Dont be afraid to delete me";
     private static File testFolder;
     private static String testFolderPath;
     private static FilePathGenerator fpg;
 
     @BeforeClass
     public static void setupBeforeClass() throws Exception {
+
         ti = new TestInitializer();
         dbac = ti.setup();
 
@@ -50,8 +52,8 @@ public class ChainFilesTest {
 
     @AfterClass
     public static void undoAllChanges() throws SQLException {
-        ti.removeTuples();
 
+        ti.removeTuples();
         ti.recursiveDelete(testFolder);
     }
 
@@ -61,16 +63,16 @@ public class ChainFilesTest {
         String fromVersion = "hg19";
         String toVersion = "hg38";
         String fileName = "chainHuman";
-
         String filePath = dbac.addChainFile(fromVersion, toVersion, fileName);
-        assertEquals(
-                ServerDependentValues.UploadURL
-                		+ fpg.getChainFolderPath("Human", fromVersion, toVersion)
-                        , filePath);
+
+        assertEquals(ServerDependentValues.UploadURL +
+        		fpg.getChainFolderPath("Human", fromVersion, toVersion)
+        		, filePath);
     }
 
     @Test
     public void shouldGetRightChainFilePath() throws Exception {
+
         String fromVersion = "hg38";
         String toVersion = "hg18";
 
@@ -81,27 +83,29 @@ public class ChainFilesTest {
     }
 
     @Test
-    public void shouldReturnNullFilePathWhenChainFileIsNotInDB() throws Exception {
+    public void shouldReturnNullFilePathWhenChainFileIsNotInDB()
+    		throws Exception {
+
         String fromVersion = "hg99";
         String toVersion = "hg38";
-
         ChainFile cf = dbac.getChainFile(fromVersion, toVersion);
 
         assertNull(cf);
     }
 
     @Test
-    public void removeChainFileFromDatabase() throws SQLException {
+    public void shouldRemoveChainFileFromDatabase() throws SQLException {
+
         String fromVersion = "hg18";
         String toVersion = "hg38";
 
         assertEquals(1, dbac.removeChainFile(fromVersion, toVersion));
         assertNull(dbac.getChainFile(fromVersion, toVersion));
-
     }
 
     @Test
-    public void shouldRemoveChainFilesFromDatabaseAndFileSystem() throws Exception {
+    public void shouldRemoveChainFilesFromDatabaseAndFileSystem()
+    		throws Exception {
 
         dbac.addChainFile("rn3", "rn5", "rat.over.chain");
 
@@ -121,6 +125,7 @@ public class ChainFilesTest {
 
     @Test
     public void chainFileObjectShouldContainExpectedValues() throws Exception {
+
         String fromVersion = "rn3";
         String toVersion = "rn5";
         String testName1 = "testName1";
@@ -141,6 +146,7 @@ public class ChainFilesTest {
 
     @Test
     public void shouldBeAbleToAddMultipleChainFileFiles() throws Exception {
+
         String fromVersion = "rn4";
         String toVersion = "rn5";
         String testName1 = "testName1";
@@ -152,7 +158,8 @@ public class ChainFilesTest {
 		dbac.addChainFile(fromVersion, toVersion, testName3);
 
 		ChainFile cf = dbac.getChainFile(fromVersion, toVersion);
-		HashMap<String, String> files = (HashMap<String, String>) cf.getFilesWithStatus();
+		HashMap<String, String> files =
+				(HashMap<String, String>) cf.getFilesWithStatus();
 
 		assertTrue(files.containsKey(testName1));
 		assertTrue(files.containsKey(testName2));
@@ -161,6 +168,7 @@ public class ChainFilesTest {
 
     private void addMockFile(String folderPath, String filename1)
             throws IOException {
+
         File file1 = new File(folderPath + filename1);
         file1.createNewFile();
     }
