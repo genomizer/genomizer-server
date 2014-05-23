@@ -22,8 +22,8 @@ public class PubMedToSQLConverterTests {
     public String expConstraintPmStr = "Human[Species]";
     public String fileConstraintPmStr = "Ruaridh Watt[Author]";
 
-    public String multipleExpConstraintsPmStr = "Human[Species] AND Unknown[Sex]";
-    public String multipleExpConstraintsPmStrWithBrackets = "Human[Species] AND (Unknown[Sex] OR Arm[Tissue])";
+    public String multipleExpConstraintsPmStr = "Human[Species] AnD Unknown[Sex]";
+    public String multipleExpConstraintsPmStrWithBrackets = "Human[Species] ANd (Unknown[Sex] OR Arm[Tissue])";
 
     public String multipleMixedConstraintsPmStrWithBrackets = "(Ruaridh Watt[Author] OR (Human[Species] AND Arm[Tissue]))";
 
@@ -184,7 +184,7 @@ public class PubMedToSQLConverterTests {
     public void shouldConvertNOTInMultiPubMedString2() throws Exception {
 
         String query = pm2sql
-                .convertFileSearch("NOT Ruaridh[Author] NOT Human[Species]");
+                .convertFileSearch("NOT Ruaridh[Author] Not Human[Species]");
 
         String expected = sqlFragmentForFileAttr + "Author NOT ~~* ?" + "\nINTERSECT\n"
                 + sqlFragmentForExpAttrInFileSearchNegated + orderBySqlFragment;

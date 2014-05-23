@@ -36,16 +36,16 @@ public class PubMedToSQLConverter {
     public static final String INT_PARAM = "int";
     public static final String DATE_PARAM = "date";
 
-    private static final String AND = " AND ";
+    private static final String AND = " and ";
     private static final String INTERSECT = "\nINTERSECT\n"; // Will
                                                              // replace
                                                              // AND
 
-    private static final String OR = " OR ";
+    private static final String OR = " or ";
     private static final String UNION = "\nUNION\n"; // Will replace
                                                      // OR
 
-    private static final String NOT = " NOT ";
+    private static final String NOT = " not ";
 
     // sql fragments
     private String sqlFragmentForExpSearch = "SELECT ExpID FROM Experiment "
@@ -132,7 +132,7 @@ public class PubMedToSQLConverter {
 
         // Change a leading "NOT " to " NOT " so that it matches the NOT Keyword
         // String
-        if (pmStr.startsWith("NOT ")) {
+        if (pmStr.toLowerCase().startsWith("not ")) {
             pmStr = " " + pmStr;
         }
 
@@ -141,7 +141,7 @@ public class PubMedToSQLConverter {
                 pmStr = moveFirstChar(pmStr, sqlQuery);
             } else if (startsWithConj(pmStr)) {
                 pmStr = moveConj(pmStr, sqlQuery);
-            } else if (pmStr.startsWith(NOT)) {
+            } else if (pmStr.toLowerCase().startsWith(NOT)) {
                 pmStr = moveNotStatement(pmStr, sqlQuery);
             } else {
                 pmStr = moveConstraint(pmStr, sqlQuery);
@@ -172,7 +172,7 @@ public class PubMedToSQLConverter {
         parametersResult.clear();
         StringBuilder sqlQuery = new StringBuilder();
 
-        if (pmStr.startsWith("NOT ")) {
+        if (pmStr.toLowerCase().startsWith("not ")) {
             pmStr = " " + pmStr;
         }
 
@@ -181,7 +181,7 @@ public class PubMedToSQLConverter {
                 pmStr = moveFirstChar(pmStr, sqlQuery);
             } else if (startsWithConj(pmStr)) {
                 pmStr = moveConj(pmStr, sqlQuery);
-            } else if (pmStr.startsWith(NOT)) {
+            } else if (pmStr.toLowerCase().startsWith(NOT)) {
                 pmStr = moveExperimentNotStatement(pmStr, sqlQuery);
             } else {
                 pmStr = moveExperimentConstraint(pmStr, sqlQuery);
@@ -356,7 +356,7 @@ public class PubMedToSQLConverter {
 
 
     private String moveConj(String s, StringBuilder sb) {
-        if (s.startsWith(OR)) {
+        if (s.toLowerCase().startsWith(OR)) {
             sb.append(UNION);
             return s.substring(OR.length());
         }
@@ -366,7 +366,7 @@ public class PubMedToSQLConverter {
 
 
     private boolean startsWithConj(String s) {
-        return (s.startsWith(AND) || s.startsWith(OR));
+        return (s.toLowerCase().startsWith(AND) || s.toLowerCase().startsWith(OR));
     }
 
 
