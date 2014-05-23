@@ -31,12 +31,15 @@ public class MockUserTests {
     static DatabaseAccessor dbac;
 
     private static FilePathGenerator fpg;
-    private static String testFolderName = "Genomizer Test Folder - Dont be afraid to delete me";
+    private static String testFolderName =
+    		"Genomizer Test Folder - Dont be afraid to delete me";
     private static String testFolderPath;
 
     @BeforeClass
     public static void setUpBeforeClass() {
+
         ti = new TestInitializer();
+
         try {
             dbac = ti.setupWithoutAddingTuples();
 
@@ -58,24 +61,29 @@ public class MockUserTests {
 
     @Before
     public void setUp() throws Exception {
+
     }
 
     @After
     public void tearDown() throws Exception {
+
         ti.removeTuplesKeepConnection();
         ti.recursiveDelete(new File(testFolderPath));
     }
 
     @Test
     public void addAnExperiment() throws Exception {
+
         dbac.addExperiment("My First Experiment");
         Experiment e = dbac.getExperiment("My First Experiment");
+
         assertEquals("My First Experiment", e.getID());
         assertEquals(0, e.getFiles().size());
     }
 
     @Test
     public void searchForEmptyExperiment() throws Exception {
+
         dbac.addExperiment("Ex1");
         List<Experiment> exs = dbac.search("ex1[expid]");
         assertEquals(1, exs.size());
@@ -83,20 +91,23 @@ public class MockUserTests {
 
     @Test(expected = IOException.class)
     public void tryToAddSameExperimentAgain() throws Exception {
+
         dbac.addExperiment("My First Experiment");
         dbac.addExperiment("my first experiment");
     }
 
     @Test
     public void addFreeTextAnnotation() throws Exception {
-        dbac.addFreeTextAnnotation("Tissue", null, true);
 
+        dbac.addFreeTextAnnotation("Tissue", null, true);
         List<String> annotationLabels = dbac.getAllAnnotationLabels();
+
         assertTrue(annotationLabels.contains("Tissue"));
     }
 
     @Test(expected = IOException.class)
     public void addDuplicateAnnotation() throws Exception {
+
         dbac.addFreeTextAnnotation("Tissue", null, true);
         dbac.addFreeTextAnnotation("tissue", null, false);
     }
@@ -110,13 +121,14 @@ public class MockUserTests {
         choices.add("unknown");
 
         dbac.addDropDownAnnotation("Sex", choices, 2, false);
-
         List<String> annotationLabels = dbac.getAllAnnotationLabels();
+
         assertTrue(annotationLabels.contains("Sex"));
     }
 
     @Test
     public void addSpeciesDDAnnotation() throws Exception {
+
         ArrayList<String> choices = new ArrayList<String>();
         choices.add("Human");
         choices.add("Fly");
@@ -126,6 +138,7 @@ public class MockUserTests {
 
         List<String> annotationLabels = dbac.getAllAnnotationLabels();
         assertTrue(annotationLabels.contains("Species"));
+
         List<String> annotationChoices = dbac.getChoices("Species");
         assertEquals(3, annotationChoices.size());
         assertTrue(annotationChoices.contains("Human"));
@@ -133,12 +146,14 @@ public class MockUserTests {
 
     @Test (expected = IOException.class)
     public void attemptToRemoveSpeciesAnnotation() throws Exception {
+
         addSpeciesDDAnnotation();
         dbac.deleteAnnotation("Species");
     }
 
     @Test (expected = IOException.class)
     public void speciesRemainsAfterAttemptedDelete() throws Exception {
+
         attemptToRemoveSpeciesAnnotation();
         Annotation a = dbac.getAnnotationObject("Species");
         assertNotNull(a);
@@ -147,6 +162,7 @@ public class MockUserTests {
 
     @Test(expected = IOException.class)
     public void addDuplicateDropDownAnnotation() throws Exception {
+
         ArrayList<String> choices = new ArrayList<String>();
         choices.add("male");
         choices.add("female");
@@ -158,6 +174,7 @@ public class MockUserTests {
 
     @Test
     public void annotateExperimentFT() throws Exception {
+
         dbac.addExperiment("My First Experiment");
         dbac.addFreeTextAnnotation("Tissue", null, true);
         dbac.annotateExperiment("My First Experiment", "Tissue",
@@ -168,6 +185,7 @@ public class MockUserTests {
 
     @Test
     public void annotateExperimentDD() throws Exception {
+
         if (dbac.getExperiment("My first experiment") == null) {
             dbac.addExperiment("My First Experiment");
         }
@@ -185,6 +203,7 @@ public class MockUserTests {
 
     @Test(expected = IOException.class)
     public void annotateExperimentInvalidChoiceDD() throws Exception {
+
         dbac.addExperiment("My First Experiment");
 
         ArrayList<String> choices = new ArrayList<String>();
@@ -200,10 +219,9 @@ public class MockUserTests {
     public void annotateExperimentFTandDD() throws Exception {
 
         annotateExperimentFT();
-
         annotateExperimentDD();
-
         Experiment e = dbac.getExperiment("My First Experiment");
+
         assertEquals(2, e.getAnnotations().size());
         assertEquals("male", e.getAnnotations().get("Sex"));
         assertEquals("Heart", e.getAnnotations().get("Tissue"));
@@ -211,6 +229,7 @@ public class MockUserTests {
 
     @Test
     public void removeAnnotationChoice() throws Exception {
+
         addDropDownAnnotation();
         dbac.removeDropDownAnnotationValue("sex", "male");
         Annotation a = dbac.getAnnotationObject("sex");
@@ -219,6 +238,7 @@ public class MockUserTests {
 
     @Test (expected = IOException.class)
     public void attemptToRemoveDefaultAnnotationChoice() throws Exception {
+
         addDropDownAnnotation();
         dbac.removeDropDownAnnotationValue("sex", "unknown");
         Annotation a = dbac.getAnnotationObject("sex");
@@ -226,19 +246,23 @@ public class MockUserTests {
     }
 
     @Test (expected = IOException.class)
-    public void attemptToRemoveAnnotationValueUsedByExperiment() throws Exception {
+    public void attemptToRemoveAnnotationValueUsedByExperiment()
+    		throws Exception {
+
         annotateExperimentFTandDD();
         dbac.removeDropDownAnnotationValue("sex", "male");
     }
 
     @Test (expected = IOException.class)
     public void attemptToRemoveAnnotationUsedByExperiment() throws Exception {
+
         annotateExperimentFTandDD();
         dbac.deleteAnnotation("sex");
     }
 
     @Test
     public void addRawFiles() throws Exception {
+
         annotateExperimentFTandDD();
 
         FileTuple ft = dbac.addNewFile("my first experiment",
@@ -268,19 +292,24 @@ public class MockUserTests {
 
     @Test
     public void rawFileUploadDone() throws Exception {
-        annotateExperimentFTandDD();
-        FileTuple ft = dbac.addNewFile("my first experiment",
+
+    	annotateExperimentFTandDD();
+
+    	FileTuple ft = dbac.addNewFile("my first experiment",
                 FileTuple.RAW, "rawFile.fastq", "rawInput.fasta",
                 null, "Umu", "Ruaridh", false, null);
-        dbac.fileReadyForDownload(ft.id);
+
+    	dbac.fileReadyForDownload(ft.id);
         ft = dbac.getFileTuple(ft.id);
+
         assertEquals("Done", ft.status);
     }
 
 
     @Test
     public void addGenomeReleaseFile() throws Exception {
-        String uploadURL = dbac.addGenomeRelease("hg38", "Human",
+
+    	String uploadURL = dbac.addGenomeRelease("hg38", "Human",
                 "hg38.fasta");
 
         String expectedUploadURL = ServerDependentValues.UploadURL
@@ -289,36 +318,42 @@ public class MockUserTests {
                 + "hg38.fasta";
 
         assertEquals(expectedUploadURL, uploadURL);
+
         Genome g = dbac.getGenomeRelease("hg38");
+
         assertEquals(1, g.getFilesWithStatus().size());
         assertEquals("hg38", g.getFilePrefix());
     }
 
     @Test
     public void changeSpeciesAnnotationValue() throws Exception {
-        addSpeciesDDAnnotation();
+
+    	addSpeciesDDAnnotation();
         addGenomeReleaseFile();
+
         dbac.changeAnnotationValue("Species", "Human", "Homosapien");
         Genome g = dbac.getGenomeRelease("hg38");
+
         assertEquals("Homosapien", g.species);
     }
 
     @Test
     public void changeOtherAnnotationValue() throws Exception {
-        annotateExperimentFTandDD();
+
+    	annotateExperimentFTandDD();
         addSpeciesDDAnnotation();
         addGenomeReleaseFile();
         dbac.changeAnnotationValue("Sex", "male", "man");
         Genome g = dbac.getGenomeRelease("hg38");
+
         assertEquals("Human", g.species);
     }
 
     @Test
     public void getGenomeRelease() throws Exception {
-        addGenomeReleaseFile();
 
+    	addGenomeReleaseFile();
         Genome g = dbac.getGenomeRelease("HG38");
-
         assertEquals("hg38", g.genomeVersion);
 
         String expectedFolderPath = testFolderPath
@@ -379,7 +414,8 @@ public class MockUserTests {
 
     @Test
     public void completeGenomeReleaseFileUpload() throws Exception {
-        addGenomeReleaseFile();
+
+    	addGenomeReleaseFile();
 
         dbac.genomeReleaseFileUploaded("hg38", "hg38.fasta");
 
@@ -389,7 +425,8 @@ public class MockUserTests {
 
     @Test
     public void processRawToProfile() throws Exception {
-        addRawFiles();
+
+    	addRawFiles();
         addTwoGenomeReleaseFiles();
 
         Entry<String, String> folders = dbac
@@ -409,7 +446,8 @@ public class MockUserTests {
 
     @Test
     public void processingDone() throws Exception {
-        addRawFiles();
+
+    	addRawFiles();
         addTwoGenomeReleaseFiles();
 
         Entry<String, String> folders = dbac
@@ -418,7 +456,8 @@ public class MockUserTests {
         addMockFile(folders.getValue(), "Prof1.sam");
         addMockFile(folders.getValue(), "Prof2.sam");
 
-        dbac.addGeneratedProfiles("My First Experiment", folders.getValue(), null, "-n1", "hg38", "Ruaridh", true);
+        dbac.addGeneratedProfiles("My First Experiment", folders.getValue(),
+        		null, "-n1", "hg38", "Ruaridh", true);
 
         List<Experiment> exps = dbac
                 .search("my first experiment[expid]");
@@ -438,17 +477,20 @@ public class MockUserTests {
     }
 
     private FileTuple getFileTuple(String string, List<FileTuple> fts) {
-        for (FileTuple ft : fts) {
+
+    	for (FileTuple ft : fts) {
             if (ft.filename.equalsIgnoreCase(string)) {
                 return ft;
             }
         }
+
         return null;
     }
 
     private void addMockFile(String folderPath, String filename)
             throws IOException {
-        File f = new File(folderPath + filename);
+
+    	File f = new File(folderPath + filename);
         f.createNewFile();
     }
 
