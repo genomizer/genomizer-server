@@ -13,21 +13,20 @@ public class GetGenomeReleaseRespons extends Response {
 
 	ArrayList<Genome> genomeReleases;
 	JsonArray arr;
-	
+
 	public GetGenomeReleaseRespons(int code, ArrayList<Genome> genomeReleases) {
 		this.code=code;
 		this.genomeReleases=genomeReleases;
-		
+
 		arr = new JsonArray();
 		Gson gson = new GsonBuilder().create();
-		
-		for(int i =0; i<genomeReleases.size();i++){	
+
+		for(int i =0; i<genomeReleases.size();i++){
 			JsonElement elem = gson.toJsonTree(genomeReleases.get(i), Genome.class);
 			arr.add(elem);
-		}	
-	
+		}
 	}
-	
+
 	@Override
 	public String getBody(){
 		return arr.toString();

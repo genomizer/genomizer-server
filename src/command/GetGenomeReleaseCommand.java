@@ -26,7 +26,6 @@ public class GetGenomeReleaseCommand extends Command{
 	 * Empty constructor, used to get an object of GetGenomeReleaseCommand
 	 */
 	public GetGenomeReleaseCommand() {
-
 	}
 
 	/**
@@ -37,9 +36,7 @@ public class GetGenomeReleaseCommand extends Command{
 	 */
 	@Override
 	public boolean validate() {
-
 		return true;
-
 	}
 
 	/**
@@ -52,20 +49,15 @@ public class GetGenomeReleaseCommand extends Command{
 	public Response execute() {
 		DatabaseAccessor db=null;
 		try {
-			db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
+			db = initDB();
 			try{
 				ArrayList<Genome> genomeReleases = (ArrayList<Genome>) db.getAllGenomReleases();
 				return new GetGenomeReleaseRespons(StatusCode.OK, genomeReleases);
 			}catch(SQLException e){
 				return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, "Could not fetch all genome releases: " + e.getMessage());
 			}
-
-
-
-		} catch (SQLException e) {
+		} catch (SQLException | IOException e) {
 			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, "SQLException - Could not create connection to database: " + e.getMessage());
-		} catch (IOException e) {
-			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, "EOException - Could not create connection to database: " + e.getMessage());
 		} finally {
 			db.close();
 		}
