@@ -213,11 +213,11 @@ public class SmoothingAndStep {
 	//	if (params==null||params[2]>=params[0] || stepSize < 1 || params[0] < 1 ){
 	//	    throw new ProcessException("");
 	//	}
-	if(!(params[1] == 0 || params[1] == 1)){
-	    throw new ProcessException("Undefined smoothing type, should be either 1 for median or 0 for trimmed mean");
-	}
 	if(params==null){
 	    throw new ProcessException("Params array is null");
+	}
+	if(!(params[1] == 0 || params[1] == 1)){
+	    throw new ProcessException("Undefined smoothing type, should be either 1 for median or 0 for trimmed mean");
 	}
 	if(params[0]<=params[2]){
 	    throw new ProcessException("Minimum positions to smooth should not be larger than window size");
