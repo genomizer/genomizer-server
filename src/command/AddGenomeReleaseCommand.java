@@ -74,38 +74,18 @@ public class AddGenomeReleaseCommand extends Command {
 
 		Response rsp = null;
 		DatabaseAccessor db = null;
+		ArrayList<String> uploadURLs = new ArrayList<String>();
 
 		try {
-
 			db = initDB();
-			//TODO: Call proper database method.
-			//ArrayList<String> filePaths = db.addGenomeRelease(version, species, files);
-
-			//rsp = new AddGenomeReleaseResponse(StatusCode.CREATED, filePaths);
-			rsp = new MinimalResponse(StatusCode.NO_CONTENT);
-
-		} catch (SQLException e) {
-
-			if(e.getErrorCode() == 0) {
-
-				rsp = new ErrorResponse(StatusCode.BAD_REQUEST, "Duplicate values.");
-
-			} else {
-
-				rsp = new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, "Database error");
-
+			for(String fileName: files) {
+				 uploadURLs.add(db.addGenomeRelease(version, species, fileName));
 			}
-
-		} catch (IOException e) {
-
-			rsp = new ErrorResponse(StatusCode.BAD_REQUEST, "IOEXCEPTION");
-
+			return new AddGenomeReleaseResponse(StatusCode.CREATED, uploadURLs);
+		} catch (SQLException | IOException e) {
+				rsp = new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
 		} finally {
-
-			if(db.isConnected()) {
-				db.close();
-			}
-
+			db.close();
 		}
 
 		return rsp;

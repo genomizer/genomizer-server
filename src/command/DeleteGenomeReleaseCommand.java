@@ -66,40 +66,23 @@ public class DeleteGenomeReleaseCommand extends Command {
 	@Override
 	public Response execute() {
 
-		Response rsp = null;
 		DatabaseAccessor db = null;
 
 		try {
-
 			db = initDB();
 			boolean result = db.removeGenomeRelease(genomeVersion);
-
 			if(result) {
-
-				rsp = new DeleteGenomeReleaseResponse(StatusCode.OK);
-
+				return new DeleteGenomeReleaseResponse(StatusCode.OK);
 			} else {
-
-				rsp = new ErrorResponse(StatusCode.BAD_REQUEST, "Removeing did not work.");
+				return new ErrorResponse(StatusCode.BAD_REQUEST, "Removeing did not work.");
 			}
-
-		} catch (SQLException e) {
-
-			return new ErrorResponse(StatusCode.BAD_REQUEST, "Database error.");
-
-		} catch (IOException e) {
-
-			return new ErrorResponse(StatusCode.BAD_REQUEST, "IOException.");
-
+		} catch (SQLException | IOException e) {
+			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
 		} finally {
-
 			if(db.isConnected()) {
 				db.close();
 			}
-
 		}
-
-		return rsp;
 
 	}
 

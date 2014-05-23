@@ -8,6 +8,7 @@ public class PasswordHash
 {
 
     public static String toSaltedSHA256Hash(String password) {
+
     	String salt = getSalt();
     	String salted_password = password + salt;
     	try {
