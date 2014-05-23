@@ -88,15 +88,11 @@ public class GenomeReleaseTableTests {
     	dbac.addGenomeRelease("test12", "Bear", "test12.txt");
     }
 
-
-    /*
-     * Forstätt arbeta här sen!!!!!!!!!!!!!11
-     */
     @Test
     public void shouldReturnNullWhenGenomeReleaseDontExist()
-    									throws SQLException {
+    									throws SQLException, IOException {
 
-    	assertNull(dbac.removeGenomeRelease("thisFileMightNotExist"));
+    	assertFalse(dbac.removeGenomeRelease("thisFileMightNotExist"));
 
     }
 
