@@ -7,6 +7,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.InetSocketAddress;
 import java.net.URLDecoder;
 
+import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.Executor;
 
@@ -206,10 +207,11 @@ public class Doorman {
 		System.out.println("Exchange: " + type);
 
 		if(type != CommandType.LOGIN_COMMAND) {
-			try {
-				uuid =  exchange.getRequestHeaders().get("Authorization").get(0);
+			List<String> auth = exchange.getRequestHeaders().get("Authorization");
+			if (auth != null && Authenticate.idExists(auth.get(0))) {
+				uuid = auth.get(0);
 				Authenticate.updateLatestRequest(uuid);
-			} catch(NullPointerException e) {
+			} else {
 				System.out.println("Unauthorized request!");
 				Response errorResponse = new MinimalResponse(StatusCode.UNAUTHORIZED);
 				try {
@@ -222,7 +224,6 @@ public class Doorman {
 				scanner.close();
 				return;
 			}
-		} else {
 		}
 		while(scanner.hasNext()) {
 			body = body.concat(" " + scanner.next());
