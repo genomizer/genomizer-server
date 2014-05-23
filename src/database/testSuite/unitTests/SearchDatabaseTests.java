@@ -118,7 +118,7 @@ public class SearchDatabaseTests {
     @Test
     public void shouldBeAbleToSearch1() throws Exception {
         List<Experiment> experiments = dbac
-                .search("Exp1[ExpID] AND Raw[FileType]");
+                .search("Exp1[ExpID] And Raw[FileType]");
         for (Experiment e: experiments) {
             System.out.println(e.toString());
         }
