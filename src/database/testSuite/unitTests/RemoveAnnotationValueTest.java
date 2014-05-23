@@ -15,7 +15,7 @@ import org.junit.Test;
 import database.DatabaseAccessor;
 import database.testSuite.TestInitializer;
 
-public class removeAnnotationValueTest {
+public class RemoveAnnotationValueTest {
 
     private static TestInitializer ti;
 	private static DatabaseAccessor dbac;

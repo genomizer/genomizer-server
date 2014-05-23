@@ -12,6 +12,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import database.DatabaseAccessor;
+import database.PubMedToSQLConverter;
 import database.testSuite.TestInitializer;
 
 public class GitHubIssuesTests {
@@ -23,7 +24,7 @@ public class GitHubIssuesTests {
     public static void setupBeforeClass() throws Exception {
     	ti = new TestInitializer();
     	dbac = ti.setup();
-    	
+
     	choices = new ArrayList<String>();
     	choices.add("mumbojumbo");
     	choices.add("mumbodumbo");
@@ -33,17 +34,17 @@ public class GitHubIssuesTests {
     public static void undoAllChanges() throws SQLException {
     	ti.removeTuples();
     }
-    
+
     @Test
     public void testRemoveAnnotationWithSlash() throws SQLException, IOException {
     	dbac.addFreeTextAnnotation("hej", null, false);
-    	
+
     	dbac.changeAnnotationLabel("hej", "/hej/");
     	assertNotNull(dbac.getAnnotationObject("/hej/"));
     	assertEquals(1, dbac.deleteAnnotation("/hej/"));
     	assertNull(dbac.getAnnotationObject("/hej/"));
     }
-    
+
     @Test
     public void testChangeAnnotationSwagName() throws SQLException, IOException {
     	dbac.addDropDownAnnotation("amountOfSwag", choices, 0, false);
@@ -51,14 +52,15 @@ public class GitHubIssuesTests {
     	assertNotNull(dbac.getAnnotationObject("amountOfSwaggerness"));
     	assertNull(dbac.getAnnotationObject("amountOfSwag"));
     }
-    
+
     @Test
     public void testChangeAnnotationLabelCereal() throws SQLException, IOException {
-    	
+
     	dbac.addFreeTextAnnotation("SuperCereal", null, false);
     	assertEquals(1, dbac.changeAnnotationLabel("SuperCereal", "SuperCerea"));
-    	
+
     	assertNotNull(dbac.getAnnotationObject("SuperCerea"));
     	assertNull(dbac.getAnnotationObject("SuperCereal"));
     }
+
 }

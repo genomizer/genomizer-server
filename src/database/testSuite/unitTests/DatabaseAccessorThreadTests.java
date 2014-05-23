@@ -31,35 +31,40 @@ public class DatabaseAccessorThreadTests {
 
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
+
 	}
 
 	@Before
 	public void setUp() throws Exception {
+
 	}
 
 	@After
 	public void tearDown() throws Exception {
+
 	}
 
 	@Test
 	public void testConnection() throws Exception {
-		DatabaseAccessor dbac = new DatabaseAccessor(username, password, host, database);
+		DatabaseAccessor dbac = new DatabaseAccessor(username, password,
+				host, database);
+
 		assertTrue(dbac.isConnected());
 		dbac.close();
 	}
 
 	@Test
-	public void addNRemoveOneFileFromCurrentThread() throws SQLException, IOException, ParseException{
+	public void shouldaddNRemoveOneFileFromCurrentThread()
+			throws SQLException, IOException, ParseException {
 
-		DatabaseAccessor dbac = new DatabaseAccessor(username, password, host, database);
+		DatabaseAccessor dbac = new DatabaseAccessor(username, password,
+				host, database);
 
 		String fileName = "StressTest0_t:9.hej";
 		String filePath = "Stress0_t:9.hej";
 
-
 		dbac.addGenomeRelease("banan", "Fly", "banan38.gr");
 		dbac.addExperiment("Exper1");
-
 		dbac.addNewFile("Exper1", 1, fileName , filePath,
 								"-m -a -te","Smurf", "Claes", true,"banan");
 
@@ -71,7 +76,6 @@ public class DatabaseAccessorThreadTests {
 		dbac.deleteFile(resExp.get(0).getFiles().get(0).id);
 		dbac.deleteExperiment("Exper1");
 		dbac.removeGenomeRelease("banan");
-
 		dbac.close();
 	}
 
@@ -80,7 +84,8 @@ public class DatabaseAccessorThreadTests {
 	 * nr of files can be changed.
 	 */
     @Test
-    public void addNRemoveFileFromSepparateThreads() throws SQLException, IOException, ParseException {
+    public void shouldAddNRemoveFileFromSeparateThreads() throws SQLException,
+    		IOException, ParseException {
 
     	ArrayList<Runnable> allRunnables = new ArrayList<Runnable>();
     	ArrayList<Thread> allThreads = new ArrayList<Thread>();
@@ -116,15 +121,15 @@ public class DatabaseAccessorThreadTests {
     	List<Experiment> resExp = dbac.search("Claes[Uploader]");
 
     	//all files added to db by sepparate threads, threads counting from 9.
-    	for(int i=9;i<(nrOfThreads * nrOfFiles)+9;i++){	//hard coded thread nr, fix later :D
-
+    	//hard coded thread nr
+    	for (int i = 9; i < (nrOfThreads * nrOfFiles) + 9; i++){
     		assertEquals(1,resExp.size());
     		assertEquals(experimentId,resExp.get(0).getFiles().get(i-9).expId);
     		assertEquals("Claes",resExp.get(0).getFiles().get(i-9).uploader);
     	}
 
-    	for(int i=9;i<(nrOfThreads * nrOfFiles)+9;i++){	//hard coded thread nr, fix later :D
-
+    	//hard coded thread nr
+    	for (int i = 9; i< (nrOfThreads * nrOfFiles) +9; i++){
     		dbac.deleteFile(resExp.get(0).getFiles().get(i-9).id);
     	}
 
@@ -134,27 +139,25 @@ public class DatabaseAccessorThreadTests {
     }
 
     //class where threads will add files to database.
-    public class myRunnable implements Runnable{
+    public class myRunnable implements Runnable {
 
 		public void run(){
 
 			int nrOfFiles = 10, nr = 0;
 
 		    try {
-		    	DatabaseAccessor dbac2 = new DatabaseAccessor(username, password,
-		    			host, database);
+		    	DatabaseAccessor dbac2 = new DatabaseAccessor(
+		    			username, password,	host, database);
 
 		    	//adding files
-		    	for(int i=0;i<nrOfFiles;i++){
+		    	for (int i = 0; i < nrOfFiles; i++) {
 		    		nr = i+1;
-
-		    		dbac2.addNewFile("Exper1", 1,
-		    		"StressTest" + i + "_t:" + Thread.currentThread().getId() +
-		    		".hej" , "Stress" + i + "_t:" +
-		    		Thread.currentThread().getId(),
-		    		"-m -a -te","Smurf", "Claes", true,"banan");
-
+		    		dbac2.addNewFile("Exper1", 1, "StressTest" + i + "_t:" +
+		    				Thread.currentThread().getId() + ".hej" , "Stress" +
+		    				i + "_t:" +	Thread.currentThread().getId(),
+		    				"-m -a -te","Smurf", "Claes", true,"banan");
 		    	}
+
 		    	dbac2.close();
 
 		    } catch (SQLException e) {

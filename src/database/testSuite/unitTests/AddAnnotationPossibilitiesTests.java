@@ -30,8 +30,10 @@ public class AddAnnotationPossibilitiesTests {
 
     @BeforeClass
     public static void setupTestCase() throws Exception {
-        dbac = new DatabaseAccessor(TestInitializer.username, TestInitializer.password, TestInitializer.host,
+        dbac = new DatabaseAccessor(TestInitializer.username,
+        		TestInitializer.password, TestInitializer.host,
         		TestInitializer.database);
+
         testChoices = new ArrayList<String>();
         testChoices.add(testChoice);
         testChoices.add(testChoice + "2");
@@ -39,23 +41,27 @@ public class AddAnnotationPossibilitiesTests {
 
     @AfterClass
     public static void undoAllChanges() throws SQLException {
+
         dbac.close();
     }
 
     @Before
     public void setup() throws SQLException, IOException {
+
         dbac.addFreeTextAnnotation(testLabelFT, null, true);
         dbac.addDropDownAnnotation(testLabelDD, testChoices, 0, false);
     }
 
     @After
     public void teardown() throws SQLException, Exception {
+
         dbac.deleteAnnotation(testLabelFT);
         dbac.deleteAnnotation(testLabelDD);
     }
 
     @Test
     public void shouldBeAbleToConnectToDB() throws Exception {
+
         assertTrue(dbac.isConnected());
     }
 
@@ -132,6 +138,7 @@ public class AddAnnotationPossibilitiesTests {
     @Test(expected=IOException.class)
     public void shouldThrowAnExceptionWhenAddingADropDownAnnotationThatAlreadyExists()
     		throws SQLException, IOException {
+
         ArrayList<String> otherChoices = new ArrayList<String>();
         otherChoices.add(testChoice);
         otherChoices.add(testChoice + "2");
@@ -140,21 +147,28 @@ public class AddAnnotationPossibilitiesTests {
 
     @Test
     public void shouldBeAbleToAddADropDownAnnotationChoice() throws Exception {
+
     	String newChoice = "newChoice";
     	dbac.addDropDownAnnotationValue(testLabelDD, newChoice);
-    	ArrayList<String> choices = (ArrayList<String>) dbac.getAnnotationObject(testLabelDD).getPossibleValues();
+    	ArrayList<String> choices = (ArrayList<String>)
+    			dbac.getAnnotationObject(testLabelDD).getPossibleValues();
+
     	assertTrue(choices.contains(newChoice));
     	assertEquals(3, choices.size());
 	}
 
     @Test(expected=IOException.class)
-    public void shouldThrowAnExceptionWhenAddingADropDownChoiceThatAlreadyExist() throws Exception {
+    public void shouldNotBeAbleToAddADropDownChoiceThatAlreadyExist()
+    		throws Exception {
+
     	dbac.addDropDownAnnotation(testLabelDD, testChoices, 0, false);
     	dbac.addDropDownAnnotationValue(testLabelDD, testChoice);
 	}
 
     @Test(expected = IOException.class)
-    public void shouldThrowAnExceptionWhenTryingToAddAChoiceForANoneDropDownAnnotation() throws Exception {
+    public void shouldNotBeAbleToAddAChoiceForANoneDropDownAnnotation()
+    		throws Exception {
+
     	String newChoice = "newChoice";
     	dbac.addDropDownAnnotationValue(testLabelFT, newChoice);
 	}
@@ -162,34 +176,40 @@ public class AddAnnotationPossibilitiesTests {
 
     @Test(expected = IOException.class)
     public void shouldNotBeAbleToAddDate() throws SQLException, IOException {
+
     	dbac.addFreeTextAnnotation("Date", "2014-11-11", false);
     }
 
 	@Test
-	public void shouldRemoveSteelmountainAnnotation()
+	public void shouldRemoveAnnotationWithWeirdChars()
 			throws SQLException, IOException, Exception {
+
        	String annotation = "@@@@@@2$???";
     	dbac.addFreeTextAnnotation(annotation, null, false);
 
         Map<String, Integer> annotations = dbac.getAnnotations();
         assertTrue(annotations.containsKey(annotation));
+
         int i = dbac.deleteAnnotation(annotation);
         assertEquals(1,i);
+
         annotations = dbac.getAnnotations();
         assertFalse(annotations.containsKey(annotation));
-
     }
 
     @Test
-    public void shouldRemoveSteelmountainAnotherAnnotation()
+    public void shouldRemoveAnotherAnnotationWithWeirdChars()
     		throws SQLException, IOException, Exception {
+
     	String annotation = "¡!";
     	dbac.addFreeTextAnnotation(annotation, null, false);
 
         Map<String, Integer> annotations = dbac.getAnnotations();
         assertTrue(annotations.containsKey(annotation));
+
         int i = dbac.deleteAnnotation(annotation);
         assertEquals(1,i);
+
         annotations = dbac.getAnnotations();
         assertFalse(annotations.containsKey(annotation));
     }
