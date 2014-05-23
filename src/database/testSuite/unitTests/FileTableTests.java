@@ -72,7 +72,7 @@ public class FileTableTests {
 
 
     @AfterClass
-    public static void undoAllChanges() throws SQLException {
+    public static void undoAllChanges() throws Exception {
         if (dbac.hasFile(ft.id)) {
             dbac.deleteFile(ft.id);
         }
@@ -87,11 +87,12 @@ public class FileTableTests {
         ft = dbac.addNewFile(testExpId, testFileType, testName, testInputFile,
                 testMetaData, testAuthor, testUploader, testIsPrivate,
                 testGRVersion);
+        addMockFile(ft.getParentFolder(), ft.filename);
     }
 
 
     @After
-    public void teardown() throws SQLException {
+    public void teardown() throws Exception {
         dbac.deleteFile(ft.path);
     }
 
@@ -145,17 +146,17 @@ public class FileTableTests {
         int fileID = ft.id;
         assertEquals(1, dbac.deleteFile(fileID));
         assertFalse(dbac.hasFile(fileID));
+
+        dbac.addNewFile(testExpId, testFileType, testName,
+                testInputFile, testMetaData, testAuthor, testUploader,
+                testIsPrivate, testGRVersion);
     }
 
 
-    @Test
+    @Test (expected = IOException.class)
     public void shouldReturnZeroIfFileToBeDeletedDoesNotExistInDatabase()
             throws Exception {
-        if (dbac.hasFile(123)) {
-            fail("Use another ID for the test, this one"
-                    + "exists in the database.");
-        }
-        assertEquals(0, dbac.deleteFile(123));
+        dbac.deleteFile(212313);
     }
 
 
@@ -166,6 +167,10 @@ public class FileTableTests {
         assertTrue(fileToDelete.exists());
         assertEquals(1, dbac.deleteFile(ft.path));
         assertFalse(fileToDelete.exists());
+
+        FileTuple ft = dbac.addNewFile(testExpId, testFileType, testName,
+                testInputFile, testMetaData, testAuthor, testUploader,
+                testIsPrivate, testGRVersion);
     }
 
 

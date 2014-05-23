@@ -81,7 +81,7 @@ public class ExperimentTests {
     }
 
     @AfterClass
-    public static void undoAllChanges() throws SQLException {
+    public static void undoAllChanges() throws SQLException, IOException {
         dbac.deleteFile(ft.id);
         dbac.deleteExperiment(testExpId2);
         dbac.close();
