@@ -46,7 +46,7 @@ public class GenomeMethods {
      * @param genomeVersion
      *            - The version to get filepath to, should use
      *            getAllGenomeReleases() and let user choose a version
-     * @return String path - a file path
+     * @return String path - a file path, NULL if it was not found.
      * @throws SQLException
      */
 
@@ -150,11 +150,15 @@ public class GenomeMethods {
             throws SQLException, IOException {
 
         if (isGenomeVersionUsed(genomeVersion)) {
-            throw new IOException(genomeVersion + " is used by at least one file and can therefore not be removed");
+            throw new IOException(genomeVersion + " is used by at least one" +
+            						" file and can therefore not be removed");
         }
 
         Genome g = getGenomeRelease(genomeVersion);
 
+        if(g == null){
+        	return false;
+        }
         File genomeReleaseFolder = new File(fpg.getGenomeReleaseFolderPath(
                 g.genomeVersion, g.species));
 
@@ -174,7 +178,8 @@ public class GenomeMethods {
         return res > 0;
     }
 
-    private boolean isGenomeVersionUsed(String genomeVersion) throws SQLException {
+    private boolean isGenomeVersionUsed(String genomeVersion)
+    									throws SQLException {
         String query = "SELECT * FROM File WHERE GRVersion = ?";
         PreparedStatement ps = conn.prepareStatement(query);
         ps.setString(1, genomeVersion);
