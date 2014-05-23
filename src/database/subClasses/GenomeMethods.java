@@ -202,7 +202,8 @@ public class GenomeMethods {
      *            String, the name of the species you want to get genome
      *            realeases for.
      * @return genomelist ArrayList<Genome>, list of all the genome releases for
-     *         a specific species.
+     *         a specific species. Returns NULL if the specified specie did NOT
+     *         have a genomeRelase entry in the database.
      * @throws SQLException
      */
     public ArrayList<Genome> getAllGenomReleasesForSpecies(String species)
@@ -219,7 +220,12 @@ public class GenomeMethods {
 
         ArrayList<Genome> genomeList = new ArrayList<Genome>();
 
-        rs.next();
+        boolean foundAnything = rs.next();
+
+        if(!foundAnything){
+        	return null;
+        }
+
         while (!rs.isAfterLast()) {
             Genome g = new Genome(rs);
             genomeList.add(g);

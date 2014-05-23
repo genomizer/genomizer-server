@@ -223,6 +223,13 @@ public class GenomeReleaseTableTests {
         assertEquals("hg38", g.getFilePrefix());
     }
 
+    @Test
+    public void shouldReturnNullIfSearchGenomReleaseThatDontExist()
+    											throws SQLException{
+
+    	assertNull(dbac.getAllGenomReleasesForSpecies("Dog"));
+    }
+
     private boolean searchGenomeForVersion(List<Genome> genomeList,
             String version) {
 
