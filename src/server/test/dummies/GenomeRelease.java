@@ -34,4 +34,16 @@ public class GenomeRelease {
 		System.out.println("Response Body: " +testSettings. printResponse(con));
 	}
 
+	static void sendAddGenomeRelease() throws Exception {
+		URL obj = new URL(testSettings.url + "/genomeRelease/");
+		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+		con.setRequestMethod("GET");
+		con.setRequestProperty("Authorization", Login.getToken());
+
+
+		System.out.println("\nSending 'GET' request to URL : " + testSettings.url);
+		System.out.println("Response Body: " +testSettings. printResponse(con));
+	}
+
 }
