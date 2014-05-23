@@ -15,7 +15,7 @@ import database.Annotation;
 import database.DatabaseAccessor;
 import database.testSuite.TestInitializer;
 
-public class TestGetAnnotationObject {
+public class GetAnnotationObjectTest {
 
     private static DatabaseAccessor dbac;
     private static TestInitializer ti;

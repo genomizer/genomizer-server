@@ -18,15 +18,15 @@ import database.testSuite.unitTests.ProcessRawToProfileTests;
 import database.testSuite.unitTests.PubMedIsValidTest;
 import database.testSuite.unitTests.PubMedToSQLConverterTests;
 import database.testSuite.unitTests.SearchDatabaseTests;
-import database.testSuite.unitTests.TestAnnotationRequiredDefault;
-import database.testSuite.unitTests.TestChainFiles;
-import database.testSuite.unitTests.TestChangeAnnotationValue;
-import database.testSuite.unitTests.TestFileNameValidator;
-import database.testSuite.unitTests.TestFilePathGEN;
-import database.testSuite.unitTests.TestGetAnnotationObject;
+import database.testSuite.unitTests.AnnotationRequiredDefaultTest;
+import database.testSuite.unitTests.ChainFilesTest;
+import database.testSuite.unitTests.ChangeAnnotationValueTest;
+import database.testSuite.unitTests.FileNameValidatorTest;
+import database.testSuite.unitTests.FilePathGeneratorTest;
+import database.testSuite.unitTests.GetAnnotationObjectTest;
 import database.testSuite.unitTests.UpdateExperimentTest;
 import database.testSuite.unitTests.UserInfoTests;
-import database.testSuite.unitTests.removeAnnotationValueTest;
+import database.testSuite.unitTests.RemoveAnnotationValueTest;
 
 
 @RunWith(Suite.class)
@@ -34,10 +34,10 @@ import database.testSuite.unitTests.removeAnnotationValueTest;
         ExperimentTests.class, AddDropDownValueTest.class,
         FileTableTests.class, PubMedToSQLConverterTests.class,
         SearchDatabaseTests.class, AddNewFileTests.class,
-        TestAnnotationRequiredDefault.class, TestChainFiles.class,
-        TestChangeAnnotationValue.class, TestFileNameValidator.class,
-        TestFilePathGEN.class, TestGetAnnotationObject.class,
-        AddDropDownValueTest.class, removeAnnotationValueTest.class,
+        AnnotationRequiredDefaultTest.class, ChainFilesTest.class,
+        ChangeAnnotationValueTest.class, FileNameValidatorTest.class,
+        FilePathGeneratorTest.class, GetAnnotationObjectTest.class,
+        AddDropDownValueTest.class, RemoveAnnotationValueTest.class,
         UpdateExperimentTest.class, UserInfoTests.class,
         ProcessRawToProfileTests.class,
         GenomeReleaseTableTests.class,
