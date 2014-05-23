@@ -9,7 +9,6 @@ import response.ErrorResponse;
 import response.GetGenomeReleaseRespons;
 import response.Response;
 import response.StatusCode;
-import server.DatabaseSettings;
 import database.DatabaseAccessor;
 import database.Genome;
 /**
@@ -51,7 +50,7 @@ public class GetGenomeReleaseSpeciesCommand extends Command{
 		DatabaseAccessor db=null;
 
 		try {
-			db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
+			db = initDB();
 			try{
 				if(db.getChoices("Species").contains(species)){
 					ArrayList<Genome> genomeReleases=db.getAllGenomReleasesForSpecies(species);
@@ -63,9 +62,6 @@ public class GetGenomeReleaseSpeciesCommand extends Command{
 				}catch (SQLException e){
 					return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, "Query did not succed" + e.getMessage());
 				}
-
-			//ArrayList<Genome> genomeReleases=db.getAllGenomReleasesForSpecies(species);
-			//return new GetGenomeReleaseRespons(StatusCode.OK, genomeReleases);
 
 		} catch (SQLException e) {
 			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, "DatabaseAccessor could not be created: " + e.getMessage());

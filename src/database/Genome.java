@@ -13,15 +13,15 @@ public class Genome {
     public final String genomeVersion;
     public final String species;
     public final String folderPath;
-    private final Map<String, String> files;
+    private final ArrayList<String> files;
 
     public Genome(ResultSet resSet) throws SQLException {
         genomeVersion = resSet.getString("Version");
         species = resSet.getString("Species");
         folderPath = resSet.getString("FolderPath");
-        files = new HashMap<String, String>();
+        files = new ArrayList<String>();
         do {
-            files.put(resSet.getString("FileName"), resSet.getString("Status"));
+            files.add(resSet.getString("FileName"));
         } while (resSet.next() && resSet.getString("Version").equals(genomeVersion));
     }
 
@@ -29,14 +29,16 @@ public class Genome {
      * Gets a map with filename as key and the status of the file as value.
      * @return
      */
-    public Map<String, String> getFilesWithStatus() {
+    public ArrayList<String> getFilesWithStatus() {
         return files;
     }
 
     public List<String> getDownloadURLs() {
         List<String> downloadURLs = new ArrayList<String>();
-        for (Entry<String, String> e: files.entrySet()) {
-            downloadURLs.add(ServerDependentValues.DownloadURL + folderPath + e.getKey());
+
+
+        for (String fileName: files) {
+            downloadURLs.add(ServerDependentValues.DownloadURL + folderPath + fileName);
         }
         return downloadURLs;
     }
@@ -45,7 +47,8 @@ public class Genome {
         if (files.isEmpty()) {
             return null;
         }
-        String fileName = files.entrySet().iterator().next().getKey();
+       // String fileName = files.entrySet().iterator().next().getKey();
+        String fileName = files.get(0);
         int indexOfFirstDot = fileName.indexOf('.');
         return fileName.substring(0, indexOfFirstDot);
     }

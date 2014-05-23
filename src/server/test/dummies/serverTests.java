@@ -8,11 +8,11 @@ public class serverTests {
 
 		Login.login("huggab0y", "umea@2014");
 //		Login.login("Splutt", "hejhej"); // Should fail to login since user don't exist.
-		Login.login("servergroup", "umea@2014");
 
+		genometest();
 		//usertests();
 		//specialannotest();
-		processtest();
+//		processtest();
 		//for(int i = 0; i < 100; i++)
 		//	Process.sendGetProcessStatus();
 		//Annotations.sendGetAnnotationInformation();
@@ -62,9 +62,9 @@ public class serverTests {
 		Search.sendSearchRequest(query);
 	}
 
-	public void genometest() throws Exception {
+	public static void genometest() throws Exception {
 		GenomeRelease.sendGetGenomeRelease();
-		GenomeRelease.sendGetGenomeReleaseSpecies();
+		GenomeRelease.sendGetGenomeReleaseSpecies("Fly");
 	}
 
 	public static void processtest() throws Exception {
