@@ -9,12 +9,12 @@ public class serverTests {
 		Login.login("huggab0y", "umea@2014");
 //		Login.login("Splutt", "hejhej"); // Should fail to login since user don't exist.
 
-		genometest();
+//		genometest();
 		//usertests();
 		//specialannotest();
 //		processtest();
 		//for(int i = 0; i < 100; i++)
-		//	Process.sendGetProcessStatus();
+//			Process.sendGetProcessStatus();
 		//Annotations.sendGetAnnotationInformation();
 
 		Login.logout();

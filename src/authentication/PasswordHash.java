@@ -38,9 +38,9 @@ public class PasswordHash
 	private static String getSalt() {
 		return "genomizer";
 	}
-	
+
 	public static void main(String args[]) {
-	    String s = PasswordHash.toSaltedSHA256Hash("kalle");
+	    String s = PasswordHash.toSaltedSHA256Hash("umea@2014");
 	    System.out.println(s);
 	}
 
