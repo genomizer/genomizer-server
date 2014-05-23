@@ -59,7 +59,7 @@ public class Authenticate {
 	    file_password = file_password.replaceAll("\r", "");
 	    file_password = file_password.replaceAll("\n", "");
 
-	    if(!PasswordHash.toSaltedMD5Hash(password).equals(file_password)) {
+	    if(!PasswordHash.toSaltedSHA256Hash(password).equals(file_password)) {
 	    	return new LoginAttempt(false, null, "Wrong password.");
 	    }
 
