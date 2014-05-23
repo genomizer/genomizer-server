@@ -17,7 +17,7 @@ import database.Annotation;
 import database.DatabaseAccessor;
 import database.testSuite.TestInitializer;
 
-public class TestAnnotationRequiredDefault {
+public class AnnotationRequiredDefaultTest {
 
     private static DatabaseAccessor dbac;
     private static TestInitializer ti;

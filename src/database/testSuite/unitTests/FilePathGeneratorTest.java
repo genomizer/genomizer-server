@@ -14,7 +14,7 @@ import org.junit.Test;
 import database.FilePathGenerator;
 import database.FileTuple;
 
-public class TestFilePathGEN {
+public class FilePathGeneratorTest {
 
     private static String testFolderName = "Genomizer Test Folder - Dont be afraid to delete me";
 
