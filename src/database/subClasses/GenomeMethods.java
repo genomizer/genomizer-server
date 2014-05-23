@@ -36,6 +36,7 @@ public class GenomeMethods {
      *            FilePathGenerator, object reference to that class.
      */
     public GenomeMethods(Connection connection, FilePathGenerator filePG) {
+
         conn = connection;
         fpg = filePG;
     }
@@ -62,6 +63,7 @@ public class GenomeMethods {
         ResultSet rs = stmt.executeQuery();
 
         Genome genome = null;
+
         if (rs.next()) {
             genome = new Genome(rs);
         }
@@ -127,12 +129,14 @@ public class GenomeMethods {
      * @return the number of tuples updated.
      * @throws SQLException
      */
-    public int fileReadyForDownload(String version, String fileName) throws SQLException {
+    public int fileReadyForDownload(String version, String fileName)
+    		throws SQLException {
 
-        String statusUpdateString = "UPDATE Genome_Release_Files SET Status = 'Done' " +
-                "WHERE Version = ? AND FileName = ?";
+        String statusUpdateString = "UPDATE Genome_Release_Files SET Status = "+
+        		"'Done' WHERE Version = ? AND FileName = ?";
 
-        PreparedStatement statusUpdate = conn.prepareStatement(statusUpdateString);
+        PreparedStatement statusUpdate =
+        		conn.prepareStatement(statusUpdateString);
         statusUpdate.setString(1, version);
         statusUpdate.setString(2, fileName);
 
@@ -166,6 +170,7 @@ public class GenomeMethods {
         if(g == null){
         	return false;
         }
+
         File genomeReleaseFolder = new File(fpg.getGenomeReleaseFolderPath(
                 g.genomeVersion, g.species));
 
@@ -211,15 +216,16 @@ public class GenomeMethods {
         String query = "SELECT * FROM Genome_Release " +
                 "JOIN Genome_Release_Files " +
                 "ON (Genome_Release.Version = Genome_Release_Files.Version) " +
-                "WHERE (Genome_Release.Species ~~* ?) ORDER BY Genome_Release.Version";
+                "WHERE (Genome_Release.Species ~~* ?) " +
+                "ORDER BY Genome_Release.Version";
 
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setString(1, species);
         ResultSet rs = stmt.executeQuery();
 
         ArrayList<Genome> genomeList = new ArrayList<Genome>();
-
         rs.next();
+
         while (!rs.isAfterLast()) {
             Genome g = new Genome(rs);
             genomeList.add(g);
@@ -243,7 +249,7 @@ public class GenomeMethods {
     public ChainFile getChainFile(String fromVersion, String toVersion)
             throws SQLException {
 
-        String query = "SELECT * FROM Chain_File NATURAL JOIN Chain_File_Files" +
+        String query = "SELECT * FROM Chain_File NATURAL JOIN Chain_File_Files"+
         		" WHERE (FromVersion ~~* ?)" +
                 " AND (ToVersion ~~* ?)";
         PreparedStatement stmt = conn.prepareStatement(query);
@@ -372,6 +378,7 @@ public class GenomeMethods {
     }
 
     private void recursiveDelete(File folder) {
+
         File[] contents = folder.listFiles();
         if (contents == null || contents.length == 0) {
             folder.delete();
@@ -384,6 +391,7 @@ public class GenomeMethods {
     }
 
     public List<String> getAllGenomReleaseSpecies() throws SQLException {
+
         String query = "SELECT DISTINCT Species FROM Genome_Release";
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(query);
@@ -395,6 +403,7 @@ public class GenomeMethods {
     }
 
     public List<Genome> getAllGenomReleases() throws SQLException {
+
         String query = "SELECT * FROM Genome_Release " +
                 "NATURAL JOIN Genome_Release_Files ";
 
