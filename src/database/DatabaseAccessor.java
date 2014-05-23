@@ -942,7 +942,7 @@ public class DatabaseAccessor {
         }
         for (File f : profileFolder.listFiles()) {
             if (!f.getName().equals(inputFileName)) {
-                FileTuple ft = fileMethods.addGeneratedFile(e.getID(),
+                fileMethods.addGeneratedFile(e.getID(),
                         FileTuple.PROFILE, f.getPath(), inputFileName,
                         metaData, uploader, isPrivate, grVersion);
             }
