@@ -176,11 +176,10 @@ public class FileTableTests {
         assertEquals(1, dbac.deleteFile(ft.path));
         assertFalse(fileToDelete.exists());
 
-        FileTuple ft = dbac.addNewFile(testExpId, testFileType, testName,
-                testInputFile, testMetaData, testAuthor, testUploader,
-                testIsPrivate, testGRVersion);
+        dbac.addNewFile(testExpId, testFileType, testName, testInputFile,
+        		testMetaData, testAuthor, testUploader, testIsPrivate,
+        		testGRVersion);
     }
-
 
     private void addMockFile(String folderPath, String filename1)
             throws IOException {

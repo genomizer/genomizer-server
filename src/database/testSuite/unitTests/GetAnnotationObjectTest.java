@@ -22,12 +22,14 @@ public class GetAnnotationObjectTest {
 
     @BeforeClass
     public static void setupBeforeClass() throws Exception {
+
     	ti = new TestInitializer();
     	dbac = ti.setup();
     }
 
     @AfterClass
     public static void undoAllChanges() throws SQLException {
+
     	ti.removeTuples();
     }
 
@@ -37,18 +39,18 @@ public class GetAnnotationObjectTest {
 
     	String label = "Sex";
     	Annotation annotation = dbac.getAnnotationObject(label);
-    	ArrayList<String> choices = (ArrayList<String>) annotation.getPossibleValues();
+    	ArrayList<String> choices = (ArrayList<String>)
+    			annotation.getPossibleValues();
 
     	assertEquals(4, choices.size());
     	assertTrue(choices.contains("Female"));
     	assertTrue(choices.contains("Male"));
     	assertTrue(choices.contains("Unknown"));
     	assertTrue(choices.contains("Does not matter"));
-    	
 	}
 
     @Test
-    public void shouldReturnNullWhenRequestingListWithChoicesForFreeTextAnnotations()
+    public void shouldReturnNullWhenRequestingFreeTextAnnotationsChoices()
     		throws Exception {
 
     	String label = "Tissue";
@@ -59,6 +61,7 @@ public class GetAnnotationObjectTest {
 
     @Test
     public void shouldStoreCorrectLabel() throws Exception {
+
     	String label = "Sex";
     	Annotation annotation = dbac.getAnnotationObject(label);
 
@@ -67,6 +70,7 @@ public class GetAnnotationObjectTest {
 
     @Test
     public void shouldStoreCorrectDataType() throws Exception {
+
     	String label = "Sex";
     	Annotation annotation = dbac.getAnnotationObject(label);
 
@@ -75,6 +79,7 @@ public class GetAnnotationObjectTest {
 
     @Test
     public void shouldStoreCorrectRequiredFlag() throws Exception {
+
     	String label = "Sex";
     	Annotation annotation = dbac.getAnnotationObject(label);
 
@@ -83,6 +88,7 @@ public class GetAnnotationObjectTest {
 
     @Test
     public void shouldReturnNullIfLabelDoesNotExist() throws Exception {
+
     	String label = "r23f9hyf293y";
     	Annotation annotation = dbac.getAnnotationObject(label);
 
@@ -91,6 +97,7 @@ public class GetAnnotationObjectTest {
 
     @Test
     public void shouldBeAbleToGetMultipleAnnotations() throws Exception {
+
     	List<String> labels = new ArrayList<String>();
     	labels.add("Sex");
     	labels.add("Tissue");
@@ -102,6 +109,7 @@ public class GetAnnotationObjectTest {
 
     @Test
     public void shouldGetNullWhenSendingInEmptyList() throws Exception {
+
     	List<String> labels = new ArrayList<String>();
     	List<Annotation> annotations = dbac.getAnnotationObjects(labels);
 
@@ -109,7 +117,9 @@ public class GetAnnotationObjectTest {
 	}
 
     @Test
-    public void shouldGetAnnotationsWhenMixingValidWithInvalidLabels() throws Exception {
+    public void shouldGetAnnotationsWhenMixingValidWithInvalidLabels()
+    		throws Exception {
+
     	List<String> labels = new ArrayList<String>();
     	labels.add("invlaidLabel");
     	labels.add("Sex");
