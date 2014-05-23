@@ -552,21 +552,36 @@ public class AnnotationMethods {
             throws SQLException, IOException {
 
         // Check if value is a dropdown choice and used on any experiments
-        String dependQuery = "SELECT * FROM Annotated_With "
+        String dependFileQuery = "SELECT * FROM Annotated_With "
                 + "WHERE (label ~~* ? AND value ~~* ?)";
 
         PreparedStatement dependencyStatement = conn
-                .prepareStatement(dependQuery);
+                .prepareStatement(dependFileQuery);
         dependencyStatement.setString(1, label);
         dependencyStatement.setString(2, value);
         ResultSet res = dependencyStatement.executeQuery();
 
+        String dependGenomeQuery = "SELECT * FROM Genome_Release "
+        						 + "WHERE (Species ~~* ?)";
+        PreparedStatement dependency2Statement = conn.prepareStatement(dependGenomeQuery);
+        dependency2Statement.setString(1, value);
+        ResultSet res2 = dependency2Statement.executeQuery();
+
         boolean hasDependency = res.next();
         dependencyStatement.close();
+
+        boolean hasDependency2 = res2.next();
+        dependency2Statement.close();
         if (hasDependency) {
             throw new IOException(value
                     + " is used in other experiments under label " + label
                     + " and can therefore not be removed.");
+        }
+        if(hasDependency2){
+        	throw new IOException(value + "is used in a stored genome_release."+
+        			    " Please remove all Genome Releases for the specie: "  +
+        			    value + " To be able to remove this specie annotation");
+
         }
 
         String query = "SELECT * FROM Annotation WHERE "
