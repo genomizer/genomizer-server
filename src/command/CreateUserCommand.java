@@ -84,7 +84,7 @@ public class CreateUserCommand extends Command {
 		}
 		try {
 			db.addUser(username, password, privileges, name, email);
-		} catch (SQLException e) {
+		} catch (SQLException | IOException e) {
 			return new ErrorResponse(StatusCode.BAD_REQUEST, "Error when adding user to database, user probably already exists. " + e.getMessage());
 		}
 		return new MinimalResponse(StatusCode.CREATED);

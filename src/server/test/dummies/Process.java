@@ -14,13 +14,13 @@ public class Process {
 
 	public static void sendRawToProfile() throws IOException{
 
-		String expid = "RealRawFiles";
+		String expid = "real_test_experiment";
 		String parameters = "\"-a -m 1 --best -p 10 -v 2 -q  -S \"," +
 				"\"\"," +
 				"\"y\"," +
-				"\"\"," +
-				"\"\"," +
-				"\"\"," +
+				"\"y\"," +
+				"\"10 1 5 0 0\"," +
+				"\"y 10\"," +
 				"\"\"," +
 				"\"\"";
 		String metadata = "astringofmetadata";
