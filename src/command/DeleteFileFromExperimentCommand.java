@@ -53,28 +53,25 @@ public class DeleteFileFromExperimentCommand extends Command {
 		DatabaseAccessor db = null;
 
 		try {
-
 			db = initDB();
-
-			if(db.deleteFile(Integer.parseInt(header))==1) {
-
-				return new MinimalResponse(StatusCode.OK);
-
-			} else {
-
-				return new ErrorResponse(StatusCode.BAD_REQUEST, "The file " + header + " does not exist and can not be deleted");
-
+			try {
+				if(db.deleteFile(Integer.parseInt(header))==1) {
+					return new MinimalResponse(StatusCode.OK);
+				} else {
+					return new ErrorResponse(StatusCode.BAD_REQUEST, "The file " + header + " does not exist and can not be deleted");
+				}
+			} catch (NumberFormatException e) {
+				if (db.deleteFile(header) > 0) {
+					return new MinimalResponse(StatusCode.OK);
+				} else {
+					return new ErrorResponse(StatusCode.BAD_REQUEST, "The file " + header + " does not exist and can not be deleted");
+				}
 			}
-
 		} catch (SQLException e) {
-
 			e.printStackTrace();
 			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, e.getMessage());
-
 		} catch (IOException e) {
-
 			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
-
 		} finally {
 			db.close();
 		}
