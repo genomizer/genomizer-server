@@ -2,6 +2,7 @@ package database.testSuite.unitTests;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -39,7 +40,7 @@ public class UserInfoTests {
     }
 
     @Before
-    public void setup() throws SQLException {
+    public void setup() throws SQLException, IOException {
         dbac.addUser(testUser, testPassword, testRole, testFullName, testEmail);
     }
 
@@ -99,6 +100,11 @@ public class UserInfoTests {
         dbac.setRole(testUser, newRole);
         assertEquals(newRole, dbac.getRole(testUser));
 
+    }
+
+    @Test(expected = SQLException.class)
+    public void testBiggerThanMaxSize() throws SQLException, IOException{
+    	dbac.addUser("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "passwd", "Admin", "Aaaaaaa bbbbbb", null);
     }
 
 }

@@ -29,7 +29,7 @@ public class ExperimentMethods {
 
     /**
      * Gets an experiment from the database.
-     * 
+     *
      * @param expID
      *            the ID of the experiment.
      * @return an Experiment object.
@@ -59,21 +59,26 @@ public class ExperimentMethods {
 
     /**
      * Adds an experiment ID to the database.
-     * 
+     *
      * @param expID
      *            the ID for the experiment.
      * @return the number of tuples inserted in the database.
      * @throws SQLException
      *             if the query does not succeed
-     * @throws IOException 
+     * @throws IOException
      * @throws DuplicatePrimaryKeyException
      *             If the experiment already exists.
      */
     public int addExperiment(String expID) throws SQLException, IOException {
 
-        if (getExperiment(expID) != null) {
-            throw new IOException("This experiment already exists.");
-        }
+    	if (expID == null || expID.contentEquals("")) {
+    		throw new IOException("Invalid parameter");
+    	}
+    	
+    	Experiment e = getExperiment(expID);
+    	if (e != null) {
+    		throw new IOException(expID + " already exists");
+    	}
 
         String query = "INSERT INTO Experiment "
                 + "(ExpID) VALUES (?)";
@@ -90,7 +95,7 @@ public class ExperimentMethods {
 
     /**
      * Deletes an experiment from the database.
-     * 
+     *
      * @param expId
      *            the experiment ID.
      * @param rootDir
@@ -121,7 +126,7 @@ public class ExperimentMethods {
 
     /**
      * Updates a value of a single annotation of a unique experiment
-     * 
+     *
      * @param expID
      *            the name of the experiment to annotate.
      * @param label
@@ -160,7 +165,7 @@ public class ExperimentMethods {
     /**
      * Annotates an experiment with the given label and value. Checks
      * so that the value is valid if it is a drop down annotation.
-     * 
+     *
      * @param expID
      *            the name of the experiment to annotate.
      * @param label
@@ -197,7 +202,7 @@ public class ExperimentMethods {
 
     /**
      * Deletes one annotation from a specific experiment.
-     * 
+     *
      * @param expID
      *            the experiment to delete the annotation from.
      * @param label
@@ -225,7 +230,7 @@ public class ExperimentMethods {
     /**
      * Adds all the files that belong to the experiment to an
      * Experiment object.
-     * 
+     *
      * @param e
      *            the experiment to add files to.
      * @return the Experiment object containing all its files.
@@ -251,7 +256,7 @@ public class ExperimentMethods {
     /**
      * Fill an Experiment object with all annotations that exists for
      * that experiment.
-     * 
+     *
      * @param e
      *            the Experiment object.
      * @return the Experiment object containing all it's annotations.
@@ -279,7 +284,7 @@ public class ExperimentMethods {
 
     /**
      * Checks so that the annotation value is valid.
-     * 
+     *
      * @param label
      *            the annotation name.
      * @param value
@@ -319,7 +324,7 @@ public class ExperimentMethods {
     /**
      * Recursively deletes a folder with all it's subfolders and
      * files.
-     * 
+     *
      * @param folder
      *            the folder to delete.
      */
@@ -333,6 +338,12 @@ public class ExperimentMethods {
             }
         }
         folder.delete();
+    }
+
+    private void isValidArgument(String arg) throws IOException {
+    	if (arg.contentEquals("") || arg == null) {
+    		throw new IOException("Invalid argument(s)");
+    	}
     }
 
 }

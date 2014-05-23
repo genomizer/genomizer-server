@@ -26,10 +26,15 @@ import database.testSuite.unitTests.SearchDatabaseTests;
  */
 public class TestInitializer {
 	//Use these strings to connect to the test server.
-    public static String username = "genomizer";
-    public static String password = "genomizer";
-    public static String host = "85.226.111.95";
-    public static String database = "genomizer_testdb";
+    public static String username = "c5dv151_vt14";
+    public static String password = "shielohh";
+    public static String host = "postgres";
+    public static String database = "c5dv151_vt14";
+
+//    public static String username = "genomizer";
+//    public static String password = "genomizer";
+//    public static String host = "85.226.111.95";
+//    public static String database = "genomizer_testdb";
 
     private String addTestTuplesPath = "/database/testSuite/add_test_tuples.sql";
     private String clearTablesPath = "/database/testSuite/clear_tables.sql";
@@ -70,26 +75,6 @@ public class TestInitializer {
     }
 
     public DatabaseAccessor setupWithoutAddingTuples() throws Exception {
-        dbac = new DatabaseAccessor(TestInitializer.username,
-                TestInitializer.password, TestInitializer.host,
-                TestInitializer.database);
-
-        String url = "jdbc:postgresql://" + TestInitializer.host +
-                "/" + TestInitializer.database;
-        Properties props = new Properties();
-        props.setProperty("user", TestInitializer.username);
-        props.setProperty("password", TestInitializer.password);
-
-        conn = DriverManager.getConnection(url, props);
-
-        addTuplesSqlStrings = buildSqlStringsFromFile(addTestTuplesPath);
-
-        clearTablesSqlStrings = buildSqlStringsFromFile(clearTablesPath);
-
-        return dbac;
-    }
-
-    public DatabaseAccessor setupWithoutAddingTuples(String database) throws Exception {
         dbac = new DatabaseAccessor(TestInitializer.username,
                 TestInitializer.password, TestInitializer.host, database);
 
