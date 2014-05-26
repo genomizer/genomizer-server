@@ -136,7 +136,11 @@ public class ExperimentMethods {
         int rs = stmt.executeUpdate();
         stmt.close();
 
-        recursiveDelete(new File(fpg.getRootDirectory() + e.getID()));
+
+        File experimentFolder = new File(fpg.getRootDirectory() + e.getID());
+        if (experimentFolder.exists()) {
+            recursiveDelete(experimentFolder);
+        }
 
         return rs;
     }

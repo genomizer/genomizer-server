@@ -84,7 +84,8 @@ public class FileMethods {
         expID = e.getID(); // Correct expID for in case sensitivity
 
         if (fileType == FileTuple.RAW && e.getNrRawFiles() >= 2) {
-            throw new IOException("There are already two raw files for this experiment!");
+            throw new IOException(
+                    "There are already two raw files for this experiment!");
         }
 
         FileTuple ft = getProfile(e, metaData);
@@ -229,15 +230,15 @@ public class FileMethods {
      */
     public int deleteFile(String path) throws SQLException, IOException {
 
-        File fileToDelete = new File(path);
-        if (fileToDelete.exists()) {
-            fileToDelete.delete();
-        }
-
         FileTuple ft = getFileTuple(path);
 
         if (ft == null) {
             throw new IOException("Could not find file at path " + path);
+        }
+
+        File fileToDelete = new File(path);
+        if (fileToDelete.exists()) {
+            fileToDelete.delete();
         }
 
         File parentFolder = new File(ft.getParentFolder());
@@ -261,8 +262,10 @@ public class FileMethods {
      * @param fileID
      *            int - the fileID of the file to be deleted.
      * @return 1 if deletion was successful, else 0.
-     * @throws SQLException If the database could not be contacted
-     * @throws IOException If the FileID does not exist in the database
+     * @throws SQLException
+     *             If the database could not be contacted
+     * @throws IOException
+     *             If the FileID does not exist in the database
      */
     public int deleteFile(int fileID) throws SQLException, IOException {
 
@@ -275,14 +278,12 @@ public class FileMethods {
         File fileToDelete = new File(ft.path);
 
         if (fileToDelete.exists()) {
-
             fileToDelete.delete();
+        }
 
-            File parentFolder = new File(ft.getParentFolder());
-            if (ft.type.equalsIgnoreCase("profile")
-            		&& isEmptyFolder(parentFolder)) {
-                parentFolder.delete();
-            }
+        File parentFolder = new File(ft.getParentFolder());
+        if (ft.type.equalsIgnoreCase("profile") && isEmptyFolder(parentFolder)) {
+            parentFolder.delete();
         }
 
         String query = "DELETE FROM File " + "WHERE FileID = ?";
@@ -304,7 +305,9 @@ public class FileMethods {
 
     /**
      * Recursively deletes a folder with all it's subfolders and files.
-     * @param folder the folder to delete.
+     *
+     * @param folder
+     *            the folder to delete.
      */
     public void recursiveDelete(File folder) {
 
@@ -349,7 +352,9 @@ public class FileMethods {
 
     /**
      * Sets the status of a file to "Done".
-     * @param fileID the ID of the file to set to "Done".
+     *
+     * @param fileID
+     *            the ID of the file to set to "Done".
      * @return the number of tuples updated.
      * @throws SQLException
      */
@@ -393,6 +398,8 @@ public class FileMethods {
 
         if (res.next()) {
             oldFilePath = res.getString("Path");
+        } else {
+            throw new IOException("No file with ID " + fileID);
         }
 
         String folderPath = getParentFolder(oldFilePath);
@@ -455,8 +462,8 @@ public class FileMethods {
         String query = "INSERT INTO File "
                 + "(Path, FileType, FileName, Date, MetaData, InputFilePath, "
                 + "Author, Uploader, IsPrivate, ExpID, GRVersion, Status) "
-                + "VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?, 'Genomizer'," +
-                " ?, ?, ?, ?, 'Done')";
+                + "VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?, 'Genomizer',"
+                + " ?, ?, ?, ?, 'Done')";
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setString(1, filePath);
 

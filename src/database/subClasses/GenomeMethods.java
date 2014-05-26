@@ -9,8 +9,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import database.FilePathGenerator;
 import database.constants.ServerDependentValues;
@@ -135,17 +133,17 @@ public class GenomeMethods {
         if (g == null) {
             return false;
         }
-        if (inCaseSensitiveSearchKeys(filename, g.getFilesWithStatus()) != null) {
+        if (inCaseSensitiveSearch(filename, g.getFiles()) != null) {
             return true;
         }
         return false;
     }
 
-    private String inCaseSensitiveSearchKeys(String targetKey,
-            Map<String, String> map) {
-        for (Entry<String, String> entry : map.entrySet()) {
-            if (entry.getKey().equalsIgnoreCase(targetKey)) {
-                return entry.getKey();
+    private String inCaseSensitiveSearch(String target,
+            List<String> list) {
+        for (String s: list) {
+            if (s.equalsIgnoreCase(target)) {
+                return s;
             }
         }
         return null;

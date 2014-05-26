@@ -247,8 +247,16 @@ public class DatabaseAccessor {
      * @throws SQLException
      *             - if the query does not succeed
      */
-    public void deleteUser(String username) throws SQLException {
-        userMethods.deleteUser(username);
+    /**
+     * Deletes a user from the database.
+     *
+     * @param username
+     * @return The number of tuples deleted.
+     * @throws SQLException
+     *             If the database could not be reached.
+     */
+    public int deleteUser(String username) throws SQLException {
+        return userMethods.deleteUser(username);
     }
 
     /**
@@ -478,6 +486,7 @@ public class DatabaseAccessor {
      *
      * @return ArrayList<String>
      */
+
     public ArrayList<String> getAllAnnotationLabels() {
         return annoMethods.getAllAnnotationLabels();
     }
@@ -721,6 +730,7 @@ public class DatabaseAccessor {
 
     /**
      * Sets the status of a file to "Done".
+     *
      * NOT USED IN 2014!
      *
      * @param fileID
@@ -1011,6 +1021,8 @@ public class DatabaseAccessor {
 
     /**
      * Sets the status for a genome release file to "Done".
+     *
+     * NOT USED IN 2014!
      *
      * @param version
      *            the file version.

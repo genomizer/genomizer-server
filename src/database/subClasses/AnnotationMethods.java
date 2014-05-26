@@ -229,11 +229,12 @@ public class AnnotationMethods {
      * @throws SQLException
      *             if the query does not succeed
      * @throws IOException
-     *             if label = "Species"
+     *             if label = "Species" or the annotation is used by an
+     *             experiment.
      */
     public int deleteAnnotation(String label) throws SQLException, IOException {
 
-        if (label.toLowerCase().contentEquals("species")) {
+        if (label.equalsIgnoreCase("species")) {
             throw new IOException("Can't remove annotation 'Species'");
         }
 
@@ -399,7 +400,7 @@ public class AnnotationMethods {
             IOException {
 
         if (label == null || label.isEmpty()) {
-            throw new IOException("Invalid Label");
+            throw new IOException("Invalid Label. (Empty or null)");
         }
 
         if (isFileAnnotation(label)) {
@@ -412,7 +413,8 @@ public class AnnotationMethods {
 
         Annotation a = getAnnotationObject(label);
         if (a != null) {
-            throw new IOException(a.label + " is an annotation possibility.");
+            throw new IOException(a.label
+                    + " is already an annotation possibility.");
         }
 
         if (choices.isEmpty()) {
@@ -578,9 +580,9 @@ public class AnnotationMethods {
                     + " and can therefore not be removed.");
         }
         if (hasDependency2) {
-            throw new IOException(value + "is used in a stored genome_release."
-                    + " Please remove all Genome Releases for the specie: "
-                    + value + " To be able to remove this specie annotation");
+            throw new IOException(value
+                    + "is used in a stored genome_release and"
+                    + " therefore cannot be removed.");
 
         }
 
@@ -708,20 +710,24 @@ public class AnnotationMethods {
 
         Annotation a = getAnnotationObject(label);
         if (a == null) {
-            throw new IOException(label + " is not a valid annotation. (Does not exist)");
+            throw new IOException(label
+                    + " is not a valid annotation. (Does not exist)");
         }
 
         if (a.dataType == Annotation.DROPDOWN) {
             if (a.getPossibleValues() == null) {
-                throw new IOException(label + " has no choices. (DropDown with no choices)");
+                throw new IOException(label
+                        + " has no choices. (DropDown with no choices)");
             }
 
             if (inCaseSensitiveSearch(oldValue, a.getPossibleValues()) == null) {
-                throw new IOException(oldValue + " is not a choice for this annotation.");
+                throw new IOException(oldValue
+                        + " is not a choice for this annotation.");
             }
 
             if (inCaseSensitiveSearch(newValue, a.getPossibleValues()) != null) {
-                throw new IOException(newValue + " is already a choice for this annotation.");
+                throw new IOException(newValue
+                        + " is already a choice for this annotation.");
             }
         }
 
@@ -780,7 +786,8 @@ public class AnnotationMethods {
 
         Annotation a = getAnnotationObject(annoLabel);
         if (a == null) {
-            throw new IOException(annoLabel + " is not a valid annotation. (Does not exist)");
+            throw new IOException(annoLabel
+                    + " is not a valid annotation. (Does not exist)");
         }
 
         if (a.isRequired && required) {
