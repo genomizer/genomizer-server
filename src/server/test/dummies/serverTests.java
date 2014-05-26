@@ -67,6 +67,7 @@ public class serverTests {
 	}
 
 	public static void genometest() throws Exception {
+		GenomeRelease.sendDeleteGenomeReleaseSpecies("asd");
 		GenomeRelease.sendGetGenomeRelease();
 		GenomeRelease.sendAddGenomeRelease("Fly");
 		GenomeRelease.sendGetGenomeReleaseSpecies("Fly");
