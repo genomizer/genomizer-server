@@ -2,9 +2,7 @@ package command;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
 import authentication.Authenticate;
-
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.ProcessResponse;
@@ -42,7 +40,6 @@ public class CommandHandler {
 	 */
 	public Response processNewCommand(String json, String restful, String uuid, CommandType cmdt) {
 
-		//Get code from restful
 		Command myCom = createCommand(json, restful, uuid, cmdt);
 
 		if(myCom == null) {
@@ -88,8 +85,6 @@ public class CommandHandler {
 			newCommand = cmdFactory.createDeleteAnnotationValueCommand(json, rest[3], rest[4]);
 		}
 		String parsedRest = parseRest(restful);
-
-
 
 		if(cmdt == CommandType.LOGIN_COMMAND && nrOfRestfuls == RestfulSizes.LOGIN_COMMAND) {
 			newCommand = cmdFactory.createLoginCommand(json);
@@ -167,14 +162,6 @@ public class CommandHandler {
 
 		String[] split = restful.split("/");
 		return split[split.length -1];
-
-//		String[] parsed = new String[split.length - 2];
-
-//		for(int i = 0; i < parsed.length; i++) {
-//			parsed[i] = split[i+2];
-//		}
-
-//		return parsed[parsed.length - 1];
 
 	}
 

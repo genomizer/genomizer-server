@@ -16,7 +16,11 @@ public class serverTests {
 		//Annotations.sendDeleteAnnotation("JONAS???");
 		Annotations.sendGetAnnotationInformation();
 
-		//exptest();
+
+		Process.sendRawToProfile();
+//		GenomeRelease.sendAddGenomeRelease("HumanitariumTest");
+
+
 		Login.logout();
 	}
 
