@@ -1,1 +1,10 @@
+<<<<<<< HEAD
 Jassådu!
+=======
+2014-05-26 13:48 | splutt | Unknown process type in processcommand execute when running {"filename": "filename1234","fileid": "1","expid": "Exp1","processtype": "rawtoprofile","parameters": ["param1","param2","param3","param4"],"metadata": "astringofmetadata","genomeRelease": "hg38","author": "yuri"} on experimentExp1
+metadata: astringofmetadata
+parameters: [Ljava.lang.String;@c9e3b21
+genomeVersion: null
+author: yuri
+
+>>>>>>> branch 'communication' of https://github.com/genomizer/genomizer-server.git
