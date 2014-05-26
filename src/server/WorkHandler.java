@@ -38,13 +38,13 @@ public class WorkHandler extends Thread{
 	//is executed
 	@Override
 	public void run(){
-		System.out.println(Thread.currentThread().getName());
+		Debug.log(Thread.currentThread().getName());
 
 
 		while(true){
 			if(!workQueue.isEmpty()){
 				ProcessCommand work = workQueue.poll();
-				System.out.println("The processcommand is going to be executed");
+				Debug.log("The processcommand is going to be executed");
 				ProcessStatus stat = processStatus.get(work);
 				stat.status = "Started";
 				work.setFilePaths();
@@ -53,7 +53,7 @@ public class WorkHandler extends Thread{
 
 				try{
 					Response resp = work.execute();
-					System.err.println("AFTER EXECUTE PROCESS");
+					Debug.log("AFTER EXECUTE PROCESS");
 					if (resp.getCode()==StatusCode.CREATED){
 						stat.status = "Finished";
 					}else{

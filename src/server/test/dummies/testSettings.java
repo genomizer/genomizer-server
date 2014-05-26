@@ -10,8 +10,10 @@ public class testSettings {
 	public static final int port = 7000;
 
 
+
 	public static String host = "localhost";
 //	public static String host = "scratchy.cs.umu.se";
+
 
 	public static String url = "http://" + host + ":" + port;
 

@@ -1,5 +1,6 @@
 package command;
 
+import server.Debug;
 import server.WorkHandler;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -223,7 +224,7 @@ public class CommandFactory {
 		processCommand.setUsername(username);
 		processCommand.setTimestamp(System.currentTimeMillis());
 		processCommand.setProcessType(parsedRest);
-		System.err.println("Username: " + username + " timestamp: " + System.currentTimeMillis() + " parsedRest: " + parsedRest);
+		Debug.log("Username: " + username + " timestamp: " + System.currentTimeMillis() + " parsedRest: " + parsedRest);
 		//Create from json
 		//set userID
 		//set fileID
