@@ -7,7 +7,7 @@ public class serverTests {
 	public static void main(String args[]) throws Exception {
 
 		Login.login("RobinO", "umea@2014");
-//		Login.login("Splutt", "hejhej"); // Should fail to login since user don't exist.
+//		Login.login("Splutt", "hejhej");
 		//usertests();
 		//specialannotest();
 		//for(int i = 0; i < 100; i++)
