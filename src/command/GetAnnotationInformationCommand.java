@@ -36,11 +36,6 @@ public class GetAnnotationInformationCommand extends Command {
 
 			List<String> list = new ArrayList<String>(a.keySet());
 
-			Iterator<String> keys = a.keySet().iterator();
-			ArrayList<String> annotation_names = new ArrayList<String>();
-			while(keys.hasNext()) {
-				annotation_names.add(keys.next());
-			}
 			for(String label: list) {
 				database.containers.Annotation annotationObject = null;
 				ArrayList<String> values = new ArrayList<String>();
