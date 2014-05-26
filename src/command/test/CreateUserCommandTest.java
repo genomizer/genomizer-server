@@ -7,7 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import command.CreateUserCommand;
-import database.MaxSize;
+import database.constants.MaxSize;
 
 /**
  * Class used to test that CreateUserCommand class works
@@ -145,6 +145,19 @@ public class CreateUserCommandTest {
 		cmd = gson.fromJson(json, CreateUserCommand.class);
 
 		assertFalse(cmd.validate());
+
+	}
+
+	/**
+	 * Test used to check a properly formatted creation.
+	 */
+	@Test
+	public void testValidationProperlyFormatted() {
+		json = createJSON("a","b","c","d","e");
+		CreateUserCommand cmd = new CreateUserCommand();
+		cmd = gson.fromJson(json, CreateUserCommand.class);
+
+		assertTrue(cmd.validate());
 
 	}
 
