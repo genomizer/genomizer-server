@@ -1,20 +1,16 @@
 package authentication;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.UUID;
 
-import server.DatabaseSettings;
 import server.Debug;
 import server.ResponseLogger;
-import database.DatabaseAccessor;
 
 /**
  * Class used to authenticate users and privileges.
