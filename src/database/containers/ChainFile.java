@@ -5,8 +5,6 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-import database.DatabaseAccessor;
-
 /**
  * This is a chain file with all properties as
  * seen in the database. Use the public final

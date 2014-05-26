@@ -5,8 +5,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import database.DatabaseAccessor;
-
 /**
  * This is an annotation with all properties as
  * seen in the database. Use the public final
