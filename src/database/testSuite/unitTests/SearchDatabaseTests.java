@@ -224,7 +224,7 @@ public class SearchDatabaseTests {
     @Test
     public void searchPrintTest() throws Exception {
 
-        String pms = "not[sex]";
+        String pms = "exp[expid]";
 
         List<Experiment> exps = dbac.search(pms);
         for (Experiment e : exps) {
