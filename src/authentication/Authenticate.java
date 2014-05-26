@@ -91,13 +91,15 @@ public class Authenticate {
 			}
 
 			updateLatestRequest(next_uuid);
+			//latestRequests.put(next_uuid, new Date());
 			return next_uuid;
 		}
 
 		String uuid = UUID.randomUUID().toString();
 
 		activeUsersID.put(uuid, username);
-		updateLatestRequest(uuid);
+		//updateLatestRequest(uuid);
+		latestRequests.put(uuid, new Date());
 
 		return uuid;
 

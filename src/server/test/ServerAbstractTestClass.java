@@ -26,8 +26,8 @@ public abstract class ServerAbstractTestClass {
 	protected String AnnotationFieldNormal = "com_AnnoFDTEST14";
 
 	protected String port = "7000";
-	protected String serverURL = "http://scratchy.cs.umu.se:" + port;
-	//protected String serverURL = "http://localhost:" + port;
+	//protected String serverURL = "http://scratchy.cs.umu.se:" + port;
+	protected String serverURL = "http://localhost:" + port;
 	protected String username = "epicon";
 	protected String password ="umea@2014";
 

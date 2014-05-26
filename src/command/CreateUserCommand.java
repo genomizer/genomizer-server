@@ -8,7 +8,6 @@ import com.google.gson.annotations.Expose;
 import database.DatabaseAccessor;
 import database.constants.MaxSize;
 
-import response.AddFileToExperimentResponse;
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;

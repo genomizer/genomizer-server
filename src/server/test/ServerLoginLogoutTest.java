@@ -76,4 +76,89 @@ public class ServerLoginLogoutTest extends ServerAbstractTestClass {
 
 	}
 
+	/**
+	 * Test case that checks that a to long password fails
+	 * the login attempt.
+	 *
+	 * @throws Exception
+	 */
+	/*
+	@Test
+	public void testLoginBadPassword() throws Exception {
+
+		JsonObject jj = new JsonObject();
+		String pw = "";
+		for(int i = 0; i < database.constants.MaxSize.PASSWORD + 1; i++) {
+			pw = pw + "a";
+		}
+		jj.addProperty("username", username);
+		jj.addProperty("password", pw);
+		int loginResponseCode = sendLogin(jj);
+		sendLogout();
+
+		assertTrue(StatusCode.BAD_REQUEST == loginResponseCode);
+
+	}
+	*/
+	/**
+	 * Test case that checks that a to long username fails
+	 * the login attempt.
+	 *
+	 * @throws Exception
+	 */
+	/*
+	@Test
+	public void testLoginBadUsername() throws Exception {
+
+		String un = "";
+		for(int i = 0; i < database.constants.MaxSize.USERNAME + 1; i++) {
+			un = un + "a";
+		}
+		JsonObject jj = new JsonObject();
+		jj.addProperty("username", un);
+		jj.addProperty("password", password);
+		int loginResponseCode = sendLogin(jj);
+		sendLogout();
+		assertTrue(StatusCode.BAD_REQUEST == loginResponseCode);
+
+	}
+	*/
+	/**
+	 * Test case that checks that no username fails
+	 * the login attempt.
+	 *
+	 * @throws Exception
+	 */
+	/*
+	@Test
+	public void testLoginNoUsername() throws Exception {
+
+		JsonObject jj = new JsonObject();
+		jj.addProperty("password", password);
+		int loginResponseCode = sendLogin(jj);
+		sendLogout();
+
+		assertTrue(StatusCode.BAD_REQUEST == loginResponseCode);
+
+	}
+	*/
+	/**
+	 * Test case that checks that no password fails
+	 * the login attempt.
+	 *
+	 * @throws Exception
+	 */
+	/*
+	@Test
+	public void testLoginNoPassword() throws Exception {
+
+		JsonObject jj = new JsonObject();
+		jj.addProperty("username", username);
+		int loginResponseCode = sendLogin(jj);
+		sendLogout();
+
+		assertTrue(StatusCode.BAD_REQUEST == loginResponseCode);
+
+	}
+	*/
 }

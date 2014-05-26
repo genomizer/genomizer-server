@@ -3,13 +3,8 @@ package command;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import response.ErrorResponse;
-import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
 import response.GetExperimentResponse;
@@ -20,7 +15,6 @@ import com.google.gson.annotations.SerializedName;
 
 import database.DatabaseAccessor;
 import database.containers.Experiment;
-import database.containers.FileTuple;
 
 
 /**
