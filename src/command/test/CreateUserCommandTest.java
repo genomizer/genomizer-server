@@ -149,6 +149,19 @@ public class CreateUserCommandTest {
 	}
 
 	/**
+	 * Test used to check a properly formatted creation.
+	 */
+	@Test
+	public void testValidationProperlyFormatted() {
+		json = createJSON("a","b","c","d","e");
+		CreateUserCommand cmd = new CreateUserCommand();
+		cmd = gson.fromJson(json, CreateUserCommand.class);
+
+		assertTrue(cmd.validate());
+
+	}
+
+	/**
 	 * Used to create JSON objects.
 	 *
 	 * @param the username.
