@@ -1,9 +1,11 @@
-package database;
+package database.containers;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import database.DatabaseAccessor;
 
 /**
  * This is an annotation with all properties as

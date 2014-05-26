@@ -14,10 +14,10 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import database.ChainFile;
 import database.DatabaseAccessor;
 import database.FilePathGenerator;
-import database.ServerDependentValues;
+import database.constants.ServerDependentValues;
+import database.containers.ChainFile;
 import database.testSuite.TestInitializer;
 
 public class ChainFilesTest {

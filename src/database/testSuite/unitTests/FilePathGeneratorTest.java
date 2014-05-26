@@ -12,7 +12,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import database.FilePathGenerator;
-import database.FileTuple;
+import database.containers.FileTuple;
 
 public class FilePathGeneratorTest {
 

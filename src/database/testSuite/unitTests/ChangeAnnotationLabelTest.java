@@ -9,8 +9,8 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import database.Annotation;
 import database.DatabaseAccessor;
+import database.containers.Annotation;
 import database.testSuite.TestInitializer;
 
 public class ChangeAnnotationLabelTest {

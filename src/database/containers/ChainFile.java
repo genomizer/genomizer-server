@@ -1,9 +1,11 @@
-package database;
+package database.containers;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+
+import database.DatabaseAccessor;
 
 /**
  * This is a chain file with all properties as

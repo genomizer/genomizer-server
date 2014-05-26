@@ -14,9 +14,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import database.DatabaseAccessor;
-import database.Experiment;
 import database.FilePathGenerator;
-import database.FileTuple;
+import database.containers.Experiment;
+import database.containers.FileTuple;
 import database.testSuite.TestInitializer;
 
 public class ProcessRawToProfileTests {

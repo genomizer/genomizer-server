@@ -7,9 +7,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import database.Experiment;
 import database.FilePathGenerator;
-import database.FileTuple;
+import database.containers.Experiment;
+import database.containers.FileTuple;
 
 /**
  * Class that contains all the methods for adding,changing, getting and removing

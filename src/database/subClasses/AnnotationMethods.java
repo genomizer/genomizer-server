@@ -17,8 +17,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import database.Annotation;
 import database.PubMedToSQLConverter;
+import database.containers.Annotation;
 
 /**
  * Class that contains all the methods for adding,changing, getting and removing

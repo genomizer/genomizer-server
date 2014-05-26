@@ -10,10 +10,10 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import database.ChainFile;
 import database.FilePathGenerator;
-import database.Genome;
-import database.ServerDependentValues;
+import database.constants.ServerDependentValues;
+import database.containers.ChainFile;
+import database.containers.Genome;
 
 /**
  * Class that contains all the methods for adding,changing, getting and removing

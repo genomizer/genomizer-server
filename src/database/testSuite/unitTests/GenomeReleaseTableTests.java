@@ -19,8 +19,8 @@ import org.junit.Test;
 
 import database.DatabaseAccessor;
 import database.FilePathGenerator;
-import database.Genome;
-import database.ServerDependentValues;
+import database.constants.ServerDependentValues;
+import database.containers.Genome;
 import database.testSuite.TestInitializer;
 
 public class GenomeReleaseTableTests {

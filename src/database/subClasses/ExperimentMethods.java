@@ -8,10 +8,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import database.Annotation;
-import database.Experiment;
 import database.FilePathGenerator;
-import database.FileTuple;
+import database.containers.Annotation;
+import database.containers.Experiment;
+import database.containers.FileTuple;
 
 public class ExperimentMethods {
 

@@ -14,7 +14,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import database.DatabaseAccessor;
-import database.Experiment;
+import database.containers.Experiment;
 import database.testSuite.TestInitializer;
 
 public class SearchDatabaseTests {
