@@ -16,6 +16,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
+import database.containers.Annotation;
+import database.containers.ChainFile;
+import database.containers.Experiment;
+import database.containers.FileTuple;
+import database.containers.Genome;
 import database.subClasses.*;
 
 /**

@@ -17,8 +17,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import database.Annotation;
 import database.PubMedToSQLConverter;
+import database.containers.Annotation;
 
 /**
  * Class that contains all the methods for adding,changing, getting and removing
@@ -43,10 +43,13 @@ public class AnnotationMethods {
      *            Connection, the connection to the database.
      */
     public AnnotationMethods(Connection connection) {
+
         fileAttributes = new HashSet<String>();
+
         for (int i = 0; i < fileAttributesArray.length; i++) {
             fileAttributes.add(fileAttributesArray[i]);
         }
+
         conn = connection;
     }
 
@@ -186,9 +189,11 @@ public class AnnotationMethods {
     public Integer getAnnotationType(String label) throws SQLException {
 
         Annotation a = getAnnotationObject(label);
+
         if (a == null) {
             return 0;
         }
+
         return a.dataType;
     }
 
@@ -493,11 +498,10 @@ public class AnnotationMethods {
     public int addDropDownAnnotationValue(String label, String value)
             throws SQLException, IOException {
 
-
-
     	if (label==null || label.isEmpty()) {
     		throw new IOException("Invalid Label");
     	}
+
     	if (value==null || value.isEmpty()) {
     		throw new IOException("Invalid Value");
     	}
@@ -563,7 +567,8 @@ public class AnnotationMethods {
 
         String dependGenomeQuery = "SELECT * FROM Genome_Release "
         						 + "WHERE (Species ~~* ?)";
-        PreparedStatement dependency2Statement = conn.prepareStatement(dependGenomeQuery);
+        PreparedStatement dependency2Statement =
+        		conn.prepareStatement(dependGenomeQuery);
         dependency2Statement.setString(1, value);
         ResultSet res2 = dependency2Statement.executeQuery();
 
@@ -579,8 +584,8 @@ public class AnnotationMethods {
         }
         if(hasDependency2){
         	throw new IOException(value + "is used in a stored genome_release."+
-        			    " Please remove all Genome Releases for the specie: "  +
-        			    value + " To be able to remove this specie annotation");
+        			" Please remove all Genome Releases for the specie: " +
+        		    value + " To be able to remove this specie annotation");
 
         }
 
@@ -644,7 +649,8 @@ public class AnnotationMethods {
         if (oldLabel.toLowerCase().contentEquals("species")) {
             throw new IOException("Can't change label on annotation 'Species'");
         } else if (isFileAnnotation(newLabel)){
-        	throw new IOException("Can't change label name to a file- annotation name.");
+        	throw new IOException("Can't change label name to a file- " +
+        			"annotation name.");
         }
         else {
             if (!isValidChoice(newLabel)) {
@@ -653,7 +659,8 @@ public class AnnotationMethods {
                         + "Brackets cannot be used in annotations.");
             }
 
-            String query = "UPDATE Annotation SET Label = ? WHERE (Label ~~* ?)";
+            String query = "UPDATE Annotation SET Label = ? " +
+            		"WHERE (Label ~~* ?)";
 
             PreparedStatement stmt;
             stmt = conn.prepareStatement(query);
@@ -745,9 +752,10 @@ public class AnnotationMethods {
      * @throws SQLException, will be thrown if the psql query fails.
      */
     public int changeAnnotationRequiredField(String AnnoLabel,
-    											boolean required) throws SQLException{
+    		boolean required) throws SQLException{
 
-    	String changeRequired = "UPDATE Annotation SET Required = ? WHERE (Label = ?)";
+    	String changeRequired = "UPDATE Annotation SET Required = ? " +
+    			"WHERE (Label = ?)";
     	PreparedStatement changeReq = conn.prepareStatement(changeRequired);
 
     	changeReq.setBoolean(1, required);
@@ -801,7 +809,7 @@ public class AnnotationMethods {
 
 
     /**
-     * binds a sql prepared query statement with parameters, example:
+     * Binds an sql prepared query statement with parameters, example:
      * "UPDATE Annotation_Choices SET Value = ? WHERE Label = ? and Value = ?;"
      * and the questionmarks are the parameters.
      *
@@ -818,7 +826,8 @@ public class AnnotationMethods {
     public PreparedStatement bind(PreparedStatement query,
             List<Entry<String, String>> params) throws SQLException,
             IOException {
-        int i = 1;
+
+    	int i = 1;
 
         for (Entry<String, String> entry : params) {
 

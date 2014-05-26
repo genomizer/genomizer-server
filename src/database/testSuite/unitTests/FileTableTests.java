@@ -17,9 +17,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import database.DatabaseAccessor;
-import database.Experiment;
 import database.FilePathGenerator;
-import database.FileTuple;
+import database.containers.Experiment;
+import database.containers.FileTuple;
 import database.testSuite.TestInitializer;
 
 public class FileTableTests {
@@ -176,11 +176,10 @@ public class FileTableTests {
         assertEquals(1, dbac.deleteFile(ft.path));
         assertFalse(fileToDelete.exists());
 
-        FileTuple ft = dbac.addNewFile(testExpId, testFileType, testName,
-                testInputFile, testMetaData, testAuthor, testUploader,
-                testIsPrivate, testGRVersion);
+        dbac.addNewFile(testExpId, testFileType, testName, testInputFile,
+        		testMetaData, testAuthor, testUploader, testIsPrivate,
+        		testGRVersion);
     }
-
 
     private void addMockFile(String folderPath, String filename1)
             throws IOException {

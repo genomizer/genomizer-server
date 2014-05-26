@@ -1,4 +1,4 @@
-package database;
+package database.constants;
 
 public class ServerDependentValues {
 

@@ -7,9 +7,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import database.Experiment;
 import database.FilePathGenerator;
-import database.FileTuple;
+import database.containers.Experiment;
+import database.containers.FileTuple;
 
 /**
  * Class that contains all the methods for adding,changing, getting and removing
@@ -31,6 +31,7 @@ public class FileMethods {
      */
     public FileMethods(Connection connection, FilePathGenerator filePG,
             ExperimentMethods expMethods) {
+
         conn = connection;
         fpg = filePG;
         this.expMethods = expMethods;
@@ -75,6 +76,7 @@ public class FileMethods {
             throws SQLException, IOException {
 
         Experiment e = expMethods.getExperiment(expID);
+
         if (e == null) {
             throw new IOException("The experiment " + expID
                     + " does not exist!");
@@ -137,6 +139,7 @@ public class FileMethods {
     }
 
     private FileTuple getProfile(Experiment e, String metaData) {
+
         for (FileTuple ft : e.getFiles()) {
             if (ft.type.equalsIgnoreCase("profile")
                     && ft.metaData.equals(metaData)) {
@@ -147,11 +150,13 @@ public class FileMethods {
     }
 
     private String getParentFolder(String filePath) {
+
         int filenameIndex = filePath.lastIndexOf(File.separator);
         return filePath.substring(0, filenameIndex + 1);
     }
 
     private String getFileName(String filePath) {
+
         int filenameIndex = filePath.lastIndexOf(File.separator);
         return filePath.substring(filenameIndex + 1);
     }
@@ -245,12 +250,8 @@ public class FileMethods {
     }
 
     /**
-<<<<<<< HEAD
      * Deletes a file from the database and the disk using the fileID. Should
      * throw an IOException if the method failed to delete the file from disk.
-=======
-     * Deletes a file from the database and the disk using the fileID.
->>>>>>> branch 'database' of https://github.com/genomizer/genomizer-server.git
      *
      * @param fileID
      *            int - the fileID of the file to be deleted.
@@ -273,7 +274,8 @@ public class FileMethods {
             fileToDelete.delete();
 
             File parentFolder = new File(ft.getParentFolder());
-            if (ft.type.equalsIgnoreCase("profile") && isEmptyFolder(parentFolder)) {
+            if (ft.type.equalsIgnoreCase("profile")
+            		&& isEmptyFolder(parentFolder)) {
                 parentFolder.delete();
             }
         }
@@ -291,6 +293,7 @@ public class FileMethods {
         if (f.exists() && f.listFiles() != null && f.listFiles().length == 0) {
             return true;
         }
+
         return false;
     }
 
@@ -299,7 +302,9 @@ public class FileMethods {
      * @param folder the folder to delete.
      */
     public void recursiveDelete(File folder) {
+
         File[] contents = folder.listFiles();
+
         if (contents == null || contents.length == 0) {
             folder.delete();
         } else {
@@ -307,6 +312,7 @@ public class FileMethods {
                 recursiveDelete(f);
             }
         }
+
         folder.delete();
     }
 
@@ -428,13 +434,15 @@ public class FileMethods {
             throws SQLException, IOException {
 
         Experiment e = expMethods.getExperiment(expId);
+
         if (e == null) {
             throw new IOException("The experiment " + expId
                     + " does not exist!");
         }
-        expId = e.getID();
 
+        expId = e.getID();
         String inputFilePath = null;
+
         if (inputFileName != null) {
             inputFilePath = getParentFolder(filePath) + inputFileName;
         }
@@ -442,7 +450,8 @@ public class FileMethods {
         String query = "INSERT INTO File "
                 + "(Path, FileType, FileName, Date, MetaData, InputFilePath, "
                 + "Author, Uploader, IsPrivate, ExpID, GRVersion, Status) "
-                + "VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?, 'Genomizer', ?, ?, ?, ?, 'Done')";
+                + "VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?, 'Genomizer'," +
+                " ?, ?, ?, ?, 'Done')";
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setString(1, filePath);
 

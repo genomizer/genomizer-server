@@ -19,8 +19,8 @@ import org.junit.Test;
 
 import database.DatabaseAccessor;
 import database.FilePathGenerator;
-import database.Genome;
-import database.ServerDependentValues;
+import database.constants.ServerDependentValues;
+import database.containers.Genome;
 import database.testSuite.TestInitializer;
 
 public class GenomeReleaseTableTests {
@@ -229,6 +229,15 @@ public class GenomeReleaseTableTests {
 
     	assertNull(dbac.getAllGenomReleasesForSpecies("Dog"));
     }
+
+    @Test
+    public void shouldReturnEmptyListFromGetAllGenomeReleasesWhenTableIsEmpty() throws Exception{
+
+    	tearDown();
+
+    	assertEquals(0,dbac.getAllGenomReleases().size());
+    }
+
 
     private boolean searchGenomeForVersion(List<Genome> genomeList,
             String version) {

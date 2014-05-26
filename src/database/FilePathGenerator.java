@@ -3,6 +3,8 @@ package database;
 import java.io.File;
 import java.io.IOException;
 
+import database.containers.FileTuple;
+
 public class FilePathGenerator {
 
     private String rootDir;
