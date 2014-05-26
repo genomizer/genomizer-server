@@ -66,7 +66,7 @@ public class GetProcessStatusCommandTest {
 
 		workHandler.start();
 		try {
-			Thread.sleep(3500);
+			Thread.sleep(20000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 /**
  * Class that represents an actual response.
@@ -30,7 +31,11 @@ public class AddGenomeReleaseResponse extends Response {
 		jsonArray = new JsonArray();
 		for(int i = 0; i < filePaths.size(); i++) {
 			JsonElement element = gson.toJsonTree(filePaths.get(i));
-			jsonArray.add(element);
+
+			JsonObject obj = new JsonObject();
+			obj.add("URLupload", element);
+
+			jsonArray.add(obj);
 		}
 
 	}

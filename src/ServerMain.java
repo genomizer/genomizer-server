@@ -14,6 +14,7 @@ import authentication.InactiveUuidsRemover;
 import command.CommandHandler;
 
 import server.DatabaseSettings;
+import server.Debug;
 import server.Doorman;
 
 
@@ -33,11 +34,17 @@ public class ServerMain {
 		Options comOptions = new Options();
 		comOptions.addOption("p", "port", true, "the listening port");
 		comOptions.addOption("d", true, "chooses which database to use, valid alternatives are global and test");
+		comOptions.addOption("debug", false, "if this flag is used the server will write output for every request and response aswell as other output.");
 		comOptions.addOption("f", "file", true, "the file to read database settings from, is ignored when -d is used");
 //		comOptions.addOption("p", "port", true, "the listening port");
 		CommandLine com = comline.parse(comOptions, args);
 		if (com.hasOption('p')) {
 			port = Integer.parseInt(com.getOptionValue('p'));
+		}
+		if (com.hasOption("debug")) {
+			Debug.isEnabled = true;
+		} else {
+			Debug.isEnabled = false;
 		}
 		if (com.hasOption('d')) {
 			String database = com.getOptionValue('d');
@@ -65,6 +72,9 @@ public class ServerMain {
 			doorman.start();
 			(new Thread(new InactiveUuidsRemover())).start();
 			System.out.println("Doorman started on port " + port);
+			if(Debug.isEnabled) {
+				System.out.println("Debug is enabled.");
+			}
 			System.out.println("Database:");
 			System.out.println("  username " + DatabaseSettings.username);
 			System.out.println("  password " + DatabaseSettings.password);

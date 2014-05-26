@@ -3,6 +3,8 @@ package command;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.regex.Pattern;
+
 import response.AddAnnotationFieldResponse;
 import response.ErrorResponse;
 import response.MinimalResponse;
@@ -11,7 +13,8 @@ import response.StatusCode;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import database.DatabaseAccessor;
-import database.MaxSize;
+import database.constants.MaxSize;
+
 
 /**
  * Class used to add annotation fields.
@@ -59,13 +62,30 @@ public class AddAnnotationFieldCommand extends Command {
 		if(name.indexOf('/') != -1) {
 			return false;
 		}
+
+		if(!hasOnlyValidCharacters(name)){
+			return false;
+		}
+		if(!hasOnlyValidCharacters(defaults)){
+			return false;
+		}
+
 		for(int i = 0; i < type.size(); i++) {
 
 			if(type.get(i).indexOf("/") != -1) {
 				return false;
 			}
+			if(!hasOnlyValidCharacters(type.get(i))){
+				return false;
+			}
+
 		}
 		return true;
+	}
+
+	public boolean hasOnlyValidCharacters(String s){
+		Pattern p = Pattern.compile("[^A-Za-z0-9 ]");
+		return !p.matcher(s).find();
 	}
 
 	/**

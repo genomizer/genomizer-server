@@ -2,14 +2,13 @@ package command;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
 import authentication.Authenticate;
-
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.ProcessResponse;
 import response.Response;
 import response.StatusCode;
+import server.Debug;
 import server.WorkHandler;
 
 /**
@@ -42,11 +41,10 @@ public class CommandHandler {
 	 */
 	public Response processNewCommand(String json, String restful, String uuid, CommandType cmdt) {
 
-		//Get code from restful
 		Command myCom = createCommand(json, restful, uuid, cmdt);
 
 		if(myCom == null) {
-			System.out.println("COMMAND IS NULL, COULD NOT CREATE A COMMAND FROM JSON AND RESTFUL.");
+			Debug.log("COMMAND IS NULL, COULD NOT CREATE A COMMAND FROM JSON AND RESTFUL.");
 			return new ErrorResponse(StatusCode.BAD_REQUEST, "Could not create a command from request. Bad format on restful.");
 		}
 
@@ -54,15 +52,15 @@ public class CommandHandler {
 			if(CommandType.PROCESS_COMMAND.equals(cmdt)){
 				//add the heavy command to the queue, executed when the
 				//command is at the head of the queue, return OK to tell the client
-				System.err.println("Adding processCommand to workqueue");
+				Debug.log("Adding processCommand to workqueue");
 				heavyWorkThread.addWork((ProcessCommand)myCom);
 				return new ProcessResponse(StatusCode.OK);
 			}else{
 				return myCom.execute();
 			}
 		} else {
-			System.out.println("not valid");
-			return new MinimalResponse(StatusCode.BAD_REQUEST);
+			Debug.log("Command not valid");
+			return new ErrorResponse(StatusCode.BAD_REQUEST, "The command was invalid. Check the input! Valid characters are A-Z, a-z, 0-9 and space");
 		}
 	}
 
@@ -88,8 +86,6 @@ public class CommandHandler {
 			newCommand = cmdFactory.createDeleteAnnotationValueCommand(json, rest[3], rest[4]);
 		}
 		String parsedRest = parseRest(restful);
-
-
 
 		if(cmdt == CommandType.LOGIN_COMMAND && nrOfRestfuls == RestfulSizes.LOGIN_COMMAND) {
 			newCommand = cmdFactory.createLoginCommand(json);
@@ -167,14 +163,6 @@ public class CommandHandler {
 
 		String[] split = restful.split("/");
 		return split[split.length -1];
-
-//		String[] parsed = new String[split.length - 2];
-
-//		for(int i = 0; i < parsed.length; i++) {
-//			parsed[i] = split[i+2];
-//		}
-
-//		return parsed[parsed.length - 1];
 
 	}
 

@@ -26,12 +26,6 @@ public class CommandHandlerTest {
 	}
 
 	@Test
-	public void testProcessNewCommand() {
-		//TODO: Implement
-		fail("Not yet implemented");
-	}
-
-	@Test
 	public void testParseRest() {
 
 		CommandHandler handler = new CommandHandler();

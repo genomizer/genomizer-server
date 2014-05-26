@@ -6,16 +6,20 @@ public class serverTests {
 
 	public static void main(String args[]) throws Exception {
 
-		Login.login("huggab0y", "umea@2014");
-//		Login.login("Splutt", "hejhej"); // Should fail to login since user don't exist.
-
-		renameannotest();
+		Login.login("RobinO", "umea@2014");
+//		Login.login("Splutt", "hejhej");
 		//usertests();
 		//specialannotest();
-//		processtest();
 		//for(int i = 0; i < 100; i++)
 //			Process.sendGetProcessStatus();
-		//Annotations.sendGetAnnotationInformation();
+		//Annotations.sendDeleteAnnotation("Test43???");
+		//Annotations.sendDeleteAnnotation("JONAS???");
+//		Annotations.sendGetAnnotationInformation();
+		Annotations.sendAddAnnotation("invalid annotation 0123456789!!!!!!!!!едц");
+
+		//Process.sendRawToProfile();
+//		GenomeRelease.sendAddGenomeRelease("HumanitariumTest");
+
 
 		Login.logout();
 	}
@@ -50,12 +54,12 @@ public class serverTests {
 		//Annotations.sendGetAnnotationInformation();
 	}
 
-	public void exptest() throws Exception {
-		Experiment.sendDeleteExperiment("testExp22");
-		Experiment.sendAddExperiment("testExp22");
-		Experiment.sendGetExperiment("testExp22");
-		Experiment.sendGetExperiment("testExp22gfert3453");
-		Experiment.sendDeleteExperiment("testExp22");
+	public static void exptest() throws Exception {
+		//Experiment.sendDeleteExperiment("testExp22");
+		Experiment.sendAddExperiment("testExp2233");
+		//Experiment.sendGetExperiment("testExp22");
+		//Experiment.sendGetExperiment("testExp22gfert3453");
+		//Experiment.sendDeleteExperiment("testExp22");
 	}
 
 	public static void searchtest(String query) throws Exception {

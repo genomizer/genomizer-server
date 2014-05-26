@@ -10,7 +10,7 @@ import com.google.gson.GsonBuilder;
 
 import command.AddGenomeReleaseCommand;
 import command.Command;
-import database.MaxSize;
+import database.constants.MaxSize;
 
 /**
  * Class used to test the AddGenomeRelease class.
@@ -53,8 +53,8 @@ public class AddGenomeReleaseCommandTest {
 	@Test
 	public void testAddGenomeReleaseJSON() {
 
-		String json = "{\"version\":\"hx16\",\"species\":\"human\",\"files\":[\"nameOfFile1\",\"nameOfFile2\",\"nameOfFile3\"]}";
-
+		String json = "{\"genomeVersion\":\"hx16\",\"specie\":\"human\"," +
+				"\"files\":[\"nameOfFile1\",\"nameOfFile2\",\"nameOfFile3\"]}";
 		final Command cmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
 	    String json2 = gson.toJson(cmd);
 
@@ -142,7 +142,7 @@ public class AddGenomeReleaseCommandTest {
 
 	/**
 	 * Test that checks that validate returns false if lengths
-	 * are not following MaxSize specifications for specie.
+	 * are not following MaxSize specifications for species.
 	 */
 	@Test
 	public void testValidateSpecieLength() {
@@ -193,7 +193,8 @@ public class AddGenomeReleaseCommandTest {
 	@Test
 	public void testValidateProperlyFormatted() {
 
-		String json = "{\"version\":\"hx16\",\"species\":\"human\",\"files\":[\"nameOfFile1\",\"nameOfFile2\",\"nameOfFile3\"]}";
+		String json = "{\"genomeVersion\":\"hx16\",\"specie\":\"human\"," +
+				"\"files\":[\"nameOfFile1\",\"nameOfFile2\",\"nameOfFile3\"]}";
 		final Command cmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
 
 		assertTrue(cmd.validate());
@@ -201,4 +202,3 @@ public class AddGenomeReleaseCommandTest {
 	}
 
 }
-

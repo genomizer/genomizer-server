@@ -9,6 +9,7 @@ import java.util.TreeMap;
 
 import response.Response;
 import response.StatusCode;
+import sun.misc.Cleaner;
 
 import command.Command;
 import command.GetAnnotationInformationCommand;
@@ -17,6 +18,8 @@ import command.ProcessStatus;
 
 
 public class WorkHandler extends Thread{
+
+	private static final long statusTimeToLive = 5000;//1000*60*60*24*3;
 
 	private Queue<ProcessCommand> workQueue;
 	private HashMap<ProcessCommand,ProcessStatus> processStatus;
@@ -33,18 +36,34 @@ public class WorkHandler extends Thread{
 		processStatus.put(command, new ProcessStatus(command));
 	}
 
+	public synchronized void removeOldStatuses() {
+		long now = System.currentTimeMillis();
+
+		for (ProcessCommand proc : processStatus.keySet()) {
+			ProcessStatus procStat = processStatus.get(proc);
+			String statusString = procStat.status;
+			if (statusString.equals("Finished") || statusString.equals("Crashed")) {
+				long time = procStat.timeFinished;
+				long diff = now - time;
+				if (diff > statusTimeToLive) {
+					processStatus.remove(proc);
+				}
+			}
+		}
+	}
+
 	//The thread runs all the time and checks if the queue is empty
 	//If the queue is not empty, the command at the head of the queue is
 	//is executed
 	@Override
 	public void run(){
-		System.out.println(Thread.currentThread().getName());
+		Debug.log(Thread.currentThread().getName());
 
 
 		while(true){
 			if(!workQueue.isEmpty()){
 				ProcessCommand work = workQueue.poll();
-				System.out.println("The processcommand is going to be executed");
+				Debug.log("The processcommand is going to be executed");
 				ProcessStatus stat = processStatus.get(work);
 				stat.status = "Started";
 				work.setFilePaths();
@@ -53,7 +72,7 @@ public class WorkHandler extends Thread{
 
 				try{
 					Response resp = work.execute();
-					System.err.println("AFTER EXECUTE PROCESS");
+					Debug.log("AFTER EXECUTE PROCESS");
 					if (resp.getCode()==StatusCode.CREATED){
 						stat.status = "Finished";
 					}else{
@@ -73,6 +92,7 @@ public class WorkHandler extends Thread{
 					e.printStackTrace();
 				}
 			}
+//			removeOldStatuses();
 		}
 
 	}

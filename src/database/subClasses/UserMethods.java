@@ -9,6 +9,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class that contains all the methods for adding,changing, getting and removing
+ * Users in the database. This class is a subClass of databaseAcessor.java
+ *
+ * date: 2014-05-14 version: 1.0
+ */
 public class UserMethods {
 
 	private Connection conn;
@@ -206,6 +212,7 @@ public class UserMethods {
 	}
 
 	private void isValidArgument(String arg) throws IOException {
+
     	if (arg == null || arg.contentEquals("")) {
     		throw new IOException("Invalid argument(s)");
     	}

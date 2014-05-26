@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import unused.FileValidator;
 
-public class TestFileNameValidator {
+public class FileNameValidatorTest {
 
 	private FileValidator validator;
 
@@ -18,19 +18,19 @@ public class TestFileNameValidator {
 	}
 
 	@Test
-	public void testGoodChars() {
+	public void shouldReturnTrueOnAcceptedChars() {
+
 		boolean isOk = false;
 		isOk = validator.isNameOk("aaa");
-
 		assertTrue(isOk);
 	}
 
 
 	@Test
-	public void testBadChars() {
+	public void shouldReturnFalseOnUnacceptedChars() {
+
 		boolean isOk = false;
 		isOk = validator.isNameOk("?!//&/*\n");
-
 		assertFalse(isOk);
 	}
 }

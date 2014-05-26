@@ -9,7 +9,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import command.AddAnnotationValueCommand;
-import database.MaxSize;
+import database.constants.MaxSize;
 
 /**
  * Class used to unit-test AddAnnotationValueCommand.

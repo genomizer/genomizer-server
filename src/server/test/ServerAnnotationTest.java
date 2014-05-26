@@ -25,8 +25,8 @@ public class ServerAnnotationTest extends ServerAbstractTestClass {
 	public void testAnnotationFreetextAddAndExists() throws Exception {
 
 		JsonObject jj = new JsonObject();
-		jj.addProperty("username", "jonas");
-		jj.addProperty("password", "losenord");
+		jj.addProperty("username", username);
+		jj.addProperty("password", password);
 		sendLogin(jj);
 
 		String json_output = "{\"name\":\""
@@ -61,8 +61,8 @@ public class ServerAnnotationTest extends ServerAbstractTestClass {
 	public void testAnnotationFieldAddAndExists() throws Exception {
 
 		JsonObject jj = new JsonObject();
-		jj.addProperty("username", "jonas");
-		jj.addProperty("password", "losenord");
+		jj.addProperty("username", username);
+		jj.addProperty("password", password);
 		sendLogin(jj);
 
 		String json_output = "{\"name\":\""
@@ -95,8 +95,8 @@ public class ServerAnnotationTest extends ServerAbstractTestClass {
 	public void testStatusCodeAddAnnotationFieldCommand() throws Exception {
 
 		JsonObject jj = new JsonObject();
-		jj.addProperty("username", "jonas");
-		jj.addProperty("password", "losenord");
+		jj.addProperty("username", username);
+		jj.addProperty("password", password);
 		sendLogin(jj);
 
 		String json_output = "{\"name\":\""
@@ -123,8 +123,8 @@ public class ServerAnnotationTest extends ServerAbstractTestClass {
 	public void testStatusCodeAddAnnotatinFieldFreeText() throws Exception {
 
 		JsonObject jj = new JsonObject();
-		jj.addProperty("username", "jonas");
-		jj.addProperty("password", "losenord");
+		jj.addProperty("username", username);
+		jj.addProperty("password", password);
 		sendLogin(jj);
 
 		String json_output = "{\"name\":\""
@@ -148,8 +148,8 @@ public class ServerAnnotationTest extends ServerAbstractTestClass {
 	public void testGetAnnotationInformationCommand() throws Exception {
 
 		JsonObject jj = new JsonObject();
-		jj.addProperty("username", "jonas");
-		jj.addProperty("password", "losenord");
+		jj.addProperty("username", username);
+		jj.addProperty("password", password);
 		sendLogin(jj);
 
 		String response = sendGetAnnotationInfo();

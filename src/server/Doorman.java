@@ -1,9 +1,27 @@
 package server;
+/**
+ * A Doorman-object is used to receive requests and send back responses to the client.
+ * The doorman is listening for the following contexts:
+ * /login
+ * /experiment
+ * /annotation
+ * /file
+ * /search
+ * /user
+ * /process
+ * /sysadm
+ * /genomeRelease
+ * /token
+ *
+ * Whenever a request is received the Doorman checks what context is has and creates a
+ * new Executor (on  a new thread) and afterwards continues listening for new requests.
+ *
+ */
+
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.InetSocketAddress;
 import java.net.URLDecoder;
 
@@ -29,6 +47,12 @@ public class Doorman {
 	private HttpServer httpServer;
 	private CommandHandler commandHandler;
 
+	/**
+	 * Constructor. Creates a HTTPServer (but doesn't start it) which listens on the given port.
+	 * @param commandHandler a commandHandler which will create and handle all commands.
+	 * @param port the listening port.
+	 * @throws IOException
+	 */
 	public Doorman(CommandHandler commandHandler, int port) throws IOException {
 
 		this.commandHandler = commandHandler;
@@ -52,22 +76,30 @@ public class Doorman {
 				try {
 				new Thread(command).start();
 				} catch(Exception e) {
-					e.printStackTrace();
+					System.err.println("ERROR when creating new Executor." + e.getMessage());
+					ResponseLogger.log("SERVER", "ERROR when creating new Executor." + e.getMessage());
 				}
 			}
 		});
 	}
 
+	/**
+	 * Start the HTTPServer
+	 */
 	public void start() {
 		httpServer.start();
 	}
 
+	/**
+	 * Determines the specific command which is to be created.
+	 * @return
+	 */
 	HttpHandler createHandler() {
 		return new HttpHandler() {
 			@Override
 			public void handle(HttpExchange exchange) throws IOException {
 
-				System.out.println("\n-----------------\nNEW EXCHANGE: " + exchange.getHttpContext().getPath());
+				Debug.log("\n-----------------\nNEW EXCHANGE: " + exchange.getHttpContext().getPath());
 				switch(exchange.getRequestMethod()) {
 				case "GET":
 					switch(exchange.getHttpContext().getPath()) {
@@ -198,13 +230,18 @@ public class Doorman {
 		};
 	}
 
+	/**
+	 * Handles the request information from the client and creates a Command with CommandHandler.
+	 * @param exchange the HTTPExchange
+	 * @param type which specific type of command it is.
+	 */
 	private void exchange(HttpExchange exchange, CommandType type) {
 		InputStream bodyStream = exchange.getRequestBody();
 		Scanner scanner = new Scanner(bodyStream);
 		String body = "";
 		String uuid = null;
 		String username = null;
-		System.out.println("Exchange: " + type);
+		Debug.log("Exchange: " + type);
 
 		if(type != CommandType.LOGIN_COMMAND) {
 			List<String> auth = exchange.getRequestHeaders().get("Authorization");
@@ -212,14 +249,13 @@ public class Doorman {
 				uuid = auth.get(0);
 				Authenticate.updateLatestRequest(uuid);
 			} else {
-				System.out.println("Unauthorized request!");
+				Debug.log("Unauthorized request!");
 				Response errorResponse = new MinimalResponse(StatusCode.UNAUTHORIZED);
 				try {
 					respond(exchange, errorResponse);
 					scanner.close();
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					Debug.log("Could not send response to client. " + e1.getMessage());
 				}
 				scanner.close();
 				return;
@@ -232,21 +268,19 @@ public class Doorman {
 
 		Response response = null;
 
-		try {
-		//username = Authenticate.getUsername(uuid);
-		System.err.println("Username: " + username + "\n");
-		} catch(Exception e ) {
-			e.printStackTrace();
-		}
 
-		System.out.println("Body from client: " + body);
+		//username = Authenticate.getUsername(uuid);
+		Debug.log("Username: " + username + "\n");
+
+
+		Debug.log("Body from client: " + body);
 
 		try {
 			String header = URLDecoder.decode(exchange.getRequestURI().toString(), "UTF-8");
 			response = commandHandler.processNewCommand(body, header, uuid, type);
 
 		} catch(Exception e ) {
-			e.printStackTrace();
+			Debug.log("Could not create/process new command" + e.getMessage());
 		}
 
 		//TODO Should there be some error checking?
@@ -255,11 +289,16 @@ public class Doorman {
 		try {
 			respond(exchange, response);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Debug.log("IOError when sending response back to client. " + e.getMessage());
 		}
 	}
 
+	/**
+	 * Sends a response back to the client.
+	 * @param exchange the HTTPExchange-object.
+	 * @param response the response object containting information about the response.
+	 * @throws IOException
+	 */
 	private void respond(HttpExchange exchange, Response response) throws IOException {
 		String body = null;
 		if(response.getBody() == null || response.getBody().equals("")) {
@@ -267,7 +306,7 @@ public class Doorman {
 
 		} else {
 			body = response.getBody();
-			System.out.println("Response: " + body.toString());
+			Debug.log("Response: " + body.toString());
 			exchange.sendResponseHeaders(response.getCode(), body.getBytes().length);
 
 			OutputStream os = exchange.getResponseBody();
@@ -276,6 +315,6 @@ public class Doorman {
 			os.close();
 		}
 
-		System.out.println("END OF EXCHANGE\n------------------");
+		Debug.log("END OF EXCHANGE\n------------------");
 	}
 }

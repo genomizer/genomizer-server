@@ -1,20 +1,17 @@
 package command.test;
 
 import static org.junit.Assert.*;
-
 import org.junit.Before;
 import org.junit.Test;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
 import command.AddAnnotationFieldCommand;
 import command.Command;
-import database.MaxSize;
+import database.constants.MaxSize;
 
 /**
- * Test class used to test the AddAnnotationFieldCommand
- * class.
+ * Test class used to check that the AddAnnotationFieldCommand
+ * class is working properly on a unit level.
  *
  * @author tfy09jnn
  * @version 1.0
@@ -36,7 +33,7 @@ public class AddAnnotationFieldCommandTest {
 	}
 
 	/**
-	 * Test creating and not null.
+	 * Test creating object and that it's not null.
 	 */
 	@Test
 	public void testCreateAddAnnotationFieldCommand() {
@@ -44,6 +41,19 @@ public class AddAnnotationFieldCommandTest {
 		AddAnnotationFieldCommand aafc = new AddAnnotationFieldCommand();
 		assertNotNull(aafc);
 
+	}
+
+	@Test
+	public void testHasOnlyValidCharacters(){
+		AddAnnotationFieldCommand aafc = new AddAnnotationFieldCommand();
+
+		String valid = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ";
+		String invalid = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 åäö";
+		String invalid2 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 !#¤%&/()";
+
+		assertTrue(aafc.hasOnlyValidCharacters(valid));
+		assertFalse(aafc.hasOnlyValidCharacters(invalid));
+		assertFalse(aafc.hasOnlyValidCharacters(invalid2));
 	}
 
 	/**
@@ -137,6 +147,25 @@ public class AddAnnotationFieldCommandTest {
 	    String json = "{\"name\":\"species\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
 	    final Command aafc = gson.fromJson(json, AddAnnotationFieldCommand.class);
 		assertTrue(aafc.validate());
+
+	}
+
+	@Test
+	public void testInvalidCharacters(){
+		String json = "{\"name\":\"spec ies\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
+	    final Command aafc = gson.fromJson(json, AddAnnotationFieldCommand.class);
+	    assertTrue(aafc.validate());
+
+	    String json2 = "{\"name\":\"speciesö\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
+	    final Command aafc2 = gson.fromJson(json2, AddAnnotationFieldCommand.class);
+	    assertFalse(aafc2.validate());
+
+	    String json3 = "{\"name\":\"species\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human!!!!\",\"forced\":true}";
+	    final Command aafc3 = gson.fromJson(json3, AddAnnotationFieldCommand.class);
+	    assertFalse(aafc3.validate());
+
+
+
 
 	}
 

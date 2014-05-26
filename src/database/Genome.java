@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import database.constants.ServerDependentValues;
+
 public class Genome {
 
     public final String genomeVersion;

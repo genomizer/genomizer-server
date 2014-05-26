@@ -35,21 +35,17 @@ public class ServerChainTestClass extends ServerAbstractTestClass {
 	@Test
 	public void testChainStatusCodeAnnoLoginGetAddLogout() throws Exception {
 
-		//Create JSON login object.
 		JsonObject jj = new JsonObject();
-		jj.addProperty("username", "jonas");
-		jj.addProperty("password", "losenord");
-
+		jj.addProperty("username", username);
+		jj.addProperty("password", password);
 		int loginResponseCode = sendLogin(jj);
 
-		//Get connection and then add headers.
 		HttpURLConnection con = connect("GET", serverURL + "/annotation");
 		con.setRequestProperty("Content-Type", "application/json");
 		con.setRequestProperty("Authorization", token.getToken());
 
 		int getAnnotationResponseCode = con.getResponseCode();
 
-		//Get connection and then add headers.
 		con = connect("POST", serverURL + "/annotation");
 		con.setRequestProperty("Content-Type", "application/json");
 		con.setRequestProperty("Authorization", token.getToken());
@@ -60,7 +56,6 @@ public class ServerChainTestClass extends ServerAbstractTestClass {
 
 		sendResponseString(con, json_output);
 
-		//Get AnnotationResponseCode
 		int addAnnotationResponseCode = con.getResponseCode();
 
 		int logoutResponseCode = sendLogout();
@@ -87,14 +82,11 @@ public class ServerChainTestClass extends ServerAbstractTestClass {
 	@Test
 	public void testChainStatusCodeAnnoLoginAddGetLogout() throws Exception {
 
-		//Create JSON login object.
 		JsonObject jj = new JsonObject();
-		jj.addProperty("username", "jonas");
-		jj.addProperty("password", "losenord");
-
+		jj.addProperty("username", username);
+		jj.addProperty("password", password);
 		int loginResponseCode = sendLogin(jj);
 
-		//Get connection and then add headers.
 		HttpURLConnection con = connect("POST", serverURL + "/annotation");
 		con.setRequestProperty("Content-Type", "application/json");
 		con.setRequestProperty("Authorization", token.getToken());
@@ -104,11 +96,8 @@ public class ServerChainTestClass extends ServerAbstractTestClass {
 				+ "\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
 
 		sendResponseString(con, json_output);
-
-		//Get AnnotationResponseCode
 		int addAnnotationResponseCode = con.getResponseCode();
 
-		//Get connection and then add headers.
 		con = connect("GET", serverURL + "/annotation");
 		con.setRequestProperty("Content-Type", "application/json");
 		con.setRequestProperty("Authorization", token.getToken());

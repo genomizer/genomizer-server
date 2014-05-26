@@ -10,7 +10,7 @@ import response.GetGenomeReleaseRespons;
 import response.Response;
 import response.StatusCode;
 import database.DatabaseAccessor;
-import database.Genome;
+import database.containers.Genome;
 /**
  * A command which is used to get all the genome versions
  * for a specific specie.
