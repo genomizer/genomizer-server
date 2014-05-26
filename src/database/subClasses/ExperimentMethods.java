@@ -8,11 +8,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import database.Annotation;
-import database.Experiment;
 import database.FilePathGenerator;
-import database.FileTuple;
+import database.containers.Annotation;
+import database.containers.Experiment;
+import database.containers.FileTuple;
 
+/**
+ * Class that contains all the methods for adding,changing, getting and removing
+ * Experiments in the database. This class is a subClass of databaseAcessor.java
+ *
+ * date: 2014-05-14 version: 1.0
+ */
 public class ExperimentMethods {
 
     private Connection conn;
@@ -74,7 +80,7 @@ public class ExperimentMethods {
     	if (expID == null || expID.contentEquals("")) {
     		throw new IOException("Invalid parameter");
     	}
-    	
+
     	Experiment e = getExperiment(expID);
     	if (e != null) {
     		throw new IOException(expID + " already exists");
@@ -313,6 +319,7 @@ public class ExperimentMethods {
     }
 
     private String matchChoice(String value, List<String> choices) {
+
         for (String s : choices) {
             if (value.equalsIgnoreCase(s)) {
                 return s;
@@ -329,7 +336,9 @@ public class ExperimentMethods {
      *            the folder to delete.
      */
     private static void recursiveDelete(File folder) {
+
         File[] contents = folder.listFiles();
+
         if (contents == null || contents.length == 0) {
             folder.delete();
         } else {
@@ -337,13 +346,7 @@ public class ExperimentMethods {
                 recursiveDelete(f);
             }
         }
+
         folder.delete();
     }
-
-    private void isValidArgument(String arg) throws IOException {
-    	if (arg.contentEquals("") || arg == null) {
-    		throw new IOException("Invalid argument(s)");
-    	}
-    }
-
 }

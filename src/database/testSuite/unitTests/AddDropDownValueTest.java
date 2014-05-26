@@ -18,6 +18,7 @@ public class AddDropDownValueTest {
 
 	@BeforeClass
 	public static void setupTestCase() throws Exception {
+
     	ti = new TestInitializer();
     	dbac = ti.setup();
 
@@ -25,6 +26,7 @@ public class AddDropDownValueTest {
 
 	@AfterClass
 	public static void undoAllChanges() throws SQLException {
+
 		ti.removeTuples();
 		dbac.close();
 	}
@@ -35,6 +37,7 @@ public class AddDropDownValueTest {
     	int ress = 0;
 		ress = dbac.addDropDownAnnotationValue("Species", "tjo");
     	assertEquals(ress, 1);
+
 		List<String> list = dbac.getChoices("Species");
 		boolean exists = false;
 
@@ -43,6 +46,7 @@ public class AddDropDownValueTest {
 				exists = true;
 			}
 		}
+
 		assertTrue(exists);
     }
 
@@ -50,11 +54,11 @@ public class AddDropDownValueTest {
     public void shouldThrowSQLException() throws SQLException, IOException {
 
 		dbac.addDropDownAnnotationValue("Sex", "Male");
-
     }
 
     @Test(expected = IOException.class)
     public void shouldThrowIOException() throws SQLException, IOException {
+
 		dbac.addDropDownAnnotationValue("moho", "something");
     }
 }

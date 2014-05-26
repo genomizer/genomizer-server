@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import com.google.gson.annotations.Expose;
 
 import database.DatabaseAccessor;
-import database.FileTuple;
+import database.containers.FileTuple;
 
 import response.AddFileToExperimentResponse;
 import response.ErrorResponse;

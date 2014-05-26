@@ -7,7 +7,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 
-import database.Genome;
+import database.containers.Genome;
 
 public class GetGenomeReleaseRespons extends Response {
 
