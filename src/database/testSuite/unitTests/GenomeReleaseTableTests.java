@@ -230,14 +230,15 @@ public class GenomeReleaseTableTests {
 
     	assertNull(dbac.getAllGenomReleasesForSpecies("Dog"));
     }
-    
+
     @Test
     public void shouldReturnEmptyListFromGetAllGenomeReleasesWhenTableIsEmpty() throws Exception{
-    	
+
     	tearDown();
-    	
+
     	assertEquals(0,dbac.getAllGenomReleases().size());
     }
+
 
     private boolean searchGenomeForVersion(List<Genome> genomeList,
             String version) {
