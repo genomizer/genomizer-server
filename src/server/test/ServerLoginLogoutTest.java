@@ -27,10 +27,9 @@ public class ServerLoginLogoutTest extends ServerAbstractTestClass {
 	@Test
 	public void testLoginResponseCode() throws Exception{
 
-		//Create JSON login object.
 		JsonObject jj = new JsonObject();
-		jj.addProperty("username", "jonas");
-		jj.addProperty("password", "losenord");
+		jj.addProperty("username", username);
+		jj.addProperty("password", password);
 
 		int loginResponseCode = sendLogin(jj);
 		sendLogout();
@@ -47,10 +46,9 @@ public class ServerLoginLogoutTest extends ServerAbstractTestClass {
 	@Test
 	public void testLogoutResponseCode() throws Exception {
 
-		//Create JSON login object.
 		JsonObject jj = new JsonObject();
-		jj.addProperty("username", "jonas");
-		jj.addProperty("password", "losenord");
+		jj.addProperty("username", username);
+		jj.addProperty("password", password);
 
 		sendLogin(jj);
 		int logoutResponseCode = sendLogout();
@@ -67,10 +65,9 @@ public class ServerLoginLogoutTest extends ServerAbstractTestClass {
 	@Test
 	public void testLoginLogoutTokenNotNull() throws Exception {
 
-		//Create JSON login object.
 		JsonObject jj = new JsonObject();
-		jj.addProperty("username", "jonas");
-		jj.addProperty("password", "losenord");
+		jj.addProperty("username", username);
+		jj.addProperty("password", password);
 
 		sendLogin(jj);
 		sendLogout();

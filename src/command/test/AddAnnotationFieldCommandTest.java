@@ -1,20 +1,17 @@
 package command.test;
 
 import static org.junit.Assert.*;
-
 import org.junit.Before;
 import org.junit.Test;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
 import command.AddAnnotationFieldCommand;
 import command.Command;
 import database.MaxSize;
 
 /**
- * Test class used to test the AddAnnotationFieldCommand
- * class.
+ * Test class used to check that the AddAnnotationFieldCommand
+ * class is working properly on a unit level.
  *
  * @author tfy09jnn
  * @version 1.0
@@ -36,7 +33,7 @@ public class AddAnnotationFieldCommandTest {
 	}
 
 	/**
-	 * Test creating and not null.
+	 * Test creating object and that it's not null.
 	 */
 	@Test
 	public void testCreateAddAnnotationFieldCommand() {

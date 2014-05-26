@@ -155,10 +155,6 @@ public class ProcessCommand extends Command {
 
 	@Override
 	public Response execute() {
-		System.out.println("-------------ProcessCommand - Execute----------------");
-
-
-
 
 		DatabaseAccessor db = null;
 		ProcessHandler processHandler;
@@ -177,9 +173,12 @@ public class ProcessCommand extends Command {
 				if(!db.isConnected()){
 					db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
 				}
+				//Get the genome information from the database.
 				Genome g = db.getGenomeRelease(genomeVersion);
 
+				//Get the path of the genome.
 				String genomeFolderPath = g.folderPath;
+				//Get the prefix of the genome files.
 				String genomeFilePrefix = g.getFilePrefix();
 
 				if(genomeFolderPath == null){
@@ -210,18 +209,12 @@ public class ProcessCommand extends Command {
 							"genomeVersion: " + genomeVersion + "\n");
 				}
 
+				//Set parameter on index 1 to the path to the genomefolder + the name of the genome files.
 				parameters[1] = genomeFolderPath + genomeFilePrefix;
-				//parameters[1] = "/var/www/data/genome_releases/Rat/d_melanogaster_fb5_22";
-
-
-				//Prints for checking what filepaths are given by database.
-				//	System.err.println("Filepath.getKey(): " + filepaths.getKey());
-				//	System.err.println("Filepath.getValue(): " + filepaths.getValue());
 
 				try {
 
 					processHandler.executeProcess("rawToProfile", parameters, filepaths.getKey(), filepaths.getValue());
-					//processHandler.executeProcess("rawToProfile", parameters, "/home/pvt/infileDir", "/home/pvt/outfileDir/");
 					System.out.println("------------------Running execute with parameters:--------------------");
 					for(String s : parameters){
 						System.out.println("Parameter: " + s);
