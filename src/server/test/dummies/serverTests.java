@@ -17,7 +17,7 @@ public class serverTests {
 //		Annotations.sendAddAnnotation("invalid annotation 0123456789!!!!!!!!!едц");
 
 
-		Process.sendRawToProfile();
+//		Process.sendRawToProfile();
 //		GenomeRelease.sendAddGenomeRelease("HumanitariumTest");
 //		GenomeRelease.sendGetGenomeReleaseSpecies("Fly");
 //		Login.sendTokenValidation();
