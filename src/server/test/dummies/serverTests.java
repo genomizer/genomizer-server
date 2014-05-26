@@ -14,7 +14,7 @@ public class serverTests {
 		//specialannotest();
 //		processtest();
 		//for(int i = 0; i < 100; i++)
-		//	Process.sendGetProcessStatus();
+//			Process.sendGetProcessStatus();
 		//Annotations.sendGetAnnotationInformation();
 
 		Process.sendRawToProfile();
@@ -65,6 +65,7 @@ public class serverTests {
 
 	public static void genometest() throws Exception {
 		GenomeRelease.sendGetGenomeRelease();
+		GenomeRelease.sendAddGenomeRelease("Fly");
 		GenomeRelease.sendGetGenomeReleaseSpecies("Fly");
 	}
 

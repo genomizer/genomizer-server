@@ -7,6 +7,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.InetSocketAddress;
 import java.net.URLDecoder;
 
+import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.Executor;
 
@@ -42,6 +43,7 @@ public class Doorman {
 		httpServer.createContext("/process", createHandler());
 		httpServer.createContext("/sysadm", createHandler());
 		httpServer.createContext("/genomeRelease", createHandler());
+		httpServer.createContext("/token", createHandler());
 
 		httpServer.setExecutor(new Executor() {
 			@Override
@@ -94,6 +96,8 @@ public class Doorman {
 					case "/process":
 						exchange(exchange, CommandType.GET_PROCESS_STATUS_COMMAND);
 						break;
+					case "/token":
+						exchange(exchange, CommandType.IS_TOKEN_VALID_COMMAND);
 					}
 					break;
 
@@ -203,10 +207,11 @@ public class Doorman {
 		System.out.println("Exchange: " + type);
 
 		if(type != CommandType.LOGIN_COMMAND) {
-			try {
-				uuid =  exchange.getRequestHeaders().get("Authorization").get(0);
+			List<String> auth = exchange.getRequestHeaders().get("Authorization");
+			if (auth != null && Authenticate.idExists(auth.get(0))) {
+				uuid = auth.get(0);
 				Authenticate.updateLatestRequest(uuid);
-			} catch(NullPointerException e) {
+			} else {
 				System.out.println("Unauthorized request!");
 				Response errorResponse = new MinimalResponse(StatusCode.UNAUTHORIZED);
 				try {
@@ -219,7 +224,6 @@ public class Doorman {
 				scanner.close();
 				return;
 			}
-		} else {
 		}
 		while(scanner.hasNext()) {
 			body = body.concat(" " + scanner.next());
@@ -229,7 +233,7 @@ public class Doorman {
 		Response response = null;
 
 		try {
-		username = Authenticate.getUsername(uuid);
+		//username = Authenticate.getUsername(uuid);
 		System.err.println("Username: " + username + "\n");
 		} catch(Exception e ) {
 			e.printStackTrace();
@@ -239,7 +243,7 @@ public class Doorman {
 
 		try {
 			String header = URLDecoder.decode(exchange.getRequestURI().toString(), "UTF-8");
-			response = commandHandler.processNewCommand(body, header, username, type);
+			response = commandHandler.processNewCommand(body, header, uuid, type);
 
 		} catch(Exception e ) {
 			e.printStackTrace();
