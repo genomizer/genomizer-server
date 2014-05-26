@@ -2,13 +2,11 @@ package database.testSuite.unitTests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.List;
 
 import org.junit.After;
@@ -85,15 +83,14 @@ public class GenomeReleaseTableTests {
     									throws Exception {
 
     	dbac.addGenomeRelease("test12", "Bear", "test12.txt");
-    	System.out.println(dbac.getGenomeRelease("test12"));
     	dbac.addGenomeRelease("test12", "Bear", "test12.txt");
     }
 
     @Test
     public void shouldReturnNullWhenGenomeReleaseDontExist()
-    									throws SQLException, IOException {
+    									throws Exception {
 
-    	assertFalse(dbac.removeGenomeRelease("thisFileMightNotExist"));
+    	assertNull(dbac.getGenomeRelease("pangabanga"));
 
     }
 
@@ -101,6 +98,7 @@ public class GenomeReleaseTableTests {
     public void shouldReturnRightNamesOfGenomeVersions() throws Exception {
         List<Genome> genomeList = dbac.getAllGenomReleasesForSpecies("Human");
 
+        assertEquals(3, genomeList.size());
         assertTrue(searchGenomeForVersion(genomeList, "hg38"));
         assertTrue(searchGenomeForVersion(genomeList, "hg19"));
         assertTrue(searchGenomeForVersion(genomeList, "hg18"));
@@ -124,6 +122,11 @@ public class GenomeReleaseTableTests {
         assertEquals(expectedUploadURL, uploadURL);
     }
 
+    @Test (expected = IOException.class)
+    public void shouldThrowIOExceptionWhenAttemptingToAddDuplicateFile() throws Exception {
+        dbac.addGenomeRelease("hg38", "Human", "hg38.fasta");
+    }
+
     @Test
     public void shouldUpdateDatabaseUponAdd() throws Exception {
         dbac.addGenomeRelease("hg40", "Human", "hg40.fasta");
@@ -134,18 +137,12 @@ public class GenomeReleaseTableTests {
     }
 
     @Test
-    public void shouldReturnNullForInvalidVersionOponGet() throws Exception {
-        Genome genome = dbac.getGenomeRelease("hg50");
-        assertNull(genome);
-    }
-
-    @Test
     public void shouldReturnFileName() throws Exception {
         dbac.addGenomeRelease("rn50", "Rat", "aRatFile.fasta");
         Genome genome = dbac.getGenomeRelease("rn50");
 
         assertEquals(1, genome.getFiles().size());
-        assertNotNull(genome.getFiles().get(0));
+        assertEquals("aRatFile.fasta", genome.getFiles().get(0));
         assertEquals(genome.species, "Rat");
         assertEquals(genome.genomeVersion, "rn50");
 
@@ -203,32 +200,21 @@ public class GenomeReleaseTableTests {
 
     @Test
     public void shouldBeAbleToGetAllGenomeReleases() throws Exception {
-        ti.removeTuplesKeepConnection();
-        ti.addTuples();
         List<Genome> genomes = dbac.getAllGenomReleases();
         assertEquals(6, genomes.size());
     }
 
     @Test
-    public void shouldBeAbleToSetStatusDone() throws Exception {
-        ti.removeTuplesKeepConnection();
-        dbac.addGenomeRelease("V1", "Frog", "Froggy1.txt");
-        dbac.genomeReleaseFileUploaded("V1", "Froggy1.txt");
-        Genome g = dbac.getGenomeRelease("V1");
-        assertEquals(1, g.getFiles().size());
-    }
-
-    @Test
     public void shouldGetFilePrefix() throws Exception {
-        Genome g = dbac.getGenomeRelease("hg38");
-        assertEquals("hg38(2)", g.getFilePrefix());
+        Genome g = dbac.getGenomeRelease("hg18");
+        assertEquals("hg18", g.getFilePrefix());
     }
 
     @Test
-    public void shouldReturnNullIfSearchGenomReleaseThatDontExist()
-    											throws SQLException{
-
-    	assertNull(dbac.getAllGenomReleasesForSpecies("Dog"));
+    public void shouldGetFilePrefixForComplexFileNames() throws Exception {
+        dbac.addGenomeRelease("rua888", "Superhero", "superheroRua888.ping.pong");
+        Genome g = dbac.getGenomeRelease("rua888");
+        assertEquals("superheroRua888", g.getFilePrefix());
     }
 
     @Test
@@ -236,7 +222,7 @@ public class GenomeReleaseTableTests {
 
     	tearDown();
 
-    	assertEquals(0,dbac.getAllGenomReleases().size());
+    	assertEquals(0, dbac.getAllGenomReleases().size());
     }
 
 

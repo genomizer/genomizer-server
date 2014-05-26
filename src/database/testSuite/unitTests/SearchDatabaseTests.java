@@ -25,16 +25,15 @@ public class SearchDatabaseTests {
     @BeforeClass
     public static void setupBeforeClass() throws Exception {
 
-    	ti = new TestInitializer();
-    	dbac = ti.setup();
+        ti = new TestInitializer();
+        dbac = ti.setup();
     }
 
     @AfterClass
     public static void undoAllChanges() throws SQLException {
 
-    	ti.removeTuples();
+        ti.removeTuples();
     }
-
 
     @Test
     public void shouldBeAbleToSearchForExperimentUsingPubMedString()
@@ -103,8 +102,8 @@ public class SearchDatabaseTests {
 
         assertEquals(1, experiments.size());
         assertEquals(1, experiments.get(0).getFiles().size());
-        assertEquals("/var/www/data/Exp1/raw/file1.fastq",
-        		experiments.get(0).getFiles().get(0).path);
+        assertEquals("/var/www/data/Exp1/raw/file1.fastq", experiments.get(0)
+                .getFiles().get(0).path);
     }
 
     @Test
@@ -113,18 +112,18 @@ public class SearchDatabaseTests {
                 .search("Human[SpEcies] NoT ChiLd[DeveLopment Stage]");
 
         assertEquals(1, experiments.size());
-        assertEquals("Adult", experiments.get(0).getAnnotations()
-        		.get("Development Stage"));
+        assertEquals("Adult",
+                experiments.get(0).getAnnotations().get("Development Stage"));
     }
 
     @Test
     public void shouldBeAbleToSearchStartingWithNot() throws Exception {
 
         List<Experiment> experiments = dbac
-               .search("not ChiLd[Development Stage]");
+                .search("not ChiLd[Development Stage]");
 
         assertEquals(2, experiments.size());
-   }
+    }
 
     @Test
     public void shouldBeAbleToSearchUsingNOT() throws Exception {
@@ -142,79 +141,76 @@ public class SearchDatabaseTests {
         List<Experiment> experiments = dbac
                 .search("Exp1[ExpID] And Raw[FileType]");
 
-        for (Experiment e: experiments) {
+        for (Experiment e : experiments) {
             System.out.println(e.toString());
         }
     }
 
     @Test
-    public void shouldBeAbleToSearchCaseInsensitive()
-    		throws IOException, SQLException, ParseException {
+    public void shouldBeAbleToSearchCaseInsensitive() throws IOException,
+            SQLException, ParseException {
 
         List<Experiment> experiments = dbac
                 .search("EXp1[ExPiD] AND RaW[FileTYPE]");
 
-        for (Experiment e: experiments) {
+        for (Experiment e : experiments) {
             System.out.println(e.toString());
         }
     }
 
     @Test
-    public void shouldBeAbleToSearchMoreCaseInsensitive()
-    		throws IOException, SQLException, ParseException {
+    public void shouldBeAbleToSearchMoreCaseInsensitive() throws IOException,
+            SQLException, ParseException {
 
-        List<Experiment> experiments = dbac.search("ExP1[ExpID] and " +
-        		"RAw[FileType] aND /var/www/data/Exp1/raw/" +
-        		"file1_input.fastq[FilePath]");
+        List<Experiment> experiments = dbac.search("ExP1[ExpID] and "
+                + "RAw[FileType] aND /var/www/data/Exp1/raw/"
+                + "file1_input.fastq[FilePath]");
 
-        for (Experiment e: experiments) {
+        for (Experiment e : experiments) {
             System.out.println(e.toString());
         }
     }
 
     @Test
-    public void shouldBeAbleToSearchForExperimentUsingDate()
-            throws Exception {
+    public void shouldBeAbleToSearchForExperimentUsingDate() throws Exception {
 
-    	List<Experiment> elist = dbac.search("exp2[expid]");
-    	Date date = elist.get(0).getFiles().get(0).date;
-    	SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+        List<Experiment> elist = dbac.search("exp2[expid]");
+        Date date = elist.get(0).getFiles().get(0).date;
+        SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd");
 
-    	String query = df.format(date) + "[date]";
-    	List<Experiment> experiments = dbac.search(query);
+        String query = df.format(date) + "[date]";
+        List<Experiment> experiments = dbac.search(query);
 
-    	assertEquals(experiments.get(0).getFiles().get(0).date.getTime(),
-    			date.getTime());
+        assertEquals(experiments.get(0).getFiles().get(0).date.getTime(),
+                date.getTime());
     }
 
     @Test
-    public void shouldBeAbleToSearchForExperimentUsingFileID()
-            throws Exception {
+    public void shouldBeAbleToSearchForExperimentUsingFileID() throws Exception {
 
-      	List<Experiment> elist = dbac.search("exp2[expid] ANd UCSC[author]");
+        List<Experiment> elist = dbac.search("exp2[expid] ANd UCSC[author]");
 
-    	int id = elist.get(0).getFiles().get(0).id;
+        int id = elist.get(0).getFiles().get(0).id;
 
-    	String query = Integer.toString(id) + "[fileid]";
-    	List<Experiment> experiments = dbac.search(query);
+        String query = Integer.toString(id) + "[fileid]";
+        List<Experiment> experiments = dbac.search(query);
 
-    	assertEquals(experiments.get(0).getFiles().get(0).author, "UCSC");
-    	assertEquals(elist.get(0).getFiles().get(0).expId, "Exp2");
+        assertEquals(experiments.get(0).getFiles().get(0).author, "UCSC");
+        assertEquals(elist.get(0).getFiles().get(0).expId, "Exp2");
     }
 
     @Test
-    public void shouldBeAbleToSearchOnPath()
-            throws Exception {
+    public void shouldBeAbleToSearchOnPath() throws Exception {
 
-        List<Experiment> elist = dbac.search("/var/www/data/Exp1/raw/" +
-        		"file1.fastq[path]");
+        List<Experiment> elist = dbac.search("/var/www/data/Exp1/raw/"
+                + "file1.fastq[path]");
 
         assertEquals(1, elist.size());
     }
 
     @Test
     public void shouldGetAllExperimentsWhenSearchingAnEmptySring()
-    		throws Exception {
+            throws Exception {
 
         List<Experiment> exps = dbac.search("");
         assertEquals(4, exps.size());
@@ -223,12 +219,22 @@ public class SearchDatabaseTests {
 
         assertEquals(4, e.getAnnotations().size());
         assertEquals(2, e.getFiles().size());
-        e.toString();
+    }
+
+    @Test
+    public void searchPrintTest() throws Exception {
+
+        String pms = "not[sex]";
+
+        List<Experiment> exps = dbac.search(pms);
+        for (Experiment e : exps) {
+            System.out.println(e.toString());
+        }
     }
 
     private Experiment getExp(String string, List<Experiment> exps) {
 
-        for (Experiment e: exps) {
+        for (Experiment e : exps) {
             if (e.getID().equalsIgnoreCase(string)) {
                 return e;
             }
