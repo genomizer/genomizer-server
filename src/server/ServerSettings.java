@@ -16,8 +16,8 @@ public class ServerSettings {
 	public static String downloadURL = "/download.php?path=";
 	public static String uploadURL = "/upload.php?path=";
 	public static int genomizerPort = 7000;
-	public static String passwordHash = "";
-	public static String passwordSalt = "123456";
+	public static String passwordHash = "2fd26e9aea528153a865257a723f6d4859e9f6c4a6775c003ae91297f619c6e8";
+	public static String passwordSalt = "genomizer";
 
 	public static void writeSettings(String path){
 		try {

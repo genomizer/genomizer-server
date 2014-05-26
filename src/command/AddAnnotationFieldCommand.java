@@ -7,7 +7,6 @@ import java.util.regex.Pattern;
 
 import response.AddAnnotationFieldResponse;
 import response.ErrorResponse;
-import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
 import com.google.gson.annotations.Expose;

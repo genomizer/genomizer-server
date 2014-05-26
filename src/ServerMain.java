@@ -34,8 +34,6 @@ public class ServerMain {
 			System.out.println("Settings file exists, reading it...");
 			readSettingsFile("settings.cfg");
 			System.out.println("Done");
-			System.out.println("Writing settings file");
-			System.out.println("Done");
 		}
 
 		CommandLineParser comline = new BasicParser();
@@ -48,12 +46,10 @@ public class ServerMain {
 //		comOptions.addOption("p", "port", true, "the listening port");
 		CommandLine com = comline.parse(comOptions, args);
 		if (com.hasOption('p')) {
-			port = Integer.parseInt(com.getOptionValue('p'));
+			ServerSettings.genomizerPort = Integer.parseInt(com.getOptionValue('p'));
 		}
 		if (com.hasOption("debug")) {
 			Debug.isEnabled = true;
-		} else {
-			Debug.isEnabled = false;
 		}
 		if (com.hasOption('d')) {
 			String database = com.getOptionValue('d');
@@ -77,10 +73,10 @@ public class ServerMain {
 
 		CommandHandler commandHandler = new CommandHandler();
 		try {
-			Doorman doorman = new Doorman(commandHandler, port);
+			Doorman doorman = new Doorman(commandHandler, ServerSettings.genomizerPort);
 			doorman.start();
 			(new Thread(new InactiveUuidsRemover())).start();
-			System.out.println("Doorman started on port " + port);
+			System.out.println("Doorman started on port " + ServerSettings.genomizerPort);
 			if(Debug.isEnabled) {
 				System.out.println("Debug is enabled.");
 			}
