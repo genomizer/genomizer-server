@@ -72,19 +72,19 @@ public class DeleteGenomeReleaseCommand extends Command {
 		try {
 			db = initDB();
 			ArrayList<Genome> genomeReleases=db.getAllGenomReleasesForSpecies(specie);
-
-			for(Genome g : genomeReleases) {
-				if (g.genomeVersion.equals(specie) && g.species.equals(genomeVersion)) {
-					boolean result = db.removeGenomeRelease(genomeVersion);
-					if(result) {
-						return new DeleteGenomeReleaseResponse(StatusCode.OK);
-					} else {
-						return new ErrorResponse(StatusCode.BAD_REQUEST, "Removeing did not work.");
+			if(genomeReleases != null) {
+				for(Genome g : genomeReleases) {
+					if (g != null && g.genomeVersion.equals(this.genomeVersion) && g.species.equals(this.specie)) {
+						boolean result = db.removeGenomeRelease(genomeVersion);
+						if(result) {
+							return new DeleteGenomeReleaseResponse(StatusCode.OK);
+						} else {
+							return new ErrorResponse(StatusCode.BAD_REQUEST, "Removeing did not work.");
+						}
 					}
 				}
 			}
-
-			return new ErrorResponse(StatusCode.BAD_REQUEST, genomeVersion + " or " + specie + " does not exist.");
+			return new ErrorResponse(StatusCode.BAD_REQUEST, "Version " +  genomeVersion + " or specie " + specie + " does not exist.");
 
 		} catch (SQLException | IOException e) {
 			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
