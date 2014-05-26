@@ -15,8 +15,7 @@ public class serverTests {
 		//Annotations.sendDeleteAnnotation("Test43???");
 		//Annotations.sendDeleteAnnotation("JONAS???");
 //		Annotations.sendGetAnnotationInformation();
-		Annotations.sendAddAnnotation("invalid annotation 0123456789!!!!!!!!!едц");
-
+		Annotations.sendGetAnnotationInformation();
 		//Process.sendRawToProfile();
 //		GenomeRelease.sendAddGenomeRelease("HumanitariumTest");
 
