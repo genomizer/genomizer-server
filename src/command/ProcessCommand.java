@@ -14,6 +14,7 @@ import response.ProcessResponse;
 import response.Response;
 import response.StatusCode;
 import server.DatabaseSettings;
+import server.Debug;
 import server.ResponseLogger;
 
 import com.google.gson.annotations.Expose;
@@ -57,39 +58,39 @@ public class ProcessCommand extends Command {
 
 
 		if(username == null){
-			System.err.println("ProcessCommand - Validate\n" +
+			Debug.log("ProcessCommand - Validate\n" +
 					"username is null");
 			return false;
 		}
 		if(processtype == null){
-			System.err.println("ProcessCommand - Validate\n" +
+			Debug.log("ProcessCommand - Validate\n" +
 					"processtype is null");
 			return false;
 		}
 		if(metadata == null){
-			System.err.println("ProcessCommand - Validate\n" +
+			Debug.log("ProcessCommand - Validate\n" +
 					"metadata is null");
 			return false;
 		}
 		if(genomeVersion == null){
-			System.err.println("ProcessCommand - Validate\n" +
+			Debug.log("ProcessCommand - Validate\n" +
 					"genomerelease is null");
 			return false;
 		}
 
 		if(expid == null){
-			System.err.println("ProcessCommand - Validate\n" +
+			Debug.log("ProcessCommand - Validate\n" +
 					"expid is null");
 			return false;
 		}
 
 		if(parameters == null){
-			System.err.println("ProcessCommand - Validate\n" +
+			Debug.log("ProcessCommand - Validate\n" +
 					"parameters are null");
 			return false;
 		}
 		if(author == null){
-			System.err.println("ProcessCommand - Validate\n" +
+			Debug.log("ProcessCommand - Validate\n" +
 					"author is null");
 			return false;
 		}
@@ -106,28 +107,28 @@ public class ProcessCommand extends Command {
 		}
 
 		if(username.length() > MaxSize.USERNAME || username.length() <= 0){
-			System.err.println("Username has the wrong length of annotation");
+			Debug.log("Username has the wrong length of annotation");
 			return false;
 		}
 		if(processtype.length() <= 0){
-			System.err.println("Processtype has the wrong length of annotation");
+			Debug.log("Processtype has the wrong length of annotation");
 			return false;
 		}
 
 		if(metadata.length() > MaxSize.FILE_METADATA || doesNotHaveCorrectLength(metadata, CanBeNull.FILE_METADATA)){
-			System.err.println("Metadata [" + metadata + "] has the wrong length of annotation");
+			Debug.log("Metadata [" + metadata + "] has the wrong length of annotation");
 			return false;
 		}
 		if(genomeVersion.length() > MaxSize.GENOME_VERSION || doesNotHaveCorrectLength(genomeVersion, CanBeNull.GENOME_VERSION)){
-			System.err.println("GenomeRelease has the wrong length of annotation");
+			Debug.log("GenomeRelease has the wrong length of annotation");
 			return false;
 		}
 		if(author.length() > MaxSize.FILE_AUTHOR || doesNotHaveCorrectLength(author, CanBeNull.FILE_AUTHOR)){
-			System.err.println("Author has the wrong length of annotation");
+			Debug.log("Author has the wrong length of annotation");
 			return false;
 		}
 		if(expid.length() > MaxSize.EXPID || doesNotHaveCorrectLength(expid, CanBeNull.EXPID)){
-			System.err.println("Expid has the wrong length of annotation");
+			Debug.log("Expid has the wrong length of annotation");
 			return false;
 		}
 
@@ -136,7 +137,7 @@ public class ProcessCommand extends Command {
 	}
 
 	private boolean doesNotHaveCorrectLength(String field, boolean canBeNull){
-		System.out.println("field: "+ field + " length: " + field.length() + " canbenull: " + canBeNull);
+		Debug.log("field: "+ field + " length: " + field.length() + " canbenull: " + canBeNull);
 		if(field.length() <= 0){
 			if(canBeNull == false){
 				return true;
@@ -215,9 +216,9 @@ public class ProcessCommand extends Command {
 				try {
 
 					processHandler.executeProcess("rawToProfile", parameters, filepaths.getKey(), filepaths.getValue());
-					System.out.println("------------------Running execute with parameters:--------------------");
+					Debug.log("------------------Running execute with parameters:--------------------");
 					for(String s : parameters){
-						System.out.println("Parameter: " + s);
+						Debug.log("Parameter: " + s);
 					}
 				} catch (ProcessException e) {
 					e.printStackTrace();
@@ -232,7 +233,7 @@ public class ProcessCommand extends Command {
 				}
 				break;
 			default:
-				System.err.println("Unknown process type in processcommand execute");
+				Debug.log("ERROR: Unknown process type in processcommand execute");
 				db.close();
 				ResponseLogger.log(username, "Unknown process type in processcommand execute when running " + processtype + " on experiment" + expid + "\n"+
 						"metadata: " + metadata + "\n"+

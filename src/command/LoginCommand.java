@@ -3,6 +3,7 @@ import response.ErrorResponse;
 import response.LoginResponse;
 import response.Response;
 import response.StatusCode;
+import server.Debug;
 import authentication.Authenticate;
 import authentication.LoginAttempt;
 
@@ -46,10 +47,10 @@ public class LoginCommand extends Command {
 		LoginAttempt login = Authenticate.login(username, password);
 
 		if(login.wasSuccessful()) {
-			System.err.println("LOGIN WAS SUCCESSFUL FOR: "+ username + ". GAVE UUID: " + Authenticate.getID(username));
+			Debug.log("LOGIN WAS SUCCESSFUL FOR: "+ username + ". GAVE UUID: " + Authenticate.getID(username));
 			return new LoginResponse(200, login.getUUID());
 		} else {
-			System.err.println("LOGIN WAS UNSUCCESSFUL FOR: " + username + ". REASON: " + login.getErrorMessage());
+			Debug.log("LOGIN WAS UNSUCCESSFUL FOR: " + username + ". REASON: " + login.getErrorMessage());
 			return new ErrorResponse(StatusCode.UNAUTHORIZED, login.getErrorMessage());
 		}
 	}
