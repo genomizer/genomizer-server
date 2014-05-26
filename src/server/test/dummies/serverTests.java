@@ -12,8 +12,11 @@ public class serverTests {
 		//specialannotest();
 		//for(int i = 0; i < 100; i++)
 //			Process.sendGetProcessStatus();
-		//Annotations.sendGetAnnotationInformation();
+		//Annotations.sendDeleteAnnotation("Test43???");
+		//Annotations.sendDeleteAnnotation("JONAS???");
+		Annotations.sendGetAnnotationInformation();
 
+		//exptest();
 		Login.logout();
 	}
 
@@ -47,12 +50,12 @@ public class serverTests {
 		//Annotations.sendGetAnnotationInformation();
 	}
 
-	public void exptest() throws Exception {
-		Experiment.sendDeleteExperiment("testExp22");
-		Experiment.sendAddExperiment("testExp22");
-		Experiment.sendGetExperiment("testExp22");
-		Experiment.sendGetExperiment("testExp22gfert3453");
-		Experiment.sendDeleteExperiment("testExp22");
+	public static void exptest() throws Exception {
+		//Experiment.sendDeleteExperiment("testExp22");
+		Experiment.sendAddExperiment("testExp2233");
+		//Experiment.sendGetExperiment("testExp22");
+		//Experiment.sendGetExperiment("testExp22gfert3453");
+		//Experiment.sendDeleteExperiment("testExp22");
 	}
 
 	public static void searchtest(String query) throws Exception {
