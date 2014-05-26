@@ -9,6 +9,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import database.FilePathGenerator;
 import database.constants.ServerDependentValues;
@@ -52,10 +54,10 @@ public class GenomeMethods {
 
     public Genome getGenomeRelease(String genomeVersion) throws SQLException {
 
-        String query = "SELECT * FROM Genome_Release " +
-        		"JOIN Genome_Release_Files " +
-        		"ON (Genome_Release.Version = Genome_Release_Files.Version) " +
-        		"WHERE (Genome_Release.Version ~~* ?)";
+        String query = "SELECT * FROM Genome_Release "
+                + "JOIN Genome_Release_Files "
+                + "ON (Genome_Release.Version = Genome_Release_Files.Version) "
+                + "WHERE (Genome_Release.Version ~~* ?)";
 
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setString(1, genomeVersion);
@@ -81,9 +83,10 @@ public class GenomeMethods {
      * @return String The upload URL.
      * @throws SQLException
      *             if adding query failed.
+     * @throws IOException
      */
     public String addGenomeRelease(String genomeVersion, String species,
-            String filename) throws SQLException {
+            String filename) throws SQLException, IOException {
 
         String folderPath = fpg.generateGenomeReleaseFolder(genomeVersion,
                 species);
@@ -106,8 +109,13 @@ public class GenomeMethods {
             stmt.close();
         }
 
-        String query2 = "INSERT INTO Genome_Release_Files " +
-                "(Version, FileName) VALUES (?, ?)";
+        if (genomeReleaseFileExists(genomeVersion, filename)) {
+            throw new IOException(filename
+                    + " already exists for this genome release!");
+        }
+
+        String query2 = "INSERT INTO Genome_Release_Files "
+                + "(Version, FileName) VALUES (?, ?)";
 
         stmt = conn.prepareStatement(query2);
         stmt.setString(1, genomeVersion);
@@ -120,19 +128,47 @@ public class GenomeMethods {
         return filePathBuilder.toString();
     }
 
+    private boolean genomeReleaseFileExists(String genomeVersion,
+            String filename) throws SQLException {
+
+        Genome g = getGenomeRelease(genomeVersion);
+        if (g == null) {
+            return false;
+        }
+        if (inCaseSensitiveSearchKeys(filename, g.getFilesWithStatus()) != null) {
+            return true;
+        }
+        return false;
+    }
+
+    private String inCaseSensitiveSearchKeys(String targetKey,
+            Map<String, String> map) {
+        for (Entry<String, String> entry : map.entrySet()) {
+            if (entry.getKey().equalsIgnoreCase(targetKey)) {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
+
     /**
      * Sets the status for a genome release file to "Done".
-     * @param version the file version.
-     * @param fileName the file name.
+     *
+     * @param version
+     *            the file version.
+     * @param fileName
+     *            the file name.
      * @return the number of tuples updated.
      * @throws SQLException
      */
-    public int fileReadyForDownload(String version, String fileName) throws SQLException {
+    public int fileReadyForDownload(String version, String fileName)
+            throws SQLException {
 
-        String statusUpdateString = "UPDATE Genome_Release_Files SET Status = 'Done' " +
-                "WHERE Version = ? AND FileName = ?";
+        String statusUpdateString = "UPDATE Genome_Release_Files SET Status = 'Done' "
+                + "WHERE Version = ? AND FileName = ?";
 
-        PreparedStatement statusUpdate = conn.prepareStatement(statusUpdateString);
+        PreparedStatement statusUpdate = conn
+                .prepareStatement(statusUpdateString);
         statusUpdate.setString(1, version);
         statusUpdate.setString(2, fileName);
 
@@ -157,14 +193,14 @@ public class GenomeMethods {
             throws SQLException, IOException {
 
         if (isGenomeVersionUsed(genomeVersion)) {
-            throw new IOException(genomeVersion + " is used by at least one" +
-            						" file and can therefore not be removed");
+            throw new IOException(genomeVersion + " is used by at least one"
+                    + " file and can therefore not be removed");
         }
 
         Genome g = getGenomeRelease(genomeVersion);
 
-        if(g == null){
-        	return false;
+        if (g == null) {
+            return false;
         }
         File genomeReleaseFolder = new File(fpg.getGenomeReleaseFolderPath(
                 g.genomeVersion, g.species));
@@ -173,8 +209,7 @@ public class GenomeMethods {
             recursiveDelete(genomeReleaseFolder);
         }
 
-        String query = "DELETE FROM Genome_Release " +
-                "WHERE Version ~~* ?";
+        String query = "DELETE FROM Genome_Release " + "WHERE Version ~~* ?";
 
         PreparedStatement stmt;
 
@@ -186,7 +221,7 @@ public class GenomeMethods {
     }
 
     private boolean isGenomeVersionUsed(String genomeVersion)
-    									throws SQLException {
+            throws SQLException {
         String query = "SELECT * FROM File WHERE GRVersion = ?";
         PreparedStatement ps = conn.prepareStatement(query);
         ps.setString(1, genomeVersion);
@@ -209,10 +244,10 @@ public class GenomeMethods {
     public ArrayList<Genome> getAllGenomReleasesForSpecies(String species)
             throws SQLException {
 
-        String query = "SELECT * FROM Genome_Release " +
-                "JOIN Genome_Release_Files " +
-                "ON (Genome_Release.Version = Genome_Release_Files.Version) " +
-                "WHERE (Genome_Release.Species ~~* ?) ORDER BY Genome_Release.Version";
+        String query = "SELECT * FROM Genome_Release "
+                + "JOIN Genome_Release_Files "
+                + "ON (Genome_Release.Version = Genome_Release_Files.Version) "
+                + "WHERE (Genome_Release.Species ~~* ?) ORDER BY Genome_Release.Version";
 
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setString(1, species);
@@ -222,8 +257,8 @@ public class GenomeMethods {
 
         boolean foundAnything = rs.next();
 
-        if(!foundAnything){
-        	return null;
+        if (!foundAnything) {
+            return null;
         }
 
         while (!rs.isAfterLast()) {
@@ -249,9 +284,8 @@ public class GenomeMethods {
     public ChainFile getChainFile(String fromVersion, String toVersion)
             throws SQLException {
 
-        String query = "SELECT * FROM Chain_File NATURAL JOIN Chain_File_Files" +
-        		" WHERE (FromVersion ~~* ?)" +
-                " AND (ToVersion ~~* ?)";
+        String query = "SELECT * FROM Chain_File NATURAL JOIN Chain_File_Files"
+                + " WHERE (FromVersion ~~* ?)" + " AND (ToVersion ~~* ?)";
         PreparedStatement stmt = conn.prepareStatement(query);
 
         stmt.setString(1, fromVersion);
@@ -305,18 +339,17 @@ public class GenomeMethods {
         String insertQuery = "INSERT INTO Chain_File "
                 + "(FromVersion, ToVersion, FolderPath) VALUES (?, ?, ?)";
 
-        String insertQuery2 = "INSERT INTO Chain_File_Files " +
-        		"(FromVersion, ToVersion, FileName) " +
-        		"VALUES (?, ?, ?)";
+        String insertQuery2 = "INSERT INTO Chain_File_Files "
+                + "(FromVersion, ToVersion, FileName) " + "VALUES (?, ?, ?)";
 
         ChainFile cf = getChainFile(fromVersion, toVersion);
         if (cf == null) {
-	        PreparedStatement insertStat = conn.prepareStatement(insertQuery);
-	        insertStat.setString(1, fromVersion);
-	        insertStat.setString(2, toVersion);
-	        insertStat.setString(3, filePath);
-	        insertStat.executeUpdate();
-	        insertStat.close();
+            PreparedStatement insertStat = conn.prepareStatement(insertQuery);
+            insertStat.setString(1, fromVersion);
+            insertStat.setString(2, toVersion);
+            insertStat.setString(3, filePath);
+            insertStat.executeUpdate();
+            insertStat.close();
         }
 
         PreparedStatement stmt = conn.prepareStatement(insertQuery2);
@@ -357,9 +390,8 @@ public class GenomeMethods {
         }
         String filePath = cf.folderPath;
 
-
-		String query = "DELETE FROM Chain_File WHERE (FromVersion ~~* ?)"
-			+ " AND (ToVersion ~~* ?)";
+        String query = "DELETE FROM Chain_File WHERE (FromVersion ~~* ?)"
+                + " AND (ToVersion ~~* ?)";
 
         File chainFile = new File(filePath);
         File chainFolder = chainFile.getParentFile();
@@ -401,8 +433,8 @@ public class GenomeMethods {
     }
 
     public List<Genome> getAllGenomReleases() throws SQLException {
-        String query = "SELECT * FROM Genome_Release " +
-                "NATURAL JOIN Genome_Release_Files ";
+        String query = "SELECT * FROM Genome_Release "
+                + "NATURAL JOIN Genome_Release_Files ";
 
         PreparedStatement stmt = conn.prepareStatement(query);
         ResultSet rs = stmt.executeQuery();

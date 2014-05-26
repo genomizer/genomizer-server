@@ -54,4 +54,13 @@ public class Genome {
         }
         return fileName.substring(0, indexOfFirstDot);
     }
+
+    @Override
+    public String toString() {
+        return "Genome [genomeVersion=" + genomeVersion + ", species="
+                + species + ", folderPath=" + folderPath + ", files=" + files
+                + "]";
+    }
+
+
 }

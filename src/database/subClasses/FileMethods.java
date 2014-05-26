@@ -81,7 +81,11 @@ public class FileMethods {
             throw new IOException("The experiment " + expID
                     + " does not exist!");
         }
-        expID = e.getID();
+        expID = e.getID(); // Correct expID for in case sensitivity
+
+        if (fileType == FileTuple.RAW && e.getNrRawFiles() >= 2) {
+            throw new IOException("There are already two raw files for this experiment!");
+        }
 
         FileTuple ft = getProfile(e, metaData);
         String path;
@@ -111,6 +115,7 @@ public class FileMethods {
         switch (fileType) {
         case FileTuple.RAW:
             stmt.setString(2, "Raw");
+            genomeRelease = null;
             break;
         case FileTuple.PROFILE:
             stmt.setString(2, "Profile");

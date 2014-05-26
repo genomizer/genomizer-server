@@ -364,9 +364,10 @@ public class DatabaseAccessor {
      *             contains at least one file. (All files relating to an
      *             experiment must be deleted first before an experiment can be
      *             deleted from the database)
+     * @throws IOException
      */
-    public int deleteExperiment(String expId) throws SQLException {
-        return expMethods.deleteExperiment(expId, fpg.getRootDirectory());
+    public int deleteExperiment(String expId) throws SQLException, IOException {
+        return expMethods.deleteExperiment(expId);
     }
 
 
@@ -705,9 +706,10 @@ public class DatabaseAccessor {
      * 							for.
      * @return resCount int, the numer of rows affected by the change.
      * @throws SQLException, will be thrown if the psql query fails.
+     * @throws IOException
      */
     public int changeAnnotationRequiredField(String annoLabel,
-    											boolean required) throws SQLException{
+    											boolean required) throws SQLException, IOException{
     	return annoMethods.changeAnnotationRequiredField(annoLabel,required);
     }
 
@@ -761,6 +763,7 @@ public class DatabaseAccessor {
             String inputFileName, String metaData, String author,
             String uploader, boolean isPrivate, String genomeRelease)
             throws SQLException, IOException {
+
         return fileMethods.addNewFile(expID, fileType, fileName, inputFileName,
                 metaData, author, uploader, isPrivate, genomeRelease);
     }
@@ -947,11 +950,24 @@ public class DatabaseAccessor {
             String inputFileName, String metaData, String grVersion,
             String uploader, boolean isPrivate) throws SQLException,
             IOException {
+
         Experiment e = expMethods.getExperiment(expId);
+
+        if (e == null) {
+            throw new IOException(expId + " does not exist.");
+        }
+
+        Genome g = genMethods.getGenomeRelease(grVersion);
+        if (g == null) {
+            throw new IOException("Invalid Genome Release! " + grVersion + " does not exist");
+        }
+
         File profileFolder = new File(folderPath);
+
         if (!profileFolder.exists()) {
             throw new IOException("There are no profiles in this folder!");
         }
+
         for (File f : profileFolder.listFiles()) {
             if (!f.getName().equals(inputFileName)) {
                 fileMethods.addGeneratedFile(e.getID(),
@@ -1032,9 +1048,10 @@ public class DatabaseAccessor {
      *         should be saved.
      * @throws SQLException
      *             - if adding query failed.
+     * @throws IOException
      */
     public String addGenomeRelease(String genomeVersion, String species,
-            String filename) throws SQLException {
+            String filename) throws SQLException, IOException {
         return genMethods.addGenomeRelease(genomeVersion, species, filename);
     }
 

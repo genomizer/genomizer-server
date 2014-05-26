@@ -80,11 +80,12 @@ public class GenomeReleaseTableTests {
         assertEquals("hg19", g.genomeVersion);
     }
 
-    @Test(expected = SQLException.class)
+    @Test(expected = IOException.class)
     public void shouldThrowExceptionWhenAddFileAlreadyExist()
-    									throws SQLException {
+    									throws Exception {
 
     	dbac.addGenomeRelease("test12", "Bear", "test12.txt");
+    	System.out.println(dbac.getGenomeRelease("test12"));
     	dbac.addGenomeRelease("test12", "Bear", "test12.txt");
     }
 

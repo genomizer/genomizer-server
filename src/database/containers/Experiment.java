@@ -33,6 +33,16 @@ public class Experiment {
         return files;
     }
 
+    public int getNrRawFiles() {
+        int res = 0;
+        for (FileTuple ft: files) {
+            if (ft.type.equalsIgnoreCase("raw")) {
+                res ++;
+            }
+        }
+        return res;
+    }
+
     public void addFile(FileTuple ft) {
         files.add(ft);
     }
