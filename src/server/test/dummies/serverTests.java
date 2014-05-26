@@ -10,14 +10,16 @@ public class serverTests {
 		Login.login("servergroup", "umea@2014");
 
 		//processtest();
-		//searchtest("");
+		//searchtest("Fly[Species]");
 		//renameannotest();
 		//usertests();
 		//specialannotest();
-		processtest();
+		//processtest();
 		//for(int i = 0; i < 100; i++)
 		//	Process.sendGetProcessStatus();
 		//Annotations.sendGetAnnotationInformation();
+
+		genometest();
 
 		Login.logout();
 	}
@@ -64,7 +66,7 @@ public class serverTests {
 		Search.sendSearchRequest(query);
 	}
 
-	public void genometest() throws Exception {
+	public static void genometest() throws Exception {
 		GenomeRelease.sendGetGenomeRelease();
 		GenomeRelease.sendGetGenomeReleaseSpecies();
 	}
