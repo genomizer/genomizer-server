@@ -71,6 +71,7 @@ public class ParameterValidator extends Executor {
 
 	public boolean validateRatioCalculation(String string) throws ProcessException {
 		String[] ratio = parse(string);
+		System.out.println("ratioLength = " + ratio.length);
 		String firstParam = ratio[0];
 
 		float[] ratioFloat = new float[2];

@@ -206,13 +206,16 @@ public class RawToProfileConverter extends Executor {
 	private boolean ValidateParameters(String[] parameters)
 			throws ProcessException {
 		boolean isOk = true;
-		if(!validator.validateSmoothing(parameters[4])) {
+		if(checker.shouldRunSmoothing() && !validator.validateSmoothing(parameters[4])) {
 			isOk = false;
-		} else if(!validator.validateStep(parameters[5])) {
+		}
+		if(checker.shouldRunStep() && !validator.validateStep(parameters[5])) {
 			isOk = false;
-		} else if(!validator.validateRatioCalculation(parameters[6])) {
+		}
+		if(checker.shouldRunRatioCalc() && !validator.validateRatioCalculation(parameters[6])) {
 			isOk = false;
-		} else if(!validator.validateSmoothing(parameters[7])) {
+		}
+		if(checker.shouldRunRatioCalc() && !validator.validateSmoothing(parameters[7])) {
 			isOk = false;
 		}
 
@@ -323,12 +326,14 @@ public class RawToProfileConverter extends Executor {
 					String inFile = filesToSmooth[i].getAbsoluteFile()
 							.toString();
 					String outFile = filesToSmooth[i].getName();
-
+					SmoothingParameterChecker smoothChecker = SmoothingParameterChecker.SmoothingParameterCheckerFactory(parameters[4]);
+					// +"_"+getSmoothType+"_winSiz-" + "_minProbe-" + getMinProbe
+					outFile = outFile.substring(0, outFile.length() - 4)+ "_"+smoothChecker.getSmoothType()+"_winSiz-" + smoothChecker.getWindowSize() + "_minProbe-" + smoothChecker.getMinProbe();
 					if (stepSize != 1) {
-						outFile = outFile.substring(0, outFile.length() - 4)
+						outFile = outFile
 								+ "_step" + stepSize + ".sgr";
 					} else {
-						// TODO Fix filename to have parameters...
+						outFile = outFile + ".sgr";
 					}
 					outFile = file.toString() + "/" + outFile;
 
