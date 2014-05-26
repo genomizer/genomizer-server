@@ -28,6 +28,8 @@ public abstract class ServerAbstractTestClass {
 	protected String port = "7000";
 	protected String serverURL = "http://scratchy.cs.umu.se:" + port;
 	//protected String serverURL = "http://localhost:" + port;
+	protected String username = "epicon";
+	protected String password ="umea@2014";
 
 	/**
 	 * Method used to set the token that represents the users

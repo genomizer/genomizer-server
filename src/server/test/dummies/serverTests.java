@@ -8,17 +8,16 @@ public class serverTests {
 
 		Login.login("RobinO", "umea@2014");
 //		Login.login("Splutt", "hejhej"); // Should fail to login since user don't exist.
-
-//		genometest();
 		//usertests();
 		//specialannotest();
-//		processtest();
 		//for(int i = 0; i < 100; i++)
 //			Process.sendGetProcessStatus();
 		//Annotations.sendGetAnnotationInformation();
 
+
 		Process.sendRawToProfile();
 //		GenomeRelease.sendAddGenomeRelease("HumanitariumTest");
+
 
 
 		Login.logout();

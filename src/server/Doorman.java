@@ -67,7 +67,7 @@ public class Doorman {
 			@Override
 			public void handle(HttpExchange exchange) throws IOException {
 
-				System.out.println("\n-----------------\nNEW EXCHANGE: " + exchange.getHttpContext().getPath());
+				Debug.log("\n-----------------\nNEW EXCHANGE: " + exchange.getHttpContext().getPath());
 				switch(exchange.getRequestMethod()) {
 				case "GET":
 					switch(exchange.getHttpContext().getPath()) {
@@ -204,7 +204,7 @@ public class Doorman {
 		String body = "";
 		String uuid = null;
 		String username = null;
-		System.out.println("Exchange: " + type);
+		Debug.log("Exchange: " + type);
 
 		if(type != CommandType.LOGIN_COMMAND) {
 			List<String> auth = exchange.getRequestHeaders().get("Authorization");
@@ -212,7 +212,7 @@ public class Doorman {
 				uuid = auth.get(0);
 				Authenticate.updateLatestRequest(uuid);
 			} else {
-				System.out.println("Unauthorized request!");
+				Debug.log("Unauthorized request!");
 				Response errorResponse = new MinimalResponse(StatusCode.UNAUTHORIZED);
 				try {
 					respond(exchange, errorResponse);
@@ -234,12 +234,12 @@ public class Doorman {
 
 		try {
 		//username = Authenticate.getUsername(uuid);
-		System.err.println("Username: " + username + "\n");
+		Debug.log("Username: " + username + "\n");
 		} catch(Exception e ) {
 			e.printStackTrace();
 		}
 
-		System.out.println("Body from client: " + body);
+		Debug.log("Body from client: " + body);
 
 		try {
 			String header = URLDecoder.decode(exchange.getRequestURI().toString(), "UTF-8");
@@ -267,7 +267,7 @@ public class Doorman {
 
 		} else {
 			body = response.getBody();
-			System.out.println("Response: " + body.toString());
+			Debug.log("Response: " + body.toString());
 			exchange.sendResponseHeaders(response.getCode(), body.getBytes().length);
 
 			OutputStream os = exchange.getResponseBody();
@@ -276,6 +276,6 @@ public class Doorman {
 			os.close();
 		}
 
-		System.out.println("END OF EXCHANGE\n------------------");
+		Debug.log("END OF EXCHANGE\n------------------");
 	}
 }

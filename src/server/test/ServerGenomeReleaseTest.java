@@ -27,8 +27,8 @@ public class ServerGenomeReleaseTest extends ServerAbstractTestClass {
 	public void testAddDeleteAddDelete() throws Exception {
 
 		JsonObject jj = new JsonObject();
-		jj.addProperty("username", "jonas");
-		jj.addProperty("password", "losenord");
+		jj.addProperty("username", username);
+		jj.addProperty("password", password);
 		sendLogin(jj);
 
 		int firstAdd = addGenomeRelease();
@@ -55,8 +55,8 @@ public class ServerGenomeReleaseTest extends ServerAbstractTestClass {
 	public void addDuplicateValues() throws Exception {
 
 		JsonObject jj = new JsonObject();
-		jj.addProperty("username", "jonas");
-		jj.addProperty("password", "losenord");
+		jj.addProperty("username", username);
+		jj.addProperty("password", password);
 		sendLogin(jj);
 
 		int result = addGenomeRelease();
@@ -78,8 +78,8 @@ public class ServerGenomeReleaseTest extends ServerAbstractTestClass {
 	public void testDeleteWhenNotExist() throws Exception {
 
 		JsonObject jj = new JsonObject();
-		jj.addProperty("username", "jonas");
-		jj.addProperty("password", "losenord");
+		jj.addProperty("username", username);
+		jj.addProperty("password", password);
 		sendLogin(jj);
 
 		HttpURLConnection con = connect("DELETE", serverURL + "/genomeRelease/human22/hg999DNE2");
