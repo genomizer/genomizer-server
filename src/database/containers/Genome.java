@@ -58,5 +58,4 @@ public class Genome {
                 + species + ", folderPath=" + folderPath + ", files=" + files
                 + "]";
     }
-
 }
