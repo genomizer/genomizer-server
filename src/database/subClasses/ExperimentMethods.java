@@ -13,6 +13,12 @@ import database.containers.Annotation;
 import database.containers.Experiment;
 import database.containers.FileTuple;
 
+/**
+ * Class that contains all the methods for adding,changing, getting and removing
+ * Experiments in the database. This class is a subClass of databaseAcessor.java
+ *
+ * date: 2014-05-14 version: 1.0
+ */
 public class ExperimentMethods {
 
     private Connection conn;
