@@ -88,11 +88,6 @@ public class ProcessCommand extends Command {
 					"parameters are null");
 			return false;
 		}
-		if(author == null){
-			System.err.println("ProcessCommand - Validate\n" +
-					"author is null");
-			return false;
-		}
 
 		switch (processtype) {
 		case "rawtoprofile":

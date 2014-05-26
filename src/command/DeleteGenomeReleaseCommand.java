@@ -15,8 +15,8 @@ import response.StatusCode;
 /**
  * Class used to delete a genome release.
  *
- * @author tfy09jnn
- * @version 1.0
+ * @author tfy09jnn, Hugo Källström
+ * @version 1.1
  */
 public class DeleteGenomeReleaseCommand extends Command {
 
@@ -69,7 +69,6 @@ public class DeleteGenomeReleaseCommand extends Command {
 	public Response execute() {
 
 		DatabaseAccessor db = null;
-
 		try {
 			db = initDB();
 			ArrayList<Genome> genomeReleases=db.getAllGenomReleasesForSpecies(specie);
@@ -85,7 +84,7 @@ public class DeleteGenomeReleaseCommand extends Command {
 				}
 			}
 
-			return new ErrorResponse(StatusCode.BAD_REQUEST, genomeVersion + " does not exist.");
+			return new ErrorResponse(StatusCode.BAD_REQUEST, genomeVersion + " or " + specie + " does not exist.");
 
 		} catch (SQLException | IOException e) {
 			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());

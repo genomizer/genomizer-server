@@ -9,7 +9,7 @@ public class serverTests {
 		Login.login("huggab0y", "umea@2014");
 //		Login.login("Splutt", "hejhej"); // Should fail to login since user don't exist.
 
-//		genometest();
+		renameannotest();
 		//usertests();
 		//specialannotest();
 //		processtest();
@@ -64,9 +64,9 @@ public class serverTests {
 
 	public static void genometest() throws Exception {
 		GenomeRelease.sendDeleteGenomeReleaseSpecies("asd");
-//		GenomeRelease.sendGetGenomeRelease();
-//		GenomeRelease.sendAddGenomeRelease("Fly");
-//		GenomeRelease.sendGetGenomeReleaseSpecies("Fly");
+		GenomeRelease.sendGetGenomeRelease();
+		GenomeRelease.sendAddGenomeRelease("Fly");
+		GenomeRelease.sendGetGenomeReleaseSpecies("Fly");
 	}
 
 	public static void processtest() throws Exception {
