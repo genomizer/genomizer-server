@@ -14,7 +14,7 @@ import response.ErrorResponse;
 import response.ProcessResponse;
 import response.Response;
 import response.StatusCode;
-import server.DatabaseSettings;
+import server.ServerSettings;
 import server.Debug;
 import server.ResponseLogger;
 
@@ -162,7 +162,7 @@ public class ProcessCommand extends Command {
 
 		try {
 
-			db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
+			db = new DatabaseAccessor(ServerSettings.databaseUsername, ServerSettings.databasePassword, ServerSettings.databaseHost, ServerSettings.databaseName);
 			processHandler = new ProcessHandler();
 
 			switch(processtype){
@@ -172,7 +172,7 @@ public class ProcessCommand extends Command {
 				//filepaths = db.processRawToProfile(expid);
 
 				if(!db.isConnected()){
-					db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
+					db = new DatabaseAccessor(ServerSettings.databaseUsername, ServerSettings.databasePassword, ServerSettings.databaseHost, ServerSettings.databaseName);
 				}
 				//Get the genome information from the database.
 				Genome g = db.getGenomeRelease(genomeVersion);
@@ -289,7 +289,7 @@ public class ProcessCommand extends Command {
 			//TODO isPrivate hardcoded.
 			//TODO Check if the connection is open
 			if(!db.isConnected()){
-				db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
+				db = new DatabaseAccessor(ServerSettings.databaseUsername, ServerSettings.databasePassword, ServerSettings.databaseHost, ServerSettings.databaseName);
 			}
 			db.addGeneratedProfiles(expid, filepaths.getValue(), filepaths.getKey(), metadata, genomeVersion, username, false);
 		} catch (SQLException e) {

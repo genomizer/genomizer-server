@@ -59,7 +59,7 @@ public class Login {
 
 		con.setRequestMethod("GET");
 		con.setRequestProperty("Content-Type", "application/json");
-		con.setRequestProperty("Authorization", token.getToken() + "h2hj");
+		con.setRequestProperty("Authorization", token.getToken());
 		System.out.println(token.getToken());
 		System.out.println("\nSending 'GET' request to URL : " + obj.toString());
 		System.out.println("Response Body: " + testSettings.printResponse(con));
