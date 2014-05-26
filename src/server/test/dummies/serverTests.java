@@ -6,10 +6,10 @@ public class serverTests {
 
 	public static void main(String args[]) throws Exception {
 
-		Login.login("huggab0y", "umea@2014");
+		Login.login("RobinO", "umea@2014");
 //		Login.login("Splutt", "hejhej"); // Should fail to login since user don't exist.
 
-		genometest();
+//		genometest();
 		//usertests();
 		//specialannotest();
 //		processtest();
@@ -17,6 +17,7 @@ public class serverTests {
 		//	Process.sendGetProcessStatus();
 		//Annotations.sendGetAnnotationInformation();
 
+		Process.sendRawToProfile();
 		Login.logout();
 	}
 

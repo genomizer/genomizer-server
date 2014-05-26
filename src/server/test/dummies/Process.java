@@ -21,8 +21,8 @@ public class Process {
 				"\"y\"," +
 				"\"10 1 5 0 0\"," +
 				"\"y 10\"," +
-				"\"\"," +
-				"\"\"";
+				"\"single 4 0\"," +
+				"\"150 1 7 0 0\"";
 		String metadata = "astringofmetadata";
 		String genomeVersion = "fb5";
 		String author = "robinodling";
