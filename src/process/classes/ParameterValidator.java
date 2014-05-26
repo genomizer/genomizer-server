@@ -76,10 +76,6 @@ public class ParameterValidator extends Executor {
 		float[] ratioFloat = new float[2];
 		int[] ratioInt = new int[2];
 
-		for(int i = 0; i < ratio.length; i++) {
-			System.out.println("Ratio "+ratio[i]);
-		}
-
 		for(int i = 0; i < ratio.length-1; i++) {
 			try {
 				ratioFloat[i] = Float.parseFloat(ratio[i+1]);
@@ -88,8 +84,6 @@ public class ParameterValidator extends Executor {
 						+" is not a number");
 			}
 		}
-		System.out.println(ratioFloat[0]);
-		System.out.println(ratioFloat[1]);
 
 		for(int i = 0; i < ratioFloat.length; i++) {
 			if(ratioFloat[i] % 1 == 0) {
