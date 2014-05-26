@@ -5,9 +5,9 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 /**
- * Container class for holding a list of all FileTuple objects and a hashMap
- * with all annotations of an Experiment. All annotations and filetuples must be
- * added after initialization.
+ * Container class for holding a list of all {@link FileTuple} objects and a
+ * hashMap with all annotations of an Experiment. All annotations and filetuples
+ * must be added after initialization.
  */
 public class Experiment {
 
@@ -60,7 +60,7 @@ public class Experiment {
     }
 
     /**
-     * Returns the list with FileTuples.
+     * Returns the list with {@link FileTuple}.
      *
      * @return ArrayList<FileTuple>
      */
@@ -70,9 +70,10 @@ public class Experiment {
     }
 
     /**
-     * Adds a FileTuple object to the experiment. Parameter: FileTuple object
+     * Adds a FileTuple object to the experiment. Parameter: {@link FileTuple}
+     * object
      *
-     * @param ft FileTuple
+     * @param ft {@link FileTuple}
      */
     public void addFile(FileTuple ft) {
 
@@ -80,7 +81,7 @@ public class Experiment {
     }
 
     /**
-     * Outputs the experiment as a String.
+     * Outputs the experiment as a {@link String}.
      */
     @Override
     public String toString() {
