@@ -169,7 +169,7 @@ public class ProcessCommand extends Command {
 			case "rawtoprofile":
 				//The process type was a rawtoprofile
 
-				filepaths = db.processRawToProfile(expid);
+				//filepaths = db.processRawToProfile(expid);
 
 				if(!db.isConnected()){
 					db = new DatabaseAccessor(ServerSettings.databaseUsername, ServerSettings.databasePassword, ServerSettings.databaseHost, ServerSettings.databaseName);

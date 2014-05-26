@@ -3,7 +3,6 @@ package authentication;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import server.Debug;
 import server.ResponseLogger;
 
 

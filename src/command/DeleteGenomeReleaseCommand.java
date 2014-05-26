@@ -38,24 +38,27 @@ public class DeleteGenomeReleaseCommand extends Command {
 
 	/**
 	 * Method used to validate the command.
+	 * @throws ValidateException
 	 */
 	@Override
-	public boolean validate() {
+	public boolean validate() throws ValidateException {
 
-		if(genomeVersion == null || specie == null) {
-			return false;
-		}
+		if (genomeVersion == null || specie == null) {
 
-		if(genomeVersion.equals("null") || specie.equals("null")) {
-			return false;
-		}
+			throw new ValidateException(StatusCode.BAD_REQUEST, "The genome version was missing.");
 
-		if(genomeVersion.length() > MaxSize.GENOME_VERSION || genomeVersion.length() < 1) {
-			return false;
-		}
+		} else if (genomeVersion.equals("null") || specie.equals("null")) {
 
-		if(specie.length() > MaxSize.GENOME_SPECIES || specie.length() < 1) {
-			return false;
+			throw new ValidateException(StatusCode.BAD_REQUEST, "The genome version or specie was missing.");
+
+		} else if(genomeVersion.length() > MaxSize.GENOME_VERSION || genomeVersion.length() < 1) {
+
+			throw new ValidateException(StatusCode.BAD_REQUEST, "The genome version must be between 1 and "+database.constants.MaxSize.GENOME_VERSION+" characters long.");
+
+		} else if(specie.length() > MaxSize.GENOME_SPECIES || specie.length() < 1) {
+
+			throw new ValidateException(StatusCode.BAD_REQUEST, "The species must be between 1 and "+database.constants.MaxSize.GENOME_SPECIES+" characters long.");
+
 		}
 
 		return true;

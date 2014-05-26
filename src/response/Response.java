@@ -2,7 +2,6 @@ package response;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.Expose;
 
 public abstract class Response {
 	protected int code;

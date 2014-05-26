@@ -1,6 +1,5 @@
 package server.test.dummies;
 
-import authentication.PasswordHash;
 
 public class serverTests {
 
