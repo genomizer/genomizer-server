@@ -62,12 +62,9 @@ public class AddExperimentCommand extends Command {
 			}
 			db.close();
 			return new MinimalResponse(StatusCode.CREATED);
-		} catch (SQLException e) {
+		} catch (IOException | SQLException e) {
 			e.printStackTrace();
 			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
-		} catch (IOException e) {
-			e.printStackTrace();
-			return new MinimalResponse(StatusCode.BAD_REQUEST);
 		} finally{
 				db.close();
 		}
