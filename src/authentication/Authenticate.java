@@ -12,6 +12,8 @@ import java.util.Iterator;
 import java.util.UUID;
 
 import server.DatabaseSettings;
+import server.Debug;
+import server.ResponseLogger;
 import database.DatabaseAccessor;
 
 /**
@@ -32,7 +34,8 @@ public class Authenticate {
 		try {
 			br = new BufferedReader(new FileReader("client_password.txt"));
 		} catch (FileNotFoundException e) {
-			System.err.println("ERROR: COULD NOT FIND PASSWORD.TXT-FILE.\n" + e.getMessage());
+			ResponseLogger.log(username, "ERROR: COULD NOT FIND CLIENT_PASSWORD.TXT-FILE.\n" + e.getMessage());
+			Debug.log("ERROR: COULD NOT FIND CLIENT_PASSWORD.TXT-FILE.\n" + e.getMessage());
 			return new LoginAttempt(false, null, "Internal server error.");
 		}
 	    try {
@@ -46,13 +49,15 @@ public class Authenticate {
 	        }
 	        file_password = sb.toString();
 	    } catch (IOException e) {
-	    	System.err.println("ERROR: IOEXCEPTION WHEN READING PASSWORD.TXT-FILE.\n" + e.getMessage());
+	    	ResponseLogger.log(username, "ERROR: IOEXCEPTION WHEN READING PASSWORD.TXT-FILE.\n" + e.getMessage());
+			Debug.log("ERROR: IOEXCEPTION WHEN READING PASSWORD.TXT-FILE.\n" + e.getMessage());
 	    	return new LoginAttempt(false, null, "Internal server error.");
 		}
 	    try {
 	    	br.close();
 	    } catch (IOException e) {
-	    	System.err.println("ERROR: IOEXCEPTION WHEN CLOSING STREAM AFTER READING PASSWORD.TXT-FILE." + e.getMessage());
+	    	ResponseLogger.log(username, "ERROR: IOEXCEPTION WHEN CLOSING STREAM AFTER READING PASSWORD.TXT-FILE." + e.getMessage());
+			Debug.log("ERROR: IOEXCEPTION WHEN CLOSING STREAM AFTER READING PASSWORD.TXT-FILE." + e.getMessage());
 	    	return new LoginAttempt(false, null, "Internal server error.");
 	    }
 
