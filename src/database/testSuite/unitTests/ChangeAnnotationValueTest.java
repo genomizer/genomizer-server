@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -93,7 +94,7 @@ public class ChangeAnnotationValueTest {
     	assertFalse(exp1.getAnnotations().get(label).equals(oldValue));
 	}
 
-    @Test(expected = SQLException.class)
+    @Test(expected = IOException.class)
     public void shouldThrowAnExceptionWhenValueAlreadyExistsInChoices()
     		throws Exception {
 
