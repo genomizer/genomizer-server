@@ -1,5 +1,6 @@
 package database.subClasses;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,6 +9,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class that contains all the methods for adding,changing, getting and removing
+ * Users in the database. This class is a subClass of databaseAcessor.java
+ *
+ * date: 2014-05-14 version: 1.0
+ */
 public class UserMethods {
 
 	private Connection conn;
@@ -52,9 +59,15 @@ public class UserMethods {
 	 * @param String
 	 *            the role given to the user ie. "Admin"
 	 * @throws SQLException
+	 * @throws IOException if an argument string is empty
 	 */
 	public void addUser(String username, String password, String role,
-			String fullName, String email) throws SQLException {
+			String fullName, String email) throws SQLException, IOException {
+
+		isValidArgument(username);
+		isValidArgument(password);
+		isValidArgument(role);
+		isValidArgument(fullName);
 
 		String query = "INSERT INTO User_Info (Username, Password, Role) "
 				+ "VALUES " + "(?, ?, ?)";
@@ -75,14 +88,15 @@ public class UserMethods {
 	 * @throws SQLException
 	 *             if the query does not succeed
 	 */
-	public void deleteUser(String username) throws SQLException {
+	public int deleteUser(String username) throws SQLException {
 
 		String query = "DELETE FROM User_Info " + "WHERE (Username = ?)";
 
 		PreparedStatement stmt = conn.prepareStatement(query);
 		stmt.setString(1, username);
-		stmt.executeUpdate();
+		int res = stmt.executeUpdate();
 		stmt.close();
+		return res;
 	}
 
 	/**
@@ -123,9 +137,15 @@ public class UserMethods {
 	 * @return the number of tuples updated in the database.
 	 * @throws SQLException
 	 *             if the query does not succeed
+	 * @throws IOException
 	 */
 	public int resetPassword(String username, String newPassword)
-			throws SQLException {
+			throws SQLException, IOException {
+
+		if (username == null || username.contentEquals("") ||
+				newPassword == null || newPassword.contentEquals("")) {
+			throw new IOException("Invalid arguments");
+		}
 
 		String query = "UPDATE User_Info SET Password = ? "
 				+ "WHERE (Username = ?)";
@@ -192,4 +212,10 @@ public class UserMethods {
 		return resCount;
 	}
 
+	private void isValidArgument(String arg) throws IOException {
+
+    	if (arg == null || arg.contentEquals("")) {
+    		throw new IOException("Invalid argument(s)");
+    	}
+    }
 }
