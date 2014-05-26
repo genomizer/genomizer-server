@@ -10,6 +10,7 @@ import response.ErrorResponse;
 import response.GetGenomeReleaseRespons;
 import response.Response;
 import response.StatusCode;
+import server.ServerSettings;
 
 /**
  * A command which is used to get all the genome versions

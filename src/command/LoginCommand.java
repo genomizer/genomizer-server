@@ -31,13 +31,22 @@ public class LoginCommand extends Command {
 	}
 
 	@Override
-	public boolean validate() {
+	public boolean validate() throws ValidateException {
 
-		if(username ==null || password==null){
-			return false;
-		}else if(username.length()<1 || password.length()<4){
-			return false;
+		if(username == null || password == null) {
+
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Username and/or password was missing.");
+
+		} else if(username.length() < 1 || username.length() > database.constants.MaxSize.USERNAME) {
+
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Username has to be between 1 and "+database.constants.MaxSize.PASSWORD+" characters long.");
+
+		} else if(password.length() < 1 || password.length() > database.constants.MaxSize.PASSWORD) {
+
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Password has to be between 1 and "+database.constants.MaxSize.PASSWORD+" characters long.");
+
 		}
+
 		return true;
 	}
 

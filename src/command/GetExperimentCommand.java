@@ -8,6 +8,10 @@ import response.ErrorResponse;
 import response.Response;
 import response.StatusCode;
 import response.GetExperimentResponse;
+import server.ServerSettings;
+
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 import database.DatabaseAccessor;
 import database.containers.Experiment;

@@ -14,7 +14,7 @@ import command.ValidateException;
 public class ValidateExceptionTest {
 
 	/**
-	 * Test used to check that the exception is created succesfully
+	 * Test used to check that the exception is created successfully
 	 * if there's no parameters passed and that it's not null.
 	 */
 	@Test
