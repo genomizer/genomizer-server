@@ -18,7 +18,11 @@ import server.Debug;
 import server.ResponseLogger;
 
 import com.google.gson.annotations.Expose;
-import database.*;
+
+import database.DatabaseAccessor;
+import database.containers.Genome;
+import database.constants.CanBeNull;
+import database.constants.MaxSize;
 
 public class ProcessCommand extends Command {
 

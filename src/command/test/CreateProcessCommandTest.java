@@ -48,7 +48,7 @@ public class CreateProcessCommandTest {
 							"\"genomeRelease\": \"" + genomeRelease + "\"," +
 							"\"author\": \"" + author + "\"}";
 
-		processCommand = (ProcessCommand)cmdf.createProcessCommand(json, username);
+		processCommand = (ProcessCommand)cmdf.createProcessCommand(json, username, json);
 	}
 
 	@Test

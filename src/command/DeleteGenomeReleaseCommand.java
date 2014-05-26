@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 import database.DatabaseAccessor;
-import database.MaxSize;
+import database.constants.MaxSize;
 import response.DeleteGenomeReleaseResponse;
 import response.ErrorResponse;
 import response.Response;

@@ -2,7 +2,7 @@ package response;
 
 import java.util.Date;
 
-import database.FileTuple;
+import database.containers.FileTuple;
 
 public class FileInformation {
 

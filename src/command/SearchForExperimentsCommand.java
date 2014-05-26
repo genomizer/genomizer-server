@@ -9,7 +9,7 @@ import java.util.List;
 import java.net.URLDecoder;
 
 import database.DatabaseAccessor;
-import database.Experiment;
+import database.containers.Experiment;
 
 import response.ErrorResponse;
 import response.MinimalResponse;

@@ -10,10 +10,10 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import database.ChainFile;
 import database.FilePathGenerator;
-import database.Genome;
-import database.ServerDependentValues;
+import database.constants.ServerDependentValues;
+import database.containers.ChainFile;
+import database.containers.Genome;
 
 /**
  * Class that contains all the methods for adding,changing, getting and removing
@@ -46,7 +46,7 @@ public class GenomeMethods {
      * @param genomeVersion
      *            - The version to get filepath to, should use
      *            getAllGenomeReleases() and let user choose a version
-     * @return String path - a file path
+     * @return String path - a file path, NULL if it was not found.
      * @throws SQLException
      */
 
@@ -120,6 +120,13 @@ public class GenomeMethods {
         return filePathBuilder.toString();
     }
 
+    /**
+     * Sets the status for a genome release file to "Done".
+     * @param version the file version.
+     * @param fileName the file name.
+     * @return the number of tuples updated.
+     * @throws SQLException
+     */
     public int fileReadyForDownload(String version, String fileName) throws SQLException {
 
         String statusUpdateString = "UPDATE Genome_Release_Files SET Status = 'Done' " +
@@ -150,11 +157,15 @@ public class GenomeMethods {
             throws SQLException, IOException {
 
         if (isGenomeVersionUsed(genomeVersion)) {
-            throw new IOException(genomeVersion + " is used by at least one file and can therefore not be removed");
+            throw new IOException(genomeVersion + " is used by at least one" +
+            						" file and can therefore not be removed");
         }
 
         Genome g = getGenomeRelease(genomeVersion);
 
+        if(g == null){
+        	return false;
+        }
         File genomeReleaseFolder = new File(fpg.getGenomeReleaseFolderPath(
                 g.genomeVersion, g.species));
 
@@ -174,7 +185,8 @@ public class GenomeMethods {
         return res > 0;
     }
 
-    private boolean isGenomeVersionUsed(String genomeVersion) throws SQLException {
+    private boolean isGenomeVersionUsed(String genomeVersion)
+    									throws SQLException {
         String query = "SELECT * FROM File WHERE GRVersion = ?";
         PreparedStatement ps = conn.prepareStatement(query);
         ps.setString(1, genomeVersion);
@@ -183,14 +195,15 @@ public class GenomeMethods {
     }
 
     /**
-     * method for getting all the genome releases for a species currently stored
+     * Method for getting all the genome releases for a species currently stored
      * in the database.
      *
      * @param species
-     *            String, the name of the specie you want to get genome
+     *            String, the name of the species you want to get genome
      *            realeases for.
      * @return genomelist ArrayList<Genome>, list of all the genome releases for
-     *         a specific specie.
+     *         a specific species. Returns NULL if the specified specie did NOT
+     *         have a genomeRelase entry in the database.
      * @throws SQLException
      */
     public ArrayList<Genome> getAllGenomReleasesForSpecies(String species)
@@ -207,7 +220,12 @@ public class GenomeMethods {
 
         ArrayList<Genome> genomeList = new ArrayList<Genome>();
 
-        rs.next();
+        boolean foundAnything = rs.next();
+
+        if(!foundAnything){
+        	return null;
+        }
+
         while (!rs.isAfterLast()) {
             Genome g = new Genome(rs);
             genomeList.add(g);
@@ -391,10 +409,11 @@ public class GenomeMethods {
 
         ArrayList<Genome> genomeList = new ArrayList<Genome>();
 
-        rs.next();
-        while (!rs.isAfterLast()) {
-            Genome g = new Genome(rs);
-            genomeList.add(g);
+        if(rs.next()){
+	        while (!rs.isAfterLast()) {
+	            Genome g = new Genome(rs);
+	            genomeList.add(g);
+	        }
         }
 
         stmt.close();

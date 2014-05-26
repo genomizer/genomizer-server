@@ -1,9 +1,11 @@
-package database;
+package database.containers;
 
 import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
+
+import database.constants.ServerDependentValues;
 
 public class FileTuple {
 

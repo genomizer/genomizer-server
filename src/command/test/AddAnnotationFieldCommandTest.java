@@ -7,7 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import command.AddAnnotationFieldCommand;
 import command.Command;
-import database.MaxSize;
+import database.constants.MaxSize;
 
 /**
  * Test class used to check that the AddAnnotationFieldCommand

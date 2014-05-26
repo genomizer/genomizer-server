@@ -1,4 +1,4 @@
-package database;
+package database.containers;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,15 +15,15 @@ public class Genome {
     public final String genomeVersion;
     public final String species;
     public final String folderPath;
-    private final ArrayList<String> files;
+    private final Map<String, String> files;
 
     public Genome(ResultSet resSet) throws SQLException {
         genomeVersion = resSet.getString("Version");
         species = resSet.getString("Species");
         folderPath = resSet.getString("FolderPath");
-        files = new ArrayList<String>();
+        files = new HashMap<String, String>();
         do {
-            files.add(resSet.getString("FileName"));
+            files.put(resSet.getString("FileName"), resSet.getString("Status"));
         } while (resSet.next() && resSet.getString("Version").equals(genomeVersion));
     }
 
@@ -31,16 +31,14 @@ public class Genome {
      * Gets a map with filename as key and the status of the file as value.
      * @return
      */
-    public ArrayList<String> getFilesWithStatus() {
+    public Map<String, String> getFilesWithStatus() {
         return files;
     }
 
     public List<String> getDownloadURLs() {
         List<String> downloadURLs = new ArrayList<String>();
-
-
-        for (String fileName: files) {
-            downloadURLs.add(ServerDependentValues.DownloadURL + folderPath + fileName);
+        for (Entry<String, String> e: files.entrySet()) {
+            downloadURLs.add(ServerDependentValues.DownloadURL + folderPath + e.getKey());
         }
         return downloadURLs;
     }
@@ -49,8 +47,7 @@ public class Genome {
         if (files.isEmpty()) {
             return null;
         }
-       // String fileName = files.entrySet().iterator().next().getKey();
-        String fileName = files.get(0);
+        String fileName = files.entrySet().iterator().next().getKey();
         int indexOfFirstDot = fileName.indexOf('.');
         if (indexOfFirstDot == -1) {
             return null;

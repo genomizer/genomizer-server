@@ -58,7 +58,7 @@ public class GetAnnotationInformationCommand extends Command {
 
 		for(int i = 0; i < annotation_names.size(); i++) {
 
-			database.Annotation annotationObject = null;
+			database.containers.Annotation annotationObject = null;
 			ArrayList<String> values = new ArrayList<String>();
 
 			try {
@@ -68,9 +68,9 @@ public class GetAnnotationInformationCommand extends Command {
 				e.printStackTrace();
 			}
 
-			if(annotationObject.dataType == database.Annotation.FREETEXT) {
+			if(annotationObject.dataType == database.containers.Annotation.FREETEXT) {
 				values.add("freetext");
-			} else if(annotationObject.dataType == database.Annotation.DROPDOWN) {
+			} else if(annotationObject.dataType == database.containers.Annotation.DROPDOWN) {
 				values = (ArrayList<String>) annotationObject.getPossibleValues();
 			}
 
