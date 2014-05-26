@@ -57,4 +57,12 @@ public class Genome {
         }
         return fileName.substring(0, indexOfFirstDot);
     }
+
+    public String getVersion() {
+    	return genomeVersion;
+    }
+
+    public String getSpecie() {
+    	return species;
+    }
 }
