@@ -50,8 +50,12 @@ public class GenomeRelease {
 		jj.addProperty("specie", specie);
 
 		JsonArray ja = new JsonArray();
-		JsonPrimitive element = new JsonPrimitive("GR1337.ebwt");
+		JsonPrimitive element = new JsonPrimitive("GR1338.ebwt");
+		JsonPrimitive element2 = new JsonPrimitive("GR1339.ebwt");
+		JsonPrimitive element3 = new JsonPrimitive("GR13310.ebwt");
 		ja.add(element);
+		ja.add(element2);
+		ja.add(element3);
 
 		jj.add("files", ja);
 
