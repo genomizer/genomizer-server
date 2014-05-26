@@ -19,8 +19,9 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import database.DatabaseAccessor;
-import database.Experiment;
-import database.FileTuple;
+import database.containers.Experiment;
+import database.containers.FileTuple;
+
 
 /**
  * Class used to retrieve an experiment.
@@ -66,7 +67,6 @@ public class GetExperimentCommand extends Command {
 	if(exp == null) {
 		return new ErrorResponse(StatusCode.BAD_REQUEST, "Experiment requested from database is null, not found or does not exist.");
 	}
-
 	return new GetExperimentResponse(StatusCode.OK, getInfo(exp), exp.getAnnotations(), exp.getFiles());
 }
 

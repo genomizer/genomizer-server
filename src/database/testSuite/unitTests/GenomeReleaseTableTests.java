@@ -19,8 +19,8 @@ import org.junit.Test;
 
 import database.DatabaseAccessor;
 import database.FilePathGenerator;
-import database.Genome;
-import database.ServerDependentValues;
+import database.constants.ServerDependentValues;
+import database.containers.Genome;
 import database.testSuite.TestInitializer;
 
 public class GenomeReleaseTableTests {
@@ -81,10 +81,19 @@ public class GenomeReleaseTableTests {
     }
 
     @Test(expected = SQLException.class)
-    public void shouldThrowExceptionWhenAddFileAlreadyExist() throws SQLException {
+    public void shouldThrowExceptionWhenAddFileAlreadyExist()
+    									throws SQLException {
 
     	dbac.addGenomeRelease("test12", "Bear", "test12.txt");
     	dbac.addGenomeRelease("test12", "Bear", "test12.txt");
+    }
+
+    @Test
+    public void shouldReturnNullWhenGenomeReleaseDontExist()
+    									throws SQLException, IOException {
+
+    	assertFalse(dbac.removeGenomeRelease("thisFileMightNotExist"));
+
     }
 
     @Test
@@ -213,6 +222,22 @@ public class GenomeReleaseTableTests {
         Genome g = dbac.getGenomeRelease("hg38");
         assertEquals("hg38", g.getFilePrefix());
     }
+
+    @Test
+    public void shouldReturnNullIfSearchGenomReleaseThatDontExist()
+    											throws SQLException{
+
+    	assertNull(dbac.getAllGenomReleasesForSpecies("Dog"));
+    }
+
+    @Test
+    public void shouldReturnEmptyListFromGetAllGenomeReleasesWhenTableIsEmpty() throws Exception{
+
+    	tearDown();
+
+    	assertEquals(0,dbac.getAllGenomReleases().size());
+    }
+
 
     private boolean searchGenomeForVersion(List<Genome> genomeList,
             String version) {

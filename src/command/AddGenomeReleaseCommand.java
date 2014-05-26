@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import com.google.gson.annotations.Expose;
 
 import database.DatabaseAccessor;
-import database.MaxSize;
+import database.constants.MaxSize;
 
 import response.AddGenomeReleaseResponse;
 import response.ErrorResponse;

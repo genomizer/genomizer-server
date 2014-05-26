@@ -16,6 +16,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
+import database.containers.Annotation;
+import database.containers.ChainFile;
+import database.containers.Experiment;
+import database.containers.FileTuple;
+import database.containers.Genome;
 import database.subClasses.*;
 
 /**
@@ -155,6 +160,11 @@ public class DatabaseAccessor {
     }
 
 
+    /**
+     * Gets all experiments.
+     * @return a list of Experiment objects.
+     * @throws SQLException
+     */
     private List<Experiment> getAllExperiments() throws SQLException {
         String query = "SELECT * FROM Experiment";
         PreparedStatement ps = conn.prepareStatement(query);
@@ -757,9 +767,9 @@ public class DatabaseAccessor {
 
 
     /**
-     *
-     * @param fileID
-     * @return
+     * Sets the status of a file to "Done".
+     * @param fileID the ID of the file to set to "Done".
+     * @return the number of tuples updated.
      * @throws SQLException
      */
     public int fileReadyForDownload(int fileID) throws SQLException {
@@ -783,14 +793,14 @@ public class DatabaseAccessor {
 
 
     /**
-     * Returns the FileTuple object associated with the given filePath.
+     * Returns the FileTuple object associated with the given fileID.
      *
-     * @param String
-     *            filePath
+     * @param fileID
+     *            int
      * @return FileTuple - The corresponding FileTuple or null if no such file
      *         exists
      * @throws SQLException
-     *             - If the query could not be executed.
+     *             If the query could not be executed.
      */
     public FileTuple getFileTuple(int fileID) throws SQLException {
         return fileMethods.getFileTuple(fileID);
@@ -805,8 +815,9 @@ public class DatabaseAccessor {
      * @return int - the number of deleted tuples in the database.
      * @throws SQLException
      *             - if the query does not succeed
+     * @throws IOException
      */
-    public int deleteFile(String path) throws SQLException {
+    public int deleteFile(String path) throws SQLException, IOException {
         return fileMethods.deleteFile(path);
     }
 
@@ -817,8 +828,9 @@ public class DatabaseAccessor {
      * @param int fileID - the fileID of the file to be deleted.
      * @return int - 1 if deletion was successful, else 0.
      * @throws SQLException
+     * @throws IOException
      */
-    public int deleteFile(int fileID) throws SQLException {
+    public int deleteFile(int fileID) throws SQLException, IOException {
         return fileMethods.deleteFile(fileID);
     }
 
@@ -837,7 +849,7 @@ public class DatabaseAccessor {
 
     /**
      * Changes the Filename for a specific file with given fileID. This method
-     * affects bothe the saved file name, but also the entries path and fileName
+     * affects both the saved file name, but also the entries path and fileName
      * in database.
      *
      * @return resCount int, the number of rows affected by the change.
@@ -862,7 +874,7 @@ public class DatabaseAccessor {
      * database.
      *
      * @param String
-     *            expId - The ID name of paththe experiment
+     *            expId - The ID name of the experiment
      * @return String - The path to the folder or null if there are no raw files
      *         for this experiment.
      * @throws IOException
@@ -942,10 +954,9 @@ public class DatabaseAccessor {
         }
         for (File f : profileFolder.listFiles()) {
             if (!f.getName().equals(inputFileName)) {
-                FileTuple ft = fileMethods.addGeneratedFile(e.getID(),
+                fileMethods.addGeneratedFile(e.getID(),
                         FileTuple.PROFILE, f.getPath(), inputFileName,
                         metaData, uploader, isPrivate, grVersion);
-                fileMethods.fileReadyForDownload(ft.id);
             }
         }
     }
@@ -1027,7 +1038,13 @@ public class DatabaseAccessor {
         return genMethods.addGenomeRelease(genomeVersion, species, filename);
     }
 
-
+    /**
+     * Sets the status for a genome release file to "Done".
+     * @param version the file version.
+     * @param fileName the file name.
+     * @return the number of tuples updated.
+     * @throws SQLException
+     */
     public int genomeReleaseFileUploaded(String version, String fileName)
             throws SQLException {
         return genMethods.fileReadyForDownload(version, fileName);
@@ -1056,11 +1073,12 @@ public class DatabaseAccessor {
      * Method for getting all the genome releases for a species currently stored
      * in the database.
      *
-     * @param String
-     *            species - the name of the species you want to get genome
-     *            releases for.
-     * @return List<String> - list of all the genome releases for a specific
-     *         species.
+     * @param species
+     *            String, the name of the species you want to get genome
+     *            realeases for.
+     * @return genomelist ArrayList<Genome>, list of all the genome releases for
+     *         a specific species. Returns NULL if the specified specie did NOT
+     *         have a genomeRelase entry in the database.
      * @throws SQLException
      */
     public ArrayList<Genome> getAllGenomReleasesForSpecies(String species)

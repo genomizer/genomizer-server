@@ -30,27 +30,34 @@ public class UserInfoTests {
 
     @BeforeClass
     public static void setupTestCase() throws Exception {
-        dbac = new DatabaseAccessor(TestInitializer.username, TestInitializer.password, TestInitializer.host,
+
+        dbac = new DatabaseAccessor(TestInitializer.username,
+        		TestInitializer.password, TestInitializer.host,
         		TestInitializer.database);
     }
 
     @AfterClass
     public static void undoAllChanges() throws SQLException {
+
         dbac.close();
     }
 
     @Before
     public void setup() throws SQLException, IOException {
-        dbac.addUser(testUser, testPassword, testRole, testFullName, testEmail);
+
+        dbac.addUser(testUser, testPassword, testRole, testFullName,
+        		testEmail);
     }
 
     @After
     public void teardown() throws SQLException {
+
         dbac.deleteUser(testUser);
     }
 
     @Test
     public void shouldBeAbleToConnectToDB() throws Exception {
+
         assertTrue(dbac.isConnected());
     }
 
@@ -104,7 +111,7 @@ public class UserInfoTests {
 
     @Test(expected = SQLException.class)
     public void testBiggerThanMaxSize() throws SQLException, IOException{
-    	dbac.addUser("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "passwd", "Admin", "Aaaaaaa bbbbbb", null);
+    	dbac.addUser("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+    			"aaaaaa", "passwd", "Admin", "Aaaaaaa bbbbbb", null);
     }
-
 }

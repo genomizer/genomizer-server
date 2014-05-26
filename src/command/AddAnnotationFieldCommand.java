@@ -13,7 +13,8 @@ import response.StatusCode;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import database.DatabaseAccessor;
-import database.MaxSize;
+import database.constants.MaxSize;
+
 
 /**
  * Class used to add annotation fields.

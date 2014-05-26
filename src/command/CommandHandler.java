@@ -59,8 +59,8 @@ public class CommandHandler {
 				return myCom.execute();
 			}
 		} else {
-			Debug.log("not valid");
-			return new MinimalResponse(StatusCode.BAD_REQUEST);
+			Debug.log("Command not valid");
+			return new ErrorResponse(StatusCode.BAD_REQUEST, "The command was invalid. Check the input! Valid characters are A-Z, a-z, 0-9 and space");
 		}
 	}
 

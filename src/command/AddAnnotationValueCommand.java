@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.google.gson.annotations.Expose;
 import database.DatabaseAccessor;
-import database.MaxSize;
+import database.constants.MaxSize;
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
@@ -31,8 +31,8 @@ public class AddAnnotationValueCommand extends Command {
 	 */
 	@Override
 	public boolean validate() {
-		
-		
+
+
 		if(value == null || name == null) {
 			return false;
 		}
