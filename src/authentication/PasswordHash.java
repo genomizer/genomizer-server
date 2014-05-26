@@ -3,6 +3,9 @@ package authentication;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import server.Debug;
+import server.ResponseLogger;
+
 
 public class PasswordHash
 {
@@ -30,6 +33,7 @@ public class PasswordHash
         }
         catch (NoSuchAlgorithmException e)
         {
+        	ResponseLogger.log("SERVER", "ERROR WHEN CREATING HASH.\n" + e.getMessage());
             System.err.println("ERROR WHEN CREATING HASH.\n" + e.getMessage());
         }
     	return null;
@@ -37,11 +41,6 @@ public class PasswordHash
 
 	private static String getSalt() {
 		return "genomizer";
-	}
-
-	public static void main(String args[]) {
-	    String s = PasswordHash.toSaltedSHA256Hash("umea@2014");
-	    System.out.println(s);
 	}
 
 }
