@@ -17,7 +17,7 @@ public class serverTests {
 		Annotations.sendGetAnnotationInformation();
 
 
-		Process.sendRawToProfile();
+		//Process.sendRawToProfile();
 //		GenomeRelease.sendAddGenomeRelease("HumanitariumTest");
 
 
