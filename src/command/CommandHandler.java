@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import authentication.Authenticate;
 import response.ErrorResponse;
-import response.MinimalResponse;
 import response.ProcessResponse;
 import response.Response;
 import response.StatusCode;
