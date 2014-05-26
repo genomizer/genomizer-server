@@ -66,7 +66,7 @@ public class GetProcessStatusCommandTest {
 
 		workHandler.start();
 		try {
-			Thread.sleep(20000);
+			Thread.sleep(10000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -85,7 +85,7 @@ public class GetProcessStatusCommandTest {
 		}
 
 		System.out.println(toPrettyFormat(arr.toString()));
-		workHandler.interrupt();
+//		workHandler.interrupt();
 	}
 
     private static String toPrettyFormat(String jsonString)
