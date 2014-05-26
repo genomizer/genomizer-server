@@ -130,7 +130,7 @@ public class AddAnnotationFieldCommand extends Command {
 
 		} catch (IOException e) {
 			e.printStackTrace();
-			return new MinimalResponse(StatusCode.BAD_REQUEST);
+			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
 		} finally{
 				db.close();
 		}

@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 
 import process.classes.ProcessException;
 import process.classes.ProcessHandler;
+import response.ErrorResponse;
 import response.ProcessResponse;
 import response.Response;
 import response.StatusCode;
@@ -176,41 +177,45 @@ public class ProcessCommand extends Command {
 				//Get the genome information from the database.
 				Genome g = db.getGenomeRelease(genomeVersion);
 
-				//Get the path of the genome.
-				String genomeFolderPath = g.folderPath;
-				//Get the prefix of the genome files.
-				String genomeFilePrefix = g.getFilePrefix();
+				if(g == null) {
+					return new ErrorResponse(StatusCode.BAD_REQUEST, "Could not find genome version: " + genomeVersion);
+				} else {
+					//Get the path of the genome.
+					String genomeFolderPath = g.folderPath;
+					//Get the prefix of the genome files.
+					String genomeFilePrefix = g.getFilePrefix();
 
-				if(genomeFolderPath == null){
-					ResponseLogger.log(username, "Could not get genome folder path when " + processtype + " on experiment" + expid + "\n"+
-							"metadata: " + metadata + "\n"+
-							"parameters: " + parameters + "\n" +
-							"genomeFilePrefix: " + genomeFilePrefix + "\n" +
-							"genomeVersion: " + genomeVersion + "\n");
-					db.close();
-					return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, "Could not get genome folder path when " + processtype + " on experiment" + expid + "\n"+
-							"metadata: " + metadata + "\n"+
-							"parameters: " + parameters + "\n" +
-							"genomeFilePrefix: " + genomeFilePrefix + "\n" +
-							"genomeVersion: " + genomeVersion + "\n");
+					if(genomeFolderPath == null){
+						ResponseLogger.log(username, "Could not get genome folder path when " + processtype + " on experiment" + expid + "\n"+
+								"metadata: " + metadata + "\n"+
+								"parameters: " + parameters + "\n" +
+								"genomeFilePrefix: " + genomeFilePrefix + "\n" +
+								"genomeVersion: " + genomeVersion + "\n");
+						db.close();
+						return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, "Could not get genome folder path when " + processtype + " on experiment" + expid + "\n"+
+								"metadata: " + metadata + "\n"+
+								"parameters: " + parameters + "\n" +
+								"genomeFilePrefix: " + genomeFilePrefix + "\n" +
+								"genomeVersion: " + genomeVersion + "\n");
+					}
+
+					if(genomeFilePrefix == null){
+						ResponseLogger.log(username, "Could not get genome file prefix when " + processtype + " on experiment" + expid + "\n"+
+								"metadata: " + metadata + "\n"+
+								"parameters: " + parameters + "\n" +
+								"genomeFolderPath: " + genomeFolderPath + "\n" +
+								"genomeVersion: " + genomeVersion + "\n");
+						db.close();
+						return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, "Could not get genome file prefix when " + processtype + " on experiment" + expid + "\n"+
+								"metadata: " + metadata + "\n"+
+								"parameters: " + parameters + "\n" +
+								"genomeFolderPath: " + genomeFolderPath + "\n" +
+								"genomeVersion: " + genomeVersion + "\n");
+					}
+
+					//Set parameter on index 1 to the path to the genomefolder + the name of the genome files.
+					parameters[1] = genomeFolderPath + genomeFilePrefix;
 				}
-
-				if(genomeFilePrefix == null){
-					ResponseLogger.log(username, "Could not get genome file prefix when " + processtype + " on experiment" + expid + "\n"+
-							"metadata: " + metadata + "\n"+
-							"parameters: " + parameters + "\n" +
-							"genomeFolderPath: " + genomeFolderPath + "\n" +
-							"genomeVersion: " + genomeVersion + "\n");
-					db.close();
-					return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, "Could not get genome file prefix when " + processtype + " on experiment" + expid + "\n"+
-							"metadata: " + metadata + "\n"+
-							"parameters: " + parameters + "\n" +
-							"genomeFolderPath: " + genomeFolderPath + "\n" +
-							"genomeVersion: " + genomeVersion + "\n");
-				}
-
-				//Set parameter on index 1 to the path to the genomefolder + the name of the genome files.
-				parameters[1] = genomeFolderPath + genomeFilePrefix;
 
 				try {
 
