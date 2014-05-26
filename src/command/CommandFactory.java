@@ -285,19 +285,23 @@ public class CommandFactory {
 		return updateUserPrivilegesCommand;
 	}
 
-
-
 	/**
 	 * Used to create the command needed to add genome releases.
 	 *
-	 * @param json string to initiate class.
-	 * @return the actual command.
+	 * @param json string to initiate the class.
+	 * @return the actual command created.
 	 */
 	public Command createAddGenomeReleaseCommand(String json) {
 		final Command addGenomeReleaseCmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
 		return addGenomeReleaseCmd;
 	}
 
+	/**
+	 * Used to create the command needed to rename a annotation value.
+	 *
+	 * @param json string to initiate the class.
+	 * @return the actual command created.
+	 */
 	public Command creatRenameAnnotationValueCommand(String json) {
 		Command command = gson.fromJson(json, RenameAnnotationValueCommand.class);
 		return command;
@@ -306,20 +310,23 @@ public class CommandFactory {
 	/**
 	 * Used to create the command needed to delete genome releases.
 	 *
-	 * @param json string to initiate class.
+	 * @param the specie associated with the genome release.
+	 * @param the genome version to delete.
 	 * @return the actual command.
 	 */
 	public Command createDeleteGenomeReleaseCommand(String specie, String genomeVersion) {
-
 		final Command deleteGenomeReleaseCmd = new DeleteGenomeReleaseCommand(specie, genomeVersion);
-
 		return deleteGenomeReleaseCmd;
-
 	}
 
+	/**
+	 * Used to create the command needed to delete a annotation value.
+	 *
+	 * @param json string to initiate the class.
+	 * @return the actual command created.
+	 */
 	public Command createDeleteAnnotationValueCommand(String json,
 			String value, String name) {
-
 		return new DeleteAnnotationValueCommand(value, name);
 	}
 
@@ -340,6 +347,12 @@ public class CommandFactory {
 		return new GetProcessStatusCommand(workHandler);
 	}
 
+	/**
+	 *
+	 *
+	 * @param a user ID.
+	 * @return the actual command.
+	 */
 	public Command createIsTokenValidCommand(String uuid) {
 		return new IsTokenValidCommand(uuid);
 	}
