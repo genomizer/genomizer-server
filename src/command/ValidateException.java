@@ -9,6 +9,8 @@ package command;
  */
 public class ValidateException extends Exception {
 
+	private int exceptionCode = 0;
+
 	/**
 	 *
 	 */
@@ -23,10 +25,20 @@ public class ValidateException extends Exception {
 	/**
 	 * Constructor that takes a message.
 	 *
+	 * @param exception code.
 	 * @param message to insert.
 	 */
-	public ValidateException(String message) {
+	public ValidateException(int exceptionCode, String message) {
 		super(message);
+		this.exceptionCode = exceptionCode;
+	}
+
+	/**
+	 * method used to
+	 * @return
+	 */
+	public int getCode() {
+		return exceptionCode;
 	}
 
 }

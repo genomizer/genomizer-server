@@ -20,7 +20,7 @@ public abstract class Command {
 	protected String header;
 
 	//Method used to validate the class object.
-	public abstract boolean validate();
+	public abstract boolean validate() throws ValidateException;
 
 	//Method used to run command.
 	public abstract Response execute();
