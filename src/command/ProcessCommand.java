@@ -136,6 +136,14 @@ public class ProcessCommand extends Command {
 		return true;
 	}
 
+	/**
+	 * Method that checks if a json attribute has correct length or not.
+	 *
+	 * @param field - the json attribute to be checked
+	 * @param canBeNull - a boolean stating if the attribute can be an empty string or not.
+	 *
+	 * @return True if the attribute have the correct length, else false.
+	 */
 	private boolean doesNotHaveCorrectLength(String field, boolean canBeNull){
 		Debug.log("field: "+ field + " length: " + field.length() + " canbenull: " + canBeNull);
 		if(field.length() <= 0){
@@ -356,12 +364,10 @@ public class ProcessCommand extends Command {
 	public String toString(){
 
 		return "Uploader of file: " + username + "\n" +
-				//				"Filename: " + filename + "\n" +
 				"Processtype: " + processtype + "\n" +
 				"metadata:" + metadata + "\n" +
 				"username: " + username + "\n" +
 				"expid: " + expid + "\n" +
-				//				"fileid: " + fileId + "\n" +
 				"genomeRelease: " + genomeVersion + "\n" +
 				"author:" + author + "\n";
 	}
