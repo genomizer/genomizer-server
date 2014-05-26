@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.UUID;
 
-import server.DatabaseSettings;
+import server.ServerSettings;
 import server.Debug;
 import server.ResponseLogger;
 import database.DatabaseAccessor;

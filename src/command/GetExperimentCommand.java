@@ -13,7 +13,7 @@ import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
 import response.GetExperimentResponse;
-import server.DatabaseSettings;
+import server.ServerSettings;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
