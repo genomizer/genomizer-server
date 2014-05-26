@@ -19,7 +19,7 @@ import command.ProcessStatus;
 
 public class WorkHandler extends Thread{
 
-	private static final long statusTimeToLive = 5000;//1000*60*60*24*3;
+	private static final long statusTimeToLive = 3000;//1000*60*60*24*3;
 
 	private Queue<ProcessCommand> workQueue;
 	private HashMap<ProcessCommand,ProcessStatus> processStatus;
@@ -37,6 +37,7 @@ public class WorkHandler extends Thread{
 	}
 
 	public synchronized void removeOldStatuses() {
+		System.out.println("Entering Remove");
 		long now = System.currentTimeMillis();
 
 		for (ProcessCommand proc : processStatus.keySet()) {
@@ -46,6 +47,7 @@ public class WorkHandler extends Thread{
 				long time = procStat.timeFinished;
 				long diff = now - time;
 				if (diff > statusTimeToLive) {
+					System.out.println("Removing " + proc.getExpId());
 					processStatus.remove(proc);
 				}
 			}
