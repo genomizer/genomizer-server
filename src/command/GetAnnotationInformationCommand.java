@@ -35,24 +35,23 @@ public class GetAnnotationInformationCommand extends Command {
 			a = db.getAnnotations();
 
 			List<String> list = new ArrayList<String>(a.keySet());
-			System.out.println("annos :::: " + list.toString());
 
 			Iterator<String> keys = a.keySet().iterator();
 			ArrayList<String> annotation_names = new ArrayList<String>();
 			while(keys.hasNext()) {
 				annotation_names.add(keys.next());
 			}
-
-			for(int i = 0; i < annotation_names.size(); i++) {
+			for(String label: list) {
 				database.containers.Annotation annotationObject = null;
 				ArrayList<String> values = new ArrayList<String>();
-				annotationObject = db.getAnnotationObject(annotation_names.get(i));
+				annotationObject = db.getAnnotationObject(label);
 
 				if(annotationObject.dataType == database.containers.Annotation.FREETEXT) {
 					values.add("freetext");
 				} else if(annotationObject.dataType == database.containers.Annotation.DROPDOWN) {
 					values = (ArrayList<String>) annotationObject.getPossibleValues();
 				}
+
 				AnnotationInformation annotation = new AnnotationInformation(annotationObject.label, values, annotationObject.isRequired);
 				annotations.add(annotation);
 			}

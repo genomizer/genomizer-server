@@ -19,8 +19,6 @@ public class serverTests {
 
 		//Process.sendRawToProfile();
 //		GenomeRelease.sendAddGenomeRelease("HumanitariumTest");
-		GenomeRelease.sendGetGenomeRelease();
-
 		Login.logout();
 	}
 

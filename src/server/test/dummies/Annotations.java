@@ -39,6 +39,8 @@ public class Annotations {
 		JsonArray ja = new JsonArray();
 		JsonPrimitive element = new JsonPrimitive("val1");
 		ja.add(element);
+		JsonPrimitive element2 = new JsonPrimitive("val2");
+		ja.add(element2);
 		jj.add("type", ja);
 		jj.addProperty("default", "val1");
 		jj.addProperty("forced", false);
