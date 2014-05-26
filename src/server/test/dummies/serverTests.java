@@ -7,18 +7,7 @@ public class serverTests {
 	public static void main(String args[]) throws Exception {
 
 		Login.login("RobinO", "umea@2014");
-//		Login.login("Splutt", "hejhej");
-		//usertests();
-		//specialannotest();
-		//for(int i = 0; i < 100; i++)
-//			Process.sendGetProcessStatus();
-		//Annotations.sendDeleteAnnotation("Test43???");
-		//Annotations.sendDeleteAnnotation("JONAS???");
-//		Annotations.sendGetAnnotationInformation();
-//		Annotations.sendAddAnnotation("invalid annotation 0123456789!!!!!!!!!едц");
-
-		//Process.sendRawToProfile();
-//		GenomeRelease.sendAddGenomeRelease("HumanitariumTest");
+		genometest();
 		Login.logout();
 	}
 
@@ -65,10 +54,13 @@ public class serverTests {
 	}
 
 	public static void genometest() throws Exception {
-		GenomeRelease.sendDeleteGenomeReleaseSpecies("asd");
+		GenomeRelease.sendDeleteGenomeReleaseSpecies("asd", "new1");
 		GenomeRelease.sendGetGenomeRelease();
-		GenomeRelease.sendAddGenomeRelease("Fly");
+		GenomeRelease.sendAddGenomeRelease("Fly", "new1");
 		GenomeRelease.sendGetGenomeReleaseSpecies("Fly");
+		GenomeRelease.sendDeleteGenomeReleaseSpecies("Fly", "new1");
+		GenomeRelease.sendGetGenomeRelease();
+
 	}
 
 	public static void processtest() throws Exception {

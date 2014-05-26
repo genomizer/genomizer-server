@@ -38,7 +38,7 @@ public class GenomeRelease {
 		System.out.println("Response Body: " +testSettings. printResponse(con));
 	}
 
-	static void sendAddGenomeRelease(String specie) throws Exception {
+	static void sendAddGenomeRelease(String specie, String version) throws Exception {
 		URL obj = new URL(testSettings.url + "/genomeRelease/");
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
@@ -46,7 +46,7 @@ public class GenomeRelease {
 		con.setRequestProperty("Authorization", Login.getToken());
 
 		JsonObject jj=new JsonObject();
-		jj.addProperty("genomeVersion", "new");
+		jj.addProperty("genomeVersion", version);
 		jj.addProperty("specie", specie);
 
 		JsonArray ja = new JsonArray();
@@ -65,8 +65,8 @@ public class GenomeRelease {
 		System.out.println("Response Body: " +testSettings. printResponse(con));
 	}
 
-	static void sendDeleteGenomeReleaseSpecies(String specie) throws Exception {
-		URL obj = new URL(testSettings.url + "/genomeRelease/" + specie + "/hx16");
+	static void sendDeleteGenomeReleaseSpecies(String specie, String version) throws Exception {
+		URL obj = new URL(testSettings.url + "/genomeRelease/" + specie + "/" + version);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
 		con.setRequestMethod("DELETE");
