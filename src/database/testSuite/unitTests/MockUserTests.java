@@ -321,7 +321,7 @@ public class MockUserTests {
 
         Genome g = dbac.getGenomeRelease("hg38");
 
-        assertEquals(1, g.getFilesWithStatus().size());
+        assertEquals(1, g.getFiles().size());
         assertEquals("hg38", g.getFilePrefix());
     }
 
@@ -364,10 +364,7 @@ public class MockUserTests {
 
         assertEquals("Human", g.species);
 
-        assertEquals(1, g.getFilesWithStatus().size());
-
-        assertEquals("In Progress",
-                g.getFilesWithStatus().get("hg38.fasta"));
+        assertEquals(1, g.getFiles().size());
 
         assertEquals(1, g.getDownloadURLs().size());
 
@@ -407,7 +404,7 @@ public class MockUserTests {
 
         Genome g = dbac.getGenomeRelease("hg38");
 
-        assertEquals(2, g.getFilesWithStatus().size());
+        assertEquals(2, g.getFiles().size());
         assertEquals(2, g.getDownloadURLs().size());
         assertEquals("hg38", g.getFilePrefix());
     }
@@ -420,7 +417,6 @@ public class MockUserTests {
         dbac.genomeReleaseFileUploaded("hg38", "hg38.fasta");
 
         Genome g = dbac.getGenomeRelease("hg38");
-        assertEquals("Done", g.getFilesWithStatus().get("hg38.fasta"));
     }
 
     @Test

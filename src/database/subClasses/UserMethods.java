@@ -88,14 +88,15 @@ public class UserMethods {
 	 * @throws SQLException
 	 *             if the query does not succeed
 	 */
-	public void deleteUser(String username) throws SQLException {
+	public int deleteUser(String username) throws SQLException {
 
 		String query = "DELETE FROM User_Info " + "WHERE (Username = ?)";
 
 		PreparedStatement stmt = conn.prepareStatement(query);
 		stmt.setString(1, username);
-		stmt.executeUpdate();
+		int res = stmt.executeUpdate();
 		stmt.close();
+		return res;
 	}
 
 	/**

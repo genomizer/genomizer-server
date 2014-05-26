@@ -48,7 +48,7 @@ public class RenameAnnotationValueCommand extends Command {
 				return new ErrorResponse(StatusCode.BAD_REQUEST, "The annotation " + name + " does not");
 			}
 
-		} catch (SQLException | IOException | ParseException e) {
+		} catch (SQLException | IOException e) {
 			e.printStackTrace();
 			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
 		} finally {

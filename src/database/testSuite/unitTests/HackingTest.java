@@ -14,6 +14,9 @@ import database.DatabaseAccessor;
 import database.FilePathGenerator;
 import database.testSuite.TestInitializer;
 
+/**
+ * Test class for finding last minute bugs in subMethods classes!
+ */
 public class HackingTest {
 
 	private static DatabaseAccessor dbac;
@@ -51,7 +54,7 @@ public class HackingTest {
         ti.recursiveDelete(testFolder);
     }
 
-    //Experiment
+    //ExperimentMethods
 
     @Test(expected = IOException.class)
 	public void shouldNotAddExperimentWithEmptyName() throws SQLException,
@@ -75,7 +78,7 @@ public class HackingTest {
     	dbac.annotateExperiment("xp2", "sdfdfs", "dfdf");
     }
 
-    //Annotation
+    //AnnotationMethods
 
     @Test(expected = IOException.class)
 	public void shouldNotAddDropDownWithEmptyLabel() throws SQLException,
@@ -120,7 +123,7 @@ public class HackingTest {
 		dbac.changeAnnotationLabel("", "value");
 	}
 
-	//User
+	//UserMethods
 
 	@Test(expected = IOException.class)
 	public void shouldNotAddUserWithEmptyName()
