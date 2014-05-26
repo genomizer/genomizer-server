@@ -486,6 +486,7 @@ public class DatabaseAccessor {
      *
      * @return ArrayList<String>
      */
+
     public ArrayList<String> getAllAnnotationLabels() {
         return annoMethods.getAllAnnotationLabels();
     }

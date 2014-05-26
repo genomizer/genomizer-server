@@ -146,11 +146,8 @@ public class AnnotationMethods {
      * Finds all annotationLabels that exist in the database, example of labels:
      * sex, tissue, etc...
      *
-     * Deprecated: Use getAnnotationObjects instead.
-     *
      * @return annotationLabels ArrayList<String>
      */
-    @Deprecated
     public ArrayList<String> getAllAnnotationLabels() {
 
         ArrayList<String> annotationLabelList = new ArrayList<>();
