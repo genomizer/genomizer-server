@@ -18,6 +18,9 @@ public class serverTests {
 		//Annotations.sendGetAnnotationInformation();
 
 		Process.sendRawToProfile();
+//		GenomeRelease.sendAddGenomeRelease("HumanitariumTest");
+
+
 		Login.logout();
 	}
 
