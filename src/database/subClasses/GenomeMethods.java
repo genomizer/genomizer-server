@@ -409,10 +409,11 @@ public class GenomeMethods {
 
         ArrayList<Genome> genomeList = new ArrayList<Genome>();
 
-        rs.next();
-        while (!rs.isAfterLast()) {
-            Genome g = new Genome(rs);
-            genomeList.add(g);
+        if(rs.next()){
+	        while (!rs.isAfterLast()) {
+	            Genome g = new Genome(rs);
+	            genomeList.add(g);
+	        }
         }
 
         stmt.close();
