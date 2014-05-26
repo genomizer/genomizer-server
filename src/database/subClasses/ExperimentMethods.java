@@ -8,11 +8,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import database.Annotation;
-import database.Experiment;
 import database.FilePathGenerator;
-import database.FileTuple;
+import database.containers.Annotation;
+import database.containers.Experiment;
+import database.containers.FileTuple;
 
+/**
+ * Class that contains all the methods for adding,changing, getting and removing
+ * Experiments in the database. This class is a subClass of databaseAcessor.java
+ *
+ * date: 2014-05-14 version: 1.0
+ */
 public class ExperimentMethods {
 
     private Connection conn;
@@ -71,10 +77,10 @@ public class ExperimentMethods {
      */
     public int addExperiment(String expID) throws SQLException, IOException {
 
-    	if (expID == null || expID.contentEquals("")) {
-    		throw new IOException("Invalid parameter");
+    	if (expID == null || expID.isEmpty()) {
+    		throw new IOException("Invalid experiment ID.");
     	}
-    	
+
     	Experiment e = getExperiment(expID);
     	if (e != null) {
     		throw new IOException(expID + " already exists");
@@ -85,10 +91,10 @@ public class ExperimentMethods {
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setString(1, expID);
 
-        fpg.generateExperimentFolders(expID);
-
         int rs = stmt.executeUpdate();
         stmt.close();
+
+        fpg.generateExperimentFolders(expID);
 
         return rs;
     }
@@ -106,9 +112,20 @@ public class ExperimentMethods {
      *             contains at least one file. (All files relating to
      *             an experiment must be deleted first before an
      *             experiment can be deleted from the database)
+     * @throws IOException
      */
-    public int deleteExperiment(String expId, String rootDir)
-            throws SQLException {
+    public int deleteExperiment(String expId)
+            throws SQLException, IOException {
+
+        Experiment e = getExperiment(expId);
+
+        if (e == null) {
+            throw new IOException("No experiment with ID " + expId);
+        }
+
+        if (!e.getFiles().isEmpty()) {
+            throw new IOException("This experiment contains files and therefore cannot be removed.");
+        }
 
         String query = "DELETE FROM Experiment "
                 + "WHERE ExpID ~~* ?";
@@ -119,7 +136,11 @@ public class ExperimentMethods {
         int rs = stmt.executeUpdate();
         stmt.close();
 
-        recursiveDelete(new File(rootDir + expId));
+
+        File experimentFolder = new File(fpg.getRootDirectory() + e.getID());
+        if (experimentFolder.exists()) {
+            recursiveDelete(experimentFolder);
+        }
 
         return rs;
     }
@@ -182,10 +203,6 @@ public class ExperimentMethods {
             String value) throws SQLException, IOException {
 
         value = validateAnnotation(label, value);
-
-        if (value == null) {
-            throw new IOException("Invalid annotation");
-        }
 
         String query = "INSERT INTO Annotated_With "
                 + "VALUES (?, ?, ?)";
@@ -292,14 +309,19 @@ public class ExperimentMethods {
      * @return true if the value is valid, else false.
      * @throws SQLException
      *             if the query does not succeed
+     * @throws IOException
      */
     private String validateAnnotation(String label, String value)
-            throws SQLException {
+            throws SQLException, IOException {
 
         Annotation a = annoMethods.getAnnotationObject(label);
 
-        if (a == null || value == null) {
-            return null;
+        if (a == null) {
+            throw new IOException(label + " is not a valid annotation. (Does not exist)");
+        }
+
+        if (value == null) {
+            throw new IOException("Invalid annotation value. (value null)");
         }
 
         if (a.dataType == Annotation.FREETEXT) {
@@ -307,12 +329,17 @@ public class ExperimentMethods {
         }
 
         List<String> choices = a.getPossibleValues();
-        value = matchChoice(value, choices);
+        String res = matchChoice(value, choices);
 
-        return value;
+        if (res == null) {
+            throw new IOException(value + "is not a valid choice for the drop down annotation " + label);
+        }
+
+        return res;
     }
 
     private String matchChoice(String value, List<String> choices) {
+
         for (String s : choices) {
             if (value.equalsIgnoreCase(s)) {
                 return s;
@@ -329,7 +356,9 @@ public class ExperimentMethods {
      *            the folder to delete.
      */
     private static void recursiveDelete(File folder) {
+
         File[] contents = folder.listFiles();
+
         if (contents == null || contents.length == 0) {
             folder.delete();
         } else {
@@ -337,13 +366,7 @@ public class ExperimentMethods {
                 recursiveDelete(f);
             }
         }
+
         folder.delete();
     }
-
-    private void isValidArgument(String arg) throws IOException {
-    	if (arg.contentEquals("") || arg == null) {
-    		throw new IOException("Invalid argument(s)");
-    	}
-    }
-
 }

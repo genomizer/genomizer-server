@@ -5,12 +5,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import database.DatabaseAccessor;
-import database.Genome;
+import database.containers.Genome;
 import response.ErrorResponse;
 import response.GetGenomeReleaseRespons;
 import response.Response;
 import response.StatusCode;
-import server.DatabaseSettings;
 
 /**
  * A command which is used to get all the genome versions
@@ -51,7 +50,7 @@ public class GetGenomeReleaseCommand extends Command{
 		try {
 			db = initDB();
 			try{
-				ArrayList<Genome> genomeReleases = (ArrayList<Genome>) db.getAllGenomReleases();
+				ArrayList<Genome> genomeReleases = (ArrayList<Genome>)db.getAllGenomReleases();
 				return new GetGenomeReleaseRespons(StatusCode.OK, genomeReleases);
 			}catch(SQLException e){
 				return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, "Could not fetch all genome releases: " + e.getMessage());

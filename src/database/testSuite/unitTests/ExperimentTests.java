@@ -20,9 +20,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import database.DatabaseAccessor;
-import database.Experiment;
 import database.FilePathGenerator;
-import database.FileTuple;
+import database.containers.Experiment;
+import database.containers.FileTuple;
 import database.testSuite.TestInitializer;
 
 public class ExperimentTests {
@@ -37,7 +37,7 @@ public class ExperimentTests {
     private static String testValueFT = "testValueFT1";
     private static String testLabelDD = "testLabelDD1";
     private static String testChoice = "testchoice";
-	private static String newLabel = "Tis";					//for changeLabel
+	private static String newLabel = "Tis";	//for changeLabel
     private static List<String> testChoices;
 
     private static FileTuple ft;
@@ -53,14 +53,18 @@ public class ExperimentTests {
     private static FilePathGenerator fpg;
     private static String testFolderPath;
     private static File testFolder;
-    private static String testFolderName = "Genomizer Test Folder - Dont be afraid to delete me";
+    private static String testFolderName =
+    		"Genomizer Test Folder - Dont be afraid to delete me";
 
     private static TestInitializer ti;
 
     @BeforeClass
     public static void setupTestCase() throws Exception {
-        dbac = new DatabaseAccessor(TestInitializer.username, TestInitializer.password, TestInitializer.host,
-        		TestInitializer.database);
+
+        ti = new TestInitializer();
+        
+        dbac = ti.setupWithoutAddingTuples();
+        
         testChoices = new ArrayList<String>();
         testChoices.add(testChoice);
         testChoices.add(testChoice + "2");
@@ -77,35 +81,34 @@ public class ExperimentTests {
         fpg = dbac.getFilePathGenerator();
         fpg.setRootDirectory(testFolderPath);
 
-        ti = new TestInitializer();
+        
     }
 
     @AfterClass
-    public static void undoAllChanges() throws SQLException {
-        dbac.deleteFile(ft.id);
-        dbac.deleteExperiment(testExpId2);
-        dbac.close();
-        ti.recursiveDelete(testFolder);
+    public static void undoAllChanges() throws SQLException, IOException {
+
+    	ti.removeTuples();
     }
 
     @Before
     public void setup() throws SQLException, IOException {
-       dbac.addExperiment(testExpId);
-       dbac.addFreeTextAnnotation(testLabelFT, null, true);
-       dbac.addDropDownAnnotation(testLabelDD, testChoices, 0, false);
+
+    	dbac.addExperiment(testExpId);
+    	dbac.addFreeTextAnnotation(testLabelFT, null, true);
+    	dbac.addDropDownAnnotation(testLabelDD, testChoices, 0, false);
     }
 
     @After
-    public void teardown() throws SQLException, Exception {
-        dbac.deleteExperiment(testExpId);
-        dbac.deleteAnnotation(testLabelFT);
-        dbac.deleteAnnotation(testLabelDD);
-        dbac.deleteAnnotation(newLabel);
+    public void teardown() throws Exception {
+
+        ti.removeTuplesKeepConnection();
+    	
     }
 
     @Test
     public void shouldBeAbleToConnectToDB() throws Exception {
-        assertTrue(dbac.isConnected());
+
+    	assertTrue(dbac.isConnected());
     }
 
     @Test
@@ -126,14 +129,16 @@ public class ExperimentTests {
         assertEquals(testExpId, e.getID());
     }
 
-    @Test
-    public void shouldReturnZeroOnRemovingNonExistantExp() throws Exception {
-        assertEquals(0, dbac.deleteExperiment("pang"));
+    @Test (expected = IOException.class)
+    public void shouldThrowIOExceptionOnRemovingNonExistantExp() throws Exception {
+
+    	dbac.deleteExperiment("pang");
     }
 
     @Test
     public void shouldReturnOneOnRemovingExp() throws Exception {
-        assertEquals(1, dbac.deleteExperiment(testExpId));
+
+    	assertEquals(1, dbac.deleteExperiment(testExpId));
     }
 
     @Test
@@ -143,9 +148,9 @@ public class ExperimentTests {
         int res = dbac.annotateExperiment(testExpId,
                 testLabelFT, testValueFT);
         assertEquals(1, res);
+
         Experiment e = dbac.getExperiment(testExpId);
         assertEquals(testValueFT, e.getAnnotations().get(testLabelFT));
-
     }
 
     @Test
@@ -158,6 +163,7 @@ public class ExperimentTests {
         int res = dbac.removeExperimentAnnotation(testExpId,
                 testLabelFT);
         assertEquals(1, res);
+
         Experiment e = dbac.getExperiment(testExpId);
         assertFalse(e.getAnnotations().containsKey(testLabelFT));
     }
@@ -169,6 +175,7 @@ public class ExperimentTests {
         int res = dbac.annotateExperiment(testExpId,
                 testLabelDD, testChoice);
         assertEquals(1, res);
+
         Experiment e = dbac.getExperiment(testExpId);
         assertEquals(testChoice, e.getAnnotations().get(testLabelDD));
     }
@@ -178,6 +185,7 @@ public class ExperimentTests {
             throws Exception {
 
         String invalidValue = testChoice + "_invalid";
+
         try {
             dbac.annotateExperiment(testExpId, testLabelDD, invalidValue);
         } catch (Exception e) {
@@ -191,7 +199,8 @@ public class ExperimentTests {
     @Test
     public void shouldBeAbleToSearchUsingExperimentID()
             throws Exception {
-        Experiment e = dbac.getExperiment(testExpId);
+
+    	Experiment e = dbac.getExperiment(testExpId);
         assertEquals(testExpId, e.getID());
     }
 
@@ -201,6 +210,7 @@ public class ExperimentTests {
 
         Experiment e = dbac.getExperiment(testExpId);
         assertFalse(e.getAnnotations().containsKey(testLabelFT));
+
         dbac.annotateExperiment(testExpId, testLabelFT, testValueFT);
         e = dbac.getExperiment(testExpId);
         assertTrue(e.getAnnotations().containsKey(testLabelFT));
@@ -211,14 +221,13 @@ public class ExperimentTests {
             throws Exception {
 
         dbac.annotateExperiment(testExpId, testLabelDD, testChoice);
-
         dbac.annotateExperiment(testExpId, testLabelFT, testValueFT);
 
         Experiment e = dbac.getExperiment(testExpId);
+
         assertEquals(2, e.getAnnotations().size());
         assertTrue(e.getAnnotations().containsKey(testLabelFT));
         assertTrue(e.getAnnotations().containsKey(testLabelDD));
-
     }
 
     @Test
@@ -227,23 +236,23 @@ public class ExperimentTests {
 
     	ArrayList<String> allLabelsBefore = dbac.getAllAnnotationLabels();
 
-    	if(allLabelsBefore.contains(testLabelFT)){
+    	if (allLabelsBefore.contains(testLabelFT)) {
 
     		int res = dbac.changeAnnotationLabel(testLabelFT, newLabel);
-
     		assertTrue(res > 0);
-
     		ArrayList<String> allLabelsAfter = dbac.getAllAnnotationLabels();
+
     		assertFalse(allLabelsAfter.contains(testLabelFT));
     		assertTrue(allLabelsAfter.contains(newLabel));
-    	}else{
+    	} else {
     		System.out.println("The old label did not exist in database!");
     		fail();
     	}
     }
 
-    @Test(expected = SQLException.class)
+    @Test(expected = IOException.class)
     public void shouldNotDeleteDirectoryContainingFile() throws Exception {
+
     	dbac.addExperiment(testExpId2);
 		ft = dbac.addNewFile(testExpId2, testFileType, testName, testInputFile,
 		  		testMetaData, testAuthor, testUploader, testIsPrivate,
@@ -255,27 +264,33 @@ public class ExperimentTests {
 
     @Test
     public void shouldDeleteDirectories() throws Exception {
-		fpg.generateExperimentFolders(testExpId);
+
+    	fpg.generateExperimentFolders(testExpId);
 		File dir = new File(testFolderPath + testExpId);
 		assertTrue(dir.exists());
+
 		dbac.deleteExperiment(testExpId);
 		assertFalse(dir.exists());
 	}
 
     @Test
     public void shouldGetExperimentDespiteWrongCase() throws Exception {
-        Experiment e = dbac.getExperiment(testExpIdWrongCase);
+
+    	Experiment e = dbac.getExperiment(testExpIdWrongCase);
         assertNotNull(e);
         assertEquals(testExpId, e.getID());
     }
 
     @Test
     public void shouldReturnNullIfExperimentDoesNotExist() throws Exception {
-        assertNull(dbac.getExperiment("pang"));
+
+    	assertNull(dbac.getExperiment("pang"));
     }
 
-    private void addMockFile(String folderPath, String filename1) throws IOException {
-        File file1 = new File(folderPath + filename1);
+    private void addMockFile(String folderPath, String filename1)
+    		throws IOException {
+
+    	File file1 = new File(folderPath + filename1);
         file1.createNewFile();
     }
 }

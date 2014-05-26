@@ -1,13 +1,10 @@
 package command.test;
 
 import static org.junit.Assert.*;
-
 import org.junit.Before;
 import org.junit.Test;
-
 import command.CommandFactory;
 
-//TODO: Implement missing unit tests, make sure all methods in commandfactory are tested.
 /**
  * Testclass used to test the CommandFactory class.
  *
@@ -250,18 +247,20 @@ public class CommandFactoryTest {
 	 */
 	@Test
 	public void testGetAnnotationPrivilegesCommandNotNull() {
-		//TODO: implement.
-		fail("Not yet implemented.");
+
+		String json = "{\"name\":\"a\",\"oldValue\":\"b\",\"newValue\":\"c\"}";
+		assertNotNull(cmdf.createGetAnnotationPrivilegesCommand(json));
 
 	}
-
+	//TODO: Should probably be removed.
 	/**
 	 * Test creation of UpdateAnnotationPrivilegesCommand and that it's not null.
 	 */
 	@Test
 	public void testUpdateAnnotationPrivilegesCommandNotNull() {
-		//TODO: Implement.
-		fail("Not yet implemented.");
+
+		assertNotNull(cmdf.createUpdateAnnotationPrivilegesCommand("a", "b"));
+
 	}
 
 	/**
@@ -274,15 +273,6 @@ public class CommandFactoryTest {
 		String json = "{\"fileName\":\"abc123\",\"specie\":\"human\",\"genomeVersion\":\"GV 1.0\"}";
 		assertNotNull(cmdf.createAddGenomeReleaseCommand(json));
 
-	}
-
-	/**
-	 * Test creation of RenameAnnotationValueCommand and that it's not null.
-	 */
-	@Test
-	public void testRenameAnnotationValueCommandNotNull() {
-		//TODO: Implement.
-		fail("Not yet implemented.");
 	}
 
 	/**
@@ -311,8 +301,10 @@ public class CommandFactoryTest {
 	 */
 	@Test
 	public void testEditAnnotationFieldCommandNotNull() {
-		//TODO: Implement
-		fail("Not implemented yet.");
+
+		String json = "{\"oldName\":\"a\",\"newName\":\"b\"}";
+		assertNotNull(cmdf.createEditAnnotationFieldCommand(json));
+
 	}
 
 	/**

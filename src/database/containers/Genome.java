@@ -1,12 +1,9 @@
-package database;
+package database.containers;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import database.constants.ServerDependentValues;
 
@@ -15,7 +12,7 @@ public class Genome {
     public final String genomeVersion;
     public final String species;
     public final String folderPath;
-    private final ArrayList<String> files;
+    private final List<String> files;
 
     public Genome(ResultSet resSet) throws SQLException {
         genomeVersion = resSet.getString("Version");
@@ -31,16 +28,14 @@ public class Genome {
      * Gets a map with filename as key and the status of the file as value.
      * @return
      */
-    public ArrayList<String> getFilesWithStatus() {
+    public List<String> getFiles() {
         return files;
     }
 
     public List<String> getDownloadURLs() {
         List<String> downloadURLs = new ArrayList<String>();
-
-
-        for (String fileName: files) {
-            downloadURLs.add(ServerDependentValues.DownloadURL + folderPath + fileName);
+        for (String s: files) {
+            downloadURLs.add(ServerDependentValues.DownloadURL + folderPath + s);
         }
         return downloadURLs;
     }
@@ -49,7 +44,6 @@ public class Genome {
         if (files.isEmpty()) {
             return null;
         }
-       // String fileName = files.entrySet().iterator().next().getKey();
         String fileName = files.get(0);
         int indexOfFirstDot = fileName.indexOf('.');
         if (indexOfFirstDot == -1) {
@@ -58,11 +52,10 @@ public class Genome {
         return fileName.substring(0, indexOfFirstDot);
     }
 
-    public String getVersion() {
-    	return genomeVersion;
-    }
-
-    public String getSpecie() {
-    	return species;
+    @Override
+    public String toString() {
+        return "Genome [genomeVersion=" + genomeVersion + ", species="
+                + species + ", folderPath=" + folderPath + ", files=" + files
+                + "]";
     }
 }

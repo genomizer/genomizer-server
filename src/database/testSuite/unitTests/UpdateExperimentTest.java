@@ -11,9 +11,9 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import database.Annotation;
 import database.DatabaseAccessor;
-import database.Experiment;
+import database.containers.Annotation;
+import database.containers.Experiment;
 import database.testSuite.TestInitializer;
 
 public class UpdateExperimentTest {
@@ -23,12 +23,14 @@ public class UpdateExperimentTest {
 
     @BeforeClass
     public static void setupBeforeClass() throws Exception {
+
         ti = new TestInitializer();
         dbac = ti.setup();
     }
 
     @AfterClass
     public static void undoAllChanges() throws SQLException {
+
         ti.removeTuples();
     }
 
@@ -42,9 +44,7 @@ public class UpdateExperimentTest {
                 dbac.updateExperiment("Exp1", "Tissue", "Leg"));
 
         String resAfter = localGetExperiment("Exp1", "Tissue");
-
         assertFalse(resBefore.equals(resAfter));
-
     }
 
     @Test
@@ -52,15 +52,12 @@ public class UpdateExperimentTest {
             IOException {
 
         String resBefore = localGetExperiment("Exp1", "Sex");
-
         assertEquals(1, dbac.updateExperiment("Exp1", "Sex", "Male"));
 
         String resAfter = localGetExperiment("Exp1", "Sex");
-
         assertFalse(resBefore.equals(resAfter));
-        
-        dbac.updateExperiment("Exp1", "Sex", "Unknown");
 
+        dbac.updateExperiment("Exp1", "Sex", "Unknown");
     }
 
     @Test
@@ -74,10 +71,10 @@ public class UpdateExperimentTest {
 
         String resAfter = localGetExperiment("Exp1", "Sex");
         assertEquals("Male", resAfter);
-        
+
         dbac.updateExperiment("Exp1", "Sex", "Unknown");
     }
-    
+
     @Test
     public void shouldUpdateFTAnnotationDespiteWrongCase()
             throws Exception {
@@ -91,15 +88,13 @@ public class UpdateExperimentTest {
         assertEquals("UPPER CASE AND lowercase", value);
     }
 
-    public String localGetExperiment(String expID, String label)
+    private String localGetExperiment(String expID, String label)
             throws SQLException {
 
         Experiment e = dbac.getExperiment(expID);
         HashMap<String, String> hm = e.getAnnotations();
-
         String res = hm.get(label);
 
         return res;
     }
-
 }

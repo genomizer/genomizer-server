@@ -1,7 +1,5 @@
 package database.testSuite.unitTests;
 
-import static org.junit.Assert.*;
-
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -16,18 +14,23 @@ import database.DatabaseAccessor;
 import database.FilePathGenerator;
 import database.testSuite.TestInitializer;
 
+/**
+ * Test class for finding last minute bugs in subMethods classes!
+ */
 public class HackingTest {
 
 	private static DatabaseAccessor dbac;
     private static TestInitializer ti;
 
-    private static String testFolderName = "Genomizer Test Folder - Dont be afraid to delete me";
+    private static String testFolderName =
+    		"Genomizer Test Folder - Dont be afraid to delete me";
     private static File testFolder;
     private static String testFolderPath;
     private static FilePathGenerator fpg;
 
     @BeforeClass
     public static void setupBeforeClass() throws Exception {
+
         ti = new TestInitializer();
         dbac = ti.setup();
 
@@ -46,34 +49,42 @@ public class HackingTest {
 
     @AfterClass
     public static void undoAllChanges() throws SQLException {
-        ti.removeTuples();
 
+        ti.removeTuples();
         ti.recursiveDelete(testFolder);
     }
 
-    //Experiment
+    //ExperimentMethods
 
     @Test(expected = IOException.class)
-	public void testAddingExperimentWithEmptyName() throws SQLException, IOException {
+	public void shouldNotAddExperimentWithEmptyName() throws SQLException,
+			IOException {
+
 		dbac.addExperiment("");
 	}
 
     @Test(expected = IOException.class)
-    public void testAnnotatWithNonExistentExperiment() throws SQLException, IOException {
+    public void shouldNotAnnotateWithNonExistentExperiment()
+    		throws SQLException, IOException {
+
     	dbac.annotateExperiment("blaj", "sdfdfs", "dfdf");
     }
 
     @Test(expected = IOException.class)
-    public void testAnnotatWithNonExistentAnnotationLabel() throws SQLException, IOException {
+    public void shouldNotAnnotateWithNonExistentAnnotationLabel()
+    		throws SQLException, IOException {
+
     	dbac.addExperiment("xp2");
     	dbac.annotateExperiment("xp2", "sdfdfs", "dfdf");
     }
 
-    //Annotation
+    //AnnotationMethods
 
     @Test(expected = IOException.class)
-	public void testAddingDropDownWithEmptyLabel() throws SQLException, IOException {
-		List<String> choices = new ArrayList<String>();
+	public void shouldNotAddDropDownWithEmptyLabel() throws SQLException,
+			IOException {
+
+    	List<String> choices = new ArrayList<String>();
 		choices.add("Choice1");
 		choices.add("Choice2");
 
@@ -81,7 +92,9 @@ public class HackingTest {
 	}
 
 	@Test(expected = IOException.class)
-	public void testAddingDropDownAnnotationWithEmptyValue() throws SQLException, IOException {
+	public void shouldNotAddDropDownAnnotationWithEmptyValue()
+			throws SQLException, IOException {
+
 		List<String> choices = new ArrayList<String>();
 		choices.add("Choice1");
 
@@ -90,43 +103,55 @@ public class HackingTest {
 	}
 
 	@Test(expected = IOException.class)
-	public void testAddingFreeTextAnnotationWithEmptyLabel() throws SQLException, IOException {
+	public void shouldNotAddFreeTextAnnotationWithEmptyLabel()
+			throws SQLException, IOException {
+
 		dbac.addFreeTextAnnotation("", "hej", true);
 	}
 
 	@Test(expected = IOException.class)
-	public void testAddingFreeTextAnnotationWithEmptyValue() throws SQLException, IOException {
+	public void shouldNotAddingFreeTextAnnotationWithEmptyValue()
+			throws SQLException, IOException {
+
 		dbac.addFreeTextAnnotation("anno2", "", true);
 	}
 
 	@Test(expected = IOException.class)
-	public void testChangeAnnotationLabelToEmptyLabel() throws SQLException, IOException {
+	public void shouldNotChangeAnnotationLabelToEmptyLabel()
+			throws SQLException, IOException {
+
 		dbac.changeAnnotationLabel("", "value");
 	}
 
-	//User
+	//UserMethods
 
 	@Test(expected = IOException.class)
-	public void testAddUserWithEmptyName() throws SQLException, IOException {
+	public void shouldNotAddUserWithEmptyName()
+			throws SQLException, IOException {
+
 		dbac.addUser("", "1234", "Admin", "Bert Larsson", "sdsdfsfsdf");
 	}
 
 	@Test(expected = IOException.class)
-	public void testAddUserWithEmptyPassword() throws SQLException, IOException {
+	public void shouldNotAddUserWithEmptyPassword()
+			throws SQLException, IOException {
+
 		dbac.addUser("Herbert", "", "Admin", "Herbert Svensson", "sdsdfsfsdf");
 	}
 
 	@Test(expected = SQLException.class)
-	public void testAddSeveralUsersWithSameName() throws SQLException, IOException {
+	public void shouldNotAddSeveralUsersWithSameName()
+			throws SQLException, IOException {
+
 		dbac.addUser("Rune", "blabla", "Admin", "Rune Karlsson", "sdsdfsfsdf");
 		dbac.addUser("Rune", "blabla", "Admin", "Rune Karlsson", "sdsdfsfsdf");
 	}
 
 	@Test(expected = IOException.class)
-	public void testChangeToEmptyPassword() throws SQLException, IOException {
+	public void shouldNotChangeToEmptyPassword()
+			throws SQLException, IOException {
+
 		dbac.addUser("Rolf", "1234", "Admin", "Rolf Persson", "dffddf@mail.com");
 		dbac.resetPassword("Rolf", "");
 	}
-
-	// Add tests for remove files if theye are in use or not
 }

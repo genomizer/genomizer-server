@@ -3,24 +3,15 @@ package command;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import response.ErrorResponse;
-import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
 import response.GetExperimentResponse;
-import server.DatabaseSettings;
-
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
 
 import database.DatabaseAccessor;
-import database.Experiment;
-import database.FileTuple;
+import database.containers.Experiment;
+
 
 /**
  * Class used to retrieve an experiment.
@@ -66,7 +57,6 @@ public class GetExperimentCommand extends Command {
 	if(exp == null) {
 		return new ErrorResponse(StatusCode.BAD_REQUEST, "Experiment requested from database is null, not found or does not exist.");
 	}
-
 	return new GetExperimentResponse(StatusCode.OK, getInfo(exp), exp.getAnnotations(), exp.getFiles());
 }
 

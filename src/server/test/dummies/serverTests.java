@@ -12,7 +12,7 @@ public class serverTests {
 				GenomeRelease.sendGetGenomeRelease();
 				Thread.sleep(19000);
 				GenomeRelease.sendGetGenomeRelease();
-				
+
 			}
 			Login.login(name+i, "umea@2014");
 		}
@@ -24,11 +24,11 @@ public class serverTests {
 		//Annotations.sendDeleteAnnotation("Test43???");
 		//Annotations.sendDeleteAnnotation("JONAS???");
 //		Annotations.sendGetAnnotationInformation();
-
-
 //		Process.sendRawToProfile();
+//		Annotations.sendAddAnnotation("invalid annotation 0123456789!!!!!!!!!едц");
+		//Process.sendRawToProfile();
 //		GenomeRelease.sendAddGenomeRelease("HumanitariumTest");
-
+		GenomeRelease.sendGetGenomeRelease();
 
 		//Login.logout();
 	}
@@ -76,6 +76,7 @@ public class serverTests {
 	}
 
 	public static void genometest() throws Exception {
+		GenomeRelease.sendDeleteGenomeReleaseSpecies("asd");
 		GenomeRelease.sendGetGenomeRelease();
 		GenomeRelease.sendAddGenomeRelease("Fly");
 		GenomeRelease.sendGetGenomeReleaseSpecies("Fly");

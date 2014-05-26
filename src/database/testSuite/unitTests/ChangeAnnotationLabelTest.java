@@ -9,8 +9,8 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import database.Annotation;
 import database.DatabaseAccessor;
+import database.containers.Annotation;
 import database.testSuite.TestInitializer;
 
 public class ChangeAnnotationLabelTest {
@@ -20,12 +20,14 @@ public class ChangeAnnotationLabelTest {
 
     @BeforeClass
     public static void setupTestCase() throws Exception {
+
         ti = new TestInitializer();
         dbac = ti.setup();
     }
 
     @AfterClass
     public static void teardownAfterClass() throws SQLException, Exception {
+
         ti.removeTuples();
     }
 
@@ -33,10 +35,10 @@ public class ChangeAnnotationLabelTest {
      * Test to check that the label changes.
      *
      * @throws IOException
-     *
      */
     @Test
     public void shouldChangeChosenLabel() throws Exception {
+
         assertEquals(1, dbac.changeAnnotationLabel("Tissue", "Tis"));
         assertNotNull(dbac.getAnnotationObject("Tis"));
         assertNull(dbac.getAnnotationObject("Tissue"));
@@ -53,13 +55,15 @@ public class ChangeAnnotationLabelTest {
     @Test(expected = IOException.class)
     public void shouldNotBeAbleToRemoveSpeciesAnnotationLabel()
             throws Exception {
+
         String label = "Species";
         dbac.deleteAnnotation(label);
     }
 
 
     @Test
-    public void testChangeAnnotationRequiredField() throws SQLException, IOException{
+    public void testChangeAnnotationRequiredField() throws SQLException,
+    		IOException {
 
     	dbac.addFreeTextAnnotation("Test", "jepp", false);
     	Annotation testAnno = dbac.getAnnotationObject("Test");

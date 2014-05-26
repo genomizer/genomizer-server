@@ -6,10 +6,8 @@ import java.sql.SQLException;
 import com.google.gson.annotations.Expose;
 
 import database.DatabaseAccessor;
-import database.FileTuple;
-import database.MaxSize;
+import database.constants.MaxSize;
 
-import response.AddFileToExperimentResponse;
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;

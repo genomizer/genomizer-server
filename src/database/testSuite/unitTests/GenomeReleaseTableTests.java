@@ -19,8 +19,8 @@ import org.junit.Test;
 
 import database.DatabaseAccessor;
 import database.FilePathGenerator;
-import database.Genome;
-import database.ServerDependentValues;
+import database.constants.ServerDependentValues;
+import database.containers.Genome;
 import database.testSuite.TestInitializer;
 
 public class GenomeReleaseTableTests {
@@ -80,11 +80,21 @@ public class GenomeReleaseTableTests {
         assertEquals("hg19", g.genomeVersion);
     }
 
-    @Test(expected = SQLException.class)
-    public void shouldThrowExceptionWhenAddFileAlreadyExist() throws SQLException {
+    @Test(expected = IOException.class)
+    public void shouldThrowExceptionWhenAddFileAlreadyExist()
+    									throws Exception {
 
     	dbac.addGenomeRelease("test12", "Bear", "test12.txt");
+    	System.out.println(dbac.getGenomeRelease("test12"));
     	dbac.addGenomeRelease("test12", "Bear", "test12.txt");
+    }
+
+    @Test
+    public void shouldReturnNullWhenGenomeReleaseDontExist()
+    									throws SQLException, IOException {
+
+    	assertFalse(dbac.removeGenomeRelease("thisFileMightNotExist"));
+
     }
 
     @Test
@@ -134,8 +144,8 @@ public class GenomeReleaseTableTests {
         dbac.addGenomeRelease("rn50", "Rat", "aRatFile.fasta");
         Genome genome = dbac.getGenomeRelease("rn50");
 
-        assertEquals(1, genome.getFilesWithStatus().size());
-        assertNotNull(genome.getFilesWithStatus().get("aRatFile.fasta"));
+        assertEquals(1, genome.getFiles().size());
+        assertNotNull(genome.getFiles().get(0));
         assertEquals(genome.species, "Rat");
         assertEquals(genome.genomeVersion, "rn50");
 
@@ -171,7 +181,7 @@ public class GenomeReleaseTableTests {
     @Test
     public void shouldBeAbleToGetDownloadURLs() throws Exception {
         Genome g = dbac.getGenomeRelease("hg38");
-        assertEquals(2, g.getFilesWithStatus().size());
+        assertEquals(2, g.getFiles().size());
         String downloadURL = getDownloadURL(g, "hg38.fasta");
         assertEquals(ServerDependentValues.DownloadURL + g.folderPath + "hg38.fasta", downloadURL);
     }
@@ -205,14 +215,30 @@ public class GenomeReleaseTableTests {
         dbac.addGenomeRelease("V1", "Frog", "Froggy1.txt");
         dbac.genomeReleaseFileUploaded("V1", "Froggy1.txt");
         Genome g = dbac.getGenomeRelease("V1");
-        assertEquals("Done", g.getFilesWithStatus().get("Froggy1.txt"));
+        assertEquals(1, g.getFiles().size());
     }
 
     @Test
     public void shouldGetFilePrefix() throws Exception {
         Genome g = dbac.getGenomeRelease("hg38");
-        assertEquals("hg38", g.getFilePrefix());
+        assertEquals("hg38(2)", g.getFilePrefix());
     }
+
+    @Test
+    public void shouldReturnNullIfSearchGenomReleaseThatDontExist()
+    											throws SQLException{
+
+    	assertNull(dbac.getAllGenomReleasesForSpecies("Dog"));
+    }
+
+    @Test
+    public void shouldReturnEmptyListFromGetAllGenomeReleasesWhenTableIsEmpty() throws Exception{
+
+    	tearDown();
+
+    	assertEquals(0,dbac.getAllGenomReleases().size());
+    }
+
 
     private boolean searchGenomeForVersion(List<Genome> genomeList,
             String version) {

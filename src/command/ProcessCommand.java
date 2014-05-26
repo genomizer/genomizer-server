@@ -18,7 +18,11 @@ import server.Debug;
 import server.ResponseLogger;
 
 import com.google.gson.annotations.Expose;
-import database.*;
+
+import database.DatabaseAccessor;
+import database.containers.Genome;
+import database.constants.CanBeNull;
+import database.constants.MaxSize;
 
 public class ProcessCommand extends Command {
 
@@ -87,11 +91,6 @@ public class ProcessCommand extends Command {
 		if(parameters == null){
 			Debug.log("ProcessCommand - Validate\n" +
 					"parameters are null");
-			return false;
-		}
-		if(author == null){
-			Debug.log("ProcessCommand - Validate\n" +
-					"author is null");
 			return false;
 		}
 

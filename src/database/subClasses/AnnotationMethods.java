@@ -17,8 +17,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import database.Annotation;
 import database.PubMedToSQLConverter;
+import database.containers.Annotation;
 
 /**
  * Class that contains all the methods for adding,changing, getting and removing
@@ -35,7 +35,6 @@ public class AnnotationMethods {
             "filename" };
     private HashSet<String> fileAttributes;
 
-
     /**
      * Constructor for the AnnotationMethod object.
      *
@@ -43,13 +42,15 @@ public class AnnotationMethods {
      *            Connection, the connection to the database.
      */
     public AnnotationMethods(Connection connection) {
+
         fileAttributes = new HashSet<String>();
+
         for (int i = 0; i < fileAttributesArray.length; i++) {
             fileAttributes.add(fileAttributesArray[i]);
         }
+
         conn = connection;
     }
-
 
     /**
      * Gets all the annotation possibilities from the database.
@@ -79,7 +80,6 @@ public class AnnotationMethods {
 
         return annotations;
     }
-
 
     /**
      * Creates an Annotation object from an annotation label.
@@ -112,7 +112,6 @@ public class AnnotationMethods {
         }
     }
 
-
     /**
      * Creates a list of Annotation objects from a list of annotation labels.
      *
@@ -143,7 +142,6 @@ public class AnnotationMethods {
         return annotationsList;
     }
 
-
     /**
      * Finds all annotationLabels that exist in the database, example of labels:
      * sex, tissue, etc...
@@ -172,7 +170,6 @@ public class AnnotationMethods {
         return annotationLabelList;
     }
 
-
     /**
      * Gets the datatype of a given annotation.
      *
@@ -186,12 +183,13 @@ public class AnnotationMethods {
     public Integer getAnnotationType(String label) throws SQLException {
 
         Annotation a = getAnnotationObject(label);
+
         if (a == null) {
             return 0;
         }
+
         return a.dataType;
     }
-
 
     /**
      * Gets the default value for a annotation if there is one, If not it
@@ -221,7 +219,6 @@ public class AnnotationMethods {
         return null;
     }
 
-
     /**
      * Deletes an annotation from the list of possible annotations. Label
      * SPECIES can't be changed because of dependencies in other tables.
@@ -232,11 +229,12 @@ public class AnnotationMethods {
      * @throws SQLException
      *             if the query does not succeed
      * @throws IOException
-     *             if label = "Species"
+     *             if label = "Species" or the annotation is used by an
+     *             experiment.
      */
     public int deleteAnnotation(String label) throws SQLException, IOException {
 
-        if (label.toLowerCase().contentEquals("species")) {
+        if (label.equalsIgnoreCase("species")) {
             throw new IOException("Can't remove annotation 'Species'");
         }
 
@@ -262,7 +260,6 @@ public class AnnotationMethods {
         return res;
     }
 
-
     /**
      * Adds a free text annotation to the list of possible annotations.
      *
@@ -281,16 +278,18 @@ public class AnnotationMethods {
     public int addFreeTextAnnotation(String label, String defaultValue,
             boolean required) throws SQLException, IOException {
 
-    	if (label==null || label.isEmpty()) {
-    		throw new IOException("Invalid Label");
-    	}
-    	if (defaultValue!=null && defaultValue.isEmpty()) {
-    		throw new IOException("Invalid DefaultValue");
-    	}
+        if (label == null || label.isEmpty()) {
+            throw new IOException("Invalid Label. (Null or empty String)");
+        }
+
+        if (defaultValue != null && defaultValue.isEmpty()) {
+            throw new IOException(
+                    "Invalid Default Value. (Null or empty String)");
+        }
 
         if (isFileAnnotation(label)) {
-            throw new IOException(
-                    "The given annotation is a file- annotation.'");
+            throw new IOException(label
+                    + " is used to annotate files and cannot be duplicated.");
         }
 
         if (!isValidChoice(label)) {
@@ -299,7 +298,7 @@ public class AnnotationMethods {
 
         Annotation a = getAnnotationObject(label);
         if (a != null) {
-            throw new IOException("This annotation already exists");
+            throw new IOException(label + " already exists");
         }
 
         if (defaultValue != null) {
@@ -322,7 +321,6 @@ public class AnnotationMethods {
 
         return rs;
     }
-
 
     /**
      * Checks if a given annotation is required to be filled by the user.
@@ -350,7 +348,6 @@ public class AnnotationMethods {
         stmt.close();
         return isRequired;
     }
-
 
     /**
      * Gets all the choices for a drop down annotation. Deprecated, use
@@ -384,7 +381,6 @@ public class AnnotationMethods {
         return dropDownLabelsList;
     }
 
-
     /**
      * Adds a drop down annotation to the list of possible annotations.
      *
@@ -403,14 +399,12 @@ public class AnnotationMethods {
             int defaultValueIndex, boolean required) throws SQLException,
             IOException {
 
-    	if (label==null || label.isEmpty()) {
-    		throw new IOException("Invalid Label");
-    	}
-
+        if (label == null || label.isEmpty()) {
+            throw new IOException("Invalid Label. (Empty or null)");
+        }
 
         if (isFileAnnotation(label)) {
-            throw new IOException(
-                    "The given annotation is a file- annotation.'");
+            throw new IOException("The given annotation is a file annotation.");
         }
 
         if (!isValidChoice(label)) {
@@ -419,7 +413,8 @@ public class AnnotationMethods {
 
         Annotation a = getAnnotationObject(label);
         if (a != null) {
-            throw new IOException("This annotation already exists.");
+            throw new IOException(a.label
+                    + " is already an annotation possibility.");
         }
 
         if (choices.isEmpty()) {
@@ -474,7 +469,6 @@ public class AnnotationMethods {
         return tuplesInserted;
     }
 
-
     /**
      * Method to add a value to a existing DropDown annotation.
      *
@@ -493,47 +487,54 @@ public class AnnotationMethods {
     public int addDropDownAnnotationValue(String label, String value)
             throws SQLException, IOException {
 
+        if (label == null || label.isEmpty()) {
+            throw new IOException("Invalid Label");
+        }
 
-
-    	if (label==null || label.isEmpty()) {
-    		throw new IOException("Invalid Label");
-    	}
-    	if (value==null || value.isEmpty()) {
-    		throw new IOException("Invalid Value");
-    	}
+        if (value == null || value.isEmpty()) {
+            throw new IOException("Invalid Value");
+        }
 
         if (!isValidChoice(value)) {
             throw new IOException("Value contains invalid characters");
         }
 
-        String query = "SELECT * FROM Annotation WHERE "
-                + "(label ~~* ? AND datatype = 'DropDown')";
+        Annotation a = getAnnotationObject(label);
 
-        PreparedStatement checkTagStatement = conn.prepareStatement(query);
-        checkTagStatement.setString(1, label);
-
-        ResultSet rs = checkTagStatement.executeQuery();
-        boolean hasResult = rs.next();
-        checkTagStatement.close();
-
-        if (!hasResult) {
-            throw new IOException("The annotation of the chosen label"
-                    + " is not of type DropDown");
-        } else {
-            query = "INSERT INTO Annotation_Choices (label , value) "
-                    + "VALUES (?,?)";
-
-            PreparedStatement insertTagStatement = conn.prepareStatement(query);
-
-            insertTagStatement.setString(1, label);
-            insertTagStatement.setString(2, value);
-            int resCount = insertTagStatement.executeUpdate();
-            insertTagStatement.close();
-
-            return resCount;
+        if (a == null) {
+            throw new IOException(label + " is not an existing annotation.");
         }
+
+        if (a.dataType != Annotation.DROPDOWN) {
+            throw new IOException(label + " is not a drop down annotation.");
+        }
+
+        if (inCaseSensitiveSearch(value, a.getPossibleValues()) != null) {
+            throw new IOException(value + " is already a choice for " + label
+                    + ".");
+        }
+
+        String query = "INSERT INTO Annotation_Choices (label , value) "
+                + "VALUES (?,?)";
+
+        PreparedStatement insertTagStatement = conn.prepareStatement(query);
+
+        insertTagStatement.setString(1, label);
+        insertTagStatement.setString(2, value);
+        int resCount = insertTagStatement.executeUpdate();
+        insertTagStatement.close();
+
+        return resCount;
     }
 
+    private String inCaseSensitiveSearch(String target, List<String> strings) {
+        for (String s : strings) {
+            if (s.equalsIgnoreCase(target)) {
+                return s;
+            }
+        }
+        return null;
+    }
 
     /**
      * Method to remove a given annotation of a dropdown- annotation.
@@ -552,21 +553,37 @@ public class AnnotationMethods {
             throws SQLException, IOException {
 
         // Check if value is a dropdown choice and used on any experiments
-        String dependQuery = "SELECT * FROM Annotated_With "
+        String dependFileQuery = "SELECT * FROM Annotated_With "
                 + "WHERE (label ~~* ? AND value ~~* ?)";
 
         PreparedStatement dependencyStatement = conn
-                .prepareStatement(dependQuery);
+                .prepareStatement(dependFileQuery);
         dependencyStatement.setString(1, label);
         dependencyStatement.setString(2, value);
         ResultSet res = dependencyStatement.executeQuery();
 
+        String dependGenomeQuery = "SELECT * FROM Genome_Release "
+                + "WHERE (Species ~~* ?)";
+        PreparedStatement dependency2Statement = conn
+                .prepareStatement(dependGenomeQuery);
+        dependency2Statement.setString(1, value);
+        ResultSet res2 = dependency2Statement.executeQuery();
+
         boolean hasDependency = res.next();
         dependencyStatement.close();
+
+        boolean hasDependency2 = res2.next();
+        dependency2Statement.close();
         if (hasDependency) {
             throw new IOException(value
                     + " is used in other experiments under label " + label
                     + " and can therefore not be removed.");
+        }
+        if (hasDependency2) {
+            throw new IOException(value
+                    + "is used in a stored genome_release and"
+                    + " therefore cannot be removed.");
+
         }
 
         String query = "SELECT * FROM Annotation WHERE "
@@ -598,7 +615,6 @@ public class AnnotationMethods {
         }
     }
 
-
     /**
      * Changes the annotation label.
      *
@@ -621,36 +637,46 @@ public class AnnotationMethods {
     public int changeAnnotationLabel(String oldLabel, String newLabel)
             throws SQLException, IOException {
 
-    	if (oldLabel == null || oldLabel.contentEquals("")
-    			|| newLabel == null || newLabel.contentEquals("")) {
-    		throw new IOException("Invalid parameters");
-    	}
+        if (oldLabel == null || oldLabel.isEmpty()) {
+            throw new IOException(
+                    "Invalid label. (Specified label to change is null or empty)");
+        }
 
-        if (oldLabel.toLowerCase().contentEquals("species")) {
+        if (newLabel == null || newLabel.isEmpty()) {
+            throw new IOException(
+                    "Invalid label. (The new label is null or empty)");
+        }
+
+        if (oldLabel.equalsIgnoreCase("species")) {
             throw new IOException("Can't change label on annotation 'Species'");
-        } else if (isFileAnnotation(newLabel)){
-        	throw new IOException("Can't change label name to a file- annotation name.");
         }
-        else {
-            if (!isValidChoice(newLabel)) {
-                throw new IOException(newLabel
-                        + " contains invalid characters.\n"
-                        + "Brackets cannot be used in annotations.");
-            }
 
-            String query = "UPDATE Annotation SET Label = ? WHERE (Label ~~* ?)";
-
-            PreparedStatement stmt;
-            stmt = conn.prepareStatement(query);
-            stmt.setString(1, newLabel);
-            stmt.setString(2, oldLabel);
-
-            int resCount = stmt.executeUpdate();
-            stmt.close();
-            return resCount;
+        if (isFileAnnotation(newLabel)) {
+            throw new IOException("Can't change label name to a file- "
+                    + "annotation name.");
         }
+
+        if (!isValidChoice(newLabel)) {
+            throw new IOException(newLabel + " contains invalid characters.\n"
+                    + "Brackets cannot be used in annotations.");
+        }
+
+        if (getAnnotationObject(newLabel) != null) {
+            throw new IOException(newLabel + " already in use.");
+        }
+
+        String query = "UPDATE Annotation SET Label = ? "
+                + "WHERE (Label ~~* ?)";
+
+        PreparedStatement stmt;
+        stmt = conn.prepareStatement(query);
+        stmt.setString(1, newLabel);
+        stmt.setString(2, oldLabel);
+
+        int resCount = stmt.executeUpdate();
+        stmt.close();
+        return resCount;
     }
-
 
     /**
      * Changes the value of an annotation corresponding to it's label.
@@ -675,11 +701,34 @@ public class AnnotationMethods {
      * @throws ParseException
      */
     public void changeAnnotationValue(String label, String oldValue,
-            String newValue) throws SQLException, IOException, ParseException {
+            String newValue) throws SQLException, IOException {
 
         if (!isValidChoice(newValue)) {
             throw new IOException(newValue + " contains invalid characters.\n"
                     + "Brackets cannot be used in annotations.");
+        }
+
+        Annotation a = getAnnotationObject(label);
+        if (a == null) {
+            throw new IOException(label
+                    + " is not a valid annotation. (Does not exist)");
+        }
+
+        if (a.dataType == Annotation.DROPDOWN) {
+            if (a.getPossibleValues() == null) {
+                throw new IOException(label
+                        + " has no choices. (DropDown with no choices)");
+            }
+
+            if (inCaseSensitiveSearch(oldValue, a.getPossibleValues()) == null) {
+                throw new IOException(oldValue
+                        + " is not a choice for this annotation.");
+            }
+
+            if (inCaseSensitiveSearch(newValue, a.getPossibleValues()) != null) {
+                throw new IOException(newValue
+                        + " is already a choice for this annotation.");
+            }
         }
 
         String query = "UPDATE Annotation_Choices " + "SET Value = ? "
@@ -724,22 +773,36 @@ public class AnnotationMethods {
 
     /**
      * Method that changes the Required field to the selected boolean.
-     * @param AnnoLabel String, the name of the annotation to change required
-     * 							for.
+     *
+     * @param AnnoLabel
+     *            String, the name of the annotation to change required for.
      * @return resCount int, the numer of rows affected by the change.
-     * @throws SQLException, will be thrown if the psql query fails.
+     * @throws SQLException
+     *             , will be thrown if the psql query fails.
+     * @throws IOException
      */
-    public int changeAnnotationRequiredField(String AnnoLabel,
-    											boolean required) throws SQLException{
+    public int changeAnnotationRequiredField(String annoLabel, boolean required)
+            throws SQLException, IOException {
 
-    	String changeRequired = "UPDATE Annotation SET Required = ? WHERE (Label = ?)";
-    	PreparedStatement changeReq = conn.prepareStatement(changeRequired);
+        Annotation a = getAnnotationObject(annoLabel);
+        if (a == null) {
+            throw new IOException(annoLabel
+                    + " is not a valid annotation. (Does not exist)");
+        }
 
-    	changeReq.setBoolean(1, required);
-    	changeReq.setString(2, AnnoLabel);
+        if (a.isRequired && required) {
+            return 0;
+        }
 
-    	int resCount = changeReq.executeUpdate();
-    	changeReq.close();
+        String changeRequired = "UPDATE Annotation SET Required = ? "
+                + "WHERE (Label = ?)";
+        PreparedStatement changeReq = conn.prepareStatement(changeRequired);
+
+        changeReq.setBoolean(1, required);
+        changeReq.setString(2, annoLabel);
+
+        int resCount = changeReq.executeUpdate();
+        changeReq.close();
         return resCount;
     }
 
@@ -753,7 +816,6 @@ public class AnnotationMethods {
         }
         return stmt;
     }
-
 
     /**
      * Gets all the choices for a drop down annotation.
@@ -784,9 +846,8 @@ public class AnnotationMethods {
         return choicesList;
     }
 
-
     /**
-     * binds a sql prepared query statement with parameters, example:
+     * Binds an sql prepared query statement with parameters, example:
      * "UPDATE Annotation_Choices SET Value = ? WHERE Label = ? and Value = ?;"
      * and the questionmarks are the parameters.
      *
@@ -803,42 +864,42 @@ public class AnnotationMethods {
     public PreparedStatement bind(PreparedStatement query,
             List<Entry<String, String>> params) throws SQLException,
             IOException {
+
         int i = 1;
 
         for (Entry<String, String> entry : params) {
 
             switch (entry.getValue()) {
-                case PubMedToSQLConverter.STRING_PARAM:
-                    query.setString(i, entry.getKey());
-                    break;
-                case PubMedToSQLConverter.DATE_PARAM:
-                    try {
-                        DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
-                        java.util.Date ud = df.parse(entry.getKey());
-                        Date d = new Date(ud.getTime());
-                        query.setDate(i, d);
-                    } catch (ParseException e) {
-                        throw new IOException(
-                                "Date in wrong format. Use yyyy/MM/dd");
-                    }
-                    break;
-                case PubMedToSQLConverter.INT_PARAM:
-                    try {
-                        Integer n = Integer.parseInt(entry.getKey());
-                        query.setInt(i, n);
-                    } catch (NumberFormatException e) {
-                        throw new IOException("File ID number in wrong format");
-                    }
-                    break;
-                default:
-                    query.setString(i, entry.getKey());
-                    break;
+            case PubMedToSQLConverter.STRING_PARAM:
+                query.setString(i, entry.getKey());
+                break;
+            case PubMedToSQLConverter.DATE_PARAM:
+                try {
+                    DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+                    java.util.Date ud = df.parse(entry.getKey());
+                    Date d = new Date(ud.getTime());
+                    query.setDate(i, d);
+                } catch (ParseException e) {
+                    throw new IOException(
+                            "Date in wrong format. Use yyyy/MM/dd");
+                }
+                break;
+            case PubMedToSQLConverter.INT_PARAM:
+                try {
+                    Integer n = Integer.parseInt(entry.getKey());
+                    query.setInt(i, n);
+                } catch (NumberFormatException e) {
+                    throw new IOException("File ID number in wrong format");
+                }
+                break;
+            default:
+                query.setString(i, entry.getKey());
+                break;
             }
             i++;
         }
         return query;
     }
-
 
     private boolean isFileAnnotation(String label) {
 
@@ -847,7 +908,6 @@ public class AnnotationMethods {
         }
         return false;
     }
-
 
     /**
      * private method to check if the annotation contains invalid characters

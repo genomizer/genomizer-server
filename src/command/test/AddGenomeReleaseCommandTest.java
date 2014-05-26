@@ -10,7 +10,7 @@ import com.google.gson.GsonBuilder;
 
 import command.AddGenomeReleaseCommand;
 import command.Command;
-import database.MaxSize;
+import database.constants.MaxSize;
 
 /**
  * Class used to test the AddGenomeRelease class.
