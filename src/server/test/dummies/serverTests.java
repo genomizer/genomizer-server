@@ -5,8 +5,17 @@ import authentication.PasswordHash;
 public class serverTests {
 
 	public static void main(String args[]) throws Exception {
+		for (int i = 0; i < 100; i++) {
+			String name = "hej";
+			if(i==80){
+				Thread.sleep(19000);
+				GenomeRelease.sendGetGenomeRelease();
+				Thread.sleep(19000);
+				GenomeRelease.sendGetGenomeRelease();
 
-		Login.login("RobinO", "umea@2014");
+			}
+			Login.login(name+i, "umea@2014");
+		}
 //		Login.login("Splutt", "hejhej");
 		//usertests();
 		//specialannotest();
@@ -15,13 +24,13 @@ public class serverTests {
 		//Annotations.sendDeleteAnnotation("Test43???");
 		//Annotations.sendDeleteAnnotation("JONAS???");
 //		Annotations.sendGetAnnotationInformation();
+//		Process.sendRawToProfile();
 //		Annotations.sendAddAnnotation("invalid annotation 0123456789!!!!!!!!!едц");
-
 		//Process.sendRawToProfile();
 //		GenomeRelease.sendAddGenomeRelease("HumanitariumTest");
 		GenomeRelease.sendGetGenomeRelease();
 
-		Login.logout();
+		//Login.logout();
 	}
 
 	public static void renameannotest() throws Exception {
