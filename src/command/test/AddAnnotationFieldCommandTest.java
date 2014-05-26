@@ -43,6 +43,19 @@ public class AddAnnotationFieldCommandTest {
 
 	}
 
+	@Test
+	public void testHasOnlyValidCharacters(){
+		AddAnnotationFieldCommand aafc = new AddAnnotationFieldCommand();
+
+		String valid = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ";
+		String invalid = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 åäö";
+		String invalid2 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 !#¤%&/()";
+
+		assertTrue(aafc.hasOnlyValidCharacters(valid));
+		assertFalse(aafc.hasOnlyValidCharacters(invalid));
+		assertFalse(aafc.hasOnlyValidCharacters(invalid2));
+	}
+
 	/**
 	 * Test that checks that creating a freetext annotation works
 	 * properly.
@@ -134,6 +147,25 @@ public class AddAnnotationFieldCommandTest {
 	    String json = "{\"name\":\"species\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
 	    final Command aafc = gson.fromJson(json, AddAnnotationFieldCommand.class);
 		assertTrue(aafc.validate());
+
+	}
+
+	@Test
+	public void testInvalidCharacters(){
+		String json = "{\"name\":\"spec ies\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
+	    final Command aafc = gson.fromJson(json, AddAnnotationFieldCommand.class);
+	    assertTrue(aafc.validate());
+
+	    String json2 = "{\"name\":\"speciesö\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
+	    final Command aafc2 = gson.fromJson(json2, AddAnnotationFieldCommand.class);
+	    assertFalse(aafc2.validate());
+
+	    String json3 = "{\"name\":\"species\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human!!!!\",\"forced\":true}";
+	    final Command aafc3 = gson.fromJson(json3, AddAnnotationFieldCommand.class);
+	    assertFalse(aafc3.validate());
+
+
+
 
 	}
 

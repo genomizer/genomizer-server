@@ -8,6 +8,7 @@ import response.MinimalResponse;
 import response.ProcessResponse;
 import response.Response;
 import response.StatusCode;
+import server.Debug;
 import server.WorkHandler;
 
 /**
@@ -43,7 +44,7 @@ public class CommandHandler {
 		Command myCom = createCommand(json, restful, uuid, cmdt);
 
 		if(myCom == null) {
-			System.out.println("COMMAND IS NULL, COULD NOT CREATE A COMMAND FROM JSON AND RESTFUL.");
+			Debug.log("COMMAND IS NULL, COULD NOT CREATE A COMMAND FROM JSON AND RESTFUL.");
 			return new ErrorResponse(StatusCode.BAD_REQUEST, "Could not create a command from request. Bad format on restful.");
 		}
 
@@ -51,14 +52,14 @@ public class CommandHandler {
 			if(CommandType.PROCESS_COMMAND.equals(cmdt)){
 				//add the heavy command to the queue, executed when the
 				//command is at the head of the queue, return OK to tell the client
-				System.err.println("Adding processCommand to workqueue");
+				Debug.log("Adding processCommand to workqueue");
 				heavyWorkThread.addWork((ProcessCommand)myCom);
 				return new ProcessResponse(StatusCode.OK);
 			}else{
 				return myCom.execute();
 			}
 		} else {
-			System.out.println("not valid");
+			Debug.log("not valid");
 			return new MinimalResponse(StatusCode.BAD_REQUEST);
 		}
 	}
