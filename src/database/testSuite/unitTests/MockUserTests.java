@@ -38,7 +38,7 @@ public class MockUserTests {
     public static void setUpBeforeClass() {
         ti = new TestInitializer();
         try {
-            dbac = ti.setupWithoutAddingTuples("genomizer");
+            dbac = ti.setupWithoutAddingTuples();
 
             testFolderPath = System.getProperty("user.home")
                     + File.separator + testFolderName
@@ -289,6 +289,9 @@ public class MockUserTests {
                 + "hg38.fasta";
 
         assertEquals(expectedUploadURL, uploadURL);
+        Genome g = dbac.getGenomeRelease("hg38");
+        assertEquals(1, g.getFilesWithStatus().size());
+        assertEquals("hg38", g.getFilePrefix());
     }
 
     @Test
@@ -352,12 +355,12 @@ public class MockUserTests {
         addGenomeReleaseFile();
 
         String uploadURL = dbac.addGenomeRelease("hg38", "Human",
-                "hg38(2).fasta");
+                "hg38.2.fasta");
 
         String expectedUploadURL = ServerDependentValues.UploadURL
                 + testFolderPath + "genome_releases" + File.separator
                 + "Human" + File.separator + "hg38" + File.separator
-                + "hg38(2).fasta";
+                + "hg38.2.fasta";
 
         assertEquals(expectedUploadURL, uploadURL);
     }
@@ -371,6 +374,7 @@ public class MockUserTests {
 
         assertEquals(2, g.getFilesWithStatus().size());
         assertEquals(2, g.getDownloadURLs().size());
+        assertEquals("hg38", g.getFilePrefix());
     }
 
     @Test
@@ -425,11 +429,11 @@ public class MockUserTests {
         FileTuple ft = getFileTuple("Prof1.sam", fts);
         assertNotNull(ft);
         assertEquals("Done", ft.status);
+        System.out.println(ft.toString());
 
         ft = getFileTuple("Prof2.sam", fts);
         assertNotNull(ft);
         assertEquals("Done", ft.status);
-
         System.out.println(ft.toString());
     }
 

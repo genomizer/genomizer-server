@@ -1,11 +1,14 @@
 package database.testSuite.unitTests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.text.ParseException;
 import java.util.List;
 
 import org.junit.After;
@@ -15,7 +18,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import database.DatabaseAccessor;
-import database.Experiment;
 import database.FilePathGenerator;
 import database.Genome;
 import database.ServerDependentValues;
@@ -33,7 +35,7 @@ public class GenomeReleaseTableTests {
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
         ti = new TestInitializer();
-        dbac = ti.setup();
+        dbac = ti.setupWithoutAddingTuples();
         fpg = dbac.getFilePathGenerator();
 
         testFolderPath = System.getProperty("user.home") + File.separator
@@ -51,16 +53,17 @@ public class GenomeReleaseTableTests {
 
     @AfterClass
     public static void tearDownAfterClass() throws Exception {
-        ti.removeTuples();
         recursiveDelete(testFolder);
     }
 
     @Before
     public void setUp() throws Exception {
+        ti.addTuples();
     }
 
     @After
     public void tearDown() throws Exception {
+        ti.removeTuplesKeepConnection();
     }
 
     @Test
@@ -75,6 +78,13 @@ public class GenomeReleaseTableTests {
         dbac.addGenomeRelease("hg19", "Human", "hg19.txt");
         g = dbac.getGenomeRelease("hg19");
         assertEquals("hg19", g.genomeVersion);
+    }
+
+    @Test(expected = SQLException.class)
+    public void shouldThrowExceptionWhenAddFileAlreadyExist() throws SQLException {
+
+    	dbac.addGenomeRelease("test12", "Bear", "test12.txt");
+    	dbac.addGenomeRelease("test12", "Bear", "test12.txt");
     }
 
     @Test
@@ -153,7 +163,7 @@ public class GenomeReleaseTableTests {
         assertFalse(genomeReleaseFolder.exists());
     }
 
-    @Test(expected = SQLException.class)
+    @Test(expected = IOException.class)
     public void shouldNotDeleteGenomReleaseWhenFileNeedsIt() throws Exception{
     	dbac.removeGenomeRelease("hg38");
     }
@@ -197,11 +207,11 @@ public class GenomeReleaseTableTests {
         Genome g = dbac.getGenomeRelease("V1");
         assertEquals("Done", g.getFilesWithStatus().get("Froggy1.txt"));
     }
-    
+
     @Test
     public void shouldGetFilePrefix() throws Exception {
-        Genome g = dbac.getGenomeRelease("hg19");
-        assertEquals("hg19", g.getFilePrefix());
+        Genome g = dbac.getGenomeRelease("hg38");
+        assertEquals("hg38", g.getFilePrefix());
     }
 
     private boolean searchGenomeForVersion(List<Genome> genomeList,

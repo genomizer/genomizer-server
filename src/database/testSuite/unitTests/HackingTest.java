@@ -51,20 +51,33 @@ public class HackingTest {
         ti.recursiveDelete(testFolder);
     }
 
-	@Test
+    //Experiment
+
+    @Test(expected = IOException.class)
 	public void testAddingExperimentWithEmptyName() throws SQLException, IOException {
 		dbac.addExperiment("");
-		assertNull(dbac.getExperiment(""));
 	}
 
-	@Test
+    @Test(expected = IOException.class)
+    public void testAnnotatWithNonExistentExperiment() throws SQLException, IOException {
+    	dbac.annotateExperiment("blaj", "sdfdfs", "dfdf");
+    }
+
+    @Test(expected = IOException.class)
+    public void testAnnotatWithNonExistentAnnotationLabel() throws SQLException, IOException {
+    	dbac.addExperiment("xp2");
+    	dbac.annotateExperiment("xp2", "sdfdfs", "dfdf");
+    }
+
+    //Annotation
+
+    @Test(expected = IOException.class)
 	public void testAddingDropDownWithEmptyLabel() throws SQLException, IOException {
 		List<String> choices = new ArrayList<String>();
 		choices.add("Choice1");
 		choices.add("Choice2");
 
 		dbac.addDropDownAnnotation("", choices, 0, true);
-		assertNull(dbac.getAnnotationObject(""));
 	}
 
 	@Test(expected = IOException.class)
@@ -78,55 +91,42 @@ public class HackingTest {
 
 	@Test(expected = IOException.class)
 	public void testAddingFreeTextAnnotationWithEmptyLabel() throws SQLException, IOException {
-
 		dbac.addFreeTextAnnotation("", "hej", true);
 	}
 
 	@Test(expected = IOException.class)
 	public void testAddingFreeTextAnnotationWithEmptyValue() throws SQLException, IOException {
-
 		dbac.addFreeTextAnnotation("anno2", "", true);
 	}
 
-	@Test
-	public void testAddUserWithEmptyName() throws SQLException {
-		List<String> userList;
+	@Test(expected = IOException.class)
+	public void testChangeAnnotationLabelToEmptyLabel() throws SQLException, IOException {
+		dbac.changeAnnotationLabel("", "value");
+	}
 
+	//User
+
+	@Test(expected = IOException.class)
+	public void testAddUserWithEmptyName() throws SQLException, IOException {
 		dbac.addUser("", "1234", "Admin", "Bert Larsson", "sdsdfsfsdf");
-		userList = dbac.getUsers();
-
-		assertFalse(userList.contains(""));
 	}
 
 	@Test(expected = IOException.class)
-	public void testAddUserWithEmptyPassword() throws SQLException {
+	public void testAddUserWithEmptyPassword() throws SQLException, IOException {
 		dbac.addUser("Herbert", "", "Admin", "Herbert Svensson", "sdsdfsfsdf");
 	}
 
 	@Test(expected = SQLException.class)
-	public void testAddSeveralUsersWithSameName() throws SQLException {
+	public void testAddSeveralUsersWithSameName() throws SQLException, IOException {
 		dbac.addUser("Rune", "blabla", "Admin", "Rune Karlsson", "sdsdfsfsdf");
 		dbac.addUser("Rune", "blabla", "Admin", "Rune Karlsson", "sdsdfsfsdf");
 	}
 
 	@Test(expected = IOException.class)
-	public void testRemoveChainFilesWithEmptyVersions() throws SQLException {
-		dbac.removeChainFile("", "");
+	public void testChangeToEmptyPassword() throws SQLException, IOException {
+		dbac.addUser("Rolf", "1234", "Admin", "Rolf Persson", "dffddf@mail.com");
+		dbac.resetPassword("Rolf", "");
 	}
 
-	@Test(expected = IOException.class)
-	public void testRemoveChainFilesWithEmptyFromVersion() throws SQLException {
-		dbac.removeChainFile("", "hej");
-	}
-
-	@Test(expected = IOException.class)
-	public void testRemoveChainFilesWithEmptyToVersion() throws SQLException {
-		dbac.removeChainFile("hej", "");
-	}
-
-	@Test(expected = IOException.class)
-	public void testRemoveDropDownAnnotationValueFromAnnotationDoesntExist() throws SQLException, IOException {
-		dbac.removeDropDownAnnotationValue("whaaat", "dfsdf");
-	}
-
+	// Add tests for remove files if theye are in use or not
 }

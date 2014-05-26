@@ -54,7 +54,7 @@ public class AddFileToExperimentCommand extends Command {
 	@Override
 	public boolean validate() {
 
-		if(experimentID == null || fileName == null || type == null) {
+		if(experimentID == null || fileName == null || type == null || uploader==null) {
 			return false;
 		}
 		return true;

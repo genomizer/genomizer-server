@@ -7,12 +7,13 @@ import java.security.NoSuchAlgorithmException;
 public class PasswordHash
 {
 
-    public static String toSaltedMD5Hash(String password) {
+    public static String toSaltedSHA256Hash(String password) {
+
     	String salt = getSalt();
     	String salted_password = password + salt;
     	try {
-            // Create MessageDigest instance for MD5
-            MessageDigest md = MessageDigest.getInstance("MD5");
+            // Create MessageDigest instance for SHA-256
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
             //Add password bytes to digest
             md.update(salted_password.getBytes());
             //Get the hash's bytes
@@ -36,6 +37,11 @@ public class PasswordHash
 
 	private static String getSalt() {
 		return "genomizer";
+	}
+
+	public static void main(String args[]) {
+	    String s = PasswordHash.toSaltedSHA256Hash("umea@2014");
+	    System.out.println(s);
 	}
 
 }

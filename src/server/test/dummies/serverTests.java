@@ -6,17 +6,12 @@ public class serverTests {
 
 	public static void main(String args[]) throws Exception {
 
+		Login.login("huggab0y", "umea@2014");
 //		Login.login("Splutt", "hejhej"); // Should fail to login since user don't exist.
-		Login.login("servergroup", "umea@2014");
-
-		//processtest();
-		//searchtest("Fly[Species]");
-		//renameannotest();
 		//usertests();
 		//specialannotest();
-		//processtest();
 		//for(int i = 0; i < 100; i++)
-		//	Process.sendGetProcessStatus();
+//			Process.sendGetProcessStatus();
 		//Annotations.sendGetAnnotationInformation();
 
 		genometest();
@@ -68,7 +63,8 @@ public class serverTests {
 
 	public static void genometest() throws Exception {
 		GenomeRelease.sendGetGenomeRelease();
-		GenomeRelease.sendGetGenomeReleaseSpecies();
+		GenomeRelease.sendAddGenomeRelease("Fly");
+		GenomeRelease.sendGetGenomeReleaseSpecies("Fly");
 	}
 
 	public static void processtest() throws Exception {

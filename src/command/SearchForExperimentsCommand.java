@@ -74,7 +74,7 @@ public class SearchForExperimentsCommand extends Command {
 		} catch (SQLException | IOException e) {
 			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, e.getMessage());
 		} catch (ParseException e) {
-			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, e.getMessage());
+			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
 		} finally {
 			db.close();
 		}

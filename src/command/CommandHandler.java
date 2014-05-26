@@ -3,6 +3,8 @@ package command;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import authentication.Authenticate;
+
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.ProcessResponse;
@@ -38,10 +40,10 @@ public class CommandHandler {
 	 * @param a RESTful-header.
 	 * @param a enumeration that determines command type.
 	 */
-	public Response processNewCommand(String json, String restful, String username, CommandType cmdt) {
+	public Response processNewCommand(String json, String restful, String uuid, CommandType cmdt) {
 
 		//Get code from restful
-		Command myCom = createCommand(json, restful, username, cmdt);
+		Command myCom = createCommand(json, restful, uuid, cmdt);
 
 		if(myCom == null) {
 			System.out.println("COMMAND IS NULL, COULD NOT CREATE A COMMAND FROM JSON AND RESTFUL.");
@@ -72,8 +74,9 @@ public class CommandHandler {
 	 * @param a enumeration that determines command type.
 	 * @return a Command of the correct type.
 	 */
-	private Command createCommand(String json, String restful, String username, CommandType cmdt) {
+	private Command createCommand(String json, String restful, String uuid, CommandType cmdt) {
 
+		String username = Authenticate.getUsername(uuid);
 		Command newCommand = null;
 
 		ArrayList<String> restPieces = splittRestful(restful, cmdt);
@@ -147,6 +150,8 @@ public class CommandHandler {
 			newCommand=cmdFactory.createGetGenomeReleasesSpeciesCommand(parsedRest);
 		} else if(cmdt==CommandType.CREATE_USER_COMMAND && nrOfRestfuls == RestfulSizes.CREATE_USER_COMMAND) {
 			newCommand=cmdFactory.createCreateUserCommand(json);
+		} else if(cmdt==CommandType.IS_TOKEN_VALID_COMMAND) {
+			newCommand=cmdFactory.createIsTokenValidCommand(uuid);
 		}
 		return newCommand;
 	}

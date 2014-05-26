@@ -10,6 +10,7 @@ import com.google.gson.GsonBuilder;
 
 import command.AddGenomeReleaseCommand;
 import command.Command;
+import database.MaxSize;
 
 /**
  * Class used to test the AddGenomeRelease class.
@@ -52,7 +53,8 @@ public class AddGenomeReleaseCommandTest {
 	@Test
 	public void testAddGenomeReleaseJSON() {
 
-		String json = "{\"fileName\":\"abc123\",\"specie\":\"human\",\"genomeVersion\":\"GV 1.0\"}";
+		String json = "{\"version\":\"hx16\",\"species\":\"human\",\"files\":[\"nameOfFile1\",\"nameOfFile2\",\"nameOfFile3\"]}";
+
 		final Command cmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
 	    String json2 = gson.toJson(cmd);
 
@@ -67,14 +69,16 @@ public class AddGenomeReleaseCommandTest {
 	@Test
 	public void testValidateFileNameNull() {
 
-		String json = "{\"fileName\":null,\"specie\":\"human\",\"genomeVersion\":\"GV 1.0\"}";
+		String json = "{\"version\":\"hx16\",\"species\":\"human\",\"files\":[]}";
 		final Command cmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
-
-		String json2 = "{\"fileName\":\"\",\"specie\":\"human\",\"genomeVersion\":\"GV 1.0\"}";
+		String json2 = "{\"version\":\"hx16\",\"species\":\"human\",\"files\":[\"\",\"nameOfFile2\",\"nameOfFile3\"]}";
 		final Command cmd2 = gson.fromJson(json2, AddGenomeReleaseCommand.class);
+		String json3 = "{\"version\":\"hx16\",\"species\":\"human\"}";
+		final Command cmd3 = gson.fromJson(json3, AddGenomeReleaseCommand.class);
 
 		assertFalse(cmd.validate());
 		assertFalse(cmd2.validate());
+		assertFalse(cmd3.validate());
 
 	}
 
@@ -85,10 +89,10 @@ public class AddGenomeReleaseCommandTest {
 	@Test
 	public void testValidateSpecieNull() {
 
-		String json = "{\"fileName\":\"abc123\",\"specie\":null,\"genomeVersion\":\"GV 1.0\"}";
+		String json = "{\"version\":\"hx16\",\"species\":null,\"files\":[\"nameOfFile1\"]}";
 		final Command cmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
 
-		String json2 = "{\"fileName\":\"abc123\",\"specie\":\"\",\"genomeVersion\":\"GV 1.0\"}";
+		String json2 = "{\"version\":\"hx16\",\"species\":\"\",\"files\":[\"nameOfFile1\"]}";
 		final Command cmd2 = gson.fromJson(json2, AddGenomeReleaseCommand.class);
 
 		assertFalse(cmd.validate());
@@ -103,10 +107,10 @@ public class AddGenomeReleaseCommandTest {
 	@Test
 	public void testValidateGenomeVersionNull() {
 
-		String json = "{\"fileName\":\"abc123\",\"specie\":\"human\",\"genomeVersion\":null}";
+		String json = "{\"version\":null,\"species\":\"human\",\"files\":[\"nameOfFile1\"]}";
 		final Command cmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
 
-		String json2 = "{\"fileName\":\"abc123\",\"specie\":\"human\",\"genomeVersion\":\"\"}";
+		String json2 = "{\"version\":\"\",\"species\":\"human\",\"files\":[\"nameOfFile1\"]}";
 		final Command cmd2 = gson.fromJson(json2, AddGenomeReleaseCommand.class);
 
 		assertFalse(cmd.validate());
@@ -121,16 +125,14 @@ public class AddGenomeReleaseCommandTest {
 	@Test
 	public void testValidateFileNameLength() {
 
-		String big_filename = "Start";
-		for(int i = 0; i < 200; i++) {
-			big_filename = big_filename + i;
+		String big_filename = "";
+		for(int i = 0; i < MaxSize.GENOME_FILEPATH+1; i++) {
+			big_filename = big_filename + "A";
 		}
-
-		String json = "{\"fileName\":\"" + big_filename +
-				"\",\"specie\":\"human\",\"genomeVersion\":\"123\"}";
+		String json = "{\"version\":\"hx16\",\"species\":\"human\",\"files\":[\"" + big_filename +
+				"\"]}";
 		final Command cmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
-
-		String json2 = "{\"fileName\":\"\",\"specie\":\"human\",\"genomeVersion\":\"123\"}";
+		String json2 = "{\"version\":\"hx16\",\"species\":\"human\",\"files\":[\"\"]}";
 		final Command cmd2 = gson.fromJson(json2, AddGenomeReleaseCommand.class);
 
 		assertFalse(cmd.validate());
@@ -145,16 +147,16 @@ public class AddGenomeReleaseCommandTest {
 	@Test
 	public void testValidateSpecieLength() {
 
-		String big_specie = "Start";
-		for(int i = 0; i < 200; i++) {
-			big_specie = big_specie + i;
+		String big_specie = "";
+		for(int i = 0; i < MaxSize.GENOME_SPECIES + 1; i++) {
+			big_specie = big_specie + "A";
 		}
 
-		String json = "{\"fileName\":\"abc123\",\"specie\":\"" + big_specie +
-				"\",\"genomeVersion\":\"123\"}";
+		String json = "{\"version\":\"hx16\",\"species\":\"" + big_specie +
+				"\",\"files\":[\"nameOfFile1\",\"nameOfFile2\",\"nameOfFile3\"]}";
 		final Command cmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
 
-		String json2 = "{\"fileName\":\"abc123\",\"specie\":\"\",\"genomeVersion\":\"123\"}";
+		String json2 = "{\"version\":\"hx16\",\"species\":\"\",\"files\":[\"nameOfFile1\"]}";
 		final Command cmd2 = gson.fromJson(json2, AddGenomeReleaseCommand.class);
 
 		assertFalse(cmd.validate());
@@ -169,16 +171,15 @@ public class AddGenomeReleaseCommandTest {
 	@Test
 	public void testValidateGenomeVersionLength() {
 
-		String big_gv = "Start";
-		for(int i = 0; i < 200; i++) {
-			big_gv = big_gv + i;
+		String big_gv = "";
+		for(int i = 0; i < MaxSize.GENOME_VERSION + 1; i++) {
+			big_gv = big_gv + "A";
 		}
-
-		String json = "{\"fileName\":\"abc123\",\"specie\":\"human\",\"genomeVersion\":\"" + big_gv +
-				"\"}";
+		String json = "{\"version\":\"" + big_gv +
+				"hx16\",\"species\":\"human\",\"files\":[\"nameOfFile1\"]}";
 		final Command cmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
 
-		String json2 = "{\"fileName\":\"abc123\",\"specie\":\"human\",\"genomeVersion\":\"\"}";
+		String json2 = "{\"version\":\"\",\"species\":\"human\",\"files\":[\"nameOfFile1\",\"nameOfFile2\",\"nameOfFile3\"]}";
 		final Command cmd2 = gson.fromJson(json2, AddGenomeReleaseCommand.class);
 
 		assertFalse(cmd.validate());
@@ -192,7 +193,7 @@ public class AddGenomeReleaseCommandTest {
 	@Test
 	public void testValidateProperlyFormatted() {
 
-		String json = "{\"fileName\":\"abc123\",\"specie\":\"Hello\",\"genomeVersion\":\"GV 1.0\"}";
+		String json = "{\"version\":\"hx16\",\"species\":\"human\",\"files\":[\"nameOfFile1\",\"nameOfFile2\",\"nameOfFile3\"]}";
 		final Command cmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
 
 		assertTrue(cmd.validate());

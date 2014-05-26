@@ -11,7 +11,6 @@ import database.MaxSize;
 
 import response.AddGenomeReleaseResponse;
 import response.ErrorResponse;
-import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
 
@@ -24,10 +23,10 @@ import response.StatusCode;
 public class AddGenomeReleaseCommand extends Command {
 
 	@Expose
-	private String version = null;
+	private String genomeVersion = null;
 
 	@Expose
-	private String species = null;
+	private String specie = null;
 
 	@Expose
 	private ArrayList<String> files = new ArrayList<String>();
@@ -38,7 +37,7 @@ public class AddGenomeReleaseCommand extends Command {
 	@Override
 	public boolean validate() {
 
-		if(files == null || species == null || version == null) {
+		if(files == null || specie == null || genomeVersion == null) {
 			return false;
 		}
 		if(files.size() == 0) {
@@ -50,15 +49,15 @@ public class AddGenomeReleaseCommand extends Command {
 				return false;
 			}
 		}
-		if(species.length() > MaxSize.GENOME_SPECIES || species.length() < 1) {
+		if(specie.length() > MaxSize.GENOME_SPECIES || specie.length() < 1) {
 			return false;
 		}
 
-		if(version.length() > MaxSize.GENOME_VERSION || version.length() < 1) {
+		if(genomeVersion.length() > MaxSize.GENOME_VERSION || genomeVersion.length() < 1) {
 			return false;
 		}
 
-		if(version.indexOf('/') != -1) {
+		if(genomeVersion.indexOf('/') != -1) {
 			return false;
 		}
 
@@ -72,44 +71,20 @@ public class AddGenomeReleaseCommand extends Command {
 	@Override
 	public Response execute() {
 
-		Response rsp = null;
 		DatabaseAccessor db = null;
+		ArrayList<String> uploadURLs = new ArrayList<String>();
 
 		try {
-
 			db = initDB();
-			//TODO: Call proper database method.
-			//ArrayList<String> filePaths = db.addGenomeRelease(version, species, files);
-
-			//rsp = new AddGenomeReleaseResponse(StatusCode.CREATED, filePaths);
-			rsp = new MinimalResponse(StatusCode.NO_CONTENT);
-
-		} catch (SQLException e) {
-
-			if(e.getErrorCode() == 0) {
-
-				rsp = new ErrorResponse(StatusCode.BAD_REQUEST, "Duplicate values.");
-
-			} else {
-
-				rsp = new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, "Database error");
-
+			for(String fileName: files) {
+				 uploadURLs.add(db.addGenomeRelease(genomeVersion, specie, fileName));
 			}
-
-		} catch (IOException e) {
-
-			rsp = new ErrorResponse(StatusCode.BAD_REQUEST, "IOEXCEPTION");
-
+			return new AddGenomeReleaseResponse(StatusCode.CREATED, uploadURLs);
+		} catch (SQLException | IOException e) {
+				return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
 		} finally {
-
-			if(db.isConnected()) {
-				db.close();
-			}
-
+			db.close();
 		}
-
-		return rsp;
-
 	}
 
 }

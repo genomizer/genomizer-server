@@ -36,6 +36,11 @@ public class AddExperimentCommand extends Command {
 		if(name == null || annotations == null || name.indexOf('/') != -1) {
 			return false;
 		} else {
+			for(int i =0;i<annotations.size();i++){
+				if(annotations.get(i).getName()==null || annotations.get(i).getValue()==null){
+					return false;
+				}
+			}
 			return true;
 		}
 		/*if(name.indexOf('/') != -1) {
