@@ -31,6 +31,8 @@ public class AddAnnotationValueCommand extends Command {
 	 */
 	@Override
 	public boolean validate() {
+		
+		
 		if(value == null || name == null) {
 			return false;
 		}
