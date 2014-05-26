@@ -33,8 +33,8 @@ public class Experiment {
 		JsonObject ja=new JsonObject();
 		JsonObject name=new JsonObject();
 		ja.addProperty("name", expName);
-		JsonObject createdBy=new JsonObject();
-		ja.addProperty("createdBy", "jonas");
+//		JsonObject createdBy=new JsonObject();
+//		ja.addProperty("createdBy", "jonas");
 		JsonArray annotations = new JsonArray();
 		JsonObject ann1=new JsonObject();
 		ann1.addProperty("id", 1);
