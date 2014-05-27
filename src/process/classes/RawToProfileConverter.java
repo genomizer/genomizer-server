@@ -70,7 +70,7 @@ public class RawToProfileConverter extends Executor {
 		this.parameters = parameters;
 		this.inFolder = inFolder;
 
-		ValidateParameters(parameters);
+
 
 		for(int i = 0; i < parameters.length; i++) {
 			System.out.println("param "+i+": "+parameters[i]);
@@ -87,6 +87,7 @@ public class RawToProfileConverter extends Executor {
 			makeConversionDirectories(remoteExecution + "resources/" + dir
 					+ "/sorted");
 			checker.calculateWhichProcessesToRun(parameters);
+			ValidateParameters(parameters);
 			rawFile1 = inFiles[0].getName();
 			rawFile_1_Name = rawFile1.substring(0, rawFile1.length() - 6);
 			if (inFiles.length == 2) {
