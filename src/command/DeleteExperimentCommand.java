@@ -29,21 +29,25 @@ public class DeleteExperimentCommand extends Command {
 
 	}
 	/**
-	 * Used to validate the command.
+	 * Used to validate the DeleteExperimentCommand.
 	 *
 	 * @return boolean depending on results.
+	 * @throws ValidateException
 	 */
-	public boolean validate() {
+	public boolean validate() throws ValidateException {
 
-		if(this.getHeader() == null) {
+		if(header == null) {
 
-			return false;
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Experiment-id was missing.");
 
-		} else {
+		} else if(header.length() < 1 || header.length() > database.constants.MaxSize.FILE_EXPID) {
 
-			return true;
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Experiment-id has to be between 1 and "
+					+ database.constants.MaxSize.FILE_EXPID + " characters long.");
 
 		}
+
+		return true;
 
 	}
 

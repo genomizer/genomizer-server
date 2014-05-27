@@ -37,7 +37,9 @@ public class DeleteGenomeReleaseCommand extends Command {
 	}
 
 	/**
-	 * Method used to validate the command.
+	 * Method used to validate the DeleteGenomeReleaseCommand.
+	 *
+	 * @return boolean depending on result.
 	 * @throws ValidateException
 	 */
 	@Override
@@ -49,7 +51,7 @@ public class DeleteGenomeReleaseCommand extends Command {
 
 		} else if (genomeVersion.equals("null") || specie.equals("null")) {
 
-			throw new ValidateException(StatusCode.BAD_REQUEST, "The genome version or specie was missing.");
+			throw new ValidateException(StatusCode.BAD_REQUEST, "The genome version and/or specie was missing.");
 
 		} else if(genomeVersion.length() > MaxSize.GENOME_VERSION || genomeVersion.length() < 1) {
 
