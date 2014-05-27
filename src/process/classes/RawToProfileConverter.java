@@ -70,7 +70,6 @@ public class RawToProfileConverter extends Executor {
 		this.parameters = parameters;
 		this.inFolder = inFolder;
 
-		ValidateParameters(parameters);
 
 		for(int i = 0; i < parameters.length; i++) {
 			System.out.println("param "+i+": "+parameters[i]);
@@ -87,6 +86,7 @@ public class RawToProfileConverter extends Executor {
 			makeConversionDirectories(remoteExecution + "resources/" + dir
 					+ "/sorted");
 			checker.calculateWhichProcessesToRun(parameters);
+			ValidateParameters(parameters);
 			rawFile1 = inFiles[0].getName();
 			rawFile_1_Name = rawFile1.substring(0, rawFile1.length() - 6);
 			if (inFiles.length == 2) {
@@ -103,7 +103,7 @@ public class RawToProfileConverter extends Executor {
 				if (checker.shouldRunBowTie()) {
 					System.out.println("Running Bowtie");
 					logString = runBowTie(rawFile1, rawFile_1_Name);
-					// System.out.println(logString);
+					System.out.println(logString);
 
 					checkBowTieFile("resources/" + dir + rawFile_1_Name
 
@@ -134,10 +134,10 @@ public class RawToProfileConverter extends Executor {
 								+ executeScript(parse(samToGff));
 
 
-						if (!checkStep(sortedDirForCommands)) {
-							cleanUp(toBeRemoved);
-							throw new ProcessException("SamToGff failed");
-						}
+//						if (!checkStep(sortedDirForCommands)) {
+//							cleanUp(toBeRemoved);
+//							throw new ProcessException("SamToGff failed");
+//						}
 
 
 					} catch (InterruptedException e) {
@@ -243,7 +243,7 @@ public class RawToProfileConverter extends Executor {
 		File bowTie = new File(dir);
 		if (!bowTie.exists() || bowTie.length() == 0) {
 			throw new ProcessException("Bowtie failed to run on file : "
-					+ fileName);
+					+ fileName + bowTie.exists() + bowTie.length());
 		}
 	}
 
@@ -401,6 +401,7 @@ public class RawToProfileConverter extends Executor {
 
 		try {
 			logString = logString + executeScript(parse(ratioCalc));
+			System.out.println("RATIO LOGSTRING = " + logString);
 		} catch (InterruptedException e) {
 			throw new ProcessException(
 					"Process interrupted while running ratio calculation on files in folder "
