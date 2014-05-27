@@ -392,16 +392,16 @@ public class ProcessCommand extends Command {
 		return expid;
 	}
 
-	public void setFilePaths() {
+	public void setFilePaths() throws SQLException, IOException {
 		DatabaseAccessor db = null;
-		try {
+
 			db = initDB();
 			filepaths = db.processRawToProfile(expid);
-		} catch (SQLException | IOException e) {
-			e.printStackTrace();
-		} finally {
-			db.close();
-		}
+
+			if(db.isConnected()){
+				db.close();
+			}
+
 	}
 
 	public String[] getFilePaths() {
