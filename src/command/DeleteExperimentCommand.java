@@ -40,7 +40,7 @@ public class DeleteExperimentCommand extends Command {
 
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Experiment-id was missing.");
 
-		} else if(header.length() < 1 || header.length() > database.constants.MaxSize.FILE_EXPID) {
+		} else if(header.length() < 1 || header.length() > database.constants.MaxSize.EXPID) {
 
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Experiment-id has to be between 1 and "
 					+ database.constants.MaxSize.FILE_EXPID + " characters long.");
