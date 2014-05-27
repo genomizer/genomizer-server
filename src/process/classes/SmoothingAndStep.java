@@ -1,5 +1,7 @@
 package process.classes;
 
+
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.DataInputStream;
@@ -69,6 +71,10 @@ public class SmoothingAndStep {
 		    while(!addLine(strLine)){
 			strLine = br.readLine();
 		    }
+		    //Ny kod, fixar förhoppingsvis problem
+	//	    if(data.size() > params[2]){
+	//		smoothOneRow(params, data.size()-1);
+	//	    }
 		}
 	    }
 
@@ -262,12 +268,14 @@ public class SmoothingAndStep {
 
     private void calcAndSetMeanSignal(int[] params,
 	    int minNrSigs, double meanSignal, double maxSig, double minSig) {
-	if((minNrSigs - 2) > params[2]){
-	    meanSignal = meanSignal - minSig;
-	    meanSignal = meanSignal - maxSig;
+	//	if((minNrSigs - 2) > params[2]){
+	meanSignal = meanSignal - minSig;
+	meanSignal = meanSignal - maxSig;
+	if((minNrSigs-2) > 0){
 	    meanSignal = meanSignal / (minNrSigs - 2);
 	    data.get(middleIndex).setNewSignal(meanSignal);
 	}
+	//	}
     }
 
     private double median (double[] array){
