@@ -9,7 +9,7 @@ public class RawToProfileProcessChecker {
 	private boolean shouldRunRatioCalculation;
 	private boolean isCorrect;
 
-	private RawToProfileProcessChecker(){
+	private RawToProfileProcessChecker() {
 
 	}
 
@@ -18,33 +18,34 @@ public class RawToProfileProcessChecker {
 	}
 
 	public void calculateWhichProcessesToRun(String[] parameters) {
-		if((!parameters[0].equals("")) && (!parameters[1].equals(""))) {
+		if ((!parameters[0].equals("")) && (!parameters[1].equals(""))) {
 			shouldRunBowTie = true;
 		}
 
-		if(!parameters[2].equals("") && shouldRunBowTie) {
+		if (!parameters[2].equals("") && shouldRunBowTie) {
 			shouldRunSamToGff = true;
 		}
 
-		if((!parameters[3].equals("")) && (shouldRunBowTie) && (shouldRunSamToGff)) {
+		if ((!parameters[3].equals("")) && (shouldRunBowTie)
+				&& (shouldRunSamToGff)) {
 			shouldRunGffToAllnusgr = true;
 		}
 
-		if((!parameters[4].equals("")) && (shouldRunGffToAllnusgr)) {
+		if ((!parameters[4].equals("")) && (shouldRunGffToAllnusgr)) {
 			shouldRunSmoothing = true;
 		}
 
-		if((!parameters[5].equals("")) && (shouldRunSmoothing)) {
+		if ((!parameters[5].equals("")) && (shouldRunSmoothing)) {
 			shouldRunStep10 = true;
 		}
 
-		if((!parameters[6].equals("")) && (!parameters[7].equals("")) && (shouldRunStep10)) {
+		if (!parameters[6].equals("") && (shouldRunStep10)) {
 			shouldRunRatioCalculation = true;
 		}
 
 	}
 
-	public boolean shouldRunBowTie(){
+	public boolean shouldRunBowTie() {
 		return shouldRunBowTie;
 	}
 
@@ -60,11 +61,11 @@ public class RawToProfileProcessChecker {
 		return shouldRunSmoothing;
 	}
 
-	public boolean shouldRunStep(){
+	public boolean shouldRunStep() {
 		return shouldRunStep10;
 	}
 
-	public boolean shouldRunRatioCalc(){
+	public boolean shouldRunRatioCalc() {
 		return shouldRunRatioCalculation;
 	}
 }
