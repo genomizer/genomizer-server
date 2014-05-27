@@ -7,8 +7,8 @@ public class ROserverTests {
 	public static void main(String args[]) throws Exception {
 		Login.login("Splutt", "umea@2014");
 
-		Process.sendRawToProfile();
-
+//		Process.sendRawToProfile();
+		Process.sendFaultyRawToProfile();
 		Login.logout();
 	}
 

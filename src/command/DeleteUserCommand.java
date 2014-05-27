@@ -2,11 +2,7 @@ package command;
 
 import java.io.IOException;
 import java.sql.SQLException;
-
-import com.google.gson.annotations.Expose;
-
 import database.DatabaseAccessor;
-
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
@@ -20,23 +16,40 @@ import response.StatusCode;
  */
 public class DeleteUserCommand extends Command {
 
-	/**
-	 * Used to validate DeleteUserCommand.
-	 */
 
 	public String username;
 
-	public DeleteUserCommand(String restful) {
-		username=restful;
+	/**
+	 * Constructor used to initiate the class.
+	 *
+	 * @param username to delete.
+	 */
+	public DeleteUserCommand(String username) {
+
+		this.username = username;
+
 	}
 
+	/**
+	 * Method used to validate the DeleteUserCommand.
+	 *
+	 * @return boolean depending on result.
+	 * @throws ValidateException
+	 */
 	@Override
-	public boolean validate() {
+	public boolean validate() throws ValidateException {
 
 		if(username == null) {
-			return false;
+
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Username was missing.");
+
+		} else if(username.length() < 1 || username.length() > database.constants.MaxSize.USERNAME) {
+
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Username has to be between 1 and "
+					+ database.constants.MaxSize.USERNAME + " characters long.");
+
 		}
-		// TODO Auto-generated method stub
+
 		return true;
 
 	}

@@ -1,6 +1,8 @@
 package server;
 
 import java.util.ArrayList;
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -68,7 +70,17 @@ public class WorkHandler extends Thread{
 				Debug.log("The processcommand is going to be executed");
 				ProcessStatus stat = processStatus.get(work);
 				stat.status = "Started";
-				work.setFilePaths();
+
+				try {
+					work.setFilePaths();
+				} catch (SQLException | IOException e) {
+					Debug.log(e.getMessage());
+					ResponseLogger.log(stat.author, "Could not run process command: " +  e.getMessage());
+					stat.status = "Crashed";
+					continue;
+
+				}
+
 				stat.outputFiles = work.getFilePaths();
 				stat.timeStarted = System.currentTimeMillis();
 
@@ -85,13 +97,13 @@ public class WorkHandler extends Thread{
 				}
 
 				stat.timeFinished = System.currentTimeMillis();
-				ResponseLogger.printLog();
 			} else {
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
+					Debug.log("Work Handler thread sleep failed/interrupted");
+					ResponseLogger.log("SYSTEM", "Work Handler thread sleep failed/interrupted in between process execution.");
 				}
 			}
 			removeOldStatuses();

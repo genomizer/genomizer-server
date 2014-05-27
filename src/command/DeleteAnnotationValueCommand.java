@@ -18,16 +18,40 @@ public class DeleteAnnotationValueCommand extends Command {
 	private String value;
 
 	public DeleteAnnotationValueCommand(String name, String value) {
+
 		this.name = name;
 		this.value = value;
+
 	}
 
+	/**
+	 * Method used to validate the DeleteAnnotationValueCommand
+	 * class.
+	 *
+	 * @return boolean depending on result.
+	 * @throws ValidateException
+	 */
 	@Override
-	public boolean validate() {
+	public boolean validate() throws ValidateException {
+
 		if(name == null || value == null) {
-			return false;
+
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation name and/or value was missing.");
+
+		} else if(name.length() < 1 || name.length() > database.constants.MaxSize.ANNOTATION_LABEL) {
+
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation name has to be between 1 and "
+					+ database.constants.MaxSize.ANNOTATION_LABEL + " characters long.");
+
+		} else if(value.length() < 1 || value.length() > database.constants.MaxSize.ANNOTATION_VALUE) {
+
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation value has to be between 1 and "
+					+ database.constants.MaxSize.ANNOTATION_VALUE + " characters long.");
+
 		}
+
 		return true;
+
 	}
 
 	@Override

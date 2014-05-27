@@ -1,6 +1,7 @@
 package server.test;
 
 import static org.junit.Assert.*;
+import java.net.HttpURLConnection;
 import org.junit.Test;
 import response.StatusCode;
 import com.google.gson.JsonObject;
@@ -82,9 +83,10 @@ public class ServerLoginLogoutTest extends ServerAbstractTestClass {
 	 *
 	 * @throws Exception
 	 */
-	/*
 	@Test
 	public void testLoginBadPassword() throws Exception {
+
+
 
 		JsonObject jj = new JsonObject();
 		String pw = "";
@@ -93,20 +95,23 @@ public class ServerLoginLogoutTest extends ServerAbstractTestClass {
 		}
 		jj.addProperty("username", username);
 		jj.addProperty("password", pw);
-		int loginResponseCode = sendLogin(jj);
-		sendLogout();
+		HttpURLConnection con = connect("POST", serverURL + "/login");
+		con.setRequestProperty("Content-Type", "application/json");
+		String json_output = jj.toString();
+		sendResponseString(con, json_output);
+
+		int loginResponseCode = con.getResponseCode();
 
 		assertTrue(StatusCode.BAD_REQUEST == loginResponseCode);
 
 	}
-	*/
+
 	/**
 	 * Test case that checks that a to long username fails
 	 * the login attempt.
 	 *
 	 * @throws Exception
 	 */
-	/*
 	@Test
 	public void testLoginBadUsername() throws Exception {
 
@@ -117,48 +122,62 @@ public class ServerLoginLogoutTest extends ServerAbstractTestClass {
 		JsonObject jj = new JsonObject();
 		jj.addProperty("username", un);
 		jj.addProperty("password", password);
-		int loginResponseCode = sendLogin(jj);
-		sendLogout();
+
+		HttpURLConnection con = connect("POST", serverURL + "/login");
+		con.setRequestProperty("Content-Type", "application/json");
+		String json_output = jj.toString();
+		sendResponseString(con, json_output);
+
+		int loginResponseCode = con.getResponseCode();
+
 		assertTrue(StatusCode.BAD_REQUEST == loginResponseCode);
 
 	}
-	*/
+
 	/**
 	 * Test case that checks that no username fails
 	 * the login attempt.
 	 *
 	 * @throws Exception
 	 */
-	/*
 	@Test
 	public void testLoginNoUsername() throws Exception {
 
 		JsonObject jj = new JsonObject();
 		jj.addProperty("password", password);
-		int loginResponseCode = sendLogin(jj);
-		sendLogout();
+
+		HttpURLConnection con = connect("POST", serverURL + "/login");
+		con.setRequestProperty("Content-Type", "application/json");
+		String json_output = jj.toString();
+		sendResponseString(con, json_output);
+
+		int loginResponseCode = con.getResponseCode();
 
 		assertTrue(StatusCode.BAD_REQUEST == loginResponseCode);
 
 	}
-	*/
+
 	/**
 	 * Test case that checks that no password fails
 	 * the login attempt.
 	 *
 	 * @throws Exception
 	 */
-	/*
 	@Test
 	public void testLoginNoPassword() throws Exception {
 
 		JsonObject jj = new JsonObject();
 		jj.addProperty("username", username);
-		int loginResponseCode = sendLogin(jj);
-		sendLogout();
+
+		HttpURLConnection con = connect("POST", serverURL + "/login");
+		con.setRequestProperty("Content-Type", "application/json");
+		String json_output = jj.toString();
+		sendResponseString(con, json_output);
+
+		int loginResponseCode = con.getResponseCode();
 
 		assertTrue(StatusCode.BAD_REQUEST == loginResponseCode);
 
 	}
-	*/
+
 }
