@@ -19,20 +19,34 @@ import response.StatusCode;
 public class DeleteAnnotationFieldCommand extends Command {
 
 	public DeleteAnnotationFieldCommand(String restful) {
+
 		header = restful;
+
 	}
 
 	/**
-	 * Used to validate the logout command.
-	 * Checks if all annotations which are to
-	 * be deleted are present in the database.
+	 * Used to validate the DeleteAnnotationFieldCommand
+	 * class.
+	 *
+	 * @return boolean depending on result.
+	 * @throws ValidateException
 	 */
 	@Override
-	public boolean validate() {
+	public boolean validate() throws ValidateException {
+
 		if(header == null) {
-			return false;
+
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation field-name was missing.");
+
+		} else if(header.length() < 1 || header.length() > database.constants.MaxSize.ANNOTATION_LABEL) {
+
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation field-name has to be between 1 and "
+					+ database.constants.MaxSize.ANNOTATION_LABEL + " characters long.");
+
 		}
+
 		return true;
+
 	}
 
 	/**

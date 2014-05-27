@@ -30,12 +30,25 @@ public class DeleteFileFromExperimentCommand extends Command {
 	}
 
 	/**
-	 * Method that validates the class.
+	 * Method that validates the DeleteFileFromExperimentCommand
+	 * class.
 	 *
 	 * @return boolean depending on result.
+	 * @throws ValidateException
 	 */
 	@Override
-	public boolean validate() {
+	public boolean validate() throws ValidateException {
+
+		if(header == null) {
+
+			throw new ValidateException(StatusCode.BAD_REQUEST, "File-id was missing.");
+
+		} else if(header.length() < 1 || header.length() > database.constants.MaxSize.FILE_EXPID) {
+
+			throw new ValidateException(StatusCode.BAD_REQUEST, "File-id has to be between 1 and "
+					+ database.constants.MaxSize.FILE_EXPID + " characters long.");
+
+		}
 
 		return true;
 
