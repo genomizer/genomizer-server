@@ -1,5 +1,5 @@
 bin/
-.idea/*	
+.idea/*
 *.iml
 .idea/
 .idea
@@ -9,3 +9,4 @@ server*.jar
 .classpath
 *~
 errorLog.txt
+src/Main.java

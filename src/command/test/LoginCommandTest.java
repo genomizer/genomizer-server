@@ -1,25 +1,22 @@
 package command.test;
 
 import static org.junit.Assert.*;
-
 import org.junit.Before;
 import org.junit.Test;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
 import command.Command;
 import command.LoginCommand;
+import command.ValidateException;
 
 /**
  * Class used to test the LoginCommand class.
  *
  * @author tfy09jnn
- * @version 1.1
+ * @version 1.0
  */
 public class LoginCommandTest {
 
-	//Builder used with almost all tests.
 	public Gson gson = null;
 
 	/**
@@ -28,7 +25,6 @@ public class LoginCommandTest {
 	@Before
 	public void setUp() {
 
-		//Create the builder.
 	    final GsonBuilder builder = new GsonBuilder();
 	    builder.excludeFieldsWithoutExposeAnnotation();
 	    gson = builder.create();
@@ -42,6 +38,7 @@ public class LoginCommandTest {
 	public void testCreateLoginCommand() {
 
 		LoginCommand lcmd = new LoginCommand();
+
 		assertNotNull(lcmd);
 
 	}
@@ -53,12 +50,8 @@ public class LoginCommandTest {
 	@Test
 	public void testLoginCommandJSON() {
 
-	    //Create input
 	    String json = "{\"username\":\"uname\",\"password\":\"pw\"}";
-
-		//Create command with json.
 		final Command lcmd = gson.fromJson(json, LoginCommand.class);
-
 		String json2 = gson.toJson(lcmd);
 
 		assertEquals(json, json2);
@@ -68,14 +61,13 @@ public class LoginCommandTest {
 	/**
 	 * Used to test the validate method if password
 	 * is not long enough.
+	 *
+	 * @throws ValidateException
 	 */
-	@Test
-	public void testValidateToSmallPasswordLength() {
+	@Test(expected = ValidateException.class)
+	public void testValidateToSmallPasswordLength() throws ValidateException {
 
-	    //Create input
 	    String json = "{\"username\":\"uname\",\"password\":\"\"}";
-
-		//Create command with json.
 		final Command lcmd = gson.fromJson(json, LoginCommand.class);
 
 		assertFalse(lcmd.validate());
@@ -85,14 +77,13 @@ public class LoginCommandTest {
 	/**
 	 * Test used to test the validate method if the
 	 * password is just big enough.
+	 *
+	 * @throws ValidateException
 	 */
 	@Test
-	public void testValidateWorkingPasswordLength() {
+	public void testValidateWorkingPasswordLength() throws ValidateException {
 
-	    //Create input
 	    String json = "{\"username\":\"uname\",\"password\":\"pass\"}";
-
-		//Create command with json.
 		final Command lcmd = gson.fromJson(json, LoginCommand.class);
 
 		assertTrue(lcmd.validate());
@@ -102,14 +93,13 @@ public class LoginCommandTest {
 	/**
 	 * Test used to test the validate method if the
 	 * user name is to short in length.
+	 *
+	 * @throws ValidateException
 	 */
-	@Test
-	public void testValidateToSmallUsernameLength() {
+	@Test(expected = ValidateException.class)
+	public void testValidateToSmallUsernameLength() throws ValidateException {
 
-	    //Create input
 	    String json = "{\"username\":\"\",\"password\":\"password\"}";
-
-		//Create command with json.
 		final Command lcmd = gson.fromJson(json, LoginCommand.class);
 
 		assertFalse(lcmd.validate());
@@ -119,14 +109,13 @@ public class LoginCommandTest {
 	/**
 	 * Test used to test the validate method if the
 	 * user name is just big enough.
+	 *
+	 * @throws ValidateException
 	 */
 	@Test
-	public void testValidateWorkingUsernameLength() {
+	public void testValidateWorkingUsernameLength() throws ValidateException {
 
-	    //Create input
 	    String json = "{\"username\":\"M\",\"password\":\"pass\"}";
-
-		//Create command with json.
 		final Command lcmd = gson.fromJson(json, LoginCommand.class);
 
 		assertTrue(lcmd.validate());

@@ -27,7 +27,7 @@ public class InactiveUuidsRemover implements Runnable {
 					Date date = latestRequests.get(uuid);
 
 					if(getDateDiff(date, new Date(), TimeUnit.HOURS) >= INACTIVE_LIMIT_HOURS) {
-						Debug.log("REMOVING INACTIVE UUID: " + uuid);
+						Debug.log("REMOVING INACTIVE UUID: " + uuid + " - USERNAME: " + Authenticate.getUsername(uuid));
 						Authenticate.deleteUser(uuid);
 						uuids = latestRequests.keySet().iterator();
 					}
@@ -35,8 +35,10 @@ public class InactiveUuidsRemover implements Runnable {
 
 				Debug.log("REMAINING USERS");
 				Iterator<String> uuids2 = latestRequests.keySet().iterator();
+				String next_uuid;
 				while(uuids2.hasNext()) {
-					Debug.log(uuids2.next());
+					next_uuid = uuids2.next();
+					Debug.log(next_uuid + " - USERNAME: " + Authenticate.getUsername(next_uuid));
 				}
 
 				try {

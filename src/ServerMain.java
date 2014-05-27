@@ -33,7 +33,6 @@ public class ServerMain {
 		if (new File("settings.cfg").exists()) {
 			System.out.println("Settings file exists, reading it...");
 			readSettingsFile("settings.cfg");
-			System.out.println("Done");
 		}
 
 		CommandLineParser comline = new BasicParser();
@@ -43,6 +42,7 @@ public class ServerMain {
 		comOptions.addOption("d", true, "chooses which database to use, valid alternatives are global and test");
 		comOptions.addOption("debug", false, "if this flag is used the server will write output for every request and response aswell as other output.");
 		comOptions.addOption("f", "file", true, "the file to read database settings from, is ignored when -d is used");
+		comOptions.addOption("nri", "noremoveinactive", false, "if this flag is set the server will not remove inactive users which are logged in on the server.");
 //		comOptions.addOption("p", "port", true, "the listening port");
 		CommandLine com = comline.parse(comOptions, args);
 		if (com.hasOption('p')) {
@@ -66,16 +66,18 @@ public class ServerMain {
 				ServerSettings.databaseHost = "localhost:6000";
 			}
 		} else if (com.hasOption('f')) {
-			readDatabaseFile(com.getOptionValue('f'));
-		} else {
-			readDatabaseFile("dbconfig");
+			readSettingsFile(com.getOptionValue('f'));
 		}
+
+		ServerSettings.validate();
 
 		CommandHandler commandHandler = new CommandHandler();
 		try {
 			Doorman doorman = new Doorman(commandHandler, ServerSettings.genomizerPort);
 			doorman.start();
-			(new Thread(new InactiveUuidsRemover())).start();
+			if (!com.hasOption("nri")) {
+				(new Thread(new InactiveUuidsRemover())).start();
+			}
 			System.out.println("Doorman started on port " + ServerSettings.genomizerPort);
 			if(Debug.isEnabled) {
 				System.out.println("Debug is enabled.");

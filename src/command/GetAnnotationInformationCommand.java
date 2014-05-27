@@ -5,20 +5,39 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import database.DatabaseAccessor;
-
 import response.AnnotationInformation;
 import response.ErrorResponse;
 import response.GetAnnotationInformationResponse;
 import response.Response;
 import response.StatusCode;
 
+/**
+ * Class used to get information about annotations.
+ *
+ * @author tfy09jnn
+ * @version 1.0
+ */
 public class GetAnnotationInformationCommand extends Command {
 
+	/**
+	 * Empty constructor.
+	 */
+	public GetAnnotationInformationCommand() {
+
+	}
+
+	/**
+	 * Method used to validate the GetAnnotationInformationCommand
+	 * class.
+	 *
+	 * @return always returns true.
+	 */
 	@Override
 	public boolean validate() {
+
 		return true;
+
 	}
 
 	@Override

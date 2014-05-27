@@ -27,15 +27,33 @@ public class GetGenomeReleaseSpeciesCommand extends Command{
 	 * @param restful - the restful header with specie information
 	 */
 	public GetGenomeReleaseSpeciesCommand(String restful) {
-		specie=restful;
+
+		specie = restful;
+
 	}
 
 	/**
 	 * Always true validation
+	 *
+	 * @return boolean depending on result.
+	 * @throws ValidateException
 	 */
 	@Override
-	public boolean validate() {
+	public boolean validate() throws ValidateException {
+
+		if(specie == null) {
+
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specie was missing.");
+
+		} else if(specie.length() < 1 || specie.length() > database.constants.MaxSize.GENOME_SPECIES) {
+
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specie has to be between 1 and "
+					+ database.constants.MaxSize.ANNOTATION_LABEL + " characters long.");
+
+		}
+
 		return true;
+
 	}
 
 	/**

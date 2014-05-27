@@ -13,7 +13,17 @@ import response.StatusCode;
 public class GetAnnotationPrivilegesCommand extends Command {
 
 	/**
-	 * Used to validate the logout command.
+	 * Empty constructor.
+	 */
+	public GetAnnotationPrivilegesCommand() {
+
+	}
+
+	/**
+	 * Used to validate the GetAnnotationPrivilegesCommand
+	 * class.
+	 *
+	 * @return always true
 	 */
 	@Override
 	public boolean validate() {
