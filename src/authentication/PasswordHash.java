@@ -4,6 +4,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import server.ResponseLogger;
+import server.ServerSettings;
 
 
 public class PasswordHash
@@ -39,7 +40,7 @@ public class PasswordHash
     }
 
 	private static String getSalt() {
-		return "genomizer";
+		return ServerSettings.passwordSalt;
 	}
 
 }
