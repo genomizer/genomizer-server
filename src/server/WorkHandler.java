@@ -1,5 +1,8 @@
 package server;
 
+import java.util.ArrayList;
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -14,7 +17,7 @@ import command.ProcessStatus;
 
 public class WorkHandler extends Thread{
 
-	private static final long statusTimeToLive = 3000;//1000*60*60*24*3;
+	private static final long statusTimeToLive = 2*1000*60*60*24;
 
 	private Queue<ProcessCommand> workQueue;
 	private HashMap<ProcessCommand,ProcessStatus> processStatus;
@@ -32,21 +35,25 @@ public class WorkHandler extends Thread{
 	}
 
 	public synchronized void removeOldStatuses() {
-		System.out.println("Entering Remove");
 		long now = System.currentTimeMillis();
-
+		ArrayList<ProcessCommand> toBeRemoved = new ArrayList<>();
 		for (ProcessCommand proc : processStatus.keySet()) {
 			ProcessStatus procStat = processStatus.get(proc);
 			String statusString = procStat.status;
 			if (statusString.equals("Finished") || statusString.equals("Crashed")) {
-				long time = procStat.timeFinished;
+				long time = procStat.timeAdded;
 				long diff = now - time;
 				if (diff > statusTimeToLive) {
-					System.out.println("Removing " + proc.getExpId());
-					processStatus.remove(proc);
+					toBeRemoved.add(proc);
 				}
 			}
 		}
+		for (ProcessCommand proc : toBeRemoved) {
+			Debug.log("Removing old process status: " + proc.getExpId());
+			processStatus.remove(proc);
+		}
+
+
 	}
 
 	//The thread runs all the time and checks if the queue is empty
@@ -63,7 +70,17 @@ public class WorkHandler extends Thread{
 				Debug.log("The processcommand is going to be executed");
 				ProcessStatus stat = processStatus.get(work);
 				stat.status = "Started";
-				work.setFilePaths();
+
+				try {
+					work.setFilePaths();
+				} catch (SQLException | IOException e) {
+					Debug.log(e.getMessage());
+					ResponseLogger.log(stat.author, "Could not run process command: " +  e.getMessage());
+					stat.status = "Crashed";
+					continue;
+
+				}
+
 				stat.outputFiles = work.getFilePaths();
 				stat.timeStarted = System.currentTimeMillis();
 
@@ -80,16 +97,16 @@ public class WorkHandler extends Thread{
 				}
 
 				stat.timeFinished = System.currentTimeMillis();
-				ResponseLogger.printLog();
 			} else {
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
+					Debug.log("Work Handler thread sleep failed/interrupted");
+					ResponseLogger.log("SYSTEM", "Work Handler thread sleep failed/interrupted in between process execution.");
 				}
 			}
-//			removeOldStatuses();
+			removeOldStatuses();
 		}
 
 	}

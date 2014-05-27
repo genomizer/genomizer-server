@@ -7,17 +7,17 @@ import java.io.IOException;
 
 public class ServerSettings {
 
-	public static String databaseUsername = "c5dv151_vt14";
-	public static String databasePassword = "shielohh";
-	public static String databaseHost = "postgres";
-	public static String databaseName = "c5dv151_vt14";
-	public static String publicAddress = "http://scratchy.cs.umu.se";
-	public static int apachePort = 8000;
-	public static String downloadURL = "/download.php?path=";
-	public static String uploadURL = "/upload.php?path=";
-	public static int genomizerPort = 7000;
-	public static String passwordHash = "2fd26e9aea528153a865257a723f6d4859e9f6c4a6775c003ae91297f619c6e8";
-	public static String passwordSalt = "genomizer";
+	public static String databaseUsername = null;
+	public static String databasePassword = null;
+	public static String databaseHost = null;
+	public static String databaseName = null;
+	public static String publicAddress = null;
+	public static int apachePort = -1;
+	public static String downloadURL = null;
+	public static String uploadURL = null;
+	public static int genomizerPort = -1;
+	public static String passwordHash = null;
+	public static String passwordSalt = null;
 
 	public static void writeSettings(String path){
 		try {
@@ -36,6 +36,36 @@ public class ServerSettings {
 			out.close();
 		} catch (IOException e) {
 			System.err.println("Could not write to file: " + path);
+		}
+	}
+
+	public static void validate() {
+		nullCheck(databaseUsername, "databaseUsername");
+		nullCheck(databasePassword, "databasePassword");
+		nullCheck(databaseHost, "databaseHost");
+		nullCheck(databaseName, "databaseName");
+		nullCheck(publicAddress, "publicAddress");
+		nullCheck(apachePort, "apachePort");
+		nullCheck(downloadURL, "downloadURL");
+		nullCheck(uploadURL, "uploadURL");
+		nullCheck(genomizerPort, "genomizerPort");
+		nullCheck(passwordHash, "passwordHash");
+		nullCheck(passwordSalt, "passwordSalt");
+	}
+
+	private static void nullCheck(int parameter, String name) {
+		if (parameter == -1) {
+			System.err.println("Error! parameter " + name + " is not set. Check in settings.cfg if it is set and spelled correctly, capitalization does not matter.");
+			System.err.println("Exiting");
+			System.exit(1);
+		}
+	}
+
+	private static void nullCheck(String parameter, String name) {
+		if (parameter == null) {
+			System.err.println("Error! parameter " + name + " is not set. Check in settings.cfg if it is set and spelled correctly, capitalization does not matter.");
+			System.err.println("Exiting");
+			System.exit(1);
 		}
 	}
 

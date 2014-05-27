@@ -30,20 +30,30 @@ public class Main {
 		String genome = "indexes/d_melanogaster_fb5_22";
 		String bowTie = "-a -m 1 --best -p 10 -v 2 -q  -S ";
 
+
 		String inFile = "/scratch/reads";
 		String outFile = "/scratch/";
+
+
+//		String inFile = "/scratch/reads/";
+// 		String outFile = "/scratch/outfile1/";
 
 		String smoothingParam = "10 1 5 0 0";
 		String yString = "y 10";
 		ProcessHandler p = new ProcessHandler();
 
 
+
 		String[] para = new String[] {bowTie, genome, "y", "", "", "", "", ""};
+
+
+//		String[] para = new String[] {bowTie, genome, "y", "y", "10 1 5 0 0", "y 10", "single 4 0", "150 1 7 0 0"};
+//		String[] para = new String[] {bowTie, genome, "y", "y", "10 1 5 0 0", "y 10", "", ""};
 
 		try {
 			System.out.println("nu executar vi");
 
-			System.out.println("allting går här = " + p.executeProcess("rawToProfile", para, inFile, outFile));
+			System.out.println("allting gï¿½r hï¿½r = " + p.executeProcess("rawToProfile", para, inFile, outFile));
 			System.out.println("nu har vi executat");
 		} catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block

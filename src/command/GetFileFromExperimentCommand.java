@@ -30,12 +30,28 @@ public class GetFileFromExperimentCommand extends Command {
 	}
 
 	/**
-	 * Used to validate the correctness of the
-	 * class when built.
+	 * Used to validate the GetFileFromExperimentCommand
+	 * class.
+	 *
+	 * @return boolean depending on result.
+	 * @throws ValidateException
 	 */
 	@Override
-	public boolean validate() {
+	public boolean validate() throws ValidateException {
+
+		if(fileID == null) {
+
+			throw new ValidateException(StatusCode.BAD_REQUEST, "File-id was missing.");
+
+		} else if(fileID.length() < 1 || fileID.length() > database.constants.MaxSize.FILE_EXPID) {
+
+			throw new ValidateException(StatusCode.BAD_REQUEST, "File-id has to be between 1 and "
+					+ database.constants.MaxSize.FILE_EXPID + " characters long.");
+
+		}
+
 		return true;
+
 	}
 
 	/**

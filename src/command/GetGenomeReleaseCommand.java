@@ -3,14 +3,12 @@ package command;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
 import database.DatabaseAccessor;
 import database.containers.Genome;
 import response.ErrorResponse;
 import response.GetGenomeReleaseRespons;
 import response.Response;
 import response.StatusCode;
-import server.ServerSettings;
 
 /**
  * A command which is used to get all the genome versions
@@ -26,17 +24,20 @@ public class GetGenomeReleaseCommand extends Command{
 	 * Empty constructor, used to get an object of GetGenomeReleaseCommand
 	 */
 	public GetGenomeReleaseCommand() {
+
 	}
 
 	/**
 	 * Validation is always true, this command is always sent to the database
 	 * because the command can't be corrupt.
 	 *
-	 * @return true.
+	 * @return always true.
 	 */
 	@Override
 	public boolean validate() {
+
 		return true;
+
 	}
 
 	/**

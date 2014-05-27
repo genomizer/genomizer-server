@@ -33,7 +33,6 @@ public class ServerMain {
 		if (new File("settings.cfg").exists()) {
 			System.out.println("Settings file exists, reading it...");
 			readSettingsFile("settings.cfg");
-			System.out.println("Done");
 		}
 
 		CommandLineParser comline = new BasicParser();
@@ -67,10 +66,10 @@ public class ServerMain {
 				ServerSettings.databaseHost = "localhost:6000";
 			}
 		} else if (com.hasOption('f')) {
-			readDatabaseFile(com.getOptionValue('f'));
-		} else {
-			readDatabaseFile("dbconfig");
+			readSettingsFile(com.getOptionValue('f'));
 		}
+
+		ServerSettings.validate();
 
 		CommandHandler commandHandler = new CommandHandler();
 		try {
