@@ -4,7 +4,9 @@ package server.test.dummies;
 public class serverTests {
 
 	public static void main(String args[]) throws Exception {
+
 		Login.login("Splutt", "umea@2014");
+
 		//usertests();
 		//specialannotest();
 		//for(int i = 0; i < 100; i++)
@@ -22,11 +24,10 @@ public class serverTests {
 //		Login.sendTokenValidation();
 //		GenomeRelease.sendGetGenomeRelease();
 
-
 		//Process.sendRawToProfile();
 //		genometest();
 
-		Login.logout();
+		//Login.logout();
 	}
 
 	public static void renameannotest() throws Exception {
