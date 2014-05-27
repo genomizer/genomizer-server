@@ -35,30 +35,42 @@ public class AddGenomeReleaseCommand extends Command {
 	 * Method used to validate the command.
 	 */
 	@Override
-	public boolean validate() {
+	public boolean validate() throws ValidateException {
 
-		if(files == null || specie == null || genomeVersion == null) {
-			return false;
+		if(files == null || files.size() == 0) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify release files.");
 		}
-		if(files.size() == 0) {
-			return false;
+		if(genomeVersion == null || genomeVersion.length() < 1) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify a genome release version.");
 		}
 		for(int i = 0; i < files.size(); i++) {
 			int sizeCheck = files.get(i).length();
 			if(sizeCheck > MaxSize.GENOME_FILEPATH || sizeCheck < 1) {
-				return false;
+				throw new ValidateException(StatusCode.BAD_REQUEST, "File name has to be between 1 and "
+						+ database.constants.MaxSize.GENOME_FILEPATH + " characters long.");
 			}
 		}
-		if(specie.length() > MaxSize.GENOME_SPECIES || specie.length() < 1) {
-			return false;
+		if(specie == null || specie.length() < 1) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify a specie.");
+		}
+		if(specie.length() > MaxSize.GENOME_SPECIES) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specie name has to be between 1 and "
+					+ database.constants.MaxSize.GENOME_SPECIES + " characters long.");
 		}
 
 		if(genomeVersion.length() > MaxSize.GENOME_VERSION || genomeVersion.length() < 1) {
-			return false;
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Genome version has to be between 1 and "
+					+ database.constants.MaxSize.GENOME_VERSION + " characters long.");
 		}
 
 		if(genomeVersion.indexOf('/') != -1) {
-			return false;
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Wrong format on request.");
+		}
+		if(!hasOnlyValidCharacters(genomeVersion)) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in genome version name. Valid characters are: a-z, A-Z, 0-9");
+		}
+		if(!hasOnlyValidCharacters(specie)) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in specie name. Valid characters are: a-z, A-Z, 0-9");
 		}
 
 		return true;

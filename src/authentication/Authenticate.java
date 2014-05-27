@@ -11,6 +11,7 @@ import java.util.UUID;
 
 import server.Debug;
 import server.ResponseLogger;
+import server.ServerSettings;
 
 /**
  * Class used to authenticate users and privileges.
@@ -24,46 +25,9 @@ public class Authenticate {
 	private static HashMap<String, Date> latestRequests = new HashMap<String, Date>();
 
 	static public LoginAttempt login(String username, String password) {
-
-		BufferedReader br = null;
-		String file_password = null;
-		try {
-			br = new BufferedReader(new FileReader("client_password.txt"));
-		} catch (FileNotFoundException e) {
-			ResponseLogger.log(username, "ERROR: COULD NOT FIND CLIENT_PASSWORD.TXT-FILE.\n" + e.getMessage());
-			Debug.log("ERROR: COULD NOT FIND CLIENT_PASSWORD.TXT-FILE.\n" + e.getMessage());
-			return new LoginAttempt(false, null, "Internal server error.");
-		}
-	    try {
-	        StringBuilder sb = new StringBuilder();
-	        String line = br.readLine();
-
-	        while (line != null) {
-	            sb.append(line);
-	            sb.append(System.lineSeparator());
-	            line = br.readLine();
-	        }
-	        file_password = sb.toString();
-	    } catch (IOException e) {
-	    	ResponseLogger.log(username, "ERROR: IOEXCEPTION WHEN READING PASSWORD.TXT-FILE.\n" + e.getMessage());
-			Debug.log("ERROR: IOEXCEPTION WHEN READING PASSWORD.TXT-FILE.\n" + e.getMessage());
-	    	return new LoginAttempt(false, null, "Internal server error.");
-		}
-	    try {
-	    	br.close();
-	    } catch (IOException e) {
-	    	ResponseLogger.log(username, "ERROR: IOEXCEPTION WHEN CLOSING STREAM AFTER READING PASSWORD.TXT-FILE." + e.getMessage());
-			Debug.log("ERROR: IOEXCEPTION WHEN CLOSING STREAM AFTER READING PASSWORD.TXT-FILE." + e.getMessage());
-	    	return new LoginAttempt(false, null, "Internal server error.");
-	    }
-
-	    file_password = file_password.replaceAll("\r", "");
-	    file_password = file_password.replaceAll("\n", "");
-
-	    if(!PasswordHash.toSaltedSHA256Hash(password).equals(file_password)) {
+	    if(!PasswordHash.toSaltedSHA256Hash(password).equals(ServerSettings.passwordHash)) {
 	    	return new LoginAttempt(false, null, "Wrong password.");
 	    }
-
 	    return new LoginAttempt(true, addUser(username), null);
 	}
 

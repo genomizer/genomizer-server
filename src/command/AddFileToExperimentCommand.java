@@ -52,10 +52,31 @@ public class AddFileToExperimentCommand extends Command {
 	 * or "region".
 	 */
 	@Override
-	public boolean validate() {
+	public boolean validate() throws ValidateException {
 
-		if(experimentID == null || fileName == null || type == null || uploader==null) {
-			return false;
+		if(experimentID == null || experimentID.length() < 1) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify an experiment name.");
+		}
+		if(fileName == null || fileName.length() < 1) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify a file name.");
+		}
+		if(type == null || type.length() < 1) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify a type.");
+		}
+		if(uploader == null || uploader.length() < 1) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify an uploader name.");
+		}
+		if(grVersion == null || grVersion.length() < 1) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify a genome release.");
+		}
+		if(!hasOnlyValidCharacters(experimentID)) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in experiment name. Valid characters are: a-z, A-Z, 0-9");
+		}
+		if(!hasOnlyValidCharacters(type)) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in file type name. Valid characters are: a-z, A-Z, 0-9");
+		}
+		if(!hasOnlyValidCharacters(uploader)) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in uploader name. Valid characters are: a-z, A-Z, 0-9");
 		}
 		return true;
 	}

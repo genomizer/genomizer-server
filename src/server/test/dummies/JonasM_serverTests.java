@@ -2,16 +2,16 @@ package server.test.dummies;
 
 import authentication.PasswordHash;
 
-public class ROserverTests {
+public class JonasM_serverTests {
 
 	public static void main(String args[]) throws Exception {
-		Login.login("Splutt", "umea@2014");
 
-//		Process.sendRawToProfile();
-//		Process.sendRawToProfileFullRun();
-//		for(int i = 0; i < 20; i++)
-			Process.sendFaultyRawToProfile();
-		Login.logout();
+		String username;
+		for(int i = 0; i < 10; i++) {
+			username =  "Jonas" + i;
+			Login.login(username, "umea@2014");
+			//Login.token = null;
+		}
 	}
 
 	public static void renameannotest() throws Exception {
@@ -57,13 +57,9 @@ public class ROserverTests {
 	}
 
 	public static void genometest() throws Exception {
-		GenomeRelease.sendDeleteGenomeReleaseSpecies("asd", "new1");
 		GenomeRelease.sendGetGenomeRelease();
-		GenomeRelease.sendAddGenomeRelease("Fly", "new1");
+		//GenomeRelease.sendAddGenomeRelease("Fly");
 		GenomeRelease.sendGetGenomeReleaseSpecies("Fly");
-		GenomeRelease.sendDeleteGenomeReleaseSpecies("Fly", "new1");
-		GenomeRelease.sendGetGenomeRelease();
-
 	}
 
 	public static void processtest() throws Exception {

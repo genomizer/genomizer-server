@@ -16,7 +16,7 @@ import response.StatusCode;
  * Class used to represent a logout command.
  *
  * @author tfy09jnn, Hugo Källström
- * @version 1.1
+ * @version 1.2
  */
 public class AddAnnotationValueCommand extends Command {
 
@@ -30,23 +30,26 @@ public class AddAnnotationValueCommand extends Command {
 	 * Used to validate the logout command.
 	 */
 	@Override
-	public boolean validate() {
+	public boolean validate() throws ValidateException{
 
 
-		if(value == null || name == null) {
-			return false;
+		if(value == null || value.length() < 1) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify an annotation value.");
 		}
-		if(value.length() < 1 || value.length() > MaxSize.ANNOTATION_VALUE) {
-			return false;
+		if(name == null || name.length() < 1) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify an annotation name.");
 		}
-		if(name.length() < 1 || name.length() > MaxSize.ANNOTATION_LABEL) {
-			return false;
+		if(value.length() > MaxSize.ANNOTATION_VALUE) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation value is too long.");
 		}
-		if(name.indexOf('/') != -1) {
-			return false;
+		if(name.length() > MaxSize.ANNOTATION_LABEL) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation name is too long.");
 		}
-		if(value.indexOf('/') != -1) {
-			return false;
+		if(name.indexOf('/') != -1 || !hasOnlyValidCharacters(name)) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation name. Valid characters are: a-z, A-Z, 0-9");
+		}
+		if(value.indexOf('/') != -1 || !hasOnlyValidCharacters(value)) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation value. Valid characters are: a-z, A-Z, 0-9");
 		}
 		return true;
 	}
@@ -71,7 +74,7 @@ public class AddAnnotationValueCommand extends Command {
 			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
 		} catch (IOException e) {
 			e.printStackTrace();
-			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, "Database unavailable");
+			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, e.getMessage());
 		} finally{
 			db.close();
 		}

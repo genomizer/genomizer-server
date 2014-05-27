@@ -32,21 +32,26 @@ public class AddExperimentCommand extends Command {
 	}
 
 	@Override
-	public boolean validate() {
-		if(name == null || annotations == null || name.indexOf('/') != -1) {
-			return false;
-		} else {
-			for(int i =0;i<annotations.size();i++){
-				if(annotations.get(i).getName()==null || annotations.get(i).getValue()==null){
-					return false;
-				}
-			}
-			return true;
+	public boolean validate() throws ValidateException {
+		if(name == null || name.length() < 1) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify a name for the experiment.");
 		}
-		/*if(name.indexOf('/') != -1) {
-			return false;
-		}*/
+		if(annotations == null || annotations.size() == 0) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify annotations for the experiment.");
+		}
+		if(name.indexOf('/') != -1 || !hasOnlyValidCharacters(name)) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation name. Valid characters are: a-z, A-Z, 0-9");
+		}
 
+		for(int i =0;i<annotations.size();i++){
+			if(annotations.get(i).getName()==null || annotations.get(i).getValue()==null){
+				throw new ValidateException(StatusCode.BAD_REQUEST, "Found an empty annotation or annotation value, please specify annotations.");
+			}
+			if(!hasOnlyValidCharacters(annotations.get(i).getName()) || !hasOnlyValidCharacters(annotations.get(i).getValue())) {
+				throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation name or value. Valid characters are: a-z, A-Z, 0-9");
+			}
+		}
+		return true;
 	}
 
 	@Override

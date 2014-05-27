@@ -41,7 +41,7 @@ public class WorkHandler extends Thread{
 			ProcessStatus procStat = processStatus.get(proc);
 			String statusString = procStat.status;
 			if (statusString.equals("Finished") || statusString.equals("Crashed")) {
-				long time = procStat.timeFinished;
+				long time = procStat.timeAdded;
 				long diff = now - time;
 				if (diff > statusTimeToLive) {
 					toBeRemoved.add(proc);
