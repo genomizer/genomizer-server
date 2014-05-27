@@ -5,6 +5,9 @@ import java.io.IOException;
 
 import database.containers.FileTuple;
 
+/**
+ * Generates paths and directories for files.
+ */
 public class FilePathGenerator {
 
     private String rootDir;
@@ -18,13 +21,7 @@ public class FilePathGenerator {
     private static String chainFilesFolderName = "chain_files";
 
     public FilePathGenerator(String rootDir) throws IOException {
-        String regex = "([a-zA-Z]:)?(/[a-zA-Z0-9._\" \"-]+)+/?";
-        if (rootDir.endsWith(File.separator) && rootDir.matches(regex)) {
-            this.rootDir = rootDir;
-        } else {
-            throw new IOException("rootDir has the wrong format. Make sure it"
-                    + "ends with a separator.");
-        }
+    	setRootDirectory(rootDir);
     }
 
     /**
@@ -113,7 +110,7 @@ public class FilePathGenerator {
     }
 
     /**
-     * Used when uploading and downloading files. Returns a Dir string where the
+     * Used when uploading and downloading files. Returns a string where the
      * file is or where is should be saved.
      *
      * @param String expID, the ID for the experiment.
