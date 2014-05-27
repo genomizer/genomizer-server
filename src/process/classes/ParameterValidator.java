@@ -11,6 +11,11 @@ public class ParameterValidator extends Executor {
 
 		//validate smoothing
 			String[] smooth = parse(smoothing);
+
+			if(smooth.length != 5) {
+				throw new ProcessException("Not correct number of parameters for smoothing, should be 5");
+			}
+
 			int[] smoothParams = new int[smooth.length];
 			float[] floatSmooth = new float[smooth.length];
 
@@ -55,6 +60,10 @@ public class ParameterValidator extends Executor {
 	public boolean validateStep(String string) throws ProcessException {
 
 		String[] step = parse(string);
+
+		if(step.length != 2) {
+			throw new ProcessException("Not correct number of parameters for step size, should be 2");
+		}
 		float stepFloat;
 		try {
 			stepFloat = Float.parseFloat(step[1]);
@@ -71,6 +80,11 @@ public class ParameterValidator extends Executor {
 
 	public boolean validateRatioCalculation(String string) throws ProcessException {
 		String[] ratio = parse(string);
+
+		if(ratio.length != 3) {
+			throw new ProcessException("Not correct number of parameters for ratio calculation, should be 3");
+		}
+
 		System.out.println("ratioLength = " + ratio.length);
 		String firstParam = ratio[0];
 

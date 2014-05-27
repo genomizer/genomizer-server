@@ -2,6 +2,7 @@ package process.classes;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Stack;
 
 
@@ -61,15 +62,20 @@ public class RawToProfileConverter extends Executor {
 	 */
 	public String procedure(String[] parameters, String inFolder,
 			String outFilePath) throws ProcessException {
-
+		File[] inFiles = null;
 		if (inFolder != null) {
 			inFolder = validateInFolder(inFolder);
+			inFiles = getRawFiles(inFolder);
+		} else{
+			throw new ProcessException("Fatal error: This should never happen");
 		}
-		File[] inFiles = new File(inFolder).listFiles();
+
+		if(inFiles == null || inFiles.length == 0) {
+			throw new ProcessException("Folder does not contain raw files");
+		}
 
 		this.parameters = parameters;
 		this.inFolder = inFolder;
-
 
 		for(int i = 0; i < parameters.length; i++) {
 			System.out.println("param "+i+": "+parameters[i]);
@@ -209,6 +215,32 @@ public class RawToProfileConverter extends Executor {
 		}
 		// System.out.println("logString = " + logString);
 		return logString;
+	}
+
+	private File[] getRawFiles(String inFolder) throws ProcessException {
+
+		File[] rawDirFiles = new File(inFolder).listFiles();
+		File[] rawFilesIsFile = null;
+		if(rawDirFiles != null && !(rawDirFiles.length == 0)) {
+			ArrayList<File> files = new ArrayList<File>();
+
+			for(int i = 0; i < rawDirFiles.length; i++) {
+				if(rawDirFiles[i].isFile()) {
+					files.add(rawDirFiles[i]);
+				}
+			}
+
+			rawFilesIsFile = new File[files.size()];
+			for(int i = 0; i < rawFilesIsFile.length; i++) {
+				rawFilesIsFile[i] = files.get(i);
+			}
+			if(rawFilesIsFile.length == 0) {
+				throw new ProcessException("No files found in directory "+inFolder);
+			}
+		} else {
+			throw new ProcessException("No files found in directory "+inFolder);
+		}
+		return rawFilesIsFile;
 	}
 
 	private boolean ValidateParameters(String[] parameters)
