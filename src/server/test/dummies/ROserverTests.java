@@ -8,7 +8,9 @@ public class ROserverTests {
 		Login.login("Splutt", "umea@2014");
 
 //		Process.sendRawToProfile();
-		Process.sendFaultyRawToProfile();
+		Process.sendRawToProfileFullRun();
+//		for(int i = 0; i < 20; i++)
+//			Process.sendFaultyRawToProfile();
 		Login.logout();
 	}
 

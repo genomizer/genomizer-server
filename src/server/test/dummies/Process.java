@@ -13,15 +13,15 @@ public class Process {
 
 	public static void sendFaultyRawToProfile() throws IOException{
 
-		String expid = "h1";
+		String expid = "small_test_files";
 		String parameters = "\"-a -m 1 --best -p 10 -v 2 -q  -S \"," +
 				"\"\"," +
 				"\"y\"," +
-				"\"\"," +
-				"\"\"," +
-				"\"\"," +
-				"\"\"," +
-				"\"\"";
+				"\"y\"," +
+				"\"10 1 5 0 0\"," +
+				"\"y 10\"," +
+				"\"single 4 0\"," +
+				"\"150 1 7 0 0\"";
 		String metadata = "astringofmetadata";
 		String genomeVersion = "fb5";
 		String author = "robinodling";
@@ -50,7 +50,7 @@ public class Process {
 
 	public static void sendRawToProfileFullRun() throws IOException{
 
-		String expid = "real_test_experiment";
+		String expid = "small_test_files";
 		String parameters = "\"-a -m 1 --best -p 10 -v 2 -q  -S \"," +
 				"\"\"," +
 				"\"y\"," +
