@@ -1,26 +1,28 @@
 package command.test;
 
 import static org.junit.Assert.*;
+
 import org.junit.Test;
-import command.GetAnnotationInformationCommand;
+
+import command.GetGenomeReleaseCommand;
 
 /**
- * Class used to test that GetAnnotationInformationCommand
+ * Test used to check that GetGenomeReleaseCommand class
  * works properly. The execute method is tested with other methods.
  *
  * @author tfy09jnn
  * @version 1.0
  */
-public class GetAnnotationInformationCommandTest {
+public class GetGenomeReleaseCommandTest {
 
 	/**
-	 * Test that checks that creation works and that the
-	 * created object is not null.
+	 * Test used to check that creation works and object
+	 * is not null.
 	 */
 	@Test
 	public void testCreationNotNull() {
 
-		GetAnnotationInformationCommand c = new GetAnnotationInformationCommand();
+		GetGenomeReleaseCommand c = new GetGenomeReleaseCommand();
 
 		assertNotNull(c);
 
@@ -28,12 +30,12 @@ public class GetAnnotationInformationCommandTest {
 
 	/**
 	 * Test used to check that ValidateException is not thrown
-	 * when calling validate.
+	 * when calling validate method.
 	 */
 	@Test
 	public void testValidateAlwaysTrue() {
 
-		GetAnnotationInformationCommand c = new GetAnnotationInformationCommand();
+		GetGenomeReleaseCommand c = new GetGenomeReleaseCommand();
 		c.validate();
 
 		assertTrue(true);

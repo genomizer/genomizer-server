@@ -6,7 +6,7 @@ import command.GetAnnotationPrivilegesCommand;
 
 /**
  * Class used to test that GetAnnotationPrivileges works
- * properly.
+ * properly. The execute method is tested with other methods.
  *
  * @author tfy09jnn
  * @version 1.0
@@ -18,17 +18,24 @@ public class GetAnnotationPrivilegesCommandTest {
 	 */
 	@Test
 	public void testCreationNotNull() {
+
 		GetAnnotationPrivilegesCommand c = new GetAnnotationPrivilegesCommand();
+
 		assertNotNull(c);
+
 	}
 	/**
-	 * Test used to check that validation is always true.
-	 * Currently there are no other cases.
+	 * Test used to check that ValidateException is not
+	 * thrown when calling validate.
 	 */
 	@Test
 	public void testvalidationAlwaysTrue() {
+
 		GetAnnotationPrivilegesCommand c = new GetAnnotationPrivilegesCommand();
-		assertTrue(c.validate());
+		c.validate();
+
+		assertTrue(true);
+
 	}
 
 }
