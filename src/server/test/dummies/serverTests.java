@@ -5,8 +5,12 @@ import authentication.PasswordHash;
 public class serverTests {
 
 	public static void main(String args[]) throws Exception {
-
-		Login.login("RobinO", "umea@2014");
+		String username;
+		for(int i = 0; i < 1000; i++) {
+			username =  "Jonas" + i;
+			Login.login(username, "umea@2014");
+			//Login.token = null;
+		}
 //		Login.login("Splutt", "hejhej");
 		//usertests();
 		//specialannotest();
@@ -15,13 +19,13 @@ public class serverTests {
 		//Annotations.sendDeleteAnnotation("Test43???");
 		//Annotations.sendDeleteAnnotation("JONAS???");
 //		Annotations.sendGetAnnotationInformation();
-		Annotations.sendAddAnnotation("invalid annotation 0123456789!!!!!!!!!едц");
+		//Annotations.sendAddAnnotation("invalid annotation 0123456789!!!!!!!!!едц");
 
 		//Process.sendRawToProfile();
 //		GenomeRelease.sendAddGenomeRelease("HumanitariumTest");
 
 
-		Login.logout();
+		//Login.logout();
 	}
 
 	public static void renameannotest() throws Exception {
