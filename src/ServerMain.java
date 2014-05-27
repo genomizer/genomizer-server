@@ -85,7 +85,7 @@ public class ServerMain {
 			System.out.println("Database:");
 			System.out.println("  username " + ServerSettings.databaseUsername);
 			System.out.println("  password " + ServerSettings.databasePassword);
-			System.out.println("  database " + ServerSettings.databaseName);
+			System.out.println("  name     " + ServerSettings.databaseName);
 			System.out.println("  host     " + ServerSettings.databaseHost);
 		} catch (IOException e) {
 			System.err.println("Error when starting server");
