@@ -13,8 +13,8 @@ import response.StatusCode;
  * Class used to represent a command that is used to
  * delete a file from an experiment.
  *
- * @author tfy09jnn
- * @version 1.0
+ * @author tfy09jnn, Hugo Källström
+ * @version 1.1
  */
 public class DeleteFileFromExperimentCommand extends Command {
 
@@ -40,14 +40,12 @@ public class DeleteFileFromExperimentCommand extends Command {
 	public boolean validate() throws ValidateException {
 
 		if(header == null) {
-
 			throw new ValidateException(StatusCode.BAD_REQUEST, "File-id was missing.");
-
 		} else if(header.length() < 1 || header.length() > database.constants.MaxSize.FILE_EXPID) {
-
 			throw new ValidateException(StatusCode.BAD_REQUEST, "File-id has to be between 1 and "
 					+ database.constants.MaxSize.FILE_EXPID + " characters long.");
-
+		} else if(!hasOnlyValidCharacters(header)) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in file name. Valid characters are: a-z, A-Z, 0-9");
 		}
 
 		return true;

@@ -48,6 +48,10 @@ public class GetFileFromExperimentCommand extends Command {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "File-id has to be between 1 and "
 					+ database.constants.MaxSize.FILE_EXPID + " characters long.");
 
+		} else if(!hasOnlyValidCharacters(fileID)) {
+
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation value. Valid characters are: a-z, A-Z, 0-9");
+
 		}
 
 		return true;
