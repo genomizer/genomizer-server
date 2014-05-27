@@ -7,11 +7,12 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import command.AddAnnotationFieldCommand;
 import command.Command;
+import command.ValidateException;
 import database.constants.MaxSize;
 
 /**
  * Test class used to check that the AddAnnotationFieldCommand
- * class is working properly on a unit level.
+ * class works properly. Execute method is tested elsewhere.
  *
  * @author tfy09jnn
  * @version 1.0
@@ -38,8 +39,97 @@ public class AddAnnotationFieldCommandTest {
 	@Test
 	public void testCreateAddAnnotationFieldCommand() {
 
-		AddAnnotationFieldCommand aafc = new AddAnnotationFieldCommand();
-		assertNotNull(aafc);
+		AddAnnotationFieldCommand c = new AddAnnotationFieldCommand();
+
+		assertNotNull(c);
+
+	}
+
+	/**
+	 * Test used to check that ValidateException is thrown when
+	 * name is null.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testValidateNameNull() throws ValidateException {
+
+		AddAnnotationFieldCommand c = new AddAnnotationFieldCommand();
+		String json = "{\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
+		c = gson.fromJson(json, AddAnnotationFieldCommand.class);
+		c.validate();
+
+		fail("Expected ValidateException to be thrown.");
+
+	}
+
+	/**
+	 * Test used to check that ValidateException is thrown when
+	 * name is an empty string.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testValidateNameEmptyString() throws ValidateException {
+
+		AddAnnotationFieldCommand c = new AddAnnotationFieldCommand();
+		String json = "{\"name\":\"\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
+		c = gson.fromJson(json, AddAnnotationFieldCommand.class);
+		c.validate();
+
+		fail("Expected ValidateException to be thrown.");
+
+	}
+
+	/**
+	 * Test used to check that ValidateException is thrown when
+	 * name length is to long.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testValidateNameLength() throws ValidateException {
+
+		String big = "";
+		for(int i = 0; i < MaxSize.ANNOTATION_LABEL + 1; i++) {
+			big = big + "A";
+		}
+	    String json = "{\"name\":\"" + big +
+	    		"\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
+		AddAnnotationFieldCommand c = new AddAnnotationFieldCommand();
+		c = gson.fromJson(json, AddAnnotationFieldCommand.class);
+		c.validate();
+
+		fail("Expected ValidateException to be thrown.");
+	}
+
+	/**
+	 * Test used to check that ValidateException is thrown if
+	 * characters are invalid.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testNameHasInvalidCharacters() throws ValidateException {
+
+		String invalid = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 едц";
+		String json = "{\"name\":\"" + invalid +
+				"\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
+		AddAnnotationFieldCommand c = new AddAnnotationFieldCommand();
+		c = gson.fromJson(json, AddAnnotationFieldCommand.class);
+		c.validate();
+
+		fail("Expected ValidateException to be thrown.");
+
+	}
+
+	@Test(expected = ValidateException.class)
+	public void testValidateTypeIsEmpty() {
+
+	}
+
+	@Test(expected = ValidateException.class)
+	public void testValidateTypeHasInvalidCharacters() {
 
 	}
 
@@ -82,7 +172,7 @@ public class AddAnnotationFieldCommandTest {
 	    String json = "{\"name\":\"species\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
 		final Command aafc = gson.fromJson(json, AddAnnotationFieldCommand.class);
 		String json2 = gson.toJson(aafc);
-		assertEquals(json2, json);
+		assertEquals(json2, json);	    String json = "{\"name\":\"species\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
 
 	}
 
@@ -109,7 +199,7 @@ public class AddAnnotationFieldCommandTest {
 	}
 
 	/**
-	 * Test to check if name validation works properly.
+	 * Test to check if name validation works pro	    String json = "{\"name\":\"species\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";perly.
 	 */
 	@Test
 	public void testValidateNameIsToLong() {

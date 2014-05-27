@@ -83,6 +83,7 @@ public class UpdateUserPrivilegesCommandTest {
 		UpdateUserPrivilegesCommand c = new UpdateUserPrivilegesCommand();
 		String j = jsonBuilder("properly");
 		c = gson.fromJson(j, UpdateUserPrivilegesCommand.class);
+
 		assertTrue(c.validate());
 
 	}
@@ -99,6 +100,7 @@ public class UpdateUserPrivilegesCommandTest {
 		j.addProperty("new_privileges", priv);
 
 		return j.toString();
+
 	}
 
 }
