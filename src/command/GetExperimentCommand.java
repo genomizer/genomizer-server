@@ -3,19 +3,12 @@ package command;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
 import response.ErrorResponse;
 import response.Response;
 import response.StatusCode;
 import response.GetExperimentResponse;
-import server.ServerSettings;
-
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
 import database.DatabaseAccessor;
 import database.containers.Experiment;
-
 
 /**
  * Class used to retrieve an experiment.
@@ -29,12 +22,33 @@ public class GetExperimentCommand extends Command {
 	 * Empty constructor.
 	 */
 	public GetExperimentCommand(String rest) {
+
 		header = rest;
+
 	}
 
+	/**
+	 * Method used to validate the GetExperimentCommand class.
+	 *
+	 * @return boolean depending on result.
+	 * @throws ValidateException
+	 */
 	@Override
-	public boolean validate() {
+	public boolean validate() throws ValidateException {
+
+		if(header == null) {
+
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Experiment-id was missing.");
+
+		} else if(header.length() < 1 || header.length() > database.constants.MaxSize.EXPID) {
+
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Experiment-id has to be between 1 and "
+					+ database.constants.MaxSize.EXPID + " characters long.");
+
+		}
+
 		return true;
+
 	}
 
 	@Override
