@@ -13,6 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import process.classes.Executor;
+import process.classes.ProcessException;
 import process.classes.RawToProfileConverter;
 
 public class RawToProfileTest {
@@ -32,43 +33,40 @@ public class RawToProfileTest {
 		rtp = null;
 	}
 
-	@Test
-	public void ShouldNotCrash() throws InterruptedException, IOException {
+	@Test (expected = ProcessException.class)
+	public void ShouldNotCrash() throws ProcessException {
 		String inFolder = "HEJ";
 		String expected = "Indata is not in the correct format";
 		String outFilePath = null;
-		String actual = rtp.procedure(parameters, inFolder, outFilePath);
-		assertEquals(expected, actual);
+		rtp.procedure(parameters, inFolder, outFilePath);
 	}
-	@Test
-	public void ShouldNotRunWhenParametersIsNull() throws InterruptedException, IOException {
+
+	@Test (expected = ProcessException.class)
+	public void ShouldNotRunWhenParametersIsNull() throws ProcessException {
 		String[] parameters = null;
 		String inFolder = "resources";
 		String expected = "Indata is not in the correct format";
 		String outFilePath = "resources";
-		String actual = rtp.procedure(parameters, inFolder, outFilePath);
-		assertEquals(expected, actual);
+		rtp.procedure(parameters, inFolder, outFilePath);
 	}
 
-	@Test
-	public void ShouldNotRunWithFiveParameters() throws InterruptedException, IOException {
+	@Test (expected = ProcessException.class)
+	public void ShouldNotRunWithFiveParameters() throws ProcessException {
 		String inFolder = "HEJ";
 		String outFilePath = "";
 		String expected = "Indata is not in the correct format";
 		String[] param = new String[]{"one","two","three","four","five"};
-		String actual = rtp.procedure(param,  inFolder, outFilePath);
-		assertEquals(expected, actual);
+		rtp.procedure(param,  inFolder, outFilePath);
 	}
 
 
-	@Test
-	public void ShouldNotRunWhenNotFindingFiles() throws InterruptedException, IOException {
+	@Test (expected = ProcessException.class)
+	public void ShouldNotRunWhenNotFindingFiles() throws ProcessException  {
 		String inFolder = "HEJ";
 		String outFilePath = "";
 		String expected = "Indata is not in the correct format";
 		String[] param = new String[]{"one","two","three","four"};
-		String actual = rtp.procedure(param, inFolder, outFilePath);
-		assertEquals(expected, actual);
+		rtp.procedure(param, inFolder, outFilePath);
 	}
 
 //	@Test

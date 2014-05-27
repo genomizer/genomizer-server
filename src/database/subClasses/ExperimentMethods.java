@@ -6,27 +6,34 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
-import database.Annotation;
-import database.Experiment;
 import database.FilePathGenerator;
-import database.FileTuple;
+import database.containers.Annotation;
+import database.containers.Experiment;
+import database.containers.FileTuple;
 
+/**
+ * Class that contains all the methods for adding,changing, getting and removing
+ * Experiments in the database. This class is a subClass of databaseAcessor.java
+ *
+ * date: 2014-05-14 version: 1.0
+ */
 public class ExperimentMethods {
 
-	private Connection conn;
-	private FilePathGenerator fpg;
-	private AnnotationMethods annoMethods;
+    private Connection conn;
+    private FilePathGenerator fpg;
+    private AnnotationMethods annoMethods;
 
-	public ExperimentMethods(Connection connection, FilePathGenerator filePG,
-								AnnotationMethods annoM){
+    public ExperimentMethods(Connection connection,
+            FilePathGenerator filePG, AnnotationMethods annoM) {
 
-		conn = connection;
-		fpg = filePG;
-		annoMethods = annoM;
-	}
+        conn = connection;
+        fpg = filePG;
+        annoMethods = annoM;
+    }
 
-	/**
+    /**
      * Gets an experiment from the database.
      *
      * @param expID
@@ -37,7 +44,8 @@ public class ExperimentMethods {
      */
     public Experiment getExperiment(String expID) throws SQLException {
 
-    	String query = "SELECT ExpID FROM Experiment " + "WHERE ExpID ~~* ?";
+        String query = "SELECT ExpID FROM Experiment "
+                + "WHERE ExpID ~~* ?";
 
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setString(1, expID);
@@ -63,17 +71,30 @@ public class ExperimentMethods {
      * @return the number of tuples inserted in the database.
      * @throws SQLException
      *             if the query does not succeed
+     * @throws IOException
+     * @throws DuplicatePrimaryKeyException
+     *             If the experiment already exists.
      */
-    public int addExperiment(String expID) throws SQLException {
+    public int addExperiment(String expID) throws SQLException, IOException {
 
-        String query = "INSERT INTO Experiment " + "(ExpID) VALUES (?)";
+    	if (expID == null || expID.isEmpty()) {
+    		throw new IOException("Invalid experiment ID.");
+    	}
+
+    	Experiment e = getExperiment(expID);
+    	if (e != null) {
+    		throw new IOException(expID + " already exists");
+    	}
+
+        String query = "INSERT INTO Experiment "
+                + "(ExpID) VALUES (?)";
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setString(1, expID);
 
-        fpg.generateExperimentFolders(expID);
-
         int rs = stmt.executeUpdate();
         stmt.close();
+
+        fpg.generateExperimentFolders(expID);
 
         return rs;
     }
@@ -84,52 +105,44 @@ public class ExperimentMethods {
      * @param expId
      *            the experiment ID.
      * @param rootDir
-     * 			  the root directory.
+     *            the root directory.
      * @return the number of tuples deleted.
      * @throws SQLException
      *             if the query does not succeed. Occurs if Experiment
      *             contains at least one file. (All files relating to
      *             an experiment must be deleted first before an
      *             experiment can be deleted from the database)
+     * @throws IOException
      */
-    public int deleteExperiment(String expId, String rootDir) throws SQLException {
+    public int deleteExperiment(String expId)
+            throws SQLException, IOException {
 
-    	String query = "DELETE FROM Experiment " + "WHERE ExpID ~~* ?";
+        Experiment e = getExperiment(expId);
 
-        PreparedStatement stmt = conn
-                .prepareStatement(query);
+        if (e == null) {
+            throw new IOException("No experiment with ID " + expId);
+        }
+
+        if (!e.getFiles().isEmpty()) {
+            throw new IOException("This experiment contains files and therefore cannot be removed.");
+        }
+
+        String query = "DELETE FROM Experiment "
+                + "WHERE ExpID ~~* ?";
+
+        PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setString(1, expId);
 
         int rs = stmt.executeUpdate();
         stmt.close();
 
-        recursiveDelete(new File(rootDir + expId));
+
+        File experimentFolder = new File(fpg.getRootDirectory() + e.getID());
+        if (experimentFolder.exists()) {
+            recursiveDelete(experimentFolder);
+        }
 
         return rs;
-    }
-
-    /**
-     * Checks if a given experiment ID exists in the database.
-     *
-     * @param expID
-     *            the experiment ID to look for.
-     * @return true if the experiment exists in the database, else
-     *         false.
-     * @throws SQLException
-     *             if the query does not succeed
-     */
-    public boolean hasExperiment(String expID) throws SQLException {
-
-    	String query = "SELECT ExpID FROM Experiment " + "WHERE ExpID ~~* ?";
-
-        PreparedStatement stmt = conn.prepareStatement(query);
-        stmt.setString(1, expID);
-        ResultSet rs = stmt.executeQuery();
-
-        boolean hasResult = rs.next();
-        stmt.close();
-
-        return hasResult;
     }
 
     /**
@@ -150,13 +163,14 @@ public class ExperimentMethods {
     public int updateExperiment(String expID, String label,
             String value) throws SQLException, IOException {
 
-        if (!isValidAnnotationValue(label, value)) {
-            throw new IOException(value + " is not a valid choice for the" +
-            		" annotation type " + label);
+        value = validateAnnotation(label, value);
+
+        if (value == null) {
+            throw new IOException("Invalid annotation");
         }
 
-        String query = "UPDATE Annotated_With SET Value = ?" +
-        		" WHERE (Label ~~* ?) AND (ExpID ~~* ?)";
+        String query = "UPDATE Annotated_With SET Value = ?"
+                + " WHERE (Label ~~* ?) AND (ExpID ~~* ?)";
 
         PreparedStatement stmt = conn.prepareStatement(query);
 
@@ -188,12 +202,10 @@ public class ExperimentMethods {
     public int annotateExperiment(String expID, String label,
             String value) throws SQLException, IOException {
 
-    	if (!isValidAnnotationValue(label, value)) {
-            throw new IOException(value
-                    +" is not a valid choice for the annotation type " + label);
-        }
+        value = validateAnnotation(label, value);
 
-        String query = "INSERT INTO Annotated_With " + "VALUES (?, ?, ?)";
+        String query = "INSERT INTO Annotated_With "
+                + "VALUES (?, ?, ?)";
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setString(1, expID);
         stmt.setString(2, label);
@@ -219,7 +231,7 @@ public class ExperimentMethods {
     public int removeExperimentAnnotation(String expID, String label)
             throws SQLException {
 
-    	String query = "DELETE FROM Annotated_With "
+        String query = "DELETE FROM Annotated_With "
                 + "WHERE (ExpID ~~* ? AND Label ~~* ?)";
 
         PreparedStatement stmt = conn.prepareStatement(query);
@@ -231,6 +243,7 @@ public class ExperimentMethods {
 
         return rs;
     }
+
     /**
      * Adds all the files that belong to the experiment to an
      * Experiment object.
@@ -277,7 +290,8 @@ public class ExperimentMethods {
         ResultSet rs = stmt.executeQuery();
 
         while (rs.next()) {
-            e.addAnnotation(rs.getString("Label"), rs.getString("Value"));
+            e.addAnnotation(rs.getString("Label"),
+                    rs.getString("Value"));
         }
 
         stmt.close();
@@ -295,20 +309,56 @@ public class ExperimentMethods {
      * @return true if the value is valid, else false.
      * @throws SQLException
      *             if the query does not succeed
+     * @throws IOException
      */
-    private boolean isValidAnnotationValue(String label, String value)
-            throws SQLException {
+    private String validateAnnotation(String label, String value)
+            throws SQLException, IOException {
 
-        return annoMethods.getAnnotationType(label) == Annotation.FREETEXT
-                || annoMethods.getChoices(label).contains(value);
+        Annotation a = annoMethods.getAnnotationObject(label);
+
+        if (a == null) {
+            throw new IOException(label + " is not a valid annotation. (Does not exist)");
+        }
+
+        if (value == null) {
+            throw new IOException("Invalid annotation value. (value null)");
+        }
+
+        if (a.dataType == Annotation.FREETEXT) {
+            return value;
+        }
+
+        List<String> choices = a.getPossibleValues();
+        String res = matchChoice(value, choices);
+
+        if (res == null) {
+            throw new IOException(value + "is not a valid choice for the drop down annotation " + label);
+        }
+
+        return res;
+    }
+
+    private String matchChoice(String value, List<String> choices) {
+
+        for (String s : choices) {
+            if (value.equalsIgnoreCase(s)) {
+                return s;
+            }
+        }
+        return null;
     }
 
     /**
-     * Recursively deletes a folder with all it's subfolders and files.
-     * @param folder the folder to delete.
+     * Recursively deletes a folder with all it's subfolders and
+     * files.
+     *
+     * @param folder
+     *            the folder to delete.
      */
     private static void recursiveDelete(File folder) {
+
         File[] contents = folder.listFiles();
+
         if (contents == null || contents.length == 0) {
             folder.delete();
         } else {
@@ -316,7 +366,7 @@ public class ExperimentMethods {
                 recursiveDelete(f);
             }
         }
+
         folder.delete();
     }
-
 }
