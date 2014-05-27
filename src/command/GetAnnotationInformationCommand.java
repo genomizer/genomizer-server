@@ -48,6 +48,12 @@ public class GetAnnotationInformationCommand extends Command {
 				AnnotationInformation annotation = new AnnotationInformation(annotationObject.label, values, annotationObject.isRequired);
 				annotations.add(annotation);
 			}
+
+			ArrayList<String> values = new ArrayList<String>();
+			values.add("freetext");
+			AnnotationInformation expId = new AnnotationInformation("expID", values, false);
+			annotations.add(expId);
+
 			db.close();
 			return new GetAnnotationInformationResponse(StatusCode.OK, annotations);
 		}

@@ -49,45 +49,46 @@ public class AddAnnotationFieldCommand extends Command {
 	 *
 	 */
 	@Override
-	public boolean validate() {
+	public boolean validate() throws ValidateException {
 
-		if(name == null || defaults == null || type.size() < 1) {
-			return false;
+		if(name == null || name.length() < 1) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify a name for the annotation.");
 		}
-		if(name.length() < 1 || name.length() > MaxSize.ANNOTATION_LABEL) {
-			return false;
+		if(defaults == null || defaults.length() < 1) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify a default value for the annotation.");
 		}
-		if(defaults.length() < 1 || defaults.length() > MaxSize.ANNOTATION_DEFAULTVALUE) {
-			return false;
+		if(type == null || type.size() < 1) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify a type for the annotation.");
 		}
-		if(name.indexOf('/') != -1) {
-			return false;
+		if(defaults == null) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify if the value is forced.");
 		}
-
-		if(!hasOnlyValidCharacters(name)){
-			return false;
+		if(name.length() > MaxSize.ANNOTATION_LABEL) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation name is too long.");
+		}
+		if(defaults.length() > MaxSize.ANNOTATION_DEFAULTVALUE) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation default value is too long.");
+		}
+		if(name.indexOf('/') != -1 || !hasOnlyValidCharacters(name)) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation name. Valid characters are: a-z, A-Z, 0-9");
 		}
 		if(!hasOnlyValidCharacters(defaults)){
-			return false;
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation default value. Valid characters are: a-z, A-Z, 0-9");
 		}
 
 		for(int i = 0; i < type.size(); i++) {
 
 			if(type.get(i).indexOf("/") != -1) {
-				return false;
+				throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation type. Valid characters are: a-z, A-Z, 0-9");
 			}
 			if(!hasOnlyValidCharacters(type.get(i))){
-				return false;
+				throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation type. Valid characters are: a-z, A-Z, 0-9");
 			}
 
 		}
 		return true;
 	}
 
-	private boolean hasOnlyValidCharacters(String s){
-		Pattern p = Pattern.compile("[^A-Za-z0-9 ]");
-		return !p.matcher(s).find();
-	}
 
 	/**
 	 * Method used to execute the command and add the
@@ -120,11 +121,10 @@ public class AddAnnotationFieldCommand extends Command {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			/* Catch dubplicate key*/
 			if(e.getErrorCode() == 0) {
 				return new ErrorResponse(StatusCode.BAD_REQUEST, "The annotation " + name + " already exists.");
 			} else {
-				return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, "Database unavailable");
+				return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, e.getMessage());
 			}
 
 		} catch (IOException e) {

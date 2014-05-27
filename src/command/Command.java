@@ -2,6 +2,7 @@ package command;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.regex.Pattern;
 
 import response.Response;
 import server.ServerSettings;
@@ -62,5 +63,11 @@ public abstract class Command {
 		return db;
 
 	}
+
+	public boolean hasOnlyValidCharacters(String s){
+		Pattern p = Pattern.compile("[^A-Za-z0-9 ]");
+		return !p.matcher(s).find();
+	}
+
 
 }
