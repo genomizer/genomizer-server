@@ -45,6 +45,8 @@ public class GetExperimentCommand extends Command {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Experiment-id has to be between 1 and "
 					+ database.constants.MaxSize.EXPID + " characters long.");
 
+		} else if(!hasOnlyValidCharacters(header)) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in experiment name. Valid characters are: a-z, A-Z, 0-9");
 		}
 
 		return true;

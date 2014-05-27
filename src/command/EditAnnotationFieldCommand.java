@@ -7,6 +7,7 @@ import java.util.Map;
 import com.google.gson.annotations.Expose;
 
 import database.DatabaseAccessor;
+import database.constants.MaxSize;
 
 import response.ErrorResponse;
 import response.MinimalResponse;
@@ -34,9 +35,21 @@ public class EditAnnotationFieldCommand extends Command {
 	}
 
 	@Override
-	public boolean validate() {
-		if (oldName != null && oldName.length() > 0 && newName != null && newName.length() > 0) {
-			return true;
+	public boolean validate() throws ValidateException {
+		if (oldName == null) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify the old annotation name");
+		} else if(newName == null) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify the old annotation name");
+		} else if(oldName.length() > MaxSize.ANNOTATION_LABEL || oldName.length() < 1) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Old annotation name has to be between 1 and "
+					+ database.constants.MaxSize.ANNOTATION_LABEL + " characters long.");
+		} else if(newName.length() > MaxSize.ANNOTATION_LABEL || newName.length() < 1) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "New annotation name has to be between 1 and "
+					+ database.constants.MaxSize.ANNOTATION_LABEL + " characters long.");
+		} else if(!hasOnlyValidCharacters(oldName)) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation label. Valid characters are: a-z, A-Z, 0-9");
+		} else if(!hasOnlyValidCharacters(newName)) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation label. Valid characters are: a-z, A-Z, 0-9");
 		}
 		return false;
 	}
