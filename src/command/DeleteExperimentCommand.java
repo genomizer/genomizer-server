@@ -37,14 +37,12 @@ public class DeleteExperimentCommand extends Command {
 	public boolean validate() throws ValidateException {
 
 		if(header == null) {
-
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Experiment-id was missing.");
-
 		} else if(header.length() < 1 || header.length() > database.constants.MaxSize.EXPID) {
-
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Experiment-id has to be between 1 and "
 					+ database.constants.MaxSize.FILE_EXPID + " characters long.");
-
+		} else if(!hasOnlyValidCharacters(header)) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in experiment name. Valid characters are: a-z, A-Z, 0-9");
 		}
 
 		return true;

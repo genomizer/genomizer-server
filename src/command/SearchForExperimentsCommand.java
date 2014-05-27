@@ -39,10 +39,11 @@ public class SearchForExperimentsCommand extends Command {
 	 * class when built.
 	 */
 	@Override
-	public boolean validate() {
-		if (annotations == null) {
-			return false;
+	public boolean validate() throws ValidateException {
+		if (annotations == null || annotations.equals("")) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify annotations to search for.");
 		}
+
 		return true;
 	}
 
@@ -55,10 +56,6 @@ public class SearchForExperimentsCommand extends Command {
 
 	    DatabaseAccessor db = null;
 	    List<Experiment> searchResult = null;
-	    System.out.println(annotations);
-	    if(annotations.equals("")) {
-	    	return new ErrorResponse(StatusCode.BAD_REQUEST, "Please specify a search string");
-	    }
 
 		try {
 			annotations = URLDecoder.decode(annotations, "UTF-8");

@@ -50,6 +50,10 @@ public class GetGenomeReleaseSpeciesCommand extends Command{
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Specie has to be between 1 and "
 					+ database.constants.MaxSize.ANNOTATION_LABEL + " characters long.");
 
+		} else if(!hasOnlyValidCharacters(specie)) {
+
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in specie name. Valid characters are: a-z, A-Z, 0-9");
+
 		}
 
 		return true;

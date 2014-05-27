@@ -35,14 +35,14 @@ public class DeleteAnnotationFieldCommand extends Command {
 	public boolean validate() throws ValidateException {
 
 		if(header == null) {
-
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation field-name was missing.");
-
-		} else if(header.length() < 1 || header.length() > database.constants.MaxSize.ANNOTATION_LABEL) {
-
+		}
+		if(header.length() < 1 || header.length() > database.constants.MaxSize.ANNOTATION_LABEL) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation field-name has to be between 1 and "
 					+ database.constants.MaxSize.ANNOTATION_LABEL + " characters long.");
-
+		}
+		if(!hasOnlyValidCharacters(header)) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters for annotation. Valid characters are: a-z, A-Z, 0-9");
 		}
 
 		return true;

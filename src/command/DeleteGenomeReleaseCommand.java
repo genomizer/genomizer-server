@@ -61,6 +61,14 @@ public class DeleteGenomeReleaseCommand extends Command {
 
 			throw new ValidateException(StatusCode.BAD_REQUEST, "The species must be between 1 and "+database.constants.MaxSize.GENOME_SPECIES+" characters long.");
 
+		} else if(!hasOnlyValidCharacters(genomeVersion)) {
+
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in genome version. Valid characters are: a-z, A-Z, 0-9");
+
+		} else if(!hasOnlyValidCharacters(specie)) {
+
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in specie name. Valid characters are: a-z, A-Z, 0-9");
+
 		}
 
 		return true;

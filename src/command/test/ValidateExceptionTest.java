@@ -21,6 +21,7 @@ public class ValidateExceptionTest {
 	public void testCreateEmptyNotNull() {
 
 		ValidateException e = new ValidateException();
+
 		assertNotNull(e);
 
 	}
@@ -33,6 +34,7 @@ public class ValidateExceptionTest {
 	public void testCreateParamConstructorNotNull() {
 
 		ValidateException e = new ValidateException(401, "hello");
+
 		assertNotNull(e);
 
 	}
@@ -45,6 +47,7 @@ public class ValidateExceptionTest {
 	public void testGetCodeMethod() {
 
 		ValidateException e = new ValidateException(401, "hello");
+
 		assertTrue(e.getCode() == 401);
 
 	}
@@ -57,6 +60,7 @@ public class ValidateExceptionTest {
 	public void testGetMessageMethod() {
 
 		ValidateException e = new ValidateException(401, "hello");
+
 		assertEquals(e.getMessage(), "hello");
 
 	}
