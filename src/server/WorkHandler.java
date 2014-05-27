@@ -70,7 +70,7 @@ public class WorkHandler extends Thread{
 					work.setFilePaths();
 				} catch (SQLException | IOException e) {
 					Debug.log(e.getMessage());
-					ResponseLogger.log(stat.author, e.getMessage());
+					ResponseLogger.log(stat.author, "Could not run process command: " +  e.getMessage());
 					stat.status = "Crashed";
 					continue;
 
@@ -98,7 +98,7 @@ public class WorkHandler extends Thread{
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 					Debug.log("Work Handler thread sleep failed/interrupted");
-					ResponseLogger.log("SYSTEM", "Work Handler thread sleep failed/interrupted");
+					ResponseLogger.log("SYSTEM", "Work Handler thread sleep failed/interrupted in between process execution.");
 				}
 			}
 //			removeOldStatuses();
