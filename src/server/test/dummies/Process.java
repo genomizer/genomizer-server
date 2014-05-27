@@ -13,10 +13,10 @@ public class Process {
 
 	public static void sendFaultyRawToProfile() throws IOException{
 
-		String expid = "real_test_experiment";
+		String expid = "TestExperiment";
 		String parameters = "\"-a -m 1 --best -p 10 -v 2 -q  -S \"," +
 				"\"\"," +
-				"\"\"," +
+				"\"y\"," +
 				"\"\"," +
 				"\"\"," +
 				"\"\"," +
