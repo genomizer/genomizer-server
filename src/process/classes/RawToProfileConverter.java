@@ -1,14 +1,9 @@
 package process.classes;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Stack;
 
-import com.sun.org.apache.bcel.internal.generic.NEW;
-
-import command.ProcessCommand;
 
 /**
  * Class used to create profile data from .fastq format.
@@ -31,6 +26,7 @@ public class RawToProfileConverter extends Executor {
 	private String rawFile_2_Name;
 	private String logString;
 	private RawToProfileProcessChecker checker;
+	private ParameterValidator validator;
 	private String filesToBeMoved = null;
 	private Stack<String> toBeRemoved;
 	private String sortedDirForFile;
@@ -38,6 +34,8 @@ public class RawToProfileConverter extends Executor {
 	public RawToProfileConverter() {
 		super();
 		toBeRemoved = new Stack<String>();
+		checker = RawToProfileProcessChecker.rawToProfileCheckerFactory();
+		validator = new ParameterValidator();
 	}
 
 	/**
@@ -63,7 +61,7 @@ public class RawToProfileConverter extends Executor {
 	 */
 	public String procedure(String[] parameters, String inFolder,
 			String outFilePath) throws ProcessException {
-		checker = RawToProfileProcessChecker.rawToProfileCheckerFactory();
+
 		if (inFolder != null) {
 			inFolder = validateInFolder(inFolder);
 		}
@@ -71,6 +69,14 @@ public class RawToProfileConverter extends Executor {
 
 		this.parameters = parameters;
 		this.inFolder = inFolder;
+
+
+		for(int i = 0; i < parameters.length; i++) {
+			System.out.println("param "+i+": "+parameters[i]);
+		}
+
+		printStringArray(parameters);
+
 
 		if (verifyInData(parameters, inFolder, outFilePath) == false
 				|| !CorrectInfiles(inFiles)) {
@@ -80,6 +86,7 @@ public class RawToProfileConverter extends Executor {
 			makeConversionDirectories(remoteExecution + "resources/" + dir
 					+ "/sorted");
 			checker.calculateWhichProcessesToRun(parameters);
+			ValidateParameters(parameters);
 			rawFile1 = inFiles[0].getName();
 			rawFile_1_Name = rawFile1.substring(0, rawFile1.length() - 6);
 			if (inFiles.length == 2) {
@@ -91,16 +98,20 @@ public class RawToProfileConverter extends Executor {
 
 			// printTrace(parameters, inFolder, outFilePath);
 			if (fileDir.exists()) {
+
+
 				if (checker.shouldRunBowTie()) {
 					System.out.println("Running Bowtie");
 					logString = runBowTie(rawFile1, rawFile_1_Name);
-					 System.out.println(logString);
+					System.out.println(logString);
 
-					checkBowTieFile(remoteExecution+"resources/" + dir + rawFile_1_Name
+					checkBowTieFile("resources/" + dir + rawFile_1_Name
+
 							+ ".sam", rawFile_1_Name);
 
 					System.out.println("Running SortSam");
 					sortSamFile(rawFile_1_Name);
+
 					if (inFiles.length == 2) {
 						logString = logString + "\n"
 								+ runBowTie(rawFile2, rawFile_2_Name);
@@ -110,15 +121,25 @@ public class RawToProfileConverter extends Executor {
 
 						sortSamFile(rawFile_2_Name);
 					}// Sets parameters for sorting first sam file
+
 					toBeRemoved.push(remoteExecution + "resources/" + dir);
 					filesToBeMoved = sortedDirForFile;
 					toBeRemoved.push(filesToBeMoved);
 				}
+
 				if (checker.shouldRunSamToGff()) {
 					System.out.println("Running SamToGff");
 					try {
 						logString = logString + "\n"
 								+ executeScript(parse(samToGff));
+
+
+//						if (!checkStep(sortedDirForCommands)) {
+//							cleanUp(toBeRemoved);
+//							throw new ProcessException("SamToGff failed");
+//						}
+
+
 					} catch (InterruptedException e) {
 						throw new ProcessException(
 								"Process interrupted while creating GFF file");
@@ -129,6 +150,7 @@ public class RawToProfileConverter extends Executor {
 					filesToBeMoved = sortedDirForFile + "reads_gff/";
 					toBeRemoved.push(filesToBeMoved);
 				}
+
 				if (checker.shouldRunGffToAllnusgr()) {
 					System.out.println("Running gffToAllnucsgr");
 					try {
@@ -145,11 +167,14 @@ public class RawToProfileConverter extends Executor {
 							+ "reads_gff/allnucs_sgr/";
 					toBeRemoved.push(filesToBeMoved);
 				}
+
 				if (checker.shouldRunSmoothing()) {
 					System.out.println("Running Smoothing");
 
-					// Second parameter should be false when not ratio
-					// calculation havent been run.
+
+					// Second parameter should be false when ratio
+					// calculation should not run.
+
 					runSmoothing(parameters, false);
 
 					filesToBeMoved = sortedDirForFile
@@ -173,7 +198,8 @@ public class RawToProfileConverter extends Executor {
 				}
 
 				moveEndFiles(filesToBeMoved, outFilePath);
-				removeTemp(toBeRemoved);
+
+				cleanUp(toBeRemoved);
 
 			} else {
 
@@ -185,15 +211,52 @@ public class RawToProfileConverter extends Executor {
 		return logString;
 	}
 
+	private boolean ValidateParameters(String[] parameters)
+			throws ProcessException {
+		boolean isOk = true;
+		if(checker.shouldRunSmoothing() && !validator.validateSmoothing(parameters[4])) {
+			isOk = false;
+		}
+		if(checker.shouldRunStep() && !validator.validateStep(parameters[5])) {
+			isOk = false;
+		}
+		if(checker.shouldRunRatioCalc() && !validator.validateRatioCalculation(parameters[6])) {
+			isOk = false;
+		}
+		if(checker.shouldRunRatioCalc() && !validator.validateSmoothing(parameters[7])) {
+			isOk = false;
+		}
+
+		return isOk;
+	}
+
+	/**
+	 * Checks that bowtie created the files it should create and that the size
+	 * is bigger then zero.
+	 *
+	 * @param dir The directory where the files bowtie creates should be placed
+	 * @param fileName The name of the file bowtie should create.
+	 * @throws ProcessException
+	 */
 	private void checkBowTieFile(String dir, String fileName)
 			throws ProcessException {
 		File bowTie = new File(dir);
 		if (!bowTie.exists() || bowTie.length() == 0) {
 			throw new ProcessException("Bowtie failed to run on file : "
-					+ fileName);
+					+ fileName + bowTie.exists() + bowTie.length());
 		}
 	}
 
+	/**
+	 * Validates that the infolder has the correct format, inFolder should not
+	 * have a "/" at the end of the string to correctly create the File objects
+	 * with it.
+	 *
+	 * @param folderString The folder to remove a "/" from the end if there is
+	 * one.
+	 *
+	 * @return The correct format of the inFolder string.
+	 */
 	private String validateInFolder(String folderString) {
 		if (folderString != null) {
 			if (folderString.endsWith("/")) {
@@ -204,6 +267,17 @@ public class RawToProfileConverter extends Executor {
 		return null;
 	}
 
+	/**
+	 * Runs the smoothing and step procedures. Checks if its smoothing
+	 * after ratio calculation or (parameters[5])[1])just normal smoothing.
+	 * Changes some parameters depending on ratio calculation or not.
+	 * runs smoothing with the incoming parameters  and runs stepping if
+	 * it should.
+	 *
+	 * @param parameters Contains all parameters needed to run smoothing snd step
+	 * @param isRatioCalc If ratio calculation or not.
+	 * @throws ProcessException
+	 */
 	private void runSmoothing(String[] parameters, boolean isRatioCalc)
 			throws ProcessException {
 
@@ -260,12 +334,14 @@ public class RawToProfileConverter extends Executor {
 					String inFile = filesToSmooth[i].getAbsoluteFile()
 							.toString();
 					String outFile = filesToSmooth[i].getName();
-
+					SmoothingParameterChecker smoothChecker = SmoothingParameterChecker.SmoothingParameterCheckerFactory(parameters[4]);
+					// +"_"+getSmoothType+"_winSiz-" + "_minProbe-" + getMinProbe
+					outFile = outFile.substring(0, outFile.length() - 4)+ "_"+smoothChecker.getSmoothType()+"_winSiz-" + smoothChecker.getWindowSize() + "_minProbe-" + smoothChecker.getMinProbe();
 					if (stepSize != 1) {
-						outFile = outFile.substring(0, outFile.length() - 4)
+						outFile = outFile
 								+ "_step" + stepSize + ".sgr";
 					} else {
-						// TODO Fix filename to have parameters...
+						outFile = outFile + ".sgr";
 					}
 					outFile = file.toString() + "/" + outFile;
 
@@ -275,9 +351,22 @@ public class RawToProfileConverter extends Executor {
 		}
 	}
 
+	/**
+	 * Checks if a strings ends with .sgr
+	 * @param name
+	 * @return
+	 */
 	private boolean isSgr(String name) {
 		return name.endsWith(".sgr");
 	}
+
+	/**
+	 * Checks that the files in the inFolder is valid.
+	 *
+	 * @param inFiles
+	 * @return
+	 * @throws ProcessException
+	 */
 
 	private boolean CorrectInfiles(File[] inFiles) throws ProcessException {
 		ProcessException e = null;
@@ -309,10 +398,10 @@ public class RawToProfileConverter extends Executor {
 			throws ProcessException {
 		String ratioCalc = "perl ratio_calculator_v2.pl " + dirPath + " "
 				+ parameters[6];
-		// String smooth = "perl smooth_v4.pl " + dirPath + "ratios/" + " "
-		// + parameters[7];
+
 		try {
 			logString = logString + executeScript(parse(ratioCalc));
+			System.out.println("RATIO LOGSTRING = " + logString);
 		} catch (InterruptedException e) {
 			throw new ProcessException(
 					"Process interrupted while running ratio calculation on files in folder "
@@ -327,7 +416,8 @@ public class RawToProfileConverter extends Executor {
 	/**
 	 * Prints important variables, used for testing.
 	 *
-	 * @param parameters
+	 * @param parametersSystem
+	 *            .out.println(nrOfProc);
 	 * @param inFolder
 	 * @param outFile
 	 */
@@ -394,6 +484,7 @@ public class RawToProfileConverter extends Executor {
 		String[] bowTieParameters = parse("bowtie " + bowTieParams + " "
 				+ parameters[1] + " " + inFolder + "/" + fileOne + " " + dir
 				+ fileOneName + ".sam");
+
 		try {
 			return executeProgram(bowTieParameters);
 		} catch (InterruptedException e) {
@@ -406,6 +497,14 @@ public class RawToProfileConverter extends Executor {
 		}
 	}
 
+	/**
+	 * Makes it so that bowtie always runs on all processors except two.
+	 * if the machine only has 1 or 2 processors bowtie will run on atleast one
+	 * processor.
+	 *
+	 * @param params
+	 * @return
+	 */
 	private String checkBowTieProcessors(String params) {
 		String[] bowTieParams = parse(params);
 
@@ -413,12 +512,15 @@ public class RawToProfileConverter extends Executor {
 			if (bowTieParams[i].equals("-p")) {
 
 				int nrOfProc = Runtime.getRuntime().availableProcessors() - 2;
+
+
 				if (nrOfProc < 1) {
 					nrOfProc = 1;
 				}
 				bowTieParams[i + 1] = Integer.toString(nrOfProc);
 			}
 		}
+
 		String bowTieString = "";
 		for (int i = 0; i < bowTieParams.length; i++) {
 			bowTieString += bowTieParams[i] + " ";
@@ -466,7 +568,6 @@ public class RawToProfileConverter extends Executor {
 			throw new ProcessException("Process interrupted by external "
 					+ "source while sorting sam file");
 		}
-
 	}
 
 	/**
@@ -480,9 +581,16 @@ public class RawToProfileConverter extends Executor {
 		if (!fileDir.exists()) {
 			fileDir.mkdirs();
 		}
-
 	}
 
+	/**
+	 * Validates that all parameters procedure takes is valid.
+	 *
+	 * @param parameters
+	 * @param inFolder
+	 * @param outFilePath
+	 * @return
+	 */
 	private boolean verifyInData(String[] parameters, String inFolder,
 			String outFilePath) {
 
@@ -510,9 +618,14 @@ public class RawToProfileConverter extends Executor {
 		}
 
 		return true;
-
 	}
 
+	/**
+	 * Checks if a folder exists.
+	 *
+	 * @param folder
+	 * @return
+	 */
 	private boolean checkIfFolderExists(String folder) {
 		File dir = new File(folder);
 		return dir.exists();
