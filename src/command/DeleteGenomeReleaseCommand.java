@@ -2,9 +2,11 @@ package command;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import database.DatabaseAccessor;
 import database.constants.MaxSize;
+import database.containers.Genome;
 import response.DeleteGenomeReleaseResponse;
 import response.ErrorResponse;
 import response.Response;
@@ -13,8 +15,8 @@ import response.StatusCode;
 /**
  * Class used to delete a genome release.
  *
- * @author tfy09jnn
- * @version 1.0
+ * @author tfy09jnn, Hugo Källström
+ * @version 1.1
  */
 public class DeleteGenomeReleaseCommand extends Command {
 
@@ -36,24 +38,27 @@ public class DeleteGenomeReleaseCommand extends Command {
 
 	/**
 	 * Method used to validate the command.
+	 * @throws ValidateException
 	 */
 	@Override
-	public boolean validate() {
+	public boolean validate() throws ValidateException {
 
-		if(genomeVersion == null || specie == null) {
-			return false;
-		}
+		if (genomeVersion == null || specie == null) {
 
-		if(genomeVersion.equals("null") || specie.equals("null")) {
-			return false;
-		}
+			throw new ValidateException(StatusCode.BAD_REQUEST, "The genome version was missing.");
 
-		if(genomeVersion.length() > MaxSize.GENOME_VERSION || genomeVersion.length() < 1) {
-			return false;
-		}
+		} else if (genomeVersion.equals("null") || specie.equals("null")) {
 
-		if(specie.length() > MaxSize.GENOME_SPECIES || specie.length() < 1) {
-			return false;
+			throw new ValidateException(StatusCode.BAD_REQUEST, "The genome version or specie was missing.");
+
+		} else if(genomeVersion.length() > MaxSize.GENOME_VERSION || genomeVersion.length() < 1) {
+
+			throw new ValidateException(StatusCode.BAD_REQUEST, "The genome version must be between 1 and "+database.constants.MaxSize.GENOME_VERSION+" characters long.");
+
+		} else if(specie.length() > MaxSize.GENOME_SPECIES || specie.length() < 1) {
+
+			throw new ValidateException(StatusCode.BAD_REQUEST, "The species must be between 1 and "+database.constants.MaxSize.GENOME_SPECIES+" characters long.");
+
 		}
 
 		return true;
@@ -67,16 +72,23 @@ public class DeleteGenomeReleaseCommand extends Command {
 	public Response execute() {
 
 		DatabaseAccessor db = null;
-
 		try {
 			db = initDB();
-			System.out.println(genomeVersion);
-			boolean result = db.removeGenomeRelease(genomeVersion);
-			if(result) {
-				return new DeleteGenomeReleaseResponse(StatusCode.OK);
-			} else {
-				return new ErrorResponse(StatusCode.BAD_REQUEST, "Removeing did not work.");
+			ArrayList<Genome> genomeReleases=db.getAllGenomReleasesForSpecies(specie);
+			if(genomeReleases != null) {
+				for(Genome g : genomeReleases) {
+					if (g != null && g.genomeVersion.equals(this.genomeVersion) && g.species.equals(this.specie)) {
+						boolean result = db.removeGenomeRelease(genomeVersion);
+						if(result) {
+							return new DeleteGenomeReleaseResponse(StatusCode.OK);
+						} else {
+							return new ErrorResponse(StatusCode.BAD_REQUEST, "Removeing did not work.");
+						}
+					}
+				}
 			}
+			return new ErrorResponse(StatusCode.BAD_REQUEST, "Version " +  genomeVersion + " or specie " + specie + " does not exist.");
+
 		} catch (SQLException | IOException e) {
 			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
 		} finally {
@@ -84,7 +96,6 @@ public class DeleteGenomeReleaseCommand extends Command {
 				db.close();
 			}
 		}
-
 	}
 
 }

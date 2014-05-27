@@ -61,9 +61,10 @@ public class ExperimentTests {
     @BeforeClass
     public static void setupTestCase() throws Exception {
 
-        dbac = new DatabaseAccessor(TestInitializer.username,
-        		TestInitializer.password, TestInitializer.host,
-        		TestInitializer.database);
+        ti = new TestInitializer();
+        
+        dbac = ti.setupWithoutAddingTuples();
+        
         testChoices = new ArrayList<String>();
         testChoices.add(testChoice);
         testChoices.add(testChoice + "2");
@@ -80,16 +81,13 @@ public class ExperimentTests {
         fpg = dbac.getFilePathGenerator();
         fpg.setRootDirectory(testFolderPath);
 
-        ti = new TestInitializer();
+        
     }
 
     @AfterClass
     public static void undoAllChanges() throws SQLException, IOException {
 
-    	dbac.deleteFile(ft.id);
-        dbac.deleteExperiment(testExpId2);
-        dbac.close();
-        ti.recursiveDelete(testFolder);
+    	ti.removeTuples();
     }
 
     @Before
@@ -101,12 +99,10 @@ public class ExperimentTests {
     }
 
     @After
-    public void teardown() throws SQLException, Exception {
+    public void teardown() throws Exception {
 
-    	dbac.deleteExperiment(testExpId);
-        dbac.deleteAnnotation(testLabelFT);
-        dbac.deleteAnnotation(testLabelDD);
-        dbac.deleteAnnotation(newLabel);
+        ti.removeTuplesKeepConnection();
+    	
     }
 
     @Test
@@ -133,10 +129,10 @@ public class ExperimentTests {
         assertEquals(testExpId, e.getID());
     }
 
-    @Test
-    public void shouldReturnZeroOnRemovingNonExistantExp() throws Exception {
+    @Test (expected = IOException.class)
+    public void shouldThrowIOExceptionOnRemovingNonExistantExp() throws Exception {
 
-    	assertEquals(0, dbac.deleteExperiment("pang"));
+    	dbac.deleteExperiment("pang");
     }
 
     @Test
@@ -254,7 +250,7 @@ public class ExperimentTests {
     	}
     }
 
-    @Test(expected = SQLException.class)
+    @Test(expected = IOException.class)
     public void shouldNotDeleteDirectoryContainingFile() throws Exception {
 
     	dbac.addExperiment(testExpId2);

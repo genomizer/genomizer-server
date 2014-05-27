@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 import response.Response;
-import server.DatabaseSettings;
+import server.ServerSettings;
 
 import database.DatabaseAccessor;
 
@@ -20,7 +20,7 @@ public abstract class Command {
 	protected String header;
 
 	//Method used to validate the class object.
-	public abstract boolean validate();
+	public abstract boolean validate() throws ValidateException;
 
 	//Method used to run command.
 	public abstract Response execute();
@@ -57,7 +57,7 @@ public abstract class Command {
 	public DatabaseAccessor initDB() throws SQLException, IOException {
 
 		DatabaseAccessor db = null;
-		db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
+		db = new DatabaseAccessor(ServerSettings.databaseUsername, ServerSettings.databasePassword, ServerSettings.databaseHost, ServerSettings.databaseName);
 
 		return db;
 

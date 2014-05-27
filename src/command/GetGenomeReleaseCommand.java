@@ -3,7 +3,6 @@ package command;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
 import database.DatabaseAccessor;
 import database.containers.Genome;
@@ -11,7 +10,7 @@ import response.ErrorResponse;
 import response.GetGenomeReleaseRespons;
 import response.Response;
 import response.StatusCode;
-import server.DatabaseSettings;
+import server.ServerSettings;
 
 /**
  * A command which is used to get all the genome versions

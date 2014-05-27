@@ -7,7 +7,6 @@ import java.util.regex.Pattern;
 
 import response.AddAnnotationFieldResponse;
 import response.ErrorResponse;
-import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
 import com.google.gson.annotations.Expose;
@@ -46,6 +45,8 @@ public class AddAnnotationFieldCommand extends Command {
 
 	/**
 	 * Method used to validate all attributes.
+	 *
+	 *
 	 */
 	@Override
 	public boolean validate() {
@@ -83,7 +84,7 @@ public class AddAnnotationFieldCommand extends Command {
 		return true;
 	}
 
-	public boolean hasOnlyValidCharacters(String s){
+	private boolean hasOnlyValidCharacters(String s){
 		Pattern p = Pattern.compile("[^A-Za-z0-9 ]");
 		return !p.matcher(s).find();
 	}
@@ -128,7 +129,7 @@ public class AddAnnotationFieldCommand extends Command {
 
 		} catch (IOException e) {
 			e.printStackTrace();
-			return new MinimalResponse(StatusCode.BAD_REQUEST);
+			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
 		} finally{
 				db.close();
 		}

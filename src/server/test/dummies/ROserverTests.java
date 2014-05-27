@@ -1,33 +1,15 @@
 package server.test.dummies;
 
+import authentication.PasswordHash;
 
-public class serverTests {
+public class ROserverTests {
 
 	public static void main(String args[]) throws Exception {
-
 		Login.login("Splutt", "umea@2014");
 
-		//usertests();
-		//specialannotest();
-		//for(int i = 0; i < 100; i++)
-//			Process.sendGetProcessStatus();
-		//Annotations.sendDeleteAnnotation("Test43???");
-		//Annotations.sendDeleteAnnotation("JONAS???");
-//		Annotations.sendGetAnnotationInformation();
-//		Process.sendRawToProfile();
-//		Annotations.sendAddAnnotation("invalid annotation 0123456789!!!!!!!!!едц");
+		Process.sendRawToProfile();
 
-
-//		Process.sendRawToProfile();
-//		GenomeRelease.sendAddGenomeRelease("HumanitariumTest");
-//		GenomeRelease.sendGetGenomeReleaseSpecies("Fly");
-//		Login.sendTokenValidation();
-//		GenomeRelease.sendGetGenomeRelease();
-
-		//Process.sendRawToProfile();
-//		genometest();
-
-		//Login.logout();
+		Login.logout();
 	}
 
 	public static void renameannotest() throws Exception {

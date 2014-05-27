@@ -3,20 +3,18 @@ package server;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Map;
 import java.util.Queue;
-import java.util.TreeMap;
 
 import response.Response;
 import response.StatusCode;
 
-import command.Command;
-import command.GetAnnotationInformationCommand;
 import command.ProcessCommand;
 import command.ProcessStatus;
 
 
 public class WorkHandler extends Thread{
+
+	private static final long statusTimeToLive = 3000;//1000*60*60*24*3;
 
 	private Queue<ProcessCommand> workQueue;
 	private HashMap<ProcessCommand,ProcessStatus> processStatus;
@@ -31,6 +29,24 @@ public class WorkHandler extends Thread{
 	public synchronized void addWork(ProcessCommand command) {
 		workQueue.add(command);
 		processStatus.put(command, new ProcessStatus(command));
+	}
+
+	public synchronized void removeOldStatuses() {
+		System.out.println("Entering Remove");
+		long now = System.currentTimeMillis();
+
+		for (ProcessCommand proc : processStatus.keySet()) {
+			ProcessStatus procStat = processStatus.get(proc);
+			String statusString = procStat.status;
+			if (statusString.equals("Finished") || statusString.equals("Crashed")) {
+				long time = procStat.timeFinished;
+				long diff = now - time;
+				if (diff > statusTimeToLive) {
+					System.out.println("Removing " + proc.getExpId());
+					processStatus.remove(proc);
+				}
+			}
+		}
 	}
 
 	//The thread runs all the time and checks if the queue is empty
@@ -73,6 +89,7 @@ public class WorkHandler extends Thread{
 					e.printStackTrace();
 				}
 			}
+//			removeOldStatuses();
 		}
 
 	}

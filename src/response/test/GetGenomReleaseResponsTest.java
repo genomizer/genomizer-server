@@ -18,7 +18,7 @@ import database.Genome;
 import response.GetGenomeReleaseRespons;
 import response.Response;
 import response.StatusCode;
-import server.DatabaseSettings;
+import server.ServerSettings;
 
 public class GetGenomReleaseResponsTest {
 
@@ -30,7 +30,7 @@ public class GetGenomReleaseResponsTest {
 		ArrayList<Genome> genomeList;
 		try {
 
-			DatabaseAccessor db=new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
+			DatabaseAccessor db=new DatabaseAccessor(ServerSettings.databaseUsername, ServerSettings.databasePassword, ServerSettings.databaseHost, ServerSettings.databaseName);
 			//genomeList = db.getAllGenomReleases();
 			Command cmd=new GetGenomeReleaseSpeciesCommand("mouseTEST");
 			Response rsp=cmd.execute();
@@ -54,7 +54,7 @@ public class GetGenomReleaseResponsTest {
 		ArrayList<Genome> genomeList;
 		try {
 
-			DatabaseAccessor db=new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
+			DatabaseAccessor db=new DatabaseAccessor(ServerSettings.databaseUsername, ServerSettings.databasePassword, ServerSettings.databaseHost, ServerSettings.databaseName);
 			//genomeList = db.getAllGenomReleases();
 			Command cmd=new GetGenomeReleaseSpeciesCommand("hej");
 			Response rsp=cmd.execute();
@@ -76,7 +76,7 @@ public class GetGenomReleaseResponsTest {
 
 		ArrayList<Genome> genomeList;
 		try {
-			DatabaseAccessor db=new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
+			DatabaseAccessor db=new DatabaseAccessor(ServerSettings.databaseUsername, ServerSettings.databasePassword, ServerSettings.databaseHost, ServerSettings.databaseName);
 			genomeList = db.getAllGenomReleases();
 
 		/*	for(int i=0; i<db.getAllAnnotationLabels().size();i++){

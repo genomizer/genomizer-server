@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import authentication.Authenticate;
 import response.ErrorResponse;
-import response.MinimalResponse;
 import response.ProcessResponse;
 import response.Response;
 import response.StatusCode;
@@ -48,19 +47,25 @@ public class CommandHandler {
 			return new ErrorResponse(StatusCode.BAD_REQUEST, "Could not create a command from request. Bad format on restful.");
 		}
 
-		if (myCom.validate()) {
-			if(CommandType.PROCESS_COMMAND.equals(cmdt)){
-				//add the heavy command to the queue, executed when the
-				//command is at the head of the queue, return OK to tell the client
-				Debug.log("Adding processCommand to workqueue");
-				heavyWorkThread.addWork((ProcessCommand)myCom);
-				return new ProcessResponse(StatusCode.OK);
-			}else{
-				return myCom.execute();
+		try {
+
+			if (myCom.validate()) {
+				if(CommandType.PROCESS_COMMAND.equals(cmdt)){
+					//add the heavy command to the queue, executed when the
+					//command is at the head of the queue, return OK to tell the client
+					Debug.log("Adding processCommand to workqueue");
+					heavyWorkThread.addWork((ProcessCommand)myCom);
+					return new ProcessResponse(StatusCode.OK);
+				}else{
+					return myCom.execute();
+				}
+			} else {
+				Debug.log("Command not valid");
+				return new ErrorResponse(StatusCode.BAD_REQUEST, "The command was invalid. Check the input! Valid characters are A-Z, a-z, 0-9 and space");
 			}
-		} else {
-			Debug.log("Command not valid");
-			return new ErrorResponse(StatusCode.BAD_REQUEST, "The command was invalid. Check the input! Valid characters are A-Z, a-z, 0-9 and space");
+
+		} catch(ValidateException e) {
+			return new ErrorResponse(e.getCode(), e.getMessage());
 		}
 	}
 

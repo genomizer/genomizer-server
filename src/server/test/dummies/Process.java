@@ -11,8 +11,44 @@ import java.net.URL;
 public class Process {
 
 
+	public static void sendFaultyRawToProfile() throws IOException{
 
-	public static void sendRawToProfile() throws IOException{
+		String expid = "real_test_experiment";
+		String parameters = "\"-a -m 1 --best -p 10 -v 2 -q  -S \"," +
+				"\"\"," +
+				"\"\"," +
+				"\"\"," +
+				"\"\"," +
+				"\"\"," +
+				"\"\"," +
+				"\"\"";
+		String metadata = "astringofmetadata";
+		String genomeVersion = "fb5";
+		String author = "robinodling";
+
+
+		URL obj = new URL(testSettings.url + "/process/rawtoprofile");
+		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+		con.setRequestMethod("PUT");
+		con.setRequestProperty("Authorization", Login.getToken());
+
+		String json = "{" +
+				"\"expid\": \"" + expid + "\"," +
+				"\"parameters\": [" + parameters + "]," +
+				"\"metadata\": \"" + metadata + "\"," +
+				"\"genomeVersion\": \"" + genomeVersion + "\"," +
+				"\"author\": \"" + author + "\"}";
+
+
+		testSettings.sendToServer(con, json);
+
+		System.out.println("\nSending 'PUT' request to URL : " + testSettings.url);
+		System.out.println("Reponse Body: " + testSettings.printResponse(con));
+	}
+
+
+	public static void sendRawToProfileFullRun() throws IOException{
 
 		String expid = "real_test_experiment";
 		String parameters = "\"-a -m 1 --best -p 10 -v 2 -q  -S \"," +
@@ -47,21 +83,20 @@ public class Process {
 		System.out.println("\nSending 'PUT' request to URL : " + testSettings.url);
 		System.out.println("Reponse Body: " + testSettings.printResponse(con));
 	}
+	public static void sendRawToProfile() throws IOException{
 
-	public static void sendRawToProfileGet0() throws IOException{
-
-		String expid = "Exp3";
-		String parameters = "\"-a -m 1 --best\"," +
+		String expid = "real_test_experiment";
+		String parameters = "\"-a -m 1 --best -p 10 -v 2 -q  -S \"," +
 				"\"\"," +
-				"\"\"," +
-				"\"\"," +
-				"\"\"," +
-				"\"\"," +
+				"\"y\"," +
+				"\"y\"," +
+				"\"10 1 5 0 0\"," +
+				"\"y 10\"," +
 				"\"\"," +
 				"\"\"";
 		String metadata = "astringofmetadata";
-		String genomeVersion = "hg38";
-		String author = "UCSC";
+		String genomeVersion = "fb5";
+		String author = "robinodling";
 
 
 		URL obj = new URL(testSettings.url + "/process/rawtoprofile");

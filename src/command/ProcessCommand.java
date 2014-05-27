@@ -10,10 +10,11 @@ import java.util.Map.Entry;
 
 import process.classes.ProcessException;
 import process.classes.ProcessHandler;
+import response.ErrorResponse;
 import response.ProcessResponse;
 import response.Response;
 import response.StatusCode;
-import server.DatabaseSettings;
+import server.ServerSettings;
 import server.Debug;
 import server.ResponseLogger;
 
@@ -93,11 +94,6 @@ public class ProcessCommand extends Command {
 					"parameters are null");
 			return false;
 		}
-		if(author == null){
-			Debug.log("ProcessCommand - Validate\n" +
-					"author is null");
-			return false;
-		}
 
 		switch (processtype) {
 		case "rawtoprofile":
@@ -140,6 +136,14 @@ public class ProcessCommand extends Command {
 		return true;
 	}
 
+	/**
+	 * Method that checks if a json attribute has correct length or not.
+	 *
+	 * @param field - the json attribute to be checked
+	 * @param canBeNull - a boolean stating if the attribute can be an empty string or not.
+	 *
+	 * @return True if the attribute have the correct length, else false.
+	 */
 	private boolean doesNotHaveCorrectLength(String field, boolean canBeNull){
 		Debug.log("field: "+ field + " length: " + field.length() + " canbenull: " + canBeNull);
 		if(field.length() <= 0){
@@ -166,56 +170,60 @@ public class ProcessCommand extends Command {
 
 		try {
 
-			db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
+			db = new DatabaseAccessor(ServerSettings.databaseUsername, ServerSettings.databasePassword, ServerSettings.databaseHost, ServerSettings.databaseName);
 			processHandler = new ProcessHandler();
 
 			switch(processtype){
 			case "rawtoprofile":
 				//The process type was a rawtoprofile
 
-				filepaths = db.processRawToProfile(expid);
+				//filepaths = db.processRawToProfile(expid);
 
 				if(!db.isConnected()){
-					db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
+					db = new DatabaseAccessor(ServerSettings.databaseUsername, ServerSettings.databasePassword, ServerSettings.databaseHost, ServerSettings.databaseName);
 				}
 				//Get the genome information from the database.
 				Genome g = db.getGenomeRelease(genomeVersion);
 
-				//Get the path of the genome.
-				String genomeFolderPath = g.folderPath;
-				//Get the prefix of the genome files.
-				String genomeFilePrefix = g.getFilePrefix();
+				if(g == null) {
+					return new ErrorResponse(StatusCode.BAD_REQUEST, "Could not find genome version: " + genomeVersion);
+				} else {
+					//Get the path of the genome.
+					String genomeFolderPath = g.folderPath;
+					//Get the prefix of the genome files.
+					String genomeFilePrefix = g.getFilePrefix();
 
-				if(genomeFolderPath == null){
-					ResponseLogger.log(username, "Could not get genome folder path when " + processtype + " on experiment" + expid + "\n"+
-							"metadata: " + metadata + "\n"+
-							"parameters: " + parameters + "\n" +
-							"genomeFilePrefix: " + genomeFilePrefix + "\n" +
-							"genomeVersion: " + genomeVersion + "\n");
-					db.close();
-					return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, "Could not get genome folder path when " + processtype + " on experiment" + expid + "\n"+
-							"metadata: " + metadata + "\n"+
-							"parameters: " + parameters + "\n" +
-							"genomeFilePrefix: " + genomeFilePrefix + "\n" +
-							"genomeVersion: " + genomeVersion + "\n");
+					if(genomeFolderPath == null){
+						ResponseLogger.log(username, "Could not get genome folder path when " + processtype + " on experiment" + expid + "\n"+
+								"metadata: " + metadata + "\n"+
+								"parameters: " + parameters + "\n" +
+								"genomeFilePrefix: " + genomeFilePrefix + "\n" +
+								"genomeVersion: " + genomeVersion + "\n");
+						db.close();
+						return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, "Could not get genome folder path when " + processtype + " on experiment" + expid + "\n"+
+								"metadata: " + metadata + "\n"+
+								"parameters: " + parameters + "\n" +
+								"genomeFilePrefix: " + genomeFilePrefix + "\n" +
+								"genomeVersion: " + genomeVersion + "\n");
+					}
+
+					if(genomeFilePrefix == null){
+						ResponseLogger.log(username, "Could not get genome file prefix when " + processtype + " on experiment" + expid + "\n"+
+								"metadata: " + metadata + "\n"+
+								"parameters: " + parameters + "\n" +
+								"genomeFolderPath: " + genomeFolderPath + "\n" +
+								"genomeVersion: " + genomeVersion + "\n");
+						db.close();
+						return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, "Could not get genome file prefix when " + processtype + " on experiment" + expid + "\n"+
+								"metadata: " + metadata + "\n"+
+								"parameters: " + parameters + "\n" +
+								"genomeFolderPath: " + genomeFolderPath + "\n" +
+								"genomeVersion: " + genomeVersion + "\n");
+					}
+
+					//Set parameter on index 1 to the path to the genomefolder + the name of the genome files.
+					parameters[1] = genomeFolderPath + genomeFilePrefix;
 				}
-
-				if(genomeFilePrefix == null){
-					ResponseLogger.log(username, "Could not get genome file prefix when " + processtype + " on experiment" + expid + "\n"+
-							"metadata: " + metadata + "\n"+
-							"parameters: " + parameters + "\n" +
-							"genomeFolderPath: " + genomeFolderPath + "\n" +
-							"genomeVersion: " + genomeVersion + "\n");
-					db.close();
-					return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, "Could not get genome file prefix when " + processtype + " on experiment" + expid + "\n"+
-							"metadata: " + metadata + "\n"+
-							"parameters: " + parameters + "\n" +
-							"genomeFolderPath: " + genomeFolderPath + "\n" +
-							"genomeVersion: " + genomeVersion + "\n");
-				}
-
-				//Set parameter on index 1 to the path to the genomefolder + the name of the genome files.
-				parameters[1] = genomeFolderPath + genomeFilePrefix;
 
 				try {
 
@@ -289,7 +297,7 @@ public class ProcessCommand extends Command {
 			//TODO isPrivate hardcoded.
 			//TODO Check if the connection is open
 			if(!db.isConnected()){
-				db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
+				db = new DatabaseAccessor(ServerSettings.databaseUsername, ServerSettings.databasePassword, ServerSettings.databaseHost, ServerSettings.databaseName);
 			}
 			db.addGeneratedProfiles(expid, filepaths.getValue(), filepaths.getKey(), metadata, genomeVersion, username, false);
 		} catch (SQLException e) {
@@ -356,12 +364,10 @@ public class ProcessCommand extends Command {
 	public String toString(){
 
 		return "Uploader of file: " + username + "\n" +
-				//				"Filename: " + filename + "\n" +
 				"Processtype: " + processtype + "\n" +
 				"metadata:" + metadata + "\n" +
 				"username: " + username + "\n" +
 				"expid: " + expid + "\n" +
-				//				"fileid: " + fileId + "\n" +
 				"genomeRelease: " + genomeVersion + "\n" +
 				"author:" + author + "\n";
 	}

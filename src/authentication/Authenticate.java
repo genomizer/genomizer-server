@@ -1,20 +1,16 @@
 package authentication;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.UUID;
 
-import server.DatabaseSettings;
 import server.Debug;
 import server.ResponseLogger;
-import database.DatabaseAccessor;
 
 /**
  * Class used to authenticate users and privileges.
@@ -91,13 +87,15 @@ public class Authenticate {
 			}
 
 			updateLatestRequest(next_uuid);
+			//latestRequests.put(next_uuid, new Date());
 			return next_uuid;
 		}
 
 		String uuid = UUID.randomUUID().toString();
 
 		activeUsersID.put(uuid, username);
-		updateLatestRequest(uuid);
+		//updateLatestRequest(uuid);
+		latestRequests.put(uuid, new Date());
 
 		return uuid;
 

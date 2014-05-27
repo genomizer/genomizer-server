@@ -122,9 +122,9 @@ public class FileTableTests {
     }
 
 
-    @Test(expected = SQLException.class)
+    @Test(expected = IOException.class)
     public void shouldNotBeAbleToDeleteAnExperimentContainingAFile()
-            throws SQLException {
+            throws Exception {
 
         try {
             dbac.deleteExperiment(testExpId);

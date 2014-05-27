@@ -2,7 +2,6 @@ package command;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +47,7 @@ public class RenameAnnotationValueCommand extends Command {
 				return new ErrorResponse(StatusCode.BAD_REQUEST, "The annotation " + name + " does not");
 			}
 
-		} catch (SQLException | IOException | ParseException e) {
+		} catch (SQLException | IOException e) {
 			e.printStackTrace();
 			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
 		} finally {

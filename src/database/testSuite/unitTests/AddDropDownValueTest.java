@@ -50,7 +50,7 @@ public class AddDropDownValueTest {
 		assertTrue(exists);
     }
 
-    @Test(expected = SQLException.class)
+    @Test(expected = IOException.class)
     public void shouldThrowSQLException() throws SQLException, IOException {
 
 		dbac.addDropDownAnnotationValue("Sex", "Male");

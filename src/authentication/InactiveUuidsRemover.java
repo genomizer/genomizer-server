@@ -1,6 +1,5 @@
 package authentication;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -43,12 +42,12 @@ public class InactiveUuidsRemover implements Runnable {
 				try {
 					Thread.sleep(SLEEP_MILLIS);
 				} catch (InterruptedException e) {
-					Debug.log("INACTIVE UUIDS REMOVER - THREAD SLEEP ERROR");
+					Debug.log("INACTIVE UUIDS REMOVER - THREAD SLEEP ERROR. "+e.getMessage());
 				}
 			}
 		} catch(Exception e) {
-			ResponseLogger.log("SERVER", "INACTIVE UUIDS REMOVER - FAILED, CONTINUING PROGRAM WITHOUT THIS FUNCTION.");
-			System.err.println("INACTIVE UUIDS REMOVER - FAILED, CONTINUING PROGRAM WITHOUT THIS FUNCTION.");
+			ResponseLogger.log("SERVER", "INACTIVE UUIDS REMOVER - FAILED, CONTINUING PROGRAM WITHOUT THIS FUNCTION."+e.getMessage());
+			System.err.println("INACTIVE UUIDS REMOVER - FAILED, CONTINUING PROGRAM WITHOUT THIS FUNCTION."+e.getMessage());
 		}
 	}
 

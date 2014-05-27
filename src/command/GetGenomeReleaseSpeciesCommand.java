@@ -18,7 +18,7 @@ import database.containers.Genome;
  */
 public class GetGenomeReleaseSpeciesCommand extends Command{
 
-	private String species;
+	private String specie;
 
 	/**
 	 * Creates a GetGenomeReleaseSpeciesCommand and saves the
@@ -27,7 +27,7 @@ public class GetGenomeReleaseSpeciesCommand extends Command{
 	 * @param restful - the restful header with specie information
 	 */
 	public GetGenomeReleaseSpeciesCommand(String restful) {
-		species=restful;
+		specie=restful;
 	}
 
 	/**
@@ -49,12 +49,12 @@ public class GetGenomeReleaseSpeciesCommand extends Command{
 
 		try {
 			db = initDB();
-			ArrayList<Genome> genomeReleases=db.getAllGenomReleasesForSpecies(species);
+			ArrayList<Genome> genomeReleases=db.getAllGenomReleasesForSpecies(specie);
 			return new GetGenomeReleaseRespons(StatusCode.OK, genomeReleases);
 		} catch (SQLException e) {
 			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, "DatabaseAccessor could not be created: " + e.getMessage());
 		} catch (IOException e) {
-			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, species + " has no genome version released");
+			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, specie + " has no genome version released");
 		}finally{
 			db.close();
 		}

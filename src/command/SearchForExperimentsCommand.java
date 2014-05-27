@@ -12,7 +12,6 @@ import database.DatabaseAccessor;
 import database.containers.Experiment;
 
 import response.ErrorResponse;
-import response.MinimalResponse;
 import response.Response;
 import response.SearchResponse;
 import response.StatusCode;
