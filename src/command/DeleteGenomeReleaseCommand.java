@@ -63,11 +63,11 @@ public class DeleteGenomeReleaseCommand extends Command {
 
 		} else if(!hasOnlyValidCharacters(genomeVersion)) {
 
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in genome version. Valid characters are: a-z, A-Z, 0-9");
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in genome version. Valid characters are: " + validCharacters);
 
 		} else if(!hasOnlyValidCharacters(specie)) {
 
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in specie name. Valid characters are: a-z, A-Z, 0-9");
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in specie name. Valid characters are: " + validCharacters);
 
 		}
 

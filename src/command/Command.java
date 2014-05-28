@@ -17,6 +17,8 @@ import database.DatabaseAccessor;
  */
 public abstract class Command {
 
+
+	final protected String validCharacters = "^, A-Z, a-z, 0-9, space and _";
 	//Used to get the header for the response.
 	protected String header;
 
@@ -65,7 +67,7 @@ public abstract class Command {
 	}
 
 	public boolean hasOnlyValidCharacters(String s){
-		Pattern p = Pattern.compile("[^A-Za-z0-9 ]");
+		Pattern p = Pattern.compile("[^A-Za-z0-9 _]");
 		return !p.matcher(s).find();
 	}
 

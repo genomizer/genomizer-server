@@ -91,13 +91,13 @@ public class AddFileToExperimentCommand extends Command {
 					+ database.constants.MaxSize.FILE_GRVERSION + " characters long.");
 		}
 		if(!hasOnlyValidCharacters(experimentID)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in experiment name. Valid characters are: a-z, A-Z, 0-9");
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in experiment name. Valid characters are: " + validCharacters);
 		}
 		if(!hasOnlyValidCharacters(type)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in file type name. Valid characters are: a-z, A-Z, 0-9");
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in file type name. Valid characters are: " + validCharacters);
 		}
 		if(!hasOnlyValidCharacters(uploader)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in uploader name. Valid characters are: a-z, A-Z, 0-9");
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in uploader name. Valid characters are: " + validCharacters);
 		}
 		return true;
 	}

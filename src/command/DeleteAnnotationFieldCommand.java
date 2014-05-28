@@ -42,7 +42,7 @@ public class DeleteAnnotationFieldCommand extends Command {
 					+ database.constants.MaxSize.ANNOTATION_LABEL + " characters long.");
 		}
 		if(!hasOnlyValidCharacters(header)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters for annotation. Valid characters are: a-z, A-Z, 0-9");
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters for annotation. Valid characters are: " + validCharacters);
 		}
 
 		return true;

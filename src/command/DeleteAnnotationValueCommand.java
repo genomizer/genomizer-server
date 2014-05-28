@@ -43,9 +43,9 @@ public class DeleteAnnotationValueCommand extends Command {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation value has to be between 1 and "
 					+ database.constants.MaxSize.ANNOTATION_VALUE + " characters long.");
 		} else if(!hasOnlyValidCharacters(name)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation label. Valid characters are: a-z, A-Z, 0-9");
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation label. Valid characters are: " + validCharacters);
 		} else if(!hasOnlyValidCharacters(value)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation value. Valid characters are: a-z, A-Z, 0-9");
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation value. Valid characters are: " + validCharacters);
 		}
 		return true;
 	}

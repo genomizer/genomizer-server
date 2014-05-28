@@ -10,7 +10,9 @@ public class ROserverTests {
 //		Process.sendRawToProfile();
 //		Process.sendRawToProfileFullRun();
 //		for(int i = 0; i < 20; i++)
-			Process.sendFaultyRawToProfile();
+//			Process.sendFaultyRawToProfile();
+//		Annotations.sendGetAnnotationInformation();
+		File.sendAddFileToExperiment("TestTest");
 		Login.logout();
 	}
 

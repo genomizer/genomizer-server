@@ -51,10 +51,10 @@ public class EditAnnotationFieldCommand extends Command {
 					+ database.constants.MaxSize.ANNOTATION_LABEL + " characters long.");
 		}
 		if(!hasOnlyValidCharacters(oldName)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation label. Valid characters are: a-z, A-Z, 0-9");
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation label. Valid characters are: " + validCharacters);
 		}
 		if(!hasOnlyValidCharacters(newName)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation label. Valid characters are: a-z, A-Z, 0-9");
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation label. Valid characters are: " + validCharacters);
 		}
 		return true;
 	}

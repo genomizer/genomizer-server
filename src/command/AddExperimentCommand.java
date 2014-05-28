@@ -45,7 +45,7 @@ public class AddExperimentCommand extends Command {
 					+ database.constants.MaxSize.EXPID + " characters long.");
 		}
 		if(name.indexOf('/') != -1 || !hasOnlyValidCharacters(name)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation name. Valid characters are: a-z, A-Z, 0-9");
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation name. Valid characters are: " + validCharacters);
 		}
 
 		for(int i =0;i<annotations.size();i++){
@@ -53,7 +53,7 @@ public class AddExperimentCommand extends Command {
 				throw new ValidateException(StatusCode.BAD_REQUEST, "Found an empty annotation or annotation value, please specify annotations.");
 			}
 			if(!hasOnlyValidCharacters(annotations.get(i).getName()) || !hasOnlyValidCharacters(annotations.get(i).getValue())) {
-				throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation name or value. Valid characters are: a-z, A-Z, 0-9");
+				throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation name or value. Valid characters are: " + validCharacters);
 			}
 		}
 		return true;

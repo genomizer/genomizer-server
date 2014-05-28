@@ -18,13 +18,13 @@ public class File {
 
 		JsonObject ja=new JsonObject();
 		ja.addProperty("experimentID", expName);
-		ja.addProperty("fileName", "hugofiltest.txt");
+		ja.addProperty("fileName", "hugofiltest2.txt");
 		ja.addProperty("type", "raw");
 		ja.addProperty("metaData", "not impl. yet");
 		ja.addProperty("author", "Jonas M");
 		ja.addProperty("uploader", "Jonas M");
 		ja.addProperty("isPrivate", false);
-		ja.addProperty("grVersion", "rn5");
+		ja.addProperty("grVersion", "fb5");
 
 		String json_output = ja.toString();
 		testSettings.sendToServer(con, json_output);

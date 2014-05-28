@@ -46,7 +46,7 @@ public class GetExperimentCommand extends Command {
 					+ database.constants.MaxSize.EXPID + " characters long.");
 
 		} else if(!hasOnlyValidCharacters(header)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in experiment name. Valid characters are: a-z, A-Z, 0-9");
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in experiment name. Valid characters are: " + validCharacters);
 		}
 
 		return true;

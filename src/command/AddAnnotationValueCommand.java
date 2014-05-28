@@ -48,10 +48,10 @@ public class AddAnnotationValueCommand extends Command {
 					+ database.constants.MaxSize.ANNOTATION_LABEL + " characters long.");
 		}
 		if(name.indexOf('/') != -1 || !hasOnlyValidCharacters(name)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation name. Valid characters are: a-z, A-Z, 0-9");
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation name. Valid characters are: " + validCharacters);
 		}
 		if(value.indexOf('/') != -1 || !hasOnlyValidCharacters(value)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation value. Valid characters are: a-z, A-Z, 0-9");
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation value. Valid characters are: " + validCharacters);
 		}
 		return true;
 	}

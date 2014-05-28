@@ -70,19 +70,19 @@ public class AddAnnotationFieldCommand extends Command {
 						+ database.constants.MaxSize.ANNOTATION_DEFAULTVALUE + " characters long.");
 			}
 			if(!hasOnlyValidCharacters(defaults)){
-				throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation default value. Valid characters are: a-z, A-Z, 0-9");
+				throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation default value. Valid characters are: " + validCharacters);
 			}
 		}
 		if(name.indexOf('/') != -1 || !hasOnlyValidCharacters(name)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation name. Valid characters are: a-z, A-Z, 0-9");
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation name. Valid characters are: " + validCharacters);
 		}
 
 		for(int i = 0; i < type.size(); i++) {
 			if(type.get(i).indexOf("/") != -1) {
-				throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation type. Valid characters are: a-z, A-Z, 0-9");
+				throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation type. Valid characters are: " + validCharacters);
 			}
 			if(!hasOnlyValidCharacters(type.get(i))){
-				throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation type. Valid characters are: a-z, A-Z, 0-9");
+				throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation type. Valid characters are: " + validCharacters);
 			}
 		}
 		return true;

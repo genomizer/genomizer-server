@@ -67,10 +67,10 @@ public class AddGenomeReleaseCommand extends Command {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Wrong format on request.");
 		}
 		if(!hasOnlyValidCharacters(genomeVersion)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in genome version name. Valid characters are: a-z, A-Z, 0-9");
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in genome version name. Valid characters are: " + validCharacters);
 		}
 		if(!hasOnlyValidCharacters(specie)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in specie name. Valid characters are: a-z, A-Z, 0-9");
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in specie name. Valid characters are: " + validCharacters);
 		}
 
 		return true;

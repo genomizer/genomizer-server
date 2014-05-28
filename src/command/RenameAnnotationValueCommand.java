@@ -48,13 +48,13 @@ public class RenameAnnotationValueCommand extends Command {
 					+ database.constants.MaxSize.GENOME_SPECIES + " characters long.");
 		}
 		if(!hasOnlyValidCharacters(name)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation label. Valid characters are: a-z, A-Z, 0-9");
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation label. Valid characters are: " + validCharacters);
 		}
 		if(!hasOnlyValidCharacters(oldValue)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in old annotation value. Valid characters are: a-z, A-Z, 0-9");
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in old annotation value. Valid characters are: " + validCharacters);
 		}
 		if(!hasOnlyValidCharacters(newValue)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in new annotation value. Valid characters are: a-z, A-Z, 0-9");
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in new annotation value. Valid characters are: " + validCharacters);
 		}
 		return true;
 	}

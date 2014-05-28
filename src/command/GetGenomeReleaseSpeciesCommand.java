@@ -52,7 +52,7 @@ public class GetGenomeReleaseSpeciesCommand extends Command{
 
 		} else if(!hasOnlyValidCharacters(specie)) {
 
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in specie name. Valid characters are: a-z, A-Z, 0-9");
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in specie name. Valid characters are: " + validCharacters);
 
 		}
 

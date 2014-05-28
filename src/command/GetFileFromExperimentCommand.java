@@ -47,7 +47,7 @@ public class GetFileFromExperimentCommand extends Command {
 					+ database.constants.MaxSize.FILE_EXPID + " characters long.");
 		}
 		if(!hasOnlyValidCharacters(fileID)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation value. Valid characters are: a-z, A-Z, 0-9");
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation value. Valid characters are: " + validCharacters);
 		}
 		return true;
 
