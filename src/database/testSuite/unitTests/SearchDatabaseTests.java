@@ -176,7 +176,7 @@ public class SearchDatabaseTests {
 
         List<Experiment> elist = dbac.search("exp2[expid]");
         Date date = elist.get(0).getFiles().get(0).date;
-        SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
         String query = df.format(date) + "[date]";
         List<Experiment> experiments = dbac.search(query);

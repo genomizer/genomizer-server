@@ -875,13 +875,13 @@ public class AnnotationMethods {
                 break;
             case PubMedToSQLConverter.DATE_PARAM:
                 try {
-                    DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+                    DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
                     java.util.Date ud = df.parse(entry.getKey());
                     Date d = new Date(ud.getTime());
                     query.setDate(i, d);
                 } catch (ParseException e) {
                     throw new IOException(
-                            "Date in wrong format. Use yyyy/MM/dd");
+                            "Date in wrong format. Use yyyy-MM-dd");
                 }
                 break;
             case PubMedToSQLConverter.INT_PARAM:
