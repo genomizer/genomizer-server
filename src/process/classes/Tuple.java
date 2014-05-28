@@ -16,8 +16,8 @@ public class Tuple {
 		chromosome = tokens[0];
 		position = Integer.parseInt(tokens[1]);
 		signal = Double.parseDouble(tokens[2]);
-		//newSignal = signal;
-		newSignal = -1;
+		newSignal = signal;
+		//newSignal = -1;
 	    } else {
 		throw new IllegalArgumentException();
 	    }

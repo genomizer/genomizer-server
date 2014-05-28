@@ -81,14 +81,19 @@ public class SmoothingAndStep {
 	    for (int i = 0; i < middleIndex; i++){
 		//NYTT
 		if(data.size() > params[2]){
-		    smoothOneRow(params, data.size()-1, i);
+		    //   if(((int)Math.ceil(data.size()/2)+i+2)>params[2]){
+		    //	smoothOneRow(params, ((int)Math.ceil(data.size()/2)+i+1), i);
+		    //  }
+		    if(((data.size()/2) + i + 2) > params[2]){
+			smoothOneRow(params, (data.size()/2)+i+1, i);
+		    }
+		    //smoothOneRow(params, data.size()-1, i);
 		}
 		//		writeToFile(params, i);
 	    }
 	    smoothOneRow(params,params[0]);
 
 	    while((strLine = br.readLine()) != null){
-		System.out.println(data.size());
 		shiftLeft(strLine, params);
 		smoothOneRow(params,params[0]);
 	    }
@@ -131,7 +136,7 @@ public class SmoothingAndStep {
 		}
 	    }
 	    while(data.size()>0){
-		writeToFile(params, 0);
+		//	writeToFile(params, 0);
 		data.remove(0);
 	    }
 
@@ -320,18 +325,16 @@ public class SmoothingAndStep {
 	    }
 	}
 	for (int j = 0; j < params[0]/2 -1 ;j++){
-	    System.out.println("DELETE");
 	    if(data.size() > 0){
 		data.remove(0);
 	    } else {
 		//Ska inte kunna hända så lista ut ett lämpligt exception
 	    }
 	}
-	System.out.println(data.size());
 
 	while(data.size()>0){
 	    //smoothOneRow(params, data.size()-1, 0);
-	    writeToFile(params, 0);
+	    //    writeToFile(params, 0);
 	    data.remove(0);
 	}
 	data.add(newChromo);
@@ -347,7 +350,10 @@ public class SmoothingAndStep {
 	for (int i = 0; i < middleIndex; i++){
 	    //NYTT
 	    if(data.size() > params[2]){
-		smoothOneRow(params, data.size()-1, i);
+		if(((data.size()/2) + i + 2)> params[2]){
+		    smoothOneRow(params, (data.size()/2)+i+1, i);
+		}
+		//smoothOneRow(params, data.size()-1, i);
 	    }
 
 
