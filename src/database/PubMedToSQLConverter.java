@@ -12,23 +12,23 @@ import java.util.Map.Entry;
 /**
  * Converts a String containing search parameters to an SQL query for the
  * Genomizer database.
- * 
+ *
  * The search string must be in PubMed format.
- * 
+ *
  * Example: "(Human[Species] OR Fly[Species]) AND Joe Bloggs[Uploader]"
- * 
+ *
  * Before choosing a convert method (convertFileSearch or
  * convertExperimentSearch) check if the PubMed string contains file constraints
  * by calling the hasFileConstraints method. If the PubMedString does not
  * contain any file constraints the convertExperimentSearch should be used.
- * 
+ *
  * @author dv12rwt, Ruaridh Watt
  * @author dv12kko, Kenny Kunto
  * @author dv12ann, André Niklasson
  * @author dv12can, Carl Alexandersson
  * @author yhi04jeo, Jonas Engbo
  * @author oi11mhn, Mattias Hinnerson
- * 
+ *
  */
 public class PubMedToSQLConverter {
 
@@ -50,27 +50,27 @@ public class PubMedToSQLConverter {
     // sql fragments
     private String sqlFragmentForExpSearch = "SELECT ExpID FROM Experiment "
             + "NATURAL JOIN Annotated_With "
-            + "WHERE Label ~~* ? AND Value ~~* ?";
+            + "WHERE Label ~~* ? AND Value ~* ?";
 
     private String sqlFragmentForExpSearchNegated = "SELECT ExpID FROM Experiment AS E "
             + "WHERE NOT EXISTS (SELECT * FROM Annotated_With AS A "
-            + "WHERE E.ExpID = A.ExpID AND Label ~~* ? AND Value ~~* ?)";
+            + "WHERE E.ExpID = A.ExpID AND Label ~~* ? AND Value ~* ?)";
 
     private String sqlFragmentForExpAttrInFileSearch = "SELECT * FROM File AS F "
             + "WHERE EXISTS (SELECT * FROM Annotated_With AS A "
             + "WHERE F.ExpID = A.ExpID AND "
-            + "A.Label ~~* ? AND A.Value ~~* ?)";
+            + "A.Label ~~* ? AND A.Value ~* ?)";
 
     private String sqlFragmentForExpAttrInFileSearchNegated = "SELECT * FROM File AS F "
             + "WHERE NOT EXISTS (SELECT * FROM Annotated_With AS A "
             + "WHERE F.ExpID = A.ExpID AND "
-            + "A.Label ~~* ? AND A.Value ~~* ?)";
+            + "A.Label ~~* ? AND A.Value ~* ?)";
 
     private String sqlFragmentForExpIdSearch = "SELECT ExpID FROM Experiment "
-            + "WHERE ExpID ~~* ?";
+            + "WHERE ExpID ~* ?";
 
     private String sqlFragmentForExpIdSearchNegated = "SELECT ExpID FROM Experiment "
-            + "WHERE NOT ExpID ~~* ?";
+            + "WHERE NOT ExpID ~* ?";
 
     private String sqlFragmentForFileAttr = "SELECT * FROM File " + "WHERE ";
 
@@ -108,13 +108,13 @@ public class PubMedToSQLConverter {
 
     /**
      * Converts a PubMed String to an sql query.
-     * 
+     *
      * The resulting query should only be used if the PubMed string specifies at
      * least one file constraint (can be checked with hasFileConstraint(String
      * pubMedString)).
-     * 
+     *
      * The resulting query will not return experiments with no files.
-     * 
+     *
      * @param pmStr
      *            A String specifying the search criteria in PubMed format.
      * @return An sql String that can be used to search files in the Genomizer
@@ -155,11 +155,11 @@ public class PubMedToSQLConverter {
 
     /**
      * Converts a PubMed String to an sql query.
-     * 
+     *
      * The resulting query should only be used if the PubMed string does not
      * specify a file constraint (can be checked with hasFileConstraint(String
      * pubMedString)).
-     * 
+     *
      * @param pmStr
      *            A String specifying the search criteria in PubMed format.
      * @return An sql String that can be used to search files in the Genomizer
@@ -217,7 +217,7 @@ public class PubMedToSQLConverter {
             label = correctLabelCase(label);
             attributeType = fileAttributes.get(label);
         }
-        
+
         if (attributeType == null) {
             sb.append(sqlFragmentForExpAttrInFileSearchNegated);
             parametersResult.add(new SimpleEntry<String, String>(label, STRING_PARAM));
@@ -305,7 +305,7 @@ public class PubMedToSQLConverter {
         SimpleEntry<String, String> labelValue = getLabelValuePair(s);
         String label = labelValue.getKey();
         String value = labelValue.getValue();
-        
+
         String attributeType;
         if (label.equalsIgnoreCase("expid")) {
             attributeType = STRING_PARAM;
@@ -313,7 +313,7 @@ public class PubMedToSQLConverter {
             label = correctLabelCase(label);
             attributeType = fileAttributes.get(label);
         }
-        
+
         if (attributeType == null) {
             sb.append(sqlFragmentForExpAttrInFileSearch);
             parametersResult.add(new SimpleEntry<String, String>(label, STRING_PARAM));

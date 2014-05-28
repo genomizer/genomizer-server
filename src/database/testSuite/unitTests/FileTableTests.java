@@ -26,8 +26,8 @@ public class FileTableTests {
 
     private static DatabaseAccessor dbac;
 
-    private String testName = "testFileName1";
-    private String testInputFile = "testInputFile";
+    private String testName = "testFileName1.txt";
+    private String testInputFile = "testInputFile.fata";
     private int testFileType = FileTuple.RAW;
     private String testAuthor = "testFileAuthor1";
     private String testUploader = "testUploader1";
@@ -216,7 +216,7 @@ public class FileTableTests {
 
         dbac.addGenomeRelease("te34", "Dog", "te34.txt");
         dbac.addExperiment("expert1");
-        FileTuple fileStore = dbac.addNewFile("expert1", 1, "temp1", "temp2",
+        FileTuple fileStore = dbac.addNewFile("expert1", 1, "temp1.txt", "temp2.txt",
                 "-a -g", "Claes", "Claes", false, "te34");
         File temp1 = new File(fileStore.path);
         temp1.createNewFile();
