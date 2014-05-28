@@ -77,7 +77,7 @@ public class Doorman {
 				new Thread(command).start();
 				} catch(Exception e) {
 					System.err.println("ERROR when creating new Executor." + e.getMessage());
-					ResponseLogger.log("SERVER", "ERROR when creating new Executor." + e.getMessage());
+					ErrorLogger.log("SERVER", "ERROR when creating new Executor." + e.getMessage());
 				}
 			}
 		});
@@ -281,7 +281,7 @@ public class Doorman {
 
 		} catch(Exception e ) {
 			Debug.log("Could not create/process new command " + e.getMessage());
-			ResponseLogger.log("SYSTEM", e);
+			ErrorLogger.log("SYSTEM", e);
 			e.printStackTrace();
 		}
 

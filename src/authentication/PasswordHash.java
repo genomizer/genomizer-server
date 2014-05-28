@@ -3,7 +3,7 @@ package authentication;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import server.ResponseLogger;
+import server.ErrorLogger;
 import server.ServerSettings;
 
 
@@ -33,7 +33,7 @@ public class PasswordHash
         }
         catch (NoSuchAlgorithmException e)
         {
-        	ResponseLogger.log("SERVER", "ERROR WHEN CREATING HASH.\n" + e.getMessage());
+        	ErrorLogger.log("SERVER", "ERROR WHEN CREATING HASH.\n" + e.getMessage());
             System.err.println("ERROR WHEN CREATING HASH.\n" + e.getMessage());
         }
     	return null;

@@ -21,14 +21,14 @@ import authentication.Authenticate;
 
 import response.Response;
 
-public class ResponseLogger {
+public class ErrorLogger {
 
 
 	private static String logFile = System.getProperty("user.dir") + "/errorLog.txt";
 
 	private static HashMap<String, ArrayList<Response>> usermap = new HashMap<String,ArrayList<Response>>();
 
-	public ResponseLogger(){
+	public ErrorLogger(){
 
 	}
 

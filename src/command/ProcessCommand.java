@@ -16,7 +16,7 @@ import response.Response;
 import response.StatusCode;
 import server.ServerSettings;
 import server.Debug;
-import server.ResponseLogger;
+import server.ErrorLogger;
 
 import com.google.gson.annotations.Expose;
 
@@ -188,7 +188,7 @@ public class ProcessCommand extends Command {
 					String genomeFilePrefix = g.getFilePrefix();
 
 					if(genomeFolderPath == null){
-						ResponseLogger.log(username, "Could not get genome folder path when " + processtype + " on experiment" + expid + "\n"+
+						ErrorLogger.log(username, "Could not get genome folder path when " + processtype + " on experiment" + expid + "\n"+
 								"metadata: " + metadata + "\n"+
 								"parameters: " + parameters + "\n" +
 								"genomeFilePrefix: " + genomeFilePrefix + "\n" +
@@ -202,7 +202,7 @@ public class ProcessCommand extends Command {
 					}
 
 					if(genomeFilePrefix == null){
-						ResponseLogger.log(username, "Could not get genome file prefix when " + processtype + " on experiment" + expid + "\n"+
+						ErrorLogger.log(username, "Could not get genome file prefix when " + processtype + " on experiment" + expid + "\n"+
 								"metadata: " + metadata + "\n"+
 								"parameters: " + parameters + "\n" +
 								"genomeFolderPath: " + genomeFolderPath + "\n" +
@@ -228,7 +228,7 @@ public class ProcessCommand extends Command {
 					}
 				} catch (ProcessException e) {
 					e.printStackTrace();
-					ResponseLogger.log(username, "Process Exception when running " + processtype + " on experiment" + expid + "\n"+
+					ErrorLogger.log(username, "Process Exception when running " + processtype + " on experiment" + expid + "\n"+
 							"metadata: " + metadata + "\n"+
 							"parameters: " + parameters + "\n" +
 							"genomeVersion: " + genomeVersion + "\n" + e.getMessage());
@@ -239,7 +239,7 @@ public class ProcessCommand extends Command {
 			default:
 				Debug.log("ERROR: Unknown process type in processcommand execute");
 				db.close();
-				ResponseLogger.log(username, "Unknown process type in processcommand execute when running " + processtype + " on experiment" + expid + "\n"+
+				ErrorLogger.log(username, "Unknown process type in processcommand execute when running " + processtype + " on experiment" + expid + "\n"+
 						"metadata: " + metadata + "\n"+
 						"parameters: " + parameters + "\n" +
 						"genomeVersion: " + genomeVersion + "\n");
@@ -251,7 +251,7 @@ public class ProcessCommand extends Command {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			ResponseLogger.log(username, "SQL Exception in ProcessCommand execute when running " + processtype + " on experiment" + expid + "\n"+
+			ErrorLogger.log(username, "SQL Exception in ProcessCommand execute when running " + processtype + " on experiment" + expid + "\n"+
 					"metadata: " + metadata + "\n"+
 					"parameters: " + parameters + "\n" +
 					"genomeVersion: " + genomeVersion + "\n" + e.getMessage());
@@ -262,7 +262,7 @@ public class ProcessCommand extends Command {
 					"genomeVersion: " + genomeVersion + "\n" + e.getMessage());
 		} catch (IOException e1) {
 			e1.printStackTrace();
-			ResponseLogger.log(username, "IO Exception in ProcessCommand execute when running " + processtype + " on experiment" + expid + "\n"+
+			ErrorLogger.log(username, "IO Exception in ProcessCommand execute when running " + processtype + " on experiment" + expid + "\n"+
 					"metadata: " + metadata + "\n"+
 					"parameters: " + parameters + "\n" +
 					"genomeVersion: " + genomeVersion + "\n" + e1.getMessage());
@@ -284,7 +284,7 @@ public class ProcessCommand extends Command {
 			db.addGeneratedProfiles(expid, filepaths.getValue(), filepaths.getKey(), metadata, genomeVersion, username, false);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			ResponseLogger.log(username, "SQL Exception in ProcessCommand execute when using addGeneratedProfiles with " + processtype + " on experiment" + expid + "\n"+
+			ErrorLogger.log(username, "SQL Exception in ProcessCommand execute when using addGeneratedProfiles with " + processtype + " on experiment" + expid + "\n"+
 					"metadata: " + metadata + "\n"+
 					"parameters: " + parameters + "\n" +
 					"genomeVersion: " + genomeVersion + "\n" + e.getMessage());
@@ -295,7 +295,7 @@ public class ProcessCommand extends Command {
 					"genomeVersion: " + genomeVersion + "\n" + e.getMessage());
 		} catch (IOException e) {
 			e.printStackTrace();
-			ResponseLogger.log(username, "IO Exception in ProcessCommand execute when creating new DatabaseAccesor before addGeneratedProfiles with " + processtype + " on experiment" + expid + "\n"+
+			ErrorLogger.log(username, "IO Exception in ProcessCommand execute when creating new DatabaseAccesor before addGeneratedProfiles with " + processtype + " on experiment" + expid + "\n"+
 					"metadata: " + metadata + "\n"+
 					"parameters: " + parameters + "\n" +
 					"genomeVersion: " + genomeVersion + "\n" + e.getMessage());
@@ -308,7 +308,7 @@ public class ProcessCommand extends Command {
 
 		db.close();
 
-		ResponseLogger.log(username, "Raw to profile processing completed running " + processtype + " on experiment" + expid + "\n"+
+		ErrorLogger.log(username, "Raw to profile processing completed running " + processtype + " on experiment" + expid + "\n"+
 					"metadata: " + metadata + "\n"+
 					"parameters: " + parameters + "\n" +
 					"genomeVersion: " + genomeVersion + "\n");

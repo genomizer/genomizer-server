@@ -10,7 +10,7 @@ import java.util.Iterator;
 import java.util.UUID;
 
 import server.Debug;
-import server.ResponseLogger;
+import server.ErrorLogger;
 import server.ServerSettings;
 
 /**
