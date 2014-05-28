@@ -123,27 +123,154 @@ public class AddAnnotationFieldCommandTest {
 
 	}
 
+	/**
+	 * Test used to check that ValidateException is thrown if
+	 * the ArrayList with types are empty.
+	 *
+	 * @throws ValidateException
+	 */
 	@Test(expected = ValidateException.class)
-	public void testValidateTypeIsEmpty() {
+	public void testValidateTypeIsEmpty() throws ValidateException {
+
+		String json = "{\"name\":\"species\",\"type\":[],\"default\":\"human\",\"forced\":false}";
+		AddAnnotationFieldCommand c = new AddAnnotationFieldCommand();
+		c = gson.fromJson(json, AddAnnotationFieldCommand.class);
+		c.validate();
+
+		fail("Expected ValidateException to be thrown.");
 
 	}
 
+	/**
+	 * Test used to check that ValidateException is thrown if
+	 * the ArrayList with types has invalid characters.
+	 *
+	 * @throws ValidateException
+	 */
 	@Test(expected = ValidateException.class)
-	public void testValidateTypeHasInvalidCharacters() {
+	public void testValidateTypeHasInvalidCharacters() throws ValidateException {
+
+		String invalidType = "ra/t";
+		String json = "{\"name\":\"species\",\"type\":[\"fly\",\"" + invalidType +
+				"\",\"human\"],\"default\":\"human\",\"forced\":false}";
+		AddAnnotationFieldCommand c = new AddAnnotationFieldCommand();
+		c = gson.fromJson(json, AddAnnotationFieldCommand.class);
+		c.validate();
+
+		fail("Expected ValidateException to be thrown.");
 
 	}
 
+	/**
+	 * Test that checks that ValidateException is thrown if forced is not passed
+	 * at all in JSON.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testValidateForcedNotPassed() throws ValidateException {
+
+		String json = "{\"name\":\"species\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\"}";
+		AddAnnotationFieldCommand c = new AddAnnotationFieldCommand();
+		c = gson.fromJson(json, AddAnnotationFieldCommand.class);
+		c.validate();
+
+		fail("Expected ValidateException to be thrown.");
+
+	}
+
+	/**
+	 * Test that checks that ValidateException is thrown if forced is empty JSON.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testValidateForcedNotFilled() throws ValidateException {
+
+		String json = "{\"name\":\"species\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":}";
+		AddAnnotationFieldCommand c = new AddAnnotationFieldCommand();
+		c = gson.fromJson(json, AddAnnotationFieldCommand.class);
+		c.validate();
+
+		fail("Expected ValidateException to be thrown.");
+
+	}
+
+	/**
+	 * Test used to check that default variable can be null and
+	 * that ValidateException is not thrown.
+	 *
+	 * @throws ValidateException
+	 */
 	@Test
-	public void testHasOnlyValidCharacters(){
-		AddAnnotationFieldCommand aafc = new AddAnnotationFieldCommand();
+	public void testValidateDefaultNotPassedWorking() throws ValidateException {
 
-		String valid = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ";
-		String invalid = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 åäö";
-		String invalid2 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 !#¤%&/()";
+		String json = "{\"name\":\"species\",\"type\":[\"fly\",\"rat\",\"human\"],\"forced\":true}";
+		AddAnnotationFieldCommand c = new AddAnnotationFieldCommand();
+		c = gson.fromJson(json, AddAnnotationFieldCommand.class);
+		c.validate();
 
-		assertTrue(aafc.hasOnlyValidCharacters(valid));
-		assertFalse(aafc.hasOnlyValidCharacters(invalid));
-		assertFalse(aafc.hasOnlyValidCharacters(invalid2));
+		assertTrue(true);
+
+	}
+
+	/**
+	 * Test used to check that ValidateException is not thrown
+	 * when default is empty string.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test
+	public void testValidateDefaultNotFilled() throws ValidateException {
+
+		String json = "{\"name\":\"species\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":,\"forced\":true}";
+		AddAnnotationFieldCommand c = new AddAnnotationFieldCommand();
+		c = gson.fromJson(json, AddAnnotationFieldCommand.class);
+		c.validate();
+
+		assertTrue(true);
+
+	}
+
+	/**
+	 * Test used to check that ValidateException is thrown if default
+	 * contains invalid characters.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testValidateDefaultInvalidCharacters() throws ValidateException {
+
+		String json = "{\"name\":\"species\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human!!\",\"forced\":false}";
+		AddAnnotationFieldCommand c = new AddAnnotationFieldCommand();
+		c = gson.fromJson(json, AddAnnotationFieldCommand.class);
+		c.validate();
+
+		fail("Expected ValidateException to be thrown.");
+
+	}
+
+	/**
+	 * Test used to check that ValidateException is thrown if
+	 * Defaults length is to long.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testValidateDefaultLengthNotToLong() throws ValidateException {
+
+		String big = "";
+		for(int i = 0; i < database.constants.MaxSize.ANNOTATION_DEFAULTVALUE + 1; i++) {
+			big = big + "a";
+		}
+		String json = "{\"name\":\"species\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"" + big +
+				"\",\"forced\":false}";
+		AddAnnotationFieldCommand c = new AddAnnotationFieldCommand();
+		c = gson.fromJson(json, AddAnnotationFieldCommand.class);
+		c.validate();
+
+		fail("Expected ValidateException to be thrown.");
+
 	}
 
 	/**
@@ -172,90 +299,25 @@ public class AddAnnotationFieldCommandTest {
 	    String json = "{\"name\":\"species\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
 		final Command aafc = gson.fromJson(json, AddAnnotationFieldCommand.class);
 		String json2 = gson.toJson(aafc);
-		assertEquals(json2, json);	    String json = "{\"name\":\"species\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
+
+		assertEquals(json2, json);
 
 	}
 
 	/**
-	 * Test for the validation of validation of missing objects
-	 * that were made when JSON was serialized.
+	 * Test to check that validation code does not throw a ValidateException
+	 * if the JSON is properly formatted.
+	 *
+	 * @throws ValidateException
 	 */
 	@Test
-	public void testValidationNullValues() {
-
-	    String json = "{\"name\":\"\",\"type\":[\"fly\",\"rat\",\"human\"],\"forced\":true}";
-	    String json2 = "{\"type\":[\"fly\",\"rat\",\"human\"],\"forced\":true}";
-	    String json3 = "{\"name\":\"species\",\"type\":[],\"forced\":true}";
-	    String json4 = "{\"name\":\"species\",\"forced\":true}";
-	    final Command aafc = gson.fromJson(json, AddAnnotationFieldCommand.class);
-	    final Command aafc2 = gson.fromJson(json2, AddAnnotationFieldCommand.class);
-	    final Command aafc3 = gson.fromJson(json3, AddAnnotationFieldCommand.class);
-	    final Command aafc4 = gson.fromJson(json4, AddAnnotationFieldCommand.class);
-	    assertFalse(aafc.validate());
-	    assertFalse(aafc2.validate());
-	    assertFalse(aafc3.validate());
-	    assertFalse(aafc4.validate());
-
-	}
-
-	/**
-	 * Test to check if name validation works pro	    String json = "{\"name\":\"species\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";perly.
-	 */
-	@Test
-	public void testValidateNameIsToLong() {
-
-		String toLong = "";
-		for(int i = 0; i < MaxSize.ANNOTATION_LABEL + 1; i++) {
-			toLong = toLong + "A";
-		}
-	    String json = "{\"name\":\"" + toLong +
-	    		"\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
-	    final Command aafc = gson.fromJson(json, AddAnnotationFieldCommand.class);
-		assertFalse(aafc.validate());
-
-	}
-
-	/**
-	 * Test to check if there are no types to select from.
-	 */
-	@Test
-	public void testValidateNoTypes() {
-
-		String json = "{\"name\":\"species\",\"type\":[],\"default\":\"human\",\"forced\":true}";
-	    final Command aafc = gson.fromJson(json, AddAnnotationFieldCommand.class);
-		assertFalse(aafc.validate());
-
-	}
-
-	/**
-	 * Test to check that validation code validates correct when
-	 * JSON string is properly formatted.
-	 */
-	@Test
-	public void testValidationProperJSON() {
+	public void testValidationProperJSON() throws ValidateException {
 
 	    String json = "{\"name\":\"species\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
-	    final Command aafc = gson.fromJson(json, AddAnnotationFieldCommand.class);
-		assertTrue(aafc.validate());
+	    final Command c = gson.fromJson(json, AddAnnotationFieldCommand.class);
+	    c.validate();
 
-	}
-
-	@Test
-	public void testInvalidCharacters(){
-		String json = "{\"name\":\"spec ies\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
-	    final Command aafc = gson.fromJson(json, AddAnnotationFieldCommand.class);
-	    assertTrue(aafc.validate());
-
-	    String json2 = "{\"name\":\"speciesö\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
-	    final Command aafc2 = gson.fromJson(json2, AddAnnotationFieldCommand.class);
-	    assertFalse(aafc2.validate());
-
-	    String json3 = "{\"name\":\"species\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human!!!!\",\"forced\":true}";
-	    final Command aafc3 = gson.fromJson(json3, AddAnnotationFieldCommand.class);
-	    assertFalse(aafc3.validate());
-
-
-
+	    assertTrue(true);
 
 	}
 
