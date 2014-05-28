@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import database.FilePathGenerator;
+import database.FileValidator;
 import database.containers.Experiment;
 import database.containers.FileTuple;
 
@@ -74,6 +75,16 @@ public class FileMethods {
             String inputFileName, String metaData, String author,
             String uploader, boolean isPrivate, String genomeRelease)
             throws SQLException, IOException {
+
+    	if(!FileValidator.fileNameCheck(fileName)){
+    		throw new IOException("Invalid filename");
+    	}
+
+    	if(inputFileName!=null){
+        	if(!FileValidator.fileNameCheck(inputFileName)){
+        		throw new IOException("Invalid input filename");
+        	}
+    	}
 
         Experiment e = expMethods.getExperiment(expID);
 

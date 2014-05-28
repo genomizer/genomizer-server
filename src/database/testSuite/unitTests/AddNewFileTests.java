@@ -25,12 +25,12 @@ public class AddNewFileTests {
 
     private static FilePathGenerator fpg;
 
-    private static String testFileName = "testFileName1";
+    private static String testFileName = "testFileName1.txt";
     private static int testFileType = FileTuple.RAW;
     private static String testAuthor = "test File Author1";
     private static String testUploader = "test Uploader 1";
     private static String testMetaData = "test Meta Data 1";
-    private static String testInputFileName = "testInputFileName";
+    private static String testInputFileName = "testInputFileName.txt";
     private static boolean testIsPrivate = false;
     private static String testExpId = "testExpId1";
     private static TestInitializer ti;

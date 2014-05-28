@@ -8,7 +8,7 @@ import javax.swing.filechooser.FileSystemView;
 /**
  * Class for validating filename
  *
- * @author yhi04jeo
+ * @author yhi04jeo, dv12can, dv12kko
  */
 public class FileValidator {
 
@@ -27,6 +27,7 @@ public class FileValidator {
 	 * @param String fileName
 	 * @return boolean
 	 */
+	@Deprecated
 	public boolean isgameOk(String fileName) {
 
 		File file = new File(home + File.separator + fileName);
@@ -47,6 +48,7 @@ public class FileValidator {
 
 		return isOk;
 	}
+
 
 	public static boolean fileNameCheck(String fileName){
 		String regex = "^[\\w,\\s-\\.åäöÅÄÖ]+\\.[A-ZÅÄÖa-zåäö0-9]+$";
