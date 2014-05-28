@@ -48,7 +48,7 @@ public class GetGenomeReleaseSpeciesCommand extends Command{
 		} else if(specie.length() < 1 || specie.length() > database.constants.MaxSize.GENOME_SPECIES) {
 
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Specie has to be between 1 and "
-					+ database.constants.MaxSize.ANNOTATION_LABEL + " characters long.");
+					+ database.constants.MaxSize.GENOME_SPECIES + " characters long.");
 
 		} else if(!hasOnlyValidCharacters(specie)) {
 

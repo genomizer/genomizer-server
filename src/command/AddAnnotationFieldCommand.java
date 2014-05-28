@@ -51,40 +51,39 @@ public class AddAnnotationFieldCommand extends Command {
 	@Override
 	public boolean validate() throws ValidateException {
 
-		if(name == null || name.length() < 1) {
+		if(name == null) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify a name for the annotation.");
-		}
-		if(defaults == null || defaults.length() < 1) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify a default value for the annotation.");
 		}
 		if(type == null || type.size() < 1) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify a type for the annotation.");
 		}
-		if(defaults == null) {
+		if(forced == null) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify if the value is forced.");
 		}
-		if(name.length() > MaxSize.ANNOTATION_LABEL) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation name is too long.");
+		if(name.length() > MaxSize.ANNOTATION_LABEL || name.length() < 1) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation label has to be between 1 and "
+					+ database.constants.MaxSize.ANNOTATION_LABEL + " characters long.");
 		}
-		if(defaults.length() > MaxSize.ANNOTATION_DEFAULTVALUE) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation default value is too long.");
+		if(defaults != null) {
+			if(defaults.length() > MaxSize.ANNOTATION_DEFAULTVALUE || defaults.length() < 1) {
+				throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation default value has to be between 1 and "
+						+ database.constants.MaxSize.ANNOTATION_DEFAULTVALUE + " characters long.");
+			}
+			if(!hasOnlyValidCharacters(defaults)){
+				throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation default value. Valid characters are: a-z, A-Z, 0-9");
+			}
 		}
 		if(name.indexOf('/') != -1 || !hasOnlyValidCharacters(name)) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation name. Valid characters are: a-z, A-Z, 0-9");
 		}
-		if(!hasOnlyValidCharacters(defaults)){
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation default value. Valid characters are: a-z, A-Z, 0-9");
-		}
 
 		for(int i = 0; i < type.size(); i++) {
-
 			if(type.get(i).indexOf("/") != -1) {
 				throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation type. Valid characters are: a-z, A-Z, 0-9");
 			}
 			if(!hasOnlyValidCharacters(type.get(i))){
 				throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation type. Valid characters are: a-z, A-Z, 0-9");
 			}
-
 		}
 		return true;
 	}
