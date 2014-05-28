@@ -6,17 +6,9 @@ import java.io.IOException;
 
 
 public class StartUpCleaner{
-	private String resDir = "resources/";
-	private StartUpCleaner() {
-
-	}
 
 
-	public static StartUpCleaner startUpCleanerFactory() {
-		return new StartUpCleaner();
-	}
-
-	public void removeOldTempDirectories(String dir) {
+	public static void removeOldTempDirectories(String dir) {
 		if(dir != null) {
 			System.out.println("dir var inte null");
 			File dirFile = new File(dir);
@@ -40,7 +32,7 @@ public class StartUpCleaner{
 	}
 
 
-	private void delete(File f) throws IOException {
+	private static void delete(File f) throws IOException {
 		  if (f.isDirectory()) {
 			    for (File c : f.listFiles()) {
 			    	delete(c);
