@@ -35,9 +35,9 @@ public class DeleteAnnotationValueCommand extends Command {
 	public boolean validate() throws ValidateException {
 
 		if(name == null || value == null) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation name and/or value was missing.");
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation label and/or value was missing.");
 		} else if(name.length() < 1 || name.length() > database.constants.MaxSize.ANNOTATION_LABEL) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation name has to be between 1 and "
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation label has to be between 1 and "
 					+ database.constants.MaxSize.ANNOTATION_LABEL + " characters long.");
 		} else if(value.length() < 1 || value.length() > database.constants.MaxSize.ANNOTATION_VALUE) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation value has to be between 1 and "
@@ -47,7 +47,6 @@ public class DeleteAnnotationValueCommand extends Command {
 		} else if(!hasOnlyValidCharacters(value)) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation value. Valid characters are: a-z, A-Z, 0-9");
 		}
-
 		return true;
 	}
 

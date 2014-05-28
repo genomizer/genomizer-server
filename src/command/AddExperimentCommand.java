@@ -9,6 +9,7 @@ import response.MinimalResponse;
 import response.StatusCode;
 import com.google.gson.annotations.Expose;
 import database.DatabaseAccessor;
+import database.constants.MaxSize;
 
 /**
  * Class used to add an experiment represented as a command.
@@ -33,11 +34,15 @@ public class AddExperimentCommand extends Command {
 
 	@Override
 	public boolean validate() throws ValidateException {
-		if(name == null || name.length() < 1) {
+		if(name == null) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify a name for the experiment.");
 		}
 		if(annotations == null || annotations.size() == 0) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify annotations for the experiment.");
+		}
+		if(name.length() > MaxSize.EXPID || name.length() < 1) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Experiment name has to be between 1 and "
+					+ database.constants.MaxSize.EXPID + " characters long.");
 		}
 		if(name.indexOf('/') != -1 || !hasOnlyValidCharacters(name)) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation name. Valid characters are: a-z, A-Z, 0-9");

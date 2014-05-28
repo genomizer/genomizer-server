@@ -38,11 +38,11 @@ public class GetExperimentCommand extends Command {
 
 		if(header == null) {
 
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Experiment-id was missing.");
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Experiment name was missing.");
 
 		} else if(header.length() < 1 || header.length() > database.constants.MaxSize.EXPID) {
 
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Experiment-id has to be between 1 and "
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Experiment name has to be between 1 and "
 					+ database.constants.MaxSize.EXPID + " characters long.");
 
 		} else if(!hasOnlyValidCharacters(header)) {

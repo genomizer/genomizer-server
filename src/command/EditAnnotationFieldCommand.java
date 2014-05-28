@@ -37,18 +37,23 @@ public class EditAnnotationFieldCommand extends Command {
 	@Override
 	public boolean validate() throws ValidateException {
 		if (oldName == null) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify the old annotation name");
-		} else if(newName == null) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify the old annotation name");
-		} else if(oldName.length() > MaxSize.ANNOTATION_LABEL || oldName.length() < 1) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Old annotation name has to be between 1 and "
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify the old annotation label");
+		}
+		if(newName == null) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify the old annotation label");
+		}
+		if(oldName.length() > MaxSize.ANNOTATION_LABEL || oldName.length() < 1) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Old annotation label has to be between 1 and "
 					+ database.constants.MaxSize.ANNOTATION_LABEL + " characters long.");
-		} else if(newName.length() > MaxSize.ANNOTATION_LABEL || newName.length() < 1) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "New annotation name has to be between 1 and "
+		}
+		if(newName.length() > MaxSize.ANNOTATION_LABEL || newName.length() < 1) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "New annotation labl has to be between 1 and "
 					+ database.constants.MaxSize.ANNOTATION_LABEL + " characters long.");
-		} else if(!hasOnlyValidCharacters(oldName)) {
+		}
+		if(!hasOnlyValidCharacters(oldName)) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation label. Valid characters are: a-z, A-Z, 0-9");
-		} else if(!hasOnlyValidCharacters(newName)) {
+		}
+		if(!hasOnlyValidCharacters(newName)) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation label. Valid characters are: a-z, A-Z, 0-9");
 		}
 		return false;

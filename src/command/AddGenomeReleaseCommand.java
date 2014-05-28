@@ -40,20 +40,20 @@ public class AddGenomeReleaseCommand extends Command {
 		if(files == null || files.size() == 0) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify release files.");
 		}
-		if(genomeVersion == null || genomeVersion.length() < 1) {
+		if(genomeVersion == null) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify a genome release version.");
 		}
 		for(int i = 0; i < files.size(); i++) {
 			int sizeCheck = files.get(i).length();
-			if(sizeCheck > MaxSize.GENOME_FILEPATH || sizeCheck < 1) {
+			if(sizeCheck > MaxSize.FILE_GRVERSION || sizeCheck < 1) {
 				throw new ValidateException(StatusCode.BAD_REQUEST, "File name has to be between 1 and "
-						+ database.constants.MaxSize.GENOME_FILEPATH + " characters long.");
+						+ database.constants.MaxSize.FILE_GRVERSION + " characters long.");
 			}
 		}
-		if(specie == null || specie.length() < 1) {
+		if(specie == null) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify a specie.");
 		}
-		if(specie.length() > MaxSize.GENOME_SPECIES) {
+		if(specie.length() > MaxSize.GENOME_SPECIES || specie.length() < 1) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Specie name has to be between 1 and "
 					+ database.constants.MaxSize.GENOME_SPECIES + " characters long.");
 		}

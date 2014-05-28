@@ -19,8 +19,8 @@ import response.StatusCode;
 /**
  * Class used to represent a command of the type Search.
  *
- * @author tfy09jnn
- * @version 1.0
+ * @author tfy09jnn, Hugo Källström
+ * @version 1.1
  */
 public class SearchForExperimentsCommand extends Command {
 
@@ -61,7 +61,7 @@ public class SearchForExperimentsCommand extends Command {
 			annotations = URLDecoder.decode(annotations, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
-			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
+			return new ErrorResponse(StatusCode.BAD_REQUEST, "Bad encoding on search query.");
 		}
 
 		try {
