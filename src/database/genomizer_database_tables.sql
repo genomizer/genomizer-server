@@ -1,16 +1,16 @@
 CREATE TABLE File
 (
     FileID SERIAL NOT NULL,
-    Path VARCHAR(512) UNIQUE NOT NULL,
+    Path VARCHAR(1024) UNIQUE NOT NULL,
     FileType VARCHAR(32) NOT NULL,
-    FileName VARCHAR(256) NOT NULL,
+    FileName VARCHAR(512) NOT NULL,
     Date DATE NOT NULL,
     MetaData VARCHAR(256),
-    InputFilePath VARCHAR(512),
+    InputFilePath VARCHAR(1024),
     Author VARCHAR(32),
     Uploader VARCHAR(32) NOT NULL,
     IsPrivate BOOLEAN NOT NULL,
-    ExpID VARCHAR(128),
+    ExpID VARCHAR(256),
     GRVersion VARCHAR(16),
     Status VARCHAR(16) DEFAULT 'In Progress',
     CONSTRAINT pkey_file PRIMARY KEY(FileID)
@@ -27,7 +27,7 @@ CREATE TABLE Annotation
 
 CREATE TABLE Experiment
 (
-    ExpID VARCHAR(128) NOT NULL,
+    ExpID VARCHAR(256) NOT NULL,
     CONSTRAINT pkey_experiment PRIMARY KEY(ExpID)
 );
 
@@ -35,7 +35,7 @@ ALTER TABLE File ADD CONSTRAINT fkey_expid FOREIGN KEY (ExpID) REFERENCES Experi
 
 CREATE TABLE Annotated_With
 (
-    ExpID VARCHAR(128) NOT NULL,
+    ExpID VARCHAR(256) NOT NULL,
     Label VARCHAR(32) NOT NULL,
     Value VARCHAR(32) NOT NULL,
     CONSTRAINT pkey_annotated_with PRIMARY KEY(ExpID, Label),
@@ -100,7 +100,7 @@ CREATE TABLE Genome_Release
 (
     Version VARCHAR(16) NOT NULL,
     Species VARCHAR(32) NOT NULL,
-    FolderPath VARCHAR(256) NOT NULL,
+    FolderPath VARCHAR(512) NOT NULL,
     CONSTRAINT pkey_genome_release PRIMARY KEY(Version)
 );
 
@@ -109,7 +109,7 @@ ALTER TABLE File ADD CONSTRAINT fkey_grversion FOREIGN KEY (GRVersion) REFERENCE
 CREATE TABLE Genome_Release_Files
 (
     Version VARCHAR(16) NOT NULL,
-    FileName VARCHAR(256) NOT NULL,
+    FileName VARCHAR(512) NOT NULL,
     Status VARCHAR(16) DEFAULT 'In Progress',
     CONSTRAINT pkey_version_filename PRIMARY KEY(Version, FileName),
     CONSTRAINT fkey_version FOREIGN KEY (Version) REFERENCES Genome_Release(Version) ON DELETE CASCADE
@@ -119,7 +119,7 @@ CREATE TABLE Chain_File
 (
     FromVersion VARCHAR(16) NOT NULL,
     ToVersion VARCHAR(16) NOT NULL,
-    FolderPath VARCHAR(256) NOT NULL,
+    FolderPath VARCHAR(512) NOT NULL,
     CONSTRAINT pkey_chain_file PRIMARY KEY(FromVersion, ToVersion),
     CONSTRAINT fkey_from_version FOREIGN KEY (FromVersion) REFERENCES Genome_Release(Version),
     CONSTRAINT fkey_to_version FOREIGN KEY (ToVersion) REFERENCES Genome_Release(Version)
@@ -129,11 +129,14 @@ CREATE TABLE Chain_File_Files
 (
     FromVersion VARCHAR(16) NOT NULL,
     ToVersion VARCHAR(16) NOT NULL,
-    FileName VARCHAR(256) NOT NULL,
+    FileName VARCHAR(512) NOT NULL,
     Status VARCHAR(16) DEFAULT 'In Progress',
     CONSTRAINT pkey_chain_file_files PRIMARY KEY(FromVersion, ToVersion, fileName),
     CONSTRAINT fkey_from_version_to_version FOREIGN KEY (FromVersion, ToVersion) REFERENCES Chain_File(FromVersion, ToVersion) ON DELETE CASCADE
 );
+
+INSERT INTO Annotation VALUES ('Species', 'DropDown', 'Fly', TRUE);
+INSERT INTO Annotation_Choices VALUES ('Species', 'Fly');
 
 
 
