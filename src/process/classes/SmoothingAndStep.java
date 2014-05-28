@@ -58,7 +58,7 @@ public class SmoothingAndStep {
 	this.middleIndex = getMiddleIndex(params[0]);
 
 	if(params[2]<=(params[0]/2)){
-	    params[2] = (params[0]/2+1);
+	    params[2] = (params[0]/2);
 	}
 
 	try {
@@ -72,38 +72,63 @@ public class SmoothingAndStep {
 			strLine = br.readLine();
 		    }
 		    //Ny kod, fixar förhoppingsvis problem
-	//	    if(data.size() > params[2]){
-	//		smoothOneRow(params, data.size()-1);
-	//	    }
+		    //	    if(data.size() > params[2]){
+		    //		smoothOneRow(params, data.size()-1, i);
+		    //	    }
 		}
 	    }
 
 	    for (int i = 0; i < middleIndex; i++){
-		writeToFile(params, i);
+		//NYTT
+		if(data.size() > params[2]){
+		    smoothOneRow(params, data.size()-1, i);
+		}
+		//		writeToFile(params, i);
 	    }
 	    smoothOneRow(params,params[0]);
 
 	    while((strLine = br.readLine()) != null){
+		System.out.println(data.size());
 		shiftLeft(strLine, params);
 		smoothOneRow(params,params[0]);
 	    }
-	    data.remove(0);
+	    if(data.size() > 0){
+		data.remove(0);
+	    } else {
+		//Ska inte kunna hända så lista ut ett lämpligt exception
+	    }
 
 	    if (params[0]%2==1){
 		for (int i = 1;i<(params[0]-params[2]);i++){
 		    smoothOneRow(params,params[0]-i);
-		    data.remove(0);
+		    if(data.size() > 0){
+			data.remove(0);
+		    } else {
+			//Ska inte kunna hända så lista ut ett lämpligt exception
+		    }
 		}
-		data.remove(0);
+		if(data.size() > 0){
+		    data.remove(0);
+		} else {
+		    //Ska inte kunna hända så lista ut ett lämpligt exception
+		}
 	    }else{
 		for (int i = 1;i<(params[0]-params[2]+1);i++){
 		    smoothOneRow(params,params[0]-i);
-		    data.remove(0);
+		    if(data.size() > 0){
+			data.remove(0);
+		    } else {
+			//Ska inte kunna hända så lista ut ett lämpligt exception
+		    }
 		}
 	    }
 
 	    for (int j = 0; j < params[0]/2 -1 ;j++){
-		data.remove(0);
+		if(data.size() > 0){
+		    data.remove(0);
+		} else {
+		    //Ska inte kunna hända så lista ut ett lämpligt exception
+		}
 	    }
 	    while(data.size()>0){
 		writeToFile(params, 0);
@@ -121,13 +146,59 @@ public class SmoothingAndStep {
 	return readSumValue/noOfValues;
     }
 
-    private void smoothOneRow(int[] params, int noOfRowsToSmooth) throws IOException {
-	if(params[1]==1){
-	    smoothMedian(noOfRowsToSmooth, params);
-	} else if(params[1]==0){
-	    smoothTrimmedMean(noOfRowsToSmooth, params);
+    private void smoothOneRow(int[] params, int noOfRowsToSmooth, int index) throws IOException {
+	if((noOfRowsToSmooth < data.size()+1)){
+	    if(params[1]==1){
+		smoothMedian(noOfRowsToSmooth, params, index);
+	    } else if(params[1]==0){
+		smoothTrimmedMean(noOfRowsToSmooth, params, index);
+	    }
+	    writeToFile(params, index);
+	} else {
+	    //Ska inte kunna hända så lista ut ett lämpligt exception
 	}
-	writeToFile(params);
+    }
+
+    private void smoothOneRow(int[] params, int noOfRowsToSmooth) throws IOException {
+	if((noOfRowsToSmooth < data.size()+1)){
+	    if(params[1]==1){
+		smoothMedian(noOfRowsToSmooth, params);
+	    } else if(params[1]==0){
+		smoothTrimmedMean(noOfRowsToSmooth, params);
+	    }
+	    writeToFile(params);
+	} else {
+	    System.out.println("Luktar fuffens");
+	}
+    }
+
+
+    private void smoothTrimmedMean(int noOfRowsToSmooth, int[] params, int index) {
+	int minNrSigs = 1;
+
+	double meanSignal = data.get(index).getSignal();
+	double maxSig = meanSignal;
+	double minSig = meanSignal;
+
+	if(data.size() >= params[2]){
+	    for(int j = 0 ; j < noOfRowsToSmooth; j++){
+		if(j != index){
+
+		    meanSignal = meanSignal + data.get(j).getSignal();
+		    minNrSigs++;
+		    if(maxSig < data.get(j).getSignal()){
+			maxSig = data.get(j).getSignal();
+		    }
+		    if(minSig > data.get(j).getSignal()){
+			minSig = data.get(j).getSignal();
+		    }
+		}
+	    }
+	    if(data.get(index).getSignal() != 0){
+		calcAndSetMeanSignal(params, minNrSigs, meanSignal, maxSig,
+			minSig, index);
+	    }
+	}
     }
 
     private void smoothTrimmedMean(int noOfRowsToSmooth, int[] params) {
@@ -137,6 +208,7 @@ public class SmoothingAndStep {
 	double maxSig = meanSignal;
 	double minSig = meanSignal;
 
+	//System.out.println(data.get(middleIndex). + "");
 	if(data.size() >= params[2]){
 	    for(int j = 0 ; j < noOfRowsToSmooth; j++){
 		if(j != middleIndex){
@@ -151,8 +223,27 @@ public class SmoothingAndStep {
 		    }
 		}
 	    }
-	    calcAndSetMeanSignal(params, minNrSigs, meanSignal, maxSig,
-		    minSig);
+	    if(data.get(middleIndex).getSignal() != 0){
+		calcAndSetMeanSignal(params, minNrSigs, meanSignal, maxSig,
+			minSig);
+	    }
+	}
+    }
+
+
+    private void smoothMedian(int noOfRowsToSmooth, int[] params, int index) {
+
+	double[] array = new double [noOfRowsToSmooth];
+
+	if(data.size() >= params[2]){
+	    for(int j = 0 ; j < (noOfRowsToSmooth); j++){
+		if(data.size() > j){
+		    array[j] = data.get(j).getSignal();
+		}
+	    }
+	    if(data.get(index).getSignal() != 0){
+		data.get(index).setNewSignal(median(array));
+	    }
 	}
     }
 
@@ -166,7 +257,9 @@ public class SmoothingAndStep {
 		    array[j] = data.get(j).getSignal();
 		}
 	    }
-	    data.get(middleIndex).setNewSignal(median(array));
+	    if(data.get(middleIndex).getSignal() != 0){
+		data.get(middleIndex).setNewSignal(median(array));
+	    }
 	}
     }
 
@@ -186,7 +279,11 @@ public class SmoothingAndStep {
 	while(!addLine(strLine)){
 	    strLine = br.readLine();
 	}
-	data.remove(0);
+	if(data.size() > 0){
+	    data.remove(0);
+	} else {
+	    //Ska inte kunna hända så lista ut ett lämpligt exception
+	}
 
 	if(!data.get(data.size()-1).getChromosome().equals(data.get(data.size()-2).getChromosome())){
 	    chromosomeChange(params);
@@ -201,20 +298,39 @@ public class SmoothingAndStep {
 	if (params[0]%2==1){
 	    for (int i = 1;i<(params[0]-params[2]);i++){
 		smoothOneRow(params,params[0]-i);
-		data.remove(0);
+		if(data.size() > 0){
+		    data.remove(0);
+		} else {
+		    //Ska inte kunna hända så lista ut ett lämpligt exception
+		}
 	    }
-	    data.remove(0);
+	    if(data.size() > 0){
+		data.remove(0);
+	    } else {
+		//Ska inte kunna hända så lista ut ett lämpligt exception
+	    }
 	}else{
 	    for (int i = 1;i<(params[0]-params[2]+1);i++){
 		smoothOneRow(params,params[0]-i);
-		data.remove(0);
+		if(data.size() > 0){
+		    data.remove(0);
+		} else {
+		    //Ska inte kunna hända så lista ut ett lämpligt exception
+		}
 	    }
 	}
-
 	for (int j = 0; j < params[0]/2 -1 ;j++){
-	    data.remove(0);
+	    System.out.println("DELETE");
+	    if(data.size() > 0){
+		data.remove(0);
+	    } else {
+		//Ska inte kunna hända så lista ut ett lämpligt exception
+	    }
 	}
+	System.out.println(data.size());
+
 	while(data.size()>0){
+	    //smoothOneRow(params, data.size()-1, 0);
 	    writeToFile(params, 0);
 	    data.remove(0);
 	}
@@ -229,7 +345,13 @@ public class SmoothingAndStep {
 	    }
 	}
 	for (int i = 0; i < middleIndex; i++){
-	    writeToFile(params, i);
+	    //NYTT
+	    if(data.size() > params[2]){
+		smoothOneRow(params, data.size()-1, i);
+	    }
+
+
+	    //writeToFile(params, i);
 	}
     }
 
@@ -277,6 +399,17 @@ public class SmoothingAndStep {
 	}
 	//	}
     }
+    private void calcAndSetMeanSignal(int[] params,
+	    int minNrSigs, double meanSignal, double maxSig, double minSig, int index) {
+	//	if((minNrSigs - 2) > params[2]){
+	meanSignal = meanSignal - minSig;
+	meanSignal = meanSignal - maxSig;
+	if((minNrSigs-2) > 0){
+	    meanSignal = meanSignal / (minNrSigs - 2);
+	    data.get(index).setNewSignal(meanSignal);
+	}
+	//	}
+    }
 
     private double median (double[] array){
 	Arrays.sort(array);
@@ -306,11 +439,14 @@ public class SmoothingAndStep {
 	if(stepSize < 1){
 	    throw new ProcessException("stepSize needs to be 1 for no stepping or larger than 1 for stepping");
 	}
-	if(params[0] < 1){
-	    throw new ProcessException("Window size needs to be atleast 1 or larger");
+	if(params[0]==2 &&params[1]==0){
+	    throw new ProcessException("When calculating trimmed mean, window size needs to be atleast 3 or larger");
 	}
-	if(params[2] < 0){
-	    throw new ProcessException("Minimum positions to smooth needs to be positive or 0");
+	if(params[0] < 2){
+	    throw new ProcessException( "Window size needs to be atleast 2 or larger");
+	}
+	if(params[2] < 1){
+	    throw new ProcessException("Minimum positions to smooth needs to be positive");
 	}
 	if(!(params[3] == 0 || params[3] == 1)){
 	    throw new ProcessException("Print total mean flag must be either 0 or 1");
