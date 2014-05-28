@@ -292,6 +292,7 @@ public class Doorman {
 			respond(exchange, response);
 		} catch (IOException e) {
 			Debug.log("IOError when sending response back to client. " + e.getMessage());
+			ErrorLogger.log("SYSTEM", e);
 		}
 	}
 

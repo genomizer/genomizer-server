@@ -9,6 +9,8 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.ParseException;
 
+import process.classes.StartUpCleaner;
+
 import authentication.InactiveUuidsRemover;
 
 import command.CommandHandler;
@@ -31,7 +33,7 @@ public class ServerMain {
 	public static void main(String[] args) throws ParseException, FileNotFoundException {
 
 		if (new File("settings.cfg").exists()) {
-			System.out.println("Settings file exists, reading it...");
+			System.out.println("Reading settings from settings.cfg");
 			readSettingsFile("settings.cfg");
 		}
 
@@ -39,11 +41,9 @@ public class ServerMain {
 
 		Options comOptions = new Options();
 		comOptions.addOption("p", "port", true, "the listening port");
-		comOptions.addOption("d", true, "chooses which database to use, valid alternatives are global and test");
 		comOptions.addOption("debug", false, "if this flag is used the server will write output for every request and response aswell as other output.");
-		comOptions.addOption("f", "file", true, "the file to read database settings from, is ignored when -d is used");
+		comOptions.addOption("f", "file", true, "the file to read server settings from, is ignored when -d is used");
 		comOptions.addOption("nri", "noremoveinactive", false, "if this flag is set the server will not remove inactive users which are logged in on the server.");
-//		comOptions.addOption("p", "port", true, "the listening port");
 		CommandLine com = comline.parse(comOptions, args);
 		if (com.hasOption('p')) {
 			ServerSettings.genomizerPort = Integer.parseInt(com.getOptionValue('p'));
@@ -51,25 +51,13 @@ public class ServerMain {
 		if (com.hasOption("debug")) {
 			Debug.isEnabled = true;
 		}
-		if (com.hasOption('d')) {
-			String database = com.getOptionValue('d');
-			if (database.equals("test")) {
-				ServerSettings.databaseUsername = "c5dv151_vt14";
-				ServerSettings.databasePassword = "shielohh";
-				ServerSettings.databaseName = "c5dv151_vt14";
-				ServerSettings.databaseHost = "postgres";
-			} else if (database.equals("global")) {
-				//not tested
-				ServerSettings.databaseUsername = "postgres";
-				ServerSettings.databasePassword = "pvt";
-				ServerSettings.databaseName = "genomizer";
-				ServerSettings.databaseHost = "localhost:6000";
-			}
-		} else if (com.hasOption('f')) {
+		if (com.hasOption('f')) {
 			readSettingsFile(com.getOptionValue('f'));
 		}
 
 		ServerSettings.validate();
+
+		StartUpCleaner.removeOldTempDirectories("resources/");
 
 		CommandHandler commandHandler = new CommandHandler();
 		try {
