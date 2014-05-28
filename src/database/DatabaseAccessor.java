@@ -688,29 +688,30 @@ public class DatabaseAccessor {
     }
 
     /**
-     * @param String
-     *            expID - The unique name of the experiment. OBS! If not null,
+     * @param expID
+     *            String The unique name of the experiment. OBS! If not null,
      *            this must reference an experiment that has been previously
      *            added.
-     * @param int fileType - An Integer identifying the file type eg.
-     *        FileTuple.RAW
-     * @param String
-     *            fileName
-     * @param String
-     *            inputFileName - The name of the corresponding input file or
-     *            null if there is no corresponding input file
-     * @param String
-     *            metaData - The parameters used in file creation or null if not
+     * @param fileType
+     *            int An Integer identifying the file type eg. FileTuple.RAW
+     * @param fileName
+     *            String
+     * @param inputFileName
+     *            String The name of the corresponding input file or null if
+     *            there is no corresponding input file
+     * @param metaData
+     *            String The parameters used in file creation or null if not
      *            applicable
-     * @param String
-     *            author
-     * @param String
-     *            uploader
-     * @param boolean isPrivate
-     * @param String
-     *            genomeRelease - The genome release version identifyer (eg.
-     *            "hg38") or null if not applicable. OBS! If not null, this must
-     *            reference a genome release that has been previously uploaded.
+     * @param author
+     *            String
+     * @param uploader
+     *            String
+     * @param isPrivate
+     *            boolean
+     * @param genomeRelease
+     *            String The genome release version identifyer (eg. "hg38") or
+     *            null if not applicable. OBS! If not null, this must reference
+     *            a genome release that has been previously uploaded.
      * @return FileTuple - The FileTuple inserted in the database or null if no
      *         file was entered into the database.
      * @throws SQLException
@@ -1132,9 +1133,10 @@ public class DatabaseAccessor {
      *            fileName
      * @return String upload URL
      * @throws SQLException
+     * @throws IOException
      */
     public String addChainFile(String fromVersion, String toVersion,
-            String fileName) throws SQLException {
+            String fileName) throws SQLException, IOException {
         return genMethods.addChainFile(fromVersion, toVersion, fileName);
     }
 

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import database.FilePathGenerator;
+import database.FileValidator;
 import database.constants.ServerDependentValues;
 import database.containers.ChainFile;
 import database.containers.Genome;
@@ -85,6 +86,11 @@ public class GenomeMethods {
      */
     public String addGenomeRelease(String genomeVersion, String species,
             String filename) throws SQLException, IOException {
+
+    	if(!FileValidator.fileNameCheck(filename)){
+    		throw new IOException("Invalid file name");
+    	}
+
 
 		String folderPath = fpg.generateGenomeReleaseFolder(genomeVersion,
 				species);
@@ -315,9 +321,14 @@ public class GenomeMethods {
 	 *            fileName
 	 * @return String upload URL
 	 * @throws SQLException
+	 * @throws IOException
 	 */
 	public String addChainFile(String fromVersion, String toVersion,
-			String fileName) throws SQLException {
+			String fileName) throws SQLException, IOException {
+
+    	if(!FileValidator.fileNameCheck(fileName)){
+    		throw new IOException("Invalid file name");
+    	}
 
 		String species = "";
 		String speciesQuery = "SELECT Species From Genome_Release"

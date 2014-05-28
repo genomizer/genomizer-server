@@ -2,6 +2,9 @@ package database.testSuite.unitTests;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
+import java.sql.SQLException;
+
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -22,47 +25,36 @@ public class AddNewFileTests {
 
     private static FilePathGenerator fpg;
 
-    private String testFileName = "testFileName1";
-    private int testFileType = FileTuple.RAW;
-    private String testAuthor = "test File Author1";
-    private String testUploader = "test Uploader 1";
-    private String testMetaData = "test Meta Data 1";
-    private String testInputFileName = "testInputFileName";
-    private boolean testIsPrivate = false;
-    private String testExpId = "testExpId1";
+    private static String testFileName = "testFileName1.txt";
+    private static int testFileType = FileTuple.RAW;
+    private static String testAuthor = "test File Author1";
+    private static String testUploader = "test Uploader 1";
+    private static String testMetaData = "test Meta Data 1";
+    private static String testInputFileName = "testInputFileName.txt";
+    private static boolean testIsPrivate = false;
+    private static String testExpId = "testExpId1";
+    private static TestInitializer ti;
 
-    private FileTuple ft;
+    private static FileTuple ft;
 
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
-
-        dbac = new DatabaseAccessor(TestInitializer.username,
-                TestInitializer.password, TestInitializer.host,
-                TestInitializer.database);
+    	ti = new TestInitializer();
+    	dbac = ti.setup();
 
         fpg = new FilePathGenerator(DatabaseAccessor.DATAFOLDER);
-    }
-
-    @AfterClass
-    public static void tearDownAfterClass() throws Exception {
-
-        dbac.close();
-    }
-
-    @Before
-    public void setUp() throws Exception {
-
         dbac.addExperiment(testExpId);
         ft = dbac.addNewFile(testExpId, testFileType, testFileName,
                 testInputFileName, testMetaData, testAuthor, testUploader,
                 testIsPrivate, null);
+
     }
 
-    @After
-    public void tearDown() throws Exception {
+    @AfterClass
+    public static void tearDownAfterClass() throws Exception {
+    	ti.removeTuples();
+        dbac.close();
 
-        dbac.deleteFile(ft.path);
-        dbac.deleteExperiment(testExpId);
     }
 
     /**
