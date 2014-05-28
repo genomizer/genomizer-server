@@ -128,7 +128,7 @@ public class AddFileToExperimentCommand extends Command {
 		}
 		try {
 			db = initDB();
-			FileTuple ft = db.addNewFile(experimentID, filetype, fileName, "", metaData, author, uploader, isPrivate, grVersion);
+			FileTuple ft = db.addNewFile(experimentID, filetype, fileName, null, metaData, author, uploader, isPrivate, grVersion);
 			return new AddFileToExperimentResponse(StatusCode.OK, ft.getUploadURL());
 		} catch (SQLException e) {
 			e.printStackTrace();
