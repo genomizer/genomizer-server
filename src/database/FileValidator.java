@@ -1,4 +1,4 @@
-package unused;
+package database;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,7 +27,7 @@ public class FileValidator {
 	 * @param String fileName
 	 * @return boolean
 	 */
-	public boolean isNameOk(String fileName) {
+	public boolean isgameOk(String fileName) {
 
 		File file = new File(home + File.separator + fileName);
 		boolean isOk = false;
@@ -46,5 +46,11 @@ public class FileValidator {
 		}
 
 		return isOk;
+	}
+
+	public static boolean fileNameCheck(String fileName){
+		String regex = "^[\\w,\\s-\\.åäöÅÄÖ]+\\.[A-ZÅÄÖa-zåäö0-9]+$";
+
+		return fileName.matches(regex);
 	}
 }

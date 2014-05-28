@@ -2,35 +2,41 @@ package database.testSuite.unitTests;
 
 import static org.junit.Assert.*;
 
-import org.junit.Before;
 import org.junit.Test;
 
-import unused.FileValidator;
+import database.FileValidator;
+
 
 public class FileNameValidatorTest {
 
-	private FileValidator validator;
-
-	@Before
-	public void setUp() {
-
-		validator = new FileValidator();
+	@Test
+	public void shouldReturnTrue(){
+		assertTrue(FileValidator.fileNameCheck("hej.txt"));
 	}
 
 	@Test
-	public void shouldReturnTrueOnAcceptedChars() {
-
-		boolean isOk = false;
-		isOk = validator.isNameOk("aaa");
-		assertTrue(isOk);
+	public void sholdReturnTrueWithÅÄÖ(){
+		assertTrue(FileValidator.fileNameCheck("håj.töt"));
 	}
 
+	@Test
+	public void shouldReturnFalse1(){
+		assertFalse(FileValidator.fileNameCheck("hej."));
+	}
 
 	@Test
-	public void shouldReturnFalseOnUnacceptedChars() {
+	public void shouldReturnFalse2(){
+		assertFalse(FileValidator.fileNameCheck("hej.*"));
+	}
 
-		boolean isOk = false;
-		isOk = validator.isNameOk("?!//&/*\n");
-		assertFalse(isOk);
+	@Test
+	public void shouldReturnFalse3(){
+		assertFalse(FileValidator.fileNameCheck(".&"));
+	}
+
+	@Test
+	public void shouldReturnTrueWithLongName(){
+		assertTrue(FileValidator.fileNameCheck("hej.txtasdfasdfasdfasdfasd.dsfgdgdfg"));
+
 	}
 }
