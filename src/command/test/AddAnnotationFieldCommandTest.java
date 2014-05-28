@@ -180,23 +180,6 @@ public class AddAnnotationFieldCommandTest {
 	}
 
 	/**
-	 * Test that checks that ValidateException is thrown if forced is empty JSON.
-	 *
-	 * @throws ValidateException
-	 */
-	@Test(expected = ValidateException.class)
-	public void testValidateForcedNotFilled() throws ValidateException {
-
-		String json = "{\"name\":\"species\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":}";
-		AddAnnotationFieldCommand c = new AddAnnotationFieldCommand();
-		c = gson.fromJson(json, AddAnnotationFieldCommand.class);
-		c.validate();
-
-		fail("Expected ValidateException to be thrown.");
-
-	}
-
-	/**
 	 * Test used to check that default variable can be null and
 	 * that ValidateException is not thrown.
 	 *
@@ -215,20 +198,20 @@ public class AddAnnotationFieldCommandTest {
 	}
 
 	/**
-	 * Test used to check that ValidateException is not thrown
+	 * Test used to check that ValidateException is thrown
 	 * when default is empty string.
 	 *
 	 * @throws ValidateException
 	 */
-	@Test
-	public void testValidateDefaultNotFilled() throws ValidateException {
+	@Test(expected = ValidateException.class)
+	public void testValidateDefaultEmptyString() throws ValidateException {
 
-		String json = "{\"name\":\"species\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":,\"forced\":true}";
+	    String json = "{\"name\":\"species\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"\",\"forced\":true}";
 		AddAnnotationFieldCommand c = new AddAnnotationFieldCommand();
 		c = gson.fromJson(json, AddAnnotationFieldCommand.class);
 		c.validate();
 
-		assertTrue(true);
+		fail("Expected ValidateException to be thrown.");
 
 	}
 
