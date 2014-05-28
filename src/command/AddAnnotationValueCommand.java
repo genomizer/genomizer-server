@@ -33,17 +33,19 @@ public class AddAnnotationValueCommand extends Command {
 	public boolean validate() throws ValidateException{
 
 
-		if(value == null || value.length() < 1) {
+		if(value == null) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify an annotation value.");
 		}
-		if(name == null || name.length() < 1) {
+		if(name == null) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify an annotation name.");
 		}
-		if(value.length() > MaxSize.ANNOTATION_VALUE) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation value is too long.");
+		if(value.length() > MaxSize.ANNOTATION_VALUE || value.length() < 1) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation value has to be between 1 and "
+					+ database.constants.MaxSize.ANNOTATION_VALUE + " characters long.");
 		}
-		if(name.length() > MaxSize.ANNOTATION_LABEL) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation name is too long.");
+		if(name.length() > MaxSize.ANNOTATION_LABEL || name.length() < 1) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation label has to be between 1 and "
+					+ database.constants.MaxSize.ANNOTATION_LABEL + " characters long.");
 		}
 		if(name.indexOf('/') != -1 || !hasOnlyValidCharacters(name)) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation name. Valid characters are: a-z, A-Z, 0-9");
