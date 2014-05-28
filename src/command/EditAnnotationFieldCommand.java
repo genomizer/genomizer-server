@@ -56,7 +56,7 @@ public class EditAnnotationFieldCommand extends Command {
 		if(!hasOnlyValidCharacters(newName)) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation label. Valid characters are: a-z, A-Z, 0-9");
 		}
-		return false;
+		return true;
 	}
 
 	/**
