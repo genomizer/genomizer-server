@@ -280,7 +280,9 @@ public class Doorman {
 			response = commandHandler.processNewCommand(body, header, uuid, type);
 
 		} catch(Exception e ) {
-			Debug.log("Could not create/process new command" + e.getMessage());
+			Debug.log("Could not create/process new command " + e.getMessage());
+			ResponseLogger.log("SYSTEM", e.toString());
+			e.printStackTrace();
 		}
 
 		//TODO Should there be some error checking?
