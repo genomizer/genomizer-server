@@ -45,9 +45,9 @@ public class AddGenomeReleaseCommand extends Command {
 		}
 		for(int i = 0; i < files.size(); i++) {
 			int sizeCheck = files.get(i).length();
-			if(sizeCheck > MaxSize.FILE_GRVERSION || sizeCheck < 1) {
+			if(sizeCheck > MaxSize.GENOME_FILEPATH || sizeCheck < 1) {
 				throw new ValidateException(StatusCode.BAD_REQUEST, "File name has to be between 1 and "
-						+ database.constants.MaxSize.FILE_GRVERSION + " characters long.");
+						+ database.constants.MaxSize.GENOME_FILEPATH + " characters long.");
 			}
 		}
 		if(specie == null) {

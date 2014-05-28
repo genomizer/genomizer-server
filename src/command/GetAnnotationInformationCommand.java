@@ -68,10 +68,11 @@ public class GetAnnotationInformationCommand extends Command {
 				annotations.add(annotation);
 			}
 
-			ArrayList<String> values = new ArrayList<String>();
-			values.add("freetext");
-			AnnotationInformation expId = new AnnotationInformation("expID", values, false);
-			annotations.add(expId);
+			// Hardcoded expID
+//			ArrayList<String> values = new ArrayList<String>();
+//			values.add("freetext");
+//			AnnotationInformation expId = new AnnotationInformation("expID", values, false);
+//			annotations.add(expId);
 
 			db.close();
 			return new GetAnnotationInformationResponse(StatusCode.OK, annotations);
