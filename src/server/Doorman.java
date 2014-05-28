@@ -281,7 +281,7 @@ public class Doorman {
 
 		} catch(Exception e ) {
 			Debug.log("Could not create/process new command " + e.getMessage());
-			ResponseLogger.log("SYSTEM", e.toString());
+			ResponseLogger.log("SYSTEM", e);
 			e.printStackTrace();
 		}
 

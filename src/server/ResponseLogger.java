@@ -4,6 +4,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -45,6 +47,18 @@ public class ResponseLogger {
 		} catch (IOException e) {
 			e.printStackTrace();
 
+		}
+	}
+
+	public static void log(String username, Throwable exc) {
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw);
+		exc.printStackTrace(pw);
+		String excString = sw.toString();
+		String[] excLines = excString.split("\n");
+		for (String line : excLines) {
+			log(username, line);
+			username = "      ";
 		}
 	}
 /*
