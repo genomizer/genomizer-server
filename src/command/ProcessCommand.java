@@ -133,7 +133,18 @@ public class ProcessCommand extends Command {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Experiment name has to be between 1 and "
 					+ database.constants.MaxSize.EXPID + " characters long.");
 		}
-
+		if(!hasOnlyValidCharacters(username)) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in username. Valid characters are: " + validCharacters);
+		}
+		if(!hasOnlyValidCharacters(processtype)) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in process type. Valid characters are: " + validCharacters);
+		}
+		if(!hasOnlyValidCharacters(genomeVersion)) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in genome version. Valid characters are: " + validCharacters);
+		}
+		if(!hasOnlyValidCharacters(expid)) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in experiment name. Valid characters are: " + validCharacters);
+		}
 
 		return true;
 	}
