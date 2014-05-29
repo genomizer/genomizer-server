@@ -56,7 +56,7 @@ public class ValidateProcessCommandTest {
 							"\"genomeRelease\": \"" + genomeRelease + "\"," +
 							"\"author\": \"" + author + "\"}";
 
-		ProcessCommand processCommand = (ProcessCommand)cmdf.createProcessCommand(json, username);
+		ProcessCommand processCommand = (ProcessCommand)cmdf.createProcessCommand(json, username, "rawtoprofile");
 
 
 		assertTrue(processCommand.validate());
@@ -92,7 +92,7 @@ public class ValidateProcessCommandTest {
 							"\"genomeRelease\": \"" + genomeRelease + "\"," +
 							"\"author\": \"" + author + "\"}";
 
-		ProcessCommand processCommand = (ProcessCommand)cmdf.createProcessCommand(json, username);
+		ProcessCommand processCommand = (ProcessCommand)cmdf.createProcessCommand(json, username, "rawtoprofile");
 
 
 		assertTrue(processCommand.validate());
@@ -129,7 +129,7 @@ public class ValidateProcessCommandTest {
 							"\"genomeRelease\": \"" + genomeRelease + "\"," +
 							"\"author\": \"" + author + "\"}";
 
-		ProcessCommand processCommand = (ProcessCommand)cmdf.createProcessCommand(json, username);
+		ProcessCommand processCommand = (ProcessCommand)cmdf.createProcessCommand(json, username, "rawtoprofile");
 
 
 		assertTrue(processCommand.validate());
@@ -165,7 +165,7 @@ public class ValidateProcessCommandTest {
 							"\"genomeRelease\": \"" + genomeRelease + "\"," +
 							"\"author\": \"" + author + "\"}";
 
-		ProcessCommand processCommand = (ProcessCommand)cmdf.createProcessCommand(json, username);
+		ProcessCommand processCommand = (ProcessCommand)cmdf.createProcessCommand(json, username, "rawtoprofile");
 
 		assertFalse(processCommand.validate());
 	}
@@ -200,7 +200,7 @@ public class ValidateProcessCommandTest {
 							"\"genomeRelease\": \"" + genomeRelease + "\"," +
 							"\"author\": \"" + author + "\"}";
 
-		ProcessCommand processCommand = (ProcessCommand)cmdf.createProcessCommand(json, username);
+		ProcessCommand processCommand = (ProcessCommand)cmdf.createProcessCommand(json, username, "rawtoprofile");
 
 		assertTrue(processCommand.validate());
 	}
@@ -234,7 +234,7 @@ public class ValidateProcessCommandTest {
 							"\"genomeRelease\": \"" + genomeRelease + "\"," +
 							"\"author\": \"" + author + "\"}";
 
-		ProcessCommand processCommand = (ProcessCommand)cmdf.createProcessCommand(json, username);
+		ProcessCommand processCommand = (ProcessCommand)cmdf.createProcessCommand(json, username, "rawtoprofile");
 
 		assertFalse(processCommand.validate());
 	}
@@ -269,7 +269,7 @@ public class ValidateProcessCommandTest {
 							"\"genomeRelease\": \"" + genomeRelease + "\"," +
 							"\"author\": \"" + author + "\"}";
 
-		ProcessCommand processCommand = (ProcessCommand)cmdf.createProcessCommand(json, username);
+		ProcessCommand processCommand = (ProcessCommand)cmdf.createProcessCommand(json, username, "rawtoprofile");
 
 
 		assertFalse(processCommand.validate());
@@ -306,7 +306,7 @@ public class ValidateProcessCommandTest {
 							"\"genomeRelease\": \"" + genomeRelease + "\"," +
 							"\"author\": \"" + author + "\"}";
 
-		ProcessCommand processCommand = (ProcessCommand)cmdf.createProcessCommand(json, username);
+		ProcessCommand processCommand = (ProcessCommand)cmdf.createProcessCommand(json, username, "rawtoprofile");
 
 
 		assertFalse(processCommand.validate());
@@ -343,7 +343,7 @@ public class ValidateProcessCommandTest {
 							"\"genomeRelease\": \"" + genomeRelease + "\"," +
 							"\"author\": \"" + author + "\"}";
 
-		ProcessCommand processCommand = (ProcessCommand)cmdf.createProcessCommand(json, username);
+		ProcessCommand processCommand = (ProcessCommand)cmdf.createProcessCommand(json, username, "rawtoprofile");
 
 
 		assertFalse(processCommand.validate());
@@ -379,7 +379,7 @@ public class ValidateProcessCommandTest {
 							"\"genomeRelease\": \"" + genomeRelease + "\"," +
 							"\"author\": \"" + author + "\"}";
 
-		ProcessCommand processCommand = (ProcessCommand)cmdf.createProcessCommand(json, username);
+		ProcessCommand processCommand = (ProcessCommand)cmdf.createProcessCommand(json, username, "rawtoprofile");
 
 
 		assertFalse(processCommand.validate());
@@ -416,7 +416,7 @@ public class ValidateProcessCommandTest {
 							"\"genomeRelease\": \"" + genomeRelease + "\"," +
 							"\"author\": \"" + author + "\"}";
 
-		ProcessCommand processCommand = (ProcessCommand)cmdf.createProcessCommand(json, username);
+		ProcessCommand processCommand = (ProcessCommand)cmdf.createProcessCommand(json, username, "rawtoprofile");
 
 
 		assertFalse(processCommand.validate());
@@ -451,7 +451,7 @@ public class ValidateProcessCommandTest {
 		//					"\"genomeRelease\": \"" + genomeRelease + "\"," +
 							"\"author\": \"" + author + "\"}";
 
-		ProcessCommand processCommand = (ProcessCommand)cmdf.createProcessCommand(json, username);
+		ProcessCommand processCommand = (ProcessCommand)cmdf.createProcessCommand(json, username, "rawtoprofile");
 
 
 		assertFalse(processCommand.validate());
@@ -486,7 +486,7 @@ public class ValidateProcessCommandTest {
 							"\"genomeRelease\": \"" + genomeRelease + "\"}";
 		//					"\"author\": \"" + author + "\"}"
 
-		ProcessCommand processCommand = (ProcessCommand)cmdf.createProcessCommand(json, username);
+		ProcessCommand processCommand = (ProcessCommand)cmdf.createProcessCommand(json, username, "rawtoprofile");
 
 
 		assertFalse(processCommand.validate());
