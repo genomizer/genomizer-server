@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import java.util.Stack;
 
 /**
- * Class used to create profile data from .fastq format. 
- * Can run a dynamic number of steps depending of which parameters thats sent 
- * from the clients. 
+ * Class used to create profile data from .fastq format.
+ * Can run a dynamic number of steps depending of which parameters thats sent
+ * from the clients.
  *
  * @version 1.0
  */
@@ -44,15 +44,15 @@ public class RawToProfileConverter extends Executor {
 	}
 
 	/**
-	 * 1. runs the bowtie program to get a .sam file. 
-	 * 2. runs a linux shell command to sort the sam file. 
-	 * 3. runs a perl script that creates a .ggf file from the sam file. 
-	 * 4. runs a perl script that creates a .sgr file from the .gff file. 
-	 * 6. runs a converted method of the smoothing and stepping scripts. 
+	 * 1. runs the bowtie program to get a .sam file.
+	 * 2. runs a linux shell command to sort the sam file.
+	 * 3. runs a perl script that creates a .ggf file from the sam file.
+	 * 4. runs a perl script that creates a .sgr file from the .gff file.
+	 * 6. runs a converted method of the smoothing and stepping scripts.
 	 * 7. runs a perl script that converts the .sgr file to .wig file.
 	 * 8. runs a perl script that does ratio calculation on the files, also runs
 	 * smoothing on these files.
-	 * 
+	 *
 	 * All these steps have to be run in order but the clients can specify how
 	 * many steps they want to run by sending parameters for the steps
 	 * they want to run.
@@ -69,9 +69,9 @@ public class RawToProfileConverter extends Executor {
 	 */
 	public String procedure(String[] parameters, String inFolder,
 			String outFilePath) throws ProcessException {
-		
+
 		File[] inFiles = null;
-		
+
 		// Error handling
 		if (inFolder != null) {
 			inFolder = validateInFolder(inFolder);
@@ -94,7 +94,7 @@ public class RawToProfileConverter extends Executor {
 //
 //			printStringArray(parameters);
 //		}
-		
+
 		// Checks all parameters that they are correct before proceeding
 		if (verifyInData(parameters, inFolder, outFilePath) == false
 				|| !CorrectInfiles(inFiles)) {
@@ -107,7 +107,7 @@ public class RawToProfileConverter extends Executor {
 					+ "/sorted");
 			checker.calculateWhichProcessesToRun(parameters);
 			ValidateParameters(parameters);
-			
+
 			rawFile1 = inFiles[0].getName();
 			rawFile_1_Name = rawFile1.substring(0, rawFile1.length() - 6);
 			if (inFiles.length == 2) {
@@ -226,7 +226,7 @@ public class RawToProfileConverter extends Executor {
 	/**
 	 * Gets all files from the folder, throws a ProcessException if there is no
 	 * files in the directory.
-	 * 
+	 *
 	 * @param inFolder
 	 * @return
 	 * @throws ProcessException
@@ -261,7 +261,7 @@ public class RawToProfileConverter extends Executor {
 
 	/**
 	 * Validates parameters.
-	 * 
+	 *
 	 * @param parameters
 	 * @return
 	 * @throws ProcessException
