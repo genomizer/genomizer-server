@@ -47,7 +47,7 @@ public class EditAnnotationFieldCommand extends Command {
 					+ database.constants.MaxSize.ANNOTATION_LABEL + " characters long.");
 		}
 		if(newName.length() > MaxSize.ANNOTATION_LABEL || newName.length() < 1) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "New annotation labl has to be between 1 and "
+			throw new ValidateException(StatusCode.BAD_REQUEST, "New annotation label has to be between 1 and "
 					+ database.constants.MaxSize.ANNOTATION_LABEL + " characters long.");
 		}
 		if(!hasOnlyValidCharacters(oldName)) {
