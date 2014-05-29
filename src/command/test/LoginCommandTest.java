@@ -143,7 +143,24 @@ public class LoginCommandTest {
 		fail("Expected ValidateException to be thrown.");
 
 	}
+	
+	/**
+	 * Test used to check that ValidateException is thrown if
+	 * username contains invalid characters.
+	 * 
+	 * @throws ValidateException 
+	 */
+	@Test(expected = ValidateException.class)
+	public void testValidateUserNameInvalidCharacters() throws ValidateException {
+		
+	    String json = "{\"username\":\"Hell///o\",\"password\":\"password\"}";
+		final Command lcmd = gson.fromJson(json, LoginCommand.class);
+		lcmd.validate();
 
+		fail("Expected ValidateException to be thrown.");
+		
+	}
+	
 	/**
 	 * Test used to check that ValidateException is not thrown
 	 * when username length is properly formatted.

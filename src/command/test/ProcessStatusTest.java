@@ -9,7 +9,7 @@ import command.ProcessStatus;
  * Class used to test that ProcessStatus class works
  * properly.
  *
- * @author tfy09jnn
+ * @author Kommunikation/kontroll 2014.
  * @version 1.0
  */
 public class ProcessStatusTest {

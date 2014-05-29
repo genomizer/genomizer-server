@@ -13,7 +13,7 @@ import database.constants.MaxSize;
  * Class used to test that CreateUserCommand class works
  * properly.
  *
- * @author tfy09jnn
+ * @author Kommunikation/kontroll 2014.
  * @version 1.0
  */
 public class CreateUserCommandTest {

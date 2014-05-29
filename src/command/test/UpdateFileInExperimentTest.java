@@ -8,7 +8,7 @@ import command.UpdateFileInExperimentCommand;
  * Class used to test that UpdateFileInExperiment works
  * properly.
  *
- * @author tfy09jnn
+ * @author Kommunikation/kontroll 2014.
  * @version 1.0
  */
 public class UpdateFileInExperimentTest {

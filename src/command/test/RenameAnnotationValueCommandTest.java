@@ -13,7 +13,7 @@ import command.ValidateException;
  * Class used to check that RenameAnnotationValueCommand class
  * works properly. Execute is not tested here.
  *
- * @author tfy09jnn
+ * @author Kommunikation/kontroll 2014.
  * @version 1.0
  */
 public class RenameAnnotationValueCommandTest {

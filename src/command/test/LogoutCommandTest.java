@@ -80,6 +80,22 @@ public class LogoutCommandTest {
 	}
 
 	/**
+	 * Test used to check that ValidateException is thrown when
+	 * username contains slashes.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testValidateUserNameInvalidCharacters() throws ValidateException {
+
+		LogoutCommand c = new LogoutCommand("user/name");
+		c.validate();
+
+		fail("Expected ValidateException to be thrown.");
+
+	}
+
+	/**
 	 * Test used to check that ValidateException is not thrown when
 	 * everything is properly formatted.
 	 *
