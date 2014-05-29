@@ -210,8 +210,12 @@ public class RawToProfileConverter extends Executor {
 							+ "reads_gff/allnucs_sgr/smoothed/ratios/smoothed/";
 					toBeRemoved.push(filesToBeMoved);
 				}
-
-				moveEndFiles(filesToBeMoved, outFilePath);
+				try {
+					moveEndFiles(filesToBeMoved, outFilePath);
+				} catch (ProcessException e) {
+					cleanUp(toBeRemoved);
+					throw e;
+				}
 				cleanUp(toBeRemoved);
 
 			} else {
@@ -281,7 +285,7 @@ public class RawToProfileConverter extends Executor {
 						parameters[7])) {
 			isOk = false;
 		}
-		
+
 		return isOk;
 	}
 
