@@ -69,9 +69,6 @@ public class AddFileToExperimentCommand extends Command {
 		if(grVersion == null) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify a genome release.");
 		}
-		if(metaData == null) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify metadata.");
-		}
 		if(author == null) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify author.");
 		}
