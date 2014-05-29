@@ -89,6 +89,9 @@ public class AddFileToExperimentCommand extends Command {
 				throw new ValidateException(StatusCode.BAD_REQUEST, "Uploader name: " + uploader + " has to be between 1 and "
 						+ database.constants.MaxSize.FILE_UPLOADER + " characters long.");
 			}
+			if(!hasOnlyValidCharacters(uploader)) {
+				throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in uploader name. Valid characters are: " + validCharacters);
+			}
 		}
 		if(grVersion.length() > MaxSize.FILE_GRVERSION || grVersion.length() < 1) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Genome version: " + grVersion + " has to be between 1 and "
@@ -105,6 +108,9 @@ public class AddFileToExperimentCommand extends Command {
 				throw new ValidateException(StatusCode.BAD_REQUEST, "Author has to be between 1 and "
 						+ database.constants.MaxSize.FILE_AUTHOR + " characters long.");
 			}
+			if(!hasOnlyValidCharacters(author)) {
+				throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in author name. Valid characters are: " + validCharacters);
+			}
 		}
 		if(!hasOnlyValidCharacters(experimentID)) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in experiment name. Valid characters are: " + validCharacters);
@@ -112,15 +118,11 @@ public class AddFileToExperimentCommand extends Command {
 		if(!hasOnlyValidCharacters(type)) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in file type name. Valid characters are: " + validCharacters);
 		}
-		if(!hasOnlyValidCharacters(uploader)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in uploader name. Valid characters are: " + validCharacters);
-		}
+
 		if(!hasOnlyValidCharacters(grVersion)) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in genome version name. Valid characters are: " + validCharacters);
 		}
-		if(!hasOnlyValidCharacters(author)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in author name. Valid characters are: " + validCharacters);
-		}
+
 		if(fileName.contains("/")) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "File name can not contain slash.");
 		}
