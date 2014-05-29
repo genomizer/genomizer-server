@@ -303,7 +303,7 @@ public class ProcessCommandTest {
 	 * @throws ValidateException
 	 */
 	@Test
-	public void testValidationMetaDataNotNull() throws ValidateException {
+	public void testValidationMetaDataEmpty() throws ValidateException {
 
 		String[] p = {"a","b","c","d","e","f","g","h"};
 		String json = jsonAndInfoBuilder("experimentID",p,null,"gen1");
@@ -494,10 +494,12 @@ public class ProcessCommandTest {
 	private String jsonAndInfoBuilder(String expId, String[] param, String met, String genV) {
 
 		String parameters = "";
-		for(int i = 0; i < param.length; i++) {
-			parameters = parameters + "\"" + param[i] + "\"";
-			if(i != param.length -1) {
-				parameters = parameters + ",";
+		if(param != null) {
+			for(int i = 0; i < param.length; i++) {
+				parameters = parameters + "\"" + param[i] + "\"";
+				if(i != param.length -1) {
+					parameters = parameters + ",";
+				}
 			}
 		}
 
