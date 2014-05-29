@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -74,10 +75,10 @@ public class GetGenomReleaseResponsTest {
 	public void testPrintResponse() {
 
 
-		ArrayList<Genome> genomeList;
+		ArrayList<database.containers.Genome> genomeList;
 		try {
 			DatabaseAccessor db=new DatabaseAccessor(ServerSettings.databaseUsername, ServerSettings.databasePassword, ServerSettings.databaseHost, ServerSettings.databaseName);
-			genomeList = db.getAllGenomReleases();
+			genomeList = (ArrayList<database.containers.Genome>) db.getAllGenomReleases();
 
 		/*	for(int i=0; i<db.getAllAnnotationLabels().size();i++){
 				System.out.println(db.getAllAnnotationLabels().get(i));

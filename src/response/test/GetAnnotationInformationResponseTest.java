@@ -26,13 +26,13 @@ public class GetAnnotationInformationResponseTest {
 		gender.add("male");
 		gender.add("female");
 		gender.add("unknown");
-		AnnotationInformation ai = new AnnotationInformation(1, "Gender", AnnotationInformation.TYPE_DROP_DOWN, gender, true);
+		AnnotationInformation ai = new AnnotationInformation("Gender", gender, true);
 		arraylist.add(ai);
 		ArrayList<String> cellLine = new ArrayList<String>();
 		cellLine.add("true");
 		cellLine.add("false");
 		cellLine.add("unknown");
-		AnnotationInformation ai2 = new AnnotationInformation(2, "Cell Line", AnnotationInformation.TYPE_DROP_DOWN, cellLine, true);
+		AnnotationInformation ai2 = new AnnotationInformation("Cell Line", cellLine, true);
 		arraylist.add(ai2);
 
 		GetAnnotationInformationResponse air = new GetAnnotationInformationResponse(200, arraylist);
