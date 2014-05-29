@@ -38,7 +38,7 @@ public class AnnotationTest {
 	    a = new Annotation();
 	    name = "b";
 	    value = "c";
-		json = "{\"id\":\"a\",\"name\":\"" + name +
+		json = "{\"name\":\"" + name +
 				"\",\"value\":\"" + value +"\"}";
 		a = gson.fromJson(json, Annotation.class);
 
@@ -59,8 +59,10 @@ public class AnnotationTest {
 	 */
 	@Test
 	public void testConvertJSON() {
+
 		String compare = gson.toJson(a);
 		assertEquals(json, compare);
+
 	}
 
 	/**
@@ -79,8 +81,10 @@ public class AnnotationTest {
 	 */
 	@Test
 	public void testGetValue() {
+
 		String value = a.getValue();
 		assertEquals(this.value, value);
+
 	}
 
 }
