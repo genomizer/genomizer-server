@@ -13,7 +13,7 @@ import command.GetExperimentCommand;
 /**
  * Test class used to test RetrieveExperimentCommand
  *
- * @author tfy09jnn
+ * @author Kommunikation/kontroll 2014.
  * @version 1.0
  */
 public class RetrieveExperimentCommandTest {

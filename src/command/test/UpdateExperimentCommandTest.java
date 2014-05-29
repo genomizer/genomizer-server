@@ -8,7 +8,7 @@ import command.UpdateExperimentCommand;
  * Class used to check that UpdateExperimentCommand class
  * works properly.
  *
- * @author tfy09jnn
+ * @author Kommunikation/kontroll 2014.
  * @version 1.0
  */
 public class UpdateExperimentCommandTest {

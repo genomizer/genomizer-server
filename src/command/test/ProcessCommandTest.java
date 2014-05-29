@@ -12,7 +12,7 @@ import command.ValidateException;
  * Class used to test that the ProcessCommand class
  * works properly. The execute method is not tested here.
  *
- * @author tfy09jnn
+ * @author Kommunikation/kontroll 2014.
  * @version 1.0
  */
 public class ProcessCommandTest {

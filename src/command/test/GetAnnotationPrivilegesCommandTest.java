@@ -8,7 +8,7 @@ import command.GetAnnotationPrivilegesCommand;
  * Class used to test that GetAnnotationPrivileges works
  * properly. The execute method is tested with other methods.
  *
- * @author tfy09jnn
+ * @author Kommunikation/kontroll 2014.
  * @version 1.0
  */
 public class GetAnnotationPrivilegesCommandTest {
