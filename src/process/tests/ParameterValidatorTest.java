@@ -12,10 +12,12 @@ import process.classes.ProcessException;
 public class ParameterValidatorTest {
 
 	ParameterValidator pv;
-
+	String correctSmoothingParams;
+	
 	@Before
 	public void setup() {
 		pv = new ParameterValidator();
+		correctSmoothingParams = "1 1 1 1 1";
 	}
 
 	@After
@@ -158,36 +160,36 @@ public class ParameterValidatorTest {
 	// --- Tests validateRatioCalculation ---
 	@Test
 	public void ShouldSucceedWhenFirstParameterIsSingle() throws ProcessException {
-		assertTrue(pv.validateRatioCalculation("single 5 6"));
+		assertTrue(pv.validateRatioCalculation("single 5 6",correctSmoothingParams));
 	}
 
 	@Test
 	public void ShouldSucceedWhenFirstParameterIsDouble() throws ProcessException {
-		assertTrue(pv.validateRatioCalculation("double 5 6"));
+		assertTrue(pv.validateRatioCalculation("double 5 6", correctSmoothingParams));
 	}
 
 	@Test (expected = ProcessException.class)
 	public void ShouldFailWhenFirstParameterIsNotSingle() throws ProcessException {
-		assertTrue(pv.validateRatioCalculation("hej 5 6"));
+		assertTrue(pv.validateRatioCalculation("hej 5 6", correctSmoothingParams));
 	}
 
 	@Test (expected = ProcessException.class)
 	public void ShouldFailWhenSecondParameterIsFloat() throws ProcessException {
-		assertTrue(pv.validateRatioCalculation("single 5,6 6"));
+		assertTrue(pv.validateRatioCalculation("single 5,6 6", correctSmoothingParams));
 	}
 
 	@Test (expected = ProcessException.class)
 	public void ShouldFailWhenThirdParameterIsFloat() throws ProcessException {
-		assertTrue(pv.validateRatioCalculation("single 5 6,6"));
+		assertTrue(pv.validateRatioCalculation("single 5 6,6", correctSmoothingParams));
 	}
 
 	@Test (expected = ProcessException.class)
 	public void ShouldFailWhenSecondRatioParameterIsBelowZero() throws ProcessException {
-		assertTrue(pv.validateRatioCalculation("single -5 6"));
+		assertTrue(pv.validateRatioCalculation("single -5 6", correctSmoothingParams));
 	}
 
 	@Test (expected = ProcessException.class)
 	public void ShouldFailWhenThirdRatioParameterIsBelowZero() throws ProcessException {
-		assertTrue(pv.validateRatioCalculation("single 5 -6"));
+		assertTrue(pv.validateRatioCalculation("single 5 -6", correctSmoothingParams));
 	}
 }

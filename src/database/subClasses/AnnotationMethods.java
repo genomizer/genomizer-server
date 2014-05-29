@@ -238,6 +238,15 @@ public class AnnotationMethods {
             throw new IOException("Can't remove annotation 'Species'");
         }
 
+        if (label.equalsIgnoreCase("expid")) {
+            throw new IOException("Can't remove annotation 'ExpID'");
+        }
+
+        if (label.equalsIgnoreCase("sex")) {
+            throw new IOException("Can't remove annotation 'Sex'");
+        }
+
+        /*
         String query = "SELECT * FROM Annotated_With WHERE Label ~~* ? ";
 
         PreparedStatement ps = conn.prepareStatement(query);
@@ -248,8 +257,8 @@ public class AnnotationMethods {
             throw new IOException(label
                     + " is used by at least one experiment "
                     + "and therefore cannot be removed");
-        }
-
+        }*/
+        PreparedStatement ps;
         String query2 = "DELETE FROM Annotation " + "WHERE (Label ~~* ?)";
         ps = conn.prepareStatement(query2);
         ps.setString(1, label);
