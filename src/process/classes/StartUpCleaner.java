@@ -8,18 +8,16 @@ public class StartUpCleaner {
 
 	public static void removeOldTempDirectories(String dir) {
 		if (dir != null) {
-			System.out.println("dir var inte null");
 			File dirFile = new File(dir);
 			if (dirFile.isDirectory()) {
 				File[] listOfFiles = dirFile.listFiles();
 				for (File file : listOfFiles) {
-					System.out.println(file.toString());
 					if (file.getName().startsWith("results_")
 							&& file.isDirectory()) {
 						try {
+							System.out.println("Deleting temp directory " + file.getName());
 							delete(file);
 						} catch (IOException e) {
-							System.out.println("IO");
 						}
 
 					}
