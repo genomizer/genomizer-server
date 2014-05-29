@@ -17,7 +17,7 @@ public class ProcessCommandMock extends ProcessCommand {
 	public Response execute() {
 		try {
 			Thread.sleep(1000);
-			if (this.getAuthor().equals("philge")) {
+			if (this.getUsername().equals("philge")) {
 				return new ErrorResponse(StatusCode.METHOD_NOT_ALLOWED, "Something bad happened");
 			}
 		} catch (InterruptedException e) {
