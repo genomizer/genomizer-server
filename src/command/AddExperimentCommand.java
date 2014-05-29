@@ -50,7 +50,7 @@ public class AddExperimentCommand extends Command {
 
 		for(int i =0;i<annotations.size();i++){
 			if(annotations.get(i) == null){
-				throw new ValidateException(StatusCode.BAD_REQUEST, "Found a null annotation or annotation value, please specify annotations.");
+				throw new ValidateException(StatusCode.BAD_REQUEST, "Found an empty annotation or annotation value, please specify annotations.");
 			}
 			if(annotations.get(i).getName()==null || annotations.get(i).getValue()==null){
 				throw new ValidateException(StatusCode.BAD_REQUEST, "Found an empty annotation or annotation value, please specify annotations.");
@@ -58,6 +58,7 @@ public class AddExperimentCommand extends Command {
 			if(!hasOnlyValidCharacters(annotations.get(i).getName()) || !hasOnlyValidCharacters(annotations.get(i).getValue())) {
 				throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation name or value. Valid characters are: " + validCharacters);
 			}
+			if(annotations.get(i).getName().length() > MaxSize.ANNOTATION_LABEL)
 		}
 		return true;
 	}

@@ -41,10 +41,9 @@ public class AddFileToExperimentCommand extends Command {
 	private String uploader;
 
 	@Expose
-	private boolean isPrivate;
-
-	@Expose
 	private String grVersion;
+
+	private boolean isPrivate = false;
 
 	/**
 	 * Validates the request by checking
