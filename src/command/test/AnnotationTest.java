@@ -13,8 +13,8 @@ import command.Annotation;
 /**
  * Class used to test that the Annotation class works
  * properly.
- * 
- * @author tfy09jnn
+ *
+ * @author Kommunikation/kontroll 2014.
  * @version 1.0
  */
 public class AnnotationTest {
@@ -43,7 +43,7 @@ public class AnnotationTest {
 		a = gson.fromJson(json, Annotation.class);
 
 	}
-	
+
 	/**
 	 * Test used to check that a created object is not
 	 * null.
@@ -52,7 +52,7 @@ public class AnnotationTest {
 	public void testCreationNotNull() {
 		assertNotNull(a);
 	}
-	
+
 	/**
 	 * Test used to check that converting to and from JSON
 	 * works properly.
@@ -62,18 +62,18 @@ public class AnnotationTest {
 		String compare = gson.toJson(a);
 		assertEquals(json, compare);
 	}
-	
+
 	/**
 	 * Test used to check that the get name method works.
 	 */
 	@Test
 	public void testGetName() {
-		
+
 		String name = a.getName();
 		assertEquals(this.name, name);
-		
+
 	}
-	
+
 	/**
 	 * Test used to check that the get value method works.
 	 */
@@ -82,5 +82,5 @@ public class AnnotationTest {
 		String value = a.getValue();
 		assertEquals(this.value, value);
 	}
-	
+
 }

@@ -9,7 +9,7 @@ import command.CommandHandler;
 /**
  * Testclass used to test the CommandHandler class.
  *
- * @author tfy09jnn
+ * @author Kommunikation/kontroll 2014.
  * @version 1.0
  */
 public class CommandHandlerTest {
@@ -25,6 +25,9 @@ public class CommandHandlerTest {
 
 	}
 
+	/**
+	 * Test used to check that the ParseRest method works properly.
+	 */
 	@Test
 	public void testParseRest() {
 

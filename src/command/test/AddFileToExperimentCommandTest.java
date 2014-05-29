@@ -13,7 +13,7 @@ import command.ValidateException;
  * Class used to test that the AddFileToExperimentCommand class
  * works properly. Execute method is not tested here.
  *
- * @author tfy09jnn
+ * @author Kommunikation/kontroll 2014.
  * @version 1.0
  */
 public class AddFileToExperimentCommandTest {
@@ -577,25 +577,6 @@ public class AddFileToExperimentCommandTest {
 	}
 
 	/**
-	 * Test used to check that ValidateException is thrown when
-	 * isPrivate is missing.
-	 *
-	 * @throws ValidateException
-	 */
-	@Test(expected = ValidateException.class)
-	public void testValidateIsPrivateMissing() throws ValidateException {
-
-		String json = "{\"experimentID\":\"id\",\"fileName\":\"name\",\"type\":\"raw\",\"metaData\":\"metameta\"," +
-				"\"author\":\"name\",\"uploader\":\"user1\",\"grVersion\":\"releaseNr\"}";
-		AddFileToExperimentCommand c = new AddFileToExperimentCommand();
-		c = gson.fromJson(json, AddFileToExperimentCommand.class);
-		c.validate();
-
-		fail("Expected ValidateException to be thrown.");
-
-	}
-
-	/**
 	 * Test used to check that ValidateException is not thrown when
 	 * everything is properly formatted.
 	 *
@@ -632,7 +613,7 @@ public class AddFileToExperimentCommandTest {
 	/**
 	 * Method used to build a JSON and return it as a string.
 	 *
-	 * @param privileges string.
+	 * @param strings to insert into JSON object.
 	 * @return JSON formatted string.
 	 */
 	private String jsonBuilder(String expID, String fileN, String type, String metaD, String ath, String up, boolean iP, String grV) {

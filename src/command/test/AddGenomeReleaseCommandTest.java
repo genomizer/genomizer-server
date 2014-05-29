@@ -16,7 +16,7 @@ import database.constants.MaxSize;
 /**
  * Class used to test the AddGenomeRelease class.
  *
- * @author tfy09jnn
+ * @author Kommunikation/kontroll 2014.
  * @version 1.0
  */
 public class AddGenomeReleaseCommandTest {

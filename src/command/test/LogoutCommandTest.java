@@ -9,8 +9,8 @@ import command.ValidateException;
  * Class used to test that the LogoutCommand class
  * works properly. The execute method is tested elsewhere.
  *
- * @author tfy09jnn
- *
+ * @author Kommunikation/kontroll 2014.
+ * @version 1.0
  */
 public class LogoutCommandTest {
 
