@@ -6,7 +6,7 @@ import org.junit.Test;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-import command.RenameAnnotationValueCommand;
+import command.EditAnnotationValueCommand;
 import command.ValidateException;
 
 /**
@@ -40,9 +40,9 @@ public class RenameAnnotationValueCommandTest {
 	@Test
 	public void testCreationNotNull() {
 
-		RenameAnnotationValueCommand c = new RenameAnnotationValueCommand();
+		EditAnnotationValueCommand c = new EditAnnotationValueCommand();
 		String j = jsonBuilder("Jhon", "dog","cat");
-		c = gson.fromJson(j, RenameAnnotationValueCommand.class);
+		c = gson.fromJson(j, EditAnnotationValueCommand.class);
 
 		assertNotNull(c);
 
@@ -57,9 +57,9 @@ public class RenameAnnotationValueCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateNameMissing() throws ValidateException {
 
-		RenameAnnotationValueCommand c = new RenameAnnotationValueCommand();
+		EditAnnotationValueCommand c = new EditAnnotationValueCommand();
 		String j = jsonBuilder(null, "dog","cat");
-		c = gson.fromJson(j, RenameAnnotationValueCommand.class);
+		c = gson.fromJson(j, EditAnnotationValueCommand.class);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -75,9 +75,9 @@ public class RenameAnnotationValueCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateNameEmptyString() throws ValidateException {
 
-		RenameAnnotationValueCommand c = new RenameAnnotationValueCommand();
+		EditAnnotationValueCommand c = new EditAnnotationValueCommand();
 		String j = jsonBuilder("", "dog","cat");
-		c = gson.fromJson(j, RenameAnnotationValueCommand.class);
+		c = gson.fromJson(j, EditAnnotationValueCommand.class);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -97,9 +97,9 @@ public class RenameAnnotationValueCommandTest {
 		for(int i = 0; i < database.constants.MaxSize.ANNOTATION_LABEL + 1; i++) {
 			big = big + "a";
 		}
-		RenameAnnotationValueCommand c = new RenameAnnotationValueCommand();
+		EditAnnotationValueCommand c = new EditAnnotationValueCommand();
 		String j = jsonBuilder(big, "dog","cat");
-		c = gson.fromJson(j, RenameAnnotationValueCommand.class);
+		c = gson.fromJson(j, EditAnnotationValueCommand.class);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -115,9 +115,9 @@ public class RenameAnnotationValueCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateNameInvalidCharacters() throws ValidateException {
 
-		RenameAnnotationValueCommand c = new RenameAnnotationValueCommand();
+		EditAnnotationValueCommand c = new EditAnnotationValueCommand();
 		String j = jsonBuilder("Jho/n", "dog","cat");
-		c = gson.fromJson(j, RenameAnnotationValueCommand.class);
+		c = gson.fromJson(j, EditAnnotationValueCommand.class);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -133,9 +133,9 @@ public class RenameAnnotationValueCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateOldValueMissing() throws ValidateException {
 
-		RenameAnnotationValueCommand c = new RenameAnnotationValueCommand();
+		EditAnnotationValueCommand c = new EditAnnotationValueCommand();
 		String j = jsonBuilder("Jhon", null,"cat");
-		c = gson.fromJson(j, RenameAnnotationValueCommand.class);
+		c = gson.fromJson(j, EditAnnotationValueCommand.class);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -151,9 +151,9 @@ public class RenameAnnotationValueCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateOldValueEmptyString() throws ValidateException {
 
-		RenameAnnotationValueCommand c = new RenameAnnotationValueCommand();
+		EditAnnotationValueCommand c = new EditAnnotationValueCommand();
 		String j = jsonBuilder("Jhon", "","cat");
-		c = gson.fromJson(j, RenameAnnotationValueCommand.class);
+		c = gson.fromJson(j, EditAnnotationValueCommand.class);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -173,9 +173,9 @@ public class RenameAnnotationValueCommandTest {
 		for(int i = 0; i < database.constants.MaxSize.ANNOTATION_VALUE + 1; i++) {
 			big = big + "a";
 		}
-		RenameAnnotationValueCommand c = new RenameAnnotationValueCommand();
+		EditAnnotationValueCommand c = new EditAnnotationValueCommand();
 		String j = jsonBuilder("Jhon", big,"cat");
-		c = gson.fromJson(j, RenameAnnotationValueCommand.class);
+		c = gson.fromJson(j, EditAnnotationValueCommand.class);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -191,9 +191,9 @@ public class RenameAnnotationValueCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateOldValueInvalidCharacters() throws ValidateException {
 
-		RenameAnnotationValueCommand c = new RenameAnnotationValueCommand();
+		EditAnnotationValueCommand c = new EditAnnotationValueCommand();
 		String j = jsonBuilder("Jhon", "do/g","cat");
-		c = gson.fromJson(j, RenameAnnotationValueCommand.class);
+		c = gson.fromJson(j, EditAnnotationValueCommand.class);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -208,9 +208,9 @@ public class RenameAnnotationValueCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateNewValueMissing() throws ValidateException {
 
-		RenameAnnotationValueCommand c = new RenameAnnotationValueCommand();
+		EditAnnotationValueCommand c = new EditAnnotationValueCommand();
 		String j = jsonBuilder("Jhon", "dog", null);
-		c = gson.fromJson(j, RenameAnnotationValueCommand.class);
+		c = gson.fromJson(j, EditAnnotationValueCommand.class);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -226,9 +226,9 @@ public class RenameAnnotationValueCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateNewValueEmptyString() throws ValidateException {
 
-		RenameAnnotationValueCommand c = new RenameAnnotationValueCommand();
+		EditAnnotationValueCommand c = new EditAnnotationValueCommand();
 		String j = jsonBuilder("Jhon", "dog","");
-		c = gson.fromJson(j, RenameAnnotationValueCommand.class);
+		c = gson.fromJson(j, EditAnnotationValueCommand.class);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -248,9 +248,9 @@ public class RenameAnnotationValueCommandTest {
 		for(int i = 0; i < database.constants.MaxSize.ANNOTATION_VALUE + 1; i++) {
 			big = big + "a";
 		}
-		RenameAnnotationValueCommand c = new RenameAnnotationValueCommand();
+		EditAnnotationValueCommand c = new EditAnnotationValueCommand();
 		String j = jsonBuilder("Jhon", "dog", big);
-		c = gson.fromJson(j, RenameAnnotationValueCommand.class);
+		c = gson.fromJson(j, EditAnnotationValueCommand.class);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -266,9 +266,9 @@ public class RenameAnnotationValueCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateNewValueInvalidCharacters() throws ValidateException {
 
-		RenameAnnotationValueCommand c = new RenameAnnotationValueCommand();
+		EditAnnotationValueCommand c = new EditAnnotationValueCommand();
 		String j = jsonBuilder("Jhon", "dog","ca/t");
-		c = gson.fromJson(j, RenameAnnotationValueCommand.class);
+		c = gson.fromJson(j, EditAnnotationValueCommand.class);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -284,9 +284,9 @@ public class RenameAnnotationValueCommandTest {
 	@Test
 	public void testValidateProperlyFormatted() throws ValidateException {
 
-		RenameAnnotationValueCommand c = new RenameAnnotationValueCommand();
+		EditAnnotationValueCommand c = new EditAnnotationValueCommand();
 		String j = jsonBuilder("Jhon", "dog","cat");
-		c = gson.fromJson(j, RenameAnnotationValueCommand.class);
+		c = gson.fromJson(j, EditAnnotationValueCommand.class);
 		c.validate();
 
 		assertTrue(true);
@@ -300,9 +300,9 @@ public class RenameAnnotationValueCommandTest {
 	@Test
 	public void testConvertJSON() {
 
-		RenameAnnotationValueCommand c = new RenameAnnotationValueCommand();
+		EditAnnotationValueCommand c = new EditAnnotationValueCommand();
 		String j = jsonBuilder("Jhon", "dog","cat");
-		c = gson.fromJson(j, RenameAnnotationValueCommand.class);
+		c = gson.fromJson(j, EditAnnotationValueCommand.class);
 		String compare = gson.toJson(c);
 
 		assertEquals(j, compare);
