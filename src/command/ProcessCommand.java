@@ -37,13 +37,17 @@ public class ProcessCommand extends Command {
 
 	//Following fields corresponds to the JSON body of a process command.
 	@Expose
-	private String metadata;
+	private String expid;
+
 	@Expose
 	private String[] parameters;
+
+	@Expose
+	private String metadata;
+
 	@Expose
 	private String genomeVersion;
-	@Expose
-	private String expid;
+
 
 	//Empty constructor
 	public ProcessCommand() {
