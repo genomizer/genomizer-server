@@ -62,7 +62,7 @@ public class AddExperimentCommand extends Command {
 				throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation label has to be between 1 and "
 						+ database.constants.MaxSize.ANNOTATION_LABEL + " characters long.");
 			}
-			if(annotations.get(i).getValue().length() > MaxSize.ANNOTATION_VALUE || annotations.get(i).getValue().length() < 1) {
+			if(annotations.get(i).getValue().length() > MaxSize.ANNOTATION_VALUE) {
 				throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation value has to be between 1 and "
 						+ database.constants.MaxSize.ANNOTATION_VALUE + " characters long.");
 			}
