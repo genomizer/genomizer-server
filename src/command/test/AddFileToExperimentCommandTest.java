@@ -54,7 +54,7 @@ public class AddFileToExperimentCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateExpIdMissing() throws ValidateException {
 
-		String json = jsonBuilder(null,"name","raw","metameta","name","user1",true,"releaseNr");
+		String json = jsonBuilder(null,"name","raw","metameta","name","user1","releaseNr");
 		AddFileToExperimentCommand c = new AddFileToExperimentCommand();
 		c = gson.fromJson(json, AddFileToExperimentCommand.class);
 		c.validate();
@@ -72,7 +72,7 @@ public class AddFileToExperimentCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateExpIdEmptyString() throws ValidateException {
 
-		String json = jsonBuilder("","name","raw","metameta","name","user1",true,"releaseNr");
+		String json = jsonBuilder("","name","raw","metameta","name","user1","releaseNr");
 		AddFileToExperimentCommand c = new AddFileToExperimentCommand();
 		c = gson.fromJson(json, AddFileToExperimentCommand.class);
 		c.validate();
@@ -94,7 +94,7 @@ public class AddFileToExperimentCommandTest {
 		for(int i = 0; i < database.constants.MaxSize.FILE_EXPID + 1; i++) {
 			big = big + "a";
 		}
-		String json = jsonBuilder(big,"name","raw","metameta","name","user1",true,"releaseNr");
+		String json = jsonBuilder(big,"name","raw","metameta","name","user1","releaseNr");
 		AddFileToExperimentCommand c = new AddFileToExperimentCommand();
 		c = gson.fromJson(json, AddFileToExperimentCommand.class);
 		c.validate();
@@ -112,7 +112,7 @@ public class AddFileToExperimentCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateExpIdInvalidCharacters() throws ValidateException {
 
-		String json = jsonBuilder("i/d","name","raw","metameta","name","user1",true,"releaseNr");
+		String json = jsonBuilder("i/d","name","raw","metameta","name","user1","releaseNr");
 		AddFileToExperimentCommand c = new AddFileToExperimentCommand();
 		c = gson.fromJson(json, AddFileToExperimentCommand.class);
 		c.validate();
@@ -130,7 +130,7 @@ public class AddFileToExperimentCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateFileNameMissing() throws ValidateException {
 
-		String json = jsonBuilder("id",null,"raw","metameta","name","user1",true,"releaseNr");
+		String json = jsonBuilder("id",null,"raw","metameta","name","user1","releaseNr");
 		AddFileToExperimentCommand c = new AddFileToExperimentCommand();
 		c = gson.fromJson(json, AddFileToExperimentCommand.class);
 		c.validate();
@@ -148,7 +148,7 @@ public class AddFileToExperimentCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateFileNameEmptyString() throws ValidateException {
 
-		String json = jsonBuilder("id","","raw","metameta","name","user1",true,"releaseNr");
+		String json = jsonBuilder("id","","raw","metameta","name","user1","releaseNr");
 		AddFileToExperimentCommand c = new AddFileToExperimentCommand();
 		c = gson.fromJson(json, AddFileToExperimentCommand.class);
 		c.validate();
@@ -170,7 +170,7 @@ public class AddFileToExperimentCommandTest {
 		for(int i = 0; i < database.constants.MaxSize.FILE_FILENAME + 1; i++) {
 			big = big + "a";
 		}
-		String json = jsonBuilder("id",big,"raw","metameta","name","user1",true,"releaseNr");
+		String json = jsonBuilder("id",big,"raw","metameta","name","user1","releaseNr");
 		AddFileToExperimentCommand c = new AddFileToExperimentCommand();
 		c = gson.fromJson(json, AddFileToExperimentCommand.class);
 		c.validate();
@@ -188,7 +188,7 @@ public class AddFileToExperimentCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateFileNameContainsSlashes() throws ValidateException {
 
-		String json = jsonBuilder("id","nam/e","raw","metameta","name","user1",true,"releaseNr");
+		String json = jsonBuilder("id","nam/e","raw","metameta","name","user1","releaseNr");
 		AddFileToExperimentCommand c = new AddFileToExperimentCommand();
 		c = gson.fromJson(json, AddFileToExperimentCommand.class);
 		c.validate();
@@ -206,7 +206,7 @@ public class AddFileToExperimentCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateTypeMissing() throws ValidateException {
 
-		String json = jsonBuilder("id","name",null,"metameta","name","user1",true,"releaseNr");
+		String json = jsonBuilder("id","name",null,"metameta","name","user1","releaseNr");
 		AddFileToExperimentCommand c = new AddFileToExperimentCommand();
 		c = gson.fromJson(json, AddFileToExperimentCommand.class);
 		c.validate();
@@ -224,7 +224,7 @@ public class AddFileToExperimentCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateTypeEmptyString() throws ValidateException {
 
-		String json = jsonBuilder("id","name","","metameta","name","user1",true,"releaseNr");
+		String json = jsonBuilder("id","name","","metameta","name","user1","releaseNr");
 		AddFileToExperimentCommand c = new AddFileToExperimentCommand();
 		c = gson.fromJson(json, AddFileToExperimentCommand.class);
 		c.validate();
@@ -246,7 +246,7 @@ public class AddFileToExperimentCommandTest {
 		for(int i = 0; i < database.constants.MaxSize.FILE_FILETYPE + 1; i++) {
 			big = big + "a";
 		}
-		String json = jsonBuilder("id","name",big,"metameta","name","user1",true,"releaseNr");
+		String json = jsonBuilder("id","name",big,"metameta","name","user1","releaseNr");
 		AddFileToExperimentCommand c = new AddFileToExperimentCommand();
 		c = gson.fromJson(json, AddFileToExperimentCommand.class);
 		c.validate();
@@ -264,7 +264,7 @@ public class AddFileToExperimentCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateTypeInvalidCharacters() throws ValidateException {
 
-		String json = jsonBuilder("id","name","ra/w","metameta","name","user1",true,"releaseNr");
+		String json = jsonBuilder("id","name","ra/w","metameta","name","user1","releaseNr");
 		AddFileToExperimentCommand c = new AddFileToExperimentCommand();
 		c = gson.fromJson(json, AddFileToExperimentCommand.class);
 		c.validate();
@@ -282,7 +282,7 @@ public class AddFileToExperimentCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateMetaDataMissing() throws ValidateException {
 
-		String json = jsonBuilder("id","name","raw",null,"name","user1",true,"releaseNr");
+		String json = jsonBuilder("id","name","raw",null,"name","user1","releaseNr");
 		AddFileToExperimentCommand c = new AddFileToExperimentCommand();
 		c = gson.fromJson(json, AddFileToExperimentCommand.class);
 		c.validate();
@@ -300,7 +300,7 @@ public class AddFileToExperimentCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateMetaDataEmptyString() throws ValidateException {
 
-		String json = jsonBuilder("id","name","raw","","name","user1",true,"releaseNr");
+		String json = jsonBuilder("id","name","raw","","name","user1","releaseNr");
 		AddFileToExperimentCommand c = new AddFileToExperimentCommand();
 		c = gson.fromJson(json, AddFileToExperimentCommand.class);
 		c.validate();
@@ -322,7 +322,7 @@ public class AddFileToExperimentCommandTest {
 		for(int i = 0; i < database.constants.MaxSize.FILE_METADATA + 1; i++) {
 			big = big + "a";
 		}
-		String json = jsonBuilder("id","name","raw",big,"name","user1",true,"releaseNr");
+		String json = jsonBuilder("id","name","raw",big,"name","user1","releaseNr");
 		AddFileToExperimentCommand c = new AddFileToExperimentCommand();
 		c = gson.fromJson(json, AddFileToExperimentCommand.class);
 		c.validate();
@@ -340,7 +340,7 @@ public class AddFileToExperimentCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateMetaDataInvalidCharacters() throws ValidateException {
 
-		String json = jsonBuilder("id","name","raw","metam/eta","name","user1",true,"releaseNr");
+		String json = jsonBuilder("id","name","raw","metam/eta","name","user1","releaseNr");
 		AddFileToExperimentCommand c = new AddFileToExperimentCommand();
 		c = gson.fromJson(json, AddFileToExperimentCommand.class);
 		c.validate();
@@ -358,7 +358,7 @@ public class AddFileToExperimentCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateAuthorMissing() throws ValidateException {
 
-		String json = jsonBuilder("id","name","raw","metameta",null,"user1",true,"releaseNr");
+		String json = jsonBuilder("id","name","raw","metameta",null,"user1","releaseNr");
 		AddFileToExperimentCommand c = new AddFileToExperimentCommand();
 		c = gson.fromJson(json, AddFileToExperimentCommand.class);
 		c.validate();
@@ -376,7 +376,7 @@ public class AddFileToExperimentCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateAuthorEmptyString() throws ValidateException {
 
-		String json = jsonBuilder("id","name","raw","metameta","","user1",true,"releaseNr");
+		String json = jsonBuilder("id","name","raw","metameta","","user1","releaseNr");
 		AddFileToExperimentCommand c = new AddFileToExperimentCommand();
 		c = gson.fromJson(json, AddFileToExperimentCommand.class);
 		c.validate();
@@ -398,7 +398,7 @@ public class AddFileToExperimentCommandTest {
 		for(int i = 0; i < database.constants.MaxSize.FILE_AUTHOR + 1; i++) {
 			big = big + "a";
 		}
-		String json = jsonBuilder("id","name","raw","metameta",big,"user1",true,"releaseNr");
+		String json = jsonBuilder("id","name","raw","metameta",big,"user1","releaseNr");
 		AddFileToExperimentCommand c = new AddFileToExperimentCommand();
 		c = gson.fromJson(json, AddFileToExperimentCommand.class);
 		c.validate();
@@ -416,7 +416,7 @@ public class AddFileToExperimentCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateAuthorInvalidCharacters() throws ValidateException {
 
-		String json = jsonBuilder("id","name","raw","metameta","na/me","user1",true,"releaseNr");
+		String json = jsonBuilder("id","name","raw","metameta","na/me","user1","releaseNr");
 		AddFileToExperimentCommand c = new AddFileToExperimentCommand();
 		c = gson.fromJson(json, AddFileToExperimentCommand.class);
 		c.validate();
@@ -434,7 +434,7 @@ public class AddFileToExperimentCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateUploaderMissing() throws ValidateException {
 
-		String json = jsonBuilder("id","name","raw","metameta","name",null,true,"releaseNr");
+		String json = jsonBuilder("id","name","raw","metameta","name",null,"releaseNr");
 		AddFileToExperimentCommand c = new AddFileToExperimentCommand();
 		c = gson.fromJson(json, AddFileToExperimentCommand.class);
 		c.validate();
@@ -452,7 +452,7 @@ public class AddFileToExperimentCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateUploaderEmptyString() throws ValidateException {
 
-		String json = jsonBuilder("id","name","raw","metameta","name","",true,"releaseNr");
+		String json = jsonBuilder("id","name","raw","metameta","name","","releaseNr");
 		AddFileToExperimentCommand c = new AddFileToExperimentCommand();
 		c = gson.fromJson(json, AddFileToExperimentCommand.class);
 		c.validate();
@@ -474,7 +474,7 @@ public class AddFileToExperimentCommandTest {
 		for(int i = 0; i < database.constants.MaxSize.FILE_UPLOADER + 1; i++) {
 			big = big + "a";
 		}
-		String json = jsonBuilder("id","name","raw","metameta","name",big,true,"releaseNr");
+		String json = jsonBuilder("id","name","raw","metameta","name",big,"releaseNr");
 		AddFileToExperimentCommand c = new AddFileToExperimentCommand();
 		c = gson.fromJson(json, AddFileToExperimentCommand.class);
 		c.validate();
@@ -492,7 +492,7 @@ public class AddFileToExperimentCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateUploaderInvalidCharacters() throws ValidateException {
 
-		String json = jsonBuilder("id","name","raw","metameta","name","use/r1",true,"releaseNr");
+		String json = jsonBuilder("id","name","raw","metameta","name","use/r1","releaseNr");
 		AddFileToExperimentCommand c = new AddFileToExperimentCommand();
 		c = gson.fromJson(json, AddFileToExperimentCommand.class);
 		c.validate();
@@ -509,7 +509,7 @@ public class AddFileToExperimentCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateGrVersionMissing() throws ValidateException {
 
-		String json = jsonBuilder("id","name","raw","metameta","name","user1",true,null);
+		String json = jsonBuilder("id","name","raw","metameta","name","user1",null);
 		AddFileToExperimentCommand c = new AddFileToExperimentCommand();
 		c = gson.fromJson(json, AddFileToExperimentCommand.class);
 		c.validate();
@@ -527,7 +527,7 @@ public class AddFileToExperimentCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateGrVersionEmptyString() throws ValidateException {
 
-		String json = jsonBuilder("id","name","raw","metameta","name","user1",true,"");
+		String json = jsonBuilder("id","name","raw","metameta","name","user1","");
 		AddFileToExperimentCommand c = new AddFileToExperimentCommand();
 		c = gson.fromJson(json, AddFileToExperimentCommand.class);
 		c.validate();
@@ -549,7 +549,7 @@ public class AddFileToExperimentCommandTest {
 		for(int i = 0; i < database.constants.MaxSize.FILE_GRVERSION + 1; i++) {
 			big = big + "a";
 		}
-		String json = jsonBuilder("id","name","raw","metameta","name","user1",true, big);
+		String json = jsonBuilder("id","name","raw","metameta","name","user1",big);
 		AddFileToExperimentCommand c = new AddFileToExperimentCommand();
 		c = gson.fromJson(json, AddFileToExperimentCommand.class);
 		c.validate();
@@ -567,7 +567,7 @@ public class AddFileToExperimentCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateGrVersionInvalidCharacters() throws ValidateException {
 
-		String json = jsonBuilder("id","name","raw","metameta","name","user1",true,"relea/seNr");
+		String json = jsonBuilder("id","name","raw","metameta","name","user1","relea/seNr");
 		AddFileToExperimentCommand c = new AddFileToExperimentCommand();
 		c = gson.fromJson(json, AddFileToExperimentCommand.class);
 		c.validate();
@@ -585,7 +585,7 @@ public class AddFileToExperimentCommandTest {
 	@Test
 	public void testValidateProperlyFormatted() throws ValidateException {
 
-		String json = jsonBuilder("id","name","raw","metameta","name","user1",true,"releaseNr");
+		String json = jsonBuilder("id","name","raw","metameta","name","user1","releaseNr");
 		AddFileToExperimentCommand c = new AddFileToExperimentCommand();
 		c = gson.fromJson(json, AddFileToExperimentCommand.class);
 		c.validate();
@@ -601,7 +601,7 @@ public class AddFileToExperimentCommandTest {
 	@Test
 	public void testConvertJSON() {
 
-		String json = jsonBuilder("id","name","raw","metameta","name","user1",true,"releaseNr");
+		String json = jsonBuilder("id","name","raw","metameta","name","user1","releaseNr");
 		AddFileToExperimentCommand c = new AddFileToExperimentCommand();
 		c = gson.fromJson(json, AddFileToExperimentCommand.class);
 		String compare = gson.toJson(c);
@@ -616,7 +616,7 @@ public class AddFileToExperimentCommandTest {
 	 * @param strings to insert into JSON object.
 	 * @return JSON formatted string.
 	 */
-	private String jsonBuilder(String expID, String fileN, String type, String metaD, String ath, String up, boolean iP, String grV) {
+	private String jsonBuilder(String expID, String fileN, String type, String metaD, String ath, String up, String grV) {
 
 	    JsonObject j = new JsonObject();
 		j.addProperty("experimentID", expID);
@@ -625,7 +625,6 @@ public class AddFileToExperimentCommandTest {
 		j.addProperty("metaData", metaD);
 		j.addProperty("author", ath);
 		j.addProperty("uploader", up);
-		j.addProperty("isPrivate", iP);
 		j.addProperty("grVersion", grV);
 
 		return j.toString();
