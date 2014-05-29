@@ -5,13 +5,22 @@ import java.io.IOException;
 
 import conversion.classes.ProfileDataConverter;
 
+/**
+ * Class that acts as a handler for all the conversions that will be done.
+ * All conversions should go through this class.
+ *
+ */
 public class ConversionHandler {
+
 	public ConversionHandler createConversionHandler() {
 		return new ConversionHandler();
 	}
 
 	/**
-	 * * @param secondColumn -- IMPORTANT, null unless converting to bed
+	 * Converts profile data from wig, sgr, gff3 and bed to all the others
+	 *
+	 *
+	 * @param secondColumn -- IMPORTANT, null unless converting to bed
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
@@ -26,7 +35,6 @@ public class ConversionHandler {
 				switch (conversionName) {
 				case "wigToSgr":
 					PDC.wigToSgr(inFile, outFile);
-
 					break;
 				case "wigToBed":
 					PDC.wigToBed(inFile, outFile, secondColumn);
@@ -43,6 +51,15 @@ public class ConversionHandler {
 				case "gff3ToSgr":
 						PDC.gff3ToSgr(inFile, outFile);
 					break;
+				case "gff3ToWig":
+					PDC.gff3ToWig(inFile, outFile);
+				break;
+				case "sgrToWig":
+					PDC.sgrToWig(inFile, outFile);
+				break;
+				case "bedToWig":
+					PDC.bedToWig(inFile, outFile);
+				break;
 				default:
 					throw new IllegalArgumentException();
 				}
@@ -66,35 +83,6 @@ public class ConversionHandler {
 		return true;
 	}
 
-
-
-
-	public String executeRegionDataConversion(String conversionName,
-			String inFile) {
-
-		//convert the outputfile to the inputfiles original filetype
-		switch(fileType){
-		case "wig":
-			typeConverter.bedToWig(outfileBed);
-			File file = new File(outfileBed);
-			file.delete();
-			break;
-		case "sgr":
-			typeConverter.bedToSgr(outfileBed);
-			File file = new File(outfileBed);
-			file.delete();
-			break;
-		case "bed":
-
-			break;
-
-		default:
-			throw new IllegalArgumentException();
-		}
-
-		return null;
-
-		}
 	public String checkFileType(String filePath){
 		String type = "";
 		if((filePath.length()-filePath.replaceAll("\\.","").length())>=1){
@@ -108,6 +96,35 @@ public class ConversionHandler {
 
 		return type;
 	}
+
+
+// TODO
+//	public String executeRegionDataConversion(String conversionName,
+//			String inFile) {
+//
+//		//convert the outputfile to the inputfiles original filetype
+//		switch(fileType){
+//		case "wig":
+//			typeConverter.bedToWig(outfileBed);
+//			File file = new File(outfileBed);
+//			file.delete();
+//			break;
+//		case "sgr":
+//			typeConverter.bedToSgr(outfileBed);
+//			File file = new File(outfileBed);
+//			file.delete();
+//			break;
+//		case "bed":
+//
+//			break;
+//
+//		default:
+//			throw new IllegalArgumentException();
+//		}
+//
+//		return null;
+//
+//		}
 
 	// public void executeGenomeReleaseConversion(String chainfilePath, String
 	// infilePath,String outfilePath){
