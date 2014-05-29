@@ -247,6 +247,9 @@ public class SmoothingAndStep {
 		}
 	    }
 	    if(data.get(index).getSignal() != 0){
+		//if(median(array) == 1.5 || median(array) == 1.625 || median(array)==2.875){
+		//    System.out.println("Philges värden");
+		//}
 		data.get(index).setNewSignal(median(array));
 	    }
 	}
@@ -263,6 +266,9 @@ public class SmoothingAndStep {
 		}
 	    }
 	    if(data.get(middleIndex).getSignal() != 0){
+		//if(median(array) == 1.5 || median(array) == 1.625 || median(array)==2.875){
+		//    System.out.println("Philges värden");
+		//}
 		data.get(middleIndex).setNewSignal(median(array));
 	    }
 	}
