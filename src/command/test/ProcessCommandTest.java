@@ -8,8 +8,6 @@ import com.google.gson.GsonBuilder;
 import command.ProcessCommand;
 import command.ValidateException;
 
-//TODO: Check: Meta data should be able to be null and empty string.
-				//Should not be able to choose a process type that is invalid. done exitst...
 /**
  * Class used to test that the ProcessCommand class
  * works properly. The execute method is not tested here.
@@ -379,8 +377,7 @@ public class ProcessCommandTest {
 		fail("Expected ValidateException to be thrown.");
 
 	}
-	
-	
+
 	/**
 	 * Test used to check that ValidateException is thrown if
 	 * GenomeVersion is null.
@@ -465,9 +462,6 @@ public class ProcessCommandTest {
 
 	}
 
-
-
-
 	/**
 	 * Test used to check that ValidateException is not thrown
 	 * when everything is properly formatted.
@@ -525,7 +519,7 @@ public class ProcessCommandTest {
 		}
 
 		String json = null;
-		
+
 		if(expId == null) {
 			json = "{\"parameters\":[" + parameters +"]," +"\"metadata\":\"" + met + "\",\"genomeVersion\":\"" + genV +"\"}";
 		} else if (param == null) {
