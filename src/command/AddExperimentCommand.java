@@ -60,11 +60,11 @@ public class AddExperimentCommand extends Command {
 			}
 			if(annotations.get(i).getName().length() > MaxSize.ANNOTATION_LABEL || annotations.get(i).getName().length() < 1) {
 				throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation label has to be between 1 and "
-						+ database.constants.MaxSize.EXPID + " characters long.");
+						+ database.constants.MaxSize.ANNOTATION_LABEL + " characters long.");
 			}
 			if(annotations.get(i).getValue().length() > MaxSize.ANNOTATION_VALUE || annotations.get(i).getValue().length() < 1) {
 				throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation value has to be between 1 and "
-						+ database.constants.MaxSize.EXPID + " characters long.");
+						+ database.constants.MaxSize.ANNOTATION_VALUE + " characters long.");
 			}
 		}
 		return true;

@@ -57,46 +57,46 @@ public class ProcessCommand extends Command {
 	 *
 	 */
 	@Override
-	public boolean validate() {
+	public boolean validate() throws ValidateException {
 
 
 		if(username == null){
 			Debug.log("ProcessCommand - Validate\n" +
 					"username is null");
-			return false;
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify a user name.");
 		}
 		if(processtype == null){
 			Debug.log("ProcessCommand - Validate\n" +
 					"processtype is null");
-			return false;
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify a process type.");
 		}
 		if(metadata == null){
 			Debug.log("ProcessCommand - Validate\n" +
 					"metadata is null");
-			return false;
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify metadata.");
 		}
 		if(genomeVersion == null){
 			Debug.log("ProcessCommand - Validate\n" +
 					"genomerelease is null");
-			return false;
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify a genome version.");
 		}
 
 		if(expid == null){
 			Debug.log("ProcessCommand - Validate\n" +
 					"expid is null");
-			return false;
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify an experiment name.");
 		}
 
 		if(parameters == null){
 			Debug.log("ProcessCommand - Validate\n" +
 					"parameters are null");
-			return false;
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify experiment id.");
 		}
 
 		switch (processtype) {
 		case "rawtoprofile":
 			if(parameters.length != 8){
-				return false;
+				throw new ValidateException(StatusCode.BAD_REQUEST, "Specify paramaters.");
 			}
 		case "profiletoregion":
 			//TODO Implement parameter size
@@ -106,24 +106,28 @@ public class ProcessCommand extends Command {
 
 		if(username.length() > MaxSize.USERNAME || username.length() <= 0){
 			Debug.log("Username has the wrong length of annotation");
-			return false;
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Username has to be between 1 and "
+					+ database.constants.MaxSize.USERNAME + " characters long.");
 		}
 		if(processtype.length() <= 0){
 			Debug.log("Processtype has the wrong length of annotation");
-			return false;
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify process type");
 		}
 
 		if(metadata.length() > MaxSize.FILE_METADATA || doesNotHaveCorrectLength(metadata, CanBeNull.FILE_METADATA)){
 			Debug.log("Metadata [" + metadata + "] has the wrong length of annotation");
-			return false;
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Metadata has to be between 1 and "
+					+ database.constants.MaxSize.FILE_METADATA + " characters long.");
 		}
 		if(genomeVersion.length() > MaxSize.GENOME_VERSION || doesNotHaveCorrectLength(genomeVersion, CanBeNull.GENOME_VERSION)){
 			Debug.log("GenomeRelease has the wrong length of annotation");
-			return false;
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Genome version has to be between 1 and "
+					+ database.constants.MaxSize.GENOME_VERSION + " characters long.");
 		}
 		if(expid.length() > MaxSize.EXPID || doesNotHaveCorrectLength(expid, CanBeNull.EXPID)){
 			Debug.log("Expid has the wrong length of annotation");
-			return false;
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Experiment name has to be between 1 and "
+					+ database.constants.MaxSize.EXPID + " characters long.");
 		}
 
 
