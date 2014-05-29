@@ -58,7 +58,14 @@ public class AddExperimentCommand extends Command {
 			if(!hasOnlyValidCharacters(annotations.get(i).getName()) || !hasOnlyValidCharacters(annotations.get(i).getValue())) {
 				throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation name or value. Valid characters are: " + validCharacters);
 			}
-			if(annotations.get(i).getName().length() > MaxSize.ANNOTATION_LABEL)
+			if(annotations.get(i).getName().length() > MaxSize.ANNOTATION_LABEL || annotations.get(i).getName().length() < 1) {
+				throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation label has to be between 1 and "
+						+ database.constants.MaxSize.EXPID + " characters long.");
+			}
+			if(annotations.get(i).getValue().length() > MaxSize.ANNOTATION_VALUE || annotations.get(i).getValue().length() < 1) {
+				throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation value has to be between 1 and "
+						+ database.constants.MaxSize.EXPID + " characters long.");
+			}
 		}
 		return true;
 	}
