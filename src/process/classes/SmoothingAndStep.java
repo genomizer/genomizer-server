@@ -42,10 +42,14 @@ public class SmoothingAndStep {
      * inPath:	  A string that tells the location and name of the source file.
      * outPath:	  A string that tells the location and name of the output file.
      *
-     * stepSize:  Flag that tells if the//		if(params[2]<(params[0]/2)+2){
-//			params[2] = (params[0]/2+2);
-//		} user wants to do stepping. Should be
+     * stepSize:  Flag that tells how much the program should step,
      * 		  1 if the user wants no stepping. Have to be larger than 0.
+     *
+     *
+     *
+     * 		Version 1.0.0, approved by Philge. If changes are made to this program
+     * 		researchers at EpiCon needs to check the results and approve the new version.
+     *
      */
     public double smoothing(int[] params, String inPath, String outPath, int stepSize) throws ProcessException {
 	validateInput(params, stepSize);
@@ -71,25 +75,16 @@ public class SmoothingAndStep {
 		    while(!addLine(strLine)){
 			strLine = br.readLine();
 		    }
-		    //Ny kod, fixar förhoppingsvis problem
-		    //	    if(data.size() > params[2]){
-		    //		smoothOneRow(params, data.size()-1, i);
-		    //	    }
 		}
 	    }
 
 	    for (int i = 0; i < middleIndex; i++){
-		//NYTT
 		if(data.size() > params[2]){
-		    //   if(((int)Math.ceil(data.size()/2)+i+2)>params[2]){
-		    //	smoothOneRow(params, ((int)Math.ceil(data.size()/2)+i+1), i);
 		    //  }
 		    if(((data.size()/2) + i + 2) > params[2]){
 			smoothOneRow(params, (data.size()/2)+i+1, i);
 		    }
-		    //smoothOneRow(params, data.size()-1, i);
 		}
-		//		writeToFile(params, i);
 	    }
 	    smoothOneRow(params,params[0]);
 
@@ -99,8 +94,6 @@ public class SmoothingAndStep {
 	    }
 	    if(data.size() > 0){
 		data.remove(0);
-	    } else {
-		//Ska inte kunna hända så lista ut ett lämpligt exception
 	    }
 
 	    if (params[0]%2==1){
@@ -108,22 +101,16 @@ public class SmoothingAndStep {
 		    smoothOneRow(params,params[0]-i);
 		    if(data.size() > 0){
 			data.remove(0);
-		    } else {
-			//Ska inte kunna hända så lista ut ett lämpligt exception
 		    }
 		}
 		if(data.size() > 0){
 		    data.remove(0);
-		} else {
-		    //Ska inte kunna hända så lista ut ett lämpligt exception
 		}
 	    }else{
 		for (int i = 1;i<(params[0]-params[2]+1);i++){
 		    smoothOneRow(params,params[0]-i);
 		    if(data.size() > 0){
 			data.remove(0);
-		    } else {
-			//Ska inte kunna hända så lista ut ett lämpligt exception
 		    }
 		}
 	    }
@@ -131,12 +118,9 @@ public class SmoothingAndStep {
 	    for (int j = 0; j < params[0]/2 -1 ;j++){
 		if(data.size() > 0){
 		    data.remove(0);
-		} else {
-		    //Ska inte kunna hända så lista ut ett lämpligt exception
 		}
 	    }
 	    while(data.size()>0){
-		//	writeToFile(params, 0);
 		data.remove(0);
 	    }
 
@@ -213,7 +197,6 @@ public class SmoothingAndStep {
 	double maxSig = meanSignal;
 	double minSig = meanSignal;
 
-	//System.out.println(data.get(middleIndex). + "");
 	if(data.size() >= params[2]){
 	    for(int j = 0 ; j < noOfRowsToSmooth; j++){
 		if(j != middleIndex){
@@ -286,8 +269,6 @@ public class SmoothingAndStep {
 	}
 	if(data.size() > 0){
 	    data.remove(0);
-	} else {
-	    //Ska inte kunna hända så lista ut ett lämpligt exception
 	}
 
 	if(!data.get(data.size()-1).getChromosome().equals(data.get(data.size()-2).getChromosome())){
@@ -305,36 +286,26 @@ public class SmoothingAndStep {
 		smoothOneRow(params,params[0]-i);
 		if(data.size() > 0){
 		    data.remove(0);
-		} else {
-		    //Ska inte kunna hända så lista ut ett lämpligt exception
 		}
 	    }
 	    if(data.size() > 0){
 		data.remove(0);
-	    } else {
-		//Ska inte kunna hända så lista ut ett lämpligt exception
 	    }
 	}else{
 	    for (int i = 1;i<(params[0]-params[2]+1);i++){
 		smoothOneRow(params,params[0]-i);
 		if(data.size() > 0){
 		    data.remove(0);
-		} else {
-		    //Ska inte kunna hända så lista ut ett lämpligt exception
 		}
 	    }
 	}
 	for (int j = 0; j < params[0]/2 -1 ;j++){
 	    if(data.size() > 0){
 		data.remove(0);
-	    } else {
-		//Ska inte kunna hända så lista ut ett lämpligt exception
 	    }
 	}
 
 	while(data.size()>0){
-	    //smoothOneRow(params, data.size()-1, 0);
-	    //    writeToFile(params, 0);
 	    data.remove(0);
 	}
 	data.add(newChromo);
@@ -348,16 +319,11 @@ public class SmoothingAndStep {
 	    }
 	}
 	for (int i = 0; i < middleIndex; i++){
-	    //NYTT
 	    if(data.size() > params[2]){
 		if(((data.size()/2) + i + 2)> params[2]){
 		    smoothOneRow(params, (data.size()/2)+i+1, i);
 		}
-		//smoothOneRow(params, data.size()-1, i);
 	    }
-
-
-	    //writeToFile(params, i);
 	}
     }
 
@@ -396,25 +362,21 @@ public class SmoothingAndStep {
 
     private void calcAndSetMeanSignal(int[] params,
 	    int minNrSigs, double meanSignal, double maxSig, double minSig) {
-	//	if((minNrSigs - 2) > params[2]){
 	meanSignal = meanSignal - minSig;
 	meanSignal = meanSignal - maxSig;
 	if((minNrSigs-2) > 0){
 	    meanSignal = meanSignal / (minNrSigs - 2);
 	    data.get(middleIndex).setNewSignal(meanSignal);
 	}
-	//	}
     }
     private void calcAndSetMeanSignal(int[] params,
 	    int minNrSigs, double meanSignal, double maxSig, double minSig, int index) {
-	//	if((minNrSigs - 2) > params[2]){
 	meanSignal = meanSignal - minSig;
 	meanSignal = meanSignal - maxSig;
 	if((minNrSigs-2) > 0){
 	    meanSignal = meanSignal / (minNrSigs - 2);
 	    data.get(index).setNewSignal(meanSignal);
 	}
-	//	}
     }
 
     private double median (double[] array){

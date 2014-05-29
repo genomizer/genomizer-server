@@ -41,10 +41,9 @@ public class AddFileToExperimentCommand extends Command {
 	private String uploader;
 
 	@Expose
-	private boolean isPrivate;
-
-	@Expose
 	private String grVersion;
+
+	private boolean isPrivate = false;
 
 	/**
 	 * Validates the request by checking
@@ -70,6 +69,12 @@ public class AddFileToExperimentCommand extends Command {
 		if(grVersion == null) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify a genome release.");
 		}
+		if(metaData == null) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify metadata.");
+		}
+		if(author == null) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify author.");
+		}
 		if(experimentID.length() > MaxSize.EXPID || experimentID.length() < 1) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Experiment name: " + experimentID + " has to be between 1 and "
 					+ database.constants.MaxSize.EXPID + " characters long.");
@@ -90,6 +95,14 @@ public class AddFileToExperimentCommand extends Command {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Genome version: " + grVersion + " has to be between 1 and "
 					+ database.constants.MaxSize.FILE_GRVERSION + " characters long.");
 		}
+		if(metaData.length() > MaxSize.FILE_METADATA || metaData.length() < 1) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Metadata has to be between 1 and "
+					+ database.constants.MaxSize.FILE_GRVERSION + " characters long.");
+		}
+		if(author.length() > MaxSize.FILE_AUTHOR || author.length() < 1) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Author has to be between 1 and "
+					+ database.constants.MaxSize.FILE_AUTHOR + " characters long.");
+		}
 		if(!hasOnlyValidCharacters(experimentID)) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in experiment name. Valid characters are: " + validCharacters);
 		}
@@ -98,6 +111,18 @@ public class AddFileToExperimentCommand extends Command {
 		}
 		if(!hasOnlyValidCharacters(uploader)) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in uploader name. Valid characters are: " + validCharacters);
+		}
+		if(!hasOnlyValidCharacters(grVersion)) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in genome version name. Valid characters are: " + validCharacters);
+		}
+		if(!hasOnlyValidCharacters(author)) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in author name. Valid characters are: " + validCharacters);
+		}
+		if(fileName.contains("/")) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "File name can not contain slash.");
+		}
+		if(metaData.contains("/")) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Metadata can not contain slash.");
 		}
 		return true;
 	}

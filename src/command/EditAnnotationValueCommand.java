@@ -13,7 +13,7 @@ import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
 
-public class RenameAnnotationValueCommand extends Command {
+public class EditAnnotationValueCommand extends Command {
 
 	@Expose
 	String name;

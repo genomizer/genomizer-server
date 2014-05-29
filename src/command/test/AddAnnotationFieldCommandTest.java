@@ -14,7 +14,7 @@ import database.constants.MaxSize;
  * Test class used to check that the AddAnnotationFieldCommand
  * class works properly. Execute method is tested elsewhere.
  *
- * @author tfy09jnn
+ * @author Kommunikation/kontroll 2014.
  * @version 1.0
  */
 public class AddAnnotationFieldCommandTest {

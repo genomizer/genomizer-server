@@ -8,7 +8,7 @@ import command.CommandFactory;
 /**
  * Testclass used to test the CommandFactory class.
  *
- * @author tfy09jnn
+ * @author Kommunikation/kontroll 2014.
  * @version 1.0
  */
 public class CommandFactoryTest {

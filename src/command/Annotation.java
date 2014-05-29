@@ -11,9 +11,6 @@ import com.google.gson.annotations.Expose;
 public class Annotation {
 
 	@Expose
-	private String id;
-
-	@Expose
 	private String name;
 
 	@Expose

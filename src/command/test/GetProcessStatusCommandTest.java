@@ -1,15 +1,12 @@
 package command.test;
 
 import static org.junit.Assert.*;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-
 import org.junit.Before;
 import org.junit.Test;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -17,12 +14,18 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
-
 import command.ProcessCommand;
 import command.ProcessStatus;
-
 import server.WorkHandler;
+import server.test.ProcessCommandMock;
 
+/**
+ * Class used to test the process status command class
+ * and that it works properly.
+ *
+ * @author Kommunikation/kontroll 2014.
+ * @version 1.0
+ */
 public class GetProcessStatusCommandTest {
 
 	private static WorkHandler workHandler = new WorkHandler();

@@ -16,7 +16,7 @@ import database.constants.MaxSize;
 /**
  * Class used to test the AddGenomeRelease class.
  *
- * @author tfy09jnn
+ * @author Kommunikation/kontroll 2014.
  * @version 1.0
  */
 public class AddGenomeReleaseCommandTest {
@@ -123,6 +123,40 @@ public class AddGenomeReleaseCommandTest {
 	public void testValidateSpecieEmptyString() throws ValidateException {
 
 		String json = "{\"version\":\"hx16\",\"species\":\"\",\"files\":[\"nameOfFile1\"]}";
+		final Command cmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
+		cmd.validate();
+
+		fail("Expected ValidateException to be thrown.");
+
+	}
+
+	/**
+	 * Test used to check that ValidateException is thrown if
+	 * specie contains invalid characters.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testValidateSpecieInvalidCharacters() throws ValidateException {
+
+		String json = "{\"version\":\"hx16\",\"species\":\"not/valid\",\"files\":[\"nameOfFile1\"]}";
+		final Command cmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
+		cmd.validate();
+
+		fail("Expected ValidateException to be thrown.");
+
+	}
+
+	/**
+	 * Test used to check that ValidateException is thrown if
+	 * genome version contains invalid characters.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testValidateGenomeVersionInvalidCharacters() throws ValidateException {
+
+		String json = "{\"version\":\"hx/16\",\"species\":\"valid\",\"files\":[\"nameOfFile1\"]}";
 		final Command cmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
 		cmd.validate();
 

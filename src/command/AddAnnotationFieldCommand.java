@@ -60,9 +60,11 @@ public class AddAnnotationFieldCommand extends Command {
 		if(forced == null) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify if the value is forced.");
 		}
-		if(name.length() > MaxSize.ANNOTATION_LABEL || name.length() < 1) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation label has to be between 1 and "
-					+ database.constants.MaxSize.ANNOTATION_LABEL + " characters long.");
+		if(!type.get(0).equals("freetext")) {
+			if(name.length() > MaxSize.ANNOTATION_LABEL || name.length() < 1) {
+				throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation label has to be between 1 and "
+						+ database.constants.MaxSize.ANNOTATION_LABEL + " characters long.");
+			}
 		}
 		if(defaults != null) {
 			if(defaults.length() > MaxSize.ANNOTATION_DEFAULTVALUE || defaults.length() < 1) {
