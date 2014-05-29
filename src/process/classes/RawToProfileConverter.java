@@ -281,11 +281,7 @@ public class RawToProfileConverter extends Executor {
 						parameters[7])) {
 			isOk = false;
 		}
-		// if(checker.shouldRunRatioCalc() &&
-		// !validator.validateSmoothing(parameters[7])) {
-		// isOk = false;
-		// }
-
+		
 		return isOk;
 	}
 
@@ -514,15 +510,6 @@ public class RawToProfileConverter extends Executor {
 		samToGff = "perl sam_to_readsgff_v1.pl " + sortedDirForCommands;
 		gffToAllnusgr = "perl readsgff_to_allnucsgr_v1.pl "
 				+ sortedDirForCommands + "reads_gff/";
-		// step10 = "perl AllSeqRegSGRtoPositionSGR_v1.pl " + parameters[3] +
-		// " " * @throws ProcessException
-
-		// + sortedDir + "reads_gff/allnucs_sgr/smoothed/"; // Step 6
-		// smooth = "perl smooth_v4.pl " + sortedDir + "reads_gff/allnucs_sgr/ "
-		// + parameters[2]; // Step 5
-		// sgr2wig = "perl sgr2wig.pl " + sortedDir
-		// + "/reads_gff/allnucs_sgr/smoothed/Step10/*.sgr " + outFile
-		// + "test.wig";
 	}
 
 	/**
@@ -542,13 +529,6 @@ public class RawToProfileConverter extends Executor {
 			throws ProcessException {
 		String bowTieParams = checkBowTieProcessors(parameters[0]);
 
-		// used to run remotely
-		// String[] bowTieParameters = parse("bowtie " + bowTieParams + " "
-		// + parameters[1] + " " + inFolder + "/" + fileOne + " " +
-		// remoteExecution+"resources/"+dir
-		// + fileOneName + ".sam");
-
-		// Ordinary
 		String[] bowTieParameters = parse("bowtie " + bowTieParams + " "
 				+ parameters[1] + " " + inFolder + "/" + fileOne + " " + dir
 				+ fileOneName + ".sam");
