@@ -14,7 +14,8 @@ import command.ValidateException;
 				"\"metadata\":\"astringofmetadata\",\"genomeVersion\":\"hg38\"}";
 
  */
-
+//TODO: Check: Meta data should be able to be null and empty string.
+				//Should not be able to choose a process type that is invalid. done exitst...
 /**
  * Class used to test that the ProcessCommand class
  * works properly. The execute method is not tested here.
@@ -290,30 +291,11 @@ public class ProcessCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidationParametersRawToProfileSize() throws ValidateException {
 
-		String json = jsonAndInfoBuilder("experimentID",null,"metadata","gen1");
-		c = gson.fromJson(json, ProcessCommand.class);
-		c.setUsername("hello");
-		c.setProcessType("rawtoprofile");
-		c.validate();
-
-		fail("Expected ValidateException to be thrown.");
-
-	}
-
-	/**
-	 * Test used to check that ValidateException is thrown if
-	 * parameters contains invalid characters.
-	 *
-	 * @throws ValidateException
-	 */
-	@Test(expected = ValidateException.class)
-	public void testValidateParametersInvalidCharacters() throws ValidateException {
-
-		String[] p = {"a/","b","c","d"};
+		String[] p = {"a","b","c","d"};
 		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1");
 		c = gson.fromJson(json, ProcessCommand.class);
 		c.setUsername("hello");
-		c.setProcessType("raw");
+		c.setProcessType("rawtoprofile");
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -326,17 +308,17 @@ public class ProcessCommandTest {
 	 *
 	 * @throws ValidateException
 	 */
-	@Test(expected = ValidateException.class)
+	@Test
 	public void testValidationMetaDataNotNull() throws ValidateException {
 
-		String[] p = {"a","b","c","d"};
+		String[] p = {"a","b","c","d","e","f","g","h"};
 		String json = jsonAndInfoBuilder("experimentID",p,null,"gen1");
 		c = gson.fromJson(json, ProcessCommand.class);
 		c.setUsername("hello");
 		c.setProcessType("raw");
 		c.validate();
 
-		fail("Expected ValidateException to be thrown.");
+		assertTrue(true);
 
 	}
 
@@ -346,17 +328,17 @@ public class ProcessCommandTest {
 	 *
 	 * @throws ValidateException
 	 */
-	@Test(expected = ValidateException.class)
+	@Test
 	public void testValidationMetaDataEmptyString() throws ValidateException {
 
 		String[] p = {"a","b","c","d","e","f","g","h"};
 		String json = jsonAndInfoBuilder("experimentID",p,"","gen1");
 		c = gson.fromJson(json, ProcessCommand.class);
 		c.setUsername("hello");
-		c.setProcessType("raw");
+		c.setProcessType("rawtoprofile");
 		c.validate();
 
-		fail("Expected ValidateException to be thrown.");
+		assertTrue(true);
 
 	}
 
@@ -375,26 +357,6 @@ public class ProcessCommandTest {
 		}
 		String[] p = {"a","b","c","d"};
 		String json = jsonAndInfoBuilder("experimentID",p,big,"gen1");
-		c = gson.fromJson(json, ProcessCommand.class);
-		c.setUsername("hello");
-		c.setProcessType("raw");
-		c.validate();
-
-		fail("Expected ValidateException to be thrown.");
-
-	}
-
-	/**
-	 * Test used to check that ValidateException is thrown if
-	 * MetaData contains invalid characters.
-	 *
-	 * @throws ValidateException
-	 */
-	@Test(expected = ValidateException.class)
-	public void testValidateMetaDataInvalidCharacters() throws ValidateException {
-
-		String[] p = {"a","b","c","d"};
-		String json = jsonAndInfoBuilder("experimentID",p,"metad/ata","gen1");
 		c = gson.fromJson(json, ProcessCommand.class);
 		c.setUsername("hello");
 		c.setProcessType("raw");
