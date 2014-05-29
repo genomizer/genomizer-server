@@ -8,12 +8,6 @@ import com.google.gson.GsonBuilder;
 import command.ProcessCommand;
 import command.ValidateException;
 
-/*
- 		String json = "{\"expid\":\"Exp1\"," +
-				"\"parameters\":[\"a", \"b\",\"c\",\"d\",\"10 1 5 0 0\",\"y 10\",\"single 4 0\",\"150 1 7 0 0\"]," +
-				"\"metadata\":\"astringofmetadata\",\"genomeVersion\":\"hg38\"}";
-
- */
 //TODO: Check: Meta data should be able to be null and empty string.
 				//Should not be able to choose a process type that is invalid. done exitst...
 /**
