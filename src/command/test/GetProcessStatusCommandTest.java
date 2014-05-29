@@ -22,6 +22,7 @@ import command.ProcessCommand;
 import command.ProcessStatus;
 
 import server.WorkHandler;
+import server.test.ProcessCommandMock;
 
 public class GetProcessStatusCommandTest {
 

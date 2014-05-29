@@ -1,4 +1,4 @@
-package command.test;
+package server.test;
 
 import response.ErrorResponse;
 import response.MinimalResponse;
