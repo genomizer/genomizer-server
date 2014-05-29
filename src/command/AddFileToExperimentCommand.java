@@ -102,6 +102,9 @@ public class AddFileToExperimentCommand extends Command {
 				throw new ValidateException(StatusCode.BAD_REQUEST, "Metadata has to be between 1 and "
 						+ database.constants.MaxSize.FILE_GRVERSION + " characters long.");
 			}
+			if(metaData.contains("/")) {
+				throw new ValidateException(StatusCode.BAD_REQUEST, "Metadata can not contain slash.");
+			}
 		}
 		if(author != null){
 			if(author.length() > MaxSize.FILE_AUTHOR || author.length() < 1) {
@@ -126,9 +129,7 @@ public class AddFileToExperimentCommand extends Command {
 		if(fileName.contains("/")) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "File name can not contain slash.");
 		}
-		if(metaData.contains("/")) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Metadata can not contain slash.");
-		}
+
 		return true;
 	}
 
