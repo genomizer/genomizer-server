@@ -29,7 +29,7 @@ public class AddFileToExperimentCommand extends Command {
 	private String fileName;
 
 	@Expose
- 	private String type;
+	private String type;
 
 	@Expose
 	private String metaData;
@@ -63,15 +63,15 @@ public class AddFileToExperimentCommand extends Command {
 		if(type == null) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify a type.");
 		}
-		if(uploader == null) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify an uploader name.");
-		}
+		//		if(uploader == null) {
+		//			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify an uploader name.");
+		//		}
 		if(grVersion == null) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify a genome release.");
 		}
-		if(author == null) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify author.");
-		}
+		//		if(author == null) {
+		//			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify author.");
+		//		}
 		if(experimentID.length() > MaxSize.EXPID || experimentID.length() < 1) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Experiment name: " + experimentID + " has to be between 1 and "
 					+ database.constants.MaxSize.EXPID + " characters long.");
@@ -84,9 +84,11 @@ public class AddFileToExperimentCommand extends Command {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "File type: " + type + " has to be between 1 and "
 					+ database.constants.MaxSize.FILE_FILETYPE + " characters long.");
 		}
-		if(uploader.length() > MaxSize.FILE_UPLOADER || uploader.length() < 1) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Uploader name: " + uploader + " has to be between 1 and "
-					+ database.constants.MaxSize.FILE_UPLOADER + " characters long.");
+		if(uploader != null){
+			if(uploader.length() > MaxSize.FILE_UPLOADER || uploader.length() < 1) {
+				throw new ValidateException(StatusCode.BAD_REQUEST, "Uploader name: " + uploader + " has to be between 1 and "
+						+ database.constants.MaxSize.FILE_UPLOADER + " characters long.");
+			}
 		}
 		if(grVersion.length() > MaxSize.FILE_GRVERSION || grVersion.length() < 1) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Genome version: " + grVersion + " has to be between 1 and "
@@ -96,9 +98,11 @@ public class AddFileToExperimentCommand extends Command {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Metadata has to be between 1 and "
 					+ database.constants.MaxSize.FILE_GRVERSION + " characters long.");
 		}
-		if(author.length() > MaxSize.FILE_AUTHOR || author.length() < 1) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Author has to be between 1 and "
-					+ database.constants.MaxSize.FILE_AUTHOR + " characters long.");
+		if(author != null){
+			if(author.length() > MaxSize.FILE_AUTHOR || author.length() < 1) {
+				throw new ValidateException(StatusCode.BAD_REQUEST, "Author has to be between 1 and "
+						+ database.constants.MaxSize.FILE_AUTHOR + " characters long.");
+			}
 		}
 		if(!hasOnlyValidCharacters(experimentID)) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in experiment name. Valid characters are: " + validCharacters);
