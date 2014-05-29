@@ -6,30 +6,19 @@ import java.io.IOException;
 
 
 public class StartUpCleaner{
-	private String resDir = "resources/";
-	private StartUpCleaner() {
-
-	}
 
 
-	public static StartUpCleaner startUpCleanerFactory() {
-		return new StartUpCleaner();
-	}
-
-	public void removeOldTempDirectories(String dir) {
+	public static void removeOldTempDirectories(String dir) {
 		if(dir != null) {
-			System.out.println("dir var inte null");
 			File dirFile = new File(dir);
 			if(dirFile.isDirectory()) {
 				File[] listOfFiles = dirFile.listFiles();
 				for (File file : listOfFiles) {
-					System.out.println(file.toString());
 					if(file.getName().startsWith("results_") && file.isDirectory()) {
 								try {
+									System.out.println("Deleting temp directory: " + file.getName());
 									delete(file);
-								} catch (IOException e) {
-									System.out.println("IO");
-								}
+								} catch (IOException e) {}
 
 					}
 
@@ -40,7 +29,7 @@ public class StartUpCleaner{
 	}
 
 
-	private void delete(File f) throws IOException {
+	private static void delete(File f) throws IOException {
 		  if (f.isDirectory()) {
 			    for (File c : f.listFiles()) {
 			    	delete(c);

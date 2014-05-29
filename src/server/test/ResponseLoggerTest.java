@@ -13,7 +13,7 @@ import authentication.Authenticate;
 import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
-import server.ResponseLogger;
+import server.ErrorLogger;
 
 import command.CommandFactory;
 import command.ProcessCommand;
@@ -23,26 +23,26 @@ public class ResponseLoggerTest {
 
 	@Before
 	public void setUp() throws Exception {
-		ResponseLogger.reset();
+		ErrorLogger.reset();
 
 	}
 
 	@After
 	public void tearDown() throws Exception {
-		ResponseLogger.reset();
+		ErrorLogger.reset();
 	}
 
 	@Test
 	public void shouldLogBADREQUESTandOKResponse(){
 		String username = "splutt";
-		Authenticate.addUser(username, "");
+		Authenticate.addUser(username);
 		Response r1 = new MinimalResponse(StatusCode.BAD_REQUEST);
 		Response r2 = new MinimalResponse(StatusCode.OK);
 
-		if(ResponseLogger.log(username, r1) && ResponseLogger.log(username, r2)){
-			assertEquals(StatusCode.BAD_REQUEST, ResponseLogger.getUserLog(username).get(0).getCode());
-			assertEquals(StatusCode.OK, ResponseLogger.getUserLog(username).get(1).getCode());
-			ResponseLogger.printUserLog("splutt");
+		if(ErrorLogger.log(username, r1) && ErrorLogger.log(username, r2)){
+			assertEquals(StatusCode.BAD_REQUEST, ErrorLogger.getUserLog(username).get(0).getCode());
+			assertEquals(StatusCode.OK, ErrorLogger.getUserLog(username).get(1).getCode());
+			ErrorLogger.printUserLog("splutt");
 		}else{
 			fail();
 		}
@@ -57,13 +57,13 @@ public class ResponseLoggerTest {
 
 		Response r = new MinimalResponse(StatusCode.BAD_REQUEST);
 
-		if(ResponseLogger.log(username, r)){
-			assertEquals(StatusCode.BAD_REQUEST, ResponseLogger.getUserLog(username).get(0).getCode());
+		if(ErrorLogger.log(username, r)){
+			assertEquals(StatusCode.BAD_REQUEST, ErrorLogger.getUserLog(username).get(0).getCode());
 		}else{
 			fail();
 		}
 
-		ResponseLogger.printUserLog("splutt");
+		ErrorLogger.printUserLog("splutt");
 
 	}
 	@Test
@@ -74,13 +74,13 @@ public class ResponseLoggerTest {
 		Response r1 = new MinimalResponse(StatusCode.BAD_REQUEST);
 		Response r2 = new MinimalResponse(StatusCode.BAD_REQUEST);
 
-		if(ResponseLogger.log(username, r1) && ResponseLogger.log(username, r2)){
-			assertEquals(StatusCode.BAD_REQUEST, ResponseLogger.getUserLog(username).get(0).getCode());
-			assertEquals(StatusCode.BAD_REQUEST, ResponseLogger.getUserLog(username).get(1).getCode());
+		if(ErrorLogger.log(username, r1) && ErrorLogger.log(username, r2)){
+			assertEquals(StatusCode.BAD_REQUEST, ErrorLogger.getUserLog(username).get(0).getCode());
+			assertEquals(StatusCode.BAD_REQUEST, ErrorLogger.getUserLog(username).get(1).getCode());
 		}else{
 			fail();
 		}
-		ResponseLogger.printUserLog("splutt");
+		ErrorLogger.printUserLog("splutt");
 
 	}
 

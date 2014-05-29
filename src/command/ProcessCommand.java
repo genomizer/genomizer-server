@@ -16,7 +16,7 @@ import response.Response;
 import response.StatusCode;
 import server.ServerSettings;
 import server.Debug;
-import server.ResponseLogger;
+import server.ErrorLogger;
 
 import com.google.gson.annotations.Expose;
 
@@ -44,8 +44,6 @@ public class ProcessCommand extends Command {
 	private String genomeVersion;
 	@Expose
 	private String expid;
-	@Expose
-	private String author;
 
 	//Empty constructor
 	public ProcessCommand() {
@@ -123,10 +121,6 @@ public class ProcessCommand extends Command {
 			Debug.log("GenomeRelease has the wrong length of annotation");
 			return false;
 		}
-		if(author.length() > MaxSize.FILE_AUTHOR || doesNotHaveCorrectLength(author, CanBeNull.FILE_AUTHOR)){
-			Debug.log("Author has the wrong length of annotation");
-			return false;
-		}
 		if(expid.length() > MaxSize.EXPID || doesNotHaveCorrectLength(expid, CanBeNull.EXPID)){
 			Debug.log("Expid has the wrong length of annotation");
 			return false;
@@ -194,7 +188,7 @@ public class ProcessCommand extends Command {
 					String genomeFilePrefix = g.getFilePrefix();
 
 					if(genomeFolderPath == null){
-						ResponseLogger.log(username, "Could not get genome folder path when " + processtype + " on experiment" + expid + "\n"+
+						ErrorLogger.log(username, "Could not get genome folder path when " + processtype + " on experiment" + expid + "\n"+
 								"metadata: " + metadata + "\n"+
 								"parameters: " + parameters + "\n" +
 								"genomeFilePrefix: " + genomeFilePrefix + "\n" +
@@ -208,7 +202,7 @@ public class ProcessCommand extends Command {
 					}
 
 					if(genomeFilePrefix == null){
-						ResponseLogger.log(username, "Could not get genome file prefix when " + processtype + " on experiment" + expid + "\n"+
+						ErrorLogger.log(username, "Could not get genome file prefix when " + processtype + " on experiment" + expid + "\n"+
 								"metadata: " + metadata + "\n"+
 								"parameters: " + parameters + "\n" +
 								"genomeFolderPath: " + genomeFolderPath + "\n" +
@@ -234,12 +228,10 @@ public class ProcessCommand extends Command {
 					}
 				} catch (ProcessException e) {
 					e.printStackTrace();
-					ResponseLogger.log(username, "Process Exception when running " + processtype + " on experiment" + expid + "\n"+
+					ErrorLogger.log(username, "Process Exception when running " + processtype + " on experiment" + expid + "\n"+
 							"metadata: " + metadata + "\n"+
 							"parameters: " + parameters + "\n" +
-							"genomeVersion: " + genomeVersion + "\n" +
-							"author: " + author + "\n" +
-							e.getMessage());
+							"genomeVersion: " + genomeVersion + "\n" + e.getMessage());
 					db.close();
 					return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, e.getMessage());
 				}
@@ -247,48 +239,38 @@ public class ProcessCommand extends Command {
 			default:
 				Debug.log("ERROR: Unknown process type in processcommand execute");
 				db.close();
-				ResponseLogger.log(username, "Unknown process type in processcommand execute when running " + processtype + " on experiment" + expid + "\n"+
+				ErrorLogger.log(username, "Unknown process type in processcommand execute when running " + processtype + " on experiment" + expid + "\n"+
 						"metadata: " + metadata + "\n"+
 						"parameters: " + parameters + "\n" +
-						"genomeVersion: " + genomeVersion + "\n" +
-						"author: " + author + "\n");
+						"genomeVersion: " + genomeVersion + "\n");
 				return new ProcessResponse(StatusCode.BAD_REQUEST, "Unknown process type in processcommand execute when running " + processtype + " on experiment" + expid + "\n"+
 						"metadata: " + metadata + "\n"+
 						"parameters: " + parameters + "\n" +
-						"genomeVersion: " + genomeVersion + "\n" +
-						"author: " + author + "\n");
+						"genomeVersion: " + genomeVersion + "\n");
 
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			ResponseLogger.log(username, "SQL Exception in ProcessCommand execute when running " + processtype + " on experiment" + expid + "\n"+
+			ErrorLogger.log(username, "SQL Exception in ProcessCommand execute when running " + processtype + " on experiment" + expid + "\n"+
 					"metadata: " + metadata + "\n"+
 					"parameters: " + parameters + "\n" +
-					"genomeVersion: " + genomeVersion + "\n" +
-					"author: " + author + "\n" +
-					e.getMessage());
+					"genomeVersion: " + genomeVersion + "\n" + e.getMessage());
 			db.close();
 			return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, "SQL Exception in ProcessCommand execute when running " + processtype + " on experiment" + expid + "\n"+
 					"metadata: " + metadata + "\n"+
 					"parameters: " + parameters + "\n" +
-					"genomeVersion: " + genomeVersion + "\n" +
-					"author: " + author + "\n" +
-					e.getMessage());
+					"genomeVersion: " + genomeVersion + "\n" + e.getMessage());
 		} catch (IOException e1) {
 			e1.printStackTrace();
-			ResponseLogger.log(username, "IO Exception in ProcessCommand execute when running " + processtype + " on experiment" + expid + "\n"+
+			ErrorLogger.log(username, "IO Exception in ProcessCommand execute when running " + processtype + " on experiment" + expid + "\n"+
 					"metadata: " + metadata + "\n"+
 					"parameters: " + parameters + "\n" +
-					"genomeVersion: " + genomeVersion + "\n" +
-					"author: " + author + "\n" +
-					e1.getMessage());
+					"genomeVersion: " + genomeVersion + "\n" + e1.getMessage());
 			db.close();
 			return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, "IO Exception in ProcessCommand execute when running " + processtype + " on experiment" + expid + "\n"+
 					"metadata: " + metadata + "\n"+
 					"parameters: " + parameters + "\n" +
-					"genomeVersion: " + genomeVersion + "\n" +
-					"author: " + author + "\n" +
-					e1.getMessage());
+					"genomeVersion: " + genomeVersion + "\n" + e1.getMessage());
 		}
 
 
@@ -302,48 +284,38 @@ public class ProcessCommand extends Command {
 			db.addGeneratedProfiles(expid, filepaths.getValue(), filepaths.getKey(), metadata, genomeVersion, username, false);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			ResponseLogger.log(username, "SQL Exception in ProcessCommand execute when using addGeneratedProfiles with " + processtype + " on experiment" + expid + "\n"+
+			ErrorLogger.log(username, "SQL Exception in ProcessCommand execute when using addGeneratedProfiles with " + processtype + " on experiment" + expid + "\n"+
 					"metadata: " + metadata + "\n"+
 					"parameters: " + parameters + "\n" +
-					"genomeVersion: " + genomeVersion + "\n" +
-					"author: " + author + "\n" +
-					e.getMessage());
+					"genomeVersion: " + genomeVersion + "\n" + e.getMessage());
 			db.close();
 			return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, "SQL Exception in ProcessCommand execute when using addGeneratedProfiles with " + processtype + " on experiment" + expid + "\n"+
 					"metadata: " + metadata + "\n"+
 					"parameters: " + parameters + "\n" +
-					"genomeVersion: " + genomeVersion + "\n" +
-					"author: " + author + "\n" +
-					e.getMessage());
+					"genomeVersion: " + genomeVersion + "\n" + e.getMessage());
 		} catch (IOException e) {
 			e.printStackTrace();
-			ResponseLogger.log(username, "IO Exception in ProcessCommand execute when creating new DatabaseAccesor before addGeneratedProfiles with " + processtype + " on experiment" + expid + "\n"+
+			ErrorLogger.log(username, "IO Exception in ProcessCommand execute when creating new DatabaseAccesor before addGeneratedProfiles with " + processtype + " on experiment" + expid + "\n"+
 					"metadata: " + metadata + "\n"+
 					"parameters: " + parameters + "\n" +
-					"genomeVersion: " + genomeVersion + "\n" +
-					"author: " + author + "\n" +
-					e.getMessage());
+					"genomeVersion: " + genomeVersion + "\n" + e.getMessage());
 			db.close();
 			return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, "IO Exception in ProcessCommand execute when creating new DatabaseAccesor before addGeneratedProfiles running " + processtype + " on experiment" + expid + "\n"+
 					"metadata: " + metadata + "\n"+
 					"parameters: " + parameters + "\n" +
-					"genomeVersion: " + genomeVersion + "\n" +
-					"author: " + author + "\n" +
-					e.getMessage());
+					"genomeVersion: " + genomeVersion + "\n" + e.getMessage());
 		}
 
 		db.close();
 
-		ResponseLogger.log(username, "Raw to profile processing completed running " + processtype + " on experiment" + expid + "\n"+
+		ErrorLogger.log(username, "Raw to profile processing completed running " + processtype + " on experiment" + expid + "\n"+
 					"metadata: " + metadata + "\n"+
 					"parameters: " + parameters + "\n" +
-					"genomeVersion: " + genomeVersion + "\n" +
-					"author: " + author + "\n");
+					"genomeVersion: " + genomeVersion + "\n");
 		return new ProcessResponse(StatusCode.CREATED, "Raw to profile processing completed running " + processtype + " on experiment" + expid + "\n"+
 					"metadata: " + metadata + "\n"+
 					"parameters: " + parameters + "\n" +
-					"genomeVersion: " + genomeVersion + "\n" +
-					"author: " + author + "\n");
+					"genomeVersion: " + genomeVersion + "\n");
 
 
 	}
@@ -368,8 +340,7 @@ public class ProcessCommand extends Command {
 				"metadata:" + metadata + "\n" +
 				"username: " + username + "\n" +
 				"expid: " + expid + "\n" +
-				"genomeRelease: " + genomeVersion + "\n" +
-				"author:" + author + "\n";
+				"genomeRelease: " + genomeVersion + "\n";
 	}
 
 	public void setTimestamp(long currentTimeMillis) {
@@ -382,10 +353,6 @@ public class ProcessCommand extends Command {
 	public void setProcessType(String processtype) {
 		this.processtype = processtype;
 
-	}
-
-	public String getAuthor() {
-		return author;
 	}
 
 	public String getExpId() {
@@ -406,6 +373,10 @@ public class ProcessCommand extends Command {
 
 	public String[] getFilePaths() {
 		return new String[] {filepaths.getKey(), filepaths.getValue()};
+	}
+
+	public String getUsername() {
+		return this.username;
 	}
 
 }

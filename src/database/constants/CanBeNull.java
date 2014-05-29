@@ -1,5 +1,10 @@
 package database.constants;
 
+/**
+ * This class contains boolean values for most attributes
+ * in the database. The values represent whether an
+ * attribute can be Null (have no value) or not.
+ */
 public class CanBeNull {
 
 	public final static boolean FILE_PATH = false;

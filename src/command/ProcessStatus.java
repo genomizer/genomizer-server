@@ -21,7 +21,7 @@ public class ProcessStatus implements Comparable<ProcessStatus> {
 
 	public ProcessStatus(ProcessCommand command) {
 		status = "Waiting";
-		author = command.getAuthor();
+		author = command.getUsername();
 		experimentName = command.getExpId();
 		timeAdded = System.currentTimeMillis();
 		outputFiles = new String[0];

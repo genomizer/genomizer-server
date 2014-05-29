@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
 import server.Debug;
-import server.ResponseLogger;
+import server.ErrorLogger;
 
 public class InactiveUuidsRemover implements Runnable {
 
@@ -48,7 +48,7 @@ public class InactiveUuidsRemover implements Runnable {
 				}
 			}
 		} catch(Exception e) {
-			ResponseLogger.log("SERVER", "INACTIVE UUIDS REMOVER - FAILED, CONTINUING PROGRAM WITHOUT THIS FUNCTION."+e.getMessage());
+			ErrorLogger.log("SERVER", "INACTIVE UUIDS REMOVER - FAILED, CONTINUING PROGRAM WITHOUT THIS FUNCTION."+e.getMessage());
 			System.err.println("INACTIVE UUIDS REMOVER - FAILED, CONTINUING PROGRAM WITHOUT THIS FUNCTION."+e.getMessage());
 		}
 	}

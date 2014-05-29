@@ -151,7 +151,7 @@ public class SmoothingAndStep {
 	return readSumValue/noOfValues;
     }
 
-    private void smoothOneRow(int[] params, int noOfRowsToSmooth, int index) throws IOException {
+    private void smoothOneRow(int[] params, int noOfRowsToSmooth, int index) throws IOException, ProcessException {
 	if((noOfRowsToSmooth < data.size()+1)){
 	    if(params[1]==1){
 		smoothMedian(noOfRowsToSmooth, params, index);
@@ -160,11 +160,11 @@ public class SmoothingAndStep {
 	    }
 	    writeToFile(params, index);
 	} else {
-	    //Ska inte kunna hända så lista ut ett lämpligt exception
+	    throw new ProcessException("Error: File is shorter than window size.");
 	}
     }
 
-    private void smoothOneRow(int[] params, int noOfRowsToSmooth) throws IOException {
+    private void smoothOneRow(int[] params, int noOfRowsToSmooth) throws IOException, ProcessException {
 	if((noOfRowsToSmooth < data.size()+1)){
 	    if(params[1]==1){
 		smoothMedian(noOfRowsToSmooth, params);
@@ -173,7 +173,7 @@ public class SmoothingAndStep {
 	    }
 	    writeToFile(params);
 	} else {
-	    System.out.println("Luktar fuffens");
+	    throw new ProcessException("Error: File is shorter than window size.");
 	}
     }
 
@@ -280,7 +280,7 @@ public class SmoothingAndStep {
 	}
     }
 
-    private void shiftLeft(String strLine, int[] params) throws IOException  {
+    private void shiftLeft(String strLine, int[] params) throws IOException, ProcessException  {
 	while(!addLine(strLine)){
 	    strLine = br.readLine();
 	}
@@ -295,7 +295,7 @@ public class SmoothingAndStep {
 	}
     }
 
-    private void chromosomeChange(int[] params) throws IOException {
+    private void chromosomeChange(int[] params) throws IOException, ProcessException {
 
 	Tuple newChromo = data.get(data.size()-1);
 	data.remove(data.size()-1);

@@ -181,12 +181,12 @@ public class AddFileToExperimentCommandTest {
 
 	/**
 	 * Test used to check that ValidateException is thrown when
-	 * FileName contains invalid characters.
+	 * FileName contains slashes.
 	 *
 	 * @throws ValidateException
 	 */
 	@Test(expected = ValidateException.class)
-	public void testValidateFileNameInvalidCharacters() throws ValidateException {
+	public void testValidateFileNameContainsSlashes() throws ValidateException {
 
 		String json = jsonBuilder("id","nam/e","raw","metameta","name","user1",true,"releaseNr");
 		AddFileToExperimentCommand c = new AddFileToExperimentCommand();
