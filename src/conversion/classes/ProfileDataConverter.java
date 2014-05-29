@@ -26,6 +26,11 @@ public class ProfileDataConverter extends Executor {
 		return sgrToBedConversion(infilePath, outFile, secondColumn);
 	}
 
+	public String sgrToWig(String infilePath, String outFile)
+			throws InterruptedException, IOException {
+		return sgrToWigConversion(infilePath, outFile);
+	}
+
 	public String wigToBed(String infilePath, String outFile,
 			String secondColumn) throws InterruptedException, IOException {
 		return sgrToBedConversion(
@@ -42,15 +47,19 @@ public class ProfileDataConverter extends Executor {
 				secondColumn);
 	}
 
-	// public String gff3ToWig (String infilePath, String secondColumn){
-	// return sgrToWigConversion(gff3ToSgrConversion(infilePath));
-	// }
-	// public String sgrToWig (String infilePath){
-	// return sgrToWigConversion(infilePath);
-	// }
-	// public String bedToWig (String infilePath, String secondColumn){
-	// return sgrToWigConversion(bedToSgrConversion(infilePath));
-	// }
+	public String gff3ToWig(String infilePath, String outFile)
+			throws InterruptedException, IOException {
+		return sgrToWigConversion(
+				gff3ToSgrConversion(infilePath,
+						infilePath.replace(".gff", ".sgr")), outFile);
+	}
+
+	public String bedToWig(String infilePath, String outFile)
+			throws InterruptedException, IOException {
+		return sgrToWigConversion(
+				bedToSgrConversion(infilePath,
+						infilePath.replace(".bed", ".sgr")), outFile);
+	}
 
 	// Actual conversion
 	private String sgrToBedConversion(String infilePath, String outFile,
@@ -84,8 +93,11 @@ public class ProfileDataConverter extends Executor {
 				+ outFile));
 		return infilePath.replace(".gff", ".sgr");
 	}
-	// private String sgrToWigConversion (String infilePath){
-	// return infilePath.replace(".sgr", ".wig");
-	// }
+
+	private String sgrToWigConversion(String infilePath, String outFile)
+			throws InterruptedException, IOException {
+		executeScript(parse("perl sgr2wig.pl " + infilePath + " " + outFile));
+		return infilePath.replace(".sgr", ".wig");
+	}
 
 }

@@ -58,11 +58,11 @@ public class ChainFilesTest {
     }
 
     @Test
-    public void addChain_file() throws SQLException {
+    public void addChain_file() throws Exception {
 
         String fromVersion = "hg19";
         String toVersion = "hg38";
-        String fileName = "chainHuman";
+        String fileName = "chainHuman.txt";
         String filePath = dbac.addChainFile(fromVersion, toVersion, fileName);
 
         assertEquals(ServerDependentValues.UploadURL +
@@ -128,8 +128,8 @@ public class ChainFilesTest {
 
         String fromVersion = "rn3";
         String toVersion = "rn5";
-        String testName1 = "testName1";
-        String testName2 = "testName2";
+        String testName1 = "testName1.txt";
+        String testName2 = "testName2.txt";
 
         dbac.addChainFile(fromVersion, toVersion, testName1);
         dbac.addChainFile(fromVersion, toVersion, testName2);
@@ -149,9 +149,9 @@ public class ChainFilesTest {
 
         String fromVersion = "rn4";
         String toVersion = "rn5";
-        String testName1 = "testName1";
-        String testName2 = "testName2";
-        String testName3 = "testName3";
+        String testName1 = "testName1.txt";
+        String testName2 = "testName2.txt";
+        String testName3 = "testName3.txt";
 
 		dbac.addChainFile(fromVersion, toVersion, testName1);
 		dbac.addChainFile(fromVersion, toVersion, testName2);

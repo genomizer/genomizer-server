@@ -1,11 +1,19 @@
 package process.classes;
 
+/**
+ * Class used to validate incoming parameters to RawToProfile so all parameters
+ * are correct format. 
+ * v 1.0
+ */
 public class ParameterValidator extends Executor {
 
-	// validate bowtie params
-
-	// validate bowtie genome file
-
+	/**
+	 * Validated smoothing parameters
+	 * 
+	 * @param smoothing
+	 * @return
+	 * @throws ProcessException
+	 */
 	public boolean validateSmoothing(String smoothing) throws ProcessException {
 
 		// validate smoothing
@@ -17,9 +25,10 @@ public class ParameterValidator extends Executor {
 		}
 
 		int[] smoothParams = new int[smooth.length];
+		
+		// Parse all parameters to float first to check that all are integers.
 		float[] floatSmooth = new float[smooth.length];
-
-		for (int i = 0; i < smooth.length; i++) {
+		for (int i = 0; i < floatSmooth.length; i++) {
 			try {
 				floatSmooth[i] = Float.parseFloat(smooth[i]);
 			} catch (NumberFormatException exc) {
@@ -28,6 +37,7 @@ public class ParameterValidator extends Executor {
 			}
 		}
 
+		// Checks that all parameters are integers
 		for (int i = 0; i < floatSmooth.length; i++) {
 			if (floatSmooth[i] % 1 != 0) {
 				throw new ProcessException("Parameter " + (i + 1)
@@ -37,6 +47,7 @@ public class ParameterValidator extends Executor {
 			}
 		}
 
+	
 		for (int i = 0; i < smoothParams.length; i++) {
 			if (smoothParams[i] < 0) {
 				throw new ProcessException(
@@ -59,6 +70,13 @@ public class ParameterValidator extends Executor {
 		return true;
 	}
 
+	/**
+	 * Validates step parameters
+	 * 
+	 * @param string
+	 * @return
+	 * @throws ProcessException
+	 */
 	public boolean validateStep(String string) throws ProcessException {
 
 		String[] step = parse(string);
@@ -67,6 +85,8 @@ public class ParameterValidator extends Executor {
 			throw new ProcessException(
 					"Not correct number of parameters for step size, should be 2");
 		}
+		
+		// Parse to float to check that all parameters are integers.
 		float stepFloat;
 		try {
 			stepFloat = Float.parseFloat(step[1]);
@@ -74,6 +94,7 @@ public class ParameterValidator extends Executor {
 			throw new ProcessException("Stepsize parameters is not a number");
 		}
 
+		// Checks that parameters are integers.
 		if (stepFloat % 1 != 0) {
 			throw new ProcessException("Stepsize parameter is not an integer");
 		}
@@ -81,6 +102,16 @@ public class ParameterValidator extends Executor {
 		return true;
 	}
 
+	/**
+	 * Validates Ratio Calculation parameters, Also validates the smoothing 
+	 * parameters that is used on the Ratio calculated files cause they should
+	 * always be done together.
+	 * 
+	 * @param RatioParam
+	 * @param smoothParam
+	 * @return
+	 * @throws ProcessException
+	 */
 	public boolean validateRatioCalculation(String RatioParam,
 			String smoothParam) throws ProcessException {
 		System.out.println("RATIO CHECKER");

@@ -410,16 +410,6 @@ public class MockUserTests {
     }
 
     @Test
-    public void completeGenomeReleaseFileUpload() throws Exception {
-
-    	addGenomeReleaseFile();
-
-        dbac.genomeReleaseFileUploaded("hg38", "hg38.fasta");
-
-        Genome g = dbac.getGenomeRelease("hg38");
-    }
-
-    @Test
     public void processRawToProfile() throws Exception {
 
     	addRawFiles();
