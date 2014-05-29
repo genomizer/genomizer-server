@@ -94,9 +94,11 @@ public class AddFileToExperimentCommand extends Command {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Genome version: " + grVersion + " has to be between 1 and "
 					+ database.constants.MaxSize.FILE_GRVERSION + " characters long.");
 		}
-		if(metaData.length() > MaxSize.FILE_METADATA || metaData.length() < 1) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Metadata has to be between 1 and "
-					+ database.constants.MaxSize.FILE_GRVERSION + " characters long.");
+		if(uploader != null){
+			if(metaData.length() > MaxSize.FILE_METADATA || metaData.length() < 1) {
+				throw new ValidateException(StatusCode.BAD_REQUEST, "Metadata has to be between 1 and "
+						+ database.constants.MaxSize.FILE_GRVERSION + " characters long.");
+			}
 		}
 		if(author != null){
 			if(author.length() > MaxSize.FILE_AUTHOR || author.length() < 1) {
