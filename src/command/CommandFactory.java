@@ -347,7 +347,7 @@ public class CommandFactory {
 	 */
 	public Command creatRenameAnnotationValueCommand(String json) {
 
-		Command command = gson.fromJson(json, RenameAnnotationValueCommand.class);
+		Command command = gson.fromJson(json, EditAnnotationValueCommand.class);
 		return command;
 
 	}

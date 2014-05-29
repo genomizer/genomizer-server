@@ -39,7 +39,7 @@ public class AddAnnotationValueCommand extends Command {
 		if(name == null) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify an annotation name.");
 		}
-		if(value.length() > MaxSize.ANNOTATION_VALUE || value.length() < 1) {
+		if(value.length() > MaxSize.ANNOTATION_VALUE) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation value has to be between 1 and "
 					+ database.constants.MaxSize.ANNOTATION_VALUE + " characters long.");
 		}

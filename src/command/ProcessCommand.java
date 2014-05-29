@@ -145,6 +145,9 @@ public class ProcessCommand extends Command {
 		if(!hasOnlyValidCharacters(expid)) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in experiment name. Valid characters are: " + validCharacters);
 		}
+		if(metadata.contains("/")) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in experiment name. Valid characters are: " + validCharacters);
+		}
 
 		return true;
 	}
