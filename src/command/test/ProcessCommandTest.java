@@ -1,20 +1,16 @@
 package command.test;
 
 import static org.junit.Assert.*;
-
 import org.junit.Before;
 import org.junit.Test;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-
 import command.ProcessCommand;
 import command.ValidateException;
 
 /*
  		String json = "{\"expid\":\"Exp1\"," +
-				"\"parameters\":[\"-a -m 1 --best -p 10 -v 2 -q -S\", \"\",\"y\",\"n\",\"10 1 5 0 0\",\"y 10\",\"single 4 0\",\"150 1 7 0 0\"]," +
+				"\"parameters\":[\"a", \"b\",\"c\",\"d\",\"10 1 5 0 0\",\"y 10\",\"single 4 0\",\"150 1 7 0 0\"]," +
 				"\"metadata\":\"astringofmetadata\",\"genomeVersion\":\"hg38\"}";
 
  */
@@ -43,7 +39,7 @@ public class ProcessCommandTest {
 		c = new ProcessCommand();
 
 	}
-	
+
 	/**
 	 * Test used to check that creation works and
 	 * object is not null.
@@ -57,33 +53,449 @@ public class ProcessCommandTest {
 
 	}
 
-	@Test
-	public void testValidationUserNameNotNull() {
-		
+	/**
+	 * Test used to check that ValidateException is thrown if
+	 * UserName is null.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testValidationUserNameNotNull() throws ValidateException {
+
+		String[] p = {"a","b","c","d","e","f","g","h"};
+		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1");
+		c = gson.fromJson(json, ProcessCommand.class);
+		c.setUsername(null);
+		c.setProcessType("rawtoprofile");
+		c.validate();
+
+		fail("Expected ValidateException to be thrown.");
+
 	}
-	
-	@Test
-	public void testValidationUserNameEmptyString() {
-		
+
+	/**
+	 * Test used to check that ValidateException is thrown if
+	 * UserName is empty string.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testValidationUserNameEmptyString() throws ValidateException {
+
+		String[] p = {"a","b","c","d","e","f","g","h"};
+		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1");
+		c = gson.fromJson(json, ProcessCommand.class);
+		c.setUsername("");
+		c.setProcessType("rawtoprofile");
+		c.validate();
+
+		fail("Expected ValidateException to be thrown.");
+
 	}
-	
-	@Test
-	public void testValidateUserNameLengthToLong() {
-		
+
+	/**
+	 * Test used to check that ValidateException is thrown if
+	 * UserName length is to long.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testValidateUserNameLengthToLong() throws ValidateException {
+
+		String big = "";
+		for(int i = 0; i < database.constants.MaxSize.USERNAME + 1; i++) {
+			big = big + "a";
+		}
+		String[] p = {"a","b","c","d","e","f","g","h"};
+		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1");
+		c = gson.fromJson(json, ProcessCommand.class);
+		c.setUsername(big);
+		c.setProcessType("rawtoprofile");
+		c.validate();
+
+		fail("Expected ValidateException to be thrown.");
+
 	}
-	
-	@Test
-	public void testValidateUserNameInvalidCharacters() {
-		
+
+	/**
+	 * Test used to check that ValidateException is thrown if
+	 * UserName contains invalid characters.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testValidateUserNameInvalidCharacters() throws ValidateException {
+
+		String[] p = {"a","b","c","d","e","f","g","h"};
+		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1");
+		c = gson.fromJson(json, ProcessCommand.class);
+		c.setUsername("hel/lo");
+		c.setProcessType("rawtoprofile");
+		c.validate();
+
+		fail("Expected ValidateException to be thrown.");
+
 	}
-	
-	
-	
+
+	/**
+	 * Test used to check that ValidateException is thrown if
+	 * process type is null.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testValidationProcessTypeNotNull() throws ValidateException {
+
+		String[] p = {"a","b","c","d","e","f","g","h"};
+		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1");
+		c = gson.fromJson(json, ProcessCommand.class);
+		c.setUsername("hello");
+		c.setProcessType(null);
+		c.validate();
+
+		fail("Expected ValidateException to be thrown.");
+
+	}
+
+	/**
+	 * Test used to check that ValidateException is thrown if
+	 * process type is empty string.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testValidationProcessTypeEmptyString() throws ValidateException {
+
+		String[] p = {"a","b","c","d","e","f","g","h"};
+		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1");
+		c = gson.fromJson(json, ProcessCommand.class);
+		c.setUsername("hello");
+		c.setProcessType("");
+		c.validate();
+
+		fail("Expected ValidateException to be thrown.");
+
+	}
+
+	/**
+	 * Test used to check that ValidateException is thrown if
+	 * process type does not exist.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testValidateProcessTypeInvalidSelection() throws ValidateException {
+
+		String[] p = {"a","b","c","d","e","f","g","h"};
+		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1");
+		c = gson.fromJson(json, ProcessCommand.class);
+		c.setUsername("hello");
+		c.setProcessType("I Dont Exist");
+		c.validate();
+
+		fail("Expected ValidateException to be thrown.");
+
+	}
+
+	/**
+	 * Test used to check that ValidateException is thrown if
+	 * experiment id is null.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testValidationExperimentIdNotNull() throws ValidateException {
+
+		String[] p = {"a","b","c","d"};
+		String json = jsonAndInfoBuilder(null,p,"metadata","gen1");
+		c = gson.fromJson(json, ProcessCommand.class);
+		c.setUsername("hello");
+		c.setProcessType("raw");
+		c.validate();
+
+		fail("Expected ValidateException to be thrown.");
+
+	}
+
+	/**
+	 * Test used to check that ValidateException is thrown if
+	 * experiment id is empty string.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testValidationExperimentIdEmptyString() throws ValidateException {
+
+		String[] p = {"a","b","c","d"};
+		String json = jsonAndInfoBuilder("",p,"metadata","gen1");
+		c = gson.fromJson(json, ProcessCommand.class);
+		c.setUsername("hello");
+		c.setProcessType("raw");
+		c.validate();
+
+		fail("Expected ValidateException to be thrown.");
+
+	}
+
+	/**
+	 * Test used to check that ValidateException is thrown if
+	 * experiment id length is to long.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testValidateExperimentIdLengthToLong() throws ValidateException {
+
+		String big = "";
+		for(int i = 0; i < database.constants.MaxSize.FILE_EXPID + 1; i++) {
+			big = big + "a";
+		}
+		String[] p = {"a","b","c","d"};
+		String json = jsonAndInfoBuilder(big,p,"metadata","gen1");
+		c = gson.fromJson(json, ProcessCommand.class);
+		c.setUsername("hello");
+		c.setProcessType("raw");
+		c.validate();
+
+		fail("Expected ValidateException to be thrown.");
+
+	}
+
+	/**
+	 * Test used to check that ValidateException is thrown if
+	 * experiment id contains invalid characters.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testValidateExperimentIdInvalidCharacters() throws ValidateException {
+
+		String[] p = {"a","b","c","d"};
+		String json = jsonAndInfoBuilder("experi/mentID",p,"metadata","gen1");
+		c = gson.fromJson(json, ProcessCommand.class);
+		c.setUsername("hello");
+		c.setProcessType("raw");
+		c.validate();
+
+		fail("Expected ValidateException to be thrown.");
+
+	}
+
+	/**
+	 * Test used to check that ValidateException is thrown if
+	 * parameters are not the correct size for raw to profile.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testValidationParametersRawToProfileSize() throws ValidateException {
+
+		String json = jsonAndInfoBuilder("experimentID",null,"metadata","gen1");
+		c = gson.fromJson(json, ProcessCommand.class);
+		c.setUsername("hello");
+		c.setProcessType("rawtoprofile");
+		c.validate();
+
+		fail("Expected ValidateException to be thrown.");
+
+	}
+
+	/**
+	 * Test used to check that ValidateException is thrown if
+	 * parameters contains invalid characters.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testValidateParametersInvalidCharacters() throws ValidateException {
+
+		String[] p = {"a/","b","c","d"};
+		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1");
+		c = gson.fromJson(json, ProcessCommand.class);
+		c.setUsername("hello");
+		c.setProcessType("raw");
+		c.validate();
+
+		fail("Expected ValidateException to be thrown.");
+
+	}
+
+	/**
+	 * Test used to check that ValidateException is thrown if
+	 * MetaData is null.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testValidationMetaDataNotNull() throws ValidateException {
+
+		String[] p = {"a","b","c","d"};
+		String json = jsonAndInfoBuilder("experimentID",p,null,"gen1");
+		c = gson.fromJson(json, ProcessCommand.class);
+		c.setUsername("hello");
+		c.setProcessType("raw");
+		c.validate();
+
+		fail("Expected ValidateException to be thrown.");
+
+	}
+
+	/**
+	 * Test used to check that ValidateException is thrown if
+	 * MetaData is empty string.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testValidationMetaDataEmptyString() throws ValidateException {
+
+		String[] p = {"a","b","c","d","e","f","g","h"};
+		String json = jsonAndInfoBuilder("experimentID",p,"","gen1");
+		c = gson.fromJson(json, ProcessCommand.class);
+		c.setUsername("hello");
+		c.setProcessType("raw");
+		c.validate();
+
+		fail("Expected ValidateException to be thrown.");
+
+	}
+
+	/**
+	 * Test used to check that ValidateException is thrown if
+	 * MetaData length is to long.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testValidateMetaDataLengthToLong() throws ValidateException {
+
+		String big = "";
+		for(int i = 0; i < database.constants.MaxSize.FILE_METADATA + 1; i++) {
+			big = big + "a";
+		}
+		String[] p = {"a","b","c","d"};
+		String json = jsonAndInfoBuilder("experimentID",p,big,"gen1");
+		c = gson.fromJson(json, ProcessCommand.class);
+		c.setUsername("hello");
+		c.setProcessType("raw");
+		c.validate();
+
+		fail("Expected ValidateException to be thrown.");
+
+	}
+
+	/**
+	 * Test used to check that ValidateException is thrown if
+	 * MetaData contains invalid characters.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testValidateMetaDataInvalidCharacters() throws ValidateException {
+
+		String[] p = {"a","b","c","d"};
+		String json = jsonAndInfoBuilder("experimentID",p,"metad/ata","gen1");
+		c = gson.fromJson(json, ProcessCommand.class);
+		c.setUsername("hello");
+		c.setProcessType("raw");
+		c.validate();
+
+		fail("Expected ValidateException to be thrown.");
+
+	}
+
+	/**
+	 * Test used to check that ValidateException is thrown if
+	 * GenomeVersion is null.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testValidationGenomeVersionNotNull() throws ValidateException {
+
+		String[] p = {"a","b","c","d"};
+		String json = jsonAndInfoBuilder("experimentID",p,"metadata",null);
+		c = gson.fromJson(json, ProcessCommand.class);
+		c.setUsername("hello");
+		c.setProcessType("raw");
+		c.validate();
+
+		fail("Expected ValidateException to be thrown.");
+
+	}
+
+	/**
+	 * Test used to check that ValidateException is thrown if
+	 * GenomeVersion is empty string.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testValidationGenomeVersionEmptyString() throws ValidateException {
+
+		String[] p = {"a","b","c","d"};
+		String json = jsonAndInfoBuilder("experimentID",p,"metadata","");
+		c = gson.fromJson(json, ProcessCommand.class);
+		c.setUsername("hello");
+		c.setProcessType("raw");
+		c.validate();
+
+		fail("Expected ValidateException to be thrown.");
+
+	}
+
+	/**
+	 * Test used to check that ValidateException is thrown if
+	 * GenomeVersion length is to long.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testValidateGenomeVersionLengthToLong() throws ValidateException {
+
+		String big = "";
+		for(int i = 0; i < database.constants.MaxSize.FILE_GRVERSION + 1; i++) {
+			big = big + "a";
+		}
+		String[] p = {"a","b","c","d"};
+		String json = jsonAndInfoBuilder("experimentID",p,"metadata",big);
+		c = gson.fromJson(json, ProcessCommand.class);
+		c.setUsername("hello");
+		c.setProcessType("raw");
+		c.validate();
+
+		fail("Expected ValidateException to be thrown.");
+
+	}
+
+	/**
+	 * Test used to check that ValidateException is thrown if
+	 * GenomeVersion contains invalid characters.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testValidateGenomeVersionInvalidCharacters() throws ValidateException {
+
+		String[] p = {"a","b","c","d"};
+		String json = jsonAndInfoBuilder("experimentID",p,"metadata","ge/n1");
+		c = gson.fromJson(json, ProcessCommand.class);
+		c.setUsername("hello");
+		c.setProcessType("raw");
+		c.validate();
+
+		fail("Expected ValidateException to be thrown.");
+
+	}
+
+
+
+
 	/**
 	 * Test used to check that ValidateException is not thrown
 	 * when everything is properly formatted.
-	 * 
-	 * @throws ValidateException 
+	 *
+	 * @throws ValidateException
 	 */
 	@Test
 	public void testValidateProperlyFormatted() throws ValidateException {
@@ -105,7 +517,7 @@ public class ProcessCommandTest {
 	 */
 	@Test
 	public void testConvertJSON() {
-		
+
 		String[] p = {"a","b","c","d"};
 		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1");
 		c = gson.fromJson(json, ProcessCommand.class);
@@ -114,7 +526,7 @@ public class ProcessCommandTest {
 		String compare = gson.toJson(c);
 
 		assertEquals(compare, json);
-		
+
 	}
 
 	/**
@@ -132,11 +544,25 @@ public class ProcessCommandTest {
 				parameters = parameters + ",";
 			}
 		}
-		String json = "{\"expid\":\"" + expId + "\"," +
-				"\"parameters\":[" + parameters +"]," +
-				"\"metadata\":\"" + met + "\",\"genomeVersion\":\"" + genV +"\"}";
+
+		String json = null;
+
+		if(expId == null) {
+			json = "{\"parameters\":[" + parameters +"]," +"\"metadata\":\"" + met + "\",\"genomeVersion\":\"" + genV +"\"}";
+		} else if (param == null) {
+			json = "{\"expid\":\"" + expId + "\"," + "\"metadata\":\"" + met + "\",\"genomeVersion\":\"" + genV +"\"}";
+		} else if(met == null) {
+			json = "{\"expid\":\"" + expId + "\"," + "\"parameters\":[" + parameters +"],\"genomeVersion\":\"" + genV +"\"}";
+		} else if(genV == null) {
+			json = "{\"expid\":\"" + expId + "\"," + "\"parameters\":[" + parameters +"]," + "\"metadata\":\"" + met + "\"}";
+		} else {
+			json = "{\"expid\":\"" + expId + "\"," +
+					"\"parameters\":[" + parameters +"]," +
+					"\"metadata\":\"" + met + "\",\"genomeVersion\":\"" + genV +"\"}";
+		}
 
 		return json;
+
 	}
 
 }
