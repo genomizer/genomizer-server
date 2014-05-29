@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import java.util.Stack;
 
 /**
- * Class used to create profile data from .fastq format. 
- * Can run a dynamic number of steps depending of which parameters thats sent 
- * from the clients. 
+ * Class used to create profile data from .fastq format.
+ * Can run a dynamic number of steps depending of which parameters thats sent
+ * from the clients.
  *
  * @version 1.0
  */
@@ -44,15 +44,15 @@ public class RawToProfileConverter extends Executor {
 	}
 
 	/**
-	 * 1. runs the bowtie program to get a .sam file. 
-	 * 2. runs a linux shell command to sort the sam file. 
-	 * 3. runs a perl script that creates a .ggf file from the sam file. 
-	 * 4. runs a perl script that creates a .sgr file from the .gff file. 
-	 * 6. runs a converted method of the smoothing and stepping scripts. 
+	 * 1. runs the bowtie program to get a .sam file.
+	 * 2. runs a linux shell command to sort the sam file.
+	 * 3. runs a perl script that creates a .ggf file from the sam file.
+	 * 4. runs a perl script that creates a .sgr file from the .gff file.
+	 * 6. runs a converted method of the smoothing and stepping scripts.
 	 * 7. runs a perl script that converts the .sgr file to .wig file.
 	 * 8. runs a perl script that does ratio calculation on the files, also runs
 	 * smoothing on these files.
-	 * 
+	 *
 	 * All these steps have to be run in order but the clients can specify how
 	 * many steps they want to run by sending parameters for the steps
 	 * they want to run.
@@ -69,9 +69,9 @@ public class RawToProfileConverter extends Executor {
 	 */
 	public String procedure(String[] parameters, String inFolder,
 			String outFilePath) throws ProcessException {
-		
+
 		File[] inFiles = null;
-		
+
 		// Error handling
 		if (inFolder != null) {
 			inFolder = validateInFolder(inFolder);
@@ -94,7 +94,7 @@ public class RawToProfileConverter extends Executor {
 //
 //			printStringArray(parameters);
 //		}
-		
+
 		// Checks all parameters that they are correct before proceeding
 		if (verifyInData(parameters, inFolder, outFilePath) == false
 				|| !CorrectInfiles(inFiles)) {
@@ -107,7 +107,7 @@ public class RawToProfileConverter extends Executor {
 					+ "/sorted");
 			checker.calculateWhichProcessesToRun(parameters);
 			ValidateParameters(parameters);
-			
+
 			rawFile1 = inFiles[0].getName();
 			rawFile_1_Name = rawFile1.substring(0, rawFile1.length() - 6);
 			if (inFiles.length == 2) {
@@ -210,8 +210,12 @@ public class RawToProfileConverter extends Executor {
 							+ "reads_gff/allnucs_sgr/smoothed/ratios/smoothed/";
 					toBeRemoved.push(filesToBeMoved);
 				}
-
-				moveEndFiles(filesToBeMoved, outFilePath);
+				try {
+					moveEndFiles(filesToBeMoved, outFilePath);
+				} catch (ProcessException e) {
+					cleanUp(toBeRemoved);
+					throw e;
+				}
 				cleanUp(toBeRemoved);
 
 			} else {
@@ -226,7 +230,7 @@ public class RawToProfileConverter extends Executor {
 	/**
 	 * Gets all files from the folder, throws a ProcessException if there is no
 	 * files in the directory.
-	 * 
+	 *
 	 * @param inFolder
 	 * @return
 	 * @throws ProcessException
@@ -261,7 +265,7 @@ public class RawToProfileConverter extends Executor {
 
 	/**
 	 * Validates parameters.
-	 * 
+	 *
 	 * @param parameters
 	 * @return
 	 * @throws ProcessException
@@ -281,10 +285,6 @@ public class RawToProfileConverter extends Executor {
 						parameters[7])) {
 			isOk = false;
 		}
-		// if(checker.shouldRunRatioCalc() &&
-		// !validator.validateSmoothing(parameters[7])) {
-		// isOk = false;
-		// }
 
 		return isOk;
 	}
@@ -514,15 +514,6 @@ public class RawToProfileConverter extends Executor {
 		samToGff = "perl sam_to_readsgff_v1.pl " + sortedDirForCommands;
 		gffToAllnusgr = "perl readsgff_to_allnucsgr_v1.pl "
 				+ sortedDirForCommands + "reads_gff/";
-		// step10 = "perl AllSeqRegSGRtoPositionSGR_v1.pl " + parameters[3] +
-		// " " * @throws ProcessException
-
-		// + sortedDir + "reads_gff/allnucs_sgr/smoothed/"; // Step 6
-		// smooth = "perl smooth_v4.pl " + sortedDir + "reads_gff/allnucs_sgr/ "
-		// + parameters[2]; // Step 5
-		// sgr2wig = "perl sgr2wig.pl " + sortedDir
-		// + "/reads_gff/allnucs_sgr/smoothed/Step10/*.sgr " + outFile
-		// + "test.wig";
 	}
 
 	/**
@@ -542,13 +533,6 @@ public class RawToProfileConverter extends Executor {
 			throws ProcessException {
 		String bowTieParams = checkBowTieProcessors(parameters[0]);
 
-		// used to run remotely
-		// String[] bowTieParameters = parse("bowtie " + bowTieParams + " "
-		// + parameters[1] + " " + inFolder + "/" + fileOne + " " +
-		// remoteExecution+"resources/"+dir
-		// + fileOneName + ".sam");
-
-		// Ordinary
 		String[] bowTieParameters = parse("bowtie " + bowTieParams + " "
 				+ parameters[1] + " " + inFolder + "/" + fileOne + " " + dir
 				+ fileOneName + ".sam");
