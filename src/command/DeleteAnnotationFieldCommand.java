@@ -11,13 +11,18 @@ import response.Response;
 import response.StatusCode;
 
 /**
- * Class used to represent a logout command.
+ * Class used to handle removal on an existing annotation-field.
  *
- * @author tfy09jnn, Hugo Källström
- * @version 1.1
+ * @author Kommunikation/kontroll 2014.
+ * @version 1.0
  */
 public class DeleteAnnotationFieldCommand extends Command {
 
+	/**
+	 * Constructor that initiates the class.
+	 *
+	 * @param restful header to set.
+	 */
 	public DeleteAnnotationFieldCommand(String restful) {
 
 		header = restful;
@@ -50,7 +55,7 @@ public class DeleteAnnotationFieldCommand extends Command {
 	}
 
 	/**
-	 * Used to execute the logout command.
+	 * Used to execute the actual command.
 	 */
 	@Override
 	public Response execute() {

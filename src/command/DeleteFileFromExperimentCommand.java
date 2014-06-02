@@ -13,8 +13,8 @@ import response.StatusCode;
  * Class used to represent a command that is used to
  * delete a file from an experiment.
  *
- * @author tfy09jnn, Hugo Källström
- * @version 1.1
+ * @author Kommunikation/kontroll 2014.
+ * @version 1.0
  */
 public class DeleteFileFromExperimentCommand extends Command {
 

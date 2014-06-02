@@ -12,11 +12,23 @@ import response.MinimalResponse;
 
 import response.StatusCode;
 
+/**
+ * Class used to handle removal of annotation values.
+ *
+ * @author Kommunikation/kontroll 2014.
+ * @version 1.0
+ */
 public class DeleteAnnotationValueCommand extends Command {
 
 	private String name;
 	private String value;
 
+	/**
+	 * Constructor used to initiate the class.
+	 *
+	 * @param label on annotation that has the value.
+	 * @param value to delete.
+	 */
 	public DeleteAnnotationValueCommand(String name, String value) {
 
 		this.name = name;
@@ -50,6 +62,9 @@ public class DeleteAnnotationValueCommand extends Command {
 		return true;
 	}
 
+	/**
+	 * Method used to execute the actual command.
+	 */
 	@Override
 	public Response execute() {
 		DatabaseAccessor db = null;

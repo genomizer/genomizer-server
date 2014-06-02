@@ -13,8 +13,8 @@ import response.StatusCode;
 /**
  * Class used to represent a remove experiment command.
  *
- * @author tfy09jnn, Hugo Källström
- * @version 1.1
+ * @author Kommunikation/kontroll 2014.
+ * @version 1.0
  */
 public class DeleteExperimentCommand extends Command {
 

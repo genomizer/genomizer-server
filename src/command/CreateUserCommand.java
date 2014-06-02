@@ -16,11 +16,14 @@ import response.StatusCode;
 /**
  * Class used to represent a create user command.
  *
- * @author tfy09jnn
+ * @author Kommunikation/kontroll 2014.
  * @version 1.0
  */
 public class CreateUserCommand extends Command {
 
+	/* All attributes in this class are serialized with
+	 * a JSON string. This is done in CommandHandler.
+	 */
 	@Expose
 	private String username = null;
 
