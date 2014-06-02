@@ -162,7 +162,7 @@ public abstract class Executor {
 						if (!fileList[i].delete()) {
 							isOk = false;
 							System.out.println("Failed");
-							throw new ProcessException("Failed to delete file "+fileList[i].toString());
+							//throw new ProcessException("Failed to delete file "+fileList[i].toString());
 						}
 					}
 				}
@@ -171,7 +171,7 @@ public abstract class Executor {
 			if (!file.delete()) {
 				isOk = false;
 				System.out.println("Failed to delete directory");
-				throw new ProcessException("Failed to delete directory "+file.toString());
+				//throw new ProcessException("Failed to delete directory "+file.toString());
 			}
 		}
 		return isOk;
