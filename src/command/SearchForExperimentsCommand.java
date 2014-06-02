@@ -17,10 +17,10 @@ import response.SearchResponse;
 import response.StatusCode;
 
 /**
- * Class used to represent a command of the type Search.
+ * Class used to handle searching for an experiment.
  *
- * @author tfy09jnn, Hugo Källström
- * @version 1.1
+ * @author Kommunikation/kontroll 2014.
+ * @version 1.0
  */
 public class SearchForExperimentsCommand extends Command {
 
@@ -28,10 +28,13 @@ public class SearchForExperimentsCommand extends Command {
 
 	/**
 	 * Empty constructor.
-	 * @param params
+	 * 
+	 * @param annotations to set.
 	 */
 	public SearchForExperimentsCommand(String params) {
+		
 		annotations = params;
+		
 	}
 
 	/**
@@ -40,11 +43,15 @@ public class SearchForExperimentsCommand extends Command {
 	 */
 	@Override
 	public boolean validate() throws ValidateException {
+		
 		if (annotations == null || annotations.equals("")) {
+			
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify annotations to search for.");
+			
 		}
 
 		return true;
+		
 	}
 
 	/**
@@ -78,7 +85,15 @@ public class SearchForExperimentsCommand extends Command {
 		return response;
 	}
 
+	/**
+	 * Method used to get the annotations that is set.
+	 * 
+	 * @return the annotations string.
+	 */
 	public String getAnnotations() {
+		
 		return annotations;
+		
 	}
+	
 }
