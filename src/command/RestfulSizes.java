@@ -1,6 +1,13 @@
 package command;
 
+/**
+ * Class used to specify the RESTful-header information pieces.
+ *
+ * @author Kommunikation/kontroll 2014.
+ * @version 1.0
+ */
 public class RestfulSizes {
+
 	public static final int LOGIN_COMMAND = 1;
 	public static final int LOGOUT_COMMAND = 1;
 	public static final int GET_EXPERIMENT_COMMAND = 2;
@@ -31,4 +38,5 @@ public class RestfulSizes {
 	public static final int DELETE_GENOME_RELEASE_COMMAND = 3;
 	public static final int GET_ALL_GENOME_RELEASE_COMMAND = 1;
 	public static final int GET_GENOME_RELEASE_SPECIES_COMMAND = 2;
+
 }
