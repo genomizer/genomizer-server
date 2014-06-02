@@ -70,6 +70,8 @@ public class RawToProfileConverter extends Executor {
 	public String procedure(String[] parameters, String inFolder,
 			String outFilePath) throws ProcessException {
 
+		/*If you want to run several processes simultaneously, this would need to be changed*/
+		StartUpCleaner.removeOldTempDirectories("resources/");
 		File[] inFiles = null;
 
 		// Error handling
@@ -90,7 +92,7 @@ public class RawToProfileConverter extends Executor {
 //		if (parameters != null) {
 //			for (int i = 0; i < parameters.length; i++) {
 //				System.out.println("param " + i + ": " + parameters[i]);
-//			}
+//			}e
 //
 //			printStringArray(parameters);
 //		}
