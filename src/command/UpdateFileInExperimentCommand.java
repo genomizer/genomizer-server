@@ -1,9 +1,5 @@
 package command;
 
-import java.io.IOException;
-import java.sql.SQLException;
-
-import database.DatabaseAccessor;
 import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
@@ -32,19 +28,6 @@ public class UpdateFileInExperimentCommand extends Command {
 	 */
 	@Override
 	public Response execute() {
-
-		DatabaseAccessor db = null;
-
-		try {
-			db = initDB();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
 
 		//Method not implemented, send appropriate response
 		return 	new MinimalResponse(StatusCode.NO_CONTENT);

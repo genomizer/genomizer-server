@@ -3,8 +3,6 @@ package command;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.regex.Pattern;
-
 import response.AddAnnotationFieldResponse;
 import response.ErrorResponse;
 import response.Response;
