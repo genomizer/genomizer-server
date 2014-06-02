@@ -20,20 +20,28 @@ import response.StatusCode;
  * oldName must be an existing annotation label and
  * newName can't be the label of an existing annotation.
  *
- * @author ens10olm
- *
+ * @author Kommunikation/kontroll 2014.
+ * @version 1.0
  */
 public class EditAnnotationFieldCommand extends Command {
 
 	@Expose
 	private String oldName;
+
 	@Expose
 	private String newName;
 
+	/**
+	 * Empty constructor.
+	 */
 	public EditAnnotationFieldCommand() {
 
 	}
 
+	/**
+	 * Method used to validate the information that is needed
+	 * to execute the actual command.
+	 */
 	@Override
 	public boolean validate() throws ValidateException {
 		if (oldName == null) {
