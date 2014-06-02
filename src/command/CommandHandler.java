@@ -114,8 +114,6 @@ public class CommandHandler {
 			newCommand = cmdFactory.createDeleteFileFromExperimentCommand(json, parsedRest);
 		} else if (cmdt == CommandType.SEARCH_FOR_EXPERIMENTS_COMMAND && nrOfRestfuls == RestfulSizes.SEARCH_FOR_EXPERIMENTS_COMMAND) {
 			newCommand = cmdFactory.createSearchForExperimentCommand(parsedRest);
-		} else if (cmdt == CommandType.UPDATE_USER_COMMAND && nrOfRestfuls == RestfulSizes.UPDATE_USER_COMMAND) {
-			newCommand = cmdFactory.createUpdateUserCommand(json, parsedRest);
 		} else if (cmdt == CommandType.DELETE_USER_COMMAND && nrOfRestfuls == RestfulSizes.DELETE_USER_COMMAND) {
 			newCommand = cmdFactory.createDeleteUserCommand(parsedRest);
 		} else if (cmdt == CommandType.PROCESS_COMMAND && nrOfRestfuls == RestfulSizes.PROCESS_COMMAND) {
@@ -138,8 +136,6 @@ public class CommandHandler {
 			newCommand = cmdFactory.createGetAnnotationPrivilegesCommand(json);
 		} else if (cmdt == CommandType.UPDATE_ANNOTATION_PRIVILEGES_COMMAND && nrOfRestfuls == RestfulSizes.UPDATE_ANNOTATION_PRIVILEGES_COMMAND) {
 			newCommand = cmdFactory.createUpdateAnnotationPrivilegesCommand(json, parsedRest);
-		} else if (cmdt == CommandType.UPDATE_USER_PRIVILEGES_COMMAND && nrOfRestfuls == RestfulSizes.UPDATE_USER_PRIVILEGES_COMMAND) {
-			newCommand = cmdFactory.createUpdateUserPrivilegesCommand(json, parsedRest);
 		} else if (cmdt == CommandType.ADD_GENOME_RELEASE_COMMAND && nrOfRestfuls == RestfulSizes.ADD_GENOME_RELEASE_COMMAND) {
 			newCommand = cmdFactory.createAddGenomeReleaseCommand(json);
 		} else if (cmdt == CommandType.DELETE_GENOME_RELEASE_COMMAND && nrOfRestfuls == RestfulSizes.DELETE_GENOME_RELEASE_COMMAND) {

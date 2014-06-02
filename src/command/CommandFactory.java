@@ -171,19 +171,6 @@ public class CommandFactory {
 	}
 
 	/**
-	 * Used to create the command needed to update users.
-	 *
-	 * @param JSON string to initiate class.
-	 * @param restful information needed.
-	 * @return the actual command.
-	 */
-	public Command createUpdateUserCommand(String json, String restful) {
-
-		return new UpdateUserCommand();
-
-	}
-
-	/**
 	 * Used to create the command needed to create a new user.
 	 *
 	 * @param JSON string to initiate class.
@@ -308,21 +295,6 @@ public class CommandFactory {
 	public Command createUpdateAnnotationPrivilegesCommand(String json, String restful) {
 
 		return new UpdateAnnotationPrivilegesCommand();
-
-	}
-
-	/**
-	 * Used to create the command needed to update user privileges.
-	 *
-	 * @param JSON string to initiate class.
-	 * @param username to update privileges on.
-	 * @return the actual command.
-	 */
-	public Command createUpdateUserPrivilegesCommand(String json, String username) {
-
-		Command updateUserPrivilegesCommand = gson.fromJson(json, UpdateUserPrivilegesCommand.class);
-		((UpdateUserPrivilegesCommand)updateUserPrivilegesCommand).setUsername(username);
-		return updateUserPrivilegesCommand;
 
 	}
 
