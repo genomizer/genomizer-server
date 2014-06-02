@@ -3,33 +3,37 @@ package command;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.regex.Pattern;
-
 import response.Response;
 import server.ServerSettings;
-
 import database.DatabaseAccessor;
 
 /**
- * Class used to represent a command in the software.
+ * This class contains common methods and attributes that are needed
+ * to create a "command". A command should extend this class and represents
+ * a task that the server needs to execute.
  *
- * @author tfy09jnn
+ * @author Kommunikation/kontroll 2014.
  * @version 1.0
  */
 public abstract class Command {
 
-
+	//These are valid characters that are used with the validation method.
 	final protected String validCharacters = "^, A-Z, a-z, 0-9, space and _";
-	//Used to get the header for the response.
+
+	//This is used to store a RESTful-header.
 	protected String header;
 
-	//Method used to validate the class object.
+	/* This method is used to validates the object and its information.
+	 * The validate method should be called before the command is executed and
+	 * should be unique to each child.
+	 */
 	public abstract boolean validate() throws ValidateException;
 
-	//Method used to run command.
+	//Method used to execute the actual command.
 	public abstract Response execute();
 
 	/**
-	 * Method used to get the header.
+	 * Method used to get the RESTful-header.
 	 *
 	 * @return the header that is set.
 	 */
@@ -40,7 +44,7 @@ public abstract class Command {
 	}
 
 	/**
-	 * Method used to set the restful header.
+	 * Method used to set the RESTful-header.
 	 *
 	 * @param the header as a string.
 	 */
@@ -53,7 +57,7 @@ public abstract class Command {
 	/**
 	 * Method used to connect to the database.
 	 *
-	 * @return a database accessor class.
+	 * @return a database accessor object.
 	 * @throws SQLException
 	 * @throws IOException
 	 */
@@ -66,10 +70,19 @@ public abstract class Command {
 
 	}
 
-	public boolean hasOnlyValidCharacters(String s){
-		Pattern p = Pattern.compile("[^A-Za-z0-9 _]");
-		return !p.matcher(s).find();
-	}
+	/**
+	 * This method is used to validate a string and check if all
+	 * it's characters are valid.
+	 *
+	 * @param a String to validate.
+	 * @return boolean depending on validation result.
+	 */
+	public boolean hasOnlyValidCharacters(String s) {
 
+		Pattern p = Pattern.compile("[^A-Za-z0-9 _]");
+
+		return !p.matcher(s).find();
+
+	}
 
 }
