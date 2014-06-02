@@ -5,10 +5,13 @@ import com.google.gson.annotations.Expose;
 /**
  * Class used to store annotation.
  *
- * @author tfy09jnn, Hugo Källström
- * @version 1.1
+ * @author Kommunikation/kontroll 2014.
+ * @version 1.0
  */
 public class Annotation {
+	/* All attributes with @Expose are serialized in
+	 * with a JSON string.
+	 */
 
 	@Expose
 	private String name;

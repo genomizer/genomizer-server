@@ -17,10 +17,13 @@ import response.StatusCode;
 /**
  * Class used to handle adding a genome release.
  *
- * @author tfy09jnn
+ * @author Kommunikation/kontroll 2014.
  * @version 1.0
  */
 public class AddGenomeReleaseCommand extends Command {
+	/* All attributes with @Expose are serialized with
+	 * a JSON string.
+	 */
 
 	@Expose
 	private String genomeVersion = null;
@@ -32,7 +35,8 @@ public class AddGenomeReleaseCommand extends Command {
 	private ArrayList<String> files = new ArrayList<String>();
 
 	/**
-	 * Method used to validate the command.
+	 * Method used to validate the information needed in order to
+	 * execute the command properly.
 	 */
 	@Override
 	public boolean validate() throws ValidateException {
@@ -78,7 +82,7 @@ public class AddGenomeReleaseCommand extends Command {
 	}
 
 	/**
-	 * method used to execute the actual command.
+	 * Method used to execute the actual command.
 	 */
 	@Override
 	public Response execute() {
