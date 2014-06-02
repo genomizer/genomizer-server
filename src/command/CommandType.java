@@ -3,8 +3,8 @@ package command;
 /**
  * Enumeration class used to identify different commands.
  *
- * @author tfy09jnn
- * @version1.0
+ * @author Kommunikation/kontroll 2014.
+ * @version 1.0
  */
 public enum CommandType {
 

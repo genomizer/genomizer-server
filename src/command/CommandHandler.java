@@ -12,14 +12,15 @@ import server.WorkHandler;
 
 /**
  * Should be used to handle and create different commands with
- * JSON and restful.
+ * JSON and RESTful-header.
  *
- * @author tfy09jnn
+ * @author Kommunikation/kontroll 2014.
  * @version 1.0
  */
 public class CommandHandler {
 
 	private CommandFactory cmdFactory = new CommandFactory();
+	
 	//used to execute heavy work such as process commands execute
 	private WorkHandler heavyWorkThread = new WorkHandler();
 	/**
