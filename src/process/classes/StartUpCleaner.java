@@ -1,11 +1,16 @@
 package process.classes;
-
+/**
+ * Class that removes temporary processing directories. Should be called when the server is started.
+ */
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class StartUpCleaner {
-
+	/**
+	 * Static method that removes temporary processing directories in a specified directory.
+	 * @param dir The directory where the temporary directories can be found
+	 */
 	public static void removeOldTempDirectories(String dir) {
 		if (dir != null) {
 			File dirFile = new File(dir);
@@ -17,8 +22,9 @@ public class StartUpCleaner {
 						try {
 							System.out.println("Deleting temp directory " + file.getName());
 							delete(file);
-						} catch (IOException e) {
-						}
+
+						} catch (IOException e) {}
+
 
 					}
 

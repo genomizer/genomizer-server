@@ -10,7 +10,7 @@ import java.util.StringTokenizer;
 
 /**
  * Class that is abstract and contains methods that all analysis needs to use.
- * 
+ *
  * v 1.0
  */
 public abstract class Executor {
@@ -19,7 +19,7 @@ public abstract class Executor {
 
 	/**
 	 * Used to execute a program like bowtie
-	 * 
+	 *
 	 * @param command
 	 * @return
 	 * @throws InterruptedException
@@ -35,7 +35,7 @@ public abstract class Executor {
 
 	/**
 	 * Used to execute a script
-	 * 
+	 *
 	 * @param command
 	 * @return
 	 * @throws IOException
@@ -51,7 +51,7 @@ public abstract class Executor {
 
 	/**
 	 * Used to parse a string and make it into a String array
-	 * 
+	 *
 	 * @param procedureParameters
 	 * @return
 	 */
@@ -69,7 +69,7 @@ public abstract class Executor {
 
 	/**
 	 * Used to execute commands
-	 * 
+	 *
 	 * @param command
 	 * @return
 	 * @throws InterruptedException
@@ -100,8 +100,8 @@ public abstract class Executor {
 	}
 
 	/**
-	 * Used to execute shell command 
-	 * 
+	 * Used to execute shell command
+	 *
 	 * @param command
 	 * @param dir
 	 * @param fileName
@@ -144,10 +144,10 @@ public abstract class Executor {
 
 	/**
 	 * Removes a list of folders and their content.
-	 * 
+	 *
 	 * @param files
 	 * @return
-	 * @throws ProcessException 
+	 * @throws ProcessException
 	 */
 	protected boolean cleanUp(Stack<String> files) throws ProcessException {
 		boolean isOk = true;
@@ -162,7 +162,7 @@ public abstract class Executor {
 						if (!fileList[i].delete()) {
 							isOk = false;
 							System.out.println("Failed");
-							throw new ProcessException("Failed to delete file "+fileList[i].toString());
+							//throw new ProcessException("Failed to delete file "+fileList[i].toString());
 						}
 					}
 				}
@@ -171,7 +171,7 @@ public abstract class Executor {
 			if (!file.delete()) {
 				isOk = false;
 				System.out.println("Failed to delete directory");
-				throw new ProcessException("Failed to delete directory "+file.toString());
+				//throw new ProcessException("Failed to delete directory "+file.toString());
 			}
 		}
 		return isOk;
@@ -179,20 +179,26 @@ public abstract class Executor {
 
 	/**
 	 * Moves files from dirToFiles to dest.
-	 * 
+	 *
 	 * @param dirToFiles
 	 *            directory where files are.
 	 * @param dest
 	 *            directory where files will be moved.
+	 * @throws ProcessException
 	 */
-	protected void moveEndFiles(String dirToFiles, String dest) {
+
+	protected void moveEndFiles(String dirToFiles, String dest) throws ProcessException {
 
 		File[] filesInDir = new File(dirToFiles).getAbsoluteFile().listFiles();
 		if (filesInDir != null) {
-			for (int i = 0; i < filesInDir.length; i++) {
-				if (!filesInDir[i].isDirectory()) {
-					if (filesInDir[i].renameTo(new File(dest
-							+ filesInDir[i].getName())));
+			if(filesInDir.length == 0) {
+				throw new ProcessException("No files were generated. If you are running ratio calculation, make sure the name is correct");
+			} else {
+				for (int i = 0; i < filesInDir.length; i++) {
+					if (!filesInDir[i].isDirectory()) {
+						if (filesInDir[i].renameTo(new File(dest
+								+ filesInDir[i].getName())));
+					}
 				}
 
 			}
@@ -201,7 +207,7 @@ public abstract class Executor {
 
 	/**
 	 * Checks if a a analysis step is executed correctly and made a file.
-	 * 
+	 *
 	 * @param dirToCheck
 	 * @return
 	 */
