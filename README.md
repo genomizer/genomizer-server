@@ -1,5 +1,8 @@
 Genomizer Server
 ===================
+
+**WARNING, contains outdated information. For more recent information read the full documentation from https://github.com/genomizer/genomizer-documentation**
+
 This is the main repository for the server side of the Genomizer system. It is currently found
 at http://scratchy.cs.umu.se:7000.
 
