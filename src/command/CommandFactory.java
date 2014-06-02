@@ -6,10 +6,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 /**
- * Used to create and return different commands that
+ * This class is used to create and return different commands that
  * will be executed later by calling their execute() method.
  *
- * @author tfy09jnn
+ * @author Kommunikation/kontroll 2014.
  * @version 1.0
  */
 public class CommandFactory {
@@ -431,7 +431,7 @@ public class CommandFactory {
 	}
 
 	/**
-	 *
+	 * Used to check if a token is valid.
 	 *
 	 * @param a user ID.
 	 * @return the actual command.

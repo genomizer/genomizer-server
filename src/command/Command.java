@@ -16,6 +16,13 @@ import database.DatabaseAccessor;
  * @version 1.0
  */
 public abstract class Command {
+	/* When creating a new command, these steps needs to be followed:
+	 * 1. 	Create the command and extend this class.
+	 * 2. 	Create the method that builds the actual command in CommandFactory.
+	 * 3. 	Add a check for the command to be able to build it in CommandHandler.
+	 * 4. 	In the Doorman class, make sure that the new command is identified if the
+	 * 		server receives it so that it can be passed to the CommandHandler.
+	 */
 
 	//These are valid characters that are used with the validation method.
 	final protected String validCharacters = "^, A-Z, a-z, 0-9, space and _";
