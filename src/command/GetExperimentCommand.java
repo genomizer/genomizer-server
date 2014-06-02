@@ -13,8 +13,8 @@ import database.containers.Experiment;
 /**
  * Class used to retrieve an experiment.
  *
- * @author tfy09jnn, Hugo Källström
- * @version 1.1
+ * @author Kommunikation/kontroll 2014.
+ * @version 1.0
  */
 public class GetExperimentCommand extends Command {
 
@@ -53,6 +53,9 @@ public class GetExperimentCommand extends Command {
 
 	}
 
+	/**
+	 * Method used to execute the actual command.
+	 */
 	@Override
 	public Response execute() {
 
@@ -74,16 +77,22 @@ public class GetExperimentCommand extends Command {
 
 		db.close();
 
-	if(exp == null) {
-		return new ErrorResponse(StatusCode.BAD_REQUEST, "Experiment requested from database is null, not found or does not exist.");
+		if(exp == null) {
+			return new ErrorResponse(StatusCode.BAD_REQUEST, "Experiment requested from database is null, not found or does not exist.");
+		}
+		return new GetExperimentResponse(StatusCode.OK, getInfo(exp), exp.getAnnotations(), exp.getFiles());
 	}
-	return new GetExperimentResponse(StatusCode.OK, getInfo(exp), exp.getAnnotations(), exp.getFiles());
-}
 
-public ArrayList<String> getInfo(Experiment exp) {
-	ArrayList<String> info = new ArrayList<String>();
-	info.add(exp.getID());
-	return info;
-}
+	/**
+	 * Method used to get the information.
+	 *
+	 * @param an experiment object.
+	 * @return an arraylist with information.
+	 */
+	public ArrayList<String> getInfo(Experiment exp) {
+		ArrayList<String> info = new ArrayList<String>();
+		info.add(exp.getID());
+		return info;
+	}
 
 }

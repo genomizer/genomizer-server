@@ -5,9 +5,9 @@ import response.Response;
 import response.StatusCode;
 
 /**
- * Class used to represent a logout command.
+ * Class used to handle retrieving annotation privileges.
  *
- * @author tfy09jnn
+ * @author Kommunikation/kontroll 2014.
  * @version 1.0
  */
 public class GetAnnotationPrivilegesCommand extends Command {
@@ -34,7 +34,7 @@ public class GetAnnotationPrivilegesCommand extends Command {
 	}
 
 	/**
-	 * Used to execute the logout command.
+	 * Used to execute the actual command.
 	 */
 	@Override
 	public Response execute() {

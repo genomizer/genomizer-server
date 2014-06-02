@@ -15,6 +15,8 @@ import database.containers.Genome;
  * A command which is used to get all the genome versions
  * for a specific specie.
  *
+ * @author Kommunikation/kontroll 2014.
+ * @version 1.0
  */
 public class GetGenomeReleaseSpeciesCommand extends Command{
 
@@ -33,7 +35,8 @@ public class GetGenomeReleaseSpeciesCommand extends Command{
 	}
 
 	/**
-	 * Always true validation
+	 * Method used to validate the information needed
+	 * to execute the command.
 	 *
 	 * @return boolean depending on result.
 	 * @throws ValidateException

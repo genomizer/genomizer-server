@@ -13,7 +13,16 @@ import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
 
+/**
+ * This class is used to handle changes to annotation values.
+ *
+ * @author Kommunikation/kontroll 2014.
+ * @version 1.0
+ */
 public class EditAnnotationValueCommand extends Command {
+	/* All attributes with @Expose are serialized with a
+	 * JSON string.
+	 */
 
 	@Expose
 	String name;
@@ -24,8 +33,13 @@ public class EditAnnotationValueCommand extends Command {
 	@Expose
 	String newValue;
 
+	/**
+	 * Method used to validate the information needed to execute
+	 * the actual command.
+	 */
 	@Override
 	public boolean validate() throws ValidateException {
+
 		if(name == null) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify an annotation label.");
 		}
@@ -59,8 +73,12 @@ public class EditAnnotationValueCommand extends Command {
 		return true;
 	}
 
+	/**
+	 * Method used to execute the actual command.
+	 */
 	@Override
 	public Response execute() {
+
 		DatabaseAccessor db = null;
 
 		try {

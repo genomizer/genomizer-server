@@ -14,7 +14,7 @@ import response.StatusCode;
  * A command which is used to get all the genome versions
  * currently stored in the database. It takes no account of species.
  *
- * @author
+ * @author Kommunikation/kontroll 2014.
  * @version 1.0
  */
 

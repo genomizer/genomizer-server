@@ -12,8 +12,8 @@ import com.google.gson.annotations.Expose;
 /**
  * Class used to represent a command of the type GetFileFromExperimentCommand.
  *
- * @author tfy09jnn, hugokallstrom
- * @version 1.1
+ * @author Kommunikation/kontroll 2014.
+ * @version 1.0
  */
 public class GetFileFromExperimentCommand extends Command {
 

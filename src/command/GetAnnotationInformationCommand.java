@@ -15,7 +15,7 @@ import response.StatusCode;
 /**
  * Class used to get information about annotations.
  *
- * @author tfy09jnn
+ * @author Kommunikation/kontroll 2014.
  * @version 1.0
  */
 public class GetAnnotationInformationCommand extends Command {
@@ -40,6 +40,9 @@ public class GetAnnotationInformationCommand extends Command {
 
 	}
 
+	/**
+	 * Method used to execute the actual command.
+	 */
 	@Override
 	public Response execute() {
 
