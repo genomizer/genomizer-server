@@ -51,7 +51,7 @@ public class FileValidator {
 
 
 	public static boolean fileNameCheck(String fileName){
-		String regex = "^[\\w,\\s-\\.åäöÅÄÖ]+\\.[A-ZÅÄÖa-zåäö0-9]+$";
+		String regex = "^[\\w,\\s-\\.åäöÅÄÖ()]+\\.[A-ZÅÄÖa-zåäö0-9]+$";
 
 		return fileName.matches(regex);
 	}
