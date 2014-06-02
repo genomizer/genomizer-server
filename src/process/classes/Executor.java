@@ -11,6 +11,7 @@ import java.util.StringTokenizer;
 /**
  * Class that is abstract and contains methods that all analysis needs to use.
  *
+ * v 1.0
  */
 public abstract class Executor {
 
@@ -21,9 +22,8 @@ public abstract class Executor {
 	 *
 	 * @param command
 	 * @return
-	 * @throws IOException
 	 * @throws InterruptedException
-	 * @throws ProcessException
+	 * @throws IOException
 	 */
 	protected String executeProgram(String[] command)
 			throws InterruptedException, IOException {
@@ -58,13 +58,13 @@ public abstract class Executor {
 	protected String[] parse(String procedureParameters) {
 		StringTokenizer paramTokenizer = new StringTokenizer(
 				procedureParameters);
-		String[] temp = new String[paramTokenizer.countTokens()];
+		String[] parsedString = new String[paramTokenizer.countTokens()];
 		int i = 0;
 		while (paramTokenizer.hasMoreTokens()) {
-			temp[i] = paramTokenizer.nextToken();
+			parsedString[i] = paramTokenizer.nextToken();
 			i++;
 		}
-		return temp;
+		return parsedString;
 	}
 
 	/**
@@ -100,7 +100,7 @@ public abstract class Executor {
 	}
 
 	/**
-	 * Used to execute shell command <<<<<<< HEAD
+	 * Used to execute shell command
 	 *
 	 * @param command
 	 * @param dir
@@ -143,24 +143,13 @@ public abstract class Executor {
 	}
 
 	/**
-	 * Used to make a File object which represents a folder.
-	 *
-	 * @param dirName
-	 * @return
-	 */
-	protected File cleanUpInitiator(String dirName) {
-
-		return new File(dirName.substring(0, dirName.length() - 1));
-
-	}
-
-	/**
 	 * Removes a list of folders and their content.
 	 *
 	 * @param files
 	 * @return
+	 * @throws ProcessException
 	 */
-	protected boolean cleanUp(Stack<String> files) {
+	protected boolean cleanUp(Stack<String> files) throws ProcessException {
 		boolean isOk = true;
 		while (!files.isEmpty()) {
 			File file = new File(files.pop());
@@ -173,8 +162,7 @@ public abstract class Executor {
 						if (!fileList[i].delete()) {
 							isOk = false;
 							System.out.println("Failed");
-							// TODO Throw exception
-							// throw new ProcessException("");
+							//throw new ProcessException("Failed to delete file "+fileList[i].toString());
 						}
 					}
 				}
@@ -183,6 +171,7 @@ public abstract class Executor {
 			if (!file.delete()) {
 				isOk = false;
 				System.out.println("Failed to delete directory");
+				//throw new ProcessException("Failed to delete directory "+file.toString());
 			}
 		}
 		return isOk;
@@ -192,26 +181,29 @@ public abstract class Executor {
 	 * Moves files from dirToFiles to dest.
 	 *
 	 * @param dirToFiles
-	 *            directory where files are
+	 *            directory where files are.
 	 * @param dest
 	 *            directory where files will be moved.
+	 * @throws ProcessException
 	 */
-	protected void moveEndFiles(String dirToFiles, String dest) {
+	protected void moveEndFiles(String dirToFiles, String dest) throws ProcessException {
 		File[] filesInDir = new File(dirToFiles).getAbsoluteFile().listFiles();
 		if (filesInDir != null) {
-			for (int i = 0; i < filesInDir.length; i++) {
-				if (!filesInDir[i].isDirectory()) {
-					if (filesInDir[i].renameTo(new File(dest
-							+ filesInDir[i].getName())))
-						;
+			if(filesInDir.length == 0) {
+				throw new ProcessException("No files were generated. If you are running ratio calculation, make sure the name is correct");
+			} else {
+				for (int i = 0; i < filesInDir.length; i++) {
+					if (!filesInDir[i].isDirectory()) {
+						if (filesInDir[i].renameTo(new File(dest
+								+ filesInDir[i].getName())));
+					}
 				}
 			}
 		}
 	}
 
-
 	/**
-	 * Checks if a a anlasysis step is executed correctly and made a file.
+	 * Checks if a a analysis step is executed correctly and made a file.
 	 *
 	 * @param dirToCheck
 	 * @return
@@ -223,14 +215,11 @@ public abstract class Executor {
 
 		if (filesInDir == null) {
 			return false;
-		}
-		else if (filesInDir.length == 0) {
+		} else if (filesInDir.length == 0) {
 			return false;
-		}
-		else if (filesInDir.length == 1 && filesInDir[0].isDirectory()) {
+		} else if (filesInDir.length == 1 && filesInDir[0].isDirectory()) {
 			return false;
-		}
-		else if (filesInDir.length >= 1) {
+		} else if (filesInDir.length >= 1) {
 			for (int i = 0; i < filesInDir.length; i++) {
 				if (!filesInDir[i].isDirectory()) {
 					if (filesInDir[i].length() == 0) {

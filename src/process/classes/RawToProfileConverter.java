@@ -7,6 +7,8 @@ import java.util.Stack;
 
 /**
  * Class used to create profile data from .fastq format.
+ * Can run a dynamic number of steps depending of which parameters thats sent
+ * from the clients.
  *
  * @version 1.0
  */
@@ -31,6 +33,9 @@ public class RawToProfileConverter extends Executor {
 	private Stack<String> toBeRemoved;
 	private String sortedDirForFile;
 
+	/**
+	 * Constructor that initializes some datastructures used by the class.
+	 */
 	public RawToProfileConverter() {
 		super();
 		toBeRemoved = new Stack<String>();
@@ -39,15 +44,18 @@ public class RawToProfileConverter extends Executor {
 	}
 
 	/**
-	 * Takes a string array that contains bowtie parameters and then follows a
-	 * procedure.
+	 * 1. runs the bowtie program to get a .sam file.
+	 * 2. runs a linux shell command to sort the sam file.
+	 * 3. runs a perl script that creates a .ggf file from the sam file.
+	 * 4. runs a perl script that creates a .sgr file from the .gff file.
+	 * 6. runs a converted method of the smoothing and stepping scripts.
+	 * 7. runs a perl script that converts the .sgr file to .wig file.
+	 * 8. runs a perl script that does ratio calculation on the files, also runs
+	 * smoothing on these files.
 	 *
-	 * 1. runs the bowtie program to get a .sam file. 2. runs a linux shell
-	 * command to sort the sam file. 3. runs a perl script that creates a .ggf
-	 * file from the sam file. 4. runs a perl script that creates a .sgr file
-	 * from the .gff file. 5. runs a perl script to smooth the .sgr file. 6.
-	 * runs a perl script to convert the .sgr file to a .sgr with fixed size. 7.
-	 * runs a perl script that converts the .sgr file to .wig file.
+	 * All these steps have to be run in order but the clients can specify how
+	 * many steps they want to run by sending parameters for the steps
+	 * they want to run.
 	 *
 	 *
 	 *
@@ -61,7 +69,12 @@ public class RawToProfileConverter extends Executor {
 	 */
 	public String procedure(String[] parameters, String inFolder,
 			String outFilePath) throws ProcessException {
+
+		/*If you want to run several processes simultaneously, this would need to be changed*/
+		StartUpCleaner.removeOldTempDirectories("resources/");
 		File[] inFiles = null;
+
+		// Error handling
 		if (inFolder != null) {
 			inFolder = validateInFolder(inFolder);
 			inFiles = getRawFiles(inFolder);
@@ -76,23 +89,27 @@ public class RawToProfileConverter extends Executor {
 		this.parameters = parameters;
 		this.inFolder = inFolder;
 
-		if (parameters != null) {
-			for (int i = 0; i < parameters.length; i++) {
-				System.out.println("param " + i + ": " + parameters[i]);
-			}
+//		if (parameters != null) {
+//			for (int i = 0; i < parameters.length; i++) {
+//				System.out.println("param " + i + ": " + parameters[i]);
+//			}e
+//
+//			printStringArray(parameters);
+//		}
 
-			printStringArray(parameters);
-		}
-
+		// Checks all parameters that they are correct before proceeding
 		if (verifyInData(parameters, inFolder, outFilePath) == false
 				|| !CorrectInfiles(inFiles)) {
 			throw new ProcessException("Wrong format of input data");
-		} else {
+		}
+		// Runs the procedure.
+		else {
 			initiateConversionStrings(parameters, outFilePath);
 			makeConversionDirectories(remoteExecution + "resources/" + dir
 					+ "/sorted");
 			checker.calculateWhichProcessesToRun(parameters);
 			ValidateParameters(parameters);
+
 			rawFile1 = inFiles[0].getName();
 			rawFile_1_Name = rawFile1.substring(0, rawFile1.length() - 6);
 			if (inFiles.length == 2) {
@@ -104,14 +121,13 @@ public class RawToProfileConverter extends Executor {
 
 			// printTrace(parameters, inFolder, outFilePath);
 			if (fileDir.exists()) {
-
+				//Runs bowtie on files. and sorts them.
 				if (checker.shouldRunBowTie()) {
 					System.out.println("Running Bowtie");
 					logString = runBowTie(rawFile1, rawFile_1_Name);
 					System.out.println(logString);
 
 					checkBowTieFile("resources/" + dir + rawFile_1_Name
-
 					+ ".sam", rawFile_1_Name);
 
 					System.out.println("Running SortSam");
@@ -132,16 +148,12 @@ public class RawToProfileConverter extends Executor {
 					toBeRemoved.push(filesToBeMoved);
 				}
 
+				// Runs SamToGff script on files
 				if (checker.shouldRunSamToGff()) {
 					System.out.println("Running SamToGff");
 					try {
 						logString = logString + "\n"
 								+ executeScript(parse(samToGff));
-
-						// if (!checkStep(sortedDirForCommands)) {
-						// cleanUp(toBeRemoved);
-						// throw new ProcessException("SamToGff failed");
-						// }
 
 					} catch (InterruptedException e) {
 						throw new ProcessException(
@@ -154,6 +166,7 @@ public class RawToProfileConverter extends Executor {
 					toBeRemoved.push(filesToBeMoved);
 				}
 
+				// Runs GffToAllnucsgr on files.
 				if (checker.shouldRunGffToAllnusgr()) {
 					System.out.println("Running gffToAllnucsgr");
 					try {
@@ -171,12 +184,12 @@ public class RawToProfileConverter extends Executor {
 					toBeRemoved.push(filesToBeMoved);
 				}
 
+				// Runs smoothing on files.
 				if (checker.shouldRunSmoothing()) {
 					System.out.println("Running Smoothing");
 
 					// Second parameter should be false when ratio
 					// calculation should not run.
-
 					runSmoothing(parameters, false);
 
 					filesToBeMoved = sortedDirForFile
@@ -184,6 +197,7 @@ public class RawToProfileConverter extends Executor {
 					toBeRemoved.push(filesToBeMoved);
 				}
 
+				// Runs Ratio calculation on files.
 				if (checker.shouldRunRatioCalc()) {
 					System.out.println("Running ratio calculation");
 
@@ -198,9 +212,12 @@ public class RawToProfileConverter extends Executor {
 							+ "reads_gff/allnucs_sgr/smoothed/ratios/smoothed/";
 					toBeRemoved.push(filesToBeMoved);
 				}
-
-				moveEndFiles(filesToBeMoved, outFilePath);
-
+				try {
+					moveEndFiles(filesToBeMoved, outFilePath);
+				} catch (ProcessException e) {
+					cleanUp(toBeRemoved);
+					throw e;
+				}
 				cleanUp(toBeRemoved);
 
 			} else {
@@ -209,10 +226,17 @@ public class RawToProfileConverter extends Executor {
 						+ fileDir.toString();
 			}
 		}
-		// System.out.println("logString = " + logString);
 		return logString;
 	}
 
+	/**
+	 * Gets all files from the folder, throws a ProcessException if there is no
+	 * files in the directory.
+	 *
+	 * @param inFolder
+	 * @return
+	 * @throws ProcessException
+	 */
 	private File[] getRawFiles(String inFolder) throws ProcessException {
 
 		File[] rawDirFiles = new File(inFolder).listFiles();
@@ -241,6 +265,13 @@ public class RawToProfileConverter extends Executor {
 		return rawFilesIsFile;
 	}
 
+	/**
+	 * Validates parameters.
+	 *
+	 * @param parameters
+	 * @return
+	 * @throws ProcessException
+	 */
 	private boolean ValidateParameters(String[] parameters)
 			throws ProcessException {
 		boolean isOk = true;
@@ -256,10 +287,6 @@ public class RawToProfileConverter extends Executor {
 						parameters[7])) {
 			isOk = false;
 		}
-		// if(checker.shouldRunRatioCalc() &&
-		// !validator.validateSmoothing(parameters[7])) {
-		// isOk = false;
-		// }
 
 		return isOk;
 	}
@@ -322,19 +349,19 @@ public class RawToProfileConverter extends Executor {
 		int stepSize = 0;
 
 		File[] filesToSmooth;
-		File file;
+		File dirToFiles;
 		if (isRatioCalc) {
 			parameterArray = parse(parameters[7]);
 			stepSize = 1;
 			filesToSmooth = new File(sortedDirForFile
 					+ "reads_gff/allnucs_sgr/smoothed/ratios").listFiles();
-			file = new File(sortedDirForFile
+			dirToFiles = new File(sortedDirForFile
 					+ "reads_gff/allnucs_sgr/smoothed/ratios/smoothed");
 
 		} else {
 			filesToSmooth = new File(sortedDirForFile + "reads_gff/allnucs_sgr")
 					.listFiles();
-			file = new File(sortedDirForFile + "reads_gff/allnucs_sgr/smoothed");
+			dirToFiles = new File(sortedDirForFile + "reads_gff/allnucs_sgr/smoothed");
 			if (parameters[6].equals("")) {
 				stepSize = 1;
 			} else {
@@ -359,8 +386,8 @@ public class RawToProfileConverter extends Executor {
 			}
 		}
 
-		if (!file.exists()) {
-			file.mkdirs();
+		if (!dirToFiles.exists()) {
+			dirToFiles.mkdirs();
 		}
 
 		SmoothingAndStep smooth = new SmoothingAndStep();
@@ -384,7 +411,7 @@ public class RawToProfileConverter extends Executor {
 					} else {
 						outFile = outFile + ".sgr";
 					}
-					outFile = file.toString() + "/" + outFile;
+					outFile = dirToFiles.toString() + "/" + outFile;
 
 					smooth.smoothing(intParams, inFile, outFile, stepSize);
 				}
@@ -489,15 +516,6 @@ public class RawToProfileConverter extends Executor {
 		samToGff = "perl sam_to_readsgff_v1.pl " + sortedDirForCommands;
 		gffToAllnusgr = "perl readsgff_to_allnucsgr_v1.pl "
 				+ sortedDirForCommands + "reads_gff/";
-		// step10 = "perl AllSeqRegSGRtoPositionSGR_v1.pl " + parameters[3] +
-		// " " * @throws ProcessException
-
-		// + sortedDir + "reads_gff/allnucs_sgr/smoothed/"; // Step 6
-		// smooth = "perl smooth_v4.pl " + sortedDir + "reads_gff/allnucs_sgr/ "
-		// + parameters[2]; // Step 5
-		// sgr2wig = "perl sgr2wig.pl " + sortedDir
-		// + "/reads_gff/allnucs_sgr/smoothed/Step10/*.sgr " + outFile
-		// + "test.wig";
 	}
 
 	/**
@@ -517,13 +535,6 @@ public class RawToProfileConverter extends Executor {
 			throws ProcessException {
 		String bowTieParams = checkBowTieProcessors(parameters[0]);
 
-		// used to run remotely
-		// String[] bowTieParameters = parse("bowtie " + bowTieParams + " "
-		// + parameters[1] + " " + inFolder + "/" + fileOne + " " +
-		// remoteExecution+"resources/"+dir
-		// + fileOneName + ".sam");
-
-		// Ordinary
 		String[] bowTieParameters = parse("bowtie " + bowTieParams + " "
 				+ parameters[1] + " " + inFolder + "/" + fileOne + " " + dir
 				+ fileOneName + ".sam");

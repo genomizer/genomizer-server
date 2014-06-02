@@ -1,35 +1,28 @@
 package process.classes;
-
+/**
+ * Class that removes temporary processing directories. Should be called when the server is started.
+ */
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-
-public class StartUpCleaner{
-	private String resDir = "resources/";
-	private StartUpCleaner() {
-
-	}
-
-
-	public static StartUpCleaner startUpCleanerFactory() {
-		return new StartUpCleaner();
-	}
-
-	public void removeOldTempDirectories(String dir) {
-		if(dir != null) {
-			System.out.println("dir var inte null");
+public class StartUpCleaner {
+	/**
+	 * Static method that removes temporary processing directories in a specified directory.
+	 * @param dir The directory where the temporary directories can be found
+	 */
+	public static void removeOldTempDirectories(String dir) {
+		if (dir != null) {
 			File dirFile = new File(dir);
-			if(dirFile.isDirectory()) {
+			if (dirFile.isDirectory()) {
 				File[] listOfFiles = dirFile.listFiles();
 				for (File file : listOfFiles) {
 					System.out.println(file.toString());
-					if(file.getName().startsWith("results_") && file.isDirectory()) {
-								try {
-									delete(file);
-								} catch (IOException e) {
-									System.out.println("IO");
-								}
+					if (file.getName().startsWith("results_")
+							&& file.isDirectory()) {
+						try {
+							delete(file);
+						} catch (IOException e) {}
 
 					}
 
@@ -39,16 +32,15 @@ public class StartUpCleaner{
 
 	}
 
-
-	private void delete(File f) throws IOException {
-		  if (f.isDirectory()) {
-			    for (File c : f.listFiles()) {
-			    	delete(c);
-			    }
-			    f.delete();
-		  } else {
-			  f.delete();
-		  }
+	private static void delete(File f) throws IOException {
+		if (f.isDirectory()) {
+			for (File c : f.listFiles()) {
+				delete(c);
+			}
+			f.delete();
+		} else {
+			f.delete();
+		}
 
 	}
 }

@@ -159,13 +159,17 @@ public class FileMethods {
 
         for (FileTuple ft : e.getFiles()) {
 
-            if (metaData == null && ft.metaData == null) {
-                return ft;
-            }
+            if (ft.type.equalsIgnoreCase("profile")) {
 
-            if (ft.metaData != null) {
-                if (ft.type.equalsIgnoreCase("profile") && ft.metaData.equals(metaData)) {
+                if (metaData == null && ft.metaData == null) {
                     return ft;
+                }
+
+                if (ft.metaData != null) {
+                    if (ft.type.equalsIgnoreCase("profile")
+                            && ft.metaData.equals(metaData)) {
+                        return ft;
+                    }
                 }
             }
 
