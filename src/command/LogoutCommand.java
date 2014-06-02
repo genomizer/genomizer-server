@@ -9,7 +9,7 @@ import response.StatusCode;
 /**
  * Class used to represent a logout command.
  *
- * @author tfy09jnn
+ * @author Kommunikation/kontroll 2014.
  * @version 1.0
  */
 public class LogoutCommand extends Command {

@@ -5,15 +5,16 @@ import response.Response;
 import response.StatusCode;
 
 /**
- * Class used to represent a logout command.
+ * Class used to handle updateing files in experiments.
  *
- * @author tfy09jnn
+ * @author Kommunikation/kontroll 2014.
  * @version 1.0
  */
 public class UpdateFileInExperimentCommand extends Command {
 
 	/**
-	 * Used to validate the logout command.
+	 * Method used to validate the information needed
+	 * to execute the command.
 	 */
 	@Override
 	public boolean validate() {
@@ -24,7 +25,7 @@ public class UpdateFileInExperimentCommand extends Command {
 	}
 
 	/**
-	 * Used to execute the logout command.
+	 * Used to execute the actual command.
 	 */
 	@Override
 	public Response execute() {
