@@ -1,5 +1,9 @@
 package process.classes;
-
+/**
+ * Class used to validate and calculate the string representation of smoothing parameters.
+ * @author c11oan
+ *
+ */
 public class SmoothingParameterChecker {
 	private String windowSize;
 	private String minProbe;
@@ -56,19 +60,31 @@ public class SmoothingParameterChecker {
 		}
 		return smooth;
 	}
-
+	/**
+	 * A method that returns the string representation of window size.
+	 * @return
+	 */
 	public String getWindowSize() {
 		return windowSize;
 	}
-
+	/**
+	 * A method that returns the string representation of minimum probe.
+	 * @return
+	 */
 	public String getMinProbe() {
 		return minProbe;
 	}
-
+	/**
+	 * A method that returns the string representation of smooth type.
+	 * @return
+	 */
 	public String getSmoothType() {
 		return smoothType;
 	}
-
+	/**
+	 * A method that is used to check if the smoothing/stepping parameters were in a correct format.
+	 * @return
+	 */
 	public boolean checkSmoothParams() {
 		return parametersCorrect;
 	}

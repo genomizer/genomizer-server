@@ -18,12 +18,16 @@ public class GetGenomeReleaseRespons extends Response {
 		this.code=code;
 		this.genomeReleases=genomeReleases;
 
+
+
 		arr = new JsonArray();
 		Gson gson = new GsonBuilder().create();
 
-		for(int i =0; i<genomeReleases.size();i++){
-			JsonElement elem = gson.toJsonTree(genomeReleases.get(i), Genome.class);
-			arr.add(elem);
+		if(genomeReleases != null){
+			for(int i =0; i<genomeReleases.size();i++){
+				JsonElement elem = gson.toJsonTree(genomeReleases.get(i), Genome.class);
+				arr.add(elem);
+			}
 		}
 	}
 
