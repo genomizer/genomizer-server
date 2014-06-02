@@ -10,9 +10,9 @@ import authentication.LoginAttempt;
 import com.google.gson.annotations.Expose;
 
 /**
- * Command used for login.
+ * This class is used to handle user login.
  *
- * @author tfy09jnn
+ * @author Kommunikation/kontroll 2014.
  * @version 1.0
  */
 public class LoginCommand extends Command {
@@ -30,6 +30,10 @@ public class LoginCommand extends Command {
 
 	}
 
+	/**
+	 * Method used to validate the information needed in order
+	 * to execute the command.
+	 */
 	@Override
 	public boolean validate() throws ValidateException {
 
@@ -50,6 +54,9 @@ public class LoginCommand extends Command {
 		return true;
 	}
 
+	/**
+	 * Method used to execute the actual command.
+	 */
 	@Override
 	public Response execute() {
 
