@@ -13,13 +13,17 @@ import response.Response;
 import response.StatusCode;
 
 /**
- * Class used to represent a logout command.
+ * Class used to handle the process of adding annotation
+ * values.
  *
- * @author tfy09jnn, Hugo Källström
- * @version 1.2
+ * @author Kommunikation/kontroll 2014.
+ * @version 1.0
  */
 public class AddAnnotationValueCommand extends Command {
-
+	/* All attributes with @Expose are serialized with a
+	 * JSON string. This is done in CommandFactory.
+	 */
+	
 	@Expose
 	private String name;
 
@@ -27,11 +31,11 @@ public class AddAnnotationValueCommand extends Command {
 	private String value;
 
 	/**
-	 * Used to validate the logout command.
+	 * Used to validate the information needed to execute the
+	 * the actual command.
 	 */
 	@Override
-	public boolean validate() throws ValidateException{
-
+	public boolean validate() throws ValidateException {
 
 		if(value == null) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify an annotation value.");
@@ -57,7 +61,7 @@ public class AddAnnotationValueCommand extends Command {
 	}
 
 	/**
-	 * Used to execute the logout command.
+	 * Used to execute the actual command.
 	 */
 	@Override
 	public Response execute() {
