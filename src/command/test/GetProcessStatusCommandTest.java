@@ -1,6 +1,5 @@
 package command.test;
 
-import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -29,8 +28,6 @@ import server.test.ProcessCommandMock;
 public class GetProcessStatusCommandTest {
 
 	private static WorkHandler workHandler = new WorkHandler();
-	private ProcessCommand com;
-	private ProcessStatus stat;
 
 	private ProcessCommand makeCmd(String author, String metadata, String genomeVersion, String expId) {
 		JsonObject comInfo = new JsonObject();
