@@ -3,27 +3,23 @@ package command;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.text.ParseException;
 import java.util.List;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.annotations.Expose;
 import java.net.URLDecoder;
 
 import database.DatabaseAccessor;
-import database.Experiment;
+import database.containers.Experiment;
 
-import response.MinimalResponse;
+import response.ErrorResponse;
 import response.Response;
 import response.SearchResponse;
 import response.StatusCode;
-import server.DatabaseSettings;
 
 /**
- * Class used to represent a command of the type Search.
+ * Class used to handle searching for an experiment.
  *
- * @author tfy09jnn
+ * @author Kommunikation/kontroll 2014.
  * @version 1.0
  */
 public class SearchForExperimentsCommand extends Command {
@@ -32,10 +28,13 @@ public class SearchForExperimentsCommand extends Command {
 
 	/**
 	 * Empty constructor.
-	 * @param params
+	 * 
+	 * @param annotations to set.
 	 */
 	public SearchForExperimentsCommand(String params) {
+		
 		annotations = params;
+		
 	}
 
 	/**
@@ -43,11 +42,16 @@ public class SearchForExperimentsCommand extends Command {
 	 * class when built.
 	 */
 	@Override
-	public boolean validate() {
-		if (annotations == null) {
-			return false;
+	public boolean validate() throws ValidateException {
+		
+		if (annotations == null || annotations.equals("")) {
+			
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify annotations to search for.");
+			
 		}
+
 		return true;
+		
 	}
 
 	/**
@@ -64,26 +68,32 @@ public class SearchForExperimentsCommand extends Command {
 			annotations = URLDecoder.decode(annotations, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
-			return new MinimalResponse(StatusCode.BAD_REQUEST);
+			return new ErrorResponse(StatusCode.BAD_REQUEST, "Bad encoding on search query.");
 		}
 
 		try {
-			System.out.println("anno:" + annotations);
-			db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
+			db = initDB();
 			searchResult = db.search(annotations);
-		} catch (SQLException e) {
-			return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return new MinimalResponse(StatusCode.BAD_REQUEST);
+		} catch (SQLException | IOException e) {
+			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, e.getMessage());
+		} catch (ParseException e) {
+			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
+		} finally {
+			db.close();
 		}
-
 		SearchResponse response = new SearchResponse(searchResult);
-
 		return response;
 	}
 
+	/**
+	 * Method used to get the annotations that is set.
+	 * 
+	 * @return the annotations string.
+	 */
 	public String getAnnotations() {
+		
 		return annotations;
+		
 	}
+	
 }

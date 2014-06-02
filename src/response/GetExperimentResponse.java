@@ -1,7 +1,6 @@
 package response;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,16 +11,17 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import database.FileTuple;
+import database.containers.FileTuple;
 
 public class GetExperimentResponse extends Response {
 
-	public GetExperimentResponse(ArrayList<String> info, Map<String, String> annotations, List<FileTuple> list, int code) {
+	JsonObject obj;
+
+	public GetExperimentResponse(int code, ArrayList<String> info, Map<String, String> annotations, List<FileTuple> list) {
 		this.code = code;
 
-		JsonObject obj = new JsonObject();
-		obj.addProperty("name", "testExp");
-		obj.addProperty("createdBy", "hugga");
+		obj = new JsonObject();
+		obj.addProperty("name", info.get(0));
 		JsonArray fileArray = new JsonArray();
 		for (FileTuple ft: list) {
 			GsonBuilder gsonBuilder = new GsonBuilder();
@@ -42,5 +42,10 @@ public class GetExperimentResponse extends Response {
 		}
 
 		obj.add("annotations", annotationArray);
+	}
+
+	@Override
+	public String getBody() {
+		return obj.toString();
 	}
 }

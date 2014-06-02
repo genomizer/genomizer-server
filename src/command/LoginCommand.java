@@ -1,14 +1,18 @@
 package command;
+import response.ErrorResponse;
 import response.LoginResponse;
 import response.Response;
+import response.StatusCode;
+import server.Debug;
 import authentication.Authenticate;
+import authentication.LoginAttempt;
 
 import com.google.gson.annotations.Expose;
 
 /**
- * Command used for login.
+ * This class is used to handle user login.
  *
- * @author tfy09jnn
+ * @author Kommunikation/kontroll 2014.
  * @version 1.0
  */
 public class LoginCommand extends Command {
@@ -19,10 +23,6 @@ public class LoginCommand extends Command {
 	@Expose
 	private String password;
 
-	/* This class responds on success only
-	 * with header = 200 (OK).
-	 * It handles both login/logut (if needed)
-	 */
 	/**
 	 * Empty constructor.
 	 */
@@ -30,38 +30,45 @@ public class LoginCommand extends Command {
 
 	}
 
+	/**
+	 * Method used to validate the information needed in order
+	 * to execute the command.
+	 */
 	@Override
-	public boolean validate() {
+	public boolean validate() throws ValidateException {
 
-		if(username ==null || password==null){
-			return false;
-		}else if(username.length()<1 || password.length()<4){
-			return false;
+		if(username == null || password == null) {
+
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Username and/or password was missing.");
+
+		} else if(username.length() < 1 || username.length() > database.constants.MaxSize.USERNAME) {
+
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Username has to be between 1 and "+database.constants.MaxSize.PASSWORD+" characters long.");
+
+		} else if(password.length() < 1 || password.length() > database.constants.MaxSize.PASSWORD) {
+
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Password has to be between 1 and "+database.constants.MaxSize.PASSWORD+" characters long.");
+
 		}
-		return true;
 
+		return true;
 	}
 
+	/**
+	 * Method used to execute the actual command.
+	 */
 	@Override
 	public Response execute() {
 
-		Response rsp;
+		LoginAttempt login = Authenticate.login(username, password);
 
-		if(Authenticate.userExists(username)){
-		//bugg if username is exactly the same as the UUID
-			System.out.println("USER ALREADY EXISTS, SENDS UUID ONCE MORE.");
-			rsp = new LoginResponse(200, Authenticate.getID(username));
-		}else{
-			String usrId = Authenticate.createUserID(username);
-
-			Authenticate.addUser(username,usrId);
-			System.out.println("USER CREATED.");
-			rsp = new LoginResponse(200, usrId);
+		if(login.wasSuccessful()) {
+			Debug.log("LOGIN WAS SUCCESSFUL FOR: "+ username + ". GAVE UUID: " + Authenticate.getID(username));
+			return new LoginResponse(200, login.getUUID());
+		} else {
+			Debug.log("LOGIN WAS UNSUCCESSFUL FOR: " + username + ". REASON: " + login.getErrorMessage());
+			return new ErrorResponse(StatusCode.UNAUTHORIZED, login.getErrorMessage());
 		}
-			// TODO Auto-generated method stub
-
-
-		return rsp;
 	}
 
 }

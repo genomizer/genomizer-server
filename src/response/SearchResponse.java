@@ -10,8 +10,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import database.Experiment;
-import database.FileTuple;
+import database.containers.Experiment;
+import database.containers.FileTuple;
 
 public class SearchResponse extends Response {
 
@@ -24,8 +24,6 @@ public class SearchResponse extends Response {
 		for (Experiment exp : searchResult) {
 			JsonObject expJson = new JsonObject();
 			expJson.addProperty("name", exp.getID());
-			expJson.addProperty("created by", "");
-
 
 			JsonArray files = new JsonArray();
 			for (FileTuple tup : exp.getFiles()) {

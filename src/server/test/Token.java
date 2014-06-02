@@ -4,10 +4,9 @@ import com.google.gson.annotations.Expose;
 
 public class Token {
 
-	@Expose
-	private String token;
+	@Expose public String token;
 
-	public String getToken() {
+	 public String getToken() {
 		return token;
 	}
 }

@@ -1,207 +1,350 @@
 package command;
 
+/**
+ * @author Robin Ödling - c11rog
+ */
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.Map.Entry;
 
+import process.classes.ProcessException;
 import process.classes.ProcessHandler;
+import response.ErrorResponse;
 import response.ProcessResponse;
 import response.Response;
 import response.StatusCode;
-import server.DatabaseSettings;
+import server.ServerSettings;
+import server.Debug;
+import server.ErrorLogger;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.annotations.Expose;
-import database.*;
+
+import database.DatabaseAccessor;
+import database.containers.Genome;
+import database.constants.CanBeNull;
+import database.constants.MaxSize;
 
 public class ProcessCommand extends Command {
 
 	private String username;
 
+	private long timestamp;
+
+	private String processtype;
+
+	private Entry<String,String> filepaths;
+
 	//Following fields corresponds to the JSON body of a process command.
 	@Expose
-	private String processtype;
-	@Expose
-	private String metadata;
+	private String expid;
+
 	@Expose
 	private String[] parameters;
+
 	@Expose
-	private String genomeRelease;
+	private String metadata;
+
 	@Expose
-	private String filename;
-	@Expose
-	private String fileId;
-	@Expose
-	private String expid;
-	@Expose
-	private String author;
+	private String genomeVersion;
+
 
 	//Empty constructor
 	public ProcessCommand() {
 
 	}
 
+	/**
+	 * Method for validating the process command.
+	 *
+	 * No field can be null.
+	 *
+	 */
 	@Override
-	public boolean validate() {
+	public boolean validate() throws ValidateException {
 
 
 		if(username == null){
-			System.err.println("ProcessCommand - Validate\n" +
+			Debug.log("ProcessCommand - Validate\n" +
 					"username is null");
-			return false;
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify a user name.");
 		}
 		if(processtype == null){
-			System.err.println("ProcessCommand - Validate\n" +
+			Debug.log("ProcessCommand - Validate\n" +
 					"processtype is null");
-			return false;
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify a process type.");
 		}
 		if(metadata == null){
-			System.err.println("ProcessCommand - Validate\n" +
+			Debug.log("ProcessCommand - Validate\n" +
 					"metadata is null");
-			return false;
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify metadata.");
 		}
-		if(genomeRelease == null){
-			System.err.println("ProcessCommand - Validate\n" +
+		if(genomeVersion == null){
+			Debug.log("ProcessCommand - Validate\n" +
 					"genomerelease is null");
-			return false;
-		}
-		if(filename == null){
-			System.err.println("ProcessCommand - Validate\n" +
-					"filename is null");
-			return false;
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify a genome version.");
 		}
 
 		if(expid == null){
-			System.err.println("ProcessCommand - Validate\n" +
+			Debug.log("ProcessCommand - Validate\n" +
 					"expid is null");
-			return false;
-		}
-
-		if(fileId == null){
-			System.err.println("ProcessCommand - Validate\n" +
-					"fileid is null");
-			return false;
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify an experiment name.");
 		}
 
 		if(parameters == null){
-			System.err.println("ProcessCommand - Validate\n" +
+			Debug.log("ProcessCommand - Validate\n" +
 					"parameters are null");
-			return false;
-		}
-		if(author == null){
-			System.err.println("ProcessCommand - Validate\n" +
-					"author is null");
-			return false;
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify experiment id.");
 		}
 
-
-
-		//TODO Hardcoded. Not using CanBeNull class
-		if(username.length() > MaxSize.USERNAME || username.length() <= 0 ||
-				processtype.length() > MaxSize.FILE_FILETYPE || processtype.length() <= 0 ||
-				metadata.length() > MaxSize.FILE_METADATA ||
-				genomeRelease.length() > MaxSize.GENOME_VERSION ||
-				filename.length() > MaxSize.FILE_FILENAME || filename.length() <= 0 ||
-				author.length() > MaxSize.FILE_AUTHOR ||
-				fileId.length() <= 0 ||
-				expid.length() > MaxSize.EXPID || expid.length() <= 0)
-
-		{
-			System.err.println("ProcessCommand - Validate\n" +
-					"Wrong lengths of annotations. Could not continue");
-			return false;
+		switch (processtype) {
+		case "rawtoprofile":
+			if(parameters.length != 8){
+				throw new ValidateException(StatusCode.BAD_REQUEST, "Specify paramaters.");
+			}
+		case "profiletoregion":
+			//TODO Implement parameter size
+		default:
+			break;
 		}
 
-		//TODO Lengths
-		//TODO Validate process command
+		if(username.length() > MaxSize.USERNAME || username.length() <= 0){
+			Debug.log("Username has the wrong length of annotation");
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Username has to be between 1 and "
+					+ database.constants.MaxSize.USERNAME + " characters long.");
+		}
+		if(processtype.length() <= 0){
+			Debug.log("Processtype has the wrong length of annotation");
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify process type");
+		}
+
+		if(metadata.length() > MaxSize.FILE_METADATA || doesNotHaveCorrectLength(metadata, CanBeNull.FILE_METADATA)){
+			Debug.log("Metadata [" + metadata + "] has the wrong length of annotation");
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Metadata has to be between 1 and "
+					+ database.constants.MaxSize.FILE_METADATA + " characters long.");
+		}
+		if(genomeVersion.length() > MaxSize.GENOME_VERSION || doesNotHaveCorrectLength(genomeVersion, CanBeNull.GENOME_VERSION)){
+			Debug.log("GenomeRelease has the wrong length of annotation");
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Genome version has to be between 1 and "
+					+ database.constants.MaxSize.GENOME_VERSION + " characters long.");
+		}
+		if(expid.length() > MaxSize.EXPID || doesNotHaveCorrectLength(expid, CanBeNull.EXPID)){
+			Debug.log("Expid has the wrong length of annotation");
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Experiment name has to be between 1 and "
+					+ database.constants.MaxSize.EXPID + " characters long.");
+		}
+		if(!hasOnlyValidCharacters(username)) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in username. Valid characters are: " + validCharacters);
+		}
+		if(!hasOnlyValidCharacters(processtype)) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in process type. Valid characters are: " + validCharacters);
+		}
+		if(!hasOnlyValidCharacters(genomeVersion)) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in genome version. Valid characters are: " + validCharacters);
+		}
+		if(!hasOnlyValidCharacters(expid)) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in experiment name. Valid characters are: " + validCharacters);
+		}
+		if(metadata.contains("/")) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in experiment name. Valid characters are: " + validCharacters);
+		}
+
 		return true;
 	}
 
 	/**
-	 * Method that runs when the processCommand is executed.
+	 * Method that checks if a json attribute has correct length or not.
+	 *
+	 * @param field - the json attribute to be checked
+	 * @param canBeNull - a boolean stating if the attribute can be an empty string or not.
+	 *
+	 * @return True if the attribute have the correct length, else false.
 	 */
+	private boolean doesNotHaveCorrectLength(String field, boolean canBeNull){
+		Debug.log("field: "+ field + " length: " + field.length() + " canbenull: " + canBeNull);
+		if(field.length() <= 0){
+			if(canBeNull == false){
+				return true;
+			}else{
+				return false;
+			}
+		}
+		return false;
+	}
+
+
+	/**
+	 * Method that runs when the processCommand is executed.
+	 *
+	 */
+
 	@Override
 	public Response execute() {
-		System.out.println("-------------ProcessCommand - Execute----------------");
 
-
-		String[] parameters = {"param1","param2","param3"};
-
-		DatabaseAccessor dbac;
+		DatabaseAccessor db = null;
 		ProcessHandler processHandler;
 
 		try {
 
-			dbac = new  DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
-			System.out.println("created databaseaccesor");
+			db = new DatabaseAccessor(ServerSettings.databaseUsername, ServerSettings.databasePassword, ServerSettings.databaseHost, ServerSettings.databaseName);
 			processHandler = new ProcessHandler();
 
 			switch(processtype){
 			case "rawtoprofile":
-				System.out.println("The process type was a rawtoprofile");
 				//The process type was a rawtoprofile
 
-				//TODO Remove print for validating data.
-				System.out.println("Uploader of file: " + username);
-				System.out.println("filename:" + filename);
-				System.out.println("fileid:" + fileId);
-				System.out.println("metadata:" + metadata);
-				System.out.println("username: " + username);
-				System.out.println("expid: " + expid);
-				System.out.println("fileid: " + fileId);
-				System.out.println("genomeRelease: " + genomeRelease);
-				System.out.println("author:" + author);
+				//filepaths = db.processRawToProfile(expid);
 
+				if(!db.isConnected()){
+					db = new DatabaseAccessor(ServerSettings.databaseUsername, ServerSettings.databasePassword, ServerSettings.databaseHost, ServerSettings.databaseName);
+				}
+				//Get the genome information from the database.
+				Genome g = db.getGenomeRelease(genomeVersion);
 
-				//Profile hardcoded since in case "rawtoprofile"
-				ArrayList<String> filepaths = dbac.process(fileId, "profile", filename, metadata, username, genomeRelease, expid);
+				if(g == null) {
+					return new ErrorResponse(StatusCode.BAD_REQUEST, "Could not find genome version: " + genomeVersion);
+				} else {
+					//Get the path of the genome.
+					String genomeFolderPath = g.folderPath;
+					//Get the prefix of the genome files.
+					String genomeFilePrefix = g.getFilePrefix();
 
+					if(genomeFolderPath == null){
+						ErrorLogger.log(username, "Could not get genome folder path when " + processtype + " on experiment" + expid + "\n"+
+								"metadata: " + metadata + "\n"+
+								"parameters: " + parameters + "\n" +
+								"genomeFilePrefix: " + genomeFilePrefix + "\n" +
+								"genomeVersion: " + genomeVersion + "\n");
+						db.close();
+						return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, "Could not get genome folder path when " + processtype + " on experiment" + expid + "\n"+
+								"metadata: " + metadata + "\n"+
+								"parameters: " + parameters + "\n" +
+								"genomeFilePrefix: " + genomeFilePrefix + "\n" +
+								"genomeVersion: " + genomeVersion + "\n");
+					}
 
-				System.err.println("Filepath[0]: " + filepaths.get(0));
-				System.err.println("Filepath[1]: " + filepaths.get(1));
+					if(genomeFilePrefix == null){
+						ErrorLogger.log(username, "Could not get genome file prefix when " + processtype + " on experiment" + expid + "\n"+
+								"metadata: " + metadata + "\n"+
+								"parameters: " + parameters + "\n" +
+								"genomeFolderPath: " + genomeFolderPath + "\n" +
+								"genomeVersion: " + genomeVersion + "\n");
+						db.close();
+						return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, "Could not get genome file prefix when " + processtype + " on experiment" + expid + "\n"+
+								"metadata: " + metadata + "\n"+
+								"parameters: " + parameters + "\n" +
+								"genomeFolderPath: " + genomeFolderPath + "\n" +
+								"genomeVersion: " + genomeVersion + "\n");
+					}
 
-				//Receive the path for the profile data from the database accessor.
-				//	String outfilepath = dbac.addFile("profile", filename, metadata, "yuri", username, false, expid, genomeRelease);
-
-
-				try {
-					System.out.println("Executing process");
-					String log = processHandler.executeProcess("rawToProfile", parameters, filepaths.get(0), filepaths.get(1));
-					System.err.println("AFter processHandler.executeProcess: " + log);
-					System.out.println("Executed process");
-				} catch (InterruptedException e) {
-					// TODO Fix this
-					System.err.println("CATCH (IE) in ProcessCommand.Execute when running processHandler.executeProcess");
-					e.printStackTrace();
-					return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE);
-				} catch (IOException e) {
-					// TODO Fix this
-					System.err.println("CATCH (IO) in ProcessCommand.Execute when running processHandler.executeProcess");
-					e.printStackTrace();
-					return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE);
+					//Set parameter on index 1 to the path to the genomefolder + the name of the genome files.
+					parameters[1] = genomeFolderPath + genomeFilePrefix;
 				}
 
+				try {
+
+					processHandler.executeProcess("rawToProfile", parameters, filepaths.getKey(), filepaths.getValue());
+					Debug.log("------------------Running execute with parameters:--------------------");
+					for(String s : parameters){
+						Debug.log("Parameter: " + s);
+					}
+				} catch (ProcessException e) {
+					e.printStackTrace();
+					ErrorLogger.log(username, "Process Exception when running " + processtype + " on experiment" + expid + "\n"+
+							"metadata: " + metadata + "\n"+
+							"parameters: " + parameters + "\n" +
+							"genomeVersion: " + genomeVersion + "\n" + e.getMessage());
+					db.close();
+					return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, e.getMessage());
+				}
 				break;
 			default:
-				System.err.println("Unknown process type in processcommand execute");
-				return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE);
-				//				break;
+				Debug.log("ERROR: Unknown process type in processcommand execute");
+				db.close();
+				ErrorLogger.log(username, "Unknown process type in processcommand execute when running " + processtype + " on experiment" + expid + "\n"+
+						"metadata: " + metadata + "\n"+
+						"parameters: " + parameters + "\n" +
+						"genomeVersion: " + genomeVersion + "\n");
+				return new ProcessResponse(StatusCode.BAD_REQUEST, "Unknown process type in processcommand execute when running " + processtype + " on experiment" + expid + "\n"+
+						"metadata: " + metadata + "\n"+
+						"parameters: " + parameters + "\n" +
+						"genomeVersion: " + genomeVersion + "\n");
 
 			}
 		} catch (SQLException e) {
-			System.err.println("Error in ProcessCommand execute:");
 			e.printStackTrace();
-			return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE);
+			ErrorLogger.log(username, "SQL Exception in ProcessCommand execute when running " + processtype + " on experiment" + expid + "\n"+
+					"metadata: " + metadata + "\n"+
+					"parameters: " + parameters + "\n" +
+					"genomeVersion: " + genomeVersion + "\n" + e.getMessage());
+			db.close();
+			return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, "SQL Exception in ProcessCommand execute when running " + processtype + " on experiment" + expid + "\n"+
+					"metadata: " + metadata + "\n"+
+					"parameters: " + parameters + "\n" +
+					"genomeVersion: " + genomeVersion + "\n" + e.getMessage());
+		} catch (IOException e1) {
+			e1.printStackTrace();
+			ErrorLogger.log(username, "IO Exception in ProcessCommand execute when running " + processtype + " on experiment" + expid + "\n"+
+					"metadata: " + metadata + "\n"+
+					"parameters: " + parameters + "\n" +
+					"genomeVersion: " + genomeVersion + "\n" + e1.getMessage());
+			db.close();
+			return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, "IO Exception in ProcessCommand execute when running " + processtype + " on experiment" + expid + "\n"+
+					"metadata: " + metadata + "\n"+
+					"parameters: " + parameters + "\n" +
+					"genomeVersion: " + genomeVersion + "\n" + e1.getMessage());
 		}
 
-		//The execute executed correctly. Return created response.
-		return new ProcessResponse(StatusCode.CREATED);
+
+		//The execute executed correctly
+		try {
+			//TODO isPrivate hardcoded.
+			//TODO Check if the connection is open
+			if(!db.isConnected()){
+				db = new DatabaseAccessor(ServerSettings.databaseUsername, ServerSettings.databasePassword, ServerSettings.databaseHost, ServerSettings.databaseName);
+			}
+			db.addGeneratedProfiles(expid, filepaths.getValue(), filepaths.getKey(), metadata, genomeVersion, username, false);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			ErrorLogger.log(username, "SQL Exception in ProcessCommand execute when using addGeneratedProfiles with " + processtype + " on experiment" + expid + "\n"+
+					"metadata: " + metadata + "\n"+
+					"parameters: " + parameters + "\n" +
+					"genomeVersion: " + genomeVersion + "\n" + e.getMessage());
+			db.close();
+			return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, "SQL Exception in ProcessCommand execute when using addGeneratedProfiles with " + processtype + " on experiment" + expid + "\n"+
+					"metadata: " + metadata + "\n"+
+					"parameters: " + parameters + "\n" +
+					"genomeVersion: " + genomeVersion + "\n" + e.getMessage());
+		} catch (IOException e) {
+			e.printStackTrace();
+			ErrorLogger.log(username, "IO Exception in ProcessCommand execute when creating new DatabaseAccesor before addGeneratedProfiles with " + processtype + " on experiment" + expid + "\n"+
+					"metadata: " + metadata + "\n"+
+					"parameters: " + parameters + "\n" +
+					"genomeVersion: " + genomeVersion + "\n" + e.getMessage());
+			db.close();
+			return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, "IO Exception in ProcessCommand execute when creating new DatabaseAccesor before addGeneratedProfiles running " + processtype + " on experiment" + expid + "\n"+
+					"metadata: " + metadata + "\n"+
+					"parameters: " + parameters + "\n" +
+					"genomeVersion: " + genomeVersion + "\n" + e.getMessage());
+		}
+
+		db.close();
+
+		ErrorLogger.log(username, "Raw to profile processing completed running " + processtype + " on experiment" + expid + "\n"+
+					"metadata: " + metadata + "\n"+
+					"parameters: " + parameters + "\n" +
+					"genomeVersion: " + genomeVersion + "\n");
+		return new ProcessResponse(StatusCode.CREATED, "Raw to profile processing completed running " + processtype + " on experiment" + expid + "\n"+
+					"metadata: " + metadata + "\n"+
+					"parameters: " + parameters + "\n" +
+					"genomeVersion: " + genomeVersion + "\n");
+
+
 	}
 
 	/**
 	 * Set the username of the uploader wich will be added to the database annotation.
+	 *
 	 * @param username - the username of the uploader.
 	 */
 	public void setUsername(String username) {
@@ -209,55 +352,53 @@ public class ProcessCommand extends Command {
 
 	}
 
+	/**
+	 * Returns the process command fields as a formatted string.
+	 */
 	public String toString(){
 
 		return "Uploader of file: " + username + "\n" +
-				"Filename: " + filename + "\n" +
 				"Processtype: " + processtype + "\n" +
 				"metadata:" + metadata + "\n" +
 				"username: " + username + "\n" +
 				"expid: " + expid + "\n" +
-				"fileid: " + fileId + "\n" +
-				"genomeRelease: " + genomeRelease + "\n" +
-				"author:" + author + "\n";
+				"genomeRelease: " + genomeVersion + "\n";
 	}
 
-	/*
-	public String getMetadata() {
-		return this.metadata;
+	public void setTimestamp(long currentTimeMillis) {
+		this.timestamp = currentTimeMillis;
+	}
+	public long getTimestamp(){
+		return this.timestamp;
 	}
 
-	public String[] getParameters() {
-		return this.parameters;
+	public void setProcessType(String processtype) {
+		this.processtype = processtype;
+
 	}
 
-	public String getGenomeRelease() {
-		return this.genomeRelease;
+	public String getExpId() {
+		return expid;
 	}
 
-	public String getProcessType() {
-		return this.processtype;
+	public void setFilePaths() throws SQLException, IOException {
+		DatabaseAccessor db = null;
+
+			db = initDB();
+			filepaths = db.processRawToProfile(expid);
+
+			if(db.isConnected()){
+				db.close();
+			}
+
 	}
 
-	public void setProcessType(String processType) {
-		this.processtype = processType;
-
+	public String[] getFilePaths() {
+		return new String[] {filepaths.getKey(), filepaths.getValue()};
 	}
 
 	public String getUsername() {
 		return this.username;
 	}
 
-	public String getFilename() {
-		return this.filename;
-	}
-
-	public String getFilepath() {
-		return this.filepath;
-	}
-
-	public String getExpID() {
-		return this.expid;
-	}
-	 */
 }

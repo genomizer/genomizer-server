@@ -1,61 +1,86 @@
 package command;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Map;
-
-import com.google.gson.annotations.Expose;
 
 import database.DatabaseAccessor;
+import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
-import server.DatabaseSettings;
 
 /**
- * Class used to represent a logout command.
+ * Class used to handle removal on an existing annotation-field.
  *
- * @author tfy09jnn, Hugo K�llstr�m
- * @version 1.1
+ * @author Kommunikation/kontroll 2014.
+ * @version 1.0
  */
 public class DeleteAnnotationFieldCommand extends Command {
 
-	@Expose
-	private ArrayList<DeleteAnnotationInfo> deleteAnnos = new ArrayList<DeleteAnnotationInfo>();
-
 	/**
-	 * Used to validate the delete annotation command.
+	 * Constructor that initiates the class.
+	 *
+	 * @param restful header to set.
 	 */
-	@Override
-	public boolean validate() {
-		if(deleteAnnos == null) {
-			return false;
-		}
-		for(DeleteAnnotationInfo da: deleteAnnos) {
-			if(da.getName() == null) {
-				return false;
-			}
-		}
-		return true;
+	public DeleteAnnotationFieldCommand(String restful) {
+
+		header = restful;
+
 	}
 
 	/**
-	 * Used to execute the logout command.
+	 * Used to validate the DeleteAnnotationFieldCommand
+	 * class.
+	 *
+	 * @return boolean depending on result.
+	 * @throws ValidateException
+	 */
+	@Override
+	public boolean validate() throws ValidateException {
+
+		if(header == null) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation field-name was missing.");
+		}
+		if(header.length() < 1 || header.length() > database.constants.MaxSize.ANNOTATION_LABEL) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation label has to be between 1 and "
+					+ database.constants.MaxSize.ANNOTATION_LABEL + " characters long.");
+		}
+		if(!hasOnlyValidCharacters(header)) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters for annotation. Valid characters are: " + validCharacters);
+		}
+
+		return true;
+
+	}
+
+	/**
+	 * Used to execute the actual command.
 	 */
 	@Override
 	public Response execute() {
+
+		DatabaseAccessor db = null;
+
 		try {
-			DatabaseAccessor db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
-			Map<String, Integer> currAnno = db.getAnnotations();
-			for(DeleteAnnotationInfo da: deleteAnnos) {
-				if(currAnno.containsKey(da.getName())) {
-					return new MinimalResponse(StatusCode.FILE_NOT_FOUND);
-				}
-				db.deleteAnnotation(da.getName());
+			db = initDB();
+			ArrayList<String> annotations = db.getAllAnnotationLabels();
+
+			if(annotations.contains(header)) {
+				db.deleteAnnotation(header);
+				return new MinimalResponse(200);
+			} else {
+				return new ErrorResponse(StatusCode.BAD_REQUEST, "The annotation " + header + " does not exist and can not be deleted");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
+		} catch (IOException e) {
+			e.printStackTrace();
+			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, e.getMessage());
+		} finally {
+			db.close();
 		}
-		return new MinimalResponse(StatusCode.OK);
 	}
+
 }

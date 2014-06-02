@@ -1,78 +1,98 @@
 package command;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import response.MinimalResponse;
+import response.ErrorResponse;
 import response.Response;
 import response.StatusCode;
 import response.GetExperimentResponse;
-import server.DatabaseSettings;
-
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
 import database.DatabaseAccessor;
-import database.Experiment;
-import database.FileTuple;
+import database.containers.Experiment;
 
 /**
  * Class used to retrieve an experiment.
  *
- * @author tfy09jnn, Hugo Källström
- * @version 1.1
+ * @author Kommunikation/kontroll 2014.
+ * @version 1.0
  */
 public class GetExperimentCommand extends Command {
-
-
 
 	/**
 	 * Empty constructor.
 	 */
 	public GetExperimentCommand(String rest) {
-		this.header = rest;
+
+		header = rest;
+
 	}
 
+	/**
+	 * Method used to validate the GetExperimentCommand class.
+	 *
+	 * @return boolean depending on result.
+	 * @throws ValidateException
+	 */
 	@Override
-	public boolean validate() {
+	public boolean validate() throws ValidateException {
 
-		if(this.header == null) {
-			return false;
-		} else {
-			return true;
+		if(header == null) {
+
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Experiment name was missing.");
+
+		} else if(header.length() < 1 || header.length() > database.constants.MaxSize.EXPID) {
+
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Experiment name has to be between 1 and "
+					+ database.constants.MaxSize.EXPID + " characters long.");
+
+		} else if(!hasOnlyValidCharacters(header)) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in experiment name. Valid characters are: " + validCharacters);
 		}
 
+		return true;
+
 	}
 
+	/**
+	 * Method used to execute the actual command.
+	 */
 	@Override
 	public Response execute() {
 
-	    Experiment exp;
-	    DatabaseAccessor db = null;
+		Experiment exp;
+		DatabaseAccessor db = null;
 
 		try {
-			db = new DatabaseAccessor(DatabaseSettings.username, DatabaseSettings.password, DatabaseSettings.host, DatabaseSettings.database);
-			exp = db.getExperiment(this.header);
-		} catch (SQLException e) {
-			return new MinimalResponse(StatusCode.SERVICE_UNAVAILABLE);
+			db = initDB();
+		}
+		catch(SQLException | IOException e){
+			return new ErrorResponse(StatusCode.BAD_REQUEST, "Could not initialize db: " + e.getMessage());
 		}
 
-		return new GetExperimentResponse(getInfo(exp), exp.getAnnotations(), exp.getFiles(), StatusCode.OK);
+		try{
+			exp = db.getExperiment(header);
+		}catch(SQLException e){
+			return new ErrorResponse(StatusCode.BAD_REQUEST, "Could not get experiment: " + e.getMessage());
+		}
+
+		db.close();
+
+		if(exp == null) {
+			return new ErrorResponse(StatusCode.BAD_REQUEST, "Experiment requested from database is null, not found or does not exist.");
+		}
+		return new GetExperimentResponse(StatusCode.OK, getInfo(exp), exp.getAnnotations(), exp.getFiles());
 	}
 
+	/**
+	 * Method used to get the information.
+	 *
+	 * @param an experiment object.
+	 * @return an arraylist with information.
+	 */
 	public ArrayList<String> getInfo(Experiment exp) {
 		ArrayList<String> info = new ArrayList<String>();
 		info.add(exp.getID());
 		return info;
-
 	}
-
-
-
-
 
 }

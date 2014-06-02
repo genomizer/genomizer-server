@@ -1,25 +1,23 @@
 package command.test;
 
 import static org.junit.Assert.*;
-
 import org.junit.Before;
 import org.junit.Test;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
 import command.Command;
 import command.LoginCommand;
+import command.ValidateException;
 
 /**
- * Class used to test the LoginCommand class.
+ * Class used to test that the LoginCommand class
+ * works properly. The execute method is tested with other methods.
  *
- * @author tfy09jnn
- * @version 1.1
+ * @author Kommunikation/kontroll 2014.
+ * @version 1.0
  */
 public class LoginCommandTest {
 
-	//Builder used with almost all tests.
 	public Gson gson = null;
 
 	/**
@@ -28,7 +26,6 @@ public class LoginCommandTest {
 	@Before
 	public void setUp() {
 
-		//Create the builder.
 	    final GsonBuilder builder = new GsonBuilder();
 	    builder.excludeFieldsWithoutExposeAnnotation();
 	    gson = builder.create();
@@ -42,6 +39,7 @@ public class LoginCommandTest {
 	public void testCreateLoginCommand() {
 
 		LoginCommand lcmd = new LoginCommand();
+
 		assertNotNull(lcmd);
 
 	}
@@ -53,12 +51,8 @@ public class LoginCommandTest {
 	@Test
 	public void testLoginCommandJSON() {
 
-	    //Create input
 	    String json = "{\"username\":\"uname\",\"password\":\"pw\"}";
-
-		//Create command with json.
 		final Command lcmd = gson.fromJson(json, LoginCommand.class);
-
 		String json2 = gson.toJson(lcmd);
 
 		assertEquals(json, json2);
@@ -66,70 +60,104 @@ public class LoginCommandTest {
 	}
 
 	/**
-	 * Used to test the validate method if password
-	 * is not long enough.
+	 * Used to test that ValidateException is thrown if
+	 * password length is empty string..
+	 *
+	 * @throws ValidateException
 	 */
-	@Test
-	public void testValidateToSmallPasswordLength() {
+	@Test(expected = ValidateException.class)
+	public void testValidatePasswordEmptyString() throws ValidateException {
 
-	    //Create input
 	    String json = "{\"username\":\"uname\",\"password\":\"\"}";
-
-		//Create command with json.
 		final Command lcmd = gson.fromJson(json, LoginCommand.class);
+		lcmd.validate();
 
-		assertFalse(lcmd.validate());
+		fail("Expected ValidateException to be thrown.");
 
 	}
 
 	/**
-	 * Test used to test the validate method if the
-	 * password is just big enough.
+	 * Test used to check that ValidateException is thrown when
+	 * password is null.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testValidatePasswordNull() throws ValidateException {
+
+	    String json = "{\"username\":\"uname\"}";
+		final Command lcmd = gson.fromJson(json, LoginCommand.class);
+		lcmd.validate();
+
+		fail("Expected ValidateException to be thrown.");
+
+	}
+
+	/**
+	 * Test used to check that ValidateException is not thrown
+	 * when password length is properly formatted.
+	 *
+	 * @throws ValidateException
 	 */
 	@Test
-	public void testValidateWorkingPasswordLength() {
+	public void testValidateWorkingPasswordLength() throws ValidateException {
 
-	    //Create input
 	    String json = "{\"username\":\"uname\",\"password\":\"pass\"}";
-
-		//Create command with json.
 		final Command lcmd = gson.fromJson(json, LoginCommand.class);
+		lcmd.validate();
 
-		assertTrue(lcmd.validate());
+		assertTrue(true);
 
 	}
 
 	/**
-	 * Test used to test the validate method if the
-	 * user name is to short in length.
+	 * Used to test that ValidateException is thrown if
+	 * username length is empty string.
+	 *
+	 * @throws ValidateException
 	 */
-	@Test
-	public void testValidateToSmallUsernameLength() {
+	@Test(expected = ValidateException.class)
+	public void testValidateUsernameEmptyString() throws ValidateException {
 
-	    //Create input
 	    String json = "{\"username\":\"\",\"password\":\"password\"}";
-
-		//Create command with json.
 		final Command lcmd = gson.fromJson(json, LoginCommand.class);
+		lcmd.validate();
 
-		assertFalse(lcmd.validate());
+		fail("Expected ValidateException to be thrown.");
 
 	}
 
 	/**
-	 * Test used to test the validate method if the
-	 * user name is just big enough.
+	 * Test used to check that ValidateException is thrown when
+	 * username is null.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testValidateUsernameNull() throws ValidateException {
+
+	    String json = "{\"password\":\"password\"}";
+		final Command lcmd = gson.fromJson(json, LoginCommand.class);
+		lcmd.validate();
+
+		fail("Expected ValidateException to be thrown.");
+
+	}
+
+	/**
+	 * Test used to check that ValidateException is not thrown
+	 * when username length is properly formatted.
+	 *
+	 * @throws ValidateException
 	 */
 	@Test
-	public void testValidateWorkingUsernameLength() {
+	public void testValidateWorkingUsernameLength() throws ValidateException {
 
-	    //Create input
-	    String json = "{\"username\":\"M\",\"password\":\"pass\"}";
-
-		//Create command with json.
+	    String json = "{\"username\":\"M\",\"password\":\"password\"}";
 		final Command lcmd = gson.fromJson(json, LoginCommand.class);
+		lcmd.validate();
 
-		assertTrue(lcmd.validate());
+		assertTrue(true);
 
 	}
 

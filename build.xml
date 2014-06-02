@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. -->
+<project basedir="." default="build" name="genomizer-Server">
+    <property environment="env"/>
+    <property name="ECLIPSE_HOME" value="../../../../../usr/lib/eclipse"/>
+    <property name="junit.output.dir" value="junit"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.7"/>
+    <property name="source" value="1.7"/>
+    <path id="JUnit 4.libraryclasspath">
+        <pathelement location="../../../../../usr/share/eclipse/dropins/jdt/plugins/org.junit_4.8.2.dist/junit.jar"/>
+        <pathelement location="../../../../../usr/share/eclipse/dropins/jdt/plugins/org.hamcrest.core_1.1.0.jar"/>
+    </path>
+    <path id="jdbc.userclasspath"/>
+    <path id="genomizer-Server.classpath">
+        <pathelement location="bin"/>
+        <path refid="JUnit 4.libraryclasspath"/>
+        <pathelement location="lib/gson-2.2.4.jar"/>
+        <path refid="jdbc.userclasspath"/>
+        <pathelement location="external-libs/commons-codec-1.6.jar"/>
+        <pathelement location="external-libs/commons-logging-1.1.3.jar"/>
+        <pathelement location="external-libs/fluent-hc-4.3.3.jar"/>
+        <pathelement location="external-libs/httpclient-4.3.3.jar"/>
+        <pathelement location="external-libs/httpclient-cache-4.3.3.jar"/>
+        <pathelement location="external-libs/httpcore-4.3.2.jar"/>
+        <pathelement location="external-libs/httpmime-4.3.3.jar"/>
+        <pathelement location="lib/postgresql-9.3-1101.jdbc4.jar"/>
+        <pathelement location="lib/commons-cli-1.2/commons-cli-1.2.jar"/>
+    </path>
+    <target depends="build-project" name="jar">
+        <jar destfile="server.jar"
+            basedir="bin/"
+            includes="lib/**">
+            <fileset dir="bin/" includes="**/*.class" />
+            <zipgroupfileset dir="lib" includes="**/*.jar"/>
+            <manifest>
+                <attribute name="Main-Class" value="ServerMain" />
+            </manifest>
+
+        </jar>
+    </target>
+    
+    <target name="init">
+        <mkdir dir="bin"/>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="src">
+                <exclude name="**/*.ucls"/>
+                <exclude name="**/*.useq"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="external-libs">
+                <exclude name="**/*.ucls"/>
+                <exclude name="**/*.useq"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="clean">
+        <delete dir="bin"/>
+    </target>
+    <target depends="clean" name="cleanall"/>
+    <target depends="build-subprojects,build-project" name="build"/>
+    <target name="build-subprojects"/>
+    <target depends="init" name="build-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
+            <src path="src"/>
+            <src path="external-libs"/>
+            <classpath refid="genomizer-Server.classpath"/>
+        </javac>
+    </target>
+    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
+    <target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
+        <copy todir="${ant.library.dir}">
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </copy>
+        <unzip dest="${ant.library.dir}">
+            <patternset includes="jdtCompilerAdapter.jar"/>
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </unzip>
+    </target>
+    <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
+        <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
+        <antcall target="build"/>
+    </target>
+    <target name="ServerMain">
+        <java classname="ServerMain" failonerror="true" fork="yes">
+            <classpath refid="genomizer-Server.classpath"/>
+        </java>
+    </target>
+    <target name="LoginResponseTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="command.test.LoginResponseTest" todir="${junit.output.dir}"/>
+            <classpath refid="genomizer-Server.classpath"/>
+        </junit>
+    </target>
+    <target name="genomizer-Server">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="command.test.AddAnnotationFieldCommandTest" todir="${junit.output.dir}"/>
+            <test name="command.test.CommandFactoryTest" todir="${junit.output.dir}"/>
+            <test name="command.test.CommandHandlerTest" todir="${junit.output.dir}"/>
+            <test name="command.test.CreateProcessCommandTest" todir="${junit.output.dir}"/>
+            <test name="command.test.GetAnnotationInformationCommandTest" todir="${junit.output.dir}"/>
+            <test name="command.test.GetExperimentCommandTest" todir="${junit.output.dir}"/>
+            <test name="command.test.LoginCommandTest" todir="${junit.output.dir}"/>
+            <test name="command.test.LoginResponseTest" todir="${junit.output.dir}"/>
+            <test name="command.test.RetrieveExperimentCommandTest" todir="${junit.output.dir}"/>
+            <test name="command.test.SearchForExperimentCommandTest" todir="${junit.output.dir}"/>
+            <test name="command.test.ValidateProcessCommandTest" todir="${junit.output.dir}"/>
+            <test name="conversion.tests.GenomeReleaseConverterTest" todir="${junit.output.dir}"/>
+            <test name="process.tests.RawToProfileTest" todir="${junit.output.dir}"/>
+            <test name="response.test.GetAnnotationInformationResponseTest" todir="${junit.output.dir}"/>
+            <test name="response.test.LoginResponseTest" todir="${junit.output.dir}"/>
+            <test name="response.test.LogoutResponseTest" todir="${junit.output.dir}"/>
+            <test name="response.test.ProcessResponseTest" todir="${junit.output.dir}"/>
+            <test name="server.test.AuthenticateTest" todir="${junit.output.dir}"/>
+            <test name="server.test.DoormanTest" todir="${junit.output.dir}"/>
+            <test name="server.test.HeavyWorkQueueTest" todir="${junit.output.dir}"/>
+            <test name="server.test.ServerMassTestClass" todir="${junit.output.dir}"/>
+            <test name="testSuite.AllTests" todir="${junit.output.dir}"/>
+            <test name="testSuite.unitTests.AddAnnotationPossibilitiesTests" todir="${junit.output.dir}"/>
+            <test name="testSuite.unitTests.AddNewFileTests" todir="${junit.output.dir}"/>
+            <test name="testSuite.unitTests.ExperimentTests" todir="${junit.output.dir}"/>
+            <test name="testSuite.unitTests.FileTableTests" todir="${junit.output.dir}"/>
+            <test name="testSuite.unitTests.PubMedToSQLConverterTests" todir="${junit.output.dir}"/>
+            <test name="testSuite.unitTests.SearchDatabaseTests" todir="${junit.output.dir}"/>
+            <test name="testSuite.unitTests.TestAnnotationRequiredDefault" todir="${junit.output.dir}"/>
+            <test name="testSuite.unitTests.TestChainFiles" todir="${junit.output.dir}"/>
+            <test name="testSuite.unitTests.TestChangeAnnotationValue" todir="${junit.output.dir}"/>
+            <test name="testSuite.unitTests.TestFileNameValidator" todir="${junit.output.dir}"/>
+            <test name="testSuite.unitTests.TestFilePathGEN" todir="${junit.output.dir}"/>
+            <test name="testSuite.unitTests.TestGetAnnotationObject" todir="${junit.output.dir}"/>
+            <test name="testSuite.unitTests.UpdateExperimentTest" todir="${junit.output.dir}"/>
+            <test name="testSuite.unitTests.UserInfoTests" todir="${junit.output.dir}"/>
+            <test name="transfer.Test.HttpURLTest" todir="${junit.output.dir}"/>
+            <test name="transfer.Test.UploadCommandTest" todir="${junit.output.dir}"/>
+            <test name="unused.QueryBuilderTest" todir="${junit.output.dir}"/>
+            <test name="unused.SearchResultTest" todir="${junit.output.dir}"/>
+            <test name="unused.TestDatabaseConnect" todir="${junit.output.dir}"/>
+            <classpath refid="genomizer-Server.classpath"/>
+        </junit>
+    </target>
+    <target name="SearchForExperimentCommandTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="command.test.SearchForExperimentCommandTest" todir="${junit.output.dir}"/>
+            <classpath refid="genomizer-Server.classpath"/>
+        </junit>
+    </target>
+    <target name="Doorman">
+        <java classname="server.Doorman" failonerror="true" fork="yes">
+            <classpath refid="genomizer-Server.classpath"/>
+        </java>
+    </target>
+    <target name="ClientDummy">
+        <java classname="server.test.ClientDummy" failonerror="true" fork="yes">
+            <classpath refid="genomizer-Server.classpath"/>
+        </java>
+    </target>
+    <target name="DoormanTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="server.test.DoormanTest" todir="${junit.output.dir}"/>
+            <classpath refid="genomizer-Server.classpath"/>
+        </junit>
+    </target>
+    <target name="SearchDummy">
+        <java classname="server.test.SearchDummy" failonerror="true" fork="yes">
+            <classpath refid="genomizer-Server.classpath"/>
+        </java>
+    </target>
+    <target name="junitreport">
+        <junitreport todir="${junit.output.dir}">
+            <fileset dir="${junit.output.dir}">
+                <include name="TEST-*.xml"/>
+            </fileset>
+            <report format="frames" todir="${junit.output.dir}"/>
+        </junitreport>
+    </target>
+</project>

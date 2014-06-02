@@ -12,8 +12,8 @@ import com.google.gson.annotations.Expose;
 /**
  * Class used to represent a command of the type GetFileFromExperimentCommand.
  *
- * @author tfy09jnn, hugokallstrom
- * @version 1.1
+ * @author Kommunikation/kontroll 2014.
+ * @version 1.0
  */
 public class GetFileFromExperimentCommand extends Command {
 
@@ -27,16 +27,30 @@ public class GetFileFromExperimentCommand extends Command {
 	 */
 	public GetFileFromExperimentCommand(String restful) {
 		fileID = restful;
-
 	}
 
 	/**
-	 * Used to validate the correctness of the
-	 * class when built.
+	 * Used to validate the GetFileFromExperimentCommand
+	 * class.
+	 *
+	 * @return boolean depending on result.
+	 * @throws ValidateException
 	 */
 	@Override
-	public boolean validate() {
+	public boolean validate() throws ValidateException {
+
+		if(fileID == null) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify a file-id.");
+		}
+		if(fileID.length() < 1 || fileID.length() > database.constants.MaxSize.FILE_EXPID) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "File-id has to be between 1 and "
+					+ database.constants.MaxSize.FILE_EXPID + " characters long.");
+		}
+		if(!hasOnlyValidCharacters(fileID)) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation value. Valid characters are: " + validCharacters);
+		}
 		return true;
+
 	}
 
 	/**
@@ -49,7 +63,7 @@ public class GetFileFromExperimentCommand extends Command {
 
 //		Response rsp = rsp;
 //		ArrayList<String> attributes = new ArrayList<String>();
-
+//
 //		results = db.searchExperiment(fileID);
 //
 //
@@ -63,8 +77,6 @@ public class GetFileFromExperimentCommand extends Command {
 //			}
 //			System.out.println(attributes.toString());
 //			rsp = new DownloadResponse(200, attributes);
-//
-
 //		}
 
 		//Method not implemented, send appropriate response

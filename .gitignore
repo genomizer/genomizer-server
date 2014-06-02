@@ -1,6 +1,12 @@
 bin/
-.idea/*	
+.idea/*
 *.iml
 .idea/
 .idea
+junit/
+server*.jar
 *.orig
+.classpath
+*~
+errorLog.txt
+src/Main.java
