@@ -17,7 +17,7 @@ import response.StatusCode;
 /**
  * Class used to represent a command of the type Addfile.
  *
- * @author hugokallstrom
+ * @author Kommunikation/kontroll 2014.
  * @version 1.0
  */
 public class AddFileToExperimentCommand extends Command {

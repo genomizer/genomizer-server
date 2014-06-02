@@ -14,7 +14,7 @@ import database.constants.MaxSize;
 /**
  * Class used to add an experiment represented as a command.
  *
- * @author tfy09jnn
+ * @author Kommunikation/kontroll 2014.
  * @version 1.0
  */
 public class AddExperimentCommand extends Command {
@@ -32,8 +32,13 @@ public class AddExperimentCommand extends Command {
 
 	}
 
+	/**
+	 * Method used to validate the information needed in order
+	 * to execute the actual command.
+	 */
 	@Override
 	public boolean validate() throws ValidateException {
+		
 		if(name == null) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify a name for the experiment.");
 		}
@@ -70,6 +75,9 @@ public class AddExperimentCommand extends Command {
 		return true;
 	}
 
+	/**
+	 * Method used to execute the actual command.
+	 */
 	@Override
 	public response.Response execute() {
 
@@ -90,4 +98,5 @@ public class AddExperimentCommand extends Command {
 				db.close();
 		}
 	}
+	
 }
