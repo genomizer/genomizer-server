@@ -12,14 +12,19 @@ import com.google.gson.annotations.SerializedName;
 import database.DatabaseAccessor;
 import database.constants.MaxSize;
 
-
 /**
- * Class used to add annotation fields.
+ * This class is created to handle the process of adding a new
+ * annotation-field. Both normal and free-text annotation-field adding is
+ * supported.
  *
- * @author tfy09jnn, Hugo Källström
- * @version 1.1
+ * @author Kommunikation/kontroll 2014.
+ * @version 1.0
  */
 public class AddAnnotationFieldCommand extends Command {
+	/* This class adds annotation-fields by calling a method in the database
+	 * that adds the field. The variables  with @Expose notation above them are
+	 * set with JSON being serialized.
+	 */
 
 	@Expose
 	private String name = null;;
@@ -42,9 +47,8 @@ public class AddAnnotationFieldCommand extends Command {
 	}
 
 	/**
-	 * Method used to validate all attributes.
-	 *
-	 *
+	 * Method used to validate all attributes that are needed
+	 * in order to add the annotation-field.
 	 */
 	@Override
 	public boolean validate() throws ValidateException {
@@ -90,8 +94,8 @@ public class AddAnnotationFieldCommand extends Command {
 
 
 	/**
-	 * Method used to execute the command and add the
-	 * annotation field.
+	 * Method used to execute the created command and then add the
+	 * annotation-field.
 	 */
 	@Override
 	public Response execute() {
