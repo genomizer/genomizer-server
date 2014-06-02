@@ -160,19 +160,6 @@ public class CommandFactoryTest {
 	}
 
 	/**
-	 * Test creation of UpdateUserCommand and that it's not null.
-	 */
-	@Test
-	public void testUpdateUserCommandNotNull() {
-
-		String json = "{\"username\":\"uname\",\"password\":\"pw\","
-				+ "\"privileges\":\"basic\",\"name\":\"John Johnson\","
-				+ "\"email\":\"john@mail.com\"}";
-		assertNotNull(cmdf.createUpdateUserCommand(json, "/user"));
-
-	}
-
-	/**
 	 * Test creation of DeleteUserCommand and that it's not null.
 	 */
 	@Test

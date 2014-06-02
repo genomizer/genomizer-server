@@ -142,9 +142,6 @@ public class Doorman {
 					case "/file":
 						exchange(exchange, CommandType.UPDATE_FILE_IN_EXPERIMENT_COMMAND);
 						break;
-					case "/user":
-						exchange(exchange, CommandType.UPDATE_USER_COMMAND);
-						break;
 					case "/process":
 
 						String processPath = exchange.getRequestURI().toString();
