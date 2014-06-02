@@ -1,21 +1,20 @@
 package response.test;
 
 import static org.junit.Assert.*;
-
 import java.util.ArrayList;
-
 import org.junit.Test;
-
 import response.AnnotationInformation;
 import response.GetAnnotationInformationResponse;
 import response.Response;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import command.AddAnnotationFieldCommand;
-import command.Command;
 import command.GetAnnotationInformationCommand;
 
+/**
+ * Test used to check that GetAnnotationInformationResponse
+ * works properly.
+ *
+ * @author Kommunikation/kontroll 2014.
+ * @version 1.0
+ */
 public class GetAnnotationInformationResponseTest {
 
 	public void testAnnotation() {
