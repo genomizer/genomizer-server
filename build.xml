@@ -73,6 +73,7 @@
             <src path="src"/>
             <src path="external-libs"/>
             <classpath refid="genomizer-Server.classpath"/>
+	    <compilerarg value="-Xlint:deprecation"/>
         </javac>
     </target>
     <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
