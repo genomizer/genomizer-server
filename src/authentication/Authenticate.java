@@ -90,25 +90,12 @@ public class Authenticate {
 	 * @return the id representing the user.
 	 */
 	static public String getID(String username) {
-
-		Iterator<String> keys = activeUsersID.keySet().iterator();
-		String key = null;
-		String temp_username;
-
-		while(keys.hasNext()) {
-
-			key = keys.next();
-			temp_username = activeUsersID.get(key);
-
-			if(temp_username.equals(username)) {
-
+		for (String key : activeUsersID.keySet()) {
+			if(username.equals(activeUsersID.get(key))) {
 				return key;
-
 			}
 		}
-
 		return null;
-
 	}
 
 	/**
