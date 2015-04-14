@@ -1,4 +1,4 @@
-Genomizer Server
+Genomizer Server [![Build Status](https://secure.travis-ci.org/genomizer/genomizer-server.svg?branch=master)](http://travis-ci.org/genomizer/genomizer-server)
 ===================
 
 **WARNING, contains outdated information. For more recent information read the full documentation from https://github.com/genomizer/genomizer-documentation**
