@@ -13,7 +13,7 @@ public class LoginAttempt {
 	private String error_message;
 
 	/**
-	 * Method sets the LoginAttempt specs.
+	 * Method sets the LoginAttempt specs
 	 *
 	 * @param successful boolean if the attempt is successful
 	 * @param uuid of the attempted login
