@@ -1,8 +1,8 @@
 package authentication;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
 import server.Debug;
@@ -20,27 +20,27 @@ public class InactiveUuidsRemover implements Runnable {
 				Debug.log("LOOKING FOR INACTIVE UUIDS.");
 				HashMap<String, Date> latestRequests = Authenticate.getLatestRequestsMap();
 
-				Iterator<String> uuids = latestRequests.keySet().iterator();
-
-				while(uuids.hasNext()) {
-					String uuid = uuids.next();
-					Date date = latestRequests.get(uuid);
-
+				// Collect all inactive User IDs...
+				ArrayList<String> usersToDelete = new ArrayList<String>();
+				for (String uid : latestRequests.keySet()) {
+					Date date = latestRequests.get(uid);
 					if(getDateDiff(date, new Date(), TimeUnit.HOURS) >= INACTIVE_LIMIT_HOURS) {
-						Debug.log("REMOVING INACTIVE UUID: " + uuid + " - USERNAME: " + Authenticate.getUsername(uuid));
-						Authenticate.deleteUser(uuid);
-						uuids = latestRequests.keySet().iterator();
+						usersToDelete.add(uid);
 					}
 				}
-
-				Debug.log("REMAINING USERS");
-				Iterator<String> uuids2 = latestRequests.keySet().iterator();
-				String next_uuid;
-				while(uuids2.hasNext()) {
-					next_uuid = uuids2.next();
-					Debug.log(next_uuid + " - USERNAME: " + Authenticate.getUsername(next_uuid));
+				// ... and remove them from Authenticate.
+				for (String uid : usersToDelete) {
+					Debug.log("REMOVING INACTIVE UUID: " + uid + " - USERNAME: " + Authenticate.getUsername(uid));
+					Authenticate.deleteUser(uid);
 				}
 
+				// Then print some debugging output...
+				Debug.log("REMAINING USERS:");
+				for(String uid : latestRequests.keySet()) {
+					Debug.log(uid + " - USERNAME: " + Authenticate.getUsername(uid));
+				}
+
+				// ...and go to sleep.
 				try {
 					Thread.sleep(SLEEP_MILLIS);
 				} catch (InterruptedException e) {
