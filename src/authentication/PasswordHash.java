@@ -6,10 +6,21 @@ import java.security.NoSuchAlgorithmException;
 import server.ErrorLogger;
 import server.ServerSettings;
 
-
+/**
+ * Class hashes a string password and returns the hash.
+ *
+ * @author
+ *
+ */
 public class PasswordHash
 {
 
+    /**
+     * Method takes a string password, hashes it and returns the hash
+     *
+     * @param password string to hash
+     * @return finished hashed string
+     */
     public static String toSaltedSHA256Hash(String password) {
 
     	String salt = getSalt();
@@ -39,6 +50,11 @@ public class PasswordHash
     	return null;
     }
 
+    /**
+     * Takes public ServerSettings passwordSalt to salt the password string
+     *
+     * @return string passWordSalt from public ServerSettings object
+     */
 	private static String getSalt() {
 		return ServerSettings.passwordSalt;
 	}
