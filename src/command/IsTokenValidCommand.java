@@ -18,7 +18,7 @@ public class IsTokenValidCommand extends Command {
 	/**
 	 * Constructor used to initiate the class.
 	 *
-	 * @param user identification
+	 * @param uuid user identification
 	 */
 	public IsTokenValidCommand(String uuid) {
 

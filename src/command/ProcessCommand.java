@@ -1,7 +1,7 @@
 package command;
 
 /**
- * @author Robin Ödling - c11rog
+ * @author Robin ï¿½dling - c11rog
  */
 
 import java.io.IOException;
@@ -35,7 +35,7 @@ public class ProcessCommand extends Command {
 
 	private Entry<String,String> filepaths;
 
-	//Following fields corresponds to the JSON body of a process command.
+	/**Following fields corresponds to the JSON body of a process command.*/
 	@Expose
 	private String expid;
 
@@ -49,7 +49,7 @@ public class ProcessCommand extends Command {
 	private String genomeVersion;
 
 
-	//Empty constructor
+	/**Empty constructor*/
 	public ProcessCommand() {
 
 	}

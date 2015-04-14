@@ -31,7 +31,7 @@ public class CommandFactory {
 	/**
 	 * Used to create the command needed to handle login.
 	 *
-	 * @param JSON string to initiate class.
+	 * @param json string to initiate class.
 	 * @return the actual command.
 	 */
 	public Command createLoginCommand(String json) {
@@ -69,7 +69,7 @@ public class CommandFactory {
 	/**
 	 * Used to create the command needed to add experiments.
 	 *
-	 * @param JSON string to initiate class.
+	 * @param json string to initiate class.
 	 * @return the actual command.
 	 */
 	public Command createAddExperimentCommand(String json) {
@@ -82,7 +82,7 @@ public class CommandFactory {
 	/**
 	 * Used to create the command needed to update experiments.
 	 *
-	 * @param JSON string to initiate class.
+	 * @param json string to initiate class.
 	 * @param restful information needed.
 	 * @return the actual command.
 	 */
@@ -95,7 +95,7 @@ public class CommandFactory {
 	/**
 	 * Used to create the command needed to remove experiments.
 	 *
-	 * @param JSON string to initiate class.
+	 * @param json string to initiate class.
 	 * @param restful information needed.
 	 * @return the actual command.
 	 */
@@ -108,7 +108,7 @@ public class CommandFactory {
 	/**
 	 * Used to create the command needed to retrieve experiment files.
 	 *
-	 * @param JSON string to initiate class.
+	 * @param json string to initiate class.
 	 * @param restful information needed.
 	 * @return the actual command.
 	 */
@@ -121,7 +121,7 @@ public class CommandFactory {
 	/**
 	 * Used to create the command needed to add files to experiments.
 	 *
-	 * @param JSON string to initiate class.
+	 * @param json string to initiate class.
 	 * @return the actual command.
 	 */
 	public Command createAddFileToExperimentCommand(String json) {
@@ -134,7 +134,7 @@ public class CommandFactory {
 	/**
 	 * Used to create the command needed to update files in experiments.
 	 *
-	 * @param JSON string to initiate class.
+	 * @param json string to initiate class.
 	 * @param restful information needed.
 	 * @return the actual command.
 	 */
@@ -147,7 +147,7 @@ public class CommandFactory {
 	/**
 	 * Used to create the command needed to remove files from experiments.
 	 *
-	 * @param JSON string to initiate class.
+	 * @param json string to initiate class.
 	 * @param restful information needed.
 	 * @return the actual command.
 	 */
@@ -173,7 +173,7 @@ public class CommandFactory {
 	/**
 	 * Used to create the command needed to create a new user.
 	 *
-	 * @param JSON string to initiate class.
+	 * @param json string to initiate class.
 	 * @return the actual command.
 	 */
 	public Command createCreateUserCommand(String json) {
@@ -198,9 +198,9 @@ public class CommandFactory {
 	/**
 	 * Used to create the command needed to convert data from raw to profile.
 	 *
-	 * @param JSON string to initiate class.
+	 * @param json string to initiate class.
 	 * @param username that executed the command.
-	 * @param restful information needed.
+	 * @param parsedRest restful information needed.
 	 * @return the actual command.
 	 */
 	public Command createProcessCommand(String json, String username, String parsedRest) {
@@ -223,7 +223,7 @@ public class CommandFactory {
 	/**
 	 * Used to create the command needed to get annotation information.
 	 *
-	 * @param JSON string to initiate class.
+	 * @param json string to initiate class.
 	 * @return the actual command.
 	 */
 	public Command createGetAnnotationInformationCommand(String json) {
@@ -235,7 +235,7 @@ public class CommandFactory {
 	/**
 	 * Used to create a command needed to add annotation fields.
 	 *
-	 * @param JSON string to initiate class.
+	 * @param json string to initiate class.
 	 * @param restful information needed.
 	 * @return the actual command.
 	 */
@@ -249,7 +249,7 @@ public class CommandFactory {
 	/**
 	 * Used to create the command needed to add annotation values.
 	 *
-	 * @param JSON string to initiate class.
+	 * @param json string to initiate class.
 	 * @param restful information needed.
 	 * @return the actual command.
 	 */
@@ -263,7 +263,7 @@ public class CommandFactory {
 	/**
 	 * Used to create the command needed to remove annotation fields.
 	 *
-	 * @param JSON string to initiate class.
+	 * @param json string to initiate class.
 	 * @param restful information needed.
 	 * @return the actual command.
 	 */
@@ -276,7 +276,7 @@ public class CommandFactory {
 	/**
 	 * Used to create the command needed to get annotation privileges.
 	 *
-	 * @param JSON string to initiate class.
+	 * @param json string to initiate class.
 	 * @return the actual command.
 	 */
 	public Command createGetAnnotationPrivilegesCommand(String json) {
@@ -288,7 +288,7 @@ public class CommandFactory {
 	/**
 	 * Used to create the command needed to update annotation privileges.
 	 *
-	 * @param JSON string to initiate class.
+	 * @param json string to initiate class.
 	 * @param restful information needed.
 	 * @return the actual command.
 	 */
@@ -301,7 +301,7 @@ public class CommandFactory {
 	/**
 	 * Used to create the command needed to add new genome releases.
 	 *
-	 * @param JSON string to initiate class.
+	 * @param json string to initiate class.
 	 * @return the actual command created.
 	 */
 	public Command createAddGenomeReleaseCommand(String json) {
@@ -314,7 +314,7 @@ public class CommandFactory {
 	/**
 	 * Used to create the command needed to rename an existing annotation value.
 	 *
-	 * @param JSON string to initiate class.
+	 * @param json string to initiate class.
 	 * @return the actual command created.
 	 */
 	public Command creatRenameAnnotationValueCommand(String json) {
@@ -327,8 +327,8 @@ public class CommandFactory {
 	/**
 	 * Used to create the command needed to delete an existing genome release.
 	 *
-	 * @param the specie associated with the genome release.
-	 * @param the genome version to delete.
+	 * @param specie associated with the genome release.
+	 * @param genomeVersion to delete.
 	 * @return the actual command.
 	 */
 	public Command createDeleteGenomeReleaseCommand(String specie, String genomeVersion) {
@@ -341,7 +341,7 @@ public class CommandFactory {
 	/**
 	 * Used to create the command needed to delete a annotation value.
 	 *
-	 * @param JSON string to initiate class.
+	 * @param json string to initiate class.
 	 * @param value
 	 * @param name
 	 * @return the actual command created.
@@ -356,7 +356,7 @@ public class CommandFactory {
 	/**
 	 * Used to create the command needed to edit an existing annotation field.
 	 *
-	 * @param JSON string to initiate class.
+	 * @param json string to initiate class.
 	 * @return the actual command.
 	 */
 	public Command createEditAnnotationFieldCommand(String json) {
@@ -393,7 +393,7 @@ public class CommandFactory {
 	/**
 	 * Used to create the command needed to get the process status.
 	 *
-	 * @param a workHandler class object needed.
+	 * @param workHandler class object needed.
 	 * @return the actual command.
 	 */
 	public Command createGetProcessStatusCommand(WorkHandler workHandler) {
@@ -405,8 +405,8 @@ public class CommandFactory {
 	/**
 	 * Used to check if a token is valid.
 	 *
-	 * @param a user ID.
-	 * @return the actual command.
+	 * @param uuid user ID.
+	 * @return a command.
 	 */
 	public Command createIsTokenValidCommand(String uuid) {
 

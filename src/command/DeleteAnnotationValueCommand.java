@@ -26,7 +26,7 @@ public class DeleteAnnotationValueCommand extends Command {
 	/**
 	 * Constructor used to initiate the class.
 	 *
-	 * @param label on annotation that has the value.
+	 * @param name is the label on annotation that has the value.
 	 * @param value to delete.
 	 */
 	public DeleteAnnotationValueCommand(String name, String value) {

@@ -21,7 +21,7 @@ public class GetProcessStatusCommand extends Command {
 	/**
 	 * Constructor used to initiate the class.
 	 *
-	 * @param a workHandler object.
+	 * @param workHandler object.
 	 */
 	public GetProcessStatusCommand(WorkHandler workHandler) {
 

@@ -20,10 +20,10 @@ import response.StatusCode;
  * @version 1.0
  */
 public class CreateUserCommand extends Command {
-
-	/* All attributes in this class are serialized with
+	/** All attributes in this class are serialized with
 	 * a JSON string. This is done in CommandHandler.
 	 */
+
 	@Expose
 	private String username = null;
 
@@ -48,25 +48,20 @@ public class CreateUserCommand extends Command {
 		if(username == null || password == null || privileges == null) {
 			return false;
 		}
-
 		if(username.length() < 1 || username.length() > MaxSize.USERNAME) {
 			return false;
 		}
-
 		if(password.length() < 1 || password.length() > MaxSize.PASSWORD) {
 			return false;
 		}
-
 		if(privileges.length() < 1 || privileges.length() > MaxSize.ROLE) {
 			return false;
 		}
-
 		if(username.indexOf('/') != -1) {
 			return false;
 		}
 
 		return true;
-
 	}
 
 	/**
