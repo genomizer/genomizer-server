@@ -27,7 +27,7 @@ public class AddAnnotationFieldCommand extends Command {
 	 */
 
 	@Expose
-	private String name = null;;
+	private String name = null;
 
 	@Expose
 	private ArrayList<String> type = new ArrayList<String>();
@@ -54,39 +54,55 @@ public class AddAnnotationFieldCommand extends Command {
 	public boolean validate() throws ValidateException {
 
 		if(name == null) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify a name for the annotation.");
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify a " +
+					"name for the annotation.");
 		}
 		if(type == null || type.size() < 1) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify a type for the annotation.");
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify a " +
+					"type for the annotation.");
 		}
 		if(forced == null) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify if the value is forced.");
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify if " +
+					"the value is forced.");
 		}
 		if(!type.get(0).equals("freetext")) {
 			if(name.length() > MaxSize.ANNOTATION_LABEL || name.length() < 1) {
-				throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation label has to be between 1 and "
-						+ database.constants.MaxSize.ANNOTATION_LABEL + " characters long.");
+				throw new ValidateException(StatusCode.BAD_REQUEST,
+						"Annotation label has to be between 1 and " +
+								database.constants.MaxSize.ANNOTATION_LABEL +
+								" characters long.");
 			}
 		}
 		if(defaults != null) {
-			if(defaults.length() > MaxSize.ANNOTATION_DEFAULTVALUE || defaults.length() < 1) {
-				throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation default value has to be between 1 and "
-						+ database.constants.MaxSize.ANNOTATION_DEFAULTVALUE + " characters long.");
+			if(defaults.length() > MaxSize.ANNOTATION_DEFAULTVALUE ||
+					defaults.length() < 1) {
+				throw new ValidateException(StatusCode.BAD_REQUEST,
+						"Annotation default value has to be between 1 and " +
+							database.constants.MaxSize.ANNOTATION_DEFAULTVALUE +
+							" characters long.");
 			}
 			if(!hasOnlyValidCharacters(defaults)){
-				throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation default value. Valid characters are: " + validCharacters);
+				throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
+						"characters in annotation default value. Valid " +
+						"characters are: " + validCharacters);
 			}
 		}
 		if(name.indexOf('/') != -1 || !hasOnlyValidCharacters(name)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation name. Valid characters are: " + validCharacters);
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
+					"characters in annotation name. Valid characters are: " +
+					validCharacters);
 		}
 
 		for(int i = 0; i < type.size(); i++) {
 			if(type.get(i).indexOf("/") != -1) {
-				throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation type. Valid characters are: " + validCharacters);
+				throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
+						"characters in annotation type. Valid characters are: "
+						+ validCharacters);
 			}
 			if(!hasOnlyValidCharacters(type.get(i))){
-				throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation type. Valid characters are: " + validCharacters);
+				throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
+						"characters in annotation type. Valid characters are: "
+						+ validCharacters);
 			}
 		}
 		return true;
@@ -100,7 +116,7 @@ public class AddAnnotationFieldCommand extends Command {
 	@Override
 	public Response execute() {
 
-		int addedAnnotations = 0;
+		int addedAnnotations;
 		int defaultValueIndex = 0;
 		DatabaseAccessor db = null;
 
@@ -113,28 +129,33 @@ public class AddAnnotationFieldCommand extends Command {
 				}
 			}
 			if(type.size() == 1 && type.get(0).equals("freetext")) {
-				addedAnnotations = db.addFreeTextAnnotation(name, defaults, forced);
+				addedAnnotations = db.addFreeTextAnnotation(name, defaults,
+						forced);
 			} else {
-				addedAnnotations = db.addDropDownAnnotation(name, type, defaultValueIndex, forced);
+				addedAnnotations = db.addDropDownAnnotation(name, type,
+						defaultValueIndex, forced);
 			}
 			if(addedAnnotations != 0) {
 				return new AddAnnotationFieldResponse(StatusCode.CREATED);
 			} else {
-				return new ErrorResponse(StatusCode.BAD_REQUEST, "Annotation could not be added, database error.");
+				return new ErrorResponse(StatusCode.BAD_REQUEST, "Annotation " +
+						"could not be added, database error.");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 			if(e.getErrorCode() == 0) {
-				return new ErrorResponse(StatusCode.BAD_REQUEST, "The annotation " + name + " already exists.");
+				return new ErrorResponse(StatusCode.BAD_REQUEST, "The " +
+						"annotation " + name + " already exists.");
 			} else {
-				return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, e.getMessage());
+				return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE,
+						e.getMessage());
 			}
 
 		} catch (IOException e) {
 			e.printStackTrace();
 			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
-		} finally{
-				db.close();
+		} finally {
+			db.close();
 		}
 	}
 }
