@@ -3,4 +3,4 @@ language: java
 jdk:
   - openjdk7
 
-script: ant jar
+script: ant test
