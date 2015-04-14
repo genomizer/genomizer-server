@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.google.gson.Gson;
@@ -36,6 +37,7 @@ public class AddGenomeReleaseResponseTest {
 	}
 
 	@Test
+	@Ignore
 	public void testGetBody() {
 
 		ArrayList<String> array = new ArrayList<String>();

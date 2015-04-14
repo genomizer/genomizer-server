@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -25,6 +26,7 @@ import server.test.ProcessCommandMock;
  * @author Kommunikation/kontroll 2014.
  * @version 1.0
  */
+@Ignore
 public class GetProcessStatusCommandTest {
 
 	private static WorkHandler workHandler = new WorkHandler();
