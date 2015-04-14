@@ -27,7 +27,8 @@ public class DeleteGenomeReleaseCommand extends Command {
 	/**
 	 * Constructor used to initiate the class.
 	 *
-	 * @param restful string to split.
+	 * @param specie name of specie
+	 * @param genomeVersion version
 	 */
 	public DeleteGenomeReleaseCommand(String specie, String genomeVersion) {
 
@@ -76,7 +77,7 @@ public class DeleteGenomeReleaseCommand extends Command {
 	}
 
 	/**
-	 * method used to execute the actual command.
+	 * method used to execute the command.
 	 */
 	@Override
 	public Response execute() {
@@ -92,7 +93,7 @@ public class DeleteGenomeReleaseCommand extends Command {
 						if(result) {
 							return new DeleteGenomeReleaseResponse(StatusCode.OK);
 						} else {
-							return new ErrorResponse(StatusCode.BAD_REQUEST, "Removeing did not work.");
+							return new ErrorResponse(StatusCode.BAD_REQUEST, "Could not delete genomrelease");
 						}
 					}
 				}

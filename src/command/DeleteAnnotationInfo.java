@@ -11,7 +11,7 @@ import com.google.gson.annotations.Expose;
  * @version 1.0
  */
 public class DeleteAnnotationInfo {
-	/* All attributes in this class are
+	/** All attributes in this class are
 	 * serialized with a JSON string.
 	 */
 
@@ -24,7 +24,7 @@ public class DeleteAnnotationInfo {
 	/**
 	 * Method used to get the name.
 	 *
-	 * @return the name
+	 * @return name
 	 */
 	public String getName() {
 

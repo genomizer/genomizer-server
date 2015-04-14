@@ -53,10 +53,10 @@ public class DeleteFileFromExperimentCommand extends Command {
 	}
 
 	/**
-	 * Used to execute the actual command to delete the
-	 * file from an experiment.
+	 * Used to execute the command
+	 * deletes the file from an experiment.
 	 *
-	 * @return Response object depending on result.
+	 * @return Response an object depending on result.
 	 */
 	@Override
 	public Response execute() {
