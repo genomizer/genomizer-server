@@ -102,8 +102,10 @@ public class ProcessCommand extends Command {
 			if(parameters.length != 8){
 				throw new ValidateException(StatusCode.BAD_REQUEST, "Specify paramaters.");
 			}
+			break;
 		case "profiletoregion":
-			//TODO Implement parameter size
+        		//TODO Implement parameter size
+		        throw new ValidateException(StatusCode.BAD_REQUEST, "profiletoregion: Not implemented!");
 		default:
 			break;
 		}

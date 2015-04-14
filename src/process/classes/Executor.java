@@ -196,8 +196,7 @@ public abstract class Executor {
 			} else {
 				for (int i = 0; i < filesInDir.length; i++) {
 					if (!filesInDir[i].isDirectory()) {
-						if (filesInDir[i].renameTo(new File(dest
-								+ filesInDir[i].getName())));
+						filesInDir[i].renameTo(new File(dest + filesInDir[i].getName()));
 					}
 				}
 

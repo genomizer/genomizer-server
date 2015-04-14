@@ -70,7 +70,7 @@ public class HTTPURLDownload {
     public HTTPURLDownload(String url, String localFilePath){
         try {
             this.url = new URL(url);
-            this.localFilePath = localFilePath;
+            HTTPURLDownload.localFilePath = localFilePath;
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
