@@ -29,7 +29,7 @@ public class SearchForExperimentsCommand extends Command {
 	/**
 	 * Empty constructor.
 	 * 
-	 * @param annotations to set.
+	 * @param params annotations to set.
 	 */
 	public SearchForExperimentsCommand(String params) {
 		

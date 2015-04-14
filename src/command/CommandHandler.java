@@ -35,9 +35,9 @@ public class CommandHandler {
 	 * with the RESTful-header and converts them into commands
 	 * and runs them.
 	 *
-	 * @param a JSON string.
-	 * @param a RESTful-header.
-	 * @param a enumeration that determines command type.
+	 * @param json string.
+	 * @param restful header.
+	 * @param cmdt - enumeration that determines command type.
 	 */
 	public Response processNewCommand(String json, String restful, String uuid, CommandType cmdt) {
 
@@ -73,10 +73,10 @@ public class CommandHandler {
 	/**
 	 * Method used to create command objects together with CommandFactory.
 	 *
-	 * @param a JSON string.
-	 * @param a RESTful-header.
-	 * @param a enumeration that determines command type.
-	 * @return a Command of the correct type.
+	 * @param json string.
+	 * @param restful header.
+	 * @param cmdt enumeration that determines command type.
+	 * @return Command of the correct type.
 	 */
 	private Command createCommand(String json, String restful, String uuid, CommandType cmdt) {
 
@@ -158,8 +158,8 @@ public class CommandHandler {
 	 * Method used to split a RESTful-header into smaller parts
 	 * and return them in a String array.
 	 *
-	 * @param RESTful-header
-	 * @return a String array with RESTful-header parts.
+	 * @param restful header
+	 * @return String array with RESTful-header parts.
 	 */
 	public String parseRest(String restful) {
 

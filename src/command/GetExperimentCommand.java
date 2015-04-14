@@ -22,9 +22,7 @@ public class GetExperimentCommand extends Command {
 	 * Empty constructor.
 	 */
 	public GetExperimentCommand(String rest) {
-
 		header = rest;
-
 	}
 
 	/**
@@ -86,7 +84,7 @@ public class GetExperimentCommand extends Command {
 	/**
 	 * Method used to get the information.
 	 *
-	 * @param an experiment object.
+	 * @param exp experiment object.
 	 * @return an arraylist with information.
 	 */
 	public ArrayList<String> getInfo(Experiment exp) {

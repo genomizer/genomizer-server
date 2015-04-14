@@ -20,7 +20,7 @@ import response.StatusCode;
  * @version 1.0
  */
 public class EditAnnotationValueCommand extends Command {
-	/* All attributes with @Expose are serialized with a
+	/** All attributes with @Expose are serialized with a
 	 * JSON string.
 	 */
 

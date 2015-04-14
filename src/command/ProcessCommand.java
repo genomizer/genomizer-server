@@ -192,85 +192,85 @@ public class ProcessCommand extends Command {
 			processHandler = new ProcessHandler();
 
 			switch(processtype){
-				case "rawtoprofile":
-					//The process type was a rawtoprofile
+			case "rawtoprofile":
+				//The process type was a rawtoprofile
 
-					//filepaths = db.processRawToProfile(expid);
+				//filepaths = db.processRawToProfile(expid);
 
-					if(!db.isConnected()){
-						db = new DatabaseAccessor(ServerSettings.databaseUsername, ServerSettings.databasePassword, ServerSettings.databaseHost, ServerSettings.databaseName);
-					}
-					//Get the genome information from the database.
-					Genome g = db.getGenomeRelease(genomeVersion);
+				if(!db.isConnected()){
+					db = new DatabaseAccessor(ServerSettings.databaseUsername, ServerSettings.databasePassword, ServerSettings.databaseHost, ServerSettings.databaseName);
+				}
+				//Get the genome information from the database.
+				Genome g = db.getGenomeRelease(genomeVersion);
 
-					if(g == null) {
-						return new ErrorResponse(StatusCode.BAD_REQUEST, "Could not find genome version: " + genomeVersion);
-					} else {
-						//Get the path of the genome.
-						String genomeFolderPath = g.folderPath;
-						//Get the prefix of the genome files.
-						String genomeFilePrefix = g.getFilePrefix();
+				if(g == null) {
+					return new ErrorResponse(StatusCode.BAD_REQUEST, "Could not find genome version: " + genomeVersion);
+				} else {
+					//Get the path of the genome.
+					String genomeFolderPath = g.folderPath;
+					//Get the prefix of the genome files.
+					String genomeFilePrefix = g.getFilePrefix();
 
-						if(genomeFolderPath == null){
-							ErrorLogger.log(username, "Could not get genome folder path when " + processtype + " on experiment" + expid + "\n"+
-									"metadata: " + metadata + "\n"+
-									"parameters: " + parameters + "\n" +
-									"genomeFilePrefix: " + genomeFilePrefix + "\n" +
-									"genomeVersion: " + genomeVersion + "\n");
-							db.close();
-							return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, "Could not get genome folder path when " + processtype + " on experiment" + expid + "\n"+
-									"metadata: " + metadata + "\n"+
-									"parameters: " + parameters + "\n" +
-									"genomeFilePrefix: " + genomeFilePrefix + "\n" +
-									"genomeVersion: " + genomeVersion + "\n");
-						}
-
-						if(genomeFilePrefix == null){
-							ErrorLogger.log(username, "Could not get genome file prefix when " + processtype + " on experiment" + expid + "\n"+
-									"metadata: " + metadata + "\n"+
-									"parameters: " + parameters + "\n" +
-									"genomeFolderPath: " + genomeFolderPath + "\n" +
-									"genomeVersion: " + genomeVersion + "\n");
-							db.close();
-							return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, "Could not get genome file prefix when " + processtype + " on experiment" + expid + "\n"+
-									"metadata: " + metadata + "\n"+
-									"parameters: " + parameters + "\n" +
-									"genomeFolderPath: " + genomeFolderPath + "\n" +
-									"genomeVersion: " + genomeVersion + "\n");
-						}
-
-						//Set parameter on index 1 to the path to the genomefolder + the name of the genome files.
-						parameters[1] = genomeFolderPath + genomeFilePrefix;
-					}
-
-					try {
-
-						processHandler.executeProcess("rawToProfile", parameters, filepaths.getKey(), filepaths.getValue());
-						Debug.log("------------------Running execute with parameters:--------------------");
-						for(String s : parameters){
-							Debug.log("Parameter: " + s);
-						}
-					} catch (ProcessException e) {
-						e.printStackTrace();
-						ErrorLogger.log(username, "Process Exception when running " + processtype + " on experiment" + expid + "\n"+
+					if(genomeFolderPath == null){
+						ErrorLogger.log(username, "Could not get genome folder path when " + processtype + " on experiment" + expid + "\n"+
 								"metadata: " + metadata + "\n"+
 								"parameters: " + parameters + "\n" +
-								"genomeVersion: " + genomeVersion + "\n" + e.getMessage());
+								"genomeFilePrefix: " + genomeFilePrefix + "\n" +
+								"genomeVersion: " + genomeVersion + "\n");
 						db.close();
-						return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, e.getMessage());
+						return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, "Could not get genome folder path when " + processtype + " on experiment" + expid + "\n"+
+								"metadata: " + metadata + "\n"+
+								"parameters: " + parameters + "\n" +
+								"genomeFilePrefix: " + genomeFilePrefix + "\n" +
+								"genomeVersion: " + genomeVersion + "\n");
 					}
-					break;
-				default:
-					Debug.log("ERROR: Unknown process type in processcommand execute");
+
+					if(genomeFilePrefix == null){
+						ErrorLogger.log(username, "Could not get genome file prefix when " + processtype + " on experiment" + expid + "\n"+
+								"metadata: " + metadata + "\n"+
+								"parameters: " + parameters + "\n" +
+								"genomeFolderPath: " + genomeFolderPath + "\n" +
+								"genomeVersion: " + genomeVersion + "\n");
+						db.close();
+						return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, "Could not get genome file prefix when " + processtype + " on experiment" + expid + "\n"+
+								"metadata: " + metadata + "\n"+
+								"parameters: " + parameters + "\n" +
+								"genomeFolderPath: " + genomeFolderPath + "\n" +
+								"genomeVersion: " + genomeVersion + "\n");
+					}
+
+					//Set parameter on index 1 to the path to the genomefolder + the name of the genome files.
+					parameters[1] = genomeFolderPath + genomeFilePrefix;
+				}
+
+				try {
+
+					processHandler.executeProcess("rawToProfile", parameters, filepaths.getKey(), filepaths.getValue());
+					Debug.log("------------------Running execute with parameters:--------------------");
+					for(String s : parameters){
+						Debug.log("Parameter: " + s);
+					}
+				} catch (ProcessException e) {
+					e.printStackTrace();
+					ErrorLogger.log(username, "Process Exception when running " + processtype + " on experiment" + expid + "\n"+
+							"metadata: " + metadata + "\n"+
+							"parameters: " + parameters + "\n" +
+							"genomeVersion: " + genomeVersion + "\n" + e.getMessage());
 					db.close();
-					ErrorLogger.log(username, "Unknown process type in processcommand execute when running " + processtype + " on experiment" + expid + "\n"+
-							"metadata: " + metadata + "\n"+
-							"parameters: " + parameters + "\n" +
-							"genomeVersion: " + genomeVersion + "\n");
-					return new ProcessResponse(StatusCode.BAD_REQUEST, "Unknown process type in processcommand execute when running " + processtype + " on experiment" + expid + "\n"+
-							"metadata: " + metadata + "\n"+
-							"parameters: " + parameters + "\n" +
-							"genomeVersion: " + genomeVersion + "\n");
+					return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE, e.getMessage());
+				}
+				break;
+			default:
+				Debug.log("ERROR: Unknown process type in processcommand execute");
+				db.close();
+				ErrorLogger.log(username, "Unknown process type in processcommand execute when running " + processtype + " on experiment" + expid + "\n"+
+						"metadata: " + metadata + "\n"+
+						"parameters: " + parameters + "\n" +
+						"genomeVersion: " + genomeVersion + "\n");
+				return new ProcessResponse(StatusCode.BAD_REQUEST, "Unknown process type in processcommand execute when running " + processtype + " on experiment" + expid + "\n"+
+						"metadata: " + metadata + "\n"+
+						"parameters: " + parameters + "\n" +
+						"genomeVersion: " + genomeVersion + "\n");
 
 			}
 		} catch (SQLException e) {
@@ -333,13 +333,13 @@ public class ProcessCommand extends Command {
 		db.close();
 
 		ErrorLogger.log(username, "Raw to profile processing completed running " + processtype + " on experiment" + expid + "\n"+
-				"metadata: " + metadata + "\n"+
-				"parameters: " + parameters + "\n" +
-				"genomeVersion: " + genomeVersion + "\n");
+					"metadata: " + metadata + "\n"+
+					"parameters: " + parameters + "\n" +
+					"genomeVersion: " + genomeVersion + "\n");
 		return new ProcessResponse(StatusCode.CREATED, "Raw to profile processing completed running " + processtype + " on experiment" + expid + "\n"+
-				"metadata: " + metadata + "\n"+
-				"parameters: " + parameters + "\n" +
-				"genomeVersion: " + genomeVersion + "\n");
+					"metadata: " + metadata + "\n"+
+					"parameters: " + parameters + "\n" +
+					"genomeVersion: " + genomeVersion + "\n");
 
 
 	}
@@ -386,12 +386,12 @@ public class ProcessCommand extends Command {
 	public void setFilePaths() throws SQLException, IOException {
 		DatabaseAccessor db = null;
 
-		db = initDB();
-		filepaths = db.processRawToProfile(expid);
+			db = initDB();
+			filepaths = db.processRawToProfile(expid);
 
-		if(db.isConnected()){
-			db.close();
-		}
+			if(db.isConnected()){
+				db.close();
+			}
 
 	}
 
