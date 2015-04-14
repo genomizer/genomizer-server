@@ -296,7 +296,7 @@ public class Doorman {
 	/**
 	 * Sends a response back to the client.
 	 * @param exchange the HTTPExchange-object.
-	 * @param response the response object containting information about the response.
+	 * @param response the response object containing information about the response.
 	 * @throws IOException
 	 */
 	private void respond(HttpExchange exchange, Response response) throws IOException {
