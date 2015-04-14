@@ -54,8 +54,8 @@ public class TestInitializer {
 //    public static String host = "85.226.111.95";
 //    public static String database = "genomizer_testdb";
 
-    private String addTestTuplesPath = "../sql/add_test_tuples.sql";
-    private String clearTablesPath = "../sql/clear_tables.sql";
+    private String addTestTuplesPath = "../../sql/add_test_tuples.sql";
+    private String clearTablesPath = "../../sql/clear_tables.sql";
 
     private DatabaseAccessor dbac;
     private Connection conn;
