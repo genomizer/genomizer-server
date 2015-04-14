@@ -9,4 +9,3 @@ server*.jar
 .classpath
 *~
 errorLog.txt
-src/Main.java
