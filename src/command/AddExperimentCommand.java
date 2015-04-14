@@ -38,7 +38,7 @@ public class AddExperimentCommand extends Command {
 	 */
 	@Override
 	public boolean validate() throws ValidateException {
-		
+
 		if(name == null) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify a name for the experiment.");
 		}
@@ -67,7 +67,7 @@ public class AddExperimentCommand extends Command {
 				throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation label has to be between 1 and "
 						+ database.constants.MaxSize.ANNOTATION_LABEL + " characters long.");
 			}
-			if(annotations.get(i).getValue().length() > MaxSize.ANNOTATION_VALUE) {
+			if(annotations.get(i).getValue().length() > MaxSize.ANNOTATION_VALUE || annotations.get(i).getValue().length() < 1) {
 				throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation value has to be less than "
 						+ database.constants.MaxSize.ANNOTATION_VALUE + " characters long.");
 			}
@@ -95,8 +95,8 @@ public class AddExperimentCommand extends Command {
 			e.printStackTrace();
 			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
 		} finally{
-				db.close();
+			db.close();
 		}
 	}
-	
+
 }
