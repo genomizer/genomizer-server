@@ -13,6 +13,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.lang.System;
 
 import database.DatabaseAccessor;
 import database.test.unittests.SearchDatabaseTests;
@@ -26,10 +27,27 @@ import database.test.unittests.SearchDatabaseTests;
  */
 public class TestInitializer {
 	//Use these strings to connect to the test server.
-    public static String username = "c5dv151_vt14";
-    public static String password = "shielohh";
-    public static String host = "postgres";
-    public static String database = "c5dv151_vt14";
+    static {
+	if(System.getenv("TRAVIS") == "true") {
+	    // Running on Travis.
+	    username = "postgres";
+	    password = "";
+	    host     = "localhost";
+	    database = "c5dv151_vt14";
+	}
+	else {
+	    // Running in a CS lab.
+	    username = "c5dv151_vt14";
+	    password = "shielohh";
+	    host     = "postgres";
+	    database = "c5dv151_vt14";
+	}
+    }
+
+    public static String username;
+    public static String password;
+    public static String host;
+    public static String database;
 
 //    public static String username = "genomizer";
 //    public static String password = "genomizer";

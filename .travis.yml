@@ -6,4 +6,10 @@ jdk:
 addons:
   postgresql: "9.3"
 
-script: ant test
+before_script:
+  - psql -c 'create database c5dv151_vt14;' -U postgres
+  - psql -f sql/genomizer_database_tables.sql -U postgres -d c5dv151_vt14
+
+script: 
+  - ant test
+  - ant junitreport
