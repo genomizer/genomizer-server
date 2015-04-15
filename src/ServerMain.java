@@ -30,32 +30,11 @@ public class ServerMain {
 	 * @throws ParseException
 	 * @throws FileNotFoundException
 	 */
-	public static void main(String[] args) throws ParseException, FileNotFoundException {
+	public static void main(String[] args) throws ParseException,
+												  FileNotFoundException {
 
-		if (new File("settings.cfg").exists()) {
-			System.out.println("Reading settings from settings.cfg");
-			readSettingsFile("settings.cfg");
-		}
-
-		CommandLineParser comline = new BasicParser();
-
-		Options comOptions = new Options();
-		comOptions.addOption("p", "port", true, "the listening port");
-		comOptions.addOption("debug", false, "if this flag is used the server will write output for every request and response aswell as other output.");
-		comOptions.addOption("f", "file", true, "the file to read server settings from, is ignored when -d is used");
-		comOptions.addOption("nri", "noremoveinactive", false, "if this flag is set the server will not remove inactive users which are logged in on the server.");
-		CommandLine com = comline.parse(comOptions, args);
-		if (com.hasOption('p')) {
-			ServerSettings.genomizerPort = Integer.parseInt(com.getOptionValue('p'));
-		}
-		if (com.hasOption("debug")) {
-			Debug.isEnabled = true;
-		}
-		if (com.hasOption('f')) {
-			readSettingsFile(com.getOptionValue('f'));
-		}
-
-		ServerSettings.validate();
+		/* We firstly need to read and validate the settings.cfg file. */
+		CommandLine com = loadSettingsFile(args);
 
 		StartUpCleaner.removeOldTempDirectories("resources/");
 
@@ -82,6 +61,88 @@ public class ServerMain {
 			System.exit(1);
 		}
 
+	}
+
+	/**
+	 * This method attempts to read settings from file. It is hardcoded to
+	 * read from 'settings.cfg', located in current working folder. It
+	 * validates the final settings to be sane (e.g. not containing 'null').
+	 *
+	 * It parses the commandline arguments and constructs a CommandLine
+	 * object containing the information.
+	 * @param args The commandline arguments
+	 * @return A CommandLine object containing the relevant commandline
+	 * 		   options. The function also contains a side effect: It modifies
+	 * 		   the static attributes of the ServerSettings class with the
+	 * 		   information in the settings.cfg file.
+	 * @throws FileNotFoundException if settings.cfg file could not be found
+	 * 								 or opened.
+	 * @throws ParseException if settings.cfg is formatted in an invalid way.
+	 */
+	private static CommandLine loadSettingsFile(String[] args)
+			throws 	FileNotFoundException,
+					ParseException {
+		// Attempt to load settings.cfg file
+		if (new File("settings.cfg").exists()) {
+			System.out.println("Reading settings from settings.cfg");
+			readSettingsFile("settings.cfg");
+		}
+
+		CommandLineParser comline = new BasicParser();
+
+		// Construct an options archetype
+		Options comOptions = createOptionsObject();
+
+		// Convert our args into a commandline object using the defined rules.
+		CommandLine com = comline.parse(comOptions, args);
+
+		handleSuppliedCommandlineOptions(com);
+
+		ServerSettings.validate();
+		return com;
+	}
+
+	/**
+	 * Method to set correct flags for the given commandline arguments.
+	 * @param com
+	 * @throws FileNotFoundException
+	 */
+	private static void handleSuppliedCommandlineOptions(CommandLine com)
+			throws FileNotFoundException {
+		// Port flag
+		if (com.hasOption('p')) {
+			ServerSettings.genomizerPort =
+					Integer.parseInt(com.getOptionValue('p'));
+		}
+		// Debug flag
+		if (com.hasOption("debug")) {
+			Debug.isEnabled = true;
+		}
+		// Settingsfile flag
+		if (com.hasOption('f')) {
+			readSettingsFile(com.getOptionValue('f'));
+		}
+	}
+
+	/**
+	 * Constructs the rules for parsing commandline parameters.
+	 * @return The options object representing rules for parsing.
+	 */
+	private static Options createOptionsObject() {
+		Options comOptions = new Options();
+		comOptions.addOption("p", "port", true, "the listening port");
+		comOptions.addOption("debug", false,
+							 "if this flag is used the server will write " +
+                			 "output for every request and response as well " +
+                			 "as other output.");
+		comOptions.addOption("f", "file", true,
+							 "the file to read server settings from, is " +
+							 "ignored when -d is used");
+		comOptions.addOption("nri", "noremoveinactive", false,
+							 "if this flag is set the server will not " +
+ 							 "remove inactive users which are logged in on " +
+ 							 "the server.");
+		return comOptions;
 	}
 
 	public static void readSettingsFile(String path) throws FileNotFoundException {
@@ -140,7 +201,17 @@ public class ServerMain {
 		}
 	}
 
-	public static void readDatabaseFile(String path) throws FileNotFoundException {
+	/**
+	 * This method reads a 'database' file. This method is never called
+	 * anywhere.
+	 *
+	 * TODO: Remove this piece of dead code. (When safe)
+	 * @param path Path of database file
+	 * @throws FileNotFoundException If database file could not be
+	 * 		   found/opened.
+	 */
+	private static void readDatabaseFile(String path)
+			throws FileNotFoundException {
 		File dbFile = new File(path);
 		if (dbFile.exists()) {
 			Scanner scan = new Scanner(dbFile);
