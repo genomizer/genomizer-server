@@ -103,7 +103,7 @@ public class TestInitializer {
      * @throws IOException
      */
     private List<String> buildSqlStringsFromFile(String path)
-            throws UnsupportedEncodingException, IOException {
+            throws IOException {
         List<String> sqlStrings = new ArrayList<String>();
         URL sqlFileUrl = SearchDatabaseTests.class.getResource(path);
         if (sqlFileUrl != null) {

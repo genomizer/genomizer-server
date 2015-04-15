@@ -26,7 +26,7 @@ public class ChangeAnnotationLabelTest {
     }
 
     @AfterClass
-    public static void teardownAfterClass() throws SQLException, Exception {
+    public static void teardownAfterClass() throws Exception {
 
         ti.removeTuples();
     }
