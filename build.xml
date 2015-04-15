@@ -28,11 +28,11 @@
     </path>
 
     <!-- Main targets-->
-    <target depends="build-project" name="jar">
+    <target depends="build" name="jar">
         <jar destfile="server.jar"
             basedir="bin/"
             includes="lib/**">
-            <fileset dir="bin/" includes="**/*.class" />
+            <fileset dir="bin/" includes="**/*.class" excludes="**/test/**/*"/>
             <zipgroupfileset dir="lib" includes="**/*.jar"/>
             <manifest>
                 <attribute name="Main-Class" value="ServerMain" />
@@ -42,6 +42,7 @@
 
     <target name="init">
         <mkdir dir="bin"/>
+        <mkdir dir="${junit.output.dir}"/>
         <copy includeemptydirs="false" todir="bin">
             <fileset dir="src">
                 <exclude name="**/*.java"/>
@@ -61,38 +62,27 @@
     </target>
 
     <target depends="clean" name="cleanall"/>
-    <target depends="build-project" name="build"/>
+    <target depends="compile" name="build"/>
 
-    <target depends="init" name="build-project">
-        <echo message="${ant.project.name}: ${ant.file}"/>
-        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}" encoding="ISO-8859-1">
-            <src path="src"/>
-            <classpath refid="genomizer-server.classpath"/>
-        <compilerarg value="-Xlint:all"/>
-        </javac>
-    </target>
-
-    <target depends="build" name="build-test">
-      <mkdir dir="${junit.output.dir}"/>
-      <mkdir dir="${junit.output.dir}/bin"/>
-      <javac debug="true" debuglevel="${debuglevel}" destdir="${junit.output.dir}/bin" includeantruntime="false" source="${source}" target="${target}" encoding="ISO-8859-1">
+    <target depends="init" name="compile">
+      <echo message="${ant.project.name}: ${ant.file}"/>
+      <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}" encoding="ISO-8859-1">
+        <src path="src"/>
         <src path="test"/>
         <classpath>
           <path refid="genomizer-server.classpath"/>
           <path refid="JUnit 4.libraryclasspath"/>
-          <pathelement location="${junit.output.dir}/bin"/>
         </classpath>
         <compilerarg value="-Xlint:all"/>
       </javac>
     </target>
 
-    <target depends="build-test" name="test">
+    <target depends="build" name="test">
       <junit printsummary="withOutAndErr">
         <formatter type="xml"/>
         <classpath>
           <path refid="genomizer-server.classpath"/>
           <path refid="JUnit 4.libraryclasspath"/>
-          <pathelement location="${junit.output.dir}/bin"/>
         </classpath>
         <batchtest fork="yes" todir="${junit.output.dir}" failureProperty="test.failed">
           <formatter type="plain" usefile="false"/>
@@ -115,6 +105,7 @@
 
     <!-- Additional targets (unused AFAICT). -->
 
+    <!--
     <target name="ServerMain">
         <java classname="ServerMain" failonerror="true" fork="yes">
             <classpath refid="genomizer-server.classpath"/>
@@ -207,6 +198,7 @@
             <classpath refid="genomizer-server.classpath"/>
         </java>
     </target>
+    -->
 
     <!-- Stuff added by Eclipse, probably unnecessary. -->
 
