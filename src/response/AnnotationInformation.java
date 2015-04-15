@@ -4,6 +4,9 @@ import java.util.ArrayList;
 
 import com.google.gson.annotations.Expose;
 
+/**
+ * Response to the annotation information
+ */
 public class AnnotationInformation {
 
 	@Expose
@@ -41,16 +44,16 @@ public class AnnotationInformation {
 	}
 
 	public String toString() {
-		String returnstring = "NAME: " + name + "\nFORCED: " + forced + "\nVALUES:\n" ;
+		String returnString = "NAME: " + name + "\nFORCED: " + forced + "\nVALUES:\n";
 
 		if(values != null) {
-			for(int i = 0; i < values.size(); i++) {
-				returnstring = returnstring + "     " + values.get(i) + "\n";
+			for (String value : values) {
+				returnString = returnString + "     " + value + "\n";
 			}
 		}
 
 
-		return returnstring;
+		return returnString;
 
 	}
 

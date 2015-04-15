@@ -12,7 +12,7 @@ public class DeleteGenomeReleaseResponse extends Response {
 	/**
 	 * Constructor used to initiate the class.
 	 *
-	 * @param integer to use as response code.
+	 * @param code integer to use as response code.
 	 */
 	public DeleteGenomeReleaseResponse(int code) {
 

@@ -4,6 +4,9 @@ import java.util.Date;
 
 import com.google.gson.annotations.Expose;
 
+/**
+ * Class that represents the response when processing.
+ */
 public class ProcessResponse extends Response {
 
 	@Expose

@@ -13,6 +13,9 @@ import com.google.gson.JsonParser;
 
 import command.ProcessStatus;
 
+/**
+ * Class that represents the response for the get process status
+ */
 public class GetProcessStatusResponse extends Response {
 
 	private Collection<ProcessStatus> procStats;
@@ -24,7 +27,7 @@ public class GetProcessStatusResponse extends Response {
 
 	@Override
 	public String getBody() {
-		List<ProcessStatus> list = new ArrayList<ProcessStatus>( procStats);
+		List<ProcessStatus> list = new ArrayList<>( procStats);
 
 		Collections.sort( list );
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -44,9 +47,8 @@ public class GetProcessStatusResponse extends Response {
         JsonArray json = parser.parse(jsonString).getAsJsonArray();
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        String prettyJson = gson.toJson(json);
 
-        return prettyJson;
+		return gson.toJson(json);
     }
 
 }
