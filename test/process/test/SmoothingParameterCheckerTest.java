@@ -2,23 +2,13 @@ package process.test;
 
 
 import static org.junit.Assert.*;
-
-import java.io.IOException;
-
-import junit.framework.AssertionFailedError;
-
 import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
-import process.Executor;
-import process.RawToProfileConverter;
 import process.SmoothingParameterChecker;
 
 public class SmoothingParameterCheckerTest {
 	private SmoothingParameterChecker spc;
-	private String parameters;
 
 	@After
 	public void tearDown() {

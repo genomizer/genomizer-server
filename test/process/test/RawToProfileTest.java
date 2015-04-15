@@ -1,17 +1,10 @@
 package process.test;
 
-import static org.junit.Assert.*;
-
-import java.io.IOException;
-
-
-import junit.framework.AssertionFailedError;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import process.Executor;
 import process.ProcessException;
 import process.RawToProfileConverter;
 
@@ -35,7 +28,7 @@ public class RawToProfileTest {
 	@Test (expected = ProcessException.class)
 	public void ShouldNotCrash() throws ProcessException {
 		String inFolder = "HEJ";
-		String expected = "Indata is not in the correct format";
+		// String expected = "Indata is not in the correct format";
 		String outFilePath = null;
 		rtp.procedure(parameters, inFolder, outFilePath);
 	}
@@ -44,7 +37,7 @@ public class RawToProfileTest {
 	public void ShouldNotRunWhenParametersIsNull() throws ProcessException {
 		String[] parameters = null;
 		String inFolder = "resources";
-		String expected = "Indata is not in the correct format";
+		// String expected = "Indata is not in the correct format";
 		String outFilePath = "resources";
 		rtp.procedure(parameters, inFolder, outFilePath);
 	}
@@ -53,7 +46,7 @@ public class RawToProfileTest {
 	public void ShouldNotRunWithFiveParameters() throws ProcessException {
 		String inFolder = "HEJ";
 		String outFilePath = "";
-		String expected = "Indata is not in the correct format";
+		// String expected = "Indata is not in the correct format";
 		String[] param = new String[]{"one","two","three","four","five"};
 		rtp.procedure(param,  inFolder, outFilePath);
 	}
@@ -63,7 +56,7 @@ public class RawToProfileTest {
 	public void ShouldNotRunWhenNotFindingFiles() throws ProcessException  {
 		String inFolder = "HEJ";
 		String outFilePath = "";
-		String expected = "Indata is not in the correct format";
+		// String expected = "Indata is not in the correct format";
 		String[] param = new String[]{"one","two","three","four"};
 		rtp.procedure(param, inFolder, outFilePath);
 	}
