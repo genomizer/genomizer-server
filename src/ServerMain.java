@@ -30,7 +30,8 @@ public class ServerMain {
 	 * @throws ParseException
 	 * @throws FileNotFoundException
 	 */
-	public static void main(String[] args) throws ParseException, FileNotFoundException {
+	public static void main(String[] args) throws ParseException,
+												  FileNotFoundException {
 
 		/* We firstly need to read and validate the settings.cfg file. */
 		CommandLine com = loadSettingsFile(args);
@@ -110,7 +111,8 @@ public class ServerMain {
 			throws FileNotFoundException {
 		// Port flag
 		if (com.hasOption('p')) {
-			ServerSettings.genomizerPort = Integer.parseInt(com.getOptionValue('p'));
+			ServerSettings.genomizerPort =
+					Integer.parseInt(com.getOptionValue('p'));
 		}
 		// Debug flag
 		if (com.hasOption("debug")) {
@@ -208,7 +210,8 @@ public class ServerMain {
 	 * @throws FileNotFoundException If database file could not be
 	 * 		   found/opened.
 	 */
-	private static void readDatabaseFile(String path) throws FileNotFoundException {
+	private static void readDatabaseFile(String path)
+			throws FileNotFoundException {
 		File dbFile = new File(path);
 		if (dbFile.exists()) {
 			Scanner scan = new Scanner(dbFile);
