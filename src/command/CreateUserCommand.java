@@ -14,7 +14,7 @@ import response.Response;
 import response.StatusCode;
 
 /**
- * Class used to represent a create user command.
+ * command used to create a user.
  *
  * @author Kommunikation/kontroll 2014.
  * @version 1.0
@@ -74,7 +74,7 @@ public class CreateUserCommand extends Command {
 		try {
 			db = initDB();
 		} catch (SQLException e) {
-			return new ErrorResponse(StatusCode.BAD_REQUEST, "Error when intiating daabaseaccessor. " + e.getMessage());
+			return new ErrorResponse(StatusCode.BAD_REQUEST, "Error when initiating databaseAccessor. " + e.getMessage());
 		} catch (IOException e)  {
 			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
 		}

@@ -16,7 +16,7 @@ import server.ServerSettings;
 /**
  * Class used to authenticate users and privileges.
  *
- * @author
+ * @author Johannes
  * @version 1.0
  */
 public class Authenticate {
@@ -25,10 +25,10 @@ public class Authenticate {
 	private static HashMap<String, Date> latestRequests = new HashMap<String, Date>();
 
 	static public LoginAttempt login(String username, String password) {
-	    if(!PasswordHash.toSaltedSHA256Hash(password).equals(ServerSettings.passwordHash)) {
-	    	return new LoginAttempt(false, null, "Wrong password.");
+	    if(PasswordHash.toSaltedSHA256Hash(password).equals(ServerSettings.passwordHash)) {
+			return new LoginAttempt(true, addUser(username), null);
 	    }
-	    return new LoginAttempt(true, addUser(username), null);
+		return new LoginAttempt(false, null, "Wrong password.");
 	}
 
 	public static HashMap<String, Date> getLatestRequestsMap() {
@@ -39,7 +39,6 @@ public class Authenticate {
 	 * Method used to handle logged in users.
 	 *
 	 * @param username to add as logged in.
-	 * @param userID to add as logged in.
 	 */
 	static public String addUser(String username) {
 
@@ -51,7 +50,6 @@ public class Authenticate {
 			}
 
 			updateLatestRequest(next_uuid);
-			//latestRequests.put(next_uuid, new Date());
 			return next_uuid;
 		}
 
