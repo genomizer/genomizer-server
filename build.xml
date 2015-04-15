@@ -57,6 +57,7 @@
     <target name="clean">
         <delete dir="bin"/>
         <delete dir="${junit.output.dir}"/>
+        <delete file="server.jar"/>
     </target>
 
     <target depends="clean" name="cleanall"/>
