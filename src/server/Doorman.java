@@ -104,32 +104,32 @@ public class Doorman {
 				case "GET":
 					switch(exchange.getHttpContext().getPath()) {
 					case "/experiment":
-						exchange(exchange, CommandType.GET_EXPERIMENT_COMMAND);
+						handleRequest(exchange, CommandType.GET_EXPERIMENT_COMMAND);
 						break;
 					case "/file":
-						exchange(exchange, CommandType.GET_FILE_FROM_EXPERIMENT_COMMAND);
+						handleRequest(exchange, CommandType.GET_FILE_FROM_EXPERIMENT_COMMAND);
 						break;
 					case "/search":
-						exchange(exchange, CommandType.SEARCH_FOR_EXPERIMENTS_COMMAND);
+						handleRequest(exchange, CommandType.SEARCH_FOR_EXPERIMENTS_COMMAND);
 						break;
 					case "/annotation":
-						exchange(exchange, CommandType.GET_ANNOTATION_INFORMATION_COMMAND);
+						handleRequest(exchange, CommandType.GET_ANNOTATION_INFORMATION_COMMAND);
 						break;
 					case "/genomeRelease":
 						if(exchange.getRequestURI().toString().startsWith("/genomeRelease/")){
-							exchange(exchange, CommandType.GET_GENOME_RELEASE_SPECIES_COMMAND);
+							handleRequest(exchange, CommandType.GET_GENOME_RELEASE_SPECIES_COMMAND);
 						}else{
-							exchange(exchange, CommandType.GET_ALL_GENOME_RELEASE_COMMAND);
+							handleRequest(exchange, CommandType.GET_ALL_GENOME_RELEASE_COMMAND);
 						}
 						break;
 					case "/sysadm":
-						exchange(exchange, CommandType.GET_ANNOTATION_PRIVILEGES_COMMAND);
+						handleRequest(exchange, CommandType.GET_ANNOTATION_PRIVILEGES_COMMAND);
 						break;
 					case "/process":
-						exchange(exchange, CommandType.GET_PROCESS_STATUS_COMMAND);
+						handleRequest(exchange, CommandType.GET_PROCESS_STATUS_COMMAND);
 						break;
 					case "/token":
-						exchange(exchange, CommandType.IS_TOKEN_VALID_COMMAND);
+						handleRequest(exchange, CommandType.IS_TOKEN_VALID_COMMAND);
 					}
 					break;
 
@@ -137,31 +137,31 @@ public class Doorman {
 				case "PUT":
 					switch(exchange.getHttpContext().getPath()) {
 					case "/experiment":
-						exchange(exchange, CommandType.UPDATE_EXPERIMENT_COMMAND);
+						handleRequest(exchange, CommandType.UPDATE_EXPERIMENT_COMMAND);
 						break;
 					case "/file":
-						exchange(exchange, CommandType.UPDATE_FILE_IN_EXPERIMENT_COMMAND);
+						handleRequest(exchange, CommandType.UPDATE_FILE_IN_EXPERIMENT_COMMAND);
 						break;
 					case "/process":
 
 						String processPath = exchange.getRequestURI().toString();
 
 						if (processPath.startsWith("/process/rawtoprofile")) {
-							exchange(exchange, CommandType.PROCESS_COMMAND);
+							handleRequest(exchange, CommandType.PROCESS_COMMAND);
 						}
 						break;
 					case "/annotation":
 						if (exchange.getRequestURI().toString().startsWith("/annotation/field")) {
-							exchange(exchange, CommandType.RENAME_ANNOTATION_FIELD_COMMAND);
+							handleRequest(exchange, CommandType.RENAME_ANNOTATION_FIELD_COMMAND);
 						} else if (exchange.getRequestURI().toString().startsWith("/annotation/value")) {
-							exchange(exchange, CommandType.RENAME_ANNOTATION_VALUE_COMMAND);
+							handleRequest(exchange, CommandType.RENAME_ANNOTATION_VALUE_COMMAND);
 						}
 						break;
 					case "/sysadm":
 						if (exchange.getRequestURI().toString().startsWith("/sysadm/annpriv")) {
-							exchange(exchange, CommandType.UPDATE_ANNOTATION_PRIVILEGES_COMMAND);
+							handleRequest(exchange, CommandType.UPDATE_ANNOTATION_PRIVILEGES_COMMAND);
 						} else if (exchange.getRequestURI().toString().startsWith("/sysadm/usrpriv")) {
-							exchange(exchange, CommandType.UPDATE_USER_PRIVILEGES_COMMAND);
+							handleRequest(exchange, CommandType.UPDATE_USER_PRIVILEGES_COMMAND);
 						}
 						break;
 					}
@@ -171,26 +171,26 @@ public class Doorman {
 				case "POST":
 					switch(exchange.getHttpContext().getPath()) {
 					case "/login":
-						exchange(exchange, CommandType.LOGIN_COMMAND);
+						handleRequest(exchange, CommandType.LOGIN_COMMAND);
 						break;
 					case "/experiment":
-						exchange(exchange, CommandType.ADD_EXPERIMENT_COMMAND);
+						handleRequest(exchange, CommandType.ADD_EXPERIMENT_COMMAND);
 						break;
 					case "/file":
-						exchange(exchange, CommandType.ADD_FILE_TO_EXPERIMENT_COMMAND);
+						handleRequest(exchange, CommandType.ADD_FILE_TO_EXPERIMENT_COMMAND);
 						break;
 					case "/user":
-						exchange(exchange, CommandType.CREATE_USER_COMMAND);
+						handleRequest(exchange, CommandType.CREATE_USER_COMMAND);
 						break;
 					case "/annotation":
 						if (exchange.getRequestURI().toString().startsWith("/annotation/field")) {
-							exchange(exchange, CommandType.ADD_ANNOTATION_FIELD_COMMAND);
+							handleRequest(exchange, CommandType.ADD_ANNOTATION_FIELD_COMMAND);
 						} else if (exchange.getRequestURI().toString().startsWith("/annotation/value")) {
-							exchange(exchange, CommandType.ADD_ANNOTATION_VALUE_COMMAND);
+							handleRequest(exchange, CommandType.ADD_ANNOTATION_VALUE_COMMAND);
 						}
 						break;
 					case "/genomeRelease":
-						exchange(exchange, CommandType.ADD_GENOME_RELEASE_COMMAND);
+						handleRequest(exchange, CommandType.ADD_GENOME_RELEASE_COMMAND);
 						break;
 					}
 					break;
@@ -199,26 +199,26 @@ public class Doorman {
 				case "DELETE":
 					switch(exchange.getHttpContext().getPath()) {
 					case "/login":
-						exchange(exchange, CommandType.LOGOUT_COMMAND);
+						handleRequest(exchange, CommandType.LOGOUT_COMMAND);
 						break;
 					case "/experiment":
-						exchange(exchange, CommandType.DELETE_EXPERIMENT_COMMAND);
+						handleRequest(exchange, CommandType.DELETE_EXPERIMENT_COMMAND);
 						break;
 					case "/file":
-						exchange(exchange, CommandType.DELETE_FILE_FROM_EXPERIMENT_COMMAND);
+						handleRequest(exchange, CommandType.DELETE_FILE_FROM_EXPERIMENT_COMMAND);
 						break;
 					case "/user":
-						exchange(exchange, CommandType.DELETE_USER_COMMAND);
+						handleRequest(exchange, CommandType.DELETE_USER_COMMAND);
 						break;
 					case "/annotation":
 						if (exchange.getRequestURI().toString().startsWith("/annotation/field")) {
-							exchange(exchange, CommandType.REMOVE_ANNOTATION_FIELD_COMMAND);
+							handleRequest(exchange, CommandType.REMOVE_ANNOTATION_FIELD_COMMAND);
 						} else if (exchange.getRequestURI().toString().startsWith("/annotation/value")) {
-							exchange(exchange, CommandType.DELETE_ANNOTATION_VALUE_COMMAND);
+							handleRequest(exchange, CommandType.DELETE_ANNOTATION_VALUE_COMMAND);
 						}
 						break;
 					case "/genomeRelease":
-						exchange(exchange, CommandType.DELETE_GENOME_RELEASE_COMMAND);
+						handleRequest(exchange, CommandType.DELETE_GENOME_RELEASE_COMMAND);
 						break;
 					}
 					break;
@@ -232,14 +232,14 @@ public class Doorman {
 	 * @param exchange the HTTPExchange
 	 * @param type which specific type of command it is.
 	 */
-	private void exchange(HttpExchange exchange, CommandType type) {
+	private void handleRequest(HttpExchange exchange, CommandType type) {
 		InputStream bodyStream = exchange.getRequestBody();
 		Scanner scanner = new Scanner(bodyStream);
 		String body = "";
 		String uuid = null;
-		String username = null;
 		Debug.log("Exchange: " + type);
 
+		/** authorization */
 		if(type != CommandType.LOGIN_COMMAND) {
 			List<String> auth = exchange.getRequestHeaders().get("Authorization");
 			if (auth != null && Authenticate.idExists(auth.get(0))) {
@@ -250,7 +250,6 @@ public class Doorman {
 				Response errorResponse = new MinimalResponse(StatusCode.UNAUTHORIZED);
 				try {
 					respond(exchange, errorResponse);
-					scanner.close();
 				} catch (IOException e1) {
 					Debug.log("Could not send response to client. " + e1.getMessage());
 				}
@@ -258,24 +257,22 @@ public class Doorman {
 				return;
 			}
 		}
+
 		while(scanner.hasNext()) {
 			body = body.concat(" " + scanner.next());
 		}
 		scanner.close();
 
-		Response response = null;
-
-
+		String username = null;
 		//username = Authenticate.getUsername(uuid);
 		Debug.log("Username: " + username + "\n");
-
-
 		Debug.log("Body from client: " + body);
 
+
+		Response response = null;
 		try {
 			String header = URLDecoder.decode(exchange.getRequestURI().toString(), "UTF-8");
 			response = commandHandler.processNewCommand(body, header, uuid, type);
-
 		} catch(Exception e ) {
 			Debug.log("Could not create/process new command " + e.getMessage());
 			ErrorLogger.log("SYSTEM", e);
@@ -283,7 +280,6 @@ public class Doorman {
 		}
 
 		//TODO Should there be some error checking?
-
 
 		try {
 			respond(exchange, response);
@@ -300,13 +296,11 @@ public class Doorman {
 	 * @throws IOException
 	 */
 	private void respond(HttpExchange exchange, Response response) throws IOException {
-		String body = null;
 		if(response.getBody() == null || response.getBody().equals("")) {
 			exchange.sendResponseHeaders(response.getCode(), 0);
-
 		} else {
-			body = response.getBody();
-			Debug.log("Response: " + body.toString());
+			String body = response.getBody();
+			Debug.log("Response: " + body);
 			exchange.sendResponseHeaders(response.getCode(), body.getBytes().length);
 
 			OutputStream os = exchange.getResponseBody();
