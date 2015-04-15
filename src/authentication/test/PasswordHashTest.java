@@ -5,23 +5,15 @@
 package authentication.test;
 
 import authentication.PasswordHash;
-import org.junit.Before;
-import org.junit.Test;
 import org.junit.*;
-
-import java.security.MessageDigest;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 /**
- * A test class made for testing of the functions in PasswordHash
- *
+ * A test class made for testing of the functions in PasswordHash.
  */
 public class PasswordHashTest {
 
-    private PasswordHash hasher = new PasswordHash();
+    private PasswordHash hasher;
 
     @Before
     public void setup() {
