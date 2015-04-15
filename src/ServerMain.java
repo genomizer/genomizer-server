@@ -136,11 +136,11 @@ public class ServerMain {
                 			 "output for every request and response as well " +
                 			 "as other output.");
 		comOptions.addOption("f", "file", true,
-							 "the file to read server settings from, is "+
+							 "the file to read server settings from, is " +
 							 "ignored when -d is used");
 		comOptions.addOption("nri", "noremoveinactive", false,
-							 "if this flag is set the server will not "+
- 							 "remove inactive users which are logged in on "+
+							 "if this flag is set the server will not " +
+ 							 "remove inactive users which are logged in on " +
  							 "the server.");
 		return comOptions;
 	}
