@@ -35,7 +35,7 @@ public class TestInitializer {
     static {
       if(System.getenv("TRAVIS").equals("true")) {
         // Running on Travis.
-        username = "test";
+        username = "postgres";
         password = "";
         host     = "localhost";
         database = "c5dv151_vt14";
