@@ -23,9 +23,19 @@ public class PasswordHash
      */
     public static String toSaltedSHA256Hash(String password) {
 
+        /**
+         * If password strängen är tom returneras null.
+         */
+            if (password.isEmpty()) {
+
+                return null;
+            }
+
     	String salt = getSalt();
     	String salted_password = password + salt;
+
     	try {
+
             // Create MessageDigest instance for SHA-256
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             //Add password bytes to digest
