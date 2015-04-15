@@ -39,7 +39,7 @@
             </manifest>
         </jar>
     </target>
-    
+
     <target name="init">
         <mkdir dir="bin"/>
         <copy includeemptydirs="false" todir="bin">
@@ -67,7 +67,7 @@
         <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}" encoding="ISO-8859-1">
             <src path="src"/>
             <classpath refid="genomizer-Server.classpath"/>
-	    <compilerarg value="-Xlint:all"/>
+        <compilerarg value="-Xlint:all"/>
         </javac>
     </target>
 
@@ -75,27 +75,27 @@
       <mkdir dir="${junit.output.dir}"/>
       <mkdir dir="${junit.output.dir}/bin"/>
       <javac debug="true" debuglevel="${debuglevel}" destdir="${junit.output.dir}/bin" includeantruntime="false" source="${source}" target="${target}" encoding="ISO-8859-1">
-	<src path="test"/>
-	<classpath>
-	  <path refid="genomizer-Server.classpath"/>
-	  <path refid="JUnit 4.libraryclasspath"/>
-	  <pathelement location="${junit.output.dir}/bin"/>
-	</classpath>
-	<compilerarg value="-Xlint:all"/>
+    <src path="test"/>
+    <classpath>
+      <path refid="genomizer-Server.classpath"/>
+      <path refid="JUnit 4.libraryclasspath"/>
+      <pathelement location="${junit.output.dir}/bin"/>
+    </classpath>
+    <compilerarg value="-Xlint:all"/>
       </javac>
       <junit printsummary="withOutAndErr">
-	<formatter type="xml"/>
-	<classpath>
-	  <path refid="genomizer-Server.classpath"/>
-	  <path refid="JUnit 4.libraryclasspath"/>
-	  <pathelement location="${junit.output.dir}/bin"/>
-	</classpath>
-	<batchtest fork="yes" todir="${junit.output.dir}" failureProperty="test.failed">
-	  <formatter type="plain" usefile="false"/>
-	  <fileset dir="test">
-	    <include name="**/*.java"/>
-	  </fileset>
-	</batchtest>
+    <formatter type="xml"/>
+    <classpath>
+      <path refid="genomizer-Server.classpath"/>
+      <path refid="JUnit 4.libraryclasspath"/>
+      <pathelement location="${junit.output.dir}/bin"/>
+    </classpath>
+    <batchtest fork="yes" todir="${junit.output.dir}" failureProperty="test.failed">
+      <formatter type="plain" usefile="false"/>
+      <fileset dir="test">
+        <include name="**/*.java"/>
+      </fileset>
+    </batchtest>
       </junit>
       <fail message="Test failure detected, check test results." if="test.failed" />
     </target>
