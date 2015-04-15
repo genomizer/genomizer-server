@@ -79,7 +79,8 @@ public class SearchForExperimentsCommand extends Command {
 		} catch (ParseException e) {
 			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
 		} finally {
-			db.close();
+			if (db != null)
+				db.close();
 		}
 		SearchResponse response = new SearchResponse(searchResult);
 		return response;
