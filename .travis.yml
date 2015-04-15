@@ -3,4 +3,13 @@ language: java
 jdk:
   - openjdk7
 
-script: ant jar
+addons:
+  postgresql: "9.3"
+
+before_script:
+  - psql -c 'create database c5dv151_vt14;' -U postgres
+  - psql -f sql/genomizer_database_tables.sql -U postgres -d c5dv151_vt14
+
+script: 
+  - ant test
+  - ant junitreport
