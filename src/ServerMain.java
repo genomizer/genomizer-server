@@ -140,8 +140,8 @@ public class ServerMain {
 							 "ignored when -d is used");
 		comOptions.addOption("nri", "noremoveinactive", false,
 							 "if this flag is set the server will not "+
-                             "remove inactive users which are logged in on "+
-                             "the server.");
+ 							 "remove inactive users which are logged in on "+
+ 							 "the server.");
 		return comOptions;
 	}
 
