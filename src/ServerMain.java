@@ -140,7 +140,16 @@ public class ServerMain {
 		}
 	}
 
-	public static void readDatabaseFile(String path) throws FileNotFoundException {
+	/**
+	 * This method reads a 'database' file. This method is never called
+	 * anywhere.
+	 *
+	 * TODO: Remove this piece of dead code. (When safe)
+	 * @param path Path of database file
+	 * @throws FileNotFoundException If database file could not be
+	 * 		   found/opened.
+	 */
+	private static void readDatabaseFile(String path) throws FileNotFoundException {
 		File dbFile = new File(path);
 		if (dbFile.exists()) {
 			Scanner scan = new Scanner(dbFile);
