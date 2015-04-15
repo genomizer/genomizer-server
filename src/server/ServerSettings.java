@@ -2,8 +2,12 @@ package server;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Scanner;
+
+import database.constants.ServerDependentValues;
 
 public class ServerSettings {
 
@@ -35,7 +39,7 @@ public class ServerSettings {
 			out.write("passwordSalt = " + passwordSalt + "\n");
 			out.close();
 		} catch (IOException e) {
-			System.err.println("Could not write to file: " + path);
+			ErrorLogger.log("SYSTEM", "Could not write to file: " + path);
 		}
 	}
 
@@ -55,17 +59,88 @@ public class ServerSettings {
 
 	private static void nullCheck(int parameter, String name) {
 		if (parameter == -1) {
-			System.err.println("Error! parameter " + name + " is not set. Check in settings.cfg if it is set and spelled correctly, capitalization does not matter.");
-			System.err.println("Exiting");
+			ErrorLogger.log("SYSTEM",
+					"Error! parameter " + name + " is not set. " +
+					"Check in settings.cfg if it is set and spelled " +
+					"correctly, capitalization does not matter.");
+			ErrorLogger.log("SYSTEM", "Exiting");
 			System.exit(1);
 		}
 	}
 
 	private static void nullCheck(String parameter, String name) {
 		if (parameter == null) {
-			System.err.println("Error! parameter " + name + " is not set. Check in settings.cfg if it is set and spelled correctly, capitalization does not matter.");
-			System.err.println("Exiting");
+			ErrorLogger.log("SYSTEM",
+					"Error! parameter " + name + " is not set. " +
+					"Check in settings.cfg if it is set and spelled " +
+					"correctly, capitalization does not matter.");
+			ErrorLogger.log("SYSTEM", "Exiting");
 			System.exit(1);
+		}
+	}
+
+	public static void readSettingsFile(String path) throws FileNotFoundException {
+		File settingsFile = new File(path);
+
+		if (settingsFile.exists()) {
+			Scanner scan = new Scanner(settingsFile);
+
+			while (scan.hasNextLine()) {
+
+				String line = scan.nextLine();
+				int index = line.indexOf("=");
+				String key = line.substring(0, index).trim();
+				String value = line.substring(index+1).trim();
+
+				switch (key.toLowerCase()) {
+				case "databaseuser":
+					databaseUsername = value;
+					break;
+				case "databasepassword":
+					databasePassword = value;
+					break;
+				case "databasehost":
+					databaseHost = value;
+					break;
+				case "databasename":
+					databaseName = value;
+					break;
+				case "publicaddress":
+					publicAddress = value;
+					break;
+				case "apacheport":
+					apachePort = Integer.parseInt(value);
+					break;
+				case "downloadurl":
+					downloadURL = value;
+					break;
+				case "uploadurl":
+					uploadURL = value;
+					break;
+				case "genomizerport":
+					genomizerPort = Integer.parseInt(value);
+					break;
+				case "passwordhash":
+					passwordHash = value;
+					break;
+				case "passwordsalt":
+					passwordSalt = value;
+					break;
+				default:
+					ErrorLogger.log("SYSTEM", "Unrecognized setting: " + key);
+					break;
+				}
+			}
+			scan.close();
+
+			ServerDependentValues.DownloadURL =
+					publicAddress + ":" + apachePort + downloadURL;
+			ServerDependentValues.UploadURL =
+					publicAddress + ":" + apachePort + uploadURL;
+
+		} else {
+			ErrorLogger.log("SYSTEM",
+					"Error, \"" + path + "\" does not exist, using default settings.");
 		}
 	}
 

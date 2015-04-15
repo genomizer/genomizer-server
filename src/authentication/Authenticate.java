@@ -21,11 +21,16 @@ import server.ServerSettings;
  */
 public class Authenticate {
 
+	// A map containing <userid, username> of the logged in user
 	private static HashMap<String, String> activeUsersID = new HashMap<String, String>();
+
+	// A map containing <userid, date> where date is the last time a request was made
 	private static HashMap<String, Date> latestRequests = new HashMap<String, Date>();
 
+
+
 	static public LoginAttempt login(String username, String password) {
-	    if(!PasswordHash.toSaltedSHA256Hash(password).equals(ServerSettings.passwordHash)) {
+	    if (!PasswordHash.toSaltedSHA256Hash(password).equals(ServerSettings.passwordHash)) {
 	    	return new LoginAttempt(false, null, "Wrong password.");
 	    }
 	    return new LoginAttempt(true, addUser(username), null);

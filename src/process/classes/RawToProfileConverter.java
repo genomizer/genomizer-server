@@ -71,7 +71,7 @@ public class RawToProfileConverter extends Executor {
 			String outFilePath) throws ProcessException {
 
 		/*If you want to run several processes simultaneously, this would need to be changed*/
-		StartUpCleaner.removeOldTempDirectories("resources/");
+		StartUpCleaner.removeOldTempDirectories(Executor.DIRECTORY);
 		File[] inFiles = null;
 
 		// Error handling

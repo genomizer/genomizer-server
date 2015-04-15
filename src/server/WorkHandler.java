@@ -19,30 +19,32 @@ public class WorkHandler extends Thread{
 
 	private static final long statusTimeToLive = 2*1000*60*60*24;
 
-	private Queue<ProcessCommand> workQueue;
+	private Queue<ProcessCommand> processPool;
 	private HashMap<ProcessCommand,ProcessStatus> processStatus;
 
-	//A queue as a linked list
 	public WorkHandler(){
-		workQueue = new LinkedList<ProcessCommand>();
-		processStatus=new HashMap<ProcessCommand, ProcessStatus>();
+		processPool = new LinkedList<ProcessCommand>();
+		processStatus = new HashMap<ProcessCommand, ProcessStatus>();
 	}
 
-	//Add a command to the queue
 	public synchronized void addWork(ProcessCommand command) {
-		workQueue.add(command);
+		processPool.add(command);
 		processStatus.put(command, new ProcessStatus(command));
 	}
 
 	public synchronized void removeOldStatuses() {
-		long now = System.currentTimeMillis();
+
+		long currentTime = System.currentTimeMillis();
 		ArrayList<ProcessCommand> toBeRemoved = new ArrayList<>();
+
 		for (ProcessCommand proc : processStatus.keySet()) {
 			ProcessStatus procStat = processStatus.get(proc);
 			String statusString = procStat.status;
+
 			if (statusString.equals("Finished") || statusString.equals("Crashed")) {
 				long time = procStat.timeAdded;
-				long diff = now - time;
+				long diff = currentTime - time;
+
 				if (diff > statusTimeToLive) {
 					toBeRemoved.add(proc);
 				}
@@ -56,54 +58,60 @@ public class WorkHandler extends Thread{
 
 	}
 
-	//The thread runs all the time and checks if the queue is empty
-	//If the queue is not empty, the command at the head of the queue is
-	//is executed
+	/* The thread runs all the time and checks if the queue is empty
+		If the queue is not empty, the command at the head of the queue is
+		is executed */
 	@Override
 	public void run(){
 		Debug.log(Thread.currentThread().getName());
 
 
-		while(true){
-			if(!workQueue.isEmpty()){
-				ProcessCommand work = workQueue.poll();
+		while (true){
+			if (!processPool.isEmpty()){
+				ProcessCommand work = processPool.poll();
 				Debug.log("The processcommand is going to be executed");
-				ProcessStatus stat = processStatus.get(work);
-				stat.status = "Started";
+				ProcessStatus procStatus = processStatus.get(work);
+				procStatus.status = "Started";
 
 				try {
 					work.setFilePaths();
 				} catch (SQLException | IOException e) {
+
 					Debug.log(e.getMessage());
-					ErrorLogger.log(stat.author, "Could not run process command: " +  e.getMessage());
-					stat.status = "Crashed";
+					ErrorLogger.log(procStatus.author,
+							"Could not run process command: " +  e.getMessage());
+					procStatus.status = "Crashed";
 					continue;
 
 				}
 
-				stat.outputFiles = work.getFilePaths();
-				stat.timeStarted = System.currentTimeMillis();
+				procStatus.outputFiles = work.getFilePaths();
+				procStatus.timeStarted = System.currentTimeMillis();
 
-				try{
+				try {
 					Response resp = work.execute();
 					Debug.log("AFTER EXECUTE PROCESS");
+
 					if (resp.getCode()==StatusCode.CREATED){
-						stat.status = "Finished";
-					}else{
-						stat.status = "Crashed";
+						procStatus.status = "Finished";
+					} else {
+						procStatus.status = "Crashed";
 					}
-				} catch(NullPointerException e){
-					stat.status = "Crashed";
+				} catch (NullPointerException e){
+					procStatus.status = "Crashed";
+					ErrorLogger.log(procStatus.author, "Process crashed");
 				}
 
-				stat.timeFinished = System.currentTimeMillis();
+				procStatus.timeFinished = System.currentTimeMillis();
 			} else {
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
-					e.printStackTrace();
+
 					Debug.log("Work Handler thread sleep failed/interrupted");
-					ErrorLogger.log("SYSTEM", "Work Handler thread sleep failed/interrupted in between process execution.");
+					ErrorLogger.log("SYSTEM",
+							"Work Handler thread sleep failed/interrupted " +
+							"in between process execution.");
 				}
 			}
 			removeOldStatuses();

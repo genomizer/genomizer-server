@@ -23,7 +23,9 @@ public class StartUpCleaner {
 							System.out.println("Deleting temp directory " + file.getName());
 							delete(file);
 
-						} catch (IOException e) {}
+						} catch (IOException e) {
+							System.err.println("removeOldTempDirectories: Could not delete specified file.");
+						}
 
 
 					}

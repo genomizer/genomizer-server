@@ -3,12 +3,12 @@ package process.classes;
 import java.io.IOException;
 
 public class temp extends Executor{
-	
+
 	public temp(){
 	}
 
 	public void sds(){
-		String [] FILEPATH = {"resources/"};
+		String [] FILEPATH = {Executor.DIRECTORY};
 		try {
 			executeScript(FILEPATH);
 		} catch (InterruptedException e) {
@@ -19,5 +19,5 @@ public class temp extends Executor{
 			e.printStackTrace();
 		}
 	}
-	
+
 }

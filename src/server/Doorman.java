@@ -57,7 +57,8 @@ public class Doorman {
 
 		this.commandHandler = commandHandler;
 
-		httpServer = HttpServer.create(new InetSocketAddress(port),0);
+		InetSocketAddress socket = new InetSocketAddress(port);
+		httpServer = HttpServer.create(socket, 0);
 		httpServer.createContext("/login", createHandler());
 		httpServer.createContext("/experiment", createHandler());
 		httpServer.createContext("/annotation", createHandler());
@@ -75,8 +76,8 @@ public class Doorman {
 
 				try {
 				new Thread(command).start();
-				} catch(Exception e) {
-					System.err.println("ERROR when creating new Executor." + e.getMessage());
+				} catch(IllegalStateException e) {
+					Debug.log("ERROR when creating new Executor." + e.getMessage());
 					ErrorLogger.log("SERVER", "ERROR when creating new Executor." + e.getMessage());
 				}
 			}
@@ -99,7 +100,9 @@ public class Doorman {
 			@Override
 			public void handle(HttpExchange exchange) throws IOException {
 
-				Debug.log("\n-----------------\nNEW EXCHANGE: " + exchange.getHttpContext().getPath());
+				Debug.log("\n-----------------\n" +
+						"NEW EXCHANGE: " + exchange.getHttpContext().getPath());
+
 				switch(exchange.getRequestMethod()) {
 				case "GET":
 					switch(exchange.getHttpContext().getPath()) {
@@ -116,9 +119,9 @@ public class Doorman {
 						exchange(exchange, CommandType.GET_ANNOTATION_INFORMATION_COMMAND);
 						break;
 					case "/genomeRelease":
-						if(exchange.getRequestURI().toString().startsWith("/genomeRelease/")){
+						if (exchange.getRequestURI().toString().startsWith("/genomeRelease/")){
 							exchange(exchange, CommandType.GET_GENOME_RELEASE_SPECIES_COMMAND);
-						}else{
+						} else {
 							exchange(exchange, CommandType.GET_ALL_GENOME_RELEASE_COMMAND);
 						}
 						break;
@@ -233,18 +236,24 @@ public class Doorman {
 	 * @param type which specific type of command it is.
 	 */
 	private void exchange(HttpExchange exchange, CommandType type) {
+
 		InputStream bodyStream = exchange.getRequestBody();
 		Scanner scanner = new Scanner(bodyStream);
 		String body = "";
 		String uuid = null;
 		String username = null;
+		Response response = null;
 		Debug.log("Exchange: " + type);
 
 		if(type != CommandType.LOGIN_COMMAND) {
+
+			// Check if user is authenticated
 			List<String> auth = exchange.getRequestHeaders().get("Authorization");
 			if (auth != null && Authenticate.idExists(auth.get(0))) {
 				uuid = auth.get(0);
 				Authenticate.updateLatestRequest(uuid);
+
+			// Send unauthorized response and close connection
 			} else {
 				Debug.log("Unauthorized request!");
 				Response errorResponse = new MinimalResponse(StatusCode.UNAUTHORIZED);
@@ -253,24 +262,25 @@ public class Doorman {
 					scanner.close();
 				} catch (IOException e1) {
 					Debug.log("Could not send response to client. " + e1.getMessage());
+					ErrorLogger.log("SYSTEM", "Could not send response to client. " + e1.getMessage());
 				}
 				scanner.close();
 				return;
 			}
 		}
+
+		// Get the body content
 		while(scanner.hasNext()) {
 			body = body.concat(" " + scanner.next());
 		}
 		scanner.close();
 
-		Response response = null;
-
 
 		//username = Authenticate.getUsername(uuid);
-		Debug.log("Username: " + username + "\n");
 
-
+		Debug.log("Userid: " + uuid + "\n");
 		Debug.log("Body from client: " + body);
+
 
 		try {
 			String header = URLDecoder.decode(exchange.getRequestURI().toString(), "UTF-8");
@@ -279,7 +289,6 @@ public class Doorman {
 		} catch(Exception e ) {
 			Debug.log("Could not create/process new command " + e.getMessage());
 			ErrorLogger.log("SYSTEM", e);
-			e.printStackTrace();
 		}
 
 		//TODO Should there be some error checking?
@@ -296,12 +305,12 @@ public class Doorman {
 	/**
 	 * Sends a response back to the client.
 	 * @param exchange the HTTPExchange-object.
-	 * @param response the response object containting information about the response.
+	 * @param response the response object containing information about the response.
 	 * @throws IOException
 	 */
 	private void respond(HttpExchange exchange, Response response) throws IOException {
 		String body = null;
-		if(response.getBody() == null || response.getBody().equals("")) {
+		if (response.getBody() == null || response.getBody().equals("")) {
 			exchange.sendResponseHeaders(response.getCode(), 0);
 
 		} else {

@@ -8,6 +8,9 @@ import java.util.Scanner;
 import java.util.Stack;
 import java.util.StringTokenizer;
 
+import server.Debug;
+import server.ErrorLogger;
+
 /**
  * Class that is abstract and contains methods that all analysis needs to use.
  *
@@ -15,7 +18,7 @@ import java.util.StringTokenizer;
  */
 public abstract class Executor {
 
-	private final String FILEPATH = "resources/";
+	static final String DIRECTORY = "resources/";
 
 	/**
 	 * Used to execute a program like bowtie
@@ -28,7 +31,7 @@ public abstract class Executor {
 	protected String executeProgram(String[] command)
 			throws InterruptedException, IOException {
 
-		File pathToExecutable = new File(FILEPATH + command[0]);
+		File pathToExecutable = new File(DIRECTORY + command[0]);
 		command[0] = pathToExecutable.getAbsolutePath();
 		return executeCommand(command);
 	}
@@ -44,7 +47,7 @@ public abstract class Executor {
 	protected String executeScript(String[] command)
 			throws InterruptedException, IOException {
 
-		File pathToExecutable = new File(FILEPATH + command[1]);
+		File pathToExecutable = new File(DIRECTORY + command[1]);
 		command[1] = pathToExecutable.getAbsolutePath();
 		return executeCommand(command);
 	}
@@ -77,15 +80,18 @@ public abstract class Executor {
 	 */
 	private String executeCommand(String[] command)
 			throws InterruptedException, IOException {
+
+		// Build a system process
 		ProcessBuilder builder = new ProcessBuilder(command);
 
-		builder.directory(new File(FILEPATH).getAbsoluteFile());
+		builder.directory(new File(DIRECTORY).getAbsoluteFile());
 		builder.redirectErrorStream(true);
-		Process process;
-		process = builder.start();
+		Process process = builder.start();
 
 		Scanner s = new Scanner(process.getInputStream());
 		StringBuilder text = new StringBuilder();
+
+		// Get process output
 		while (s.hasNextLine()) {
 			text.append(s.nextLine());
 			text.append("\n");
@@ -111,27 +117,32 @@ public abstract class Executor {
 	 */
 	protected String executeShellCommand(String[] command, String dir,
 			String fileName) throws IOException, InterruptedException {
+
+		// Build a system process
 		ProcessBuilder builder = new ProcessBuilder(command);
 
-		builder.directory(new File(FILEPATH).getAbsoluteFile());
+		builder.directory(new File(DIRECTORY).getAbsoluteFile());
 		builder.redirectErrorStream(true);
-		Process process;
-		process = builder.start();
+		Process process = builder.start();
 
 		Scanner s = new Scanner(process.getInputStream());
 		StringBuilder text = new StringBuilder();
-		File dirFile = new File(FILEPATH + dir);
+		File dirFile = new File(DIRECTORY + dir);
 
 		if (!dirFile.exists()) {
 			dirFile.mkdirs();
 		}
+
 		File file = new File(dirFile.toString() + "/" + fileName);
 		FileWriter fw = new FileWriter(file.getAbsoluteFile());
 		BufferedWriter bw = new BufferedWriter(fw);
+
+		// Get process output
 		while (s.hasNextLine()) {
 			bw.append(s.nextLine());
 			bw.append("\n");
 		}
+
 		bw.close();
 		s.close();
 
@@ -151,26 +162,35 @@ public abstract class Executor {
 	 */
 	protected boolean cleanUp(Stack<String> files) throws ProcessException {
 		boolean isOk = true;
+
 		while (!files.isEmpty()) {
+
 			File file = new File(files.pop());
+
+			// Delete files in the directory
 			if (file.isDirectory()) {
 				File[] fileList = file.listFiles();
+
 				for (int i = 0; i < fileList.length; i++) {
-					System.out.println("nu tas " + fileList[i].toString()
-							+ " bort");
+					Debug.log("File " + fileList[i].toString() + "is being deleted");
+
 					if (fileList[i].isFile()) {
 						if (!fileList[i].delete()) {
 							isOk = false;
-							System.out.println("Failed");
+							Debug.log("Failed to delete file "+fileList[i].toString());
+							ErrorLogger.log("SYSTEM", "Failed to delete file "+fileList[i].toString());
 							//throw new ProcessException("Failed to delete file "+fileList[i].toString());
 						}
 					}
 				}
 			}
-			System.out.println("nu tas " + file.toString() + " bort");
+
+			// Delete the file/directory
+			Debug.log("File " + file.toString() + "is being deleted");
 			if (!file.delete()) {
 				isOk = false;
-				System.out.println("Failed to delete directory");
+				Debug.log("Failed to delete file "+file.toString());
+				ErrorLogger.log("SYSTEM", "Failed to delete file "+file.toString());
 				//throw new ProcessException("Failed to delete directory "+file.toString());
 			}
 		}
@@ -180,23 +200,27 @@ public abstract class Executor {
 	/**
 	 * Moves files from dirToFiles to dest.
 	 *
-	 * @param dirToFiles
+	 * @param orgDir
 	 *            directory where files are.
-	 * @param dest
+	 * @param destDir
 	 *            directory where files will be moved.
 	 * @throws ProcessException
 	 */
 
-	protected void moveEndFiles(String dirToFiles, String dest) throws ProcessException {
+	protected void moveEndFiles(String orgDir, String destDir) throws ProcessException {
 
-		File[] filesInDir = new File(dirToFiles).getAbsoluteFile().listFiles();
+		File[] filesInDir = new File(orgDir).getAbsoluteFile().listFiles();
+
 		if (filesInDir != null) {
-			if(filesInDir.length == 0) {
-				throw new ProcessException("No files were generated. If you are running ratio calculation, make sure the name is correct");
+
+			if (filesInDir.length == 0) {
+				throw new ProcessException(
+						"No files were generated. If you are running " +
+						"ratio calculation, make sure the name is correct");
 			} else {
 				for (int i = 0; i < filesInDir.length; i++) {
 					if (!filesInDir[i].isDirectory()) {
-						if (filesInDir[i].renameTo(new File(dest
+						if (filesInDir[i].renameTo(new File(destDir
 								+ filesInDir[i].getName())));
 					}
 				}
@@ -212,16 +236,16 @@ public abstract class Executor {
 	 * @return
 	 */
 	protected boolean checkStep(String dirToCheck) {
-		System.out.println(dirToCheck);
+		//System.out.println(dirToCheck);
 		File fileDirToCheck = new File(dirToCheck);
 		File[] filesInDir = fileDirToCheck.listFiles();
 
-		if (filesInDir == null) {
+		if (filesInDir == null || filesInDir.length == 0) {
 			return false;
-		} else if (filesInDir.length == 0) {
-			return false;
+
 		} else if (filesInDir.length == 1 && filesInDir[0].isDirectory()) {
 			return false;
+
 		} else if (filesInDir.length >= 1) {
 			for (int i = 0; i < filesInDir.length; i++) {
 				if (!filesInDir[i].isDirectory()) {

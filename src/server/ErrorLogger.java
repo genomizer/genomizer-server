@@ -23,20 +23,20 @@ import response.Response;
 
 public class ErrorLogger {
 
+	private static String logFile;
+	private static HashMap<String, ArrayList<Response>> usermap;
 
-	private static String logFile = System.getProperty("user.dir") + "/errorLog.txt";
 
-	private static HashMap<String, ArrayList<Response>> usermap = new HashMap<String,ArrayList<Response>>();
-
-	public ErrorLogger(){
-
+	public ErrorLogger() {
+		usermap = new HashMap<String,ArrayList<Response>>();
+		logFile = System.getProperty("user.dir") + "/errorLog.txt";
 	}
 
-	public static void log(String username, String logText){
+	public static void log(String tag, String logText){
 
 		File file = new File(logFile);
 		String timeString = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date(System.currentTimeMillis()));
-		String text = timeString + " | " + username + " | " + logText;
+		String text = timeString + " | " + tag + " | " + logText;
 		try{
 
 			file.createNewFile();
@@ -50,15 +50,15 @@ public class ErrorLogger {
 		}
 	}
 
-	public static void log(String username, Throwable exc) {
+	public static void log(String tag, Throwable exc) {
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
 		exc.printStackTrace(pw);
 		String excString = sw.toString();
 		String[] excLines = excString.split("\n");
 		for (String line : excLines) {
-			log(username, line);
-			username = "      ";
+			log(tag, line);
+			tag = "      ";
 		}
 	}
 /*
