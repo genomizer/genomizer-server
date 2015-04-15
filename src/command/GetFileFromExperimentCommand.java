@@ -1,13 +1,10 @@
 package command;
 
-import java.util.ArrayList;
 
-import response.DownloadResponse;
 import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
 import database.DatabaseAccessor;
-import com.google.gson.annotations.Expose;
 
 /**
  * Class used to represent a command of the type GetFileFromExperimentCommand.

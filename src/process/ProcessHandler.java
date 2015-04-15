@@ -1,4 +1,4 @@
-package process.classes;
+package process;
 
 /**
  * Class that acts as a handler for the procedure and calculation part of the

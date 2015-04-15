@@ -12,9 +12,10 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import process.classes.Executor;
-import process.classes.RawToProfileConverter;
-import process.classes.SmoothingParameterChecker;
+import process.Executor;
+import process.RawToProfileConverter;
+import process.SmoothingParameterChecker;
+
 public class SmoothingParameterCheckerTest {
 	private SmoothingParameterChecker spc;
 	private String parameters;

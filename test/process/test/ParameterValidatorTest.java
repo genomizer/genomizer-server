@@ -6,8 +6,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import process.classes.ParameterValidator;
-import process.classes.ProcessException;
+import process.ParameterValidator;
+import process.ProcessException;
 
 public class ParameterValidatorTest {
 

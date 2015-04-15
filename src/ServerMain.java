@@ -9,7 +9,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.ParseException;
 
-import process.classes.StartUpCleaner;
+import process.StartUpCleaner;
 
 import authentication.InactiveUuidsRemover;
 

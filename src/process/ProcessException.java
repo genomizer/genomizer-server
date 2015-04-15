@@ -1,4 +1,4 @@
-package process.classes;
+package process;
 
 /**
  * Class used by the process part of the genomizer program to throw our own

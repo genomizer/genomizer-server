@@ -1,4 +1,4 @@
-package process.classes;
+package process;
 
 
 public class Tuple {

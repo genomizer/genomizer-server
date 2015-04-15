@@ -11,9 +11,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import process.classes.Executor;
-import process.classes.ProcessException;
-import process.classes.RawToProfileConverter;
+import process.Executor;
+import process.ProcessException;
+import process.RawToProfileConverter;
 
 public class RawToProfileTest {
 	RawToProfileConverter rtp = null;

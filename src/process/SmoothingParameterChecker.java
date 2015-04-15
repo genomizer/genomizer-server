@@ -1,4 +1,4 @@
-package process.classes;
+package process;
 /**
  * Class used to validate and calculate the string representation of smoothing parameters.
  * @author c11oan

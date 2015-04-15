@@ -2,7 +2,7 @@ package conversion;
 
 import java.io.IOException;
 
-import process.classes.Executor;
+import process.Executor;
 
 public class ProfileDataConverter extends Executor {
 

@@ -1,4 +1,4 @@
-package process.classes;
+package process;
 
 /**
  * Class used to validate incoming parameters to RawToProfile so all parameters

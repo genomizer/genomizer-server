@@ -1,9 +1,8 @@
-package process.classes;
+package process;
 /**
  * Class that removes temporary processing directories. Should be called when the server is started.
  */
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class StartUpCleaner {

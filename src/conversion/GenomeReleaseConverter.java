@@ -2,7 +2,7 @@ package conversion;
 
 import java.io.IOException;
 
-import process.classes.Executor;
+import process.Executor;
 /**A class that runs liftover to convert old profile data to a newer genome release
  * 
  * 
