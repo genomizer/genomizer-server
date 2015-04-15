@@ -54,8 +54,8 @@ public class TestInitializer {
 //    public static String host = "85.226.111.95";
 //    public static String database = "genomizer_testdb";
 
-    private String addTestTuplesPath = "../../sql/add_test_tuples.sql";
-    private String clearTablesPath = "../../sql/clear_tables.sql";
+    private String addTestTuplesPath = "sql/add_test_tuples.sql";
+    private String clearTablesPath = "sql/clear_tables.sql";
 
     private DatabaseAccessor dbac;
     private Connection conn;
@@ -123,7 +123,7 @@ public class TestInitializer {
     private List<String> buildSqlStringsFromFile(String path)
             throws UnsupportedEncodingException, IOException {
         List<String> sqlStrings = new ArrayList<String>();
-        URL sqlFileUrl = SearchDatabaseTests.class.getResource(path);
+        URL sqlFileUrl = new File(path).toURI().toURL();
         if (sqlFileUrl != null) {
             BufferedReader in = new BufferedReader(new InputStreamReader(
                     sqlFileUrl.openStream(), "UTF-8"));
