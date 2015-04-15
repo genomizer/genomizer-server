@@ -26,28 +26,28 @@ import database.test.unittests.SearchDatabaseTests;
  * all tests are using the same database.
  */
 public class TestInitializer {
-	//Use these strings to connect to the test server.
-    static {
-	if(System.getenv("TRAVIS") == "true") {
-	    // Running on Travis.
-	    username = "postgres";
-	    password = "";
-	    host     = "localhost";
-	    database = "c5dv151_vt14";
-	}
-	else {
-	    // Running in a CS lab.
-	    username = "c5dv151_vt14";
-	    password = "shielohh";
-	    host     = "postgres";
-	    database = "c5dv151_vt14";
-	}
-    }
-
+    //Use these strings to connect to the test server.
     public static String username;
     public static String password;
     public static String host;
     public static String database;
+
+    static {
+      if(System.getenv("TRAVIS").equals("true")) {
+        // Running on Travis.
+        username = "test";
+        password = "";
+        host     = "localhost";
+        database = "c5dv151_vt14";
+      }
+      else {
+        // Running in a CS lab.
+        username = "c5dv151_vt14";
+        password = "shielohh";
+        host     = "postgres";
+        database = "c5dv151_vt14";
+      }
+    }
 
 //    public static String username = "genomizer";
 //    public static String password = "genomizer";
@@ -72,11 +72,11 @@ public class TestInitializer {
      */
     public DatabaseAccessor setup() throws Exception {
         dbac = new DatabaseAccessor(TestInitializer.username,
-        		TestInitializer.password, TestInitializer.host,
-        		TestInitializer.database);
+                TestInitializer.password, TestInitializer.host,
+                TestInitializer.database);
 
         String url = "jdbc:postgresql://" + TestInitializer.host +
-        		"/" + TestInitializer.database;
+                "/" + TestInitializer.database;
         Properties props = new Properties();
         props.setProperty("user", TestInitializer.username);
         props.setProperty("password", TestInitializer.password);
@@ -195,4 +195,3 @@ public class TestInitializer {
         folder.delete();
     }
 }
-
