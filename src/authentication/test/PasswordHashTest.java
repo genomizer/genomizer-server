@@ -10,7 +10,6 @@ import static org.junit.Assert.*;
 
 /**
  * A test class made for testing of the functions in PasswordHash.
- *
  */
 public class PasswordHashTest {
 
