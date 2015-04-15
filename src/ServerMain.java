@@ -132,9 +132,9 @@ public class ServerMain {
 		Options comOptions = new Options();
 		comOptions.addOption("p", "port", true, "the listening port");
 		comOptions.addOption("debug", false,
-				"if this flag is used the server will write " +
-						"output for every request and response as well " +
-						"as other output.");
+							 "if this flag is used the server will write " +
+                			 "output for every request and response as well " +
+                			 "as other output.");
 		comOptions.addOption("f", "file", true,
 							 "the file to read server settings from, is "+
 							 "ignored when -d is used");
