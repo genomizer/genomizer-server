@@ -179,7 +179,7 @@ public class CommandHandler {
 		ArrayList<String> rest = null;
 
 		if(restful != null) {
-			rest = new ArrayList<String>(Arrays.asList(restful.split("/")));;
+			rest = new ArrayList<String>(Arrays.asList(restful.split("/")));
 			rest.remove(0);
 		}
 
