@@ -36,12 +36,12 @@ public class TimeTest {
     }
 
     @Test
-    public void ShouldStillBeConnectedAfter15Minutes() throws SQLException{
+    public void ShouldStillBeConnectedAfter15Seconds() throws SQLException{
 
         assertTrue(dbac.isConnected());
 
         try {
-            Thread.sleep(15*1000*60);
+            Thread.sleep(15*1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
