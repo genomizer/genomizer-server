@@ -10,3 +10,4 @@ server*.jar
 .project
 *~
 errorLog.txt
+*.properties
