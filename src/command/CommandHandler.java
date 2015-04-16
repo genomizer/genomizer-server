@@ -96,8 +96,8 @@ public class CommandHandler {
 		if (cmdt == CommandType.DELETE_ANNOTATION_VALUE_COMMAND &&
 				uriLength == RestfulSizes.DELETE_ANNOTATION_VALUE_COMMAND) {
 			String[] rest = uri.split("/");
-			newCommand = cmdFactory.createDeleteAnnotationValueCommand(json,
-					rest[3], rest[4]);
+			newCommand = cmdFactory.createDeleteAnnotationValueCommand(rest[3],
+					rest[4]);
 		} else if(cmdt == CommandType.LOGIN_COMMAND &&
 				uriLength == RestfulSizes.LOGIN_COMMAND) {
 			newCommand = cmdFactory.createLoginCommand(json);
@@ -112,26 +112,23 @@ public class CommandHandler {
 			newCommand = cmdFactory.createAddExperimentCommand(json);
 		} else if (cmdt == CommandType.UPDATE_EXPERIMENT_COMMAND &&
 				uriLength == RestfulSizes.UPDATE_EXPERIMENT_COMMAND) {
-			newCommand = cmdFactory.createUpdateExperimentCommand(json,
-					parsedURI);
+			newCommand = cmdFactory.createUpdateExperimentCommand();
 		} else if (cmdt == CommandType.DELETE_EXPERIMENT_COMMAND &&
 				uriLength == RestfulSizes.DELETE_EXPERIMENT_COMMAND) {
-			newCommand = cmdFactory.createDeleteExperimentCommand(json,
-					parsedURI);
+			newCommand = cmdFactory.createDeleteExperimentCommand(parsedURI);
 		} else if (cmdt == CommandType.GET_FILE_FROM_EXPERIMENT_COMMAND &&
 				uriLength == RestfulSizes.GET_FILE_FROM_EXPERIMENT_COMMAND) {
-			newCommand = cmdFactory.createGetFileFromExperimentCommand(json,
+			newCommand = cmdFactory.createGetFileFromExperimentCommand(
 					parsedURI);
 		} else if (cmdt == CommandType.ADD_FILE_TO_EXPERIMENT_COMMAND &&
 				uriLength == RestfulSizes.ADD_FILE_TO_EXPERIMENT_COMMAND) {
 			newCommand = cmdFactory.createAddFileToExperimentCommand(json);
 		} else if (cmdt == CommandType.UPDATE_FILE_IN_EXPERIMENT_COMMAND &&
 				uriLength == RestfulSizes.UPDATE_FILE_IN_EXPERIMENT_COMMAND) {
-			newCommand = cmdFactory.createUpdateFileInExperimentCommand(json,
-					parsedURI);
+			newCommand = cmdFactory.createUpdateFileInExperimentCommand();
 		} else if (cmdt == CommandType.DELETE_FILE_FROM_EXPERIMENT_COMMAND &&
 				uriLength == RestfulSizes.DELETE_FILE_FROM_EXPERIMENT_COMMAND) {
-			newCommand = cmdFactory.createDeleteFileFromExperimentCommand(json,
+			newCommand = cmdFactory.createDeleteFileFromExperimentCommand(
 					parsedURI);
 		} else if (cmdt == CommandType.SEARCH_FOR_EXPERIMENTS_COMMAND &&
 				uriLength == RestfulSizes.SEARCH_FOR_EXPERIMENTS_COMMAND) {
@@ -149,15 +146,13 @@ public class CommandHandler {
 					heavyWorkThread);
 		} else if (cmdt == CommandType.GET_ANNOTATION_INFORMATION_COMMAND &&
 				uriLength == RestfulSizes.GET_ANNOTATION_INFORMATION_COMMAND) {
-			newCommand = cmdFactory.createGetAnnotationInformationCommand(json);
+			newCommand = cmdFactory.createGetAnnotationInformationCommand();
 		} else if (cmdt == CommandType.ADD_ANNOTATION_FIELD_COMMAND &&
 				uriLength == RestfulSizes.ADD_ANNOTATION_FIELD_COMMAND) {
-			newCommand = cmdFactory.createAddAnnotationFieldCommand(json,
-					parsedURI);
+			newCommand = cmdFactory.createAddAnnotationFieldCommand(parsedURI);
 		} else if (cmdt == CommandType.ADD_ANNOTATION_VALUE_COMMAND &&
 				uriLength == RestfulSizes.ADD_ANNOTATION_VALUE_COMMAND) {
-			newCommand = cmdFactory.createAddAnnotationValueCommand(json,
-					parsedURI);
+			newCommand = cmdFactory.createAddAnnotationValueCommand(json);
 		} else if (cmdt == CommandType.RENAME_ANNOTATION_VALUE_COMMAND &&
 				uriLength == RestfulSizes.RENAME_ANNOTATION_VALUE_COMMAND) {
 			newCommand = cmdFactory.creatRenameAnnotationValueCommand(json);
@@ -166,16 +161,15 @@ public class CommandHandler {
 			newCommand = cmdFactory.createEditAnnotationFieldCommand(json);
 		} else if (cmdt == CommandType.REMOVE_ANNOTATION_FIELD_COMMAND &&
 				uriLength == RestfulSizes.REMOVE_ANNOTATION_FIELD_COMMAND) {
-			newCommand = cmdFactory.createRemoveAnnotationFieldCommand(json,
+			newCommand = cmdFactory.createRemoveAnnotationFieldCommand(
 					parsedURI);
 		} else if (cmdt == CommandType.GET_ANNOTATION_PRIVILEGES_COMMAND &&
 				uriLength == RestfulSizes.GET_ANNOTATION_PRIVILEGES_COMMAND) {
-			newCommand = cmdFactory.createGetAnnotationPrivilegesCommand(json);
+			newCommand = cmdFactory.createGetAnnotationPrivilegesCommand();
 		} else if (cmdt == CommandType.UPDATE_ANNOTATION_PRIVILEGES_COMMAND &&
 				uriLength == RestfulSizes.
 						UPDATE_ANNOTATION_PRIVILEGES_COMMAND) {
-			newCommand = cmdFactory.createUpdateAnnotationPrivilegesCommand(
-					json, parsedURI);
+			newCommand = cmdFactory.createUpdateAnnotationPrivilegesCommand();
 		} else if (cmdt == CommandType.ADD_GENOME_RELEASE_COMMAND &&
 				uriLength == RestfulSizes.ADD_GENOME_RELEASE_COMMAND) {
 			newCommand = cmdFactory.createAddGenomeReleaseCommand(json);
@@ -224,5 +218,4 @@ public class CommandHandler {
 	private int calculateURILength(String requestURI) {
 		return requestURI.split("/").length-1;
 	}
-
 }
