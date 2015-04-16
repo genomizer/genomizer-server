@@ -74,7 +74,8 @@ public class CommandFactory {
 	 *
 	 * @return the actual command.
 	 */
-	public Command createUpdateExperimentCommand() {
+	public Command createUpdateExperimentCommand(String json, String restful) {
+		//TODO Make sure the json and restful are used.
 		return new UpdateExperimentCommand();
 	}
 
@@ -115,7 +116,9 @@ public class CommandFactory {
 	 *
 	 * @return the actual command.
 	 */
-	public Command createUpdateFileInExperimentCommand() {
+	public Command createUpdateFileInExperimentCommand(String json,
+													   String restful) {
+		//TODO Make sure the json and restful are used.
 		return new UpdateFileInExperimentCommand();
 	}
 
@@ -198,7 +201,8 @@ public class CommandFactory {
 	 *
 	 * @return the actual command.
 	 */
-	public Command createGetAnnotationInformationCommand() {
+	public Command createGetAnnotationInformationCommand(String json) {
+		//TODO Make sure the json is used.
 		return new GetAnnotationInformationCommand();
 	}
 
@@ -241,7 +245,8 @@ public class CommandFactory {
 	 *
 	 * @return the actual command.
 	 */
-	public Command createGetAnnotationPrivilegesCommand() {
+	public Command createGetAnnotationPrivilegesCommand(String json) {
+		//TODO Make sure the json is used.
 		return new GetAnnotationPrivilegesCommand();
 	}
 
@@ -250,7 +255,9 @@ public class CommandFactory {
 	 *
 	 * @return the actual command.
 	 */
-	public Command createUpdateAnnotationPrivilegesCommand() {
+	public Command createUpdateAnnotationPrivilegesCommand(String json,
+														   String restful) {
+		//TODO Make sure the json and restful are used.
 		return new UpdateAnnotationPrivilegesCommand();
 	}
 

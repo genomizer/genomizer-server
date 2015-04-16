@@ -99,7 +99,7 @@ public class CommandFactoryTest {
 	@Test
 	public void testDeleteExperimentCommandNotNull() {
 
-		assertNotNull(cmdf.createDeleteExperimentCommand("NONE", "/experiment/id123"));
+		assertNotNull(cmdf.createDeleteExperimentCommand("/experiment/id123"));
 
 	}
 
@@ -109,7 +109,7 @@ public class CommandFactoryTest {
 	@Test
 	public void testGetFileFromExperimentCommandNotNull() {
 
-		assertNotNull(cmdf.createGetFileFromExperimentCommand("NONE", "/file/myFileId"));
+		assertNotNull(cmdf.createGetFileFromExperimentCommand("/file/myFileId"));
 
 	}
 
@@ -145,7 +145,7 @@ public class CommandFactoryTest {
 	@Test
 	public void testDeleteFileFromExperimentCommandNotNull() {
 
-		assertNotNull(cmdf.createDeleteFileFromExperimentCommand("NONE", "/file/myFileId"));
+		assertNotNull(cmdf.createDeleteFileFromExperimentCommand("/file/myFileId"));
 
 	}
 
@@ -203,7 +203,7 @@ public class CommandFactoryTest {
 
 		String json = "{\"name\":\"species\",\"type\":[\"fly\",\"rat\",\"human\"],"
 				+ "\"default\":\"human\",\"forced\":false}";
-		assertNotNull(cmdf.createAddAnnotationFieldCommand(json, "/annotation/field"));
+		assertNotNull(cmdf.createAddAnnotationFieldCommand(json));
 
 	}
 
@@ -214,7 +214,7 @@ public class CommandFactoryTest {
 	public void testAddAnnotationValueCommandNotNull() {
 
 		String json = "{\"name\":\"species\",\"value\":\"mouse\"}";
-		assertNotNull(cmdf.createAddAnnotationValueCommand(json, "/annotation/value"));
+		assertNotNull(cmdf.createAddAnnotationValueCommand(json));
 
 	}
 
@@ -224,8 +224,7 @@ public class CommandFactoryTest {
 	@Test
 	public void testRemoveAnnotationFieldCommandNotNull() {
 
-		String[] insert = {"NONE","/annotation/field/myFieldName"};
-		assertNotNull(cmdf.createRemoveAnnotationFieldCommand(insert[0], insert[1]));
+		assertNotNull(cmdf.createRemoveAnnotationFieldCommand("/annotation/field/myFieldName"));
 
 	}
 
@@ -279,7 +278,7 @@ public class CommandFactoryTest {
 	@Test
 	public void testDeleteAnnotationValueCommandNotNull() {
 
-		assertNotNull(cmdf.createDeleteAnnotationValueCommand("NONE", "valueName", "fieldName"));
+		assertNotNull(cmdf.createDeleteAnnotationValueCommand("valueName", "fieldName"));
 
 	}
 

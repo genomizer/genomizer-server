@@ -114,7 +114,8 @@ public class CommandHandler {
 				newCommand = cmdFactory.createAddExperimentCommand(json);
 				break;
 			case UPDATE_EXPERIMENT_COMMAND:
-				newCommand = cmdFactory.createUpdateExperimentCommand();
+				newCommand = cmdFactory.
+						createUpdateExperimentCommand(json, parsedURI);
 				break;
 			case DELETE_EXPERIMENT_COMMAND:
 				newCommand = cmdFactory.
@@ -128,7 +129,8 @@ public class CommandHandler {
 				newCommand = cmdFactory.createAddFileToExperimentCommand(json);
 				break;
 			case UPDATE_FILE_IN_EXPERIMENT_COMMAND:
-				newCommand = cmdFactory.createUpdateFileInExperimentCommand();
+				newCommand = cmdFactory.
+						createUpdateFileInExperimentCommand(json, parsedURI);
 				break;
 			case DELETE_FILE_FROM_EXPERIMENT_COMMAND:
 				newCommand = cmdFactory.
@@ -150,7 +152,8 @@ public class CommandHandler {
 						createGetProcessStatusCommand(heavyWorkThread);
 				break;
 			case GET_ANNOTATION_INFORMATION_COMMAND:
-				newCommand = cmdFactory.createGetAnnotationInformationCommand();
+				newCommand = cmdFactory.
+						createGetAnnotationInformationCommand(json);
 				break;
 			case ADD_ANNOTATION_FIELD_COMMAND:
 				newCommand = cmdFactory.
@@ -170,11 +173,13 @@ public class CommandHandler {
 						createRemoveAnnotationFieldCommand(parsedURI);
 				break;
 			case GET_ANNOTATION_PRIVILEGES_COMMAND:
-				newCommand = cmdFactory.createGetAnnotationPrivilegesCommand();
+				newCommand = cmdFactory.
+						createGetAnnotationPrivilegesCommand(json);
 				break;
 			case UPDATE_ANNOTATION_PRIVILEGES_COMMAND:
 				newCommand = cmdFactory.
-						createUpdateAnnotationPrivilegesCommand();
+						createUpdateAnnotationPrivilegesCommand(json,
+								parsedURI);
 				break;
 			case ADD_GENOME_RELEASE_COMMAND:
 				newCommand = cmdFactory.createAddGenomeReleaseCommand(json);
@@ -210,7 +215,7 @@ public class CommandHandler {
 	 * @param requestURI the URI part of the request line.
 	 * @return the last part of the request URI.
 	 */
-	public String parseRequestURI(String requestURI) {
+	private String parseRequestURI(String requestURI) {
 		String[] split = requestURI.split("/");
 		return split[split.length -1];
 	}
