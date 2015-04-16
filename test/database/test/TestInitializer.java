@@ -21,7 +21,7 @@ import database.DatabaseAccessor;
 import database.test.unittests.SearchDatabaseTests;
 /** */
 /**
- * Create an instance of this class if you want to use the test tuples in
+ * Cqeate an instance of this class if you want to use the test tuples in
  * add_test_tuples.sql.
  * If you don't need the test tuples for your test, you should still use
  * the public strings to connect to the database. This is to make sure that
