@@ -1,5 +1,4 @@
 package command;
-import database.constants.MaxSize;
 import response.ErrorResponse;
 import response.LoginResponse;
 import response.Response;
