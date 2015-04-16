@@ -15,6 +15,7 @@ import authentication.InactiveUuidsRemover;
 
 import command.CommandHandler;
 
+import server.ErrorLogger;
 import server.ServerSettings;
 import server.Debug;
 import server.Doorman;
@@ -23,6 +24,7 @@ import server.Doorman;
 public class ServerMain {
 
 	public static int port = 7000;
+	public static String settingsFile = "settings.cfg";
 
 	/**
 	 * @param args
@@ -32,7 +34,7 @@ public class ServerMain {
 	public static void main(String[] args) throws ParseException,
 												  FileNotFoundException {
 
-		/* We firstly need to read and validate the settings.cfg file. */
+		/* We firstly need to read and validate the settings file. */
 		CommandLine com = loadSettingsFile(args);
 
 		StartUpCleaner.removeOldTempDirectories("resources/");
@@ -55,17 +57,16 @@ public class ServerMain {
 			System.out.println("  host     " + ServerSettings.databaseHost);
 		} catch (IOException e) {
 			System.err.println("Error when starting server");
-			e.printStackTrace();
-			//log exception
+			ErrorLogger.log("SYSTEM", "Error when starting server");
 			System.exit(1);
 		}
 
 	}
 
 	/**
-	 * This method attempts to read settings from file. It is hardcoded to
-	 * read from 'settings.cfg', located in current working folder. It
-	 * validates the final settings to be sane (e.g. not containing 'null').
+	 * This method attempts to read the settings file. It is defined to read
+	 * from the file in fileSettings. It validates the final settings to be
+	 * sane (e.g. not containing 'null').
 	 *
 	 * It parses the commandline arguments and constructs a CommandLine
 	 * object containing the information.
@@ -73,18 +74,18 @@ public class ServerMain {
 	 * @return A CommandLine object containing the relevant commandline
 	 * 		   options. The function also contains a side effect: It modifies
 	 * 		   the static attributes of the ServerSettings class with the
-	 * 		   information in the settings.cfg file.
-	 * @throws FileNotFoundException if settings.cfg file could not be found
+	 * 		   information in the settings file.
+	 * @throws FileNotFoundException if the settings file could not be found
 	 * 								 or opened.
-	 * @throws ParseException if settings.cfg is formatted in an invalid way.
+	 * @throws ParseException if the settings is formatted in an invalid way.
 	 */
 	private static CommandLine loadSettingsFile(String[] args)
 			throws 	FileNotFoundException,
 					ParseException {
-		// Attempt to load settings.cfg file
-		if (new File("settings.cfg").exists()) {
-			System.out.println("Reading settings from settings.cfg");
-			ServerSettings.readSettingsFile("settings.cfg");
+		// Attempt to load the settings file
+		if (new File(settingsFile).exists()) {
+			System.out.println("Reading settings from " + settingsFile);
+			ServerSettings.readSettingsFile(settingsFile);
 		}
 
 		CommandLineParser comline = new BasicParser();
