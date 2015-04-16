@@ -6,6 +6,14 @@ Genomizer Server [![Build Status](https://secure.travis-ci.org/genomizer/genomiz
 This is the main repository for the server side of the Genomizer system. It is currently found
 at http://scratchy.cs.umu.se:7000.
 
+##Building
+
+To build the `server.jar` file, run `ant jar` from the console. To just compile
+the sources, use `ant build` or `ant compile`. To run tests, use `ant test`. To
+run individual tests or test groups, use an IDE (e.g. in Eclipse you can import
+the project with 'File > New > Project > Java > Java Project from Existing Ant
+Buildfile').
+
 ##Download instructions
 A jar of the current version of the server is available on scratchy.cs.umu.se at all times. To download it execute the following in
 a terminal:
