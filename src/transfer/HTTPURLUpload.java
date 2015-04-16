@@ -20,6 +20,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import server.ServerSettings;
 
 public class HTTPURLUpload {
 	
@@ -33,7 +34,8 @@ public class HTTPURLUpload {
 	
 	public void sendFile() {		 
 		// the URL where the file will be posted
-		String postReceiverUrl = "http://130.239.178.22/cgi-bin/upload.php";
+		//String postReceiverUrl = "http://130.239.178.22/cgi-bin/upload.php";
+		String postReceiverUrl = ServerSettings.webUrlUpload;
 		 
 		// new HttpClient
 		HttpClientBuilder hcBuilder = HttpClients.custom();

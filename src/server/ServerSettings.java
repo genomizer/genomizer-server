@@ -18,6 +18,8 @@ public class ServerSettings {
 	public static int genomizerPort = -1;
 	public static String passwordHash = null;
 	public static String passwordSalt = null;
+	public static String webUrlUpload = null;
+
 
 	public static void writeSettings(String path){
 		try {
@@ -33,6 +35,7 @@ public class ServerSettings {
 			out.write("genomizerPort = " + genomizerPort + "\n");
 			out.write("passwordHash = " + passwordHash + "\n");
 			out.write("passwordSalt = " + passwordSalt + "\n");
+			out.write("webUrlUpload = " + webUrlUpload + "\n");
 			out.close();
 		} catch (IOException e) {
 			System.err.println("Could not write to file: " + path);
@@ -51,6 +54,7 @@ public class ServerSettings {
 		nullCheck(genomizerPort, "genomizerPort");
 		nullCheck(passwordHash, "passwordHash");
 		nullCheck(passwordSalt, "passwordSalt");
+		nullCheck(webUrlUpload, "webUrlUpload");
 	}
 
 	private static void nullCheck(int parameter, String name) {
@@ -111,6 +115,9 @@ public class ServerSettings {
 					break;
 				case "passwordsalt":
 					passwordSalt = value;
+					break;
+				case "weburlupload":
+					webUrlUpload = value;
 					break;
 				default:
 					System.err.println("Unrecognized setting: " + key);
