@@ -19,19 +19,32 @@ import database.containers.Experiment;
 
 public class DatabaseAccessorThreadTests {
 
+	// BAD
+	/*
     public static String username = "genomizer";
     public static String password = "genomizer";
     public static String host = "85.226.111.95";
     public static String database = "genomizer_testdb";
+    */
+	private static TestInitializer ti;
+
+	public static String username = "";
+	public static String password = "";
+	public static String host = "";
+	public static String database = "";
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-
+		ti = new TestInitializer();
+		username = ti.username;
+		password = ti.password;
+		host = ti.host;
+		database = ti.database;
 	}
 
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
-
+		ti.removeTuples();
 	}
 
 	@Before
