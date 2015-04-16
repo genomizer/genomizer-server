@@ -19,9 +19,9 @@ import org.junit.Ignore;
 
 import database.DatabaseAccessor;
 import database.test.unittests.SearchDatabaseTests;
-
+/** */
 /**
- * Create an instance of this class if you want to use the test tuples in
+ * Cqeate an instance of this class if you want to use the test tuples in
  * add_test_tuples.sql.
  * If you don't need the test tuples for your test, you should still use
  * the public strings to connect to the database. This is to make sure that
@@ -36,20 +36,20 @@ public class TestInitializer {
     public static String database;
 
     static {
-      if(System.getenv("TRAVIS").equals("true")) {
+      /*if(System.getenv("TRAVIS").equals("true")) {
         // Running on Travis.
         username = "postgres";
         password = "";
         host     = "localhost";
         database = "c5dv151_vt14";
-      }
-      else {
+      }*/
+      //else {
         // Running in a CS lab.
-        username = "c5dv151_vt14";
-        password = "shielohh";
+        username = "c5dv119_vt15_dv13esn";
+        password = "";
         host     = "postgres";
-        database = "c5dv151_vt14";
-      }
+        database = "c5dv119_vt15_dv13esn";
+      //}
     }
 
 //    public static String username = "genomizer";
