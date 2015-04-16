@@ -37,34 +37,40 @@ public class ServerMain {
 		/* We firstly need to read and validate the settings file. */
 		CommandLine com = loadSettingsFile(args);
 
+		/* We delete possible fragments from previous runs */
 		StartUpCleaner.removeOldTempDirectories("resources/");
 
-		CommandHandler commandHandler = new CommandHandler();
+		/* The database settings should be written upon startup*/
+		printDatabaseInformation();
+
+		/* We attempt to start the doorman */
 		try {
-			Doorman doorman = new Doorman(commandHandler, ServerSettings.genomizerPort);
-			doorman.start();
-			if (!com.hasOption("nri")) {
-				(new Thread(new InactiveUuidsRemover())).start();
-			}
-			System.out.println("Doorman started on port " + ServerSettings.genomizerPort);
-			if(Debug.isEnabled) {
-				System.out.println("Debug is enabled.");
-			}
-
-			String msg = "Database:\n"
-					+ "  username " + ServerSettings.databaseUsername + "\n"
-					+ "  password " + ServerSettings.databasePassword + "\n"
-					+ "  name     " + ServerSettings.databaseName + "\n"
-					+ "  host     " + ServerSettings.databaseHost;
-
-			System.out.println(msg);
-			ErrorLogger.log("SYSTEM", msg);
-
+			new Doorman(new CommandHandler(),
+					ServerSettings.genomizerPort).start();
 		} catch (IOException e) {
-			ErrorLogger.log("SYSTEM", "Error when starting server");
+			System.err.println("Error when starting server");
+			if (Debug.isEnabled) e.printStackTrace();
 			System.exit(1);
 		}
 
+		/* By default we run a UID remover */
+		if (!com.hasOption("nri")) {
+			(new Thread(new InactiveUuidsRemover())).start();
+		}
+
+	}
+
+	/**
+	 * Print the database settings currently loaded into ServerSettings.
+	 */
+	private static void printDatabaseInformation() {
+		System.out.println("Doorman started on port " +
+						   ServerSettings.genomizerPort);
+		System.out.println("Database:");
+		System.out.println("  username " + ServerSettings.databaseUsername);
+		System.out.println("  password " + ServerSettings.databasePassword);
+		System.out.println("  name     " + ServerSettings.databaseName);
+		System.out.println("  host     " + ServerSettings.databaseHost);
 	}
 
 	/**
@@ -121,6 +127,7 @@ public class ServerMain {
 		// Debug flag
 		if (com.hasOption("debug")) {
 			Debug.isEnabled = true;
+			System.out.println("Debug is enabled.");
 		}
 		// Settings file flag
 		if (com.hasOption('f')) {
