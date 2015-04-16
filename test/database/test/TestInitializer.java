@@ -42,20 +42,19 @@ public class TestInitializer {
         password = "";
         host     = "localhost";
         database = "c5dv151_vt14";
-      } else if (System.getenv("HOSTNAME") != null && System.getenv("HOSTNAME").equals("silverSurfer")) {
-        //Running on Albin local
-        username = "albin";
-        password = "";
-        host = "localhost";
-        database = "genomizer";
-      }
-      else {
+        }
+       else {
         // Running in a CS lab.
         username = "c5dv119_vt15_dv13esn";
         password = "";
         host     = "postgres";
         database = "c5dv119_vt15_dv13esn";
       }
+
+        username = "albin";
+        password = "";
+        host = "localhost";
+        database = "genomizer";
     }
 
 //    public static String username = "genomizer";
