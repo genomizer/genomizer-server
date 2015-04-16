@@ -50,13 +50,17 @@ public class ServerMain {
 			if(Debug.isEnabled) {
 				System.out.println("Debug is enabled.");
 			}
-			System.out.println("Database:");
-			System.out.println("  username " + ServerSettings.databaseUsername);
-			System.out.println("  password " + ServerSettings.databasePassword);
-			System.out.println("  name     " + ServerSettings.databaseName);
-			System.out.println("  host     " + ServerSettings.databaseHost);
+
+			String msg = "Database:\n"
+					+ "  username " + ServerSettings.databaseUsername + "\n"
+					+ "  password " + ServerSettings.databasePassword + "\n"
+					+ "  name     " + ServerSettings.databaseName + "\n"
+					+ "  host     " + ServerSettings.databaseHost;
+
+			System.out.println(msg);
+			ErrorLogger.log("SYSTEM", msg);
+
 		} catch (IOException e) {
-			System.err.println("Error when starting server");
 			ErrorLogger.log("SYSTEM", "Error when starting server");
 			System.exit(1);
 		}
@@ -118,7 +122,7 @@ public class ServerMain {
 		if (com.hasOption("debug")) {
 			Debug.isEnabled = true;
 		}
-		// Settingsfile flag
+		// Settings file flag
 		if (com.hasOption('f')) {
 			ServerSettings.readSettingsFile(com.getOptionValue('f'));
 		}
