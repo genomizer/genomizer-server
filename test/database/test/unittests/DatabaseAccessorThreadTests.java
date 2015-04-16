@@ -16,6 +16,7 @@ import org.junit.Test;
 
 import database.DatabaseAccessor;
 import database.containers.Experiment;
+import database.test.TestInitializer;
 
 public class DatabaseAccessorThreadTests {
 
