@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Properties;
 import java.lang.System;
 
+import org.junit.Ignore;
+
 import database.DatabaseAccessor;
 import database.test.unittests.SearchDatabaseTests;
 
@@ -25,6 +27,7 @@ import database.test.unittests.SearchDatabaseTests;
  * the public strings to connect to the database. This is to make sure that
  * all tests are using the same database.
  */
+@Ignore
 public class TestInitializer {
     //Use these strings to connect to the test server.
     public static String username;
