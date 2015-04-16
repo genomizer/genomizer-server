@@ -36,20 +36,26 @@ public class TestInitializer {
     public static String database;
 
     static {
-      /*if(System.getenv("TRAVIS").equals("true")) {
+      if(System.getenv("TRAVIS") != null && System.getenv("TRAVIS").equals("true")) {
         // Running on Travis.
         username = "postgres";
         password = "";
         host     = "localhost";
         database = "c5dv151_vt14";
-      }*/
-      //else {
+      } else if (System.getenv("HOSTNAME") != null && System.getenv("HOSTNAME").equals("silverSurfer")) {
+        //Running on Albin local
+        username = "albin";
+        password = "";
+        host = "localhost";
+        database = "genomizer";
+      }
+      else {
         // Running in a CS lab.
         username = "c5dv119_vt15_dv13esn";
         password = "";
         host     = "postgres";
         database = "c5dv119_vt15_dv13esn";
-      //}
+      }
     }
 
 //    public static String username = "genomizer";
