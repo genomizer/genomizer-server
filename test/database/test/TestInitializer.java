@@ -44,17 +44,13 @@ public class TestInitializer {
         database = "c5dv151_vt14";
         }
        else {
-        // Running in a CS lab.
-        username = "c5dv119_vt15_dv13esn";
-        password = "";
-        host     = "postgres";
-        database = "c5dv119_vt15_dv13esn";
+          // Running in a CS lab.
+          username = "c5dv119_vt15_dv13esn";
+          password = "";
+          host     = "postgres";
+          database = "c5dv119_vt15_dv13esn";
       }
 
-        username = "albin";
-        password = "";
-        host = "localhost";
-        database = "genomizer";
     }
 
 //    public static String username = "genomizer";
