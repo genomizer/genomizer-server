@@ -12,8 +12,8 @@
     <property name="target" value="1.7"/>
     <property name="source" value="1.7"/>
     <path id="JUnit 4.libraryclasspath">
-        <pathelement location="../../../../../usr/share/eclipse/dropins/jdt/plugins/org.junit_4.8.2.dist/junit.jar"/>
-        <pathelement location="../../../../../usr/share/eclipse/dropins/jdt/plugins/org.hamcrest.core_1.1.0.jar"/>
+        <pathelement location="./external-libs/junit-4.12.jar"/>
+        <pathelement location="./external-libs/hamcrest-core-4.3.3.jar"/>
     </path>
     <path id="jdbc.userclasspath"/>
     <path id="genomizer-Server.classpath">
@@ -73,6 +73,7 @@
             <src path="src"/>
             <src path="external-libs"/>
             <classpath refid="genomizer-Server.classpath"/>
+	    <compilerarg value="-Xlint:all"/>
         </javac>
     </target>
     <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>

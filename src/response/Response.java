@@ -3,6 +3,9 @@ package response;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+/**
+ * Class that represents the parent for the responses
+ */
 public abstract class Response {
 	protected int code;
 

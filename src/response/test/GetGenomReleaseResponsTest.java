@@ -3,10 +3,8 @@ package response.test;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.Test;
 
@@ -16,7 +14,7 @@ import command.GetGenomeReleaseSpeciesCommand;
 import database.DatabaseAccessor;
 import database.Genome;
 
-import response.GetGenomeReleaseRespons;
+import response.GetGenomeReleaseResponse;
 import response.Response;
 import response.StatusCode;
 import server.ServerSettings;
@@ -90,7 +88,7 @@ public class GetGenomReleaseResponsTest {
 			}*/
 
 			//genomeList =db.getAllGenomReleasesForSpecies("Human");
-			GetGenomeReleaseRespons gResp=new GetGenomeReleaseRespons(StatusCode.OK,genomeList);
+			GetGenomeReleaseResponse gResp=new GetGenomeReleaseResponse(StatusCode.OK,genomeList);
 			System.out.println(gResp.getBody());
 
 		} catch (SQLException e) {

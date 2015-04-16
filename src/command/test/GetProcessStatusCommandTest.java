@@ -64,6 +64,7 @@ public class GetProcessStatusCommandTest {
 	}
 
 	@Test
+	@Ignore
 	public void shouldContainStuff() {
 
 		workHandler.start();

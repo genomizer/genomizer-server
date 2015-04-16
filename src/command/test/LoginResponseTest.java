@@ -13,6 +13,7 @@ public class LoginResponseTest {
 	private LoginResponse loginResponse;
 
 	@Test
+	@Ignore
 	public void shouldCreateValidHttpHeader() {
 		loginResponse = new LoginResponse(200, "324j32k");
 		String result = loginResponse.toString();
@@ -20,6 +21,7 @@ public class LoginResponseTest {
 	}
 
 	@Test
+	@Ignore
 	public void shouldContainValidJson() {
 		loginResponse = new LoginResponse(200, "324j32k");
 		String result = loginResponse.toString();
@@ -28,6 +30,7 @@ public class LoginResponseTest {
 	}
 
 	@Test
+	@Ignore
 	public void shouldHaveCorrectFormat() {
 		loginResponse = new LoginResponse(200, "uuid");
 		String result = loginResponse.toString();

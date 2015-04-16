@@ -8,7 +8,7 @@ package response;
  */
 public class AddAnnotationFieldResponse extends Response {
 
-	/* Reponse that should return code 201 (created)
+	/* Response that should return code 201 (created)
 	 * if everything is working.
 	 */
 	/**

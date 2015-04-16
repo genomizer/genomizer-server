@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 
 import response.ErrorResponse;
-import response.GetGenomeReleaseRespons;
+import response.GetGenomeReleaseResponse;
 import response.Response;
 import response.StatusCode;
 import database.DatabaseAccessor;
@@ -75,7 +75,7 @@ public class GetGenomeReleaseSpeciesCommand extends Command{
 		try {
 			db = initDB();
 			ArrayList<Genome> genomeReleases=db.getAllGenomReleasesForSpecies(specie);
-			return new GetGenomeReleaseRespons(StatusCode.OK, genomeReleases);
+			return new GetGenomeReleaseResponse(StatusCode.OK, genomeReleases);
 		} catch (SQLException e) {
 			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, "DatabaseAccessor could not be created: " + e.getMessage());
 		} catch (IOException e) {

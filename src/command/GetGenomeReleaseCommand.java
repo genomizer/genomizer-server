@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import database.DatabaseAccessor;
 import database.containers.Genome;
 import response.ErrorResponse;
-import response.GetGenomeReleaseRespons;
+import response.GetGenomeReleaseResponse;
 import response.Response;
 import response.StatusCode;
 
@@ -53,7 +53,7 @@ public class GetGenomeReleaseCommand extends Command{
 			db = initDB();
 			try{
 				ArrayList<Genome> genomeReleases = (ArrayList<Genome>)db.getAllGenomReleases();
-				return new GetGenomeReleaseRespons(StatusCode.OK, genomeReleases);
+				return new GetGenomeReleaseResponse(StatusCode.OK, genomeReleases);
 			}catch(SQLException e){
 				return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, "Could not fetch all genome releases: " + e.getMessage());
 			}

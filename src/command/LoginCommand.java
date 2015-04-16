@@ -1,4 +1,5 @@
 package command;
+import database.constants.MaxSize;
 import response.ErrorResponse;
 import response.LoginResponse;
 import response.Response;
@@ -43,7 +44,7 @@ public class LoginCommand extends Command {
 
 		} else if(username.length() < 1 || username.length() > database.constants.MaxSize.USERNAME) {
 
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Username has to be between 1 and "+database.constants.MaxSize.PASSWORD+" characters long.");
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Username has to be between 1 and "+ database.constants.MaxSize.USERNAME+" characters long.");
 
 		} else if(password.length() < 1 || password.length() > database.constants.MaxSize.PASSWORD) {
 

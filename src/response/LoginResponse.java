@@ -2,6 +2,9 @@ package response;
 
 import com.google.gson.annotations.Expose;
 
+/**
+ * Class that represents the login response.
+ */
 public class LoginResponse extends Response {
 
 	@Expose
