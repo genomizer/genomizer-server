@@ -14,7 +14,6 @@ import process.StartUpCleaner;
 import authentication.InactiveUuidsRemover;
 
 import command.CommandHandler;
-import database.constants.ServerDependentValues;
 
 import server.ServerSettings;
 import server.Debug;
@@ -85,7 +84,7 @@ public class ServerMain {
 		// Attempt to load settings.cfg file
 		if (new File("settings.cfg").exists()) {
 			System.out.println("Reading settings from settings.cfg");
-			readSettingsFile("settings.cfg");
+			ServerSettings.readSettingsFile("settings.cfg");
 		}
 
 		CommandLineParser comline = new BasicParser();
@@ -120,7 +119,7 @@ public class ServerMain {
 		}
 		// Settingsfile flag
 		if (com.hasOption('f')) {
-			readSettingsFile(com.getOptionValue('f'));
+			ServerSettings.readSettingsFile(com.getOptionValue('f'));
 		}
 	}
 
@@ -143,62 +142,6 @@ public class ServerMain {
  							 "remove inactive users which are logged in on " +
  							 "the server.");
 		return comOptions;
-	}
-
-	public static void readSettingsFile(String path) throws FileNotFoundException {
-		File dbFile = new File(path);
-		if (dbFile.exists()) {
-			Scanner scan = new Scanner(dbFile);
-			while (scan.hasNextLine()) {
-				String line = scan.nextLine();
-				int index = line.indexOf("=");
-				String key = line.substring(0, index).trim();
-				String value = line.substring(index+1).trim();
-				switch (key.toLowerCase()) {
-				case "databaseuser":
-					ServerSettings.databaseUsername = value;
-					break;
-				case "databasepassword":
-					ServerSettings.databasePassword = value;
-					break;
-				case "databasehost":
-					ServerSettings.databaseHost = value;
-					break;
-				case "databasename":
-					ServerSettings.databaseName = value;
-					break;
-				case "publicaddress":
-					ServerSettings.publicAddress = value;
-					break;
-				case "apacheport":
-					ServerSettings.apachePort = Integer.parseInt(value);
-					break;
-				case "downloadurl":
-					ServerSettings.downloadURL = value;
-					break;
-				case "uploadurl":
-					ServerSettings.uploadURL = value;
-					break;
-				case "genomizerport":
-					ServerSettings.genomizerPort = Integer.parseInt(value);
-					break;
-				case "passwordhash":
-					ServerSettings.passwordHash = value;
-					break;
-				case "passwordsalt":
-					ServerSettings.passwordSalt = value;
-					break;
-				default:
-					System.err.println("Unrecognized setting: " + key);
-					break;
-				}
-			}
-			scan.close();
-			ServerDependentValues.DownloadURL = ServerSettings.publicAddress + ":" + ServerSettings.apachePort + ServerSettings.downloadURL;
-			ServerDependentValues.UploadURL = ServerSettings.publicAddress + ":" + ServerSettings.apachePort + ServerSettings.uploadURL;
-		} else {
-			System.err.println("Error, " + path + " does not exist, using default settings.");
-		}
 	}
 
 	/**
