@@ -16,13 +16,21 @@ import server.ServerSettings;
 /**
  * Class used to authenticate users and privileges.
  *
- * @author Johannes
+ * @author dv13jen
  * @version 1.0
  */
 public class Authenticate {
 
 	private static HashMap<String, String> activeUsersID = new HashMap<String, String>();
 	private static HashMap<String, Date> latestRequests = new HashMap<String, Date>();
+
+	// TODO : Check user and user password instead of server password
+	// Get user salt and hash from DB (manage user not found), need DB group to implement table and get method
+	// if user not found -> return new LoginAttempt(false, null, "Incorrect user.")
+	// Apply salt to password. String hash = PasswordHash.hashString(password + DBsalt);
+	// Check if new hash matches DB hash.
+	// if hash.equals(DBhash) -> return new LoginAttempt(true, addUser(username), null);)
+	// else -> return new LoginAttempt(false, null, "Wrong password.");
 
 	static public LoginAttempt login(String username, String password) {
 	    if(PasswordHash.toSaltedSHA256Hash(password).equals(ServerSettings.passwordHash)) {
