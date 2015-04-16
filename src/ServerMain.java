@@ -62,7 +62,7 @@ public class ServerMain {
 	/**
 	 * Print the database settings currently loaded into ServerSettings.
 	 */
-	private void printDatabaseInformation() {
+	private static void printDatabaseInformation() {
 		System.out.println("Doorman started on port " +
 						   ServerSettings.genomizerPort);
 		System.out.println("Database:");
