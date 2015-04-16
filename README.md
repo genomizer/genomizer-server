@@ -11,8 +11,8 @@ A jar of the current version of the server is available on scratchy.cs.umu.se at
 a terminal:
 
     scp -P 2222 pvt@scratchy.cs.umu.se:server.jar .
-    
-After entering the password this will download server.jar to your current directory. An alternative is to connect to 
+
+After entering the password this will download server.jar to your current directory. An alternative is to connect to
 pvt@scratchy.cs.umu.se on port 2222
 using Filezilla or similar and choosing server.jar for download. There will also be other build versions there, with date and timestamp
 from when they where created.
@@ -34,10 +34,10 @@ Full path
 The program can be run with the following options:
 
     -p [NUMBER]    The listening port for the server, default is 7000
-    
+
     -d [DB]        DB can be either "test" or "global". Chooses which database to use, test is located at ITS and can only be reached
                    using lab computers. Global is in MC333 and requires the server application to be started locally on that computer.
-                   
+
     -f [FILE]      Reads the database information from a file. The file should contain a single line with 4 words, each separated by a space.
                    It should be written in the following format: USERNAME PASSWORD DATABASE HOST
 
@@ -49,7 +49,7 @@ to read database settings from. If the file doesn't exist, the server will use t
 ##Development
 All development is done in either of four branches, *communication*, *process*, *transfer* or *database*. When some feature
 is done in either of these branches it should be merged into the *development* branch.
-A guide for doing this can be found [here](https://github.com/genomizer/genomizer-server/wiki/Merging-in-Git). The *development* 
+A guide for doing this can be found [here](https://github.com/genomizer/genomizer-server/wiki/Merging-in-Git). The *development*
 branch is used for ongoing
 features which haven't been fully tested yet. This is used to connect different branches which are working on the same feature.
 Only when a feature is proven to work in the *development* branch should it be merged into *master*. This way
@@ -70,7 +70,7 @@ Request
 
     POST /login HTTP/1.1
     Content-Length: XXXX
-    
+
     {"username":"yuri","password":"epicgenie"}
 
 Response
@@ -96,11 +96,11 @@ Response
 
     [
      {
-      "id": 1, 
+      "id": 1,
       "name": "pubmedId",
       "value": "freetext",
       "forced": true
-     }, 
+     },
      {
       "id": 2,
       "name": "type",
