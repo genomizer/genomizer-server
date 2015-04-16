@@ -43,7 +43,7 @@ public class InactiveUuidsRemover implements Runnable {
 				// ... and remove them from Authenticate.
 				for (String uid : usersToDelete) {
 					Debug.log("REMOVING INACTIVE UUID: " + uid + " - USERNAME: " + Authenticate.getUsername(uid));
-					Authenticate.deleteUser(uid);
+					Authenticate.deleteActiveUser(uid);
 				}
 
 				// Then print some debugging output...
@@ -75,8 +75,8 @@ public class InactiveUuidsRemover implements Runnable {
 	 * @return time difference in hours
 	 */
 	private static long getDateDiff(Date date1, Date date2, TimeUnit timeUnit) {
-	    long diffInMillies = date2.getTime() - date1.getTime();
-	    return timeUnit.convert(diffInMillies,TimeUnit.MILLISECONDS);
+	    long diffInMillis = date2.getTime() - date1.getTime();
+	    return timeUnit.convert(diffInMillis,TimeUnit.MILLISECONDS);
 	}
 
 }

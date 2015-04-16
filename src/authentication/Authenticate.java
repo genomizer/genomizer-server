@@ -1,6 +1,5 @@
 package authentication;
 
-import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -24,33 +23,37 @@ public class Authenticate {
 	private static HashMap<String, String> activeUsersID = new HashMap<String, String>();
 	private static HashMap<String, Date> latestRequests = new HashMap<String, Date>();
 
-	// TODO : Check user and user password instead of server password
-	// Get user salt and hash from DB (manage user not found), need DB group to implement table and get method
+
+	static public LoginAttempt login(String username, String password) {
+
 	/*
+	// TODO : Check user and user password instead of server password
+	// Get user salt and hash from DB, need DB group to implement table and get method
 	DatabaseAccessor db = null;
 		try {
 			db = initDB();
 		} catch (SQLException e) {
-			return new ErrorResponse(StatusCode.BAD_REQUEST, "Error when initiating databaseAccessor. " + e.getMessage());
+			return new LoginAttempt(false, null, "SQL Error when initiating databaseAccessor in LoginAttempt." + e.getMessage());
 		} catch (IOException e)  {
-			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
+			return new LoginAttempt(false, null, "IO Error when initiating databaseAccessor in LoginAttempt. " + e.getMessage());
 		}
 		try {
 			String[] salt&hash = db.getUserSaltAndHash(username);
 		}catch (SQLException | IOException e) {
-		return new ErrorResponse(StatusCode.BAD_REQUEST, "Error when requesting user from database, user probably don't exist " + e.getMessage());
+			return new LoginAttempt(false, null, "Error when requesting user from database, user don't exist. " + e.getMessage());
 		}
+		// Apply salt to password.
+		String hash = PasswordHash.hashString(password + salt&hash[0]
 
+		// Check if new hash matches DB hash.
+		if(hash.equals(salt&hash[1]))
+			return new LoginAttempt(true, addUser(username), null);)
+
+		return new LoginAttempt(false, null, "Wrong password.");
 	 */
-	// if user not found -> return new LoginAttempt(false, null, "Incorrect user.")
-	// Apply salt to password. String hash = PasswordHash.hashString(password + salt&hash[0]);
-	// Check if new hash matches DB hash.
-	// if hash.equals(salt&hash[1]) -> return new LoginAttempt(true, addUser(username), null);)
-	// else -> return new LoginAttempt(false, null, "Wrong password.");
 
-	static public LoginAttempt login(String username, String password) {
 	    if(PasswordHash.toSaltedSHA256Hash(password).equals(ServerSettings.passwordHash)) {
-			return new LoginAttempt(true, addUser(username), null);
+			return new LoginAttempt(true, updateActiveUser(username), null);
 	    }
 		return new LoginAttempt(false, null, "Wrong password.");
 	}
@@ -60,11 +63,12 @@ public class Authenticate {
 	}
 
 	/**
-	 * Method used to handle logged in users.
+	 * Method used to update active users. The user is added to the list of
+	 * active users or the user is updated.
 	 *
-	 * @param username to add as logged in.
+	 * @param username to add or update.
 	 */
-	static public String addUser(String username) {
+	static public String updateActiveUser(String username) {
 
 		if(activeUsersID.containsValue(username)) {
 			Iterator<String> uuids = activeUsersID.keySet().iterator();
@@ -80,7 +84,6 @@ public class Authenticate {
 		String uuid = UUID.randomUUID().toString();
 
 		activeUsersID.put(uuid, username);
-		//updateLatestRequest(uuid);
 		latestRequests.put(uuid, new Date());
 
 		return uuid;
@@ -93,17 +96,6 @@ public class Authenticate {
 		}
 	}
 
-	/**
-	 * Method used to check if user exists.
-	 *
-	 * @param username to check for.
-	 * @return boolean depending on result.
-	 */
-	static public boolean userExists(String username) {
-
-		return activeUsersID.containsValue(username);
-
-	}
 
 	/**
 	 * Method used to get the id for a user.
@@ -126,7 +118,7 @@ public class Authenticate {
 	 *
 	 * @param id representing the user to remove.
 	 */
-	static public void deleteUser(String id) {
+	static public void deleteActiveUser(String id) {
 
 		activeUsersID.remove(id);
 		latestRequests.remove(id);
