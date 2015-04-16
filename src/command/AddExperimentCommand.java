@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import response.ErrorResponse;
 import response.MinimalResponse;
+import response.Response;
 import response.StatusCode;
 import com.google.gson.annotations.Expose;
 import database.DatabaseAccessor;
@@ -79,7 +80,7 @@ public class AddExperimentCommand extends Command {
 	 * Method used to execute the actual command.
 	 */
 	@Override
-	public response.Response execute() {
+	public Response execute() {
 
 		DatabaseAccessor db = null;
 

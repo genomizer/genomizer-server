@@ -6,11 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import database.DatabaseAccessor;
-import response.AnnotationInformation;
-import response.ErrorResponse;
-import response.GetAnnotationInformationResponse;
-import response.Response;
-import response.StatusCode;
+import response.*;
 
 /**
  * Class used to get information about annotations.
