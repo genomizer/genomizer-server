@@ -39,6 +39,9 @@ public class ServerMain {
 		/* We delete possible fragments from previous runs */
 		StartUpCleaner.removeOldTempDirectories("resources/");
 
+		/* The database settings should be written upon startup*/
+		printDatabaseInformation();
+
 		/* We attempt to start the doorman */
 		try {
 			new Doorman(new CommandHandler(),
