@@ -16,13 +16,37 @@ import server.ServerSettings;
 /**
  * Class used to authenticate users and privileges.
  *
- * @author Johannes
+ * @author dv13jen
  * @version 1.0
  */
 public class Authenticate {
 
 	private static HashMap<String, String> activeUsersID = new HashMap<String, String>();
 	private static HashMap<String, Date> latestRequests = new HashMap<String, Date>();
+
+	// TODO : Check user and user password instead of server password
+	// Get user salt and hash from DB (manage user not found), need DB group to implement table and get method
+	/*
+	DatabaseAccessor db = null;
+		try {
+			db = initDB();
+		} catch (SQLException e) {
+			return new ErrorResponse(StatusCode.BAD_REQUEST, "Error when initiating databaseAccessor. " + e.getMessage());
+		} catch (IOException e)  {
+			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
+		}
+		try {
+			String[] salt&hash = db.getUserSaltAndHash(username);
+		}catch (SQLException | IOException e) {
+		return new ErrorResponse(StatusCode.BAD_REQUEST, "Error when requesting user from database, user probably don't exist " + e.getMessage());
+		}
+
+	 */
+	// if user not found -> return new LoginAttempt(false, null, "Incorrect user.")
+	// Apply salt to password. String hash = PasswordHash.hashString(password + salt&hash[0]);
+	// Check if new hash matches DB hash.
+	// if hash.equals(salt&hash[1]) -> return new LoginAttempt(true, addUser(username), null);)
+	// else -> return new LoginAttempt(false, null, "Wrong password.");
 
 	static public LoginAttempt login(String username, String password) {
 	    if(PasswordHash.toSaltedSHA256Hash(password).equals(ServerSettings.passwordHash)) {
