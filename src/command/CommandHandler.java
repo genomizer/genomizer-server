@@ -86,110 +86,117 @@ public class CommandHandler {
 	 */
 	private Command createCommand(String json, String uri, String uuid,
 								  CommandType cmdt) {
+		if (RestfulSizes.getSize(cmdt) != calculateURISize(uri)) {
+			return null;
+		}
 
-		String username = Authenticate.getUsername(uuid);
 		Command newCommand = null;
-
-		int uriLength = calculateURILength(uri);
 		String parsedURI = parseRequestURI(uri);
+		String username = Authenticate.getUsername(uuid);
+		String[] rest;
 
-		if (cmdt == CommandType.DELETE_ANNOTATION_VALUE_COMMAND &&
-				uriLength == RestfulSizes.DELETE_ANNOTATION_VALUE_COMMAND) {
-			String[] rest = uri.split("/");
-			newCommand = cmdFactory.createDeleteAnnotationValueCommand(rest[3],
-					rest[4]);
-		} else if(cmdt == CommandType.LOGIN_COMMAND &&
-				uriLength == RestfulSizes.LOGIN_COMMAND) {
-			newCommand = cmdFactory.createLoginCommand(json);
-		} else if (cmdt == CommandType.LOGOUT_COMMAND &&
-				uriLength == RestfulSizes.LOGOUT_COMMAND) {
-			newCommand = cmdFactory.createLogoutCommand(username);
-		} else if (cmdt == CommandType.GET_EXPERIMENT_COMMAND &&
-				uriLength == RestfulSizes.GET_EXPERIMENT_COMMAND) {
-			newCommand = cmdFactory.createGetExperimentCommand(parsedURI);
-		} else if (cmdt == CommandType.ADD_EXPERIMENT_COMMAND &&
-				uriLength == RestfulSizes.ADD_EXPERIMENT_COMMAND) {
-			newCommand = cmdFactory.createAddExperimentCommand(json);
-		} else if (cmdt == CommandType.UPDATE_EXPERIMENT_COMMAND &&
-				uriLength == RestfulSizes.UPDATE_EXPERIMENT_COMMAND) {
-			newCommand = cmdFactory.createUpdateExperimentCommand();
-		} else if (cmdt == CommandType.DELETE_EXPERIMENT_COMMAND &&
-				uriLength == RestfulSizes.DELETE_EXPERIMENT_COMMAND) {
-			newCommand = cmdFactory.createDeleteExperimentCommand(parsedURI);
-		} else if (cmdt == CommandType.GET_FILE_FROM_EXPERIMENT_COMMAND &&
-				uriLength == RestfulSizes.GET_FILE_FROM_EXPERIMENT_COMMAND) {
-			newCommand = cmdFactory.createGetFileFromExperimentCommand(
-					parsedURI);
-		} else if (cmdt == CommandType.ADD_FILE_TO_EXPERIMENT_COMMAND &&
-				uriLength == RestfulSizes.ADD_FILE_TO_EXPERIMENT_COMMAND) {
-			newCommand = cmdFactory.createAddFileToExperimentCommand(json);
-		} else if (cmdt == CommandType.UPDATE_FILE_IN_EXPERIMENT_COMMAND &&
-				uriLength == RestfulSizes.UPDATE_FILE_IN_EXPERIMENT_COMMAND) {
-			newCommand = cmdFactory.createUpdateFileInExperimentCommand();
-		} else if (cmdt == CommandType.DELETE_FILE_FROM_EXPERIMENT_COMMAND &&
-				uriLength == RestfulSizes.DELETE_FILE_FROM_EXPERIMENT_COMMAND) {
-			newCommand = cmdFactory.createDeleteFileFromExperimentCommand(
-					parsedURI);
-		} else if (cmdt == CommandType.SEARCH_FOR_EXPERIMENTS_COMMAND &&
-				uriLength == RestfulSizes.SEARCH_FOR_EXPERIMENTS_COMMAND) {
-			newCommand = cmdFactory.createSearchForExperimentCommand(parsedURI);
-		} else if (cmdt == CommandType.DELETE_USER_COMMAND &&
-				uriLength == RestfulSizes.DELETE_USER_COMMAND) {
-			newCommand = cmdFactory.createDeleteUserCommand(parsedURI);
-		} else if (cmdt == CommandType.PROCESS_COMMAND &&
-				uriLength == RestfulSizes.PROCESS_COMMAND) {
-			newCommand = cmdFactory.createProcessCommand(json, username,
-					parsedURI);
-		} else if (cmdt == CommandType.GET_PROCESS_STATUS_COMMAND &&
-				uriLength == RestfulSizes.GET_PROCESS_STATUS_COMMAND) {
-			newCommand = cmdFactory.createGetProcessStatusCommand(
-					heavyWorkThread);
-		} else if (cmdt == CommandType.GET_ANNOTATION_INFORMATION_COMMAND &&
-				uriLength == RestfulSizes.GET_ANNOTATION_INFORMATION_COMMAND) {
-			newCommand = cmdFactory.createGetAnnotationInformationCommand();
-		} else if (cmdt == CommandType.ADD_ANNOTATION_FIELD_COMMAND &&
-				uriLength == RestfulSizes.ADD_ANNOTATION_FIELD_COMMAND) {
-			newCommand = cmdFactory.createAddAnnotationFieldCommand(parsedURI);
-		} else if (cmdt == CommandType.ADD_ANNOTATION_VALUE_COMMAND &&
-				uriLength == RestfulSizes.ADD_ANNOTATION_VALUE_COMMAND) {
-			newCommand = cmdFactory.createAddAnnotationValueCommand(json);
-		} else if (cmdt == CommandType.RENAME_ANNOTATION_VALUE_COMMAND &&
-				uriLength == RestfulSizes.RENAME_ANNOTATION_VALUE_COMMAND) {
-			newCommand = cmdFactory.creatRenameAnnotationValueCommand(json);
-		} else if (cmdt == CommandType.RENAME_ANNOTATION_FIELD_COMMAND &&
-				uriLength == RestfulSizes.RENAME_ANNOTATION_FIELD_COMMAND) {
-			newCommand = cmdFactory.createEditAnnotationFieldCommand(json);
-		} else if (cmdt == CommandType.REMOVE_ANNOTATION_FIELD_COMMAND &&
-				uriLength == RestfulSizes.REMOVE_ANNOTATION_FIELD_COMMAND) {
-			newCommand = cmdFactory.createRemoveAnnotationFieldCommand(
-					parsedURI);
-		} else if (cmdt == CommandType.GET_ANNOTATION_PRIVILEGES_COMMAND &&
-				uriLength == RestfulSizes.GET_ANNOTATION_PRIVILEGES_COMMAND) {
-			newCommand = cmdFactory.createGetAnnotationPrivilegesCommand();
-		} else if (cmdt == CommandType.UPDATE_ANNOTATION_PRIVILEGES_COMMAND &&
-				uriLength == RestfulSizes.
-						UPDATE_ANNOTATION_PRIVILEGES_COMMAND) {
-			newCommand = cmdFactory.createUpdateAnnotationPrivilegesCommand();
-		} else if (cmdt == CommandType.ADD_GENOME_RELEASE_COMMAND &&
-				uriLength == RestfulSizes.ADD_GENOME_RELEASE_COMMAND) {
-			newCommand = cmdFactory.createAddGenomeReleaseCommand(json);
-		} else if (cmdt == CommandType.DELETE_GENOME_RELEASE_COMMAND &&
-				uriLength == RestfulSizes.DELETE_GENOME_RELEASE_COMMAND) {
-			String[] rest = uri.split("/");
-			newCommand = cmdFactory.createDeleteGenomeReleaseCommand(rest[2],
-					rest[3]);
-		} else if(cmdt==CommandType.GET_ALL_GENOME_RELEASE_COMMAND &&
-				uriLength == RestfulSizes.GET_ALL_GENOME_RELEASE_COMMAND) {
-			newCommand=cmdFactory.createGetAllGenomeReleasesCommand();
-		} else if(cmdt==CommandType.GET_GENOME_RELEASE_SPECIES_COMMAND &&
-				uriLength == RestfulSizes.GET_GENOME_RELEASE_SPECIES_COMMAND) {
-			newCommand=cmdFactory.createGetGenomeReleasesSpeciesCommand(
-					parsedURI);
-		} else if(cmdt==CommandType.CREATE_USER_COMMAND &&
-				uriLength == RestfulSizes.CREATE_USER_COMMAND) {
-			newCommand=cmdFactory.createCreateUserCommand(json);
-		} else if(cmdt==CommandType.IS_TOKEN_VALID_COMMAND) {
-			newCommand=cmdFactory.createIsTokenValidCommand(uuid);
+		switch (cmdt) {
+			case DELETE_ANNOTATION_VALUE_COMMAND:
+				rest = uri.split("/");
+				newCommand = cmdFactory.
+						createDeleteAnnotationValueCommand(rest[3], rest[4]);
+				break;
+			case LOGIN_COMMAND:
+				newCommand = cmdFactory.createLoginCommand(json);
+				break;
+			case LOGOUT_COMMAND:
+				newCommand = cmdFactory.createLogoutCommand(username);
+				break;
+			case GET_EXPERIMENT_COMMAND:
+				newCommand = cmdFactory.createGetExperimentCommand(parsedURI);
+				break;
+			case ADD_EXPERIMENT_COMMAND:
+				newCommand = cmdFactory.createAddExperimentCommand(json);
+				break;
+			case UPDATE_EXPERIMENT_COMMAND:
+				newCommand = cmdFactory.createUpdateExperimentCommand();
+				break;
+			case DELETE_EXPERIMENT_COMMAND:
+				newCommand = cmdFactory.
+						createDeleteExperimentCommand(parsedURI);
+				break;
+			case GET_FILE_FROM_EXPERIMENT_COMMAND:
+				newCommand = cmdFactory.
+						createGetFileFromExperimentCommand(parsedURI);
+				break;
+			case ADD_FILE_TO_EXPERIMENT_COMMAND:
+				newCommand = cmdFactory.createAddFileToExperimentCommand(json);
+				break;
+			case UPDATE_FILE_IN_EXPERIMENT_COMMAND:
+				newCommand = cmdFactory.createUpdateFileInExperimentCommand();
+				break;
+			case DELETE_FILE_FROM_EXPERIMENT_COMMAND:
+				newCommand = cmdFactory.
+						createDeleteFileFromExperimentCommand(parsedURI);
+				break;
+			case SEARCH_FOR_EXPERIMENTS_COMMAND:
+				newCommand = cmdFactory.
+						createSearchForExperimentCommand(parsedURI);
+				break;
+			case DELETE_USER_COMMAND:
+				newCommand = cmdFactory.createDeleteUserCommand(parsedURI);
+				break;
+			case PROCESS_COMMAND:
+				newCommand = cmdFactory.createProcessCommand(json, username,
+						parsedURI);
+				break;
+			case GET_PROCESS_STATUS_COMMAND:
+				newCommand = cmdFactory.
+						createGetProcessStatusCommand(heavyWorkThread);
+				break;
+			case GET_ANNOTATION_INFORMATION_COMMAND:
+				newCommand = cmdFactory.createGetAnnotationInformationCommand();
+				break;
+			case ADD_ANNOTATION_FIELD_COMMAND:
+				newCommand = cmdFactory.
+						createAddAnnotationFieldCommand(parsedURI);
+				break;
+			case ADD_ANNOTATION_VALUE_COMMAND:
+				newCommand = cmdFactory.createAddAnnotationValueCommand(json);
+				break;
+			case RENAME_ANNOTATION_VALUE_COMMAND:
+				newCommand = cmdFactory.creatRenameAnnotationValueCommand(json);
+				break;
+			case RENAME_ANNOTATION_FIELD_COMMAND:
+				newCommand = cmdFactory.createEditAnnotationFieldCommand(json);
+				break;
+			case REMOVE_ANNOTATION_FIELD_COMMAND:
+				newCommand = cmdFactory.
+						createRemoveAnnotationFieldCommand(parsedURI);
+				break;
+			case GET_ANNOTATION_PRIVILEGES_COMMAND:
+				newCommand = cmdFactory.createGetAnnotationPrivilegesCommand();
+				break;
+			case UPDATE_ANNOTATION_PRIVILEGES_COMMAND:
+				newCommand = cmdFactory.
+						createUpdateAnnotationPrivilegesCommand();
+				break;
+			case ADD_GENOME_RELEASE_COMMAND:
+				newCommand = cmdFactory.createAddGenomeReleaseCommand(json);
+				break;
+			case DELETE_GENOME_RELEASE_COMMAND:
+				rest = uri.split("/");
+				newCommand = cmdFactory.
+						createDeleteGenomeReleaseCommand(rest[2], rest[3]);
+				break;
+			case GET_ALL_GENOME_RELEASE_COMMAND:
+				newCommand=cmdFactory.createGetAllGenomeReleasesCommand();
+				break;
+			case GET_GENOME_RELEASE_SPECIES_COMMAND:
+				newCommand=cmdFactory.
+						createGetGenomeReleasesSpeciesCommand(parsedURI);
+				break;
+			case CREATE_USER_COMMAND:
+				newCommand=cmdFactory.createCreateUserCommand(json);
+				break;
+			case IS_TOKEN_VALID_COMMAND:
+				newCommand=cmdFactory.createIsTokenValidCommand(uuid);
+				break;
 		}
 
 		return newCommand;
@@ -209,13 +216,13 @@ public class CommandHandler {
 	}
 
 	/**
-	 * Returns the so called "length" of the request URI. For example, in the
+	 * Returns the so called "size" of the request URI. For example, in the
 	 * request URI "/experiment/\<experiment-id\>" the length would be 2
 	 * (experiment and \<experiment-id\>).
 	 * @param requestURI the URI part of the request line.
-	 * @return the "length" of the request URI.
+	 * @return the "size" of the request URI.
 	 */
-	private int calculateURILength(String requestURI) {
+	private int calculateURISize(String requestURI) {
 		return requestURI.split("/").length-1;
 	}
 }
