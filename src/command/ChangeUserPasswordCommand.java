@@ -66,7 +66,7 @@ public class ChangeUserPasswordCommand extends Command {
 			// get hash using salt and password
 			String hash = PasswordHash.hashString(password+salt);
 			// insert into DB, requires new table from DB group
-            db.updatePassword(username, salt, hash);
+            db.changeUserPassword(username, salt, hash);
             */
 
         return new MinimalResponse(StatusCode.CREATED);
