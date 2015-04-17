@@ -2,7 +2,7 @@ import authentication.InactiveUuidsRemover;
 import command.CommandHandler;
 import database.constants.ServerDependentValues;
 import org.apache.commons.cli.*;
-import process.classes.StartUpCleaner;
+import process.StartUpCleaner;
 import server.Debug;
 import server.SecureDoorman;
 import server.ServerSettings;
