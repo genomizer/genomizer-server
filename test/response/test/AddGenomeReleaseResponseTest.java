@@ -43,7 +43,7 @@ public class AddGenomeReleaseResponseTest {
 		array.add("SECOND");
 		AddGenomeReleaseResponse rsp = new AddGenomeReleaseResponse(StatusCode.CREATED, array);
 		String checker = rsp.getBody();
-		assertEquals(checker, "[\"FIRST\",\"SECOND\"]");
+		assertEquals("[\"FIRST\",\"SECOND\"]", checker);
 
 	}
 
