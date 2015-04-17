@@ -94,11 +94,6 @@ public class ServerMain {
 	private static CommandLine loadSettingsFile(String[] args)
 			throws 	FileNotFoundException,
 					ParseException {
-		// Attempt to load the settings file
-		if (new File(settingsFile).exists()) {
-			System.out.println("Reading settings from " + settingsFile);
-			ServerSettings.readSettingsFile(settingsFile);
-		}
 
 		CommandLineParser comline = new BasicParser();
 
@@ -110,7 +105,14 @@ public class ServerMain {
 
 		handleSuppliedCommandlineOptions(com);
 
+		// Attempt to load the settings file
+		if (new File(settingsFile).exists()) {
+			System.out.println("Reading settings from " + settingsFile);
+			ServerSettings.readSettingsFile(settingsFile);
+		}
+
 		ServerSettings.validate();
+
 		return com;
 	}
 
@@ -133,7 +135,7 @@ public class ServerMain {
 		}
 		// Settings file flag
 		if (com.hasOption('f')) {
-			ServerSettings.readSettingsFile(com.getOptionValue('f'));
+			settingsFile = com.getOptionValue('f');
 		}
 	}
 
