@@ -266,7 +266,7 @@ public class Doorman {
 		scanner.close();
 
 		String username = null;
-		//username = Authenticate.getUsername(uuid);
+		//username = Authenticate.getUsernameByID(uuid);
 		Debug.log("Username: " + username + "\n");
 		Debug.log("Body from client: " + body);
 

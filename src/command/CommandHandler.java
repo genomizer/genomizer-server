@@ -92,7 +92,7 @@ public class CommandHandler {
 
 		Command newCommand = null;
 		String parsedURI = parseRequestURI(uri);
-		String username = Authenticate.getUsername(uuid);
+		String username = Authenticate.getUsernameByID(uuid);
 		String[] rest;
 
 		switch (cmdt) {

@@ -42,14 +42,14 @@ public class InactiveUuidsRemover implements Runnable {
 				}
 				// ... and remove them from Authenticate.
 				for (String uid : usersToDelete) {
-					Debug.log("REMOVING INACTIVE UUID: " + uid + " - USERNAME: " + Authenticate.getUsername(uid));
+					Debug.log("REMOVING INACTIVE UUID: " + uid + " - USERNAME: " + Authenticate.getUsernameByID(uid));
 					Authenticate.deleteActiveUser(uid);
 				}
 
 				// Then print some debugging output...
 				Debug.log("REMAINING USERS:");
 				for(String uid : latestRequests.keySet()) {
-					Debug.log(uid + " - USERNAME: " + Authenticate.getUsername(uid));
+					Debug.log(uid + " - USERNAME: " + Authenticate.getUsernameByID(uid));
 				}
 
 				// ...and go to sleep.

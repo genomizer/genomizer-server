@@ -137,7 +137,7 @@ public class Authenticate {
 	 * @param userID to match against an active user.
 	 * @return the user name matching the id as a string.
 	 */
-	static public String getUsername(String userID){
+	static public String getUsernameByID(String userID){
 
 		return activeUsersID.get(userID);
 

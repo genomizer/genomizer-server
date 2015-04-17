@@ -83,7 +83,7 @@ public class CreateProcessCommandTest {
 
 	@Test
 	public void shouldSetUserID(){
-		assertEquals(username, processCommand.getUsername());
+		assertEquals(username, processCommand.getUsernameByID());
 	}
 
 	@Test
