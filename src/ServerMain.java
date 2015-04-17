@@ -33,6 +33,7 @@ public class ServerMain {
 	 */
 	public static void main(String[] args) throws ParseException,
 												  FileNotFoundException {
+		System.out.println("SANE?!?!");
 
 		/* We firstly need to read and validate the settings file. */
 		CommandLine com = loadSettingsFile(args);
