@@ -6,18 +6,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.io.Writer;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Scanner;
-
-import javax.swing.text.DateFormatter;
-
-import authentication.Authenticate;
 
 import response.Response;
 
@@ -28,15 +20,16 @@ public class ErrorLogger {
 
 	private static HashMap<String, ArrayList<Response>> usermap = new HashMap<String,ArrayList<Response>>();
 
+
 	public ErrorLogger(){
 
 	}
 
-	public static void log(String username, String logText){
+	public static void log(String tag, String logText){
 
 		File file = new File(logFile);
 		String timeString = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date(System.currentTimeMillis()));
-		String text = timeString + " | " + username + " | " + logText;
+		String text = timeString + " : " + tag + " | " + logText;
 		try{
 
 			file.createNewFile();

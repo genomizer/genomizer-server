@@ -25,10 +25,10 @@ public class AddAnnotationValueCommand extends Command {
 	 */
 
 	@Expose
-	private String name;
+	String name;
 
 	@Expose
-	private String value;
+	String value;
 
 	/**
 	 * Used to validate the information needed to execute the

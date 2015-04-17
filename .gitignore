@@ -1,3 +1,4 @@
+.settings/
 bin/
 .idea/*
 *.iml
@@ -7,5 +8,8 @@ junit/
 server*.jar
 *.orig
 .classpath
+.project
 *~
 errorLog.txt
+*.properties
+out
