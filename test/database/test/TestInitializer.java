@@ -18,7 +18,6 @@ import java.lang.System;
 import org.junit.Ignore;
 
 import database.DatabaseAccessor;
-import database.test.unittests.SearchDatabaseTests;
 
 /**
  * Create an instance of this class if you want to use the test tuples in
