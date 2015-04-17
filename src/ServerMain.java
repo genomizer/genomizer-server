@@ -18,6 +18,7 @@ import command.CommandHandler;
 import server.ServerSettings;
 import server.Debug;
 import server.Doorman;
+import server.ErrorLogger;
 
 
 public class ServerMain {
@@ -32,6 +33,7 @@ public class ServerMain {
 	 */
 	public static void main(String[] args) throws ParseException,
 												  FileNotFoundException {
+		System.out.println("SANE?!?!");
 
 		/* We firstly need to read and validate the settings file. */
 		CommandLine com = loadSettingsFile(args);
