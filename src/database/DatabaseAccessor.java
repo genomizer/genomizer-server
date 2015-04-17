@@ -16,7 +16,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
-import server.ServerSettings;
 import database.containers.Annotation;
 import database.containers.ChainFile;
 import database.containers.Experiment;
@@ -47,7 +46,8 @@ public class DatabaseAccessor {
     public static Integer FREETEXT = 1;
     public static Integer DROPDOWN = 2;
     private Connection conn;
-    public static final String DATAFOLDER = ServerSettings.fileLocation;
+    public static final String DATAFOLDER = File.separator + "var"
+            + File.separator + "www" + File.separator + "data" + File.separator;
     private FilePathGenerator fpg;
     private PubMedToSQLConverter pm2sql;
     private UserMethods userMethods;
@@ -243,7 +243,7 @@ public class DatabaseAccessor {
      *             - if the query does not succeed
      */
 
-
+    
     /**
      * Deletes a user from the database.
      *
@@ -630,7 +630,7 @@ public class DatabaseAccessor {
      *
      * @param annoLabel
      *            String, the name of the annotation to change required for.
-     * @param required
+     * @param required 
      * @return resCount int, the numer of rows affected by the change.
      * @throws SQLException
      *             , will be thrown if the psql query fails.
@@ -906,7 +906,7 @@ public class DatabaseAccessor {
 
 
     //TODO Better comments on unused methods.
-
+    
     /**
      * Not used in Genomizer 2014
      *

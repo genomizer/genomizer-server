@@ -19,7 +19,6 @@ public class ServerSettings {
 	public static String passwordHash = null;
 	public static String passwordSalt = null;
 	public static String webUrlUpload = null;
-	public static String fileLocation = null;
 
 
 	public static void writeSettings(String path){
@@ -37,7 +36,6 @@ public class ServerSettings {
 					+ "genomizerPort = " + genomizerPort + "\n"
 					+ "passwordHash = " + passwordHash + "\n"
 					+ "passwordSalt = " + passwordSalt + "\n"
-					+ "fileLocation = " + fileLocation + "\n"
 					+ "webUrlUpload = " + webUrlUpload + "\n";
 
 			out.write(dataInfo);
@@ -67,7 +65,6 @@ public class ServerSettings {
 		nullCheck(passwordHash, "passwordHash");
 		nullCheck(passwordSalt, "passwordSalt");
 		nullCheck(webUrlUpload, "webUrlUpload");
-		nullCheck(fileLocation, "fileLocation");
 	}
 
 	private static void nullCheck(int parameter, String name) {
@@ -142,9 +139,6 @@ public class ServerSettings {
 				case "weburlupload":
 					webUrlUpload = value;
 					break;
-				case "filelocation":
-					fileLocation = value;
-					break;
 				default:
 					String msg = "Unrecognized setting: " + key;
 					Debug.log(msg);
@@ -170,7 +164,7 @@ public class ServerSettings {
 							+ "\tgenomizerPort = " + genomizerPort + "\n"
 							+ "\tpasswordHash = " + passwordHash + "\n"
 							+ "\tpasswordSalt = " + passwordSalt + "\n"
-							+ "\tfileLocation = " + fileLocation + "\n"
+							//+ "\tfileLocation = " + fileLocation + "\n"
 							+ "\twebUrlUpload = " + webUrlUpload + "\n";
 
 			Debug.log("Imported the following settings:\n" + dataInfo);
