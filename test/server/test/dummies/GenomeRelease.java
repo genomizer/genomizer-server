@@ -6,7 +6,9 @@ import java.net.URL;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import org.junit.Ignore;
 
+@Ignore
 public class GenomeRelease {
 
 	public GenomeRelease() {

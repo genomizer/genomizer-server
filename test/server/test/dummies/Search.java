@@ -1,8 +1,11 @@
 package server.test.dummies;
 
+import org.junit.Ignore;
+
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+@Ignore
 public class Search {
 
 	static void sendSearchRequest(String query) throws Exception {

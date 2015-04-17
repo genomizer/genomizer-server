@@ -9,6 +9,7 @@ import java.net.URL;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import org.junit.Ignore;
 
 /**
  * Abstract class used for server testing.
@@ -16,6 +17,7 @@ import com.google.gson.JsonObject;
  * @author tfy09jnn
  * @version 1.0
  */
+@Ignore
 public abstract class ServerAbstractTestClass {
 
 	//Token used to identify users.

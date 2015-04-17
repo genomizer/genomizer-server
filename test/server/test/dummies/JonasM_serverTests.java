@@ -1,6 +1,8 @@
 package server.test.dummies;
 
+import org.junit.Ignore;
 
+@Ignore
 public class JonasM_serverTests {
 
 	public static void main(String args[]) throws Exception {

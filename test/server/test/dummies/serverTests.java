@@ -1,6 +1,9 @@
 package server.test.dummies;
 
 
+import org.junit.Ignore;
+
+@Ignore
 public class serverTests {
 
 	public static void main(String args[]) throws Exception {
@@ -15,7 +18,7 @@ public class serverTests {
 		//Annotations.sendDeleteAnnotation("JONAS???");
 //		Annotations.sendGetAnnotationInformation();
 //		Process.sendRawToProfile();
-//		Annotations.sendAddAnnotation("invalid annotation 0123456789!!!!!!!!!åäö");
+//		Annotations.sendAddAnnotation("invalid annotation 0123456789!!!!!!!!!ï¿½ï¿½ï¿½");
 
 
 //		Process.sendRawToProfile();
@@ -45,8 +48,8 @@ public class serverTests {
 
 	public static void usertests() throws Exception {
 		User.sendDeleteUser("c11jmm");
-		User.sendCreateUser("c11jmm", "bajs", "minion", "Jonas Erik Markström", "c11jmm@cs.umu.se");
-		User.sendCreateUser("c11jmm", "bajs", "minion", "Jonas Erik Markström", "c11jmm@cs.umu.se"); // Trying to create duplicate user, should give error.
+		User.sendCreateUser("c11jmm", "bajs", "minion", "Jonas Erik Markstrï¿½m", "c11jmm@cs.umu.se");
+		User.sendCreateUser("c11jmm", "bajs", "minion", "Jonas Erik Markstrï¿½m", "c11jmm@cs.umu.se"); // Trying to create duplicate user, should give error.
 		Administrator.sendUpdateUserPrivileges("c11jmm", "basic");
 		Administrator.sendUpdateUserPrivileges("c11jmm2", "mastah"); // User does not exist, should return error code.
 		User.sendDeleteUser("c11jmm");
