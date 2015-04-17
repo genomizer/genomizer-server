@@ -58,7 +58,7 @@ public class LogoutCommand extends Command {
 	public Response execute() {
 		String id = Authenticate.getID(username);
 		if(Authenticate.idExists(id)) {
-			Authenticate.deleteUser(id);
+			Authenticate.deleteActiveUser(id);
 			return new MinimalResponse(StatusCode.OK);
 		} else {
 			return 	new ErrorResponse(StatusCode.FILE_NOT_FOUND, "User not found");

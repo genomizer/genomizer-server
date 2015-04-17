@@ -2,7 +2,7 @@
  * @author dv12rrt
  */
 
-package authentication.test;
+package authenticate.test;
 
 import authentication.LoginAttempt;
 import org.junit.*;

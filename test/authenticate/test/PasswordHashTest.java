@@ -2,7 +2,7 @@
  * @author dv12rrt
  */
 
-package authentication.test;
+package authenticate.test;
 
 import authentication.PasswordHash;
 import org.junit.*;
