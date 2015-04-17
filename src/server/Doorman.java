@@ -76,8 +76,10 @@ public class Doorman {
 				try {
 				new Thread(command).start();
 				} catch(Exception e) {
-					System.err.println("ERROR when creating new Executor." + e.getMessage());
-					ErrorLogger.log("SERVER", "ERROR when creating new Executor." + e.getMessage());
+					String msg = "ERROR when creating new Executor."
+							+ e.getMessage();
+					Debug.log(msg);
+					ErrorLogger.log("SYSTEM", msg);
 				}
 			}
 		});
@@ -88,8 +90,11 @@ public class Doorman {
 	 */
 	public void start() {
 		httpServer.start();
-		System.out.println("Doorman started on port " +
-						   ServerSettings.genomizerPort);
+
+		String msg = "Doorman started on port " +
+				ServerSettings.genomizerPort;
+		Debug.log(msg);
+		ErrorLogger.log("SYSTEM", msg);
 	}
 
 	/**
@@ -279,9 +284,10 @@ public class Doorman {
 			response = commandHandler.processNewCommand(body, header, uuid, type);
 
 		} catch(Exception e ) {
-			Debug.log("Could not create/process new command " + e.getMessage());
-			ErrorLogger.log("SYSTEM", e);
-			e.printStackTrace();
+			String msg = "Could not create/process new command: " + e
+					.getMessage();
+			Debug.log(msg);
+			ErrorLogger.log("SYSTEM", msg);
 		}
 
 		//TODO Should there be some error checking?
@@ -290,8 +296,10 @@ public class Doorman {
 		try {
 			respond(exchange, response);
 		} catch (IOException e) {
-			Debug.log("IOError when sending response back to client. " + e.getMessage());
-			ErrorLogger.log("SYSTEM", e);
+			String msg = "IOError when sending response back to client. " + e
+					.getMessage();
+			Debug.log(msg);
+			ErrorLogger.log("SYSTEM", msg);
 		}
 	}
 
