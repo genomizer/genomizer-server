@@ -16,7 +16,7 @@ import database.containers.Experiment;
 import database.containers.FileTuple;
 import database.test.TestInitializer;
 
-public class GetFileTupeTest {
+public class GetFileTupleTest {
     private static DatabaseAccessor dbac;
     private static TestInitializer ti;
 
