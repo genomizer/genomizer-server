@@ -37,12 +37,18 @@ public class DeleteExperimentCommand extends Command {
 	public boolean validate() throws ValidateException {
 
 		if(header == null) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Experiment name was missing.");
-		} else if(header.length() < 1 || header.length() > database.constants.MaxSize.EXPID) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Experiment name has to be between 1 and "
-					+ database.constants.MaxSize.FILE_EXPID + " characters long.");
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Experiment " +
+					"name was missing.");
+		} else if(header.length() < 1 || header.length() >
+				database.constants.MaxSize.EXPID) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Experiment " +
+					"name has to be between 1 and "
+					+ database.constants.MaxSize.FILE_EXPID +
+					" characters long.");
 		} else if(!hasOnlyValidCharacters(header)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in experiment name. Valid characters are: " + validCharacters);
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
+					"characters in experiment name. Valid characters are: " +
+					validCharacters);
 		}
 
 		return true;
@@ -66,12 +72,15 @@ public class DeleteExperimentCommand extends Command {
 
 			if(tuples == 0) {
 
-				return new ErrorResponse(StatusCode.BAD_REQUEST, "The experiment " + header + " does not exist and can not be deleted");
+				return new ErrorResponse(StatusCode.BAD_REQUEST,
+						"The experiment " + header + " does not exist and " +
+								"can not be deleted");
 
 			}
 		} catch (SQLException e) {
 
-			return new ErrorResponse(StatusCode.BAD_REQUEST, Integer.toString(e.getErrorCode()));
+			return new ErrorResponse(StatusCode.BAD_REQUEST,
+					Integer.toString(e.getErrorCode()));
 
 		} catch (IOException e) {
 

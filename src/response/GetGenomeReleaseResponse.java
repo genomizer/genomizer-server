@@ -24,8 +24,8 @@ public class GetGenomeReleaseResponse extends Response {
 		Gson gson = new GsonBuilder().create();
 
 		if(genomeReleases != null){
-			for(int i =0; i<genomeReleases.size();i++){
-				JsonElement elem = gson.toJsonTree(genomeReleases.get(i), Genome.class);
+			for (Genome genomeRelease : genomeReleases) {
+				JsonElement elem = gson.toJsonTree(genomeRelease, Genome.class);
 				arr.add(elem);
 			}
 		}

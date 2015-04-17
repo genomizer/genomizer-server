@@ -46,16 +46,22 @@ public class GetGenomeReleaseSpeciesCommand extends Command{
 
 		if(specie == null) {
 
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specie was missing.");
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specie was " +
+					"missing.");
 
-		} else if(specie.length() < 1 || specie.length() > database.constants.MaxSize.GENOME_SPECIES) {
+		} else if(specie.length() < 1 || specie.length() >
+				database.constants.MaxSize.GENOME_SPECIES) {
 
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specie has to be between 1 and "
-					+ database.constants.MaxSize.GENOME_SPECIES + " characters long.");
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specie has " +
+					"to be between 1 and "
+					+ database.constants.MaxSize.GENOME_SPECIES +
+					" characters long.");
 
 		} else if(!hasOnlyValidCharacters(specie)) {
 
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in specie name. Valid characters are: " + validCharacters);
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
+					"characters in specie name. Valid characters are: " +
+					validCharacters);
 
 		}
 
@@ -66,7 +72,8 @@ public class GetGenomeReleaseSpeciesCommand extends Command{
 	/**
 	 * Connects to the database, retrieves all the genomeReleases for a
 	 * specific species from
-	 * the db and creates a response depending on the return value from the database.
+	 * the db and creates a response depending on the return value from the
+	 * database.
 	 */
 	@Override
 	public Response execute() {
@@ -74,12 +81,15 @@ public class GetGenomeReleaseSpeciesCommand extends Command{
 
 		try {
 			db = initDB();
-			ArrayList<Genome> genomeReleases=db.getAllGenomeReleasesForSpecies(specie);
+			ArrayList<Genome> genomeReleases =
+					db.getAllGenomeReleasesForSpecies(specie);
 			return new GetGenomeReleaseResponse(StatusCode.OK, genomeReleases);
 		} catch (SQLException e) {
-			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, "DatabaseAccessor could not be created: " + e.getMessage());
+			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE,
+					"DatabaseAccessor could not be created: " + e.getMessage());
 		} catch (IOException e) {
-			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, specie + " has no genome version released");
+			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, specie +
+					" has no genome version released");
 		}finally{
 			db.close();
 		}

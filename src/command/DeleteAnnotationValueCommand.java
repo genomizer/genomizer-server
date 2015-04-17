@@ -26,7 +26,7 @@ public class DeleteAnnotationValueCommand extends Command {
 	/**
 	 * Constructor used to initiate the class.
 	 *
-	 * @param label on annotation that has the value.
+	 * @param name is the label on annotation that has the value.
 	 * @param value to delete.
 	 */
 	public DeleteAnnotationValueCommand(String name, String value) {
@@ -47,17 +47,28 @@ public class DeleteAnnotationValueCommand extends Command {
 	public boolean validate() throws ValidateException {
 
 		if(name == null || value == null) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation label and/or value was missing.");
-		} else if(name.length() < 1 || name.length() > database.constants.MaxSize.ANNOTATION_LABEL) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation label has to be between 1 and "
-					+ database.constants.MaxSize.ANNOTATION_LABEL + " characters long.");
-		} else if(value.length() < 1 || value.length() > database.constants.MaxSize.ANNOTATION_VALUE) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation value has to be between 1 and "
-					+ database.constants.MaxSize.ANNOTATION_VALUE + " characters long.");
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation " +
+					"label and/or value was missing.");
+		} else if(name.length() < 1 || name.length() >
+				database.constants.MaxSize.ANNOTATION_LABEL) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation " +
+					"label has to be between 1 and "
+					+ database.constants.MaxSize.ANNOTATION_LABEL +
+					" characters long.");
+		} else if(value.length() < 1 || value.length() >
+				database.constants.MaxSize.ANNOTATION_VALUE) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation " +
+					"value has to be between 1 and "
+					+ database.constants.MaxSize.ANNOTATION_VALUE +
+					" characters long.");
 		} else if(!hasOnlyValidCharacters(name)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation label. Valid characters are: " + validCharacters);
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
+					"characters in annotation label. Valid characters are: " +
+					validCharacters);
 		} else if(!hasOnlyValidCharacters(value)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation value. Valid characters are: " + validCharacters);
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
+					"characters in annotation value. Valid characters are: " +
+					validCharacters);
 		}
 		return true;
 	}
@@ -77,14 +88,17 @@ public class DeleteAnnotationValueCommand extends Command {
 				db.removeDropDownAnnotationValue(name, value);
 
 			} else {
-				return new ErrorResponse(StatusCode.BAD_REQUEST, "The value " + value + " does not exist in " + name + " and can not be deleted");
+				return new ErrorResponse(StatusCode.BAD_REQUEST, "The value " +
+						value + " does not exist in " + name + " and can not " +
+						"be deleted");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return new ErrorResponse(StatusCode.NO_CONTENT, e.getMessage());
 		} catch (IOException e) {
 			e.printStackTrace();
-			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, e.getMessage());
+			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE,
+					e.getMessage());
 		} finally {
 			db.close();
 		}

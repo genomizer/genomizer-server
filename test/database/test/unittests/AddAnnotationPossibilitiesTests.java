@@ -53,7 +53,7 @@ public class AddAnnotationPossibilitiesTests {
     }
 
     @After
-    public void teardown() throws SQLException, Exception {
+    public void teardown() throws Exception {
 
         dbac.deleteAnnotation(testLabelFT);
         dbac.deleteAnnotation(testLabelDD);
@@ -182,7 +182,7 @@ public class AddAnnotationPossibilitiesTests {
 
 	@Test
 	public void shouldRemoveAnnotationWithWeirdChars()
-			throws SQLException, IOException, Exception {
+			throws Exception {
 
        	String annotation = "@@@@@@2$???";
     	dbac.addFreeTextAnnotation(annotation, null, false);
@@ -199,9 +199,9 @@ public class AddAnnotationPossibilitiesTests {
 
     @Test
     public void shouldRemoveAnotherAnnotationWithWeirdChars()
-    		throws SQLException, IOException, Exception {
+    		throws Exception {
 
-    	String annotation = "¡!";
+    	String annotation = "ï¿½!";
     	dbac.addFreeTextAnnotation(annotation, null, false);
 
         Map<String, Integer> annotations = dbac.getAnnotations();

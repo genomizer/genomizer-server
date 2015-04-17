@@ -38,11 +38,14 @@ public class LogoutCommand extends Command {
 
 		if(username == null) {
 
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Username was missing.");
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Username " +
+					"was missing.");
 
-		} else if(username.length() < 1 || username.length() > database.constants.MaxSize.USERNAME) {
+		} else if(username.length() < 1 || username.length() >
+				database.constants.MaxSize.USERNAME) {
 
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Username has to be between 1 and "
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Username " +
+					"has to be between 1 and "
 					+ database.constants.MaxSize.USERNAME + " characters long.");
 
 		}
@@ -58,10 +61,11 @@ public class LogoutCommand extends Command {
 	public Response execute() {
 		String id = Authenticate.getID(username);
 		if(Authenticate.idExists(id)) {
-			Authenticate.deleteUser(id);
+			Authenticate.deleteActiveUser(id);
 			return new MinimalResponse(StatusCode.OK);
 		} else {
-			return 	new ErrorResponse(StatusCode.FILE_NOT_FOUND, "User not found");
+			return 	new ErrorResponse(StatusCode.FILE_NOT_FOUND,
+					"User not found");
 		}
 	}
 

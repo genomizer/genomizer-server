@@ -13,6 +13,9 @@ import com.google.gson.JsonObject;
 
 import database.containers.FileTuple;
 
+/**
+ * Class that represents the response when getting the experiment response.
+ */
 public class GetExperimentResponse extends Response {
 
 	JsonObject obj;

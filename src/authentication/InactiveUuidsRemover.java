@@ -7,12 +7,24 @@ import java.util.concurrent.TimeUnit;
 
 import server.Debug;
 import server.ErrorLogger;
-
+/**
+ * Class used to remove inactive uuids. The object is a string that
+ * runs continuously. It makes a check and removes inactive uuids
+ * once every hour.
+ *
+ * @author
+ *
+ */
 public class InactiveUuidsRemover implements Runnable {
 
 	private static final int INACTIVE_LIMIT_HOURS = 24;
 	private static final int SLEEP_MILLIS = 3600000; // 3600000 milliseconds = 1 hour.
 
+	/**
+	 * The method is the main loop. All uuids are checked
+	 * if they have been inactive for more than 24 hours. If they
+	 * have the uuid is removed.
+	 */
 	@Override
 	public void run() {
 		try{
@@ -30,14 +42,14 @@ public class InactiveUuidsRemover implements Runnable {
 				}
 				// ... and remove them from Authenticate.
 				for (String uid : usersToDelete) {
-					Debug.log("REMOVING INACTIVE UUID: " + uid + " - USERNAME: " + Authenticate.getUsername(uid));
-					Authenticate.deleteUser(uid);
+					Debug.log("REMOVING INACTIVE UUID: " + uid + " - USERNAME: " + Authenticate.getUsernameByID(uid));
+					Authenticate.deleteActiveUser(uid);
 				}
 
 				// Then print some debugging output...
 				Debug.log("REMAINING USERS:");
 				for(String uid : latestRequests.keySet()) {
-					Debug.log(uid + " - USERNAME: " + Authenticate.getUsername(uid));
+					Debug.log(uid + " - USERNAME: " + Authenticate.getUsernameByID(uid));
 				}
 
 				// ...and go to sleep.
@@ -53,9 +65,18 @@ public class InactiveUuidsRemover implements Runnable {
 		}
 	}
 
+	/**
+	 * Method to get the date difference from current date and
+	 * uuid date.
+	 *
+	 * @param date1 uuid date
+	 * @param date2 current date
+	 * @param timeUnit hours
+	 * @return time difference in hours
+	 */
 	private static long getDateDiff(Date date1, Date date2, TimeUnit timeUnit) {
-	    long diffInMillies = date2.getTime() - date1.getTime();
-	    return timeUnit.convert(diffInMillies,TimeUnit.MILLISECONDS);
+	    long diffInMillis = date2.getTime() - date1.getTime();
+	    return timeUnit.convert(diffInMillis,TimeUnit.MILLISECONDS);
 	}
 
 }

@@ -4,6 +4,9 @@ import java.util.ArrayList;
 
 import com.google.gson.annotations.Expose;
 
+/**
+ * Class that represents the download response
+ */
 public class DownloadResponse extends Response {
 
 	@Expose

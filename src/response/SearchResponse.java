@@ -13,6 +13,9 @@ import com.google.gson.JsonParser;
 import database.containers.Experiment;
 import database.containers.FileTuple;
 
+/**
+ * Class that represents the response for a search.
+ */
 public class SearchResponse extends Response {
 
 	JsonArray experimentArray;
@@ -67,9 +70,8 @@ public class SearchResponse extends Response {
         JsonArray json = parser.parse(jsonString).getAsJsonArray();
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        String prettyJson = gson.toJson(json);
 
-        return prettyJson;
+		return gson.toJson(json);
     }
 
 }

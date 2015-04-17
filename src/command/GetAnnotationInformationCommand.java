@@ -6,11 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import database.DatabaseAccessor;
-import response.AnnotationInformation;
-import response.ErrorResponse;
-import response.GetAnnotationInformationResponse;
-import response.Response;
-import response.StatusCode;
+import response.*;
 
 /**
  * Class used to get information about annotations.
@@ -61,13 +57,18 @@ public class GetAnnotationInformationCommand extends Command {
 				ArrayList<String> values = new ArrayList<String>();
 				annotationObject = db.getAnnotationObject(label);
 
-				if(annotationObject.dataType == database.containers.Annotation.FREETEXT) {
+				if(annotationObject.dataType ==
+						database.containers.Annotation.FREETEXT) {
 					values.add("freetext");
-				} else if(annotationObject.dataType == database.containers.Annotation.DROPDOWN) {
-					values = (ArrayList<String>) annotationObject.getPossibleValues();
+				} else if(annotationObject.dataType ==
+						database.containers.Annotation.DROPDOWN) {
+					values = (ArrayList<String>)
+							annotationObject.getPossibleValues();
 				}
 
-				AnnotationInformation annotation = new AnnotationInformation(annotationObject.label, values, annotationObject.isRequired);
+				AnnotationInformation annotation =
+						new AnnotationInformation(annotationObject.label,
+								values, annotationObject.isRequired);
 				annotations.add(annotation);
 			}
 
@@ -81,7 +82,8 @@ public class GetAnnotationInformationCommand extends Command {
 			return new GetAnnotationInformationResponse(StatusCode.OK, annotations);
 		}
 		catch(SQLException | IOException e){
-			return new ErrorResponse(StatusCode.BAD_REQUEST, "Could not initialize db: " + e.getMessage());
+			return new ErrorResponse(StatusCode.BAD_REQUEST,
+					"Could not initialize db: " + e.getMessage());
 		}
 	}
 }

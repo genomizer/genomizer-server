@@ -39,7 +39,7 @@ public class GetAnnotationPrivilegesCommand extends Command {
 	@Override
 	public Response execute() {
 
-		//Method not implemented, send appropriate response
+		// TODO send appropriate response
 		return 	new MinimalResponse(StatusCode.NO_CONTENT);
 
 	}

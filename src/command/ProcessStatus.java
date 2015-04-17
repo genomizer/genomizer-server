@@ -11,7 +11,7 @@ import com.google.gson.annotations.Expose;
 public class ProcessStatus implements Comparable<ProcessStatus> {
 
 	@Expose
-	public String experimentName;
+	private String experimentName;
 	@Expose
 	public String status;
 	@Expose

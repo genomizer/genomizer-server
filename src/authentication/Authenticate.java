@@ -10,7 +10,7 @@ import server.ServerSettings;
 /**
  * Class used to authenticate users and privileges.
  *
- * @author
+ * @author dv13jen
  * @version 1.0
  */
 public class Authenticate {
@@ -18,11 +18,39 @@ public class Authenticate {
 	private static HashMap<String, String> activeUsersID = new HashMap<String, String>();
 	private static HashMap<String, Date> latestRequests = new HashMap<String, Date>();
 
+
 	static public LoginAttempt login(String username, String password) {
-	    if(!PasswordHash.toSaltedSHA256Hash(password).equals(ServerSettings.passwordHash)) {
-	    	return new LoginAttempt(false, null, "Wrong password.");
+
+	/*
+	// TODO : Check user and user password instead of server password
+	// Get user salt and hash from DB, need DB group to implement table and get method
+	DatabaseAccessor db = null;
+		try {
+			db = initDB();
+		} catch (SQLException e) {
+			return new LoginAttempt(false, null, "SQL Error when initiating databaseAccessor in LoginAttempt." + e.getMessage());
+		} catch (IOException e)  {
+			return new LoginAttempt(false, null, "IO Error when initiating databaseAccessor in LoginAttempt. " + e.getMessage());
+		}
+		try {
+			String[] salt&hash = db.getUserSaltAndHash(username);
+		}catch (SQLException | IOException e) {
+			return new LoginAttempt(false, null, "Error when requesting user from database, user don't exist. " + e.getMessage());
+		}
+		// Apply salt to password.
+		String hash = PasswordHash.hashString(password + salt&hash[0]
+
+		// Check if new hash matches DB hash.
+		if(hash.equals(salt&hash[1]))
+			return new LoginAttempt(true, addUser(username), null);)
+
+		return new LoginAttempt(false, null, "Wrong password.");
+	 */
+
+	    if(PasswordHash.toSaltedSHA256Hash(password).equals(ServerSettings.passwordHash)) {
+			return new LoginAttempt(true, updateActiveUser(username), null);
 	    }
-	    return new LoginAttempt(true, addUser(username), null);
+		return new LoginAttempt(false, null, "Wrong password.");
 	}
 
 	public static HashMap<String, Date> getLatestRequestsMap() {
@@ -30,12 +58,12 @@ public class Authenticate {
 	}
 
 	/**
-	 * Method used to handle logged in users.
+	 * Method used to update active users. The user is added to the list of
+	 * active users or the user is updated.
 	 *
-	 * @param username to add as logged in.
-	 * @param userID to add as logged in.
+	 * @param username to add or update.
 	 */
-	static public String addUser(String username) {
+	static public String updateActiveUser(String username) {
 
 		if(activeUsersID.containsValue(username)) {
 			Iterator<String> uuids = activeUsersID.keySet().iterator();
@@ -45,14 +73,12 @@ public class Authenticate {
 			}
 
 			updateLatestRequest(next_uuid);
-			//latestRequests.put(next_uuid, new Date());
 			return next_uuid;
 		}
 
 		String uuid = UUID.randomUUID().toString();
 
 		activeUsersID.put(uuid, username);
-		//updateLatestRequest(uuid);
 		latestRequests.put(uuid, new Date());
 
 		return uuid;
@@ -65,17 +91,6 @@ public class Authenticate {
 		}
 	}
 
-	/**
-	 * Method used to check if user exists.
-	 *
-	 * @param username to check for.
-	 * @return boolean depending on result.
-	 */
-	static public boolean userExists(String username) {
-
-		return activeUsersID.containsValue(username);
-
-	}
 
 	/**
 	 * Method used to get the id for a user.
@@ -98,7 +113,7 @@ public class Authenticate {
 	 *
 	 * @param id representing the user to remove.
 	 */
-	static public void deleteUser(String id) {
+	static public void deleteActiveUser(String id) {
 
 		activeUsersID.remove(id);
 		latestRequests.remove(id);
@@ -122,7 +137,7 @@ public class Authenticate {
 	 * @param userID to match against an active user.
 	 * @return the user name matching the id as a string.
 	 */
-	static public String getUsername(String userID){
+	static public String getUsernameByID(String userID){
 
 		return activeUsersID.get(userID);
 

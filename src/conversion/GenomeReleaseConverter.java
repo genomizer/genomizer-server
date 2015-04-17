@@ -21,7 +21,7 @@ public class GenomeReleaseConverter extends Executor {
 		liftover[4] = unliftedPath;
 		try {
 			outString = executeProgram(liftover);
-			System.err.println(outString);;
+			System.err.println(outString);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
