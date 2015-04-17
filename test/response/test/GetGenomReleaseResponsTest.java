@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import database.test.TestInitializer;
+import org.junit.Before;
 import org.junit.Test;
 
 import command.Command;
@@ -20,6 +22,11 @@ import response.StatusCode;
 import server.ServerSettings;
 
 public class GetGenomReleaseResponsTest {
+
+	@Before
+	public void setup() {
+		TestInitializer.setupServerSettings();
+	}
 
 	@Test
 	public void testIfResponseCodeIsCorrectForExisting() {
