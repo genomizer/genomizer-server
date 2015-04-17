@@ -201,7 +201,7 @@ public class AddAnnotationPossibilitiesTests {
     public void shouldRemoveAnotherAnnotationWithWeirdChars()
     		throws SQLException, IOException, Exception {
 
-    	String annotation = "¡!";
+    	String annotation = "Ã±!";
     	dbac.addFreeTextAnnotation(annotation, null, false);
 
         Map<String, Integer> annotations = dbac.getAnnotations();
