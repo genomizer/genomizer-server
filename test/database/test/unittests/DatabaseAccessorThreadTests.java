@@ -12,24 +12,38 @@ import org.junit.*;
 
 import database.DatabaseAccessor;
 import database.containers.Experiment;
+import database.test.TestInitializer;
 
 // TODO: Ignoring for now. This takes too long and sometimes fails. Someone in the database group should take a look.
 @Ignore
 public class DatabaseAccessorThreadTests {
 
+	// BAD
+	/*
     public static String username = "genomizer";
     public static String password = "genomizer";
     public static String host = "85.226.111.95";
     public static String database = "genomizer_testdb";
+    */
+	private static TestInitializer ti;
+
+	public static String username = "";
+	public static String password = "";
+	public static String host = "";
+	public static String database = "";
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-
+		ti = new TestInitializer();
+		username = ti.username;
+		password = ti.password;
+		host = ti.host;
+		database = ti.database;
 	}
 
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
-
+		ti.removeTuples();
 	}
 
 	@Before
@@ -39,7 +53,7 @@ public class DatabaseAccessorThreadTests {
 
 	@After
 	public void tearDown() throws Exception {
-
+		ti.removeTuples();
 	}
 
 	@Test

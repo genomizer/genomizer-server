@@ -201,7 +201,7 @@ public class AddAnnotationPossibilitiesTests {
     public void shouldRemoveAnotherAnnotationWithWeirdChars()
     		throws Exception {
 
-    	String annotation = "�!";
+    	String annotation = "ñ!";
     	dbac.addFreeTextAnnotation(annotation, null, false);
 
         Map<String, Integer> annotations = dbac.getAnnotations();

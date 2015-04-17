@@ -24,7 +24,7 @@ public class FileValidator {
 	 * file system or a file is already using that name. Returns true if the
 	 * name can be used, false if it cannot.
 	 *
-	 * @param String fileName
+	 * @param  fileName
 	 * @return boolean
 	 */
 	@Deprecated
@@ -51,8 +51,7 @@ public class FileValidator {
 
 
 	public static boolean fileNameCheck(String fileName){
-		String regex = "^[\\w,\\s-\\.åäöÅÄÖ()]+\\.[A-ZÅÄÖa-zåäö0-9]+$";
-
+		String regex = "^[-\\w,\\s\\.Ã¥Ã¤Ã¶Ã…Ã„Ã–()]+\\.[A-ZÃ…Ã„Ã–a-zÃ¥Ã¤Ã¶0-9]+$";
 		return fileName.matches(regex);
 	}
 }

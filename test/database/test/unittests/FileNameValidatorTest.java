@@ -19,7 +19,7 @@ public class FileNameValidatorTest {
 	@Ignore
 	@Test
 	public void sholdReturnTrueWithSpecialSymbols(){
-		assertTrue(FileValidator.fileNameCheck("h�j.t�t"));
+		assertTrue(FileValidator.fileNameCheck("håj.tät"));
 	}
 
 	@Test
