@@ -16,12 +16,12 @@ import command.GetGenomeReleaseSpeciesCommand;
 import database.DatabaseAccessor;
 //import database.Genome;
 
-import response.GetGenomeReleaseRespons;
+import response.GetGenomeReleaseResponse;
 import response.Response;
 import response.StatusCode;
 import server.ServerSettings;
 
-public class GetGenomReleaseResponsTest {
+public class GetGenomeReleaseResponseTest {
 
 	@Before
 	public void setup() {
@@ -67,10 +67,8 @@ public class GetGenomReleaseResponsTest {
 			assertEquals(StatusCode.BAD_REQUEST, rsp.getCode());
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -95,7 +93,7 @@ public class GetGenomReleaseResponsTest {
 			}*/
 
 			//genomeList =db.getAllGenomReleasesForSpecies("Human");
-			GetGenomeReleaseRespons gResp=new GetGenomeReleaseRespons(StatusCode.OK,genomeList);
+			GetGenomeReleaseResponse gResp=new GetGenomeReleaseResponse(StatusCode.OK,genomeList);
 			System.out.println(gResp.getBody());
 
 		} catch (SQLException e) {

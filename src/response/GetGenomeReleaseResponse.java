@@ -9,12 +9,12 @@ import com.google.gson.JsonElement;
 
 import database.containers.Genome;
 
-public class GetGenomeReleaseRespons extends Response {
+public class GetGenomeReleaseResponse extends Response {
 
 	ArrayList<Genome> genomeReleases;
 	JsonArray arr;
 
-	public GetGenomeReleaseRespons(int code, ArrayList<Genome> genomeReleases) {
+	public GetGenomeReleaseResponse(int code, ArrayList<Genome> genomeReleases) {
 		this.code=code;
 		this.genomeReleases=genomeReleases;
 
