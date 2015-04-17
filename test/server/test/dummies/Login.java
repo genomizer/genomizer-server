@@ -4,12 +4,13 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import server.ErrorLogger;
+import org.junit.Ignore;
 import server.test.dummies.Token;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+@Ignore
 public class Login {
 
 	public static Token token = null;

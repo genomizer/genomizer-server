@@ -1,6 +1,5 @@
 package command;
 
-
 import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
@@ -20,10 +19,10 @@ public class GetFileFromExperimentCommand extends Command {
 
 	/**
 	 * Constructor. Takes the fileID as argument.
-	 * @param fileID
+	 * @param fileID the file id.
 	 */
-	public GetFileFromExperimentCommand(String restful) {
-		fileID = restful;
+	public GetFileFromExperimentCommand(String fileID) {
+		this.fileID = fileID;
 	}
 
 	/**
@@ -37,14 +36,20 @@ public class GetFileFromExperimentCommand extends Command {
 	public boolean validate() throws ValidateException {
 
 		if(fileID == null) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify a file-id.");
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify a " +
+					"file-id.");
 		}
-		if(fileID.length() < 1 || fileID.length() > database.constants.MaxSize.FILE_EXPID) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "File-id has to be between 1 and "
-					+ database.constants.MaxSize.FILE_EXPID + " characters long.");
+		if(fileID.length() < 1 || fileID.length() >
+				database.constants.MaxSize.FILE_EXPID) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "File-id has " +
+					"to be between 1 and "
+					+ database.constants.MaxSize.FILE_EXPID + " characters " +
+					"long.");
 		}
 		if(!hasOnlyValidCharacters(fileID)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation value. Valid characters are: " + validCharacters);
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
+					"characters in annotation value. Valid characters are: " +
+					validCharacters);
 		}
 		return true;
 

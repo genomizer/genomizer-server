@@ -22,9 +22,7 @@ public class GetExperimentCommand extends Command {
 	 * Empty constructor.
 	 */
 	public GetExperimentCommand(String rest) {
-
 		header = rest;
-
 	}
 
 	/**
@@ -38,15 +36,20 @@ public class GetExperimentCommand extends Command {
 
 		if(header == null) {
 
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Experiment name was missing.");
+			throw new ValidateException(StatusCode.BAD_REQUEST,
+					"Experiment name was missing.");
 
-		} else if(header.length() < 1 || header.length() > database.constants.MaxSize.EXPID) {
+		} else if(header.length() < 1 || header.length() >
+				database.constants.MaxSize.EXPID) {
 
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Experiment name has to be between 1 and "
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Experiment " +
+					"name has to be between 1 and "
 					+ database.constants.MaxSize.EXPID + " characters long.");
 
 		} else if(!hasOnlyValidCharacters(header)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in experiment name. Valid characters are: " + validCharacters);
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
+					"characters in experiment name. Valid characters are: " +
+					validCharacters);
 		}
 
 		return true;
@@ -66,27 +69,32 @@ public class GetExperimentCommand extends Command {
 			db = initDB();
 		}
 		catch(SQLException | IOException e){
-			return new ErrorResponse(StatusCode.BAD_REQUEST, "Could not initialize db: " + e.getMessage());
+			return new ErrorResponse(StatusCode.BAD_REQUEST, "Could not " +
+					"initialize db: " + e.getMessage());
 		}
 
 		try{
 			exp = db.getExperiment(header);
 		}catch(SQLException e){
-			return new ErrorResponse(StatusCode.BAD_REQUEST, "Could not get experiment: " + e.getMessage());
+			return new ErrorResponse(StatusCode.BAD_REQUEST, "Could not get " +
+					"experiment: " + e.getMessage());
 		}
 
 		db.close();
 
 		if(exp == null) {
-			return new ErrorResponse(StatusCode.BAD_REQUEST, "Experiment requested from database is null, not found or does not exist.");
+			return new ErrorResponse(StatusCode.BAD_REQUEST, "Experiment " +
+					"requested from database is null, not found or does not " +
+					"exist.");
 		}
-		return new GetExperimentResponse(StatusCode.OK, getInfo(exp), exp.getAnnotations(), exp.getFiles());
+		return new GetExperimentResponse(StatusCode.OK, getInfo(exp),
+				exp.getAnnotations(), exp.getFiles());
 	}
 
 	/**
 	 * Method used to get the information.
 	 *
-	 * @param an experiment object.
+	 * @param exp experiment object.
 	 * @return an arraylist with information.
 	 */
 	public ArrayList<String> getInfo(Experiment exp) {

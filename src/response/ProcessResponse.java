@@ -4,12 +4,15 @@ import java.util.Date;
 
 import com.google.gson.annotations.Expose;
 
+/**
+ * Class that represents the response when processing.
+ */
 public class ProcessResponse extends Response {
 
 	@Expose
 	String message;
 	@Expose
-	private Date date;
+	Date date;
 
 	public ProcessResponse (int code) {
 		this.code = code;

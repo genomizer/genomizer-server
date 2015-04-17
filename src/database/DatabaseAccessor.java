@@ -1034,7 +1034,7 @@ public class DatabaseAccessor {
      *         have a genomeRelase entry in the database.
      * @throws SQLException
      */
-    public ArrayList<Genome> getAllGenomReleasesForSpecies(String species)
+    public ArrayList<Genome> getAllGenomeReleasesForSpecies(String species)
             throws SQLException {
         return genMethods.getAllGenomReleasesForSpecies(species);
     }

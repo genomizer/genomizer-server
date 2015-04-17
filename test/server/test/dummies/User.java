@@ -1,14 +1,12 @@
 package server.test.dummies;
 
-import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
+import org.junit.Ignore;
 
+@Ignore
 public class User {
 
 	static void sendCreateUser(String username, String password, String privileges, String fullname, String email) throws Exception {
@@ -41,7 +39,7 @@ public class User {
 		con.setRequestProperty("Content-Type", "application/json");
 		con.setRequestProperty("Authorization", Login.getToken());
 		con.setRequestProperty("Content-Type", "application/json");
-		JsonObject jj=new JsonObject();
+//		JsonObject jj=new JsonObject();
 
 		//testSettings.sendToServer(con, jj.toString());
 

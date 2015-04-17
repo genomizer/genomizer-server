@@ -490,16 +490,16 @@ public class RawToProfileConverter extends Executor {
 	 * @param inFolder
 	 * @param outFile
 	 */
-	private void printTrace(String[] parameters, String inFolder, String outFile) {
-		System.out.println("dir " + fileDir.toString());
-		System.out.println("INFOLDER = " + inFolder);
-		System.out.println("OUTFILE = " + outFile);
-		System.out.println("DIR = " + dir);
-		System.out.println("SORTEDDIR = " + sortedDirForCommands);
-		System.out.println("BOWTIE = "
-				+ parse(parameters[0] + " " + inFolder + "/" + rawFile1 + " "
-						+ dir + rawFile_1_Name + ".sam"));
-	}
+//	private void printTrace(String[] parameters, String inFolder, String outFile) {
+//		System.out.println("dir " + fileDir.toString());
+//		System.out.println("INFOLDER = " + inFolder);
+//		System.out.println("OUTFILE = " + outFile);
+//		System.out.println("DIR = " + dir);
+//		System.out.println("SORTEDDIR = " + sortedDirForCommands);
+//		System.out.println("BOWTIE = "
+//				+ parse(parameters[0] + " " + inFolder + "/" + rawFile1 + " "
+//						+ dir + rawFile_1_Name + ".sam"));
+//	}
 
 	/**
 	 * Initiates strings that is used to run programs and scripts and also
@@ -587,14 +587,14 @@ public class RawToProfileConverter extends Executor {
 	 * @param s
 	 * @return
 	 */
-	private String printStringArray(String[] s) {
-		String string = "";
-		for (int i = 0; i < s.length; i++) {
-			string += s[i] + " ";
-		}
-		System.out.println(string);
-		return string;
-	}
+//	private String printStringArray(String[] s) {
+//		String string = "";
+//		for (int i = 0; i < s.length; i++) {
+//			string += s[i] + " ";
+//		}
+//		System.out.println(string);
+//		return string;
+//	}
 
 	/**
 	 * Constructs a string with values to run a linux command that sorts a file

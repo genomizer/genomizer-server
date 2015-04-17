@@ -1,9 +1,5 @@
 package server.test;
 
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,12 +7,9 @@ import org.junit.Test;
 import authentication.Authenticate;
 
 import response.MinimalResponse;
-import response.Response;
+//import response.Response;
 import response.StatusCode;
 import server.ErrorLogger;
-
-import command.CommandFactory;
-import command.ProcessCommand;
 
 public class ResponseLoggerTest {
 
@@ -35,9 +28,9 @@ public class ResponseLoggerTest {
 	@Test
 	public void shouldLogBADREQUESTandOKResponse(){
 		String username = "splutt";
-		Authenticate.addUser(username);
-		Response r1 = new MinimalResponse(StatusCode.BAD_REQUEST);
-		Response r2 = new MinimalResponse(StatusCode.OK);
+		Authenticate.updateActiveUser(username);
+		new MinimalResponse(StatusCode.BAD_REQUEST);
+		new MinimalResponse(StatusCode.OK);
 //
 //		if(ErrorLogger.log(username, r1) && ErrorLogger.log(username, r2)){
 //			assertEquals(StatusCode.BAD_REQUEST, ErrorLogger.getUserLog(username).get(0).getCode());
@@ -53,9 +46,9 @@ public class ResponseLoggerTest {
 	@Test
 	public void shouldLogBADREQUESTError() {
 		//		ResponseLogger logger = new ResponseLogger();
-		String username = "splutt";
+		//String username = "splutt";
 
-		Response r = new MinimalResponse(StatusCode.BAD_REQUEST);
+		new MinimalResponse(StatusCode.BAD_REQUEST);
 
 //		if(ErrorLogger.log(username, r)){
 //			assertEquals(StatusCode.BAD_REQUEST, ErrorLogger.getUserLog(username).get(0).getCode());
@@ -70,9 +63,9 @@ public class ResponseLoggerTest {
 	public void shouldLog2BADREQUESTErrors(){
 		//		ResponseLogger logger = new ResponseLogger();
 
-		String username = "splutt";
-		Response r1 = new MinimalResponse(StatusCode.BAD_REQUEST);
-		Response r2 = new MinimalResponse(StatusCode.BAD_REQUEST);
+		//String username = "splutt";
+		new MinimalResponse(StatusCode.BAD_REQUEST);
+		new MinimalResponse(StatusCode.BAD_REQUEST);
 //
 //		if(ErrorLogger.log(username, r1) && ErrorLogger.log(username, r2)){
 //			assertEquals(StatusCode.BAD_REQUEST, ErrorLogger.getUserLog(username).get(0).getCode());

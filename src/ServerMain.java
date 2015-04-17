@@ -1,7 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Scanner;
+// import java.util.Scanner;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -15,10 +15,10 @@ import authentication.InactiveUuidsRemover;
 
 import command.CommandHandler;
 
-import server.ErrorLogger;
 import server.ServerSettings;
 import server.Debug;
 import server.Doorman;
+import server.ErrorLogger;
 
 
 public class ServerMain {
@@ -49,7 +49,7 @@ public class ServerMain {
 					ServerSettings.genomizerPort).start();
 		} catch (IOException e) {
 			System.err.println("Error when starting server");
-			if (Debug.isEnabled) e.printStackTrace();
+			Debug.log(e.getMessage());
 			System.exit(1);
 		}
 
@@ -64,13 +64,15 @@ public class ServerMain {
 	 * Print the database settings currently loaded into ServerSettings.
 	 */
 	private static void printDatabaseInformation() {
-		System.out.println("Doorman started on port " +
-						   ServerSettings.genomizerPort);
-		System.out.println("Database:");
-		System.out.println("  username " + ServerSettings.databaseUsername);
-		System.out.println("  password " + ServerSettings.databasePassword);
-		System.out.println("  name     " + ServerSettings.databaseName);
-		System.out.println("  host     " + ServerSettings.databaseHost);
+		String info = "Doorman started on port "
+				+ ServerSettings.genomizerPort + "\n"
+				+ "Database:" + "\n"
+				+ "  username " + ServerSettings.databaseUsername + "\n"
+				+ "  password " + ServerSettings.databasePassword + "\n"
+				+ "  name     " + ServerSettings.databaseName + "\n"
+				+ "  host     " + ServerSettings.databaseHost + "\n";
+		System.out.print(info);
+		ErrorLogger.log("SYSTEM", info);
 	}
 
 	/**
@@ -165,22 +167,22 @@ public class ServerMain {
 	 * @throws FileNotFoundException If database file could not be
 	 * 		   found/opened.
 	 */
-	private static void readDatabaseFile(String path)
-			throws FileNotFoundException {
-		File dbFile = new File(path);
-		if (dbFile.exists()) {
-			Scanner scan = new Scanner(dbFile);
-			String username = scan.next();
-			String password = scan.next();
-			String database = scan.next();
-			String host = scan.next();
-			scan.close();
-
-			ServerSettings.databaseUsername = username;
-			ServerSettings.databasePassword = password;
-			ServerSettings.databaseName = database;
-			ServerSettings.databaseHost = host;
-		}
-	}
+//	private static void readDatabaseFile(String path)
+//			throws FileNotFoundException {
+//		File dbFile = new File(path);
+//		if (dbFile.exists()) {
+//			Scanner scan = new Scanner(dbFile);
+//			String username = scan.next();
+//			String password = scan.next();
+//			String database = scan.next();
+//			String host = scan.next();
+//			scan.close();
+//
+//			ServerSettings.databaseUsername = username;
+//			ServerSettings.databasePassword = password;
+//			ServerSettings.databaseName = database;
+//			ServerSettings.databaseHost = host;
+//		}
+//	}
 
 }

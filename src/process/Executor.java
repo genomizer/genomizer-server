@@ -92,7 +92,7 @@ public abstract class Executor {
 		}
 		s.close();
 
-		int result = process.waitFor();
+		process.waitFor();
 
 		// System.out.printf( "Process exited with result %d and output %s%n",
 		// result, text );
@@ -135,7 +135,7 @@ public abstract class Executor {
 		bw.close();
 		s.close();
 
-		int result = process.waitFor();
+		process.waitFor();
 
 		// System.out.printf( "Process exited with result %d and output %s%n",
 		// result, text );

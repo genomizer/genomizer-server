@@ -14,7 +14,7 @@ public class DownloadCommand extends Command {
 
 
     public void execute() {
-        String url = urlFactory();
+        urlFactory();
 
 
 

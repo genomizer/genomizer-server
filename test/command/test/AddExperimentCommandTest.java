@@ -187,8 +187,7 @@ public class AddExperimentCommandTest {
 	public void testValidateAnnotationValueMissing() throws ValidateException {
 
 		String json = "{\"name\":\"experimentId\",\"annotations\":[{\"name\":\"pubmedId\"},{\"name\":\"type\",\"value\":\"raw\"}]}";
-		AddExperimentCommand c = new AddExperimentCommand();
-		c = gson.fromJson(json, AddExperimentCommand.class);
+		AddExperimentCommand c = gson.fromJson(json, AddExperimentCommand.class);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -205,8 +204,7 @@ public class AddExperimentCommandTest {
 	public void testValidateAnnotationValueEmptyString() throws ValidateException {
 
 		String json = "{\"name\":\"experimentId\",\"annotations\":[{\"name\":\"pubmedId\",\"value\":\"\"},{\"name\":\"type\",\"value\":\"raw\"}]}";
-		AddExperimentCommand c = new AddExperimentCommand();
-		c = gson.fromJson(json, AddExperimentCommand.class);
+		AddExperimentCommand c = gson.fromJson(json, AddExperimentCommand.class);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");

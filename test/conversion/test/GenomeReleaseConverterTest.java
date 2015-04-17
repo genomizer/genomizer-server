@@ -1,9 +1,7 @@
 package conversion.test;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-import conversion.ConversionHandler;
 import conversion.GenomeReleaseConverter;
 
 public class GenomeReleaseConverterTest {

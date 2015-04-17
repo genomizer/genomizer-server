@@ -4,6 +4,9 @@ import java.util.Date;
 
 import database.containers.FileTuple;
 
+/**
+ * Class that contains the file information.
+ */
 public class FileInformation {
 
     public final Integer id;

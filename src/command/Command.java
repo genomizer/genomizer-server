@@ -19,8 +19,10 @@ public abstract class Command {
 	/* When creating a new command, these steps needs to be followed:
 	 * 1. 	Create the command and extend this class.
 	 * 2. 	Create the method that builds the actual command in CommandFactory.
-	 * 3. 	Add a check for the command to be able to build it in CommandHandler.
-	 * 4. 	In the Doorman class, make sure that the new command is identified if the
+	 * 3. 	Add a check for the command to be able to build it in
+	 * 		CommandHandler.
+	 * 4. 	In the Doorman class, make sure that the new command is identified
+	 * 		if the
 	 * 		server receives it so that it can be passed to the CommandHandler.
 	 */
 
@@ -53,7 +55,7 @@ public abstract class Command {
 	/**
 	 * Method used to set the RESTful-header.
 	 *
-	 * @param the header as a string.
+	 * @param header the header as a string.
 	 */
 	public void setHeader(String header) {
 
@@ -71,7 +73,9 @@ public abstract class Command {
 	public DatabaseAccessor initDB() throws SQLException, IOException {
 
 		DatabaseAccessor db = null;
-		db = new DatabaseAccessor(ServerSettings.databaseUsername, ServerSettings.databasePassword, ServerSettings.databaseHost, ServerSettings.databaseName);
+		db = new DatabaseAccessor(ServerSettings.databaseUsername,
+				ServerSettings.databasePassword, ServerSettings.databaseHost,
+				ServerSettings.databaseName);
 
 		return db;
 
@@ -81,14 +85,14 @@ public abstract class Command {
 	 * This method is used to validate a string and check if all
 	 * it's characters are valid.
 	 *
-	 * @param a String to validate.
+	 * @param string a string to validate.
 	 * @return boolean depending on validation result.
 	 */
-	public boolean hasOnlyValidCharacters(String s) {
+	public boolean hasOnlyValidCharacters(String string) {
 
 		Pattern p = Pattern.compile("[^A-Za-z0-9 _]");
 
-		return !p.matcher(s).find();
+		return !p.matcher(string).find();
 
 	}
 

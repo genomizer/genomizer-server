@@ -2,17 +2,22 @@ package server.test;
 
 import static org.junit.Assert.*;
 import java.net.HttpURLConnection;
+
+import org.junit.Ignore;
 import org.junit.Test;
 import response.StatusCode;
 import com.google.gson.JsonObject;
 
 /**
-* Class used to test that the annotation handling works
-* properly with the server.
-*
-* @author tfy09jnn
-* @version 1.0
-*/
+ * Class used to test that the annotation handling works
+ * properly with the server.
+ *
+ * TODO: This test presumes that a server is running on scratchy. Modify to be standalone.
+ *
+ * @author tfy09jnn
+ * @version 1.0
+ * */
+@Ignore
 public class ServerAnnotationTest extends ServerAbstractTestClass {
 
 	/**

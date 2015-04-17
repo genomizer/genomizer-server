@@ -41,12 +41,15 @@ public class DeleteUserCommand extends Command {
 
 		if(username == null) {
 
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Username was missing.");
+			throw new ValidateException(StatusCode.BAD_REQUEST,
+					"Username was missing.");
 
-		} else if(username.length() < 1 || username.length() > database.constants.MaxSize.USERNAME) {
+		} else if(username.length() < 1 || username.length() >
+				database.constants.MaxSize.USERNAME) {
 
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Username has to be between 1 and "
-					+ database.constants.MaxSize.USERNAME + " characters long.");
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Username " +
+					"has to be between 1 and " +
+					database.constants.MaxSize.USERNAME + " characters long.");
 
 		}
 
@@ -65,14 +68,17 @@ public class DeleteUserCommand extends Command {
 		try {
 			db = initDB();
 		} catch (SQLException e) {
-			return new ErrorResponse(StatusCode.BAD_REQUEST, "Error when intiating daabaseaccessor. " + e.getMessage());
+			return new ErrorResponse(StatusCode.BAD_REQUEST, "Error when " +
+					"intiating daabaseaccessor. " + e.getMessage());
 		} catch (IOException e)  {
 			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
 		}
 		try {
 			db.deleteUser(username);
 		} catch (SQLException e) {
-			return new ErrorResponse(StatusCode.BAD_REQUEST, "Error when removing user from database, user probably don't exists. " + e.getMessage());
+			return new ErrorResponse(StatusCode.BAD_REQUEST, "Error when " +
+					"removing user from database, user probably don't exists. "
+					+ e.getMessage());
 		}
 		return new MinimalResponse(StatusCode.OK);
 

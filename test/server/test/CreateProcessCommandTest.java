@@ -2,13 +2,11 @@ package server.test;
 
 import static org.junit.Assert.*;
 
+import database.test.*;
 import org.junit.*;
 
 import response.Response;
 
-import authentication.Authenticate;
-
-import command.Command;
 import command.CommandFactory;
 import command.ProcessCommand;
 
@@ -34,6 +32,7 @@ public class CreateProcessCommandTest {
 	@Before
 	public void setup(){
 
+		TestInitializer.setupServerSettings();
 		cmdf = new CommandFactory();
 
 
@@ -86,7 +85,7 @@ public class CreateProcessCommandTest {
 
 	@Test
 	public void shouldSetUserID(){
-		assertEquals(username, processCommand.getUsername());
+		assertEquals(username, processCommand.getUsernameByID());
 	}
 
 	@Test

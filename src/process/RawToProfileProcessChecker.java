@@ -7,7 +7,7 @@ public class RawToProfileProcessChecker {
 	private boolean shouldRunSmoothing;
 	private boolean shouldRunStep10;
 	private boolean shouldRunRatioCalculation;
-	private boolean isCorrect;
+//	private boolean isCorrect;
 
 	private RawToProfileProcessChecker() {
 

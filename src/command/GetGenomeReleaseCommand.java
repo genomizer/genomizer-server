@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import database.DatabaseAccessor;
 import database.containers.Genome;
 import response.ErrorResponse;
-import response.GetGenomeReleaseRespons;
+import response.GetGenomeReleaseResponse;
 import response.Response;
 import response.StatusCode;
 
@@ -52,15 +52,22 @@ public class GetGenomeReleaseCommand extends Command{
 		try {
 			db = initDB();
 			try{
-				ArrayList<Genome> genomeReleases = (ArrayList<Genome>)db.getAllGenomReleases();
-				return new GetGenomeReleaseRespons(StatusCode.OK, genomeReleases);
+				ArrayList<Genome> genomeReleases =
+						(ArrayList<Genome>)db.getAllGenomReleases();
+				return new GetGenomeReleaseResponse(StatusCode.OK,
+						genomeReleases);
 			}catch(SQLException e){
-				return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, "Could not fetch all genome releases: " + e.getMessage());
+				return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE,
+						"Could not fetch all genome releases: " +
+								e.getMessage());
 			}
 		} catch (SQLException | IOException e) {
-			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, "SQLException - Could not create connection to database: " + e.getMessage());
+			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE,
+					"SQLException - Could not create connection to database: " +
+							e.getMessage());
 		} finally {
-			db.close();
+			if (db != null)
+				db.close();
 		}
 	}
 

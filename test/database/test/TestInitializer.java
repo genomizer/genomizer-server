@@ -18,10 +18,10 @@ import java.lang.System;
 import org.junit.Ignore;
 
 import database.DatabaseAccessor;
-import database.test.unittests.SearchDatabaseTests;
-/** */
+import server.ServerSettings;
+
 /**
- * Cqeate an instance of this class if you want to use the test tuples in
+ * Create an instance of this class if you want to use the test tuples in
  * add_test_tuples.sql.
  * If you don't need the test tuples for your test, you should still use
  * the public strings to connect to the database. This is to make sure that
@@ -36,21 +36,21 @@ public class TestInitializer {
     public static String database;
 
     static {
-      if(System.getenv("TRAVIS") != null && System.getenv("TRAVIS").equals("true")) {
-        // Running on Travis.
-        username = "postgres";
-        password = "";
-        host     = "localhost";
-        database = "c5dv151_vt14";
+        String travis = System.getenv("TRAVIS");
+        if(travis != null && travis.equals("true")) {
+            // Running on Travis.
+            username = "postgres";
+            password = "";
+            host     = "localhost";
+            database = "c5dv151_vt14";
         }
-       else {
-          // Running in a CS lab.
-          username = "c5dv151_vt14";
-          password = "shielohh";
-          host     = "postgres";
-          database = "c5dv151_vt14";
-      }
-
+        else {
+            // Running in a CS lab.
+            username = "c5dv151_vt14";
+            password = "shielohh";
+            host     = "postgres";
+            database = "c5dv151_vt14";
+        }
     }
 
 //    public static String username = "genomizer";
@@ -96,6 +96,13 @@ public class TestInitializer {
         return dbac;
     }
 
+    public static void setupServerSettings() {
+        ServerSettings.databaseUsername = TestInitializer.username;
+        ServerSettings.databasePassword = TestInitializer.password;
+        ServerSettings.databaseHost     = TestInitializer.host;
+        ServerSettings.databaseName     = TestInitializer.database;
+    }
+
     public DatabaseAccessor setupWithoutAddingTuples() throws Exception {
         dbac = new DatabaseAccessor(TestInitializer.username,
                 TestInitializer.password, TestInitializer.host, database);
@@ -125,7 +132,7 @@ public class TestInitializer {
      * @throws IOException
      */
     private List<String> buildSqlStringsFromFile(String path)
-            throws UnsupportedEncodingException, IOException {
+            throws IOException {
         List<String> sqlStrings = new ArrayList<String>();
         URL sqlFileUrl = new File(path).toURI().toURL();
         if (sqlFileUrl != null) {

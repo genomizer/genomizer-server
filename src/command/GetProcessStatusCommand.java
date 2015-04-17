@@ -21,7 +21,7 @@ public class GetProcessStatusCommand extends Command {
 	/**
 	 * Constructor used to initiate the class.
 	 *
-	 * @param a workHandler object.
+	 * @param workHandler object.
 	 */
 	public GetProcessStatusCommand(WorkHandler workHandler) {
 
@@ -46,7 +46,8 @@ public class GetProcessStatusCommand extends Command {
 	@Override
 	public Response execute() {
 
-		Collection<ProcessStatus> processStatus = workHandler.getProcessStatus();
+		Collection<ProcessStatus> processStatus =
+				workHandler.getProcessStatus();
 		return new GetProcessStatusResponse(processStatus);
 
 	}

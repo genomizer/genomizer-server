@@ -29,7 +29,7 @@ public class SearchForExperimentsCommand extends Command {
 	/**
 	 * Empty constructor.
 	 * 
-	 * @param annotations to set.
+	 * @param params annotations to set.
 	 */
 	public SearchForExperimentsCommand(String params) {
 		
@@ -46,7 +46,8 @@ public class SearchForExperimentsCommand extends Command {
 		
 		if (annotations == null || annotations.equals("")) {
 			
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify annotations to search for.");
+			throw new ValidateException(StatusCode.BAD_REQUEST,
+					"Specify annotations to search for.");
 			
 		}
 
@@ -68,18 +69,21 @@ public class SearchForExperimentsCommand extends Command {
 			annotations = URLDecoder.decode(annotations, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
-			return new ErrorResponse(StatusCode.BAD_REQUEST, "Bad encoding on search query.");
+			return new ErrorResponse(StatusCode.BAD_REQUEST, "Bad encoding " +
+					"on search query.");
 		}
 
 		try {
 			db = initDB();
 			searchResult = db.search(annotations);
 		} catch (SQLException | IOException e) {
-			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, e.getMessage());
+			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE,
+					e.getMessage());
 		} catch (ParseException e) {
 			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
 		} finally {
-			db.close();
+			if (db != null)
+				db.close();
 		}
 		SearchResponse response = new SearchResponse(searchResult);
 		return response;

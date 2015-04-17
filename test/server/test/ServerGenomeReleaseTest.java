@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.net.HttpURLConnection;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import response.StatusCode;
@@ -13,9 +14,12 @@ import com.google.gson.JsonObject;
 /**
  * Class used to test Genome release add and delete.
  *
+ * TODO: This test presumes that a server is running on scratchy. Modify to be standalone.
+ *
  * @author tfy09jnn
  * @version 1.0
  */
+@Ignore
 public class ServerGenomeReleaseTest extends ServerAbstractTestClass {
 
 	/**

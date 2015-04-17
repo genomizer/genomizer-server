@@ -22,7 +22,7 @@ public class ValidateException extends Exception {
 	/**
 	 * Constructor that takes a message.
 	 *
-	 * @param exception code.
+	 * @param exceptionCode an int containing the exception code.
 	 * @param message to insert.
 	 */
 	public ValidateException(int exceptionCode, String message) {

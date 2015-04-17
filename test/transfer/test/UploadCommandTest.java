@@ -4,12 +4,9 @@ import org.junit.Before;
 import org.junit.Test;
 import transfer.UploadCommand;
 
-import java.net.ServerSocket;
-import java.net.Socket;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static transfer.UploadCommand.*;
 
 /**
  * Project: genomizer-Server

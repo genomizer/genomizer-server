@@ -21,7 +21,7 @@ public class AddGenomeReleaseResponse extends Response {
 	/**
 	 * Constructor used to initiate the command.
 	 *
-	 * @param code to send as a responsecode.
+	 * @param code to send as a response code.
 	 */
 	public AddGenomeReleaseResponse(int code, ArrayList<String> filePaths) {
 
@@ -29,8 +29,8 @@ public class AddGenomeReleaseResponse extends Response {
 		Gson gson = new GsonBuilder().create();
 
 		jsonArray = new JsonArray();
-		for(int i = 0; i < filePaths.size(); i++) {
-			JsonElement element = gson.toJsonTree(filePaths.get(i));
+		for (String filePath : filePaths) {
+			JsonElement element = gson.toJsonTree(filePath);
 
 			JsonObject obj = new JsonObject();
 			obj.add("URLupload", element);

@@ -1,11 +1,11 @@
 package server.test.dummies;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import org.junit.Ignore;
+
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
 
+@Ignore
 public class Search {
 
 	static void sendSearchRequest(String query) throws Exception {
