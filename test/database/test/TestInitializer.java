@@ -45,10 +45,10 @@ public class TestInitializer {
         }
        else {
           // Running in a CS lab.
-          username = "c5dv119_vt15_dv13esn";
-          password = "";
+          username = "c5dv151_vt14";
+          password = "shielohh";
           host     = "postgres";
-          database = "c5dv119_vt15_dv13esn";
+          database = "c5dv151_vt14";
       }
 
     }
