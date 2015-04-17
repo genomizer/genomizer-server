@@ -71,7 +71,7 @@ public class ServerMain {
 				+ "  password " + ServerSettings.databasePassword + "\n"
 				+ "  name     " + ServerSettings.databaseName + "\n"
 				+ "  host     " + ServerSettings.databaseHost + "\n";
-		Debug.log(info);
+		System.out.print(info);
 		ErrorLogger.log("SYSTEM", info);
 	}
 
