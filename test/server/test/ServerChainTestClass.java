@@ -1,6 +1,8 @@
 package server.test;
 
 import static org.junit.Assert.*;
+
+import org.junit.Ignore;
 import org.junit.Test;
 import response.StatusCode;
 import java.net.HttpURLConnection;
@@ -15,9 +17,12 @@ import com.google.gson.JsonObject;
  * Class used to test that the server works properly when
  * a scenario is run.
  *
+ * TODO: This test presumes that a server is running on scratchy. Modify to be standalone.
+ *
  * @author tfy09jnn
  * @version 1.0
  */
+@Ignore
 public class ServerChainTestClass extends ServerAbstractTestClass {
 
 	/* User story:	1. User logs in.

@@ -18,6 +18,7 @@ import java.lang.System;
 import org.junit.Ignore;
 
 import database.DatabaseAccessor;
+import server.ServerSettings;
 
 /**
  * Create an instance of this class if you want to use the test tuples in
@@ -35,20 +36,21 @@ public class TestInitializer {
     public static String database;
 
     static {
-      if(System.getenv("TRAVIS").equals("true")) {
-        // Running on Travis.
-        username = "postgres";
-        password = "";
-        host     = "localhost";
-        database = "c5dv151_vt14";
-      }
-      else {
-        // Running in a CS lab.
-        username = "c5dv151_vt14";
-        password = "shielohh";
-        host     = "postgres";
-        database = "c5dv151_vt14";
-      }
+        String travis = System.getenv("TRAVIS");
+        if(travis != null && travis.equals("true")) {
+            // Running on Travis.
+            username = "postgres";
+            password = "";
+            host     = "localhost";
+            database = "c5dv151_vt14";
+        }
+        else {
+            // Running in a CS lab.
+            username = "c5dv151_vt14";
+            password = "shielohh";
+            host     = "postgres";
+            database = "c5dv151_vt14";
+        }
     }
 
 //    public static String username = "genomizer";
@@ -92,6 +94,13 @@ public class TestInitializer {
         clearTablesSqlStrings = buildSqlStringsFromFile(clearTablesPath);
 
         return dbac;
+    }
+
+    public static void setupServerSettings() {
+        ServerSettings.databaseUsername = TestInitializer.username;
+        ServerSettings.databasePassword = TestInitializer.password;
+        ServerSettings.databaseHost     = TestInitializer.host;
+        ServerSettings.databaseName     = TestInitializer.database;
     }
 
     public DatabaseAccessor setupWithoutAddingTuples() throws Exception {

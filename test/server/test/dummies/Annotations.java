@@ -8,7 +8,9 @@ import java.net.URLEncoder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import org.junit.Ignore;
 
+@Ignore
 public class Annotations {
 
 	static Token token;

@@ -107,7 +107,7 @@ public class ProcessCommand extends Command {
         		//TODO Implement parameter size
 		        throw new ValidateException(StatusCode.BAD_REQUEST, "profiletoregion: Not implemented!");
 		default:
-			break;
+				throw new ValidateException(StatusCode.BAD_REQUEST, "Unknown process type!");
 		}
 
 		if(username.length() > MaxSize.USERNAME || username.length() <= 0){

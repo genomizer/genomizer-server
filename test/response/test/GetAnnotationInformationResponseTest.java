@@ -2,6 +2,9 @@ package response.test;
 
 import static org.junit.Assert.*;
 import java.util.ArrayList;
+
+import database.test.TestInitializer;
+import org.junit.Before;
 import org.junit.Test;
 import response.AnnotationInformation;
 import response.GetAnnotationInformationResponse;
@@ -37,6 +40,11 @@ public class GetAnnotationInformationResponseTest {
 		GetAnnotationInformationResponse air = new GetAnnotationInformationResponse(200, arraylist);
 		System.out.println(air.getBody());
 		assertEquals(air.getBody(), "{\"annotations\":[{\"id\":1,\"name\":\"Gender\",\"type\":1,\"values\":[\"male\",\"female\",\"unknown\"],\"forced\":true},{\"id\":2,\"name\":\"Cell Line\",\"type\":1,\"values\":[\"true\",\"false\",\"unknown\"],\"forced\":true}]}");
+	}
+
+	@Before
+	public void setup() {
+		TestInitializer.setupServerSettings();
 	}
 
 	@Test

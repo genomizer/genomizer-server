@@ -5,7 +5,9 @@ import java.net.URL;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import org.junit.Ignore;
 
+@Ignore
 public class Experiment {
 
 	static void sendGetExperiment(String expName) throws Exception {

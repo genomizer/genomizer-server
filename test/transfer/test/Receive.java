@@ -1,5 +1,7 @@
 package transfer.test;
 
+import org.junit.Ignore;
+
 import java.io.DataInputStream;
 import java.io.IOException;
 //import java.io.InputStream;
@@ -15,6 +17,7 @@ import java.net.Socket;
  * To change this template use File | Settings | File Templates.
  */
 
+@Ignore
 public class Receive implements Runnable {
 
 

@@ -9,7 +9,9 @@ import java.net.URL;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import org.junit.Ignore;
 
+@Ignore
 public class GetExperimentDummy {
 	public static final int port = 7000;
 

@@ -7,7 +7,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.io.DataOutputStream;
 import com.google.gson.*;
+import org.junit.Ignore;
 
+@Ignore
 public class ClientDummy {
 
 	public static final int port = 7000;

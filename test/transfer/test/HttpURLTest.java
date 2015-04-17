@@ -15,13 +15,15 @@ import static org.junit.Assert.*;
  */
 public class HttpURLTest {
     private HTTPURLDownload dummy;
+    private final static String testURL  = "http://i.imgur.com/8uuZIMp.jpg";
+    private final static String testURL2 = "http://i.imgur.com/jvx1BoR.gif";
 
     @Before
     public void setup() throws MalformedURLException {
         String localFilePath = "/home/" +
                 System.getProperty("user.name").substring(0,3) +
                 "/" + System.getProperty("user.name") + "/testfile.jpg";
-        dummy = new HTTPURLDownload("http://www8.cs.umu.se/~c11epm/thailand/IMG_20131227_105730.jpg", localFilePath);
+        dummy = new HTTPURLDownload(testURL, localFilePath);
     }
 
     @Test
@@ -42,18 +44,18 @@ public class HttpURLTest {
     }
     @Test
     public void shouldMatchURL(){
-        assertURLs(dummy.getURL(), "http://www8.cs.umu.se/~c11epm/thailand/IMG_20131227_105730.jpg");
+        assertURLs(dummy.getURL(), testURL);
     }
 
     @Test
     public void shouldChangeURL(){
-        assertURLs(dummy.getURL(), "http://www8.cs.umu.se/~c11epm/thailand/IMG_20131227_105730.jpg");
+        assertURLs(dummy.getURL(), testURL);
         try {
-            assertTrue(dummy.changeURL(new URL("http://www8.cs.umu.se/~c11epm/thailand/IMG_20131227_105734.jpg")));
+            assertTrue(dummy.changeURL(new URL(testURL2)));
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        assertURLs(dummy.getURL(), "http://www8.cs.umu.se/~c11epm/thailand/IMG_20131227_105734.jpg");
+        assertURLs(dummy.getURL(), testURL2);
     }
 
     private void assertURLs(String expected, String actual){

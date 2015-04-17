@@ -1,11 +1,14 @@
 package server.test.dummies;
 
+import org.junit.Ignore;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 
+@Ignore
 public class testSettings {
 	public static final int port = 7000;
 
