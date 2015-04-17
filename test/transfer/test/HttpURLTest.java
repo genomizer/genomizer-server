@@ -16,13 +16,11 @@ import static org.junit.Assert.*;
 public class HttpURLTest {
     private HTTPURLDownload dummy;
     private final static String testURL  = "http://i.imgur.com/8uuZIMp.jpg";
-    private final static String testURL2 = "http://i.imgur.com/jvx1BoR.gif";
+    private final static String testURL2 = "http://i.imgur.com/jwp9SpW.jpg";
 
     @Before
     public void setup() throws MalformedURLException {
-        String localFilePath = "/home/" +
-                System.getProperty("user.name").substring(0,3) +
-                "/" + System.getProperty("user.name") + "/testfile.jpg";
+        String localFilePath = "/tmp/testfile.jpg";
         dummy = new HTTPURLDownload(testURL, localFilePath);
     }
 
