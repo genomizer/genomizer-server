@@ -14,8 +14,8 @@ import process.StartUpCleaner;
 import authentication.InactiveUuidsRemover;
 
 import command.CommandHandler;
-import database.constants.ServerDependentValues;
 
+import server.ErrorLogger;
 import server.ServerSettings;
 import server.Debug;
 import server.Doorman;
@@ -24,6 +24,7 @@ import server.Doorman;
 public class ServerMain {
 
 	public static int port = 7000;
+	public static String settingsFile = "settings.cfg";
 
 	/**
 	 * @param args
@@ -33,40 +34,49 @@ public class ServerMain {
 	public static void main(String[] args) throws ParseException,
 												  FileNotFoundException {
 
-		/* We firstly need to read and validate the settings.cfg file. */
+		/* We firstly need to read and validate the settings file. */
 		CommandLine com = loadSettingsFile(args);
 
+		/* We delete possible fragments from previous runs */
 		StartUpCleaner.removeOldTempDirectories("resources/");
 
-		CommandHandler commandHandler = new CommandHandler();
+		/* The database settings should be written upon startup*/
+		printDatabaseInformation();
+
+		/* We attempt to start the doorman */
 		try {
-			Doorman doorman = new Doorman(commandHandler, ServerSettings.genomizerPort);
-			doorman.start();
-			if (!com.hasOption("nri")) {
-				(new Thread(new InactiveUuidsRemover())).start();
-			}
-			System.out.println("Doorman started on port " + ServerSettings.genomizerPort);
-			if(Debug.isEnabled) {
-				System.out.println("Debug is enabled.");
-			}
-			System.out.println("Database:");
-			System.out.println("  username " + ServerSettings.databaseUsername);
-			System.out.println("  password " + ServerSettings.databasePassword);
-			System.out.println("  name     " + ServerSettings.databaseName);
-			System.out.println("  host     " + ServerSettings.databaseHost);
+			new Doorman(new CommandHandler(),
+					ServerSettings.genomizerPort).start();
 		} catch (IOException e) {
 			System.err.println("Error when starting server");
-			e.printStackTrace();
-			//log exception
+			if (Debug.isEnabled) e.printStackTrace();
 			System.exit(1);
+		}
+
+		/* By default we run a UID remover */
+		if (!com.hasOption("nri")) {
+			(new Thread(new InactiveUuidsRemover())).start();
 		}
 
 	}
 
 	/**
-	 * This method attempts to read settings from file. It is hardcoded to
-	 * read from 'settings.cfg', located in current working folder. It
-	 * validates the final settings to be sane (e.g. not containing 'null').
+	 * Print the database settings currently loaded into ServerSettings.
+	 */
+	private static void printDatabaseInformation() {
+		System.out.println("Doorman started on port " +
+						   ServerSettings.genomizerPort);
+		System.out.println("Database:");
+		System.out.println("  username " + ServerSettings.databaseUsername);
+		System.out.println("  password " + ServerSettings.databasePassword);
+		System.out.println("  name     " + ServerSettings.databaseName);
+		System.out.println("  host     " + ServerSettings.databaseHost);
+	}
+
+	/**
+	 * This method attempts to read the settings file. It is defined to read
+	 * from the file in fileSettings. It validates the final settings to be
+	 * sane (e.g. not containing 'null').
 	 *
 	 * It parses the commandline arguments and constructs a CommandLine
 	 * object containing the information.
@@ -74,18 +84,18 @@ public class ServerMain {
 	 * @return A CommandLine object containing the relevant commandline
 	 * 		   options. The function also contains a side effect: It modifies
 	 * 		   the static attributes of the ServerSettings class with the
-	 * 		   information in the settings.cfg file.
-	 * @throws FileNotFoundException if settings.cfg file could not be found
+	 * 		   information in the settings file.
+	 * @throws FileNotFoundException if the settings file could not be found
 	 * 								 or opened.
-	 * @throws ParseException if settings.cfg is formatted in an invalid way.
+	 * @throws ParseException if the settings is formatted in an invalid way.
 	 */
 	private static CommandLine loadSettingsFile(String[] args)
 			throws 	FileNotFoundException,
 					ParseException {
-		// Attempt to load settings.cfg file
-		if (new File("settings.cfg").exists()) {
-			System.out.println("Reading settings from settings.cfg");
-			readSettingsFile("settings.cfg");
+		// Attempt to load the settings file
+		if (new File(settingsFile).exists()) {
+			System.out.println("Reading settings from " + settingsFile);
+			ServerSettings.readSettingsFile(settingsFile);
 		}
 
 		CommandLineParser comline = new BasicParser();
@@ -117,10 +127,11 @@ public class ServerMain {
 		// Debug flag
 		if (com.hasOption("debug")) {
 			Debug.isEnabled = true;
+			System.out.println("Debug is enabled.");
 		}
-		// Settingsfile flag
+		// Settings file flag
 		if (com.hasOption('f')) {
-			readSettingsFile(com.getOptionValue('f'));
+			ServerSettings.readSettingsFile(com.getOptionValue('f'));
 		}
 	}
 
@@ -143,62 +154,6 @@ public class ServerMain {
  							 "remove inactive users which are logged in on " +
  							 "the server.");
 		return comOptions;
-	}
-
-	public static void readSettingsFile(String path) throws FileNotFoundException {
-		File dbFile = new File(path);
-		if (dbFile.exists()) {
-			Scanner scan = new Scanner(dbFile);
-			while (scan.hasNextLine()) {
-				String line = scan.nextLine();
-				int index = line.indexOf("=");
-				String key = line.substring(0, index).trim();
-				String value = line.substring(index+1).trim();
-				switch (key.toLowerCase()) {
-				case "databaseuser":
-					ServerSettings.databaseUsername = value;
-					break;
-				case "databasepassword":
-					ServerSettings.databasePassword = value;
-					break;
-				case "databasehost":
-					ServerSettings.databaseHost = value;
-					break;
-				case "databasename":
-					ServerSettings.databaseName = value;
-					break;
-				case "publicaddress":
-					ServerSettings.publicAddress = value;
-					break;
-				case "apacheport":
-					ServerSettings.apachePort = Integer.parseInt(value);
-					break;
-				case "downloadurl":
-					ServerSettings.downloadURL = value;
-					break;
-				case "uploadurl":
-					ServerSettings.uploadURL = value;
-					break;
-				case "genomizerport":
-					ServerSettings.genomizerPort = Integer.parseInt(value);
-					break;
-				case "passwordhash":
-					ServerSettings.passwordHash = value;
-					break;
-				case "passwordsalt":
-					ServerSettings.passwordSalt = value;
-					break;
-				default:
-					System.err.println("Unrecognized setting: " + key);
-					break;
-				}
-			}
-			scan.close();
-			ServerDependentValues.DownloadURL = ServerSettings.publicAddress + ":" + ServerSettings.apachePort + ServerSettings.downloadURL;
-			ServerDependentValues.UploadURL = ServerSettings.publicAddress + ":" + ServerSettings.apachePort + ServerSettings.uploadURL;
-		} else {
-			System.err.println("Error, " + path + " does not exist, using default settings.");
-		}
 	}
 
 	/**

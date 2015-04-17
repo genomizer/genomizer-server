@@ -28,15 +28,16 @@ public class ErrorLogger {
 
 	private static HashMap<String, ArrayList<Response>> usermap = new HashMap<String,ArrayList<Response>>();
 
+
 	public ErrorLogger(){
 
 	}
 
-	public static void log(String username, String logText){
+	public static void log(String tag, String logText){
 
 		File file = new File(logFile);
 		String timeString = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date(System.currentTimeMillis()));
-		String text = timeString + " | " + username + " | " + logText;
+		String text = timeString + " : " + tag + " | " + logText;
 		try{
 
 			file.createNewFile();
