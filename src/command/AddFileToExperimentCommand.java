@@ -63,15 +63,18 @@ public class AddFileToExperimentCommand extends Command {
 		if(type == null) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify a type.");
 		}
-		//		if(uploader == null) {
-		//			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify an uploader name.");
-		//		}
+		if(metaData == null) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify metadata.");
+		}
+		if(uploader == null) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify an uploader name.");
+		}
 		if(grVersion == null) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify a genome release.");
 		}
-		//		if(author == null) {
-		//			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify author.");
-		//		}
+		if(author == null) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify author.");
+		}
 		if(experimentID.length() > MaxSize.EXPID || experimentID.length() < 1) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Experiment name: " + experimentID + " has to be between 1 and "
 					+ database.constants.MaxSize.EXPID + " characters long.");
