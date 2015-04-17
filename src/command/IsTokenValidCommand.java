@@ -43,7 +43,8 @@ public class IsTokenValidCommand extends Command {
 	@Override
 	public Response execute() {
 
-		int code = Authenticate.idExists(uuid) ? StatusCode.OK : StatusCode.UNAUTHORIZED;
+		int code = Authenticate.idExists(uuid) ? StatusCode.OK :
+				StatusCode.UNAUTHORIZED;
 		return new MinimalResponse(code);
 
 	}

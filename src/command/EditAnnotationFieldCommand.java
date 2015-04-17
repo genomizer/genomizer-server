@@ -45,24 +45,36 @@ public class EditAnnotationFieldCommand extends Command {
 	@Override
 	public boolean validate() throws ValidateException {
 		if (oldName == null) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify the old annotation label");
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify the " +
+					"old annotation label");
 		}
 		if(newName == null) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify the old annotation label");
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify the " +
+					"old annotation label");
 		}
-		if(oldName.length() > MaxSize.ANNOTATION_LABEL || oldName.length() < 1) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Old annotation label has to be between 1 and "
-					+ database.constants.MaxSize.ANNOTATION_LABEL + " characters long.");
+		if(oldName.length() > MaxSize.ANNOTATION_LABEL ||
+				oldName.length() < 1) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Old " +
+					"annotation label has to be between 1 and "
+					+ database.constants.MaxSize.ANNOTATION_LABEL +
+					" characters long.");
 		}
-		if(newName.length() > MaxSize.ANNOTATION_LABEL || newName.length() < 1) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "New annotation label has to be between 1 and "
-					+ database.constants.MaxSize.ANNOTATION_LABEL + " characters long.");
+		if(newName.length() > MaxSize.ANNOTATION_LABEL ||
+				newName.length() < 1) {
+			throw new ValidateException(StatusCode.BAD_REQUEST,
+					"New annotation label has to be between 1 and "
+					+ database.constants.MaxSize.ANNOTATION_LABEL +
+							" characters long.");
 		}
 		if(!hasOnlyValidCharacters(oldName)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation label. Valid characters are: " + validCharacters);
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
+					"characters in annotation label. Valid characters are: " +
+					validCharacters);
 		}
 		if(!hasOnlyValidCharacters(newName)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters in annotation label. Valid characters are: " + validCharacters);
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
+					"characters in annotation label. Valid characters are: "
+					+ validCharacters);
 		}
 		return true;
 	}
@@ -81,27 +93,34 @@ public class EditAnnotationFieldCommand extends Command {
 			db = initDB();
 		}
 		catch(SQLException | IOException e){
-			return new ErrorResponse(StatusCode.BAD_REQUEST, "Could not initialize db: " + e.getMessage());
+			return new ErrorResponse(StatusCode.BAD_REQUEST, "Could not " +
+					"initialize db: " + e.getMessage());
 		}
 
 		try {
 			Map<String,Integer> anno = db.getAnnotations();
 
 			if (!anno.containsKey(oldName)) {
-				return new ErrorResponse(StatusCode.BAD_REQUEST, "The annotation field " + oldName + " does not exist in the database");
+				return new ErrorResponse(StatusCode.BAD_REQUEST, "The " +
+						"annotation field " + oldName + " does not exist in " +
+						"the database");
 			} else if (anno.containsKey(newName)) {
-				return new ErrorResponse(StatusCode.BAD_REQUEST, "The annotation field " + newName + " already exists in the database");
+				return new ErrorResponse(StatusCode.BAD_REQUEST, "The " +
+						"annotation field " + newName + " already exists in " +
+						"the database");
 			}
 
 			try {
 				db.changeAnnotationLabel(oldName, newName);
 			} catch (IOException | SQLException e) {
-				return new ErrorResponse(StatusCode.BAD_REQUEST, "Could not change annotation label: " + e.getMessage());
+				return new ErrorResponse(StatusCode.BAD_REQUEST, "Could not " +
+						"change annotation label: " + e.getMessage());
 			}
 
 		}
 		catch(SQLException e){
-			return new ErrorResponse(StatusCode.BAD_REQUEST, "Could not get annotations: " + e.getMessage());
+			return new ErrorResponse(StatusCode.BAD_REQUEST, "Could not " +
+					"get annotations: " + e.getMessage());
 		}finally{
 			db.close();
 		}

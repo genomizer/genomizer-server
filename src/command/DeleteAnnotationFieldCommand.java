@@ -40,14 +40,20 @@ public class DeleteAnnotationFieldCommand extends Command {
 	public boolean validate() throws ValidateException {
 
 		if(header == null) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation field-name was missing.");
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation " +
+					"field-name was missing.");
 		}
-		if(header.length() < 1 || header.length() > database.constants.MaxSize.ANNOTATION_LABEL) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation label has to be between 1 and "
-					+ database.constants.MaxSize.ANNOTATION_LABEL + " characters long.");
+		if(header.length() < 1 || header.length() >
+				database.constants.MaxSize.ANNOTATION_LABEL) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation " +
+					"label has to be between 1 and "
+					+ database.constants.MaxSize.ANNOTATION_LABEL +
+					" characters long.");
 		}
 		if(!hasOnlyValidCharacters(header)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid characters for annotation. Valid characters are: " + validCharacters);
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
+					"characters for annotation. Valid characters are: " +
+					validCharacters);
 		}
 
 		return true;
@@ -70,14 +76,17 @@ public class DeleteAnnotationFieldCommand extends Command {
 				db.deleteAnnotation(header);
 				return new MinimalResponse(200);
 			} else {
-				return new ErrorResponse(StatusCode.BAD_REQUEST, "The annotation " + header + " does not exist and can not be deleted");
+				return new ErrorResponse(StatusCode.BAD_REQUEST,
+						"The annotation " + header + " does not exist and " +
+								"can not be deleted");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
 		} catch (IOException e) {
 			e.printStackTrace();
-			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, e.getMessage());
+			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE,
+					e.getMessage());
 		} finally {
 			db.close();
 		}

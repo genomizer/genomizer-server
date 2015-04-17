@@ -46,7 +46,8 @@ public class GetProcessStatusCommand extends Command {
 	@Override
 	public Response execute() {
 
-		Collection<ProcessStatus> processStatus = workHandler.getProcessStatus();
+		Collection<ProcessStatus> processStatus =
+				workHandler.getProcessStatus();
 		return new GetProcessStatusResponse(processStatus);
 
 	}

@@ -55,7 +55,8 @@ public class ChangeUserPasswordCommand extends Command {
         try {
             db = initDB();
         } catch (SQLException e) {
-            return new ErrorResponse(StatusCode.BAD_REQUEST, "Error when initiating databaseAccessor. " + e.getMessage());
+            return new ErrorResponse(StatusCode.BAD_REQUEST, "Error when " +
+                    "initiating databaseAccessor. " + e.getMessage());
         } catch (IOException e)  {
             return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
         }
