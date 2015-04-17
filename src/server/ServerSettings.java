@@ -19,7 +19,7 @@ public class ServerSettings {
 	public static String passwordHash = null;
 	public static String passwordSalt = null;
 	public static String webUrlUpload = null;
-	public static String fileLocation = "/var/www/data";
+	public static String fileLocation = "/var/www/data/";
 
 
 	public static void writeSettings(String path){
