@@ -84,7 +84,7 @@ public class DeleteGenomeReleaseCommand extends Command {
 		DatabaseAccessor db = null;
 		try {
 			db = initDB();
-			ArrayList<Genome> genomeReleases=db.getAllGenomReleasesForSpecies(specie);
+			ArrayList<Genome> genomeReleases=db.getAllGenomeReleasesForSpecies(specie);
 			if(genomeReleases != null) {
 				for(Genome g : genomeReleases) {
 					if (g != null && g.genomeVersion.equals(this.genomeVersion) && g.species.equals(this.specie)) {

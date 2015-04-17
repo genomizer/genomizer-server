@@ -92,7 +92,7 @@ public class GetGenomeReleaseResponseTest {
 
 			}*/
 
-			//genomeList =db.getAllGenomReleasesForSpecies("Human");
+			//genomeList =db.getAllGenomeReleasesForSpecies("Human");
 			GetGenomeReleaseResponse gResp=new GetGenomeReleaseResponse(StatusCode.OK,genomeList);
 			System.out.println(gResp.getBody());
 
