@@ -35,10 +35,10 @@ public class DatabaseAccessorThreadTests {
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		ti = new TestInitializer();
-		username = ti.username;
-		password = ti.password;
-		host = ti.host;
-		database = ti.database;
+		username = TestInitializer.username;
+		password = TestInitializer.password;
+		host 	 = TestInitializer.host;
+		database = TestInitializer.database;
 	}
 
 	@AfterClass
