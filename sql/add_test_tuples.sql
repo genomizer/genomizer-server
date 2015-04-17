@@ -32,7 +32,7 @@ INSERT INTO Chain_File_Files VALUES('hg18', 'hg38', 'hg18ToHg38.over.chain', DEF
 INSERT INTO Chain_File_Files VALUES('hg38', 'hg18', 'hg38ToHg18.over.chain', DEFAULT);
 INSERT INTO Chain_File_Files VALUES('hg38', 'hg18', 'hg38ToHg18.over(2).chain', DEFAULT);
 
-INSERT INTO Annotation VALUES('Species', 'DropDown', NULL, TRUE);
+INSERT INTO Annotation VALUES ('Species', 'DropDown', NULL, TRUE);
 INSERT INTO Annotation_Choices VALUES('Species', 'Human');
 INSERT INTO Annotation_Choices VALUES('Species', 'Fly');
 INSERT INTO Annotation_Choices VALUES('Species', 'Rat');

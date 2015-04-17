@@ -39,6 +39,8 @@ public class DatabaseAccessorThreadTests {
 		password = TestInitializer.password;
 		host 	 = TestInitializer.host;
 		database = TestInitializer.database;
+
+		ti.setup();
 	}
 
 	@AfterClass
@@ -48,7 +50,6 @@ public class DatabaseAccessorThreadTests {
 
 	@Before
 	public void setUp() throws Exception {
-
 	}
 
 	@After

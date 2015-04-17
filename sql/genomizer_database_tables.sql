@@ -134,6 +134,3 @@ CREATE TABLE Chain_File_Files
     CONSTRAINT pkey_chain_file_files PRIMARY KEY(FromVersion, ToVersion, fileName),
     CONSTRAINT fkey_from_version_to_version FOREIGN KEY (FromVersion, ToVersion) REFERENCES Chain_File(FromVersion, ToVersion) ON DELETE CASCADE
 );
-
-INSERT INTO Annotation VALUES ('Species', 'DropDown', 'Fly', TRUE);
-INSERT INTO Annotation_Choices VALUES ('Species', 'Fly');
