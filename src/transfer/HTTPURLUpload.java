@@ -21,46 +21,45 @@ import org.apache.http.util.EntityUtils;
 import server.ServerSettings;
 
 public class HTTPURLUpload {
-	
+
 	private String filePath;
 	private String uploadPath;
-	
+
 	public HTTPURLUpload(String filePath, String uploadPath) {
 		this.filePath = filePath;
 		this.uploadPath = uploadPath;
 	}
-	
-	public void sendFile() {		 
+
+	public void sendFile() {
 		// the URL where the file will be posted
-		//String postReceiverUrl = "http://130.239.178.22/cgi-bin/upload.php";
 		String postReceiverUrl = ServerSettings.webUrlUpload;
-		 
+
 		// new HttpClient
 		HttpClientBuilder hcBuilder = HttpClients.custom();
-		 
+
 		CloseableHttpClient httpClient = hcBuilder.build();
-		
+
 		CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
 		credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials("pvt:pvt"));
 		HttpClientContext localContext = HttpClientContext.create();
 		localContext.setCredentialsProvider(credentialsProvider);
 
 
-		
+
 		// post header
 		HttpPost httpPost = new HttpPost(postReceiverUrl);
-		 
+
 		File file = new File(filePath);
-		 
+
 		MultipartEntityBuilder reqEntity = MultipartEntityBuilder.create();
 		reqEntity.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-		
+
 		//add the location on the server where the file should be saved
 		reqEntity.addTextBody("data", uploadPath);
-		
+
 		reqEntity.addBinaryBody("uploadfile", file);
 		httpPost.setEntity(reqEntity.build());
-		 
+
 		// execute HTTP post request
 
 
@@ -69,10 +68,10 @@ public class HTTPURLUpload {
 			response = httpClient.execute(httpPost, localContext);
 			HttpEntity resEntity = response.getEntity();
 			if (resEntity != null) {
-			     
+
 			    String responseStr = EntityUtils.toString(resEntity).trim();
 			    System.out.println("Response: " +  responseStr);
-			     
+
 			    // you can add an if statement here and do other actions based on the response
 			}
 		} catch (ClientProtocolException e) {
@@ -82,8 +81,8 @@ public class HTTPURLUpload {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		 
+
+
 
 
 	}
