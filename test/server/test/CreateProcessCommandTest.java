@@ -6,9 +6,6 @@ import org.junit.*;
 
 import response.Response;
 
-import authentication.Authenticate;
-
-import command.Command;
 import command.CommandFactory;
 import command.ProcessCommand;
 

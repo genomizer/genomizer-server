@@ -31,7 +31,7 @@ public class Experiment {
 		con.setRequestProperty("Content-Type", "application/json");
 
 		JsonObject ja=new JsonObject();
-		JsonObject name=new JsonObject();
+//		JsonObject name=new JsonObject();
 		ja.addProperty("name", expName);
 //		JsonObject createdBy=new JsonObject();
 //		ja.addProperty("createdBy", "jonas");

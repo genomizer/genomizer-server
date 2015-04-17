@@ -2,7 +2,7 @@ package transfer;
 
 
 import java.io.*;
-import java.net.HttpURLConnection;
+//import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -29,43 +29,43 @@ public class HTTPURLDownload {
     
 
 
-    private static void put() {
-    	try {
-            URL targetUrl = new URL("http://10.42.0.91:8090/html/asd1.html");
-            HttpURLConnection connection = (HttpURLConnection)
-                    targetUrl.openConnection();
-            connection.setDoOutput(true);
-            connection.setReadTimeout(1000);
-            connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "text/plain");
-            connection.setRequestProperty("Authorization", "pvt");
-            PrintWriter outputStream = new PrintWriter(
-                    connection.getOutputStream(), true);
-            File file = new File(localFilePath);
-            BufferedReader reader = new BufferedReader(
-                    new FileReader(file));
-            while (reader.ready()) {
-//            	System.out.println("Sending data");
-                outputStream.println(reader.readLine());
-                outputStream.flush();
-            }
-            int responseCode;
-            if ((responseCode = connection.getResponseCode()) != 200) {
-                System.out.println("Error wrong response code: "
-                        + responseCode);
-            }
-            System.out.println(responseCode);
-            connection.disconnect();
-            reader.close();
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch(FileNotFoundException e) {
-            System.out.println("File was not found: " + localFilePath);
-        } catch (IOException e) {
-            System.out.println("Connection error: " + e.getMessage() + " " + "http://10.42.0.91:8090/html/asd1.html");
-        }
-    }
+//    private static void put() {
+//    	try {
+//            URL targetUrl = new URL("http://10.42.0.91:8090/html/asd1.html");
+//            HttpURLConnection connection = (HttpURLConnection)
+//                    targetUrl.openConnection();
+//            connection.setDoOutput(true);
+//            connection.setReadTimeout(1000);
+//            connection.setRequestMethod("POST");
+//            connection.setRequestProperty("Content-Type", "text/plain");
+//            connection.setRequestProperty("Authorization", "pvt");
+//            PrintWriter outputStream = new PrintWriter(
+//                    connection.getOutputStream(), true);
+//            File file = new File(localFilePath);
+//            BufferedReader reader = new BufferedReader(
+//                    new FileReader(file));
+//            while (reader.ready()) {
+////            	System.out.println("Sending data");
+//                outputStream.println(reader.readLine());
+//                outputStream.flush();
+//            }
+//            int responseCode;
+//            if ((responseCode = connection.getResponseCode()) != 200) {
+//                System.out.println("Error wrong response code: "
+//                        + responseCode);
+//            }
+//            System.out.println(responseCode);
+//            connection.disconnect();
+//            reader.close();
+//
+//        } catch (MalformedURLException e) {
+//            e.printStackTrace();
+//        } catch(FileNotFoundException e) {
+//            System.out.println("File was not found: " + localFilePath);
+//        } catch (IOException e) {
+//            System.out.println("Connection error: " + e.getMessage() + " " + "http://10.42.0.91:8090/html/asd1.html");
+//        }
+//    }
     
     public HTTPURLDownload(String url, String localFilePath){
         try {

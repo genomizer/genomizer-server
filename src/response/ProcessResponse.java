@@ -9,7 +9,7 @@ public class ProcessResponse extends Response {
 	@Expose
 	String message;
 	@Expose
-	private Date date;
+	Date date;
 
 	public ProcessResponse (int code) {
 		this.code = code;

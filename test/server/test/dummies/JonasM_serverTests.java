@@ -1,6 +1,5 @@
 package server.test.dummies;
 
-import authentication.PasswordHash;
 
 public class JonasM_serverTests {
 
@@ -29,8 +28,8 @@ public class JonasM_serverTests {
 
 	public static void usertests() throws Exception {
 		User.sendDeleteUser("c11jmm");
-		User.sendCreateUser("c11jmm", "bajs", "minion", "Jonas Erik Markström", "c11jmm@cs.umu.se");
-		User.sendCreateUser("c11jmm", "bajs", "minion", "Jonas Erik Markström", "c11jmm@cs.umu.se"); // Trying to create duplicate user, should give error.
+		User.sendCreateUser("c11jmm", "bajs", "minion", "Jonas Erik Markstrï¿½m", "c11jmm@cs.umu.se");
+		User.sendCreateUser("c11jmm", "bajs", "minion", "Jonas Erik Markstrï¿½m", "c11jmm@cs.umu.se"); // Trying to create duplicate user, should give error.
 		Administrator.sendUpdateUserPrivileges("c11jmm", "basic");
 		Administrator.sendUpdateUserPrivileges("c11jmm2", "mastah"); // User does not exist, should return error code.
 		User.sendDeleteUser("c11jmm");

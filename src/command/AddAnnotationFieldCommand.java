@@ -27,17 +27,17 @@ public class AddAnnotationFieldCommand extends Command {
 	 */
 
 	@Expose
-	private String name = null;;
+	String name = null;;
 
 	@Expose
-	private ArrayList<String> type = new ArrayList<String>();
+	ArrayList<String> type = new ArrayList<String>();
 
 	@SerializedName("default")
 	@Expose
-	private String defaults = null;
+	String defaults = null;
 
 	@Expose
-	private Boolean forced = null;
+	Boolean forced = null;
 
 	/**
 	 * Empty constructor.

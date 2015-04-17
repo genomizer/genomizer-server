@@ -1,13 +1,9 @@
 package server.test.dummies;
 
-import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 
 public class User {
 
@@ -41,7 +37,7 @@ public class User {
 		con.setRequestProperty("Content-Type", "application/json");
 		con.setRequestProperty("Authorization", Login.getToken());
 		con.setRequestProperty("Content-Type", "application/json");
-		JsonObject jj=new JsonObject();
+//		JsonObject jj=new JsonObject();
 
 		//testSettings.sendToServer(con, jj.toString());
 

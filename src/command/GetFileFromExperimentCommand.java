@@ -4,7 +4,7 @@ package command;
 import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
-import database.DatabaseAccessor;
+//import database.DatabaseAccessor;
 
 /**
  * Class used to represent a command of the type GetFileFromExperimentCommand.
@@ -15,7 +15,7 @@ import database.DatabaseAccessor;
 public class GetFileFromExperimentCommand extends Command {
 
 	private String fileID;
-	private DatabaseAccessor db;
+//	private DatabaseAccessor db;
 
 
 	/**

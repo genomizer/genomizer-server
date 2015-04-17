@@ -2,12 +2,9 @@ package transfer.test;
 
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
+//import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Arrays;
 
 /**
  * Project: genomizer-Server
@@ -21,7 +18,7 @@ import java.util.Arrays;
 public class Receive implements Runnable {
 
 
-    private InputStream is;
+//  private InputStream is;
     private ServerSocket welcome;
     private Socket listen;
     public Receive() {

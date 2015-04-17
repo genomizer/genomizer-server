@@ -8,9 +8,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 
 public class GetExperimentDummy {
 	public static final int port = 7000;
@@ -60,69 +58,69 @@ public class GetExperimentDummy {
 
 
 
-	private static void sendProcessing() throws Exception {
-
-		System.out.println("sendprocessing");
-	/*	String username = "splutt";
-//		String filename = filename;
-		String fileid = "1";
+//	private static void sendProcessing() throws Exception {
+//
+//		System.out.println("sendprocessing");
+//	/*	String username = "splutt";
+////		String filename = filename;
+//		String fileid = "1";
+////		String expid = "Exp1";
+//		String processtype = "rawtoprofile";
+//		String parameters = "\"param1\"," +
+//							"\"param2\"," +
+//							"\"param3\"," +
+//							"\"param4\"";
+//		String metadata = "astringofmetadata";
+//		String genomeRelease = "hg38";
+//		String author = "yuri";*/
+//
+//
+//		String username = "splutt";
+//		String filename = "filename1234";
+//		String fileid = "1";
 //		String expid = "Exp1";
-		String processtype = "rawtoprofile";
-		String parameters = "\"param1\"," +
-							"\"param2\"," +
-							"\"param3\"," +
-							"\"param4\"";
-		String metadata = "astringofmetadata";
-		String genomeRelease = "hg38";
-		String author = "yuri";*/
-
-
-		String username = "splutt";
-		String filename = "filename1234";
-		String fileid = "1";
-		String expid = "Exp1";
-		String processtype = "rawtoprofile";
-		String parameters = "\"param1\"," +
-				"\"param2\"," +
-				"\"param3\"," +
-				"\"param4\"," +
-				"\"param5\"," +
-				"\"param6\"," +
-				"\"param7\"," +
-				"\"param8\"";
-		String metadata = "astringofmetadata";
-		String genomeRelease = "hg38";
-		String author = "yuri";
-
-
-		URL obj = new URL(url + "/process");
-		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
-		con.setRequestMethod("PUT");
-		con.setRequestProperty("Authorization", token.getToken());
-
-		String json = "{" +
-				"\"filename\": \"" + filename + "\"," +
-				"\"fileId\": \"" + fileid + "\"," +
-				"\"expid\": \"" + expName + "\"," +
-				"\"processtype\": \"" + processtype + "\"," +
-				"\"parameters\": [" + parameters + "]," +
-				"\"metadata\": \"" + metadata + "\"," +
-				"\"genomeRelease\": \"" + genomeRelease + "\"," +
-				"\"author\": \"" + author + "\"}";
-
-
-		sendToServer(con, json);
-		/*con.setDoOutput(true);
-		DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-		wr.write(json.getBytes());
-		wr.flush();
-		wr.close();*/
-
-		//int responseCode = con.getResponseCode();
-		System.out.println("\nSending 'PUT' request to URL : " + url);
-		System.out.println("Reponse Body: " + printResponse(con));
-	}
+//		String processtype = "rawtoprofile";
+//		String parameters = "\"param1\"," +
+//				"\"param2\"," +
+//				"\"param3\"," +
+//				"\"param4\"," +
+//				"\"param5\"," +
+//				"\"param6\"," +
+//				"\"param7\"," +
+//				"\"param8\"";
+//		String metadata = "astringofmetadata";
+//		String genomeRelease = "hg38";
+//		String author = "yuri";
+//
+//
+//		URL obj = new URL(url + "/process");
+//		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+//
+//		con.setRequestMethod("PUT");
+//		con.setRequestProperty("Authorization", token.getToken());
+//
+//		String json = "{" +
+//				"\"filename\": \"" + filename + "\"," +
+//				"\"fileId\": \"" + fileid + "\"," +
+//				"\"expid\": \"" + expName + "\"," +
+//				"\"processtype\": \"" + processtype + "\"," +
+//				"\"parameters\": [" + parameters + "]," +
+//				"\"metadata\": \"" + metadata + "\"," +
+//				"\"genomeRelease\": \"" + genomeRelease + "\"," +
+//				"\"author\": \"" + author + "\"}";
+//
+//
+//		sendToServer(con, json);
+//		/*con.setDoOutput(true);
+//		DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+//		wr.write(json.getBytes());
+//		wr.flush();
+//		wr.close();*/
+//
+//		//int responseCode = con.getResponseCode();
+//		System.out.println("\nSending 'PUT' request to URL : " + url);
+//		System.out.println("Reponse Body: " + printResponse(con));
+//	}
 
 
 

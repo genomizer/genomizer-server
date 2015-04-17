@@ -20,10 +20,10 @@ import database.constants.MaxSize;
 public class AddExperimentCommand extends Command {
 
 	@Expose
-	private String name;
+	String name;
 
 	@Expose
-	private ArrayList<Annotation> annotations = new ArrayList<Annotation>();
+	ArrayList<Annotation> annotations = new ArrayList<Annotation>();
 
 	/**
 	 * Empty constructor.

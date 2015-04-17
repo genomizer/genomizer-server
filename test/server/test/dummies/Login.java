@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import server.ErrorLogger;
 import server.test.dummies.Token;
 
 import com.google.gson.Gson;

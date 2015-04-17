@@ -2,13 +2,8 @@ package database.test.unittests;
 
 import static org.junit.Assert.*;
 
-import java.io.IOException;
-import java.sql.SQLException;
 
-
-import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -35,7 +30,7 @@ public class AddNewFileTests {
     private static String testExpId = "testExpId1";
     private static TestInitializer ti;
 
-    private static FileTuple ft;
+    static FileTuple ft;
 
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
