@@ -55,7 +55,7 @@ public class DatabaseAccessorThreadTests {
 
 	@After
 	public void tearDown() throws Exception {
-
+		ti.removeTuples();
 	}
 
 	@Test

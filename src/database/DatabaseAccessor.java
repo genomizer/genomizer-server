@@ -225,7 +225,6 @@ public class DatabaseAccessor {
      *            - the role given to the user ie. "Admin"
      * @throws SQLException
      * @throws IOException
-     * @throws DuplicatePrimaryKeyException
      */
     public void addUser(String username, String password, String role,
             String fullName, String email) throws SQLException, IOException {
@@ -243,12 +242,12 @@ public class DatabaseAccessor {
      * @throws SQLException
      *             - if the query does not succeed
      */
-*/
+
     
     /**
      * Deletes a user from the database.
      *
-     * @param username
+     * @param username the user to delete
      * @return The number of tuples deleted.
      * @throws SQLException
      *             If the database could not be reached.
@@ -323,6 +322,13 @@ public class DatabaseAccessor {
         return expMethods.getExperiment(expID);
     }
 
+    //TODO Find this thing?
+    /*
+         * @throws DuplicatePrimaryKeyException
+     *             If the experiment already exists.
+
+     */
+
     /**
      * Adds an experiment ID to the database.
      *
@@ -331,8 +337,6 @@ public class DatabaseAccessor {
      * @throws SQLException
      *             - if the query does not succeed
      * @throws IOException
-     * @throws DuplicatePrimaryKeyException
-     *             If the experiment already exists.
      */
     public int addExperiment(String expID) throws SQLException, IOException {
         return expMethods.addExperiment(expID);
@@ -856,7 +860,7 @@ public class DatabaseAccessor {
      *            file was generated
      * @param metaData - A String specifying the parameters used for
      *            processing the raw file.
-     * @param genomeReleaseVersion - The genome release version used in
+     * @param grVersion - The genome release version used in
      *            processing. OBS! this is a reference to a genome release
      *            stored in the database/on the server and must therefore be
      *            valid.
@@ -991,11 +995,23 @@ public class DatabaseAccessor {
         return genMethods.fileReadyForDownload(version, fileName);
     }
 
+    //FIXME This i incorrect
+    /*
     /**
      * Removes one specific genome version stored in the database.
      *
      * @param version - the genome version.
      * @param species
+     *
+     * @return boolean - true if succeeded, false if failed.
+     * @throws SQLException
+     * @throws IOException
+     */
+
+    /**
+     * Removes one specific genome version stored in the database.
+     *
+     * @param genomeVersion - the genome version.
      *
      * @return boolean - true if succeeded, false if failed.
      * @throws SQLException
