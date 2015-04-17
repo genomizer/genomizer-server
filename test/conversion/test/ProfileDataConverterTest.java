@@ -2,10 +2,12 @@ package conversion.test;
 
 import java.io.IOException;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import conversion.ConversionHandler;
 
+@Ignore
 public class ProfileDataConverterTest {
 
 
