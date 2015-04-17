@@ -4,7 +4,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import com.google.gson.JsonObject;
+import org.junit.Ignore;
 
+@Ignore
 public class User {
 
 	static void sendCreateUser(String username, String password, String privileges, String fullname, String email) throws Exception {

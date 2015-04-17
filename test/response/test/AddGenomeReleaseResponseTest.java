@@ -36,8 +36,9 @@ public class AddGenomeReleaseResponseTest {
 
 	}
 
-	@Test
+	// TODO: re-enable this test. Not sure if it's correct or not.
 	@Ignore
+	@Test
 	public void testGetBody() {
 
 		ArrayList<String> array = new ArrayList<String>();
@@ -45,7 +46,7 @@ public class AddGenomeReleaseResponseTest {
 		array.add("SECOND");
 		AddGenomeReleaseResponse rsp = new AddGenomeReleaseResponse(StatusCode.CREATED, array);
 		String checker = rsp.getBody();
-		assertEquals(checker, "[\"FIRST\",\"SECOND\"]");
+		assertEquals("[\"FIRST\",\"SECOND\"]", checker);
 
 	}
 

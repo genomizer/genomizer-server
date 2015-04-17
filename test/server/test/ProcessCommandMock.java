@@ -1,11 +1,13 @@
 package server.test;
 
+import org.junit.Ignore;
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
 import command.ProcessCommand;
 
+@Ignore
 public class ProcessCommandMock extends ProcessCommand {
 
 	public ProcessCommandMock() {

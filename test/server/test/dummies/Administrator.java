@@ -4,7 +4,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import com.google.gson.JsonObject;
+import org.junit.Ignore;
 
+@Ignore
 public class Administrator {
 
 	static void sendUpdateUserPrivileges(String username, String newprivileges) throws Exception {

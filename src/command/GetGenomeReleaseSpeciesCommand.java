@@ -82,7 +82,7 @@ public class GetGenomeReleaseSpeciesCommand extends Command{
 		try {
 			db = initDB();
 			ArrayList<Genome> genomeReleases =
-					db.getAllGenomReleasesForSpecies(specie);
+					db.getAllGenomeReleasesForSpecies(specie);
 			return new GetGenomeReleaseResponse(StatusCode.OK, genomeReleases);
 		} catch (SQLException e) {
 			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE,

@@ -2,6 +2,7 @@ package server.test;
 
 import static org.junit.Assert.*;
 
+import database.test.*;
 import org.junit.*;
 
 import response.Response;
@@ -31,6 +32,7 @@ public class CreateProcessCommandTest {
 	@Before
 	public void setup(){
 
+		TestInitializer.setupServerSettings();
 		cmdf = new CommandFactory();
 
 

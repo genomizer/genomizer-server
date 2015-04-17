@@ -24,21 +24,27 @@ public class ServerSettings {
 	public static void writeSettings(String path){
 		try {
 			BufferedWriter out = new BufferedWriter(new FileWriter(path, false));
-			out.write("databaseUsername = " + databaseUsername + "\n");
-			out.write("databasePassword = " + databasePassword + "\n");
-			out.write("databaseHost = " + databaseHost + "\n");
-			out.write("databaseName = " + databaseName + "\n");
-			out.write("publicAddress = " + publicAddress + "\n");
-			out.write("apachePort = " + apachePort + "\n");
-			out.write("downloadURL = " + downloadURL + "\n");
-			out.write("uploadURL = " + uploadURL + "\n");
-			out.write("genomizerPort = " + genomizerPort + "\n");
-			out.write("passwordHash = " + passwordHash + "\n");
-			out.write("passwordSalt = " + passwordSalt + "\n");
-			out.write("webUrlUpload = " + webUrlUpload + "\n");
+			String dataInfo =
+					"databaseUsername = " + databaseUsername + "\n"
+					+ "databasePassword = " + databasePassword + "\n"
+					+ "databaseHost = " + databaseHost + "\n"
+					+ "databaseName = " + databaseName + "\n"
+					+ "publicAddress = " + publicAddress + "\n"
+					+ "apachePort = " + apachePort + "\n"
+					+ "downloadURL = " + downloadURL + "\n"
+					+ "uploadURL = " + uploadURL + "\n"
+					+ "genomizerPort = " + genomizerPort + "\n"
+					+ "passwordHash = " + passwordHash + "\n"
+					+ "passwordSalt = " + passwordSalt + "\n"
+					+ "webUrlUpload = " + webUrlUpload + "\n";
+
+			out.write(dataInfo);
 			out.close();
+
 		} catch (IOException e) {
-			System.err.println("Could not write to file: " + path);
+			String msg = "Could not write to file: " + path;
+			Debug.log(msg);
+			ErrorLogger.log("SYSTEM", msg);
 		}
 	}
 
@@ -59,29 +65,39 @@ public class ServerSettings {
 
 	private static void nullCheck(int parameter, String name) {
 		if (parameter == -1) {
-			System.err.println("Error! parameter " + name + " is not set. Check in settings.cfg if it is set and spelled correctly, capitalization does not matter.");
-			System.err.println("Exiting");
+			String msg = "Error! parameter " + name + " is not set. Check in " +
+					"settings.cfg if it is set and spelled correctly, " +
+					"capitalization does not matter.\nExiting";
+			Debug.log(msg);
+			ErrorLogger.log("SYSTEM", msg);
 			System.exit(1);
 		}
 	}
 
 	private static void nullCheck(String parameter, String name) {
 		if (parameter == null) {
-			System.err.println("Error! parameter " + name + " is not set. Check in settings.cfg if it is set and spelled correctly, capitalization does not matter.");
-			System.err.println("Exiting");
+			String msg = "Error! parameter " + name + " is not set. Check in " +
+					"settings.cfg if it is set and spelled correctly, " +
+					"capitalization does not matter.\nExiting";
+			Debug.log(msg);
+			ErrorLogger.log("SYSTEM", msg);
 			System.exit(1);
 		}
 	}
 
 	public static void readSettingsFile(String path) throws FileNotFoundException {
 		File dbFile = new File(path);
+
 		if (dbFile.exists()) {
 			Scanner scan = new Scanner(dbFile);
+
 			while (scan.hasNextLine()) {
 				String line = scan.nextLine();
 				int index = line.indexOf("=");
+
 				String key = line.substring(0, index).trim();
 				String value = line.substring(index+1).trim();
+
 				switch (key.toLowerCase()) {
 				case "databaseuser":
 					databaseUsername = value;
@@ -120,7 +136,9 @@ public class ServerSettings {
 					webUrlUpload = value;
 					break;
 				default:
-					System.err.println("Unrecognized setting: " + key);
+					String msg = "Unrecognized setting: " + key;
+					Debug.log(msg);
+					ErrorLogger.log("SYSTEM", msg);
 					break;
 				}
 			}
@@ -130,7 +148,10 @@ public class ServerSettings {
 			ServerDependentValues.UploadURL = publicAddress + ":" +
 					apachePort + uploadURL;
 		} else {
-			System.err.println("Error, " + path + " does not exist, using default settings.");
+			String msg = "Error, " + path + " does not exist, applying " +
+					"default settings..";
+			Debug.log(msg);
+			ErrorLogger.log("SYSTEM", msg);
 		}
 	}
 }

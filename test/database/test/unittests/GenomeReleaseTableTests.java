@@ -96,7 +96,7 @@ public class GenomeReleaseTableTests {
 
     @Test
     public void shouldReturnRightNamesOfGenomeVersions() throws Exception {
-        List<Genome> genomeList = dbac.getAllGenomReleasesForSpecies("Human");
+        List<Genome> genomeList = dbac.getAllGenomeReleasesForSpecies("Human");
 
         assertEquals(3, genomeList.size());
         assertTrue(searchGenomeForVersion(genomeList, "hg38"));

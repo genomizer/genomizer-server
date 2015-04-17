@@ -1,6 +1,9 @@
 package server.test.dummies;
 
 
+import org.junit.Ignore;
+
+@Ignore
 public class ROserverTests {
 
 	public static void main(String args[]) throws Exception {
