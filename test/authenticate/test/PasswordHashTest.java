@@ -6,6 +6,7 @@ package authenticate.test;
 
 import authentication.PasswordHash;
 import org.junit.*;
+
 import static org.junit.Assert.*;
 
 /**
@@ -13,12 +14,8 @@ import static org.junit.Assert.*;
  */
 public class PasswordHashTest {
 
-    private PasswordHash hasher;
-
     @Before
     public void setup() {
-
-        this.hasher = new PasswordHash();
     }
 
     /**
@@ -27,7 +24,7 @@ public class PasswordHashTest {
     @Test
     public void toSaltedSHA256HashTestEquals() {
 
-        assertEquals(hasher.toSaltedSHA256Hash("TEST"), (hasher.toSaltedSHA256Hash("TEST")));
+        assertEquals(PasswordHash.toSaltedSHA256Hash("TEST"), (PasswordHash.toSaltedSHA256Hash("TEST")));
     }
 
     /**
@@ -36,7 +33,7 @@ public class PasswordHashTest {
     @Test
     public void toSaltedSHA256HashTestNotEquals() {
 
-        assertNotEquals(hasher.toSaltedSHA256Hash("TEST"), (hasher.toSaltedSHA256Hash("TEST2")));
+        assertNotEquals(PasswordHash.toSaltedSHA256Hash("TEST"), (PasswordHash.toSaltedSHA256Hash("TEST2")));
     }
 
     /**
@@ -45,6 +42,6 @@ public class PasswordHashTest {
     @Test
     public void toSaltedSHA256HashTestEmpty() {
 
-        assertNull(hasher.toSaltedSHA256Hash(""));
+        assertNull(PasswordHash.toSaltedSHA256Hash(""));
     }
 }

@@ -58,20 +58,19 @@ public class PasswordHash
     public static String hashString(String salted_password) {
         try {
 
-            // Create MessageDigest instance for SHA-256
+            /** Create MessageDigest instance for SHA-256 */
             MessageDigest md = MessageDigest.getInstance("SHA-256");
-            //Add password bytes to digest
+            /** update digest with password bytes */
             md.update(salted_password.getBytes());
-            //Get the hash's bytes
+            /** Digest password */
             byte[] bytes = md.digest();
-            //This bytes[] has bytes in decimal format;
-            //Convert it to hexadecimal format
+            /** Convert it to hexadecimal format */
             StringBuilder sb = new StringBuilder();
             for(int i=0; i< bytes.length ;i++)
             {
                 sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
             }
-            //Get complete hashed password in hex format (64 characters long string)
+            /** Get complete hashed password in hex format (64 characters long string) */
             return sb.toString();
         }
         catch (NoSuchAlgorithmException e)
