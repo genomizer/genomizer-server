@@ -13,5 +13,4 @@ server*.jar
 errorLog.txt
 *.properties
 out
-settings.cfg
 psqllogin
