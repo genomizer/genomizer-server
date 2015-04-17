@@ -10,15 +10,15 @@ import com.google.gson.annotations.Expose;
 public class DownloadResponse extends Response {
 
 	@Expose
-	private String experimentID;
+	public String experimentID;
 	@Expose
-	private String fileName;
+	public String fileName;
 	@Expose
-	private String size;
+	public String size;
 	@Expose
-	private String type;
+	public String type;
 	@Expose
-	private String URL;
+	public String URL;
 
 	public DownloadResponse(int code, ArrayList<String> attributes) {
 		this.code = code;

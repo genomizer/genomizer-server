@@ -8,8 +8,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Map.Entry;
 
-import process.classes.ProcessException;
-import process.classes.ProcessHandler;
+import process.ProcessException;
+import process.ProcessHandler;
 import response.ErrorResponse;
 import response.ProcessResponse;
 import response.Response;

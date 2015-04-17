@@ -1,15 +1,10 @@
 package authentication;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.UUID;
 
-import server.Debug;
-import server.ErrorLogger;
 import server.ServerSettings;
 
 /**

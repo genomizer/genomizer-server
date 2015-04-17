@@ -1,9 +1,9 @@
 package server;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import database.constants.ServerDependentValues;
+
+import java.io.*;
+import java.util.Scanner;
 
 public class ServerSettings {
 
@@ -18,6 +18,8 @@ public class ServerSettings {
 	public static int genomizerPort = -1;
 	public static String passwordHash = null;
 	public static String passwordSalt = null;
+	public static String webUrlUpload = null;
+
 
 	public static void writeSettings(String path){
 		try {
@@ -33,6 +35,7 @@ public class ServerSettings {
 			out.write("genomizerPort = " + genomizerPort + "\n");
 			out.write("passwordHash = " + passwordHash + "\n");
 			out.write("passwordSalt = " + passwordSalt + "\n");
+			out.write("webUrlUpload = " + webUrlUpload + "\n");
 			out.close();
 		} catch (IOException e) {
 			System.err.println("Could not write to file: " + path);
@@ -51,6 +54,7 @@ public class ServerSettings {
 		nullCheck(genomizerPort, "genomizerPort");
 		nullCheck(passwordHash, "passwordHash");
 		nullCheck(passwordSalt, "passwordSalt");
+		nullCheck(webUrlUpload, "webUrlUpload");
 	}
 
 	private static void nullCheck(int parameter, String name) {
@@ -69,4 +73,64 @@ public class ServerSettings {
 		}
 	}
 
+	public static void readSettingsFile(String path) throws FileNotFoundException {
+		File dbFile = new File(path);
+		if (dbFile.exists()) {
+			Scanner scan = new Scanner(dbFile);
+			while (scan.hasNextLine()) {
+				String line = scan.nextLine();
+				int index = line.indexOf("=");
+				String key = line.substring(0, index).trim();
+				String value = line.substring(index+1).trim();
+				switch (key.toLowerCase()) {
+				case "databaseuser":
+					databaseUsername = value;
+					break;
+				case "databasepassword":
+					databasePassword = value;
+					break;
+				case "databasehost":
+					databaseHost = value;
+					break;
+				case "databasename":
+					databaseName = value;
+					break;
+				case "publicaddress":
+					publicAddress = value;
+					break;
+				case "apacheport":
+					apachePort = Integer.parseInt(value);
+					break;
+				case "downloadurl":
+					downloadURL = value;
+					break;
+				case "uploadurl":
+					uploadURL = value;
+					break;
+				case "genomizerport":
+					genomizerPort = Integer.parseInt(value);
+					break;
+				case "passwordhash":
+					passwordHash = value;
+					break;
+				case "passwordsalt":
+					passwordSalt = value;
+					break;
+				case "weburlupload":
+					webUrlUpload = value;
+					break;
+				default:
+					System.err.println("Unrecognized setting: " + key);
+					break;
+				}
+			}
+			scan.close();
+			ServerDependentValues.DownloadURL = publicAddress + ":" +
+					apachePort + downloadURL;
+			ServerDependentValues.UploadURL = publicAddress + ":" +
+					apachePort + uploadURL;
+		} else {
+			System.err.println("Error, " + path + " does not exist, using default settings.");
+		}
+	}
 }

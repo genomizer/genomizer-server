@@ -3,4 +3,21 @@ language: java
 jdk:
   - openjdk7
 
-script: ant jar
+addons:
+  postgresql: "9.3"
+
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -y bowtie
+
+before_script:
+  - mkdir resources
+  - travis_retry wget http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64.v287/liftOver -O resources/liftOver
+  - chmod +x resources/liftOver
+  - export PATH=$PATH:$PWD/resources/
+  - psql -c 'create database c5dv151_vt14;' -U postgres
+  - psql -f sql/genomizer_database_tables.sql -U postgres -d c5dv151_vt14
+
+script:
+  - ant test
+  - ant junitreport
