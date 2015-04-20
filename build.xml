@@ -29,6 +29,15 @@
 
     <!-- Main targets-->
     <target depends="build" name="jar">
+        <jar destfile="sequreserver.jar"
+            basedir="bin/"
+            includes="lib/**">
+            <fileset dir="bin/" includes="**/*.class" excludes="**/test/**/*"/>
+            <zipgroupfileset dir="lib" includes="**/*.jar"/>
+            <manifest>
+                <attribute name="Main-Class" value="SecureServerMain" />
+            </manifest>
+        </jar>
         <jar destfile="server.jar"
             basedir="bin/"
             includes="lib/**">
@@ -59,6 +68,7 @@
         <delete dir="bin"/>
         <delete dir="${junit.output.dir}"/>
         <delete file="server.jar"/>
+        <delete file="sequreserver.jar"/>
     </target>
 
     <target depends="clean" name="cleanall"/>
@@ -106,6 +116,11 @@
     <!-- Additional targets (unused AFAICT). -->
 
     <!--
+    <target name="SecureServerMain">
+        <java classname="SecureServerMain" failonerror="true" fork="yes">
+            <classpath refid="genomizer-server.classpath"/>
+        </java>
+    </target>
     <target name="ServerMain">
         <java classname="ServerMain" failonerror="true" fork="yes">
             <classpath refid="genomizer-server.classpath"/>
@@ -175,8 +190,8 @@
             <classpath refid="genomizer-server.classpath"/>
         </junit>
     </target>
-    <target name="Doorman">
-        <java classname="server.Doorman" failonerror="true" fork="yes">
+    <target name="SecureDoorman">
+        <java classname="server.SecureDoorman" failonerror="true" fork="yes">
             <classpath refid="genomizer-server.classpath"/>
         </java>
     </target>
