@@ -1,5 +1,7 @@
 package process;
 
+import server.ErrorLogger;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -111,30 +113,37 @@ public abstract class Executor {
 	 */
 	protected String executeShellCommand(String[] command, String dir,
 			String fileName) throws IOException, InterruptedException {
-		ProcessBuilder builder = new ProcessBuilder(command);
 
+		// Create a system process
+		ProcessBuilder builder = new ProcessBuilder(command);
 		builder.directory(new File(FILEPATH).getAbsoluteFile());
 		builder.redirectErrorStream(true);
-		Process process;
-		process = builder.start();
+		Process process = builder.start();
 
+		// Construct a reader to read data from process
 		Scanner s = new Scanner(process.getInputStream());
 		StringBuilder text = new StringBuilder();
 		File dirFile = new File(FILEPATH + dir);
 
+		// Create directory if it does not exist
 		if (!dirFile.exists()) {
 			dirFile.mkdirs();
 		}
+
+		// Construct a writer to output data to file
 		File file = new File(dirFile.toString() + "/" + fileName);
 		FileWriter fw = new FileWriter(file.getAbsoluteFile());
 		BufferedWriter bw = new BufferedWriter(fw);
+
+		// Write data to file
 		while (s.hasNextLine()) {
-			bw.append(s.nextLine());
-			bw.append("\n");
+			bw.append(s.nextLine()+"\n");
 		}
+
 		bw.close();
 		s.close();
 
+		// Wait for the process to finish
 		process.waitFor();
 
 		// System.out.printf( "Process exited with result %d and output %s%n",
@@ -151,52 +160,71 @@ public abstract class Executor {
 	 */
 	protected boolean cleanUp(Stack<String> files) throws ProcessException {
 		boolean isOk = true;
+
 		while (!files.isEmpty()) {
+
 			File file = new File(files.pop());
+
+			// If it is a directory, delete contents first
 			if (file.isDirectory()) {
+
+				// Save file references into an array
 				File[] fileList = file.listFiles();
+
+				// Delete each file with a reference in the array
 				for (int i = 0; i < fileList.length; i++) {
-					System.out.println("nu tas " + fileList[i].toString()
-							+ " bort");
 					if (fileList[i].isFile()) {
-						if (!fileList[i].delete()) {
-							isOk = false;
-							System.out.println("Failed");
+
+						if (fileList[i].delete()) {
+							ErrorLogger.log("SYSTEM", "Deleting "
+									+ fileList[i].toString());
 							//throw new ProcessException("Failed to delete file "+fileList[i].toString());
+						} else {
+							isOk = false;
+							ErrorLogger.log("SYSTEM", "Deletion of " +
+									fileList[i] +	" failed.");
 						}
 					}
 				}
 			}
-			System.out.println("nu tas " + file.toString() + " bort");
-			if (!file.delete()) {
-				isOk = false;
-				System.out.println("Failed to delete directory");
+
+			// Delete the file/directory
+			if (file.delete()) {
+				ErrorLogger.log("SYSTEM", "Deleting " + file.toString());
 				//throw new ProcessException("Failed to delete directory "+file.toString());
+			} else {
+				isOk = false;
+				ErrorLogger.log("SYSTEM", "Failed to delete directory " + file);
 			}
 		}
+
 		return isOk;
 	}
 
 	/**
-	 * Moves files from dirToFiles to dest.
+	 * Moves files from orgDir to destDir.
 	 *
-	 * @param dirToFiles
+	 * @param orgDir
 	 *            directory where files are.
-	 * @param dest
+	 * @param destDir
 	 *            directory where files will be moved.
 	 * @throws ProcessException
 	 */
 
-	protected void moveEndFiles(String dirToFiles, String dest) throws ProcessException {
+	protected void moveEndFiles(String orgDir, String destDir) throws ProcessException {
 
-		File[] filesInDir = new File(dirToFiles).getAbsoluteFile().listFiles();
+		// Save references to files in original directory into an array
+		File[] filesInDir = new File(orgDir).getAbsoluteFile().listFiles();
+
 		if (filesInDir != null) {
-			if(filesInDir.length == 0) {
-				throw new ProcessException("No files were generated. If you are running ratio calculation, make sure the name is correct");
+			if (filesInDir.length == 0) {
+				throw new ProcessException("No files were generated. " +
+						"If you are running ratio calculation, " +
+						"make sure the name is correct");
 			} else {
 				for (int i = 0; i < filesInDir.length; i++) {
 					if (!filesInDir[i].isDirectory()) {
-						filesInDir[i].renameTo(new File(dest + filesInDir[i].getName()));
+						filesInDir[i].renameTo(new File(destDir + filesInDir[i].getName()));
 					}
 				}
 
@@ -211,7 +239,7 @@ public abstract class Executor {
 	 * @return
 	 */
 	protected boolean checkStep(String dirToCheck) {
-		System.out.println(dirToCheck);
+
 		File fileDirToCheck = new File(dirToCheck);
 		File[] filesInDir = fileDirToCheck.listFiles();
 
