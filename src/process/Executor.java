@@ -6,9 +6,14 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.Scanner;
 import java.util.Stack;
 import java.util.StringTokenizer;
+
 
 /**
  * Class that is abstract and contains methods that all analysis needs to use.
@@ -211,7 +216,8 @@ public abstract class Executor {
 	 * @throws ProcessException
 	 */
 
-	protected void moveEndFiles(String orgDir, String destDir) throws ProcessException {
+	protected void moveEndFiles(String orgDir, String destDir)
+				throws ProcessException {
 
 		// Save references to files in original directory into an array
 		File[] filesInDir = new File(orgDir).getAbsoluteFile().listFiles();
@@ -223,8 +229,27 @@ public abstract class Executor {
 						"make sure the name is correct");
 			} else {
 				for (int i = 0; i < filesInDir.length; i++) {
+
+
+					// Path to source file
+					Path sourcePath = FileSystems.getDefault().getPath
+							(orgDir, filesInDir[i].getName());
+
+					// Path to target file
+					Path targetPath = FileSystems.getDefault().getPath
+							(destDir, filesInDir[i].getName());
+
+					// Move file if it is not a directory
 					if (!filesInDir[i].isDirectory()) {
-						filesInDir[i].renameTo(new File(destDir + filesInDir[i].getName()));
+						try {
+							Files.move(sourcePath, targetPath,
+									StandardCopyOption.REPLACE_EXISTING);
+						} catch (IOException e) {
+							ErrorLogger.log("SYSTEM", "Could not move file "
+									+ filesInDir[i].getName() + " from " +
+									sourcePath.toString() + " to " +
+									targetPath.toString());
+						}
 					}
 				}
 
