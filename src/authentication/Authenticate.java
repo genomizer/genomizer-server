@@ -1,9 +1,9 @@
 package authentication;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import server.ServerSettings;
 
@@ -15,8 +15,9 @@ import server.ServerSettings;
  */
 public class Authenticate {
 
-	private static HashMap<String, String> activeUsersID = new HashMap<String, String>();
-	private static HashMap<String, Date> latestRequests = new HashMap<String, Date>();
+	// These can be modified from the InteractiveUuidsRemover thread.
+	private static ConcurrentHashMap<String, String> activeUsersID = new ConcurrentHashMap<String, String>();
+	private static ConcurrentHashMap<String, Date> latestRequests = new ConcurrentHashMap<String, Date>();
 
 
 	static public LoginAttempt login(String username, String password) {
@@ -53,7 +54,7 @@ public class Authenticate {
 		return new LoginAttempt(false, null, "Wrong password.");
 	}
 
-	public static HashMap<String, Date> getLatestRequestsMap() {
+	public static ConcurrentHashMap<String, Date> getLatestRequestsMap() {
 		return latestRequests;
 	}
 
