@@ -783,8 +783,8 @@ public class AnnotationMethods {
     /**
      * Method that changes the Required field to the selected boolean.
      *
-     * @param AnnoLabel
-     *            String, the name of the annotation to change required for.
+     * @param annoLabel
+     *             the name of the annotation to change required for.
      * @return resCount int, the numer of rows affected by the change.
      * @throws SQLException
      *             , will be thrown if the psql query fails.
@@ -923,7 +923,7 @@ public class AnnotationMethods {
      * ('(', ')', '[' and ']'.
      *
      * @param annotation
-     * @return
+     * @return a boolean
      */
     private boolean isValidChoice(String annotation) {
 

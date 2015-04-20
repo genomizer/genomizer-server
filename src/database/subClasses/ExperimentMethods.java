@@ -104,8 +104,6 @@ public class ExperimentMethods {
      *
      * @param expId
      *            the experiment ID.
-     * @param rootDir
-     *            the root directory.
      * @return the number of tuples deleted.
      * @throws SQLException
      *             if the query does not succeed. Occurs if Experiment

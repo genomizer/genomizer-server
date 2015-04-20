@@ -75,10 +75,9 @@ public class GenomeMethods {
     /**
      * Add one genomerelease to the database.
      *
-     * @param String
-     *            genomeVersion.
-     * @param String
-     *            species.
+     * @param genomeVersion
+     * @param species
+	 * @param filename
      * @return String The upload URL.
      * @throws SQLException
      *             if adding query failed.
@@ -187,10 +186,8 @@ public class GenomeMethods {
 	/**
 	 * Removes one specific genome version stored in the database.
 	 *
-	 * @param version
+	 * @param genomeVersion
 	 *            the genome version.
-	 * @param specie
-	 *            .
 	 * @return boolean true if succeded, false if failed.
 	 * @throws SQLException
 	 * @throws IOException
@@ -313,13 +310,10 @@ public class GenomeMethods {
 	 * Adds a chain file to database for conversions. Parameters: Oldversion,
 	 * new version and filename. Returns: upload URL
 	 *
-	 * @param String
-	 *            fromVersion
-	 * @param String
-	 *            toVersion
-	 * @param String
-	 *            fileName
-	 * @return String upload URL
+	 * @param fromVersion
+	 * @param toVersion
+	 * @param fileName
+	 * @return the upload URL
 	 * @throws SQLException
 	 * @throws IOException
 	 */
