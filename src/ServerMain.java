@@ -34,16 +34,16 @@ public class ServerMain {
 	public static void main(String[] args) throws ParseException,
 												  FileNotFoundException {
 
-		/* We firstly need to read and validate the settings file. */
+		/* First we need to read and validate the settings file. */
 		CommandLine com = loadSettingsFile(args);
 
-		/* We delete possible fragments from previous runs */
+		/* We delete possible fragments from previous runs. */
 		StartUpCleaner.removeOldTempDirectories("resources/");
 
-		/* The database settings should be written upon startup*/
+		/* The database settings should be written upon startup. */
 		printDatabaseInformation();
 
-		/* We attempt to start the doorman */
+		/* We attempt to start the doorman. */
 		try {
 			new Doorman(new CommandHandler(),
 					ServerSettings.genomizerPort).start();
@@ -53,7 +53,7 @@ public class ServerMain {
 			System.exit(1);
 		}
 
-		/* By default we run a UID remover */
+		/* By default we run a UID remover. */
 		if (!com.hasOption("nri")) {
 			(new Thread(new InactiveUuidsRemover())).start();
 		}
@@ -80,9 +80,9 @@ public class ServerMain {
 	 * from the file in fileSettings. It validates the final settings to be
 	 * sane (e.g. not containing 'null').
 	 *
-	 * It parses the commandline arguments and constructs a CommandLine
+	 * It parses the command-line arguments and constructs a CommandLine
 	 * object containing the information.
-	 * @param args The commandline arguments
+	 * @param args Command-line arguments
 	 * @return A CommandLine object containing the relevant commandline
 	 * 		   options. The function also contains a side effect: It modifies
 	 * 		   the static attributes of the ServerSettings class with the
