@@ -37,7 +37,7 @@ public class PasswordHash
     	String salt = getSalt();
 
         // Use this salt for user specific passwords
-        String newSalt = getNewSalt();
+        // String newSalt = getNewSalt();
 
     	String salted_password = password + salt;
 

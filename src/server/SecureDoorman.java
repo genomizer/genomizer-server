@@ -216,8 +216,6 @@ public class SecureDoorman {
 							case "/sysadm":
 								if (exchange.getRequestURI().toString().startsWith("/sysadm/annpriv")) {
 									handleRequest(exchange, CommandType.UPDATE_ANNOTATION_PRIVILEGES_COMMAND);
-								} else if (exchange.getRequestURI().toString().startsWith("/sysadm/usrpriv")) {
-									handleRequest(exchange, CommandType.UPDATE_USER_PRIVILEGES_COMMAND);
 								}
 								break;
 						}

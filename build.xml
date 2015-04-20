@@ -181,7 +181,7 @@
         </java>
     </target>
     <target name="ClientDummy">
-        <java classname="server.test.ClientDummy" failonerror="true" fork="yes">
+        <java classname="server.test.dummies.ClientDummy" failonerror="true" fork="yes">
             <classpath refid="genomizer-server.classpath"/>
         </java>
     </target>
