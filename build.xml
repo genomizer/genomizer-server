@@ -88,6 +88,7 @@
           <formatter type="plain" usefile="false"/>
           <fileset dir="test">
             <include name="**/*.java"/>
+            <exclude name="**/dummies/*.java"/>
           </fileset>
         </batchtest>
       </junit>
