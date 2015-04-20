@@ -3,6 +3,7 @@ package authentication;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 import server.Debug;
@@ -30,7 +31,7 @@ public class InactiveUuidsRemover implements Runnable {
 		try{
 			while(true) {
 				Debug.log("LOOKING FOR INACTIVE UUIDS.");
-				HashMap<String, Date> latestRequests = Authenticate.getLatestRequestsMap();
+				ConcurrentHashMap<String, Date> latestRequests = Authenticate.getLatestRequestsMap();
 
 				// Collect all inactive User IDs...
 				ArrayList<String> usersToDelete = new ArrayList<String>();
