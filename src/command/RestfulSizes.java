@@ -25,7 +25,6 @@ public class RestfulSizes {
 		restfulSizes.put(CommandType.DELETE_FILE_FROM_EXPERIMENT_COMMAND, 2);
 		restfulSizes.put(CommandType.SEARCH_FOR_EXPERIMENTS_COMMAND, 2);
 		restfulSizes.put(CommandType.CREATE_USER_COMMAND, 1);
-		restfulSizes.put(CommandType.UPDATE_USER_COMMAND, 1);
 		restfulSizes.put(CommandType.DELETE_USER_COMMAND, 2);
 		restfulSizes.put(CommandType.PROCESS_COMMAND, 2);
 		restfulSizes.put(CommandType.GET_PROCESS_STATUS_COMMAND, 1);
@@ -35,7 +34,6 @@ public class RestfulSizes {
 		restfulSizes.put(CommandType.REMOVE_ANNOTATION_FIELD_COMMAND, 3);
 		restfulSizes.put(CommandType.GET_ANNOTATION_PRIVILEGES_COMMAND, 2);
 		restfulSizes.put(CommandType.UPDATE_ANNOTATION_PRIVILEGES_COMMAND, 3);
-		restfulSizes.put(CommandType.UPDATE_USER_PRIVILEGES_COMMAND, 3);
 		restfulSizes.put(CommandType.ADD_GENOME_RELEASE_COMMAND, 1);
 		restfulSizes.put(CommandType.RENAME_ANNOTATION_VALUE_COMMAND, 2);
 		restfulSizes.put(CommandType.RENAME_ANNOTATION_FIELD_COMMAND , 2);
