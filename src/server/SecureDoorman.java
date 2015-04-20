@@ -48,11 +48,11 @@ public class SecureDoorman {
 	 * @throws java.io.IOException
 	 */
 	public SecureDoorman(CommandHandler commandHandler, int port) throws IOException {
-
+System.err.println("Https server starting...");
 		this.commandHandler = commandHandler;
 
 		httpsServer = HttpsServer.create(new InetSocketAddress(port),0);
-		httpsServer.setHttpsConfigurator(getHttpsConfiguration("password"));
+		httpsServer.setHttpsConfigurator(getHttpsConfiguration("baguette"));
 
 		httpsServer.createContext("/login", createHandler());
 		httpsServer.createContext("/experiment", createHandler());
@@ -64,7 +64,7 @@ public class SecureDoorman {
 		httpsServer.createContext("/sysadm", createHandler());
 		httpsServer.createContext("/genomeRelease", createHandler());
 		httpsServer.createContext("/token", createHandler());
-
+System.err.println("Https server started");
 		httpsServer.setExecutor(new Executor() {
 			@Override
 			public void execute(Runnable command) {
@@ -90,7 +90,7 @@ public class SecureDoorman {
 
 			//Initialize the key store
 			KeyStore keyStore = KeyStore.getInstance("JKS");
-			String keyStoreName = "locationOfKeyStore";
+			String keyStoreName = "genoStore";
 			keyStore.load(new FileInputStream(keyStoreName),charPassword);
 
 			//Setup for the key manager factory
