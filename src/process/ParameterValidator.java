@@ -21,7 +21,7 @@ public class ParameterValidator extends Executor {
 
 		if (smooth.length != 5) {
 			throw new ProcessException(
-					"Not correct number of parameters for smoothing, should be 5");
+					"Incorrect number of parameters for smoothing, should be 5");
 		}
 
 		int[] smoothParams = new int[smooth.length];
@@ -83,7 +83,7 @@ public class ParameterValidator extends Executor {
 
 		if (step.length != 2) {
 			throw new ProcessException(
-					"Not correct number of parameters for step size, should be 2");
+					"Incorrect number of parameters for step size, should be 2");
 		}
 		
 		// Parse to float to check that all parameters are integers.
@@ -91,12 +91,12 @@ public class ParameterValidator extends Executor {
 		try {
 			stepFloat = Float.parseFloat(step[1]);
 		} catch (NumberFormatException e) {
-			throw new ProcessException("Stepsize parameters is not a number");
+			throw new ProcessException("Step size parameters is not a number");
 		}
 
 		// Checks that parameters are integers.
 		if (stepFloat % 1 != 0) {
-			throw new ProcessException("Stepsize parameter is not an integer");
+			throw new ProcessException("Step size parameter is not an integer");
 		}
 
 		return true;
@@ -119,7 +119,7 @@ public class ParameterValidator extends Executor {
 
 		if (ratio.length != 3) {
 			throw new ProcessException(
-					"Not correct number of parameters for ratio calculation, should be 3");
+					"Incorrect number of parameters for ratio calculation, should be 3");
 		}
 
 		System.out.println("ratioLength = " + ratio.length);
@@ -155,7 +155,7 @@ public class ParameterValidator extends Executor {
 
 		if ((!firstParam.equals("single")) && (!firstParam.equals("double"))) {
 			throw new ProcessException(
-					"Ratio calculation first parameter invalid, must be 'single' or 'double'");
+					"First ratio calculation parameter is invalid, must be 'single' or 'double'");
 		}
 
 		validateSmoothing(smoothParam);
