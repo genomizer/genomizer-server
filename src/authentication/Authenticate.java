@@ -15,6 +15,7 @@ import server.ServerSettings;
  */
 public class Authenticate {
 
+	// These can be modified from the InteractiveUuidsRemover thread.
 	private static ConcurrentHashMap<String, String> activeUsersID = new ConcurrentHashMap<String, String>();
 	private static ConcurrentHashMap<String, Date> latestRequests = new ConcurrentHashMap<String, Date>();
 
