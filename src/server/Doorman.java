@@ -43,8 +43,10 @@ import command.CommandHandler;
 import command.CommandType;
 
 public class Doorman {
+
 	private HttpServer httpServer;
 	private CommandHandler commandHandler;
+	private UploadHandler  uploadHandler;
 
 	/**
 	 * Constructor. Creates a HTTPServer (but doesn't start it) which listens on
@@ -55,7 +57,10 @@ public class Doorman {
 	 * @throws IOException
 	 */
 	public Doorman(CommandHandler commandHandler, int port) throws IOException {
+
 		this.commandHandler = commandHandler;
+		this.uploadHandler  = new UploadHandler();
+
 		httpServer = HttpServer.create(new InetSocketAddress(port),0);
 		httpServer.createContext("/login", createHandler());
 		httpServer.createContext("/experiment", createHandler());
@@ -67,10 +72,12 @@ public class Doorman {
 		httpServer.createContext("/sysadm", createHandler());
 		httpServer.createContext("/genomeRelease", createHandler());
 		httpServer.createContext("/token", createHandler());
+		httpServer.createContext("/upload", createHandler());
 
 		httpServer.setExecutor(new Executor() {
 			@Override
 			public void execute(Runnable command) {
+
 				try {
 				    new Thread(command).start();
 				} catch(Exception e) {
@@ -84,12 +91,12 @@ public class Doorman {
 	}
 
 	/**
-	 * Starts the HTTPServer
+	 * Start the HTTPServer.
 	 */
 	public void start() {
 		httpServer.start();
-		System.out.println("Doorman started on port " + ServerSettings.
-                genomizerPort);
+		System.out.println("Doorman started on port " +
+						   ServerSettings.genomizerPort);
 	}
 
 	/**
@@ -100,6 +107,7 @@ public class Doorman {
 		return new HttpHandler() {
 			@Override
 			public void handle(HttpExchange exchange) throws IOException {
+
 				String method = exchange.getRequestMethod();
 				Debug.log("\n-----------------\nNEW EXCHANGE: " + method
 						+ " " + exchange.getHttpContext().getPath());
@@ -143,6 +151,10 @@ public class Doorman {
 					case "/token":
 						handleRequest(exchange, CommandType.
                                 IS_TOKEN_VALID_COMMAND);
+						break;
+					case "/upload":
+						uploadHandler.handleGET(exchange);
+						break;
 					}
 					break;
 
@@ -217,6 +229,9 @@ public class Doorman {
 					case "/genomeRelease":
 						handleRequest(exchange, CommandType.
                                 ADD_GENOME_RELEASE_COMMAND);
+						break;
+					case "/upload":
+						uploadHandler.handlePOST(exchange);
 						break;
 					}
 					break;
