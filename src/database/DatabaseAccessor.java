@@ -219,18 +219,17 @@ public class DatabaseAccessor {
      * Method to add a new user to the database.
      *
      * @param username the username
-     * @param password
-     *            the password
-     * @param role
-     *            the role given to the user ie. "Admin"
+     * @param hash the password's hash
+     * @param salt the password's salt
+     * @param role the role given to the user ie. "Admin"
      * @param fullName the full name of the user
      * @param email the email of the user
      * @throws SQLException
      * @throws IOException
      */
-    public void addUser(String username, String password, String role,
+    public void addUser(String username, String hash, String salt, String role,
             String fullName, String email) throws SQLException, IOException {
-        userMethods.addUser(username, password, role, fullName, email);
+        userMethods.addUser(username, hash, salt, role, fullName, email);
     }
 
     /**
