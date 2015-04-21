@@ -55,7 +55,7 @@ public abstract class Executor {
 
 		/* TODO Should check if script is readable et c. as well */
 		if(!pathToExecutable.exists()) {
-			throw new IllegalArgumentException(String.format("Script [%s] does not exist", command[1]));
+			throw new IOException(String.format("Script [%s] does not exist", command[1]));
 		}
 
 			command[1] = pathToExecutable.getAbsolutePath();
