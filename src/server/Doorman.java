@@ -227,12 +227,8 @@ public class Doorman {
 
 				case "OPTIONS":
 					// TODO: Not all resources actually support all methods.
-					byte [] resp = "OK".getBytes();
 					exchange.getResponseHeaders().set("Allow", "GET, PUT, POST, DELETE");
-					exchange.sendResponseHeaders(200, resp.length);
-					OutputStream out = exchange.getResponseBody();
-					out.write(resp);
-					out.close();
+					respond(exchange, new MinimalResponse(200));
 					break;
 
 				default:
