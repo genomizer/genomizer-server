@@ -1,11 +1,13 @@
 package conversion.test;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import conversion.GenomeReleaseConverter;
 
 import java.io.IOException;
 
+@Ignore
 public class GenomeReleaseConverterTest {
 
 
