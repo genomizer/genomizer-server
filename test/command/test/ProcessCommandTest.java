@@ -57,7 +57,7 @@ public class ProcessCommandTest {
 		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1");
 		ProcessCommand c = gson.fromJson(json, ProcessCommand.class);
 		c.setUsername(null);
-		c.setProcessType("rawtoprofile");
+		c.setProcessType(ProcessCommand.CMD_RAW_TO_PROFILE);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -77,7 +77,7 @@ public class ProcessCommandTest {
 		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1");
 		ProcessCommand c = gson.fromJson(json, ProcessCommand.class);
 		c.setUsername("");
-		c.setProcessType("rawtoprofile");
+		c.setProcessType(ProcessCommand.CMD_RAW_TO_PROFILE);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -101,7 +101,7 @@ public class ProcessCommandTest {
 		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1");
 		ProcessCommand c = gson.fromJson(json, ProcessCommand.class);
 		c.setUsername(big);
-		c.setProcessType("rawtoprofile");
+		c.setProcessType(ProcessCommand.CMD_RAW_TO_PROFILE);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -121,7 +121,7 @@ public class ProcessCommandTest {
 		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1");
 		ProcessCommand c = gson.fromJson(json, ProcessCommand.class);
 		c.setUsername("hel/lo");
-		c.setProcessType("rawtoprofile");
+		c.setProcessType(ProcessCommand.CMD_RAW_TO_PROFILE);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -201,7 +201,7 @@ public class ProcessCommandTest {
 		String json = jsonAndInfoBuilder(null,p,"metadata","gen1");
 		ProcessCommand c = gson.fromJson(json, ProcessCommand.class);
 		c.setUsername("hello");
-		c.setProcessType("rawtoprofile");
+		c.setProcessType(ProcessCommand.CMD_RAW_TO_PROFILE);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -221,7 +221,7 @@ public class ProcessCommandTest {
 		String json = jsonAndInfoBuilder("",p,"metadata","gen1");
 		ProcessCommand c = gson.fromJson(json, ProcessCommand.class);
 		c.setUsername("hello");
-		c.setProcessType("rawtoprofile");
+		c.setProcessType(ProcessCommand.CMD_RAW_TO_PROFILE);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -245,7 +245,7 @@ public class ProcessCommandTest {
 		String json = jsonAndInfoBuilder(big,p,"metadata","gen1");
 		ProcessCommand c = gson.fromJson(json, ProcessCommand.class);
 		c.setUsername("hello");
-		c.setProcessType("rawtoprofile");
+		c.setProcessType(ProcessCommand.CMD_RAW_TO_PROFILE);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -265,7 +265,7 @@ public class ProcessCommandTest {
 		String json = jsonAndInfoBuilder("experi/mentID",p,"metadata","gen1");
 		ProcessCommand c = gson.fromJson(json, ProcessCommand.class);
 		c.setUsername("hello");
-		c.setProcessType("rawtoprofile");
+		c.setProcessType(ProcessCommand.CMD_RAW_TO_PROFILE);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -305,7 +305,7 @@ public class ProcessCommandTest {
 		String json = jsonAndInfoBuilder("experimentID",p,null,"gen1");
 		ProcessCommand c = gson.fromJson(json, ProcessCommand.class);
 		c.setUsername("hello");
-		c.setProcessType("rawtoprofile");
+		c.setProcessType(ProcessCommand.CMD_RAW_TO_PROFILE);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -328,7 +328,7 @@ public class ProcessCommandTest {
 		String json = jsonAndInfoBuilder("experimentID",p,"","gen1");
 		ProcessCommand c = gson.fromJson(json, ProcessCommand.class);
 		c.setUsername("hello");
-		c.setProcessType("rawtoprofile");
+		c.setProcessType(ProcessCommand.CMD_RAW_TO_PROFILE);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -352,7 +352,7 @@ public class ProcessCommandTest {
 		String json = jsonAndInfoBuilder("experimentID",p,big,"gen1");
 		ProcessCommand c = gson.fromJson(json, ProcessCommand.class);
 		c.setUsername("hello");
-		c.setProcessType("rawtoprofile");
+		c.setProcessType(ProcessCommand.CMD_RAW_TO_PROFILE);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -372,7 +372,7 @@ public class ProcessCommandTest {
 		String json = jsonAndInfoBuilder("experimentID",p,"metad/ata","gen1");
 		ProcessCommand c = gson.fromJson(json, ProcessCommand.class);
 		c.setUsername("hello");
-		c.setProcessType("rawtoprofile");
+		c.setProcessType(ProcessCommand.CMD_RAW_TO_PROFILE);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -392,7 +392,7 @@ public class ProcessCommandTest {
 		String json = jsonAndInfoBuilder("experimentID",p,"metadata",null);
 		ProcessCommand c = gson.fromJson(json, ProcessCommand.class);
 		c.setUsername("hello");
-		c.setProcessType("rawtoprofile");
+		c.setProcessType(ProcessCommand.CMD_RAW_TO_PROFILE);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -412,7 +412,7 @@ public class ProcessCommandTest {
 		String json = jsonAndInfoBuilder("experimentID",p,"metadata","");
 		ProcessCommand c = gson.fromJson(json, ProcessCommand.class);
 		c.setUsername("hello");
-		c.setProcessType("rawtoprofile");
+		c.setProcessType(ProcessCommand.CMD_RAW_TO_PROFILE);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -436,7 +436,7 @@ public class ProcessCommandTest {
 		String json = jsonAndInfoBuilder("experimentID",p,"metadata",big);
 		ProcessCommand c = gson.fromJson(json, ProcessCommand.class);
 		c.setUsername("hello");
-		c.setProcessType("rawtoprofile");
+		c.setProcessType(ProcessCommand.CMD_RAW_TO_PROFILE);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -456,7 +456,7 @@ public class ProcessCommandTest {
 		String json = jsonAndInfoBuilder("experimentID",p,"metadata","ge/n1");
 		ProcessCommand c = gson.fromJson(json, ProcessCommand.class);
 		c.setUsername("hello");
-		c.setProcessType("rawtoprofile");
+		c.setProcessType(ProcessCommand.CMD_RAW_TO_PROFILE);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -476,7 +476,7 @@ public class ProcessCommandTest {
 		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1");
 		ProcessCommand c = gson.fromJson(json, ProcessCommand.class);
 		c.setUsername("hello");
-		c.setProcessType("rawtoprofile");
+		c.setProcessType(ProcessCommand.CMD_RAW_TO_PROFILE);
 		c.validate();
 
 		assertTrue(true);
@@ -494,7 +494,7 @@ public class ProcessCommandTest {
 		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1");
 		ProcessCommand c = gson.fromJson(json, ProcessCommand.class);
 		c.setUsername("hello");
-		c.setProcessType("rawtoprofile");
+		c.setProcessType(ProcessCommand.CMD_RAW_TO_PROFILE);
 		String compare = gson.toJson(c);
 
 		assertEquals(compare, json);
