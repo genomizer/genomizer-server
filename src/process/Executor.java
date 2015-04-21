@@ -36,6 +36,7 @@ public abstract class Executor {
 			throws InterruptedException, IOException {
 
 		File pathToExecutable = new File(FILEPATH + command[0]);
+
 		command[0] = pathToExecutable.getAbsolutePath();
 		return executeCommand(command);
 	}
@@ -49,7 +50,7 @@ public abstract class Executor {
 	 * @throws InterruptedException
 	 */
 	protected String executeScript(String[] command)
-			throws InterruptedException, IOException, IllegalArgumentException {
+			throws InterruptedException, IOException {
 
 		File pathToExecutable = new File(FILEPATH + command[1]);
 
