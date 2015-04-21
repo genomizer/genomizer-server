@@ -6,13 +6,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-
+import org.junit.*;
 
 
 import database.DatabaseAccessor;
@@ -23,10 +17,16 @@ public class UserInfoTests {
     private static DatabaseAccessor dbac;
 
     private static String testUser = "testUser1";
-    private static String testPassword = "testPassword1";
+    private static String testUser2 = "testJAWSER";
+
+    private static String testHash = "66e863ca7262669e5bd71d21d3eab0356136bd8569c6984430209deb50c55a23";
+    private static String testSalt = "5goh146chpisv949ehjjdepparq3a9vga4p114ovedf66k5c78e39vnhvfpbvi43";
     private static String testRole = "testRole1";
     private static String testFullName = "Testis Test";
     private static String testEmail = "test@cs.umu.se";
+
+    private static String otherHash = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+    private static String otherSalt = "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
 
     @BeforeClass
     public static void setupTestCase() throws Exception {
@@ -34,6 +34,7 @@ public class UserInfoTests {
         dbac = new DatabaseAccessor(TestInitializer.username,
         		TestInitializer.password, TestInitializer.host,
         		TestInitializer.database);
+
     }
 
     @AfterClass
@@ -45,14 +46,17 @@ public class UserInfoTests {
     @Before
     public void setup() throws SQLException, IOException {
 
-        dbac.addUser(testUser, testPassword, testRole, testFullName,
-        		testEmail);
+        dbac.addUser(testUser, testHash, testSalt, testRole, testFullName,
+                testEmail);
+        dbac.addUser(testUser2, testHash, testSalt, testRole, testFullName,
+                testEmail);
     }
 
     @After
     public void teardown() throws SQLException {
 
         dbac.deleteUser(testUser);
+        dbac.deleteUser(testUser2);
     }
 
     @Test
@@ -71,31 +75,9 @@ public class UserInfoTests {
         users = dbac.getUsers();
         assertFalse(users.contains(testUser));
 
-        dbac.addUser(testUser, testPassword, testRole, testFullName, testEmail);
+        dbac.addUser(testUser, testHash, testSalt, testRole, testFullName, testEmail);
         users = dbac.getUsers();
         assertTrue(users.contains(testUser));
-    }
-
-    @Test
-    public void shouldBeAbleToGetPassword() throws Exception {
-
-        String password = dbac.getPassword(testUser);
-        assertEquals(testPassword, password);
-    }
-
-    @Test
-    public void shouldBeAbleToResetPassword() throws Exception {
-
-        String pass = dbac.getPassword(testUser);
-        assertEquals(testPassword, pass);
-
-        String newPass = testPassword + "_new";
-
-        int res = dbac.resetPassword(testUser, newPass);
-        assertEquals(1, res);
-
-        pass = dbac.getPassword(testUser);
-        assertEquals(newPass, pass);
     }
 
     @Test
@@ -112,6 +94,25 @@ public class UserInfoTests {
     @Test(expected = SQLException.class)
     public void testBiggerThanMaxSize() throws SQLException, IOException{
     	dbac.addUser("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
-    			"aaaaaa", "passwd", "Admin", "Aaaaaaa bbbbbb", null);
+                "aaaaaa", "passwd", "asdsad", "Admin", "Aaaaaaa bbbbbb", null);
     }
+
+    @Test
+    public void shouldBeAbleToGetSalt() throws SQLException, IOException {
+        assertEquals(testSalt, dbac.getPasswordSalt(testUser2));
+    }
+
+    @Test
+    public void shouldBeAbleToGetHash() throws SQLException, IOException {
+        assertEquals(testHash,dbac.getPasswordHash(testUser2));
+    }
+
+    @Test
+    public void shouldBeAbleToChangeHashAndSalt() throws SQLException, IOException {
+        dbac.resetPassword(testUser2, otherHash, otherSalt);
+        assertEquals(otherHash,dbac.getPasswordHash(testUser2));
+        assertEquals(otherSalt,dbac.getPasswordSalt(testUser2));
+    }
+
+
 }

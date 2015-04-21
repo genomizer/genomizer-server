@@ -54,8 +54,8 @@ CREATE TABLE Annotation_Choices
 CREATE TABLE User_Info
 (
     Username VARCHAR(32) NOT NULL,
-    PasswordHash CHARACTER(64) NOT NULL,
-    PasswordSalt CHARACTER(64) NOT NULL,
+    PasswordHash VARCHAR(64) NOT NULL,
+    PasswordSalt VARCHAR(64) NOT NULL,
     Role VARCHAR(32) NOT NULL,
     FullName VARCHAR(62),
     Email VARCHAR(62),

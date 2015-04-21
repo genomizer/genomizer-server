@@ -173,7 +173,7 @@ public class UserMethods {
 			throw new IOException("Invalid arguments");
 		}
 
-		String query = "UPDATE User_Info SET PasswordHash = ?, PasswordSalt = ? "
+		String query = "UPDATE User_Info SET PasswordHash = ?, PasswordSalt = ?"
 				+ "WHERE (Username = ?)";
 
 		PreparedStatement stmt = conn.prepareStatement(query);
