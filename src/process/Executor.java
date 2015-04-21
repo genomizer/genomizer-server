@@ -49,11 +49,18 @@ public abstract class Executor {
 	 * @throws InterruptedException
 	 */
 	protected String executeScript(String[] command)
-			throws InterruptedException, IOException {
+			throws InterruptedException, IOException, IllegalArgumentException {
 
 		File pathToExecutable = new File(FILEPATH + command[1]);
-		command[1] = pathToExecutable.getAbsolutePath();
-		return executeCommand(command);
+
+		/* TODO Should check if script is readable et c. as well */
+		if(!pathToExecutable.exists()) {
+			throw new IllegalArgumentException(String.format("Script [%s] does not exist", command[1]));
+		}
+
+			command[1] = pathToExecutable.getAbsolutePath();
+			return executeCommand(command);
+
 	}
 
 	/**
