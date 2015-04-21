@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import database.containers.FileTuple;
+import server.ServerSettings;
 
 /**
  * Generates paths and directories for files.
@@ -43,6 +44,12 @@ public class FilePathGenerator {
 
         file = new File(getUnknownFolderPath(expID));
         file.mkdirs();
+
+		try {
+			Runtime.getRuntime().exec("chmod 777 -R " + ServerSettings.fileLocation);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
     }
 
     /**
