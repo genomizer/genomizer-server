@@ -3,7 +3,6 @@ package server;
 import command.ProcessCommand;
 import command.ProcessStatus;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -15,20 +14,16 @@ public class WorkPool {
     private Queue<ProcessCommand> workQueue;
     private HashMap<ProcessCommand,ProcessStatus> processStatus;
 
+
     public WorkPool() {
-        workQueue = new LinkedList<ProcessCommand>();
-        processStatus = new HashMap<ProcessCommand, ProcessStatus>();
+        workQueue = new LinkedList<>();
+        processStatus = new HashMap<>();
     }
 
-    public Queue<ProcessCommand> getWorkQueue() {
-        return workQueue;
-    }
-
-    public HashMap<ProcessCommand,ProcessStatus> getProcesses() {
+    public synchronized HashMap<ProcessCommand,ProcessStatus> getProcesses() {
         return processStatus;
     }
 
-    //Add a command to the queue
     public synchronized void addWork(ProcessCommand command) {
         workQueue.add(command);
         processStatus.put(command, new ProcessStatus(command));
@@ -36,6 +31,11 @@ public class WorkPool {
 
     public synchronized ProcessCommand getProcess() {
         return workQueue.poll();
+    }
+
+    public synchronized void removeProcess(ProcessCommand processCommand) {
+        workQueue.remove(processCommand);
+        processStatus.remove(processCommand);
     }
 
     public synchronized ProcessStatus getProcessStatus(ProcessCommand process) {

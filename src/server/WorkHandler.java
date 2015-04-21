@@ -21,30 +21,35 @@ public class WorkHandler implements Runnable {
 	}
 
 	public synchronized void removeOldStatuses() {
-		long now = System.currentTimeMillis();
+
+		// Get current time
+		long currentTime = System.currentTimeMillis();
+
+		// List to store processes to be removed
 		ArrayList<ProcessCommand> toBeRemoved = new ArrayList<>();
 
 		HashMap<ProcessCommand,ProcessStatus> processes = workPool
 				.getProcesses();
 
+		/* Loop through all processes and check statuses */
 		for (ProcessCommand proc : processes.keySet()) {
 
-			ProcessStatus procStat = processes.get(proc);
+			ProcessStatus procStat = workPool.getProcessStatus(proc);
 			String statusString = procStat.status;
 
 			if (statusString.equals(ProcessStatus.STATUS_FINISHED)
 					|| statusString.equals(ProcessStatus.STATUS_CRASHED)) {
-				long time = procStat.timeAdded;
-				long diff = now - time;
+				long processTimeAdded = procStat.timeAdded;
+				long timeDifference = currentTime - processTimeAdded;
 
-				if (diff > statusTimeToLive) {
+				if (timeDifference > statusTimeToLive) {
 					toBeRemoved.add(proc);
 				}
 			}
 		}
 		for (ProcessCommand proc : toBeRemoved) {
 			Debug.log("Removing old process status: " + proc.getExpId());
-			processes.remove(proc);
+			workPool.removeProcess(proc);
 		}
 
 
