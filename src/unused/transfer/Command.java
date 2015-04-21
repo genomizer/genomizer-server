@@ -1,4 +1,4 @@
-package transfer;
+package unused.transfer;
 
 public interface Command {
 	

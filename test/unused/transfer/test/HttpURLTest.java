@@ -1,8 +1,8 @@
-package transfer.test;
+package unused.transfer.test;
 
 import org.junit.Before;
 import org.junit.Test;
-import transfer.HTTPURLDownload;
+import unused.transfer.HTTPURLDownload;
 
 import java.net.MalformedURLException;
 import java.net.URL;

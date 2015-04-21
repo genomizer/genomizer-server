@@ -1,8 +1,8 @@
-package transfer.test;
+package unused.transfer.test;
 
 import org.junit.Before;
 import org.junit.Test;
-import transfer.UploadCommand;
+import unused.transfer.UploadCommand;
 
 
 import static org.junit.Assert.assertEquals;

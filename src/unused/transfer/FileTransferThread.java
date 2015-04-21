@@ -1,4 +1,4 @@
-package transfer;
+package unused.transfer;
 
 public class FileTransferThread implements Runnable {
 	private Command command;

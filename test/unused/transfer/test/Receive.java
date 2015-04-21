@@ -1,4 +1,4 @@
-package transfer.test;
+package unused.transfer.test;
 
 import org.junit.Ignore;
 
