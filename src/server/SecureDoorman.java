@@ -32,6 +32,7 @@ import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.URLDecoder;
 import java.security.*;
+import java.security.cert.CertificateException;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.Executor;
@@ -52,7 +53,7 @@ System.err.println("Https server starting...");
 		this.commandHandler = commandHandler;
 
 		httpsServer = HttpsServer.create(new InetSocketAddress(port),0);
-		httpsServer.setHttpsConfigurator(getHttpsConfiguration("baguette"));
+		httpsServer.setHttpsConfigurator(getHttpsConfiguration("baguette", false));
 
 		httpsServer.createContext("/login", createHandler());
 		httpsServer.createContext("/experiment", createHandler());
@@ -82,7 +83,7 @@ System.err.println("Https server started");
 
 	/* Creates the configurator for the HttpsServer and initializes the
 	* SSL context and parameters.*/
-	private HttpsConfigurator getHttpsConfiguration(String password){
+	private HttpsConfigurator getHttpsConfiguration(String password, final boolean clientAuth){
 
 		SSLContext sslContext = null;
 		char[] charPassword = password.toCharArray();
@@ -142,7 +143,7 @@ System.err.println("Https server started");
 					SSLEngine sslEngine = sslContext.createSSLEngine();
 
 					SSLParameters sslParameters = new SSLParameters();
-					sslParameters.setNeedClientAuth(false); 	//Change to true for client authentication
+					sslParameters.setNeedClientAuth(clientAuth); 	//Change to true for client authentication
 					sslParameters.setCipherSuites(sslEngine.getEnabledCipherSuites());
 					sslParameters.setProtocols(sslEngine.getEnabledProtocols());
 					params.setSSLParameters(sslParameters);
@@ -237,8 +238,6 @@ System.err.println("Https server started");
 							case "/sysadm":
 								if (exchange.getRequestURI().toString().startsWith("/sysadm/annpriv")) {
 									handleRequest(exchange, CommandType.UPDATE_ANNOTATION_PRIVILEGES_COMMAND);
-								} else if (exchange.getRequestURI().toString().startsWith("/sysadm/usrpriv")) {
-									handleRequest(exchange, CommandType.UPDATE_USER_PRIVILEGES_COMMAND);
 								}
 								break;
 						}
