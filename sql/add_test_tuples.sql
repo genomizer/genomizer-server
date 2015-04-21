@@ -61,7 +61,7 @@ INSERT INTO Annotated_With  VALUES('Exp2', 'Tissue', 'Arm');
 INSERT INTO Annotated_With  VALUES('Exp2', 'Development Stage', 'Child');
 
 INSERT INTO Annotated_With  VALUES('Exp3', 'Species', 'Rat');
-INSERT INTO Annotated_With  VALUES('Exp3', 'Development Stage', 'Child');secret16D459AA49F934EDC2E96E3DA3C968
+INSERT INTO Annotated_With  VALUES('Exp3', 'Development Stage', 'Child');
 
 --INSERT INTO User_Info VALUES('user1', 'secret1', 'role1','Carl Bertill Jonsson','sexy@cs.umu.se');
 --INSERT INTO User_Info VALUES('user2', 'passwd', 'admin','Arne Weise','arne.weise@cs.umu.se');
