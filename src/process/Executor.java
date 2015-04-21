@@ -2,10 +2,7 @@ package process;
 
 import server.ErrorLogger;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -37,6 +34,11 @@ public abstract class Executor {
 
 		File pathToExecutable = new File(FILEPATH + command[0]);
 
+		/* TODO Should check if program has correct permissions et c. as well */
+		if(!pathToExecutable.exists()) {
+			throw new FileNotFoundException(String.format("Program [%s] does not exist", command[1]));
+		}
+
 		command[0] = pathToExecutable.getAbsolutePath();
 		return executeCommand(command);
 	}
@@ -54,13 +56,13 @@ public abstract class Executor {
 
 		File pathToExecutable = new File(FILEPATH + command[1]);
 
-		/* TODO Should check if script is readable et c. as well */
+		/* TODO Should check if script has correct permissions et c. as well */
 		if(!pathToExecutable.exists()) {
-			throw new IOException(String.format("Script [%s] does not exist", command[1]));
+			throw new FileNotFoundException(String.format("Script [%s] does not exist", command[1]));
 		}
 
-			command[1] = pathToExecutable.getAbsolutePath();
-			return executeCommand(command);
+		command[1] = pathToExecutable.getAbsolutePath();
+		return executeCommand(command);
 
 	}
 
@@ -107,7 +109,13 @@ public abstract class Executor {
 		}
 		s.close();
 
+
 		process.waitFor();
+
+		/* Check if command finished successfully */
+		if(process.exitValue() != 0) {
+			throw new RuntimeException(text.toString());
+		}
 
 		// System.out.printf( "Process exited with result %d and output %s%n",
 		// result, text );
