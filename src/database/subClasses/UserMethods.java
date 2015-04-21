@@ -50,12 +50,14 @@ public class UserMethods {
 	}
 
 	/**
-	 * Method to add a new user to the database.
+	 * Adds a new user to the database.
 	 *
-	 * @param username the username
-	 * @param passwordHash password
-	 * @param passwordSalt salt used with password
+	 * @param username the username of the user
+	 * @param passwordHash the hash of the user's password and salt
+	 * @param passwordSalt the user's salt
 	 * @param role role given to the user ie. "Admin"
+	 * @param fullName the full name of the user
+	 * @param email email address of the new user.
 	 * @throws SQLException
 	 * @throws IOException if an argument string is empty
 	 */
@@ -67,15 +69,18 @@ public class UserMethods {
 		isValidArgument(passwordSalt);
 		isValidArgument(role);
 		isValidArgument(fullName);
+		isValidArgument(email);
 
-		String query = "INSERT INTO User_Info (Username, PasswordHash, PasswordSalt, Role) "
-				+ "VALUES " + "(?, ?, ?, ?)";
+		String query = "INSERT INTO User_Info (Username, PasswordHash, PasswordSalt, Role, FullName, Email) "
+				+ "VALUES " + "(?, ?, ?, ?, ?, ?)";
 
 		PreparedStatement stmt = conn.prepareStatement(query);
 		stmt.setString(1, username);
 		stmt.setString(2, passwordHash);
 		stmt.setString(3, passwordSalt);
 		stmt.setString(4, role);
+		stmt.setString(5, fullName);
+		stmt.setString(6, email);
 		stmt.executeUpdate();
 		stmt.close();
 	}
@@ -158,18 +163,18 @@ public class UserMethods {
 	/**
 	 * Changes the password for a user.
 	 *
-	 * @param username the user to change the password for.
-	 * @param newPassword the new password.
-	 * @param newSalt the salt for the new password.
-	 * @return the number of tuples updated in the database.
+	 * @param username the user to change the password for
+	 * @param newPsswdHash the new password/salt hash
+	 * @param newSalt the salt for the new password
+	 * @return the number of tuples updated in the database
 	 * @throws SQLException if the query does not succeed
 	 * @throws IOException
 	 */
-	public int resetPassword(String username, String newPassword, String newSalt)
+	public int resetPassword(String username, String newPsswdHash, String newSalt)
 			throws SQLException, IOException {
 
 		if (username == null || username.contentEquals("") ||
-				newPassword == null || newPassword.contentEquals("")) {
+				newPsswdHash == null || newPsswdHash.contentEquals("")) {
 			throw new IOException("Invalid arguments");
 		}
 
@@ -177,7 +182,7 @@ public class UserMethods {
 				+ "WHERE (Username = ?)";
 
 		PreparedStatement stmt = conn.prepareStatement(query);
-		stmt.setString(1, newPassword);
+		stmt.setString(1, newPsswdHash);
 		stmt.setString(2, newSalt);
 		stmt.setString(3, username);
 		int resCount = stmt.executeUpdate();
@@ -238,6 +243,59 @@ public class UserMethods {
 
 		return resCount;
 	}
+
+	/**
+	 * Gets the full name of a user.
+	 * @param username the user to lookup
+	 * @return a string containing the full name or null
+	 * @throws SQLException
+	 */
+	public String getUserFullName(String username) throws SQLException {
+
+		String query = "SELECT FullName FROM User_Info " +
+				"WHERE (Username = ?)";
+
+		PreparedStatement stmt = conn.prepareStatement(query);
+		stmt.setString(1,username);
+
+		String name = null;
+		ResultSet rs = stmt.executeQuery();
+
+		if(rs.next()){
+			name = rs.getString("FullName");
+		}
+
+		stmt.close();
+
+		return name;
+	}
+
+	/**
+	 * Gets a user's email.
+	 * @param username the user to lookup
+	 * @return a string containing the user's email or null
+	 * @throws SQLException
+	 */
+	public String getUserEmail(String username) throws SQLException {
+
+		String query = "SELECT Email FROM User_Info " +
+				"WHERE (Username = ?)";
+
+		PreparedStatement stmt = conn.prepareStatement(query);
+		stmt.setString(1,username);
+
+		String email = null;
+		ResultSet rs = stmt.executeQuery();
+
+		if(rs.next()){
+			email = rs.getString("Email");
+		}
+
+		stmt.close();
+
+		return email;
+	}
+
 
 	private void isValidArgument(String arg) throws IOException {
 

@@ -94,7 +94,7 @@ public class UserInfoTests {
     @Test(expected = SQLException.class)
     public void testBiggerThanMaxSize() throws SQLException, IOException{
     	dbac.addUser("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
-                "aaaaaa", "passwd", "asdsad", "Admin", "Aaaaaaa bbbbbb", null);
+                "aaaaaa", "passwd", "asdsad", "Admin", "Aaaaaaa bbbbbb", "ha@bla.se");
     }
 
     @Test
@@ -114,5 +114,14 @@ public class UserInfoTests {
         assertEquals(otherSalt,dbac.getPasswordSalt(testUser2));
     }
 
+    @Test
+    public void shouldBeAbleToGetFullName() throws SQLException, IOException {
+        assertEquals(testFullName,dbac.getUserFullName(testUser));
+    }
+
+    @Test
+    public void shouldBeAbleToGetEmail() throws SQLException,  IOException {
+        assertEquals(testEmail,dbac.getUserEmail(testUser));
+    }
 
 }

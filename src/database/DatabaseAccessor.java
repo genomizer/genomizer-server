@@ -216,6 +216,26 @@ public class DatabaseAccessor {
     }
 
     /**
+     * Gets the full name of a user.
+     * @param username the user to lookup
+     * @return a string containing the full name or null
+     * @throws SQLException
+     */
+    public String getUserFullName(String username) throws  SQLException {
+        return userMethods.getUserFullName(username);
+    }
+
+    /**
+     * Gets a user's email.
+     * @param username the user to lookup
+     * @return a string containing the user's email or null
+     * @throws SQLException
+     */
+    public String getUserEmail(String username) throws  SQLException {
+        return userMethods.getUserEmail(username);
+    }
+
+    /**
      * Method to add a new user to the database.
      *
      * @param username the username
@@ -322,13 +342,6 @@ public class DatabaseAccessor {
     public Experiment getExperiment(String expID) throws SQLException {
         return expMethods.getExperiment(expID);
     }
-
-    //TODO Find this thing?
-    /*
-         * @throws DuplicatePrimaryKeyException
-     *             If the experiment already exists.
-
-     */
 
     /**
      * Adds an experiment ID to the database.
