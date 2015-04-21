@@ -78,22 +78,22 @@ public class LoginCommand extends Command {
 
 		try {
 			db = initDB();
-		} catch (SQLException e) {
+		} catch (SQLException | IOException e) {
 			Debug.log("LOGIN WAS UNSUCCESSFUL FOR: " + username + ". REASON: " +
 					e.getMessage());
-			return new ErrorResponse(StatusCode.UNAUTHORIZED,
-					"LOGIN WAS UNSUCCESSFUL FOR: " + username + ". REASON: " + e.getMessage());
-		} catch (IOException e)  {
-			Debug.log("LOGIN WAS UNSUCCESSFUL FOR: " + username + ". REASON: " +
-					e.getMessage());
-			return new ErrorResponse(StatusCode.UNAUTHORIZED,
+			return new ErrorResponse(StatusCode.BAD_REQUEST,
 					"LOGIN WAS UNSUCCESSFUL FOR: " + username + ". REASON: " + e.getMessage());
 		}
+
 		try {
 			dbSalt = db.getPasswordSalt(username);
 			dbHash = db.getPasswordHash(username);
 		}catch (SQLException e) {
-			return new ErrorResponse(StatusCode.UNAUTHORIZED, "Error when requesting user information from database, user don't exist. " + e.getMessage());
+			return new ErrorResponse(StatusCode.BAD_REQUEST, "Database error " + e.getMessage());
+		}
+
+		if(dbSalt == null || dbSalt.isEmpty() || dbHash == null || dbHash.isEmpty()){
+			return new ErrorResponse(StatusCode.UNAUTHORIZED, "Incorrect user name");
 		}
 
 		LoginAttempt login = Authenticate.login(username, password, dbHash, dbSalt);

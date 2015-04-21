@@ -8,6 +8,7 @@ import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
+import server.Debug;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -55,18 +56,22 @@ public class ChangeUserPasswordCommand extends Command {
         DatabaseAccessor db = null;
         try {
             db = initDB();
-        } catch (SQLException e) {
-            return new ErrorResponse(StatusCode.BAD_REQUEST, "Error when " +
-                    "initiating databaseAccessor. " + e.getMessage());
-        } catch (IOException e)  {
-            return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
+        } catch (SQLException | IOException e) {
+            Debug.log("CHANGE OF PASSWORD FAILED FOR: " + username + ". REASON: " +
+                    e.getMessage());
+            return new ErrorResponse(StatusCode.BAD_REQUEST,
+                    "CHANGE OF PASSWORD FAILED FOR: " + username + ". REASON: " + e.getMessage());
         }
 
 		String salt = PasswordHash.getNewSalt();
 		// get hash using salt and password
 		String hash = PasswordHash.hashString(password+salt);
 		// insert into DB, requires method DB group
-        //db.changeUserPassword(username, salt, hash);
+        try {
+            db.resetPassword(username, hash, salt);
+        } catch (SQLException | IOException e) {
+            return new ErrorResponse(StatusCode.BAD_REQUEST, "Database error " + e.getMessage());
+        }
 
         return new MinimalResponse(StatusCode.CREATED);
     }
