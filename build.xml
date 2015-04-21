@@ -28,18 +28,18 @@
     <target depends="build" name="jar">
         <jar destfile="sequreserver.jar"
             basedir="bin/"
-            includes="lib/**">
+            includes="external-libs/**">
             <fileset dir="bin/" includes="**/*.class" excludes="**/test/**/*"/>
-            <zipgroupfileset dir="lib" includes="**/*.jar"/>
+            <zipgroupfileset dir="external-libs" includes="**/*.jar"/>
             <manifest>
                 <attribute name="Main-Class" value="SecureServerMain" />
             </manifest>
         </jar>
         <jar destfile="server.jar"
             basedir="bin/"
-            includes="lib/**">
+            includes="external-libs/**">
             <fileset dir="bin/" includes="**/*.class" excludes="**/test/**/*"/>
-            <zipgroupfileset dir="lib" includes="**/*.jar"/>
+            <zipgroupfileset dir="external-libs" includes="**/*.jar"/>
             <manifest>
                 <attribute name="Main-Class" value="ServerMain" />
             </manifest>
