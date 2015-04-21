@@ -14,12 +14,14 @@
             <include name="*.jar"/>
             <exclude name="junit-*.jar"/>
             <exclude name="hamcrest-*.jar"/>
+            <exclude name="servlet-api-*.jar"/>
         </fileset>
     </path>
-    <path id="junit.classpath">
-        <fileset dir="external-libs" id="fileset.junit-jars">
+    <path id="devel.classpath">
+        <fileset dir="external-libs">
             <include name="junit-*.jar"/>
             <include name="hamcrest-*.jar"/>
+            <include name="servlet-api-*.jar"/>
         </fileset>
     </path>
 
@@ -47,7 +49,7 @@
             <src path="test"/>
             <classpath>
                 <path refid="genomizer-server.classpath"/>
-                <path refid="junit.classpath"/>
+                <path refid="devel.classpath"/>
             </classpath>
             <compilerarg value="-Xlint:all"/>
         </javac>
@@ -86,7 +88,7 @@
         <formatter type="xml"/>
         <classpath>
           <path refid="genomizer-server.classpath"/>
-          <path refid="junit.classpath"/>
+          <path refid="devel.classpath"/>
         </classpath>
         <batchtest fork="yes" todir="${junit.output.dir}" failureProperty="test.failed">
           <formatter type="plain" usefile="false"/>
