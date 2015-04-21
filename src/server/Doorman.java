@@ -101,8 +101,10 @@ public class Doorman {
 			@Override
 			public void handle(HttpExchange exchange) throws IOException {
 
-				Debug.log("\n-----------------\nNEW EXCHANGE: " + exchange.getHttpContext().getPath());
-				switch(exchange.getRequestMethod()) {
+				String method = exchange.getRequestMethod();
+				Debug.log("\n-----------------\nNEW EXCHANGE: " + method
+						+ " " + exchange.getHttpContext().getPath());
+				switch(method) {
 				case "GET":
 					switch(exchange.getHttpContext().getPath()) {
 					case "/experiment":
@@ -221,6 +223,20 @@ public class Doorman {
 						handleRequest(exchange, CommandType.DELETE_GENOME_RELEASE_COMMAND);
 						break;
 					}
+					break;
+
+				case "OPTIONS":
+					// TODO: Not all resources actually support all methods.
+					byte [] resp = "OK".getBytes();
+					exchange.getResponseHeaders().set("Allow", "GET, PUT, POST, DELETE");
+					exchange.sendResponseHeaders(200, resp.length);
+					OutputStream out = exchange.getResponseBody();
+					out.write(resp);
+					out.close();
+					break;
+
+				default:
+					Debug.log("Unsupported HTTP method: " + method);
 					break;
 				}
 			}
