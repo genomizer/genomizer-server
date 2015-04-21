@@ -15,10 +15,7 @@ import authentication.InactiveUuidsRemover;
 
 import command.CommandHandler;
 
-import server.ServerSettings;
-import server.Debug;
-import server.Doorman;
-import server.ErrorLogger;
+import server.*;
 
 
 public class ServerMain {
@@ -43,9 +40,12 @@ public class ServerMain {
 		/* The database settings should be written upon startup. */
 		printDatabaseInformation();
 
+		/* Create a work pool */
+		WorkPool workPool = new WorkPool();
+
 		/* We attempt to start the doorman. */
 		try {
-			new Doorman(new CommandHandler(),
+			new Doorman(new CommandHandler(workPool),
 					ServerSettings.genomizerPort).start();
 		} catch (IOException e) {
 			System.err.println("Error when starting server");

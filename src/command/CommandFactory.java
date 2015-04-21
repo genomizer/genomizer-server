@@ -4,6 +4,7 @@ import server.Debug;
 import server.WorkHandler;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import server.WorkPool;
 
 /**
  * This class is used to create and return different commands that
@@ -347,8 +348,8 @@ public class CommandFactory {
 	 * @param workHandler class object needed.
 	 * @return the actual command.
 	 */
-	public Command createGetProcessStatusCommand(WorkHandler workHandler) {
-		return new GetProcessStatusCommand(workHandler);
+	public Command createGetProcessStatusCommand(WorkPool workPool) {
+		return new GetProcessStatusCommand(workPool);
 	}
 
 	/**

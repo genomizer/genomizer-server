@@ -1,48 +1,42 @@
 package server;
 
-import java.util.ArrayList;
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Queue;
-
+import command.ProcessCommand;
+import command.ProcessStatus;
 import response.Response;
 import response.StatusCode;
 
-import command.ProcessCommand;
-import command.ProcessStatus;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 
-public class WorkHandler extends Thread{
+public class WorkHandler implements Runnable {
 
 	private static final long statusTimeToLive = 2*1000*60*60*24;
+	private WorkPool workPool;
 
-	private Queue<ProcessCommand> workQueue;
-	private HashMap<ProcessCommand,ProcessStatus> processStatus;
-
-	//A queue as a linked list
-	public WorkHandler(){
-		workQueue = new LinkedList<ProcessCommand>();
-		processStatus=new HashMap<ProcessCommand, ProcessStatus>();
-	}
-
-	//Add a command to the queue
-	public synchronized void addWork(ProcessCommand command) {
-		workQueue.add(command);
-		processStatus.put(command, new ProcessStatus(command));
+	public WorkHandler(WorkPool workPool) {
+		this.workPool = workPool;
 	}
 
 	public synchronized void removeOldStatuses() {
 		long now = System.currentTimeMillis();
 		ArrayList<ProcessCommand> toBeRemoved = new ArrayList<>();
-		for (ProcessCommand proc : processStatus.keySet()) {
-			ProcessStatus procStat = processStatus.get(proc);
+
+		HashMap<ProcessCommand,ProcessStatus> processes = workPool
+				.getProcesses();
+
+		for (ProcessCommand proc : processes.keySet()) {
+
+			ProcessStatus procStat = processes.get(proc);
 			String statusString = procStat.status;
-			if (statusString.equals("Finished") || statusString.equals("Crashed")) {
+
+			if (statusString.equals(ProcessStatus.STATUS_FINISHED)
+					|| statusString.equals(ProcessStatus.STATUS_CRASHED)) {
 				long time = procStat.timeAdded;
 				long diff = now - time;
+
 				if (diff > statusTimeToLive) {
 					toBeRemoved.add(proc);
 				}
@@ -50,7 +44,7 @@ public class WorkHandler extends Thread{
 		}
 		for (ProcessCommand proc : toBeRemoved) {
 			Debug.log("Removing old process status: " + proc.getExpId());
-			processStatus.remove(proc);
+			processes.remove(proc);
 		}
 
 
@@ -65,54 +59,62 @@ public class WorkHandler extends Thread{
 
 
 		while(true){
-			if(!workQueue.isEmpty()){
-				ProcessCommand work = workQueue.poll();
-				Debug.log("The processcommand is going to be executed");
-				ProcessStatus stat = processStatus.get(work);
-				stat.status = "Started";
+
+			ProcessCommand processCommand = workPool.getProcess();
+			ProcessStatus processStatus = workPool.getProcessStatus
+					(processCommand);
+
+			if (processCommand != null && processStatus != null) {
+				Debug.log("Executing process in experiment " + processCommand
+						.getExpId() + " with parameters");
+
+				processStatus.status = ProcessStatus.STATUS_STARTED;
 
 				try {
-					work.setFilePaths();
+					processCommand.setFilePaths();
 				} catch (SQLException | IOException e) {
 					Debug.log(e.getMessage());
-					ErrorLogger.log(stat.author, "Could not run process command: " +  e.getMessage());
-					stat.status = "Crashed";
-					continue;
+					ErrorLogger.log(processStatus.author,
+							"Could not run process command: " +  e.getMessage());
+					processStatus.status = ProcessStatus.STATUS_CRASHED;
 
+					continue;
 				}
 
-				stat.outputFiles = work.getFilePaths();
-				stat.timeStarted = System.currentTimeMillis();
+				processStatus.outputFiles = processCommand.getFilePaths();
+				processStatus.timeStarted = System.currentTimeMillis();
 
-				try{
-					Response resp = work.execute();
+				try {
+					Response resp = processCommand.execute();
 					Debug.log("AFTER EXECUTE PROCESS");
 					if (resp.getCode()==StatusCode.CREATED){
-						stat.status = "Finished";
-					}else{
-						stat.status = "Crashed";
+						processStatus.status = ProcessStatus.STATUS_FINISHED;
+					} else {
+						processStatus.status = ProcessStatus.STATUS_CRASHED;
 					}
 				} catch(NullPointerException e){
-					stat.status = "Crashed";
+					processStatus.status = ProcessStatus.STATUS_CRASHED;
 				}
 
-				stat.timeFinished = System.currentTimeMillis();
-			} else {
+
+				processStatus.timeFinished = System.currentTimeMillis();
+
+
+			}  else {
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
-					e.printStackTrace();
 					Debug.log("Work Handler thread sleep failed/interrupted");
-					ErrorLogger.log("SYSTEM", "Work Handler thread sleep failed/interrupted in between process execution.");
+					ErrorLogger.log("SYSTEM", "Work Handler thread sleep " +
+							"failed/interrupted in between process execution.");
 				}
 			}
+
 			removeOldStatuses();
 		}
 
 	}
 
-	public Collection<ProcessStatus> getProcessStatus() {
-		return processStatus.values();
-	}
+
 }
 
