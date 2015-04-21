@@ -26,9 +26,9 @@ public class ProcessStatus implements Comparable<ProcessStatus> {
 	public long timeFinished;
 
 	/**
-	 * Constructor used to initiate the class.
+	 * Constructor used to initialize the class.
 	 *
-	 * @param a process command.
+	 * @param command ProcessCommand to create the ProcessStatus from.
 	 */
 	public ProcessStatus(ProcessCommand command) {
 
@@ -41,7 +41,8 @@ public class ProcessStatus implements Comparable<ProcessStatus> {
 	}
 
 	/**
-	 * Method used to compare the ProcessStatus variables.
+	 * Method used to compare the creation time for the ProcessStatus'.
+	 * @param other ProcessStatus to compare with.
 	 */
 	@Override
 	public int compareTo(ProcessStatus other) {
