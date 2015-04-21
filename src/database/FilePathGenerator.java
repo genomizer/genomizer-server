@@ -33,6 +33,9 @@ public class FilePathGenerator {
     public void generateExperimentFolders(String expID) {
 
         File file = new File(getRawFolderPath(expID));
+		file.setReadable();
+		file.setWritable();
+		file.setExecutable();
         file.mkdirs();
 
         file = new File(getProfileFolderPath(expID));
@@ -43,6 +46,8 @@ public class FilePathGenerator {
 
         file = new File(getUnknownFolderPath(expID));
         file.mkdirs();
+
+		Runtime.getRuntime().exec("chmod 777 -R " + ServerSettings.fileLocation);
     }
 
     /**
