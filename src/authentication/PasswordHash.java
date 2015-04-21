@@ -39,9 +39,7 @@ public class PasswordHash
         // Use this salt for user specific passwords
         // String newSalt = getNewSalt();
 
-    	String salted_password = password + salt;
-
-        String hash = hashString(salted_password);
+        String hash = hashString(password + salt);
 
         return hash;
     }
@@ -60,6 +58,7 @@ public class PasswordHash
 
             /** Create MessageDigest instance for SHA-256 */
             MessageDigest md = MessageDigest.getInstance("SHA-256");
+
             /** update digest with password bytes */
             md.update(salted_password.getBytes());
             /** Digest password */
@@ -88,11 +87,11 @@ public class PasswordHash
     /**
      * Method generates a random salt to use on passwords
      *
-     * @return 12 character long string salt (chars and integers mixed)
+     * @return 64 character long string salt (chars and integers mixed)
      */
     public static String getNewSalt() {
 
-        String salt = new BigInteger(60, random).toString(32);
+        String salt = new BigInteger(320, random).toString(32);
 
         return salt;
     }
