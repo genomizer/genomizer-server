@@ -12,7 +12,7 @@ import java.net.Socket;
  * Time: 1:43 PM
  * To change this template use File | Settings | File Templates.
  */
-public class UploadCommand extends Command {
+public class UploadCommand implements Command {
 
     private String path;
     private Socket sendSocket;
@@ -24,7 +24,6 @@ public class UploadCommand extends Command {
 
 
 
-    @Override
     public void execute() {
         try {
             InetAddress a = InetAddress.getByName("127.0.0.1");

@@ -46,6 +46,7 @@ public class Doorman {
 
 	private HttpServer httpServer;
 	private CommandHandler commandHandler;
+	private UploadHandler  uploadHandler;
 
 	/**
 	 * Constructor. Creates a HTTPServer (but doesn't start it) which listens on the given port.
@@ -56,6 +57,7 @@ public class Doorman {
 	public Doorman(CommandHandler commandHandler, int port) throws IOException {
 
 		this.commandHandler = commandHandler;
+		this.uploadHandler  = new UploadHandler();
 
 		httpServer = HttpServer.create(new InetSocketAddress(port),0);
 		httpServer.createContext("/login", createHandler());
@@ -68,6 +70,7 @@ public class Doorman {
 		httpServer.createContext("/sysadm", createHandler());
 		httpServer.createContext("/genomeRelease", createHandler());
 		httpServer.createContext("/token", createHandler());
+		httpServer.createContext("/upload", createHandler());
 
 		httpServer.setExecutor(new Executor() {
 			@Override
@@ -132,6 +135,10 @@ public class Doorman {
 						break;
 					case "/token":
 						handleRequest(exchange, CommandType.IS_TOKEN_VALID_COMMAND);
+						break;
+					case "/upload":
+						uploadHandler.handleGET(exchange);
+						break;
 					}
 					break;
 
@@ -162,8 +169,6 @@ public class Doorman {
 					case "/sysadm":
 						if (exchange.getRequestURI().toString().startsWith("/sysadm/annpriv")) {
 							handleRequest(exchange, CommandType.UPDATE_ANNOTATION_PRIVILEGES_COMMAND);
-						} else if (exchange.getRequestURI().toString().startsWith("/sysadm/usrpriv")) {
-							handleRequest(exchange, CommandType.UPDATE_USER_PRIVILEGES_COMMAND);
 						}
 						break;
 					}
@@ -172,28 +177,31 @@ public class Doorman {
 
 				case "POST":
 					switch(exchange.getHttpContext().getPath()) {
-					case "/login":
-						handleRequest(exchange, CommandType.LOGIN_COMMAND);
-						break;
-					case "/experiment":
-						handleRequest(exchange, CommandType.ADD_EXPERIMENT_COMMAND);
-						break;
-					case "/file":
-						handleRequest(exchange, CommandType.ADD_FILE_TO_EXPERIMENT_COMMAND);
-						break;
-					case "/user":
-						handleRequest(exchange, CommandType.CREATE_USER_COMMAND);
-						break;
-					case "/annotation":
-						if (exchange.getRequestURI().toString().startsWith("/annotation/field")) {
-							handleRequest(exchange, CommandType.ADD_ANNOTATION_FIELD_COMMAND);
-						} else if (exchange.getRequestURI().toString().startsWith("/annotation/value")) {
-							handleRequest(exchange, CommandType.ADD_ANNOTATION_VALUE_COMMAND);
-						}
-						break;
-					case "/genomeRelease":
-						handleRequest(exchange, CommandType.ADD_GENOME_RELEASE_COMMAND);
-						break;
+						case "/login":
+							handleRequest(exchange, CommandType.LOGIN_COMMAND);
+							break;
+						case "/experiment":
+							handleRequest(exchange, CommandType.ADD_EXPERIMENT_COMMAND);
+							break;
+						case "/file":
+							handleRequest(exchange, CommandType.ADD_FILE_TO_EXPERIMENT_COMMAND);
+							break;
+						case "/user":
+							handleRequest(exchange, CommandType.CREATE_USER_COMMAND);
+							break;
+						case "/annotation":
+							if (exchange.getRequestURI().toString().startsWith("/annotation/field")) {
+								handleRequest(exchange, CommandType.ADD_ANNOTATION_FIELD_COMMAND);
+							} else if (exchange.getRequestURI().toString().startsWith("/annotation/value")) {
+								handleRequest(exchange, CommandType.ADD_ANNOTATION_VALUE_COMMAND);
+							}
+							break;
+						case "/genomeRelease":
+							handleRequest(exchange, CommandType.ADD_GENOME_RELEASE_COMMAND);
+							break;
+						case "/upload":
+							uploadHandler.handlePOST(exchange);
+							break;
 					}
 					break;
 

@@ -397,6 +397,8 @@ public class AnnotationMethods {
      *            String - the name of the annotation.
      * @param choices
      *            List<String> - the possible values for the annotation.
+     * @param defaultValueIndex - specifies the default value
+     * @param required - whether or not the field is required
      * @return tuplesInserted int - the number of tuples inserted into the
      *         database.
      * @throws SQLException
@@ -632,9 +634,9 @@ public class AnnotationMethods {
      * be changed to another, it becomes removable.
      *
      * @param oldLabel
-     *            String
+     *            the old label
      * @param newLabel
-     *            string
+     *            the new label
      *
      * @return res int - the number of tuples updated
      * @throws SQLException
@@ -783,8 +785,10 @@ public class AnnotationMethods {
     /**
      * Method that changes the Required field to the selected boolean.
      *
-     * @param AnnoLabel
-     *            String, the name of the annotation to change required for.
+     * @param annoLabel
+     *             the name of the annotation to change required for.
+     * @param required
+     *             whether or not it is required
      * @return resCount int, the numer of rows affected by the change.
      * @throws SQLException
      *             , will be thrown if the psql query fails.
@@ -861,7 +865,7 @@ public class AnnotationMethods {
      * and the questionmarks are the parameters.
      *
      * @param query
-     *            PreparedStatement
+     *            a PreparedStatement
      * @param params
      *            List<String> - the parameters connected to the query, size of
      *            list must be equal to nr of questionmarks in query.
@@ -923,7 +927,7 @@ public class AnnotationMethods {
      * ('(', ')', '[' and ']'.
      *
      * @param annotation
-     * @return
+     * @return a boolean
      */
     private boolean isValidChoice(String annotation) {
 

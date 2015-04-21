@@ -1,4 +1,4 @@
-package server.test;
+package server.test.dummies;
 
 import org.junit.Ignore;
 import response.ErrorResponse;
