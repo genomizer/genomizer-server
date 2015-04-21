@@ -272,16 +272,17 @@ public class DatabaseAccessor {
      * Changes the password for a user.
      *
      * @param username - the user to change the password for
-     * @param newPassword - the new password
+     * @param newPasswordHash - the new password
+     * @param newSalt - the new salt
      * @return the number of tuples updated in the database
      * @throws SQLException
      *             - if the query does not succeed
      * @throws IOException
      *             - if an argument is empty or null
      */
-    public int resetPassword(String username, String newPassword)
+    public int resetPassword(String username, String newPasswordHash, String newSalt)
             throws SQLException, IOException {
-        return userMethods.resetPassword(username, newPassword);
+        return userMethods.resetPassword(username, newPasswordHash, newSalt);
     }
 
     /**
