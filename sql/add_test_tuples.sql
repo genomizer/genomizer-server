@@ -61,10 +61,12 @@ INSERT INTO Annotated_With  VALUES('Exp2', 'Tissue', 'Arm');
 INSERT INTO Annotated_With  VALUES('Exp2', 'Development Stage', 'Child');
 
 INSERT INTO Annotated_With  VALUES('Exp3', 'Species', 'Rat');
-INSERT INTO Annotated_With  VALUES('Exp3', 'Development Stage', 'Child');
+INSERT INTO Annotated_With  VALUES('Exp3', 'Development Stage', 'Child');secret16D459AA49F934EDC2E96E3DA3C968
 
-INSERT INTO User_Info VALUES('user1', 'secret1', 'role1','Carl Bertill Jonsson','sexy@cs.umu.se');
-INSERT INTO User_Info VALUES('user2', 'passwd', 'admin','Arne Weise','arne.weise@cs.umu.se');
+--INSERT INTO User_Info VALUES('user1', 'secret1', 'role1','Carl Bertill Jonsson','sexy@cs.umu.se');
+--INSERT INTO User_Info VALUES('user2', 'passwd', 'admin','Arne Weise','arne.weise@cs.umu.se');
+INSERT INTO User_Info VALUES('user3', '2fd26e9aea528153a865257a723f6d4859e9f6c4a6775c003ae91297f619c6e8', 'genomizer', 'admin','Arne Weise','arne.weise@cs.umu.se'); -- pwd: baguette
+
 
 INSERT INTO File VALUES(DEFAULT, '/var/www/data/Exp1/raw/file1.fastq', 'Raw', 'file1.fastq', CURRENT_TIMESTAMP, NULL, '/var/www/data/Exp1/raw/file1_input.fastq', 'Umeå Uni', 'user1', 'True', 'Exp1', NULL, DEFAULT);
 

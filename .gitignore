@@ -14,3 +14,4 @@ errorLog.txt
 *.properties
 out
 psqllogin
+.metadata/
