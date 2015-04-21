@@ -23,8 +23,38 @@
         </fileset>
     </path>
 
-    <!-- Main targets-->
-    <target depends="build" name="jar">
+    <!-- Targets. -->
+    <target name="init">
+        <mkdir dir="bin"/>
+        <mkdir dir="${junit.output.dir}"/>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="src">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="external-libs">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="compile" depends="init">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin"
+               includeantruntime="false" source="${source}" target="${target}" encoding="ISO-8859-1">
+            <src path="src"/>
+            <src path="test"/>
+            <classpath>
+                <path refid="genomizer-server.classpath"/>
+                <path refid="junit.classpath"/>
+            </classpath>
+            <compilerarg value="-Xlint:all"/>
+        </javac>
+    </target>
+    <target name="build" depends="compile"/>
+
+    <target name="jar" depends="build">
         <jar destfile="server.jar">
             <fileset dir="bin/" id="fileset.class">
                 <include name ="**/*.class" />
@@ -44,21 +74,6 @@
         </jar>
     </target>
 
-    <target name="init">
-        <mkdir dir="bin"/>
-        <mkdir dir="${junit.output.dir}"/>
-        <copy includeemptydirs="false" todir="bin">
-            <fileset dir="src">
-                <exclude name="**/*.java"/>
-            </fileset>
-        </copy>
-        <copy includeemptydirs="false" todir="bin">
-            <fileset dir="external-libs">
-                <exclude name="**/*.java"/>
-            </fileset>
-        </copy>
-    </target>
-
     <target name="clean">
         <delete dir="bin"/>
         <delete dir="${junit.output.dir}"/>
@@ -66,24 +81,7 @@
         <delete file="sequreserver.jar"/>
     </target>
 
-    <target depends="clean" name="cleanall"/>
-    <target depends="compile" name="build"/>
-
-    <target depends="init" name="compile">
-      <echo message="${ant.project.name}: ${ant.file}"/>
-      <javac debug="true" debuglevel="${debuglevel}" destdir="bin"
-             includeantruntime="false" source="${source}" target="${target}" encoding="ISO-8859-1">
-        <src path="src"/>
-        <src path="test"/>
-        <classpath>
-          <path refid="genomizer-server.classpath"/>
-          <path refid="junit.classpath"/>
-        </classpath>
-        <compilerarg value="-Xlint:all"/>
-      </javac>
-    </target>
-
-    <target depends="build" name="test">
+    <target name="test" depends="build">
       <junit printsummary="withOutAndErr">
         <formatter type="xml"/>
         <classpath>
@@ -109,5 +107,5 @@
             <report format="frames" todir="${junit.output.dir}"/>
         </junitreport>
     </target>
-    
+
 </project>
