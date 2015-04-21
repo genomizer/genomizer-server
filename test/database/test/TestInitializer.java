@@ -88,10 +88,9 @@ public class TestInitializer {
         conn = DriverManager.getConnection(url, props);
 
         addTuplesSqlStrings = buildSqlStringsFromFile(addTestTuplesPath);
+        clearTablesSqlStrings = buildSqlStringsFromFile(clearTablesPath);
 
         addTuples();
-
-        clearTablesSqlStrings = buildSqlStringsFromFile(clearTablesPath);
 
         return dbac;
     }

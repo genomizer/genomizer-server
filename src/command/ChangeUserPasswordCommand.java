@@ -1,7 +1,6 @@
 package command;
 
 import com.google.gson.annotations.Expose;
-import database.DatabaseAccessor;
 import database.constants.MaxSize;
 import response.ErrorResponse;
 import response.MinimalResponse;
@@ -51,9 +50,9 @@ public class ChangeUserPasswordCommand extends Command {
      */
     @Override
     public Response execute() {
-        DatabaseAccessor db = null;
+        // DatabaseAccessor db = null;
         try {
-            db = initDB();
+            /*db = */initDB();
         } catch (SQLException e) {
             return new ErrorResponse(StatusCode.BAD_REQUEST, "Error when " +
                     "initiating databaseAccessor. " + e.getMessage());

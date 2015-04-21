@@ -17,7 +17,7 @@ import com.google.gson.JsonPrimitive;
 import command.ProcessCommand;
 import command.ProcessStatus;
 import server.WorkHandler;
-import server.test.ProcessCommandMock;
+import server.test.dummies.ProcessCommandMock;
 
 /**
  * Class used to test the process status command class

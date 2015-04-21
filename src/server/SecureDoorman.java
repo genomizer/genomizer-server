@@ -32,7 +32,6 @@ import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.URLDecoder;
 import java.security.*;
-import java.security.cert.CertificateException;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.Executor;

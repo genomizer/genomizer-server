@@ -1,5 +1,5 @@
-package server;
 
+package server;
 import database.constants.ServerDependentValues;
 
 import java.io.*;
@@ -19,7 +19,7 @@ public class ServerSettings {
 	public static String passwordHash = null;
 	public static String passwordSalt = null;
 	public static String webUrlUpload = null;
-	public static String fileLocation = null;
+	public static String fileLocation = "/var/www/data/";
 
 
 	public static void writeSettings(String path){
@@ -42,6 +42,10 @@ public class ServerSettings {
 
 			out.write(dataInfo);
 			out.close();
+
+			Debug.log("Written the following settings:\n" + dataInfo);
+			ErrorLogger.log("SYSTEM", "Written the following settings:\n" +
+					dataInfo);
 
 		} catch (IOException e) {
 			String msg = "Could not write to file: " + path;
@@ -153,6 +157,26 @@ public class ServerSettings {
 					apachePort + downloadURL;
 			ServerDependentValues.UploadURL = publicAddress + ":" +
 					apachePort + uploadURL;
+
+			String dataInfo =
+					"\tdatabaseUsername = " + databaseUsername + "\n"
+							+ "\tdatabasePassword = " + databasePassword + "\n"
+							+ "\tdatabaseHost = " + databaseHost + "\n"
+							+ "\tdatabaseName = " + databaseName + "\n"
+							+ "\tpublicAddress = " + publicAddress + "\n"
+							+ "\tapachePort = " + apachePort + "\n"
+							+ "\tdownloadURL = " + downloadURL + "\n"
+							+ "\tuploadURL = " + uploadURL + "\n"
+							+ "\tgenomizerPort = " + genomizerPort + "\n"
+							+ "\tpasswordHash = " + passwordHash + "\n"
+							+ "\tpasswordSalt = " + passwordSalt + "\n"
+							+ "\tfileLocation = " + fileLocation + "\n"
+							+ "\twebUrlUpload = " + webUrlUpload + "\n";
+
+			Debug.log("Imported the following settings:\n" + dataInfo);
+			ErrorLogger.log("SYSTEM", "Imported the following settings:\n" +
+					dataInfo);
+
 		} else {
 			String msg = "Error, " + path + " does not exist, applying " +
 					"default settings..";
