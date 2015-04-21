@@ -184,7 +184,6 @@ public class TestInitializer {
      */
     public void addTuples() throws SQLException {
         for (String s : addTuplesSqlStrings) {
-            System.err.println(s);
             Statement statement = conn.createStatement();
             statement.execute(s);
         }
