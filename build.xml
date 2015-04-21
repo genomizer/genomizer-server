@@ -71,7 +71,8 @@
 
     <target depends="init" name="compile">
       <echo message="${ant.project.name}: ${ant.file}"/>
-      <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}" encoding="ISO-8859-1">
+      <javac debug="true" debuglevel="${debuglevel}" destdir="bin"
+             includeantruntime="false" source="${source}" target="${target}" encoding="ISO-8859-1">
         <src path="src"/>
         <src path="test"/>
         <classpath>
@@ -108,122 +109,5 @@
             <report format="frames" todir="${junit.output.dir}"/>
         </junitreport>
     </target>
-
-    <!-- Additional targets (unused AFAICT). -->
-
-    <!--
-    <target name="SecureServerMain">
-        <java classname="SecureServerMain" failonerror="true" fork="yes">
-            <classpath refid="genomizer-server.classpath"/>
-        </java>
-    </target>
-    <target name="ServerMain">
-        <java classname="ServerMain" failonerror="true" fork="yes">
-            <classpath refid="genomizer-server.classpath"/>
-        </java>
-    </target>
-    <target name="LoginResponseTest">
-        <mkdir dir="${junit.output.dir}"/>
-        <junit fork="yes" printsummary="withOutAndErr">
-            <formatter type="xml"/>
-            <test name="command.test.LoginResponseTest" todir="${junit.output.dir}"/>
-            <classpath refid="genomizer-server.classpath"/>
-        </junit>
-    </target>
-    <target name="genomizer-server">
-        <mkdir dir="${junit.output.dir}"/>
-        <junit fork="yes" printsummary="withOutAndErr">
-            <formatter type="xml"/>
-            <test name="command.test.AddAnnotationFieldCommandTest" todir="${junit.output.dir}"/>
-            <test name="command.test.CommandFactoryTest" todir="${junit.output.dir}"/>
-            <test name="command.test.CommandHandlerTest" todir="${junit.output.dir}"/>
-            <test name="command.test.CreateProcessCommandTest" todir="${junit.output.dir}"/>
-            <test name="command.test.GetAnnotationInformationCommandTest" todir="${junit.output.dir}"/>
-            <test name="command.test.GetExperimentCommandTest" todir="${junit.output.dir}"/>
-            <test name="command.test.LoginCommandTest" todir="${junit.output.dir}"/>
-            <test name="command.test.LoginResponseTest" todir="${junit.output.dir}"/>
-            <test name="command.test.RetrieveExperimentCommandTest" todir="${junit.output.dir}"/>
-            <test name="command.test.SearchForExperimentCommandTest" todir="${junit.output.dir}"/>
-            <test name="command.test.ValidateProcessCommandTest" todir="${junit.output.dir}"/>
-            <test name="conversion.tests.GenomeReleaseConverterTest" todir="${junit.output.dir}"/>
-            <test name="process.tests.RawToProfileTest" todir="${junit.output.dir}"/>
-            <test name="response.test.GetAnnotationInformationResponseTest" todir="${junit.output.dir}"/>
-            <test name="response.test.LoginResponseTest" todir="${junit.output.dir}"/>
-            <test name="response.test.LogoutResponseTest" todir="${junit.output.dir}"/>
-            <test name="response.test.ProcessResponseTest" todir="${junit.output.dir}"/>
-            <test name="server.test.AuthenticateTest" todir="${junit.output.dir}"/>
-            <test name="server.test.DoormanTest" todir="${junit.output.dir}"/>
-            <test name="server.test.HeavyWorkQueueTest" todir="${junit.output.dir}"/>
-            <test name="server.test.ServerMassTestClass" todir="${junit.output.dir}"/>
-            <test name="testSuite.AllTests" todir="${junit.output.dir}"/>
-            <test name="testSuite.unitTests.AddAnnotationPossibilitiesTests" todir="${junit.output.dir}"/>
-            <test name="testSuite.unitTests.AddNewFileTests" todir="${junit.output.dir}"/>
-            <test name="testSuite.unitTests.ExperimentTests" todir="${junit.output.dir}"/>
-            <test name="testSuite.unitTests.FileTableTests" todir="${junit.output.dir}"/>
-            <test name="testSuite.unitTests.PubMedToSQLConverterTests" todir="${junit.output.dir}"/>
-            <test name="testSuite.unitTests.SearchDatabaseTests" todir="${junit.output.dir}"/>
-            <test name="testSuite.unitTests.TestAnnotationRequiredDefault" todir="${junit.output.dir}"/>
-            <test name="testSuite.unitTests.TestChainFiles" todir="${junit.output.dir}"/>
-            <test name="testSuite.unitTests.TestChangeAnnotationValue" todir="${junit.output.dir}"/>
-            <test name="testSuite.unitTests.TestFileNameValidator" todir="${junit.output.dir}"/>
-            <test name="testSuite.unitTests.TestFilePathGEN" todir="${junit.output.dir}"/>
-            <test name="testSuite.unitTests.TestGetAnnotationObject" todir="${junit.output.dir}"/>
-            <test name="testSuite.unitTests.UpdateExperimentTest" todir="${junit.output.dir}"/>
-            <test name="testSuite.unitTests.UserInfoTests" todir="${junit.output.dir}"/>
-            <test name="transfer.Test.HttpURLTest" todir="${junit.output.dir}"/>
-            <test name="transfer.Test.UploadCommandTest" todir="${junit.output.dir}"/>
-            <test name="unused.QueryBuilderTest" todir="${junit.output.dir}"/>
-            <test name="unused.SearchResultTest" todir="${junit.output.dir}"/>
-            <test name="unused.TestDatabaseConnect" todir="${junit.output.dir}"/>
-            <classpath refid="genomizer-server.classpath"/>
-        </junit>
-    </target>
-    <target name="SearchForExperimentCommandTest">
-        <mkdir dir="${junit.output.dir}"/>
-        <junit fork="yes" printsummary="withOutAndErr">
-            <formatter type="xml"/>
-            <test name="command.test.SearchForExperimentCommandTest" todir="${junit.output.dir}"/>
-            <classpath refid="genomizer-server.classpath"/>
-        </junit>
-    </target>
-    <target name="SecureDoorman">
-        <java classname="server.SecureDoorman" failonerror="true" fork="yes">
-            <classpath refid="genomizer-server.classpath"/>
-        </java>
-    </target>
-    <target name="ClientDummy">
-        <java classname="server.test.dummies.ClientDummy" failonerror="true" fork="yes">
-            <classpath refid="genomizer-server.classpath"/>
-        </java>
-    </target>
-    <target name="DoormanTest">
-        <mkdir dir="${junit.output.dir}"/>
-        <junit fork="yes" printsummary="withOutAndErr">
-            <formatter type="xml"/>
-            <test name="server.test.DoormanTest" todir="${junit.output.dir}"/>
-            <classpath refid="genomizer-server.classpath"/>
-        </junit>
-    </target>
-    <target name="SearchDummy">
-        <java classname="server.test.SearchDummy" failonerror="true" fork="yes">
-            <classpath refid="genomizer-server.classpath"/>
-        </java>
-    </target>
-    -->
-
-    <!-- Stuff added by Eclipse, probably unnecessary. -->
-
-    <target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
-        <copy todir="${ant.library.dir}">
-            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
-        </copy>
-        <unzip dest="${ant.library.dir}">
-            <patternset includes="jdtCompilerAdapter.jar"/>
-            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
-        </unzip>
-    </target>
-    <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
-        <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
-        <antcall target="build"/>
-    </target>
+    
 </project>
