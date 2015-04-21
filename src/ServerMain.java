@@ -64,7 +64,7 @@ public class ServerMain {
 	 * Print the database settings currently loaded into ServerSettings.
 	 */
 	private static void printDatabaseInformation() {
-		String info = "Doorman started on port "
+		String info = "Doorman set to use port "
 				+ ServerSettings.genomizerPort + "\n"
 				+ "Database:" + "\n"
 				+ "  username " + ServerSettings.databaseUsername + "\n"

@@ -5,7 +5,8 @@ bin/
 .idea/
 .idea
 junit/
-server*.jar
+secure-server.jar
+server.jar
 *.orig
 .classpath
 .project
