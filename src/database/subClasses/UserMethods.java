@@ -100,17 +100,17 @@ public class UserMethods {
 	}
 
 	/**
-	 * Returns the password for the given user. Used for login.
+	 * Returns the password hash for the given user. Used for login.
 	 *
 	 * @param user
 	 *            - the username as string
-	 * @return String - the password
+	 * @return String - the password hash
 	 * @throws SQLException
 	 *             if the query does not succeed
 	 */
-	public String getPassword(String user) throws SQLException {
+	public String getPasswordHash(String user) throws SQLException {
 
-		String query = "SELECT Password FROM User_Info "
+		String query = "SELECT PasswordHash FROM User_Info "
 				+ "WHERE (Username = ?)";
 
 		PreparedStatement stmt = conn.prepareStatement(query);
@@ -119,7 +119,35 @@ public class UserMethods {
 		String pass = null;
 
 		if (rs.next()) {
-			pass = rs.getString("password");
+			pass = rs.getString("passwordHash");
+		}
+
+		stmt.close();
+
+		return pass;
+	}
+
+	/**
+	 * Returns the password salt for the given user. Used for login.
+	 *
+	 * @param user
+	 *            - the username as string
+	 * @return String - the password salt
+	 * @throws SQLException
+	 *             if the query does not succeed
+	 */
+	public String getPasswordSalt(String user) throws SQLException {
+
+		String query = "SELECT PasswordSalt FROM User_Info "
+				+ "WHERE (Username = ?)";
+
+		PreparedStatement stmt = conn.prepareStatement(query);
+		stmt.setString(1, user);
+		ResultSet rs = stmt.executeQuery();
+		String pass = null;
+
+		if (rs.next()) {
+			pass = rs.getString("passwordSalt");
 		}
 
 		stmt.close();

@@ -253,8 +253,20 @@ public class DatabaseAccessor {
      * @throws SQLException
      *             - if the query does not succeed
      */
-    public String getPassword(String user) throws SQLException {
-        return userMethods.getPassword(user);
+    public String getPasswordHash(String user) throws SQLException {
+        return userMethods.getPasswordHash(user);
+    }
+
+    /**
+     * Returns the password for the given user. Used for login.
+     *
+     * @param  user the username as string
+     * @return the password
+     * @throws SQLException
+     *             - if the query does not succeed
+     */
+    public String getPasswordSalt(String user) throws SQLException {
+        return userMethods.getPasswordSalt(user);
     }
 
     /**
