@@ -43,6 +43,8 @@ public class FilePathGenerator {
 
         file = new File(getUnknownFolderPath(expID));
         file.mkdirs();
+
+		Runtime.getRuntime().exec("chmod 777 -R " + ServerSettings.fileLocation);
     }
 
     /**
