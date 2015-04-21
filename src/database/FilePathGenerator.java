@@ -33,6 +33,9 @@ public class FilePathGenerator {
     public void generateExperimentFolders(String expID) {
 
         File file = new File(getRawFolderPath(expID));
+		file.setReadable();
+		file.setWritable();
+		file.setExecutable();
         file.mkdirs();
 
         file = new File(getProfileFolderPath(expID));
