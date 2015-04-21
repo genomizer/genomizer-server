@@ -70,8 +70,8 @@ public class WorkHandler implements Runnable {
 					(processCommand);
 
 			if (processCommand != null && processStatus != null) {
-				Debug.log("Executing process in experiment " + processCommand
-						.getExpId() + " with parameters");
+				Debug.log("Executing process in experiment "
+						+ processCommand.getExpId());
 
 				processStatus.status = ProcessStatus.STATUS_STARTED;
 
