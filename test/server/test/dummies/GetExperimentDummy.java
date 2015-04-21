@@ -1,4 +1,4 @@
-package server.test;
+package server.test.dummies;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -10,6 +10,7 @@ import java.net.URL;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.junit.Ignore;
+import server.test.*;
 
 @Ignore
 public class GetExperimentDummy {
@@ -21,7 +22,7 @@ public class GetExperimentDummy {
 
 
 	public static String url = "http://" + host + ":" + port;
-	public static Token token = null;
+	public static server.test.Token token = null;
 
 	public static String expName = "huggaboy7";
 	public static String filename = "spluttfile662693";
@@ -53,7 +54,7 @@ public class GetExperimentDummy {
 		System.out.println("Response Body: " + response);
 
 		Gson gson = new Gson();
-		token = gson.fromJson(response, Token.class);
+		token = gson.fromJson(response, server.test.Token.class);
 		System.out.println(token.getToken());
 
 	}

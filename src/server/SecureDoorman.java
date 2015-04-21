@@ -32,6 +32,7 @@ import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.URLDecoder;
 import java.security.*;
+import java.security.cert.CertificateException;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.Executor;
@@ -48,11 +49,11 @@ public class SecureDoorman {
 	 * @throws java.io.IOException
 	 */
 	public SecureDoorman(CommandHandler commandHandler, int port) throws IOException {
-
+System.err.println("Https server starting...");
 		this.commandHandler = commandHandler;
 
 		httpsServer = HttpsServer.create(new InetSocketAddress(port),0);
-		httpsServer.setHttpsConfigurator(getHttpsConfiguration("password"));
+		httpsServer.setHttpsConfigurator(getHttpsConfiguration("baguette"));
 
 		httpsServer.createContext("/login", createHandler());
 		httpsServer.createContext("/experiment", createHandler());
@@ -64,7 +65,7 @@ public class SecureDoorman {
 		httpsServer.createContext("/sysadm", createHandler());
 		httpsServer.createContext("/genomeRelease", createHandler());
 		httpsServer.createContext("/token", createHandler());
-
+System.err.println("Https server started");
 		httpsServer.setExecutor(new Executor() {
 			@Override
 			public void execute(Runnable command) {
@@ -84,13 +85,14 @@ public class SecureDoorman {
 
 		SSLContext sslContext = null;
 		char[] charPassword = password.toCharArray();
+		String filename = "genoStore";
 		try {
 			//Initialize context
 			sslContext = SSLContext.getInstance("TLSv1.1");
 
 			//Initialize the key store
 			KeyStore keyStore = KeyStore.getInstance("JKS");
-			String keyStoreName = "locationOfKeyStore";
+			String keyStoreName = filename;
 			keyStore.load(new FileInputStream(keyStoreName),charPassword);
 
 			//Setup for the key manager factory
@@ -104,8 +106,34 @@ public class SecureDoorman {
 			//Initialize the sslContext
 			sslContext.init(kmf.getKeyManagers(),tmf.getTrustManagers(),null);
 
-		} catch (Exception e) {
+		} catch (KeyStoreException e) {
 			e.printStackTrace();
+			System.err.println("The provider for the KeyStore is not available.");
+			System.exit(1);
+		} catch (CertificateException e) {
+			e.printStackTrace();
+			System.err.println("Could not load the key from the KeyStore.");
+			System.exit(1);
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+			System.err.println("Could not find the KeyStore algorithm.");
+			System.exit(1);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			System.err.println("Could not find the file: " + filename + ".");
+			System.exit(1);
+		} catch (UnrecoverableKeyException e) {
+			e.printStackTrace();
+			System.err.println("The key could not be retrieved.\n Please check if the password is correct.");
+			System.exit(1);
+		} catch (KeyManagementException e) {
+			e.printStackTrace();
+			System.err.println("Could not initialize the SSL context for the server.");
+			System.exit(1);
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.err.println("Could not open the file: " + filename + ".");
+			System.exit(1);
 		}
 
 		//Creates the configurator object
@@ -127,8 +155,10 @@ public class SecureDoorman {
 					sslParameters.setProtocols(sslEngine.getEnabledProtocols());
 					params.setSSLParameters(sslParameters);
 
-				} catch (Exception e) {
+				} catch (NoSuchAlgorithmException e) {
 					e.printStackTrace();
+					System.err.println("Could not find the KeyStore algorithm.");
+					System.exit(1);
 				}
 			}
 		};
@@ -216,8 +246,6 @@ public class SecureDoorman {
 							case "/sysadm":
 								if (exchange.getRequestURI().toString().startsWith("/sysadm/annpriv")) {
 									handleRequest(exchange, CommandType.UPDATE_ANNOTATION_PRIVILEGES_COMMAND);
-								} else if (exchange.getRequestURI().toString().startsWith("/sysadm/usrpriv")) {
-									handleRequest(exchange, CommandType.UPDATE_USER_PRIVILEGES_COMMAND);
 								}
 								break;
 						}

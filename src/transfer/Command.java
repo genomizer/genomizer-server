@@ -1,12 +1,7 @@
 package transfer;
 
-public abstract class Command {
-
-
-	public Command() {
-
-	}
-
-	public abstract void execute();
+public interface Command {
+	
+	public void execute();
 
 }

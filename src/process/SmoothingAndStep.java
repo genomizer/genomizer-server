@@ -29,7 +29,7 @@ public class SmoothingAndStep {
      * Params:	  An array with 5 integers representing parameters.
      * params[0]: Window Size, the number of signal values that the smoothing
      * 		  should be calculated on.
-     * params[1]: Wether the smoothing should be trimmed mean (0) or median (1)
+     * params[1]: Whether the smoothing should be trimmed mean (0) or median (1)
      * params[2]: Minimum numbers to smooth. A number that says how many signal
      * 		  values the program at least need in order to smooth one row.
      * 		  This number must be smaller than windowSize
