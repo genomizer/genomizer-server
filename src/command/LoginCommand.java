@@ -1,4 +1,5 @@
 package command;
+import database.DatabaseAccessor;
 import response.ErrorResponse;
 import response.LoginResponse;
 import response.Response;
@@ -8,6 +9,9 @@ import authentication.Authenticate;
 import authentication.LoginAttempt;
 
 import com.google.gson.annotations.Expose;
+
+import java.io.IOException;
+import java.sql.SQLException;
 
 /**
  * This class is used to handle user login.
@@ -67,7 +71,32 @@ public class LoginCommand extends Command {
 	@Override
 	public Response execute() {
 
-		LoginAttempt login = Authenticate.login(username, password);
+		DatabaseAccessor db = null;
+
+		String dbHash = null;
+		String dbSalt = null;
+
+		try {
+			db = initDB();
+		} catch (SQLException e) {
+			Debug.log("LOGIN WAS UNSUCCESSFUL FOR: " + username + ". REASON: " +
+					e.getMessage());
+			return new ErrorResponse(StatusCode.UNAUTHORIZED,
+					"LOGIN WAS UNSUCCESSFUL FOR: " + username + ". REASON: " + e.getMessage());
+		} catch (IOException e)  {
+			Debug.log("LOGIN WAS UNSUCCESSFUL FOR: " + username + ". REASON: " +
+					e.getMessage());
+			return new ErrorResponse(StatusCode.UNAUTHORIZED,
+					"LOGIN WAS UNSUCCESSFUL FOR: " + username + ". REASON: " + e.getMessage());
+		}
+		try {
+			dbSalt = db.getPasswordSalt(username);
+			dbHash = db.getPasswordHash(username);
+		}catch (SQLException e) {
+			return new ErrorResponse(StatusCode.UNAUTHORIZED, "Error when requesting user information from database, user don't exist. " + e.getMessage());
+		}
+
+		LoginAttempt login = Authenticate.login(username, password, dbHash, dbSalt);
 
 		if(login.wasSuccessful()) {
 			Debug.log("LOGIN WAS SUCCESSFUL FOR: "+ username + ". GAVE UUID: " +

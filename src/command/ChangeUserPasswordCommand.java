@@ -1,6 +1,8 @@
 package command;
 
+import authentication.PasswordHash;
 import com.google.gson.annotations.Expose;
+import database.DatabaseAccessor;
 import database.constants.MaxSize;
 import response.ErrorResponse;
 import response.MinimalResponse;
@@ -46,13 +48,13 @@ public class ChangeUserPasswordCommand extends Command {
     }
 
     /**
-     * Used to execute the actual creation of the user.
+     * Used to execute the actual password change of the user.
      */
     @Override
     public Response execute() {
-        // DatabaseAccessor db = null;
+        DatabaseAccessor db = null;
         try {
-            /*db = */initDB();
+            db = initDB();
         } catch (SQLException e) {
             return new ErrorResponse(StatusCode.BAD_REQUEST, "Error when " +
                     "initiating databaseAccessor. " + e.getMessage());
@@ -60,14 +62,11 @@ public class ChangeUserPasswordCommand extends Command {
             return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
         }
 
-			/* For updating salt and hash in DB
-			// get a new salt
-			String salt = PasswordHash.getNewSalt();
-			// get hash using salt and password
-			String hash = PasswordHash.hashString(password+salt);
-			// insert into DB, requires new table from DB group
-            db.changeUserPassword(username, salt, hash);
-            */
+		String salt = PasswordHash.getNewSalt();
+		// get hash using salt and password
+		String hash = PasswordHash.hashString(password+salt);
+		// insert into DB, requires method DB group
+        //db.changeUserPassword(username, salt, hash);
 
         return new MinimalResponse(StatusCode.CREATED);
     }
