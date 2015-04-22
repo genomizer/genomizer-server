@@ -81,6 +81,12 @@
         <delete file="sequreserver.jar"/>
     </target>
 
+	<target name="run" depends="jar">
+		<java jar="server.jar" fork="true">
+			<arg value="-debug"/>
+		</java>
+	</target>
+
     <target name="test" depends="build">
       <junit printsummary="withOutAndErr">
         <formatter type="xml"/>

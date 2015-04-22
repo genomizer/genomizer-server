@@ -10,7 +10,6 @@ import java.net.URL;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.junit.Ignore;
-import server.test.*;
 
 @Ignore
 public class GetExperimentDummy {

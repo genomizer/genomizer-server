@@ -12,7 +12,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import org.junit.Ignore;
-import server.test.*;
 
 @Ignore
 public class EditAnnotationFieldDummy {
