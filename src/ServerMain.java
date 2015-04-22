@@ -19,6 +19,7 @@ import server.ServerSettings;
 import server.Debug;
 import server.Doorman;
 import server.ErrorLogger;
+import server.WorkPool;
 
 
 public class ServerMain {
