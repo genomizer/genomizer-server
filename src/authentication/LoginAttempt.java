@@ -1,5 +1,7 @@
 package authentication;
 
+import server.Debug;
+
 /**
  * This class creates an object that describes details of an attempted login
  *
@@ -20,6 +22,8 @@ public class LoginAttempt {
 	 * @param error_message of the login attempt
 	 */
 	public LoginAttempt(boolean successful, String uuid, String error_message) {
+		Debug.log((successful ? "Successful" : "Unsuccessful") 
+				+ " login attempt, user ID: " + uuid);
 		this.successful = successful;
 		this.uuid = uuid;
 		this.error_message = error_message;

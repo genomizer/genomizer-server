@@ -40,9 +40,12 @@ public class SecureServerMain {
 		/* The database settings should be written upon startup*/
 		printDatabaseInformation();
 
+		/* Create a work pool */
+		WorkPool workPool = new WorkPool();
+
 		/* We attempt to start the secure doorman */
 		try {
-			new SecureDoorman(new CommandHandler(),
+			new SecureDoorman(new CommandHandler(workPool),
 					ServerSettings.genomizerPort).start();
 		} catch (IOException e) {
 			System.err.println("Error when starting server");
@@ -61,9 +64,7 @@ public class SecureServerMain {
 	 * Print the database settings currently loaded into ServerSettings.
 	 */
 	private static void printDatabaseInformation() {
-		String info = "Secure doorman started on port "
-				+ ServerSettings.genomizerPort + "\n"
-				+ "Database:" + "\n"
+		String info = "Database information:" + "\n"
 				+ "  username " + ServerSettings.databaseUsername + "\n"
 				+ "  password " + ServerSettings.databasePassword + "\n"
 				+ "  name     " + ServerSettings.databaseName + "\n"

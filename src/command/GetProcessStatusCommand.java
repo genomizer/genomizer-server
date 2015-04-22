@@ -4,7 +4,8 @@ import java.util.Collection;
 
 import response.GetProcessStatusResponse;
 import response.Response;
-import server.WorkHandler;
+import server.ErrorLogger;
+import server.WorkPool;
 
 /**
  * Fetches status of all processes that have been added to the server. Will be
@@ -15,15 +16,19 @@ import server.WorkHandler;
  * @version 1.1
  */
 public class GetProcessStatusCommand extends Command {
-	private WorkHandler workHandler;
+
+	private WorkPool workPool;
 
 	/**
 	 * Constructs a new instance of GetProcessStatusCommand using the supplied
 	 * WorkHandler.
-	 * @param workHandler the WorkHandler in use by the server.
+	 *
+	 * @param workPool thw workPool in use by the server.
 	 */
-	public GetProcessStatusCommand(WorkHandler workHandler) {
-		this.workHandler = workHandler;
+	public GetProcessStatusCommand(WorkPool workPool) {
+
+		this.workPool = workPool;
+
 	}
 
 	/**
@@ -37,8 +42,11 @@ public class GetProcessStatusCommand extends Command {
 
 	@Override
 	public Response execute() {
-		Collection<ProcessStatus> processStatus =
-				workHandler.getProcessStatus();
+
+		Collection<ProcessStatus> processStatus = null;
+
+		processStatus = workPool.getProcesses().values();
+
 		return new GetProcessStatusResponse(processStatus);
 	}
 

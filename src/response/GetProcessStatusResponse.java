@@ -12,6 +12,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
 import command.ProcessStatus;
+import server.ErrorLogger;
 
 /**
  * Class that represents the response for the get process status
@@ -27,6 +28,13 @@ public class GetProcessStatusResponse extends Response {
 
 	@Override
 	public String getBody() {
+
+		if (procStats == null) {
+			ErrorLogger.log("SYSTEM", "GetProcessStatusResponse.getBody(): " +
+					"Error getting process status");
+			return "";
+		}
+
 		List<ProcessStatus> list = new ArrayList<>( procStats);
 
 		Collections.sort( list );
