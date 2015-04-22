@@ -6,41 +6,96 @@ import command.ProcessStatus;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by c12smi on 4/21/15.
  */
 public class WorkPool {
     private Queue<ProcessCommand> workQueue;
-    private HashMap<ProcessCommand,ProcessStatus> processStatus;
+    private HashMap<ProcessCommand,ProcessStatus> processesStatus;
+
+    private final Lock lock;
+    private Condition notEmptyCond;
 
 
     public WorkPool() {
         workQueue = new LinkedList<>();
-        processStatus = new HashMap<>();
+        processesStatus = new HashMap<>();
+        lock = new ReentrantLock();
+        notEmptyCond = lock.newCondition();
     }
 
-    public synchronized HashMap<ProcessCommand,ProcessStatus> getProcesses() {
-        return new HashMap<>(processStatus);
+    public HashMap<ProcessCommand,ProcessStatus> getProcesses()
+            throws InterruptedException {
+        lock.lock();
+
+        try {
+            while (workQueue.size() == 0) {
+                notEmptyCond.await();
+            }
+            return new HashMap<>(processesStatus);
+        } finally {
+            lock.unlock();
+        }
     }
 
-    public synchronized void addWork(ProcessCommand command) {
-        workQueue.add(command);
-        processStatus.put(command, new ProcessStatus(command));
+    public void addWork(ProcessCommand command) {
+        lock.lock();
+
+        try {
+            workQueue.add(command);
+            processesStatus.put(command, new ProcessStatus(command));
+            notEmptyCond.signalAll();
+        } finally {
+            lock.unlock();
+        }
     }
 
-    public synchronized ProcessCommand getProcess() {
-        return workQueue.poll();
+    public ProcessCommand getProcess() throws InterruptedException {
+        lock.lock();
+
+        try {
+            while (workQueue.size() == 0) {
+                notEmptyCond.await();
+            }
+            return workQueue.poll();
+        } finally {
+            lock.unlock();
+        }
+
     }
 
-    public synchronized void removeProcess(ProcessCommand processCommand) {
-        workQueue.remove(processCommand);
-        processStatus.remove(processCommand);
+    public void removeProcess(ProcessCommand processCommand) {
+        lock.lock();
+
+        try {
+            workQueue.remove(processCommand);
+            processesStatus.remove(processCommand);
+        } finally {
+            lock.unlock();
+        }
     }
 
-    public synchronized ProcessStatus getProcessStatus(ProcessCommand process) {
-        return processStatus.get(process);
+    public ProcessStatus getProcessStatus(ProcessCommand process) {
+        lock.lock();
+
+        try {
+            return processesStatus.get(process);
+        } finally {
+            lock.unlock();
+        }
     }
 
+    public int availableProcesses() {
+        lock.lock();
 
+        try {
+            return workQueue.size();
+        } finally {
+            lock.unlock();
+        }
+    }
 }

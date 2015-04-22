@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import response.GetProcessStatusResponse;
 import response.Response;
+import server.ErrorLogger;
 import server.WorkPool;
 
 /**
@@ -46,8 +47,17 @@ public class GetProcessStatusCommand extends Command {
 	@Override
 	public Response execute() {
 
-		Collection<ProcessStatus> processStatus =
-				workPool.getProcesses().values();
+		Collection<ProcessStatus> processStatus = null;
+
+		try {
+			processStatus =
+					workPool.getProcesses().values();
+
+		} catch (InterruptedException e) {
+			ErrorLogger.log("SYSTEM", "Error acquiring processes: " +
+					e.getMessage());
+		}
+
 		return new GetProcessStatusResponse(processStatus);
 
 	}

@@ -16,6 +16,7 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 import command.ProcessCommand;
 import command.ProcessStatus;
+import server.ErrorLogger;
 import server.WorkHandler;
 import server.WorkPool;
 import server.test.dummies.ProcessCommandMock;
@@ -80,19 +81,32 @@ public class GetProcessStatusCommandTest {
 			e.printStackTrace();
 		}
 
-		Collection<ProcessStatus> procStats = workPool.getProcesses().values();
-		List<ProcessStatus> list = new ArrayList<ProcessStatus>( procStats);
+		Collection<ProcessStatus> procStats = null;
 
-		Collections.sort( list );
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		try {
+			procStats = workPool.getProcesses().values();
 
-		JsonArray arr = new JsonArray();
-		for (ProcessStatus p : list) {
-			JsonElement elem = gson.toJsonTree(p, ProcessStatus.class);
-			arr.add(elem);
+		} catch (InterruptedException e) {
+			ErrorLogger.log("SYSTEM", "Error acquiring processes: " +
+					e.getMessage());
 		}
 
-		System.out.println(toPrettyFormat(arr.toString()));
+		if (procStats != null) {
+			List<ProcessStatus> list = new ArrayList<ProcessStatus>( procStats);
+
+			Collections.sort( list );
+			Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+			JsonArray arr = new JsonArray();
+			for (ProcessStatus p : list) {
+				JsonElement elem = gson.toJsonTree(p, ProcessStatus.class);
+				arr.add(elem);
+			}
+
+			System.out.println(toPrettyFormat(arr.toString()));
+		}
+
+
 //		workHandler.interrupt();
 	}
 

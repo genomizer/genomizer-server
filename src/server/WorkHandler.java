@@ -28,30 +28,34 @@ public class WorkHandler implements Runnable {
 		// List to store processes to be removed
 		ArrayList<ProcessCommand> toBeRemoved = new ArrayList<>();
 
-		HashMap<ProcessCommand,ProcessStatus> processes = workPool
-				.getProcesses();
+		try {
+			HashMap<ProcessCommand,ProcessStatus> processes = workPool
+					.getProcesses();
 
 		/* Loop through all processes and check statuses */
-		for (ProcessCommand proc : processes.keySet()) {
+			for (ProcessCommand proc : processes.keySet()) {
 
-			ProcessStatus procStat = workPool.getProcessStatus(proc);
-			String statusString = procStat.status;
+				ProcessStatus procStat = workPool.getProcessStatus(proc);
+				String statusString = procStat.status;
 
-			if (statusString.equals(ProcessStatus.STATUS_FINISHED)
-					|| statusString.equals(ProcessStatus.STATUS_CRASHED)) {
-				long processTimeAdded = procStat.timeAdded;
-				long timeDifference = currentTime - processTimeAdded;
+				if (statusString.equals(ProcessStatus.STATUS_FINISHED)
+						|| statusString.equals(ProcessStatus.STATUS_CRASHED)) {
+					long processTimeAdded = procStat.timeAdded;
+					long timeDifference = currentTime - processTimeAdded;
 
-				if (timeDifference > statusTimeToLive) {
-					toBeRemoved.add(proc);
+					if (timeDifference > statusTimeToLive) {
+						toBeRemoved.add(proc);
+					}
 				}
 			}
+			for (ProcessCommand proc : toBeRemoved) {
+				Debug.log("Removing old process status: " + proc.getExpId());
+				workPool.removeProcess(proc);
+			}
+		} catch (InterruptedException e) {
+			ErrorLogger.log("SYSTEM", "Error acquiring processes: " +
+					e.getMessage());
 		}
-		for (ProcessCommand proc : toBeRemoved) {
-			Debug.log("Removing old process status: " + proc.getExpId());
-			workPool.removeProcess(proc);
-		}
-
 
 	}
 
@@ -65,9 +69,19 @@ public class WorkHandler implements Runnable {
 
 		while (true) {
 
-			ProcessCommand processCommand = workPool.getProcess();
-			ProcessStatus processStatus = workPool.getProcessStatus
-					(processCommand);
+			ProcessCommand processCommand = null;
+			ProcessStatus processStatus = null;
+
+			try {
+				processCommand = workPool.getProcess();
+				processStatus = workPool.getProcessStatus
+						(processCommand);
+			} catch (InterruptedException e) {
+				ErrorLogger.log("SYSTEM", "Error acquiring process statuses: " +
+						e.getMessage());
+			}
+
+
 
 			if (processCommand != null && processStatus != null) {
 				Debug.log("Executing process in experiment "
@@ -105,14 +119,6 @@ public class WorkHandler implements Runnable {
 				processStatus.timeFinished = System.currentTimeMillis();
 
 
-			}  else {
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					Debug.log("Work Handler thread sleep failed/interrupted");
-					ErrorLogger.log("SYSTEM", "Work Handler thread sleep " +
-							"failed/interrupted in between process execution.");
-				}
 			}
 
 			removeOldStatuses();
