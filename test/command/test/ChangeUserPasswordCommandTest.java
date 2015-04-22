@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import command.ChangeUserPasswordCommand;
+import command.ValidateException;
 import database.constants.MaxSize;
 import junit.framework.TestCase;
 import org.junit.Before;
@@ -77,8 +78,13 @@ public class ChangeUserPasswordCommandTest extends TestCase {
         ChangeUserPasswordCommand cmd2 = new ChangeUserPasswordCommand();
         cmd2 = gson.fromJson(json, ChangeUserPasswordCommand.class);
 
-        cmd.validate();
-        cmd2.validate();
+        try {
+            cmd.validate();
+            cmd2.validate();
+            fail("Expected ValidateException to be thrown.");
+        }catch(ValidateException e){
+
+        }
     }
 
     /**
@@ -100,8 +106,13 @@ public class ChangeUserPasswordCommandTest extends TestCase {
         ChangeUserPasswordCommand cmd2 = new ChangeUserPasswordCommand();
         cmd2 = gson.fromJson(json, ChangeUserPasswordCommand.class);
 
-        cmd.validate();
-        cmd2.validate();
+        try {
+            cmd.validate();
+            cmd2.validate();
+            fail("Expected ValidateException to be thrown.");
+        }catch(ValidateException e){
+
+        }
     }
 
     /**

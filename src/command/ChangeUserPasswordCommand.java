@@ -29,7 +29,7 @@ public class ChangeUserPasswordCommand extends Command {
      * Used to validate the ChangeUserPasswordCommand.
      */
     @Override
-    public void validate() {
+    public void validate() throws ValidateException {
         validateString(username, MaxSize.USERNAME, "Username/Password");
         validateString(password, MaxSize.PASSWORD, "Username/Password");
     }

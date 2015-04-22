@@ -63,7 +63,6 @@ public class LoginCommand extends Command {
 
 		LoginAttempt login = Authenticate.login(username, password, dbHash, dbSalt);
 
-		LoginAttempt login = Authenticate.login(username, password);
 		if(login.wasSuccessful()) {
 			Debug.log("LOGIN WAS SUCCESSFUL FOR: "+ username + ". GAVE UUID: " +
 					Authenticate.getID(username));
