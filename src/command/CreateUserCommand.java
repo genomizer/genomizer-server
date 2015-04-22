@@ -3,7 +3,7 @@ package command;
 import java.io.IOException;
 import java.sql.SQLException;
 
-import authentication.PasswordHash;
+import authentication.BCrypt;
 import com.google.gson.annotations.Expose;
 
 import database.DatabaseAccessor;
@@ -87,9 +87,9 @@ public class CreateUserCommand extends Command {
 
 
 			// get a new salt
-			String salt = PasswordHash.getNewSalt();
+			String salt = BCrypt.gensalt();
 			// get hash using salt and password
-			String hash = PasswordHash.hashString(password+salt);
+			String hash = BCrypt.hashpw(password,salt);
 			// insert into DB, requires new table from DB group
 			db.addUser(username, salt, hash, privileges, name, email);
 

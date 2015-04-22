@@ -1,6 +1,6 @@
 package command;
 
-import authentication.PasswordHash;
+import authentication.BCrypt;
 import com.google.gson.annotations.Expose;
 import database.DatabaseAccessor;
 import database.constants.MaxSize;
@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 /**
+ * Command for changing user.
+ *
  * Created by dv13jen on 2015-04-16.
  */
 public class ChangeUserPasswordCommand extends Command {
@@ -63,10 +65,8 @@ public class ChangeUserPasswordCommand extends Command {
                     "CHANGE OF PASSWORD FAILED FOR: " + username + ". REASON: " + e.getMessage());
         }
 
-		String salt = PasswordHash.getNewSalt();
-		// get hash using salt and password
-		String hash = PasswordHash.hashString(password+salt);
-		// insert into DB, requires method DB group
+		String salt = BCrypt.gensalt();
+		String hash = BCrypt.hashpw(password,salt);
         try {
             db.resetPassword(username, hash, salt);
         } catch (SQLException | IOException e) {

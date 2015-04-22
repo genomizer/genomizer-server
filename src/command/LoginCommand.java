@@ -72,12 +72,11 @@ public class LoginCommand extends Command {
 	public Response execute() {
 
 		DatabaseAccessor db = null;
-
 		String dbHash = null;
-		String dbSalt = null;
 
 		try {
 			db = initDB();
+			dbHash = db.getPasswordHash(username);
 		} catch (SQLException | IOException e) {
 			Debug.log("LOGIN WAS UNSUCCESSFUL FOR: " + username + ". REASON: " +
 					e.getMessage());
@@ -85,29 +84,21 @@ public class LoginCommand extends Command {
 					"LOGIN WAS UNSUCCESSFUL FOR: " + username + ". REASON: " + e.getMessage());
 		}
 
-		try {
-			dbSalt = db.getPasswordSalt(username);
-			dbHash = db.getPasswordHash(username);
-		}catch (SQLException e) {
-			return new ErrorResponse(StatusCode.BAD_REQUEST, "Database error " + e.getMessage());
-		}
-
-		if(dbSalt == null || dbSalt.isEmpty() || dbHash == null || dbHash.isEmpty()){
+		if(dbHash == null || dbHash.isEmpty()){
 			return new ErrorResponse(StatusCode.UNAUTHORIZED, "Incorrect user name");
 		}
 
-		LoginAttempt login = Authenticate.login(username, password, dbHash, dbSalt);
+		LoginAttempt login = Authenticate.login(username, password, dbHash);
 
 		if(login.wasSuccessful()) {
 			Debug.log("LOGIN WAS SUCCESSFUL FOR: "+ username + ". GAVE UUID: " +
 					Authenticate.getID(username));
 			return new LoginResponse(200, login.getUUID());
-		} else {
-			Debug.log("LOGIN WAS UNSUCCESSFUL FOR: " + username + ". REASON: " +
-					login.getErrorMessage());
-			return new ErrorResponse(StatusCode.UNAUTHORIZED,
-					login.getErrorMessage());
 		}
+		Debug.log("LOGIN WAS UNSUCCESSFUL FOR: " + username + ". REASON: " +
+				login.getErrorMessage());
+		return new ErrorResponse(StatusCode.UNAUTHORIZED,
+				login.getErrorMessage());
 	}
 
 }
