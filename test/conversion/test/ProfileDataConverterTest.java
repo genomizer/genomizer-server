@@ -7,9 +7,11 @@ import org.junit.Test;
 
 import conversion.ConversionHandler;
 
-// TODO: Re-enable.
+/* TODO None of these tests check the actual conversion but only tests if
+ * it is possible to run scripts. Should be extended with tests of actual
+  * results but real data is needed as reference. */
 @Ignore
-public class ProfileDataConverterTest {
+ public class ProfileDataConverterTest {
 
 
 	@Test

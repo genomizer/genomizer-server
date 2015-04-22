@@ -140,7 +140,7 @@ public class Authenticate {
 	 */
 	static public String getUsernameByID(String userID){
 
-		return activeUsersID.get(userID);
+		return (userID == null ? "" : activeUsersID.get(userID));
 
 	}
 

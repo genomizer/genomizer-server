@@ -15,7 +15,10 @@ import authentication.InactiveUuidsRemover;
 
 import command.CommandHandler;
 
-import server.*;
+import server.ServerSettings;
+import server.Debug;
+import server.Doorman;
+import server.ErrorLogger;
 
 
 public class ServerMain {
