@@ -20,7 +20,7 @@ public class WorkHandler implements Runnable {
 		this.workPool = workPool;
 	}
 
-	public synchronized void removeOldStatuses() {
+	public void removeOldStatuses() {
 
 		// Get current time
 		long currentTime = System.currentTimeMillis();
@@ -59,11 +59,11 @@ public class WorkHandler implements Runnable {
 	//If the queue is not empty, the command at the head of the queue is
 	//is executed
 	@Override
-	public void run(){
+	public void run() {
 		Debug.log(Thread.currentThread().getName());
 
 
-		while(true){
+		while (true) {
 
 			ProcessCommand processCommand = workPool.getProcess();
 			ProcessStatus processStatus = workPool.getProcessStatus
@@ -97,7 +97,7 @@ public class WorkHandler implements Runnable {
 					} else {
 						processStatus.status = ProcessStatus.STATUS_CRASHED;
 					}
-				} catch(NullPointerException e){
+				} catch (NullPointerException e){
 					processStatus.status = ProcessStatus.STATUS_CRASHED;
 				}
 
