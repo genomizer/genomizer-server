@@ -13,29 +13,21 @@ import response.StatusCode;
 /**
  * Class used to represent a remove experiment command.
  *
- * @author Kommunikation/kontroll 2014.
- * @version 1.0
+ * @author Business Logic 2015.
+ * @version 1.1
  */
 public class DeleteExperimentCommand extends Command {
 
 	/**
-	 * Constructor used to initiate the object.
-	 *
+	 * Constructs a new instance of DeleteExperimentCommand using the supplied
+	 * restful string.
 	 * @param restful string to set.
 	 */
 	public DeleteExperimentCommand(String restful) {
-
 		this.setHeader(restful);
-
 	}
-	/**
-	 * Used to validate the DeleteExperimentCommand.
-	 *
-	 * @return boolean depending on results.
-	 * @throws ValidateException
-	 */
-	public boolean validate() throws ValidateException {
 
+	public void validate() throws ValidateException {
 		if(header == null) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Experiment " +
 					"name was missing.");
@@ -50,26 +42,13 @@ public class DeleteExperimentCommand extends Command {
 					"characters in experiment name. Valid characters are: " +
 					validCharacters);
 		}
-
-		return true;
-
 	}
 
-	/**
-	 * Used to execute the actual command that deletes
-	 * the experiment.
-	 *
-	 * @return Response object depending on result.
-	 */
 	public Response execute() {
-
 		DatabaseAccessor db = null;
-
 		try {
-
 			db = initDB();
 			int tuples = db.deleteExperiment(header);
-
 			if(tuples == 0) {
 
 				return new ErrorResponse(StatusCode.BAD_REQUEST,
@@ -78,20 +57,17 @@ public class DeleteExperimentCommand extends Command {
 
 			}
 		} catch (SQLException e) {
-
 			return new ErrorResponse(StatusCode.BAD_REQUEST,
 					Integer.toString(e.getErrorCode()));
 
 		} catch (IOException e) {
-
 			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
-
 		} finally {
-			db.close();
+			if (db != null) {
+				db.close();
+			}
 		}
-
 		return new MinimalResponse(StatusCode.OK);
-
 	}
 
 }

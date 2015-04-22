@@ -9,8 +9,8 @@ import com.google.gson.GsonBuilder;
  * This class is used to create and return different commands that
  * will be executed later by calling their execute() method.
  *
- * @author Kommunikation/kontroll 2014.
- * @version 1.0
+ * @author Business Logic 2015.
+ * @version 1.1
  */
 public class CommandFactory {
 	private final GsonBuilder builder;
@@ -27,7 +27,6 @@ public class CommandFactory {
 
 	/**
 	 * Used to create the command needed to handle login.
-	 *
 	 * @param json string to initiate class.
 	 * @return the actual command.
 	 */
@@ -38,7 +37,6 @@ public class CommandFactory {
 
 	/**
 	 * Used to create the command needed to handle logout.
-	 *
 	 * @param username on the person that wants to logout.
 	 * @return a logout command.
 	 */
@@ -49,7 +47,6 @@ public class CommandFactory {
 
 	/**
 	 * Used to create the command needed to retrieve experiments.
-	 *
 	 * @param restful information needed.
 	 * @return the actual command.
 	 */
@@ -59,7 +56,6 @@ public class CommandFactory {
 
 	/**
 	 * Used to create the command needed to add experiments.
-	 *
 	 * @param json string to initiate class.
 	 * @return the actual command.
 	 */
@@ -71,7 +67,6 @@ public class CommandFactory {
 
 	/**
 	 * Used to create the command needed to update experiments.
-	 *
 	 * @return the actual command.
 	 */
 	public Command createUpdateExperimentCommand(String json, String restful) {
@@ -81,7 +76,6 @@ public class CommandFactory {
 
 	/**
 	 * Used to create the command needed to remove experiments.
-	 *
 	 * @param restful information needed.
 	 * @return the actual command.
 	 */
@@ -91,7 +85,6 @@ public class CommandFactory {
 
 	/**
 	 * Used to create the command needed to retrieve experiment files.
-	 *
 	 * @param restful information needed.
 	 * @return the actual command.
 	 */
@@ -101,7 +94,6 @@ public class CommandFactory {
 
 	/**
 	 * Used to create the command needed to add files to experiments.
-	 *
 	 * @param json string to initiate class.
 	 * @return the actual command.
 	 */
@@ -113,7 +105,6 @@ public class CommandFactory {
 
 	/**
 	 * Used to create the command needed to update files in experiments.
-	 *
 	 * @return the actual command.
 	 */
 	public Command createUpdateFileInExperimentCommand(String json,
@@ -124,7 +115,6 @@ public class CommandFactory {
 
 	/**
 	 * Used to create the command needed to remove files from experiments.
-	 *
 	 * @param restful information needed.
 	 * @return the actual command.
 	 */
@@ -134,7 +124,6 @@ public class CommandFactory {
 
 	/**
 	 * Used to create the command needed to search for experiments.
-	 *
 	 * @param restful information needed.
 	 * @return the actual command.
 	 */
@@ -147,7 +136,6 @@ public class CommandFactory {
 
 	/**
 	 * Used to create the command needed to create a new user.
-	 *
 	 * @param json string to initiate class.
 	 * @return the actual command.
 	 */
@@ -159,7 +147,6 @@ public class CommandFactory {
 
 	/**
 	 * Used to create the command needed to delete a user.
-	 *
 	 * @param username to delete.
 	 * @return the actual command.
 	 */
@@ -169,7 +156,6 @@ public class CommandFactory {
 
 	/**
 	 * Used to create the command needed to convert data from raw to profile.
-	 *
 	 * @param json string to initiate class.
 	 * @param username that executed the command.
 	 * @param parsedRest restful information needed.
@@ -182,8 +168,8 @@ public class CommandFactory {
 
 		ProcessCommand processCommand = gson.fromJson(json,
 				ProcessCommand.class);
-//		processCommand.setProcessType(restful[2]);
-//		processCommand.setFileID(restful[3]);
+		//processCommand.setProcessType(restful[2]);
+		//processCommand.setFileID(restful[3]);
 		processCommand.setUsername(username);
 		processCommand.setTimestamp(System.currentTimeMillis());
 		processCommand.setProcessType(parsedRest);
@@ -198,7 +184,6 @@ public class CommandFactory {
 
 	/**
 	 * Used to create the command needed to get annotation information.
-	 *
 	 * @return the actual command.
 	 */
 	public Command createGetAnnotationInformationCommand(String json) {
@@ -208,7 +193,6 @@ public class CommandFactory {
 
 	/**
 	 * Used to create a command needed to add annotation fields.
-	 *
 	 * @param json string to initiate class.
 	 * @return the actual command.
 	 */
@@ -220,7 +204,6 @@ public class CommandFactory {
 
 	/**
 	 * Used to create the command needed to add annotation values.
-	 *
 	 * @param json string to initiate class.
 	 * @return the actual command.
 	 */
@@ -232,7 +215,6 @@ public class CommandFactory {
 
 	/**
 	 * Used to create the command needed to remove annotation fields.
-	 *
 	 * @param restful information needed.
 	 * @return the actual command.
 	 */
@@ -242,7 +224,6 @@ public class CommandFactory {
 
 	/**
 	 * Used to create the command needed to get annotation privileges.
-	 *
 	 * @return the actual command.
 	 */
 	public Command createGetAnnotationPrivilegesCommand(String json) {
@@ -252,7 +233,6 @@ public class CommandFactory {
 
 	/**
 	 * Used to create the command needed to update annotation privileges.
-	 *
 	 * @return the actual command.
 	 */
 	public Command createUpdateAnnotationPrivilegesCommand(String json,
@@ -263,7 +243,6 @@ public class CommandFactory {
 
 	/**
 	 * Used to create the command needed to add new genome releases.
-	 *
 	 * @param json string to initiate class.
 	 * @return the actual command created.
 	 */
@@ -275,7 +254,6 @@ public class CommandFactory {
 
 	/**
 	 * Used to create the command needed to rename an existing annotation value.
-	 *
 	 * @param json string to initiate class.
 	 * @return the actual command created.
 	 */
@@ -286,7 +264,6 @@ public class CommandFactory {
 
 	/**
 	 * Used to create the command needed to delete an existing genome release.
-	 *
 	 * @param specie associated with the genome release.
 	 * @param genomeVersion to delete.
 	 * @return the actual command.
@@ -300,7 +277,6 @@ public class CommandFactory {
 
 	/**
 	 * Used to create the command needed to delete a annotation value.
-	 *
 	 * @param value
 	 * @param name
 	 * @return the actual command created.
@@ -312,7 +288,6 @@ public class CommandFactory {
 
 	/**
 	 * Used to create the command needed to edit an existing annotation field.
-	 *
 	 * @param json string to initiate class.
 	 * @return the actual command.
 	 */
@@ -323,7 +298,6 @@ public class CommandFactory {
 
 	/**
 	 * Used to create the command needed to get all genome releases.
-	 *
 	 * @return the actual command.
 	 */
 	public Command createGetAllGenomeReleasesCommand() {
@@ -333,7 +307,6 @@ public class CommandFactory {
 	/**
 	 * Used to create the command needed to get all genome releases on
 	 * a given species.
-	 *
 	 * @param species to get.
 	 * @return the actual command.
 	 */
@@ -343,7 +316,6 @@ public class CommandFactory {
 
 	/**
 	 * Used to create the command needed to get the process status.
-	 *
 	 * @param workHandler class object needed.
 	 * @return the actual command.
 	 */
@@ -353,7 +325,6 @@ public class CommandFactory {
 
 	/**
 	 * Used to check if a token is valid.
-	 *
 	 * @param uuid user ID.
 	 * @return a command.
 	 */

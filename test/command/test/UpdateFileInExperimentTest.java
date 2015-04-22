@@ -31,7 +31,7 @@ public class UpdateFileInExperimentTest {
 	public void testValidateAlwaysTrue() {
 
 		UpdateFileInExperimentCommand c = new UpdateFileInExperimentCommand();
-		assertTrue(c.validate());
+		c.validate();
 	}
 
 }

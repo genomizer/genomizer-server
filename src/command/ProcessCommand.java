@@ -61,7 +61,7 @@ public class ProcessCommand extends Command {
 	 *
 	 */
 	@Override
-	public boolean validate() throws ValidateException {
+	public void validate() throws ValidateException {
 
 
 		if(username == null){
@@ -182,7 +182,6 @@ public class ProcessCommand extends Command {
 					validCharacters);
 		}
 
-		return true;
 	}
 
 	/**
@@ -198,11 +197,7 @@ public class ProcessCommand extends Command {
 		Debug.log("field: "+ field + " length: " + field.length() +
 				" canbenull: " + canBeNull);
 		if(field.length() <= 0){
-			if(canBeNull == false){
-				return true;
-			}else{
-				return false;
-			}
+			return !canBeNull;
 		}
 		return false;
 	}
@@ -481,7 +476,7 @@ public class ProcessCommand extends Command {
 	}
 
 	public void setFilePaths() throws SQLException, IOException {
-		DatabaseAccessor db = null;
+		DatabaseAccessor db;
 
 		db = initDB();
 		filepaths = db.processRawToProfile(expid);

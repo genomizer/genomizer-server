@@ -17,14 +17,10 @@ import response.StatusCode;
 /**
  * Class used to handle adding a genome release.
  *
- * @author Kommunikation/kontroll 2014.
- * @version 1.0
+ * @author Business Logic 2015.
+ * @version 1.1
  */
 public class AddGenomeReleaseCommand extends Command {
-	/* All attributes with @Expose are serialized with
-	 * a JSON string.
-	 */
-
 	@Expose
 	private String genomeVersion = null;
 
@@ -32,15 +28,10 @@ public class AddGenomeReleaseCommand extends Command {
 	private String specie = null;
 
 	@Expose
-	private ArrayList<String> files = new ArrayList<String>();
+	private ArrayList<String> files = new ArrayList<>();
 
-	/**
-	 * Method used to validate the information needed in order to
-	 * execute the command properly.
-	 */
 	@Override
-	public boolean validate() throws ValidateException {
-
+	public void validate() throws ValidateException {
 		if(files == null || files.size() == 0) {
 			throw new ValidateException(StatusCode.BAD_REQUEST,
 					"Specify release files.");
@@ -91,20 +82,13 @@ public class AddGenomeReleaseCommand extends Command {
 					"characters in specie name. Valid characters are: " +
 					validCharacters);
 		}
-
-		return true;
-
 	}
 
-	/**
-	 * Method used to execute the actual command.
-	 */
+
 	@Override
 	public Response execute() {
-
 		DatabaseAccessor db = null;
 		ArrayList<String> uploadURLs = new ArrayList<String>();
-
 		try {
 			db = initDB();
 			for(String fileName: files) {
@@ -116,7 +100,9 @@ public class AddGenomeReleaseCommand extends Command {
 				return new ErrorResponse(StatusCode.BAD_REQUEST,
 						e.getMessage());
 		} finally {
-			db.close();
+			if (db != null) {
+				db.close();
+			}
 		}
 	}
 

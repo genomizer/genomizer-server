@@ -14,7 +14,6 @@ import java.sql.SQLException;
  * Created by dv13jen on 2015-04-16.
  */
 public class ChangeUserPasswordCommand extends Command {
-
     @Expose
     private String username = null;
 
@@ -26,9 +25,10 @@ public class ChangeUserPasswordCommand extends Command {
      * Used to validate the ChangeUserPasswordCommand.
      */
     @Override
-    public boolean validate() {
+    public void validate() {
+        //TODO Change to exceptions.
 
-        if(username == null || password == null ) {
+        /*if(username == null || password == null ) {
             return false;
         }
         if(username.length() < 1 || username.length() > MaxSize.USERNAME) {
@@ -38,16 +38,10 @@ public class ChangeUserPasswordCommand extends Command {
             return false;
         }
 
-        if(username.indexOf('/') != -1) {
-            return false;
-        }
+        return username.indexOf('/') == -1;*/
 
-        return true;
     }
 
-    /**
-     * Used to execute the actual creation of the user.
-     */
     @Override
     public Response execute() {
         // DatabaseAccessor db = null;

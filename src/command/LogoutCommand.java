@@ -9,11 +9,10 @@ import response.StatusCode;
 /**
  * Class used to represent a logout command.
  *
- * @author Kommunikation/kontroll 2014.
- * @version 1.0
+ * @author Business Logic 2015.
+ * @version 1.1
  */
 public class LogoutCommand extends Command {
-
 	private String username;
 
 	/**
@@ -21,21 +20,18 @@ public class LogoutCommand extends Command {
 	 *
 	 * @param username that wants to logout.
 	 */
-	public LogoutCommand(String username) {
-
-		this.username = username;
-
-	}
 
 	/**
-	 * Used to validate the LogoutCommand class.
-	 *
-	 * @return boolean depending on result.
-	 * @throws ValidateException
+	 * Constructs a new instance of LogoutCommand using the supplied
+	 * username.
+	 * @param username the username of the user that should be logged out.
 	 */
-	@Override
-	public boolean validate() throws ValidateException {
+	public LogoutCommand(String username) {
+		this.username = username;
+	}
 
+	@Override
+	public void validate() throws ValidateException {
 		if(username == null) {
 
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Username " +
@@ -49,14 +45,8 @@ public class LogoutCommand extends Command {
 					+ database.constants.MaxSize.USERNAME + " characters long.");
 
 		}
-
-		return true;
-
 	}
 
-	/**
-	 * Used to execute the logout command.
-	 */
 	@Override
 	public Response execute() {
 		String id = Authenticate.getID(username);

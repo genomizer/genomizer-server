@@ -32,7 +32,7 @@ public class UpdateExperimentCommandTest {
 	public void testValidateAlwaysTrue() {
 
 		UpdateExperimentCommand c = new UpdateExperimentCommand();
-		assertTrue(c.validate());
+		c.validate();
 
 	}
 

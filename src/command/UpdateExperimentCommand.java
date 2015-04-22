@@ -5,10 +5,10 @@ import response.Response;
 import response.StatusCode;
 
 /**
- * Class used to handle updateing experiments.
+ * Class used to handle updating experiments.
  *
- * @author Kommunikation/kontroll 2014.
- * @version 1.0
+ * @author Business Logic 2015.
+ * @version 1.1
  */
 public class UpdateExperimentCommand extends Command {
 
@@ -17,22 +17,15 @@ public class UpdateExperimentCommand extends Command {
 	 * to execute the actual command.
 	 */
 	@Override
-	public boolean validate() {
-
-		// TODO Auto-generated method stub
-		return true;
-
+	public void validate() {
+		// TODO Add code here probably
 	}
 
-	/**
-	 * Used to execute the actual command.
-	 */
 	@Override
 	public Response execute() {
-
+		//TODO Add code here probably
 		//Method not implemented, send appropriate response
 		return 	new MinimalResponse(StatusCode.NO_CONTENT);
-
 	}
 
 }

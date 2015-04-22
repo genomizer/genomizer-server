@@ -13,32 +13,21 @@ import response.StatusCode;
 /**
  * Class used to handle removal on an existing annotation-field.
  *
- * @author Kommunikation/kontroll 2014.
- * @version 1.0
+ * @author Business Logic 2015.
+ * @version 1.1
  */
 public class DeleteAnnotationFieldCommand extends Command {
 
 	/**
-	 * Constructor that initiates the class.
-	 *
+	 * Constructs a new instance of DeleteAnnotationFieldCommand.
 	 * @param restful header to set.
 	 */
 	public DeleteAnnotationFieldCommand(String restful) {
-
 		header = restful;
-
 	}
 
-	/**
-	 * Used to validate the DeleteAnnotationFieldCommand
-	 * class.
-	 *
-	 * @return boolean depending on result.
-	 * @throws ValidateException
-	 */
 	@Override
-	public boolean validate() throws ValidateException {
-
+	public void validate() throws ValidateException {
 		if(header == null) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation " +
 					"field-name was missing.");
@@ -55,19 +44,11 @@ public class DeleteAnnotationFieldCommand extends Command {
 					"characters for annotation. Valid characters are: " +
 					validCharacters);
 		}
-
-		return true;
-
 	}
 
-	/**
-	 * Used to execute the actual command.
-	 */
 	@Override
 	public Response execute() {
-
 		DatabaseAccessor db = null;
-
 		try {
 			db = initDB();
 			ArrayList<String> annotations = db.getAllAnnotationLabels();
@@ -88,7 +69,9 @@ public class DeleteAnnotationFieldCommand extends Command {
 			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE,
 					e.getMessage());
 		} finally {
-			db.close();
+			if (db != null) {
+				db.close();
+			}
 		}
 	}
 

@@ -11,49 +11,26 @@ import response.*;
 /**
  * Class used to get information about annotations.
  *
- * @author Kommunikation/kontroll 2014.
- * @version 1.0
+ * @author Business Logic 2015.
+ * @version 1.1
  */
 public class GetAnnotationInformationCommand extends Command {
-
-	/**
-	 * Empty constructor.
-	 */
-	public GetAnnotationInformationCommand() {
-
-	}
-
-	/**
-	 * Method used to validate the GetAnnotationInformationCommand
-	 * class.
-	 *
-	 * @return always returns true.
-	 */
 	@Override
-	public boolean validate() {
-
-		return true;
-
+	public void validate() {
+		//TODO Something should be added here probably?
 	}
 
-	/**
-	 * Method used to execute the actual command.
-	 */
 	@Override
 	public Response execute() {
-
 		ArrayList<AnnotationInformation> annotations = new ArrayList<AnnotationInformation>();
-
-		DatabaseAccessor db = null;
-		Map<String, Integer> a = null;
+		DatabaseAccessor db;
+		Map<String, Integer> a;
 		try {
 			db = initDB();
 			a = db.getAnnotations();
-
 			List<String> list = new ArrayList<String>(a.keySet());
-
 			for(String label: list) {
-				database.containers.Annotation annotationObject = null;
+				database.containers.Annotation annotationObject;
 				ArrayList<String> values = new ArrayList<String>();
 				annotationObject = db.getAnnotationObject(label);
 
@@ -65,19 +42,17 @@ public class GetAnnotationInformationCommand extends Command {
 					values = (ArrayList<String>)
 							annotationObject.getPossibleValues();
 				}
-
 				AnnotationInformation annotation =
 						new AnnotationInformation(annotationObject.label,
 								values, annotationObject.isRequired);
 				annotations.add(annotation);
 			}
-
+			//TODO Unsure what this code should do
 			// Hardcoded expID
-//			ArrayList<String> values = new ArrayList<String>();
-//			values.add("freetext");
-//			AnnotationInformation expId = new AnnotationInformation("expID", values, false);
-//			annotations.add(expId);
-
+			//ArrayList<String> values = new ArrayList<String>();
+			//values.add("freetext");
+			//AnnotationInformation expId = new AnnotationInformation("expID", values, false);
+			//annotations.add(expId);
 			db.close();
 			return new GetAnnotationInformationResponse(StatusCode.OK, annotations);
 		}

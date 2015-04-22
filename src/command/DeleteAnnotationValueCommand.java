@@ -15,37 +15,26 @@ import response.StatusCode;
 /**
  * Class used to handle removal of annotation values.
  *
- * @author Kommunikation/kontroll 2014.
- * @version 1.0
+ * @author Business Logic 2015.
+ * @version 1.1
  */
 public class DeleteAnnotationValueCommand extends Command {
-
 	private String name;
 	private String value;
 
 	/**
-	 * Constructor used to initiate the class.
-	 *
-	 * @param name is the label on annotation that has the value.
-	 * @param value to delete.
+	 * Constructs a new instance of DeleteAnnotationValueCommand using the
+	 * supplied name of the affected annotation and the value to be removed.
+	 * @param name the name of the selected annotation.
+	 * @param value the value to delete.
 	 */
 	public DeleteAnnotationValueCommand(String name, String value) {
-
 		this.name = name;
 		this.value = value;
-
 	}
 
-	/**
-	 * Method used to validate the DeleteAnnotationValueCommand
-	 * class.
-	 *
-	 * @return boolean depending on result.
-	 * @throws ValidateException
-	 */
 	@Override
-	public boolean validate() throws ValidateException {
-
+	public void validate() throws ValidateException {
 		if(name == null || value == null) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation " +
 					"label and/or value was missing.");
@@ -70,16 +59,11 @@ public class DeleteAnnotationValueCommand extends Command {
 					"characters in annotation value. Valid characters are: " +
 					validCharacters);
 		}
-		return true;
 	}
 
-	/**
-	 * Method used to execute the actual command.
-	 */
 	@Override
 	public Response execute() {
 		DatabaseAccessor db = null;
-
 		try {
 			db = initDB();
 			List<String> values = db.getChoices(name);
@@ -100,7 +84,9 @@ public class DeleteAnnotationValueCommand extends Command {
 			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE,
 					e.getMessage());
 		} finally {
-			db.close();
+			if (db != null) {
+				db.close();
+			}
 		}
 		return new MinimalResponse(StatusCode.OK);
 	}

@@ -16,30 +16,21 @@ import response.StatusCode;
 /**
  * This class is used to handle changes to annotation values.
  *
- * @author Kommunikation/kontroll 2014.
- * @version 1.0
+ * @author Business Logic 2015.
+ * @version 1.1
  */
 public class EditAnnotationValueCommand extends Command {
-	/** All attributes with @Expose are serialized with a
-	 * JSON string.
-	 */
+	@Expose
+	private String name = null;
 
 	@Expose
-	String name;
+	private String oldValue = null;
 
 	@Expose
-	String oldValue;
+	private String newValue = null;
 
-	@Expose
-	String newValue;
-
-	/**
-	 * Method used to validate the information needed to execute
-	 * the actual command.
-	 */
 	@Override
-	public boolean validate() throws ValidateException {
-
+	public void validate() throws ValidateException {
 		if(name == null) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify an " +
 					"annotation label.");
@@ -87,17 +78,11 @@ public class EditAnnotationValueCommand extends Command {
 					"characters in new annotation value. Valid characters are: "
 					+ validCharacters);
 		}
-		return true;
 	}
 
-	/**
-	 * Method used to execute the actual command.
-	 */
 	@Override
 	public Response execute() {
-
 		DatabaseAccessor db = null;
-
 		try {
 			db = initDB();
 			ArrayList<String> annotations = db.getAllAnnotationLabels();
@@ -119,8 +104,9 @@ public class EditAnnotationValueCommand extends Command {
 			e.printStackTrace();
 			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
 		} finally {
-			db.close();
+			if (db != null) {
+				db.close();
+			}
 		}
 	}
-
 }

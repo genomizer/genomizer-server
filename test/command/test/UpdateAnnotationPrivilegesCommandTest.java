@@ -32,7 +32,7 @@ public class UpdateAnnotationPrivilegesCommandTest {
 	public void testValidateAlwaysTrue() {
 
 		UpdateAnnotationPrivilegesCommand c = new UpdateAnnotationPrivilegesCommand();
-		assertTrue(c.validate());
+		c.validate();
 
 	}
 

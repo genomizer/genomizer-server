@@ -3,11 +3,10 @@ package command;
 /**
  * Enumeration class used to identify different commands.
  *
- * @author Kommunikation/kontroll 2014.
- * @version 1.0
+ * @author Business Logic 2015.
+ * @version 1.1
  */
 public enum CommandType {
-
 	LOGIN_COMMAND,
 	LOGOUT_COMMAND,
 	GET_EXPERIMENT_COMMAND,
@@ -37,5 +36,4 @@ public enum CommandType {
 	GET_ALL_GENOME_RELEASE_COMMAND,
 	GET_GENOME_RELEASE_SPECIES_COMMAND,
 	IS_TOKEN_VALID_COMMAND
-
 }

@@ -47,30 +47,21 @@ public class CommandHandler {
 		}
 
 		try {
-			if (myCom.validate()) {
-				if(CommandType.PROCESS_COMMAND.equals(cmdt)){
+			myCom.validate();
+			if (CommandType.PROCESS_COMMAND.equals(cmdt)) {
 
-					/*If the command is a process command, execution of it
-					* starts in the heavy work thread, followed by returning a
-					* OK status to the client.*/
-					Debug.log("Adding processCommand to work queue.");
-					heavyWorkThread.addWork((ProcessCommand)myCom);
-					return new ProcessResponse(StatusCode.OK);
-				}else {
+				/*If the command is a process command, execution of it starts
+				* in the heavy work thread, followed by returning an OK
+				* status to the client.*/
+				Debug.log("Adding processCommand to work queue.");
+				heavyWorkThread.addWork((ProcessCommand)myCom);
+				return new ProcessResponse(StatusCode.OK);
+ 			} else {
 
-					/*If the command is of the common kind, execute the
-					* command and return the response.*/
-					return myCom.execute();
-				}
-			} else {
-
-				/*If the command is not valid, return an error response.*/
-				Debug.log("Command not valid");
-				return new ErrorResponse(StatusCode.BAD_REQUEST, "The " +
-						"command was invalid. Check the input! Valid " +
-						"characters are A-Z, a-z, 0-9 and space");
-			}
-
+				/*If the command is of the common kind, execute the command
+				* and return the response.*/
+				return myCom.execute();
+ 			}
 		} catch(ValidateException e) {
 			return new ErrorResponse(e.getCode(), e.getMessage());
 		}
@@ -157,7 +148,7 @@ public class CommandHandler {
 				break;
 			case ADD_ANNOTATION_FIELD_COMMAND:
 				newCommand = cmdFactory.
-						createAddAnnotationFieldCommand(parsedURI);
+						createAddAnnotationFieldCommand(json);
 				break;
 			case ADD_ANNOTATION_VALUE_COMMAND:
 				newCommand = cmdFactory.createAddAnnotationValueCommand(json);

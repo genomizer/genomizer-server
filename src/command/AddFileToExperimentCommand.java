@@ -15,45 +15,38 @@ import response.Response;
 import response.StatusCode;
 
 /**
- * Class used to represent a command of the type Addfile.
+ * Class used to represent a command of the type AddFile.
  *
- * @author Kommunikation/kontroll 2014.
- * @version 1.0
+ * @author Business Logic 2015.
+ * @version 1.1
  */
 public class AddFileToExperimentCommand extends Command {
+	@Expose
+	private String experimentID = null;
 
 	@Expose
-	private String experimentID;
+	private String fileName = null;
 
 	@Expose
-	private String fileName;
+	private String type = null;
 
 	@Expose
-	private String type;
+	private String metaData = null;
 
 	@Expose
-	private String metaData;
-
-	@Expose
-	private String author;
+	private String author = null;
 
 	@Expose
 	private String uploader;
 
 	@Expose
-	private String grVersion;
+	private String grVersion = null;
 
+	//TODO: Find out what this does.
 	private boolean isPrivate = false;
 
-	/**
-	 * Validates the request by checking
-	 * the attributes. No attribute can be null
-	 * and type needs to be either "raw", "profile",
-	 * or "region".
-	 */
 	@Override
-	public boolean validate() throws ValidateException {
-
+	public void validate() throws ValidateException {
 		if(experimentID == null) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify " +
 					"an experiment name.");
@@ -67,16 +60,20 @@ public class AddFileToExperimentCommand extends Command {
 					"type.");
 		}
 		if(metaData == null) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify metadata.");
+			throw new ValidateException(StatusCode.BAD_REQUEST,
+					"Specify metadata.");
 		}
 		if(uploader == null) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify an uploader name.");
+			throw new ValidateException(StatusCode.BAD_REQUEST,
+					"Specify an uploader name.");
 		}
 		if(grVersion == null) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify a genome release.");
+			throw new ValidateException(StatusCode.BAD_REQUEST,
+					"Specify a genome release.");
 		}
 		if(author == null) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify author.");
+			throw new ValidateException(StatusCode.BAD_REQUEST,
+					"Specify author.");
 		}
 		if(experimentID.length() > MaxSize.EXPID || experimentID.length() < 1) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Experiment " +
@@ -168,8 +165,6 @@ public class AddFileToExperimentCommand extends Command {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "File name " +
 					"can not contain slash.");
 		}
-
-		return true;
 	}
 
 	public void setUploader(String uploader) {
@@ -177,28 +172,27 @@ public class AddFileToExperimentCommand extends Command {
 	}
 
 	/**
-	 * Adds all attributes to an arraylist and
-	 * pass that and the experimentID to the database.
-	 * A filepath is returned and sent to the client as
-	 * a URL.
+	 * Adds all attributes to an ArrayList and passes that and the experimentID
+	 * to the database. A file path is returned and sent to the client as an
+	 * URL.
 	 */
 	@Override
 	public Response execute() {
 
 		DatabaseAccessor db = null;
-		int filetype;
+		int fileType;
 		if(type.equalsIgnoreCase("raw")) {
-			filetype = FileTuple.RAW;
+			fileType = FileTuple.RAW;
 		} else if(type.equalsIgnoreCase("profile")) {
-			filetype = FileTuple.PROFILE;
+			fileType = FileTuple.PROFILE;
 		} else if(type.equalsIgnoreCase("region")) {
-			filetype = FileTuple.REGION;
+			fileType = FileTuple.REGION;
 		} else {
-			filetype = FileTuple.OTHER;
+			fileType = FileTuple.OTHER;
 		}
 		try {
 			db = initDB();
-			FileTuple ft = db.addNewFile(experimentID, filetype, fileName, null,
+			FileTuple ft = db.addNewFile(experimentID, fileType, fileName, null,
 					metaData, author, uploader, isPrivate, grVersion);
 			return new AddFileToExperimentResponse(StatusCode.OK,
 					ft.getUploadURL());
@@ -209,8 +203,10 @@ public class AddFileToExperimentCommand extends Command {
 			e.printStackTrace();
 			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE,
 					e.getMessage());
-		} finally{
-			db.close();
+		} finally {
+			if (db != null) {
+				db.close();
+			}
 		}
 	}
 }

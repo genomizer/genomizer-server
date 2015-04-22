@@ -7,33 +7,29 @@ import response.StatusCode;
 /**
  * Class used to represent a command of the type GetFileFromExperimentCommand.
  *
- * @author Kommunikation/kontroll 2014.
- * @version 1.0
+ * @author Business Logic 2015.
+ * @version 1.1
  */
+
 public class GetFileFromExperimentCommand extends Command {
-
 	private String fileID;
-	// private DatabaseAccessor db;
-
 
 	/**
 	 * Constructor. Takes the fileID as argument.
 	 * @param fileID the file id.
 	 */
+
+	/**
+	 * Constructs a new instance of GetFileExperimentCommand using the supplied
+	 * file ID.
+	 * @param fileID the file ID of the wanted file.
+	 */
 	public GetFileFromExperimentCommand(String fileID) {
 		this.fileID = fileID;
 	}
 
-	/**
-	 * Used to validate the GetFileFromExperimentCommand
-	 * class.
-	 *
-	 * @return boolean depending on result.
-	 * @throws ValidateException
-	 */
 	@Override
-	public boolean validate() throws ValidateException {
-
+	public void validate() throws ValidateException {
 		if(fileID == null) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify a " +
 					"file-id.");
@@ -50,18 +46,11 @@ public class GetFileFromExperimentCommand extends Command {
 					"characters in annotation value. Valid characters are: " +
 					validCharacters);
 		}
-		return true;
-
 	}
 
-	/**
-	 * Check to see if the requested file exists and
-	 * get its attributes from the database. Return
-	 * the attributes and an URL to the client.
-	 */
 	@Override
 	public Response execute() {
-
+		//TODO Replace this with useful code?
 //		Response rsp = rsp;
 //		ArrayList<String> attributes = new ArrayList<String>();
 //
@@ -69,7 +58,7 @@ public class GetFileFromExperimentCommand extends Command {
 //
 //
 //		if(results == null) {
-//			// File not found, send appropriate response (404)
+//			 File not found, send appropriate response (404)
 //			rsp = new ErrorResponse(404);
 //		} else {
 //			int rowNr = results.getRowCount();

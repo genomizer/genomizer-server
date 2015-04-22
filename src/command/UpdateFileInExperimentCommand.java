@@ -7,32 +7,20 @@ import response.StatusCode;
 /**
  * Class used to handle updateing files in experiments.
  *
- * @author Kommunikation/kontroll 2014.
- * @version 1.0
+ * @author Business Logic 2015.
+ * @version 1.1
  */
 public class UpdateFileInExperimentCommand extends Command {
 
-	/**
-	 * Method used to validate the information needed
-	 * to execute the command.
-	 */
+
 	@Override
-	public boolean validate() {
-
-		// TODO Auto-generated method stub
-		return true;
-
+	public void validate() {
+		// TODO Add code here probably
 	}
 
-	/**
-	 * Used to execute the actual command.
-	 */
 	@Override
 	public Response execute() {
-
-		//Method not implemented, send appropriate response
+		//TODO Add code here probably
 		return 	new MinimalResponse(StatusCode.NO_CONTENT);
-
 	}
-
 }

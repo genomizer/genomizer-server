@@ -77,9 +77,8 @@ public class ChangeUserPasswordCommandTest extends TestCase {
         ChangeUserPasswordCommand cmd2 = new ChangeUserPasswordCommand();
         cmd2 = gson.fromJson(json, ChangeUserPasswordCommand.class);
 
-        assertFalse(cmd.validate());
-        assertFalse(cmd2.validate());
-
+        cmd.validate();
+        cmd2.validate();
     }
 
     /**
@@ -101,9 +100,8 @@ public class ChangeUserPasswordCommandTest extends TestCase {
         ChangeUserPasswordCommand cmd2 = new ChangeUserPasswordCommand();
         cmd2 = gson.fromJson(json, ChangeUserPasswordCommand.class);
 
-        assertFalse(cmd.validate());
-        assertFalse(cmd2.validate());
-
+        cmd.validate();
+        cmd2.validate();
     }
 
     /**

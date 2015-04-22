@@ -20,30 +20,27 @@ import response.StatusCode;
  * oldName must be an existing annotation label and
  * newName can't be the label of an existing annotation.
  *
- * @author Kommunikation/kontroll 2014.
- * @version 1.0
+ * @author Business Logic 2015.
+ * @version 1.1
+ */
+
+/**
+ * Edits the label of an annotation. The object is generated directly from
+ * JSON with parameters oldName and newName. oldName must be an existing
+ * annotation label and newName can't be the label of an existing annotation.
+ *
+ * @author Business Logic 2015.
+ * @version 1.1
  */
 public class EditAnnotationFieldCommand extends Command {
+	@Expose
+	private String oldName = null;
 
 	@Expose
-	private String oldName;
+	private String newName = null;
 
-	@Expose
-	private String newName;
-
-	/**
-	 * Empty constructor.
-	 */
-	public EditAnnotationFieldCommand() {
-
-	}
-
-	/**
-	 * Method used to validate the information that is needed
-	 * to execute the actual command.
-	 */
 	@Override
-	public boolean validate() throws ValidateException {
+	public void validate() throws ValidateException {
 		if (oldName == null) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify the " +
 					"old annotation label");
@@ -76,7 +73,6 @@ public class EditAnnotationFieldCommand extends Command {
 					"characters in annotation label. Valid characters are: "
 					+ validCharacters);
 		}
-		return true;
 	}
 
 	/**
@@ -84,11 +80,13 @@ public class EditAnnotationFieldCommand extends Command {
 	 * will be affected by the change. Will return a bad request response if
 	 * either parameter is invalid, and an OK response if the modification
 	 * succeeded.
+	 *
+	 * @return an appropriate minimal response signaling that the edit was
+	 * done successfully.
 	 */
 	@Override
 	public Response execute() {
-		DatabaseAccessor db = null;
-
+		DatabaseAccessor db;
 		try {
 			db = initDB();
 		}
@@ -96,10 +94,8 @@ public class EditAnnotationFieldCommand extends Command {
 			return new ErrorResponse(StatusCode.BAD_REQUEST, "Could not " +
 					"initialize db: " + e.getMessage());
 		}
-
 		try {
 			Map<String,Integer> anno = db.getAnnotations();
-
 			if (!anno.containsKey(oldName)) {
 				return new ErrorResponse(StatusCode.BAD_REQUEST, "The " +
 						"annotation field " + oldName + " does not exist in " +
@@ -109,7 +105,6 @@ public class EditAnnotationFieldCommand extends Command {
 						"annotation field " + newName + " already exists in " +
 						"the database");
 			}
-
 			try {
 				db.changeAnnotationLabel(oldName, newName);
 			} catch (IOException | SQLException e) {
@@ -124,7 +119,6 @@ public class EditAnnotationFieldCommand extends Command {
 		}finally{
 			db.close();
 		}
-
 		return new MinimalResponse(StatusCode.OK);
 	}
 

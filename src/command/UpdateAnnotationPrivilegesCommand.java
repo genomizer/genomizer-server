@@ -7,8 +7,8 @@ import response.StatusCode;
 /**
  * Class used to handle updates on annotation privileges.
  *
- * @author Kommunikation/kontroll 2014.
- * @version 1.0
+ * @author Business Logic 2015.
+ * @version 1.1
  */
 public class UpdateAnnotationPrivilegesCommand extends Command {
 
@@ -17,22 +17,16 @@ public class UpdateAnnotationPrivilegesCommand extends Command {
 	 * the command.
 	 */
 	@Override
-	public boolean validate() {
-
-		// TODO Auto-generated method stub
-		return true;
-
+	public void validate() {
+		// TODO Add validation code here
 	}
 
-	/**
-	 * Used to execute the actual command.
-	 */
+
 	@Override
 	public Response execute() {
-
+		//TODO Add execute code here probably
 		//Method not implemented, send appropriate response
 		return 	new MinimalResponse(StatusCode.NO_CONTENT);
-
 	}
 
 }

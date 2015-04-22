@@ -15,31 +15,18 @@ import database.constants.MaxSize;
 /**
  * Class used to add an experiment represented as a command.
  *
- * @author Kommunikation/kontroll 2014.
- * @version 1.0
+ * @author Business Logic 2015.
+ * @version 1.1
  */
 public class AddExperimentCommand extends Command {
+	@Expose
+	private String name = null;
 
 	@Expose
-	private String name;
+	private ArrayList<Annotation> annotations = new ArrayList<>();
 
-	@Expose
-	private ArrayList<Annotation> annotations = new ArrayList<Annotation>();
-
-	/**
-	 * Empty constructor.
-	 */
-	public AddExperimentCommand() {
-
-	}
-
-	/**
-	 * Method used to validate the information needed in order
-	 * to execute the actual command.
-	 */
 	@Override
-	public boolean validate() throws ValidateException {
-
+	public void validate() throws ValidateException {
 		if(name == null) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify a " +
 					"name for the experiment.");
@@ -92,17 +79,11 @@ public class AddExperimentCommand extends Command {
 								" characters long.");
 			}
 		}
-		return true;
 	}
 
-	/**
-	 * Method used to execute the actual command.
-	 */
 	@Override
 	public Response execute() {
-
 		DatabaseAccessor db = null;
-
 		try {
 			db = initDB();
 			db.addExperiment(name);
@@ -110,13 +91,14 @@ public class AddExperimentCommand extends Command {
 				db.annotateExperiment(name, annotation.getName(),
 						annotation.getValue());
 			}
-			db.close();
 			return new MinimalResponse(StatusCode.CREATED);
 		} catch (IOException | SQLException e) {
 			e.printStackTrace();
 			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
-		} finally{
-			db.close();
+		} finally {
+			if (db != null) {
+				db.close();
+			}
 		}
 	}
 

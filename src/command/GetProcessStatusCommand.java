@@ -11,22 +11,19 @@ import server.WorkHandler;
  * Will be reset when the server restarts. A process can have one
  * of four states: Waiting, Started, Finished and Crashed.
  *
- * @author Kommunikation/kontroll 2014.
- * @version 1.0
+ * @author Business Logic 2015.
+ * @version 1.1
  */
 public class GetProcessStatusCommand extends Command {
-
 	private WorkHandler workHandler;
 
 	/**
-	 * Constructor used to initiate the class.
-	 *
-	 * @param workHandler object.
+	 * Constructs a new instance of GetProcessStatusCommand using the supplied
+	 * WorkHandler.
+	 * @param workHandler the WorkHandler in use by the server.
 	 */
 	public GetProcessStatusCommand(WorkHandler workHandler) {
-
 		this.workHandler = workHandler;
-
 	}
 
 	/**
@@ -34,18 +31,12 @@ public class GetProcessStatusCommand extends Command {
 	 * This method always returns true.
 	 */
 	@Override
-	public boolean validate() {
-
-		return true;
-
+	public void validate() {
+		/*Validation will always succeed, the command can not be corrupt.*/
 	}
 
-	/**
-	 * Method used to execute the actual command.
-	 */
 	@Override
 	public Response execute() {
-
 		Collection<ProcessStatus> processStatus =
 				workHandler.getProcessStatus();
 		return new GetProcessStatusResponse(processStatus);
