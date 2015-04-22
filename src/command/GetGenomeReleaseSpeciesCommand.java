@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 
+import database.constants.MaxSize;
 import response.ErrorResponse;
 import response.GetGenomeReleaseResponse;
 import response.Response;
@@ -38,27 +39,7 @@ public class GetGenomeReleaseSpeciesCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-
-		if(species == null) {
-
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Species was " +
-					"missing.");
-
-		} else if(species.length() < 1 || species.length() >
-				database.constants.MaxSize.GENOME_SPECIES) {
-
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Species has " +
-					"to be between 1 and "
-					+ database.constants.MaxSize.GENOME_SPECIES +
-					" characters long.");
-
-		} else if(!hasOnlyValidCharacters(species)) {
-
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
-					"characters in species name. Valid characters are: " +
-					validCharacters);
-
-		}
+		validateString(species, MaxSize.GENOME_SPECIES, "Genome specie");
 	}
 
 	/**

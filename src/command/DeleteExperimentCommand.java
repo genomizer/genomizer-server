@@ -5,6 +5,7 @@ import java.sql.SQLException;
 
 import database.DatabaseAccessor;
 
+import database.constants.MaxSize;
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
@@ -28,20 +29,7 @@ public class DeleteExperimentCommand extends Command {
 	}
 
 	public void validate() throws ValidateException {
-		if(header == null) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Experiment " +
-					"name was missing.");
-		} else if(header.length() < 1 || header.length() >
-				database.constants.MaxSize.EXPID) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Experiment " +
-					"name has to be between 1 and "
-					+ database.constants.MaxSize.FILE_EXPID +
-					" characters long.");
-		} else if(!hasOnlyValidCharacters(header)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
-					"characters in experiment name. Valid characters are: " +
-					validCharacters);
-		}
+		validateString(header, MaxSize.EXPID, "Experiment name");
 	}
 
 	public Response execute() {

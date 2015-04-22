@@ -41,38 +41,10 @@ public class EditAnnotationFieldCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-		if (oldName == null) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify the " +
-					"old annotation label");
-		}
-		if(newName == null) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify the " +
-					"old annotation label");
-		}
-		if(oldName.length() > MaxSize.ANNOTATION_LABEL ||
-				oldName.length() < 1) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Old " +
-					"annotation label has to be between 1 and "
-					+ database.constants.MaxSize.ANNOTATION_LABEL +
-					" characters long.");
-		}
-		if(newName.length() > MaxSize.ANNOTATION_LABEL ||
-				newName.length() < 1) {
-			throw new ValidateException(StatusCode.BAD_REQUEST,
-					"New annotation label has to be between 1 and "
-					+ database.constants.MaxSize.ANNOTATION_LABEL +
-							" characters long.");
-		}
-		if(!hasOnlyValidCharacters(oldName)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
-					"characters in annotation label. Valid characters are: " +
-					validCharacters);
-		}
-		if(!hasOnlyValidCharacters(newName)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
-					"characters in annotation label. Valid characters are: "
-					+ validCharacters);
-		}
+		validateString(oldName, MaxSize.ANNOTATION_LABEL,
+				"Old annotation label");
+		validateString(newName, MaxSize.ANNOTATION_LABEL,
+				"New annotation label");
 	}
 
 	/**

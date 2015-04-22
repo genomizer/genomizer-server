@@ -42,36 +42,8 @@ public class DeleteGenomeReleaseCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-		if (genomeVersion == null || species == null) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "The genome " +
-					"version was missing.");
-		} else if (genomeVersion.equals("null") || species.equals("null")) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "The genome " +
-					"version and/or species was missing.");
-		} else if(genomeVersion.length() > MaxSize.GENOME_VERSION ||
-				genomeVersion.length() < 1) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "The genome " +
-					"version must be between 1 and "+
-					database.constants.MaxSize.GENOME_VERSION +
-					" characters long.");
-		} else if(species.length() > MaxSize.GENOME_SPECIES ||
-				species.length() < 1) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "The species " +
-					"must be between 1 and " +
-					database.constants.MaxSize.GENOME_SPECIES +
-					" characters long.");
-
-		} else if(!hasOnlyValidCharacters(genomeVersion)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
-					"characters in genome version. Valid characters are: " +
-					validCharacters);
-
-		} else if(!hasOnlyValidCharacters(species)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST,
-					"Invalid characters in species name. Valid characters are: "
-							+ validCharacters);
-
-		}
+		validateString(genomeVersion, MaxSize.GENOME_VERSION, "Genome version");
+		validateString(species, MaxSize.GENOME_SPECIES, "Genome specie");
 	}
 
 	@Override

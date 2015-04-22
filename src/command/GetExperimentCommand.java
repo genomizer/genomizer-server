@@ -3,6 +3,8 @@ package command;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import database.constants.MaxSize;
 import response.ErrorResponse;
 import response.Response;
 import response.StatusCode;
@@ -22,25 +24,13 @@ public class GetExperimentCommand extends Command {
 	 * restful string.
 	 * @param rest header to set.
 	 */
-	public GetExperimentCommand(String rest) {
-		header = rest;
+	public GetExperimentCommand(String restful) {
+		this.setHeader(restful);
 	}
 
 	@Override
 	public void validate() throws ValidateException {
-		if(header == null) {
-			throw new ValidateException(StatusCode.BAD_REQUEST,
-					"Experiment name was missing.");
-		} else if(header.length() < 1 || header.length() >
-				database.constants.MaxSize.EXPID) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Experiment " +
-					"name has to be between 1 and "
-					+ database.constants.MaxSize.EXPID + " characters long.");
-		} else if(!hasOnlyValidCharacters(header)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
-					"characters in experiment name. Valid characters are: " +
-					validCharacters);
-		}
+		validateString(header, MaxSize.EXPID, "Experiment name");
 	}
 
 	@Override

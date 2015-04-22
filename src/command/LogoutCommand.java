@@ -1,6 +1,7 @@
 package command;
 
 import authentication.Authenticate;
+import database.constants.MaxSize;
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
@@ -32,19 +33,7 @@ public class LogoutCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-		if(username == null) {
-
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Username " +
-					"was missing.");
-
-		} else if(username.length() < 1 || username.length() >
-				database.constants.MaxSize.USERNAME) {
-
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Username " +
-					"has to be between 1 and "
-					+ database.constants.MaxSize.USERNAME + " characters long.");
-
-		}
+		validateString(username, MaxSize.USERNAME, "Username");
 	}
 
 	@Override

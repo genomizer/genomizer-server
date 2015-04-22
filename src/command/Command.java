@@ -3,7 +3,10 @@ package command;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.regex.Pattern;
+
+import database.constants.MaxSize;
 import response.Response;
+import response.StatusCode;
 import server.ServerSettings;
 import database.DatabaseAccessor;
 
@@ -102,4 +105,24 @@ public abstract class Command {
 		return !p.matcher(string).find();
 	}
 
+	public void validateString(String string, int maxSize, String id) throws ValidateException {
+		if(string == null) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify " +
+					"an " + id.toLowerCase() + ".");
+		}
+		if(string.equals("null")){
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid "
+					+ id.toLowerCase() + ".");
+		}
+		if(string.length() > maxSize || string.length() < 1) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, id + ": " +
+					string + " has to be between 1 and " + maxSize +
+					" characters long.");
+		}
+		if(!hasOnlyValidCharacters(string)) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid" +
+					" characters in " + id.toLowerCase() + ". Valid characters are: " +
+					validCharacters);
+		}
+	}
 }

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 import database.DatabaseAccessor;
+import database.constants.MaxSize;
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
@@ -24,25 +25,12 @@ public class DeleteFileFromExperimentCommand extends Command {
 	 * @param restful string to set.
 	 */
 	public DeleteFileFromExperimentCommand(String restful) {
-		setHeader(restful);
+		this.setHeader(restful);
 	}
 
 	@Override
 	public void validate() throws ValidateException {
-		if(header == null) {
-			throw new ValidateException(StatusCode.BAD_REQUEST,
-					"File-id was missing.");
-		} else if(header.length() < 1 || header.length() >
-				database.constants.MaxSize.FILE_EXPID) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "File-id has " +
-					"to be between 1 and "
-					+ database.constants.MaxSize.FILE_EXPID +
-					" characters long.");
-		} else if(!hasOnlyValidCharacters(header)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
-					"characters in file name. Valid characters are: " +
-					validCharacters);
-		}
+		validateString(header, MaxSize.EXPID, "Experiment name");
 	}
 
 	@Override
@@ -78,6 +66,5 @@ public class DeleteFileFromExperimentCommand extends Command {
 				db.close();
 			}
 		}
-
 	}
 }

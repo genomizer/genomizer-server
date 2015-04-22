@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
+import database.constants.MaxSize;
 import response.Response;
 
 import database.DatabaseAccessor;
@@ -35,30 +36,9 @@ public class DeleteAnnotationValueCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-		if(name == null || value == null) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation " +
-					"label and/or value was missing.");
-		} else if(name.length() < 1 || name.length() >
-				database.constants.MaxSize.ANNOTATION_LABEL) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation " +
-					"label has to be between 1 and "
-					+ database.constants.MaxSize.ANNOTATION_LABEL +
-					" characters long.");
-		} else if(value.length() < 1 || value.length() >
-				database.constants.MaxSize.ANNOTATION_VALUE) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation " +
-					"value has to be between 1 and "
-					+ database.constants.MaxSize.ANNOTATION_VALUE +
-					" characters long.");
-		} else if(!hasOnlyValidCharacters(name)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
-					"characters in annotation label. Valid characters are: " +
-					validCharacters);
-		} else if(!hasOnlyValidCharacters(value)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
-					"characters in annotation value. Valid characters are: " +
-					validCharacters);
-		}
+
+		validateString(name, MaxSize.ANNOTATION_LABEL, "Annotation label");
+		validateString(value, MaxSize.ANNOTATION_VALUE, "Annotation value");
 	}
 
 	@Override

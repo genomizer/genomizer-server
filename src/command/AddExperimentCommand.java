@@ -27,23 +27,11 @@ public class AddExperimentCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-		if(name == null) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify a " +
-					"name for the experiment.");
-		}
+		validateString(name, MaxSize.EXPID, "Experiment name");
+
 		if(annotations == null || annotations.size() == 0) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify " +
 					"annotations for the experiment.");
-		}
-		if(name.length() > MaxSize.EXPID || name.length() < 1) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Experiment " +
-					"name has to be between 1 and "
-					+ database.constants.MaxSize.EXPID + " characters long.");
-		}
-		if(name.indexOf('/') != -1 || !hasOnlyValidCharacters(name)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
-					"characters in annotation name. Valid characters are: " +
-					validCharacters);
 		}
 
 		for(int i =0;i<annotations.size();i++){
@@ -52,32 +40,8 @@ public class AddExperimentCommand extends Command {
 						"an empty annotation or annotation value, please " +
 						"specify annotations.");
 			}
-			if(annotations.get(i).getName()==null ||
-					annotations.get(i).getValue()==null){
-				throw new ValidateException(StatusCode.BAD_REQUEST, "Found " +
-						"an empty annotation or annotation value, please " +
-						"specify annotations.");
-			}
-			if(!hasOnlyValidCharacters(annotations.get(i).getName()) ||
-					!hasOnlyValidCharacters(annotations.get(i).getValue())) {
-				throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
-						"characters in annotation name or value. Valid " +
-						"characters are: " + validCharacters);
-			}
-			if(annotations.get(i).getName().length() > MaxSize.ANNOTATION_LABEL
-					|| annotations.get(i).getName().length() < 1) {
-				throw new ValidateException(StatusCode.BAD_REQUEST,
-						"Annotation label has to be between 1 and " +
-								database.constants.MaxSize.ANNOTATION_LABEL +
-								" characters long.");
-			}
-			if(annotations.get(i).getValue().length() > MaxSize.ANNOTATION_VALUE
-					|| annotations.get(i).getValue().length() < 1) {
-				throw new ValidateException(StatusCode.BAD_REQUEST,
-						"Annotation value has to be less than " +
-								database.constants.MaxSize.ANNOTATION_VALUE +
-								" characters long.");
-			}
+			validateString(annotations.get(i).getName(), MaxSize.ANNOTATION_LABEL, "Annotation label");
+			validateString(annotations.get(i).getValue(), MaxSize.ANNOTATION_VALUE, "Annotation value");
 		}
 	}
 

@@ -1,4 +1,5 @@
 package command;
+import database.constants.MaxSize;
 import response.ErrorResponse;
 import response.LoginResponse;
 import response.Response;
@@ -24,24 +25,8 @@ public class LoginCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-		if(username == null || password == null) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Username " +
-					"and/or password was missing.");
-		} else if(username.length() < 1 || username.length() >
-				database.constants.MaxSize.USERNAME) {
-
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Username " +
-					"has to be between 1 and " +
-					database.constants.MaxSize.USERNAME + " characters long.");
-
-		} else if(password.length() < 1 || password.length() >
-				database.constants.MaxSize.PASSWORD) {
-
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Password has" +
-					" to be between 1 and " +
-					database.constants.MaxSize.PASSWORD + " characters long.");
-
-		}
+		validateString(username, MaxSize.USERNAME, "Username/Password");
+		validateString(password, MaxSize.PASSWORD, "Username/Password");
 	}
 
 	@Override

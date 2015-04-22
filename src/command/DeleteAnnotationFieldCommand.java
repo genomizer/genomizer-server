@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import database.DatabaseAccessor;
+import database.constants.MaxSize;
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
@@ -23,27 +24,12 @@ public class DeleteAnnotationFieldCommand extends Command {
 	 * @param restful header to set.
 	 */
 	public DeleteAnnotationFieldCommand(String restful) {
-		header = restful;
+		this.setHeader(restful);
 	}
 
 	@Override
 	public void validate() throws ValidateException {
-		if(header == null) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation " +
-					"field-name was missing.");
-		}
-		if(header.length() < 1 || header.length() >
-				database.constants.MaxSize.ANNOTATION_LABEL) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation " +
-					"label has to be between 1 and "
-					+ database.constants.MaxSize.ANNOTATION_LABEL +
-					" characters long.");
-		}
-		if(!hasOnlyValidCharacters(header)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
-					"characters for annotation. Valid characters are: " +
-					validCharacters);
-		}
+		validateString(header, MaxSize.ANNOTATION_LABEL, "Annotation label");
 	}
 
 	@Override

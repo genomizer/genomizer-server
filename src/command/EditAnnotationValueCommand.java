@@ -31,53 +31,11 @@ public class EditAnnotationValueCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-		if(name == null) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify an " +
-					"annotation label.");
-		}
-		if(oldValue == null) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify the " +
-					"old annotation value.");
-		}
-		if(newValue == null) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify the " +
-					"new annotation value.");
-		}
-		if(name.length() > MaxSize.ANNOTATION_LABEL || name.length() < 1) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation " +
-					"label has to be between 1 and "
-					+ database.constants.MaxSize.GENOME_SPECIES +
-					" characters long.");
-		}
-		if(oldValue.length() > MaxSize.ANNOTATION_VALUE ||
-				oldValue.length() < 1) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Old " +
-					"annotation value has to be between 1 and "
-					+ database.constants.MaxSize.GENOME_SPECIES +
-					" characters long.");
-		}
-		if(newValue.length() > MaxSize.ANNOTATION_VALUE ||
-				newValue.length() < 1) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "New " +
-					"annotation value has to be between 1 and "
-					+ database.constants.MaxSize.GENOME_SPECIES +
-					" characters long.");
-		}
-		if(!hasOnlyValidCharacters(name)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
-					"characters in annotation label. Valid characters are: " +
-					validCharacters);
-		}
-		if(!hasOnlyValidCharacters(oldValue)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
-					"characters in old annotation value. Valid characters are: "
-					+ validCharacters);
-		}
-		if(!hasOnlyValidCharacters(newValue)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
-					"characters in new annotation value. Valid characters are: "
-					+ validCharacters);
-		}
+		validateString(name, MaxSize.ANNOTATION_LABEL, "Annotation label");
+		validateString(oldValue, MaxSize.ANNOTATION_LABEL,
+				"Old annotation value");
+		validateString(newValue, MaxSize.ANNOTATION_LABEL,
+				"New annotation value");
 	}
 
 	@Override
