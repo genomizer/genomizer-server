@@ -31,7 +31,7 @@ public class GetExperimentResponse extends Response {
 	 * @param annotations
 	 * @param list
 	 */
-	//TODO Handle multiple experiments?
+	//TODO Handle multiple experiments? --> Info
 	public GetExperimentResponse(int code, ArrayList<String> info, Map<String, String> annotations, List<FileTuple> list) {
 
 		this.code = code;
@@ -65,11 +65,12 @@ public class GetExperimentResponse extends Response {
 	}
 
 	/**
-	 * Returns the return code and body from the response.
-	 * @return The return code followed by the body as a String.
+	 * Creates a Json representation of the body
+	 * @return The response body as a String
 	 */
 	@Override
 	public String getBody() {
+
 		return jsonObj.toString();
 	}
 }

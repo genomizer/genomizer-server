@@ -73,9 +73,8 @@ public class SearchResponse extends Response {
 	}
 
 	/**
-	 * Returns a Json representation of the response including return code and
-	 * body.
-	 * @return The return code followed by the response body.
+	 * Creates a Json representation of the body.
+	 * @return The response body as a String.
 	 */
 	@Override
 	public String getBody() {
@@ -83,8 +82,9 @@ public class SearchResponse extends Response {
 		return toPrettyFormat(experimentArray.toString());
 	}
 
-	//Converts the Json to a nice format
+	//Converts the Json to a nice format for sending
     private String toPrettyFormat(String jsonString) {
+
         JsonParser parser = new JsonParser();
         JsonArray json = parser.parse(jsonString).getAsJsonArray();
 

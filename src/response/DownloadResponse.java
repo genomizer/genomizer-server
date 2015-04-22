@@ -31,6 +31,7 @@ public class DownloadResponse extends Response {
 	 */
 	//Currently unused
 	public DownloadResponse(int code, ArrayList<String> attributes) {
+
 		this.code = code;
 		experimentID = attributes.get(0);
 		fileName = attributes.get(1);
@@ -44,6 +45,7 @@ public class DownloadResponse extends Response {
 	 * @return Experiment id as a String
 	 */
 	public String getExperimentID() {
+
 		return experimentID;
 	}
 
@@ -52,6 +54,7 @@ public class DownloadResponse extends Response {
 	 * @return The filename as a String
 	 */
 	public String getFileName() {
+
 		return fileName;
 	}
 
@@ -60,6 +63,7 @@ public class DownloadResponse extends Response {
 	 * @return The file size as a String
 	 */
 	public String getSize() {
+
 		return size;
 	}
 
@@ -68,6 +72,7 @@ public class DownloadResponse extends Response {
 	 * @return The type as a String
 	 */
 	public String getType() {
+
 		return type;
 	}
 
@@ -76,6 +81,7 @@ public class DownloadResponse extends Response {
 	 * @return The URL as a String
 	 */
 	public String getURL() {
+
 		return URL;
 	}
 }

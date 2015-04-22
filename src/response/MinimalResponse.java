@@ -14,6 +14,7 @@ public class MinimalResponse extends Response {
 	 * @param code The return code for the response
 	 */
 	public MinimalResponse (int code) {
+
 		this.code = code;
 	}
 

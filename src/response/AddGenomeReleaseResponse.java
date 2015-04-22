@@ -19,9 +19,9 @@ public class AddGenomeReleaseResponse extends Response {
 	private JsonArray jsonArray = null;
 
 	/**
-	 * Constructor used to create the response.
+	 * Constructor for the response.
 	 *
-	 * @param code to send as a response code.
+	 * @param code Code to send as a response code.
 	 * @param filePaths An ArrayList containing the paths to where the files
 	 *                     should be saved
 	 */
@@ -43,7 +43,8 @@ public class AddGenomeReleaseResponse extends Response {
 	}
 
 	/**
-	 * Creates a Json representation of the response
+	 * Creates a Json representation of the body
+	 * @return The response body as a String
 	 */
 	@Override
 	public String getBody(){

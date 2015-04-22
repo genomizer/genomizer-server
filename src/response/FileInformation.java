@@ -31,6 +31,7 @@ public class FileInformation {
      * @param src The FileTuple object to convert from.
      */
     public FileInformation(FileTuple src) {
+
     	id = src.id;
     	path = src.path;
     	url = src.getDownloadURL();

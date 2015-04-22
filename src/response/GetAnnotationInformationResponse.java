@@ -41,8 +41,8 @@ public class GetAnnotationInformationResponse extends Response {
 	}
 
 	/**
-	 * Returns the return code and body of the response.
-	 * @return The return code and body as a String.
+	 * Creates a Json representation of the body
+	 * @return The response body as a String
 	 */
 	@Override
 	public String getBody() {

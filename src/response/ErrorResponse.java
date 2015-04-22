@@ -19,6 +19,7 @@ public class ErrorResponse extends Response {
 	 * @param message The error message
 	 */
 	public ErrorResponse(int code, String message) {
+
 		this.code = code;
 		this.message = message;
 	}
@@ -28,6 +29,7 @@ public class ErrorResponse extends Response {
 	 * @return The error message as a String
 	 */
 	public String getMessage() {
+
 		return message;
 	}
 }

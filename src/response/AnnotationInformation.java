@@ -37,6 +37,7 @@ public class AnnotationInformation {
 	 * @return The name as a String
 	 */
 	public String getName() {
+
 		return name;
 	}
 
@@ -45,6 +46,7 @@ public class AnnotationInformation {
 	 * @return The value as a String
 	 */
 	public ArrayList<String> getValues() {
+
 		return values;
 	}
 

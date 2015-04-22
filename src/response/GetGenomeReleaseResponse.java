@@ -44,8 +44,8 @@ public class GetGenomeReleaseResponse extends Response {
 	}
 
 	/**
-	 * Getter for the response information and return code.
-	 * @return The return code followed by the response information as a String
+	 * Creates a Json representation of the body
+	 * @return The response body as a String
 	 */
 	@Override
 	public String getBody(){

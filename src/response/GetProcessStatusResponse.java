@@ -30,13 +30,14 @@ public class GetProcessStatusResponse extends Response {
 	 * @param processStatus The process status to return.
 	 */
 	public GetProcessStatusResponse(Collection<ProcessStatus> processStatus) {
+
 		this.processStatus = processStatus;
 		code = 200;
 	}
 
 	/**
-	 * Creates a String representation of the response
-	 * @return The Json string of the response
+	 * Creates a Json representation of the body
+	 * @return The response body as a String
 	 */
 	@Override
 	public String getBody() {
@@ -61,9 +62,9 @@ public class GetProcessStatusResponse extends Response {
 		return toPrettyFormat(arr.toString());
 	}
 
-	//Parses the json string to a nice format
-    private String toPrettyFormat(String jsonString)
-    {
+	//Parses the json string to a nice format for sending
+    private String toPrettyFormat(String jsonString) {
+
         JsonParser parser = new JsonParser();
         JsonArray json = parser.parse(jsonString).getAsJsonArray();
 

@@ -19,25 +19,26 @@ public class ProcessResponse extends Response {
 
 
 	/**
-	 * Creator for the response
-	 * @param code The return code for the response
+	 * Creator for the response where the message is null.
+	 * @param code The return code for the response.
 	 */
 	public ProcessResponse (int code) {
+
 		this.code = code;
 		message = null;
 		date = new Date(System.currentTimeMillis());
 	}
 
 	/**
-	 * Creator for the response which also includes a message
-	 * @param code The return code for the response
-	 * @param message The attached message
+	 * Creator for the response which also includes a message.
+	 * @param code The return code for the response.
+	 * @param message The attached message.
 	 */
 	public ProcessResponse (int code, String message) {
+
 		this.code = code;
 		this.message = message;
 		date = new Date(System.currentTimeMillis());
-
 	}
 
 }

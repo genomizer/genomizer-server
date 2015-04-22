@@ -4,8 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 /**
- * Class that represents the basic framework for the responses
+ * Class that implements the basic framework for the responses.
  * @author
+ * @version 1.0
  */
 public abstract class Response {
 
@@ -28,6 +29,7 @@ public abstract class Response {
 	 * @return The return code of the response
 	 */
 	public int getCode() {
+
 		return code;
 	}
 
@@ -36,6 +38,7 @@ public abstract class Response {
 	 * @return The response's content as a String
 	 */
 	public String toString(){
+
 		return code + getBody();
 	}
 

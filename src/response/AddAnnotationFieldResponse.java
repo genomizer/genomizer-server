@@ -11,7 +11,7 @@ public class AddAnnotationFieldResponse extends Response {
 
 
 	/**
-	 * Basic constructor.
+	 * Constructor for the response
 	 * @param code The return code of the response
 	 */
 	public AddAnnotationFieldResponse(int code) {

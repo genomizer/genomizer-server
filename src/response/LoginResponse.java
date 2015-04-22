@@ -20,15 +20,17 @@ public class LoginResponse extends Response {
 	 * @param token The login token to be returned.
 	 */
 	public LoginResponse(int code, String token) {
+
 		this.code = code;
 		this.token = token;
 	}
 
 	/**
-	 * Returns the login token
+	 * Getter for the login token
 	 * @return The login token as a String
 	 */
 	public String getToken() {
+
 		return token;
 	}
 }

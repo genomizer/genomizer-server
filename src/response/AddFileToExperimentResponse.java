@@ -11,11 +11,12 @@ public class AddFileToExperimentResponse extends Response {
 	private String UrlUpload;
 
 	/**
-	 * Constructor
+	 * Constructor for the response
 	 * @param code The return code
 	 * @param UrlUpload URL for the experiment to upload
 	 */
 	public AddFileToExperimentResponse(int code, String UrlUpload) {
+
 		this.code = code;
 		this.UrlUpload = UrlUpload;
 	}
