@@ -6,6 +6,9 @@ import database.containers.FileTuple;
 
 /**
  * Class that contains the file information.
+ *
+ * @author
+ * @version 1.0
  */
 public class FileInformation {
 
@@ -22,6 +25,11 @@ public class FileInformation {
     public final String expId;
     public final String grVersion;
 
+
+    /**
+     * Creates a FileInformation object from a FileTuple object.
+     * @param src The FileTuple object to convert from.
+     */
     public FileInformation(FileTuple src) {
     	id = src.id;
     	path = src.path;

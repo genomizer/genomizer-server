@@ -9,32 +9,44 @@ import com.google.gson.annotations.Expose;
 import java.util.ArrayList;
 
 /**
- * Class that represents the response for get annotation information.
+ * Class that represents the response when getting the annotation information.
+ *
+ * @author
+ * @version 1.0
  */
 public class GetAnnotationInformationResponse extends Response {
 
 	@Expose
-	ArrayList<AnnotationInformation> annotations;
+	private ArrayList<AnnotationInformation> annotations;
 
-	JsonArray annotationsArray;
+	private JsonArray annotationsArray;
 
+	/**
+	 * Creator for the get annotation information response.
+	 * @param code The return code of the response.
+	 * @param annotations An ArrayList containing the annotations to return.
+	 */
 	public GetAnnotationInformationResponse(int code,
 			ArrayList<AnnotationInformation> annotations) {
 
 		this.code = code;
 	    annotationsArray = new JsonArray();
 
-	    for (AnnotationInformation anno: annotations) {
+	    for (AnnotationInformation annotation: annotations) {
 	    	GsonBuilder builder = new GsonBuilder();
 	    	Gson gson = builder.create();
-	    	JsonElement annoJson = gson.toJsonTree(anno);
-	    	annotationsArray.add(annoJson);
-	    	//annotationsArray.toString();
+	    	JsonElement annotationJson = gson.toJsonTree(annotation);
+	    	annotationsArray.add(annotationJson);
 	    }
 	}
 
+	/**
+	 * Returns the return code and body of the response.
+	 * @return The return code and body as a String.
+	 */
 	@Override
 	public String getBody() {
+
 		return annotationsArray.toString();
 	}
 

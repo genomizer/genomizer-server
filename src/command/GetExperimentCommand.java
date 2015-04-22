@@ -97,6 +97,7 @@ public class GetExperimentCommand extends Command {
 	 * @param exp experiment object.
 	 * @return an arraylist with information.
 	 */
+	//TODO Handle multiple experiments?
 	public ArrayList<String> getInfo(Experiment exp) {
 		ArrayList<String> info = new ArrayList<String>();
 		info.add(exp.getID());

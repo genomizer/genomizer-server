@@ -15,16 +15,33 @@ import database.containers.FileTuple;
 
 /**
  * Class that represents the response when getting the experiment response.
+ *
+ * @author
+ * @version 1.0
  */
 public class GetExperimentResponse extends Response {
 
-	JsonObject obj;
+	private JsonObject jsonObj;
 
+
+	/**
+	 * Creator for the response.
+	 * @param code The return code for the response.
+	 * @param info
+	 * @param annotations
+	 * @param list
+	 */
+	//TODO Handle multiple experiments?
 	public GetExperimentResponse(int code, ArrayList<String> info, Map<String, String> annotations, List<FileTuple> list) {
+
 		this.code = code;
 
-		obj = new JsonObject();
-		obj.addProperty("name", info.get(0));
+		//Creates a JsonObject and adds the information as jsonArrays
+		jsonObj = new JsonObject();
+		jsonObj.addProperty("name", info.get(0));
+
+		//Creates a jsonArray from the FileTuple list with FileInformation
+		// objects
 		JsonArray fileArray = new JsonArray();
 		for (FileTuple ft: list) {
 			GsonBuilder gsonBuilder = new GsonBuilder();
@@ -33,22 +50,26 @@ public class GetExperimentResponse extends Response {
 			JsonElement fileJson = gson.toJsonTree(fileInfo);
 			fileArray.add(fileJson);
 		}
+		jsonObj.add("files", fileArray);
 
-		obj.add("files", fileArray);
-
+		//Creates an jsonArray from the annotations map with name and value
 		JsonArray annotationArray = new JsonArray();
 		for (String key: annotations.keySet()) {
-			JsonObject anno = new JsonObject();
-			anno.addProperty("name", key);
-			anno.addProperty("value", annotations.get(key));
-			annotationArray.add(anno);
+			JsonObject annotation = new JsonObject();
+			annotation.addProperty("name", key);
+			annotation.addProperty("value", annotations.get(key));
+			annotationArray.add(annotation);
 		}
+		jsonObj.add("annotations", annotationArray);
 
-		obj.add("annotations", annotationArray);
 	}
 
+	/**
+	 * Returns the return code and body from the response.
+	 * @return The return code followed by the body as a String.
+	 */
 	@Override
 	public String getBody() {
-		return obj.toString();
+		return jsonObj.toString();
 	}
 }
