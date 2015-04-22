@@ -21,7 +21,7 @@ public class WorkPool {
     }
 
     public synchronized HashMap<ProcessCommand,ProcessStatus> getProcesses() {
-        return processStatus;
+        return new HashMap<>(processStatus);
     }
 
     public synchronized void addWork(ProcessCommand command) {
