@@ -49,14 +49,7 @@ public class GetProcessStatusCommand extends Command {
 
 		Collection<ProcessStatus> processStatus = null;
 
-		try {
-			processStatus =
-					workPool.getProcesses().values();
-
-		} catch (InterruptedException e) {
-			ErrorLogger.log("SYSTEM", "Error acquiring processes: " +
-					e.getMessage());
-		}
+		processStatus = workPool.getProcesses().values();
 
 		return new GetProcessStatusResponse(processStatus);
 

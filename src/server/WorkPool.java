@@ -28,18 +28,15 @@ public class WorkPool {
         notEmptyCond = lock.newCondition();
     }
 
-    public HashMap<ProcessCommand,ProcessStatus> getProcesses()
-            throws InterruptedException {
+    public HashMap<ProcessCommand,ProcessStatus> getProcesses() {
         lock.lock();
 
         try {
-            while (workQueue.size() == 0) {
-                notEmptyCond.await();
-            }
             return new HashMap<>(processesStatus);
-        } finally {
+        }  finally {
             lock.unlock();
         }
+
     }
 
     public void addWork(ProcessCommand command) {
@@ -54,17 +51,26 @@ public class WorkPool {
         }
     }
 
-    public ProcessCommand getProcess() throws InterruptedException {
+    public ProcessCommand getProcess() {
         lock.lock();
+
+        ProcessCommand processCommand = null;
 
         try {
             while (workQueue.size() == 0) {
                 notEmptyCond.await();
             }
-            return workQueue.poll();
-        } finally {
+            processCommand = workQueue.poll();
+        }
+        catch (InterruptedException ex) {
+            ErrorLogger.log("SYSTEM", "Error acquiring processes: " +
+                    ex.getMessage());
+        }
+        finally {
             lock.unlock();
         }
+
+        return processCommand;
 
     }
 

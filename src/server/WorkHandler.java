@@ -28,34 +28,30 @@ public class WorkHandler implements Runnable {
 		// List to store processes to be removed
 		ArrayList<ProcessCommand> toBeRemoved = new ArrayList<>();
 
-		try {
-			HashMap<ProcessCommand,ProcessStatus> processes = workPool
+		HashMap<ProcessCommand,ProcessStatus> processes = workPool
 					.getProcesses();
 
 		/* Loop through all processes and check statuses */
-			for (ProcessCommand proc : processes.keySet()) {
+		for (ProcessCommand proc : processes.keySet()) {
 
-				ProcessStatus procStat = workPool.getProcessStatus(proc);
-				String statusString = procStat.status;
+			ProcessStatus procStat = workPool.getProcessStatus(proc);
+			String statusString = procStat.status;
 
-				if (statusString.equals(ProcessStatus.STATUS_FINISHED)
-						|| statusString.equals(ProcessStatus.STATUS_CRASHED)) {
-					long processTimeAdded = procStat.timeAdded;
-					long timeDifference = currentTime - processTimeAdded;
+			if (statusString.equals(ProcessStatus.STATUS_FINISHED)
+					|| statusString.equals(ProcessStatus.STATUS_CRASHED)) {
+				long processTimeAdded = procStat.timeAdded;
+				long timeDifference = currentTime - processTimeAdded;
 
-					if (timeDifference > statusTimeToLive) {
-						toBeRemoved.add(proc);
-					}
+				if (timeDifference > statusTimeToLive) {
+					toBeRemoved.add(proc);
 				}
 			}
-			for (ProcessCommand proc : toBeRemoved) {
-				Debug.log("Removing old process status: " + proc.getExpId());
-				workPool.removeProcess(proc);
-			}
-		} catch (InterruptedException e) {
-			ErrorLogger.log("SYSTEM", "Error acquiring processes: " +
-					e.getMessage());
 		}
+		for (ProcessCommand proc : toBeRemoved) {
+			Debug.log("Removing old process status: " + proc.getExpId());
+			workPool.removeProcess(proc);
+		}
+
 
 	}
 
@@ -69,18 +65,9 @@ public class WorkHandler implements Runnable {
 
 		while (true) {
 
-			ProcessCommand processCommand = null;
-			ProcessStatus processStatus = null;
-
-			try {
-				processCommand = workPool.getProcess();
-				processStatus = workPool.getProcessStatus
+			ProcessCommand processCommand = workPool.getProcess();
+			ProcessStatus processStatus = workPool.getProcessStatus
 						(processCommand);
-			} catch (InterruptedException e) {
-				ErrorLogger.log("SYSTEM", "Error acquiring process statuses: " +
-						e.getMessage());
-			}
-
 
 
 			if (processCommand != null && processStatus != null) {

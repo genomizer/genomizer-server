@@ -83,13 +83,7 @@ public class GetProcessStatusCommandTest {
 
 		Collection<ProcessStatus> procStats = null;
 
-		try {
-			procStats = workPool.getProcesses().values();
-
-		} catch (InterruptedException e) {
-			ErrorLogger.log("SYSTEM", "Error acquiring processes: " +
-					e.getMessage());
-		}
+		procStats = workPool.getProcesses().values();
 
 		if (procStats != null) {
 			List<ProcessStatus> list = new ArrayList<ProcessStatus>( procStats);
