@@ -14,12 +14,20 @@
             <include name="*.jar"/>
             <exclude name="junit-*.jar"/>
             <exclude name="hamcrest-*.jar"/>
+            <exclude name="httpclient-*.jar"/>
+            <exclude name="httpcore-*.jar"/>
+            <exclude name="httpmime-*.jar"/>
         </fileset>
     </path>
-    <path id="junit.classpath">
-        <fileset dir="external-libs" id="fileset.junit-jars">
+    <!-- Stuff that is needed for compilation/testing,
+         but is not required at runtime. -->
+    <path id="devel.classpath">
+        <fileset dir="external-libs">
             <include name="junit-*.jar"/>
             <include name="hamcrest-*.jar"/>
+            <include name="httpclient-*.jar"/>
+            <include name="httpcore-*.jar"/>
+            <include name="httpmime-*.jar"/>
         </fileset>
     </path>
 
@@ -47,7 +55,7 @@
             <src path="test"/>
             <classpath>
                 <path refid="genomizer-server.classpath"/>
-                <path refid="junit.classpath"/>
+                <path refid="devel.classpath"/>
             </classpath>
             <compilerarg value="-Xlint:all"/>
         </javac>
@@ -92,7 +100,7 @@
         <formatter type="xml"/>
         <classpath>
           <path refid="genomizer-server.classpath"/>
-          <path refid="junit.classpath"/>
+          <path refid="devel.classpath"/>
         </classpath>
         <batchtest fork="yes" todir="${junit.output.dir}" failureProperty="test.failed">
           <formatter type="plain" usefile="false"/>
