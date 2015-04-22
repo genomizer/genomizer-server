@@ -5,6 +5,12 @@ import com.sun.net.httpserver.HttpExchange;
 import response.StatusCode;
 
 import java.io.*;
+import java.nio.file.FileVisitResult;
+import java.nio.file.FileVisitor;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
 
 public class DownloadHandler {
     private String downloadDir;
@@ -14,10 +20,39 @@ public class DownloadHandler {
     }
 
     private void serveIndex(HttpExchange exchange) throws IOException {
-        // TODO: Generate index.
-        byte [] index = ("<html><body>" +
-                "TODO" +
-                "</body></html>").getBytes();
+        final ArrayList<String> fileList = new ArrayList<>();
+        Files.walkFileTree((new File(downloadDir)).toPath(), new FileVisitor<Path>() {
+            @Override
+            public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                fileList.add(file.toString());
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+                return FileVisitResult.CONTINUE;
+            }
+        });
+        String fileListHTML = "";
+        int parentLen = downloadDir.length();
+        for (String file : fileList) {
+            String f = file.substring(parentLen);
+            fileListHTML += "<li>" + "<a href=\"/download/" + f
+                    + "\">" + f + "</a>" + "</li>";
+        }
+        byte [] index = ("<html><body><ul>" +
+                fileListHTML +
+                "</ul></body></html>").getBytes();
         exchange.sendResponseHeaders(200, index.length);
         OutputStream out = exchange.getResponseBody();
         out.write(index);
@@ -50,7 +85,7 @@ public class DownloadHandler {
     public void handleGET(HttpExchange exchange) throws IOException {
         String requestURI = exchange.getRequestURI().toString();
         Debug.log("Request URI: " + requestURI);
-        if (requestURI.equals("/download")) {
+        if (requestURI.equals("/download") || requestURI.equals("/download/")) {
             serveIndex(exchange);
         }
         else {
