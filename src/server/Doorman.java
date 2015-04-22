@@ -12,6 +12,8 @@ package server;
  * /sysadm
  * /genomeRelease
  * /token
+ * /upload
+ * /download
  *
  * Whenever a request is received the Doorman checks what context is has and
  * creates a new Executor (on  a new thread) and afterwards continues listening
