@@ -46,7 +46,8 @@ public class Doorman {
 
 	private HttpServer httpServer;
 	private CommandHandler commandHandler;
-	private UploadHandler  uploadHandler;
+	private UploadHandler   uploadHandler;
+	private DownloadHandler downloadHandler;
 
 	/**
 	 * Constructor. Creates a HTTPServer (but doesn't start it) which listens on
@@ -59,7 +60,9 @@ public class Doorman {
 	public Doorman(CommandHandler commandHandler, int port) throws IOException {
 
 		this.commandHandler = commandHandler;
-		this.uploadHandler  = new UploadHandler();
+		// TODO: Don't hard-code this location.
+		this.uploadHandler   = new UploadHandler("resources/");
+		this.downloadHandler = new DownloadHandler("resources/");
 
 		httpServer = HttpServer.create(new InetSocketAddress(port),0);
 		httpServer.createContext("/login", createHandler());
@@ -73,6 +76,7 @@ public class Doorman {
 		httpServer.createContext("/genomeRelease", createHandler());
 		httpServer.createContext("/token", createHandler());
 		httpServer.createContext("/upload", createHandler());
+		httpServer.createContext("/download", createHandler());
 
 		httpServer.setExecutor(new Executor() {
 			@Override
@@ -108,12 +112,14 @@ public class Doorman {
 			@Override
 			public void handle(HttpExchange exchange) throws IOException {
 
+			    try {
 				String method = exchange.getRequestMethod();
+				String requestPath = exchange.getHttpContext().getPath();
 				Debug.log("\n-----------------\nNEW EXCHANGE: " + method
-						+ " " + exchange.getHttpContext().getPath());
+						+ " " + requestPath);
 				switch(method) {
 				case "GET":
-					switch(exchange.getHttpContext().getPath()) {
+					switch(requestPath) {
 					case "/experiment":
 						handleRequest(exchange, CommandType.
                                 GET_EXPERIMENT_COMMAND);
@@ -155,11 +161,18 @@ public class Doorman {
 					case "/upload":
 						uploadHandler.handleGET(exchange);
 						break;
+					case "/download":
+						downloadHandler.handleGET(exchange);
+						break;
+					default:
+						Debug.log("HTTP 404 Not Found: " + method + " " + requestPath);
+						respond(exchange, new MinimalResponse(StatusCode.NOT_FOUND));
+						break;
 					}
 					break;
 
 				case "PUT":
-					switch(exchange.getHttpContext().getPath()) {
+					switch(requestPath) {
 					case "/experiment":
 						handleRequest(exchange, CommandType.
                                 UPDATE_EXPERIMENT_COMMAND);
@@ -196,11 +209,15 @@ public class Doorman {
                                     UPDATE_ANNOTATION_PRIVILEGES_COMMAND);
 						}
 						break;
+					default:
+						Debug.log("HTTP 404 Not Found: " + method + " " + requestPath);
+						respond(exchange, new MinimalResponse(StatusCode.NOT_FOUND));
+						break;
 					}
 					break;
 
 				case "POST":
-					switch(exchange.getHttpContext().getPath()) {
+					switch(requestPath) {
 					case "/login":
 						handleRequest(exchange, CommandType.LOGIN_COMMAND);
 						break;
@@ -233,11 +250,15 @@ public class Doorman {
 					case "/upload":
 						uploadHandler.handlePOST(exchange);
 						break;
+					default:
+						Debug.log("HTTP 404 Not Found: " + method + " " + requestPath);
+						respond(exchange, new MinimalResponse(StatusCode.NOT_FOUND));
+						break;
 					}
 					break;
 
 				case "DELETE":
-					switch(exchange.getHttpContext().getPath()) {
+					switch(requestPath) {
 					case "/login":
 						handleRequest(exchange, CommandType.LOGOUT_COMMAND);
 						break;
@@ -268,6 +289,10 @@ public class Doorman {
 						handleRequest(exchange, CommandType.
                                 DELETE_GENOME_RELEASE_COMMAND);
 						break;
+					default:
+						Debug.log("HTTP 404 Not Found: " + method + " " + requestPath);
+						respond(exchange, new MinimalResponse(StatusCode.NOT_FOUND));
+						break;
 					}
 					break;
 
@@ -280,9 +305,17 @@ public class Doorman {
 
 				default:
 					Debug.log("Unsupported HTTP method: " + method);
+					respond(exchange, new MinimalResponse(StatusCode.METHOD_NOT_ALLOWED));
 					break;
 				}
-			}
+		    }
+		    catch (Exception ex) {
+				Debug.log("Internal server error " + ex.getMessage());
+				ErrorLogger.log("SYSTEM", ex);
+				ex.printStackTrace();
+				respond(exchange, new MinimalResponse(StatusCode.INTERNAL_SERVER_ERROR));
+		    }
+		    }
 		};
 	}
 
@@ -367,6 +400,7 @@ public class Doorman {
 		} else {
 			String body = response.getBody();
 			Debug.log("Response: " + body);
+			exchange.getResponseHeaders().set("Content-Type", "application/json");
 			exchange.sendResponseHeaders(response.getCode(), body.getBytes().
                     length);
 			OutputStream os = exchange.getResponseBody();
