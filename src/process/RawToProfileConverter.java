@@ -37,7 +37,6 @@ public class RawToProfileConverter extends Executor {
 	 * Constructor that initializes some datastructures used by the class.
 	 */
 	public RawToProfileConverter() {
-		super();
 		toBeRemoved = new Stack<String>();
 		checker = RawToProfileProcessChecker.rawToProfileCheckerFactory();
 		validator = new ParameterValidator();

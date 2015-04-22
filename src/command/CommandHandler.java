@@ -7,6 +7,7 @@ import response.Response;
 import response.StatusCode;
 import server.Debug;
 import server.WorkHandler;
+import server.WorkPool;
 
 /**
  * Should be used to handle and create different commands using information
@@ -17,11 +18,15 @@ import server.WorkHandler;
  */
 public class CommandHandler {
 	private CommandFactory cmdFactory = new CommandFactory();
+	private WorkPool workPool;
 	
 	/*Used to execute heavy work such as process commands execute*/
-	private WorkHandler heavyWorkThread = new WorkHandler();
+	private Thread heavyWorkThread;
 
-	public CommandHandler() {
+	public CommandHandler(WorkPool workPool) {
+		this.workPool = workPool;
+
+		heavyWorkThread = new Thread(new WorkHandler(workPool));
 		heavyWorkThread.start();
 	}
 
@@ -54,7 +59,7 @@ public class CommandHandler {
 					* starts in the heavy work thread, followed by returning a
 					* OK status to the client.*/
 					Debug.log("Adding processCommand to work queue.");
-					heavyWorkThread.addWork((ProcessCommand)myCom);
+					workPool.addWork((ProcessCommand)myCom);
 					return new ProcessResponse(StatusCode.OK);
 				}else {
 
@@ -149,7 +154,7 @@ public class CommandHandler {
 				break;
 			case GET_PROCESS_STATUS_COMMAND:
 				newCommand = cmdFactory.
-						createGetProcessStatusCommand(heavyWorkThread);
+						createGetProcessStatusCommand(workPool);
 				break;
 			case GET_ANNOTATION_INFORMATION_COMMAND:
 				newCommand = cmdFactory.

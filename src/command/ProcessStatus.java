@@ -10,6 +10,11 @@ import com.google.gson.annotations.Expose;
  */
 public class ProcessStatus implements Comparable<ProcessStatus> {
 
+	public static final String STATUS_STARTED = "Started";
+	public static final String STATUS_FINISHED = "Finished";
+	public static final String STATUS_CRASHED = "Crashed";
+
+
 	@Expose
 	public String experimentName;
 	@Expose

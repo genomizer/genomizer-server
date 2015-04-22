@@ -27,6 +27,9 @@ import database.constants.MaxSize;
 
 public class ProcessCommand extends Command {
 
+	public static final String CMD_RAW_TO_PROFILE = "rawToProfile";
+	public static final String CMD_PROFILE_TO_REGION = "profileToRegion";
+
 	private String username;
 
 	private long timestamp;
@@ -104,13 +107,13 @@ public class ProcessCommand extends Command {
 		}
 
 		switch (processtype) {
-			case "rawtoprofile":
+			case CMD_RAW_TO_PROFILE:
 				if(parameters.length != 8){
 					throw new ValidateException(StatusCode.BAD_REQUEST,
 							"Specify paramaters.");
 				}
 				break;
-			case "profiletoregion":
+			case CMD_PROFILE_TO_REGION:
 				//TODO Implement parameter size
 				break;
 			default:
@@ -227,7 +230,7 @@ public class ProcessCommand extends Command {
 			processHandler = new ProcessHandler();
 
 			switch(processtype){
-				case "rawtoprofile":
+				case ProcessCommand.CMD_RAW_TO_PROFILE:
 					//The process type was a rawtoprofile
 
 					//filepaths = db.processRawToProfile(expid);
@@ -300,7 +303,8 @@ public class ProcessCommand extends Command {
 
 					try {
 
-						processHandler.executeProcess("rawToProfile",
+						processHandler.executeProcess(
+								ProcessCommand.CMD_RAW_TO_PROFILE,
 								parameters, filepaths.getKey(),
 								filepaths.getValue());
 						Debug.log("------------------Running execute with " +

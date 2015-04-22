@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import command.CommandHandler;
+import server.WorkPool;
 
 /**
  * Testclass used to test the CommandHandler class.
@@ -20,7 +21,7 @@ public class CommandHandlerTest {
 	@Test
 	public void testCreateClass() {
 
-		CommandHandler cmdh = new CommandHandler();
+		CommandHandler cmdh = new CommandHandler(new WorkPool());
 		assertNotNull(cmdh);
 
 	}
