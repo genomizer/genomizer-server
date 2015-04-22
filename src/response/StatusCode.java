@@ -2,7 +2,10 @@ package response;
 
 /**
  * Contains all HTTP response codes that are used by the server.
+ * Currently, 403 and 429 are not used.
+ *
  * @author ens10olm
+ * @version 1.0
  */
 public class StatusCode {
 

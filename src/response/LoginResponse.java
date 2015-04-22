@@ -4,15 +4,31 @@ import com.google.gson.annotations.Expose;
 
 /**
  * Class that represents the login response.
+ *
+ * @author
+ * @version 1.0
  */
 public class LoginResponse extends Response {
 
 	@Expose
-	public String token;
+	private String token;
 
+
+	/**
+	 * Creator for the response.
+	 * @param code The return code for the response.
+	 * @param token The login token to be returned.
+	 */
 	public LoginResponse(int code, String token) {
 		this.code = code;
 		this.token = token;
 	}
 
+	/**
+	 * Returns the login token
+	 * @return The login token as a String
+	 */
+	public String getToken() {
+		return token;
+	}
 }
