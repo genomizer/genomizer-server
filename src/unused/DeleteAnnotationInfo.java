@@ -1,4 +1,4 @@
-package command;
+package unused;
 
 import java.util.ArrayList;
 
@@ -11,7 +11,6 @@ import com.google.gson.annotations.Expose;
  * @version 1.0
  */
 
-@Deprecated
 public class DeleteAnnotationInfo {
 	@Expose
 	public String name;

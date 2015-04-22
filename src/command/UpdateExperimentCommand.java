@@ -11,6 +11,11 @@ import response.StatusCode;
  * @version 1.1
  */
 public class UpdateExperimentCommand extends Command {
+	//TODO Implement this class
+
+	public UpdateExperimentCommand(String json, String expID) {
+
+	}
 
 	/**
 	 * Used to validate the information that is needed
@@ -18,13 +23,10 @@ public class UpdateExperimentCommand extends Command {
 	 */
 	@Override
 	public void validate() {
-		// TODO Add code here probably
 	}
 
 	@Override
 	public Response execute() {
-		//TODO Add code here probably
-		//Method not implemented, send appropriate response
 		return 	new MinimalResponse(StatusCode.NO_CONTENT);
 	}
 

@@ -21,11 +21,11 @@ import database.containers.Experiment;
 public class GetExperimentCommand extends Command {
 	/**
 	 * Constructs a new instance of GetExperimentCommand using the supplied
-	 * restful string.
-	 * @param rest header to set.
+	 * experiment ID.
+	 * @param expID header to set.
 	 */
-	public GetExperimentCommand(String restful) {
-		this.setHeader(restful);
+	public GetExperimentCommand(String expID) {
+		this.setHeader(expID);
 	}
 
 	@Override

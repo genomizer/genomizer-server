@@ -17,13 +17,13 @@ import response.*;
 public class GetAnnotationInformationCommand extends Command {
 	@Override
 	public void validate() {
-		//TODO Something should be added here probably?
+		/*Validation will always succeed, the command can not be corrupt.*/
 	}
 
 	@Override
 	public Response execute() {
 		ArrayList<AnnotationInformation> annotations = new ArrayList<AnnotationInformation>();
-		DatabaseAccessor db;
+		DatabaseAccessor db = null;
 		Map<String, Integer> a;
 		try {
 			db = initDB();
@@ -47,18 +47,15 @@ public class GetAnnotationInformationCommand extends Command {
 								values, annotationObject.isRequired);
 				annotations.add(annotation);
 			}
-			//TODO Unsure what this code should do
-			// Hardcoded expID
-			//ArrayList<String> values = new ArrayList<String>();
-			//values.add("freetext");
-			//AnnotationInformation expId = new AnnotationInformation("expID", values, false);
-			//annotations.add(expId);
-			db.close();
-			return new GetAnnotationInformationResponse(StatusCode.OK, annotations);
-		}
-		catch(SQLException | IOException e){
+			return new GetAnnotationInformationResponse(StatusCode.OK,
+					annotations);
+		} catch(SQLException | IOException e) {
 			return new ErrorResponse(StatusCode.BAD_REQUEST,
 					"Could not initialize db: " + e.getMessage());
+		} finally {
+			if (db != null) {
+				db.close();
+			}
 		}
 	}
 }

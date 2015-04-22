@@ -36,7 +36,6 @@ public class DeleteAnnotationValueCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-
 		validateString(name, MaxSize.ANNOTATION_LABEL, "Annotation label");
 		validateString(value, MaxSize.ANNOTATION_VALUE, "Annotation value");
 	}
@@ -70,5 +69,4 @@ public class DeleteAnnotationValueCommand extends Command {
 		}
 		return new MinimalResponse(StatusCode.OK);
 	}
-
 }

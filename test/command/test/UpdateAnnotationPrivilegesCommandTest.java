@@ -1,6 +1,8 @@
 package command.test;
 
 import static org.junit.Assert.*;
+
+import org.junit.Ignore;
 import org.junit.Test;
 import command.UpdateAnnotationPrivilegesCommand;
 
@@ -12,6 +14,7 @@ import command.UpdateAnnotationPrivilegesCommand;
  * @version 1.0
  */
 public class UpdateAnnotationPrivilegesCommandTest {
+	//TODO Implement tests later
 
 	/**
 	 * Test used to check that creation works and object
@@ -20,7 +23,7 @@ public class UpdateAnnotationPrivilegesCommandTest {
 	@Test
 	public void testCreationNotNull() {
 
-		UpdateAnnotationPrivilegesCommand c = new UpdateAnnotationPrivilegesCommand();
+		UpdateAnnotationPrivilegesCommand c = new UpdateAnnotationPrivilegesCommand("", "");
 		assertNotNull(c);
 
 	}
@@ -31,7 +34,7 @@ public class UpdateAnnotationPrivilegesCommandTest {
 	@Test
 	public void testValidateAlwaysTrue() {
 
-		UpdateAnnotationPrivilegesCommand c = new UpdateAnnotationPrivilegesCommand();
+		UpdateAnnotationPrivilegesCommand c = new UpdateAnnotationPrivilegesCommand("", "");
 		c.validate();
 
 	}

@@ -22,10 +22,10 @@ public class DeleteFileFromExperimentCommand extends Command {
 	/**
 	 * Constructs a new instance of DeleteFileFromExperimentCommand using the
 	 * supplied restful string.
-	 * @param restful string to set.
+	 * @param fileID the file ID of the file you wish to delete.
 	 */
-	public DeleteFileFromExperimentCommand(String restful) {
-		this.setHeader(restful);
+	public DeleteFileFromExperimentCommand(String fileID) {
+		this.setHeader(fileID);
 	}
 
 	@Override

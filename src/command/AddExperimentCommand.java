@@ -40,8 +40,10 @@ public class AddExperimentCommand extends Command {
 						"an empty annotation or annotation value, please " +
 						"specify annotations.");
 			}
-			validateString(annotations.get(i).getName(), MaxSize.ANNOTATION_LABEL, "Annotation label");
-			validateString(annotations.get(i).getValue(), MaxSize.ANNOTATION_VALUE, "Annotation value");
+			validateString(annotations.get(i).getName(),
+					MaxSize.ANNOTATION_LABEL, "Annotation label");
+			validateString(annotations.get(i).getValue(),
+					MaxSize.ANNOTATION_VALUE, "Annotation value");
 		}
 	}
 

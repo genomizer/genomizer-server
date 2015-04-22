@@ -21,20 +21,14 @@ import database.containers.Genome;
  */
 public class GetGenomeReleaseSpeciesCommand extends Command {
 	private String species;
-	/**
-	 * Creates a GetGenomeReleaseSpeciesCommand and saves the
-	 * species the genome versions should be retrieved for.
-	 *
-	 * @param restful - the restful header with species information
-	 */
 
 	/**
 	 * Constructs a new instance of GetGenomeReleaseSpeciesCommand using the
 	 * supplied restful string.
-	 * @param restful header to set.
+	 * @param species the species of the genome.
 	 */
-	public GetGenomeReleaseSpeciesCommand(String restful) {
-		species = restful;
+	public GetGenomeReleaseSpeciesCommand(String species) {
+		this.species = species;
 	}
 
 	@Override
@@ -50,7 +44,7 @@ public class GetGenomeReleaseSpeciesCommand extends Command {
 	 */
 	@Override
 	public Response execute() {
-		DatabaseAccessor db=null;
+		DatabaseAccessor db = null;
 		try {
 			db = initDB();
 			ArrayList<Genome> genomeReleases =
@@ -62,7 +56,7 @@ public class GetGenomeReleaseSpeciesCommand extends Command {
 		} catch (IOException e) {
 			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, species +
 					" has no genome version released");
-		}finally{
+		} finally {
 			if (db != null) {
 				db.close();
 			}

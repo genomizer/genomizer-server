@@ -22,10 +22,10 @@ public class DeleteExperimentCommand extends Command {
 	/**
 	 * Constructs a new instance of DeleteExperimentCommand using the supplied
 	 * restful string.
-	 * @param restful string to set.
+	 * @param expID the ID of the experiment.
 	 */
-	public DeleteExperimentCommand(String restful) {
-		this.setHeader(restful);
+	public DeleteExperimentCommand(String expID) {
+		this.setHeader(expID);
 	}
 
 	public void validate() throws ValidateException {
@@ -38,7 +38,6 @@ public class DeleteExperimentCommand extends Command {
 			db = initDB();
 			int tuples = db.deleteExperiment(header);
 			if(tuples == 0) {
-
 				return new ErrorResponse(StatusCode.BAD_REQUEST,
 						"The experiment " + header + " does not exist and " +
 								"can not be deleted");
@@ -57,5 +56,4 @@ public class DeleteExperimentCommand extends Command {
 		}
 		return new MinimalResponse(StatusCode.OK);
 	}
-
 }

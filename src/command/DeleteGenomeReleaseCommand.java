@@ -19,14 +19,8 @@ import response.StatusCode;
  * @version 1.1
  */
 public class DeleteGenomeReleaseCommand extends Command {
-	private String genomeVersion = null;
-	private String species = null;
-
-	/**
-	 * Constructs a new instance of DeleteExperimentCommand using the supplied
-	 * restful string.
-	 * @param restful string to set.
-	 */
+	private String genomeVersion;
+	private String species;
 
 	/**
 	 * Constructs a new instance of DeleteGenomeReleaseCommand using the

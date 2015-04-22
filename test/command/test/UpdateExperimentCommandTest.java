@@ -12,6 +12,7 @@ import command.UpdateExperimentCommand;
  * @version 1.0
  */
 public class UpdateExperimentCommandTest {
+	//TODO Implement tests later
 
 	/**
 	 * Test used to check that creation works and object
@@ -20,7 +21,7 @@ public class UpdateExperimentCommandTest {
 	@Test
 	public void testCreationNotNull() {
 
-		UpdateExperimentCommand c = new UpdateExperimentCommand();
+		UpdateExperimentCommand c = new UpdateExperimentCommand("", "");
 		assertNotNull(c);
 
 	}
@@ -31,7 +32,7 @@ public class UpdateExperimentCommandTest {
 	@Test
 	public void testValidateAlwaysTrue() {
 
-		UpdateExperimentCommand c = new UpdateExperimentCommand();
+		UpdateExperimentCommand c = new UpdateExperimentCommand("", "");
 		c.validate();
 
 	}

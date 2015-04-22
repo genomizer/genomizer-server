@@ -27,18 +27,13 @@ public class SearchForExperimentsCommand extends Command {
 	private String annotations;
 
 	/**
-	 * Empty constructor.
-	 * 
-	 * @param params annotations to set.
-	 */
-
-	/**
 	 * Constructs a new instance of SearchForExperimentsCommand using the
-	 * supplied params
-	 * @param params the needed params.
+	 * supplied annotations.
+	 * @param annotations the annotations (hopefully) belonging to the
+	 *                       experiment.
 	 */
-	public SearchForExperimentsCommand(String params) {
-		annotations = params;
+	public SearchForExperimentsCommand(String annotations) {
+		this.annotations = annotations;
 	}
 
 	@Override
@@ -77,8 +72,8 @@ public class SearchForExperimentsCommand extends Command {
 	}
 
 	/**
-	 * Method used to get the annotations that is set.
-	 * @return the annotations string.
+	 * Returns the annotations used to query for the experiment.
+	 * @return the annotations used to query for the experiment.
 	 */
 	public String getAnnotations() {
 		return annotations;

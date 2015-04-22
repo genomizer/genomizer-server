@@ -31,14 +31,11 @@ public class DeleteUserCommand extends Command {
 		if(username == null) {
 			throw new ValidateException(StatusCode.BAD_REQUEST,
 					"Username was missing.");
-
 		} else if(username.length() < 1 || username.length() >
 				database.constants.MaxSize.USERNAME) {
-
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Username " +
 					"has to be between 1 and " +
 					database.constants.MaxSize.USERNAME + " characters long.");
-
 		}
 	}
 

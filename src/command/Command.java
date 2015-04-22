@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.regex.Pattern;
 
-import database.constants.MaxSize;
 import response.Response;
 import response.StatusCode;
 import server.ServerSettings;
@@ -100,12 +99,13 @@ public abstract class Command {
 	 * @param string a string to validate.
 	 * @return boolean depending on validation result.
 	 */
-	public boolean hasOnlyValidCharacters(String string) {
+	public boolean hasInvalidCharacters(String string) {
 		Pattern p = Pattern.compile("[^A-Za-z0-9 _]");
-		return !p.matcher(string).find();
+		return p.matcher(string).find();
 	}
 
-	public void validateString(String string, int maxSize, String id) throws ValidateException {
+	public void validateString(String string, int maxSize, String id)
+			throws ValidateException {
 		if(string == null) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify " +
 					"an " + id.toLowerCase() + ".");
@@ -119,10 +119,10 @@ public abstract class Command {
 					string + " has to be between 1 and " + maxSize +
 					" characters long.");
 		}
-		if(!hasOnlyValidCharacters(string)) {
+		if(hasInvalidCharacters(string)) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid" +
-					" characters in " + id.toLowerCase() + ". Valid characters are: " +
-					validCharacters);
+					" characters in " + id.toLowerCase() +
+					". Valid characters are: " + validCharacters);
 		}
 	}
 }

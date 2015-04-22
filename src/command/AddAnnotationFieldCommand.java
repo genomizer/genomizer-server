@@ -38,7 +38,8 @@ public class AddAnnotationFieldCommand extends Command {
 	public void validate() throws ValidateException {
 		validateString(name, MaxSize.ANNOTATION_LABEL, "Annotation label");
 		if(defaults != null) {
-			validateString(defaults, MaxSize.ANNOTATION_DEFAULTVALUE, "Default value");
+			validateString(defaults, MaxSize.ANNOTATION_DEFAULTVALUE,
+					"Default value");
 		}
 
 		if(forced == null) {
@@ -52,7 +53,7 @@ public class AddAnnotationFieldCommand extends Command {
 		}
 
 		for(int i = 0; i < type.size(); i++) {
-			if(!hasOnlyValidCharacters(type.get(i))){
+			if(hasInvalidCharacters(type.get(i))){
 				throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
 						"characters in annotation type. Valid characters are: "
 						+ validCharacters);

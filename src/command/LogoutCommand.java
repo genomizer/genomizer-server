@@ -17,12 +17,6 @@ public class LogoutCommand extends Command {
 	private String username;
 
 	/**
-	 * Constructor used to initiate the class.
-	 *
-	 * @param username that wants to logout.
-	 */
-
-	/**
 	 * Constructs a new instance of LogoutCommand using the supplied
 	 * username.
 	 * @param username the username of the user that should be logged out.

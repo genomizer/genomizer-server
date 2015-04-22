@@ -6,6 +6,7 @@ import response.ProcessResponse;
 import response.Response;
 import response.StatusCode;
 import server.Debug;
+import server.ErrorLogger;
 import server.WorkHandler;
 
 /**
@@ -63,6 +64,8 @@ public class CommandHandler {
 				return myCom.execute();
  			}
 		} catch(ValidateException e) {
+			Debug.log(e.getMessage());
+			ErrorLogger.log("ValidateException", e.getMessage());
 			return new ErrorResponse(e.getCode(), e.getMessage());
 		}
 	}
@@ -77,7 +80,7 @@ public class CommandHandler {
 	 */
 	private Command createCommand(String json, String uri, String uuid,
 								  CommandType cmdt) {
-		if (RestfulSizes.getSize(cmdt) != calculateURISize(uri)) {
+		if (RestfulLengths.getSize(cmdt) != calculateURISize(uri)) {
 			return null;
 		}
 
@@ -143,8 +146,7 @@ public class CommandHandler {
 						createGetProcessStatusCommand(heavyWorkThread);
 				break;
 			case GET_ANNOTATION_INFORMATION_COMMAND:
-				newCommand = cmdFactory.
-						createGetAnnotationInformationCommand(json);
+				newCommand = cmdFactory.createGetAnnotationInformationCommand();
 				break;
 			case ADD_ANNOTATION_FIELD_COMMAND:
 				newCommand = cmdFactory.
@@ -154,7 +156,7 @@ public class CommandHandler {
 				newCommand = cmdFactory.createAddAnnotationValueCommand(json);
 				break;
 			case RENAME_ANNOTATION_VALUE_COMMAND:
-				newCommand = cmdFactory.creatRenameAnnotationValueCommand(json);
+				newCommand = cmdFactory.createRenameAnnotationValueCommand(json);
 				break;
 			case RENAME_ANNOTATION_FIELD_COMMAND:
 				newCommand = cmdFactory.createEditAnnotationFieldCommand(json);
@@ -165,7 +167,7 @@ public class CommandHandler {
 				break;
 			case GET_ANNOTATION_PRIVILEGES_COMMAND:
 				newCommand = cmdFactory.
-						createGetAnnotationPrivilegesCommand(json);
+						createGetAnnotationPrivilegesCommand(parsedURI);
 				break;
 			case UPDATE_ANNOTATION_PRIVILEGES_COMMAND:
 				newCommand = cmdFactory.

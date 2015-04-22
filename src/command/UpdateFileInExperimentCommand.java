@@ -11,16 +11,18 @@ import response.StatusCode;
  * @version 1.1
  */
 public class UpdateFileInExperimentCommand extends Command {
+	//TODO Implement this class
 
+	public UpdateFileInExperimentCommand(String json, String expID) {
+
+	}
 
 	@Override
 	public void validate() {
-		// TODO Add code here probably
 	}
 
 	@Override
 	public Response execute() {
-		//TODO Add code here probably
 		return 	new MinimalResponse(StatusCode.NO_CONTENT);
 	}
 }

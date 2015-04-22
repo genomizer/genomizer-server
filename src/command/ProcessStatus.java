@@ -10,25 +10,32 @@ import com.google.gson.annotations.Expose;
  */
 public class ProcessStatus implements Comparable<ProcessStatus> {
 	@Expose
-	public String experimentName;
-	@Expose
-	public String status;
-	@Expose
-	public String[] outputFiles;
-	@Expose
-	public String author;
-	@Expose
-	public long timeAdded;
-	@Expose
-	public long timeStarted;
-	@Expose
-	public long timeFinished;
+	@SuppressWarnings("unused")
+	private String experimentName;
 
-	/**
-	 * Constructor used to initiate the class.
-	 *
-	 * @param command process command.
-	 */
+	@Expose
+	@SuppressWarnings("unused")
+	private String status;
+
+	@Expose
+	@SuppressWarnings("unused")
+	private String[] outputFiles;
+
+	@Expose
+	@SuppressWarnings("unused")
+	private String author;
+
+	@Expose
+	@SuppressWarnings("unused")
+	private long timeAdded;
+
+	@Expose
+	@SuppressWarnings("unused")
+	private long timeStarted;
+
+	@Expose
+	@SuppressWarnings("unused")
+	private long timeFinished;
 
 	/**
 	 * Constructs a new instance of DeleteExperimentCommand using the supplied

@@ -1,6 +1,8 @@
 package command.test;
 
 import static org.junit.Assert.*;
+
+import org.junit.Ignore;
 import org.junit.Test;
 import command.GetAnnotationPrivilegesCommand;
 
@@ -12,6 +14,7 @@ import command.GetAnnotationPrivilegesCommand;
  * @version 1.0
  */
 public class GetAnnotationPrivilegesCommandTest {
+	//TODO Implement tests later
 
 	/**
 	 * Test creation and that it is not null.
@@ -19,7 +22,7 @@ public class GetAnnotationPrivilegesCommandTest {
 	@Test
 	public void testCreationNotNull() {
 
-		GetAnnotationPrivilegesCommand c = new GetAnnotationPrivilegesCommand();
+		GetAnnotationPrivilegesCommand c = new GetAnnotationPrivilegesCommand("");
 
 		assertNotNull(c);
 
@@ -31,7 +34,7 @@ public class GetAnnotationPrivilegesCommandTest {
 	@Test
 	public void testvalidationAlwaysTrue() {
 
-		GetAnnotationPrivilegesCommand c = new GetAnnotationPrivilegesCommand();
+		GetAnnotationPrivilegesCommand c = new GetAnnotationPrivilegesCommand("");
 		c.validate();
 
 		assertTrue(true);

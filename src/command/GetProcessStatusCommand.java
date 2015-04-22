@@ -7,9 +7,9 @@ import response.Response;
 import server.WorkHandler;
 
 /**
- * Fetches status of all processes that have been added to the server.
- * Will be reset when the server restarts. A process can have one
- * of four states: Waiting, Started, Finished and Crashed.
+ * Fetches status of all processes that have been added to the server. Will be
+ * reset when the server restarts. A process can have one of four states:
+ * Waiting, Started, Finished and Crashed.
  *
  * @author Business Logic 2015.
  * @version 1.1
@@ -40,7 +40,6 @@ public class GetProcessStatusCommand extends Command {
 		Collection<ProcessStatus> processStatus =
 				workHandler.getProcessStatus();
 		return new GetProcessStatusResponse(processStatus);
-
 	}
 
 }

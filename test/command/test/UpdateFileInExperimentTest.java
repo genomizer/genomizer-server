@@ -1,6 +1,8 @@
 package command.test;
 
 import static org.junit.Assert.*;
+
+import org.junit.Ignore;
 import org.junit.Test;
 import command.UpdateFileInExperimentCommand;
 
@@ -12,14 +14,14 @@ import command.UpdateFileInExperimentCommand;
  * @version 1.0
  */
 public class UpdateFileInExperimentTest {
+//TODO Implement tests later
 
 	/**
 	 * Test that creation works and object is not null.
 	 */
 	@Test
 	public void testCreateNotNull() {
-
-		UpdateFileInExperimentCommand c = new UpdateFileInExperimentCommand();
+		UpdateFileInExperimentCommand c = new UpdateFileInExperimentCommand("","");
 		assertNotNull(c);
 
 	}
@@ -29,8 +31,7 @@ public class UpdateFileInExperimentTest {
 	 */
 	@Test
 	public void testValidateAlwaysTrue() {
-
-		UpdateFileInExperimentCommand c = new UpdateFileInExperimentCommand();
+		UpdateFileInExperimentCommand c = new UpdateFileInExperimentCommand("","");
 		c.validate();
 	}
 

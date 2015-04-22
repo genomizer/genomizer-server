@@ -11,6 +11,11 @@ import response.StatusCode;
  * @version 1.1
  */
 public class UpdateAnnotationPrivilegesCommand extends Command {
+	//TODO Implement this class
+
+	public UpdateAnnotationPrivilegesCommand(String json, String userName) {
+
+	}
 
 	/**
 	 * Used to validate the information needed to execute
@@ -18,14 +23,12 @@ public class UpdateAnnotationPrivilegesCommand extends Command {
 	 */
 	@Override
 	public void validate() {
-		// TODO Add validation code here
+
 	}
 
 
 	@Override
 	public Response execute() {
-		//TODO Add execute code here probably
-		//Method not implemented, send appropriate response
 		return 	new MinimalResponse(StatusCode.NO_CONTENT);
 	}
 

@@ -11,8 +11,9 @@ import response.StatusCode;
  * @author Business Logic 2015.
  * @version 1.1
  */
-
 public class GetFileFromExperimentCommand extends Command {
+	//TODO Implement this class
+
 	private String fileID;
 
 	/**
@@ -36,7 +37,6 @@ public class GetFileFromExperimentCommand extends Command {
 
 	@Override
 	public Response execute() {
-		//TODO Replace this with useful code?
 //		Response rsp = rsp;
 //		ArrayList<String> attributes = new ArrayList<String>();
 //
@@ -58,5 +58,4 @@ public class GetFileFromExperimentCommand extends Command {
 		//Method not implemented, send appropriate response
 		return 	new MinimalResponse(StatusCode.NO_CONTENT);
 	}
-
 }

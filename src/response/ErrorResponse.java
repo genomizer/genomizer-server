@@ -6,7 +6,6 @@ import com.google.gson.annotations.Expose;
  * Class that represents the error response.
  */
 public class ErrorResponse extends Response {
-	
 	@Expose
 	public String message;
 	
@@ -14,7 +13,4 @@ public class ErrorResponse extends Response {
 		this.code = code;
 		this.message = message;
 	}
-	
-	
-	
 }

@@ -15,16 +15,6 @@ import response.Response;
 import response.StatusCode;
 
 /**
- * Edits the label of an annotation. The object is generated
- * directly from JSON with parameters oldName and newName.
- * oldName must be an existing annotation label and
- * newName can't be the label of an existing annotation.
- *
- * @author Business Logic 2015.
- * @version 1.1
- */
-
-/**
  * Edits the label of an annotation. The object is generated directly from
  * JSON with parameters oldName and newName. oldName must be an existing
  * annotation label and newName can't be the label of an existing annotation.
@@ -61,8 +51,7 @@ public class EditAnnotationFieldCommand extends Command {
 		DatabaseAccessor db;
 		try {
 			db = initDB();
-		}
-		catch(SQLException | IOException e){
+		} catch(SQLException | IOException e) {
 			return new ErrorResponse(StatusCode.BAD_REQUEST, "Could not " +
 					"initialize db: " + e.getMessage());
 		}
@@ -84,14 +73,14 @@ public class EditAnnotationFieldCommand extends Command {
 						"change annotation label: " + e.getMessage());
 			}
 
-		}
-		catch(SQLException e){
+		} catch(SQLException e) {
 			return new ErrorResponse(StatusCode.BAD_REQUEST, "Could not " +
 					"get annotations: " + e.getMessage());
-		}finally{
-			db.close();
+		} finally {
+			if (db != null) {
+				db.close();
+			}
 		}
 		return new MinimalResponse(StatusCode.OK);
 	}
-
 }
