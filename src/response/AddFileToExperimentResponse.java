@@ -8,11 +8,17 @@ import com.google.gson.annotations.Expose;
 public class AddFileToExperimentResponse extends Response {
 
 	@Expose
-	public String URLupload;
+	private String UrlUpload;
 
-	public AddFileToExperimentResponse(int code, String URLupload) {
+	/**
+	 * Constructor for the response
+	 * @param code The return code
+	 * @param UrlUpload URL for the experiment to upload
+	 */
+	public AddFileToExperimentResponse(int code, String UrlUpload) {
+
 		this.code = code;
-		this.URLupload = URLupload;
+		this.UrlUpload = UrlUpload;
 	}
 
 }
