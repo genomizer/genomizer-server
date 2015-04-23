@@ -14,9 +14,11 @@ public class Util {
         Debug.log("Request URI path: " + reqPath);
         Debug.log("Request URI query: " + reqQuery);
 
-        for (String paramPair : reqQuery.split("&")) {
-            String [] splitPair = paramPair.split("=");
-            outParams.put(splitPair[0], splitPair[1]);
+        if (reqQuery != null) {
+            for (String paramPair : reqQuery.split("&")) {
+                String[] splitPair = paramPair.split("=");
+                outParams.put(splitPair[0], splitPair[1]);
+            }
         }
 
         return reqPath;
