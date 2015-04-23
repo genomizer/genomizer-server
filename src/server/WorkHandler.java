@@ -26,10 +26,8 @@ public class WorkHandler implements Runnable {
 		long currentTime = System.currentTimeMillis();
 
 		// List to store processes to be removed
-		ArrayList<ProcessCommand> toBeRemoved = new ArrayList<>();
-
-		//HashMap<ProcessCommand,ProcessStatus> processes = workPool
-		//			.getProcesses();
+		LinkedList<ProcessCommand> toBeRemoved = new LinkedList<>();
+		
 		LinkedList<ProcessCommand> processes = workPool.getProcesses();
 
 		/* Loop through all processes and check statuses */
