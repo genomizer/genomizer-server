@@ -20,6 +20,7 @@ public class ServerSettings {
 	public static String passwordSalt = null;
 	public static String webUrlUpload = null;
 	public static String fileLocation = "/var/www/data/";
+	public static int nrOfProcessThreads = 5;
 
 
 	public static void writeSettings(String path){
@@ -38,7 +39,8 @@ public class ServerSettings {
 					+ "passwordHash = " + passwordHash + "\n"
 					+ "passwordSalt = " + passwordSalt + "\n"
 					+ "fileLocation = " + fileLocation + "\n"
-					+ "webUrlUpload = " + webUrlUpload + "\n";
+					+ "webUrlUpload = " + webUrlUpload + "\n"
+					+ "nrOfProcessThreads = " + nrOfProcessThreads + "\n";
 
 			out.write(dataInfo);
 			out.close();
@@ -68,6 +70,7 @@ public class ServerSettings {
 		nullCheck(passwordSalt, "passwordSalt");
 		nullCheck(webUrlUpload, "webUrlUpload");
 		nullCheck(fileLocation, "fileLocation");
+		nullCheck(nrOfProcessThreads, "nrOfProcessThreads");
 	}
 
 	private static void nullCheck(int parameter, String name) {
@@ -145,6 +148,9 @@ public class ServerSettings {
 				case "filelocation":
 					fileLocation = value;
 					break;
+				case "nrofprocessthreads":
+					nrOfProcessThreads = Integer.parseInt(value);
+					break;
 				default:
 					String msg = "Unrecognized setting: " + key;
 					Debug.log(msg);
@@ -171,7 +177,9 @@ public class ServerSettings {
 							+ "\tpasswordHash = " + passwordHash + "\n"
 							+ "\tpasswordSalt = " + passwordSalt + "\n"
 							+ "\tfileLocation = " + fileLocation + "\n"
-							+ "\twebUrlUpload = " + webUrlUpload + "\n";
+							+ "\twebUrlUpload = " + webUrlUpload + "\n"
+							+ "\tnrOfProcessThreads = " + nrOfProcessThreads
+							+ "\n";
 
 			Debug.log("Imported the following settings:\n" + dataInfo);
 			ErrorLogger.log("SYSTEM", "Imported the following settings:\n" +
