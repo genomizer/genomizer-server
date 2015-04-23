@@ -15,11 +15,7 @@ import authentication.InactiveUuidsRemover;
 
 import command.CommandHandler;
 
-import server.ServerSettings;
-import server.Debug;
-import server.Doorman;
-import server.ErrorLogger;
-import server.WorkPool;
+import server.*;
 
 
 public class ServerMain {
@@ -46,6 +42,9 @@ public class ServerMain {
 
 		/* Create a work pool */
 		WorkPool workPool = new WorkPool();
+
+		/* Create process handlers */
+		createWorkHandlers(workPool);
 
 		/* We attempt to start the doorman. */
 		try {
@@ -75,6 +74,12 @@ public class ServerMain {
 				+ "  host     " + ServerSettings.databaseHost + "\n";
 		System.out.print(info);
 		ErrorLogger.log("SYSTEM", info);
+	}
+
+	private static void createWorkHandlers(WorkPool workPool) {
+		for (int i=0; i<ServerSettings.nrOfProcessThreads; i++) {
+			new Thread(new WorkHandler(workPool)).start();
+		}
 	}
 
 	/**

@@ -60,8 +60,6 @@ public class WorkHandler implements Runnable {
 	//is executed
 	@Override
 	public void run() {
-		Debug.log(Thread.currentThread().getName());
-
 
 		while (true) {
 

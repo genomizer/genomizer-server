@@ -60,6 +60,7 @@ public class GetExperimentCommand extends Command {
 				exp.getAnnotations(), exp.getFiles());
 	}
 
+	//TODO Handle multiple experiments?
 	private ArrayList<String> getInfo(Experiment exp) {
 		ArrayList<String> info = new ArrayList<String>();
 		info.add(exp.getID());

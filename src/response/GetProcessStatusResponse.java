@@ -15,27 +15,40 @@ import command.ProcessStatus;
 import server.ErrorLogger;
 
 /**
- * Class that represents the response for the get process status
+ * Class that represents the response for the get process status.
+ *
+ * @author
+ * @version 1.0
  */
 public class GetProcessStatusResponse extends Response {
 
-	private Collection<ProcessStatus> procStats;
+	private Collection<ProcessStatus> processStatus;
 
-	public GetProcessStatusResponse(Collection<ProcessStatus> procStats) {
-		this.procStats = procStats;
+
+	/**
+	 * Creator for the response. Always returns 200 as return code.
+	 * @param processStatus The process status to return.
+	 */
+	public GetProcessStatusResponse(Collection<ProcessStatus> processStatus) {
+
+		this.processStatus = processStatus;
 		code = 200;
 	}
 
+	/**
+	 * Creates a Json representation of the body
+	 * @return The response body as a String
+	 */
 	@Override
 	public String getBody() {
 
-		if (procStats == null) {
+		if (processStatus == null) {
 			ErrorLogger.log("SYSTEM", "GetProcessStatusResponse.getBody(): " +
 					"Error getting process status");
 			return "";
 		}
 
-		List<ProcessStatus> list = new ArrayList<>( procStats);
+		List<ProcessStatus> list = new ArrayList<>(processStatus);
 
 		Collections.sort( list );
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -49,8 +62,9 @@ public class GetProcessStatusResponse extends Response {
 		return toPrettyFormat(arr.toString());
 	}
 
-    private static String toPrettyFormat(String jsonString)
-    {
+	//Parses the json string to a nice format for sending
+    private String toPrettyFormat(String jsonString) {
+
         JsonParser parser = new JsonParser();
         JsonArray json = parser.parse(jsonString).getAsJsonArray();
 
