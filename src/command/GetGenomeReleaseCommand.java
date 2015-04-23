@@ -19,32 +19,15 @@ import response.StatusCode;
  */
 
 public class GetGenomeReleaseCommand extends Command{
-
-	/**
-	 * Empty constructor, used to get an object of GetGenomeReleaseCommand
-	 */
-	public GetGenomeReleaseCommand() {
-
-	}
-
-	/**
-	 * Validation is always true, this command is always sent to the database
-	 * because the command can't be corrupt.
-	 *
-	 * @return always true.
-	 */
 	@Override
-	public boolean validate() {
-
-		return true;
-
+	public void validate() {
+		/*Validation will always succeed, the command can not be corrupt.*/
 	}
 
 	/**
-	 * Connects to the database, retrieves all the genomeReleases
-	 * and creates a response depending on the database return value.
-	 *
-	 * @return Object of the response class depending on result.
+	 * Connects to the database, retrieves all the genomeReleases and creates
+	 * a response depending on the database return value.
+	 * @return an appropriate Response.
 	 */
 	@Override
 	public Response execute() {
@@ -70,5 +53,4 @@ public class GetGenomeReleaseCommand extends Command{
 				db.close();
 		}
 	}
-
 }

@@ -80,9 +80,8 @@ public class CreateUserCommandTest {
 		CreateUserCommand cmd2 = new CreateUserCommand();
 		cmd2 = gson.fromJson(json, CreateUserCommand.class);
 
-		assertFalse(cmd.validate());
-		assertFalse(cmd2.validate());
-
+		cmd.validate();
+		cmd2.validate();
 	}
 
 	/**
@@ -104,8 +103,8 @@ public class CreateUserCommandTest {
 		CreateUserCommand cmd2 = new CreateUserCommand();
 		cmd2 = gson.fromJson(json, CreateUserCommand.class);
 
-		assertFalse(cmd.validate());
-		assertFalse(cmd2.validate());
+		cmd.validate();
+		cmd2.validate();
 
 	}
 
@@ -128,8 +127,8 @@ public class CreateUserCommandTest {
 		CreateUserCommand cmd2 = new CreateUserCommand();
 		cmd2 = gson.fromJson(json, CreateUserCommand.class);
 
-		assertFalse(cmd.validate());
-		assertFalse(cmd2.validate());
+		cmd.validate();
+		cmd2.validate();
 
 	}
 
@@ -144,7 +143,7 @@ public class CreateUserCommandTest {
 		CreateUserCommand cmd = new CreateUserCommand();
 		cmd = gson.fromJson(json, CreateUserCommand.class);
 
-		assertFalse(cmd.validate());
+		cmd.validate();
 
 	}
 
@@ -157,7 +156,7 @@ public class CreateUserCommandTest {
 		CreateUserCommand cmd = new CreateUserCommand();
 		cmd = gson.fromJson(json, CreateUserCommand.class);
 
-		assertTrue(cmd.validate());
+		cmd.validate();
 
 	}
 

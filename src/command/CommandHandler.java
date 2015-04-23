@@ -6,6 +6,7 @@ import response.ProcessResponse;
 import response.Response;
 import response.StatusCode;
 import server.Debug;
+import server.ErrorLogger;
 import server.WorkPool;
 
 /**
@@ -34,7 +35,6 @@ public class CommandHandler {
 	public Response processNewCommand(String json, String uri,
 									  String uuid, CommandType cmdt) {
 		Command myCom = createCommand(json, uri, uuid, cmdt);
-
 		if(myCom == null) {
 
 			/*If a command could not be created from the given request, return
@@ -45,8 +45,8 @@ public class CommandHandler {
 		}
 
 		try {
-			if (myCom.validate()) {
-				if(CommandType.PROCESS_COMMAND.equals(cmdt)){
+			myCom.validate();
+			if (CommandType.PROCESS_COMMAND.equals(cmdt)) {
 
 					/*If the command is a process command, execution of it
 					* starts in the heavy work thread, followed by returning a
@@ -56,20 +56,13 @@ public class CommandHandler {
 					return new ProcessResponse(StatusCode.OK);
 				}else {
 
-					/*If the command is of the common kind, execute the
-					* command and return the response.*/
-					return myCom.execute();
-				}
-			} else {
-
-				/*If the command is not valid, return an error response.*/
-				Debug.log("Command not valid");
-				return new ErrorResponse(StatusCode.BAD_REQUEST, "The " +
-						"command was invalid. Check the input! Valid " +
-						"characters are A-Z, a-z, 0-9 and space");
-			}
-
+				/*If the command is of the common kind, execute the command
+				* and return the response.*/
+				return myCom.execute();
+ 			}
 		} catch(ValidateException e) {
+			Debug.log(e.getMessage());
+			ErrorLogger.log("ValidateException", e.getMessage());
 			return new ErrorResponse(e.getCode(), e.getMessage());
 		}
 	}
@@ -84,7 +77,7 @@ public class CommandHandler {
 	 */
 	private Command createCommand(String json, String uri, String uuid,
 								  CommandType cmdt) {
-		if (RestfulSizes.getSize(cmdt) != calculateURISize(uri)) {
+		if (RestfulLengths.getSize(cmdt) != calculateURISize(uri)) {
 			return null;
 		}
 
@@ -118,7 +111,7 @@ public class CommandHandler {
 						parsedURI);
 			case DELETE_FILE_FROM_EXPERIMENT_COMMAND:
 				return cmdFactory.
-						createDeleteFileFromExperimentCommand(parsedURI);
+                        createDeleteFileFromExperimentCommand(parsedURI);
 			case SEARCH_FOR_EXPERIMENTS_COMMAND:
 				return cmdFactory.createSearchForExperimentCommand(parsedURI);
 			case DELETE_USER_COMMAND:
@@ -129,13 +122,13 @@ public class CommandHandler {
 			case GET_PROCESS_STATUS_COMMAND:
 				return cmdFactory.createGetProcessStatusCommand(workPool);
 			case GET_ANNOTATION_INFORMATION_COMMAND:
-				return cmdFactory.createGetAnnotationInformationCommand(json);
+				return cmdFactory.createGetAnnotationInformationCommand();
 			case ADD_ANNOTATION_FIELD_COMMAND:
 				return cmdFactory.createAddAnnotationFieldCommand(json);
 			case ADD_ANNOTATION_VALUE_COMMAND:
 				return cmdFactory.createAddAnnotationValueCommand(json);
 			case RENAME_ANNOTATION_VALUE_COMMAND:
-				return cmdFactory.creatRenameAnnotationValueCommand(json);
+				return cmdFactory.createEditAnnotationFieldCommand(json);
 			case RENAME_ANNOTATION_FIELD_COMMAND:
 				return cmdFactory.createEditAnnotationFieldCommand(json);
 			case REMOVE_ANNOTATION_FIELD_COMMAND:
