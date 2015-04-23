@@ -63,8 +63,8 @@ public class Doorman {
 
 		this.commandHandler = commandHandler;
 		// TODO: Don't hard-code this location.
-		this.uploadHandler   = new UploadHandler("resources/");
-		this.downloadHandler = new DownloadHandler("resources/");
+		this.uploadHandler   = new UploadHandler("/upload", "resources/", "/tmp");
+		this.downloadHandler = new DownloadHandler("/download", "resources/");
 
 		httpServer = HttpServer.create(new InetSocketAddress(port),0);
 		httpServer.createContext("/login", createHandler());
