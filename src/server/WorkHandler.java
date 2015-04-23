@@ -7,7 +7,6 @@ import response.StatusCode;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 
@@ -27,7 +26,7 @@ public class WorkHandler implements Runnable {
 
 		// List to store processes to be removed
 		LinkedList<ProcessCommand> toBeRemoved = new LinkedList<>();
-		
+
 		LinkedList<ProcessCommand> processes = workPool.getProcesses();
 
 		/* Loop through all processes and check statuses */
