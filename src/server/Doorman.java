@@ -62,7 +62,7 @@ public class Doorman {
 	public Doorman(CommandHandler commandHandler, int port) throws IOException {
 
 		this.commandHandler = commandHandler;
-		// TODO: Don't hard-code this location.
+		// TODO: Don't hard-code the upload and temp directories' locations.
 		this.uploadHandler   = new UploadHandler("/upload", "resources/", "/tmp");
 		this.downloadHandler = new DownloadHandler("/download", "resources/");
 
