@@ -32,8 +32,7 @@ public class CommandFactory {
 	 * @return the actual command.
 	 */
 	public Command createLoginCommand(String json) {
-		final Command loginCmd = gson.fromJson(json, LoginCommand.class);
-		return loginCmd;
+		return gson.fromJson(json, LoginCommand.class);
 	}
 
 	/**
@@ -42,8 +41,7 @@ public class CommandFactory {
 	 * @return a logout command.
 	 */
 	public Command createLogoutCommand(String username) {
-		final Command logoutCmd = new LogoutCommand(username);
-		return logoutCmd;
+		return new LogoutCommand(username);
 	}
 
 	/**
@@ -61,15 +59,8 @@ public class CommandFactory {
 	 * @return the actual command.
 	 */
 	public Command createAddExperimentCommand(String json) {
-		final Command addExperimentCmd = gson.fromJson(json,
-				AddExperimentCommand.class);
-		return addExperimentCmd;
+		return gson.fromJson(json, AddExperimentCommand.class);
 	}
-
-	/**
-	 * Used to create the command needed to update experiments.
-	 * @return the actual command.
-	 */
 
 	/**
 	 * Used to create the command needed to update experiments.
@@ -105,9 +96,7 @@ public class CommandFactory {
 	 * @return the actual command.
 	 */
 	public Command createAddFileToExperimentCommand(String json) {
-		final Command addFileToExperimentCmd = gson.fromJson(json,
-				AddFileToExperimentCommand.class);
-		return addFileToExperimentCmd;
+		return gson.fromJson(json, AddFileToExperimentCommand.class);
 	}
 
 	/**
@@ -146,9 +135,7 @@ public class CommandFactory {
 	 * @return the actual command.
 	 */
 	public Command createCreateUserCommand(String json) {
-		final Command createUserCmd = gson.fromJson(json,
-				CreateUserCommand.class);
-		return createUserCmd;
+		return gson.fromJson(json, CreateUserCommand.class);
 	}
 
 	/**
@@ -193,9 +180,7 @@ public class CommandFactory {
 	 * @return the actual command.
 	 */
 	public Command createAddAnnotationFieldCommand(String json) {
-		final Command AddAnnotationFieldCmd = gson.fromJson(json,
-				AddAnnotationFieldCommand.class);
-		return AddAnnotationFieldCmd;
+		return gson.fromJson(json, AddAnnotationFieldCommand.class);
 	}
 
 	/**
@@ -204,9 +189,7 @@ public class CommandFactory {
 	 * @return the actual command.
 	 */
 	public Command createAddAnnotationValueCommand(String json) {
-		Command AddAnnotationValueCommand = gson.fromJson(json,
-				AddAnnotationValueCommand.class);
-		return AddAnnotationValueCommand;
+		return gson.fromJson(json, AddAnnotationValueCommand.class);
 	}
 
 	/**
@@ -326,5 +309,4 @@ public class CommandFactory {
 	public Command createIsTokenValidCommand(String uuid) {
 		return new IsTokenValidCommand(uuid);
 	}
-
 }
