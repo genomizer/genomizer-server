@@ -9,6 +9,7 @@ import java.util.List;
 import java.net.URLDecoder;
 
 import database.DatabaseAccessor;
+import database.constants.MaxSize;
 import database.containers.Experiment;
 
 import response.ErrorResponse;
@@ -19,52 +20,34 @@ import response.StatusCode;
 /**
  * Class used to handle searching for an experiment.
  *
- * @author Kommunikation/kontroll 2014.
- * @version 1.0
+ * @author Business Logic 2015.
+ * @version 1.1
  */
 public class SearchForExperimentsCommand extends Command {
-
 	private String annotations;
 
 	/**
-	 * Empty constructor.
-	 * 
-	 * @param params annotations to set.
+	 * Constructs a new instance of SearchForExperimentsCommand using the
+	 * supplied annotations.
+	 * @param annotations the annotations (hopefully) belonging to the
+	 *                       experiment.
 	 */
-	public SearchForExperimentsCommand(String params) {
-		
-		annotations = params;
-		
+	public SearchForExperimentsCommand(String annotations) {
+		this.annotations = annotations;
 	}
 
-	/**
-	 * Used to validate the correctness of the
-	 * class when built.
-	 */
 	@Override
-	public boolean validate() throws ValidateException {
-		
+	public void validate() throws ValidateException {
 		if (annotations == null || annotations.equals("")) {
-			
 			throw new ValidateException(StatusCode.BAD_REQUEST,
 					"Specify annotations to search for.");
-			
 		}
-
-		return true;
-		
 	}
 
-	/**
-	 * Runs the actual code needed to search
-	 * the database.
-	 */
 	@Override
 	public Response execute() {
-
 	    DatabaseAccessor db = null;
 	    List<Experiment> searchResult = null;
-
 		try {
 			annotations = URLDecoder.decode(annotations, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
@@ -72,7 +55,6 @@ public class SearchForExperimentsCommand extends Command {
 			return new ErrorResponse(StatusCode.BAD_REQUEST, "Bad encoding " +
 					"on search query.");
 		}
-
 		try {
 			db = initDB();
 			searchResult = db.search(annotations);
@@ -90,14 +72,10 @@ public class SearchForExperimentsCommand extends Command {
 	}
 
 	/**
-	 * Method used to get the annotations that is set.
-	 * 
-	 * @return the annotations string.
+	 * Returns the annotations used to query for the experiment.
+	 * @return the annotations used to query for the experiment.
 	 */
 	public String getAnnotations() {
-		
 		return annotations;
-		
 	}
-	
 }

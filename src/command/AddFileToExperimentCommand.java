@@ -15,161 +15,45 @@ import response.Response;
 import response.StatusCode;
 
 /**
- * Class used to represent a command of the type Addfile.
+ * Class used to represent a command of the type AddFile.
  *
- * @author Kommunikation/kontroll 2014.
- * @version 1.0
+ * @author Business Logic 2015.
+ * @version 1.1
  */
 public class AddFileToExperimentCommand extends Command {
+	@Expose
+	private String experimentID = null;
 
 	@Expose
-	private String experimentID;
+	private String fileName = null;
 
 	@Expose
-	private String fileName;
+	private String type = null;
 
 	@Expose
-	private String type;
+	private String metaData = null;
 
 	@Expose
-	private String metaData;
-
-	@Expose
-	private String author;
+	private String author = null;
 
 	@Expose
 	private String uploader;
 
 	@Expose
-	private String grVersion;
+	private String grVersion = null;
 
+	//TODO: Find out what this does.
 	private boolean isPrivate = false;
 
-	/**
-	 * Validates the request by checking
-	 * the attributes. No attribute can be null
-	 * and type needs to be either "raw", "profile",
-	 * or "region".
-	 */
 	@Override
-	public boolean validate() throws ValidateException {
-
-		if(experimentID == null) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify " +
-					"an experiment name.");
-		}
-		if(fileName == null) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify a " +
-					"file name.");
-		}
-		if(type == null) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify a " +
-					"type.");
-		}
-		if(metaData == null) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify metadata.");
-		}
-		if(uploader == null) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify an uploader name.");
-		}
-		if(grVersion == null) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify a genome release.");
-		}
-		if(author == null) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify author.");
-		}
-		if(experimentID.length() > MaxSize.EXPID || experimentID.length() < 1) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Experiment " +
-					"name: " + experimentID + " has to be between 1 and "
-					+ database.constants.MaxSize.EXPID + " characters long.");
-		}
-		if(fileName.length() > MaxSize.FILE_FILENAME || fileName.length() < 1) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "File name: " +
-					fileName + " has to be between 1 and "
-					+ database.constants.MaxSize.FILE_FILENAME + " characters" +
-					" long.");
-		}
-		if(type.length() > MaxSize.FILE_FILETYPE  || type.length() < 1) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "File type: " +
-					type + " has to be between 1 and "
-					+ database.constants.MaxSize.FILE_FILETYPE + " characters" +
-					" long.");
-		}
-		if(uploader == null){
-			throw new ValidateException(StatusCode.BAD_REQUEST,"Specify " +
-					"metadata");
-		}
-		if(uploader.length() > MaxSize.FILE_UPLOADER || uploader.length() < 1) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Uploader " +
-					"name: " + uploader + " has to be between 1 and "
-					+ database.constants.MaxSize.FILE_UPLOADER + " characters" +
-					" long.");
-		}
-		if(!hasOnlyValidCharacters(uploader)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
-					"characters in uploader name. Valid characters are: " +
-					validCharacters);
-		}
-		if(grVersion.length() > MaxSize.FILE_GRVERSION ||
-				grVersion.length() < 1) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Genome " +
-					"version: " + grVersion + " has to be between 1 and "
-					+ database.constants.MaxSize.FILE_GRVERSION +
-					" characters long.");
-		}
-		if(metaData == null){
-			throw new ValidateException(StatusCode.BAD_REQUEST,"Specify " +
-					"metadata");
-		}
-		if(metaData.length() > MaxSize.FILE_METADATA ||
-				metaData.length() < 1) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Metadata has" +
-					" to be between 1 and "
-					+ database.constants.MaxSize.FILE_GRVERSION +
-					" characters long.");
-		}
-		if(metaData.contains("/")) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Metadata can" +
-					" not contain slash.");
-		}
-		if(author == null){
-			throw new ValidateException(StatusCode.BAD_REQUEST,"Specify " +
-					"author");
-		}
-		if(author.length() > MaxSize.FILE_AUTHOR || author.length() < 1) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Author has" +
-					" to be between 1 and "
-					+ database.constants.MaxSize.FILE_AUTHOR + " characters" +
-					" long.");
-		}
-		if(!hasOnlyValidCharacters(author)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid" +
-					" characters in author name. Valid characters are: " +
-					validCharacters);
-		}
-		if(!hasOnlyValidCharacters(experimentID)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid" +
-					" characters in experiment name. Valid characters are: " +
-					validCharacters);
-		}
-		if(!hasOnlyValidCharacters(type)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
-					"characters in file type name. Valid characters are: " +
-					validCharacters);
-		}
-
-		if(!hasOnlyValidCharacters(grVersion)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
-					"characters in genome version name. Valid characters are: "
-					+ validCharacters);
-		}
-
-		if(fileName.contains("/")) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "File name " +
-					"can not contain slash.");
-		}
-
-		return true;
+	public void validate() throws ValidateException {
+		validateString(experimentID, MaxSize.EXPID, "Experiment name");
+		validateString(type, MaxSize.FILE_FILETYPE, "File type");
+		validateString(author, MaxSize.FILE_AUTHOR, "Author");
+		validateString(uploader, MaxSize.FILE_UPLOADER, "Uploader");
+		validateString(grVersion, MaxSize.FILE_GRVERSION, "Genome release");
+		validateString(fileName, MaxSize.FILE_FILENAME, "Filename");
+		validateString(metaData, MaxSize.FILE_METADATA, "Metadata");
 	}
 
 	public void setUploader(String uploader) {
@@ -177,28 +61,27 @@ public class AddFileToExperimentCommand extends Command {
 	}
 
 	/**
-	 * Adds all attributes to an arraylist and
-	 * pass that and the experimentID to the database.
-	 * A filepath is returned and sent to the client as
-	 * a URL.
+	 * Adds all attributes to an ArrayList and passes that and the experimentID
+	 * to the database. A file path is returned and sent to the client as an
+	 * URL.
 	 */
 	@Override
 	public Response execute() {
 
 		DatabaseAccessor db = null;
-		int filetype;
+		int fileType;
 		if(type.equalsIgnoreCase("raw")) {
-			filetype = FileTuple.RAW;
+			fileType = FileTuple.RAW;
 		} else if(type.equalsIgnoreCase("profile")) {
-			filetype = FileTuple.PROFILE;
+			fileType = FileTuple.PROFILE;
 		} else if(type.equalsIgnoreCase("region")) {
-			filetype = FileTuple.REGION;
+			fileType = FileTuple.REGION;
 		} else {
-			filetype = FileTuple.OTHER;
+			fileType = FileTuple.OTHER;
 		}
 		try {
 			db = initDB();
-			FileTuple ft = db.addNewFile(experimentID, filetype, fileName, null,
+			FileTuple ft = db.addNewFile(experimentID, fileType, fileName, null,
 					metaData, author, uploader, isPrivate, grVersion);
 			return new AddFileToExperimentResponse(StatusCode.OK,
 					ft.getUploadURL());
@@ -209,8 +92,10 @@ public class AddFileToExperimentCommand extends Command {
 			e.printStackTrace();
 			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE,
 					e.getMessage());
-		} finally{
-			db.close();
+		} finally {
+			if (db != null) {
+				db.close();
+			}
 		}
 	}
 }

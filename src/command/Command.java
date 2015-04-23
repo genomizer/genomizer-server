@@ -3,7 +3,9 @@ package command;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.regex.Pattern;
+
 import response.Response;
+import response.StatusCode;
 import server.ServerSettings;
 import database.DatabaseAccessor;
 
@@ -12,8 +14,8 @@ import database.DatabaseAccessor;
  * to create a "command". A command should extend this class and represents
  * a task that the server needs to execute.
  *
- * @author Kommunikation/kontroll 2014.
- * @version 1.0
+ * @author Business Logic 2015.
+ * @version 1.1
  */
 public abstract class Command {
 	/* When creating a new command, these steps needs to be followed:
@@ -26,74 +28,101 @@ public abstract class Command {
 	 * 		server receives it so that it can be passed to the CommandHandler.
 	 */
 
-	//These are valid characters that are used with the validation method.
+	/*These are valid characters that are used with the validation method.*/
 	final protected String validCharacters = "^, A-Z, a-z, 0-9, space and _";
 
-	//This is used to store a RESTful-header.
+	/*This is used to store a RESTful-header.*/
 	protected String header;
 
-	/* This method is used to validates the object and its information.
-	 * The validate method should be called before the command is executed and
+	/* This method is used to validates the object and its information. The
+	 * validate method should be called before the command is executed and
 	 * should be unique to each child.
 	 */
-	public abstract boolean validate() throws ValidateException;
 
-	//Method used to execute the actual command.
+	/**
+	 * Used to validate the object and its information. The validate method
+	 * should be called before the command is executed and should be unique
+	 * to each subclass. If the object is not valid a ValidateException is
+	 * thrown.
+	 * @throws ValidateException containing information describing why the
+	 * Command could not be validated.
+	 */
+	public abstract void validate() throws ValidateException;
+
+	/**
+	 * Executes the command and returns the appropriate response.
+	 * @return an appropriate Response depending on the command.
+	 */
 	public abstract Response execute();
 
 	/**
+	 * Empty constructor. Suggested when using Gson.
+	 */
+	public Command() {
+
+	}
+
+	/**
 	 * Method used to get the RESTful-header.
-	 *
 	 * @return the header that is set.
 	 */
 	public String getHeader() {
-
 		return header;
-
 	}
 
 	/**
 	 * Method used to set the RESTful-header.
-	 *
 	 * @param header the header as a string.
 	 */
 	public void setHeader(String header) {
-
 		this.header = header;
-
 	}
 
 	/**
 	 * Method used to connect to the database.
-	 *
 	 * @return a database accessor object.
 	 * @throws SQLException
 	 * @throws IOException
 	 */
 	public DatabaseAccessor initDB() throws SQLException, IOException {
-
-		DatabaseAccessor db = null;
+		DatabaseAccessor db;
 		db = new DatabaseAccessor(ServerSettings.databaseUsername,
 				ServerSettings.databasePassword, ServerSettings.databaseHost,
 				ServerSettings.databaseName);
 
 		return db;
-
 	}
 
 	/**
 	 * This method is used to validate a string and check if all
 	 * it's characters are valid.
-	 *
 	 * @param string a string to validate.
 	 * @return boolean depending on validation result.
 	 */
-	public boolean hasOnlyValidCharacters(String string) {
-
+	public boolean hasInvalidCharacters(String string) {
 		Pattern p = Pattern.compile("[^A-Za-z0-9 _]");
-
-		return !p.matcher(string).find();
-
+		return p.matcher(string).find();
 	}
 
+	public void validateString(String string, int maxSize, String id)
+			throws ValidateException {
+		if(string == null) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify " +
+					"an " + id.toLowerCase() + ".");
+		}
+		if(string.equals("null")){
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid "
+					+ id.toLowerCase() + ".");
+		}
+		if(string.length() > maxSize || string.length() < 1) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, id + ": " +
+					string + " has to be between 1 and " + maxSize +
+					" characters long.");
+		}
+		if(hasInvalidCharacters(string)) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid" +
+					" characters in " + id.toLowerCase() +
+					". Valid characters are: " + validCharacters);
+		}
+	}
 }

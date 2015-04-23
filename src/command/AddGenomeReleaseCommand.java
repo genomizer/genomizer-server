@@ -17,14 +17,10 @@ import response.StatusCode;
 /**
  * Class used to handle adding a genome release.
  *
- * @author Kommunikation/kontroll 2014.
- * @version 1.0
+ * @author Business Logic 2015.
+ * @version 1.1
  */
 public class AddGenomeReleaseCommand extends Command {
-	/* All attributes with @Expose are serialized with
-	 * a JSON string.
-	 */
-
 	@Expose
 	private String genomeVersion = null;
 
@@ -32,23 +28,14 @@ public class AddGenomeReleaseCommand extends Command {
 	private String specie = null;
 
 	@Expose
-	private ArrayList<String> files = new ArrayList<String>();
+	private ArrayList<String> files = new ArrayList<>();
 
-	/**
-	 * Method used to validate the information needed in order to
-	 * execute the command properly.
-	 */
 	@Override
-	public boolean validate() throws ValidateException {
+	public void validate() throws ValidateException {
 
-		if(files == null || files.size() == 0) {
-			throw new ValidateException(StatusCode.BAD_REQUEST,
-					"Specify release files.");
-		}
-		if(genomeVersion == null) {
-			throw new ValidateException(StatusCode.BAD_REQUEST,
-					"Specify a genome release version.");
-		}
+		validateString(specie, MaxSize.GENOME_SPECIES, "Specie");
+		validateString(genomeVersion, MaxSize.GENOME_VERSION, "Genome version");
+
 		for(int i = 0; i < files.size(); i++) {
 			int sizeCheck = files.get(i).length();
 			if(sizeCheck > MaxSize.GENOME_FILEPATH || sizeCheck < 1) {
@@ -58,53 +45,13 @@ public class AddGenomeReleaseCommand extends Command {
 						" characters long.");
 			}
 		}
-		if(specie == null) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify a " +
-					"specie.");
-		}
-		if(specie.length() > MaxSize.GENOME_SPECIES || specie.length() < 1) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specie name " +
-					"has to be between 1 and "
-					+ database.constants.MaxSize.GENOME_SPECIES +
-					" characters long.");
-		}
-
-		if(genomeVersion.length() > MaxSize.GENOME_VERSION ||
-				genomeVersion.length() < 1) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Genome " +
-					"version has to be between 1 and "
-					+ database.constants.MaxSize.GENOME_VERSION +
-					" characters long.");
-		}
-
-		if(genomeVersion.indexOf('/') != -1) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Wrong " +
-					"format on request.");
-		}
-		if(!hasOnlyValidCharacters(genomeVersion)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
-					"characters in genome version name. Valid characters are: "
-					+ validCharacters);
-		}
-		if(!hasOnlyValidCharacters(specie)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
-					"characters in specie name. Valid characters are: " +
-					validCharacters);
-		}
-
-		return true;
-
 	}
 
-	/**
-	 * Method used to execute the actual command.
-	 */
+
 	@Override
 	public Response execute() {
-
 		DatabaseAccessor db = null;
 		ArrayList<String> uploadURLs = new ArrayList<String>();
-
 		try {
 			db = initDB();
 			for(String fileName: files) {
@@ -116,7 +63,9 @@ public class AddGenomeReleaseCommand extends Command {
 				return new ErrorResponse(StatusCode.BAD_REQUEST,
 						e.getMessage());
 		} finally {
-			db.close();
+			if (db != null) {
+				db.close();
+			}
 		}
 	}
 

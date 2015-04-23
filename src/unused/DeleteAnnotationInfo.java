@@ -1,4 +1,4 @@
-package command;
+package unused;
 
 import java.util.ArrayList;
 
@@ -10,11 +10,8 @@ import com.google.gson.annotations.Expose;
  * @author Kommunikation/kontroll 2014.
  * @version 1.0
  */
-public class DeleteAnnotationInfo {
-	/** All attributes in this class are
-	 * serialized with a JSON string.
-	 */
 
+public class DeleteAnnotationInfo {
 	@Expose
 	public String name;
 
@@ -22,14 +19,11 @@ public class DeleteAnnotationInfo {
 	public ArrayList<String> values = new ArrayList<String>();
 
 	/**
-	 * Method used to get the name.
-	 *
-	 * @return name
+	 * Returns the name of the annotation.
+	 * @return the name of the annotation.
 	 */
 	public String getName() {
-
 		return name;
-
 	}
 
 	/**
@@ -38,9 +32,7 @@ public class DeleteAnnotationInfo {
 	 * @return ArrayList with all the values.
 	 */
 	public ArrayList<String> getValues() {
-
 		return values;
-
 	}
 
 }
