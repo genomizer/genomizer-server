@@ -154,8 +154,7 @@ public class CommandHandler {
 						createGetAnnotationInformationCommand(json);
 				break;
 			case ADD_ANNOTATION_FIELD_COMMAND:
-				newCommand = cmdFactory.
-						createAddAnnotationFieldCommand(parsedURI);
+				newCommand = cmdFactory.createAddAnnotationFieldCommand(json);
 				break;
 			case ADD_ANNOTATION_VALUE_COMMAND:
 				newCommand = cmdFactory.createAddAnnotationValueCommand(json);
