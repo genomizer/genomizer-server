@@ -77,13 +77,9 @@ public class ServerMain {
 	}
 
 	private static void createWorkHandlers(WorkPool workPool) {
-		Thread heavyWorkThread1 = new Thread(new WorkHandler(workPool));
-		Thread heavyWorkThread2 = new Thread(new WorkHandler(workPool));
-		Thread heavyWorkThread3 = new Thread(new WorkHandler(workPool));
-
-		heavyWorkThread1.start();
-		heavyWorkThread2.start();
-		heavyWorkThread3.start();
+		for (int i=0; i<ServerSettings.nrOfProcessThreads; i++) {
+			new Thread(new WorkHandler(workPool)).start();
+		}
 	}
 
 	/**
