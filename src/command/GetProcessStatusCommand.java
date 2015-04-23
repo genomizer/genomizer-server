@@ -1,11 +1,9 @@
 package command;
 
-import java.util.Collection;
 import java.util.LinkedList;
 
 import response.GetProcessStatusResponse;
 import response.Response;
-import server.ErrorLogger;
 import server.WorkPool;
 
 /**
