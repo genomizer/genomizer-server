@@ -6,7 +6,6 @@ import response.ProcessResponse;
 import response.Response;
 import response.StatusCode;
 import server.Debug;
-import server.WorkHandler;
 import server.WorkPool;
 
 /**
@@ -19,15 +18,9 @@ import server.WorkPool;
 public class CommandHandler {
 	private CommandFactory cmdFactory = new CommandFactory();
 	private WorkPool workPool;
-	
-	/*Used to execute heavy work such as process commands execute*/
-	private Thread heavyWorkThread;
 
 	public CommandHandler(WorkPool workPool) {
 		this.workPool = workPool;
-
-		heavyWorkThread = new Thread(new WorkHandler(workPool));
-		heavyWorkThread.start();
 	}
 
 	/**
