@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 
 public class WorkHandler implements Runnable {
@@ -28,11 +29,12 @@ public class WorkHandler implements Runnable {
 		// List to store processes to be removed
 		ArrayList<ProcessCommand> toBeRemoved = new ArrayList<>();
 
-		HashMap<ProcessCommand,ProcessStatus> processes = workPool
-					.getProcesses();
+		//HashMap<ProcessCommand,ProcessStatus> processes = workPool
+		//			.getProcesses();
+		LinkedList<ProcessCommand> processes = workPool.getProcesses();
 
 		/* Loop through all processes and check statuses */
-		for (ProcessCommand proc : processes.keySet()) {
+		for (ProcessCommand proc : processes) {
 
 			ProcessStatus procStat = workPool.getProcessStatus(proc);
 			String statusString = procStat.status;
