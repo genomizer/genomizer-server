@@ -6,6 +6,7 @@ import response.ProcessResponse;
 import response.Response;
 import response.StatusCode;
 import server.Debug;
+import server.ErrorLogger;
 import server.WorkPool;
 
 /**
@@ -34,7 +35,6 @@ public class CommandHandler {
 	public Response processNewCommand(String json, String uri,
 									  String uuid, CommandType cmdt) {
 		Command myCom = createCommand(json, uri, uuid, cmdt);
-
 		if(myCom == null) {
 
 			/*If a command could not be created from the given request, return
