@@ -16,7 +16,9 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 import command.ProcessCommand;
 import command.ProcessStatus;
+import server.ErrorLogger;
 import server.WorkHandler;
+import server.WorkPool;
 import server.test.dummies.ProcessCommandMock;
 
 /**
@@ -29,7 +31,8 @@ import server.test.dummies.ProcessCommandMock;
 @Ignore
 public class GetProcessStatusCommandTest {
 
-	private static WorkHandler workHandler = new WorkHandler();
+	private static WorkHandler workHandler;
+	private WorkPool workPool;
 
 	private ProcessCommand makeCmd(String author, String metadata, String genomeVersion, String expId) {
 		JsonObject comInfo = new JsonObject();
@@ -51,12 +54,14 @@ public class GetProcessStatusCommandTest {
 	@Before
 	public void setUp() throws Exception {
 
+		workPool = new WorkPool();
+		workHandler = new WorkHandler(workPool);
 
-		workHandler.addWork(makeCmd("yuri", "meta", "v123", "Exp1"));
-		workHandler.addWork(makeCmd("janne", "mea", "v1523", "Exp2"));
-		workHandler.addWork(makeCmd("philge", "meta", "v22", "Exp43"));
-		workHandler.addWork(makeCmd("per", "meta", "v12", "Exp234"));
-		workHandler.addWork(makeCmd("yuri", "meta", "v1", "Exp6"));
+		workPool.addWork(makeCmd("yuri", "meta", "v123", "Exp1"));
+		workPool.addWork(makeCmd("janne", "mea", "v1523", "Exp2"));
+		workPool.addWork(makeCmd("philge", "meta", "v22", "Exp43"));
+		workPool.addWork(makeCmd("per", "meta", "v12", "Exp234"));
+		workPool.addWork(makeCmd("yuri", "meta", "v1", "Exp6"));
 
 		//stat = new ProcessStatus(com);
 		//stat.outputFiles = com.getFilePaths();
@@ -67,7 +72,8 @@ public class GetProcessStatusCommandTest {
 	@Ignore
 	public void shouldContainStuff() {
 
-		workHandler.start();
+		new Thread(workHandler).start();
+
 		try {
 			Thread.sleep(10000);
 		} catch (InterruptedException e) {
@@ -75,19 +81,26 @@ public class GetProcessStatusCommandTest {
 			e.printStackTrace();
 		}
 
-		Collection<ProcessStatus> procStats = workHandler.getProcessStatus();
-		List<ProcessStatus> list = new ArrayList<ProcessStatus>( procStats);
+		Collection<ProcessStatus> procStats = null;
 
-		Collections.sort( list );
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		procStats = workPool.getProcesses().values();
 
-		JsonArray arr = new JsonArray();
-		for (ProcessStatus p : list) {
-			JsonElement elem = gson.toJsonTree(p, ProcessStatus.class);
-			arr.add(elem);
+		if (procStats != null) {
+			List<ProcessStatus> list = new ArrayList<ProcessStatus>( procStats);
+
+			Collections.sort( list );
+			Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+			JsonArray arr = new JsonArray();
+			for (ProcessStatus p : list) {
+				JsonElement elem = gson.toJsonTree(p, ProcessStatus.class);
+				arr.add(elem);
+			}
+
+			System.out.println(toPrettyFormat(arr.toString()));
 		}
 
-		System.out.println(toPrettyFormat(arr.toString()));
+
 //		workHandler.interrupt();
 	}
 

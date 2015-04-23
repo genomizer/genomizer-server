@@ -15,10 +15,7 @@ import authentication.InactiveUuidsRemover;
 
 import command.CommandHandler;
 
-import server.ServerSettings;
-import server.Debug;
-import server.Doorman;
-import server.ErrorLogger;
+import server.*;
 
 
 public class ServerMain {
@@ -43,9 +40,15 @@ public class ServerMain {
 		/* The database settings should be written upon startup. */
 		printDatabaseInformation();
 
+		/* Create a work pool */
+		WorkPool workPool = new WorkPool();
+
+		/* Create process handlers */
+		createWorkHandlers(workPool);
+
 		/* We attempt to start the doorman. */
 		try {
-			new Doorman(new CommandHandler(),
+			new Doorman(new CommandHandler(workPool),
 					ServerSettings.genomizerPort).start();
 		} catch (IOException e) {
 			System.err.println("Error when starting server");
@@ -64,15 +67,23 @@ public class ServerMain {
 	 * Print the database settings currently loaded into ServerSettings.
 	 */
 	private static void printDatabaseInformation() {
-		String info = "Doorman started on port "
-				+ ServerSettings.genomizerPort + "\n"
-				+ "Database:" + "\n"
+		String info = "Database information:" + "\n"
 				+ "  username " + ServerSettings.databaseUsername + "\n"
 				+ "  password " + ServerSettings.databasePassword + "\n"
 				+ "  name     " + ServerSettings.databaseName + "\n"
 				+ "  host     " + ServerSettings.databaseHost + "\n";
 		System.out.print(info);
 		ErrorLogger.log("SYSTEM", info);
+	}
+
+	private static void createWorkHandlers(WorkPool workPool) {
+		Thread heavyWorkThread1 = new Thread(new WorkHandler(workPool));
+		Thread heavyWorkThread2 = new Thread(new WorkHandler(workPool));
+		Thread heavyWorkThread3 = new Thread(new WorkHandler(workPool));
+
+		heavyWorkThread1.start();
+		heavyWorkThread2.start();
+		heavyWorkThread3.start();
 	}
 
 	/**

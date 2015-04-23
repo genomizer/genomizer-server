@@ -8,7 +8,6 @@ import java.net.URL;
 import java.io.DataOutputStream;
 import com.google.gson.*;
 import org.junit.Ignore;
-import server.test.*;
 
 @Ignore
 public class ClientDummy {

@@ -1,11 +1,14 @@
 package command;
 
+import authentication.PasswordHash;
 import com.google.gson.annotations.Expose;
+import database.DatabaseAccessor;
 import database.constants.MaxSize;
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
+import server.Debug;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -46,28 +49,29 @@ public class ChangeUserPasswordCommand extends Command {
     }
 
     /**
-     * Used to execute the actual creation of the user.
+     * Used to execute the actual password change of the user.
      */
     @Override
     public Response execute() {
-        // DatabaseAccessor db = null;
+        DatabaseAccessor db = null;
         try {
-            /*db = */initDB();
-        } catch (SQLException e) {
-            return new ErrorResponse(StatusCode.BAD_REQUEST, "Error when " +
-                    "initiating databaseAccessor. " + e.getMessage());
-        } catch (IOException e)  {
-            return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
+            db = initDB();
+        } catch (SQLException | IOException e) {
+            Debug.log("CHANGE OF PASSWORD FAILED FOR: " + username + ". REASON: " +
+                    e.getMessage());
+            return new ErrorResponse(StatusCode.BAD_REQUEST,
+                    "CHANGE OF PASSWORD FAILED FOR: " + username + ". REASON: " + e.getMessage());
         }
 
-			/* For updating salt and hash in DB
-			// get a new salt
-			String salt = PasswordHash.getNewSalt();
-			// get hash using salt and password
-			String hash = PasswordHash.hashString(password+salt);
-			// insert into DB, requires new table from DB group
-            db.changeUserPassword(username, salt, hash);
-            */
+		String salt = PasswordHash.getNewSalt();
+		// get hash using salt and password
+		String hash = PasswordHash.hashString(password+salt);
+		// insert into DB, requires method DB group
+        try {
+            db.resetPassword(username, hash, salt);
+        } catch (SQLException | IOException e) {
+            return new ErrorResponse(StatusCode.BAD_REQUEST, "Database error " + e.getMessage());
+        }
 
         return new MinimalResponse(StatusCode.CREATED);
     }

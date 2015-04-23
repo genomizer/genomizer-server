@@ -129,29 +129,29 @@ public class HackingTest {
 	public void shouldNotAddUserWithEmptyName()
 			throws SQLException, IOException {
 
-		dbac.addUser("", "1234", "Admin", "Bert Larsson", "sdsdfsfsdf");
+		dbac.addUser("", "1234","asd", "Admin", "Bert Larsson", "sdsdfsfsdf");
 	}
 
 	@Test(expected = IOException.class)
 	public void shouldNotAddUserWithEmptyPassword()
 			throws SQLException, IOException {
 
-		dbac.addUser("Herbert", "", "Admin", "Herbert Svensson", "sdsdfsfsdf");
+		dbac.addUser("Herbert", "","asd", "Admin", "Herbert Svensson", "sdsdfsfsdf");
 	}
 
 	@Test(expected = SQLException.class)
 	public void shouldNotAddSeveralUsersWithSameName()
 			throws SQLException, IOException {
 
-		dbac.addUser("Rune", "blabla", "Admin", "Rune Karlsson", "sdsdfsfsdf");
-		dbac.addUser("Rune", "blabla", "Admin", "Rune Karlsson", "sdsdfsfsdf");
+		dbac.addUser("Rune", "blabla","asd", "Admin", "Rune Karlsson", "sdsdfsfsdf");
+		dbac.addUser("Rune", "blabla", "asd","Admin", "Rune Karlsson", "sdsdfsfsdf");
 	}
 
 	@Test(expected = IOException.class)
 	public void shouldNotChangeToEmptyPassword()
 			throws SQLException, IOException {
 
-		dbac.addUser("Rolf", "1234", "Admin", "Rolf Persson", "dffddf@mail.com");
-		dbac.resetPassword("Rolf", "");
+		dbac.addUser("Rolf", "1234","ads", "Admin", "Rolf Persson", "dffddf@mail.com");
+		dbac.resetPassword("Rolf", "","asd");
 	}
 }

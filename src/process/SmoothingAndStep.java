@@ -16,15 +16,15 @@ import java.util.Arrays;
 
 public class SmoothingAndStep {
 
-    private double readSumValue;
-    private int noOfValues;
-    private BufferedWriter bw;
-    private BufferedReader br;
-    private ArrayList<Tuple> data;
-    private int stepSize;
-    private int middleIndex;
+	private double readSumValue;
+	private int noOfValues;
+	private BufferedWriter bw;
+	private BufferedReader br;
+	private ArrayList<Tuple> data;
+	private int stepSize;
+	private int middleIndex;
 
-    /*
+	/*
      * Parameters:
      * Params:	  An array with 5 integers representing parameters.
      * params[0]: Window Size, the number of signal values that the smoothing
@@ -51,376 +51,376 @@ public class SmoothingAndStep {
      * 		researchers at EpiCon needs to check the results and approve the new version.
      *
      */
-    public double smoothing(int[] params, String inPath, String outPath, int stepSize) throws ProcessException {
-	validateInput(params, stepSize);
+	public double smoothing(int[] params, String inPath, String outPath, int stepSize) throws ProcessException {
+		validateInput(params, stepSize);
 
-	data = new ArrayList<Tuple>();
-	readSumValue = 0;
-	noOfValues = 0;
-	String strLine;
-	this.stepSize = stepSize;
-	this.middleIndex = getMiddleIndex(params[0]);
+		data = new ArrayList<Tuple>();
+		readSumValue = 0;
+		noOfValues = 0;
+		String strLine;
+		this.stepSize = stepSize;
+		this.middleIndex = getMiddleIndex(params[0]);
 
-	if(params[2]<=(params[0]/2)){
-	    params[2] = (params[0]/2);
-	}
-
-	try {
-	    setupBuffertReader(inPath);
-	    setupBuffertWriter(outPath);
-
-	    for(int i = 0; i<params[0]; i++){
-
-		if((strLine = br.readLine()) != null){
-		    while(!addLine(strLine)){
-			strLine = br.readLine();
-		    }
+		if(params[2]<=(params[0]/2)){
+			params[2] = (params[0]/2);
 		}
-	    }
 
-	    for (int i = 0; i < middleIndex; i++){
-		if(data.size() > params[2]){
-		    //  }
-		    if(((data.size()/2) + i + 2) > params[2]){
-			smoothOneRow(params, (data.size()/2)+i+1, i);
-		    }
+		try {
+			setupBuffertReader(inPath);
+			setupBuffertWriter(outPath);
+
+			for(int i = 0; i<params[0]; i++){
+
+				if((strLine = br.readLine()) != null){
+					while(!addLine(strLine)){
+						strLine = br.readLine();
+					}
+				}
+			}
+
+			for (int i = 0; i < middleIndex; i++){
+				if(data.size() > params[2]){
+					//  }
+					if(((data.size()/2) + i + 2) > params[2]){
+						smoothOneRow(params, (data.size()/2)+i+1, i);
+					}
+				}
+			}
+			smoothOneRow(params,params[0]);
+
+			while((strLine = br.readLine()) != null){
+				shiftLeft(strLine, params);
+				smoothOneRow(params,params[0]);
+			}
+			if(data.size() > 0){
+				data.remove(0);
+			}
+
+			if (params[0]%2==1){
+				for (int i = 1;i<(params[0]-params[2]);i++){
+					smoothOneRow(params,params[0]-i);
+					if(data.size() > 0){
+						data.remove(0);
+					}
+				}
+				if(data.size() > 0){
+					data.remove(0);
+				}
+			}else{
+				for (int i = 1;i<(params[0]-params[2]+1);i++){
+					smoothOneRow(params,params[0]-i);
+					if(data.size() > 0){
+						data.remove(0);
+					}
+				}
+			}
+
+			for (int j = 0; j < params[0]/2 -1 ;j++){
+				if(data.size() > 0){
+					data.remove(0);
+				}
+			}
+			while(data.size()>0){
+				data.remove(0);
+			}
+
+			tearDown();
+
+		} catch (IOException e) {
+			throw new ProcessException("IOException when reading/writing in Smoothing: "+ e.getMessage());
 		}
-	    }
-	    smoothOneRow(params,params[0]);
-
-	    while((strLine = br.readLine()) != null){
-		shiftLeft(strLine, params);
-		smoothOneRow(params,params[0]);
-	    }
-	    if(data.size() > 0){
-		data.remove(0);
-	    }
-
-	    if (params[0]%2==1){
-		for (int i = 1;i<(params[0]-params[2]);i++){
-		    smoothOneRow(params,params[0]-i);
-		    if(data.size() > 0){
-			data.remove(0);
-		    }
+		if(params[3] == 1){
+			System.out.println("Total mean for file is: " + (readSumValue/noOfValues));
 		}
-		if(data.size() > 0){
-		    data.remove(0);
+		return readSumValue/noOfValues;
+	}
+
+	private void smoothOneRow(int[] params, int noOfRowsToSmooth, int index) throws IOException, ProcessException {
+		if((noOfRowsToSmooth < data.size()+1)){
+			if(params[1]==1){
+				smoothMedian(noOfRowsToSmooth, params, index);
+			} else if(params[1]==0){
+				smoothTrimmedMean(noOfRowsToSmooth, params, index);
+			}
+			writeToFile(params, index);
+		} else {
+			throw new ProcessException("Error: File is shorter than window size.");
 		}
-	    }else{
-		for (int i = 1;i<(params[0]-params[2]+1);i++){
-		    smoothOneRow(params,params[0]-i);
-		    if(data.size() > 0){
-			data.remove(0);
-		    }
+	}
+
+	private void smoothOneRow(int[] params, int noOfRowsToSmooth) throws IOException, ProcessException {
+		if((noOfRowsToSmooth < data.size()+1)){
+			if(params[1]==1){
+				smoothMedian(noOfRowsToSmooth, params);
+			} else if(params[1]==0){
+				smoothTrimmedMean(noOfRowsToSmooth, params);
+			}
+			writeToFile(params);
+		} else {
+			throw new ProcessException("Error: File is shorter than window size.");
 		}
-	    }
+	}
 
-	    for (int j = 0; j < params[0]/2 -1 ;j++){
-		if(data.size() > 0){
-		    data.remove(0);
+
+	private void smoothTrimmedMean(int noOfRowsToSmooth, int[] params, int index) {
+		int minNrSigs = 1;
+
+		double meanSignal = data.get(index).getSignal();
+		double maxSig = meanSignal;
+		double minSig = meanSignal;
+
+		if(data.size() >= params[2]){
+			for(int j = 0 ; j < noOfRowsToSmooth; j++){
+				if(j != index){
+
+					meanSignal = meanSignal + data.get(j).getSignal();
+					minNrSigs++;
+					if(maxSig < data.get(j).getSignal()){
+						maxSig = data.get(j).getSignal();
+					}
+					if(minSig > data.get(j).getSignal()){
+						minSig = data.get(j).getSignal();
+					}
+				}
+			}
+			if(data.get(index).getSignal() != 0){
+				calcAndSetMeanSignal(params, minNrSigs, meanSignal, maxSig,
+						minSig, index);
+			}
 		}
-	    }
-	    while(data.size()>0){
-		data.remove(0);
-	    }
-
-	    tearDown();
-
-	} catch (IOException e) {
-	    throw new ProcessException("IOException when reading/writing in Smoothing: "+ e.getMessage());
 	}
-	if(params[3] == 1){
-	    System.out.println("Total mean for file is: " + (readSumValue/noOfValues));
-	}
-	return readSumValue/noOfValues;
-    }
 
-    private void smoothOneRow(int[] params, int noOfRowsToSmooth, int index) throws IOException, ProcessException {
-	if((noOfRowsToSmooth < data.size()+1)){
-	    if(params[1]==1){
-		smoothMedian(noOfRowsToSmooth, params, index);
-	    } else if(params[1]==0){
-		smoothTrimmedMean(noOfRowsToSmooth, params, index);
-	    }
-	    writeToFile(params, index);
-	} else {
-	    throw new ProcessException("Error: File is shorter than window size.");
-	}
-    }
+	private void smoothTrimmedMean(int noOfRowsToSmooth, int[] params) {
+		int minNrSigs = 1;
 
-    private void smoothOneRow(int[] params, int noOfRowsToSmooth) throws IOException, ProcessException {
-	if((noOfRowsToSmooth < data.size()+1)){
-	    if(params[1]==1){
-		smoothMedian(noOfRowsToSmooth, params);
-	    } else if(params[1]==0){
-		smoothTrimmedMean(noOfRowsToSmooth, params);
-	    }
-	    writeToFile(params);
-	} else {
-	    throw new ProcessException("Error: File is shorter than window size.");
-	}
-    }
+		double meanSignal = data.get(middleIndex).getSignal();
+		double maxSig = meanSignal;
+		double minSig = meanSignal;
 
+		if(data.size() >= params[2]){
+			for(int j = 0 ; j < noOfRowsToSmooth; j++){
+				if(j != middleIndex){
 
-    private void smoothTrimmedMean(int noOfRowsToSmooth, int[] params, int index) {
-	int minNrSigs = 1;
-
-	double meanSignal = data.get(index).getSignal();
-	double maxSig = meanSignal;
-	double minSig = meanSignal;
-
-	if(data.size() >= params[2]){
-	    for(int j = 0 ; j < noOfRowsToSmooth; j++){
-		if(j != index){
-
-		    meanSignal = meanSignal + data.get(j).getSignal();
-		    minNrSigs++;
-		    if(maxSig < data.get(j).getSignal()){
-			maxSig = data.get(j).getSignal();
-		    }
-		    if(minSig > data.get(j).getSignal()){
-			minSig = data.get(j).getSignal();
-		    }
+					meanSignal = meanSignal + data.get(j).getSignal();
+					minNrSigs++;
+					if(maxSig < data.get(j).getSignal()){
+						maxSig = data.get(j).getSignal();
+					}
+					if(minSig > data.get(j).getSignal()){
+						minSig = data.get(j).getSignal();
+					}
+				}
+			}
+			if(data.get(middleIndex).getSignal() != 0){
+				calcAndSetMeanSignal(params, minNrSigs, meanSignal, maxSig,
+						minSig);
+			}
 		}
-	    }
-	    if(data.get(index).getSignal() != 0){
-		calcAndSetMeanSignal(params, minNrSigs, meanSignal, maxSig,
-			minSig, index);
-	    }
 	}
-    }
 
-    private void smoothTrimmedMean(int noOfRowsToSmooth, int[] params) {
-	int minNrSigs = 1;
 
-	double meanSignal = data.get(middleIndex).getSignal();
-	double maxSig = meanSignal;
-	double minSig = meanSignal;
+	private void smoothMedian(int noOfRowsToSmooth, int[] params, int index) {
 
-	if(data.size() >= params[2]){
-	    for(int j = 0 ; j < noOfRowsToSmooth; j++){
-		if(j != middleIndex){
+		double[] array = new double [noOfRowsToSmooth];
 
-		    meanSignal = meanSignal + data.get(j).getSignal();
-		    minNrSigs++;
-		    if(maxSig < data.get(j).getSignal()){
-			maxSig = data.get(j).getSignal();
-		    }
-		    if(minSig > data.get(j).getSignal()){
-			minSig = data.get(j).getSignal();
-		    }
+		if(data.size() >= params[2]){
+			for(int j = 0 ; j < (noOfRowsToSmooth); j++){
+				if(data.size() > j){
+					array[j] = data.get(j).getSignal();
+				}
+			}
+			if(data.get(index).getSignal() != 0){
+				data.get(index).setNewSignal(median(array));
+			}
 		}
-	    }
-	    if(data.get(middleIndex).getSignal() != 0){
-		calcAndSetMeanSignal(params, minNrSigs, meanSignal, maxSig,
-			minSig);
-	    }
 	}
-    }
 
+	private void smoothMedian(int noOfRowsToSmooth, int[] params) {
 
-    private void smoothMedian(int noOfRowsToSmooth, int[] params, int index) {
+		double[] array = new double [noOfRowsToSmooth];
 
-	double[] array = new double [noOfRowsToSmooth];
-
-	if(data.size() >= params[2]){
-	    for(int j = 0 ; j < (noOfRowsToSmooth); j++){
-		if(data.size() > j){
-		    array[j] = data.get(j).getSignal();
+		if(data.size() >= params[2]){
+			for(int j = 0 ; j < (noOfRowsToSmooth); j++){
+				if(data.size() > j){
+					array[j] = data.get(j).getSignal();
+				}
+			}
+			if(data.get(middleIndex).getSignal() != 0){
+				data.get(middleIndex).setNewSignal(median(array));
+			}
 		}
-	    }
-	    if(data.get(index).getSignal() != 0){
-		data.get(index).setNewSignal(median(array));
-	    }
 	}
-    }
 
-    private void smoothMedian(int noOfRowsToSmooth, int[] params) {
-
-	double[] array = new double [noOfRowsToSmooth];
-
-	if(data.size() >= params[2]){
-	    for(int j = 0 ; j < (noOfRowsToSmooth); j++){
-		if(data.size() > j){
-		    array[j] = data.get(j).getSignal();
+	private void writeToFile(int[] params) throws IOException {
+		if(!((params[4] == 0) && (data.get(middleIndex).getNewSignal() == 0)) ){
+			if(data.get(middleIndex).getPosition()%stepSize== 0){
+				bw.write(data.get(middleIndex).toString());
+			}
 		}
-	    }
-	    if(data.get(middleIndex).getSignal() != 0){
-		data.get(middleIndex).setNewSignal(median(array));
-	    }
-	}
-    }
-
-    private void writeToFile(int[] params) throws IOException {
-	if(!((params[4] == 0) && (data.get(middleIndex).getNewSignal() == 0)) ){
-	    if(data.get(middleIndex).getPosition()%stepSize== 0){
-		bw.write(data.get(middleIndex).toString());
-	    }
-	}
-	if (params[3] == 1){
-	    readSumValue = readSumValue+ data.get(middleIndex).getSignal();
-	    noOfValues++;
-	}
-    }
-
-    private void shiftLeft(String strLine, int[] params) throws IOException, ProcessException  {
-	while(!addLine(strLine)){
-	    strLine = br.readLine();
-	}
-	if(data.size() > 0){
-	    data.remove(0);
-	}
-
-	if(!data.get(data.size()-1).getChromosome().equals(data.get(data.size()-2).getChromosome())){
-	    chromosomeChange(params);
-	}
-    }
-
-    private void chromosomeChange(int[] params) throws IOException, ProcessException {
-
-	Tuple newChromo = data.get(data.size()-1);
-	data.remove(data.size()-1);
-
-	if (params[0]%2==1){
-	    for (int i = 1;i<(params[0]-params[2]);i++){
-		smoothOneRow(params,params[0]-i);
-		if(data.size() > 0){
-		    data.remove(0);
+		if (params[3] == 1){
+			readSumValue = readSumValue+ data.get(middleIndex).getSignal();
+			noOfValues++;
 		}
-	    }
-	    if(data.size() > 0){
-		data.remove(0);
-	    }
-	}else{
-	    for (int i = 1;i<(params[0]-params[2]+1);i++){
-		smoothOneRow(params,params[0]-i);
-		if(data.size() > 0){
-		    data.remove(0);
-		}
-	    }
-	}
-	for (int j = 0; j < params[0]/2 -1 ;j++){
-	    if(data.size() > 0){
-		data.remove(0);
-	    }
 	}
 
-	while(data.size()>0){
-	    data.remove(0);
-	}
-	data.add(newChromo);
-
-	String strLine;
-	for(int i = 0; i<params[0]-1; i++){
-	    if((strLine = br.readLine()) != null){
+	private void shiftLeft(String strLine, int[] params) throws IOException, ProcessException  {
 		while(!addLine(strLine)){
-		    strLine = br.readLine();
+			strLine = br.readLine();
 		}
-	    }
-	}
-	for (int i = 0; i < middleIndex; i++){
-	    if(data.size() > params[2]){
-		if(((data.size()/2) + i + 2)> params[2]){
-		    smoothOneRow(params, (data.size()/2)+i+1, i);
+		if(data.size() > 0){
+			data.remove(0);
 		}
-	    }
-	}
-    }
 
-    private void writeToFile(int[] params, int i) throws IOException {
-	if(!((params[4] == 0) && (data.get(i).getNewSignal() == 0)) ){
-	    if(data.get(i).getPosition()%stepSize== 0){
-		bw.write(data.get(i).toString());
-	    }
+		if(!data.get(data.size()-1).getChromosome().equals(data.get(data.size()-2).getChromosome())){
+			chromosomeChange(params);
+		}
 	}
-	if (params[3] == 1){
-	    readSumValue = readSumValue+ data.get(i).getSignal();
-	    noOfValues++;
-	}
-    }
 
-    private boolean addLine(String strLine) {
-	try{
-	    data.add(new Tuple(strLine));
-	} catch(Exception e){
-	    return false;
-	}
-	return true;
-    }
+	private void chromosomeChange(int[] params) throws IOException, ProcessException {
 
-    private void setupBuffertWriter(String outPath) throws IOException {
-	File outFile = new File(outPath);
-	if (!outFile.exists()) {
-	    outFile.createNewFile();
-	}
-	bw = new BufferedWriter(new FileWriter(outFile.getAbsoluteFile()));
-    }
+		Tuple newChromo = data.get(data.size()-1);
+		data.remove(data.size()-1);
 
-    private void setupBuffertReader(String inPath) throws FileNotFoundException{
-	br = new BufferedReader(new InputStreamReader(new DataInputStream(new FileInputStream(inPath))));
-    }
+		if (params[0]%2==1){
+			for (int i = 1;i<(params[0]-params[2]);i++){
+				smoothOneRow(params,params[0]-i);
+				if(data.size() > 0){
+					data.remove(0);
+				}
+			}
+			if(data.size() > 0){
+				data.remove(0);
+			}
+		}else{
+			for (int i = 1;i<(params[0]-params[2]+1);i++){
+				smoothOneRow(params,params[0]-i);
+				if(data.size() > 0){
+					data.remove(0);
+				}
+			}
+		}
+		for (int j = 0; j < params[0]/2 -1 ;j++){
+			if(data.size() > 0){
+				data.remove(0);
+			}
+		}
 
-    private void calcAndSetMeanSignal(int[] params,
-	    int minNrSigs, double meanSignal, double maxSig, double minSig) {
-	meanSignal = meanSignal - minSig;
-	meanSignal = meanSignal - maxSig;
-	if((minNrSigs-2) > 0){
-	    meanSignal = meanSignal / (minNrSigs - 2);
-	    data.get(middleIndex).setNewSignal(meanSignal);
-	}
-    }
-    private void calcAndSetMeanSignal(int[] params,
-	    int minNrSigs, double meanSignal, double maxSig, double minSig, int index) {
-	meanSignal = meanSignal - minSig;
-	meanSignal = meanSignal - maxSig;
-	if((minNrSigs-2) > 0){
-	    meanSignal = meanSignal / (minNrSigs - 2);
-	    data.get(index).setNewSignal(meanSignal);
-	}
-    }
+		while(data.size()>0){
+			data.remove(0);
+		}
+		data.add(newChromo);
 
-    private double median (double[] array){
-	Arrays.sort(array);
-	return (array[(array.length-1)/2]+array[array.length/2])/2;
-    }
+		String strLine;
+		for(int i = 0; i<params[0]-1; i++){
+			if((strLine = br.readLine()) != null){
+				while(!addLine(strLine)){
+					strLine = br.readLine();
+				}
+			}
+		}
+		for (int i = 0; i < middleIndex; i++){
+			if(data.size() > params[2]){
+				if(((data.size()/2) + i + 2)> params[2]){
+					smoothOneRow(params, (data.size()/2)+i+1, i);
+				}
+			}
+		}
+	}
 
-    private void tearDown() throws IOException {
-	bw.close();
-	br.close();
-	data.clear();
-    }
+	private void writeToFile(int[] params, int i) throws IOException {
+		if(!((params[4] == 0) && (data.get(i).getNewSignal() == 0)) ){
+			if(data.get(i).getPosition()%stepSize== 0){
+				bw.write(data.get(i).toString());
+			}
+		}
+		if (params[3] == 1){
+			readSumValue = readSumValue+ data.get(i).getSignal();
+			noOfValues++;
+		}
+	}
 
-    private int getMiddleIndex(int windowSize){
-	return ((windowSize-1)/2);
-    }
+	private boolean addLine(String strLine) {
+		try{
+			data.add(new Tuple(strLine));
+		} catch(Exception e){
+			return false;
+		}
+		return true;
+	}
 
-    private void validateInput(int[] params, int stepSize) throws ProcessException {
-	if(params==null){
-	    throw new ProcessException("Params array is null");
+	private void setupBuffertWriter(String outPath) throws IOException {
+		File outFile = new File(outPath);
+		if (!outFile.exists()) {
+			outFile.createNewFile();
+		}
+		bw = new BufferedWriter(new FileWriter(outFile.getAbsoluteFile()));
 	}
-	if(!(params[1] == 0 || params[1] == 1)){
-	    throw new ProcessException("Undefined smoothing type, should be either 1 for median or 0 for trimmed mean");
+
+	private void setupBuffertReader(String inPath) throws FileNotFoundException{
+		br = new BufferedReader(new InputStreamReader(new DataInputStream(new FileInputStream(inPath))));
 	}
-	if(params[0]<=params[2]){
-	    throw new ProcessException("Minimum positions to smooth should not be larger than window size");
+
+	private void calcAndSetMeanSignal(int[] params,
+									  int minNrSigs, double meanSignal, double maxSig, double minSig) {
+		meanSignal = meanSignal - minSig;
+		meanSignal = meanSignal - maxSig;
+		if((minNrSigs-2) > 0){
+			meanSignal = meanSignal / (minNrSigs - 2);
+			data.get(middleIndex).setNewSignal(meanSignal);
+		}
 	}
-	if(stepSize < 1){
-	    throw new ProcessException("stepSize needs to be 1 for no stepping or larger than 1 for stepping");
+	private void calcAndSetMeanSignal(int[] params,
+									  int minNrSigs, double meanSignal, double maxSig, double minSig, int index) {
+		meanSignal = meanSignal - minSig;
+		meanSignal = meanSignal - maxSig;
+		if((minNrSigs-2) > 0){
+			meanSignal = meanSignal / (minNrSigs - 2);
+			data.get(index).setNewSignal(meanSignal);
+		}
 	}
-	if(params[0]==2 &&params[1]==0){
-	    throw new ProcessException("When calculating trimmed mean, window size needs to be atleast 3 or larger");
+
+	private double median (double[] array){
+		Arrays.sort(array);
+		return (array[(array.length-1)/2]+array[array.length/2])/2;
 	}
-	if(params[0] < 2){
-	    throw new ProcessException( "Window size needs to be atleast 2 or larger");
+
+	private void tearDown() throws IOException {
+		bw.close();
+		br.close();
+		data.clear();
 	}
-	if(params[2] < 1){
-	    throw new ProcessException("Minimum positions to smooth needs to be positive");
+
+	private int getMiddleIndex(int windowSize){
+		return ((windowSize-1)/2);
 	}
-	if(!(params[3] == 0 || params[3] == 1)){
-	    throw new ProcessException("Print total mean flag must be either 0 or 1");
+
+	private void validateInput(int[] params, int stepSize) throws ProcessException {
+		if(params==null){
+			throw new ProcessException("Params array is null");
+		}
+		if(!(params[1] == 0 || params[1] == 1)){
+			throw new ProcessException("Undefined smoothing type, should be either 1 for median or 0 for trimmed mean");
+		}
+		if(params[0]<=params[2]){
+			throw new ProcessException("Minimum positions to smooth should not be larger than window size");
+		}
+		if(stepSize < 1){
+			throw new ProcessException("stepSize needs to be 1 for no stepping or larger than 1 for stepping");
+		}
+		if(params[0]==2 &&params[1]==0){
+			throw new ProcessException("When calculating trimmed mean, window size needs to be atleast 3 or larger");
+		}
+		if(params[0] < 2){
+			throw new ProcessException( "Window size needs to be atleast 2 or larger");
+		}
+		if(params[2] < 1){
+			throw new ProcessException("Minimum positions to smooth needs to be positive");
+		}
+		if(!(params[3] == 0 || params[3] == 1)){
+			throw new ProcessException("Print total mean flag must be either 0 or 1");
+		}
+		if(!(params[4] == 0 || params[4] == 1)){
+			throw new ProcessException("The flag print zeroes should be either 1 for yes or 0 for no");
+		}
 	}
-	if(!(params[4] == 0 || params[4] == 1)){
-	    throw new ProcessException("The flag print zeroes should be either 1 for yes or 0 for no");
-	}
-    }
 }
