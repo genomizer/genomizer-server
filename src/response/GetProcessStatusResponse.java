@@ -42,7 +42,7 @@ public class GetProcessStatusResponse extends Response {
 	@Override
 	public String getBody() {
 
-		if (procStats == null) {
+		if (processStatus == null) {
 			ErrorLogger.log("SYSTEM", "GetProcessStatusResponse.getBody(): " +
 					"Error getting process status");
 			return "";
