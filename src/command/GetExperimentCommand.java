@@ -62,7 +62,7 @@ public class GetExperimentCommand extends Command {
 
 	//TODO Handle multiple experiments?
 	private ArrayList<String> getInfo(Experiment exp) {
-		ArrayList<String> info = new ArrayList<String>();
+		ArrayList<String> info = new ArrayList<>();
 		info.add(exp.getID());
 		return info;
 	}

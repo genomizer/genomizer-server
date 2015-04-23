@@ -6,7 +6,6 @@ import response.ProcessResponse;
 import response.Response;
 import response.StatusCode;
 import server.Debug;
-import server.ErrorLogger;
 import server.WorkPool;
 
 /**
