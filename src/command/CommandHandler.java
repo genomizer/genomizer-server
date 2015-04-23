@@ -160,8 +160,9 @@ public class CommandHandler {
 				return cmdFactory.createCreateUserCommand(json);
 			case IS_TOKEN_VALID_COMMAND:
 				return cmdFactory.createIsTokenValidCommand(uuid);
+			default:
+				return null;
 		}
-		return null;
 	}
 
 	/**
