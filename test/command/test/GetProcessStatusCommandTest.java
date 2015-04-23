@@ -79,20 +79,20 @@ public class GetProcessStatusCommandTest {
 		}
 
 		LinkedList<ProcessCommand> processes = workPool.getProcesses();
-		LinkedList<ProcessStatus> processesStatus = new LinkedList<>();
+		LinkedList<ProcessStatus> processStatuses = new LinkedList<>();
 
 		for (ProcessCommand proc : processes) {
-			processesStatus.add(workPool.getProcessStatus(proc));
+			processStatuses.add(workPool.getProcessStatus(proc));
 		}
 
 
-		if (processesStatus.size() > 0) {
+		if (processStatuses.size() > 0) {
 
-			Collections.sort( processesStatus );
+			Collections.sort( processStatuses );
 			Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
 			JsonArray arr = new JsonArray();
-			for (ProcessStatus p : processesStatus) {
+			for (ProcessStatus p : processStatuses) {
 				JsonElement elem = gson.toJsonTree(p, ProcessStatus.class);
 				arr.add(elem);
 			}

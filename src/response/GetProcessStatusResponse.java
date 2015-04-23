@@ -19,7 +19,7 @@ import server.ErrorLogger;
  */
 public class GetProcessStatusResponse extends Response {
 
-	private LinkedList<ProcessStatus> processesStatus;
+	private LinkedList<ProcessStatus> processStatuses;
 
 
 	/**
@@ -28,7 +28,7 @@ public class GetProcessStatusResponse extends Response {
 	 */
 	public GetProcessStatusResponse(LinkedList<ProcessStatus> processStatus) {
 
-		this.processesStatus = processStatus;
+		this.processStatuses = processStatus;
 		code = 200;
 	}
 
@@ -39,17 +39,17 @@ public class GetProcessStatusResponse extends Response {
 	@Override
 	public String getBody() {
 
-		if (processesStatus.size() > 0) {
+		if (processStatuses.size() > 0) {
 			ErrorLogger.log("SYSTEM", "GetProcessStatusResponse.getBody(): " +
 					"Error getting process status");
 			return "";
 		}
 
-		Collections.sort( processesStatus );
+		Collections.sort( processStatuses );
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
 		JsonArray arr = new JsonArray();
-		for (ProcessStatus p : processesStatus) {
+		for (ProcessStatus p : processStatuses) {
 			JsonElement elem = gson.toJsonTree(p, ProcessStatus.class);
 			arr.add(elem);
 		}
