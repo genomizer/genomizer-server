@@ -46,10 +46,10 @@ public class GetProcessStatusCommand extends Command {
 	@Override
 	public Response execute() {
 
-		LinkedList<ProcessCommand> processes = workPool.getProcesses();
+		LinkedList<ProcessCommand> processesList = workPool.getProcesses();
 		LinkedList<ProcessStatus> processStatuses = new LinkedList<>();
 
-		for (ProcessCommand proc : processes) {
+		for (ProcessCommand proc : processesList) {
 			processStatuses.add(workPool.getProcessStatus(proc));
 		}
 
