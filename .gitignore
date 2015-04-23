@@ -16,3 +16,4 @@ errorLog.txt
 out
 psqllogin
 .metadata/
+*.cfg
