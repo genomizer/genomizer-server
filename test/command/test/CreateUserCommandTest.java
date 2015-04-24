@@ -7,7 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import command.CreateUserCommand;
-import database.constants.MaxSize;
+import database.constants.MaxLength;
 
 /**
  * Class used to test that CreateUserCommand class works
@@ -69,7 +69,7 @@ public class CreateUserCommandTest {
 	public void testValidateUsernameLength() {
 
 		String username = "";
-		for(int i = 0; i < MaxSize.USERNAME+1; i++) {
+		for(int i = 0; i < MaxLength.USERNAME+1; i++) {
 			username = username + "a";
 		}
 		json = createJSON(username,"b","c","d","e");
@@ -92,7 +92,7 @@ public class CreateUserCommandTest {
 	public void testValidatePasswordLength() {
 
 		String password = "";
-		for(int i = 0; i < MaxSize.PASSWORD+1; i++) {
+		for(int i = 0; i < MaxLength.PASSWORD+1; i++) {
 			password = password + "a";
 		}
 		json = createJSON("a",password,"c","d","e");
@@ -116,7 +116,7 @@ public class CreateUserCommandTest {
 	public void testValidatePrivilegesLength() {
 
 		String priv = "";
-		for(int i = 0; i < MaxSize.ROLE+1; i++) {
+		for(int i = 0; i < MaxLength.ROLE+1; i++) {
 			priv = priv + "a";
 		}
 		json = createJSON("a","b",priv,"d","e");

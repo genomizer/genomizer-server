@@ -3,6 +3,7 @@ package command;
 import java.io.IOException;
 import java.sql.SQLException;
 import database.DatabaseAccessor;
+import database.constants.MaxLength;
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
@@ -32,10 +33,10 @@ public class DeleteUserCommand extends Command {
 			throw new ValidateException(StatusCode.BAD_REQUEST,
 					"Username was missing.");
 		} else if(username.length() < 1 || username.length() >
-				database.constants.MaxSize.USERNAME) {
+				MaxLength.USERNAME) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Username " +
 					"has to be between 1 and " +
-					database.constants.MaxSize.USERNAME + " characters long.");
+					MaxLength.USERNAME + " characters long.");
 		}
 	}
 

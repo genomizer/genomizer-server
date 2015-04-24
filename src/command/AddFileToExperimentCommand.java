@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import com.google.gson.annotations.Expose;
 
 import database.DatabaseAccessor;
-import database.constants.MaxSize;
+import database.constants.MaxLength;
 import database.containers.FileTuple;
 
 import response.AddFileToExperimentResponse;
@@ -47,13 +47,13 @@ public class AddFileToExperimentCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-		validateString(experimentID, MaxSize.EXPID, "Experiment name");
-		validateString(type, MaxSize.FILE_FILETYPE, "File type");
-		validateString(author, MaxSize.FILE_AUTHOR, "Author");
-		validateString(uploader, MaxSize.FILE_UPLOADER, "Uploader");
-		validateString(grVersion, MaxSize.FILE_GRVERSION, "Genome release");
-		validateString(fileName, MaxSize.FILE_FILENAME, "Filename");
-		validateString(metaData, MaxSize.FILE_METADATA, "Metadata");
+		validateString(experimentID, MaxLength.EXPID, "Experiment name");
+		validateString(type, MaxLength.FILE_FILETYPE, "File type");
+		validateString(author, MaxLength.FILE_AUTHOR, "Author");
+		validateString(uploader, MaxLength.FILE_UPLOADER, "Uploader");
+		validateString(grVersion, MaxLength.FILE_GRVERSION, "Genome release");
+		validateString(fileName, MaxLength.FILE_FILENAME, "Filename");
+		validateString(metaData, MaxLength.FILE_METADATA, "Metadata");
 	}
 
 	public void setUploader(String uploader) {

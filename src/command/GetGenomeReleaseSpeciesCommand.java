@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 
-import database.constants.MaxSize;
+import database.constants.MaxLength;
 import response.ErrorResponse;
 import response.GetGenomeReleaseResponse;
 import response.Response;
@@ -33,7 +33,7 @@ public class GetGenomeReleaseSpeciesCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-		validateString(species, MaxSize.GENOME_SPECIES, "Genome specie");
+		validateString(species, MaxLength.GENOME_SPECIES, "Genome specie");
 	}
 
 	/**

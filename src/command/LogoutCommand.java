@@ -1,7 +1,7 @@
 package command;
 
 import authentication.Authenticate;
-import database.constants.MaxSize;
+import database.constants.MaxLength;
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
@@ -27,7 +27,7 @@ public class LogoutCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-		validateString(username, MaxSize.USERNAME, "Username");
+		validateString(username, MaxLength.USERNAME, "Username");
 	}
 
 	@Override

@@ -10,7 +10,7 @@ import response.StatusCode;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import database.DatabaseAccessor;
-import database.constants.MaxSize;
+import database.constants.MaxLength;
 
 /**
  * This class is created to handle the process of adding a new
@@ -36,9 +36,9 @@ public class AddAnnotationFieldCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-		validateString(name, MaxSize.ANNOTATION_LABEL, "Annotation label");
+		validateString(name, MaxLength.ANNOTATION_LABEL, "Annotation label");
 		if(defaults != null) {
-			validateString(defaults, MaxSize.ANNOTATION_DEFAULTVALUE,
+			validateString(defaults, MaxLength.ANNOTATION_DEFAULTVALUE,
 					"Default value");
 		}
 

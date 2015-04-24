@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import database.DatabaseAccessor;
-import database.constants.MaxSize;
+import database.constants.MaxLength;
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
@@ -29,7 +29,7 @@ public class DeleteAnnotationFieldCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-		validateString(header, MaxSize.ANNOTATION_LABEL, "Annotation label");
+		validateString(header, MaxLength.ANNOTATION_LABEL, "Annotation label");
 	}
 
 	@Override

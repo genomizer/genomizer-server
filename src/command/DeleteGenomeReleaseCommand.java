@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import database.DatabaseAccessor;
-import database.constants.MaxSize;
+import database.constants.MaxLength;
 import database.containers.Genome;
 import response.DeleteGenomeReleaseResponse;
 import response.ErrorResponse;
@@ -36,8 +36,8 @@ public class DeleteGenomeReleaseCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-		validateString(genomeVersion, MaxSize.GENOME_VERSION, "Genome version");
-		validateString(species, MaxSize.GENOME_SPECIES, "Genome specie");
+		validateString(genomeVersion, MaxLength.GENOME_VERSION, "Genome version");
+		validateString(species, MaxLength.GENOME_SPECIES, "Genome specie");
 	}
 
 	@Override

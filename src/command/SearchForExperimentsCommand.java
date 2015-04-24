@@ -9,7 +9,6 @@ import java.util.List;
 import java.net.URLDecoder;
 
 import database.DatabaseAccessor;
-import database.constants.MaxSize;
 import database.containers.Experiment;
 
 import response.ErrorResponse;

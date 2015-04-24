@@ -1,6 +1,6 @@
 package command;
 
-import database.constants.MaxSize;
+import database.constants.MaxLength;
 import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
@@ -32,7 +32,7 @@ public class GetFileFromExperimentCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-		validateString(fileID, MaxSize.FILE_EXPID, "Filename");
+		validateString(fileID, MaxLength.FILE_EXPID, "Filename");
 	}
 
 	@Override

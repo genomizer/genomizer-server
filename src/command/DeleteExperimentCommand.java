@@ -5,7 +5,7 @@ import java.sql.SQLException;
 
 import database.DatabaseAccessor;
 
-import database.constants.MaxSize;
+import database.constants.MaxLength;
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
@@ -29,7 +29,7 @@ public class DeleteExperimentCommand extends Command {
 	}
 
 	public void validate() throws ValidateException {
-		validateString(header, MaxSize.EXPID, "Experiment name");
+		validateString(header, MaxLength.EXPID, "Experiment name");
 	}
 
 	public Response execute() {

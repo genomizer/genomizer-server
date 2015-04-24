@@ -3,7 +3,7 @@ package command;
 import authentication.PasswordHash;
 import com.google.gson.annotations.Expose;
 import database.DatabaseAccessor;
-import database.constants.MaxSize;
+import database.constants.MaxLength;
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
@@ -30,8 +30,8 @@ public class ChangeUserPasswordCommand extends Command {
      */
     @Override
     public void validate() throws ValidateException {
-        validateString(username, MaxSize.USERNAME, "Username/Password");
-        validateString(password, MaxSize.PASSWORD, "Username/Password");
+        validateString(username, MaxLength.USERNAME, "Username/Password");
+        validateString(password, MaxLength.PASSWORD, "Username/Password");
     }
 
     /**

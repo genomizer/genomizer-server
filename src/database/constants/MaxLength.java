@@ -4,7 +4,7 @@ package database.constants;
  * The integers in this class represent the maximum number
  * of characters the string attributes in the database can hold.
  */
-public class MaxSize {
+public class MaxLength {
 
 	public final static int FILE_PATH = 1024;
 	public final static int FILE_FILETYPE = 32;

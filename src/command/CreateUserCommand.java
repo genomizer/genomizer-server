@@ -7,7 +7,6 @@ import authentication.PasswordHash;
 import com.google.gson.annotations.Expose;
 
 import database.DatabaseAccessor;
-import database.constants.MaxSize;
 
 import response.ErrorResponse;
 import response.MinimalResponse;

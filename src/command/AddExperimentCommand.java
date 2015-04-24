@@ -10,7 +10,7 @@ import response.Response;
 import response.StatusCode;
 import com.google.gson.annotations.Expose;
 import database.DatabaseAccessor;
-import database.constants.MaxSize;
+import database.constants.MaxLength;
 
 /**
  * Class used to add an experiment represented as a command.
@@ -27,7 +27,7 @@ public class AddExperimentCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-		validateString(name, MaxSize.EXPID, "Experiment name");
+		validateString(name, MaxLength.EXPID, "Experiment name");
 
 		if(annotations == null || annotations.size() == 0) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify " +
@@ -41,9 +41,9 @@ public class AddExperimentCommand extends Command {
 						"specify annotations.");
 			}
 			validateString(annotations.get(i).getName(),
-					MaxSize.ANNOTATION_LABEL, "Annotation label");
+					MaxLength.ANNOTATION_LABEL, "Annotation label");
 			validateString(annotations.get(i).getValue(),
-					MaxSize.ANNOTATION_VALUE, "Annotation value");
+					MaxLength.ANNOTATION_VALUE, "Annotation value");
 		}
 	}
 

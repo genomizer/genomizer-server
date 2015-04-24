@@ -22,8 +22,7 @@ import com.google.gson.annotations.Expose;
 
 import database.DatabaseAccessor;
 import database.containers.Genome;
-import database.constants.CanBeNull;
-import database.constants.MaxSize;
+import database.constants.MaxLength;
 
 public class ProcessCommand extends Command {
 
@@ -65,10 +64,10 @@ public class ProcessCommand extends Command {
 	 */
 	@Override
 	public void validate() throws ValidateException {
-		validateString(username, MaxSize.USERNAME, "Username");
-		validateString(expid, MaxSize.EXPID, "Experiment name");
-		validateString(metadata, MaxSize.FILE_METADATA, "Metadata");
-		validateString(genomeVersion, MaxSize.GENOME_VERSION, "Genome version");
+		validateString(username, MaxLength.USERNAME, "Username");
+		validateString(expid, MaxLength.EXPID, "Experiment name");
+		validateString(metadata, MaxLength.FILE_METADATA, "Metadata");
+		validateString(genomeVersion, MaxLength.GENOME_VERSION, "Genome version");
 		validateString(processtype, Integer.MAX_VALUE, "Processtype");
 
 		if(parameters == null){

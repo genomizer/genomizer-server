@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
-import database.constants.MaxSize;
+import database.constants.MaxLength;
 import response.Response;
 
 import database.DatabaseAccessor;
@@ -36,8 +36,8 @@ public class DeleteAnnotationValueCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-		validateString(name, MaxSize.ANNOTATION_LABEL, "Annotation label");
-		validateString(value, MaxSize.ANNOTATION_VALUE, "Annotation value");
+		validateString(name, MaxLength.ANNOTATION_LABEL, "Annotation label");
+		validateString(value, MaxLength.ANNOTATION_VALUE, "Annotation value");
 	}
 
 	@Override
@@ -47,9 +47,7 @@ public class DeleteAnnotationValueCommand extends Command {
 			db = initDB();
 			List<String> values = db.getChoices(name);
 			if(values.contains(value)) {
-
 				db.removeDropDownAnnotationValue(name, value);
-
 			} else {
 				return new ErrorResponse(StatusCode.BAD_REQUEST, "The value " +
 						value + " does not exist in " + name + " and can not " +

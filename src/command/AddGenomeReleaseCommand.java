@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import com.google.gson.annotations.Expose;
 
 import database.DatabaseAccessor;
-import database.constants.MaxSize;
+import database.constants.MaxLength;
 
 import response.AddGenomeReleaseResponse;
 import response.ErrorResponse;
@@ -33,15 +33,15 @@ public class AddGenomeReleaseCommand extends Command {
 	@Override
 	public void validate() throws ValidateException {
 
-		validateString(specie, MaxSize.GENOME_SPECIES, "Specie");
-		validateString(genomeVersion, MaxSize.GENOME_VERSION, "Genome version");
+		validateString(specie, MaxLength.GENOME_SPECIES, "Specie");
+		validateString(genomeVersion, MaxLength.GENOME_VERSION, "Genome version");
 
 		for(int i = 0; i < files.size(); i++) {
 			int sizeCheck = files.get(i).length();
-			if(sizeCheck > MaxSize.GENOME_FILEPATH || sizeCheck < 1) {
+			if(sizeCheck > MaxLength.GENOME_FILEPATH || sizeCheck < 1) {
 				throw new ValidateException(StatusCode.BAD_REQUEST, "File " +
 						"name has to be between 1 and " +
-						database.constants.MaxSize.GENOME_FILEPATH +
+						MaxLength.GENOME_FILEPATH +
 						" characters long.");
 			}
 		}

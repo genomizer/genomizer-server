@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.google.gson.annotations.Expose;
 import database.DatabaseAccessor;
-import database.constants.MaxSize;
+import database.constants.MaxLength;
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
@@ -28,8 +28,8 @@ public class AddAnnotationValueCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-		validateString(name, MaxSize.ANNOTATION_LABEL, "Annotation label");
-		validateString(value, MaxSize.ANNOTATION_VALUE, "Annotation value");
+		validateString(name, MaxLength.ANNOTATION_LABEL, "Annotation label");
+		validateString(value, MaxLength.ANNOTATION_VALUE, "Annotation value");
 	}
 
 	@Override

@@ -1,6 +1,6 @@
 package command;
 import database.DatabaseAccessor;
-import database.constants.MaxSize;
+import database.constants.MaxLength;
 import response.ErrorResponse;
 import response.LoginResponse;
 import response.Response;
@@ -29,8 +29,8 @@ public class LoginCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-		validateString(username, MaxSize.USERNAME, "Username/Password");
-		validateString(password, MaxSize.PASSWORD, "Username/Password");
+		validateString(username, MaxLength.USERNAME, "Username/Password");
+		validateString(password, MaxLength.PASSWORD, "Username/Password");
 	}
 
 	@Override

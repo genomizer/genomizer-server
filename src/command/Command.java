@@ -34,11 +34,6 @@ public abstract class Command {
 	/*This is used to store a RESTful-header.*/
 	protected String header;
 
-	/* This method is used to validates the object and its information. The
-	 * validate method should be called before the command is executed and
-	 * should be unique to each child.
-	 */
-
 	/**
 	 * Used to validate the object and its information. The validate method
 	 * should be called before the command is executed and should be unique
@@ -54,13 +49,6 @@ public abstract class Command {
 	 * @return an appropriate Response depending on the command.
 	 */
 	public abstract Response execute();
-
-	/**
-	 * Empty constructor. Suggested when using Gson.
-	 */
-	public Command() {
-
-	}
 
 	/**
 	 * Method used to get the RESTful-header.
@@ -104,24 +92,32 @@ public abstract class Command {
 		return p.matcher(string).find();
 	}
 
-	public void validateString(String string, int maxSize, String id)
+	/**
+	 * Validates a field by throwing a ValidateException if it doesn't conform
+	 * to specifications.
+	 * @param string the field to be validated.
+	 * @param maxLength the maximum length of the field.
+	 * @param field the name of the field in question.
+	 * @throws ValidateException if the field does not conform.
+	 */
+	public void validateString(String string, int maxLength, String field)
 			throws ValidateException {
 		if(string == null) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify " +
-					"an " + id.toLowerCase() + ".");
+					"an " + field.toLowerCase() + ".");
 		}
 		if(string.equals("null")){
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid "
-					+ id.toLowerCase() + ".");
+					+ field.toLowerCase() + ".");
 		}
-		if(string.length() > maxSize || string.length() < 1) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, id + ": " +
-					string + " has to be between 1 and " + maxSize +
+		if(string.length() > maxLength || string.length() < 1) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, field + ": " +
+					string + " has to be between 1 and " + maxLength +
 					" characters long.");
 		}
 		if(hasInvalidCharacters(string)) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid" +
-					" characters in " + id.toLowerCase() +
+					" characters in " + field.toLowerCase() +
 					". Valid characters are: " + validCharacters);
 		}
 	}
