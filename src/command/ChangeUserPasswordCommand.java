@@ -55,7 +55,9 @@ public class ChangeUserPasswordCommand extends Command {
      */
     @Override
     public Response execute() {
+
         DatabaseAccessor db = null;
+
         try {
             db = initDB();
         } catch (SQLException | IOException e) {
@@ -65,10 +67,10 @@ public class ChangeUserPasswordCommand extends Command {
                     "CHANGE OF PASSWORD FAILED FOR: " + username + ". REASON: " + e.getMessage());
         }
 
-		String salt = BCrypt.gensalt();
-		String hash = BCrypt.hashpw(password,salt);
+		String hash = BCrypt.hashpw(password,BCrypt.gensalt());
+
         try {
-            db.resetPassword(username, hash, salt);
+            db.resetPassword(username, hash);
         } catch (SQLException | IOException e) {
             return new ErrorResponse(StatusCode.BAD_REQUEST, "Database error " + e.getMessage());
         }

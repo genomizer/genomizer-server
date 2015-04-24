@@ -71,37 +71,23 @@ public class CreateUserCommand extends Command {
 	@Override
 	public Response execute() {
 
-
-
 		DatabaseAccessor db = null;
 		try {
 			db = initDB();
-		} catch (SQLException e) {
+		} catch (SQLException | IOException e) {
 			return new ErrorResponse(StatusCode.BAD_REQUEST, "Error when " +
 					"initiating databaseAccessor. " + e.getMessage());
-		} catch (IOException e)  {
-			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
 		}
+
 		try {
+			String hash = BCrypt.hashpw(password,BCrypt.gensalt());
+			db.addUser(username, hash, privileges, name, email);
 
-
-
-			// get a new salt
-			String salt = BCrypt.gensalt();
-			// get hash using salt and password
-			String hash = BCrypt.hashpw(password,salt);
-			// insert into DB, requires new table from DB group
-			db.addUser(username, salt, hash, privileges, name, email);
-
-
-			//db.addUser(username, password, privileges, name, email);
 		} catch (SQLException | IOException e) {
 			return new ErrorResponse(StatusCode.BAD_REQUEST, "Error when " +
 					"adding user to database, user probably already exists. " +
 					e.getMessage());
 		}
 		return new MinimalResponse(StatusCode.CREATED);
-
 	}
-
 }
