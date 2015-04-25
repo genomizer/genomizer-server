@@ -1,10 +1,9 @@
 package command;
 
-import java.util.Collection;
+import java.util.LinkedList;
 
 import response.GetProcessStatusResponse;
 import response.Response;
-import server.ErrorLogger;
 import server.WorkPool;
 
 /**
@@ -42,12 +41,12 @@ public class GetProcessStatusCommand extends Command {
 
 	@Override
 	public Response execute() {
-
-		Collection<ProcessStatus> processStatus = null;
-
-		processStatus = workPool.getProcesses().values();
-
-		return new GetProcessStatusResponse(processStatus);
+		LinkedList<ProcessCommand> processesList = workPool.getProcesses();
+		LinkedList<ProcessStatus> processStatuses = new LinkedList<>();
+        
+		for (ProcessCommand proc : processesList) {
+			processStatuses.add(workPool.getProcessStatus(proc));
+		}
+		return new GetProcessStatusResponse(processStatuses);
 	}
-
 }

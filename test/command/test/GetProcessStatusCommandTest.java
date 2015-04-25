@@ -1,9 +1,7 @@
 package command.test;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -16,7 +14,6 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 import command.ProcessCommand;
 import command.ProcessStatus;
-import server.ErrorLogger;
 import server.WorkHandler;
 import server.WorkPool;
 import server.test.dummies.ProcessCommandMock;
@@ -81,18 +78,21 @@ public class GetProcessStatusCommandTest {
 			e.printStackTrace();
 		}
 
-		Collection<ProcessStatus> procStats = null;
+		LinkedList<ProcessCommand> processesList = workPool.getProcesses();
+		LinkedList<ProcessStatus> processStatuses = new LinkedList<>();
 
-		procStats = workPool.getProcesses().values();
+		for (ProcessCommand proc : processesList) {
+			processStatuses.add(workPool.getProcessStatus(proc));
+		}
 
-		if (procStats != null) {
-			List<ProcessStatus> list = new ArrayList<ProcessStatus>( procStats);
 
-			Collections.sort( list );
+		if (processStatuses.size() > 0) {
+
+			Collections.sort( processStatuses );
 			Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
 			JsonArray arr = new JsonArray();
-			for (ProcessStatus p : list) {
+			for (ProcessStatus p : processStatuses) {
 				JsonElement elem = gson.toJsonTree(p, ProcessStatus.class);
 				arr.add(elem);
 			}
