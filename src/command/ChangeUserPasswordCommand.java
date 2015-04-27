@@ -70,7 +70,7 @@ public class ChangeUserPasswordCommand extends Command {
 		String hash = BCrypt.hashpw(password,BCrypt.gensalt());
 
         try {
-            db.resetPassword(username, hash);
+            db.resetPassword(username, hash,"SALT");
         } catch (SQLException | IOException e) {
             return new ErrorResponse(StatusCode.BAD_REQUEST, "Database error " + e.getMessage());
         }
