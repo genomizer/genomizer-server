@@ -22,6 +22,7 @@ import response.StatusCode;
 public class DeleteAnnotationValueCommand extends Command {
 	private String name;
 	private String value;
+	private UserType userType;
 
 	/**
 	 * Constructs a new instance of DeleteAnnotationValueCommand using the
@@ -29,15 +30,17 @@ public class DeleteAnnotationValueCommand extends Command {
 	 * @param name the name of the selected annotation.
 	 * @param value the value to delete.
 	 */
-	public DeleteAnnotationValueCommand(String name, String value) {
+	public DeleteAnnotationValueCommand(String name, String value, UserType userType) {
 		this.name = name;
 		this.value = value;
+		this.userType = userType;
 	}
 
 	@Override
 	public void validate() throws ValidateException {
 		validateString(name, MaxLength.ANNOTATION_LABEL, "Annotation label");
 		validateString(value, MaxLength.ANNOTATION_VALUE, "Annotation value");
+		hasRights(UserType.USER, userType);
 	}
 
 	@Override

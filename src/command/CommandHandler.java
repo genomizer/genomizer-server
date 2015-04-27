@@ -83,12 +83,14 @@ public class CommandHandler {
 
 		String parsedURI = parseRequestURI(uri);
 		String username = Authenticate.getUsernameByID(uuid);
+		//TODO Add the get user type method
+		Command.UserType userType = Command.UserType.ADMIN;
 		String[] rest;
 		switch (cmdt) {
 			case DELETE_ANNOTATION_VALUE_COMMAND:
 				rest = uri.split("/");
 				return cmdFactory.
-						createDeleteAnnotationValueCommand(rest[3], rest[4]);
+						createDeleteAnnotationValueCommand(rest[3], rest[4], userType);
 			case LOGIN_COMMAND:
 				return cmdFactory.createLoginCommand(json);
 			case LOGOUT_COMMAND:

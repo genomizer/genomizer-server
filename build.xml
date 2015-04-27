@@ -104,7 +104,7 @@
         </classpath>
         <batchtest fork="yes" todir="${junit.output.dir}" failureProperty="test.failed">
           <formatter type="plain" usefile="false"/>
-          <fileset dir="test">
+          <fileset dir="src/test">
             <include name="**/*.java"/>
             <exclude name="**/dummies/*.java"/>
           </fileset>

@@ -31,6 +31,8 @@ public abstract class Command {
 	/*These are valid characters that are used with the validation method.*/
 	final protected String validCharacters = "^, A-Z, a-z, 0-9, space and _";
 
+	public enum UserType {ADMIN,USER,GUEST,UNKNOWN};
+
 	/*This is used to store a RESTful-header.*/
 	protected String header;
 
@@ -121,4 +123,24 @@ public abstract class Command {
 					". Valid characters are: " + validCharacters);
 		}
 	}
+
+
+	public void hasRights(UserType required, UserType user) throws ValidateException {
+
+		if (user == UserType.UNKNOWN)
+			throw new ValidateException(StatusCode.FORBIDDEN, "You don't have permission.");
+
+		if (required == user)
+			return;
+
+		else if (required == UserType.ADMIN)
+			throw new ValidateException(StatusCode.FORBIDDEN, "You don't have permission.");
+
+		else if (required == UserType.USER && user != UserType.ADMIN)
+			throw new ValidateException(StatusCode.FORBIDDEN, "You don't have permission.");
+
+		else if (required == UserType.UNKNOWN && !(user == UserType.ADMIN))
+			throw new ValidateException(StatusCode.FORBIDDEN, "You don't have permission.");
+	}
+
 }

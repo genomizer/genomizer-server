@@ -261,8 +261,8 @@ public class CommandFactory {
 	 * @return the actual command created.
 	 */
 	public Command createDeleteAnnotationValueCommand(String value,
-													  String name) {
-		return new DeleteAnnotationValueCommand(value, name);
+													  String name, Command.UserType userType) {
+		return new DeleteAnnotationValueCommand(value, name, userType);
 	}
 
 	/**
