@@ -20,6 +20,7 @@ public class ServerSettings {
 	public static String passwordSalt = null;
 	public static String webUrlUpload = null;
 	public static String fileLocation = "/var/www/data/";
+	public static String bowtieLocation = "bowtie";
 	public static int nrOfProcessThreads = 5;
 
 
@@ -40,7 +41,8 @@ public class ServerSettings {
 					+ "passwordSalt = " + passwordSalt + "\n"
 					+ "fileLocation = " + fileLocation + "\n"
 					+ "webUrlUpload = " + webUrlUpload + "\n"
-					+ "nrOfProcessThreads = " + nrOfProcessThreads + "\n";
+					+ "nrOfProcessThreads = " + nrOfProcessThreads + "\n"
+					+ "bowtieLocation = " + bowtieLocation + "\n";
 
 			out.write(dataInfo);
 			out.close();
@@ -71,6 +73,7 @@ public class ServerSettings {
 		nullCheck(webUrlUpload, "webUrlUpload");
 		nullCheck(fileLocation, "fileLocation");
 		nullCheck(nrOfProcessThreads, "nrOfProcessThreads");
+		nullCheck(bowtieLocation, "bowtieLocation");
 	}
 
 	private static void nullCheck(int parameter, String name) {
@@ -151,6 +154,9 @@ public class ServerSettings {
 				case "nrofprocessthreads":
 					nrOfProcessThreads = Integer.parseInt(value);
 					break;
+				case "bowtielocation":
+					bowtieLocation = value;
+					break;
 				default:
 					String msg = "Unrecognized setting: " + key;
 					Debug.log(msg);
@@ -178,7 +184,8 @@ public class ServerSettings {
 							+ "\tpasswordSalt = " + passwordSalt + "\n"
 							+ "\tfileLocation = " + fileLocation + "\n"
 							+ "\twebUrlUpload = " + webUrlUpload + "\n"
-							+ "\tnrOfProcessThreads = " + nrOfProcessThreads
+							+ "\tnrOfProcessThreads = " + nrOfProcessThreads + "\n"
+							+ "\tbowtieLocation = " + bowtieLocation
 							+ "\n";
 
 			Debug.log("Imported the following settings:\n" + dataInfo);
