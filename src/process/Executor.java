@@ -7,6 +7,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.security.AccessControlException;
 import java.util.Scanner;
 import java.util.Stack;
 import java.util.StringTokenizer;
@@ -36,7 +37,14 @@ public abstract class Executor {
 
 		/* TODO Should check if program has correct permissions et c. as well */
 		if(!pathToExecutable.exists()) {
-			throw new FileNotFoundException(String.format("Program [%s] does not exist", command[1]));
+			throw new FileNotFoundException(
+					"Program "+command[1]+" does not exist");
+		}
+
+		/* Check execute exception */
+		if(!pathToExecutable.canExecute()) {
+			throw new AccessControlException(
+					"No permission to execute "+command[1]);
 		}
 
 		command[0] = pathToExecutable.getAbsolutePath();
