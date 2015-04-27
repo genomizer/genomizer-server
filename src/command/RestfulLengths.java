@@ -5,7 +5,7 @@ import java.util.HashMap;
 /**
  * Class to be used as a reference for the "length" of the request URI. For
  * example the get experiment request URI looks like
- * /experiment/\<experiment-id\> abd hence has the length 2.
+ * /experiment/\<experiment-id\> and hence has the length 2.
  *
  * @author Business Logic 2015.
  * @version 1.1
