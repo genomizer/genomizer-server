@@ -1,4 +1,4 @@
-package test.command.test;
+package command.test;
 
 import command.Command;
 import command.DeleteAnnotationValueCommand;
