@@ -3,7 +3,7 @@ package command;
 import authentication.PasswordHash;
 import com.google.gson.annotations.Expose;
 import database.DatabaseAccessor;
-import database.constants.MaxSize;
+import database.constants.MaxLength;
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
@@ -17,7 +17,7 @@ import java.sql.SQLException;
  * Created by dv13jen on 2015-04-16.
  */
 public class ChangeUserPasswordCommand extends Command {
-
+    
     @Expose
     private String username = null;
 
@@ -29,23 +29,9 @@ public class ChangeUserPasswordCommand extends Command {
      * Used to validate the ChangeUserPasswordCommand.
      */
     @Override
-    public boolean validate() {
-
-        if(username == null || password == null ) {
-            return false;
-        }
-        if(username.length() < 1 || username.length() > MaxSize.USERNAME) {
-            return false;
-        }
-        if(password.length() < 1 || password.length() > MaxSize.PASSWORD) {
-            return false;
-        }
-
-        if(username.indexOf('/') != -1) {
-            return false;
-        }
-
-        return true;
+    public void validate() throws ValidateException {
+        validateString(username, MaxLength.USERNAME, "Username/Password");
+        validateString(password, MaxLength.PASSWORD, "Username/Password");
     }
 
     /**

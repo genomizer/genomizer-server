@@ -11,7 +11,7 @@ import com.google.gson.GsonBuilder;
 import command.AddGenomeReleaseCommand;
 import command.Command;
 import command.ValidateException;
-import database.constants.MaxSize;
+import database.constants.MaxLength;
 
 /**
  * Class used to test the AddGenomeRelease class.
@@ -224,7 +224,7 @@ public class AddGenomeReleaseCommandTest {
 	public void testValidateFileNameLength() throws ValidateException {
 
 		String big_filename = "";
-		for(int i = 0; i < MaxSize.GENOME_FILEPATH + 1; i++) {
+		for(int i = 0; i < MaxLength.GENOME_FILEPATH + 1; i++) {
 			big_filename = big_filename + "A";
 		}
 		String json = "{\"version\":\"hx16\",\"species\":\"human\",\"files\":[\"" + big_filename +
@@ -246,7 +246,7 @@ public class AddGenomeReleaseCommandTest {
 	public void testValidateSpecieLength() throws ValidateException {
 
 		String big_specie = "";
-		for(int i = 0; i < MaxSize.GENOME_SPECIES + 1; i++) {
+		for(int i = 0; i < MaxLength.GENOME_SPECIES + 1; i++) {
 			big_specie = big_specie + "A";
 		}
 		String json = "{\"version\":\"hx16\",\"species\":\"" + big_specie +
@@ -268,7 +268,7 @@ public class AddGenomeReleaseCommandTest {
 	public void testValidateGenomeVersionLength() throws ValidateException {
 
 		String big_gv = "";
-		for(int i = 0; i < MaxSize.GENOME_VERSION + 1; i++) {
+		for(int i = 0; i < MaxLength.GENOME_VERSION + 1; i++) {
 			big_gv = big_gv + "A";
 		}
 		String json = "{\"version\":\"" + big_gv +

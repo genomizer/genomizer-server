@@ -1,6 +1,8 @@
 package command.test;
 
 import static org.junit.Assert.*;
+
+import database.constants.MaxLength;
 import org.junit.Before;
 import org.junit.Test;
 import com.google.gson.Gson;
@@ -91,7 +93,7 @@ public class AddFileToExperimentCommandTest {
 	public void testValidateExpIdLengthToLong() throws ValidateException {
 
 		String big = "";
-		for(int i = 0; i < database.constants.MaxSize.FILE_EXPID + 1; i++) {
+		for(int i = 0; i < MaxLength.FILE_EXPID + 1; i++) {
 			big = big + "a";
 		}
 		String json = jsonBuilder(big,"name","raw","metameta","name","user1","releaseNr");
@@ -167,7 +169,7 @@ public class AddFileToExperimentCommandTest {
 	public void testValidateFileNameLengthToLong() throws ValidateException {
 
 		String big = "";
-		for(int i = 0; i < database.constants.MaxSize.FILE_FILENAME + 1; i++) {
+		for(int i = 0; i < MaxLength.FILE_FILENAME + 1; i++) {
 			big = big + "a";
 		}
 		String json = jsonBuilder("id",big,"raw","metameta","name","user1","releaseNr");
@@ -243,7 +245,7 @@ public class AddFileToExperimentCommandTest {
 	public void testValidateTypeLengthToLong() throws ValidateException {
 
 		String big = "";
-		for(int i = 0; i < database.constants.MaxSize.FILE_FILETYPE + 1; i++) {
+		for(int i = 0; i < MaxLength.FILE_FILETYPE + 1; i++) {
 			big = big + "a";
 		}
 		String json = jsonBuilder("id","name",big,"metameta","name","user1","releaseNr");
@@ -319,7 +321,7 @@ public class AddFileToExperimentCommandTest {
 	public void testValidateMetaDataLengthToLong() throws ValidateException {
 
 		String big = "";
-		for(int i = 0; i < database.constants.MaxSize.FILE_METADATA + 1; i++) {
+		for(int i = 0; i < MaxLength.FILE_METADATA + 1; i++) {
 			big = big + "a";
 		}
 		String json = jsonBuilder("id","name","raw",big,"name","user1","releaseNr");
@@ -395,7 +397,7 @@ public class AddFileToExperimentCommandTest {
 	public void testValidateAuthorLengthToLong() throws ValidateException {
 
 		String big = "";
-		for(int i = 0; i < database.constants.MaxSize.FILE_AUTHOR + 1; i++) {
+		for(int i = 0; i < MaxLength.FILE_AUTHOR + 1; i++) {
 			big = big + "a";
 		}
 		String json = jsonBuilder("id","name","raw","metameta",big,"user1","releaseNr");
@@ -471,7 +473,7 @@ public class AddFileToExperimentCommandTest {
 	public void testValidateUploaderToLong() throws ValidateException {
 
 		String big = "";
-		for(int i = 0; i < database.constants.MaxSize.FILE_UPLOADER + 1; i++) {
+		for(int i = 0; i < MaxLength.FILE_UPLOADER + 1; i++) {
 			big = big + "a";
 		}
 		String json = jsonBuilder("id","name","raw","metameta","name",big,"releaseNr");
@@ -546,7 +548,7 @@ public class AddFileToExperimentCommandTest {
 	public void testValidateGrVersionToLong() throws ValidateException {
 
 		String big = "";
-		for(int i = 0; i < database.constants.MaxSize.FILE_GRVERSION + 1; i++) {
+		for(int i = 0; i < MaxLength.FILE_GRVERSION + 1; i++) {
 			big = big + "a";
 		}
 		String json = jsonBuilder("id","name","raw","metameta","name","user1",big);

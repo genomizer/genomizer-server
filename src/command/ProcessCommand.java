@@ -22,8 +22,7 @@ import com.google.gson.annotations.Expose;
 
 import database.DatabaseAccessor;
 import database.containers.Genome;
-import database.constants.CanBeNull;
-import database.constants.MaxSize;
+import database.constants.MaxLength;
 
 public class ProcessCommand extends Command {
 
@@ -64,40 +63,12 @@ public class ProcessCommand extends Command {
 	 *
 	 */
 	@Override
-	public boolean validate() throws ValidateException {
-
-
-		if(username == null){
-			Debug.log("ProcessCommand - Validate\n" +
-					"username is null");
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify a " +
-					"user name.");
-		}
-		if(processtype == null){
-			Debug.log("ProcessCommand - Validate\n" +
-					"processtype is null");
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify a " +
-					"process type.");
-		}
-		if(metadata == null){
-			Debug.log("ProcessCommand - Validate\n" +
-					"metadata is null");
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify " +
-					"metadata.");
-		}
-		if(genomeVersion == null){
-			Debug.log("ProcessCommand - Validate\n" +
-					"genomerelease is null");
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify a " +
-					"genome version.");
-		}
-
-		if(expid == null){
-			Debug.log("ProcessCommand - Validate\n" +
-					"expid is null");
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify an " +
-					"experiment name.");
-		}
+	public void validate() throws ValidateException {
+		validateString(username, MaxLength.USERNAME, "Username");
+		validateString(expid, MaxLength.EXPID, "Experiment name");
+		validateString(metadata, MaxLength.FILE_METADATA, "Metadata");
+		validateString(genomeVersion, MaxLength.GENOME_VERSION, "Genome version");
+		validateString(processtype, Integer.MAX_VALUE, "Processtype");
 
 		if(parameters == null){
 			Debug.log("ProcessCommand - Validate\n" +
@@ -120,72 +91,6 @@ public class ProcessCommand extends Command {
 				throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
 						"process type");
 		}
-
-		if(username.length() > MaxSize.USERNAME || username.length() <= 0){
-			Debug.log("Username has the wrong length of annotation");
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Username " +
-					"has to be between 1 and "
-					+ database.constants.MaxSize.USERNAME +
-					" characters long.");
-		}
-		if(processtype.length() <= 0){
-			Debug.log("Processtype has the wrong length of annotation");
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify " +
-					"process type");
-		}
-
-		if(metadata.length() > MaxSize.FILE_METADATA ||
-				doesNotHaveCorrectLength(metadata, CanBeNull.FILE_METADATA)) {
-			Debug.log("Metadata [" + metadata + "] has the wrong length of " +
-					"annotation");
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Metadata " +
-					"has to be between 1 and "
-					+ database.constants.MaxSize.FILE_METADATA +
-					" characters long.");
-		}
-		if(genomeVersion.length() > MaxSize.GENOME_VERSION ||
-				doesNotHaveCorrectLength(genomeVersion,
-						CanBeNull.GENOME_VERSION)) {
-			Debug.log("GenomeRelease has the wrong length of annotation");
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Genome " +
-					"version has to be between 1 and "
-					+ database.constants.MaxSize.GENOME_VERSION +
-					" characters long.");
-		}
-		if(expid.length() > MaxSize.EXPID ||
-				doesNotHaveCorrectLength(expid, CanBeNull.EXPID)){
-			Debug.log("Expid has the wrong length of annotation");
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Experiment " +
-					"name has to be between 1 and "
-					+ database.constants.MaxSize.EXPID + " characters long.");
-		}
-		if(!hasOnlyValidCharacters(username)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
-					"characters in username. Valid characters are: " +
-					validCharacters);
-		}
-		if(!hasOnlyValidCharacters(processtype)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
-					"characters in process type. Valid characters are: " +
-					validCharacters);
-		}
-		if(!hasOnlyValidCharacters(genomeVersion)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
-					"characters in genome version. Valid characters are: " +
-					validCharacters);
-		}
-		if(!hasOnlyValidCharacters(expid)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
-					"characters in experiment name. Valid characters are: " +
-					validCharacters);
-		}
-		if(metadata.contains("/")) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
-					"characters in experiment name. Valid characters are: " +
-					validCharacters);
-		}
-
-		return true;
 	}
 
 	/**
@@ -201,11 +106,7 @@ public class ProcessCommand extends Command {
 		Debug.log("field: "+ field + " length: " + field.length() +
 				" canbenull: " + canBeNull);
 		if(field.length() <= 0){
-			if(canBeNull == false){
-				return true;
-			}else{
-				return false;
-			}
+			return !canBeNull;
 		}
 		return false;
 	}
@@ -485,7 +386,7 @@ public class ProcessCommand extends Command {
 	}
 
 	public void setFilePaths() throws SQLException, IOException {
-		DatabaseAccessor db = null;
+		DatabaseAccessor db;
 
 		db = initDB();
 		filepaths = db.processRawToProfile(expid);
