@@ -13,6 +13,11 @@ import response.StatusCode;
 public class GetAnnotationPrivilegesCommand extends Command {
 	//TODO Implement this class
 
+	@Override
+	public void setFields(String uri, String uuid) {
+
+	}
+
 	public GetAnnotationPrivilegesCommand(String userName) {
 
 	}

@@ -18,18 +18,16 @@ import response.StatusCode;
  * @version 1.1
  */
 public class DeleteAnnotationFieldCommand extends Command {
+	private String name;
 
-	/**
-	 * Constructs a new instance of DeleteAnnotationFieldCommand.
-	 * @param restful header to set.
-	 */
-	public DeleteAnnotationFieldCommand(String restful) {
-		this.setHeader(restful);
+	@Override
+	public void setFields(String uri, String uuid) {
+		name = uri.split("/")[2];
 	}
 
 	@Override
 	public void validate() throws ValidateException {
-		validateString(header, MaxLength.ANNOTATION_LABEL, "Annotation label");
+		validateString(name, MaxLength.ANNOTATION_LABEL, "Annotation label");
 	}
 
 	@Override
@@ -39,12 +37,12 @@ public class DeleteAnnotationFieldCommand extends Command {
 			db = initDB();
 			ArrayList<String> annotations = db.getAllAnnotationLabels();
 
-			if(annotations.contains(header)) {
-				db.deleteAnnotation(header);
+			if(annotations.contains(name)) {
+				db.deleteAnnotation(name);
 				return new MinimalResponse(200);
 			} else {
 				return new ErrorResponse(StatusCode.BAD_REQUEST,
-						"The annotation " + header + " does not exist and " +
+						"The annotation " + name + " does not exist and " +
 								"can not be deleted");
 			}
 		} catch (SQLException e) {

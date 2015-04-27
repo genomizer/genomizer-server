@@ -66,6 +66,8 @@ public abstract class Command {
 		this.header = header;
 	}
 
+	public abstract void setFields(String uri, String uuid);
+
 	/**
 	 * Method used to connect to the database.
 	 * @return a database accessor object.

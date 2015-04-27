@@ -25,14 +25,10 @@ import response.StatusCode;
 public class SearchForExperimentsCommand extends Command {
 	private String annotations;
 
-	/**
-	 * Constructs a new instance of SearchForExperimentsCommand using the
-	 * supplied annotations.
-	 * @param annotations the annotations (hopefully) belonging to the
-	 *                       experiment.
-	 */
-	public SearchForExperimentsCommand(String annotations) {
-		this.annotations = annotations;
+	@Override
+	public void setFields(String uri, String uuid) {
+		int index = uri.indexOf("=");
+		annotations = uri.substring(index+1);
 	}
 
 	@Override

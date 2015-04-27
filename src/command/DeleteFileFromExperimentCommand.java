@@ -18,19 +18,16 @@ import response.StatusCode;
  * @version 1.1
  */
 public class DeleteFileFromExperimentCommand extends Command {
+	private String fileID;
 
-	/**
-	 * Constructs a new instance of DeleteFileFromExperimentCommand using the
-	 * supplied restful string.
-	 * @param fileID the file ID of the file you wish to delete.
-	 */
-	public DeleteFileFromExperimentCommand(String fileID) {
-		this.setHeader(fileID);
+	@Override
+	public void setFields(String uri, String uuid) {
+		fileID = uri.split("/")[1];
 	}
 
 	@Override
 	public void validate() throws ValidateException {
-		validateString(header, MaxLength.EXPID, "Experiment name");
+		validateString(fileID, MaxLength.EXPID, "Experiment name");
 	}
 
 	@Override
@@ -39,19 +36,19 @@ public class DeleteFileFromExperimentCommand extends Command {
 		try {
 			db = initDB();
 			try {
-				if(db.deleteFile(Integer.parseInt(header))==1) {
+				if(db.deleteFile(Integer.parseInt(fileID))==1) {
 					return new MinimalResponse(StatusCode.OK);
 				} else {
 					return new ErrorResponse(StatusCode.BAD_REQUEST,
-							"The file " + header + " does not exist and can " +
+							"The file " + fileID + " does not exist and can " +
 									"not be deleted");
 				}
 			} catch (NumberFormatException e) {
-				if (db.deleteFile(header) > 0) {
+				if (db.deleteFile(fileID) > 0) {
 					return new MinimalResponse(StatusCode.OK);
 				} else {
 					return new ErrorResponse(StatusCode.BAD_REQUEST,
-							"The file " + header + " does not exist and can " +
+							"The file " + fileID + " does not exist and can " +
 									"not be deleted");
 				}
 			}

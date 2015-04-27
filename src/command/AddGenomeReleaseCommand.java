@@ -31,6 +31,11 @@ public class AddGenomeReleaseCommand extends Command {
 	private ArrayList<String> files = new ArrayList<>();
 
 	@Override
+	public void setFields(String uri, String uuid) {
+
+	}
+
+	@Override
 	public void validate() throws ValidateException {
 
 		validateString(specie, MaxLength.GENOME_SPECIES, "Specie");

@@ -19,18 +19,16 @@ import database.containers.Experiment;
  * @version 1.1
  */
 public class GetExperimentCommand extends Command {
-	/**
-	 * Constructs a new instance of GetExperimentCommand using the supplied
-	 * experiment ID.
-	 * @param expID header to set.
-	 */
-	public GetExperimentCommand(String expID) {
-		this.setHeader(expID);
+	private String expID;
+
+	@Override
+	public void setFields(String uri, String uuid) {
+		expID = uri.split("/")[1];
 	}
 
 	@Override
 	public void validate() throws ValidateException {
-		validateString(header, MaxLength.EXPID, "Experiment name");
+		validateString(expID, MaxLength.EXPID, "Experiment name");
 	}
 
 	@Override
@@ -45,7 +43,7 @@ public class GetExperimentCommand extends Command {
 					"initialize db: " + e.getMessage());
 		}
 		try{
-			exp = db.getExperiment(header);
+			exp = db.getExperiment(expID);
 		}catch(SQLException e){
 			return new ErrorResponse(StatusCode.BAD_REQUEST, "Could not get " +
 					"experiment: " + e.getMessage());

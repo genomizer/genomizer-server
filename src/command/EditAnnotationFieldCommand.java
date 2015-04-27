@@ -30,6 +30,11 @@ public class EditAnnotationFieldCommand extends Command {
 	private String newName = null;
 
 	@Override
+	public void setFields(String uri, String uuid) {
+
+	}
+
+	@Override
 	public void validate() throws ValidateException {
 		validateString(oldName, MaxLength.ANNOTATION_LABEL,
 				"Old annotation label");

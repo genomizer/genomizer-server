@@ -18,7 +18,12 @@ import response.StatusCode;
  * @version 1.0
  */
 
-public class GetGenomeReleaseCommand extends Command{
+public class GetGenomeReleaseCommand extends Command {
+	@Override
+	public void setFields(String uri, String uuid) {
+
+	}
+
 	@Override
 	public void validate() {
 		/*Validation will always succeed, the command can not be corrupt.*/

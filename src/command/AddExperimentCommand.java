@@ -26,6 +26,11 @@ public class AddExperimentCommand extends Command {
 	private ArrayList<Annotation> annotations = new ArrayList<>();
 
 	@Override
+	public void setFields(String uri, String uuid) {
+
+	}
+
+	@Override
 	public void validate() throws ValidateException {
 		validateString(name, MaxLength.EXPID, "Experiment name");
 

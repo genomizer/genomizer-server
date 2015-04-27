@@ -13,7 +13,8 @@ import response.StatusCode;
 public class UpdateAnnotationPrivilegesCommand extends Command {
 	//TODO Implement this class
 
-	public UpdateAnnotationPrivilegesCommand(String json, String userName) {
+	@Override
+	public void setFields(String uri, String uuid) {
 
 	}
 

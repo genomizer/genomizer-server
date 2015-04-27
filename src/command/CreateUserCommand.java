@@ -36,6 +36,11 @@ public class CreateUserCommand extends Command {
 	private String email = null;
 
 	@Override
+	public void setFields(String uri, String uuid) {
+
+	}
+
+	@Override
 	public void validate() {
 		//TODO Change to exceptions.
 

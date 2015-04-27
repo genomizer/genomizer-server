@@ -18,28 +18,25 @@ import response.StatusCode;
  * @version 1.1
  */
 public class DeleteExperimentCommand extends Command {
+	private String expID;
 
-	/**
-	 * Constructs a new instance of DeleteExperimentCommand using the supplied
-	 * restful string.
-	 * @param expID the ID of the experiment.
-	 */
-	public DeleteExperimentCommand(String expID) {
-		this.setHeader(expID);
+	@Override
+	public void setFields(String uri, String uuid) {
+		expID = uri.split("/")[1];
 	}
 
 	public void validate() throws ValidateException {
-		validateString(header, MaxLength.EXPID, "Experiment name");
+		validateString(expID, MaxLength.EXPID, "Experiment name");
 	}
 
 	public Response execute() {
 		DatabaseAccessor db = null;
 		try {
 			db = initDB();
-			int tuples = db.deleteExperiment(header);
+			int tuples = db.deleteExperiment(expID);
 			if(tuples == 0) {
 				return new ErrorResponse(StatusCode.BAD_REQUEST,
-						"The experiment " + header + " does not exist and " +
+						"The experiment " + expID + " does not exist and " +
 								"can not be deleted");
 
 			}

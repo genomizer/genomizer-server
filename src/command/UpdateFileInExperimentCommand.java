@@ -13,7 +13,8 @@ import response.StatusCode;
 public class UpdateFileInExperimentCommand extends Command {
 	//TODO Implement this class
 
-	public UpdateFileInExperimentCommand(String json, String expID) {
+	@Override
+	public void setFields(String uri, String uuid) {
 
 	}
 

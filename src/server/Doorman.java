@@ -60,12 +60,16 @@ public class Doorman {
 		httpServer.createContext("/login", createHandler());
 		httpServer.createContext("/experiment", createHandler());
 		httpServer.createContext("/annotation", createHandler());
+		httpServer.createContext("/annotation/field", createHandler());
+		httpServer.createContext("/annotation/value", createHandler());
 		httpServer.createContext("/file", createHandler());
 		httpServer.createContext("/search", createHandler());
 		httpServer.createContext("/user", createHandler());
-		httpServer.createContext("/process", createHandler());
+		httpServer.createContext("/process/rawtoprofile", createHandler());
 		httpServer.createContext("/sysadm", createHandler());
+		httpServer.createContext("/sysadm/annpriv", createHandler());
 		httpServer.createContext("/genomeRelease", createHandler());
+		httpServer.createContext("/genomeRelease/", createHandler());
 		httpServer.createContext("/token", createHandler());
 
 		httpServer.setExecutor(new Executor() {
@@ -100,7 +104,15 @@ public class Doorman {
 		return new HttpHandler() {
 			@Override
 			public void handle(HttpExchange exchange) throws IOException {
+
 				String method = exchange.getRequestMethod();
+
+				/**
+				 * Kanske?
+				 *
+				 CommandClasses commandClasses = new CommandClasses();
+				 **/
+
 				Debug.log("\n-----------------\nNEW EXCHANGE: " + method
 						+ " " + exchange.getHttpContext().getPath());
 				switch(method) {
@@ -124,7 +136,7 @@ public class Doorman {
 						break;
 					case "/genomeRelease":
 						if(exchange.getRequestURI().toString().
-                                startsWith("/genomeRelease/")) {
+								startsWith("/genomeRelease/")) {
 							handleRequest(exchange, CommandType.
                                     GET_GENOME_RELEASE_SPECIES_COMMAND);
 						} else {
@@ -159,7 +171,7 @@ public class Doorman {
 					case "/process":
 
 						String processPath = exchange.getRequestURI().
-                                toString();
+								toString();
 
 						if (processPath.startsWith("/process/rawtoprofile")) {
 							handleRequest(exchange, CommandType.
@@ -168,18 +180,18 @@ public class Doorman {
 						break;
 					case "/annotation":
 						if (exchange.getRequestURI().toString().
-                                startsWith("/annotation/field")) {
+								startsWith("/annotation/field")) {
 							handleRequest(exchange, CommandType.
                                     RENAME_ANNOTATION_FIELD_COMMAND);
 						} else if (exchange.getRequestURI().toString().
-                                startsWith("/annotation/value")) {
+								startsWith("/annotation/value")) {
 							handleRequest(exchange, CommandType.
                                     RENAME_ANNOTATION_VALUE_COMMAND);
 						}
 						break;
 					case "/sysadm":
 						if (exchange.getRequestURI().toString().
-                                startsWith("/sysadm/annpriv")) {
+								startsWith("/sysadm/annpriv")) {
 							handleRequest(exchange, CommandType.
                                     UPDATE_ANNOTATION_PRIVILEGES_COMMAND);
 						}
@@ -205,11 +217,11 @@ public class Doorman {
 						break;
 					case "/annotation":
 						if (exchange.getRequestURI().toString().
-                                startsWith("/annotation/field")) {
+								startsWith("/annotation/field")) {
 							handleRequest(exchange, CommandType.
                                     ADD_ANNOTATION_FIELD_COMMAND);
 						} else if (exchange.getRequestURI().toString().
-                                startsWith("/annotation/value")) {
+								startsWith("/annotation/value")) {
 							handleRequest(exchange, CommandType.
                                     ADD_ANNOTATION_VALUE_COMMAND);
 						}
@@ -240,11 +252,11 @@ public class Doorman {
 						break;
 					case "/annotation":
 						if (exchange.getRequestURI().toString().
-                                startsWith("/annotation/field")) {
+								startsWith("/annotation/field")) {
 							handleRequest(exchange, CommandType.
                                     REMOVE_ANNOTATION_FIELD_COMMAND);
 						} else if (exchange.getRequestURI().toString().
-                                startsWith("/annotation/value")) {
+								startsWith("/annotation/value")) {
 							handleRequest(exchange, CommandType.
                                     DELETE_ANNOTATION_VALUE_COMMAND);
 						}
@@ -287,7 +299,7 @@ public class Doorman {
 		/** authorization */
 		if(type != CommandType.LOGIN_COMMAND) {
 			List<String> auth = exchange.getRequestHeaders().
-                    get("Authorization");
+					get("Authorization");
 			if (auth != null && Authenticate.idExists(auth.get(0))) {
 				uuid = auth.get(0);
 				Authenticate.updateLatestRequest(uuid);
@@ -299,7 +311,7 @@ public class Doorman {
 					respond(exchange, errorResponse);
 				} catch (IOException e1) {
 					Debug.log("Could not send response to client. " + e1.
-                            getMessage());
+							getMessage());
 				}
 				scanner.close();
 				return;
@@ -319,7 +331,7 @@ public class Doorman {
 		Response response = null;
 		try {
 			String header = URLDecoder.decode(exchange.getRequestURI().
-                    toString(), "UTF-8");
+					toString(), "UTF-8");
 			response = commandHandler.processNewCommand(body, header, uuid,
                     type);
 		} catch(Exception e ) {

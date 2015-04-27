@@ -24,6 +24,10 @@ public class ChangeUserPasswordCommand extends Command {
     @Expose
     private String password = null;
 
+    @Override
+    public void setFields(String uri, String uuid) {
+
+    }
 
     /**
      * Used to validate the ChangeUserPasswordCommand.

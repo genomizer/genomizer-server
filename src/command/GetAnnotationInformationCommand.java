@@ -16,6 +16,11 @@ import response.*;
  */
 public class GetAnnotationInformationCommand extends Command {
 	@Override
+	public void setFields(String uri, String uuid) {
+
+	}
+
+	@Override
 	public void validate() {
 		/*Validation will always succeed, the command can not be corrupt.*/
 	}

@@ -13,7 +13,8 @@ import response.StatusCode;
 public class UpdateExperimentCommand extends Command {
 	//TODO Implement this class
 
-	public UpdateExperimentCommand(String json, String expID) {
+	@Override
+	public void setFields(String uri, String uuid) {
 
 	}
 

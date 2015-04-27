@@ -22,11 +22,14 @@ public class GetProcessStatusCommand extends Command {
 	 * Constructs a new instance of GetProcessStatusCommand using the supplied
 	 * WorkHandler.
 	 *
-	 * @param workPool thw workPool in use by the server.
+	 * @param workPool the workPool in use by the server.
 	 */
 	public GetProcessStatusCommand(WorkPool workPool) {
-
 		this.workPool = workPool;
+	}
+
+	@Override
+	public void setFields(String uri, String uuid) {
 
 	}
 

@@ -22,18 +22,14 @@ import database.containers.Genome;
 public class GetGenomeReleaseSpeciesCommand extends Command {
 	private String species;
 
-	/**
-	 * Constructs a new instance of GetGenomeReleaseSpeciesCommand using the
-	 * supplied restful string.
-	 * @param species the species of the genome.
-	 */
-	public GetGenomeReleaseSpeciesCommand(String species) {
-		this.species = species;
+	@Override
+	public void setFields(String uri, String uuid) {
+		species = uri.split("/")[1];
 	}
 
 	@Override
 	public void validate() throws ValidateException {
-		validateString(species, MaxLength.GENOME_SPECIES, "Genome specie");
+		validateString(species, MaxLength.GENOME_SPECIES, "Genome species");
 	}
 
 	/**

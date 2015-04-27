@@ -16,18 +16,9 @@ public class GetFileFromExperimentCommand extends Command {
 
 	private String fileID;
 
-	/**
-	 * Constructor. Takes the fileID as argument.
-	 * @param fileID the file id.
-	 */
-
-	/**
-	 * Constructs a new instance of GetFileExperimentCommand using the supplied
-	 * file ID.
-	 * @param fileID the file ID of the wanted file.
-	 */
-	public GetFileFromExperimentCommand(String fileID) {
-		this.fileID = fileID;
+	@Override
+	public void setFields(String uri, String uuid) {
+		fileID = uri.split("/")[1];
 	}
 
 	@Override

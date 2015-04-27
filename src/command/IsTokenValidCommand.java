@@ -14,6 +14,11 @@ import response.StatusCode;
 public class IsTokenValidCommand extends Command {
 	private String uuid;
 
+	@Override
+	public void setFields(String uri, String uuid) {
+
+	}
+
 	/**
 	 * Constructs a new instance of IsTokenValidCommand using the supplied
 	 * uuid.

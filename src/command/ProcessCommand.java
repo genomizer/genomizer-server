@@ -51,6 +51,11 @@ public class ProcessCommand extends Command {
 	private String genomeVersion;
 
 
+	@Override
+	public void setFields(String uri, String uuid) {
+
+	}
+
 	//Empty constructor
 	public ProcessCommand() {
 

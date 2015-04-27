@@ -35,6 +35,11 @@ public class AddAnnotationFieldCommand extends Command {
 	private Boolean forced = null;
 
 	@Override
+	public void setFields(String uri, String uuid) {
+
+	}
+
+	@Override
 	public void validate() throws ValidateException {
 		validateString(name, MaxLength.ANNOTATION_LABEL, "Annotation label");
 		if(defaults != null) {

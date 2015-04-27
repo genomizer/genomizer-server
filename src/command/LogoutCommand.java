@@ -16,13 +16,9 @@ import response.StatusCode;
 public class LogoutCommand extends Command {
 	private String username;
 
-	/**
-	 * Constructs a new instance of LogoutCommand using the supplied
-	 * username.
-	 * @param username the username of the user that should be logged out.
-	 */
-	public LogoutCommand(String username) {
-		this.username = username;
+	@Override
+	public void setFields(String uri, String uuid) {
+		username = Authenticate.getUsernameByID(uuid);
 	}
 
 	@Override
