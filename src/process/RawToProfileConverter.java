@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Stack;
 
+import server.ServerSettings;
+
 /**
  * Class used to create profile data from .fastq format.
  * Can run a dynamic number of steps depending of which parameters thats sent
@@ -534,9 +536,9 @@ public class RawToProfileConverter extends Executor {
 			throws ProcessException {
 		String bowTieParams = checkBowTieProcessors(parameters[0]);
 
-		String[] bowTieParameters = parse("bowtie " + bowTieParams + " "
-				+ parameters[1] + " " + inFolder + "/" + fileOne + " " + dir
-				+ fileOneName + ".sam");
+		String[] bowTieParameters = parse(ServerSettings.bowtieLocation +
+				" " + bowTieParams + " " + parameters[1] + " " +
+				inFolder + "/" + fileOne + " " + dir + fileOneName + ".sam");
 
 		try {
 			return executeProgram(bowTieParameters);
