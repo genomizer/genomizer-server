@@ -30,6 +30,8 @@ public class LoginCommand extends Command {
 	@Override
 	public void setFields(String uri, String uuid) {
 
+		/*No fields from the uri is needed, neither is the UUID. Dummy
+		implementation*/
 	}
 
 	@Override
@@ -46,7 +48,7 @@ public class LoginCommand extends Command {
 
 		try {
 			db = initDB();
-		} catch (SQLException | IOException e) {
+		} catch (Exception e) {
 			Debug.log("LOGIN WAS UNSUCCESSFUL FOR: " + username + ". REASON: " +
 					e.getMessage());
 			return new ErrorResponse(StatusCode.BAD_REQUEST,

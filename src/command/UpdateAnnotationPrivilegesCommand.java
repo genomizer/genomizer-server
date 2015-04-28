@@ -16,6 +16,8 @@ public class UpdateAnnotationPrivilegesCommand extends Command {
 	@Override
 	public void setFields(String uri, String uuid) {
 
+		/*No fields from the uri is needed, neither is the UUID. Dummy
+		implementation*/
 	}
 
 	/**

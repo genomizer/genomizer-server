@@ -12,12 +12,14 @@ import response.StatusCode;
 import server.Debug;
 import server.ErrorLogger;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Scanner;
 
-public class CommandHandler implements HttpHandler {
+public class RequestHandler implements HttpHandler {
 	private Gson gson;
 
-	public CommandHandler() {
+	public RequestHandler() {
 		GsonBuilder builder = new GsonBuilder();
 		builder.excludeFieldsWithoutExposeAnnotation();
 		gson = builder.create();
@@ -25,10 +27,11 @@ public class CommandHandler implements HttpHandler {
 
 	@Override
 	public void handle(HttpExchange exchange) {
-		String context = exchange.getHttpContext().toString();
+		logRequest(exchange);
+		String context = exchange.getHttpContext().getPath();
 		String requestMethod = exchange.getRequestMethod().toString();
-		Class<? extends Command> commandClass = CommandClasses.get(context +
-				" " + requestMethod);
+		Class<? extends Command> commandClass = CommandClasses.
+				get(requestMethod + " " + context);
 
 		/*Does the request match a command?*/
 		if (commandClass == null) {
@@ -48,16 +51,23 @@ public class CommandHandler implements HttpHandler {
 		}
 
 		/*Is the user authorized?*/
-		String uuid = getUUID(exchange);
-		if (uuid == null) {
-			Debug.log("Unauthorized request!");
-			Response response = new MinimalResponse(StatusCode.UNAUTHORIZED);
-			respond(response, exchange);
-			return;
+		String uuid = null;
+		if (!commandClass.equals(LoginCommand.class)) {
+			uuid = getUUID(exchange);
+			if (uuid == null) {
+				Debug.log("Unauthorized request!");
+				Response response = new MinimalResponse(StatusCode.
+						UNAUTHORIZED);
+				respond(response, exchange);
+				return;
+			}
 		}
+
+		logUser(uuid);
 
 		/*Read the json body and create the commmand.*/
 		String json = readBody(exchange);
+		logRequestBody(json);
 		Command command = gson.fromJson(json, commandClass);
 		command.setFields(uri, uuid);
 
@@ -82,6 +92,7 @@ public class CommandHandler implements HttpHandler {
 		while(scanner.hasNext()) {
 			body = body.concat(" " + scanner.next());
 		}
+
 		scanner.close();
 		return body;
 	}
@@ -91,16 +102,34 @@ public class CommandHandler implements HttpHandler {
 		return requestURI.split("/").length-1;
 	}
 
-	private void respond(Response response, HttpExchange httpExchange) {
-
+	private void respond(Response response, HttpExchange exchange) {
+		try {
+			if (response.getBody() == null || response.getBody().equals("")) {
+				exchange.sendResponseHeaders(response.getCode(), 0);
+			} else {
+				String body = response.getBody();
+				logResponseBody(body);
+				exchange.sendResponseHeaders(response.getCode(),
+						body.getBytes().length);
+				OutputStream os = exchange.getResponseBody();
+				os.write(body.getBytes());
+				os.flush();
+				os.close();
+			}
+		} catch (IOException e) {
+			Debug.log("IOError when sending response back to client. " +
+					e.getMessage());
+			ErrorLogger.log("SYSTEM", e);
+		}
+		Debug.log("END OF EXCHANGE\n------------------");
 	}
 
 	/*Returns the uuid of the connected user. Returns null if the user
 	* is not authorized.*/
 	private String getUUID(HttpExchange exchange) {
 		String uuid = exchange.getRequestHeaders().get("Authorization").get(0);
-		if (uuid != null && Authenticate.idExists(id)) {
-			Authenticate.updateLatestRequest(id);
+		if (uuid != null && Authenticate.idExists(uuid)) {
+			Authenticate.updateLatestRequest(uuid);
 			return uuid;
 		} else {
 			return null;
@@ -111,5 +140,28 @@ public class CommandHandler implements HttpHandler {
 	private ErrorResponse createBadRequestResponse() {
 		return new ErrorResponse(StatusCode.BAD_REQUEST, "Could not create a " +
 				"command from request. Bad format on request.");
+	}
+
+	/*Used to log a request.*/
+	private void logRequest(HttpExchange exchange) {
+		Debug.log("\n-----------------\nNEW EXCHANGE: " + exchange.
+				getRequestMethod().toString() + " " +
+				exchange.getRequestURI().toString());
+	}
+
+	private void logRequestBody(String body) {
+		Debug.log("Request body: ");
+		Debug.log(body);
+	}
+
+	private void logResponseBody(String body) {
+		Debug.log("Response body: ");
+		Debug.log(body);
+	}
+
+	/*Used to a log that a user was authenticated.*/
+	private void logUser(String uuid) {
+		String username = Authenticate.getUsernameByID(uuid);
+		Debug.log("Username: " + username + "\n");
 	}
 }

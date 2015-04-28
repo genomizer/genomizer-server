@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import command.CommandHandler;
+import command.RequestHandler;
 import server.WorkPool;
 
 /**
@@ -13,7 +13,7 @@ import server.WorkPool;
  * @author Kommunikation/kontroll 2014.
  * @version 1.0
  */
-public class CommandHandlerTest {
+public class RequestHandlerTest {
 
 	/**
 	 * Test method used to test creation of the class.
@@ -21,7 +21,7 @@ public class CommandHandlerTest {
 	@Test
 	public void testCreateClass() {
 
-		CommandHandler cmdh = new CommandHandler(new WorkPool());
+		RequestHandler cmdh = new RequestHandler(new WorkPool());
 		assertNotNull(cmdh);
 
 	}

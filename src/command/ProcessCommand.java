@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Map.Entry;
 
+import authentication.Authenticate;
 import process.ProcessException;
 import process.ProcessHandler;
 import response.ErrorResponse;
@@ -53,12 +54,9 @@ public class ProcessCommand extends Command {
 
 	@Override
 	public void setFields(String uri, String uuid) {
-
-	}
-
-	//Empty constructor
-	public ProcessCommand() {
-
+		username = Authenticate.getUsernameByID(uuid);
+		setTimestamp(System.currentTimeMillis());
+		processtype = uri.split("/")[1];
 	}
 
 	/**
