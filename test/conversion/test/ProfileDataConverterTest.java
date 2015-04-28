@@ -87,19 +87,8 @@ import static org.junit.Assert.assertFalse;
 		try{
 			outputFile = new File(outputPath+"sgr2wigtest.wig");
 
-			FileInputStream fis = new FileInputStream(outputFile);
 
-			MessageDigest md = MessageDigest.getInstance("SHA1");
-
-			byte[] dataBytes = new byte[1024];
-			int nread = 0;
-
-			while((nread = fis.read(dataBytes)) != -1) {
-				md.update(dataBytes, 0, nread);
-
-			}
-
-			byte[] mdbytes = md.digest();
+			fileChecksum(outputFile);
 
 
 
@@ -108,6 +97,28 @@ import static org.junit.Assert.assertFalse;
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		}
+	}
+
+	/*
+	* 	Private method that calculates a checksum for a file, used to compare
+	* 	files.
+	*
+	* 	returns the checksum in a byte array.
+	* */
+	private byte[] fileChecksum(File inputFile) throws NoSuchAlgorithmException, IOException {
+		MessageDigest md = MessageDigest.getInstance("SHA1");
+
+		FileInputStream fileStream = new FileInputStream(inputFile);
+
+		byte[] dataBytes = new byte[1024];
+		int nrOfLines;
+
+		while((nrOfLines = fileStream.read(dataBytes)) != -1) {
+            md.update(dataBytes, 0, nrOfLines);
+
+        }
+
+		return md.digest();
 	}
 
 	@Test
