@@ -29,23 +29,15 @@ public abstract class Executor {
 	 * @return
 	 * @throws InterruptedException
 	 * @throws IOException
+	 * @throws RuntimeException
 	 */
 	protected String executeProgram(String[] command)
-			throws InterruptedException, IOException {
+			throws InterruptedException, IOException, RuntimeException {
 
 		File pathToExecutable = new File(FILEPATH + command[0]);
 
-		/* TODO Should check if program has correct permissions et c. as well */
-		if(!pathToExecutable.exists()) {
-			throw new FileNotFoundException(
-					"Program "+command[1]+" does not exist");
-		}
-
-		/* Check execute exception */
-		if(!pathToExecutable.canExecute()) {
-			throw new AccessControlException(
-					"No permission to execute "+command[1]);
-		}
+		/* Checks if program can be executed, does not execute, throws excp. */
+		isExecutable(pathToExecutable);
 
 		command[0] = pathToExecutable.getAbsolutePath();
 		return executeCommand(command);
@@ -58,20 +50,39 @@ public abstract class Executor {
 	 * @return
 	 * @throws IOException
 	 * @throws InterruptedException
+	 * @throws RuntimeException
 	 */
 	protected String executeScript(String[] command)
-			throws InterruptedException, IOException {
+			throws InterruptedException, IOException, RuntimeException {
 
 		File pathToExecutable = new File(FILEPATH + command[1]);
 
-		/* TODO Should check if script has correct permissions et c. as well */
-		if(!pathToExecutable.exists()) {
-			throw new FileNotFoundException(String.format("Script [%s] does not exist", command[1]));
-		}
+		/* Checks if script can be executed, does not execute, throws excp.*/
+		isExecutable(pathToExecutable);
 
 		command[1] = pathToExecutable.getAbsolutePath();
 		return executeCommand(command);
 
+	}
+
+	/**
+	 * Checks if given executable exists and that execution rights are correct.
+	 * Does NOT execute the given program.
+	 * @param executable Executable file
+	 * @throws IOException If the file does not exists
+	 * @throws AccessControlException If execute permissions are not present
+	 */
+	private void isExecutable(File executable)
+			throws IOException, AccessControlException{
+		if(!executable.exists()) {
+			throw new FileNotFoundException(
+					String.format("Runnable [%s] does not exist", executable));
+		}
+
+		if(!executable.canExecute()) {
+			throw new AccessControlException(
+					"No permission to execute "+executable);
+		}
 	}
 
 	/**
