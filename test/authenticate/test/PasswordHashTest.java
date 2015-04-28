@@ -14,34 +14,30 @@ import static org.junit.Assert.*;
  */
 public class PasswordHashTest {
 
-    @Before
-    public void setup() {
-    }
-
     /**
      * @return If the hashing is the same for the same string.
      */
     @Test
-    public void toSaltedSHA256HashTestEquals() {
+    public void hashStringTestEquals() {
 
-        assertEquals(PasswordHash.toSaltedSHA256Hash("TEST"), (PasswordHash.toSaltedSHA256Hash("TEST")));
+        assertEquals(PasswordHash.hashString("TEST"), (PasswordHash.hashString("TEST")));
     }
 
     /**
      * @return If the hashing is different for different strings.
      */
     @Test
-    public void toSaltedSHA256HashTestNotEquals() {
+    public void hashStringTestNotEquals() {
 
-        assertNotEquals(PasswordHash.toSaltedSHA256Hash("TEST"), (PasswordHash.toSaltedSHA256Hash("TEST2")));
+        assertNotEquals(PasswordHash.hashString("TEST"), (PasswordHash.hashString("TEST2")));
     }
 
     /**
      * @return If the hashing returns null if a empty string is given.
      */
     @Test
-    public void toSaltedSHA256HashTestEmpty() {
+    public void hashStringTestEmpty() {
 
-        assertNull(PasswordHash.toSaltedSHA256Hash(""));
+        assertNull(PasswordHash.hashString(""));
     }
 }

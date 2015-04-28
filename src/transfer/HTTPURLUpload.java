@@ -32,7 +32,7 @@ public class HTTPURLUpload {
 
 	public void sendFile() {
 		// the URL where the file will be posted
-		String postReceiverUrl = ServerSettings.webUrlUpload;
+		String postReceiverUrl = "";//ServerSettings.webUrlUpload;
 
 		// new HttpClient
 		HttpClientBuilder hcBuilder = HttpClients.custom();
