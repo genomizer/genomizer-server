@@ -62,9 +62,9 @@ public class RawToProfileConverter extends Executor {
 	 *
 	 * @param parameters
 	 *            String array with execution parameters
-	 * @param inFile
+	 * @param inFolder
 	 *            The filepath to the file to create a wig from
-	 * @param outFile
+	 * @param outFilePath
 	 *            Filepath to where the .wig file should be placed.
 	 * @throws ProcessException
 	 */
