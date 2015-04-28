@@ -18,19 +18,123 @@ public class FileTuple {
     public static final int REGION = 3;
     public static final int OTHER = 4;
 
-    public final Integer id;
-    public final String path;
-    public final String inputFilePath;
-    public final String type;
-    public final String filename;
-    public final Date date;
-    public final String metaData;
-    public final String author;
-    public final String uploader;
-    public final Boolean isPrivate;
-    public final String expId;
-    public final String grVersion;
-    public final String status;
+    private Integer id;
+    private String path;
+    private String inputFilePath;
+    private String type;
+    private String filename;
+    private Date date;
+    private String metaData;
+    private String author;
+    private String uploader;
+    private Boolean isPrivate;
+    private String expId;
+    private String grVersion;
+    private String status;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public String getInputFilePath() {
+        return inputFilePath;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public String getMetaData() {
+        return metaData;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public String getUploader() {
+        return uploader;
+    }
+
+    public Boolean isPrivate() {
+        return isPrivate;
+    }
+
+    public String getExpId() {
+        return expId;
+    }
+
+    public String getGrVersion() {
+        return grVersion;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    void setId(Integer id) {
+        this.id = id;
+    }
+
+    void setPath(String path) {
+        this.path = path;
+    }
+
+    void setInputFilePath(String inputFilePath) {
+        this.inputFilePath = inputFilePath;
+    }
+
+    void setType(String type) {
+        this.type = type;
+    }
+
+    void setFilename(String filename) {
+        this.filename = filename;
+    }
+
+    void setDate(Date date) {
+        this.date = date;
+    }
+
+    void setMetaData(String metaData) {
+        this.metaData = metaData;
+    }
+
+    void setAuthor(String author) {
+        this.author = author;
+    }
+
+    void setUploader(String uploader) {
+        this.uploader = uploader;
+    }
+
+    void setIsPrivate(Boolean isPrivate) {
+        this.isPrivate = isPrivate;
+    }
+
+    void setExpId(String expId) {
+        this.expId = expId;
+    }
+
+    void setGrVersion(String grVersion) {
+        this.grVersion = grVersion;
+    }
+
+    void setStatus(String status) {
+        this.status = status;
+    }
 
     /**
      * Constructs a FileTuple object. Parameter: ResultSet
@@ -53,6 +157,10 @@ public class FileTuple {
         expId = resSet.getString("ExpID");
         grVersion = resSet.getString("GRVersion");
         status = resSet.getString("Status");
+    }
+
+    FileTuple(){
+
     }
 
     /**
