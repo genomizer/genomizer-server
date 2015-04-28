@@ -160,12 +160,41 @@ import static org.junit.Assert.assertFalse;
 	@Test
 	public void gff3ToWigtest() throws InterruptedException, IOException {
 		ConversionHandler ch = new ConversionHandler();
-		ch.executeProfileDataConversion("gff3ToWig", "conversionTestData/TP_SG_A_ZeroLvl_Release5_TRUNCATEDFORTEST.gff", "conversionTestData/output/gff2wigtest.wig", "Unknown");
+		ch.executeProfileDataConversion("gff3ToWig", "conversionTestData/TP_SG_A_ZeroLvl_Release5_TRUNCATEDFORTEST.gff", "conversionTestData/output/gff2wigtest.wig", null);
+		File outputFile;
+
+		try{
+			outputFile = new File(outputPath+"gff2wigtest.wig");
+			assertTrue(outputFile.exists());
+			outputFile.delete();
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void gff3ToWigCheckSumTest() throws InterruptedException ,IOException {
+		ConversionHandler ch = new ConversionHandler();
+		ch.executeProfileDataConversion("gff3ToWig", "conversionTestData/TP_SG_A_ZeroLvl_Release5_TRUNCATEDFORTEST.gff", "conversionTestData/output/gff2wigtest.wig", null);
+		File testFile;
+		File expectedFile;
+		try{
+			testFile = new File(outputPath+"gff2wigtest.wig");
+			expectedFile = new File(expectedResultPath+"gff2wigResult.wig");
+
+			assertTrue(compareFiles(testFile, expectedFile));
+
+			testFile.delete();
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
 	}
 	@Test
 	public void sgrToWigTestFileExists() throws InterruptedException, IOException {
 		ConversionHandler ch = new ConversionHandler();
-		ch.executeProfileDataConversion("sgrToWig", "conversionTestData/Sg4_TRX-CP_Ave.resRto_Rel5_TRUNCATEDFORTEST.sgr", "conversionTestData/output/sgr2wigtest.wig", "Unknown");
+		ch.executeProfileDataConversion("sgrToWig", "conversionTestData/Sg4_TRX-CP_Ave.resRto_Rel5_TRUNCATEDFORTEST.sgr", "conversionTestData/output/sgr2wigtest.wig", null);
 		File outputFile;
 
 		try{
@@ -180,7 +209,7 @@ import static org.junit.Assert.assertFalse;
 	@Test
 	public void sgrToWigCheckSumTest() throws InterruptedException ,IOException {
 		ConversionHandler ch = new ConversionHandler();
-		ch.executeProfileDataConversion("sgrToWig", "conversionTestData/GSM604730_CB_DmS2DRSC_Trx_b.dm3_rep2_TRUNCATEDFORTEST.sgr", "conversionTestData/output/sgr2wigtest.wig", "Unknown");
+		ch.executeProfileDataConversion("sgrToWig", "conversionTestData/GSM604730_CB_DmS2DRSC_Trx_b.dm3_rep2_TRUNCATEDFORTEST.sgr", "conversionTestData/output/sgr2wigtest.wig", null);
 		File testFile;
 		File expectedFile;
 		try{
@@ -201,17 +230,17 @@ import static org.junit.Assert.assertFalse;
 	@Test
 	public void bedToWigtest() throws InterruptedException, IOException {
 		ConversionHandler ch = new ConversionHandler();
-		ch.executeProfileDataConversion("bedToWig", "conversionTestData/Sg4_TRX-CP_Ave.resRto_Rel5_TRUNCATEDFORTEST.bed", "conversionTestData/output/bed2wigtest.wig", "Unknown");
+		ch.executeProfileDataConversion("bedToWig", "conversionTestData/Sg4_TRX-CP_Ave.resRto_Rel5_TRUNCATEDFORTEST.bed", "conversionTestData/output/bed2wigtest.wig", null);
 	}
 	@Test(expected=IllegalArgumentException.class)
 	public void nulltest1() throws InterruptedException, IOException {
 		ConversionHandler ch = new ConversionHandler();
-		ch.executeProfileDataConversion("sgrToBed", "conversionTestData/GSM604730_CB_DmS2DRSC_Trx_b.dm3_rep2_TRUNCATEDFORTEST.sgr",null, "Unknown");
+		ch.executeProfileDataConversion("sgrToBed", "conversionTestData/GSM604730_CB_DmS2DRSC_Trx_b.dm3_rep2_TRUNCATEDFORTEST.sgr",null, null);
 	}
 	@Test(expected=IllegalArgumentException.class)
 	public void nulltest2() throws InterruptedException, IOException {
 		ConversionHandler ch = new ConversionHandler();
-		ch.executeProfileDataConversion("sgrToBed", null,"conversionTestData/output/bed1.bed", "Unknown");
+		ch.executeProfileDataConversion("sgrToBed", null,"conversionTestData/output/bed1.bed", null);
 	}
 	@Test(expected=IllegalArgumentException.class)
 	public void nulltest3() throws InterruptedException, IOException {
