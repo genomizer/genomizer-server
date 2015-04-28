@@ -15,10 +15,7 @@ import conversion.ConversionHandler;
 
 import static org.junit.Assert.assertFalse;
 
-/* TODO None of these tests check the actual conversion but only tests if
- * it is possible to run scripts. Should be extended with tests of actual
-  * results but real data is needed as reference. */
-@Ignore
+
  public class ProfileDataConverterTest {
 
 	private final String outputPath = "resources/conversionTestData/output/";
@@ -231,7 +228,37 @@ import static org.junit.Assert.assertFalse;
 	public void bedToWigtest() throws InterruptedException, IOException {
 		ConversionHandler ch = new ConversionHandler();
 		ch.executeProfileDataConversion("bedToWig", "conversionTestData/Sg4_TRX-CP_Ave.resRto_Rel5_TRUNCATEDFORTEST.bed", "conversionTestData/output/bed2wigtest.wig", null);
+		File outputFile;
+
+		try{
+			outputFile = new File(outputPath+"bed2wigtest.wig");
+			assertTrue(outputFile.exists());
+			outputFile.delete();
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		}
 	}
+
+	@Test
+	public void bedToWigCheckSumTest() throws InterruptedException ,IOException {
+		ConversionHandler ch = new ConversionHandler();
+		ch.executeProfileDataConversion("bedToWig", "conversionTestData/Sg4_TRX-CP_Ave.resRto_Rel5_TRUNCATEDFORTEST.bed", "conversionTestData/output/bed2wigtest.wig", null);
+		File testFile;
+		File expectedFile;
+		try{
+			testFile = new File(outputPath+"bed2wigtest.wig");
+			expectedFile = new File(expectedResultPath+"bed2wigResult.wig");
+
+			assertTrue(compareFiles(testFile, expectedFile));
+
+			testFile.delete();
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+	}
+
 	@Test(expected=IllegalArgumentException.class)
 	public void nulltest1() throws InterruptedException, IOException {
 		ConversionHandler ch = new ConversionHandler();
