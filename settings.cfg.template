@@ -8,14 +8,6 @@ databaseName        = genomizer
 # Port number for the genomizer server to use.
 genomizerPort       = 7000
 
-# Address and port of the publicly visible WWW server
-# that is tunnelling requests to the genomizer server.
-# AFAICT used only to form the address of the upload/download scripts.
-# TODO: remove.
-
-publicAddress       = http://localhost
-apachePort          = 7000
-
 # Directory on the server where uploaded files are stored.
 
 fileLocation        = /path/to/resources/
@@ -27,3 +19,11 @@ nrOfProcessThreads  = 5
 # Paths to various programs that we use. Currently only 'bowtie'.
 
 bowtieLocation      = resources/bowtie/bowtie
+
+# Address and port of the publicly visible WWW server (if any)
+# that is tunnelling requests to the genomizer server.
+# AFAICT used only to form the address of the upload/download scripts.
+# TODO: remove.
+
+wwwTunnelHost       = http://localhost
+wwwTunnelPort       = 7000

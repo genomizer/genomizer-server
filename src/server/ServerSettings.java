@@ -11,8 +11,8 @@ public class ServerSettings {
 	public static String databasePassword = null;
 	public static String databaseHost = null;
 	public static String databaseName = null;
-	public static String publicAddress = null;
-	public static int apachePort = -1;
+	public static String wwwTunnelHost = null;
+	public static int wwwTunnelPort = -1;
 	public static String downloadURL = "/download?path=";
 	public static String uploadURL = "/upload?path=";
 	public static int genomizerPort = -1;
@@ -29,8 +29,8 @@ public class ServerSettings {
 					+ "databasePassword = " + databasePassword + "\n"
 					+ "databaseHost = " + databaseHost + "\n"
 					+ "databaseName = " + databaseName + "\n"
-					+ "publicAddress = " + publicAddress + "\n"
-					+ "apachePort = " + apachePort + "\n"
+					+ "wwwTunnelHost = " + wwwTunnelHost + "\n"
+					+ "wwwTunnelPort = " + wwwTunnelPort + "\n"
 					+ "genomizerPort = " + genomizerPort + "\n"
 					+ "fileLocation = " + fileLocation + "\n"
 					+ "nrOfProcessThreads = " + nrOfProcessThreads + "\n"
@@ -55,8 +55,8 @@ public class ServerSettings {
 		nullCheck(databasePassword, "databasePassword");
 		nullCheck(databaseHost, "databaseHost");
 		nullCheck(databaseName, "databaseName");
-		nullCheck(publicAddress, "publicAddress");
-		nullCheck(apachePort, "apachePort");
+		nullCheck(wwwTunnelHost, "wwwTunnelHost");
+		nullCheck(wwwTunnelPort, "wwwTunnelPort");
 		nullCheck(genomizerPort, "genomizerPort");
 		nullCheck(fileLocation, "fileLocation");
 		nullCheck(nrOfProcessThreads, "nrOfProcessThreads");
@@ -119,11 +119,11 @@ public class ServerSettings {
 				case "databasename":
 					databaseName = value;
 					break;
-				case "publicaddress":
-					publicAddress = value;
+				case "wwwtunnelhost":
+					wwwTunnelHost = value;
 					break;
-				case "apacheport":
-					apachePort = Integer.parseInt(value);
+				case "wwwtunnelport":
+					wwwTunnelPort = Integer.parseInt(value);
 					break;
 				case "genomizerport":
 					genomizerPort = Integer.parseInt(value);
@@ -145,18 +145,18 @@ public class ServerSettings {
 				}
 			}
 			scan.close();
-			ServerDependentValues.DownloadURL = publicAddress + ":" +
-					apachePort + downloadURL;
-			ServerDependentValues.UploadURL = publicAddress + ":" +
-					apachePort + uploadURL;
+			ServerDependentValues.DownloadURL = wwwTunnelHost + ":" +
+					wwwTunnelPort + downloadURL;
+			ServerDependentValues.UploadURL = wwwTunnelHost + ":" +
+					wwwTunnelPort + uploadURL;
 
 			String dataInfo =
 					"\tdatabaseUsername = " + databaseUsername + "\n"
 							+ "\tdatabasePassword = " + databasePassword + "\n"
 							+ "\tdatabaseHost = " + databaseHost + "\n"
 							+ "\tdatabaseName = " + databaseName + "\n"
-							+ "\tpublicAddress = " + publicAddress + "\n"
-							+ "\tapachePort = " + apachePort + "\n"
+							+ "\twwwTunnelHost = " + wwwTunnelHost + "\n"
+							+ "\twwwTunnelPort = " + wwwTunnelPort + "\n"
 							+ "\tgenomizerPort = " + genomizerPort + "\n"
 							+ "\tfileLocation = " + fileLocation + "\n"
 							+ "\tnrOfProcessThreads = " + nrOfProcessThreads + "\n"
