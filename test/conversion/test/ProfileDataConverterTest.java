@@ -23,6 +23,39 @@ import static org.junit.Assert.assertFalse;
 
 	private final String outputPath = "resources/conversionTestData/output/";
 	private final String expectedResultPath = "resources/conversionTestData/expectedResults/";
+
+
+
+	/*
+*	Private method that uses checksum to compare two files.
+*	returns true if equal false otherwise.
+ */
+	private boolean compareFiles(File fileA, File fileB) throws IOException, NoSuchAlgorithmException {
+		return (Arrays.equals(fileChecksum(fileA), fileChecksum(fileB)));
+	}
+
+	/*
+	* 	Private method that calculates a checksum for a file, used to compare
+	* 	files.
+	*
+	* 	returns the checksum in a byte array.
+	* */
+	private byte[] fileChecksum(File inputFile) throws NoSuchAlgorithmException, IOException {
+		MessageDigest md = MessageDigest.getInstance("SHA1");
+
+		FileInputStream fileStream = new FileInputStream(inputFile);
+
+		byte[] dataBytes = new byte[1024];
+		int nrOfLines;
+
+		while((nrOfLines = fileStream.read(dataBytes)) != -1) {
+			md.update(dataBytes, 0, nrOfLines);
+
+		}
+
+		return md.digest();
+	}
+
 /*
 	@Test
 	public void sgrToBedtest() throws InterruptedException, IOException {
@@ -100,35 +133,6 @@ import static org.junit.Assert.assertFalse;
 		}
 	}
 
-	/*
-	*	Private method that uses checksum to compare two files.
-	*	returns true if equal false otherwise.
-	 */
-	private boolean compareFiles(File fileA, File fileB) throws IOException, NoSuchAlgorithmException {
-		return (Arrays.equals(fileChecksum(fileA), fileChecksum(fileB)));
-	}
-
-	/*
-	* 	Private method that calculates a checksum for a file, used to compare
-	* 	files.
-	*
-	* 	returns the checksum in a byte array.
-	* */
-	private byte[] fileChecksum(File inputFile) throws NoSuchAlgorithmException, IOException {
-		MessageDigest md = MessageDigest.getInstance("SHA1");
-
-		FileInputStream fileStream = new FileInputStream(inputFile);
-
-		byte[] dataBytes = new byte[1024];
-		int nrOfLines;
-
-		while((nrOfLines = fileStream.read(dataBytes)) != -1) {
-            md.update(dataBytes, 0, nrOfLines);
-
-        }
-
-		return md.digest();
-	}
 
 	@Test
 	public void bedToWigtest() throws InterruptedException, IOException {
