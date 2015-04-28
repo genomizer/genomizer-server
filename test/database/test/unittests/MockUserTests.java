@@ -299,10 +299,10 @@ public class MockUserTests {
                 FileTuple.RAW, "rawFile.fastq", "rawInput.fasta",
                 null, "Umu", "Ruaridh", false, null);
 
-    	dbac.fileReadyForDownload(ft.id);
-        ft = dbac.getFileTuple(ft.id);
+    	dbac.fileReadyForDownload(ft.getId());
+        ft = dbac.getFileTuple(ft.getId());
 
-        assertEquals("Done", ft.status);
+        assertEquals("Done", ft.getStatus());
     }
 
 
@@ -453,19 +453,19 @@ public class MockUserTests {
 
         FileTuple ft = getFileTuple("Prof1.sam", fts);
         assertNotNull(ft);
-        assertEquals("Done", ft.status);
+        assertEquals("Done", ft.getStatus());
         System.out.println(ft.toString());
 
         ft = getFileTuple("Prof2.sam", fts);
         assertNotNull(ft);
-        assertEquals("Done", ft.status);
+        assertEquals("Done", ft.getStatus());
         System.out.println(ft.toString());
     }
 
     private FileTuple getFileTuple(String string, List<FileTuple> fts) {
 
     	for (FileTuple ft : fts) {
-            if (ft.filename.equalsIgnoreCase(string)) {
+            if (ft.getFilename().equalsIgnoreCase(string)) {
                 return ft;
             }
         }

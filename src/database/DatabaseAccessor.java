@@ -939,7 +939,7 @@ public class DatabaseAccessor {
         }
         String filePath = folderPath + "processing...";
         FileTuple pft = getFileFromPath(filePath);
-        return fileMethods.deleteFile(pft.id);
+        return fileMethods.deleteFile(pft.getId());
     }
 
     /**
@@ -1058,7 +1058,7 @@ public class DatabaseAccessor {
 
     private FileTuple getRawFileTuple(List<FileTuple> fileTuples) {
         for (FileTuple ft : fileTuples) {
-            if (ft.type.equalsIgnoreCase("raw")) {
+            if (ft.getType().equalsIgnoreCase("raw")) {
                 return ft;
             }
         }

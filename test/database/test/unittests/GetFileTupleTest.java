@@ -37,11 +37,11 @@ public class GetFileTupleTest {
     		ParseException {
 
     	List<Experiment> elist = dbac.search("exp2[expid] AND UCSC[author]");
-    	int id = elist.get(0).getFiles().get(0).id;
+    	int id = elist.get(0).getFiles().get(0).getId();
     	FileTuple tuple = dbac.getFileTuple(id);
 
-    	assertEquals(elist.get(0).getFiles().get(0).id, tuple.id);
-    	assertEquals(elist.get(0).getFiles().get(0).author, tuple.author);
+    	assertEquals(elist.get(0).getFiles().get(0).getId(), tuple.getId());
+    	assertEquals(elist.get(0).getFiles().get(0).getAuthor(), tuple.getAuthor());
     }
 
     @Test
@@ -49,10 +49,10 @@ public class GetFileTupleTest {
     		ParseException {
 
     	List<Experiment> elist = dbac.search("exp3[expid] AND genomizer[author]");
-    	String path = elist.get(0).getFiles().get(0).path;
+    	String path = elist.get(0).getFiles().get(0).getPath();
     	FileTuple tuple = dbac.getFileTuple(path);
 
-    	assertEquals(elist.get(0).getFiles().get(0).id, tuple.id);
-    	assertEquals(elist.get(0).getFiles().get(0).author, tuple.author);
+    	assertEquals(elist.get(0).getFiles().get(0).getId(), tuple.getId());
+    	assertEquals(elist.get(0).getFiles().get(0).getAuthor(), tuple.getAuthor());
     }
 }

@@ -72,7 +72,7 @@ public class Experiment {
     public int getNrRawFiles() {
         int res = 0;
         for (FileTuple ft: files) {
-            if (ft.type.equalsIgnoreCase("raw")) {
+            if (ft.getType().equalsIgnoreCase("raw")) {
                 res ++;
             }
         }
@@ -107,13 +107,13 @@ public class Experiment {
 
         for (FileTuple ft: files) {
             sb.append("\n    ");
-            sb.append(ft.path);
+            sb.append(ft.getPath());
             sb.append(", ");
-            sb.append(ft.type);
+            sb.append(ft.getType());
             sb.append(", ");
-            sb.append(ft.uploader);
+            sb.append(ft.getUploader());
             sb.append(", ");
-            sb.append(ft.author);
+            sb.append(ft.getAuthor());
         }
 
         return sb.toString();

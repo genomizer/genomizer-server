@@ -68,13 +68,13 @@ public class AddNewFileTests {
 
         FileTuple ft = dbac.getFileTuple(expectedFilePath);
 
-        assertEquals(expectedFilePath, ft.path);
+        assertEquals(expectedFilePath, ft.getPath());
 
         Experiment e = dbac.getExperiment(testExpId);
         ft = e.getFiles().get(0);
-        assertEquals(expectedFilePath, ft.path);
+        assertEquals(expectedFilePath, ft.getPath());
 
-        dbac.deleteFile(ft.id);
+        dbac.deleteFile(ft.getId());
         assertNull(dbac.getFileTuple(expectedFilePath));
         e = dbac.getExperiment(testExpId);
         assertEquals(0, e.getFiles().size());
@@ -83,11 +83,11 @@ public class AddNewFileTests {
                 testInputFileName, testMetaData, testAuthor, testUploader,
                 testIsPrivate, null);
         ft = dbac.getFileTuple(expectedFilePath);
-        assertEquals(expectedFilePath, ft.path);
+        assertEquals(expectedFilePath, ft.getPath());
 
         e = dbac.getExperiment(testExpId);
         ft = e.getFiles().get(0);
-        assertEquals(expectedFilePath, ft.path);
+        assertEquals(expectedFilePath, ft.getPath());
     }
 
     @Test
@@ -100,14 +100,14 @@ public class AddNewFileTests {
 
         FileTuple ft = dbac.getFileTuple(expectedFilePath);
 
-        assertEquals(expectedFilePath, ft.path);
-        assertEquals(testExpId, ft.expId);
-        assertEquals("Raw", ft.type);
-        assertEquals(testFileName, ft.filename);
-        assertEquals(expectedInputFilePath, ft.inputFilePath);
-        assertEquals(testMetaData, ft.metaData);
-        assertEquals(testAuthor, ft.author);
-        assertEquals(testUploader, ft.uploader);
+        assertEquals(expectedFilePath, ft.getPath());
+        assertEquals(testExpId, ft.getExpId());
+        assertEquals("Raw", ft.getType());
+        assertEquals(testFileName, ft.getFilename());
+        assertEquals(expectedInputFilePath, ft.getInputFilePath());
+        assertEquals(testMetaData, ft.getMetaData());
+        assertEquals(testAuthor, ft.getAuthor());
+        assertEquals(testUploader, ft.getUploader());
     }
 
 }

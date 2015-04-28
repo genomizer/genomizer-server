@@ -98,12 +98,12 @@ public class SearchDatabaseTests {
     public void shouldBeAbleToSearchUsingPubMedString5() throws Exception {
 
         List<Experiment> experiments = dbac
-                .search("Human[SpeCies] AnD Umeå uni[author]");
+                .search("Human[SpeCies] AnD Umeï¿½ uni[author]");
 
         assertEquals(1, experiments.size());
         assertEquals(1, experiments.get(0).getFiles().size());
         assertEquals("/var/www/data/Exp1/raw/file1.fastq", experiments.get(0)
-                .getFiles().get(0).path);
+                .getFiles().get(0).getPath());
     }
 
     @Test
@@ -175,13 +175,13 @@ public class SearchDatabaseTests {
     public void shouldBeAbleToSearchForExperimentUsingDate() throws Exception {
 
         List<Experiment> elist = dbac.search("exp2[expid]");
-        Date date = elist.get(0).getFiles().get(0).date;
+        Date date = elist.get(0).getFiles().get(0).getDate();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
         String query = df.format(date) + "[date]";
         List<Experiment> experiments = dbac.search(query);
 
-        assertEquals(experiments.get(0).getFiles().get(0).date.getTime(),
+        assertEquals(experiments.get(0).getFiles().get(0).getDate().getTime(),
                 date.getTime());
     }
 
@@ -190,13 +190,13 @@ public class SearchDatabaseTests {
 
         List<Experiment> elist = dbac.search("exp2[expid] ANd UCSC[author]");
 
-        int id = elist.get(0).getFiles().get(0).id;
+        int id = elist.get(0).getFiles().get(0).getId();
 
         String query = Integer.toString(id) + "[fileid]";
         List<Experiment> experiments = dbac.search(query);
 
-        assertEquals(experiments.get(0).getFiles().get(0).author, "UCSC");
-        assertEquals(elist.get(0).getFiles().get(0).expId, "Exp2");
+        assertEquals(experiments.get(0).getFiles().get(0).getAuthor(), "UCSC");
+        assertEquals(elist.get(0).getFiles().get(0).getExpId(), "Exp2");
     }
 
     @Test

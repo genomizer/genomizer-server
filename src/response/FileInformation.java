@@ -32,17 +32,17 @@ public class FileInformation {
      */
     public FileInformation(FileTuple src) {
 
-    	id = src.id;
-    	path = src.path;
+    	id = src.getId();
+    	path = src.getPath();
     	url = src.getDownloadURL();
-    	type = src.type;
-    	filename = src.filename;
-    	date = src.date;
-    	metaData = src.metaData;
-    	author = src.author;
-    	uploader = src.uploader;
+    	type = src.getType();
+    	filename = src.getFilename();
+    	date = src.getDate();
+    	metaData = src.getMetaData();
+    	author = src.getAuthor();
+    	uploader = src.getUploader();
 //    	isPrivate = src.isPrivate;
-    	expId = src.expId;
-    	grVersion = src.grVersion;
+    	expId = src.getExpId();
+    	grVersion = src.getGrVersion();
     }
 }

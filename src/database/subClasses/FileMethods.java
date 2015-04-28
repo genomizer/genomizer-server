@@ -159,15 +159,15 @@ public class FileMethods {
 
         for (FileTuple ft : e.getFiles()) {
 
-            if (ft.type.equalsIgnoreCase("profile")) {
+            if (ft.getType().equalsIgnoreCase("profile")) {
 
-                if (metaData == null && ft.metaData == null) {
+                if (metaData == null && ft.getMetaData() == null) {
                     return ft;
                 }
 
-                if (ft.metaData != null) {
-                    if (ft.type.equalsIgnoreCase("profile")
-                            && ft.metaData.equals(metaData)) {
+                if (ft.getMetaData() != null) {
+                    if (ft.getType().equalsIgnoreCase("profile")
+                            && ft.getMetaData().equals(metaData)) {
                         return ft;
                     }
                 }
@@ -264,7 +264,7 @@ public class FileMethods {
 		}
 
 		File parentFolder = new File(ft.getParentFolder());
-		if (ft.type.equalsIgnoreCase("profile") && isEmptyFolder(parentFolder)) {
+		if (ft.getType().equalsIgnoreCase("profile") && isEmptyFolder(parentFolder)) {
 			parentFolder.delete();
 		}
 
@@ -297,14 +297,14 @@ public class FileMethods {
 			throw new IOException("Could not find file with ID " + fileID);
 		}
 
-		File fileToDelete = new File(ft.path);
+		File fileToDelete = new File(ft.getPath());
 
 		if (fileToDelete.exists()) {
 			fileToDelete.delete();
 		}
 
 		File parentFolder = new File(ft.getParentFolder());
-		if (ft.type.equalsIgnoreCase("profile") && isEmptyFolder(parentFolder)) {
+		if (ft.getType().equalsIgnoreCase("profile") && isEmptyFolder(parentFolder)) {
 			parentFolder.delete();
 		}
 

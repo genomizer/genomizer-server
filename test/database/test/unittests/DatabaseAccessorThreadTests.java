@@ -84,9 +84,9 @@ public class DatabaseAccessorThreadTests {
 		List<Experiment> resExp = dbac.search("Claes[Uploader]");
 
 		assertEquals(1,resExp.size());
-		assertEquals(fileName,resExp.get(0).getFiles().get(0).filename);
+		assertEquals(fileName,resExp.get(0).getFiles().get(0).getFilename());
 
-		dbac.deleteFile(resExp.get(0).getFiles().get(0).id);
+		dbac.deleteFile(resExp.get(0).getFiles().get(0).getId());
 		dbac.deleteExperiment("Exper1");
 		dbac.removeGenomeRelease("banan");
 		dbac.close();
@@ -137,13 +137,13 @@ public class DatabaseAccessorThreadTests {
     	//hard coded thread nr
     	for (int i = 9; i < (nrOfThreads * nrOfFiles) + 9; i++){
     		assertEquals(1,resExp.size());
-    		assertEquals(experimentId,resExp.get(0).getFiles().get(i-9).expId);
-    		assertEquals("Claes",resExp.get(0).getFiles().get(i-9).uploader);
+    		assertEquals(experimentId,resExp.get(0).getFiles().get(i-9).getExpId());
+    		assertEquals("Claes",resExp.get(0).getFiles().get(i-9).getUploader());
     	}
 
     	//hard coded thread nr
     	for (int i = 9; i< (nrOfThreads * nrOfFiles) +9; i++){
-    		dbac.deleteFile(resExp.get(0).getFiles().get(i-9).id);
+    		dbac.deleteFile(resExp.get(0).getFiles().get(i-9).getId());
     	}
 
     	dbac.deleteExperiment(experimentId);
