@@ -8,7 +8,7 @@ import com.google.gson.annotations.Expose;
 public class AddFileToExperimentResponse extends Response {
 
 	@Expose
-	private String URLUpload;
+	String URLupload;
 
 	/**
 	 * Constructor for the response
@@ -18,7 +18,7 @@ public class AddFileToExperimentResponse extends Response {
 	public AddFileToExperimentResponse(int code, String UrlUpload) {
 
 		this.code = code;
-		this.URLUpload = UrlUpload;
+		this.URLupload = UrlUpload;
 	}
 
 }
