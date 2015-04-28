@@ -16,8 +16,6 @@ public class ServerSettings {
 	public static String downloadURL = "/download?path=";
 	public static String uploadURL = "/upload?path=";
 	public static int genomizerPort = -1;
-	public static String passwordHash = null;
-	public static String passwordSalt = null;
 	public static String fileLocation = "/var/www/data/";
 	public static String bowtieLocation = "bowtie";
 	public static int nrOfProcessThreads = 5;
@@ -34,8 +32,6 @@ public class ServerSettings {
 					+ "publicAddress = " + publicAddress + "\n"
 					+ "apachePort = " + apachePort + "\n"
 					+ "genomizerPort = " + genomizerPort + "\n"
-					+ "passwordHash = " + passwordHash + "\n"
-					+ "passwordSalt = " + passwordSalt + "\n"
 					+ "fileLocation = " + fileLocation + "\n"
 					+ "nrOfProcessThreads = " + nrOfProcessThreads + "\n"
 					+ "bowtieLocation = " + bowtieLocation + "\n";
@@ -62,8 +58,6 @@ public class ServerSettings {
 		nullCheck(publicAddress, "publicAddress");
 		nullCheck(apachePort, "apachePort");
 		nullCheck(genomizerPort, "genomizerPort");
-		nullCheck(passwordHash, "passwordHash");
-		nullCheck(passwordSalt, "passwordSalt");
 		nullCheck(fileLocation, "fileLocation");
 		nullCheck(nrOfProcessThreads, "nrOfProcessThreads");
 		nullCheck(bowtieLocation, "bowtieLocation");
@@ -134,12 +128,6 @@ public class ServerSettings {
 				case "genomizerport":
 					genomizerPort = Integer.parseInt(value);
 					break;
-				case "passwordhash":
-					passwordHash = value;
-					break;
-				case "passwordsalt":
-					passwordSalt = value;
-					break;
 				case "filelocation":
 					fileLocation = value;
 					break;
@@ -170,8 +158,6 @@ public class ServerSettings {
 							+ "\tpublicAddress = " + publicAddress + "\n"
 							+ "\tapachePort = " + apachePort + "\n"
 							+ "\tgenomizerPort = " + genomizerPort + "\n"
-							+ "\tpasswordHash = " + passwordHash + "\n"
-							+ "\tpasswordSalt = " + passwordSalt + "\n"
 							+ "\tfileLocation = " + fileLocation + "\n"
 							+ "\tnrOfProcessThreads = " + nrOfProcessThreads + "\n"
 							+ "\tbowtieLocation = " + bowtieLocation

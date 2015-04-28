@@ -27,9 +27,3 @@ nrOfProcessThreads  = 5
 # Paths to various programs that we use. Currently only 'bowtie'.
 
 bowtieLocation      = resources/bowtie/bowtie
-
-# Other stuff that is probably OK to remove. Passwords are now stored
-# in the database.
-
-passwordSalt        = genomizer
-passwordHash        = 2fd26e9aea528153a865257a723f6d4859e9f6c4a6775c003ae91297f619c6e8

@@ -18,33 +18,6 @@ public class PasswordHash
 {
     private static SecureRandom random = new SecureRandom();
 
-    /**
-     * Method takes a string password, hashes it and returns the hash
-     *
-     * @param password string to hash
-     * @return finished hashed string
-     */
-    public static String toSaltedSHA256Hash(String password) {
-
-        /**
-         * If password string is empty return null.
-         */
-            if (password.isEmpty()) {
-
-                return null;
-            }
-
-    	String salt = getSalt();
-
-        // Use this salt for user specific passwords
-        // String newSalt = getNewSalt();
-
-        String hash = hashString(password + salt);
-
-        return hash;
-    }
-
-
 
     /**
      * Hash a given string and return the result
@@ -54,6 +27,8 @@ public class PasswordHash
      * @return string hash result of the hashing
      */
     public static String hashString(String salted_password) {
+        if (salted_password.equals(""))
+            return null;
         try {
 
             /** Create MessageDigest instance for SHA-256 */
@@ -83,7 +58,6 @@ public class PasswordHash
 
 
 
-
     /**
      * Method generates a random salt to use on passwords
      *
@@ -96,14 +70,5 @@ public class PasswordHash
         return salt;
     }
 
-
-    /**
-     * Takes public ServerSettings passwordSalt to salt the password string
-     *
-     * @return string passWordSalt from public ServerSettings object
-     */
-	private static String getSalt() {
-		return ServerSettings.passwordSalt;
-	}
 
 }
