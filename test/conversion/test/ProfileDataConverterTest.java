@@ -67,6 +67,38 @@ import static org.junit.Assert.assertFalse;
 	public void bedToSgrtest() throws InterruptedException, IOException {
 		ConversionHandler ch = new ConversionHandler();
 		ch.executeProfileDataConversion("bedToSgr", "conversionTestData/Sg4_TRX-CP_Ave.resRto_Rel5_TRUNCATEDFORTEST.bed","conversionTestData/output/sgr1.sgr", null);
+
+		File outputFile;
+
+		try{
+			outputFile = new File(outputPath+"sgr1.sgr");
+			assertTrue(outputFile.exists());
+			outputFile.delete();
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		}
+	}
+
+
+	@Test
+	public void bedToSgrCheckSumTest() throws InterruptedException ,IOException {
+
+		ConversionHandler ch = new ConversionHandler();
+		ch.executeProfileDataConversion("bedToSgr", "conversionTestData/Sg4_TRX-CP_Ave.resRto_Rel5_TRUNCATEDFORTEST.bed","conversionTestData/output/sgr1.sgr", null);
+		File testFile;
+		File expectedFile;
+		try{
+			testFile = new File(outputPath+"sgr1.sgr");
+			expectedFile = new File(expectedResultPath+"bed2sgrResult.sgr");
+
+			assertTrue(compareFiles(testFile, expectedFile));
+
+			testFile.delete();
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Test
