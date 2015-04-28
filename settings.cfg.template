@@ -16,12 +16,6 @@ genomizerPort       = 7000
 publicAddress       = http://localhost
 apachePort          = 7000
 
-# Relative URLs for the upload/download scripts.
-# TODO: remove.
-
-downloadURL         = /download?path=
-uploadURL           = /upload?path=
-
 # Directory on the server where uploaded files are stored.
 
 fileLocation        = /path/to/resources/
@@ -35,8 +29,7 @@ nrOfProcessThreads  = 5
 bowtieLocation      = resources/bowtie/bowtie
 
 # Other stuff that is probably OK to remove. Passwords are now stored
-# in the database and webUrlUpload looks also related to upload/download.
+# in the database.
 
 passwordSalt        = genomizer
 passwordHash        = 2fd26e9aea528153a865257a723f6d4859e9f6c4a6775c003ae91297f619c6e8
-webUrlUpload        = http://localhost/upload

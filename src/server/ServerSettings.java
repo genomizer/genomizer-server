@@ -13,12 +13,11 @@ public class ServerSettings {
 	public static String databaseName = null;
 	public static String publicAddress = null;
 	public static int apachePort = -1;
-	public static String downloadURL = null;
-	public static String uploadURL = null;
+	public static String downloadURL = "/download?path=";
+	public static String uploadURL = "/upload?path=";
 	public static int genomizerPort = -1;
 	public static String passwordHash = null;
 	public static String passwordSalt = null;
-	public static String webUrlUpload = null;
 	public static String fileLocation = "/var/www/data/";
 	public static String bowtieLocation = "bowtie";
 	public static int nrOfProcessThreads = 5;
@@ -34,13 +33,10 @@ public class ServerSettings {
 					+ "databaseName = " + databaseName + "\n"
 					+ "publicAddress = " + publicAddress + "\n"
 					+ "apachePort = " + apachePort + "\n"
-					+ "downloadURL = " + downloadURL + "\n"
-					+ "uploadURL = " + uploadURL + "\n"
 					+ "genomizerPort = " + genomizerPort + "\n"
 					+ "passwordHash = " + passwordHash + "\n"
 					+ "passwordSalt = " + passwordSalt + "\n"
 					+ "fileLocation = " + fileLocation + "\n"
-					+ "webUrlUpload = " + webUrlUpload + "\n"
 					+ "nrOfProcessThreads = " + nrOfProcessThreads + "\n"
 					+ "bowtieLocation = " + bowtieLocation + "\n";
 
@@ -65,12 +61,9 @@ public class ServerSettings {
 		nullCheck(databaseName, "databaseName");
 		nullCheck(publicAddress, "publicAddress");
 		nullCheck(apachePort, "apachePort");
-		nullCheck(downloadURL, "downloadURL");
-		nullCheck(uploadURL, "uploadURL");
 		nullCheck(genomizerPort, "genomizerPort");
 		nullCheck(passwordHash, "passwordHash");
 		nullCheck(passwordSalt, "passwordSalt");
-		nullCheck(webUrlUpload, "webUrlUpload");
 		nullCheck(fileLocation, "fileLocation");
 		nullCheck(nrOfProcessThreads, "nrOfProcessThreads");
 		nullCheck(bowtieLocation, "bowtieLocation");
@@ -138,12 +131,6 @@ public class ServerSettings {
 				case "apacheport":
 					apachePort = Integer.parseInt(value);
 					break;
-				case "downloadurl":
-					downloadURL = value;
-					break;
-				case "uploadurl":
-					uploadURL = value;
-					break;
 				case "genomizerport":
 					genomizerPort = Integer.parseInt(value);
 					break;
@@ -152,9 +139,6 @@ public class ServerSettings {
 					break;
 				case "passwordsalt":
 					passwordSalt = value;
-					break;
-				case "weburlupload":
-					webUrlUpload = value;
 					break;
 				case "filelocation":
 					fileLocation = value;
@@ -185,13 +169,10 @@ public class ServerSettings {
 							+ "\tdatabaseName = " + databaseName + "\n"
 							+ "\tpublicAddress = " + publicAddress + "\n"
 							+ "\tapachePort = " + apachePort + "\n"
-							+ "\tdownloadURL = " + downloadURL + "\n"
-							+ "\tuploadURL = " + uploadURL + "\n"
 							+ "\tgenomizerPort = " + genomizerPort + "\n"
 							+ "\tpasswordHash = " + passwordHash + "\n"
 							+ "\tpasswordSalt = " + passwordSalt + "\n"
 							+ "\tfileLocation = " + fileLocation + "\n"
-							+ "\twebUrlUpload = " + webUrlUpload + "\n"
 							+ "\tnrOfProcessThreads = " + nrOfProcessThreads + "\n"
 							+ "\tbowtieLocation = " + bowtieLocation
 							+ "\n";
