@@ -1,15 +1,42 @@
+# Database settings.
+
 databaseUser        = postgres
 databasePassword    = pvt
 databaseHost        = localhost:6000
 databaseName        = genomizer
+
+# Port number for the genomizer server to use.
+genomizerPort       = 7000
+
+# Address and port of the publicly visible WWW server
+# that is tunnelling requests to the genomizer server.
+# AFAICT used only to form the address of the upload/download scripts.
+# TODO: remove.
+
 publicAddress       = http://localhost
 apachePort          = 7000
+
+# Relative URLs for the upload/download scripts.
+# TODO: remove.
+
 downloadURL         = /download?path=
 uploadURL           = /upload?path=
-genomizerPort       = 7000
+
+# Directory on the server where uploaded files are stored.
+
+fileLocation        = /path/to/resources/
+
+# Max. number of threads in the processing work pool.
+
+nrOfProcessThreads  = 5
+
+# Paths to various programs that we use. Currently only 'bowtie'.
+
+bowtieLocation      = resources/bowtie/bowtie
+
+# Other stuff that is probably OK to remove. Passwords are now stored
+# in the database and webUrlUpload looks also related to upload/download.
+
 passwordSalt        = genomizer
 passwordHash        = 2fd26e9aea528153a865257a723f6d4859e9f6c4a6775c003ae91297f619c6e8
 webUrlUpload        = http://localhost/upload
-fileLocation        = /path/to/resources/
-nrOfProcessThreads  = 3
-bowtieLocation      = resources/bowtie/bowtie
