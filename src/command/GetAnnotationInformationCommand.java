@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import database.DatabaseAccessor;
+import database.subClasses.UserMethods.UserType;
 import response.*;
 
 /**
@@ -15,9 +16,18 @@ import response.*;
  * @version 1.1
  */
 public class GetAnnotationInformationCommand extends Command {
+
+
+	public GetAnnotationInformationCommand(UserType userType){
+		this.userType = userType;
+	}
+
+
 	@Override
-	public void validate() {
-		/*Validation will always succeed, the command can not be corrupt.*/
+	public void validate() throws ValidateException {
+		/*Validation of the information will always succeed,
+		the command can not be corrupt.*/
+		hasRights(UserType.GUEST);
 	}
 
 	@Override

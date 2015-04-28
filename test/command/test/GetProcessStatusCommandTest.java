@@ -2,6 +2,9 @@ package command.test;
 
 import java.util.*;
 
+import command.GetProcessStatusCommand;
+import command.ValidateException;
+import database.subClasses.UserMethods.UserType;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -18,6 +21,8 @@ import server.WorkHandler;
 import server.WorkPool;
 import server.test.dummies.ProcessCommandMock;
 
+import static org.junit.Assert.fail;
+
 /**
  * Class used to test the process status command class
  * and that it works properly.
@@ -25,7 +30,7 @@ import server.test.dummies.ProcessCommandMock;
  * @author Kommunikation/kontroll 2014.
  * @version 1.0
  */
-@Ignore
+
 public class GetProcessStatusCommandTest {
 
 	private static WorkHandler workHandler;
@@ -44,7 +49,7 @@ public class GetProcessStatusCommandTest {
 		comInfo.addProperty("metadata", metadata);
 		comInfo.addProperty("genomeVersion", genomeVersion);
 		comInfo.addProperty("author", author);
-		//System.out.println(comInfo.toString());
+
 		return new GsonBuilder().create().fromJson(comInfo.toString(), ProcessCommandMock.class);
 	}
 
@@ -102,6 +107,33 @@ public class GetProcessStatusCommandTest {
 
 
 //		workHandler.interrupt();
+	}
+
+	/**
+	 * Test used to check that ValidateException is not thrown
+	 * when the user have the required rights.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test
+	public void testHavingRights() throws ValidateException {
+
+		GetProcessStatusCommand com = new GetProcessStatusCommand(workPool, UserType.USER);
+		com.validate();
+	}
+
+	/**
+	 * Test used to check that ValidateException is thrown
+	 * when the user doesn't have the required rights.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testNotHavingRights() throws ValidateException {
+
+		GetProcessStatusCommand com = new GetProcessStatusCommand(workPool, UserType.GUEST);
+		com.validate();
+		fail();
 	}
 
     private static String toPrettyFormat(String jsonString)

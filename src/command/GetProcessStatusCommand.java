@@ -2,6 +2,7 @@ package command;
 
 import java.util.LinkedList;
 
+import database.subClasses.UserMethods.UserType;
 import response.GetProcessStatusResponse;
 import response.Response;
 import server.WorkPool;
@@ -24,19 +25,20 @@ public class GetProcessStatusCommand extends Command {
 	 *
 	 * @param workPool thw workPool in use by the server.
 	 */
-	public GetProcessStatusCommand(WorkPool workPool) {
+	public GetProcessStatusCommand(WorkPool workPool, UserType userType) {
 
 		this.workPool = workPool;
-
+		this.userType = userType;
 	}
 
 	/**
 	 * Method that validates the class information.
-	 * This method always returns true.
 	 */
 	@Override
-	public void validate() {
-		/*Validation will always succeed, the command can not be corrupt.*/
+	public void validate() throws ValidateException {
+		/*Validation will always succeed for the content,
+		the command can not be corrupt.*/
+		hasRights(UserType.USER);
 	}
 
 	@Override

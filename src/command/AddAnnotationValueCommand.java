@@ -7,6 +7,7 @@ import java.util.List;
 import com.google.gson.annotations.Expose;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
+import database.subClasses.UserMethods;
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
@@ -30,6 +31,7 @@ public class AddAnnotationValueCommand extends Command {
 	public void validate() throws ValidateException {
 		validateString(name, MaxLength.ANNOTATION_LABEL, "Annotation label");
 		validateString(value, MaxLength.ANNOTATION_VALUE, "Annotation value");
+		hasRights(UserMethods.UserType.USER);
 	}
 
 	@Override
@@ -61,4 +63,7 @@ public class AddAnnotationValueCommand extends Command {
 		return new MinimalResponse(StatusCode.CREATED);
 	}
 
+	public void setRights(UserMethods.UserType rights) {
+		this.userType = rights;
+	}
 }

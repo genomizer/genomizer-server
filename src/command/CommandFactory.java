@@ -178,8 +178,8 @@ public class CommandFactory {
 	 * Used to create the command needed to get annotation information.
 	 * @return the actual command.
 	 */
-	public Command createGetAnnotationInformationCommand() {
-		return new GetAnnotationInformationCommand();
+	public Command createGetAnnotationInformationCommand(UserType userType) {
+		return new GetAnnotationInformationCommand(userType);
 	}
 
 	/**
@@ -187,8 +187,10 @@ public class CommandFactory {
 	 * @param json string to initiate class.
 	 * @return the actual command.
 	 */
-	public Command createAddAnnotationFieldCommand(String json) {
-		return gson.fromJson(json, AddAnnotationFieldCommand.class);
+	public Command createAddAnnotationFieldCommand(String json, UserType userType) {
+		AddAnnotationFieldCommand exp = gson.fromJson(json, AddAnnotationFieldCommand.class);
+		exp.setRights(userType);
+		return exp;
 	}
 
 	/**
@@ -196,8 +198,10 @@ public class CommandFactory {
 	 * @param json string to initiate class.
 	 * @return the actual command.
 	 */
-	public Command createAddAnnotationValueCommand(String json) {
-		return gson.fromJson(json, AddAnnotationValueCommand.class);
+	public Command createAddAnnotationValueCommand(String json, UserType userType) {
+		AddAnnotationValueCommand exp = gson.fromJson(json, AddAnnotationValueCommand.class);
+		exp.setRights(userType);
+		return exp;
 	}
 
 	/**
@@ -205,16 +209,16 @@ public class CommandFactory {
 	 * @param fieldName the name of the field.
 	 * @return the actual command.
 	 */
-	public Command createRemoveAnnotationFieldCommand(String fieldName) {
-		return new DeleteAnnotationFieldCommand(fieldName);
+	public Command createRemoveAnnotationFieldCommand(String fieldName, UserType userType) {
+		return new DeleteAnnotationFieldCommand(fieldName, userType);
 	}
 
 	/**
 	 * Used to create the command needed to get annotation privileges.
 	 * @return the actual command.
 	 */
-	public Command createGetAnnotationPrivilegesCommand(String userName) {
-		return new GetAnnotationPrivilegesCommand(userName);
+	public Command createGetAnnotationPrivilegesCommand(String userName, UserType userType) {
+		return new GetAnnotationPrivilegesCommand(userName, userType);
 	}
 
 	/**
@@ -278,8 +282,11 @@ public class CommandFactory {
 	 * @param json string to initiate class.
 	 * @return the actual command.
 	 */
-	public Command createEditAnnotationFieldCommand(String json) {
-		return gson.fromJson(json, EditAnnotationFieldCommand.class);
+	public Command createEditAnnotationFieldCommand(String json, UserType userType) {
+
+		EditAnnotationFieldCommand exp = gson.fromJson(json, EditAnnotationFieldCommand.class);
+		exp.setRights(userType);
+		return exp;
 	}
 
 	/**
@@ -305,8 +312,8 @@ public class CommandFactory {
 	 * @param workPool class object needed.
 	 * @return the actual command.
 	 */
-	public Command createGetProcessStatusCommand(WorkPool workPool) {
-		return new GetProcessStatusCommand(workPool);
+	public Command createGetProcessStatusCommand(WorkPool workPool, UserType userType) {
+		return new GetProcessStatusCommand(workPool, userType);
 	}
 
 	/**

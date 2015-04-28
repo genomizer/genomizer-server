@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
+import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
@@ -23,13 +24,15 @@ public class DeleteAnnotationFieldCommand extends Command {
 	 * Constructs a new instance of DeleteAnnotationFieldCommand.
 	 * @param restful header to set.
 	 */
-	public DeleteAnnotationFieldCommand(String restful) {
+	public DeleteAnnotationFieldCommand(String restful, UserType userType) {
 		this.setHeader(restful);
+		this.userType = userType;
 	}
 
 	@Override
 	public void validate() throws ValidateException {
 		validateString(header, MaxLength.ANNOTATION_LABEL, "Annotation label");
+		hasRights(UserType.USER);
 	}
 
 	@Override

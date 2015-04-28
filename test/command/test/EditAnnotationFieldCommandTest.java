@@ -3,6 +3,7 @@ package command.test;
 import static org.junit.Assert.*;
 
 import database.constants.MaxLength;
+import database.subClasses.UserMethods.UserType;
 import org.junit.Before;
 import org.junit.Test;
 import com.google.gson.Gson;
@@ -40,8 +41,7 @@ public class EditAnnotationFieldCommandTest {
 	@Test
 	public void testCreationNotNull() {
 
-		EditAnnotationFieldCommand c = new EditAnnotationFieldCommand();
-		c = gson.fromJson(jsonBuilder("One","Two"), EditAnnotationFieldCommand.class);
+		EditAnnotationFieldCommand c = gson.fromJson(jsonBuilder("One","Two"), EditAnnotationFieldCommand.class);
 
 		assertNotNull(c);
 
@@ -56,8 +56,8 @@ public class EditAnnotationFieldCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateOldNameNotNull() throws ValidateException {
 
-		EditAnnotationFieldCommand c = new EditAnnotationFieldCommand();
-		c = gson.fromJson(jsonBuilder(null,"Two"), EditAnnotationFieldCommand.class);
+		EditAnnotationFieldCommand c = gson.fromJson(jsonBuilder(null,"Two"), EditAnnotationFieldCommand.class);
+		c.setRights(UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -73,8 +73,8 @@ public class EditAnnotationFieldCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateOldNameEmptyString() throws ValidateException {
 
-		EditAnnotationFieldCommand c = new EditAnnotationFieldCommand();
-		c = gson.fromJson(jsonBuilder("","Two"), EditAnnotationFieldCommand.class);
+		EditAnnotationFieldCommand c = gson.fromJson(jsonBuilder("","Two"), EditAnnotationFieldCommand.class);
+		c.setRights(UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -90,8 +90,8 @@ public class EditAnnotationFieldCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateOldNameInvalidCharacters() throws ValidateException {
 
-		EditAnnotationFieldCommand c = new EditAnnotationFieldCommand();
-		c = gson.fromJson(jsonBuilder("O/*ne","Two"), EditAnnotationFieldCommand.class);
+		EditAnnotationFieldCommand c = gson.fromJson(jsonBuilder("O/*ne","Two"), EditAnnotationFieldCommand.class);
+		c.setRights(UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -111,8 +111,8 @@ public class EditAnnotationFieldCommandTest {
 		for(int i = 0; i < MaxLength.ANNOTATION_LABEL + 1; i++) {
 			big = big + "a";
 		}
-		EditAnnotationFieldCommand c = new EditAnnotationFieldCommand();
-		c = gson.fromJson(jsonBuilder(big,"Two"), EditAnnotationFieldCommand.class);
+		EditAnnotationFieldCommand c = gson.fromJson(jsonBuilder(big,"Two"), EditAnnotationFieldCommand.class);
+		c.setRights(UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -128,8 +128,8 @@ public class EditAnnotationFieldCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateNewNameNotNull() throws ValidateException {
 
-		EditAnnotationFieldCommand c = new EditAnnotationFieldCommand();
-		c = gson.fromJson(jsonBuilder("One",null), EditAnnotationFieldCommand.class);
+		EditAnnotationFieldCommand c = gson.fromJson(jsonBuilder("One",null), EditAnnotationFieldCommand.class);
+		c.setRights(UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -145,8 +145,8 @@ public class EditAnnotationFieldCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateNewNameEmptyString() throws ValidateException {
 
-		EditAnnotationFieldCommand c = new EditAnnotationFieldCommand();
-		c = gson.fromJson(jsonBuilder("One",""), EditAnnotationFieldCommand.class);
+		EditAnnotationFieldCommand c = gson.fromJson(jsonBuilder("One",""), EditAnnotationFieldCommand.class);
+		c.setRights(UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -162,8 +162,8 @@ public class EditAnnotationFieldCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateNewNameInvalidCharacters() throws ValidateException {
 
-		EditAnnotationFieldCommand c = new EditAnnotationFieldCommand();
-		c = gson.fromJson(jsonBuilder("One","Tw/*o"), EditAnnotationFieldCommand.class);
+		EditAnnotationFieldCommand c = gson.fromJson(jsonBuilder("One","Tw/*o"), EditAnnotationFieldCommand.class);
+		c.setRights(UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -183,8 +183,8 @@ public class EditAnnotationFieldCommandTest {
 		for(int i = 0; i < MaxLength.ANNOTATION_LABEL + 1; i++) {
 			big = big + "a";
 		}
-		EditAnnotationFieldCommand c = new EditAnnotationFieldCommand();
-		c = gson.fromJson(jsonBuilder("One",big), EditAnnotationFieldCommand.class);
+		EditAnnotationFieldCommand c = gson.fromJson(jsonBuilder("One",big), EditAnnotationFieldCommand.class);
+		c.setRights(UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -200,8 +200,8 @@ public class EditAnnotationFieldCommandTest {
 	@Test
 	public void testValidateProperlyFormatted() throws ValidateException {
 
-		EditAnnotationFieldCommand c = new EditAnnotationFieldCommand();
-		c = gson.fromJson(jsonBuilder("Species","Mouse"), EditAnnotationFieldCommand.class);
+		EditAnnotationFieldCommand c = gson.fromJson(jsonBuilder("Species","Mouse"), EditAnnotationFieldCommand.class);
+		c.setRights(UserType.ADMIN);
 		c.validate();
 
 		assertTrue(true);
@@ -216,8 +216,7 @@ public class EditAnnotationFieldCommandTest {
 	public void testConvertJSON() {
 
 		String json = jsonBuilder("Species","Mouse");
-		EditAnnotationFieldCommand c = new EditAnnotationFieldCommand();
-		c = gson.fromJson(jsonBuilder("Species","Mouse"), EditAnnotationFieldCommand.class);
+		EditAnnotationFieldCommand c = gson.fromJson(jsonBuilder("Species","Mouse"), EditAnnotationFieldCommand.class);
 		String compare = gson.toJson(c);
 
 		assertEquals(json, compare);
@@ -225,9 +224,43 @@ public class EditAnnotationFieldCommandTest {
 	}
 
 	/**
+	 * Test used to check that ValidateException is not thrown
+	 * when the user have the required rights.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test
+	public void testHavingRights() throws ValidateException {
+
+		String json = jsonBuilder("Species","Mouse");
+		EditAnnotationFieldCommand c = gson.fromJson(json, EditAnnotationFieldCommand.class);
+		c.setRights(UserType.USER);
+
+		c.validate();
+	}
+
+	/**
+	 * Test used to check that ValidateException is thrown
+	 * when the user doesn't have the required rights.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testNotHavingRights() throws ValidateException {
+
+		String json = jsonBuilder("Species","Mouse");
+		EditAnnotationFieldCommand c = gson.fromJson(json, EditAnnotationFieldCommand.class);
+		c.setRights(UserType.GUEST);
+
+		c.validate();
+		fail();
+	}
+
+	/**
 	 * Method used to build a JSON and return it as a string.
 	 *
-	 * @param Strings to insert into JSON body.
+	 * @param oldName to insert into JSON body.
+	 * @param newName to insert into JSON body.
 	 * @return JSON formatted string.
 	 */
 	private String jsonBuilder(String oldName, String newName) {

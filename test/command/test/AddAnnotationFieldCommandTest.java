@@ -1,6 +1,8 @@
 package command.test;
 
 import static org.junit.Assert.*;
+
+import database.subClasses.UserMethods.UserType;
 import org.junit.Before;
 import org.junit.Test;
 import com.google.gson.Gson;
@@ -54,9 +56,9 @@ public class AddAnnotationFieldCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateNameNull() throws ValidateException {
 
-		AddAnnotationFieldCommand c = new AddAnnotationFieldCommand();
 		String json = "{\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
-		c = gson.fromJson(json, AddAnnotationFieldCommand.class);
+		AddAnnotationFieldCommand c = gson.fromJson(json, AddAnnotationFieldCommand.class);
+		c.setRights(UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -72,9 +74,9 @@ public class AddAnnotationFieldCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateNameEmptyString() throws ValidateException {
 
-		AddAnnotationFieldCommand c = new AddAnnotationFieldCommand();
 		String json = "{\"name\":\"\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
-		c = gson.fromJson(json, AddAnnotationFieldCommand.class);
+		AddAnnotationFieldCommand c = gson.fromJson(json, AddAnnotationFieldCommand.class);
+		c.setRights(UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -96,8 +98,8 @@ public class AddAnnotationFieldCommandTest {
 		}
 	    String json = "{\"name\":\"" + big +
 	    		"\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
-		AddAnnotationFieldCommand c = new AddAnnotationFieldCommand();
-		c = gson.fromJson(json, AddAnnotationFieldCommand.class);
+		AddAnnotationFieldCommand c = gson.fromJson(json, AddAnnotationFieldCommand.class);
+		c.setRights(UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -115,8 +117,8 @@ public class AddAnnotationFieldCommandTest {
 		String invalid = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ���";
 		String json = "{\"name\":\"" + invalid +
 				"\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
-		AddAnnotationFieldCommand c = new AddAnnotationFieldCommand();
-		c = gson.fromJson(json, AddAnnotationFieldCommand.class);
+		AddAnnotationFieldCommand c = gson.fromJson(json, AddAnnotationFieldCommand.class);
+		c.setRights(UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -133,8 +135,8 @@ public class AddAnnotationFieldCommandTest {
 	public void testValidateTypeIsEmpty() throws ValidateException {
 
 		String json = "{\"name\":\"species\",\"type\":[],\"default\":\"human\",\"forced\":false}";
-		AddAnnotationFieldCommand c = new AddAnnotationFieldCommand();
-		c = gson.fromJson(json, AddAnnotationFieldCommand.class);
+		AddAnnotationFieldCommand c = gson.fromJson(json, AddAnnotationFieldCommand.class);
+		c.setRights(UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -153,8 +155,8 @@ public class AddAnnotationFieldCommandTest {
 		String invalidType = "ra/t";
 		String json = "{\"name\":\"species\",\"type\":[\"fly\",\"" + invalidType +
 				"\",\"human\"],\"default\":\"human\",\"forced\":false}";
-		AddAnnotationFieldCommand c = new AddAnnotationFieldCommand();
-		c = gson.fromJson(json, AddAnnotationFieldCommand.class);
+		AddAnnotationFieldCommand c = gson.fromJson(json, AddAnnotationFieldCommand.class);
+		c.setRights(UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -171,8 +173,8 @@ public class AddAnnotationFieldCommandTest {
 	public void testValidateForcedNotPassed() throws ValidateException {
 
 		String json = "{\"name\":\"species\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\"}";
-		AddAnnotationFieldCommand c = new AddAnnotationFieldCommand();
-		c = gson.fromJson(json, AddAnnotationFieldCommand.class);
+		AddAnnotationFieldCommand c = gson.fromJson(json, AddAnnotationFieldCommand.class);
+		c.setRights(UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -189,8 +191,8 @@ public class AddAnnotationFieldCommandTest {
 	public void testValidateDefaultNotPassedWorking() throws ValidateException {
 
 		String json = "{\"name\":\"species\",\"type\":[\"fly\",\"rat\",\"human\"],\"forced\":true}";
-		AddAnnotationFieldCommand c = new AddAnnotationFieldCommand();
-		c = gson.fromJson(json, AddAnnotationFieldCommand.class);
+		AddAnnotationFieldCommand c = gson.fromJson(json, AddAnnotationFieldCommand.class);
+		c.setRights(UserType.ADMIN);
 		c.validate();
 
 		assertTrue(true);
@@ -207,8 +209,8 @@ public class AddAnnotationFieldCommandTest {
 	public void testValidateDefaultEmptyString() throws ValidateException {
 
 	    String json = "{\"name\":\"species\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"\",\"forced\":true}";
-		AddAnnotationFieldCommand c = new AddAnnotationFieldCommand();
-		c = gson.fromJson(json, AddAnnotationFieldCommand.class);
+		AddAnnotationFieldCommand c = gson.fromJson(json, AddAnnotationFieldCommand.class);
+		c.setRights(UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -225,8 +227,8 @@ public class AddAnnotationFieldCommandTest {
 	public void testValidateDefaultInvalidCharacters() throws ValidateException {
 
 		String json = "{\"name\":\"species\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human!!\",\"forced\":false}";
-		AddAnnotationFieldCommand c = new AddAnnotationFieldCommand();
-		c = gson.fromJson(json, AddAnnotationFieldCommand.class);
+		AddAnnotationFieldCommand c = gson.fromJson(json, AddAnnotationFieldCommand.class);
+		c.setRights(UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -248,8 +250,8 @@ public class AddAnnotationFieldCommandTest {
 		}
 		String json = "{\"name\":\"species\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"" + big +
 				"\",\"forced\":false}";
-		AddAnnotationFieldCommand c = new AddAnnotationFieldCommand();
-		c = gson.fromJson(json, AddAnnotationFieldCommand.class);
+		AddAnnotationFieldCommand c = gson.fromJson(json, AddAnnotationFieldCommand.class);
+		c.setRights(UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -297,11 +299,45 @@ public class AddAnnotationFieldCommandTest {
 	public void testValidationProperJSON() throws ValidateException {
 
 	    String json = "{\"name\":\"species\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
-	    final Command c = gson.fromJson(json, AddAnnotationFieldCommand.class);
-	    c.validate();
+	    AddAnnotationFieldCommand c = gson.fromJson(json, AddAnnotationFieldCommand.class);
+		c.setRights(UserType.ADMIN);
+		c.validate();
 
 	    assertTrue(true);
 
+	}
+
+	/**
+	 * Test used to check that ValidateException is not thrown
+	 * when the user have the required rights.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test
+	public void testHavingRights() throws ValidateException {
+
+		String json = "{\"name\":\"species\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
+		AddAnnotationFieldCommand c = gson.fromJson(json, AddAnnotationFieldCommand.class);
+		c.setRights(UserType.USER);
+
+		c.validate();
+	}
+
+	/**
+	 * Test used to check that ValidateException is thrown
+	 * when the user doesn't have the required rights.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testNotHavingRights() throws ValidateException {
+
+		String json = "{\"name\":\"species\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
+		AddAnnotationFieldCommand c = gson.fromJson(json, AddAnnotationFieldCommand.class);
+		c.setRights(UserType.GUEST);
+
+		c.validate();
+		fail();
 	}
 
 }

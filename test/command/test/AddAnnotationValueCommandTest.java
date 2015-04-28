@@ -1,6 +1,8 @@
 package command.test;
 
 import static org.junit.Assert.*;
+
+import database.subClasses.UserMethods.UserType;
 import org.junit.Before;
 import org.junit.Test;
 import com.google.gson.Gson;
@@ -53,8 +55,8 @@ public class AddAnnotationValueCommandTest {
 	public void testValidateNameNotNull() throws ValidateException {
 
 		String json = "{\"value\":\"mouse\"}";
-		AddAnnotationValueCommand c = new AddAnnotationValueCommand();
-		c = gson.fromJson(json, AddAnnotationValueCommand.class);
+		AddAnnotationValueCommand c = gson.fromJson(json, AddAnnotationValueCommand.class);
+		c.setRights(UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -76,8 +78,8 @@ public class AddAnnotationValueCommandTest {
 		}
 		String json = "{\"name\":\"" + big +
 				"\",\"value\":\"mouse\"}";
-		AddAnnotationValueCommand c = new AddAnnotationValueCommand();
-		c = gson.fromJson(json, AddAnnotationValueCommand.class);
+		AddAnnotationValueCommand c = gson.fromJson(json, AddAnnotationValueCommand.class);
+		c.setRights(UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -94,8 +96,8 @@ public class AddAnnotationValueCommandTest {
 	public void testValidateNameInvalidCharacters() throws ValidateException {
 
 		String json = "{\"name\":\"spec/ies\",\"value\":\"mouse\"}";
-		AddAnnotationValueCommand c = new AddAnnotationValueCommand();
-		c = gson.fromJson(json, AddAnnotationValueCommand.class);
+		AddAnnotationValueCommand c = gson.fromJson(json, AddAnnotationValueCommand.class);
+		c.setRights(UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -112,8 +114,8 @@ public class AddAnnotationValueCommandTest {
 	public void testValidateValueNotNull() throws ValidateException {
 
 		String json = "{\"name\":\"species\"}";
-		AddAnnotationValueCommand c = new AddAnnotationValueCommand();
-		c = gson.fromJson(json, AddAnnotationValueCommand.class);
+		AddAnnotationValueCommand c = gson.fromJson(json, AddAnnotationValueCommand.class);
+		c.setRights(UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -135,8 +137,8 @@ public class AddAnnotationValueCommandTest {
 		}
 		String json = "{\"name\":\"species\",\"value\":\"" + big +
 				"\"}";
-		AddAnnotationValueCommand c = new AddAnnotationValueCommand();
-		c = gson.fromJson(json, AddAnnotationValueCommand.class);
+		AddAnnotationValueCommand c = gson.fromJson(json, AddAnnotationValueCommand.class);
+		c.setRights(UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -153,8 +155,8 @@ public class AddAnnotationValueCommandTest {
 	public void testValidateValueInvalidCharacters() throws ValidateException {
 
 		String json = "{\"name\":\"species\",\"value\":\"m*/ouse!\"}";
-		AddAnnotationValueCommand c = new AddAnnotationValueCommand();
-		c = gson.fromJson(json, AddAnnotationValueCommand.class);
+		AddAnnotationValueCommand c = gson.fromJson(json, AddAnnotationValueCommand.class);
+		c.setRights(UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -171,12 +173,45 @@ public class AddAnnotationValueCommandTest {
 	public void testValidateProperlyFormatted() throws ValidateException {
 
 		String json = "{\"name\":\"species\",\"value\":\"mouse\"}";
-		AddAnnotationValueCommand c = new AddAnnotationValueCommand();
-		c = gson.fromJson(json, AddAnnotationValueCommand.class);
+		AddAnnotationValueCommand c = gson.fromJson(json, AddAnnotationValueCommand.class);
+		c.setRights(UserType.ADMIN);
 		c.validate();
 
 		assertTrue(true);
 
+	}
+
+	/**
+	 * Test used to check that ValidateException is not thrown
+	 * when the user have the required rights.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test
+	public void testHavingRights() throws ValidateException {
+
+		String json = "{\"name\":\"species\",\"value\":\"mouse\"}";
+		AddAnnotationValueCommand c = gson.fromJson(json, AddAnnotationValueCommand.class);
+		c.setRights(UserType.USER);
+
+		c.validate();
+	}
+
+	/**
+	 * Test used to check that ValidateException is thrown
+	 * when the user doesn't have the required rights.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testNotHavingRights() throws ValidateException {
+
+		String json = "{\"name\":\"species\",\"value\":\"mouse\"}";
+		AddAnnotationValueCommand c = gson.fromJson(json, AddAnnotationValueCommand.class);
+		c.setRights(UserType.GUEST);
+
+		c.validate();
+		fail();
 	}
 
 }

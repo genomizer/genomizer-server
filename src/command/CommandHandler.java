@@ -131,21 +131,28 @@ public class CommandHandler {
 				return cmdFactory.createProcessCommand(json, username,
 						parsedURI, userType);
 			case GET_PROCESS_STATUS_COMMAND:
-				return cmdFactory.createGetProcessStatusCommand(workPool);
+				return cmdFactory.createGetProcessStatusCommand(workPool,
+						userType);
 			case GET_ANNOTATION_INFORMATION_COMMAND:
-				return cmdFactory.createGetAnnotationInformationCommand();
+				return cmdFactory.createGetAnnotationInformationCommand(
+						userType);
 			case ADD_ANNOTATION_FIELD_COMMAND:
-				return cmdFactory.createAddAnnotationFieldCommand(json);
+				return cmdFactory.createAddAnnotationFieldCommand(json,
+						userType);
 			case ADD_ANNOTATION_VALUE_COMMAND:
-				return cmdFactory.createAddAnnotationValueCommand(json);
-			case RENAME_ANNOTATION_VALUE_COMMAND:
-				return cmdFactory.createEditAnnotationFieldCommand(json);
+			return cmdFactory.createAddAnnotationValueCommand(json,
+						userType);
 			case RENAME_ANNOTATION_FIELD_COMMAND:
-				return cmdFactory.createEditAnnotationFieldCommand(json);
+				return cmdFactory.createEditAnnotationFieldCommand(json,
+						userType);
+//			case RENAME_ANNOTATION_VALUE_COMMAND:
+//				return cmdFactory.createEditAnnotationFieldCommand(json);
 			case REMOVE_ANNOTATION_FIELD_COMMAND:
-				return cmdFactory.createRemoveAnnotationFieldCommand(parsedURI);
+				return cmdFactory.createRemoveAnnotationFieldCommand(parsedURI,
+						userType);
 			case GET_ANNOTATION_PRIVILEGES_COMMAND:
-				return cmdFactory.createGetAnnotationPrivilegesCommand(json);
+				return cmdFactory.createGetAnnotationPrivilegesCommand(json,
+						userType);
 			case UPDATE_ANNOTATION_PRIVILEGES_COMMAND:
 				return cmdFactory.createUpdateAnnotationPrivilegesCommand(json,
 						parsedURI);

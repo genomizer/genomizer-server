@@ -3,6 +3,8 @@ package command;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import database.subClasses.UserMethods.UserType;
 import response.AddAnnotationFieldResponse;
 import response.ErrorResponse;
 import response.Response;
@@ -59,6 +61,7 @@ public class AddAnnotationFieldCommand extends Command {
 						+ validCharacters);
 			}
 		}
+		hasRights(UserType.USER);
 	}
 
 	@Override
@@ -107,5 +110,9 @@ public class AddAnnotationFieldCommand extends Command {
 				db.close();
 			}
 		}
+	}
+
+	public void setRights(UserType rights) {
+		this.userType = rights;
 	}
 }

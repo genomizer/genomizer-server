@@ -1,5 +1,6 @@
 package command;
 
+import database.subClasses.UserMethods.UserType;
 import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
@@ -13,13 +14,13 @@ import response.StatusCode;
 public class GetAnnotationPrivilegesCommand extends Command {
 	//TODO Implement this class
 
-	public GetAnnotationPrivilegesCommand(String userName) {
-
+	public GetAnnotationPrivilegesCommand(String userName, UserType userType) {
+		this.userType = userType;
 	}
 
 	@Override
-	public void validate() {
-
+	public void validate() throws ValidateException {
+		hasRights(UserType.GUEST);
 	}
 
 	@Override

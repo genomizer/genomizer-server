@@ -3,6 +3,7 @@ package response.test;
 import static org.junit.Assert.*;
 import java.util.ArrayList;
 
+import database.subClasses.UserMethods;
 import database.test.TestInitializer;
 import org.junit.Before;
 import org.junit.Test;
@@ -49,7 +50,7 @@ public class GetAnnotationInformationResponseTest {
 
 	@Test
 	public void testDatabaseConnection() {
-		GetAnnotationInformationCommand cmd = new GetAnnotationInformationCommand();
+		GetAnnotationInformationCommand cmd = new GetAnnotationInformationCommand(UserMethods.UserType.ADMIN);
 		Response rsp = cmd.execute();
 		rsp.getBody();
 	}

@@ -193,7 +193,7 @@ public class CommandFactoryTest {
 	@Test
 	public void testGetAnnotationInformationCommandNotNull() {
 
-		assertNotNull(cmdf.createGetAnnotationInformationCommand());
+		assertNotNull(cmdf.createGetAnnotationInformationCommand(UserType.ADMIN));
 
 	}
 
@@ -205,7 +205,7 @@ public class CommandFactoryTest {
 
 		String json = "{\"name\":\"species\",\"type\":[\"fly\",\"rat\",\"human\"],"
 				+ "\"default\":\"human\",\"forced\":false}";
-		assertNotNull(cmdf.createAddAnnotationFieldCommand(json));
+		assertNotNull(cmdf.createAddAnnotationFieldCommand(json, UserType.ADMIN));
 
 	}
 
@@ -216,7 +216,7 @@ public class CommandFactoryTest {
 	public void testAddAnnotationValueCommandNotNull() {
 
 		String json = "{\"name\":\"species\",\"value\":\"mouse\"}";
-		assertNotNull(cmdf.createAddAnnotationValueCommand(json));
+		assertNotNull(cmdf.createAddAnnotationValueCommand(json, UserType.ADMIN));
 
 	}
 
@@ -226,7 +226,7 @@ public class CommandFactoryTest {
 	@Test
 	public void testRemoveAnnotationFieldCommandNotNull() {
 
-		assertNotNull(cmdf.createRemoveAnnotationFieldCommand("/annotation/field/myFieldName"));
+		assertNotNull(cmdf.createRemoveAnnotationFieldCommand("/annotation/field/myFieldName", UserType.ADMIN));
 
 	}
 
@@ -237,7 +237,7 @@ public class CommandFactoryTest {
 	public void testGetAnnotationPrivilegesCommandNotNull() {
 
 		String json = "{\"name\":\"a\",\"oldValue\":\"b\",\"newValue\":\"c\"}";
-		assertNotNull(cmdf.createGetAnnotationPrivilegesCommand(json));
+		assertNotNull(cmdf.createGetAnnotationPrivilegesCommand(json, UserType.ADMIN));
 
 	}
 	//TODO: Should probably be removed.
@@ -291,7 +291,7 @@ public class CommandFactoryTest {
 	public void testEditAnnotationFieldCommandNotNull() {
 
 		String json = "{\"oldName\":\"a\",\"newName\":\"b\"}";
-		assertNotNull(cmdf.createEditAnnotationFieldCommand(json));
+		assertNotNull(cmdf.createEditAnnotationFieldCommand(json, UserType.ADMIN));
 
 	}
 
@@ -321,7 +321,7 @@ public class CommandFactoryTest {
 	@Test
 	public void testGetProcessStatusCommandNotNull() {
 
-		assertNotNull(cmdf.createGetProcessStatusCommand(null));
+		assertNotNull(cmdf.createGetProcessStatusCommand(null, UserType.ADMIN));
 
 	}
 

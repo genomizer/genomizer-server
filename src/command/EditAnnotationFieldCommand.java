@@ -9,6 +9,7 @@ import com.google.gson.annotations.Expose;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
 
+import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
@@ -35,6 +36,7 @@ public class EditAnnotationFieldCommand extends Command {
 				"Old annotation label");
 		validateString(newName, MaxLength.ANNOTATION_LABEL,
 				"New annotation label");
+		hasRights(UserType.USER);
 	}
 
 	/**
@@ -82,5 +84,9 @@ public class EditAnnotationFieldCommand extends Command {
 			}
 		}
 		return new MinimalResponse(StatusCode.OK);
+	}
+
+	public void setRights(UserType rights) {
+		this.userType = rights;
 	}
 }
