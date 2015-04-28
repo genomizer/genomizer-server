@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -20,7 +21,8 @@ import static org.junit.Assert.assertFalse;
 @Ignore
  public class ProfileDataConverterTest {
 
-	private String outputPath = "resources/conversionTestData/output/";
+	private final String outputPath = "resources/conversionTestData/output/";
+	private final String expectedResultPath = "resources/conversionTestData/expectedResults/";
 /*
 	@Test
 	public void sgrToBedtest() throws InterruptedException, IOException {
@@ -81,22 +83,29 @@ import static org.junit.Assert.assertFalse;
 	@Test
 	public void sgrToWigCheckSumTest() throws InterruptedException ,IOException {
 		ConversionHandler ch = new ConversionHandler();
-		ch.executeProfileDataConversion("sgrToWig", "conversionTestData/Sg4_TRX-CP_Ave.resRto_Rel5_TRUNCATEDFORTEST.sgr", "conversionTestData/output/sgr2wigtest.wig", "Unknown");
-		File outputFile;
-
+		ch.executeProfileDataConversion("sgrToWig", "conversionTestData/GSM604730_CB_DmS2DRSC_Trx_b.dm3_rep2_TRUNCATEDFORTEST.sgr", "conversionTestData/output/sgr2wigtest.wig", "Unknown");
+		File testFile;
+		File expectedFile;
 		try{
-			outputFile = new File(outputPath+"sgr2wigtest.wig");
+			testFile = new File(outputPath+"sgr2wigtest.wig");
+			expectedFile = new File(expectedResultPath+"sgr2wigResult.wig");
 
+			assertTrue(compareFiles(testFile, expectedFile));
 
-			fileChecksum(outputFile);
-
-
-
+			testFile.delete();
 		} catch (NullPointerException e) {
 			e.printStackTrace();
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		}
+	}
+
+	/*
+	*	Private method that uses checksum to compare two files.
+	*	returns true if equal false otherwise.
+	 */
+	private boolean compareFiles(File fileA, File fileB) throws IOException, NoSuchAlgorithmException {
+		return (Arrays.equals(fileChecksum(fileA), fileChecksum(fileB)));
 	}
 
 	/*
