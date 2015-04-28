@@ -5,7 +5,6 @@ import command.ProcessStatus;
 
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Queue;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -14,7 +13,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * Created by c12smi on 4/21/15.
  */
 public class WorkPool {
-    private Queue<ProcessCommand> workQueue;
+    private LinkedList<ProcessCommand> processesList;
     private HashMap<ProcessCommand,ProcessStatus> processesStatus;
 
     private final Lock lock;
@@ -22,17 +21,17 @@ public class WorkPool {
 
 
     public WorkPool() {
-        workQueue = new LinkedList<>();
+        processesList = new LinkedList<>();
         processesStatus = new HashMap<>();
         lock = new ReentrantLock();
         notEmptyCond = lock.newCondition();
     }
 
-    public HashMap<ProcessCommand,ProcessStatus> getProcesses() {
+    public LinkedList<ProcessCommand> getProcesses() {
         lock.lock();
 
         try {
-            return new HashMap<>(processesStatus);
+            return new LinkedList<>(processesList);
         }  finally {
             lock.unlock();
         }
@@ -43,7 +42,7 @@ public class WorkPool {
         lock.lock();
 
         try {
-            workQueue.add(command);
+            processesList.add(command);
             processesStatus.put(command, new ProcessStatus(command));
             notEmptyCond.signalAll();
         } finally {
@@ -57,10 +56,10 @@ public class WorkPool {
         ProcessCommand processCommand = null;
 
         try {
-            while (workQueue.size() == 0) {
+            while (processesList.size() == 0) {
                 notEmptyCond.await();
             }
-            processCommand = workQueue.poll();
+            processCommand = processesList.poll();
         }
         catch (InterruptedException ex) {
             ErrorLogger.log("SYSTEM", "Error acquiring processes: " +
@@ -78,7 +77,7 @@ public class WorkPool {
         lock.lock();
 
         try {
-            workQueue.remove(processCommand);
+            processesList.remove(processCommand);
             processesStatus.remove(processCommand);
         } finally {
             lock.unlock();
@@ -99,7 +98,7 @@ public class WorkPool {
         lock.lock();
 
         try {
-            return workQueue.size();
+            return processesList.size();
         } finally {
             lock.unlock();
         }

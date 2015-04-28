@@ -12,20 +12,6 @@ import command.ValidateException;
  * @version 1.0
  */
 public class ValidateExceptionTest {
-
-	/**
-	 * Test used to check that the exception is created successfully
-	 * if there's no parameters passed and that it's not null.
-	 */
-	@Test
-	public void testCreateEmptyNotNull() {
-
-		ValidateException e = new ValidateException();
-
-		assertNotNull(e);
-
-	}
-
 	/**
 	 * Test used to check that the exception is created successfully
 	 * if the constructor with two parameters is used.

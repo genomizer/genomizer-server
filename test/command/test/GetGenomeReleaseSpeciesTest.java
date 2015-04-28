@@ -1,6 +1,8 @@
 package command.test;
 
 import static org.junit.Assert.*;
+
+import database.constants.MaxLength;
 import org.junit.Test;
 import command.GetGenomeReleaseSpeciesCommand;
 import command.ValidateException;
@@ -69,7 +71,7 @@ public class GetGenomeReleaseSpeciesTest {
 	public void testValidateSpeciesLength() throws ValidateException {
 
 		String big = "";
-		for(int i = 0; i < database.constants.MaxSize.GENOME_SPECIES + 1; i++) {
+		for(int i = 0; i < MaxLength.GENOME_SPECIES + 1; i++) {
 			big = big + "a";
 		}
 		GetGenomeReleaseSpeciesCommand c = new GetGenomeReleaseSpeciesCommand(big);

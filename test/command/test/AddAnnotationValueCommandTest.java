@@ -7,7 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import command.AddAnnotationValueCommand;
 import command.ValidateException;
-import database.constants.MaxSize;
+import database.constants.MaxLength;
 
 /**
  * Class used to unit-test AddAnnotationValueCommand.
@@ -71,7 +71,7 @@ public class AddAnnotationValueCommandTest {
 	public void testValidateNameLengthToLong() throws ValidateException {
 
 		String big = "";
-		for(int i = 0; i < MaxSize.ANNOTATION_LABEL + 1; i++) {
+		for(int i = 0; i < MaxLength.ANNOTATION_LABEL + 1; i++) {
 			big = big + "A";
 		}
 		String json = "{\"name\":\"" + big +
@@ -130,7 +130,7 @@ public class AddAnnotationValueCommandTest {
 	public void testValidateValueLengthToLong() throws ValidateException {
 
 		String big = "";
-		for(int i = 0; i < MaxSize.ANNOTATION_VALUE + 1; i++) {
+		for(int i = 0; i < MaxLength.ANNOTATION_VALUE + 1; i++) {
 			big = big + "A";
 		}
 		String json = "{\"name\":\"species\",\"value\":\"" + big +

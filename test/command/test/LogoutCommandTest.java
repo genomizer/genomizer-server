@@ -1,6 +1,8 @@
 package command.test;
 
 import static org.junit.Assert.*;
+
+import database.constants.MaxLength;
 import org.junit.Test;
 import command.LogoutCommand;
 import command.ValidateException;
@@ -69,7 +71,7 @@ public class LogoutCommandTest {
 	public void testValidateUsernameLength() throws ValidateException {
 
 		String big = "";
-		for(int i = 0; i < database.constants.MaxSize.USERNAME + 1; i++) {
+		for(int i = 0; i < MaxLength.USERNAME + 1; i++) {
 			big = big + "a";
 		}
 		LogoutCommand c = new LogoutCommand(big);

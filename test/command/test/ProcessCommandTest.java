@@ -1,6 +1,8 @@
 package command.test;
 
 import static org.junit.Assert.*;
+
+import database.constants.MaxLength;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -94,7 +96,7 @@ public class ProcessCommandTest {
 	public void testValidateUserNameLengthToLong() throws ValidateException {
 
 		String big = "";
-		for(int i = 0; i < database.constants.MaxSize.USERNAME + 1; i++) {
+		for(int i = 0; i < MaxLength.USERNAME + 1; i++) {
 			big = big + "a";
 		}
 		String[] p = {"a","b","c","d","e","f","g","h"};
@@ -238,7 +240,7 @@ public class ProcessCommandTest {
 	public void testValidateExperimentIdLengthToLong() throws ValidateException {
 
 		String big = "";
-		for(int i = 0; i < database.constants.MaxSize.FILE_EXPID + 1; i++) {
+		for(int i = 0; i < MaxLength.FILE_EXPID + 1; i++) {
 			big = big + "a";
 		}
 		String[] p = {"a","b","c","d","e","f","g","h"};
@@ -345,7 +347,7 @@ public class ProcessCommandTest {
 	public void testValidateMetaDataLengthToLong() throws ValidateException {
 
 		String big = "";
-		for(int i = 0; i < database.constants.MaxSize.FILE_METADATA + 1; i++) {
+		for(int i = 0; i < MaxLength.FILE_METADATA + 1; i++) {
 			big = big + "a";
 		}
 		String[] p = {"a","b","c","d","e","f","g","h"};
@@ -429,7 +431,7 @@ public class ProcessCommandTest {
 	public void testValidateGenomeVersionLengthToLong() throws ValidateException {
 
 		String big = "";
-		for(int i = 0; i < database.constants.MaxSize.FILE_GRVERSION + 1; i++) {
+		for(int i = 0; i < MaxLength.FILE_GRVERSION + 1; i++) {
 			big = big + "a";
 		}
 		String[] p = {"a","b","c","d","e","f","g","h"};

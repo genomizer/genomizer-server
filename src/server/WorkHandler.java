@@ -7,8 +7,7 @@ import response.StatusCode;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedList;
 
 
 public class WorkHandler implements Runnable {
@@ -26,13 +25,12 @@ public class WorkHandler implements Runnable {
 		long currentTime = System.currentTimeMillis();
 
 		// List to store processes to be removed
-		ArrayList<ProcessCommand> toBeRemoved = new ArrayList<>();
+		LinkedList<ProcessCommand> toBeRemoved = new LinkedList<>();
 
-		HashMap<ProcessCommand,ProcessStatus> processes = workPool
-					.getProcesses();
+		LinkedList<ProcessCommand> processesList = workPool.getProcesses();
 
 		/* Loop through all processes and check statuses */
-		for (ProcessCommand proc : processes.keySet()) {
+		for (ProcessCommand proc : processesList) {
 
 			ProcessStatus procStat = workPool.getProcessStatus(proc);
 			String statusString = procStat.status;
@@ -60,8 +58,6 @@ public class WorkHandler implements Runnable {
 	//is executed
 	@Override
 	public void run() {
-		Debug.log(Thread.currentThread().getName());
-
 
 		while (true) {
 
