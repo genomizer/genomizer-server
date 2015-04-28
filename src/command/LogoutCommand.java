@@ -37,5 +37,4 @@ public class LogoutCommand extends Command {
 					"User not found");
 		}
 	}
-
 }

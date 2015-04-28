@@ -1,46 +1,46 @@
 package server;
 
-//TODO Change this comment
-
-/**
- * A Doorman-object is used to receive requests and send back responses to the
- * client. The doorman is listening for the following contexts:
- * /login
- * /experiment
- * /annotation
- * /file
- * /search
- * /user
- * /process
- * /sysadm
- * /genomeRelease
- * /token
- *
- * Whenever a request is received the Doorman checks what context is has and
- * creates a new Executor (on  a new thread) and afterwards continues listening
- * for new requests.
- */
-
-
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.concurrent.Executor;
 import com.sun.net.httpserver.HttpServer;
 import command.RequestHandler;
 
+/**
+ * Used to receive requests and forward them to a request handler (which will
+ * then process them and return the appropriate response). This implementation
+ * will start a new thread for each incoming request. The doorman is listening
+ * for the following contexts:
+ *
+ * /login
+ * /experiment
+ * /annotation
+ * /annotation/field
+ * /annotation/value
+ * /file
+ * /search
+ * /user
+ * /process
+ * /process/rawtoprofile
+ * /sysadm
+ * /sysadm/annpriv
+ * /genomeRelease
+ * /genomeRelease/
+ * /token
+ */
 public class Doorman {
 	private HttpServer httpServer;
 
 	/**
-	 * Constructor. Creates a HTTPServer (but doesn't start it) which listens on
-     * the given port.
+	 * Constructs a HTTP server (but doesn't start it) which listens on the
+     * given port.
 	 * @param port the listening port.
-	 * @throws IOException
-	 */
-	public Doorman(int port) throws IOException {
+	 * @throws IOException if the Doorman object could not be created.
+     */
+    public Doorman(int port) throws IOException {
 		RequestHandler requestHandler = new RequestHandler();
 		httpServer = HttpServer.create(new InetSocketAddress(port),0);
-		httpServer.createContext("/login", requestHandler);
+        httpServer.createContext("/login", requestHandler);
 		httpServer.createContext("/experiment", requestHandler);
 		httpServer.createContext("/annotation", requestHandler);
 		httpServer.createContext("/annotation/field", requestHandler);
@@ -54,7 +54,7 @@ public class Doorman {
 		httpServer.createContext("/genomeRelease", requestHandler);
 		httpServer.createContext("/genomeRelease/", requestHandler);
 		httpServer.createContext("/token", requestHandler);
-		httpServer.setExecutor(new Executor() {
+        httpServer.setExecutor(new Executor() {
 			@Override
 			public void execute(Runnable command) {
 				try {

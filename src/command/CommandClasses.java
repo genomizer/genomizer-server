@@ -3,7 +3,9 @@ package command;
 import java.util.HashMap;
 
 /**
- * Created by c12mkn on 2015-04-27.
+ * Contains all of the Command class objects in a hash map. They can be
+ * retrieved using the request method followed by a " " and the request context
+ * as a key.
  */
 public class CommandClasses {
     private static final HashMap<String, Class<? extends Command>> classes;
@@ -46,6 +48,12 @@ public class CommandClasses {
         classes.put("PUT /file", UpdateFileInExperimentCommand.class);
     }
 
+    /**
+     * Returns the class object corresponding to the given context.
+     * @param context the context of the command, for example "POST /experiment"
+     *                would be used to retrieve the AddExperiment class object.
+     * @return the class object corresponding to the given context.
+     */
     public static Class<? extends Command> get(String context) {
         return classes.get(context);
     }

@@ -48,7 +48,7 @@
 //
 //		/* We attempt to start the secure doorman */
 //		try {
-//			new SecureDoorman(new RequestHandler(workPool),
+//			new SecureDoorman(
 //					ServerSettings.genomizerPort).start();
 //		} catch (IOException e) {
 //			System.err.println("Error when starting server");
