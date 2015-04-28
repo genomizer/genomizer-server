@@ -106,6 +106,13 @@ public class ServerSettings {
 
 			while (scan.hasNextLine()) {
 				String line = scan.nextLine();
+
+				// Skip comments and empty lines.
+				if (line.trim().startsWith("#")
+						|| line.trim().equals("")) {
+					continue;
+				}
+
 				int index = line.indexOf("=");
 
 				String key = line.substring(0, index).trim();
