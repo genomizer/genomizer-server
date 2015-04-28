@@ -64,8 +64,7 @@ INSERT INTO Annotated_With  VALUES('Exp3', 'Species', 'Rat');
 INSERT INTO Annotated_With  VALUES('Exp3', 'Development Stage', 'Child');
 
 -- This creates a user called "testuser" with the obvious password
-INSERT INTO User_Info VALUES('testuser', '2287314fffa14d77e1868fb51700ff893066472b4d6e94f1c498863bde10b992', 'a36af7fe4a6d300cb9a76711695b9e8ec5c40bc2a3c9c0a63e005b81fed153e4', 'admin','Test User','test.user.pvt@cs.umu.se');
-
+INSERT INTO User_Info VALUES('testuser', '$2a$10$DepSfvFFOsrP/M6uLKXd5.8OiEQET4.vC9LqBUUt1p0VQXak2B0GO', '$2a$10$DepSfvFFOsrP/M6uLKXd5.8OiEQET4.vC9LqBUUt1p0VQXak2B0GO', 'admin','Test User','test.user.pvt@cs.umu.se');
 
 INSERT INTO File VALUES(DEFAULT, '/var/www/data/Exp1/raw/file1.fastq', 'Raw', 'file1.fastq', CURRENT_TIMESTAMP, NULL, '/var/www/data/Exp1/raw/file1_input.fastq', 'Umeå Uni', 'user1', 'True', 'Exp1', NULL, DEFAULT);
 
