@@ -1,6 +1,8 @@
 package command.test;
 
 import static org.junit.Assert.*;
+
+import command.Command;
 import org.junit.Before;
 import org.junit.Test;
 import command.CommandFactory;
@@ -278,7 +280,7 @@ public class CommandFactoryTest {
 	@Test
 	public void testDeleteAnnotationValueCommandNotNull() {
 
-		assertNotNull(cmdf.createDeleteAnnotationValueCommand("valueName", "fieldName"));
+		assertNotNull(cmdf.createDeleteAnnotationValueCommand("valueName", "fieldName", Command.UserType.ADMIN));
 
 	}
 

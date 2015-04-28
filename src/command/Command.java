@@ -125,6 +125,12 @@ public abstract class Command {
 	}
 
 
+	/**
+	 * Methods which verifies if the user has the requested user rights.
+	 * @param required The user rights level required
+	 * @param user The user rights of the current user
+	 * @throws ValidateException If the user rights level wasn't high enough
+	 */
 	public void hasRights(UserType required, UserType user) throws ValidateException {
 
 		if (user == UserType.UNKNOWN)
