@@ -79,7 +79,7 @@ public class UploadHandler {
             @Override
             @SuppressWarnings("deprecation")
             public int getContentLength() {
-                    return Integer.parseInt(headers.getFirst("Content-Length"));
+                    return 0; 
                 }
 
             @Override
