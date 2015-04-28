@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
 import database.containers.Genome;
+import database.subClasses.UserMethods.UserType;
 import response.DeleteGenomeReleaseResponse;
 import response.ErrorResponse;
 import response.Response;
@@ -29,15 +30,17 @@ public class DeleteGenomeReleaseCommand extends Command {
 	 * @param species the name of the species.
 	 * @param genomeVersion the genome version.
 	 */
-	public DeleteGenomeReleaseCommand(String species, String genomeVersion) {
+	public DeleteGenomeReleaseCommand(String species, String genomeVersion, UserType userType) {
 		this.genomeVersion = genomeVersion;
 		this.species = species;
+		this.userType = userType;
 	}
 
 	@Override
 	public void validate() throws ValidateException {
 		validateString(genomeVersion, MaxLength.GENOME_VERSION, "Genome version");
 		validateString(species, MaxLength.GENOME_SPECIES, "Genome specie");
+		hasRights(UserType.USER);
 	}
 
 	@Override

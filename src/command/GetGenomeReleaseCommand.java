@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import database.DatabaseAccessor;
 import database.containers.Genome;
+import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.GetGenomeReleaseResponse;
 import response.Response;
@@ -18,10 +19,16 @@ import response.StatusCode;
  * @version 1.0
  */
 
-public class GetGenomeReleaseCommand extends Command{
+public class GetGenomeReleaseCommand extends Command {
+
+	public GetGenomeReleaseCommand(UserType userType){
+		this.userType = userType;
+	}
+
 	@Override
-	public void validate() {
+	public void validate() throws ValidateException {
 		/*Validation will always succeed, the command can not be corrupt.*/
+		hasRights(UserType.GUEST);
 	}
 
 	/**

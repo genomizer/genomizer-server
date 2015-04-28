@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 
 import database.constants.MaxLength;
+import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.GetGenomeReleaseResponse;
 import response.Response;
@@ -27,13 +28,15 @@ public class GetGenomeReleaseSpeciesCommand extends Command {
 	 * supplied restful string.
 	 * @param species the species of the genome.
 	 */
-	public GetGenomeReleaseSpeciesCommand(String species) {
+	public GetGenomeReleaseSpeciesCommand(String species, UserType userType) {
 		this.species = species;
+		this.userType = userType;
 	}
 
 	@Override
 	public void validate() throws ValidateException {
 		validateString(species, MaxLength.GENOME_SPECIES, "Genome specie");
+		hasRights(UserType.GUEST);
 	}
 
 	/**

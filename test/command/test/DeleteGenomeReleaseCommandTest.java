@@ -3,6 +3,7 @@ package command.test;
 import static org.junit.Assert.*;
 
 import database.constants.MaxLength;
+import database.subClasses.UserMethods.UserType;
 import org.junit.Test;
 import command.Command;
 import command.DeleteGenomeReleaseCommand;
@@ -24,7 +25,7 @@ public class DeleteGenomeReleaseCommandTest {
 	@Test
 	public void testCreateNotNull() {
 
-		DeleteGenomeReleaseCommand cmd = new DeleteGenomeReleaseCommand("Specie", "GenomeRelease");
+		DeleteGenomeReleaseCommand cmd = new DeleteGenomeReleaseCommand("Specie", "GenomeRelease", UserType.ADMIN);
 
 		assertNotNull(cmd);
 
@@ -39,7 +40,7 @@ public class DeleteGenomeReleaseCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateGenomeVersionNull() throws ValidateException {
 
-		final Command cmd = new DeleteGenomeReleaseCommand("Human", "null");
+		final Command cmd = new DeleteGenomeReleaseCommand("Human", "null", UserType.ADMIN);
 		cmd.validate();
 
 		fail("Expected ValidateException.");
@@ -55,7 +56,7 @@ public class DeleteGenomeReleaseCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateGenomeVersionEmptyString() throws ValidateException {
 
-		final Command cmd = new DeleteGenomeReleaseCommand("Human", "");
+		final Command cmd = new DeleteGenomeReleaseCommand("Human", "", UserType.ADMIN);
 		cmd.validate();
 
 		fail("Expected ValidateException.");
@@ -71,7 +72,7 @@ public class DeleteGenomeReleaseCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateSpecieNull() throws ValidateException {
 
-		final Command cmd = new DeleteGenomeReleaseCommand("null", "GRelease");
+		final Command cmd = new DeleteGenomeReleaseCommand("null", "GRelease", UserType.ADMIN);
 		cmd.validate();
 
 		fail("Expected ValidateException.");
@@ -87,7 +88,7 @@ public class DeleteGenomeReleaseCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateSpecieEmptyString() throws ValidateException {
 
-		final Command cmd = new DeleteGenomeReleaseCommand("", "GRelease");
+		final Command cmd = new DeleteGenomeReleaseCommand("", "GRelease", UserType.ADMIN);
 		cmd.validate();
 
 		fail("Expected ValidateException.");
@@ -107,7 +108,7 @@ public class DeleteGenomeReleaseCommandTest {
 		for(int i = 0; i < MaxLength.GENOME_VERSION + 1; i++) {
 			big = big + i;
 		}
-		final Command cmd = new DeleteGenomeReleaseCommand("Specie", big);
+		final Command cmd = new DeleteGenomeReleaseCommand("Specie", big, UserType.ADMIN);
 		cmd.validate();
 
 		fail("Expected ValidateException.");
@@ -127,7 +128,7 @@ public class DeleteGenomeReleaseCommandTest {
 		for(int i = 0; i < MaxLength.GENOME_SPECIES + 1; i++) {
 			big = big + "a";
 		}
-		final Command cmd = new DeleteGenomeReleaseCommand(big, "GRelease");
+		final Command cmd = new DeleteGenomeReleaseCommand(big, "GRelease", UserType.ADMIN);
 		cmd.validate();
 
 		fail("Expected ValidateException.");
@@ -143,11 +144,39 @@ public class DeleteGenomeReleaseCommandTest {
 	@Test
 	public void testValidateProperFormatted() throws ValidateException {
 
-		final Command cmd = new DeleteGenomeReleaseCommand("Specie", "GRelease");
+		final Command cmd = new DeleteGenomeReleaseCommand("Specie", "GRelease", UserType.ADMIN);
 		cmd.validate();
 
 		assertTrue(true);
 
 	}
+
+	/**
+	 * Test used to check that ValidateException is not thrown
+	 * when the user have the required rights.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test
+	public void testHavingRights() throws ValidateException {
+
+		DeleteGenomeReleaseCommand com = new DeleteGenomeReleaseCommand("name", "string", UserType.USER);
+		com.validate();
+	}
+
+	/**
+	 * Test used to check that ValidateException is thrown
+	 * when the user doesn't have the required rights.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testNotHavingRights() throws ValidateException {
+
+		DeleteGenomeReleaseCommand com = new DeleteGenomeReleaseCommand("name", "string", UserType.GUEST);
+		com.validate();
+		fail();
+	}
+
 
 }

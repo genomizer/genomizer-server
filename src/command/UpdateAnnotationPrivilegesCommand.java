@@ -1,5 +1,6 @@
 package command;
 
+import database.subClasses.UserMethods.UserType;
 import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
@@ -13,8 +14,8 @@ import response.StatusCode;
 public class UpdateAnnotationPrivilegesCommand extends Command {
 	//TODO Implement this class
 
-	public UpdateAnnotationPrivilegesCommand(String json, String userName) {
-
+	public UpdateAnnotationPrivilegesCommand(String json, String userName, UserType userType) {
+		this.userType = userType;
 	}
 
 	/**
@@ -22,8 +23,8 @@ public class UpdateAnnotationPrivilegesCommand extends Command {
 	 * the command.
 	 */
 	@Override
-	public void validate() {
-
+	public void validate() throws ValidateException {
+		hasRights(UserType.USER);
 	}
 
 

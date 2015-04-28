@@ -8,6 +8,7 @@ import com.google.gson.annotations.Expose;
 
 import database.DatabaseAccessor;
 
+import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
@@ -36,7 +37,7 @@ public class CreateUserCommand extends Command {
 	private String email = null;
 
 	@Override
-	public void validate() {
+	public void validate() throws ValidateException {
 		//TODO Change to exceptions.
 
 		/*if(username == null || password == null || privileges == null) {
@@ -53,6 +54,7 @@ public class CreateUserCommand extends Command {
 		}
 		return username.indexOf('/') == -1;*/
 
+		hasRights(UserType.ADMIN);
 	}
 
 	@Override
@@ -88,4 +90,7 @@ public class CreateUserCommand extends Command {
 
 	}
 
+	public void setRights(UserType rights) {
+		this.userType = rights;
+	}
 }

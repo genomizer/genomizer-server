@@ -247,7 +247,7 @@ public class CommandFactoryTest {
 	@Test
 	public void testUpdateAnnotationPrivilegesCommandNotNull() {
 
-		assertNotNull(cmdf.createUpdateAnnotationPrivilegesCommand("a", "b"));
+		assertNotNull(cmdf.createUpdateAnnotationPrivilegesCommand("a", "b", UserType.ADMIN));
 
 	}
 
@@ -259,7 +259,7 @@ public class CommandFactoryTest {
 	public void testCreateAddGenomeReleaseCommand() {
 
 		String json = "{\"fileName\":\"abc123\",\"specie\":\"human\",\"genomeVersion\":\"GV 1.0\"}";
-		assertNotNull(cmdf.createAddGenomeReleaseCommand(json));
+		assertNotNull(cmdf.createAddGenomeReleaseCommand(json, UserType.ADMIN));
 
 	}
 
@@ -270,7 +270,7 @@ public class CommandFactoryTest {
 	@Test
 	public void testCreateDeleteGenomeReleaseCommand() {
 
-		assertNotNull(cmdf.createDeleteGenomeReleaseCommand("specie", "genVersion"));
+		assertNotNull(cmdf.createDeleteGenomeReleaseCommand("specie", "genVersion", UserType.ADMIN));
 
 	}
 
@@ -301,7 +301,7 @@ public class CommandFactoryTest {
 	@Test
 	public void testGetAllGenomeReleasesCommandNotNull() {
 
-		assertNotNull(cmdf.createGetAllGenomeReleasesCommand());
+		assertNotNull(cmdf.createGetAllGenomeReleasesCommand(UserType.ADMIN));
 
 	}
 
@@ -311,7 +311,7 @@ public class CommandFactoryTest {
 	@Test
 	public void testGetGenomeReleaseSpeciesCommandNotNull() {
 
-		assertNotNull(cmdf.createGetGenomeReleasesSpeciesCommand("species"));
+		assertNotNull(cmdf.createGetGenomeReleasesSpeciesCommand("species", UserType.ADMIN));
 
 	}
 

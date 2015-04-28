@@ -140,8 +140,10 @@ public class CommandFactory {
 	 * @param json string to initiate class.
 	 * @return the actual command.
 	 */
-	public Command createCreateUserCommand(String json) {
-		return gson.fromJson(json, CreateUserCommand.class);
+	public Command createCreateUserCommand(String json, UserType userType) {
+		CreateUserCommand exp = gson.fromJson(json, CreateUserCommand.class);
+		exp.setRights(userType);
+		return exp;
 	}
 
 	/**
@@ -233,8 +235,8 @@ public class CommandFactory {
 	 * @return the actual command.
 	 */
 	public Command createUpdateAnnotationPrivilegesCommand(String json,
-														   String userName) {
-		return new UpdateAnnotationPrivilegesCommand(json, userName);
+														   String userName, UserType userType) {
+		return new UpdateAnnotationPrivilegesCommand(json, userName, userType);
 	}
 
 	/**
@@ -242,8 +244,10 @@ public class CommandFactory {
 	 * @param json string to initiate class.
 	 * @return the actual command created.
 	 */
-	public Command createAddGenomeReleaseCommand(String json) {
-		return gson.fromJson(json, AddGenomeReleaseCommand.class);
+	public Command createAddGenomeReleaseCommand(String json, UserType userType) {
+		AddGenomeReleaseCommand exp = gson.fromJson(json, AddGenomeReleaseCommand.class);
+		exp.setRights(userType);
+		return exp;
 	}
 
 	/**
@@ -262,8 +266,8 @@ public class CommandFactory {
 	 * @return the actual command.
 	 */
 	public Command createDeleteGenomeReleaseCommand(String species,
-													String genomeVersion) {
-		return new DeleteGenomeReleaseCommand(species, genomeVersion);
+													String genomeVersion, UserType userType) {
+		return new DeleteGenomeReleaseCommand(species, genomeVersion, userType);
 	}
 
 	/**
@@ -293,8 +297,8 @@ public class CommandFactory {
 	 * Used to create the command needed to get all genome releases.
 	 * @return the actual command.
 	 */
-	public Command createGetAllGenomeReleasesCommand() {
-		return new GetGenomeReleaseCommand();
+	public Command createGetAllGenomeReleasesCommand(UserType userType) {
+		return new GetGenomeReleaseCommand(userType);
 	}
 
 	/**
@@ -303,8 +307,8 @@ public class CommandFactory {
 	 * @param species to get.
 	 * @return the actual command.
 	 */
-	public Command createGetGenomeReleasesSpeciesCommand(String species) {
-		return new GetGenomeReleaseSpeciesCommand(species);
+	public Command createGetGenomeReleasesSpeciesCommand(String species, UserType userType) {
+		return new GetGenomeReleaseSpeciesCommand(species, userType);
 	}
 
 	/**

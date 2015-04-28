@@ -155,20 +155,21 @@ public class CommandHandler {
 						userType);
 			case UPDATE_ANNOTATION_PRIVILEGES_COMMAND:
 				return cmdFactory.createUpdateAnnotationPrivilegesCommand(json,
-						parsedURI);
+						parsedURI, userType);
 			case ADD_GENOME_RELEASE_COMMAND:
-				return cmdFactory.createAddGenomeReleaseCommand(json);
+				return cmdFactory.createAddGenomeReleaseCommand(json, userType);
 			case DELETE_GENOME_RELEASE_COMMAND:
 				rest = uri.split("/");
 				return cmdFactory.createDeleteGenomeReleaseCommand(rest[2],
-						rest[3]);
+						rest[3], userType);
 			case GET_ALL_GENOME_RELEASE_COMMAND:
-				return cmdFactory.createGetAllGenomeReleasesCommand();
+				return cmdFactory.createGetAllGenomeReleasesCommand(userType);
 			case GET_GENOME_RELEASE_SPECIES_COMMAND:
 				return cmdFactory.
-						createGetGenomeReleasesSpeciesCommand(parsedURI);
+						createGetGenomeReleasesSpeciesCommand(parsedURI,
+								userType);
 			case CREATE_USER_COMMAND:
-				return cmdFactory.createCreateUserCommand(json);
+				return cmdFactory.createCreateUserCommand(json, userType);
 			case IS_TOKEN_VALID_COMMAND:
 				return cmdFactory.createIsTokenValidCommand(uuid);
 			default:

@@ -9,6 +9,7 @@ import com.google.gson.annotations.Expose;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
 
+import database.subClasses.UserMethods.UserType;
 import response.AddGenomeReleaseResponse;
 import response.ErrorResponse;
 import response.Response;
@@ -45,6 +46,7 @@ public class AddGenomeReleaseCommand extends Command {
 						" characters long.");
 			}
 		}
+		hasRights(UserType.USER);
 	}
 
 
@@ -69,4 +71,7 @@ public class AddGenomeReleaseCommand extends Command {
 		}
 	}
 
+	public void setRights(UserType rights) {
+		this.userType = rights;
+	}
 }

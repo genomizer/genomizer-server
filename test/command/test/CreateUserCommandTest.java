@@ -1,6 +1,9 @@
 package command.test;
 
 import static org.junit.Assert.*;
+
+import command.ValidateException;
+import database.subClasses.UserMethods.UserType;
 import org.junit.Before;
 import org.junit.Test;
 import com.google.gson.Gson;
@@ -40,8 +43,8 @@ public class CreateUserCommandTest {
 	public void testCreationNotNull() {
 
 		json = createJSON("a","b","c","d","e");
-		CreateUserCommand cmd = new CreateUserCommand();
-		cmd = gson.fromJson(json, CreateUserCommand.class);
+		CreateUserCommand cmd = gson.fromJson(json, CreateUserCommand.class);
+		cmd.setRights(UserType.ADMIN);
 		assertNotNull(cmd);
 
 	}
@@ -54,8 +57,7 @@ public class CreateUserCommandTest {
 	public void testConvertJSON() {
 
 		json = createJSON("a","b","c","d","e");
-		CreateUserCommand cmd = new CreateUserCommand();
-		cmd = gson.fromJson(json, CreateUserCommand.class);
+		CreateUserCommand cmd = gson.fromJson(json, CreateUserCommand.class);
 		String compare = gson.toJson(cmd);
 		assertEquals(compare, json);
 
@@ -66,19 +68,19 @@ public class CreateUserCommandTest {
 	 * properly.
 	 */
 	@Test
-	public void testValidateUsernameLength() {
+	public void testValidateUsernameLength() throws ValidateException {
 
 		String username = "";
 		for(int i = 0; i < MaxLength.USERNAME+1; i++) {
 			username = username + "a";
 		}
 		json = createJSON(username,"b","c","d","e");
-		CreateUserCommand cmd = new CreateUserCommand();
-		cmd = gson.fromJson(json, CreateUserCommand.class);
+		CreateUserCommand cmd = gson.fromJson(json, CreateUserCommand.class);
+		cmd.setRights(UserType.ADMIN);
 
 		json = createJSON("","b","c","d","e");
-		CreateUserCommand cmd2 = new CreateUserCommand();
-		cmd2 = gson.fromJson(json, CreateUserCommand.class);
+		CreateUserCommand cmd2 = gson.fromJson(json, CreateUserCommand.class);
+		cmd2.setRights(UserType.ADMIN);
 
 		cmd.validate();
 		cmd2.validate();
@@ -89,19 +91,19 @@ public class CreateUserCommandTest {
 	 * properly.
 	 */
 	@Test
-	public void testValidatePasswordLength() {
+	public void testValidatePasswordLength() throws ValidateException {
 
 		String password = "";
 		for(int i = 0; i < MaxLength.PASSWORD+1; i++) {
 			password = password + "a";
 		}
 		json = createJSON("a",password,"c","d","e");
-		CreateUserCommand cmd = new CreateUserCommand();
-		cmd = gson.fromJson(json, CreateUserCommand.class);
+		CreateUserCommand cmd = gson.fromJson(json, CreateUserCommand.class);
+		cmd.setRights(UserType.ADMIN);
 
 		json = createJSON("a","","c","d","e");
-		CreateUserCommand cmd2 = new CreateUserCommand();
-		cmd2 = gson.fromJson(json, CreateUserCommand.class);
+		CreateUserCommand cmd2 = gson.fromJson(json, CreateUserCommand.class);
+		cmd2.setRights(UserType.ADMIN);
 
 		cmd.validate();
 		cmd2.validate();
@@ -113,19 +115,19 @@ public class CreateUserCommandTest {
 	 * properly.
 	 */
 	@Test
-	public void testValidatePrivilegesLength() {
+	public void testValidatePrivilegesLength() throws ValidateException {
 
 		String priv = "";
 		for(int i = 0; i < MaxLength.ROLE+1; i++) {
 			priv = priv + "a";
 		}
 		json = createJSON("a","b",priv,"d","e");
-		CreateUserCommand cmd = new CreateUserCommand();
-		cmd = gson.fromJson(json, CreateUserCommand.class);
+		CreateUserCommand cmd = gson.fromJson(json, CreateUserCommand.class);
+		cmd.setRights(UserType.ADMIN);
 
 		json = createJSON("a","b","","d","e");
-		CreateUserCommand cmd2 = new CreateUserCommand();
-		cmd2 = gson.fromJson(json, CreateUserCommand.class);
+		CreateUserCommand cmd2 = gson.fromJson(json, CreateUserCommand.class);
+		cmd2.setRights(UserType.ADMIN);
 
 		cmd.validate();
 		cmd2.validate();
@@ -137,11 +139,11 @@ public class CreateUserCommandTest {
 	 * any slashes.
 	 */
 	@Test
-	public void testNoSlashesUserName() {
+	public void testNoSlashesUserName() throws ValidateException {
 
 		json = createJSON("a/b/c","b","c","d","e");
-		CreateUserCommand cmd = new CreateUserCommand();
-		cmd = gson.fromJson(json, CreateUserCommand.class);
+		CreateUserCommand cmd = gson.fromJson(json, CreateUserCommand.class);
+		cmd.setRights(UserType.ADMIN);
 
 		cmd.validate();
 
@@ -151,33 +153,67 @@ public class CreateUserCommandTest {
 	 * Test used to check a properly formatted creation.
 	 */
 	@Test
-	public void testValidationProperlyFormatted() {
+	public void testValidationProperlyFormatted() throws ValidateException {
 		json = createJSON("a","b","c","d","e");
-		CreateUserCommand cmd = new CreateUserCommand();
-		cmd = gson.fromJson(json, CreateUserCommand.class);
+		CreateUserCommand cmd = gson.fromJson(json, CreateUserCommand.class);
+		cmd.setRights(UserType.ADMIN);
 
 		cmd.validate();
 
 	}
 
 	/**
+	 * Test used to check that ValidateException is not thrown
+	 * when the user have the required rights.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test
+	public void testHavingRights() throws ValidateException {
+
+		json = createJSON("a","b","c","d","e");
+		CreateUserCommand c = gson.fromJson(json, CreateUserCommand.class);
+		c.setRights(UserType.ADMIN);
+
+		c.validate();
+	}
+
+	/**
+	 * Test used to check that ValidateException is thrown
+	 * when the user doesn't have the required rights.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testNotHavingRights() throws ValidateException {
+
+		json = createJSON("a","b","c","d","e");
+		CreateUserCommand c = gson.fromJson(json, CreateUserCommand.class);
+		c.setRights(UserType.USER);
+
+		c.validate();
+		fail();
+	}
+
+	/**
 	 * Used to create JSON objects.
 	 *
-	 * @param the username.
-	 * @param the password.
-	 * @param the privileges.
-	 * @param the name.
-	 * @param the email.
+	 * @param username the username.
+	 * @param password the password.
+	 * @param privilege the privileges.
+	 * @param name the name.
+	 * @param email the email.
 	 * @return String with the JSON.
 	 */
-	private String createJSON(String un, String pw, String p, String n, String e) {
+	private String createJSON(String username, String password,
+							  String privilege, String name, String email) {
 
 	    JsonObject j = new JsonObject();
-		j.addProperty("username", un);
-		j.addProperty("password", pw);
-		j.addProperty("privileges", p);
-		j.addProperty("name", n);
-		j.addProperty("email", e);
+		j.addProperty("username", username);
+		j.addProperty("password", password);
+		j.addProperty("privileges", privilege);
+		j.addProperty("name", name);
+		j.addProperty("email", email);
 
 		return j.toString();
 
