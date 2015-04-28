@@ -112,6 +112,7 @@ public class ServerSettings {
 						|| line.trim().equals("")) {
 					continue;
 				}
+				line = line.replaceAll("#.*$","");
 
 				int index = line.indexOf("=");
 
