@@ -105,6 +105,38 @@ import static org.junit.Assert.assertFalse;
 	public void gff3ToSgrtest() throws InterruptedException, IOException {
 		ConversionHandler ch = new ConversionHandler();
 		ch.executeProfileDataConversion("gff3ToSgr", "conversionTestData/TP_SG_A_ZeroLvl_Release5_TRUNCATEDFORTEST.gff", "conversionTestData/output/sgr2.sgr", null);
+
+		File outputFile;
+
+		try{
+			outputFile = new File(outputPath+"sgr2.sgr");
+			assertTrue(outputFile.exists());
+			outputFile.delete();
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		}
+	}
+
+
+	@Test
+	public void gffToSgrCheckSumTest() throws InterruptedException ,IOException {
+
+		ConversionHandler ch = new ConversionHandler();
+		ch.executeProfileDataConversion("gff3ToSgr", "conversionTestData/TP_SG_A_ZeroLvl_Release5_TRUNCATEDFORTEST.gff", "conversionTestData/output/sgr2.sgr", null);
+		File testFile;
+		File expectedFile;
+		try{
+			testFile = new File(outputPath+"sgr2.sgr");
+			expectedFile = new File(expectedResultPath+"gff2sgrResult.sgr");
+
+			assertTrue(compareFiles(testFile, expectedFile));
+
+			testFile.delete();
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
 	}
 
 /*	@Test
