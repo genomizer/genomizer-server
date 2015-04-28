@@ -1,6 +1,7 @@
 package command;
 
 import authentication.Authenticate;
+import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.ProcessResponse;
 import response.Response;
@@ -84,7 +85,7 @@ public class CommandHandler {
 		String parsedURI = parseRequestURI(uri);
 		String username = Authenticate.getUsernameByID(uuid);
 		//TODO Add the get user type method
-		Command.UserType userType = Command.UserType.ADMIN;
+		UserType userType = UserType.ADMIN;
 		String[] rest;
 		switch (cmdt) {
 			case DELETE_ANNOTATION_VALUE_COMMAND:
@@ -96,14 +97,14 @@ public class CommandHandler {
 			case LOGOUT_COMMAND:
 				return cmdFactory.createLogoutCommand(username);
 			case GET_EXPERIMENT_COMMAND:
-				return cmdFactory.createGetExperimentCommand(parsedURI);
+				return cmdFactory.createGetExperimentCommand(parsedURI, userType);
 			case ADD_EXPERIMENT_COMMAND:
-				return cmdFactory.createAddExperimentCommand(json);
+				return cmdFactory.createAddExperimentCommand(json, userType);
 			case UPDATE_EXPERIMENT_COMMAND:
 				return cmdFactory.
-						createUpdateExperimentCommand(json, parsedURI);
+						createUpdateExperimentCommand(json, parsedURI, userType);
 			case DELETE_EXPERIMENT_COMMAND:
-				return cmdFactory.createDeleteExperimentCommand(parsedURI);
+				return cmdFactory.createDeleteExperimentCommand(parsedURI, userType);
 			case GET_FILE_FROM_EXPERIMENT_COMMAND:
 				return cmdFactory.createGetFileFromExperimentCommand(parsedURI);
 			case ADD_FILE_TO_EXPERIMENT_COMMAND:

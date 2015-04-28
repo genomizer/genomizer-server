@@ -1,6 +1,8 @@
 package command.test;
 
 import static org.junit.Assert.*;
+
+import database.subClasses.UserMethods.UserType;
 import org.junit.Before;
 import org.junit.Test;
 import com.google.gson.Gson;
@@ -264,6 +266,8 @@ public class AddExperimentCommandTest {
 		String json = "{\"name\":\"experimentId\",\"annotations\":[{\"name\":\"pubmedId\",\"value\":\"abc123\"},{\"name\":\"type\",\"value\":\"raw\"}]}";
 		AddExperimentCommand c = new AddExperimentCommand();
 		c = gson.fromJson(json, AddExperimentCommand.class);
+		c.setRights(UserType.USER);
+
 		c.validate();
 
 		assertTrue(true);
@@ -277,12 +281,45 @@ public class AddExperimentCommandTest {
 	public void testConvertToAndFromJSON() {
 
 		String json = "{\"name\":\"experimentId\",\"annotations\":[{\"name\":\"pubmedId\",\"value\":\"abc123\"},{\"name\":\"type\",\"value\":\"raw\"}]}";
-		AddExperimentCommand c = new AddExperimentCommand();
-		c = gson.fromJson(json, AddExperimentCommand.class);
+		AddExperimentCommand c = gson.fromJson(json, AddExperimentCommand.class);
 		String compare = gson.toJson(c);
+		c.setRights(UserType.ADMIN);
 
 		assertEquals(json, compare);
 
+	}
+
+	/**
+	 * Test used to check that ValidateException is not thrown
+	 * when the user have the required rights.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test
+	public void testHavingRights() throws ValidateException {
+
+		String json = "{\"name\":\"experimentId\",\"annotations\":[{\"name\":\"pubmedId\",\"value\":\"abc123\"},{\"name\":\"type\",\"value\":\"raw\"}]}";
+		AddExperimentCommand c = gson.fromJson(json, AddExperimentCommand.class);
+		c.setRights(UserType.USER);
+
+		c.validate();
+	}
+
+	/**
+	 * Test used to check that ValidateException is thrown
+	 * when the user doesn't have the required rights.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testNotHavingRights() throws ValidateException {
+
+		String json = "{\"name\":\"experimentId\",\"annotations\":[{\"name\":\"pubmedId\",\"value\":\"abc123\"},{\"name\":\"type\",\"value\":\"raw\"}]}";
+		AddExperimentCommand c = gson.fromJson(json, AddExperimentCommand.class);
+		c.setRights(UserType.GUEST);
+
+		c.validate();
+		fail();
 	}
 
 

@@ -1,6 +1,9 @@
 package command.test;
 
 import static org.junit.Assert.*;
+
+import command.ValidateException;
+import database.subClasses.UserMethods.UserType;
 import org.junit.Test;
 import command.UpdateExperimentCommand;
 
@@ -12,7 +15,7 @@ import command.UpdateExperimentCommand;
  * @version 1.0
  */
 public class UpdateExperimentCommandTest {
-	//TODO Implement tests later
+	//TODO Implement more tests
 
 	/**
 	 * Test used to check that creation works and object
@@ -21,20 +24,36 @@ public class UpdateExperimentCommandTest {
 	@Test
 	public void testCreationNotNull() {
 
-		UpdateExperimentCommand c = new UpdateExperimentCommand("", "");
+		UpdateExperimentCommand c = new UpdateExperimentCommand("", "", UserType.ADMIN);
 		assertNotNull(c);
 
 	}
 
 	/**
-	 * Test used to check that validate always returns true.
+	 * Test used to check that ValidateException is not thrown
+	 * when the user have the required rights.
+	 *
+	 * @throws command.ValidateException
 	 */
 	@Test
-	public void testValidateAlwaysTrue() {
+	public void testHavingRights() throws ValidateException {
 
-		UpdateExperimentCommand c = new UpdateExperimentCommand("", "");
-		c.validate();
+		UpdateExperimentCommand com = new UpdateExperimentCommand("", "", UserType.USER);
+		com.validate();
+	}
 
+	/**
+	 * Test used to check that ValidateException is thrown
+	 * when the user doesn't have the required rights.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testNotHavingRights() throws ValidateException {
+
+		UpdateExperimentCommand com = new UpdateExperimentCommand("", "", UserType.GUEST);
+		com.validate();
+		fail();
 	}
 
 }

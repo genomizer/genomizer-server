@@ -11,6 +11,7 @@ import response.StatusCode;
 import response.GetExperimentResponse;
 import database.DatabaseAccessor;
 import database.containers.Experiment;
+import database.subClasses.UserMethods.UserType;
 
 /**
  * Class used to retrieve an experiment.
@@ -24,13 +25,15 @@ public class GetExperimentCommand extends Command {
 	 * experiment ID.
 	 * @param expID header to set.
 	 */
-	public GetExperimentCommand(String expID) {
+	public GetExperimentCommand(String expID, UserType userType) {
 		this.setHeader(expID);
+		this.userType = userType;
 	}
 
 	@Override
 	public void validate() throws ValidateException {
 		validateString(header, MaxLength.EXPID, "Experiment name");
+		hasRights(UserType.GUEST);
 	}
 
 	@Override

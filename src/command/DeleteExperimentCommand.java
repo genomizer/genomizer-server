@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import database.DatabaseAccessor;
 
 import database.constants.MaxLength;
+import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
@@ -24,8 +25,9 @@ public class DeleteExperimentCommand extends Command {
 	 * restful string.
 	 * @param expID the ID of the experiment.
 	 */
-	public DeleteExperimentCommand(String expID) {
+	public DeleteExperimentCommand(String expID, UserType userType) {
 		this.setHeader(expID);
+		this.userType = userType;
 	}
 
 	public void validate() throws ValidateException {

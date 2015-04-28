@@ -8,6 +8,7 @@ import response.Response;
 import response.StatusCode;
 import server.ServerSettings;
 import database.DatabaseAccessor;
+import database.subClasses.UserMethods.UserType;
 
 /**
  * This class contains common methods and attributes that are needed
@@ -31,10 +32,11 @@ public abstract class Command {
 	/*These are valid characters that are used with the validation method.*/
 	final protected String validCharacters = "^, A-Z, a-z, 0-9, space and _";
 
-	public enum UserType {ADMIN,USER,GUEST,UNKNOWN};
-
 	/*This is used to store a RESTful-header.*/
 	protected String header;
+
+	/*Contains the user rights level of the sender*/
+	protected UserType userType;
 
 	/**
 	 * Used to validate the object and its information. The validate method
@@ -128,24 +130,23 @@ public abstract class Command {
 	/**
 	 * Methods which verifies if the user has the requested user rights.
 	 * @param required The user rights level required
-	 * @param user The user rights of the current user
 	 * @throws ValidateException If the user rights level wasn't high enough
 	 */
-	public void hasRights(UserType required, UserType user) throws ValidateException {
+	public void hasRights(UserType required) throws ValidateException {
 
-		if (user == UserType.UNKNOWN)
+		if (userType == UserType.UNKNOWN)
 			throw new ValidateException(StatusCode.FORBIDDEN, "You don't have permission.");
 
-		if (required == user)
+		if (required == userType)
 			return;
 
 		else if (required == UserType.ADMIN)
 			throw new ValidateException(StatusCode.FORBIDDEN, "You don't have permission.");
 
-		else if (required == UserType.USER && user != UserType.ADMIN)
+		else if (required == UserType.USER && userType != UserType.ADMIN)
 			throw new ValidateException(StatusCode.FORBIDDEN, "You don't have permission.");
 
-		else if (required == UserType.UNKNOWN && !(user == UserType.ADMIN))
+		else if (required == UserType.UNKNOWN && !(userType == UserType.ADMIN))
 			throw new ValidateException(StatusCode.FORBIDDEN, "You don't have permission.");
 	}
 

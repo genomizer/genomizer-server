@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
@@ -45,6 +46,7 @@ public class AddExperimentCommand extends Command {
 			validateString(annotations.get(i).getValue(),
 					MaxLength.ANNOTATION_VALUE, "Annotation value");
 		}
+		hasRights(UserType.USER);
 	}
 
 	@Override
@@ -68,4 +70,7 @@ public class AddExperimentCommand extends Command {
 		}
 	}
 
+	public void setRights(UserType rights) {
+		this.userType = rights;
+	}
 }

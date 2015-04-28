@@ -1,9 +1,8 @@
 package command.test;
 
-import command.Command;
 import command.DeleteAnnotationValueCommand;
 import command.ValidateException;
-import org.junit.Before;
+import database.subClasses.UserMethods.UserType;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -13,27 +12,29 @@ public class DeleteAnnotationValueCommandTest {
     private DeleteAnnotationValueCommand com;
 
 
+    /**
+     * Test used to check that ValidateException is not thrown
+     * when the user have the required rights.
+     *
+     * @throws ValidateException
+     */
     @Test
-    public void testHavingUserRights() throws ValidateException {
+    public void testHavingRights() throws ValidateException {
 
-        com = new DeleteAnnotationValueCommand("name", "string", Command.UserType.USER);
-        com.validate();
-        com = new DeleteAnnotationValueCommand("name", "string", Command.UserType.ADMIN);
+        com = new DeleteAnnotationValueCommand("name", "string", UserType.USER);
         com.validate();
     }
 
+    /**
+     * Test used to check that ValidateException is thrown
+     * when the user doesn't have the required rights.
+     *
+     * @throws ValidateException
+     */
     @Test(expected = ValidateException.class)
-    public void testNotHavingUserRights1() throws ValidateException {
+    public void testNotHavingRights() throws ValidateException {
 
-        com = new DeleteAnnotationValueCommand("name", "string", Command.UserType.GUEST);
-        com.validate();
-        fail();
-    }
-
-    @Test(expected = ValidateException.class)
-    public void testNotHavingUserRights2() throws ValidateException {
-
-        com = new DeleteAnnotationValueCommand("name", "string", Command.UserType.UNKNOWN);
+        com = new DeleteAnnotationValueCommand("name", "string", UserType.GUEST);
         com.validate();
         fail();
     }

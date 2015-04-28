@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import database.constants.MaxLength;
+import database.subClasses.UserMethods.UserType;
 import response.Response;
 
 import database.DatabaseAccessor;
@@ -22,7 +23,6 @@ import response.StatusCode;
 public class DeleteAnnotationValueCommand extends Command {
 	private String name;
 	private String value;
-	private UserType userType;
 
 	/**
 	 * Constructs a new instance of DeleteAnnotationValueCommand using the
@@ -40,7 +40,7 @@ public class DeleteAnnotationValueCommand extends Command {
 	public void validate() throws ValidateException {
 		validateString(name, MaxLength.ANNOTATION_LABEL, "Annotation label");
 		validateString(value, MaxLength.ANNOTATION_VALUE, "Annotation value");
-		hasRights(UserType.USER, userType);
+		hasRights(UserType.USER);
 	}
 
 	@Override

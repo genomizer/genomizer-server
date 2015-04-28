@@ -1,10 +1,10 @@
 package command;
 
 import server.Debug;
-import server.WorkHandler;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import server.WorkPool;
+import database.subClasses.UserMethods.UserType;
 
 /**
  * This class is used to create and return different commands that
@@ -49,8 +49,8 @@ public class CommandFactory {
 	 * @param expID the ID of the experiment.
 	 * @return the actual command.
 	 */
-	public Command createGetExperimentCommand(String expID) {
-		return new GetExperimentCommand(expID);
+	public Command createGetExperimentCommand(String expID, UserType userType) {
+		return new GetExperimentCommand(expID, userType);
 	}
 
 	/**
@@ -58,8 +58,10 @@ public class CommandFactory {
 	 * @param json string to initiate class.
 	 * @return the actual command.
 	 */
-	public Command createAddExperimentCommand(String json) {
-		return gson.fromJson(json, AddExperimentCommand.class);
+	public Command createAddExperimentCommand(String json, UserType userType) {
+		AddExperimentCommand exp = gson.fromJson(json, AddExperimentCommand.class);
+		exp.setRights(userType);
+		return exp;
 	}
 
 	/**
@@ -68,8 +70,8 @@ public class CommandFactory {
 	 * @param expID the experiment ID.
 	 * @return the actual command.
 	 */
-	public Command createUpdateExperimentCommand(String json, String expID) {
-		return new UpdateExperimentCommand(json, expID);
+	public Command createUpdateExperimentCommand(String json, String expID, UserType userType) {
+		return new UpdateExperimentCommand(json, expID, userType);
 	}
 
 	/**
@@ -77,8 +79,8 @@ public class CommandFactory {
 	 * @param expID the ID of the experiment.
 	 * @return the actual command.
 	 */
-	public Command createDeleteExperimentCommand(String expID) {
-		return new DeleteExperimentCommand(expID);
+	public Command createDeleteExperimentCommand(String expID, UserType userType) {
+		return new DeleteExperimentCommand(expID, userType);
 	}
 
 	/**
@@ -261,7 +263,7 @@ public class CommandFactory {
 	 * @return the actual command created.
 	 */
 	public Command createDeleteAnnotationValueCommand(String value,
-													  String name, Command.UserType userType) {
+													  String name, UserType userType) {
 		return new DeleteAnnotationValueCommand(value, name, userType);
 	}
 
@@ -294,7 +296,7 @@ public class CommandFactory {
 
 	/**
 	 * Used to create the command needed to get the process status.
-	 * @param workHandler class object needed.
+	 * @param workPool class object needed.
 	 * @return the actual command.
 	 */
 	public Command createGetProcessStatusCommand(WorkPool workPool) {

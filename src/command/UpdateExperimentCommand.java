@@ -1,5 +1,6 @@
 package command;
 
+import database.subClasses.UserMethods.UserType;
 import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
@@ -13,8 +14,9 @@ import response.StatusCode;
 public class UpdateExperimentCommand extends Command {
 	//TODO Implement this class
 
-	public UpdateExperimentCommand(String json, String expID) {
+	public UpdateExperimentCommand(String json, String expID, UserType userType) {
 
+		this.userType = userType;
 	}
 
 	/**
@@ -22,7 +24,8 @@ public class UpdateExperimentCommand extends Command {
 	 * to execute the actual command.
 	 */
 	@Override
-	public void validate() {
+	public void validate() throws ValidateException {
+		hasRights(UserType.USER);
 	}
 
 	@Override

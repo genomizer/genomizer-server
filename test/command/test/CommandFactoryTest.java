@@ -2,7 +2,7 @@ package command.test;
 
 import static org.junit.Assert.*;
 
-import command.Command;
+import database.subClasses.UserMethods.UserType;
 import org.junit.Before;
 import org.junit.Test;
 import command.CommandFactory;
@@ -67,7 +67,7 @@ public class CommandFactoryTest {
 	@Test
 	public void testCreateGetExperimentCommandNotNull() {
 
-		assertNotNull(cmdf.createGetExperimentCommand("restful"));
+		assertNotNull(cmdf.createGetExperimentCommand("restful", UserType.ADMIN));
 
 	}
 
@@ -79,7 +79,7 @@ public class CommandFactoryTest {
 
 		String json = "{\"name\":\"experimentId\",\"createdBy\":\"user\",\"annotations\":"
 				+ "[{\"name\":\"pubmedId\",\"value\":\"abc123\"}]}";
-		assertNotNull(cmdf.createAddExperimentCommand(json));
+		assertNotNull(cmdf.createAddExperimentCommand(json, UserType.ADMIN));
 
 	}
 
@@ -91,7 +91,7 @@ public class CommandFactoryTest {
 
 		String json = "{\"name\": \"experimentId\",\"createdBy\":\"user\",\"annotations\":"
 				+ "[{\"name\":\"pubmedId\",\"value\":\"abc123\"}]}";
-		assertNotNull(cmdf.createUpdateExperimentCommand(json, "/experiment/id123"));
+		assertNotNull(cmdf.createUpdateExperimentCommand(json, "/experiment/id123", UserType.ADMIN));
 
 	}
 
@@ -101,7 +101,7 @@ public class CommandFactoryTest {
 	@Test
 	public void testDeleteExperimentCommandNotNull() {
 
-		assertNotNull(cmdf.createDeleteExperimentCommand("/experiment/id123"));
+		assertNotNull(cmdf.createDeleteExperimentCommand("/experiment/id123", UserType.ADMIN));
 
 	}
 
@@ -280,7 +280,7 @@ public class CommandFactoryTest {
 	@Test
 	public void testDeleteAnnotationValueCommandNotNull() {
 
-		assertNotNull(cmdf.createDeleteAnnotationValueCommand("valueName", "fieldName", Command.UserType.ADMIN));
+		assertNotNull(cmdf.createDeleteAnnotationValueCommand("valueName", "fieldName", UserType.ADMIN));
 
 	}
 
@@ -331,7 +331,7 @@ public class CommandFactoryTest {
 	@Test
 	public void testCreateRetrieveExperimentCommand() {
 
-		assertNotNull(cmdf.createGetExperimentCommand("restful"));
+		assertNotNull(cmdf.createGetExperimentCommand("restful", UserType.ADMIN));
 
 	}
 

@@ -1,105 +1,114 @@
-package test.command.test;
+package command.test;
 
 import static org.junit.Assert.*;
 
 import command.Command;
-import command.LoginCommand;
+import command.DeleteAnnotationValueCommand;
 import command.ValidateException;
-import junit.framework.TestCase;
-import org.junit.Before;
+import database.subClasses.UserMethods.UserType;
 import org.junit.Test;
 
 public class CommandTest {
 
     private Command com;
 
-    @Before
-    public void setUp(){
-        com = new LoginCommand();
-    }
 
     @Test(expected = ValidateException.class)
     public void testReturnFalseForUnknown() throws ValidateException {
 
-        com.hasRights(Command.UserType.UNKNOWN, Command.UserType.UNKNOWN);
+        com = new DeleteAnnotationValueCommand("name","value", UserType.UNKNOWN);
+        com.hasRights(UserType.UNKNOWN);
         fail();
     }
 
     @Test
     public void testReturnTrueForEqual() throws ValidateException {
 
-        com.hasRights(Command.UserType.ADMIN, Command.UserType.ADMIN);
-        com.hasRights(Command.UserType.USER, Command.UserType.USER);
-        com.hasRights(Command.UserType.GUEST, Command.UserType.GUEST);
+        com = new DeleteAnnotationValueCommand("name","value", UserType.ADMIN);
+        com.hasRights(UserType.ADMIN);
+        com = new DeleteAnnotationValueCommand("name","value", UserType.USER);
+        com.hasRights(UserType.USER);
+        com = new DeleteAnnotationValueCommand("name","value", UserType.GUEST);
+        com.hasRights(UserType.GUEST);
     }
 
     @Test
     public void testReturnTrueForAdmin() throws ValidateException {
 
-        com.hasRights(Command.UserType.USER, Command.UserType.ADMIN);
-        com.hasRights(Command.UserType.GUEST, Command.UserType.ADMIN);
-        com.hasRights(Command.UserType.UNKNOWN, Command.UserType.ADMIN);
+        com = new DeleteAnnotationValueCommand("name","value", UserType.ADMIN);
+        com.hasRights(UserType.USER);
+        com.hasRights(UserType.GUEST);
+        com.hasRights(UserType.UNKNOWN);
     }
 
     @Test(expected = ValidateException.class)
     public void testReturnFalseWithoutAdminRights1() throws ValidateException {
 
-        com.hasRights(Command.UserType.ADMIN, Command.UserType.USER);
+        com = new DeleteAnnotationValueCommand("name","value", UserType.USER);
+        com.hasRights(UserType.ADMIN);
         fail();
     }
 
     @Test(expected = ValidateException.class)
     public void testReturnFalseWithoutAdminRights2() throws ValidateException {
 
-        com.hasRights(Command.UserType.ADMIN, Command.UserType.GUEST);
-        fail();
-    }
-
-    @Test(expected = ValidateException.class)
-    public void testReturnFalseWithoutAdminRights3() throws ValidateException {
-
-        com.hasRights(Command.UserType.ADMIN, Command.UserType.UNKNOWN);
+        com = new DeleteAnnotationValueCommand("name","value", UserType.GUEST);
+        com.hasRights(UserType.ADMIN);
         fail();
     }
 
     @Test(expected = ValidateException.class)
     public void testReturnFalseWithoutUserRights1() throws ValidateException {
 
-        com.hasRights(Command.UserType.USER, Command.UserType.GUEST);
-        fail();
-    }
-
-    @Test(expected = ValidateException.class)
-    public void testReturnFalseWithoutUserRights2() throws ValidateException {
-
-        com.hasRights(Command.UserType.USER, Command.UserType.UNKNOWN);
-        fail();
-    }
-
-    @Test
-    public void testReturnTrueWithGuestRights() throws ValidateException {
-
-        com.hasRights(Command.UserType.GUEST, Command.UserType.USER);
-    }
-
-    @Test(expected = ValidateException.class)
-    public void testReturnFalseWithoutGuestRights() throws ValidateException {
-
-        com.hasRights(Command.UserType.GUEST, Command.UserType.UNKNOWN);
-        fail();
-    }
-
-    @Test(expected = ValidateException.class)
-    public void testDoNotAllowUsersForUnknown1() throws ValidateException {
-
-        com.hasRights(Command.UserType.UNKNOWN, Command.UserType.USER);
+        com = new DeleteAnnotationValueCommand("name","value", UserType.GUEST);
+        com.hasRights(UserType.USER);
         fail();
     }
 
     @Test(expected = ValidateException.class)
     public void testDoNotAllowUsersForUnknown2() throws ValidateException {
 
-        com.hasRights(Command.UserType.UNKNOWN, Command.UserType.GUEST);
+        com = new DeleteAnnotationValueCommand("name","value", UserType.GUEST);
+        com.hasRights(UserType.UNKNOWN);
+        fail();
+    }
+
+    @Test(expected = ValidateException.class)
+    public void testReturnFalseWithoutAdminRights3() throws ValidateException {
+
+        com = new DeleteAnnotationValueCommand("name","value", UserType.UNKNOWN);
+        com.hasRights(UserType.ADMIN);
+        fail();
+    }
+
+    @Test(expected = ValidateException.class)
+    public void testReturnFalseWithoutUserRights2() throws ValidateException {
+
+        com = new DeleteAnnotationValueCommand("name","value", UserType.UNKNOWN);
+        com.hasRights(UserType.USER);
+        fail();
+    }
+
+    @Test(expected = ValidateException.class)
+    public void testReturnFalseWithoutGuestRights() throws ValidateException {
+
+        com = new DeleteAnnotationValueCommand("name","value", UserType.UNKNOWN);
+        com.hasRights(UserType.GUEST);
+        fail();
+    }
+
+    @Test
+    public void testReturnTrueWithGuestRights() throws ValidateException {
+
+        com = new DeleteAnnotationValueCommand("name","value", UserType.USER);
+        com.hasRights(UserType.GUEST);
+    }
+
+    @Test(expected = ValidateException.class)
+    public void testDoNotAllowUsersForUnknown1() throws ValidateException {
+
+        com = new DeleteAnnotationValueCommand("name","value", UserType.USER);
+        com.hasRights(UserType.UNKNOWN);
         fail();
     }
 

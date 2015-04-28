@@ -3,6 +3,7 @@ package command.test;
 import static org.junit.Assert.*;
 
 import database.constants.MaxLength;
+import database.subClasses.UserMethods.UserType;
 import org.junit.Test;
 import command.DeleteExperimentCommand;
 import command.ValidateException;
@@ -23,7 +24,7 @@ public class DeleteExperimentCommandTest {
 	@Test
 	public void testCreateNotNull() {
 
-		DeleteExperimentCommand c = new DeleteExperimentCommand("a");
+		DeleteExperimentCommand c = new DeleteExperimentCommand("a", UserType.ADMIN);
 
 		assertNotNull(c);
 
@@ -38,7 +39,7 @@ public class DeleteExperimentCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateNullExpId() throws ValidateException {
 
-		DeleteExperimentCommand c = new DeleteExperimentCommand(null);
+		DeleteExperimentCommand c = new DeleteExperimentCommand(null, UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException.");
@@ -54,7 +55,7 @@ public class DeleteExperimentCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateExpIdEmptyString() throws ValidateException {
 
-		DeleteExperimentCommand c = new DeleteExperimentCommand("");
+		DeleteExperimentCommand c = new DeleteExperimentCommand("", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException.");
@@ -74,7 +75,7 @@ public class DeleteExperimentCommandTest {
 		for(int i = 0; i < MaxLength.EXPID + 1; i++) {
 			big = big + "a";
 		}
-		DeleteExperimentCommand c = new DeleteExperimentCommand(big);
+		DeleteExperimentCommand c = new DeleteExperimentCommand(big, UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException.");
@@ -90,7 +91,7 @@ public class DeleteExperimentCommandTest {
 	@Test
 	public void testValidateProperlyFormatted() throws ValidateException {
 
-		DeleteExperimentCommand c = new DeleteExperimentCommand("properly");
+		DeleteExperimentCommand c = new DeleteExperimentCommand("properly", UserType.ADMIN);
 		c.validate();
 
 		assertTrue(true);
