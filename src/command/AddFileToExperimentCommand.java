@@ -9,6 +9,7 @@ import database.DatabaseAccessor;
 import database.constants.MaxLength;
 import database.containers.FileTuple;
 
+import database.subClasses.UserMethods.UserType;
 import response.AddFileToExperimentResponse;
 import response.ErrorResponse;
 import response.Response;
@@ -54,6 +55,7 @@ public class AddFileToExperimentCommand extends Command {
 		validateString(grVersion, MaxLength.FILE_GRVERSION, "Genome release");
 		validateString(fileName, MaxLength.FILE_FILENAME, "Filename");
 		validateString(metaData, MaxLength.FILE_METADATA, "Metadata");
+		hasRights(UserType.USER);
 	}
 
 	public void setUploader(String uploader) {
@@ -97,5 +99,9 @@ public class AddFileToExperimentCommand extends Command {
 				db.close();
 			}
 		}
+	}
+
+	public void setRights(UserType rights) {
+		this.userType = rights;
 	}
 }

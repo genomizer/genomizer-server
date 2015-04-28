@@ -91,37 +91,45 @@ public class CommandHandler {
 			case DELETE_ANNOTATION_VALUE_COMMAND:
 				rest = uri.split("/");
 				return cmdFactory.
-						createDeleteAnnotationValueCommand(rest[3], rest[4], userType);
+						createDeleteAnnotationValueCommand(rest[3], rest[4],
+								userType);
 			case LOGIN_COMMAND:
 				return cmdFactory.createLoginCommand(json);
 			case LOGOUT_COMMAND:
 				return cmdFactory.createLogoutCommand(username);
 			case GET_EXPERIMENT_COMMAND:
-				return cmdFactory.createGetExperimentCommand(parsedURI, userType);
+				return cmdFactory.createGetExperimentCommand(parsedURI,
+						userType);
 			case ADD_EXPERIMENT_COMMAND:
 				return cmdFactory.createAddExperimentCommand(json, userType);
 			case UPDATE_EXPERIMENT_COMMAND:
 				return cmdFactory.
-						createUpdateExperimentCommand(json, parsedURI, userType);
+						createUpdateExperimentCommand(json, parsedURI,
+								userType);
 			case DELETE_EXPERIMENT_COMMAND:
-				return cmdFactory.createDeleteExperimentCommand(parsedURI, userType);
+				return cmdFactory.createDeleteExperimentCommand(parsedURI,
+						userType);
 			case GET_FILE_FROM_EXPERIMENT_COMMAND:
-				return cmdFactory.createGetFileFromExperimentCommand(parsedURI);
+				return cmdFactory.createGetFileFromExperimentCommand(parsedURI,
+						userType);
 			case ADD_FILE_TO_EXPERIMENT_COMMAND:
-				return cmdFactory.createAddFileToExperimentCommand(json);
+				return cmdFactory.createAddFileToExperimentCommand(json,
+						userType);
 			case UPDATE_FILE_IN_EXPERIMENT_COMMAND:
 				return cmdFactory.createUpdateFileInExperimentCommand(json,
-						parsedURI);
+						parsedURI, userType);
 			case DELETE_FILE_FROM_EXPERIMENT_COMMAND:
 				return cmdFactory.
-                        createDeleteFileFromExperimentCommand(parsedURI);
+                        createDeleteFileFromExperimentCommand(parsedURI,
+								userType);
 			case SEARCH_FOR_EXPERIMENTS_COMMAND:
-				return cmdFactory.createSearchForExperimentCommand(parsedURI);
+				return cmdFactory.createSearchForExperimentCommand(parsedURI,
+						userType);
 			case DELETE_USER_COMMAND:
-				return cmdFactory.createDeleteUserCommand(parsedURI);
+				return cmdFactory.createDeleteUserCommand(parsedURI, userType);
 			case PROCESS_COMMAND:
 				return cmdFactory.createProcessCommand(json, username,
-						parsedURI);
+						parsedURI, userType);
 			case GET_PROCESS_STATUS_COMMAND:
 				return cmdFactory.createGetProcessStatusCommand(workPool);
 			case GET_ANNOTATION_INFORMATION_COMMAND:

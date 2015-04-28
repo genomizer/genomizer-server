@@ -11,6 +11,7 @@ import java.net.URLDecoder;
 import database.DatabaseAccessor;
 import database.containers.Experiment;
 
+import database.subClasses.UserMethods;
 import response.ErrorResponse;
 import response.Response;
 import response.SearchResponse;
@@ -31,8 +32,9 @@ public class SearchForExperimentsCommand extends Command {
 	 * @param annotations the annotations (hopefully) belonging to the
 	 *                       experiment.
 	 */
-	public SearchForExperimentsCommand(String annotations) {
+	public SearchForExperimentsCommand(String annotations, UserMethods.UserType userType) {
 		this.annotations = annotations;
+		this.userType = userType;
 	}
 
 	@Override
@@ -41,6 +43,7 @@ public class SearchForExperimentsCommand extends Command {
 			throw new ValidateException(StatusCode.BAD_REQUEST,
 					"Specify annotations to search for.");
 		}
+		hasRights(UserMethods.UserType.GUEST);
 	}
 
 	@Override

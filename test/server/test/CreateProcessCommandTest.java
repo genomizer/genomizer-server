@@ -2,6 +2,7 @@ package server.test;
 
 import static org.junit.Assert.*;
 
+import database.subClasses.UserMethods;
 import database.test.*;
 import org.junit.*;
 
@@ -47,13 +48,15 @@ public class CreateProcessCommandTest {
 							"\"genomeRelease\": \"" + genomeRelease + "\"," +
 							"\"author\": \"" + author + "\"}";
 
-		processCommand = (ProcessCommand)cmdf.createProcessCommand(json, username, json);
+		processCommand = (ProcessCommand)cmdf.createProcessCommand(json, username, json, UserMethods.UserType.ADMIN);
 	}
 
 	@Test
 	public void shouldInitiateProcessCommand(){
 		assertNotNull(processCommand);
 	}
+
+//TODO Make some new tests?
 /*
 	@Test
 	public void shouldSetMetadata(){

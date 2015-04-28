@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Map.Entry;
 
+import database.subClasses.UserMethods.UserType;
 import process.ProcessException;
 import process.ProcessHandler;
 import response.ErrorResponse;
@@ -91,6 +92,7 @@ public class ProcessCommand extends Command {
 				throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
 						"process type");
 		}
+		hasRights(UserType.USER);
 	}
 
 	/**
@@ -229,16 +231,16 @@ public class ProcessCommand extends Command {
 					break;
 				default:
 					Debug.log("ERROR: Unknown process type in " +
-							"processcommand execute");
+							"processCommand execute");
 					db.close();
 					ErrorLogger.log(username, "Unknown process type in " +
-							"processcommand execute when running " + processtype
+							"processCommand execute when running " + processtype
 							+ " on experiment" + expid + "\n"+
 							"metadata: " + metadata + "\n"+
 							"parameters: " + parameters + "\n" +
 							"genomeVersion: " + genomeVersion + "\n");
 					return new ProcessResponse(StatusCode.BAD_REQUEST,
-							"Unknown process type in processcommand execute " +
+							"Unknown process type in processCommand execute " +
 									"when running " + processtype +
 									" on experiment" + expid + "\n"+
 							"metadata: " + metadata + "\n"+
@@ -311,7 +313,7 @@ public class ProcessCommand extends Command {
 		} catch (IOException e) {
 			e.printStackTrace();
 			ErrorLogger.log(username, "IO Exception in ProcessCommand " +
-					"execute when creating new DatabaseAccesor before " +
+					"execute when creating new DatabaseAccessor before " +
 					"addGeneratedProfiles with " + processtype +
 					" on experiment" + expid + "\n"+
 					"metadata: " + metadata + "\n"+
@@ -320,7 +322,7 @@ public class ProcessCommand extends Command {
 			db.close();
 			return new ProcessResponse(StatusCode.SERVICE_UNAVAILABLE,
 					"IO Exception in ProcessCommand execute when creating " +
-							"new DatabaseAccesor before addGeneratedProfiles " +
+							"new DatabaseAccessor before addGeneratedProfiles " +
 							"running " + processtype + " on experiment" + expid +
 							"\n"+
 					"metadata: " + metadata + "\n"+
@@ -346,14 +348,13 @@ public class ProcessCommand extends Command {
 	}
 
 	/**
-	 * Set the username of the uploader wich will be added to the database
+	 * Set the username of the uploader which will be added to the database
 	 * annotation.
 	 *
 	 * @param username - the username of the uploader.
 	 */
 	public void setUsername(String username) {
 		this.username = username;
-
 	}
 
 	/**
@@ -362,23 +363,27 @@ public class ProcessCommand extends Command {
 	public String toString(){
 
 		return "Uploader of file: " + username + "\n" +
-				"Processtype: " + processtype + "\n" +
+				"ProcessType: " + processtype + "\n" +
 				"metadata:" + metadata + "\n" +
 				"username: " + username + "\n" +
-				"expid: " + expid + "\n" +
+				"expId: " + expid + "\n" +
 				"genomeRelease: " + genomeVersion + "\n";
 	}
 
 	public void setTimestamp(long currentTimeMillis) {
 		this.timestamp = currentTimeMillis;
 	}
-	public long getTimestamp(){
-		return this.timestamp;
+//	public long getTimestamp(){
+//		return this.timestamp;
+//	}
+
+	public void setProcessType(String processType) {
+		this.processtype = processType;
+
 	}
 
-	public void setProcessType(String processtype) {
-		this.processtype = processtype;
-
+	public void setUserType(UserType userType){
+		this.userType = userType;
 	}
 
 	public String getExpId() {

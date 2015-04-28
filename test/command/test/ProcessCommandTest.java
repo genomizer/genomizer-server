@@ -3,6 +3,7 @@ package command.test;
 import static org.junit.Assert.*;
 
 import database.constants.MaxLength;
+import database.subClasses.UserMethods.UserType;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -318,7 +319,7 @@ public class ProcessCommandTest {
 	 * Test used to check that ValidateException is thrown if
 	 * MetaData is empty string.
 	 *
-	 * TODO: Looks like this test is not correct, metadata can be null.
+	 * TODO: This test is not working currently as metadata can be null.
 	 *
 	 * @throws ValidateException
 	 */
@@ -479,6 +480,7 @@ public class ProcessCommandTest {
 		ProcessCommand c = gson.fromJson(json, ProcessCommand.class);
 		c.setUsername("hello");
 		c.setProcessType(ProcessCommand.CMD_RAW_TO_PROFILE);
+		c.setUserType(UserType.ADMIN);
 		c.validate();
 
 		assertTrue(true);
@@ -504,9 +506,47 @@ public class ProcessCommandTest {
 	}
 
 	/**
+	 * Test used to check that ValidateException is not thrown
+	 * when the user have the required rights.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test
+	public void testHavingRights() throws ValidateException {
+
+		String[] p = {"a","b","c","d","e","f","g","h"};
+		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1");
+		ProcessCommand c = gson.fromJson(json, ProcessCommand.class);
+		c.setUsername("hello");
+		c.setProcessType(ProcessCommand.CMD_RAW_TO_PROFILE);
+		c.setUserType(UserType.USER);
+
+		c.validate();
+	}
+
+	/**
+	 * Test used to check that ValidateException is thrown
+	 * when the user doesn't have the required rights.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testNotHavingRights() throws ValidateException {
+
+		String json = "{\"name\":\"experimentId\",\"annotations\":[{\"name\":\"pubmedId\",\"value\":\"abc123\"},{\"name\":\"type\",\"value\":\"raw\"}]}";
+		ProcessCommand c = gson.fromJson(json, ProcessCommand.class);
+		c.setUsername("hello");
+		c.setProcessType(ProcessCommand.CMD_RAW_TO_PROFILE);
+		c.setUserType(UserType.GUEST);
+
+		c.validate();
+		fail();
+	}
+
+	/**
 	 * Method used to build a JSON and return it as a string.
 	 *
-	 * @param strings to insert into JSON object.
+	 * @param expId and the other strings are used for inserting into JSON object.
 	 * @return JSON formatted string.
 	 */
 	private String jsonAndInfoBuilder(String expId, String[] param, String met, String genV) {

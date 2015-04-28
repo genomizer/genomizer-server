@@ -98,4 +98,31 @@ public class DeleteExperimentCommandTest {
 
 	}
 
+	/**
+	 * Test used to check that ValidateException is not thrown
+	 * when the user have the required rights.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test
+	public void testHavingRights() throws ValidateException {
+
+		DeleteExperimentCommand com = new DeleteExperimentCommand("string", UserType.USER);
+		com.validate();
+	}
+
+	/**
+	 * Test used to check that ValidateException is thrown
+	 * when the user doesn't have the required rights.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testNotHavingRights() throws ValidateException {
+
+		DeleteExperimentCommand com = new DeleteExperimentCommand("string", UserType.GUEST);
+		com.validate();
+		fail();
+	}
+
 }

@@ -6,6 +6,8 @@ import com.google.gson.GsonBuilder;
 import server.WorkPool;
 import database.subClasses.UserMethods.UserType;
 
+import javax.jws.soap.SOAPBinding;
+
 /**
  * This class is used to create and return different commands that
  * will be executed later by calling their execute() method.
@@ -88,8 +90,8 @@ public class CommandFactory {
 	 * @param fileID the ID of the file.
 	 * @return the actual command.
 	 */
-	public Command createGetFileFromExperimentCommand(String fileID) {
-		return new GetFileFromExperimentCommand(fileID);
+	public Command createGetFileFromExperimentCommand(String fileID, UserType userType) {
+		return new GetFileFromExperimentCommand(fileID, userType);
 	}
 
 	/**
@@ -97,8 +99,10 @@ public class CommandFactory {
 	 * @param json string to initiate class.
 	 * @return the actual command.
 	 */
-	public Command createAddFileToExperimentCommand(String json) {
-		return gson.fromJson(json, AddFileToExperimentCommand.class);
+	public Command createAddFileToExperimentCommand(String json, UserType userType) {
+		AddFileToExperimentCommand exp = gson.fromJson(json, AddFileToExperimentCommand.class);
+		exp.setRights(userType);
+		return exp;
 	}
 
 	/**
@@ -108,8 +112,8 @@ public class CommandFactory {
 	 * @return the actual command.
 	 */
 	public Command createUpdateFileInExperimentCommand(String json,
-													   String expID) {
-		return new UpdateFileInExperimentCommand(json, expID);
+													   String expID, UserType userType) {
+		return new UpdateFileInExperimentCommand(json, expID, userType);
 	}
 
 	/**
@@ -117,8 +121,8 @@ public class CommandFactory {
 	 * @param fileID the ID of the file.
 	 * @return the actual command.
 	 */
-	public Command createDeleteFileFromExperimentCommand(String fileID) {
-		return new DeleteFileFromExperimentCommand(fileID);
+	public Command createDeleteFileFromExperimentCommand(String fileID, UserType userType) {
+		return new DeleteFileFromExperimentCommand(fileID, userType);
 	}
 
 	/**
@@ -126,9 +130,9 @@ public class CommandFactory {
 	 * @param pubmedQuery the pubmed query.
 	 * @return the actual command.
 	 */
-	public Command createSearchForExperimentCommand(String pubmedQuery) {
+	public Command createSearchForExperimentCommand(String pubmedQuery, UserType userType) {
 		int index = pubmedQuery.indexOf("=");
-		return new SearchForExperimentsCommand(pubmedQuery.substring(index+1));
+		return new SearchForExperimentsCommand(pubmedQuery.substring(index+1), userType);
 	}
 
 	/**
@@ -145,8 +149,8 @@ public class CommandFactory {
 	 * @param username to delete.
 	 * @return the actual command.
 	 */
-	public Command createDeleteUserCommand(String username) {
-		return new DeleteUserCommand(username);
+	public Command createDeleteUserCommand(String username, UserType userType) {
+		return new DeleteUserCommand(username, userType);
 	}
 
 	/**
@@ -157,14 +161,16 @@ public class CommandFactory {
 	 * @return the actual command.
 	 */
 	public Command createProcessCommand(String json, String username,
-										String processType) {
+										String processType, UserType userType) {
 		ProcessCommand processCommand = gson.fromJson(json,
 				ProcessCommand.class);
 		processCommand.setUsername(username);
 		processCommand.setTimestamp(System.currentTimeMillis());
 		processCommand.setProcessType(processType);
+		processCommand.setUserType(userType);
 		Debug.log("Username: " + username + " timestamp: " +
-				System.currentTimeMillis() + " parsedRest: " + processType);
+				System.currentTimeMillis() + " parsedRest: " + processType +
+				" userType: " + userType);
 		return processCommand;
 	}
 

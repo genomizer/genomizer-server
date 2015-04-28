@@ -1,6 +1,7 @@
 package command;
 
 import database.constants.MaxLength;
+import database.subClasses.UserMethods.UserType;
 import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
@@ -26,13 +27,15 @@ public class GetFileFromExperimentCommand extends Command {
 	 * file ID.
 	 * @param fileID the file ID of the wanted file.
 	 */
-	public GetFileFromExperimentCommand(String fileID) {
+	public GetFileFromExperimentCommand(String fileID, UserType userType) {
 		this.fileID = fileID;
+		this.userType = userType;
 	}
 
 	@Override
 	public void validate() throws ValidateException {
 		validateString(fileID, MaxLength.FILE_EXPID, "Filename");
+		hasRights(UserType.USER);
 	}
 
 	@Override

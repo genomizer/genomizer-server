@@ -111,7 +111,7 @@ public class CommandFactoryTest {
 	@Test
 	public void testGetFileFromExperimentCommandNotNull() {
 
-		assertNotNull(cmdf.createGetFileFromExperimentCommand("/file/myFileId"));
+		assertNotNull(cmdf.createGetFileFromExperimentCommand("/file/myFileId", UserType.ADMIN));
 
 	}
 
@@ -124,7 +124,7 @@ public class CommandFactoryTest {
 		String json = "{\"experimentID\":\"id\",\"fileName\":\"name\",\"type\":\"raw\","
 				+ "\"metaData\":\"metameta\",\"author\":\"name\",\"uploader\":\"user1\","
 				+ "\"isPrivate\":\"bool\",\"grVersion\":\"releaseNr\"}";
-		assertNotNull(cmdf.createAddFileToExperimentCommand(json));
+		assertNotNull(cmdf.createAddFileToExperimentCommand(json, UserType.ADMIN));
 
 	}
 
@@ -137,7 +137,7 @@ public class CommandFactoryTest {
 		String json = "{\"experimentID\":\"id\",\"fileName\":\"name\",\"type\":\"raw\","
 				+ "\"metaData\":\"metameta\",\"author\":\"name\",\"uploader\":\"user1\","
 				+ "\"isPrivate\":\"bool\",\"grVersion\":\"releaseNr\"}";
-		assertNotNull(cmdf.createUpdateFileInExperimentCommand(json, "/file/myFileId"));
+		assertNotNull(cmdf.createUpdateFileInExperimentCommand(json, "/file/myFileId", UserType.ADMIN));
 
 	}
 
@@ -147,7 +147,7 @@ public class CommandFactoryTest {
 	@Test
 	public void testDeleteFileFromExperimentCommandNotNull() {
 
-		assertNotNull(cmdf.createDeleteFileFromExperimentCommand("/file/myFileId"));
+		assertNotNull(cmdf.createDeleteFileFromExperimentCommand("/file/myFileId", UserType.ADMIN));
 
 	}
 
@@ -157,7 +157,7 @@ public class CommandFactoryTest {
 	@Test
 	public void testSearchForExperimentCommandNotNull() {
 
-		assertNotNull(cmdf.createSearchForExperimentCommand("/search/?annotations=pubmedStyleQuery"));
+		assertNotNull(cmdf.createSearchForExperimentCommand("/search/?annotations=pubmedStyleQuery", UserType.ADMIN));
 
 	}
 
@@ -167,7 +167,7 @@ public class CommandFactoryTest {
 	@Test
 	public void testDeleteUserCommandNotNull() {
 
-		assertNotNull(cmdf.createDeleteUserCommand("/user"));
+		assertNotNull(cmdf.createDeleteUserCommand("/user", UserType.ADMIN));
 
 	}
 
@@ -183,7 +183,7 @@ public class CommandFactoryTest {
 				",\"y\",\"y\",\"10 1 5 0 0\",\"y 10\",\"single 4 0\",\"150 1 7 0 0\"]," +
 				"\"metadata\": \"astringofmetadata\",\"genomeRelease\":" +
 				"\"hg38\",\"author\": \"yuri\"}";
-		assertNotNull(cmdf.createProcessCommand(json, "userName", "parsedRestful"));
+		assertNotNull(cmdf.createProcessCommand(json, "userName", "parsedRestful", UserType.ADMIN));
 
 	}
 

@@ -36,7 +36,7 @@ public abstract class Command {
 	protected String header;
 
 	/*Contains the user rights level of the sender*/
-	protected UserType userType;
+	protected UserType userType = UserType.UNKNOWN;
 
 	/**
 	 * Used to validate the object and its information. The validate method

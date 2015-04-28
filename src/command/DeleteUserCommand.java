@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
+import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
@@ -23,8 +24,9 @@ public class DeleteUserCommand extends Command {
 	 * username.
 	 * @param username the username to delete.
 	 */
-	public DeleteUserCommand(String username) {
+	public DeleteUserCommand(String username, UserType userType) {
 		this.username = username;
+		this.userType = userType;
 	}
 
 	@Override
@@ -38,6 +40,7 @@ public class DeleteUserCommand extends Command {
 					"has to be between 1 and " +
 					MaxLength.USERNAME + " characters long.");
 		}
+		hasRights(UserType.ADMIN);
 	}
 
 	@Override
@@ -48,7 +51,7 @@ public class DeleteUserCommand extends Command {
 			db = initDB();
 		} catch (SQLException e) {
 			return new ErrorResponse(StatusCode.BAD_REQUEST, "Error when " +
-					"intiating daabaseaccessor. " + e.getMessage());
+					"initiating databaseAccessor. " + e.getMessage());
 		} catch (IOException e)  {
 			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
 		}

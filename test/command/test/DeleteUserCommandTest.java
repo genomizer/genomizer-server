@@ -3,6 +3,7 @@ package command.test;
 import static org.junit.Assert.*;
 
 import database.constants.MaxLength;
+import database.subClasses.UserMethods.UserType;
 import org.junit.Test;
 import command.DeleteUserCommand;
 import command.ValidateException;
@@ -20,9 +21,9 @@ public class DeleteUserCommandTest {
 	 * Test used to check that creation is not null.
 	 */
 	@Test
-	public void testCreationnotNull() {
+	public void testCreationNotNull() {
 
-		DeleteUserCommand c = new DeleteUserCommand("username");
+		DeleteUserCommand c = new DeleteUserCommand("username", UserType.ADMIN);
 
 		assertNotNull(c);
 
@@ -37,7 +38,7 @@ public class DeleteUserCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateUserNameNotNull() throws ValidateException {
 
-		DeleteUserCommand c = new DeleteUserCommand(null);
+		DeleteUserCommand c = new DeleteUserCommand(null, UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException.");
@@ -53,7 +54,7 @@ public class DeleteUserCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateUsernameEmptyString() throws ValidateException {
 
-		DeleteUserCommand c = new DeleteUserCommand("");
+		DeleteUserCommand c = new DeleteUserCommand("", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException.");
@@ -73,7 +74,7 @@ public class DeleteUserCommandTest {
 		for(int i = 0; i < MaxLength.USERNAME + 1; i++) {
 			big = big + "a";
 		}
-		DeleteUserCommand c = new DeleteUserCommand(big);
+		DeleteUserCommand c = new DeleteUserCommand(big, UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException.");
@@ -89,11 +90,38 @@ public class DeleteUserCommandTest {
 	@Test
 	public void testValidateProperlyFormatted() throws ValidateException {
 
-		DeleteUserCommand c = new DeleteUserCommand("username");
+		DeleteUserCommand c = new DeleteUserCommand("username", UserType.ADMIN);
 		c.validate();
 
 		assertTrue(true);
 
+	}
+
+	/**
+	 * Test used to check that ValidateException is not thrown
+	 * when the user have the required rights.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test
+	public void testHavingRights() throws ValidateException {
+
+		DeleteUserCommand com = new DeleteUserCommand("string", UserType.ADMIN);
+		com.validate();
+	}
+
+	/**
+	 * Test used to check that ValidateException is thrown
+	 * when the user doesn't have the required rights.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testNotHavingRights() throws ValidateException {
+
+		DeleteUserCommand com = new DeleteUserCommand("string", UserType.USER);
+		com.validate();
+		fail();
 	}
 
 }

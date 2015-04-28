@@ -5,6 +5,7 @@ import java.sql.SQLException;
 
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
+import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
@@ -24,13 +25,15 @@ public class DeleteFileFromExperimentCommand extends Command {
 	 * supplied restful string.
 	 * @param fileID the file ID of the file you wish to delete.
 	 */
-	public DeleteFileFromExperimentCommand(String fileID) {
+	public DeleteFileFromExperimentCommand(String fileID, UserType userType) {
 		this.setHeader(fileID);
+		this.userType = userType;
 	}
 
 	@Override
 	public void validate() throws ValidateException {
 		validateString(header, MaxLength.EXPID, "Experiment name");
+		hasRights(UserType.USER);
 	}
 
 	@Override
