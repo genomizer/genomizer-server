@@ -8,7 +8,7 @@ import com.google.gson.GsonBuilder;
 import command.AddAnnotationFieldCommand;
 import command.Command;
 import command.ValidateException;
-import database.constants.MaxSize;
+import database.constants.MaxLength;
 
 /**
  * Test class used to check that the AddAnnotationFieldCommand
@@ -91,7 +91,7 @@ public class AddAnnotationFieldCommandTest {
 	public void testValidateNameLength() throws ValidateException {
 
 		String big = "";
-		for(int i = 0; i < MaxSize.ANNOTATION_LABEL + 1; i++) {
+		for(int i = 0; i < MaxLength.ANNOTATION_LABEL + 1; i++) {
 			big = big + "A";
 		}
 	    String json = "{\"name\":\"" + big +
@@ -112,7 +112,7 @@ public class AddAnnotationFieldCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testNameHasInvalidCharacters() throws ValidateException {
 
-		String invalid = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 едц";
+		String invalid = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 пїЅпїЅпїЅ";
 		String json = "{\"name\":\"" + invalid +
 				"\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
 		AddAnnotationFieldCommand c = new AddAnnotationFieldCommand();
@@ -243,7 +243,7 @@ public class AddAnnotationFieldCommandTest {
 	public void testValidateDefaultLengthNotToLong() throws ValidateException {
 
 		String big = "";
-		for(int i = 0; i < database.constants.MaxSize.ANNOTATION_DEFAULTVALUE + 1; i++) {
+		for(int i = 0; i < MaxLength.ANNOTATION_DEFAULTVALUE + 1; i++) {
 			big = big + "a";
 		}
 		String json = "{\"name\":\"species\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"" + big +

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import com.google.gson.annotations.Expose;
 
 /**
- * Response to the annotation information
+ * Response containing the annotation information
  */
 public class AnnotationInformation {
 
@@ -18,6 +18,12 @@ public class AnnotationInformation {
 	@Expose
 	private boolean forced;
 
+	/**
+	 * Creates a response containing the information
+	 * @param name Name of the annotation
+	 * @param values Value of the annotation
+	 * @param forced Whether the annotation is forced or not
+	 */
 	public AnnotationInformation(String name,
 			ArrayList<String> values, boolean forced) {
 
@@ -26,36 +32,31 @@ public class AnnotationInformation {
 		this.forced = forced;
 	}
 
+	/**
+	 * Getter for the annotation name
+	 * @return The name as a String
+	 */
 	public String getName() {
+
 		return name;
 	}
 
-//	public int getType() {
-//		return type;
-//	}
-
+	/**
+	 * Getter for the annotation value
+	 * @return The value as a String
+	 */
 	public ArrayList<String> getValues() {
+
 		return values;
 	}
 
+	/**
+	 * Returns whether a annotation is forced or not
+	 * @return true if forced, otherwise false
+	 */
 	public boolean isForced() {
 
 		return forced;
 	}
-
-	public String toString() {
-		String returnString = "NAME: " + name + "\nFORCED: " + forced + "\nVALUES:\n";
-
-		if(values != null) {
-			for (String value : values) {
-				returnString = returnString + "     " + value + "\n";
-			}
-		}
-
-
-		return returnString;
-
-	}
-
 
 }

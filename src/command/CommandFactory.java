@@ -4,13 +4,14 @@ import server.Debug;
 import server.WorkHandler;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import server.WorkPool;
 
 /**
  * This class is used to create and return different commands that
  * will be executed later by calling their execute() method.
  *
- * @author Kommunikation/kontroll 2014.
- * @version 1.0
+ * @author Business Logic 2015.
+ * @version 1.1
  */
 public class CommandFactory {
 	private final GsonBuilder builder;
@@ -27,139 +28,118 @@ public class CommandFactory {
 
 	/**
 	 * Used to create the command needed to handle login.
-	 *
 	 * @param json string to initiate class.
 	 * @return the actual command.
 	 */
 	public Command createLoginCommand(String json) {
-		final Command loginCmd = gson.fromJson(json, LoginCommand.class);
-		return loginCmd;
+		return gson.fromJson(json, LoginCommand.class);
 	}
 
 	/**
 	 * Used to create the command needed to handle logout.
-	 *
 	 * @param username on the person that wants to logout.
 	 * @return a logout command.
 	 */
 	public Command createLogoutCommand(String username) {
-		final Command logoutCmd = new LogoutCommand(username);
-		return logoutCmd;
+		return new LogoutCommand(username);
 	}
 
 	/**
 	 * Used to create the command needed to retrieve experiments.
-	 *
-	 * @param restful information needed.
+	 * @param expID the ID of the experiment.
 	 * @return the actual command.
 	 */
-	public Command createGetExperimentCommand(String restful) {
-		return new GetExperimentCommand(restful);
+	public Command createGetExperimentCommand(String expID) {
+		return new GetExperimentCommand(expID);
 	}
 
 	/**
 	 * Used to create the command needed to add experiments.
-	 *
 	 * @param json string to initiate class.
 	 * @return the actual command.
 	 */
 	public Command createAddExperimentCommand(String json) {
-		final Command addExperimentCmd = gson.fromJson(json,
-				AddExperimentCommand.class);
-		return addExperimentCmd;
+		return gson.fromJson(json, AddExperimentCommand.class);
 	}
 
 	/**
 	 * Used to create the command needed to update experiments.
-	 *
+	 * @param json string to initiate the class.
+	 * @param expID the experiment ID.
 	 * @return the actual command.
 	 */
-	public Command createUpdateExperimentCommand(String json, String restful) {
-		//TODO Make sure the json and restful are used.
-		return new UpdateExperimentCommand();
+	public Command createUpdateExperimentCommand(String json, String expID) {
+		return new UpdateExperimentCommand(json, expID);
 	}
 
 	/**
 	 * Used to create the command needed to remove experiments.
-	 *
-	 * @param restful information needed.
+	 * @param expID the ID of the experiment.
 	 * @return the actual command.
 	 */
-	public Command createDeleteExperimentCommand(String restful) {
-		return new DeleteExperimentCommand(restful);
+	public Command createDeleteExperimentCommand(String expID) {
+		return new DeleteExperimentCommand(expID);
 	}
 
 	/**
 	 * Used to create the command needed to retrieve experiment files.
-	 *
-	 * @param restful information needed.
+	 * @param fileID the ID of the file.
 	 * @return the actual command.
 	 */
-	public Command createGetFileFromExperimentCommand(String restful) {
-		return new GetFileFromExperimentCommand(restful);
+	public Command createGetFileFromExperimentCommand(String fileID) {
+		return new GetFileFromExperimentCommand(fileID);
 	}
 
 	/**
 	 * Used to create the command needed to add files to experiments.
-	 *
 	 * @param json string to initiate class.
 	 * @return the actual command.
 	 */
 	public Command createAddFileToExperimentCommand(String json) {
-		final Command addFileToExperimentCmd = gson.fromJson(json,
-				AddFileToExperimentCommand.class);
-		return addFileToExperimentCmd;
+		return gson.fromJson(json, AddFileToExperimentCommand.class);
 	}
 
 	/**
 	 * Used to create the command needed to update files in experiments.
-	 *
+	 * @param json string to initiate class.
+	 * @param expID the ID of the experiment.
 	 * @return the actual command.
 	 */
 	public Command createUpdateFileInExperimentCommand(String json,
-													   String restful) {
-		//TODO Make sure the json and restful are used.
-		return new UpdateFileInExperimentCommand();
+													   String expID) {
+		return new UpdateFileInExperimentCommand(json, expID);
 	}
 
 	/**
 	 * Used to create the command needed to remove files from experiments.
-	 *
-	 * @param restful information needed.
+	 * @param fileID the ID of the file.
 	 * @return the actual command.
 	 */
-	public Command createDeleteFileFromExperimentCommand(String restful) {
-		return new DeleteFileFromExperimentCommand(restful);
+	public Command createDeleteFileFromExperimentCommand(String fileID) {
+		return new DeleteFileFromExperimentCommand(fileID);
 	}
 
 	/**
 	 * Used to create the command needed to search for experiments.
-	 *
-	 * @param restful information needed.
+	 * @param pubmedQuery the pubmed query.
 	 * @return the actual command.
 	 */
-	public Command createSearchForExperimentCommand(String restful) {
-
-		int index = restful.indexOf("=");
-		return new SearchForExperimentsCommand(restful.substring(index+1));
-
+	public Command createSearchForExperimentCommand(String pubmedQuery) {
+		int index = pubmedQuery.indexOf("=");
+		return new SearchForExperimentsCommand(pubmedQuery.substring(index+1));
 	}
 
 	/**
 	 * Used to create the command needed to create a new user.
-	 *
 	 * @param json string to initiate class.
 	 * @return the actual command.
 	 */
 	public Command createCreateUserCommand(String json) {
-		final Command createUserCmd = gson.fromJson(json,
-				CreateUserCommand.class);
-		return createUserCmd;
+		return gson.fromJson(json, CreateUserCommand.class);
 	}
 
 	/**
 	 * Used to create the command needed to delete a user.
-	 *
 	 * @param username to delete.
 	 * @return the actual command.
 	 */
@@ -169,140 +149,115 @@ public class CommandFactory {
 
 	/**
 	 * Used to create the command needed to convert data from raw to profile.
-	 *
 	 * @param json string to initiate class.
 	 * @param username that executed the command.
-	 * @param parsedRest restful information needed.
+	 * @param processType the type of process.
 	 * @return the actual command.
 	 */
 	public Command createProcessCommand(String json, String username,
-										String parsedRest) {
-		//Unsure if the out-commented lines in this function carry any
-		//relevance (c12mkn 2015-04-16)
-
+										String processType) {
 		ProcessCommand processCommand = gson.fromJson(json,
 				ProcessCommand.class);
-//		processCommand.setProcessType(restful[2]);
-//		processCommand.setFileID(restful[3]);
 		processCommand.setUsername(username);
 		processCommand.setTimestamp(System.currentTimeMillis());
-		processCommand.setProcessType(parsedRest);
+		processCommand.setProcessType(processType);
 		Debug.log("Username: " + username + " timestamp: " +
-				System.currentTimeMillis() + " parsedRest: " + parsedRest);
-		//Create from json
-		//set userID
-		//set fileID
-		//set processType
+				System.currentTimeMillis() + " parsedRest: " + processType);
 		return processCommand;
 	}
 
 	/**
 	 * Used to create the command needed to get annotation information.
-	 *
 	 * @return the actual command.
 	 */
-	public Command createGetAnnotationInformationCommand(String json) {
-		//TODO Make sure the json is used.
+	public Command createGetAnnotationInformationCommand() {
 		return new GetAnnotationInformationCommand();
 	}
 
 	/**
 	 * Used to create a command needed to add annotation fields.
-	 *
 	 * @param json string to initiate class.
 	 * @return the actual command.
 	 */
 	public Command createAddAnnotationFieldCommand(String json) {
-		final Command AddAnnotationFieldCmd = gson.fromJson(json,
-				AddAnnotationFieldCommand.class);
-		return AddAnnotationFieldCmd;
+		return gson.fromJson(json, AddAnnotationFieldCommand.class);
 	}
 
 	/**
 	 * Used to create the command needed to add annotation values.
-	 *
 	 * @param json string to initiate class.
 	 * @return the actual command.
 	 */
 	public Command createAddAnnotationValueCommand(String json) {
-		Command AddAnnotationValueCommand = gson.fromJson(json,
-				AddAnnotationValueCommand.class);
-		return AddAnnotationValueCommand;
+		return gson.fromJson(json, AddAnnotationValueCommand.class);
 	}
 
 	/**
 	 * Used to create the command needed to remove annotation fields.
-	 *
-	 * @param restful information needed.
+	 * @param fieldName the name of the field.
 	 * @return the actual command.
 	 */
-	public Command createRemoveAnnotationFieldCommand(String restful) {
-		return new DeleteAnnotationFieldCommand(restful);
+	public Command createRemoveAnnotationFieldCommand(String fieldName) {
+		return new DeleteAnnotationFieldCommand(fieldName);
 	}
 
 	/**
 	 * Used to create the command needed to get annotation privileges.
-	 *
 	 * @return the actual command.
 	 */
-	public Command createGetAnnotationPrivilegesCommand(String json) {
-		//TODO Make sure the json is used.
-		return new GetAnnotationPrivilegesCommand();
+	public Command createGetAnnotationPrivilegesCommand(String userName) {
+		return new GetAnnotationPrivilegesCommand(userName);
 	}
 
 	/**
 	 * Used to create the command needed to update annotation privileges.
-	 *
+	 * @return the actual command.
+	 */
+
+	/**
+	 * Used to create the command needed to update annotation privileges.
+	 * @param json string to initiate class.
+	 * @param userName the username.
 	 * @return the actual command.
 	 */
 	public Command createUpdateAnnotationPrivilegesCommand(String json,
-														   String restful) {
-		//TODO Make sure the json and restful are used.
-		return new UpdateAnnotationPrivilegesCommand();
+														   String userName) {
+		return new UpdateAnnotationPrivilegesCommand(json, userName);
 	}
 
 	/**
 	 * Used to create the command needed to add new genome releases.
-	 *
 	 * @param json string to initiate class.
 	 * @return the actual command created.
 	 */
 	public Command createAddGenomeReleaseCommand(String json) {
-		final Command addGenomeReleaseCmd = gson.fromJson(json,
-				AddGenomeReleaseCommand.class);
-		return addGenomeReleaseCmd;
+		return gson.fromJson(json, AddGenomeReleaseCommand.class);
 	}
 
 	/**
 	 * Used to create the command needed to rename an existing annotation value.
-	 *
 	 * @param json string to initiate class.
 	 * @return the actual command created.
 	 */
-	public Command creatRenameAnnotationValueCommand(String json) {
-		Command command = gson.fromJson(json, EditAnnotationValueCommand.class);
-		return command;
+	public Command createRenameAnnotationValueCommand(String json) {
+		return gson.fromJson(json, EditAnnotationValueCommand.class);
 	}
 
 	/**
 	 * Used to create the command needed to delete an existing genome release.
-	 *
-	 * @param specie associated with the genome release.
+	 * @param species associated with the genome release.
 	 * @param genomeVersion to delete.
 	 * @return the actual command.
 	 */
-	public Command createDeleteGenomeReleaseCommand(String specie,
+	public Command createDeleteGenomeReleaseCommand(String species,
 													String genomeVersion) {
-		final Command deleteGenomeReleaseCmd = new DeleteGenomeReleaseCommand(
-				specie, genomeVersion);
-		return deleteGenomeReleaseCmd;
+		return new DeleteGenomeReleaseCommand(species, genomeVersion);
 	}
 
 	/**
 	 * Used to create the command needed to delete a annotation value.
-	 *
-	 * @param value
-	 * @param name
+	 * @param value the value of the annotation.
+	 * @param name of the annotation.
 	 * @return the actual command created.
 	 */
 	public Command createDeleteAnnotationValueCommand(String value,
@@ -312,18 +267,15 @@ public class CommandFactory {
 
 	/**
 	 * Used to create the command needed to edit an existing annotation field.
-	 *
 	 * @param json string to initiate class.
 	 * @return the actual command.
 	 */
 	public Command createEditAnnotationFieldCommand(String json) {
-		Command command = gson.fromJson(json, EditAnnotationFieldCommand.class);
-		return command;
+		return gson.fromJson(json, EditAnnotationFieldCommand.class);
 	}
 
 	/**
 	 * Used to create the command needed to get all genome releases.
-	 *
 	 * @return the actual command.
 	 */
 	public Command createGetAllGenomeReleasesCommand() {
@@ -333,7 +285,6 @@ public class CommandFactory {
 	/**
 	 * Used to create the command needed to get all genome releases on
 	 * a given species.
-	 *
 	 * @param species to get.
 	 * @return the actual command.
 	 */
@@ -343,22 +294,19 @@ public class CommandFactory {
 
 	/**
 	 * Used to create the command needed to get the process status.
-	 *
 	 * @param workHandler class object needed.
 	 * @return the actual command.
 	 */
-	public Command createGetProcessStatusCommand(WorkHandler workHandler) {
-		return new GetProcessStatusCommand(workHandler);
+	public Command createGetProcessStatusCommand(WorkPool workPool) {
+		return new GetProcessStatusCommand(workPool);
 	}
 
 	/**
 	 * Used to check if a token is valid.
-	 *
 	 * @param uuid user ID.
 	 * @return a command.
 	 */
 	public Command createIsTokenValidCommand(String uuid) {
 		return new IsTokenValidCommand(uuid);
 	}
-
 }

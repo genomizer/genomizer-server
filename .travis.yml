@@ -11,7 +11,6 @@ before_install:
   - sudo apt-get install -y bowtie
 
 before_script:
-  - mkdir resources
   - travis_retry wget http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64.v287/liftOver -O resources/liftOver
   - chmod +x resources/liftOver
   - export PATH=$PATH:$PWD/resources/

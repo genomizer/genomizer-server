@@ -75,10 +75,9 @@ public class GenomeMethods {
     /**
      * Add one genomerelease to the database.
      *
-     * @param String
-     *            genomeVersion.
-     * @param String
-     *            species.
+     * @param genomeVersion the genome version
+     * @param species the species
+	 * @param filename a filename
      * @return String The upload URL.
      * @throws SQLException
      *             if adding query failed.
@@ -187,10 +186,8 @@ public class GenomeMethods {
 	/**
 	 * Removes one specific genome version stored in the database.
 	 *
-	 * @param version
+	 * @param genomeVersion
 	 *            the genome version.
-	 * @param specie
-	 *            .
 	 * @return boolean true if succeded, false if failed.
 	 * @throws SQLException
 	 * @throws IOException
@@ -313,13 +310,10 @@ public class GenomeMethods {
 	 * Adds a chain file to database for conversions. Parameters: Oldversion,
 	 * new version and filename. Returns: upload URL
 	 *
-	 * @param String
-	 *            fromVersion
-	 * @param String
-	 *            toVersion
-	 * @param String
-	 *            fileName
-	 * @return String upload URL
+	 * @param fromVersion version to convert from
+	 * @param toVersion version to convert to
+	 * @param fileName the name of the file
+	 * @return the upload URL
 	 * @throws SQLException
 	 * @throws IOException
 	 */
@@ -422,7 +416,7 @@ public class GenomeMethods {
 
 	/**
 	 * Deletes a folder if it is empty, else open folder and repeat.
-	 * @param folder
+	 * @param folder the folder to delete
 	 */
 	private void recursiveDelete(File folder) {
 		File[] contents = folder.listFiles();

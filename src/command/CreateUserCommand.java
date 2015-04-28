@@ -3,10 +3,10 @@ package command;
 import java.io.IOException;
 import java.sql.SQLException;
 
+import authentication.BCrypt;
 import com.google.gson.annotations.Expose;
 
 import database.DatabaseAccessor;
-import database.constants.MaxSize;
 
 import response.ErrorResponse;
 import response.MinimalResponse;
@@ -16,14 +16,10 @@ import response.StatusCode;
 /**
  * command used to create a user.
  *
- * @author Kommunikation/kontroll 2014.
- * @version 1.0
+ * @author Business Logic 2015.
+ * @version 1.1
  */
 public class CreateUserCommand extends Command {
-	/** All attributes in this class are serialized with
-	 * a JSON string. This is done in CommandHandler.
-	 */
-
 	@Expose
 	private String username = null;
 
@@ -39,13 +35,11 @@ public class CreateUserCommand extends Command {
 	@Expose
 	private String email = null;
 
-	/**
-	 * Used to validate the CreateUserCommand.
-	 */
 	@Override
-	public boolean validate() {
+	public void validate() {
+		//TODO Change to exceptions.
 
-		if(username == null || password == null || privileges == null) {
+		/*if(username == null || password == null || privileges == null) {
 			return false;
 		}
 		if(username.length() < 1 || username.length() > MaxSize.USERNAME) {
@@ -57,22 +51,13 @@ public class CreateUserCommand extends Command {
 		if(privileges.length() < 1 || privileges.length() > MaxSize.ROLE) {
 			return false;
 		}
-		if(username.indexOf('/') != -1) {
-			return false;
-		}
+		return username.indexOf('/') == -1;*/
 
-		return true;
 	}
 
-	/**
-	 * Used to execute the actual creation of the user.
-	 */
 	@Override
 	public Response execute() {
-
-
-
-		DatabaseAccessor db = null;
+		DatabaseAccessor db;
 		try {
 			db = initDB();
 		} catch (SQLException e) {
@@ -82,19 +67,9 @@ public class CreateUserCommand extends Command {
 			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
 		}
 		try {
+			String hash = BCrypt.hashpw(password,BCrypt.gensalt());
+			db.addUser(username, hash, "SALT",privileges, name, email);
 
-			/* For insertion of new user into db
-
-			// get a new salt
-			String salt = PasswordHash.getNewSalt();
-			// get hash using salt and password
-			String hash = PasswordHash.hashString(password+salt);
-			// insert into DB, requires new table from DB group
-			db.addUser(username, salt, hash, privileges, name, email);
-			*/
-
-
-			db.addUser(username, password, privileges, name, email);
 		} catch (SQLException | IOException e) {
 			return new ErrorResponse(StatusCode.BAD_REQUEST, "Error when " +
 					"adding user to database, user probably already exists. " +

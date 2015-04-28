@@ -20,6 +20,8 @@ public class ServerSettings {
 	public static String passwordSalt = null;
 	public static String webUrlUpload = null;
 	public static String fileLocation = "/var/www/data/";
+	public static String bowtieLocation = "bowtie";
+	public static int nrOfProcessThreads = 5;
 
 
 	public static void writeSettings(String path){
@@ -38,7 +40,9 @@ public class ServerSettings {
 					+ "passwordHash = " + passwordHash + "\n"
 					+ "passwordSalt = " + passwordSalt + "\n"
 					+ "fileLocation = " + fileLocation + "\n"
-					+ "webUrlUpload = " + webUrlUpload + "\n";
+					+ "webUrlUpload = " + webUrlUpload + "\n"
+					+ "nrOfProcessThreads = " + nrOfProcessThreads + "\n"
+					+ "bowtieLocation = " + bowtieLocation + "\n";
 
 			out.write(dataInfo);
 			out.close();
@@ -68,6 +72,8 @@ public class ServerSettings {
 		nullCheck(passwordSalt, "passwordSalt");
 		nullCheck(webUrlUpload, "webUrlUpload");
 		nullCheck(fileLocation, "fileLocation");
+		nullCheck(nrOfProcessThreads, "nrOfProcessThreads");
+		nullCheck(bowtieLocation, "bowtieLocation");
 	}
 
 	private static void nullCheck(int parameter, String name) {
@@ -100,6 +106,13 @@ public class ServerSettings {
 
 			while (scan.hasNextLine()) {
 				String line = scan.nextLine();
+
+				// Skip comments and empty lines.
+				if (line.trim().startsWith("#")
+						|| line.trim().equals("")) {
+					continue;
+				}
+
 				int index = line.indexOf("=");
 
 				String key = line.substring(0, index).trim();
@@ -145,6 +158,12 @@ public class ServerSettings {
 				case "filelocation":
 					fileLocation = value;
 					break;
+				case "nrofprocessthreads":
+					nrOfProcessThreads = Integer.parseInt(value);
+					break;
+				case "bowtielocation":
+					bowtieLocation = value;
+					break;
 				default:
 					String msg = "Unrecognized setting: " + key;
 					Debug.log(msg);
@@ -171,7 +190,10 @@ public class ServerSettings {
 							+ "\tpasswordHash = " + passwordHash + "\n"
 							+ "\tpasswordSalt = " + passwordSalt + "\n"
 							+ "\tfileLocation = " + fileLocation + "\n"
-							+ "\twebUrlUpload = " + webUrlUpload + "\n";
+							+ "\twebUrlUpload = " + webUrlUpload + "\n"
+							+ "\tnrOfProcessThreads = " + nrOfProcessThreads + "\n"
+							+ "\tbowtieLocation = " + bowtieLocation
+							+ "\n";
 
 			Debug.log("Imported the following settings:\n" + dataInfo);
 			ErrorLogger.log("SYSTEM", "Imported the following settings:\n" +

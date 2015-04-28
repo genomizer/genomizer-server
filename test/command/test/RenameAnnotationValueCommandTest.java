@@ -1,6 +1,8 @@
 package command.test;
 
 import static org.junit.Assert.*;
+
+import database.constants.MaxLength;
 import org.junit.Before;
 import org.junit.Test;
 import com.google.gson.Gson;
@@ -94,7 +96,7 @@ public class RenameAnnotationValueCommandTest {
 	public void testValidateNameLengthNotToLong() throws ValidateException {
 
 		String big = "";
-		for(int i = 0; i < database.constants.MaxSize.ANNOTATION_LABEL + 1; i++) {
+		for(int i = 0; i < MaxLength.ANNOTATION_LABEL + 1; i++) {
 			big = big + "a";
 		}
 		EditAnnotationValueCommand c = new EditAnnotationValueCommand();
@@ -170,7 +172,7 @@ public class RenameAnnotationValueCommandTest {
 	public void testValidateOldValueLengthNotToLong() throws ValidateException {
 
 		String big = "";
-		for(int i = 0; i < database.constants.MaxSize.ANNOTATION_VALUE + 1; i++) {
+		for(int i = 0; i < MaxLength.ANNOTATION_VALUE + 1; i++) {
 			big = big + "a";
 		}
 		EditAnnotationValueCommand c = new EditAnnotationValueCommand();
@@ -245,7 +247,7 @@ public class RenameAnnotationValueCommandTest {
 	public void testValidateNewValueLengthNotToLong() throws ValidateException {
 
 		String big = "";
-		for(int i = 0; i < database.constants.MaxSize.ANNOTATION_VALUE + 1; i++) {
+		for(int i = 0; i < MaxLength.ANNOTATION_VALUE + 1; i++) {
 			big = big + "a";
 		}
 		EditAnnotationValueCommand c = new EditAnnotationValueCommand();
