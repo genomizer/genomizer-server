@@ -161,10 +161,14 @@ public class Doorman {
                                 IS_TOKEN_VALID_COMMAND);
 						break;
 					case "/upload":
-						uploadHandler.handleGET(exchange);
+						if (performAuthorization(exchange) != null) {
+							uploadHandler.handleGET(exchange);
+						}
 						break;
 					case "/download":
-						downloadHandler.handleGET(exchange);
+						if (performAuthorization(exchange) != null) {
+							downloadHandler.handleGET(exchange);
+						}
 						break;
 					default:
 						Debug.log("HTTP 404 Not Found: " + method + " " + requestPath);
@@ -250,7 +254,9 @@ public class Doorman {
                                 ADD_GENOME_RELEASE_COMMAND);
 						break;
 					case "/upload":
-						uploadHandler.handlePOST(exchange);
+						if (performAuthorization(exchange) != null) {
+							uploadHandler.handlePOST(exchange);
+						}
 						break;
 					default:
 						Debug.log("HTTP 404 Not Found: " + method + " " + requestPath);
@@ -322,6 +328,35 @@ public class Doorman {
 	}
 
 	/**
+	 * Actually perform authorization.
+	 *
+	 * @param exchange the HTTPExchange
+	 * @return         null in case of error, name of the logged in user otherwise.
+	 */
+	private String performAuthorization(HttpExchange exchange) {
+		List<String> auth = exchange.getRequestHeaders().
+				get("Authorization");
+		String uuid = null;
+
+		if (auth != null && Authenticate.idExists(auth.get(0))) {
+			uuid = auth.get(0);
+			Authenticate.updateLatestRequest(uuid);
+		} else {
+			Debug.log("Unauthorized request!");
+			Response errorResponse = new MinimalResponse(StatusCode.
+					UNAUTHORIZED);
+			try {
+				respond(exchange, errorResponse);
+			} catch (IOException e1) {
+				Debug.log("Could not send response to client. " + e1.
+						getMessage());
+			}
+		}
+
+		return uuid;
+	}
+
+	/**
 	 * Handles the request information from the client and creates a Command
      * with CommandHandler.
 	 * @param exchange the HTTPExchange
@@ -329,40 +364,25 @@ public class Doorman {
 	 */
 	private void handleRequest(HttpExchange exchange, CommandType type) {
 		InputStream bodyStream = exchange.getRequestBody();
-		Scanner scanner = new Scanner(bodyStream);
-		String body = "";
 		String uuid = null;
 		Debug.log("Exchange: " + type);
 
 		/** authorization */
 		if(type != CommandType.LOGIN_COMMAND) {
-			List<String> auth = exchange.getRequestHeaders().
-                    get("Authorization");
-			if (auth != null && Authenticate.idExists(auth.get(0))) {
-				uuid = auth.get(0);
-				Authenticate.updateLatestRequest(uuid);
-			} else {
-				Debug.log("Unauthorized request!");
-				Response errorResponse = new MinimalResponse(StatusCode.
-                        UNAUTHORIZED);
-				try {
-					respond(exchange, errorResponse);
-				} catch (IOException e1) {
-					Debug.log("Could not send response to client. " + e1.
-                            getMessage());
-				}
-				scanner.close();
+			uuid = performAuthorization(exchange);
+			if (uuid == null)
 				return;
-			}
 		}
 
+		Scanner scanner = new Scanner(bodyStream);
+		String body = "";
 		while(scanner.hasNext()) {
 			body = body.concat(" " + scanner.next());
 		}
 		scanner.close();
 
 		String username = null;
-		//username = Authenticate.getUsernameByID(uuid);
+		username = Authenticate.getUsernameByID(uuid);
 		Debug.log("Username: " + username + "\n");
 		Debug.log("Body from client: " + body);
 
