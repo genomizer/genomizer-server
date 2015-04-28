@@ -1,11 +1,18 @@
 package conversion.test;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import org.junit.Ignore;
 import org.junit.Test;
+import static org.junit.Assert.*;
 
 import conversion.ConversionHandler;
+
+import static org.junit.Assert.assertFalse;
 
 /* TODO None of these tests check the actual conversion but only tests if
  * it is possible to run scripts. Should be extended with tests of actual
@@ -13,6 +20,7 @@ import conversion.ConversionHandler;
 @Ignore
  public class ProfileDataConverterTest {
 
+	private String outputPath = "resources/conversionTestData/output/";
 /*
 	@Test
 	public void sgrToBedtest() throws InterruptedException, IOException {
@@ -56,10 +64,52 @@ import conversion.ConversionHandler;
 		ch.executeProfileDataConversion("gff3ToWig", "conversionTestData/TP_SG_A_ZeroLvl_Release5_TRUNCATEDFORTEST.gff", "conversionTestData/output/gff2wigtest.wig", "Unknown");
 	}
 	@Test
-	public void sgrToWigtest() throws InterruptedException, IOException {
+	public void sgrToWigTestFileExists() throws InterruptedException, IOException {
 		ConversionHandler ch = new ConversionHandler();
 		ch.executeProfileDataConversion("sgrToWig", "conversionTestData/Sg4_TRX-CP_Ave.resRto_Rel5_TRUNCATEDFORTEST.sgr", "conversionTestData/output/sgr2wigtest.wig", "Unknown");
+		File outputFile;
+
+		try{
+			outputFile = new File(outputPath+"sgr2wigtest.wig");
+			assertTrue(outputFile.exists());
+			outputFile.delete();
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		}
 	}
+
+	@Test
+	public void sgrToWigCheckSumTest() throws InterruptedException ,IOException {
+		ConversionHandler ch = new ConversionHandler();
+		ch.executeProfileDataConversion("sgrToWig", "conversionTestData/Sg4_TRX-CP_Ave.resRto_Rel5_TRUNCATEDFORTEST.sgr", "conversionTestData/output/sgr2wigtest.wig", "Unknown");
+		File outputFile;
+
+		try{
+			outputFile = new File(outputPath+"sgr2wigtest.wig");
+
+			FileInputStream fis = new FileInputStream(outputFile);
+
+			MessageDigest md = MessageDigest.getInstance("SHA1");
+
+			byte[] dataBytes = new byte[1024];
+			int nread = 0;
+
+			while((nread = fis.read(dataBytes)) != -1) {
+				md.update(dataBytes, 0, nread);
+
+			}
+
+			byte[] mdbytes = md.digest();
+
+
+
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+	}
+
 	@Test
 	public void bedToWigtest() throws InterruptedException, IOException {
 		ConversionHandler ch = new ConversionHandler();
