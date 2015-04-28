@@ -36,11 +36,21 @@ public class FileTupleBuilder {
         return this;
     }
 
+    /**
+     *
+     * @param inputFilePath File path to the RAW input data-file in .fastq-format
+     * @return
+     */
     public FileTupleBuilder withInputFilePath(String inputFilePath) {
         product.setInputFilePath(inputFilePath);
         return this;
     }
 
+    /**
+     *
+     * @param type The type of data. Can be "Raw", "Profile", etc.
+     * @return
+     */
     public FileTupleBuilder withType(String type) {
         product.setType(type);
         return this;
@@ -56,6 +66,11 @@ public class FileTupleBuilder {
         return this;
     }
 
+    /**
+     *
+     * @param metaData Specify the parameters used to process the file.
+     * @return
+     */
     public FileTupleBuilder withMetaData(String metaData) {
         product.setMetaData(metaData);
         return this;
@@ -71,7 +86,7 @@ public class FileTupleBuilder {
         return this;
     }
 
-    public FileTupleBuilder withIsPrivate(Boolean isPrivate) {
+    public FileTupleBuilder isPrivate(Boolean isPrivate) {
         product.setIsPrivate(isPrivate);
         return this;
     }
@@ -81,11 +96,21 @@ public class FileTupleBuilder {
         return this;
     }
 
+    /**
+     *
+     * @param grVersion Specifies which Genome Release was used to process the file.
+     * @return
+     */
     public FileTupleBuilder withGrVersion(String grVersion) {
         product.setGrVersion(grVersion);
         return this;
     }
 
+    /**
+     *
+     * @param status Set the status of the file (Default: "In progress")
+     * @return
+     */
     public FileTupleBuilder withStatus(String status) {
         product.setStatus(status);
         return this;
