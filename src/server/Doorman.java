@@ -341,6 +341,8 @@ public class Doorman {
 		if (auth != null && Authenticate.idExists(auth.get(0))) {
 			uuid = auth.get(0);
 			Authenticate.updateLatestRequest(uuid);
+			Debug.log("User " + Authenticate.getUsernameByID(uuid)
+					+ " authenticated successfully.");
 		} else {
 			Debug.log("Unauthorized request!");
 			Response errorResponse = new MinimalResponse(StatusCode.
