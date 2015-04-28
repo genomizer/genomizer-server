@@ -27,6 +27,7 @@ import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.URLDecoder;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.Executor;
@@ -328,34 +329,53 @@ public class Doorman {
 	}
 
 	/**
-	 * Actually perform authorization.
+	 * Actually perform authorization. Supports both the 'Authorization' header
+	 * and '?token=some-token' parameter (special casing needed by the web
+	 * client, see https://github.com/genomizer/genomizer-server/issues/185).
 	 *
 	 * @param exchange the HTTPExchange
 	 * @return         null in case of error, name of the logged in user otherwise.
 	 */
-	private String performAuthorization(HttpExchange exchange) {
-		List<String> auth = exchange.getRequestHeaders().
-				get("Authorization");
+	private String performAuthorization(HttpExchange exchange) throws Exception {
 		String uuid = null;
 
-		if (auth != null && Authenticate.idExists(auth.get(0))) {
-			uuid = auth.get(0);
+        // Get the value of the 'Authorization' header.
+		List<String> authHeader = exchange.getRequestHeaders().
+				get("Authorization");
+        if (authHeader != null && Authenticate.idExists(authHeader.get(0)))
+          uuid = authHeader.get(0);
+
+        // Get the value of the 'token' parameter.
+        String uuid2 = null;
+        HashMap<String, String> reqParams = new HashMap<>();
+        Util.parseURI(exchange.getRequestURI(), reqParams);
+        if (reqParams.containsKey("token")) {
+          uuid2 = reqParams.get("token");
+          if (uuid2 != null) {
+            if (uuid == null || uuid.equals(uuid2)) {
+              uuid = uuid2;
+            } else {
+              Debug.log("Authorization header "
+                        + "and token parameter values differ!");
+              respond(exchange, new MinimalResponse(StatusCode.UNAUTHORIZED));
+              return null;
+            }
+          }
+        }
+
+        // Actual authentication.
+		if (uuid != null) {
 			Authenticate.updateLatestRequest(uuid);
 			Debug.log("User " + Authenticate.getUsernameByID(uuid)
 					+ " authenticated successfully.");
+            return uuid;
 		} else {
 			Debug.log("Unauthorized request!");
 			Response errorResponse = new MinimalResponse(StatusCode.
 					UNAUTHORIZED);
-			try {
-				respond(exchange, errorResponse);
-			} catch (IOException e1) {
-				Debug.log("Could not send response to client. " + e1.
-						getMessage());
-			}
+            respond(exchange, errorResponse);
+            return null;
 		}
-
-		return uuid;
 	}
 
 	/**
@@ -364,7 +384,7 @@ public class Doorman {
 	 * @param exchange the HTTPExchange
 	 * @param type which specific type of command it is.
 	 */
-	private void handleRequest(HttpExchange exchange, CommandType type) {
+	private void handleRequest(HttpExchange exchange, CommandType type) throws Exception {
 		InputStream bodyStream = exchange.getRequestBody();
 		String uuid = null;
 		Debug.log("Exchange: " + type);
@@ -389,25 +409,13 @@ public class Doorman {
 		Debug.log("Body from client: " + body);
 
 		Response response = null;
-		try {
-			String header = URLDecoder.decode(exchange.getRequestURI().
-                    toString(), "UTF-8");
-			response = commandHandler.processNewCommand(body, header, uuid,
-                    type);
-		} catch(Exception e ) {
-			Debug.log("Could not create/process new command " + e.getMessage());
-			ErrorLogger.log("SYSTEM", e);
-			e.printStackTrace();
-		}
 
-		//TODO Should there be some error checking?
-		try {
-			respond(exchange, response);
-		} catch (IOException e) {
-			Debug.log("IOError when sending response back to client. " +
-                    e.getMessage());
-			ErrorLogger.log("SYSTEM", e);
-		}
+        String header = URLDecoder.decode(exchange.getRequestURI().
+                                          toString(), "UTF-8");
+        response = commandHandler.processNewCommand(body, header, uuid,
+                                                    type);
+
+        respond(exchange, response);
 	}
 
 	/**
