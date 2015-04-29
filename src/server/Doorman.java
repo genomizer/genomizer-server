@@ -342,7 +342,7 @@ public class Doorman {
         // Get the value of the 'Authorization' header.
 		List<String> authHeader = exchange.getRequestHeaders().
 				get("Authorization");
-        if (authHeader != null && Authenticate.idExists(authHeader.get(0)))
+        if (authHeader != null)
           uuid = authHeader.get(0);
 
         // Get the value of the 'token' parameter.
@@ -364,7 +364,8 @@ public class Doorman {
         }
 
         // Actual authentication.
-		if (uuid != null) {
+		Debug.log("Trying to authenticate token " + uuid + "...");
+		if (uuid != null && Authenticate.idExists(uuid)) {
 			Authenticate.updateLatestRequest(uuid);
 			Debug.log("User " + Authenticate.getUsernameByID(uuid)
 					+ " authenticated successfully.");
@@ -403,17 +404,12 @@ public class Doorman {
 		}
 		scanner.close();
 
-		String username = null;
-		username = Authenticate.getUsernameByID(uuid);
-		Debug.log("Username: " + username + "\n");
 		Debug.log("Body from client: " + body);
-
-		Response response = null;
 
         String header = URLDecoder.decode(exchange.getRequestURI().
                                           toString(), "UTF-8");
-        response = commandHandler.processNewCommand(body, header, uuid,
-                                                    type);
+        Response response =
+				commandHandler.processNewCommand(body, header, uuid, type);
 
         respond(exchange, response);
 	}
