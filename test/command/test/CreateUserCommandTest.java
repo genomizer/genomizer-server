@@ -67,7 +67,7 @@ public class CreateUserCommandTest {
 	 * Test used to check that username validation works
 	 * properly.
 	 */
-	@Test
+	@Test(expected =  ValidateException.class)
 	public void testValidateUsernameLength() throws ValidateException{
 
 		String username = "";
@@ -90,7 +90,7 @@ public class CreateUserCommandTest {
 	 * Test used to check that password validation works
 	 * properly.
 	 */
-	@Test
+	@Test(expected = ValidateException.class)
 	public void testValidatePasswordLength() throws ValidateException {
 
 		String password = "";
@@ -114,7 +114,7 @@ public class CreateUserCommandTest {
 	 * Test used to check that privileges validation works
 	 * properly.
 	 */
-	@Test
+	@Test(expected = ValidateException.class)
 	public void testValidatePrivilegesLength() throws ValidateException {
 
 		String priv = "";
@@ -138,7 +138,7 @@ public class CreateUserCommandTest {
 	 * Test used to check that username does not contains
 	 * any slashes.
 	 */
-	@Test
+	@Test(expected=ValidateException.class)
 	public void testNoSlashesUserName() throws ValidateException {
 
 		json = createJSON("a/b/c","b","c","d","e");
