@@ -1,5 +1,6 @@
 package database.containers;
 
+import java.io.File;
 import java.util.Date;
 
 /**
@@ -65,6 +66,11 @@ public abstract class AbstractFileTuple {
 
     public String getProcessFlags() {
         return processFlags;
+    }
+
+    public String getParentFolder() {
+        int filenameIndex = path.lastIndexOf(File.separator);
+        return path.substring(0, filenameIndex + 1);
     }
 
     void setPath(String path) {

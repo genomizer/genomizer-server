@@ -16,12 +16,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
-import server.ServerSettings;
-import database.containers.Annotation;
-import database.containers.ChainFile;
-import database.containers.Experiment;
-import database.containers.FileTuple;
+import database.containers.*;
 import database.containers.Genome;
+import server.ServerSettings;
 import database.subClasses.*;
 
 /**
@@ -928,7 +925,7 @@ public class DatabaseAccessor {
      * @param ft - A file tuple object.
      * @throws IOException
      */
-    public void addGeneratedProfiles(FileTuple ft) throws SQLException,
+    public void addGeneratedProfiles(FileTupleTemplate ft) throws SQLException,
             IOException {
 
         Experiment e = expMethods.getExperiment(ft.getExpId());
