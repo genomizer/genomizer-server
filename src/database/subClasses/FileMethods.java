@@ -376,8 +376,8 @@ public class FileMethods {
 	 * Adds a parent to a file. I.e. mark that the file with parentId as FileID
 	 * was used in the processing to generate the file with fileId as its FileID.
 	 *
-	 * @param fileId
-	 * @param parentId
+	 * @param fileId - ID of file to add parent to.
+	 * @param parentId - ID of the file to use as parent.
 	 * @throws SQLException if the query did not succeed
 	 */
 	public void addParent(int fileId, int parentId) throws SQLException {
