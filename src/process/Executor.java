@@ -83,7 +83,6 @@ public abstract class Executor {
 			throw new AccessControlException(
 					"No permission to execute "+executable);
 		}
-
 	}
 
 	/**
@@ -130,7 +129,6 @@ public abstract class Executor {
 		}
 		processOutput.close();
 
-
 		process.waitFor();
 
 		/* Check if command finished successfully */
@@ -138,8 +136,6 @@ public abstract class Executor {
 			throw new RuntimeException(results.toString());
 		}
 
-		// System.out.printf( "Process exited with result %d and output %s%n",
-		// result, text );
 		return results.toString();
 	}
 
@@ -187,9 +183,7 @@ public abstract class Executor {
 
 		// Wait for the process to finish
 		process.waitFor();
-
-		// System.out.printf( "Process exited with result %d and output %s%n",
-		// result, text );
+		
 		return text.toString();
 	}
 
@@ -202,7 +196,7 @@ public abstract class Executor {
 	 */
 	protected boolean cleanUp(Stack<String> files) throws ProcessException {
 		boolean isOk = true;
-
+		/* TODO should this be replaced with FileUtils.deleteDirectory?*/
 		while (!files.isEmpty()) {
 
 			File file = new File(files.pop());
@@ -214,14 +208,12 @@ public abstract class Executor {
 				File[] fileList = file.listFiles();
 
 				// Delete each file with a reference in the array
-
 				isOk = deleteFiles(fileList);
 			}
 
 			// Delete the file/directory
 			if (file.delete()) {
 				ErrorLogger.log("SYSTEM", "Deleting " + file.toString());
-				//throw new ProcessException("Failed to delete directory "+file.toString());
 			} else {
 				isOk = false;
 				ErrorLogger.log("SYSTEM", "Failed to delete directory " + file);
@@ -255,8 +247,6 @@ public abstract class Executor {
 		}
 		return isOk;
 	}
-
-	private void deleteFiles
 
 	/**
 	 * Moves files from orgDir to destDir.
