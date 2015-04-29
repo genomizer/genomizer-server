@@ -31,14 +31,6 @@ public class Authenticate {
 			return new LoginAttempt(true, updateActiveUser(username), null);
 
 		return new LoginAttempt(false, null, "Wrong password.");
-
-
-		/*
-	    if(PasswordHash.toSaltedSHA256Hash(password).equals(ServerSettings.passwordHash)) {
-			return new LoginAttempt(true, updateActiveUser(username), null);
-	    }
-		return new LoginAttempt(false, null, "Wrong password.");
-		*/
 	}
 
 	public static ConcurrentHashMap<String, Date> getLatestRequestsMap() {

@@ -29,7 +29,7 @@ public abstract class Command {
 	 */
 
 	/*These are valid characters that are used with the validation method.*/
-	final protected String validCharacters = "^, A-Z, a-z, 0-9, space and _";
+	final protected String validCharacters = "^, A-Z, a-z, 0-9, space, _ and .";
 
 	/**
 	 * Used to validate the object and its information. The validate method
@@ -80,7 +80,7 @@ public abstract class Command {
 	 * @return boolean depending on validation result.
 	 */
 	public boolean hasInvalidCharacters(String string) {
-		Pattern p = Pattern.compile("[^A-Za-z0-9 _]");
+		Pattern p = Pattern.compile("[^A-Za-z0-9_\\. ]");
 		return p.matcher(string).find();
 	}
 
