@@ -17,8 +17,8 @@ public class LogoutCommand extends Command {
 	private String username;
 
 	@Override
-	public void setFields(String uri, String uuid) {
-		username = Authenticate.getUsernameByID(uuid);
+	public void setFields(String uri, String username) {
+		this.username = username;
 	}
 
 	@Override

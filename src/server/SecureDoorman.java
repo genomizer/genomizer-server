@@ -1,22 +1,22 @@
 //package server;
 ///**
-// * A Doorman-object is used to receive requests and send back responses to the client.
-// * The doorman is listening for the following contexts:
-// * /login
-// * /experiment
-// * /annotation
-// * /file
-// * /search
-// * /user
-// * /process
-// * /sysadm
-// * /genomeRelease
-// * /token
-// *
-// * Whenever a request is received the Doorman checks what context is has and creates a
-// * new Executor (on  a new thread) and afterwards continues listening for new requests.
-// *
-// */
+//* A Doorman-object is used to receive requests and send back responses to the client.
+//* The doorman is listening for the following contexts:
+//* /login
+//* /experiment
+//* /annotation
+//* /file
+//* /search
+//* /user
+//* /process
+//* /sysadm
+//* /genomeRelease
+//* /token
+//*
+//* Whenever a request is received the Doorman checks what context is has and creates a
+//* new Executor (on  a new thread) and afterwards continues listening for new requests.
+//*
+//*/
 //
 //
 //import authentication.Authenticate;
