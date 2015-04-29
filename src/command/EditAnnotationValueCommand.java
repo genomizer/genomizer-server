@@ -31,10 +31,10 @@ public class EditAnnotationValueCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-		validateString(name, MaxLength.ANNOTATION_LABEL, "Annotation label");
-		validateString(oldValue, MaxLength.ANNOTATION_LABEL,
+		validateName(name, MaxLength.ANNOTATION_LABEL, "Annotation label");
+		validateName(oldValue, MaxLength.ANNOTATION_LABEL,
 				"Old annotation value");
-		validateString(newValue, MaxLength.ANNOTATION_LABEL,
+		validateName(newValue, MaxLength.ANNOTATION_LABEL,
 				"New annotation value");
 	}
 

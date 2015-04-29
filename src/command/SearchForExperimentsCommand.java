@@ -37,7 +37,8 @@ public class SearchForExperimentsCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-		if (annotations == null || annotations.equals("")) {
+		if (annotations == null || annotations.equals("") ||
+				annotations.equals("null")) {
 			throw new ValidateException(StatusCode.BAD_REQUEST,
 					"Specify annotations to search for.");
 		}
