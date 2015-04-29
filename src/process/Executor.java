@@ -194,6 +194,41 @@ public abstract class Executor {
 	}
 
 	/**
+	 * Execute shell command
+	 *
+	 * @param command array of shell command and args
+	 * @return shell command output
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
+	protected String executeShellCommand(String[] command)
+											throws IOException, InterruptedException {
+
+		ProcessBuilder builder = new ProcessBuilder(command);
+		builder.directory(new File(FILEPATH).getAbsoluteFile());
+		builder.redirectErrorStream(true);
+		Process process = builder.start();
+
+		Scanner processOutput = new Scanner(process.getInputStream());
+		StringBuilder results = new StringBuilder();
+
+		while (processOutput.hasNextLine()) {
+			results.append(processOutput.nextLine());
+			results.append("\n");
+		}
+
+		processOutput.close();
+
+		process.waitFor();
+
+		if(process.exitValue() != 0) {
+			throw new RuntimeException(results.toString());
+		}
+
+		return results.toString();
+	}
+
+	/**
 	 * Removes a list of folders and their content.
 	 *
 	 * @param files
