@@ -1,6 +1,7 @@
 package database.test.unittests;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -115,6 +116,31 @@ public class ProcessRawToProfileTests {
 
         experiments = dbac.search("Exp1[ExpID] AND processing...[FileName]");
         assertEquals(0, experiments.size());
+    }
+
+    /*
+     * Test created: 2015-04-29 by dv13esn
+     *
+     * Description: Should be able to add Parent to a file.
+     */
+    @Test
+    public void shouldAcceptNewParent() throws Exception {
+        fpg.generateExperimentFolders("tmpExp");
+        Entry<String, String> folderPaths = dbac.processRawToProfile("tmpExp");
+        addMockFiles(folderPaths.getValue(), "prof1.sam",
+                "prof2.sam", "input.sam");
+        Experiment e = dbac.search("tmpExp[ExpID]").get(0);
+        List<FileTuple> fileTuples = e.getFiles();
+        FileTuple file1 = fileTuples.get(0);
+        FileTuple file2 = fileTuples.get(1);
+        FileTuple file3 = fileTuples.get(2);
+
+        dbac.addParent(file1.getId(), file2.getId());
+        dbac.addParent(file1.getId(), file3.getId());
+
+        List<String> parents = file1.getParents();
+        assertTrue(parents.get(0).equals(String.valueOf(file2.getId())));
+        assertTrue(parents.get(1).equals(String.valueOf(file3.getId())));
     }
 
     private void addMockFiles(String folderPath, String filename1,
