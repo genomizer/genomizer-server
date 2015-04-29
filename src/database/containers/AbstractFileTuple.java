@@ -1,6 +1,9 @@
 package database.containers;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by nils on 2015-04-29.
@@ -18,6 +21,8 @@ public abstract class AbstractFileTuple {
     private String processName;
     private String processVersion;
     private String processFlags;
+
+    private List<String> parents = new ArrayList<>();
 
     public String getPath() {
         return path;
@@ -67,6 +72,15 @@ public abstract class AbstractFileTuple {
         return processFlags;
     }
 
+    public String getParentFolder() {
+        int filenameIndex = path.lastIndexOf(File.separator);
+        return path.substring(0, filenameIndex + 1);
+    }
+
+    public List<String> getParents() {
+        return parents;
+    }
+
     void setPath(String path) {
         this.path = path;
     }
@@ -113,5 +127,9 @@ public abstract class AbstractFileTuple {
 
     void setProcessFlags(String pFlags) {
         this.processFlags = pFlags;
+    }
+
+    public void setParent(String newParentId) {
+        this.parents.add(newParentId);
     }
 }
