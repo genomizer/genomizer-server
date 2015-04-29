@@ -102,8 +102,10 @@ public class RawToProfileConverter extends Executor {
 			makeConversionDirectories(remoteExecution + "resources/" + dir
 					+ "/sorted");
 			checker.calculateWhichProcessesToRun(parameters);
-			ValidateParameters(parameters);
 
+			if(!ValidateParameters(parameters)) {
+				throw new ProcessException("Parameters are incorrect");
+			}
 			rawFile1 = inFiles[0].getName();
 			rawFile_1_Name = rawFile1.substring(0, rawFile1.length() - 6);
 			if (inFiles.length == 2) {
