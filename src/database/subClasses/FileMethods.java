@@ -373,6 +373,25 @@ public class FileMethods {
 	}
 
 	/**
+	 * Adds a parent to a file. I.e. mark that the file with parentId as FileID
+	 * was used in the processing to generate the file with fileId as its FileID.
+	 *
+	 * @param fileId
+	 * @param parentId
+	 * @throws SQLException if the query did not succeed
+	 */
+	public void addParent(int fileId, int parentId) throws SQLException {
+		String query = "INSERT INTO Parent "
+				+ "(FileID, ParentID) "
+				+ "VALUES (?, ?)";
+		PreparedStatement stmt = conn.prepareStatement(query);
+		stmt.setString(1, String.valueOf(fileId));
+		stmt.setString(2, String.valueOf(parentId));
+		stmt.executeUpdate();
+		stmt.close();
+	}
+
+	/**
 	 * Sets the status of a file to "Done".
 	 *
 	 * @param fileID
