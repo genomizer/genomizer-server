@@ -10,44 +10,30 @@ import command.ValidateException;
 import database.constants.MaxLength;
 
 /**
- * Class used to unit-test AddAnnotationValueCommand.
+ * Test class used to check that the AddAnnotationValueCommand class works
+ * properly. The execute method is not tested as it requires a connection to a
+ * external database.
  *
- * @author Kommunikation/kontroll 2014.
- * @version 1.0
+ * @author Business Logic 2015.
+ * @version 1.1
  */
 public class AddAnnotationValueCommandTest {
-
-	public Gson gson = null;
+	private Gson gson;
 
 	/**
-	 * Setup method to initiate GSON builder.
+	 * Setup method to initiate the GSON object.
 	 */
 	@Before
 	public void setUp() {
-
 	    final GsonBuilder builder = new GsonBuilder();
 	    builder.excludeFieldsWithoutExposeAnnotation();
 	    gson = builder.create();
-
 	}
 
 	/**
-	 * Test that checks that creation is not null.
-	 */
-	@Test
-	public void testCreateNotNull() {
-
-		AddAnnotationValueCommand c = new AddAnnotationValueCommand();
-
-		assertNotNull(c);
-
-	}
-
-	/**
-	 * Test used to check that ValidateException is thrown if name
-	 * is missing.
-	 *
-	 * @throws ValidateException
+	 * Test used to check that ValidateException is thrown if the name field is
+	 * missing altogether.
+	 * @throws ValidateException if the name field is missing altogether.
 	 */
 	@Test(expected = ValidateException.class)
 	public void testValidateNameNotNull() throws ValidateException {

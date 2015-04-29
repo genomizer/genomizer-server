@@ -1,6 +1,6 @@
 package transfer;
 
-public interface Command {
+public interface TransferCommand {
 	
 	public void execute();
 

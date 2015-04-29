@@ -11,6 +11,7 @@ import response.Response;
 import response.StatusCode;
 import server.Debug;
 import server.ErrorLogger;
+import sun.rmi.runtime.Log;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -47,10 +48,25 @@ public class RequestHandler implements HttpHandler {
 		Class<? extends Command> commandClass = CommandClasses.
 				get(requestMethod + " " + context);
 
-		/*Did the request match an existing command?*/
+		/*Authenticate the user and send the appropriate response*/
+		String uuid = getUUID(exchange);
 		if (commandClass == null) {
-			Debug.log("Unrecognized command.");
-			respond(createBadRequestResponse(), exchange);
+			if (uuid == null) {
+				Debug.log("User could not be authenticated!");
+				Response response = new MinimalResponse(StatusCode.
+						UNAUTHORIZED);
+				respond(response, exchange);
+				return;
+			} else {
+				Debug.log("Unrecognized command.");
+				respond(createBadRequestResponse(), exchange);
+				return;
+			}
+		} else if (uuid == null && !commandClass.equals(LoginCommand.class)) {
+			Debug.log("User could not be authenticated!");
+			Response response = new MinimalResponse(StatusCode.
+					UNAUTHORIZED);
+			respond(response, exchange);
 			return;
 		}
 
@@ -62,19 +78,6 @@ public class RequestHandler implements HttpHandler {
 			Debug.log("Bad format on command");
 			respond(createBadRequestResponse(), exchange);
 			return;
-		}
-
-		/*Authenticate the user.*/
-		String uuid = null;
-		if (!commandClass.equals(LoginCommand.class)) {
-			uuid = getUUID(exchange);
-			if (uuid == null) {
-				Debug.log("User could not be authenticated!");
-				Response response = new MinimalResponse(StatusCode.
-						UNAUTHORIZED);
-				respond(response, exchange);
-				return;
-			}
 		}
 
         /*Log the user.*/
@@ -162,7 +165,7 @@ public class RequestHandler implements HttpHandler {
 	/*Used to log a request.*/
 	private void logRequest(HttpExchange exchange) {
 		Debug.log("\n-----------------\nNEW EXCHANGE: " + exchange.
-                getRequestMethod().toString() + " " + exchange.getRequestURI().
+				getRequestMethod().toString() + " " + exchange.getRequestURI().
                 toString());
 	}
 

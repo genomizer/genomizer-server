@@ -2,6 +2,7 @@ package command.test;
 
 import static org.junit.Assert.*;
 
+import command.Command;
 import database.constants.MaxLength;
 import org.junit.Test;
 import command.DeleteExperimentCommand;
@@ -16,50 +17,37 @@ import command.ValidateException;
  */
 public class DeleteExperimentCommandTest {
 
-	/**
-	 * Test that checks that creation works and is
-	 * not null.
-	 */
-	@Test
-	public void testCreateNotNull() {
+//	/**
+//	 * Test that checks that ValidateException is thrown when
+//	 * the experiment-id is null.
+//	 *
+//	 * @throws ValidateException
+//	 */
+//	@Test(expected = ValidateException.class)
+//	public void testValidateNullExpId() throws ValidateException {
+//
+//		DeleteExperimentCommand c = new DeleteExperimentCommand(null);
+//		c.validate();
+//
+//		fail("Expected ValidateException.");
+//
+//	}
 
-		DeleteExperimentCommand c = new DeleteExperimentCommand("a");
-
-		assertNotNull(c);
-
-	}
-
-	/**
-	 * Test that checks that ValidateException is thrown when
-	 * the experiment-id is null.
-	 *
-	 * @throws ValidateException
-	 */
-	@Test(expected = ValidateException.class)
-	public void testValidateNullExpId() throws ValidateException {
-
-		DeleteExperimentCommand c = new DeleteExperimentCommand(null);
-		c.validate();
-
-		fail("Expected ValidateException.");
-
-	}
-
-	/**
-	 * Test that checks that ValidateException is thrown when
-	 * experiment-id is an empty string.
-	 *
-	 * @throws ValidateException
-	 */
-	@Test(expected = ValidateException.class)
-	public void testValidateExpIdEmptyString() throws ValidateException {
-
-		DeleteExperimentCommand c = new DeleteExperimentCommand("");
-		c.validate();
-
-		fail("Expected ValidateException.");
-
-	}
+//	/**
+//	 * Test that checks that ValidateException is thrown when
+//	 * experiment-id is an empty string.
+//	 *
+//	 * @throws ValidateException
+//	 */
+//	@Test(expected = ValidateException.class)
+//	public void testValidateExpIdEmptyString() throws ValidateException {
+//
+//		DeleteExperimentCommand c = new DeleteExperimentCommand("");
+//		c.validate();
+//
+//		fail("Expected ValidateException.");
+//
+//	}
 
 	/**
 	 * Method used to check that a ValidateException is thrown
@@ -69,16 +57,14 @@ public class DeleteExperimentCommandTest {
 	 */
 	@Test(expected = ValidateException.class)
 	public void testValidateExpIdLength() throws ValidateException {
-
-		String big = "";
+		String uri = "/experiment/";
 		for(int i = 0; i < MaxLength.EXPID + 1; i++) {
-			big = big + "a";
+			uri += "a";
 		}
-		DeleteExperimentCommand c = new DeleteExperimentCommand(big);
+		Command c = new DeleteExperimentCommand();
+		c.setFields(uri, null);
 		c.validate();
-
 		fail("Expected ValidateException.");
-
 	}
 
 	/**
@@ -89,12 +75,10 @@ public class DeleteExperimentCommandTest {
 	 */
 	@Test
 	public void testValidateProperlyFormatted() throws ValidateException {
-
-		DeleteExperimentCommand c = new DeleteExperimentCommand("properly");
+		Command c = new DeleteExperimentCommand();
+		c.setFields("/experiment/properly", null);
 		c.validate();
-
 		assertTrue(true);
-
 	}
 
 }

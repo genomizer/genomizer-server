@@ -2,7 +2,7 @@ package transfer.test;
 
 import org.junit.Before;
 import org.junit.Test;
-import transfer.UploadCommand;
+import transfer.UploadTransferCommand;
 
 
 import static org.junit.Assert.assertEquals;
@@ -16,9 +16,9 @@ import static org.junit.Assert.assertNotNull;
  * Time: 1:44 PM
  * To change this template use File | Settings | File Templates.
  */
-public class UploadCommandTest {
+public class UploadTransferCommandTest {
 
-    private UploadCommand uploadCommand;
+    private UploadTransferCommand uploadCommand;
 
 
 
@@ -30,7 +30,7 @@ public class UploadCommandTest {
 
 
 
-        uploadCommand = new UploadCommand("fake path");
+        uploadCommand = new UploadTransferCommand("fake path");
     }
 
     @Test

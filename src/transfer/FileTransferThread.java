@@ -1,14 +1,14 @@
 package transfer;
 
 public class FileTransferThread implements Runnable {
-	private Command command;
+	private TransferCommand transferCommand;
 
-	public FileTransferThread(Command command) {
-		this.command = command;
+	public FileTransferThread(TransferCommand transferCommand) {
+		this.transferCommand = transferCommand;
 	}
 
 	@Override
 	public void run() {
-		command.execute();
+		transferCommand.execute();
 	}
 }

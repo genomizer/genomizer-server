@@ -3,11 +3,11 @@ package transfer;
 //import java.net.InetAddress;
 //import java.net.UnknownHostException;
 
-public class DownloadCommand implements Command {
+public class DownloadTransferCommand implements TransferCommand {
 
     private String filePath;
 
-    public DownloadCommand(String filePath) {
+    public DownloadTransferCommand(String filePath) {
         this.filePath = filePath;
 
     }
