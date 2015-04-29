@@ -29,7 +29,7 @@ public class DeleteAnnotationFieldCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-		validateString(header, MaxLength.ANNOTATION_LABEL, "Annotation label");
+		validateName(header, MaxLength.ANNOTATION_LABEL, "Annotation label");
 	}
 
 	@Override

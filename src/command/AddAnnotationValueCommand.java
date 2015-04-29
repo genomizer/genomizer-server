@@ -28,8 +28,8 @@ public class AddAnnotationValueCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-		validateString(name, MaxLength.ANNOTATION_LABEL, "Annotation label");
-		validateString(value, MaxLength.ANNOTATION_VALUE, "Annotation value");
+		validateName(name, MaxLength.ANNOTATION_LABEL, "Annotation label");
+		validateName(value, MaxLength.ANNOTATION_VALUE, "Annotation value");
 	}
 
 	@Override

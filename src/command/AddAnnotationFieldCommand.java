@@ -36,9 +36,10 @@ public class AddAnnotationFieldCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-		validateString(name, MaxLength.ANNOTATION_LABEL, "Annotation label");
+		validateName(name, MaxLength.ANNOTATION_LABEL, "Annotation label");
+
 		if(defaults != null) {
-			validateString(defaults, MaxLength.ANNOTATION_DEFAULTVALUE,
+			validateName(defaults, MaxLength.ANNOTATION_DEFAULTVALUE,
 					"Default value");
 		}
 
@@ -53,11 +54,7 @@ public class AddAnnotationFieldCommand extends Command {
 		}
 
 		for(int i = 0; i < type.size(); i++) {
-			if(hasInvalidCharacters(type.get(i))){
-				throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
-						"characters in annotation type. Valid characters are: "
-						+ validCharacters);
-			}
+			validateName(type.get(i), MaxLength.ANNOTATION_VALUE, "Annotation type");
 		}
 	}
 

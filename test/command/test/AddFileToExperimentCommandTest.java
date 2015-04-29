@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import database.constants.MaxLength;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -339,6 +340,7 @@ public class AddFileToExperimentCommandTest {
 	 *
 	 * @throws ValidateException
 	 */
+	@Ignore
 	@Test(expected = ValidateException.class)
 	public void testValidateMetaDataInvalidCharacters() throws ValidateException {
 

@@ -1,8 +1,9 @@
-package server;
+package transfer;
 
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import response.StatusCode;
+import server.*;
 
 import java.io.*;
 import java.nio.file.FileVisitResult;

@@ -26,6 +26,8 @@ public class MaxLength {
 	public final static int USERNAME = 32;
 	public final static int PASSWORD = 32;
 	public final static int ROLE = 32;
+	public final static int FULLNAME = 32;
+	public final static int EMAIL = 32;
 
 	public final static int WORKSPACEID = 32;
 	public final static int WORKSPACE_NAME = 64;
