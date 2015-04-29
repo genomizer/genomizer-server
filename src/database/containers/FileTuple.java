@@ -3,7 +3,6 @@ package database.containers;
 import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
 
 import database.constants.ServerDependentValues;
 
@@ -11,7 +10,7 @@ import database.constants.ServerDependentValues;
  * Container class for holding data on a file in the database. Public variables
  * are used to get the different values of the file.
  */
-public class FileTuple {
+public class FileTuple extends AbstractFileTuple {
 
     public static final int RAW = 1;
     public static final int PROFILE = 2;
@@ -19,33 +18,13 @@ public class FileTuple {
     public static final int OTHER = 4;
 
     private Integer id;
-    private String path;
-    private String inputFilePath;
     private String type;
     private String filename;
-    private Date date;
-    private String metaData;
-    private String author;
-    private String uploader;
-    private Boolean isPrivate;
-    private String expId;
-    private String grVersion;
     private String status;
-    private String processName;
-    private String processVersion;
-    private String processFlags;
 
 
     public Integer getId() {
         return id;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public String getInputFilePath() {
-        return inputFilePath;
     }
 
     public String getType() {
@@ -56,60 +35,12 @@ public class FileTuple {
         return filename;
     }
 
-    public Date getDate() {
-        return date;
-    }
-
-    public String getMetaData() {
-        return metaData;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public String getUploader() {
-        return uploader;
-    }
-
-    public Boolean isPrivate() {
-        return isPrivate;
-    }
-
-    public String getExpId() {
-        return expId;
-    }
-
-    public String getGrVersion() {
-        return grVersion;
-    }
-
     public String getStatus() {
         return status;
     }
 
-    public String getProcessName() {
-        return processName;
-    }
-
-    public String getProcessVersion() {
-        return processVersion;
-    }
-
-    public String getProcessFlags() {
-        return processFlags;
-    }
-
     void setId(Integer id) {
         this.id = id;
-    }
-
-    void setPath(String path) {
-        this.path = path;
-    }
-
-    void setInputFilePath(String inputFilePath) {
-        this.inputFilePath = inputFilePath;
     }
 
     void setType(String type) {
@@ -120,48 +51,8 @@ public class FileTuple {
         this.filename = filename;
     }
 
-    void setDate(Date date) {
-        this.date = date;
-    }
-
-    void setMetaData(String metaData) {
-        this.metaData = metaData;
-    }
-
-    void setAuthor(String author) {
-        this.author = author;
-    }
-
-    void setUploader(String uploader) {
-        this.uploader = uploader;
-    }
-
-    void setIsPrivate(Boolean isPrivate) {
-        this.isPrivate = isPrivate;
-    }
-
-    void setExpId(String expId) {
-        this.expId = expId;
-    }
-
-    void setGrVersion(String grVersion) {
-        this.grVersion = grVersion;
-    }
-
     void setStatus(String status) {
         this.status = status;
-    }
-
-    void setProcessName(String pName) {
-        this.processName = pName;
-    }
-
-    void setProcessVersion(String pVersion) {
-        this.processVersion = pVersion;
-    }
-
-    void setProcessFlags(String pFlags) {
-        this.processFlags = pFlags;
     }
 
     /**
