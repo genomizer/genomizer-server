@@ -1,4 +1,4 @@
-package server;
+package transfer;
 
 
 import com.sun.net.httpserver.Headers;
@@ -8,6 +8,7 @@ import org.apache.commons.fileupload.FileUpload;
 import org.apache.commons.fileupload.RequestContext;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import response.StatusCode;
+import server.*;
 
 import java.io.File;
 import java.io.IOException;
