@@ -16,8 +16,11 @@ CREATE TABLE File
     ProcessName     VARCHAR(32),
     ProcessVersion  VARCHAR(32),
     ProcessFlags    VARCHAR(32),
-    CONSTRAINT pkey_file PRIMARY KEY(FileID)
+    CONSTRAINT pkey_fileid PRIMARY KEY(FileID)
 );
+
+CREATE UNIQUE INDEX path_index
+ON File (Path);
 
 CREATE TABLE Parent
 {
