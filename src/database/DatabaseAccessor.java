@@ -1061,19 +1061,6 @@ public class DatabaseAccessor {
         return genMethods.fileReadyForDownload(version, fileName);
     }
 
-    //FIXME This i incorrect
-    /*
-    /**
-     * Removes one specific genome version stored in the database.
-     *
-     * @param version - the genome version.
-     * @param species
-     *
-     * @return boolean - true if succeeded, false if failed.
-     * @throws SQLException
-     * @throws IOException
-     */
-
     /**
      * Removes one specific genome version stored in the database.
      *
