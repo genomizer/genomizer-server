@@ -10,7 +10,7 @@ import server.ServerSettings;
 
 /**
  * Class used to create profile data from .fastq format.
- * Can run a dynamic number of steps depending of which parameters thats sent
+ * Can run a dynamic number of steps depending of which parameters that's sent
  * from the clients.
  *
  * @version 1.0
@@ -37,7 +37,7 @@ public class RawToProfileConverter extends Executor {
 	private String sortedDirForFile;
 
 	/**
-	 * Constructor that initializes some datastructures used by the class.
+	 * Constructor that initializes some data structures used by the class.
 	 */
 	public RawToProfileConverter() {
 		toBeRemoved = new Stack<String>();
@@ -432,19 +432,14 @@ public class RawToProfileConverter extends Executor {
 	 */
 
 	private boolean CorrectInfiles(File[] inFiles) throws ProcessException {
-		ProcessException e = null;
-		boolean checkInFiles = true;
+
 		if (inFiles == null) {
-			e = new ProcessException("Filepath to raw file is null");
-			checkInFiles = false;
+			throw new ProcessException("Filepath to raw file is null");
 		} else if (inFiles.length > 2 && inFiles.length < 1) {
-			e = new ProcessException("Wrong quantity of raw file in Filepath");
-			checkInFiles = false;
+			throw new ProcessException("Wrong quantity of raw file in Filepath");
 		}
-		if (e != null) {
-			throw e;
-		}
-		return checkInFiles;
+
+		return true;
 	}
 
 	/**
@@ -547,7 +542,7 @@ public class RawToProfileConverter extends Executor {
 
 	/**
 	 * Makes it so that bowtie always runs on all processors except two. if the
-	 * machine only has 1 or 2 processors bowtie will run on atleast one
+	 * machine only has 1 or 2 processors bowtie will run on at least one
 	 * processor.
 	 *
 	 * @param params
@@ -614,7 +609,7 @@ public class RawToProfileConverter extends Executor {
 	 * Creates the working directory for the procedure to put its files in.
 	 *
 	 * @param directoryPath
-	 *            the directory to create if it doesnt exist
+	 *            the directory to create if it doesn't exist
 	 */
 	private void makeConversionDirectories(String directoryPath) {
 		fileDir = new File(directoryPath);
@@ -633,7 +628,7 @@ public class RawToProfileConverter extends Executor {
 	 */
 	private boolean verifyInData(String[] parameters, String inFolder,
 			String outFilePath) {
-
+		/* TODO Log these errors correctly */
 		if (parameters == null) {
 			System.out.println("Parameters are null");
 			return false;
