@@ -37,7 +37,6 @@ public class UpdateFileInExperimentTest {
 //		UpdateFileInExperimentCommand c = new UpdateFileInExperimentCommand("","");
 //		c.validate();
 //	}
-//TODO Implement tests later
 
 	/**
 	 * Test used to check that ValidateException is not thrown

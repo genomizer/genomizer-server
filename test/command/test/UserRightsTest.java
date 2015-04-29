@@ -8,7 +8,7 @@ import command.ValidateException;
 import database.subClasses.UserMethods.UserType;
 import org.junit.Test;
 
-public class CommandTest {
+public class UserRightsTest {
 
     private Command com;
 

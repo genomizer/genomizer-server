@@ -4,9 +4,12 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 
+import command.Command;
+import command.ValidateException;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import database.subClasses.UserMethods.UserType;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -112,5 +115,34 @@ public class DeleteAnnotationInfoTest {
 		}
 
 	}
+
+//	/**
+//	 * Test used to check that ValidateException is not thrown
+//	 * when the user have the required rights.
+//	 *
+//	 * @throws command.ValidateException
+//	 */
+//	@Test
+//	public void testHavingRights() throws ValidateException {
+//
+//		Command c = new DeleteAnnotationInfo();
+//		c.setFields("uri", null, UserType.USER);
+//		c.validate();
+//	}
+//
+//	/**
+//	 * Test used to check that ValidateException is thrown
+//	 * when the user doesn't have the required rights.
+//	 *
+//	 * @throws ValidateException
+//	 */
+//	@Test(expected = ValidateException.class)
+//	public void testNotHavingRights() throws ValidateException {
+//
+//		Command c = new DeleteAnnotationInfo();
+//		c.setFields("uri", null, UserType.GUEST);
+//		c.validate();
+//		fail();
+//	}
 
 }

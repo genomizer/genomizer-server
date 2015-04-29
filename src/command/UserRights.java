@@ -1,6 +1,7 @@
 package command;
 
 import database.subClasses.UserMethods.UserType;
+import unused.DeleteAnnotationInfo;
 
 import java.util.HashMap;
 
@@ -42,6 +43,7 @@ public class UserRights {
         userRights.put(UpdateAnnotationPrivilegesCommand.class, UserType.USER);
         userRights.put(UpdateExperimentCommand.class, UserType.USER);
         userRights.put(UpdateFileInExperimentCommand.class, UserType.USER);
+        userRights.put(DeleteAnnotationInfo.class, UserType.USER);
     }
 
 
@@ -53,7 +55,6 @@ public class UserRights {
     public static UserType getRights(Class<? extends Command> command){
 
         if (userRights.get(command) == null)
-
             return UserType.UNKNOWN;
         else
             return userRights.get(command);
