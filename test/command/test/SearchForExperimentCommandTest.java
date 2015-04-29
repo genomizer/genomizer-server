@@ -2,6 +2,7 @@ package command.test;
 
 import static org.junit.Assert.*;
 
+import command.Command;
 import command.ValidateException;
 import database.subClasses.UserMethods.UserType;
 import org.junit.Before;
@@ -60,8 +61,9 @@ public class SearchForExperimentCommandTest {
 	@Test
 	public void testHavingRights() throws ValidateException {
 
-		SearchForExperimentsCommand com = new SearchForExperimentsCommand("string", UserType.GUEST);
-		com.validate();
+		Command c = new SearchForExperimentsCommand();
+		c.setFields("uri", null, UserType.GUEST);
+		c.validate();
 	}
 
 	/**
@@ -73,8 +75,9 @@ public class SearchForExperimentCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testNotHavingRights() throws ValidateException {
 
-		SearchForExperimentsCommand com = new SearchForExperimentsCommand("string", UserType.UNKNOWN);
-		com.validate();
+		Command c = new SearchForExperimentsCommand();
+		c.setFields("uri", null, UserType.UNKNOWN);
+		c.validate();
 		fail();
 	}
 

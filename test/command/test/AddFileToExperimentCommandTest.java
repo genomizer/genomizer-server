@@ -59,7 +59,7 @@ public class AddFileToExperimentCommandTest {
 
 		String json = jsonBuilder(null,"name","raw","metameta","name","user1","releaseNr");
 		AddFileToExperimentCommand c = gson.fromJson(json, AddFileToExperimentCommand.class);
-		c.setRights(UserType.ADMIN);
+		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -77,7 +77,7 @@ public class AddFileToExperimentCommandTest {
 
 		String json = jsonBuilder("","name","raw","metameta","name","user1","releaseNr");
 		AddFileToExperimentCommand c = gson.fromJson(json, AddFileToExperimentCommand.class);
-		c.setRights(UserType.ADMIN);
+		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -99,7 +99,7 @@ public class AddFileToExperimentCommandTest {
 		}
 		String json = jsonBuilder(big,"name","raw","metameta","name","user1","releaseNr");
 		AddFileToExperimentCommand c = gson.fromJson(json, AddFileToExperimentCommand.class);
-		c.setRights(UserType.ADMIN);
+		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -117,7 +117,7 @@ public class AddFileToExperimentCommandTest {
 
 		String json = jsonBuilder("i/d","name","raw","metameta","name","user1","releaseNr");
 		AddFileToExperimentCommand c = gson.fromJson(json, AddFileToExperimentCommand.class);
-		c.setRights(UserType.ADMIN);
+		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -135,7 +135,7 @@ public class AddFileToExperimentCommandTest {
 
 		String json = jsonBuilder("id",null,"raw","metameta","name","user1","releaseNr");
 		AddFileToExperimentCommand c = gson.fromJson(json, AddFileToExperimentCommand.class);
-		c.setRights(UserType.ADMIN);
+		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -153,7 +153,7 @@ public class AddFileToExperimentCommandTest {
 
 		String json = jsonBuilder("id","","raw","metameta","name","user1","releaseNr");
 		AddFileToExperimentCommand c = gson.fromJson(json, AddFileToExperimentCommand.class);
-		c.setRights(UserType.ADMIN);
+		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -175,7 +175,7 @@ public class AddFileToExperimentCommandTest {
 		}
 		String json = jsonBuilder("id",big,"raw","metameta","name","user1","releaseNr");
 		AddFileToExperimentCommand c = gson.fromJson(json, AddFileToExperimentCommand.class);
-		c.setRights(UserType.ADMIN);
+		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -193,7 +193,7 @@ public class AddFileToExperimentCommandTest {
 
 		String json = jsonBuilder("id","nam/e","raw","metameta","name","user1","releaseNr");
 		AddFileToExperimentCommand c = gson.fromJson(json, AddFileToExperimentCommand.class);
-		c.setRights(UserType.ADMIN);
+		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -211,7 +211,7 @@ public class AddFileToExperimentCommandTest {
 
 		String json = jsonBuilder("id","name",null,"metameta","name","user1","releaseNr");
 		AddFileToExperimentCommand c = gson.fromJson(json, AddFileToExperimentCommand.class);
-		c.setRights(UserType.ADMIN);
+		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -229,7 +229,7 @@ public class AddFileToExperimentCommandTest {
 
 		String json = jsonBuilder("id","name","","metameta","name","user1","releaseNr");
 		AddFileToExperimentCommand c = gson.fromJson(json, AddFileToExperimentCommand.class);
-		c.setRights(UserType.ADMIN);
+		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -251,7 +251,7 @@ public class AddFileToExperimentCommandTest {
 		}
 		String json = jsonBuilder("id","name",big,"metameta","name","user1","releaseNr");
 		AddFileToExperimentCommand c = gson.fromJson(json, AddFileToExperimentCommand.class);
-		c.setRights(UserType.ADMIN);
+		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -269,7 +269,7 @@ public class AddFileToExperimentCommandTest {
 
 		String json = jsonBuilder("id","name","ra/w","metameta","name","user1","releaseNr");
 		AddFileToExperimentCommand c = gson.fromJson(json, AddFileToExperimentCommand.class);
-		c.setRights(UserType.ADMIN);
+		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -287,7 +287,7 @@ public class AddFileToExperimentCommandTest {
 
 		String json = jsonBuilder("id","name","raw",null,"name","user1","releaseNr");
 		AddFileToExperimentCommand c = gson.fromJson(json, AddFileToExperimentCommand.class);
-		c.setRights(UserType.ADMIN);
+		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -305,7 +305,7 @@ public class AddFileToExperimentCommandTest {
 
 		String json = jsonBuilder("id","name","raw","","name","user1","releaseNr");
 		AddFileToExperimentCommand c = gson.fromJson(json, AddFileToExperimentCommand.class);
-		c.setRights(UserType.ADMIN);
+		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -327,7 +327,7 @@ public class AddFileToExperimentCommandTest {
 		}
 		String json = jsonBuilder("id","name","raw",big,"name","user1","releaseNr");
 		AddFileToExperimentCommand c = gson.fromJson(json, AddFileToExperimentCommand.class);
-		c.setRights(UserType.ADMIN);
+		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -345,7 +345,7 @@ public class AddFileToExperimentCommandTest {
 
 		String json = jsonBuilder("id","name","raw","metam/eta","name","user1","releaseNr");
 		AddFileToExperimentCommand c = gson.fromJson(json, AddFileToExperimentCommand.class);
-		c.setRights(UserType.ADMIN);
+		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -363,7 +363,7 @@ public class AddFileToExperimentCommandTest {
 
 		String json = jsonBuilder("id","name","raw","metameta",null,"user1","releaseNr");
 		AddFileToExperimentCommand c = gson.fromJson(json, AddFileToExperimentCommand.class);
-		c.setRights(UserType.ADMIN);
+		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -381,7 +381,7 @@ public class AddFileToExperimentCommandTest {
 
 		String json = jsonBuilder("id","name","raw","metameta","","user1","releaseNr");
 		AddFileToExperimentCommand c = gson.fromJson(json, AddFileToExperimentCommand.class);
-		c.setRights(UserType.ADMIN);
+		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -403,7 +403,7 @@ public class AddFileToExperimentCommandTest {
 		}
 		String json = jsonBuilder("id","name","raw","metameta",big,"user1","releaseNr");
 		AddFileToExperimentCommand c = gson.fromJson(json, AddFileToExperimentCommand.class);
-		c.setRights(UserType.ADMIN);
+		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -421,7 +421,7 @@ public class AddFileToExperimentCommandTest {
 
 		String json = jsonBuilder("id","name","raw","metameta","na/me","user1","releaseNr");
 		AddFileToExperimentCommand c = gson.fromJson(json, AddFileToExperimentCommand.class);
-		c.setRights(UserType.ADMIN);
+		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -439,7 +439,7 @@ public class AddFileToExperimentCommandTest {
 
 		String json = jsonBuilder("id","name","raw","metameta","name",null,"releaseNr");
 		AddFileToExperimentCommand c = gson.fromJson(json, AddFileToExperimentCommand.class);
-		c.setRights(UserType.ADMIN);
+		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -457,7 +457,7 @@ public class AddFileToExperimentCommandTest {
 
 		String json = jsonBuilder("id","name","raw","metameta","name","","releaseNr");
 		AddFileToExperimentCommand c = gson.fromJson(json, AddFileToExperimentCommand.class);
-		c.setRights(UserType.ADMIN);
+		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -479,7 +479,7 @@ public class AddFileToExperimentCommandTest {
 		}
 		String json = jsonBuilder("id","name","raw","metameta","name",big,"releaseNr");
 		AddFileToExperimentCommand c = gson.fromJson(json, AddFileToExperimentCommand.class);
-		c.setRights(UserType.ADMIN);
+		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -497,7 +497,7 @@ public class AddFileToExperimentCommandTest {
 
 		String json = jsonBuilder("id","name","raw","metameta","name","use/r1","releaseNr");
 		AddFileToExperimentCommand c = gson.fromJson(json, AddFileToExperimentCommand.class);
-		c.setRights(UserType.ADMIN);
+		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -514,7 +514,7 @@ public class AddFileToExperimentCommandTest {
 
 		String json = jsonBuilder("id","name","raw","metameta","name","user1",null);
 		AddFileToExperimentCommand c = gson.fromJson(json, AddFileToExperimentCommand.class);
-		c.setRights(UserType.ADMIN);
+		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -532,7 +532,7 @@ public class AddFileToExperimentCommandTest {
 
 		String json = jsonBuilder("id","name","raw","metameta","name","user1","");
 		AddFileToExperimentCommand c = gson.fromJson(json, AddFileToExperimentCommand.class);
-		c.setRights(UserType.ADMIN);
+		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -554,7 +554,7 @@ public class AddFileToExperimentCommandTest {
 		}
 		String json = jsonBuilder("id","name","raw","metameta","name","user1",big);
 		AddFileToExperimentCommand c = gson.fromJson(json, AddFileToExperimentCommand.class);
-		c.setRights(UserType.ADMIN);
+		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -572,7 +572,7 @@ public class AddFileToExperimentCommandTest {
 
 		String json = jsonBuilder("id","name","raw","metameta","name","user1","relea/seNr");
 		AddFileToExperimentCommand c = gson.fromJson(json, AddFileToExperimentCommand.class);
-		c.setRights(UserType.ADMIN);
+		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -590,7 +590,7 @@ public class AddFileToExperimentCommandTest {
 
 		String json = jsonBuilder("id","name.txt","raw","metameta","name","user1","releaseNr");
 		AddFileToExperimentCommand c = gson.fromJson(json, AddFileToExperimentCommand.class);
-		c.setRights(UserType.ADMIN);
+		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
 
 		assertTrue(true);
@@ -619,11 +619,11 @@ public class AddFileToExperimentCommandTest {
 	 * @throws ValidateException
 	 */
 	@Test
-	public void testHavingRights() throws ValidateException {
+	public void testHavingFieldsRights() throws ValidateException {
 
 		String json = jsonBuilder("id","name","raw","metameta","name","user1","releaseNr");
 		AddFileToExperimentCommand c = gson.fromJson(json, AddFileToExperimentCommand.class);
-		c.setRights(UserType.USER);
+		c.setFields("uri", "uuid", UserType.USER);
 
 		c.validate();
 	}
@@ -639,7 +639,7 @@ public class AddFileToExperimentCommandTest {
 
 		String json = jsonBuilder("id","name","raw","metameta","name","user1","releaseNr");
 		AddFileToExperimentCommand c = gson.fromJson(json, AddFileToExperimentCommand.class);
-		c.setRights(UserType.GUEST);
+		c.setFields("uri", "uuid", UserType.GUEST);
 
 		c.validate();
 		fail();

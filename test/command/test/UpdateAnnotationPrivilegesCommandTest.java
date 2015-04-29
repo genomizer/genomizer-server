@@ -17,10 +17,6 @@ import command.UpdateAnnotationPrivilegesCommand;
  */
 public class UpdateAnnotationPrivilegesCommandTest {
 	//TODO Implement tests when the class is implemented
-
-@Ignore
-public class UpdateAnnotationPrivilegesCommandTest {
-//	//TODO Implement tests later
 //
 //	/**
 //	 * Test used to check that creation works and object
@@ -54,7 +50,8 @@ public class UpdateAnnotationPrivilegesCommandTest {
 	@Test
 	public void testHavingRights() throws ValidateException {
 
-		UpdateAnnotationPrivilegesCommand com = new UpdateAnnotationPrivilegesCommand("json", "string", UserType.USER);
+		UpdateAnnotationPrivilegesCommand com = new UpdateAnnotationPrivilegesCommand();
+		com.setFields("json", "string", UserType.USER);
 		com.validate();
 	}
 
@@ -67,7 +64,8 @@ public class UpdateAnnotationPrivilegesCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testNotHavingRights() throws ValidateException {
 
-		UpdateAnnotationPrivilegesCommand com = new UpdateAnnotationPrivilegesCommand("name", "string", UserType.GUEST);
+		UpdateAnnotationPrivilegesCommand com = new UpdateAnnotationPrivilegesCommand();
+		com.setFields("name", "string", UserType.GUEST);
 		com.validate();
 		fail();
 	}

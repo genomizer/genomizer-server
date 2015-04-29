@@ -44,7 +44,7 @@ public class CreateUserCommandTest {
 
 		json = createJSON("a","b","c","d","e");
 		CreateUserCommand cmd = gson.fromJson(json, CreateUserCommand.class);
-		cmd.setRights(UserType.ADMIN);
+		cmd.setFields("uri", "uuid", UserType.ADMIN);
 		assertNotNull(cmd);
 
 	}
@@ -74,13 +74,13 @@ public class CreateUserCommandTest {
 		for(int i = 0; i < MaxLength.USERNAME+1; i++) {
 			username = username + "a";
 		}
-		json = createJSON(username,"b","c","d","e");
+		json = createJSON(username, "b", "c", "d", "e");
 		CreateUserCommand cmd = gson.fromJson(json, CreateUserCommand.class);
-		cmd.setRights(UserType.ADMIN);
+		cmd.setFields("uri", "uuid", UserType.ADMIN);
 
 		json = createJSON("","b","c","d","e");
 		CreateUserCommand cmd2 = gson.fromJson(json, CreateUserCommand.class);
-		cmd2.setRights(UserType.ADMIN);
+		cmd2.setFields("uri", "uuid", UserType.ADMIN);
 
 		cmd.validate();
 		cmd2.validate();
@@ -97,13 +97,13 @@ public class CreateUserCommandTest {
 		for(int i = 0; i < MaxLength.PASSWORD+1; i++) {
 			password = password + "a";
 		}
-		json = createJSON("a",password,"c","d","e");
+		json = createJSON("a", password,"c","d","e");
 		CreateUserCommand cmd = gson.fromJson(json, CreateUserCommand.class);
-		cmd.setRights(UserType.ADMIN);
+		cmd.setFields("uri", "uuid", UserType.ADMIN);
 
 		json = createJSON("a","","c","d","e");
 		CreateUserCommand cmd2 = gson.fromJson(json, CreateUserCommand.class);
-		cmd2.setRights(UserType.ADMIN);
+		cmd2.setFields("uri", "uuid", UserType.ADMIN);
 
 		cmd.validate();
 		cmd2.validate();
@@ -117,17 +117,17 @@ public class CreateUserCommandTest {
 	@Test
 	public void testValidatePrivilegesLength() throws ValidateException {
 
-		String priv = "";
+		String privilege = "";
 		for(int i = 0; i < MaxLength.ROLE+1; i++) {
-			priv = priv + "a";
+			privilege = privilege + "a";
 		}
-		json = createJSON("a","b",priv,"d","e");
+		json = createJSON("a","b",privilege,"d","e");
 		CreateUserCommand cmd = gson.fromJson(json, CreateUserCommand.class);
-		cmd.setRights(UserType.ADMIN);
+		cmd.setFields("uri", "uuid", UserType.ADMIN);
 
 		json = createJSON("a","b","","d","e");
 		CreateUserCommand cmd2 = gson.fromJson(json, CreateUserCommand.class);
-		cmd2.setRights(UserType.ADMIN);
+		cmd2.setFields("uri", "uuid", UserType.ADMIN);
 
 		cmd.validate();
 		cmd2.validate();
@@ -143,7 +143,7 @@ public class CreateUserCommandTest {
 
 		json = createJSON("a/b/c","b","c","d","e");
 		CreateUserCommand cmd = gson.fromJson(json, CreateUserCommand.class);
-		cmd.setRights(UserType.ADMIN);
+		cmd.setFields("uri", "uuid", UserType.ADMIN);
 
 		cmd.validate();
 
@@ -156,7 +156,7 @@ public class CreateUserCommandTest {
 	public void testValidationProperlyFormatted() throws ValidateException {
 		json = createJSON("a","b","c","d","e");
 		CreateUserCommand cmd = gson.fromJson(json, CreateUserCommand.class);
-		cmd.setRights(UserType.ADMIN);
+		cmd.setFields("uri", "uuid", UserType.ADMIN);
 
 		cmd.validate();
 
@@ -173,7 +173,7 @@ public class CreateUserCommandTest {
 
 		json = createJSON("a","b","c","d","e");
 		CreateUserCommand c = gson.fromJson(json, CreateUserCommand.class);
-		c.setRights(UserType.ADMIN);
+		c.setFields("uri", "uuid", UserType.ADMIN);
 
 		c.validate();
 	}
@@ -189,7 +189,7 @@ public class CreateUserCommandTest {
 
 		json = createJSON("a","b","c","d","e");
 		CreateUserCommand c = gson.fromJson(json, CreateUserCommand.class);
-		c.setRights(UserType.USER);
+		c.setFields("uri", "uuid", UserType.USER);
 
 		c.validate();
 		fail();

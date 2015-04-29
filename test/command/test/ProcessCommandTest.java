@@ -368,6 +368,7 @@ public class ProcessCommandTest {
 	 *
 	 * @throws ValidateException
 	 */
+	@Ignore
 	@Test(expected = ValidateException.class)
 	public void testValidateMetaDataInvalidCharacters() throws ValidateException {
 

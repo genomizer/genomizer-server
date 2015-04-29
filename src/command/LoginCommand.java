@@ -1,6 +1,7 @@
 package command;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
+import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.LoginResponse;
 import response.Response;
@@ -11,6 +12,7 @@ import authentication.LoginAttempt;
 
 import com.google.gson.annotations.Expose;
 
+import java.io.IOException;
 import java.sql.SQLException;
 
 /**
@@ -27,7 +29,8 @@ public class LoginCommand extends Command {
 	private String password = null;
 
 	@Override
-	public void setFields(String uri, String username) {
+	public void setFields(String uri, String uuid, UserType userType) {
+		this.userType = userType;
 
 		/*No fields from the URI is needed, neither is the UUID. Dummy
 		implementation*/

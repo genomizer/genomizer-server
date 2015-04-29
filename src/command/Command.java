@@ -36,6 +36,9 @@ public abstract class Command {
 	/*This is used to store a RESTful-header.*/
 	protected String header;
 
+	/*Keeps track of the user rights level for the command sender. */
+	protected UserType userType = UserType.UNKNOWN;
+
 	/**
 	 * Used to validate the object and its information. The validate method
 	 * should be called before the command is executed and should be unique
@@ -59,7 +62,7 @@ public abstract class Command {
 	 * @param uri the URI from the http request.
 	 * @param username the UUID for the user who made the request.
 	 */
-	public abstract void setFields(String uri, String username);
+	public abstract void setFields(String uri, String username, UserType userType);
 
 	/**
 	 * Method used to connect to the database.

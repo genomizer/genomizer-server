@@ -4,6 +4,7 @@ import authentication.PasswordHash;
 import com.google.gson.annotations.Expose;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
+import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
@@ -14,7 +15,10 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 /**
- * Created by dv13jen on 2015-04-16.
+ * Command class which enables the user to change their password.
+ *
+ * @author dv13jen
+ * @version 1.0
  */
 public class ChangeUserPasswordCommand extends Command {
     
@@ -25,7 +29,8 @@ public class ChangeUserPasswordCommand extends Command {
     private String password = null;
 
     @Override
-    public void setFields(String uri, String username) {
+    public void setFields(String uri, String uuid, UserType userType) {
+        this.userType = userType;
 
         /*No fields from the URI is needed, neither is the UUID. Dummy
 		implementation*/
@@ -46,7 +51,7 @@ public class ChangeUserPasswordCommand extends Command {
      */
     @Override
     public Response execute() {
-        DatabaseAccessor db = null;
+        DatabaseAccessor db;
         try {
             db = initDB();
         } catch (SQLException | IOException e) {

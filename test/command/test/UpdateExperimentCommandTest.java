@@ -2,6 +2,7 @@ package command.test;
 
 import static org.junit.Assert.*;
 
+import command.Command;
 import org.junit.Ignore;
 
 import command.ValidateException;
@@ -52,8 +53,9 @@ public class UpdateExperimentCommandTest {
 	@Test
 	public void testHavingRights() throws ValidateException {
 
-		UpdateExperimentCommand com = new UpdateExperimentCommand("", "", UserType.USER);
-		com.validate();
+		Command c = new UpdateExperimentCommand();
+		c.setFields("uri", null, UserType.USER);
+		c.validate();
 	}
 
 	/**
@@ -65,8 +67,9 @@ public class UpdateExperimentCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testNotHavingRights() throws ValidateException {
 
-		UpdateExperimentCommand com = new UpdateExperimentCommand("", "", UserType.GUEST);
-		com.validate();
+		Command c = new UpdateExperimentCommand();
+		c.setFields("uri", null, UserType.GUEST);
+		c.validate();
 		fail();
 	}
 

@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import command.Command;
 import database.constants.MaxLength;
+import database.subClasses.UserMethods.UserType;
 import org.junit.Test;
 import command.LogoutCommand;
 import command.ValidateException;
@@ -76,7 +77,7 @@ public class LogoutCommandTest {
 			uuid = uuid + "a";
 		}
 		Command c = new LogoutCommand();
-		c.setFields(null, uuid);
+		c.setFields(null, uuid, UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -93,7 +94,7 @@ public class LogoutCommandTest {
 	public void testValidateProperlyFormatted() throws ValidateException {
 
 		Command c = new LogoutCommand();
-		c.setFields(null, "properly");
+		c.setFields(null, "properly", UserType.ADMIN);
 		c.validate();
 
 		assertTrue(true);

@@ -64,44 +64,6 @@ public class GetGenomeReleaseSpeciesTest {
 //
 //	}
 
-		GetGenomeReleaseSpeciesCommand c = new GetGenomeReleaseSpeciesCommand("testing");
-
-		assertNotNull(c);
-
-	}
-
-	/**
-	 * Test used to check that ValidateException is thrown when
-	 * species is an empty string.
-	 *
-	 * @throws ValidateException
-	 */
-	@Test(expected = ValidateException.class)
-	public void testValidateSpeciesEmptyString() throws ValidateException {
-
-		GetGenomeReleaseSpeciesCommand c = new GetGenomeReleaseSpeciesCommand("");
-		c.validate();
-
-		fail("Expected ValidateException to be thrown.");
-
-	}
-
-	/**
-	 * Test used to check that ValidateException is thrown when
-	 * species is null.
-	 *
-	 * @throws ValidateException
-	 */
-	@Test(expected = ValidateException.class)
-	public void testValidateSpeciesNotNull() throws ValidateException {
-
-		GetGenomeReleaseSpeciesCommand c = new GetGenomeReleaseSpeciesCommand(null);
-		c.validate();
-
-		fail("Expected ValidateException to be thrown.");
-
-	}
-
 	/**
 	 * Test used to check that ValidateException is thrown when
 	 * species length is to long.
@@ -115,7 +77,8 @@ public class GetGenomeReleaseSpeciesTest {
 		for(int i = 0; i < MaxLength.GENOME_SPECIES + 1; i++) {
 			uri = uri + "a";
 		}
-		GetGenomeReleaseSpeciesCommand c = new GetGenomeReleaseSpeciesCommand(big);
+		Command c = new GetGenomeReleaseCommand();
+		c.setFields(uri, null, UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -131,7 +94,8 @@ public class GetGenomeReleaseSpeciesTest {
 	@Test
 	public void testValidateProperlyFormatted() throws ValidateException {
 
-		GetGenomeReleaseSpeciesCommand c = new GetGenomeReleaseSpeciesCommand("properly");
+		Command c = new GetGenomeReleaseCommand();
+		c.setFields("/genomeRelease/properly", null, UserType.ADMIN);
 		c.validate();
 
 		assertTrue(true);
@@ -147,8 +111,9 @@ public class GetGenomeReleaseSpeciesTest {
 	@Test
 	public void testHavingRights() throws ValidateException {
 
-		GetGenomeReleaseCommand com = new GetGenomeReleaseCommand(UserType.GUEST);
-		com.validate();
+		Command c = new GetGenomeReleaseCommand();
+		c.setFields("/genomeRelease/properly", null, UserType.GUEST);
+		c.validate();
 	}
 
 	/**
@@ -160,8 +125,9 @@ public class GetGenomeReleaseSpeciesTest {
 	@Test(expected = ValidateException.class)
 	public void testNotHavingRights() throws ValidateException {
 
-		GetGenomeReleaseCommand com = new GetGenomeReleaseCommand(UserType.UNKNOWN);
-		com.validate();
+		Command c = new GetGenomeReleaseCommand();
+		c.setFields("/genomeRelease/properly", null, UserType.UNKNOWN);
+		c.validate();
 		fail();
 	}
 

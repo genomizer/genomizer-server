@@ -32,7 +32,8 @@ public class AddGenomeReleaseCommand extends Command {
 	private ArrayList<String> files = new ArrayList<>();
 
 	@Override
-	public void setFields(String uri, String username) {
+	public void setFields(String uri, String uuid, UserType userType) {
+		this.userType = userType;
 
 		/*No fields from the URI is needed, neither is the UUID. Dummy
 		implementation*/
@@ -60,7 +61,7 @@ public class AddGenomeReleaseCommand extends Command {
 	@Override
 	public Response execute() {
 		DatabaseAccessor db = null;
-		ArrayList<String> uploadURLs = new ArrayList<String>();
+		ArrayList<String> uploadURLs = new ArrayList<>();
 		try {
 			db = initDB();
 			for(String fileName: files) {

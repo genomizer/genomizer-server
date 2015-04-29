@@ -1,5 +1,6 @@
 package command.test;
 
+import command.Command;
 import command.DeleteAnnotationValueCommand;
 import command.ValidateException;
 import database.subClasses.UserMethods.UserType;
@@ -21,8 +22,9 @@ public class DeleteAnnotationValueCommandTest {
     @Test
     public void testHavingRights() throws ValidateException {
 
-        com = new DeleteAnnotationValueCommand("name", "string", UserType.USER);
-        com.validate();
+        Command c = new DeleteAnnotationValueCommand();
+        c.setFields("uri", null, UserType.USER);
+        c.validate();
     }
 
     /**
@@ -34,8 +36,9 @@ public class DeleteAnnotationValueCommandTest {
     @Test(expected = ValidateException.class)
     public void testNotHavingRights() throws ValidateException {
 
-        com = new DeleteAnnotationValueCommand("name", "string", UserType.GUEST);
-        com.validate();
+        Command c = new DeleteAnnotationValueCommand();
+        c.setFields("uri", null, UserType.GUEST);
+        c.validate();
         fail();
     }
 

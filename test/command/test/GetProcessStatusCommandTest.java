@@ -2,8 +2,7 @@ package command.test;
 
 import java.util.*;
 
-import command.GetProcessStatusCommand;
-import command.ValidateException;
+import command.*;
 import database.subClasses.UserMethods.UserType;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -15,8 +14,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
-import command.ProcessCommand;
-import command.ProcessStatus;
 import server.WorkHandler;
 import server.WorkPool;
 import server.test.dummies.ProcessCommandMock;
@@ -118,8 +115,9 @@ public class GetProcessStatusCommandTest {
 	@Test
 	public void testHavingRights() throws ValidateException {
 
-		GetProcessStatusCommand com = new GetProcessStatusCommand(workPool, UserType.USER);
-		com.validate();
+		Command c = new GetAnnotationPrivilegesCommand();
+		c.setFields("uri", null, UserType.USER);
+		c.validate();
 	}
 
 	/**
@@ -131,8 +129,9 @@ public class GetProcessStatusCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testNotHavingRights() throws ValidateException {
 
-		GetProcessStatusCommand com = new GetProcessStatusCommand(workPool, UserType.GUEST);
-		com.validate();
+		Command c = new GetAnnotationPrivilegesCommand();
+		c.setFields("uri", null, UserType.GUEST);
+		c.validate();
 		fail();
 	}
 
@@ -142,9 +141,8 @@ public class GetProcessStatusCommandTest {
         JsonArray json = parser.parse(jsonString).getAsJsonArray();
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        String prettyJson = gson.toJson(json);
 
-        return prettyJson;
+		return gson.toJson(json);
     }
 
 }

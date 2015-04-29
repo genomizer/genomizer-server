@@ -256,7 +256,7 @@ public class AddExperimentCommandTest {
 
 		String json = "{\"name\":\"experimentId\",\"annotations\":[{\"name\":\"pubmedId\",\"value\":\"abc123\"},{\"name\":\"type\",\"value\":\"raw\"}]}";
 		AddExperimentCommand c = gson.fromJson(json, AddExperimentCommand.class);
-		c.setRights(UserType.USER);
+		c.setFields("uri", "uuid", UserType.USER);
 
 		c.validate();
 
@@ -273,7 +273,7 @@ public class AddExperimentCommandTest {
 		String json = "{\"name\":\"experimentId\",\"annotations\":[{\"name\":\"pubmedId\",\"value\":\"abc123\"},{\"name\":\"type\",\"value\":\"raw\"}]}";
 		AddExperimentCommand c = gson.fromJson(json, AddExperimentCommand.class);
 		String compare = gson.toJson(c);
-		c.setRights(UserType.ADMIN);
+		c.setFields("uri", "uuid", UserType.ADMIN);
 
 		assertEquals(json, compare);
 
@@ -290,7 +290,7 @@ public class AddExperimentCommandTest {
 
 		String json = "{\"name\":\"experimentId\",\"annotations\":[{\"name\":\"pubmedId\",\"value\":\"abc123\"},{\"name\":\"type\",\"value\":\"raw\"}]}";
 		AddExperimentCommand c = gson.fromJson(json, AddExperimentCommand.class);
-		c.setRights(UserType.USER);
+		c.setFields("uri", "uuid", UserType.USER);
 
 		c.validate();
 	}
@@ -306,7 +306,7 @@ public class AddExperimentCommandTest {
 
 		String json = "{\"name\":\"experimentId\",\"annotations\":[{\"name\":\"pubmedId\",\"value\":\"abc123\"},{\"name\":\"type\",\"value\":\"raw\"}]}";
 		AddExperimentCommand c = gson.fromJson(json, AddExperimentCommand.class);
-		c.setRights(UserType.GUEST);
+		c.setFields("uri", "uuid", UserType.GUEST);
 
 		c.validate();
 		fail();

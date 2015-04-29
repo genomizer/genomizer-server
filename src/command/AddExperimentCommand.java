@@ -27,7 +27,8 @@ public class AddExperimentCommand extends Command {
 	private ArrayList<Annotation> annotations = new ArrayList<>();
 
 	@Override
-	public void setFields(String uri, String username) {
+	public void setFields(String uri, String uuid, UserType userType) {
+		this.userType = userType;
 
 		/*No fields from the URI is needed, neither is the UUID. Dummy
 		implementation*/
@@ -78,7 +79,4 @@ public class AddExperimentCommand extends Command {
 		}
 	}
 
-	public void setRights(UserType rights) {
-		this.userType = rights;
-	}
 }

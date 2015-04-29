@@ -2,6 +2,7 @@ package command;
 
 import authentication.Authenticate;
 import database.constants.MaxLength;
+import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
@@ -17,8 +18,9 @@ public class LogoutCommand extends Command {
 	private String username;
 
 	@Override
-	public void setFields(String uri, String username) {
-		this.username = username;
+	public void setFields(String uri, String uuid, UserType userType) {
+		this.userType = userType;
+		username = Authenticate.getUsernameByID(uuid);
 	}
 
 	@Override

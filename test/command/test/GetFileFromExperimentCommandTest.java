@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import command.Command;
 import database.constants.MaxLength;
-import database.subClasses.UserMethods;
+import database.subClasses.UserMethods.UserType;
 import org.junit.Test;
 import command.GetFileFromExperimentCommand;
 import command.ValidateException;
@@ -63,44 +63,6 @@ public class GetFileFromExperimentCommandTest {
 //
 //	}
 
-		GetFileFromExperimentCommand c = new GetFileFromExperimentCommand("Hello");
-
-		assertNotNull(c);
-
-	}
-
-	/**
-	 * Test used to check that ValidateException is thrown
-	 * when FileExpId is an empty string.
-	 *
-	 * @throws ValidateException
-	 */
-	@Test(expected = ValidateException.class)
-	public void testValidateFileExpIdEmptyString() throws ValidateException {
-
-		GetFileFromExperimentCommand c = new GetFileFromExperimentCommand("");
-		c.validate();
-
-		fail("Expected ValidateException to be thrown.");
-
-	}
-
-	/**
-	 * Test used to check that ValidateException is thrown
-	 * when FileExpId is null.
-	 *
-	 * @throws ValidateException
-	 */
-	@Test(expected = ValidateException.class)
-	public void testValidateFileExpIdNotNull() throws ValidateException {
-
-		GetFileFromExperimentCommand c = new GetFileFromExperimentCommand(null);
-		c.validate();
-
-		fail("Expected ValidateException to be thrown.");
-
-	}
-
 	/**
 	 * Test used to check that ValidateException is thrown
 	 * when FileExpId length is to long.
@@ -114,7 +76,7 @@ public class GetFileFromExperimentCommandTest {
 			uri += "a";
 		}
 		Command c = new GetFileFromExperimentCommand();
-		c.setFields(uri, null);
+		c.setFields(uri, null, UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -131,7 +93,7 @@ public class GetFileFromExperimentCommandTest {
 	public void testValidateProperlyFormatted() throws ValidateException {
 
 		Command c = new GetFileFromExperimentCommand();
-		c.setFields("/file/properly", null);
+		c.setFields("/file/properly", null, UserType.ADMIN);
 		c.validate();
 
 		assertTrue(true);
@@ -146,7 +108,8 @@ public class GetFileFromExperimentCommandTest {
 	@Test
 	public void testHavingRights() throws ValidateException {
 
-		GetFileFromExperimentCommand c = new GetFileFromExperimentCommand("string", UserMethods.UserType.USER);
+		Command c = new GetFileFromExperimentCommand();
+		c.setFields("/file/properly", null, UserType.USER);
 		c.validate();
 	}
 
@@ -159,7 +122,8 @@ public class GetFileFromExperimentCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testNotHavingRights() throws ValidateException {
 
-		GetFileFromExperimentCommand c = new GetFileFromExperimentCommand("string", UserMethods.UserType.GUEST);
+		Command c = new GetFileFromExperimentCommand();
+		c.setFields("/file/properly", null, UserType.GUEST);
 		c.validate();
 		fail();
 	}

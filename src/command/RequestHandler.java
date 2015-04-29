@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
@@ -46,7 +47,7 @@ public class RequestHandler implements HttpHandler {
         /*Extract the request method and the context. Together they form a
         * key that is used to retrieve the appropriate command from a
         * hash map of all existing commands.*/
-        String requestMethod = exchange.getRequestMethod().toString();
+        String requestMethod = exchange.getRequestMethod();
 		String context = exchange.getHttpContext().getPath();
 		Class<? extends Command> commandClass = CommandClasses.
 				get(requestMethod + " " + context);
@@ -86,11 +87,14 @@ public class RequestHandler implements HttpHandler {
         /*Log the user.*/
 		logUser(uuid);
 
+		/*TODO: Get the current user's user right level*/
+		UserType userType = UserType.ADMIN;
+
 		/*Read the json body and create the command.*/
 		String json = readBody(exchange);
 		logRequestBody(json);
 		Command command = gson.fromJson(json, commandClass);
-		command.setFields(uri, uuid);
+		command.setFields(uri, uuid, userType);
 
 		/*Attempt to validate the command.*/
 		try {
@@ -209,7 +213,7 @@ public class RequestHandler implements HttpHandler {
 	/*Used to log a request.*/
 	private void logRequest(HttpExchange exchange) {
 		Debug.log("\n-----------------\nNEW EXCHANGE: " + exchange.
-				getRequestMethod().toString() + " " + exchange.getRequestURI().
+				getRequestMethod() + " " + exchange.getRequestURI().
                 toString());
 	}
 

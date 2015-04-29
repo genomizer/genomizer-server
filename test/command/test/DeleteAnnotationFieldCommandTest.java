@@ -2,6 +2,7 @@ package command.test;
 
 import static org.junit.Assert.*;
 
+import command.AddFileToExperimentCommand;
 import command.Command;
 import database.constants.MaxLength;
 import database.subClasses.UserMethods.UserType;
@@ -49,44 +50,6 @@ public class DeleteAnnotationFieldCommandTest {
 //
 //	}
 
-		DeleteAnnotationFieldCommand c = new DeleteAnnotationFieldCommand("a");
-
-		assertNotNull(c);
-
-	}
-
-	/**
-	 * Test that checks that ValidateException is thrown when
-	 * the label(header) is null.
-	 *
-	 * @throws ValidateException
-	 */
-	@Test(expected = ValidateException.class)
-	public void testValidationLabelNull() throws ValidateException {
-
-		DeleteAnnotationFieldCommand c = new DeleteAnnotationFieldCommand(null);
-		c.validate();
-
-		fail("Expected ValidateException.");
-
-	}
-
-	/**
-	 * Test that checks that ValidationException is thrown when
-	 * the label(header) is an empty string.
-	 *
-	 * @throws ValidateException
-	 */
-	@Test(expected = ValidateException.class)
-	public void testValidationLabelEmptyString() throws ValidateException {
-
-		DeleteAnnotationFieldCommand c = new DeleteAnnotationFieldCommand("");
-		c.validate();
-
-		fail("Expected ValidateException.");
-
-	}
-
 	/**
 	 * Test that checks that ValidateException is thrown when
 	 * the label(header) length is to long.
@@ -101,7 +64,7 @@ public class DeleteAnnotationFieldCommandTest {
 		}
 
 		Command c = new DeleteAnnotationFieldCommand();
-		c.setFields(uri, null);
+		c.setFields(uri, null, UserType.ADMIN);
 		c.validate();
 		fail("Expected ValidateException.");
 	}
@@ -115,7 +78,10 @@ public class DeleteAnnotationFieldCommandTest {
 	@Test
 	public void testValidationProperlyFormatted() throws ValidateException {
 
-		DeleteAnnotationFieldCommand c = new DeleteAnnotationFieldCommand("great");
+		String uri = "/annotation/field/great";
+		Command c = new DeleteAnnotationFieldCommand();
+		c.setFields(uri, null, UserType.ADMIN);
+
 		c.validate();
 		assertTrue(true);
 	}
@@ -129,8 +95,11 @@ public class DeleteAnnotationFieldCommandTest {
 	@Test
 	public void testHavingRights() throws ValidateException {
 
-		DeleteAnnotationFieldCommand com = new DeleteAnnotationFieldCommand("string", UserType.USER);
-		com.validate();
+		String uri = "/annotation/field/great";
+		Command c = new DeleteAnnotationFieldCommand();
+		c.setFields(uri, null, UserType.USER);
+
+		c.validate();
 	}
 
 	/**
@@ -142,8 +111,11 @@ public class DeleteAnnotationFieldCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testNotHavingRights() throws ValidateException {
 
-		DeleteAnnotationFieldCommand com = new DeleteAnnotationFieldCommand("string", UserType.GUEST);
-		com.validate();
+		String uri = "/annotation/field/great";
+		Command c = new DeleteAnnotationFieldCommand();
+		c.setFields(uri, null, UserType.GUEST);
+
+		c.validate();
 		fail();
 	}
 }

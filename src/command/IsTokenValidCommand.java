@@ -1,6 +1,7 @@
 package command;
 
 import authentication.Authenticate;
+import database.subClasses.UserMethods.UserType;
 import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
@@ -15,7 +16,8 @@ public class IsTokenValidCommand extends Command {
 	private String uuid;
 
 	@Override
-	public void setFields(String uri, String username) {
+	public void setFields(String uri, String uuid, UserType userType) {
+		this.userType = userType;
 
 		/*No fields from the URI is needed, neither is the UUID. Dummy
 		implementation*/

@@ -46,9 +46,7 @@ public class DeleteGenomeReleaseCommandTest {
 //		fail("Expected ValidateException.");
 //
 //	}
-
-		DeleteGenomeReleaseCommand cmd = new DeleteGenomeReleaseCommand("Specie", "GenomeRelease");
-
+//
 //	/**
 //	 * Test used to check that validate method throws ValidateException
 //	 * when specie is null.
@@ -95,7 +93,7 @@ public class DeleteGenomeReleaseCommandTest {
 			uri = uri + i;
 		}
 		Command c = new DeleteGenomeReleaseCommand();
-		c.setFields(uri, null);
+		c.setFields(uri, null, UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException.");
@@ -118,7 +116,7 @@ public class DeleteGenomeReleaseCommandTest {
 
 		uri += "GRelease";
 		Command c = new DeleteGenomeReleaseCommand();
-		c.setFields(uri, null);
+		c.setFields(uri, null, UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException.");
@@ -134,7 +132,7 @@ public class DeleteGenomeReleaseCommandTest {
 	@Test
 	public void testValidateProperFormatted() throws ValidateException {
 		Command c = new DeleteGenomeReleaseCommand();
-		c.setFields("/genomeRelease/Specie/GRelease", null);
+		c.setFields("/genomeRelease/Specie/GRelease", null, UserType.ADMIN);
 		c.validate();
 
 		assertTrue(true);
@@ -150,8 +148,9 @@ public class DeleteGenomeReleaseCommandTest {
 	@Test
 	public void testHavingRights() throws ValidateException {
 
-		DeleteGenomeReleaseCommand com = new DeleteGenomeReleaseCommand("name", "string", UserType.USER);
-		com.validate();
+		Command c = new DeleteGenomeReleaseCommand();
+		c.setFields("/genomeRelease/Specie/GRelease", null, UserType.USER);
+		c.validate();
 	}
 
 	/**
@@ -163,8 +162,9 @@ public class DeleteGenomeReleaseCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testNotHavingRights() throws ValidateException {
 
-		DeleteGenomeReleaseCommand com = new DeleteGenomeReleaseCommand("name", "string", UserType.GUEST);
-		com.validate();
+		Command c = new DeleteGenomeReleaseCommand();
+		c.setFields("/genomeRelease/Specie/GRelease", null, UserType.GUEST);
+		c.validate();
 		fail();
 	}
 

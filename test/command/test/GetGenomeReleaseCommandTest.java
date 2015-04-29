@@ -2,6 +2,7 @@ package command.test;
 
 import static org.junit.Assert.*;
 
+import command.Command;
 import command.ValidateException;
 import database.subClasses.UserMethods.UserType;
 import org.junit.Test;
@@ -24,7 +25,7 @@ public class GetGenomeReleaseCommandTest {
 	@Test
 	public void testCreationNotNull() {
 
-		GetGenomeReleaseCommand c = new GetGenomeReleaseCommand(UserType.ADMIN);
+		GetGenomeReleaseCommand c = new GetGenomeReleaseCommand();
 
 		assertNotNull(c);
 	}
@@ -38,8 +39,9 @@ public class GetGenomeReleaseCommandTest {
 	@Test
 	public void testHavingRights() throws ValidateException {
 
-		GetGenomeReleaseCommand com = new GetGenomeReleaseCommand(UserType.GUEST);
-		com.validate();
+		Command c = new GetGenomeReleaseCommand();
+		c.setFields("uri", null, UserType.GUEST);
+		c.validate();
 	}
 
 	/**
@@ -51,8 +53,9 @@ public class GetGenomeReleaseCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testNotHavingRights() throws ValidateException {
 
-		GetGenomeReleaseCommand com = new GetGenomeReleaseCommand(UserType.UNKNOWN);
-		com.validate();
+		Command c = new GetGenomeReleaseCommand();
+		c.setFields("uri", null, UserType.UNKNOWN);
+		c.validate();
 		fail();
 	}
 

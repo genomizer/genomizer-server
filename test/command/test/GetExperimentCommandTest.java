@@ -63,44 +63,6 @@ public class GetExperimentCommandTest {
 //
 //	}
 
-		GetExperimentCommand c = new GetExperimentCommand("Exp-id");
-
-		assertNotNull(c);
-
-	}
-
-	/**
-	 * Test used to check that ValidateEception is thrown
-	 * when experiment-id is null.
-	 *
-	 * @throws ValidateException
-	 */
-	@Test(expected = ValidateException.class)
-	public void testValidateExpIdNotNull() throws ValidateException {
-
-		GetExperimentCommand c = new GetExperimentCommand(null);
-		c.validate();
-
-		fail("Expected ValidateException.");
-
-	}
-
-	/**
-	 * Test used to check that ValidateException is thrown
-	 * when experiment-id is an empty string.
-	 *
-	 * @throws ValidateException
-	 */
-	@Test(expected = ValidateException.class)
-	public void testValidateExpIdEmptyString() throws ValidateException {
-
-		GetExperimentCommand c = new GetExperimentCommand("");
-		c.validate();
-
-		fail("Expected ValidateException.");
-
-	}
-
 	/**
 	 * Test used to check that ValidateException is thrown
 	 * when experiment-id length is to long.
@@ -114,7 +76,8 @@ public class GetExperimentCommandTest {
 		for(int i = 0; i < MaxLength.EXPID + 1; i++) {
 			uri += "a";
 		}
-		GetExperimentCommand c = new GetExperimentCommand(big);
+		Command c = new GetExperimentCommand();
+		c.setFields(uri, null, UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException.");
@@ -131,7 +94,7 @@ public class GetExperimentCommandTest {
 	public void testValidateProperlyFormatted() throws ValidateException {
 
 		Command c = new GetExperimentCommand();
-		c.setFields("/experiment/properly", null);
+		c.setFields("/experiment/properly", null, UserType.ADMIN);
 		c.validate();
 
 		assertTrue(true);
@@ -147,8 +110,9 @@ public class GetExperimentCommandTest {
 	@Test
 	public void testHavingRights() throws ValidateException {
 
-		GetExperimentCommand com = new GetExperimentCommand("properly", UserType.GUEST);
-		com.validate();
+		Command c = new GetExperimentCommand();
+		c.setFields("/experiment/properly", null, UserType.GUEST);
+		c.validate();
 	}
 
 	/**
@@ -160,8 +124,9 @@ public class GetExperimentCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testNotHavingRights() throws ValidateException {
 
-		GetExperimentCommand com = new GetExperimentCommand("properly", UserType.UNKNOWN);
-		com.validate();
+		Command c = new GetExperimentCommand();
+		c.setFields("/experiment/properly", null, UserType.UNKNOWN);
+		c.validate();
 		fail();
 	}
 

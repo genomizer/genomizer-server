@@ -2,6 +2,7 @@ package command.test;
 
 import static org.junit.Assert.*;
 
+import command.Command;
 import command.ValidateException;
 import database.subClasses.UserMethods.UserType;
 import org.junit.Ignore;
@@ -47,8 +48,9 @@ public class UpdateFileInExperimentTest {
 	@Test
 	public void testHavingRights() throws ValidateException {
 
-		UpdateFileInExperimentCommand com = new UpdateFileInExperimentCommand("name", "string", UserType.USER);
-		com.validate();
+		Command c = new UpdateFileInExperimentCommand();
+		c.setFields("uri", null, UserType.USER);
+		c.validate();
 	}
 
 	/**
@@ -60,8 +62,9 @@ public class UpdateFileInExperimentTest {
 	@Test(expected = ValidateException.class)
 	public void testNotHavingRights() throws ValidateException {
 
-		UpdateFileInExperimentCommand com = new UpdateFileInExperimentCommand("name", "string", UserType.GUEST);
-		com.validate();
+		Command c = new UpdateFileInExperimentCommand();
+		c.setFields("uri", null, UserType.GUEST);
+		c.validate();
 		fail();
 	}
 

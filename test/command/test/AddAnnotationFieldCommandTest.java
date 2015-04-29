@@ -195,11 +195,6 @@ public class AddAnnotationFieldCommandTest {
 		for(int i = 0; i < MaxLength.ANNOTATION_DEFAULTVALUE + 1; i++) {
 			big = big + "a";
 		}
-		String json = "{\"name\":\"species\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"" + big +
-				"\",\"forced\":false}";
-		AddAnnotationFieldCommand c = new AddAnnotationFieldCommand();
-		c = gson.fromJson(json, AddAnnotationFieldCommand.class);
-		c.validate();
 
 		String json = "{\"name\":\"species\",\"type\":[\"fly\",\"rat\"" +
 				",\"human\"],\"default\":\"" + big + "\",\"forced\":false}";
@@ -261,7 +256,7 @@ public class AddAnnotationFieldCommandTest {
 
 		String json = "{\"name\":\"species\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
 		AddAnnotationFieldCommand c = gson.fromJson(json, AddAnnotationFieldCommand.class);
-		c.setRights(UserType.USER);
+		c.setFields("uri", "uuid", UserType.USER);
 
 		c.validate();
 	}
@@ -277,7 +272,7 @@ public class AddAnnotationFieldCommandTest {
 
 		String json = "{\"name\":\"species\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
 		AddAnnotationFieldCommand c = gson.fromJson(json, AddAnnotationFieldCommand.class);
-		c.setRights(UserType.GUEST);
+		c.setFields("uri", "uuid", UserType.GUEST);
 
 		c.validate();
 		fail();

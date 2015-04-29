@@ -44,7 +44,8 @@ public class AddFileToExperimentCommand extends Command {
 	private String grVersion = null;
 
 	@Override
-	public void setFields(String uri, String username) {
+	public void setFields(String uri, String uuid, UserType userType) {
+		this.userType = userType;
 
 		/*No fields from the URI is needed, neither is the UUID. Dummy
 		implementation*/
@@ -103,9 +104,5 @@ public class AddFileToExperimentCommand extends Command {
 				db.close();
 			}
 		}
-	}
-
-	public void setRights(UserType rights) {
-		this.userType = rights;
 	}
 }

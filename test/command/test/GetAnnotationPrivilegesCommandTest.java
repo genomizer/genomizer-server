@@ -2,6 +2,7 @@ package command.test;
 
 import static org.junit.Assert.*;
 
+import command.Command;
 import command.ValidateException;
 import database.subClasses.UserMethods.UserType;
 import org.junit.Ignore;
@@ -18,17 +19,6 @@ import command.GetAnnotationPrivilegesCommand;
 public class GetAnnotationPrivilegesCommandTest {
 	//TODO Implement tests when implementing the class
 
-	/**
-	 * Test creation and that it is not null.
-	 */
-	@Test
-	public void testCreationNotNull() {
-
-		GetAnnotationPrivilegesCommand c = new GetAnnotationPrivilegesCommand("", UserType.ADMIN);
-
-		assertNotNull(c);
-
-	}
 
 	/**
 	 * Test used to check that ValidateException is not thrown
@@ -39,8 +29,9 @@ public class GetAnnotationPrivilegesCommandTest {
 	@Test
 	public void testHavingRights() throws ValidateException {
 
-		GetAnnotationPrivilegesCommand com = new GetAnnotationPrivilegesCommand("name", UserType.GUEST);
-		com.validate();
+		Command c = new GetAnnotationPrivilegesCommand();
+		c.setFields("uri", null, UserType.GUEST);
+		c.validate();
 	}
 
 	/**
@@ -52,8 +43,9 @@ public class GetAnnotationPrivilegesCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testNotHavingRights() throws ValidateException {
 
-		GetAnnotationPrivilegesCommand com = new GetAnnotationPrivilegesCommand("name", UserType.UNKNOWN);
-		com.validate();
+		Command c = new GetAnnotationPrivilegesCommand();
+		c.setFields("uri", null, UserType.UNKNOWN);
+		c.validate();
 		fail();
 	}
 

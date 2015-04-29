@@ -76,7 +76,7 @@ public class DeleteUserCommandTest {
 			uri += "a";
 		}
 		Command c = new DeleteUserCommand();
-		c.setFields(uri, null);
+		c.setFields(uri, null, UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException.");
@@ -93,7 +93,7 @@ public class DeleteUserCommandTest {
 	public void testValidateProperlyFormatted() throws ValidateException {
 
 		Command c = new DeleteUserCommand();
-		c.setFields("username", null);
+		c.setFields("username", null, UserType.ADMIN);
 		c.validate();
 
 		assertTrue(true);
@@ -109,8 +109,9 @@ public class DeleteUserCommandTest {
 	@Test
 	public void testHavingRights() throws ValidateException {
 
-		DeleteUserCommand com = new DeleteUserCommand("string", UserType.ADMIN);
-		com.validate();
+		Command c = new DeleteUserCommand();
+		c.setFields("username", null, UserType.ADMIN);
+		c.validate();
 	}
 
 	/**
@@ -122,8 +123,9 @@ public class DeleteUserCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testNotHavingRights() throws ValidateException {
 
-		DeleteUserCommand com = new DeleteUserCommand("string", UserType.USER);
-		com.validate();
+		Command c = new DeleteUserCommand();
+		c.setFields("username", null, UserType.USER);
+		c.validate();
 		fail();
 	}
 

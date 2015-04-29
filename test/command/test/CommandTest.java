@@ -16,7 +16,8 @@ public class CommandTest {
     @Test(expected = ValidateException.class)
     public void testReturnFalseForUnknown() throws ValidateException {
 
-        com = new DeleteAnnotationValueCommand("name","value", UserType.UNKNOWN);
+        com = new DeleteAnnotationValueCommand();
+        com.setFields("name","value", UserType.UNKNOWN);
         com.hasRights(UserType.UNKNOWN);
         fail();
     }
@@ -24,18 +25,23 @@ public class CommandTest {
     @Test
     public void testReturnTrueForEqual() throws ValidateException {
 
-        com = new DeleteAnnotationValueCommand("name","value", UserType.ADMIN);
+        com = new DeleteAnnotationValueCommand();
+
+        com.setFields("name", "value", UserType.ADMIN);
         com.hasRights(UserType.ADMIN);
-        com = new DeleteAnnotationValueCommand("name","value", UserType.USER);
+
+        com.setFields("name", "value", UserType.USER);
         com.hasRights(UserType.USER);
-        com = new DeleteAnnotationValueCommand("name","value", UserType.GUEST);
+
+        com.setFields("name","value", UserType.GUEST);
         com.hasRights(UserType.GUEST);
     }
 
     @Test
     public void testReturnTrueForAdmin() throws ValidateException {
 
-        com = new DeleteAnnotationValueCommand("name","value", UserType.ADMIN);
+        com = new DeleteAnnotationValueCommand();
+        com.setFields("name","value", UserType.ADMIN);
         com.hasRights(UserType.USER);
         com.hasRights(UserType.GUEST);
         com.hasRights(UserType.UNKNOWN);
@@ -44,7 +50,8 @@ public class CommandTest {
     @Test(expected = ValidateException.class)
     public void testReturnFalseWithoutAdminRights1() throws ValidateException {
 
-        com = new DeleteAnnotationValueCommand("name","value", UserType.USER);
+        com = new DeleteAnnotationValueCommand();
+        com.setFields("name","value", UserType.USER);
         com.hasRights(UserType.ADMIN);
         fail();
     }
@@ -52,7 +59,8 @@ public class CommandTest {
     @Test(expected = ValidateException.class)
     public void testReturnFalseWithoutAdminRights2() throws ValidateException {
 
-        com = new DeleteAnnotationValueCommand("name","value", UserType.GUEST);
+        com = new DeleteAnnotationValueCommand();
+        com.setFields("name","value", UserType.GUEST);
         com.hasRights(UserType.ADMIN);
         fail();
     }
@@ -60,7 +68,8 @@ public class CommandTest {
     @Test(expected = ValidateException.class)
     public void testReturnFalseWithoutUserRights1() throws ValidateException {
 
-        com = new DeleteAnnotationValueCommand("name","value", UserType.GUEST);
+        com = new DeleteAnnotationValueCommand();
+        com.setFields("name","value", UserType.GUEST);
         com.hasRights(UserType.USER);
         fail();
     }
@@ -68,7 +77,8 @@ public class CommandTest {
     @Test(expected = ValidateException.class)
     public void testDoNotAllowUsersForUnknown2() throws ValidateException {
 
-        com = new DeleteAnnotationValueCommand("name","value", UserType.GUEST);
+        com = new DeleteAnnotationValueCommand();
+        com.setFields("name","value", UserType.GUEST);
         com.hasRights(UserType.UNKNOWN);
         fail();
     }
@@ -76,7 +86,8 @@ public class CommandTest {
     @Test(expected = ValidateException.class)
     public void testReturnFalseWithoutAdminRights3() throws ValidateException {
 
-        com = new DeleteAnnotationValueCommand("name","value", UserType.UNKNOWN);
+        com = new DeleteAnnotationValueCommand();
+        com.setFields("name","value", UserType.UNKNOWN);
         com.hasRights(UserType.ADMIN);
         fail();
     }
@@ -84,7 +95,8 @@ public class CommandTest {
     @Test(expected = ValidateException.class)
     public void testReturnFalseWithoutUserRights2() throws ValidateException {
 
-        com = new DeleteAnnotationValueCommand("name","value", UserType.UNKNOWN);
+        com = new DeleteAnnotationValueCommand();
+        com.setFields("name","value", UserType.UNKNOWN);
         com.hasRights(UserType.USER);
         fail();
     }
@@ -92,7 +104,8 @@ public class CommandTest {
     @Test(expected = ValidateException.class)
     public void testReturnFalseWithoutGuestRights() throws ValidateException {
 
-        com = new DeleteAnnotationValueCommand("name","value", UserType.UNKNOWN);
+        com = new DeleteAnnotationValueCommand();
+        com.setFields("name","value", UserType.UNKNOWN);
         com.hasRights(UserType.GUEST);
         fail();
     }
@@ -100,14 +113,16 @@ public class CommandTest {
     @Test
     public void testReturnTrueWithGuestRights() throws ValidateException {
 
-        com = new DeleteAnnotationValueCommand("name","value", UserType.USER);
+        com = new DeleteAnnotationValueCommand();
+        com.setFields("name","value", UserType.USER);
         com.hasRights(UserType.GUEST);
     }
 
     @Test(expected = ValidateException.class)
     public void testDoNotAllowUsersForUnknown1() throws ValidateException {
 
-        com = new DeleteAnnotationValueCommand("name","value", UserType.USER);
+        com = new DeleteAnnotationValueCommand();
+        com.setFields("name","value", UserType.USER);
         com.hasRights(UserType.UNKNOWN);
         fail();
     }
