@@ -47,13 +47,15 @@ public class AddFileToExperimentCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-		validateString(experimentID, MaxLength.EXPID, "Experiment name");
-		validateString(type, MaxLength.FILE_FILETYPE, "File type");
-		validateString(author, MaxLength.FILE_AUTHOR, "Author");
-		validateString(uploader, MaxLength.FILE_UPLOADER, "Uploader");
-		validateString(grVersion, MaxLength.FILE_GRVERSION, "Genome release");
-		validateString(fileName, MaxLength.FILE_FILENAME, "Filename");
-		validateString(metaData, MaxLength.FILE_METADATA, "Metadata");
+		validateName(experimentID, MaxLength.EXPID, "Experiment name");
+		validateExists(type, MaxLength.FILE_FILETYPE, "File type");
+		validateName(author, MaxLength.FILE_AUTHOR, "Author");
+		validateName(uploader, MaxLength.FILE_UPLOADER, "Uploader");
+		validateExists(grVersion, MaxLength.FILE_GRVERSION, "Genome release");
+		validateName(fileName, MaxLength.FILE_FILENAME, "Filename");
+		if(metaData != null){
+			validateExists(metaData, MaxLength.FILE_METADATA, "Metadata");
+		}
 	}
 
 	public void setUploader(String uploader) {
