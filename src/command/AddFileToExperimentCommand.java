@@ -48,7 +48,7 @@ public class AddFileToExperimentCommand extends Command {
 	@Override
 	public void validate() throws ValidateException {
 		validateName(experimentID, MaxLength.EXPID, "Experiment name");
-		validateExists(type, MaxLength.FILE_FILETYPE, "File type");
+		validateName(type, MaxLength.FILE_FILETYPE, "File type");
 		validateName(author, MaxLength.FILE_AUTHOR, "Author");
 		validateName(uploader, MaxLength.FILE_UPLOADER, "Uploader");
 		validateName(grVersion, MaxLength.FILE_GRVERSION, "Genome release");
