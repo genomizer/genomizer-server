@@ -214,19 +214,8 @@ public abstract class Executor {
 				File[] fileList = file.listFiles();
 
 				// Delete each file with a reference in the array
-				for (File fileToDelete : fileList) {
-					if (fileToDelete.isFile()) {
 
-						if (fileToDelete.delete()) {
-							ErrorLogger.log("SYSTEM", "Deleting "
-									+ fileToDelete.toString());
-						} else {
-							isOk = false;
-							ErrorLogger.log("SYSTEM", "Deletion of " +
-									fileToDelete +	" failed.");
-						}
-					}
-				}
+				isOk = deleteFiles(fileList);
 			}
 
 			// Delete the file/directory
@@ -241,6 +230,33 @@ public abstract class Executor {
 
 		return isOk;
 	}
+
+	/**
+	 * Helper method that deletes given files. Doesn't delete directory files.
+	 *
+	 * @param fileList List of files to delete
+	 * @return False if one or more files wasn't deleted, true otherwise.
+	 */
+	private boolean deleteFiles(File[] fileList) {
+		boolean isOk = true;
+		if (fileList != null){
+			for (File fileToDelete : fileList) {
+				if (fileToDelete.isFile()) {
+					if (fileToDelete.delete()) {
+						ErrorLogger.log("SYSTEM", "Deleting "
+										  + fileToDelete.toString());
+					} else {
+						isOk = false;
+						ErrorLogger.log("SYSTEM", "Deletion of " +
+										  fileToDelete + " failed.");
+					}
+				}
+			}
+		}
+		return isOk;
+	}
+
+	private void deleteFiles
 
 	/**
 	 * Moves files from orgDir to destDir.
