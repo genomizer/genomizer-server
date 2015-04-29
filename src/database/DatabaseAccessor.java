@@ -887,7 +887,9 @@ public class DatabaseAccessor {
      *             - If the request uses invalid arguments or the database could
      *             not be reached. Possible reasons: invalid genomeRelease.
      * @throws IOException
+     * @deprecated Use addGeneratedProfiles(FileTuple ft) instead.
      */
+    @Deprecated
     public void addGeneratedProfiles(String expId, String folderPath,
             String inputFileName, String metaData, String grVersion,
             String uploader, boolean isPrivate) throws SQLException,
@@ -916,6 +918,43 @@ public class DatabaseAccessor {
                 fileMethods.addGeneratedFile(e.getID(), FileTuple.PROFILE,
                         f.getPath(), inputFileName, metaData, uploader,
                         isPrivate, grVersion);
+            }
+        }
+    }
+
+    /**
+     * Adds all the files in the specified folder to the database's File table.
+     * They will all be treated as profile files.
+     *
+     * @param ft - A file tuple object.
+     * @throws IOException
+     */
+    public void addGeneratedProfiles(FileTuple ft) throws SQLException,
+            IOException {
+
+        Experiment e = expMethods.getExperiment(ft.getExpId());
+
+        if (e == null) {
+            throw new IOException(ft.getExpId() + " does not exist.");
+        }
+
+        Genome g = genMethods.getGenomeRelease(ft.getGrVersion());
+        if (g == null) {
+            throw new IOException("Invalid Genome Release! " + ft.getGrVersion()
+                    + " does not exist");
+        }
+
+        File profileFolder = new File(ft.getParentFolder());
+
+        if (!profileFolder.exists()) {
+            throw new IOException("There are no profiles in this folder!");
+        }
+
+        for (File f : profileFolder.listFiles()) {
+            if (!f.getName().equals(ft.getInputFilePath())) {
+                fileMethods.addGeneratedFile(e.getID(), FileTuple.PROFILE,
+                        f.getPath(), ft.getInputFilePath(), ft.getMetaData(), ft.getUploader(),
+                        ft.isPrivate(), ft.getGrVersion());
             }
         }
     }
