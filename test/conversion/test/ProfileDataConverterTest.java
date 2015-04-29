@@ -57,13 +57,13 @@ import static org.junit.Assert.assertFalse;
 	@Test
 	public void sgrToBedtest() throws InterruptedException, IOException {
 		ConversionHandler ch = new ConversionHandler();
-		ch.executeProfileDataConversion("sgrToBed", "conversionTestData/GSM604730_CB_DmS2DRSC_Trx_b.dm3_rep2_TRUNCATEDFORTEST.sgr","conversionTestData/output/bed1.bed", "Unknown");
+		ch.executeProfileDataConversion("sgrToBed", "conversionTestData/SGR-testdata.sgr","conversionTestData/output/bed1.bed", "Unknown");
 	}
 */
 	@Test
 	public void bedToSgrtest() throws InterruptedException, IOException {
 		ConversionHandler ch = new ConversionHandler();
-		ch.executeProfileDataConversion("bedToSgr", "conversionTestData/Sg4_TRX-CP_Ave.resRto_Rel5_TRUNCATEDFORTEST.bed","conversionTestData/output/sgr1.sgr", null);
+		ch.executeProfileDataConversion("bedToSgr", "conversionTestData/BED-testdata.bed","conversionTestData/output/sgr1.sgr", null);
 
 		File outputFile;
 
@@ -81,7 +81,7 @@ import static org.junit.Assert.assertFalse;
 	public void bedToSgrCheckSumTest() throws InterruptedException ,IOException {
 
 		ConversionHandler ch = new ConversionHandler();
-		ch.executeProfileDataConversion("bedToSgr", "conversionTestData/Sg4_TRX-CP_Ave.resRto_Rel5_TRUNCATEDFORTEST.bed","conversionTestData/output/sgr1.sgr", null);
+		ch.executeProfileDataConversion("bedToSgr", "conversionTestData/BED-testdata.bed","conversionTestData/output/sgr1.sgr", null);
 		File testFile;
 		File expectedFile;
 		try{
@@ -101,7 +101,7 @@ import static org.junit.Assert.assertFalse;
 	@Test
 	public void gff3ToSgrtest() throws InterruptedException, IOException {
 		ConversionHandler ch = new ConversionHandler();
-		ch.executeProfileDataConversion("gff3ToSgr", "conversionTestData/TP_SG_A_ZeroLvl_Release5_TRUNCATEDFORTEST.gff", "conversionTestData/output/sgr2.sgr", null);
+		ch.executeProfileDataConversion("gff3ToSgr", "conversionTestData/GFF-testdata.gff", "conversionTestData/output/sgr2.sgr", null);
 
 		File outputFile;
 
@@ -119,7 +119,7 @@ import static org.junit.Assert.assertFalse;
 	public void gffToSgrCheckSumTest() throws InterruptedException ,IOException {
 
 		ConversionHandler ch = new ConversionHandler();
-		ch.executeProfileDataConversion("gff3ToSgr", "conversionTestData/TP_SG_A_ZeroLvl_Release5_TRUNCATEDFORTEST.gff", "conversionTestData/output/sgr2.sgr", null);
+		ch.executeProfileDataConversion("gff3ToSgr", "conversionTestData/GFF-testdata.gff", "conversionTestData/output/sgr2.sgr", null);
 		File testFile;
 		File expectedFile;
 		try{
@@ -139,25 +139,25 @@ import static org.junit.Assert.assertFalse;
 /*	@Test
 	public void wigToSgrtest() throws InterruptedException, IOException {
 		ConversionHandler ch = new ConversionHandler();
-		ch.executeProfileDataConversion("wigToSgr", "conversionTestData/GSM604730_CB_DmS2DRSC_Trx_b.dm3_rep2_TRUNCATEDFORTEST.wig", "conversionTestData/output/sgr3.sgr", null);
+		ch.executeProfileDataConversion("wigToSgr", "conversionTestData/WIG-testdata.wig", "conversionTestData/output/sgr3.sgr", null);
 	}
 */
 	/*@Test
 	public void wigToBedtest() throws InterruptedException, IOException {
 		ConversionHandler ch = new ConversionHandler();
-		ch.executeProfileDataConversion("wigToBed", "conversionTestData/GSM604730_CB_DmS2DRSC_Trx_b.dm3_rep2_TRUNCATEDFORTEST.wig", "conversionTestData/output/bed2.bed", "Unknown");
+		ch.executeProfileDataConversion("wigToBed", "conversionTestData/WIG-testdata.wig", "conversionTestData/output/bed2.bed", "Unknown");
 	}*/
 
 /*	@Test
 	public void gff3ToBedtest() throws InterruptedException, IOException {
 		ConversionHandler ch = new ConversionHandler();
-		ch.executeProfileDataConversion("gff3ToBed", "conversionTestData/TP_SG_A_ZeroLvl_Release5_TRUNCATEDFORTEST.gff", "conversionTestData/output/bed3.bed", "Unknown");
+		ch.executeProfileDataConversion("gff3ToBed", "conversionTestData/GFF-testdata.gff", "conversionTestData/output/bed3.bed", "Unknown");
 	}*/
 
 	@Test
 	public void gff3ToWigtest() throws InterruptedException, IOException {
 		ConversionHandler ch = new ConversionHandler();
-		ch.executeProfileDataConversion("gff3ToWig", "conversionTestData/TP_SG_A_ZeroLvl_Release5_TRUNCATEDFORTEST.gff", "conversionTestData/output/gff2wigtest.wig", null);
+		ch.executeProfileDataConversion("gff3ToWig", "conversionTestData/GFF-testdata.gff", "conversionTestData/output/gff2wigtest.wig", null);
 		File outputFile;
 
 		try{
@@ -172,7 +172,7 @@ import static org.junit.Assert.assertFalse;
 	@Test
 	public void gff3ToWigCheckSumTest() throws InterruptedException ,IOException {
 		ConversionHandler ch = new ConversionHandler();
-		ch.executeProfileDataConversion("gff3ToWig", "conversionTestData/TP_SG_A_ZeroLvl_Release5_TRUNCATEDFORTEST.gff", "conversionTestData/output/gff2wigtest.wig", null);
+		ch.executeProfileDataConversion("gff3ToWig", "conversionTestData/GFF-testdata.gff", "conversionTestData/output/gff2wigtest.wig", null);
 		File testFile;
 		File expectedFile;
 		try{
@@ -191,7 +191,7 @@ import static org.junit.Assert.assertFalse;
 	@Test
 	public void sgrToWigTestFileExists() throws InterruptedException, IOException {
 		ConversionHandler ch = new ConversionHandler();
-		ch.executeProfileDataConversion("sgrToWig", "conversionTestData/Sg4_TRX-CP_Ave.resRto_Rel5_TRUNCATEDFORTEST.sgr", "conversionTestData/output/sgr2wigtest.wig", null);
+		ch.executeProfileDataConversion("sgrToWig", "conversionTestData/SGR-testdata-3.sgr", "conversionTestData/output/sgr2wigtest.wig", null);
 		File outputFile;
 
 		try{
@@ -206,7 +206,7 @@ import static org.junit.Assert.assertFalse;
 	@Test
 	public void sgrToWigCheckSumTest() throws InterruptedException ,IOException {
 		ConversionHandler ch = new ConversionHandler();
-		ch.executeProfileDataConversion("sgrToWig", "conversionTestData/GSM604730_CB_DmS2DRSC_Trx_b.dm3_rep2_TRUNCATEDFORTEST.sgr", "conversionTestData/output/sgr2wigtest.wig", null);
+		ch.executeProfileDataConversion("sgrToWig", "conversionTestData/SGR-testdata.sgr", "conversionTestData/output/sgr2wigtest.wig", null);
 		File testFile;
 		File expectedFile;
 		try{
@@ -227,7 +227,7 @@ import static org.junit.Assert.assertFalse;
 	@Test
 	public void bedToWigtest() throws InterruptedException, IOException {
 		ConversionHandler ch = new ConversionHandler();
-		ch.executeProfileDataConversion("bedToWig", "conversionTestData/Sg4_TRX-CP_Ave.resRto_Rel5_TRUNCATEDFORTEST.bed", "conversionTestData/output/bed2wigtest.wig", null);
+		ch.executeProfileDataConversion("bedToWig", "conversionTestData/BED-testdata.bed", "conversionTestData/output/bed2wigtest.wig", null);
 		File outputFile;
 
 		try{
@@ -242,7 +242,7 @@ import static org.junit.Assert.assertFalse;
 	@Test
 	public void bedToWigCheckSumTest() throws InterruptedException ,IOException {
 		ConversionHandler ch = new ConversionHandler();
-		ch.executeProfileDataConversion("bedToWig", "conversionTestData/Sg4_TRX-CP_Ave.resRto_Rel5_TRUNCATEDFORTEST.bed", "conversionTestData/output/bed2wigtest.wig", null);
+		ch.executeProfileDataConversion("bedToWig", "conversionTestData/BED-testdata.bed", "conversionTestData/output/bed2wigtest.wig", null);
 		File testFile;
 		File expectedFile;
 		try{
@@ -262,7 +262,7 @@ import static org.junit.Assert.assertFalse;
 	@Test(expected=IllegalArgumentException.class)
 	public void nulltest1() throws InterruptedException, IOException {
 		ConversionHandler ch = new ConversionHandler();
-		ch.executeProfileDataConversion("sgrToBed", "conversionTestData/GSM604730_CB_DmS2DRSC_Trx_b.dm3_rep2_TRUNCATEDFORTEST.sgr",null, null);
+		ch.executeProfileDataConversion("sgrToBed", "conversionTestData/SGR-testdata.sgr",null, null);
 	}
 	@Test(expected=IllegalArgumentException.class)
 	public void nulltest2() throws InterruptedException, IOException {
@@ -278,7 +278,7 @@ import static org.junit.Assert.assertFalse;
 	@Test(expected=IllegalArgumentException.class)
 	public void badPathTest() throws InterruptedException, IOException {
 		ConversionHandler ch = new ConversionHandler();
-		ch.executeProfileDataConversion("gff3ToBed", "conversionTestData/TP_SG_A_ZeroLvl_Release5_TRUNCATEDFORTEST.gff", "conversionTestData/output", "Unknown");
+		ch.executeProfileDataConversion("gff3ToBed", "conversionTestData/GFF-testdata.gff", "conversionTestData/output", "Unknown");
 	}
 
 */
