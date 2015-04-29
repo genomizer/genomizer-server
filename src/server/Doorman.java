@@ -108,7 +108,6 @@ public class Doorman {
 
 	/**
 	 * Determines the specific command which is to be created.
-	 * @return
 	 */
 	HttpHandler createHandler() {
 		return new HttpHandler() {
@@ -346,7 +345,7 @@ public class Doorman {
           uuid = authHeader.get(0);
 
         // Get the value of the 'token' parameter.
-        String uuid2 = null;
+        String uuid2;
         HashMap<String, String> reqParams = new HashMap<>();
         Util.parseURI(exchange.getRequestURI(), reqParams);
         if (reqParams.containsKey("token")) {
