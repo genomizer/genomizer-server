@@ -166,17 +166,17 @@ public class UserMethods {
 	 * Changes the password for a user.
 	 *
 	 * @param username the user to change the password for
-	 * @param newPsswdHash the new password/salt hash
+	 * @param newPasswdHash the new password/salt hash
 	 * @param newSalt the salt for the new password
 	 * @return the number of tuples updated in the database
 	 * @throws SQLException if the query does not succeed
 	 * @throws IOException
 	 */
-	public int resetPassword(String username, String newPsswdHash, String newSalt)
+	public int resetPassword(String username, String newPasswdHash, String newSalt)
 			throws SQLException, IOException {
 
 		if (username == null || username.contentEquals("") ||
-				newPsswdHash == null || newPsswdHash.contentEquals("")) {
+				newPasswdHash == null || newPasswdHash.contentEquals("")) {
 			throw new IOException("Invalid arguments");
 		}
 
@@ -184,7 +184,7 @@ public class UserMethods {
 				+ "WHERE (Username = ?)";
 
 		PreparedStatement stmt = conn.prepareStatement(query);
-		stmt.setString(1, newPsswdHash);
+		stmt.setString(1, newPasswdHash);
 		stmt.setString(2, newSalt);
 		stmt.setString(3, username);
 		int resCount = stmt.executeUpdate();

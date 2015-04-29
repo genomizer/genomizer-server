@@ -33,7 +33,7 @@ public class LogoutCommand extends Command {
 			Authenticate.deleteActiveUser(id);
 			return new MinimalResponse(StatusCode.OK);
 		} else {
-			return 	new ErrorResponse(StatusCode.FILE_NOT_FOUND,
+			return 	new ErrorResponse(StatusCode.NOT_FOUND,
 					"User not found");
 		}
 	}

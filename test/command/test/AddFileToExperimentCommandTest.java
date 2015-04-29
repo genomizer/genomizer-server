@@ -588,7 +588,7 @@ public class AddFileToExperimentCommandTest {
 	@Test
 	public void testValidateProperlyFormatted() throws ValidateException {
 
-		String json = jsonBuilder("id","name","raw","metameta","name","user1","releaseNr");
+		String json = jsonBuilder("id","name.txt","raw","metameta","name","user1","releaseNr");
 		AddFileToExperimentCommand c = gson.fromJson(json, AddFileToExperimentCommand.class);
 		c.setRights(UserType.ADMIN);
 		c.validate();

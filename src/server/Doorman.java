@@ -27,9 +27,39 @@ import command.RequestHandler;
  * /genomeRelease
  * /genomeRelease/
  * /token
+ *
+ * Whenever a request is received the Doorman checks what context is has and
+ * creates a new Executor (on  a new thread) and afterwards continues listening
+ * for new requests.
  */
+
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.InetSocketAddress;
+import java.net.URLDecoder;
+
+import java.util.List;
+import java.util.Scanner;
+import java.util.concurrent.Executor;
+
+import response.MinimalResponse;
+import response.Response;
+import response.StatusCode;
+
+import authentication.Authenticate;
+
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
+import com.sun.net.httpserver.HttpServer;
+
+import command.CommandHandler;
+import command.CommandType;
+
 public class Doorman {
 	private HttpServer httpServer;
+	private CommandHandler commandHandler;
 
 	/**
 	 * Constructs a HTTP server (but doesn't start it) which listens on the

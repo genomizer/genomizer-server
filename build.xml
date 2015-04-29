@@ -17,6 +17,7 @@
             <exclude name="httpclient-*.jar"/>
             <exclude name="httpcore-*.jar"/>
             <exclude name="httpmime-*.jar"/>
+            <exclude name="servlet-api-*.jar"/>
         </fileset>
     </path>
     <!-- Stuff that is needed for compilation/testing,
@@ -28,6 +29,7 @@
             <include name="httpclient-*.jar"/>
             <include name="httpcore-*.jar"/>
             <include name="httpmime-*.jar"/>
+            <include name="servlet-api-*.jar"/>
         </fileset>
     </path>
 
