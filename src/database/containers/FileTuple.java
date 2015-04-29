@@ -31,6 +31,10 @@ public class FileTuple {
     private String expId;
     private String grVersion;
     private String status;
+    private String processName;
+    private String processVersion;
+    private String processFlags;
+
 
     public Integer getId() {
         return id;
@@ -84,6 +88,18 @@ public class FileTuple {
         return status;
     }
 
+    public String getProcessName() {
+        return processName;
+    }
+
+    public String getProcessVersion() {
+        return processVersion;
+    }
+
+    public String getProcessFlags() {
+        return processFlags;
+    }
+
     void setId(Integer id) {
         this.id = id;
     }
@@ -134,6 +150,18 @@ public class FileTuple {
 
     void setStatus(String status) {
         this.status = status;
+    }
+
+    void setProcessName(String pName) {
+        this.processName = pName;
+    }
+
+    void setProcessVersion(String pVersion) {
+        this.processVersion = pVersion;
+    }
+
+    void setProcessFlags(String pFlags) {
+        this.processFlags = pFlags;
     }
 
     /**
