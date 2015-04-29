@@ -26,7 +26,7 @@ import database.constants.MaxLength;
 
 public class ProcessCommand extends Command {
 
-	public static final String CMD_RAW_TO_PROFILE = "rawToProfile";
+	public static final String CMD_RAW_TO_PROFILE = "rawtoprofile";
 	public static final String CMD_PROFILE_TO_REGION = "profileToRegion";
 
 	private String username;
