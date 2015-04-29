@@ -1,6 +1,8 @@
 package command.test;
 
 import static org.junit.Assert.*;
+
+import command.ValidateException;
 import org.junit.Before;
 import org.junit.Test;
 import com.google.gson.Gson;
@@ -66,7 +68,7 @@ public class CreateUserCommandTest {
 	 * properly.
 	 */
 	@Test
-	public void testValidateUsernameLength() {
+	public void testValidateUsernameLength() throws ValidateException{
 
 		String username = "";
 		for(int i = 0; i < MaxLength.USERNAME+1; i++) {
@@ -89,7 +91,7 @@ public class CreateUserCommandTest {
 	 * properly.
 	 */
 	@Test
-	public void testValidatePasswordLength() {
+	public void testValidatePasswordLength() throws ValidateException {
 
 		String password = "";
 		for(int i = 0; i < MaxLength.PASSWORD+1; i++) {
@@ -113,7 +115,7 @@ public class CreateUserCommandTest {
 	 * properly.
 	 */
 	@Test
-	public void testValidatePrivilegesLength() {
+	public void testValidatePrivilegesLength() throws ValidateException {
 
 		String priv = "";
 		for(int i = 0; i < MaxLength.ROLE+1; i++) {
@@ -137,7 +139,7 @@ public class CreateUserCommandTest {
 	 * any slashes.
 	 */
 	@Test
-	public void testNoSlashesUserName() {
+	public void testNoSlashesUserName() throws ValidateException {
 
 		json = createJSON("a/b/c","b","c","d","e");
 		CreateUserCommand cmd = new CreateUserCommand();
@@ -151,7 +153,7 @@ public class CreateUserCommandTest {
 	 * Test used to check a properly formatted creation.
 	 */
 	@Test
-	public void testValidationProperlyFormatted() {
+	public void testValidationProperlyFormatted() throws ValidateException {
 		json = createJSON("a","b","c","d","e");
 		CreateUserCommand cmd = new CreateUserCommand();
 		cmd = gson.fromJson(json, CreateUserCommand.class);
