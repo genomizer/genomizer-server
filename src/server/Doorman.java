@@ -44,13 +44,15 @@ import com.sun.net.httpserver.HttpServer;
 
 import command.CommandHandler;
 import command.CommandType;
+import transfer.DownloadHandler;
+import transfer.UploadHandler;
 
 public class Doorman {
 
 	private HttpServer httpServer;
 	private CommandHandler commandHandler;
-	private UploadHandler   uploadHandler;
-	private DownloadHandler downloadHandler;
+	private transfer.UploadHandler uploadHandler;
+	private transfer.DownloadHandler downloadHandler;
 
 	/**
 	 * Constructor. Creates a HTTPServer (but doesn't start it) which listens on
@@ -347,7 +349,7 @@ public class Doorman {
         // Get the value of the 'token' parameter.
         String uuid2;
         HashMap<String, String> reqParams = new HashMap<>();
-        Util.parseURI(exchange.getRequestURI(), reqParams);
+        transfer.Util.parseURI(exchange.getRequestURI(), reqParams);
         if (reqParams.containsKey("token")) {
           uuid2 = reqParams.get("token");
           if (uuid2 != null) {
