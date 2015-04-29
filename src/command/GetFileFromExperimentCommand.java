@@ -20,7 +20,7 @@ public class GetFileFromExperimentCommand extends Command {
 	@Override
 	public void setFields(String uri, String uuid, UserType userType) {
 		this.userType = userType;
-		fileID = uri.split("/")[1];
+		fileID = uri.split("/")[2];
 	}
 
 	@Override

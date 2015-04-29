@@ -25,13 +25,13 @@ public class GetExperimentCommand extends Command {
 	@Override
 	public void setFields(String uri, String uuid, UserType userType) {
 		this.userType = userType;
-		expID = uri.split("/")[1];
+		expID = uri.split("/")[2];
 	}
 
 	@Override
 	public void validate() throws ValidateException {
 		hasRights(UserRights.getRights(this.getClass()));
-		validateString(header, MaxLength.EXPID, "Experiment name");
+		validateString(expID, MaxLength.EXPID, "Experiment name");
 	}
 
 	@Override

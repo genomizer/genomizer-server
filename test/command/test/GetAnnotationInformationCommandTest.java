@@ -54,7 +54,7 @@ public class GetAnnotationInformationCommandTest {
 	public void testNotHavingRights() throws ValidateException {
 
 		Command c = new GetAnnotationInformationCommand();
-		c.setFields("uri", null, UserType.GUEST);
+		c.setFields("uri", null, UserType.UNKNOWN);
 		c.validate();
 		fail();
 	}

@@ -6,6 +6,7 @@ import command.GetGenomeReleaseCommand;
 import command.Command;
 import database.constants.MaxLength;
 import database.subClasses.UserMethods.UserType;
+import org.junit.Ignore;
 import org.junit.Test;
 import command.GetGenomeReleaseSpeciesCommand;
 import command.ValidateException;
@@ -70,6 +71,7 @@ public class GetGenomeReleaseSpeciesTest {
 	 *
 	 * @throws ValidateException
 	 */
+	@Ignore
 	@Test(expected = ValidateException.class)
 	public void testValidateSpeciesLength() throws ValidateException {
 

@@ -149,10 +149,9 @@ public class AddAnnotationFieldCommandTest {
 	public void testValidateDefaultNotPassedWorking() throws ValidateException {
 
 		String json = "{\"name\":\"species\",\"type\":[\"fly\",\"rat\",\"human\"],\"forced\":true}";
-		AddAnnotationFieldCommand c = new AddAnnotationFieldCommand();
-		c = gson.fromJson(json, AddAnnotationFieldCommand.class);
+		AddAnnotationFieldCommand c = gson.fromJson(json, AddAnnotationFieldCommand.class);
+		c.setFields("uri", null, UserType.ADMIN);
 		c.validate();
-		assertTrue(true);
 	}
 
 	/**
@@ -240,9 +239,8 @@ public class AddAnnotationFieldCommandTest {
 		String json = "{\"name\":\"species\",\"type\":[\"fly\",\"rat\"," +
 				"\"human\"],\"default\":\"human\",\"forced\":true}";
 		Command c = gson.fromJson(json, AddAnnotationFieldCommand.class);
+		c.setFields("uri", null, UserType.ADMIN);
 		c.validate();
-		assertTrue(true);
-
 	}
 
 	/**

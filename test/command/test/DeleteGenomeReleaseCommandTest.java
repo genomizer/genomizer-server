@@ -114,7 +114,7 @@ public class DeleteGenomeReleaseCommandTest {
 			uri = uri + "a";
 		}
 
-		uri += "GRelease";
+		uri += "/GRelease";
 		Command c = new DeleteGenomeReleaseCommand();
 		c.setFields(uri, null, UserType.ADMIN);
 		c.validate();

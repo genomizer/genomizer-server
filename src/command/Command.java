@@ -33,9 +33,6 @@ public abstract class Command {
 	/*These are valid characters that are used with the validation method.*/
 	final protected String validCharacters = "^, A-Z, a-z, 0-9, space, _ and .";
 
-	/*This is used to store a RESTful-header.*/
-	protected String header;
-
 	/*Keeps track of the user rights level for the command sender. */
 	protected UserType userType = UserType.UNKNOWN;
 

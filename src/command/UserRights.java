@@ -36,7 +36,7 @@ public class UserRights {
         userRights.put(GetFileFromExperimentCommand.class, UserType.USER);
         userRights.put(GetGenomeReleaseCommand.class, UserType.GUEST);
         userRights.put(GetGenomeReleaseSpeciesCommand.class, UserType.GUEST);
-        userRights.put(GetProcessStatusCommand.class, UserType.USER);
+        userRights.put(GetProcessStatusCommand.class, UserType.GUEST);
         userRights.put(ProcessCommand.class, UserType.USER);
         userRights.put(SearchForExperimentsCommand.class, UserType.GUEST);
         userRights.put(UpdateAnnotationPrivilegesCommand.class, UserType.USER);

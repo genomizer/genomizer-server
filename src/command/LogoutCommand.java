@@ -20,7 +20,7 @@ public class LogoutCommand extends Command {
 	@Override
 	public void setFields(String uri, String uuid, UserType userType) {
 		this.userType = userType;
-		username = Authenticate.getUsernameByID(uuid);
+		this.username = uuid;
 	}
 
 	@Override

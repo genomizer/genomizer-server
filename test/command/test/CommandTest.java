@@ -17,7 +17,7 @@ public class CommandTest {
     public void testReturnFalseForUnknown() throws ValidateException {
 
         com = new DeleteAnnotationValueCommand();
-        com.setFields("name","value", UserType.UNKNOWN);
+        com.setFields("/test/name/value",null, UserType.UNKNOWN);
         com.hasRights(UserType.UNKNOWN);
         fail();
     }
@@ -27,13 +27,13 @@ public class CommandTest {
 
         com = new DeleteAnnotationValueCommand();
 
-        com.setFields("name", "value", UserType.ADMIN);
+        com.setFields("/test/name/value",null, UserType.ADMIN);
         com.hasRights(UserType.ADMIN);
 
-        com.setFields("name", "value", UserType.USER);
+        com.setFields("/test/name/value",null, UserType.USER);
         com.hasRights(UserType.USER);
 
-        com.setFields("name","value", UserType.GUEST);
+        com.setFields("/test/name/value",null, UserType.GUEST);
         com.hasRights(UserType.GUEST);
     }
 
@@ -41,7 +41,7 @@ public class CommandTest {
     public void testReturnTrueForAdmin() throws ValidateException {
 
         com = new DeleteAnnotationValueCommand();
-        com.setFields("name","value", UserType.ADMIN);
+        com.setFields("/test/name/value",null, UserType.ADMIN);
         com.hasRights(UserType.USER);
         com.hasRights(UserType.GUEST);
         com.hasRights(UserType.UNKNOWN);
@@ -51,7 +51,7 @@ public class CommandTest {
     public void testReturnFalseWithoutAdminRights1() throws ValidateException {
 
         com = new DeleteAnnotationValueCommand();
-        com.setFields("name","value", UserType.USER);
+        com.setFields("/test/name/value",null, UserType.USER);
         com.hasRights(UserType.ADMIN);
         fail();
     }
@@ -60,7 +60,7 @@ public class CommandTest {
     public void testReturnFalseWithoutAdminRights2() throws ValidateException {
 
         com = new DeleteAnnotationValueCommand();
-        com.setFields("name","value", UserType.GUEST);
+        com.setFields("/test/name/value",null, UserType.GUEST);
         com.hasRights(UserType.ADMIN);
         fail();
     }
@@ -69,7 +69,7 @@ public class CommandTest {
     public void testReturnFalseWithoutUserRights1() throws ValidateException {
 
         com = new DeleteAnnotationValueCommand();
-        com.setFields("name","value", UserType.GUEST);
+        com.setFields("/test/name/value",null, UserType.GUEST);
         com.hasRights(UserType.USER);
         fail();
     }
@@ -78,7 +78,7 @@ public class CommandTest {
     public void testDoNotAllowUsersForUnknown2() throws ValidateException {
 
         com = new DeleteAnnotationValueCommand();
-        com.setFields("name","value", UserType.GUEST);
+        com.setFields("/test/name/value",null, UserType.GUEST);
         com.hasRights(UserType.UNKNOWN);
         fail();
     }
@@ -87,7 +87,7 @@ public class CommandTest {
     public void testReturnFalseWithoutAdminRights3() throws ValidateException {
 
         com = new DeleteAnnotationValueCommand();
-        com.setFields("name","value", UserType.UNKNOWN);
+        com.setFields("/test/name/value",null, UserType.UNKNOWN);
         com.hasRights(UserType.ADMIN);
         fail();
     }
@@ -96,7 +96,7 @@ public class CommandTest {
     public void testReturnFalseWithoutUserRights2() throws ValidateException {
 
         com = new DeleteAnnotationValueCommand();
-        com.setFields("name","value", UserType.UNKNOWN);
+        com.setFields("/test/name/value",null, UserType.UNKNOWN);
         com.hasRights(UserType.USER);
         fail();
     }
@@ -105,7 +105,7 @@ public class CommandTest {
     public void testReturnFalseWithoutGuestRights() throws ValidateException {
 
         com = new DeleteAnnotationValueCommand();
-        com.setFields("name","value", UserType.UNKNOWN);
+        com.setFields("/test/name/value",null, UserType.UNKNOWN);
         com.hasRights(UserType.GUEST);
         fail();
     }
@@ -114,7 +114,7 @@ public class CommandTest {
     public void testReturnTrueWithGuestRights() throws ValidateException {
 
         com = new DeleteAnnotationValueCommand();
-        com.setFields("name","value", UserType.USER);
+        com.setFields("/test/name/value",null, UserType.USER);
         com.hasRights(UserType.GUEST);
     }
 
@@ -122,7 +122,7 @@ public class CommandTest {
     public void testDoNotAllowUsersForUnknown1() throws ValidateException {
 
         com = new DeleteAnnotationValueCommand();
-        com.setFields("name","value", UserType.USER);
+        com.setFields("/test/name/value",null, UserType.USER);
         com.hasRights(UserType.UNKNOWN);
         fail();
     }

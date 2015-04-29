@@ -24,13 +24,13 @@ public class DeleteFileFromExperimentCommand extends Command {
 	@Override
 	public void setFields(String uri, String uuid, UserType userType) {
 		this.userType = userType;
-		fileID = uri.split("/")[1];
+		fileID = uri.split("/")[2];
 	}
 
 	@Override
 	public void validate() throws ValidateException {
 		hasRights(UserRights.getRights(this.getClass()));
-		validateString(header, MaxLength.EXPID, "Experiment name");
+		validateString(fileID, MaxLength.EXPID, "Experiment name");
 	}
 
 	@Override

@@ -22,7 +22,7 @@ public class DeleteUserCommand extends Command {
 	@Override
 	public void setFields(String uri, String uuid, UserType userType) {
 		this.userType = userType;
-		username = uri.split("/")[1];
+		username = uri.split("/")[2];
 	}
 
 	@Override

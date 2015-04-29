@@ -93,7 +93,7 @@ public class DeleteUserCommandTest {
 	public void testValidateProperlyFormatted() throws ValidateException {
 
 		Command c = new DeleteUserCommand();
-		c.setFields("username", null, UserType.ADMIN);
+		c.setFields("/test/username", null, UserType.ADMIN);
 		c.validate();
 
 		assertTrue(true);
@@ -110,7 +110,7 @@ public class DeleteUserCommandTest {
 	public void testHavingRights() throws ValidateException {
 
 		Command c = new DeleteUserCommand();
-		c.setFields("username", null, UserType.ADMIN);
+		c.setFields("/test/username", null, UserType.ADMIN);
 		c.validate();
 	}
 
@@ -124,7 +124,7 @@ public class DeleteUserCommandTest {
 	public void testNotHavingRights() throws ValidateException {
 
 		Command c = new DeleteUserCommand();
-		c.setFields("username", null, UserType.USER);
+		c.setFields("/test/username", null, UserType.USER);
 		c.validate();
 		fail();
 	}
