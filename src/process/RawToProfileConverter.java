@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Stack;
 
+import server.ErrorLogger;
 import server.ServerSettings;
 
 /**
@@ -90,16 +91,8 @@ public class RawToProfileConverter extends Executor {
 		this.parameters = parameters;
 		this.inFolder = inFolder;
 
-//		if (parameters != null) {
-//			for (int i = 0; i < parameters.length; i++) {
-//				System.out.println("param " + i + ": " + parameters[i]);
-//			}e
-//
-//			printStringArray(parameters);
-//		}
-
 		// Checks all parameters that they are correct before proceeding
-		if (verifyInData(parameters, inFolder, outFilePath) == false
+		if (!verifyInData(parameters, inFolder, outFilePath)
 				|| !CorrectInfiles(inFiles)) {
 			throw new ProcessException("Wrong format of input data");
 		}
@@ -124,14 +117,14 @@ public class RawToProfileConverter extends Executor {
 			if (fileDir.exists()) {
 				//Runs bowtie on files. and sorts them.
 				if (checker.shouldRunBowTie()) {
-					System.out.println("Running Bowtie");
+					ErrorLogger.log("SYSTEM", "Running Bowtie");
 					logString = runBowTie(rawFile1, rawFile_1_Name);
-					System.out.println(logString);
 
-					checkBowTieFile("resources/" + dir + rawFile_1_Name
-					+ ".sam", rawFile_1_Name);
+					checkBowTieFile(
+							"resources/" + dir + rawFile_1_Name
+							+ ".sam", rawFile_1_Name);
 
-					System.out.println("Running SortSam");
+					ErrorLogger.log("SYSTEM","Running SortSam");
 					sortSamFile(rawFile_1_Name);
 
 					if (inFiles.length == 2) {
@@ -151,7 +144,7 @@ public class RawToProfileConverter extends Executor {
 
 				// Runs SamToGff script on files
 				if (checker.shouldRunSamToGff()) {
-					System.out.println("Running SamToGff");
+					ErrorLogger.log("SYSTEM","Running SamToGff");
 					try {
 						logString = logString + "\n"
 								+ executeScript(parse(samToGff));
@@ -169,7 +162,7 @@ public class RawToProfileConverter extends Executor {
 
 				// Runs GffToAllnucsgr on files.
 				if (checker.shouldRunGffToAllnusgr()) {
-					System.out.println("Running gffToAllnucsgr");
+					ErrorLogger.log("SYSTEM","Running gffToAllnucsgr");
 					try {
 						logString = logString + "\n"
 								+ executeScript(parse(gffToAllnusgr));
@@ -187,7 +180,7 @@ public class RawToProfileConverter extends Executor {
 
 				// Runs smoothing on files.
 				if (checker.shouldRunSmoothing()) {
-					System.out.println("Running Smoothing");
+					ErrorLogger.log("SYSTEM","Running Smoothing");
 
 					// Second parameter should be false when ratio
 					// calculation should not run.
@@ -200,7 +193,7 @@ public class RawToProfileConverter extends Executor {
 
 				// Runs Ratio calculation on files.
 				if (checker.shouldRunRatioCalc()) {
-					System.out.println("Running ratio calculation");
+					ErrorLogger.log("SYSTEM", "Running ratio calculation");
 
 					doRatioCalculation(sortedDirForCommands
 							+ "reads_gff/allnucs_sgr/smoothed/", parameters);
@@ -245,9 +238,9 @@ public class RawToProfileConverter extends Executor {
 		if (rawDirFiles != null && !(rawDirFiles.length == 0)) {
 			ArrayList<File> files = new ArrayList<File>();
 
-			for (int i = 0; i < rawDirFiles.length; i++) {
-				if (rawDirFiles[i].isFile()) {
-					files.add(rawDirFiles[i]);
+			for (File rawDirFile: rawDirFiles) {
+				if (rawDirFile.isFile()) {
+					files.add(rawDirFile);
 				}
 			}
 
@@ -393,12 +386,12 @@ public class RawToProfileConverter extends Executor {
 
 		SmoothingAndStep smooth = new SmoothingAndStep();
 		if (filesToSmooth != null) {
-			for (int i = 0; i < filesToSmooth.length; i++) {
-				if (filesToSmooth[i].isFile()
-						&& isSgr(filesToSmooth[i].getName())) {
-					String inFile = filesToSmooth[i].getAbsoluteFile()
+			for (File fileToSmooth : filesToSmooth) {
+				if (fileToSmooth.isFile()
+						&& isSgr(fileToSmooth.getName())) {
+					String inFile = fileToSmooth.getAbsoluteFile()
 							.toString();
-					String outFile = filesToSmooth[i].getName();
+					String outFile = fileToSmooth.getName();
 					SmoothingParameterChecker smoothChecker = SmoothingParameterChecker
 							.SmoothingParameterCheckerFactory(parameters[4]);
 					// +"_"+getSmoothType+"_winSiz-" + "_minProbe-" +
@@ -576,8 +569,8 @@ public class RawToProfileConverter extends Executor {
 		}
 
 		String bowTieString = "";
-		for (int i = 0; i < bowTieParams.length; i++) {
-			bowTieString += bowTieParams[i] + " ";
+		for (String param : bowTieParams) {
+			bowTieString += param + " ";
 		}
 		return bowTieString;
 	}
@@ -588,14 +581,7 @@ public class RawToProfileConverter extends Executor {
 	 * @param s
 	 * @return
 	 */
-//	private String printStringArray(String[] s) {
-//		String string = "";
-//		for (int i = 0; i < s.length; i++) {
-//			string += s[i] + " ";
-//		}
-//		System.out.println(string);
-//		return string;
-//	}
+
 
 	/**
 	 * Constructs a string with values to run a linux command that sorts a file
