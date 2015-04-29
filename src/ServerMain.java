@@ -43,8 +43,8 @@ public class ServerMain {
 		/* Create a work pool */
 		WorkPool workPool = new WorkPool();
 
-		/* Create process handlers */
-		createWorkHandlers(workPool);
+		/* Create a thread pool */
+		ProcessThreadPool procThreadPool = new ProcessThreadPool(workPool);
 
 		/* We attempt to start the doorman. */
 		try {
@@ -76,11 +76,6 @@ public class ServerMain {
 		ErrorLogger.log("SYSTEM", info);
 	}
 
-	private static void createWorkHandlers(WorkPool workPool) {
-		for (int i=0; i<ServerSettings.nrOfProcessThreads; i++) {
-			new Thread(new WorkHandler(workPool)).start();
-		}
-	}
 
 	/**
 	 * This method attempts to read the settings file. It is defined to read
