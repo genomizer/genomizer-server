@@ -1,5 +1,6 @@
 package database.containers;
 
+import java.io.File;
 import java.util.Date;
 
 /**
@@ -19,7 +20,10 @@ public class FileTupleTemplateBuilder {
      * @param path The path to the File
      * @return
      */
-    public FileTupleTemplateBuilder withPath(String path) {
+    public FileTupleTemplateBuilder withFolderPath(String path) {
+        if(!path.endsWith(File.separator))
+            throw new IllegalArgumentException("FileTupleTemplates must point to "
+                    + "folders, NOT files!");
         product.setPath(path);
         return this;
     }

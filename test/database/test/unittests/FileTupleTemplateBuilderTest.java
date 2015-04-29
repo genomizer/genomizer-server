@@ -1,7 +1,6 @@
 package database.test.unittests;
 
 import database.containers.FileTuple;
-import database.containers.FileTupleBuilder;
 import database.containers.FileTupleTemplate;
 import database.containers.FileTupleTemplateBuilder;
 import org.junit.Before;
@@ -26,20 +25,20 @@ public class FileTupleTemplateBuilderTest {
     @Test
     public void shouldGetNameRight(){
         String path = "/a/path/";
-        FileTupleTemplate f = fbuild.fileTupleTemplate().withPath(path).build();
+        FileTupleTemplate f = fbuild.fileTupleTemplate().withFolderPath(path).build();
 
-        assertEquals(path,f.getPath());
+        assertEquals(path,f.getFolderPath());
     }
 
     @Test
     public void shouldGetFilesRight() {
         String inputFP = "/this/is/a/test";
-        String path = "/also/a/test";
-        FileTupleTemplate f = fbuild.fileTupleTemplate().withPath(path)
+        String path = "/also/a/test/";
+        FileTupleTemplate f = fbuild.fileTupleTemplate().withFolderPath(path)
                 .withInputFilePath(inputFP).isPrivate(true).build();
 
         assertEquals(inputFP,f.getInputFilePath());
-        assertEquals(path,f.getPath());
+        assertEquals(path,f.getFolderPath());
         assertTrue(f.isPrivate());
     }
 
@@ -48,7 +47,7 @@ public class FileTupleTemplateBuilderTest {
         String inputFP = "/this/is/a/test";
         String path = "/also/a/test/";
         String name = "aName";
-        FileTupleTemplate f = fbuild.fileTupleTemplate().withPath(path)
+        FileTupleTemplate f = fbuild.fileTupleTemplate().withFolderPath(path)
                 .withInputFilePath(inputFP).isPrivate(true).build();
 
         FileTuple ft = f.toFileTuple(1,"raw",name,"Done");
@@ -65,7 +64,7 @@ public class FileTupleTemplateBuilderTest {
     @Test (expected = IllegalArgumentException.class)
     public void shouldNotAcceptMalFormedPath(){
         String badpath = "/a/path/to/a/file";
-        
-        FileTupleTemplate f = fbuild.fileTupleTemplate().withPath(badpath);
+
+        FileTupleTemplate f = fbuild.fileTupleTemplate().withFolderPath(badpath).build();
     }
 }

@@ -19,7 +19,7 @@ public class FileTupleTemplate extends AbstractFileTuple {
                 .withGrVersion(this.getGrVersion())
                 .withExpId(this.getExpId())
                 .withInputFilePath(this.getInputFilePath())
-                .withPath(this.getPath() + filename)
+                .withPath(this.getFolderPath() + filename)
                 .withFilename(filename)
                 .withMetaData(this.getMetaData())
                 .withProcessFlags(this.getProcessFlags())
@@ -31,4 +31,9 @@ public class FileTupleTemplate extends AbstractFileTuple {
                 .isPrivate(this.isPrivate())
                 .withUploader(this.getUploader()).build();
     }
+
+    public String getFolderPath() {
+        return path;
+    }
+
 }

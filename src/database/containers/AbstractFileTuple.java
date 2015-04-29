@@ -24,10 +24,6 @@ public abstract class AbstractFileTuple {
 
     private List<String> parents = new ArrayList<>();
 
-    public String getPath() {
-        return path;
-    }
-
     public String getInputFilePath() {
         return inputFilePath;
     }

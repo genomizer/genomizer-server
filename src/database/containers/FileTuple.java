@@ -39,6 +39,11 @@ public class FileTuple extends AbstractFileTuple {
         return status;
     }
 
+    public String getPath() {
+        return path;
+    }
+
+
     void setId(Integer id) {
         this.id = id;
     }
