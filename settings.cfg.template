@@ -20,6 +20,11 @@ nrOfProcessThreads  = 5
 
 bowtieLocation      = resources/bowtie/bowtie
 
+# Path to the upload/download scripts on server.
+
+uploadURL   = /upload?path=
+downloadURL = /download?path=
+
 # Address and port of the publicly visible WWW server (if any)
 # that is tunnelling requests to the genomizer server.
 # AFAICT used only to form the address of the upload/download scripts.
