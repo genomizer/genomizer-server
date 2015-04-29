@@ -8,6 +8,7 @@ import java.util.List;
 import com.google.gson.annotations.Expose;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
+import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
@@ -31,6 +32,7 @@ public class EditAnnotationValueCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
+		hasRights(UserRights.getRights(this.getClass()));
 		validateString(name, MaxLength.ANNOTATION_LABEL, "Annotation label");
 		validateString(oldValue, MaxLength.ANNOTATION_LABEL,
 				"Old annotation value");
@@ -66,5 +68,9 @@ public class EditAnnotationValueCommand extends Command {
 				db.close();
 			}
 		}
+	}
+
+	public void setRights(UserType userType){
+		this.userType = userType;
 	}
 }

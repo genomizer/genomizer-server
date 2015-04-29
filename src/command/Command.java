@@ -2,6 +2,7 @@ package command;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.regex.Pattern;
 
 import response.Response;
@@ -37,6 +38,13 @@ public abstract class Command {
 
 	/*Contains the user rights level of the sender*/
 	protected UserType userType = UserType.UNKNOWN;
+
+	final static protected HashMap<Class<? extends Command>, UserType> map;
+
+	static {
+		map = new HashMap<>();
+		map.put(AddAnnotationFieldCommand.class, UserType.USER);
+	}
 
 	/**
 	 * Used to validate the object and its information. The validate method

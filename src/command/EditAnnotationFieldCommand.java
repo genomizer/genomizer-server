@@ -32,11 +32,11 @@ public class EditAnnotationFieldCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
+		hasRights(UserRights.getRights(this.getClass()));
 		validateString(oldName, MaxLength.ANNOTATION_LABEL,
 				"Old annotation label");
 		validateString(newName, MaxLength.ANNOTATION_LABEL,
 				"New annotation label");
-		hasRights(UserType.USER);
 	}
 
 	/**

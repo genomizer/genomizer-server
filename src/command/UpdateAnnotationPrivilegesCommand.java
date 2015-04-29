@@ -24,7 +24,7 @@ public class UpdateAnnotationPrivilegesCommand extends Command {
 	 */
 	@Override
 	public void validate() throws ValidateException {
-		hasRights(UserType.USER);
+		hasRights(UserRights.getRights(this.getClass()));
 	}
 
 

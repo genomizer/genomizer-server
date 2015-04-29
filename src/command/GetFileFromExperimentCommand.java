@@ -34,8 +34,8 @@ public class GetFileFromExperimentCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
+		hasRights(UserRights.getRights(this.getClass()));
 		validateString(fileID, MaxLength.FILE_EXPID, "Filename");
-		hasRights(UserType.USER);
 	}
 
 	@Override

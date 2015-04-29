@@ -48,6 +48,7 @@ public class AddFileToExperimentCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
+		hasRights(UserRights.getRights(this.getClass()));
 		validateString(experimentID, MaxLength.EXPID, "Experiment name");
 		validateString(type, MaxLength.FILE_FILETYPE, "File type");
 		validateString(author, MaxLength.FILE_AUTHOR, "Author");
@@ -55,7 +56,6 @@ public class AddFileToExperimentCommand extends Command {
 		validateString(grVersion, MaxLength.FILE_GRVERSION, "Genome release");
 		validateString(fileName, MaxLength.FILE_FILENAME, "Filename");
 		validateString(metaData, MaxLength.FILE_METADATA, "Metadata");
-		hasRights(UserType.USER);
 	}
 
 	public void setUploader(String uploader) {

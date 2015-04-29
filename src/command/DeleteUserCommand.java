@@ -31,6 +31,7 @@ public class DeleteUserCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
+		hasRights(UserRights.getRights(this.getClass()));
 		if(username == null) {
 			throw new ValidateException(StatusCode.BAD_REQUEST,
 					"Username was missing.");
@@ -40,7 +41,6 @@ public class DeleteUserCommand extends Command {
 					"has to be between 1 and " +
 					MaxLength.USERNAME + " characters long.");
 		}
-		hasRights(UserType.ADMIN);
 	}
 
 	@Override

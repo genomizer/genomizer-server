@@ -28,7 +28,7 @@ public class GetGenomeReleaseCommand extends Command {
 	@Override
 	public void validate() throws ValidateException {
 		/*Validation will always succeed, the command can not be corrupt.*/
-		hasRights(UserType.GUEST);
+		hasRights(UserRights.getRights(this.getClass()));
 	}
 
 	/**

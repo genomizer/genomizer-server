@@ -38,7 +38,7 @@ public class GetProcessStatusCommand extends Command {
 	public void validate() throws ValidateException {
 		/*Validation will always succeed for the content,
 		the command can not be corrupt.*/
-		hasRights(UserType.USER);
+		hasRights(UserRights.getRights(this.getClass()));
 	}
 
 	@Override

@@ -20,7 +20,7 @@ public class GetAnnotationPrivilegesCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-		hasRights(UserType.GUEST);
+		hasRights(UserRights.getRights(this.getClass()));
 	}
 
 	@Override

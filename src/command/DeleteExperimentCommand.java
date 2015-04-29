@@ -31,6 +31,7 @@ public class DeleteExperimentCommand extends Command {
 	}
 
 	public void validate() throws ValidateException {
+		hasRights(UserRights.getRights(this.getClass()));
 		validateString(header, MaxLength.EXPID, "Experiment name");
 	}
 

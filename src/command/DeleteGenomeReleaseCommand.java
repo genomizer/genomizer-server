@@ -38,9 +38,9 @@ public class DeleteGenomeReleaseCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
+		hasRights(UserRights.getRights(this.getClass()));
 		validateString(genomeVersion, MaxLength.GENOME_VERSION, "Genome version");
 		validateString(species, MaxLength.GENOME_SPECIES, "Genome specie");
-		hasRights(UserType.USER);
 	}
 
 	@Override

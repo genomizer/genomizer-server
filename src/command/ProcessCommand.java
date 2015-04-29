@@ -65,6 +65,8 @@ public class ProcessCommand extends Command {
 	 */
 	@Override
 	public void validate() throws ValidateException {
+
+		hasRights(UserRights.getRights(this.getClass()));
 		validateString(username, MaxLength.USERNAME, "Username");
 		validateString(expid, MaxLength.EXPID, "Experiment name");
 		validateString(metadata, MaxLength.FILE_METADATA, "Metadata");
@@ -92,7 +94,6 @@ public class ProcessCommand extends Command {
 				throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
 						"process type");
 		}
-		hasRights(UserType.USER);
 	}
 
 	/**

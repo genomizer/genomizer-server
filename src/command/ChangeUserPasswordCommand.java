@@ -30,6 +30,7 @@ public class ChangeUserPasswordCommand extends Command {
      */
     @Override
     public void validate() throws ValidateException {
+        hasRights(UserRights.getRights(this.getClass()));
         validateString(username, MaxLength.USERNAME, "Username/Password");
         validateString(password, MaxLength.PASSWORD, "Username/Password");
     }

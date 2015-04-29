@@ -34,6 +34,7 @@ public class AddGenomeReleaseCommand extends Command {
 	@Override
 	public void validate() throws ValidateException {
 
+		hasRights(UserRights.getRights(this.getClass()));
 		validateString(specie, MaxLength.GENOME_SPECIES, "Specie");
 		validateString(genomeVersion, MaxLength.GENOME_VERSION, "Genome version");
 
@@ -46,7 +47,6 @@ public class AddGenomeReleaseCommand extends Command {
 						" characters long.");
 			}
 		}
-		hasRights(UserType.USER);
 	}
 
 

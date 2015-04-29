@@ -29,9 +29,9 @@ public class AddAnnotationValueCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
+		hasRights(UserRights.getRights(this.getClass()));
 		validateString(name, MaxLength.ANNOTATION_LABEL, "Annotation label");
 		validateString(value, MaxLength.ANNOTATION_VALUE, "Annotation value");
-		hasRights(UserMethods.UserType.USER);
 	}
 
 	@Override

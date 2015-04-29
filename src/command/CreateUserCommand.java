@@ -38,6 +38,9 @@ public class CreateUserCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
+
+		hasRights(UserRights.getRights(this.getClass()));
+
 		//TODO Change to exceptions.
 
 		/*if(username == null || password == null || privileges == null) {
@@ -53,8 +56,6 @@ public class CreateUserCommand extends Command {
 			return false;
 		}
 		return username.indexOf('/') == -1;*/
-
-		hasRights(UserType.ADMIN);
 	}
 
 	@Override

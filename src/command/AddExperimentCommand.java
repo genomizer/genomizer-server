@@ -28,6 +28,8 @@ public class AddExperimentCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
+
+		hasRights(UserRights.getRights(this.getClass()));
 		validateString(name, MaxLength.EXPID, "Experiment name");
 
 		if(annotations == null || annotations.size() == 0) {
@@ -46,7 +48,6 @@ public class AddExperimentCommand extends Command {
 			validateString(annotations.get(i).getValue(),
 					MaxLength.ANNOTATION_VALUE, "Annotation value");
 		}
-		hasRights(UserType.USER);
 	}
 
 	@Override

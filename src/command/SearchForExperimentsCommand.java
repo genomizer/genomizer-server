@@ -39,11 +39,13 @@ public class SearchForExperimentsCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
+
+		hasRights(UserRights.getRights(this.getClass()));
+
 		if (annotations == null || annotations.equals("")) {
 			throw new ValidateException(StatusCode.BAD_REQUEST,
 					"Specify annotations to search for.");
 		}
-		hasRights(UserMethods.UserType.GUEST);
 	}
 
 	@Override

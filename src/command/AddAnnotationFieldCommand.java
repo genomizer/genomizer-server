@@ -38,6 +38,9 @@ public class AddAnnotationFieldCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
+
+		hasRights(UserRights.getRights(this.getClass()));
+
 		validateString(name, MaxLength.ANNOTATION_LABEL, "Annotation label");
 		if(defaults != null) {
 			validateString(defaults, MaxLength.ANNOTATION_DEFAULTVALUE,
@@ -61,7 +64,6 @@ public class AddAnnotationFieldCommand extends Command {
 						+ validCharacters);
 			}
 		}
-		hasRights(UserType.USER);
 	}
 
 	@Override

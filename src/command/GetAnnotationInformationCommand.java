@@ -27,7 +27,7 @@ public class GetAnnotationInformationCommand extends Command {
 	public void validate() throws ValidateException {
 		/*Validation of the information will always succeed,
 		the command can not be corrupt.*/
-		hasRights(UserType.GUEST);
+		hasRights(UserRights.getRights(this.getClass()));
 	}
 
 	@Override
