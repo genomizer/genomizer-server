@@ -42,6 +42,9 @@ public class AddFileToExperimentCommand extends Command {
 	@Expose
 	private String grVersion = null;
 
+	@Expose
+	private String checkSumMD5 = null;
+
 	//TODO: Find out what this does.
 	private boolean isPrivate = false;
 
@@ -54,6 +57,16 @@ public class AddFileToExperimentCommand extends Command {
 		validateName(grVersion, MaxLength.FILE_GRVERSION, "Genome release");
 		validateName(fileName, MaxLength.FILE_FILENAME, "Filename");
 		validateExists(metaData, MaxLength.FILE_METADATA, "Metadata");
+
+		if (checkSumMD5 != null) {
+			if (checkSumMD5.length() != 32)
+				throw new ValidateException(StatusCode.BAD_REQUEST,
+						"MD5 checksum has incorrect length (should be 32)!");
+			if (!checkSumMD5.matches("[0-9a-fA-F]+"))
+				throw new ValidateException(StatusCode.BAD_REQUEST,
+						"Invalid characters in MD5 "
+						+ "checksum string (should be '[0-9a-fA-F]')!");
+		}
 	}
 
 	public void setUploader(String uploader) {
@@ -82,7 +95,7 @@ public class AddFileToExperimentCommand extends Command {
 		try {
 			db = initDB();
 			FileTuple ft = db.addNewFile(experimentID, fileType, fileName, null,
-					metaData, author, uploader, isPrivate, grVersion);
+					metaData, author, uploader, isPrivate, grVersion, checkSumMD5);
 			return new AddFileToExperimentResponse(StatusCode.OK,
 					ft.getUploadURL());
 		} catch (SQLException e) {

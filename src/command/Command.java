@@ -72,13 +72,10 @@ public abstract class Command {
 	 * @throws SQLException
 	 * @throws IOException
 	 */
-	public DatabaseAccessor initDB() throws SQLException, IOException {
-		DatabaseAccessor db;
-		db = new DatabaseAccessor(ServerSettings.databaseUsername,
+	public static DatabaseAccessor initDB() throws SQLException, IOException {
+		return new DatabaseAccessor(ServerSettings.databaseUsername,
 				ServerSettings.databasePassword, ServerSettings.databaseHost,
 				ServerSettings.databaseName);
-
-		return db;
 	}
 
 	/**

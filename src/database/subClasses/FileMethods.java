@@ -63,6 +63,8 @@ public class FileMethods {
 	 *            String The genome release version identifyer (eg. "hg38") or
 	 *            null if not applicable. OBS! If not null, this must reference
 	 *            a genome release that has been previously uploaded.
+	 * @param checkSumMD5
+	 *            MD5 checksum of the file. Can be null.
 	 * @return FileTuple - The FileTuple inserted in the database or null if no
 	 *         file was entered into the database.
 	 * @throws SQLException
@@ -73,7 +75,8 @@ public class FileMethods {
 	 */
 	public FileTuple addNewFile(String expID, int fileType, String fileName,
 			String inputFileName, String metaData, String author,
-			String uploader, boolean isPrivate, String genomeRelease)
+			String uploader, boolean isPrivate, String genomeRelease,
+			String checkSumMD5)
 			throws SQLException, IOException {
 
 		if (!FileValidator.fileNameCheck(fileName)) {
@@ -119,8 +122,8 @@ public class FileMethods {
 
 		String query = "INSERT INTO File "
 				+ "(Path, FileType, FileName, Date, MetaData, InputFilePath, "
-				+ "Author, Uploader, IsPrivate, ExpID, GRVersion) "
-				+ "VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?, ?, ?, ?, ?, ?)";
+				+ "Author, Uploader, IsPrivate, ExpID, GRVersion, MD5) "
+				+ "VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?, ?, ?, ?, ?, ?, ?)";
 		PreparedStatement stmt = conn.prepareStatement(query);
 		stmt.setString(1, path);
 
@@ -148,6 +151,7 @@ public class FileMethods {
 		stmt.setBoolean(8, isPrivate);
 		stmt.setString(9, expID);
 		stmt.setString(10, genomeRelease);
+		stmt.setString(11, checkSumMD5);
 
 		stmt.executeUpdate();
 		stmt.close();
@@ -464,7 +468,8 @@ public class FileMethods {
 
 	public FileTuple addGeneratedFile(String expId, int fileType,
 			String filePath, String inputFileName, String metaData,
-			String uploader, boolean isPrivate, String grVersion)
+			String uploader, boolean isPrivate, String grVersion,
+			String checkSumMD5)
 			throws SQLException, IOException {
 
 		Experiment e = expMethods.getExperiment(expId);
@@ -483,9 +488,9 @@ public class FileMethods {
 
 		String query = "INSERT INTO File "
 				+ "(Path, FileType, FileName, Date, MetaData, InputFilePath, "
-				+ "Author, Uploader, IsPrivate, ExpID, GRVersion, Status) "
+				+ "Author, Uploader, IsPrivate, ExpID, GRVersion, Status, MD5) "
 				+ "VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?, 'Genomizer',"
-				+ " ?, ?, ?, ?, 'Done')";
+				+ " ?, ?, ?, ?, 'Done', ?)";
 		PreparedStatement stmt = conn.prepareStatement(query);
 		stmt.setString(1, filePath);
 
@@ -511,6 +516,7 @@ public class FileMethods {
 		stmt.setBoolean(7, isPrivate);
 		stmt.setString(8, expId);
 		stmt.setString(9, grVersion);
+		stmt.setString(10, checkSumMD5);
 
 		stmt.executeUpdate();
 		stmt.close();
