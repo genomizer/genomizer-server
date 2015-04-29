@@ -26,7 +26,7 @@ public class SearchForExperimentsCommand extends Command {
 	private String annotations;
 
 	@Override
-	public void setFields(String uri, String uuid) {
+	public void setFields(String uri, String username) {
 		int index = uri.indexOf("=");
 		annotations = uri.substring(index+1);
 	}

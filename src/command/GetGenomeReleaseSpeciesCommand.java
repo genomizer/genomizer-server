@@ -23,7 +23,7 @@ public class GetGenomeReleaseSpeciesCommand extends Command {
 	private String species;
 
 	@Override
-	public void setFields(String uri, String uuid) {
+	public void setFields(String uri, String username) {
 		species = uri.split("/")[1];
 	}
 

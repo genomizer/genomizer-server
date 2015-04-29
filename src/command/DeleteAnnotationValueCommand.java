@@ -24,7 +24,7 @@ public class DeleteAnnotationValueCommand extends Command {
 	private String value;
 
 	@Override
-	public void setFields(String uri, String uuid) {
+	public void setFields(String uri, String username) {
 		String[] splitFields = uri.split("/");
 		name = splitFields[2];
 		value = splitFields[3];

@@ -22,7 +22,7 @@ public class GetExperimentCommand extends Command {
 	private String expID;
 
 	@Override
-	public void setFields(String uri, String uuid) {
+	public void setFields(String uri, String username) {
 		expID = uri.split("/")[1];
 	}
 

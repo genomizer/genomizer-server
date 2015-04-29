@@ -11,7 +11,6 @@ import authentication.LoginAttempt;
 
 import com.google.gson.annotations.Expose;
 
-import java.io.IOException;
 import java.sql.SQLException;
 
 /**
@@ -28,7 +27,7 @@ public class LoginCommand extends Command {
 	private String password = null;
 
 	@Override
-	public void setFields(String uri, String uuid) {
+	public void setFields(String uri, String username) {
 
 		/*No fields from the URI is needed, neither is the UUID. Dummy
 		implementation*/

@@ -20,7 +20,7 @@ import response.StatusCode;
 
 public class GetGenomeReleaseCommand extends Command {
 	@Override
-	public void setFields(String uri, String uuid) {
+	public void setFields(String uri, String username) {
 
 		/*No fields from the URI is needed, neither is the UUID. Dummy
 		implementation*/

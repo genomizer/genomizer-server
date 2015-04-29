@@ -17,7 +17,7 @@ public class GetFileFromExperimentCommand extends Command {
 	private String fileID;
 
 	@Override
-	public void setFields(String uri, String uuid) {
+	public void setFields(String uri, String username) {
 		fileID = uri.split("/")[1];
 	}
 

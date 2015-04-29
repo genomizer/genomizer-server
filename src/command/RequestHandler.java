@@ -11,10 +11,13 @@ import response.Response;
 import response.StatusCode;
 import server.Debug;
 import server.ErrorLogger;
+import server.Util;
 import sun.rmi.runtime.Log;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -49,7 +52,7 @@ public class RequestHandler implements HttpHandler {
 				get(requestMethod + " " + context);
 
 		/*Authenticate the user and send the appropriate response*/
-		String uuid = getUUID(exchange);
+		String uuid = performAuthorization(exchange);
 		if (commandClass == null) {
 			if (uuid == null) {
 				Debug.log("User could not be authenticated!");
@@ -143,6 +146,47 @@ public class RequestHandler implements HttpHandler {
             return null;
         }
     }
+
+	private String performAuthorization(HttpExchange exchange) {
+		String uuid = null;
+
+		// Get the value of the 'Authorization' header.
+		List<String> authHeader = exchange.getRequestHeaders().
+				get("Authorization");
+		if (authHeader != null)
+			uuid = authHeader.get(0);
+
+		// Get the value of the 'token' parameter.
+		String uuid2;
+		HashMap<String, String> reqParams = new HashMap<>();
+		Util.parseURI(exchange.getRequestURI(), reqParams);
+		if (reqParams.containsKey("token")) {
+			uuid2 = reqParams.get("token");
+			if (uuid2 != null) {
+				if (uuid == null || uuid.equals(uuid2)) {
+					uuid = uuid2;
+				} else {
+					Debug.log("Authorization header "
+							+ "and token parameter values differ!");
+					return null;
+				}
+			}
+		}
+
+		// Actual authentication.
+		Debug.log("Trying to authenticate token " + uuid + "...");
+		if (uuid != null && Authenticate.idExists(uuid)) {
+			Authenticate.updateLatestRequest(uuid);
+			Debug.log("User " + Authenticate.getUsernameByID(uuid)
+					+ " authenticated successfully.");
+			return uuid;
+		} else {
+			Debug.log("Unauthorized request!");
+			Response errorResponse = new MinimalResponse(StatusCode.
+					UNAUTHORIZED);
+			return null;
+		}
+	}
 
     /*Returns the body of the request (a json).*/
     private String readBody(HttpExchange exchange) {

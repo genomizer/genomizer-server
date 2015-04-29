@@ -52,9 +52,9 @@ public abstract class Command {
 	 * from the request as well as the UUID of the user the implementation
 	 * of this function should make sure the necessary information is set.
 	 * @param uri the URI from the http request.
-	 * @param uuid the UUID for the user who made the request.
+	 * @param username the UUID for the user who made the request.
 	 */
-	public abstract void setFields(String uri, String uuid);
+	public abstract void setFields(String uri, String username);
 
 	/**
 	 * Method used to connect to the database.
@@ -98,15 +98,18 @@ public abstract class Command {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify " +
 					"an " + field.toLowerCase() + ".");
 		}
+
 		if(string.equals("null")){
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid "
 					+ field.toLowerCase() + ".");
 		}
+
 		if(string.length() > maxLength || string.length() < 1) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, field + ": " +
 					string + " has to be between 1 and " + maxLength +
 					" characters long.");
 		}
+
 		if(hasInvalidCharacters(string)) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid" +
 					" characters in " + field.toLowerCase() +

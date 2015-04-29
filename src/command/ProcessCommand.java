@@ -53,8 +53,8 @@ public class ProcessCommand extends Command {
 
 
 	@Override
-	public void setFields(String uri, String uuid) {
-		username = Authenticate.getUsernameByID(uuid);
+	public void setFields(String uri, String username) {
+		this.username = Authenticate.getUsernameByID(username);
 		setTimestamp(System.currentTimeMillis());
 		processtype = uri.split("/")[1];
 	}
