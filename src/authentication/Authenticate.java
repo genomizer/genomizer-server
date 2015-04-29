@@ -1,11 +1,12 @@
 package authentication;
 
+
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
-import server.ServerSettings;
+
 
 /**
  * Class used to authenticate users and privileges.
@@ -15,45 +16,24 @@ import server.ServerSettings;
  */
 public class Authenticate {
 
-	private static HashMap<String, String> activeUsersID = new HashMap<String, String>();
-	private static HashMap<String, Date> latestRequests = new HashMap<String, Date>();
+	// These can be modified from the InteractiveUuidsRemover thread.
+	private static ConcurrentHashMap<String, String> activeUsersID = new ConcurrentHashMap<String, String>();
+	private static ConcurrentHashMap<String, Date> latestRequests = new ConcurrentHashMap<String, Date>();
 
 
-	static public LoginAttempt login(String username, String password) {
+	static public LoginAttempt login(String username, String password, String dbHash, String dbSalt) {
 
-	/*
-	// TODO : Check user and user password instead of server password
-	// Get user salt and hash from DB, need DB group to implement table and get method
-	DatabaseAccessor db = null;
-		try {
-			db = initDB();
-		} catch (SQLException e) {
-			return new LoginAttempt(false, null, "SQL Error when initiating databaseAccessor in LoginAttempt." + e.getMessage());
-		} catch (IOException e)  {
-			return new LoginAttempt(false, null, "IO Error when initiating databaseAccessor in LoginAttempt. " + e.getMessage());
-		}
-		try {
-			String[] salt&hash = db.getUserSaltAndHash(username);
-		}catch (SQLException | IOException e) {
-			return new LoginAttempt(false, null, "Error when requesting user from database, user don't exist. " + e.getMessage());
-		}
 		// Apply salt to password.
-		String hash = PasswordHash.hashString(password + salt&hash[0]
+		String hash = PasswordHash.hashString(password + dbSalt);
 
 		// Check if new hash matches DB hash.
-		if(hash.equals(salt&hash[1]))
-			return new LoginAttempt(true, addUser(username), null);)
-
-		return new LoginAttempt(false, null, "Wrong password.");
-	 */
-
-	    if(PasswordHash.toSaltedSHA256Hash(password).equals(ServerSettings.passwordHash)) {
+		if(hash.equals(dbHash))
 			return new LoginAttempt(true, updateActiveUser(username), null);
-	    }
+
 		return new LoginAttempt(false, null, "Wrong password.");
 	}
 
-	public static HashMap<String, Date> getLatestRequestsMap() {
+	public static ConcurrentHashMap<String, Date> getLatestRequestsMap() {
 		return latestRequests;
 	}
 
@@ -139,7 +119,7 @@ public class Authenticate {
 	 */
 	static public String getUsernameByID(String userID){
 
-		return activeUsersID.get(userID);
+		return (userID == null ? "" : activeUsersID.get(userID));
 
 	}
 

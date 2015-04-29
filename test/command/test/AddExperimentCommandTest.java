@@ -7,7 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import command.AddExperimentCommand;
 import command.ValidateException;
-import database.constants.MaxSize;
+import database.constants.MaxLength;
 
 /**
  * Test class used to check that AddExperimentCommand class
@@ -92,7 +92,7 @@ public class AddExperimentCommandTest {
 	public void testValidateNameLengthToLong() throws ValidateException {
 
 		String big = "";
-		for(int i = 0; i < MaxSize.EXPID + 1; i++) {
+		for(int i = 0; i < MaxLength.EXPID + 1; i++) {
 			big = big + "A";
 		}
 		String json = "{\"name\":\"" + big +
@@ -221,7 +221,7 @@ public class AddExperimentCommandTest {
 	public void testValidateAnnotationValueLengthToLong() throws ValidateException {
 
 		String big = "";
-		for(int i = 0; i < MaxSize.ANNOTATION_VALUE + 1; i++) {
+		for(int i = 0; i < MaxLength.ANNOTATION_VALUE + 1; i++) {
 			big = big + "A";
 		}
 		String json = "{\"name\":\"experimentId\",\"annotations\":[{\"name\":\"pubmedId\",\"value\":\"" + big +

@@ -175,7 +175,7 @@ public class DatabaseAccessor {
     /**
      * Internal method! Checks that the pubmed string is valid.
      *
-     * @param pubMedString
+     * @param pubMedString a string in pubmed format
      * @return boolean - true if ok else throws Exception
      * @throws IOException
      */
@@ -216,33 +216,41 @@ public class DatabaseAccessor {
     }
 
     /**
+     * Gets the full name of a user.
+     * @param username the user to lookup
+     * @return a string containing the full name or null
+     * @throws SQLException
+     */
+    public String getUserFullName(String username) throws  SQLException {
+        return userMethods.getUserFullName(username);
+    }
+
+    /**
+     * Gets a user's email.
+     * @param username the user to lookup
+     * @return a string containing the user's email or null
+     * @throws SQLException
+     */
+    public String getUserEmail(String username) throws  SQLException {
+        return userMethods.getUserEmail(username);
+    }
+
+    /**
      * Method to add a new user to the database.
      *
-     * @param username - the username
-     * @param password
-     *            - the password
-     * @param role
-     *            - the role given to the user ie. "Admin"
+     * @param username the username
+     * @param hash the password's hash
+     * @param salt the password's salt
+     * @param role the role given to the user ie. "Admin"
+     * @param fullName the full name of the user
+     * @param email the email of the user
      * @throws SQLException
      * @throws IOException
      */
-    public void addUser(String username, String password, String role,
+    public void addUser(String username, String hash, String salt, String role,
             String fullName, String email) throws SQLException, IOException {
-        userMethods.addUser(username, password, role, fullName, email);
+        userMethods.addUser(username, hash, salt, role, fullName, email);
     }
-
-
-    //TODO remove duplicate
-    /*
-
-    /**
-     * Deletes a user from the database.
-     *
-     * @param  username - the username of the user to be deleted.
-     * @throws SQLException
-     *             - if the query does not succeed
-     */
-
 
     /**
      * Deletes a user from the database.
@@ -259,29 +267,42 @@ public class DatabaseAccessor {
     /**
      * Returns the password for the given user. Used for login.
      *
-     * @param  user - the username as string
+     * @param  user the username as string
      * @return the password
      * @throws SQLException
      *             - if the query does not succeed
      */
-    public String getPassword(String user) throws SQLException {
-        return userMethods.getPassword(user);
+    public String getPasswordHash(String user) throws SQLException {
+        return userMethods.getPasswordHash(user);
+    }
+
+    /**
+     * Returns the password for the given user. Used for login.
+     *
+     * @param  user the username as string
+     * @return the password
+     * @throws SQLException
+     *             - if the query does not succeed
+     */
+    public String getPasswordSalt(String user) throws SQLException {
+        return userMethods.getPasswordSalt(user);
     }
 
     /**
      * Changes the password for a user.
      *
      * @param username - the user to change the password for
-     * @param newPassword - the new password
+     * @param newPasswordHash - the new password
+     * @param newSalt - the new salt
      * @return the number of tuples updated in the database
      * @throws SQLException
      *             - if the query does not succeed
      * @throws IOException
      *             - if an argument is empty or null
      */
-    public int resetPassword(String username, String newPassword)
+    public int resetPassword(String username, String newPasswordHash, String newSalt)
             throws SQLException, IOException {
-        return userMethods.resetPassword(username, newPassword);
+        return userMethods.resetPassword(username, newPasswordHash, newSalt);
     }
 
     /**
@@ -321,13 +342,6 @@ public class DatabaseAccessor {
     public Experiment getExperiment(String expID) throws SQLException {
         return expMethods.getExperiment(expID);
     }
-
-    //TODO Find this thing?
-    /*
-         * @throws DuplicatePrimaryKeyException
-     *             If the experiment already exists.
-
-     */
 
     /**
      * Adds an experiment ID to the database.
@@ -466,7 +480,7 @@ public class DatabaseAccessor {
      * sex, tissue, etc... Finds all annotationLabels that exist in the
      * database, example of labels: sex, tissue, etc...
      *
-     * @return ArrayList<String>
+     * @return a list of annotation labels
      */
 
     public ArrayList<String> getAllAnnotationLabels() {
@@ -585,8 +599,8 @@ public class DatabaseAccessor {
      * OBS! This changes the label for all experiments. Label Species can't be
      * changed because of dependencies in other tables.
      *
-     * @param oldLabel
-     * @param newLabel
+     * @param oldLabel the previous label value
+     * @param newLabel the new label value
      * @return the number of tuples updated
      * @throws SQLException
      *             If the update fails
@@ -630,7 +644,7 @@ public class DatabaseAccessor {
      *
      * @param annoLabel
      *            String, the name of the annotation to change required for.
-     * @param required
+     * @param required whether or not the label should be required
      * @return resCount int, the numer of rows affected by the change.
      * @throws SQLException
      *             , will be thrown if the psql query fails.
@@ -662,7 +676,7 @@ public class DatabaseAccessor {
      * @param fileType
      *            int An Integer identifying the file type eg. FileTuple.RAW
      * @param fileName
-     *            String
+     *            the name of the file
      * @param inputFileName
      *            String The name of the corresponding input file or null if
      *            there is no corresponding input file
@@ -670,11 +684,11 @@ public class DatabaseAccessor {
      *            String The parameters used in file creation or null if not
      *            applicable
      * @param author
-     *            String
+     *            the name of the author
      * @param uploader
-     *            String
+     *            the name of the uploader
      * @param isPrivate
-     *            boolean
+     *            whether or not the file is private
      * @param genomeRelease
      *            String The genome release version identifyer (eg. "hg38") or
      *            null if not applicable. OBS! If not null, this must reference
@@ -713,7 +727,7 @@ public class DatabaseAccessor {
     /**
      * Returns the FileTuple object associated with the given filePath.
      *
-     * @param filePath
+     * @param filePath the path of the file
      * @return FileTuple - The corresponding FileTuple or null if no such file
      *         exists
      * @throws SQLException
@@ -727,7 +741,7 @@ public class DatabaseAccessor {
      * Returns the FileTuple object associated with the given fileID.
      *
      * @param fileID
-     *            int
+     *            the fileID to check
      * @return The corresponding FileTuple or null if no such file
      *         exists
      * @throws SQLException
@@ -796,6 +810,8 @@ public class DatabaseAccessor {
      *
      * @param label - the name of the annotation
      * @param choices - the possible values for the annotation
+     * @param defaultValueIndex - the index of the default value
+     * @param required - whether or not it is required
      * @return  the number of tuples inserted into the database
      * @throws SQLException
      *             - if the query does not succeed
@@ -910,7 +926,7 @@ public class DatabaseAccessor {
     /**
      * Not used in Genomizer 2014
      *
-     * @param folderPath
+     * @param folderPath the path of the folder
      * @return
      * @throws SQLException
      * @throws IOException
@@ -929,8 +945,8 @@ public class DatabaseAccessor {
     /**
      * Not used in 2014.
      *
-     * @param filePath
-     * @return
+     * @param filePath the path to the file
+     * @return a FileTuple
      * @throws SQLException
      * @throws IOException
      */
@@ -965,8 +981,9 @@ public class DatabaseAccessor {
     /**
      * Add one genome release to the database.
      *
-     * @param genomeVersion
-     * @param species
+     * @param genomeVersion the genome version
+     * @param species the species
+     * @param filename the filename
      * @return The path to the folder where the genome release files
      *         should be saved.
      * @throws SQLException
@@ -1091,9 +1108,9 @@ public class DatabaseAccessor {
      * Adds a chain file to database for conversions. Parameters: Oldversion,
      * new version and filename. Returns: upload URL
      *
-     * @param fromVersion
-     * @param toVersion
-     * @param fileName
+     * @param fromVersion the version to convert from
+     * @param toVersion the version to convert to
+     * @param fileName the filename
      * @return upload URL
      * @throws SQLException
      * @throws IOException
@@ -1194,7 +1211,7 @@ public class DatabaseAccessor {
     /**
      * Get's the filePathGenerator object.
      *
-     * @return FilePathGenerator
+     * @return a FilePathGenerator
      */
     public FilePathGenerator getFilePathGenerator() {
         return fpg;

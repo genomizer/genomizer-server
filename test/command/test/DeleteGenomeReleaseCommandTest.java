@@ -2,6 +2,7 @@ package command.test;
 
 import static org.junit.Assert.*;
 
+import database.constants.MaxLength;
 import org.junit.Test;
 import command.Command;
 import command.DeleteGenomeReleaseCommand;
@@ -103,7 +104,7 @@ public class DeleteGenomeReleaseCommandTest {
 	public void testValidateGenomeVersionLength() throws ValidateException {
 
 		String big = "Start";
-		for(int i = 0; i < database.constants.MaxSize.GENOME_VERSION + 1; i++) {
+		for(int i = 0; i < MaxLength.GENOME_VERSION + 1; i++) {
 			big = big + i;
 		}
 		final Command cmd = new DeleteGenomeReleaseCommand("Specie", big);
@@ -123,7 +124,7 @@ public class DeleteGenomeReleaseCommandTest {
 	public void testValidateSpecieLength() throws ValidateException {
 
 		String big = "";
-		for(int i = 0; i < database.constants.MaxSize.GENOME_SPECIES + 1; i++) {
+		for(int i = 0; i < MaxLength.GENOME_SPECIES + 1; i++) {
 			big = big + "a";
 		}
 		final Command cmd = new DeleteGenomeReleaseCommand(big, "GRelease");

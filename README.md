@@ -13,7 +13,8 @@ the sources, use `ant build` or `ant compile`. To run tests, use `ant test`. To
 run individual tests or test groups, use an IDE (e.g. in Eclipse you can import
 the project with 'File > New > Project > Java > Java Project from Existing Ant
 Buildfile'). To produce a HTML report with test results, run `ant junitreport`.
-The report will be put under `junit/index.html`.
+The report will be put under `junit/index.html`. To build and run the server in
+one step (useful during development), use `ant run`.
 
 ##Download instructions
 A jar of the current version of the server is available on scratchy.cs.umu.se at all times. To download it execute the following in

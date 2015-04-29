@@ -191,7 +191,7 @@ public class CommandFactoryTest {
 	@Test
 	public void testGetAnnotationInformationCommandNotNull() {
 
-		assertNotNull(cmdf.createGetAnnotationInformationCommand(null));
+		assertNotNull(cmdf.createGetAnnotationInformationCommand());
 
 	}
 

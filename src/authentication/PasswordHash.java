@@ -18,35 +18,6 @@ public class PasswordHash
 {
     private static SecureRandom random = new SecureRandom();
 
-    /**
-     * Method takes a string password, hashes it and returns the hash
-     *
-     * @param password string to hash
-     * @return finished hashed string
-     */
-    public static String toSaltedSHA256Hash(String password) {
-
-        /**
-         * If password string is empty return null.
-         */
-            if (password.isEmpty()) {
-
-                return null;
-            }
-
-    	String salt = getSalt();
-
-        // Use this salt for user specific passwords
-        String newSalt = getNewSalt();
-
-    	String salted_password = password + salt;
-
-        String hash = hashString(salted_password);
-
-        return hash;
-    }
-
-
 
     /**
      * Hash a given string and return the result
@@ -56,10 +27,13 @@ public class PasswordHash
      * @return string hash result of the hashing
      */
     public static String hashString(String salted_password) {
+        if (salted_password.equals(""))
+            return null;
         try {
 
             /** Create MessageDigest instance for SHA-256 */
             MessageDigest md = MessageDigest.getInstance("SHA-256");
+
             /** update digest with password bytes */
             md.update(salted_password.getBytes());
             /** Digest password */
@@ -84,27 +58,17 @@ public class PasswordHash
 
 
 
-
     /**
      * Method generates a random salt to use on passwords
      *
-     * @return 12 character long string salt (chars and integers mixed)
+     * @return 64 character long string salt (chars and integers mixed)
      */
     public static String getNewSalt() {
 
-        String salt = new BigInteger(60, random).toString(32);
+        String salt = new BigInteger(320, random).toString(32);
 
         return salt;
     }
 
-
-    /**
-     * Takes public ServerSettings passwordSalt to salt the password string
-     *
-     * @return string passWordSalt from public ServerSettings object
-     */
-	private static String getSalt() {
-		return ServerSettings.passwordSalt;
-	}
 
 }

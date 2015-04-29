@@ -64,7 +64,7 @@ public class ProfileDataConverter extends Executor {
 	// Actual conversion
 	private String sgrToBedConversion(String infilePath, String outFile,
 			String secondColumn) throws InterruptedException, IOException {
-		executeScript(parse("perl MakeBEDfromSGR_v1.pl " + infilePath + " "
+		executeScript(parse("perl MakeBEDfromSGR.pl " + infilePath + " "
 				+ outFile + " " + secondColumn));
 
 		return infilePath.replace(".sgr", ".bed");
@@ -73,7 +73,7 @@ public class ProfileDataConverter extends Executor {
 	private String bedToSgrConversion(String infilePath, String outFile)
 			throws InterruptedException, IOException {
 
-		executeScript(parse("perl MakeSGRfromBED_v1.pl " + infilePath + " "
+		executeScript(parse("perl MakeSGRfromBED.pl " + infilePath + " "
 				+ outFile));
 
 		return infilePath.replace(".bed", ".sgr");
@@ -81,7 +81,7 @@ public class ProfileDataConverter extends Executor {
 
 	private String wigToSgrConversion(String infilePath, String outFile)
 			throws InterruptedException, IOException {
-		executeScript(parse("perl AllFixedStepWig2sgr_v1.pl " + infilePath
+		executeScript(parse("perl AllFixedStepWig2sgr.pl " + infilePath
 				+ " " + outFile));
 
 		return infilePath.replace(".wig", ".sgr");
@@ -89,7 +89,7 @@ public class ProfileDataConverter extends Executor {
 
 	private String gff3ToSgrConversion(String infilePath, String outFile)
 			throws InterruptedException, IOException {
-		executeScript(parse("perl MakeSGRfromGFF_v1.pl " + infilePath + " "
+		executeScript(parse("perl MakeSGRfromGFF.pl " + infilePath + " "
 				+ outFile));
 		return infilePath.replace(".gff", ".sgr");
 	}

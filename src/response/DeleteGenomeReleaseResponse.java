@@ -1,8 +1,7 @@
 package response;
 
 /**
- * Class used to represent a delete genome release
- * response.
+ * Response sent when deleting a genome release.
  *
  * @author tfy09jnn
  * @version 1.0
@@ -10,9 +9,9 @@ package response;
 public class DeleteGenomeReleaseResponse extends Response {
 
 	/**
-	 * Constructor used to initiate the class.
+	 * Constructor used to create the response.
 	 *
-	 * @param code integer to use as response code.
+	 * @param code The response code for the response.
 	 */
 	public DeleteGenomeReleaseResponse(int code) {
 
