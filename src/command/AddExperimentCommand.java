@@ -27,9 +27,9 @@ public class AddExperimentCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-		validateString(name, MaxLength.EXPID, "Experiment name");
+		validateName(name, MaxLength.EXPID, "Experiment name");
 
-		if(annotations == null || annotations.size() == 0) {
+		if(annotations == null || annotations.size() < 1) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify " +
 					"annotations for the experiment.");
 		}
@@ -40,9 +40,9 @@ public class AddExperimentCommand extends Command {
 						"an empty annotation or annotation value, please " +
 						"specify annotations.");
 			}
-			validateString(annotations.get(i).getName(),
+			validateName(annotations.get(i).getName(),
 					MaxLength.ANNOTATION_LABEL, "Annotation label");
-			validateString(annotations.get(i).getValue(),
+			validateName(annotations.get(i).getValue(),
 					MaxLength.ANNOTATION_VALUE, "Annotation value");
 		}
 	}
