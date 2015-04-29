@@ -126,10 +126,10 @@ public class ProcessRawToProfileTests {
     @Test
     public void shouldAcceptNewParent() throws Exception {
         fpg.generateExperimentFolders("tmpExp");
-        Entry<String, String> folderPaths = dbac.processRawToProfile("tmpExp");
+        Entry<String, String> folderPaths = dbac.processRawToProfile("Exp1");
         addMockFiles(folderPaths.getValue(), "prof1.sam",
                 "prof2.sam", "input.sam");
-        Experiment e = dbac.search("tmpExp[ExpID]").get(0);
+        Experiment e = dbac.search("Exp1[ExpID]").get(0);
         List<FileTuple> fileTuples = e.getFiles();
         FileTuple file1 = fileTuples.get(0);
         FileTuple file2 = fileTuples.get(1);
