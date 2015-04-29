@@ -66,22 +66,26 @@ public class ProcessCommand extends Command {
 	public void validate() throws ValidateException {
 		validateName(username, MaxLength.USERNAME, "Username");
 		validateName(expid, MaxLength.EXPID, "Experiment name");
-		validateName(metadata, MaxLength.FILE_METADATA, "Metadata");
+		if(metadata != null){
+			validateExists(metadata, MaxLength.FILE_METADATA, "Metadata");
+		}
 		validateName(genomeVersion, MaxLength.GENOME_VERSION, "Genome version");
-		validateName(processtype, Integer.MAX_VALUE, "Processtype");
+		validateExists(processtype, Integer.MAX_VALUE, "Processtype");
 
-		if(parameters == null){
-			Debug.log("ProcessCommand - Validate\n" +
-					"parameters are null");
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify " +
-					"experiment id.");
+		if(parameters == null || parameters.length < 1) {
+			throw new ValidateException(StatusCode.BAD_REQUEST,
+					"Specify parameters.");
 		}
 
 		switch (processtype) {
 			case CMD_RAW_TO_PROFILE:
 				if(parameters.length != 8){
 					throw new ValidateException(StatusCode.BAD_REQUEST,
-							"Specify paramaters.");
+							"Specify the right number of parameters.(8)");
+				}
+				for(int i = 0; i < parameters.length; i++) {
+					validateExists(parameters[i], Integer.MAX_VALUE, "Parameter " +
+							parameters[i]);
 				}
 				break;
 			case CMD_PROFILE_TO_REGION:
