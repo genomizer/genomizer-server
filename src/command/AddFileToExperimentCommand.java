@@ -51,7 +51,7 @@ public class AddFileToExperimentCommand extends Command {
 		validateExists(type, MaxLength.FILE_FILETYPE, "File type");
 		validateName(author, MaxLength.FILE_AUTHOR, "Author");
 		validateName(uploader, MaxLength.FILE_UPLOADER, "Uploader");
-		validateExists(grVersion, MaxLength.FILE_GRVERSION, "Genome release");
+		validateName(grVersion, MaxLength.FILE_GRVERSION, "Genome release");
 		validateName(fileName, MaxLength.FILE_FILENAME, "Filename");
 		if(metaData != null){
 			validateExists(metaData, MaxLength.FILE_METADATA, "Metadata");
