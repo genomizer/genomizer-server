@@ -53,9 +53,7 @@ public class AddFileToExperimentCommand extends Command {
 		validateName(uploader, MaxLength.FILE_UPLOADER, "Uploader");
 		validateName(grVersion, MaxLength.FILE_GRVERSION, "Genome release");
 		validateName(fileName, MaxLength.FILE_FILENAME, "Filename");
-		if(metaData != null){
-			validateExists(metaData, MaxLength.FILE_METADATA, "Metadata");
-		}
+		validateExists(metaData, MaxLength.FILE_METADATA, "Metadata");
 	}
 
 	public void setUploader(String uploader) {

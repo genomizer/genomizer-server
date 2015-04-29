@@ -66,9 +66,7 @@ public class ProcessCommand extends Command {
 	public void validate() throws ValidateException {
 		validateName(username, MaxLength.USERNAME, "Username");
 		validateName(expid, MaxLength.EXPID, "Experiment name");
-		if(metadata != null){
-			validateExists(metadata, MaxLength.FILE_METADATA, "Metadata");
-		}
+		validateExists(metadata, MaxLength.FILE_METADATA, "Metadata");
 		validateName(genomeVersion, MaxLength.GENOME_VERSION, "Genome version");
 		validateExists(processtype, Integer.MAX_VALUE, "Processtype");
 
