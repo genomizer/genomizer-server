@@ -12,7 +12,10 @@ CREATE TABLE File
     IsPrivate       BOOLEAN         NOT NULL,
     ExpID           VARCHAR(256),
     GRVersion       VARCHAR(16),
-    Status            VARCHAR(16)   DEFAULT 'In Progress',
+    Status          VARCHAR(16)   DEFAULT 'In Progress',
+    ProcessName     VARCHAR(32),
+    ProcessVersion  VARCHAR(32),
+    ProcessFlags    VARCHAR(32),
     CONSTRAINT pkey_file PRIMARY KEY(FileID)
 );
 
