@@ -7,7 +7,6 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import command.*;
 import response.ErrorResponse;
-import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
 
@@ -24,6 +23,8 @@ import java.util.Scanner;
  */
 public class RequestHandler implements HttpHandler {
 	private Gson gson;
+    private UploadHandler uploadHandler;
+    private DownloadHandler downloadHandler;
 
     /**
      * Constructs a RequestHandler.
@@ -32,6 +33,8 @@ public class RequestHandler implements HttpHandler {
 		GsonBuilder builder = new GsonBuilder();
 		builder.excludeFieldsWithoutExposeAnnotation();
 		gson = builder.create();
+        uploadHandler = new UploadHandler("/upload", "resources/", "/tmp");
+        downloadHandler = new DownloadHandler("/download", "resources/");
 	}
 
 	@Override
@@ -45,17 +48,46 @@ public class RequestHandler implements HttpHandler {
         * hash map of all existing commands.*/
         String requestMethod = exchange.getRequestMethod().toString();
 		String context = exchange.getHttpContext().getPath();
-		Class<? extends Command> commandClass = CommandClasses.
-				get(requestMethod + " " + context);
+        String key = requestMethod + " " + context;
+        Class<? extends Command> commandClass = CommandClasses.get(key);
+
+        //TODO Temporary solution for the file up- and downloading?
+        try {
+            switch (key) {
+                case ("GET /download"):
+                    if (performAuthorization(exchange) != null) {
+                        downloadHandler.handleGET(exchange);
+                    } else {
+                        respondWithAuthenticationFailure(exchange);
+                    }
+
+                    return;
+                case ("GET /upload"):
+                    if (performAuthorization(exchange) != null) {
+                        uploadHandler.handleGET(exchange);
+                    } else {
+                        respondWithAuthenticationFailure(exchange);
+                    }
+
+                    return;
+                case ("POST /upload"):
+                    if (performAuthorization(exchange) != null)
+                        uploadHandler.handlePOST(exchange);
+                    else {
+                        respondWithAuthenticationFailure(exchange);
+                    }
+
+                    return;
+            }
+        } catch (Exception e) {
+            Debug.log("Could not handle upload/download");
+        }
 
 		/*Authenticate the user and send the appropriate response if needed.*/
 		String username = performAuthorization(exchange);
 		if (commandClass == null) {
 			if (username == null) {
-				Debug.log("User could not be authenticated!");
-				Response response = new MinimalResponse(StatusCode.
-						UNAUTHORIZED);
-				respond(response, exchange);
+                respondWithAuthenticationFailure(exchange);
 				return;
 			} else {
 				Debug.log("Unrecognized command.");
@@ -65,9 +97,7 @@ public class RequestHandler implements HttpHandler {
 		} else if (username == null && !commandClass.equals(LoginCommand.
                 class)) {
 			Debug.log("User could not be authenticated!");
-			Response response = new MinimalResponse(StatusCode.
-					UNAUTHORIZED);
-			respond(response, exchange);
+            respondWithAuthenticationFailure(exchange);
 			return;
 		}
 
@@ -234,4 +264,13 @@ public class RequestHandler implements HttpHandler {
 	private void logUser(String username) {
         Debug.log("User " + username + " authenticated successfully.");
 	}
+
+    /*Sends a authentication failure response. Logs the event.*/
+    private void respondWithAuthenticationFailure(HttpExchange exchange) {
+        Debug.log("User could not be authenticated!");
+        ErrorResponse errorResponse = new ErrorResponse(StatusCode.
+                INTERNAL_SERVER_ERROR, "Could not create command from " +
+                "request");
+        respond(errorResponse, exchange);
+    }
 }

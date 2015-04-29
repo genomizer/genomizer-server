@@ -41,8 +41,6 @@ import com.sun.net.httpserver.HttpServer;
 
 public class Doorman {
 	private HttpServer httpServer;
-	private UploadHandler uploadHandler;
-	private DownloadHandler downloadHandler;
 
 	/**
 	 * Constructs a HTTP server (but doesn't start it) which listens on the
@@ -51,10 +49,6 @@ public class Doorman {
 	 * @throws IOException if the Doorman object could not be created.
      */
     public Doorman(int port) throws IOException {
-		uploadHandler   = new UploadHandler("/upload", "resources/", "/tmp");
-		downloadHandler = new DownloadHandler("/download", "resources/");
-		CustomRequestHandler customRequestHandler = new CustomRequestHandler();
-
 		RequestHandler requestHandler = new RequestHandler();
 		httpServer = HttpServer.create(new InetSocketAddress(port),0);
         httpServer.createContext("/login", requestHandler);
@@ -71,10 +65,8 @@ public class Doorman {
 		httpServer.createContext("/genomeRelease", requestHandler);
 		httpServer.createContext("/genomeRelease/", requestHandler);
 		httpServer.createContext("/token", requestHandler);
-
-		httpServer.createContext("/upload", customRequestHandler);
-		httpServer.createContext("/download", customRequestHandler);
-
+		httpServer.createContext("/upload", requestHandler);
+		httpServer.createContext("/download", requestHandler);
         httpServer.setExecutor(new Executor() {
 			@Override
 			public void execute(Runnable command) {
@@ -97,32 +89,5 @@ public class Doorman {
 		httpServer.start();
 		System.out.println("Doorman started on port " + ServerSettings.
 				genomizerPort);
-	}
-
-	//TODO Currently uses NO authentication
-
-	private class CustomRequestHandler implements HttpHandler {
-		public void handle(HttpExchange exchange) {
-			String requestMethod = exchange.getRequestMethod();
-			String requestPath = exchange.getHttpContext().getPath();
-			String context = requestMethod + " " + requestPath;
-
-			try {
-				switch (context) {
-					case ("GET /download"):
-						downloadHandler.handleGET(exchange);
-						break;
-					case ("GET /upload"):
-						uploadHandler.handleGET(exchange);
-						break;
-					case ("POST /upload"):
-						uploadHandler.handlePOST(exchange);
-						break;
-				}
-			} catch (Exception e) {
-				Debug.log("Could not handle upload/download");
-			}
-
-		}
 	}
 }
