@@ -27,11 +27,7 @@ public class Authenticate {
 
 		return new LoginAttempt(false, null, "Wrong password.");
 	}
-
-	public static ConcurrentHashMap<String, Date> getLatestRequestsMap() {
-		return latestRequests;
-	}
-
+	
 	/**
 	 * Method used to update active users. The user is added to the list of
 	 * active users or the user is updated.
