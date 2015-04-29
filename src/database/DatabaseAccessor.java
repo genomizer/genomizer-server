@@ -800,6 +800,18 @@ public class DatabaseAccessor {
         return fileMethods.changeFileName(fileID, newFileName);
     }
 
+    /**
+     * Adds a parent to a file. I.e. mark that the file with parentId as FileID
+     * was used in the processing to generate the file with fileId as its FileID.
+     *
+     * @param fileID - the FileID.
+     * @param parentID - The ID of the file to use as parent.
+     * @throws SQLException If the query fails.
+     */
+    public void addParent(int fileID, int parentID) throws SQLException {
+        fileMethods.addParent(fileID, parentID);
+    }
+
 
     //FIXME missing param annotation
     /**
