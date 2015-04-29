@@ -31,7 +31,7 @@ public class GenomeReleaseConverterTest {
 				"genomeConversionTestData/conversionResults/temp.bed",
 				"genomeConversionTestData/dm2ToDm3.over.chain.gz",
 				"genomeConversionTestData/conversionResults/unlifted.bed");
-		File resFile = new File("/resources/genomeConversionTestData/" +
+		File resFile = new File("resources/genomeConversionTestData/" +
 								"conversionResults/temp.bed");
 		assertTrue(resFile.exists());
 	}
@@ -44,7 +44,7 @@ public class GenomeReleaseConverterTest {
 				"genomeConversionTestData/conversionResults/temp.bed",
 				"genomeConversionTestData/dm2ToDm3.over.chain.gz",
 				"genomeConversionTestData/conversionResults/unlifted.bed");
-		File resFile = new File("/resources/genomeConversionTestData/" +
+		File resFile = new File("resources/genomeConversionTestData/" +
 								"conversionResults/unlifted.bed");
 		assertTrue(resFile.exists());
 	}
