@@ -3,7 +3,7 @@ package command;
 import java.io.IOException;
 import java.sql.SQLException;
 
-import authentication.PasswordHash;
+import authentication.BCrypt;
 import com.google.gson.annotations.Expose;
 
 import database.DatabaseAccessor;
@@ -67,18 +67,9 @@ public class CreateUserCommand extends Command {
 			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
 		}
 		try {
+			String hash = BCrypt.hashpw(password,BCrypt.gensalt());
+			db.addUser(username, hash, "SALT",privileges, name, email);
 
-
-
-			// get a new salt
-			String salt = PasswordHash.getNewSalt();
-			// get hash using salt and password
-			String hash = PasswordHash.hashString(password+salt);
-			// insert into DB, requires new table from DB group
-			db.addUser(username, salt, hash, privileges, name, email);
-
-
-			//db.addUser(username, password, privileges, name, email);
 		} catch (SQLException | IOException e) {
 			return new ErrorResponse(StatusCode.BAD_REQUEST, "Error when " +
 					"adding user to database, user probably already exists. " +
