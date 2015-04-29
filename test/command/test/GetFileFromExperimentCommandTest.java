@@ -2,6 +2,7 @@ package command.test;
 
 import static org.junit.Assert.*;
 
+import command.Command;
 import database.constants.MaxLength;
 import database.subClasses.UserMethods;
 import org.junit.Test;
@@ -17,14 +18,52 @@ import command.ValidateException;
  */
 public class GetFileFromExperimentCommandTest {
 
-	/**
-	 * Test used to check that creation works and
-	 * object is not null.
-	 */
-	@Test
-	public void testCreateNotNull() {
+//	/**
+//	 * Test used to check that creation works and
+//	 * object is not null.
+//	 */
+//	@Test
+//	public void testCreateNotNull() {
+//
+//		GetFileFromExperimentCommand c = new GetFileFromExperimentCommand("Hello");
+//
+//		assertNotNull(c);
+//
+//	}
+//
+//	/**
+//	 * Test used to check that ValidateException is thrown
+//	 * when FileExpId is an empty string.
+//	 *
+//	 * @throws ValidateException
+//	 */
+//	@Test(expected = ValidateException.class)
+//	public void testValidateFileExpIdEmptyString() throws ValidateException {
+//
+//		GetFileFromExperimentCommand c = new GetFileFromExperimentCommand("");
+//		c.validate();
+//
+//		fail("Expected ValidateException to be thrown.");
+//
+//	}
+//
+//	/**
+//	 * Test used to check that ValidateException is thrown
+//	 * when FileExpId is null.
+//	 *
+//	 * @throws ValidateException
+//	 */
+//	@Test(expected = ValidateException.class)
+//	public void testValidateFileExpIdNotNull() throws ValidateException {
+//
+//		GetFileFromExperimentCommand c = new GetFileFromExperimentCommand(null);
+//		c.validate();
+//
+//		fail("Expected ValidateException to be thrown.");
+//
+//	}
 
-		GetFileFromExperimentCommand c = new GetFileFromExperimentCommand("Hello", UserMethods.UserType.ADMIN);
+		GetFileFromExperimentCommand c = new GetFileFromExperimentCommand("Hello");
 
 		assertNotNull(c);
 
@@ -39,7 +78,7 @@ public class GetFileFromExperimentCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateFileExpIdEmptyString() throws ValidateException {
 
-		GetFileFromExperimentCommand c = new GetFileFromExperimentCommand("", UserMethods.UserType.ADMIN);
+		GetFileFromExperimentCommand c = new GetFileFromExperimentCommand("");
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -55,7 +94,7 @@ public class GetFileFromExperimentCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateFileExpIdNotNull() throws ValidateException {
 
-		GetFileFromExperimentCommand c = new GetFileFromExperimentCommand(null, UserMethods.UserType.ADMIN);
+		GetFileFromExperimentCommand c = new GetFileFromExperimentCommand(null);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -70,12 +109,12 @@ public class GetFileFromExperimentCommandTest {
 	 */
 	@Test(expected = ValidateException.class)
 	public void testValidateFileExpIdLength() throws ValidateException {
-
-		String big = "";
+		String uri = "/file/";
 		for(int i = 0; i < MaxLength.FILE_EXPID + 1; i++) {
-			big = big + "a";
+			uri += "a";
 		}
-		GetFileFromExperimentCommand c = new GetFileFromExperimentCommand(big, UserMethods.UserType.ADMIN);
+		Command c = new GetFileFromExperimentCommand();
+		c.setFields(uri, null);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -91,7 +130,8 @@ public class GetFileFromExperimentCommandTest {
 	@Test
 	public void testValidateProperlyFormatted() throws ValidateException {
 
-		GetFileFromExperimentCommand c = new GetFileFromExperimentCommand("properly", UserMethods.UserType.ADMIN);
+		Command c = new GetFileFromExperimentCommand();
+		c.setFields("/file/properly", null);
 		c.validate();
 
 		assertTrue(true);

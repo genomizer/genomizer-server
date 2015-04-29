@@ -14,8 +14,11 @@ import response.StatusCode;
 public class UpdateAnnotationPrivilegesCommand extends Command {
 	//TODO Implement this class
 
-	public UpdateAnnotationPrivilegesCommand(String json, String userName, UserType userType) {
-		this.userType = userType;
+	@Override
+	public void setFields(String uri, String uuid) {
+
+		/*No fields from the URI is needed, neither is the UUID. Dummy
+		implementation*/
 	}
 
 	/**

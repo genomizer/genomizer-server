@@ -36,16 +36,6 @@ public abstract class Command {
 	/*This is used to store a RESTful-header.*/
 	protected String header;
 
-	/*Contains the user rights level of the sender*/
-	protected UserType userType = UserType.UNKNOWN;
-
-	final static protected HashMap<Class<? extends Command>, UserType> map;
-
-	static {
-		map = new HashMap<>();
-		map.put(AddAnnotationFieldCommand.class, UserType.USER);
-	}
-
 	/**
 	 * Used to validate the object and its information. The validate method
 	 * should be called before the command is executed and should be unique
@@ -63,20 +53,13 @@ public abstract class Command {
 	public abstract Response execute();
 
 	/**
-	 * Method used to get the RESTful-header.
-	 * @return the header that is set.
+	 * Used to set the required fields of the command. Provided the URI
+	 * from the request as well as the UUID of the user the implementation
+	 * of this function should make sure the necessary information is set.
+	 * @param uri the URI from the http request.
+	 * @param uuid the UUID for the user who made the request.
 	 */
-	public String getHeader() {
-		return header;
-	}
-
-	/**
-	 * Method used to set the RESTful-header.
-	 * @param header the header as a string.
-	 */
-	public void setHeader(String header) {
-		this.header = header;
-	}
+	public abstract void setFields(String uri, String uuid);
 
 	/**
 	 * Method used to connect to the database.
@@ -86,10 +69,12 @@ public abstract class Command {
 	 */
 	public DatabaseAccessor initDB() throws SQLException, IOException {
 		DatabaseAccessor db;
+		System.err.println(ServerSettings.databaseUsername + " " +
+				ServerSettings.databasePassword + " " + ServerSettings.databaseHost + " " +
+				ServerSettings.databaseName);
 		db = new DatabaseAccessor(ServerSettings.databaseUsername,
 				ServerSettings.databasePassword, ServerSettings.databaseHost,
 				ServerSettings.databaseName);
-
 		return db;
 	}
 

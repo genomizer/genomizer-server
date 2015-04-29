@@ -37,6 +37,13 @@ public class AddAnnotationFieldCommand extends Command {
 	private Boolean forced = null;
 
 	@Override
+	public void setFields(String uri, String uuid) {
+
+		/*No fields from the URI is needed, neither is the UUID. Dummy
+		implementation*/
+	}
+
+	@Override
 	public void validate() throws ValidateException {
 
 		hasRights(UserRights.getRights(this.getClass()));

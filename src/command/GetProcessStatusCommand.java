@@ -17,17 +17,11 @@ import server.WorkPool;
  */
 public class GetProcessStatusCommand extends Command {
 
-	private WorkPool workPool;
-
-	/**
-	 * Constructs a new instance of GetProcessStatusCommand using the supplied
-	 * WorkHandler.
-	 *
-	 * @param workPool thw workPool in use by the server.
-	 */
-	public GetProcessStatusCommand(WorkPool workPool, UserType userType) {
-
-		this.workPool = workPool;
+	@Override
+	public void setFields(String uri, String uuid, UserType userType) {
+		
+		/*No fields from the URI is needed, neither is the UUID. Dummy
+		implementation*/
 		this.userType = userType;
 	}
 
@@ -43,6 +37,8 @@ public class GetProcessStatusCommand extends Command {
 
 	@Override
 	public Response execute() {
+		//TODO Retrieve the right workpool
+		WorkPool workPool = null;
 		LinkedList<ProcessCommand> processesList = workPool.getProcesses();
 		LinkedList<ProcessStatus> processStatuses = new LinkedList<>();
         

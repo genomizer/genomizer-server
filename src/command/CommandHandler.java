@@ -1,7 +1,6 @@
 package command;
 
 import authentication.Authenticate;
-import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.ProcessResponse;
 import response.Response;
@@ -84,92 +83,74 @@ public class CommandHandler {
 
 		String parsedURI = parseRequestURI(uri);
 		String username = Authenticate.getUsernameByID(uuid);
-		//TODO Add the get user type method
-		UserType userType = UserType.ADMIN;
 		String[] rest;
 		switch (cmdt) {
 			case DELETE_ANNOTATION_VALUE_COMMAND:
 				rest = uri.split("/");
 				return cmdFactory.
-						createDeleteAnnotationValueCommand(rest[3], rest[4],
-								userType);
+						createDeleteAnnotationValueCommand(rest[3], rest[4]);
 			case LOGIN_COMMAND:
 				return cmdFactory.createLoginCommand(json);
 			case LOGOUT_COMMAND:
 				return cmdFactory.createLogoutCommand(username);
 			case GET_EXPERIMENT_COMMAND:
-				return cmdFactory.createGetExperimentCommand(parsedURI,
-						userType);
+				return cmdFactory.createGetExperimentCommand(parsedURI);
 			case ADD_EXPERIMENT_COMMAND:
-				return cmdFactory.createAddExperimentCommand(json, userType);
+				return cmdFactory.createAddExperimentCommand(json);
 			case UPDATE_EXPERIMENT_COMMAND:
 				return cmdFactory.
-						createUpdateExperimentCommand(json, parsedURI,
-								userType);
+						createUpdateExperimentCommand(json, parsedURI);
 			case DELETE_EXPERIMENT_COMMAND:
-				return cmdFactory.createDeleteExperimentCommand(parsedURI,
-						userType);
+				return cmdFactory.createDeleteExperimentCommand(parsedURI);
 			case GET_FILE_FROM_EXPERIMENT_COMMAND:
-				return cmdFactory.createGetFileFromExperimentCommand(parsedURI,
-						userType);
+				return cmdFactory.createGetFileFromExperimentCommand(parsedURI);
 			case ADD_FILE_TO_EXPERIMENT_COMMAND:
-				return cmdFactory.createAddFileToExperimentCommand(json,
-						userType);
+				return cmdFactory.createAddFileToExperimentCommand(json);
 			case UPDATE_FILE_IN_EXPERIMENT_COMMAND:
 				return cmdFactory.createUpdateFileInExperimentCommand(json,
-						parsedURI, userType);
+						parsedURI);
 			case DELETE_FILE_FROM_EXPERIMENT_COMMAND:
 				return cmdFactory.
-                        createDeleteFileFromExperimentCommand(parsedURI,
-								userType);
+                        createDeleteFileFromExperimentCommand(parsedURI);
 			case SEARCH_FOR_EXPERIMENTS_COMMAND:
-				return cmdFactory.createSearchForExperimentCommand(parsedURI,
-						userType);
+				return cmdFactory.createSearchForExperimentCommand(parsedURI);
 			case DELETE_USER_COMMAND:
-				return cmdFactory.createDeleteUserCommand(parsedURI, userType);
+				return cmdFactory.createDeleteUserCommand(parsedURI);
 			case PROCESS_COMMAND:
 				return cmdFactory.createProcessCommand(json, username,
-						parsedURI, userType);
+						parsedURI);
 			case GET_PROCESS_STATUS_COMMAND:
-				return cmdFactory.createGetProcessStatusCommand(workPool,
-						userType);
+				return cmdFactory.createGetProcessStatusCommand(workPool);
 			case GET_ANNOTATION_INFORMATION_COMMAND:
-				return cmdFactory.createGetAnnotationInformationCommand(
-						userType);
+				return cmdFactory.createGetAnnotationInformationCommand();
 			case ADD_ANNOTATION_FIELD_COMMAND:
-				return cmdFactory.createAddAnnotationFieldCommand(json,
-						userType);
+				return cmdFactory.createAddAnnotationFieldCommand(json);
 			case ADD_ANNOTATION_VALUE_COMMAND:
-			return cmdFactory.createAddAnnotationValueCommand(json,
-						userType);
+				return cmdFactory.createAddAnnotationValueCommand(json);
+			case RENAME_ANNOTATION_VALUE_COMMAND:
+				return cmdFactory.createEditAnnotationFieldCommand(json);
 			case RENAME_ANNOTATION_FIELD_COMMAND:
-				return cmdFactory.createEditAnnotationFieldCommand(json,
-						userType);
-//			case RENAME_ANNOTATION_VALUE_COMMAND:
-//				return cmdFactory.createEditAnnotationFieldCommand(json);
+				return cmdFactory.createEditAnnotationFieldCommand(json);
 			case REMOVE_ANNOTATION_FIELD_COMMAND:
-				return cmdFactory.createRemoveAnnotationFieldCommand(parsedURI,
-						userType);
+				return cmdFactory.createRemoveAnnotationFieldCommand(parsedURI);
 			case GET_ANNOTATION_PRIVILEGES_COMMAND:
-				return cmdFactory.createGetAnnotationPrivilegesCommand(json,
-						userType);
+				return cmdFactory.createGetAnnotationPrivilegesCommand(json);
 			case UPDATE_ANNOTATION_PRIVILEGES_COMMAND:
 				return cmdFactory.createUpdateAnnotationPrivilegesCommand(json,
-						parsedURI, userType);
+						parsedURI);
 			case ADD_GENOME_RELEASE_COMMAND:
-				return cmdFactory.createAddGenomeReleaseCommand(json, userType);
+				return cmdFactory.createAddGenomeReleaseCommand(json);
 			case DELETE_GENOME_RELEASE_COMMAND:
 				rest = uri.split("/");
 				return cmdFactory.createDeleteGenomeReleaseCommand(rest[2],
-						rest[3], userType);
+						rest[3]);
 			case GET_ALL_GENOME_RELEASE_COMMAND:
-				return cmdFactory.createGetAllGenomeReleasesCommand(userType);
+				return cmdFactory.createGetAllGenomeReleasesCommand();
 			case GET_GENOME_RELEASE_SPECIES_COMMAND:
 				return cmdFactory.
-						createGetGenomeReleasesSpeciesCommand(parsedURI,
-								userType);
+						createGetGenomeReleasesSpeciesCommand(parsedURI);
 			case CREATE_USER_COMMAND:
-				return cmdFactory.createCreateUserCommand(json, userType);
+				return cmdFactory.createCreateUserCommand(json);
 			case IS_TOKEN_VALID_COMMAND:
 				return cmdFactory.createIsTokenValidCommand(uuid);
 			default:

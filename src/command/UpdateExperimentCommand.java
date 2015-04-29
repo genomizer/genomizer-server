@@ -14,9 +14,12 @@ import response.StatusCode;
 public class UpdateExperimentCommand extends Command {
 	//TODO Implement this class
 
-	public UpdateExperimentCommand(String json, String expID, UserType userType) {
-
+	@Override
+	public void setFields(String uri, String uuid, UserType userType) {
 		this.userType = userType;
+
+		/*No fields from the URI is needed, neither is the UUID. Dummy
+		implementation*/
 	}
 
 	/**

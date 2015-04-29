@@ -6,7 +6,7 @@ package server;
  */
 public class Debug {
 
-	public static boolean isEnabled = false;
+	public static boolean isEnabled = true;
 
 	/**
 	 * Writes the message on standard output is debug option is enabled.

@@ -24,16 +24,12 @@ public class DeleteAnnotationValueCommand extends Command {
 	private String name;
 	private String value;
 
-	/**
-	 * Constructs a new instance of DeleteAnnotationValueCommand using the
-	 * supplied name of the affected annotation and the value to be removed.
-	 * @param name the name of the selected annotation.
-	 * @param value the value to delete.
-	 */
-	public DeleteAnnotationValueCommand(String name, String value, UserType userType) {
-		this.name = name;
-		this.value = value;
+	@Override
+	public void setFields(String uri, String uuid, UserType userType) {
 		this.userType = userType;
+		String[] splitFields = uri.split("/");
+		name = splitFields[2];
+		value = splitFields[3];
 	}
 
 	@Override

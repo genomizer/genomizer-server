@@ -1,12 +1,10 @@
 package command;
 
 import server.Debug;
+import server.WorkHandler;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import server.WorkPool;
-import database.subClasses.UserMethods.UserType;
-
-import javax.jws.soap.SOAPBinding;
 
 /**
  * This class is used to create and return different commands that
@@ -51,8 +49,8 @@ public class CommandFactory {
 	 * @param expID the ID of the experiment.
 	 * @return the actual command.
 	 */
-	public Command createGetExperimentCommand(String expID, UserType userType) {
-		return new GetExperimentCommand(expID, userType);
+	public Command createGetExperimentCommand(String expID) {
+		return new GetExperimentCommand(expID);
 	}
 
 	/**
@@ -60,10 +58,8 @@ public class CommandFactory {
 	 * @param json string to initiate class.
 	 * @return the actual command.
 	 */
-	public Command createAddExperimentCommand(String json, UserType userType) {
-		AddExperimentCommand exp = gson.fromJson(json, AddExperimentCommand.class);
-		exp.setRights(userType);
-		return exp;
+	public Command createAddExperimentCommand(String json) {
+		return gson.fromJson(json, AddExperimentCommand.class);
 	}
 
 	/**
@@ -72,8 +68,8 @@ public class CommandFactory {
 	 * @param expID the experiment ID.
 	 * @return the actual command.
 	 */
-	public Command createUpdateExperimentCommand(String json, String expID, UserType userType) {
-		return new UpdateExperimentCommand(json, expID, userType);
+	public Command createUpdateExperimentCommand(String json, String expID) {
+		return new UpdateExperimentCommand(json, expID);
 	}
 
 	/**
@@ -81,8 +77,8 @@ public class CommandFactory {
 	 * @param expID the ID of the experiment.
 	 * @return the actual command.
 	 */
-	public Command createDeleteExperimentCommand(String expID, UserType userType) {
-		return new DeleteExperimentCommand(expID, userType);
+	public Command createDeleteExperimentCommand(String expID) {
+		return new DeleteExperimentCommand(expID);
 	}
 
 	/**
@@ -90,8 +86,8 @@ public class CommandFactory {
 	 * @param fileID the ID of the file.
 	 * @return the actual command.
 	 */
-	public Command createGetFileFromExperimentCommand(String fileID, UserType userType) {
-		return new GetFileFromExperimentCommand(fileID, userType);
+	public Command createGetFileFromExperimentCommand(String fileID) {
+		return new GetFileFromExperimentCommand(fileID);
 	}
 
 	/**
@@ -99,10 +95,8 @@ public class CommandFactory {
 	 * @param json string to initiate class.
 	 * @return the actual command.
 	 */
-	public Command createAddFileToExperimentCommand(String json, UserType userType) {
-		AddFileToExperimentCommand exp = gson.fromJson(json, AddFileToExperimentCommand.class);
-		exp.setRights(userType);
-		return exp;
+	public Command createAddFileToExperimentCommand(String json) {
+		return gson.fromJson(json, AddFileToExperimentCommand.class);
 	}
 
 	/**
@@ -112,8 +106,8 @@ public class CommandFactory {
 	 * @return the actual command.
 	 */
 	public Command createUpdateFileInExperimentCommand(String json,
-													   String expID, UserType userType) {
-		return new UpdateFileInExperimentCommand(json, expID, userType);
+													   String expID) {
+		return new UpdateFileInExperimentCommand(json, expID);
 	}
 
 	/**
@@ -121,8 +115,8 @@ public class CommandFactory {
 	 * @param fileID the ID of the file.
 	 * @return the actual command.
 	 */
-	public Command createDeleteFileFromExperimentCommand(String fileID, UserType userType) {
-		return new DeleteFileFromExperimentCommand(fileID, userType);
+	public Command createDeleteFileFromExperimentCommand(String fileID) {
+		return new DeleteFileFromExperimentCommand(fileID);
 	}
 
 	/**
@@ -130,9 +124,9 @@ public class CommandFactory {
 	 * @param pubmedQuery the pubmed query.
 	 * @return the actual command.
 	 */
-	public Command createSearchForExperimentCommand(String pubmedQuery, UserType userType) {
+	public Command createSearchForExperimentCommand(String pubmedQuery) {
 		int index = pubmedQuery.indexOf("=");
-		return new SearchForExperimentsCommand(pubmedQuery.substring(index+1), userType);
+		return new SearchForExperimentsCommand(pubmedQuery.substring(index+1));
 	}
 
 	/**
@@ -140,10 +134,8 @@ public class CommandFactory {
 	 * @param json string to initiate class.
 	 * @return the actual command.
 	 */
-	public Command createCreateUserCommand(String json, UserType userType) {
-		CreateUserCommand exp = gson.fromJson(json, CreateUserCommand.class);
-		exp.setRights(userType);
-		return exp;
+	public Command createCreateUserCommand(String json) {
+		return gson.fromJson(json, CreateUserCommand.class);
 	}
 
 	/**
@@ -151,8 +143,8 @@ public class CommandFactory {
 	 * @param username to delete.
 	 * @return the actual command.
 	 */
-	public Command createDeleteUserCommand(String username, UserType userType) {
-		return new DeleteUserCommand(username, userType);
+	public Command createDeleteUserCommand(String username) {
+		return new DeleteUserCommand(username);
 	}
 
 	/**
@@ -163,16 +155,14 @@ public class CommandFactory {
 	 * @return the actual command.
 	 */
 	public Command createProcessCommand(String json, String username,
-										String processType, UserType userType) {
+										String processType) {
 		ProcessCommand processCommand = gson.fromJson(json,
 				ProcessCommand.class);
 		processCommand.setUsername(username);
 		processCommand.setTimestamp(System.currentTimeMillis());
 		processCommand.setProcessType(processType);
-		processCommand.setUserType(userType);
 		Debug.log("Username: " + username + " timestamp: " +
-				System.currentTimeMillis() + " parsedRest: " + processType +
-				" userType: " + userType);
+				System.currentTimeMillis() + " parsedRest: " + processType);
 		return processCommand;
 	}
 
@@ -180,8 +170,8 @@ public class CommandFactory {
 	 * Used to create the command needed to get annotation information.
 	 * @return the actual command.
 	 */
-	public Command createGetAnnotationInformationCommand(UserType userType) {
-		return new GetAnnotationInformationCommand(userType);
+	public Command createGetAnnotationInformationCommand() {
+		return new GetAnnotationInformationCommand();
 	}
 
 	/**
@@ -189,10 +179,8 @@ public class CommandFactory {
 	 * @param json string to initiate class.
 	 * @return the actual command.
 	 */
-	public Command createAddAnnotationFieldCommand(String json, UserType userType) {
-		AddAnnotationFieldCommand exp = gson.fromJson(json, AddAnnotationFieldCommand.class);
-		exp.setRights(userType);
-		return exp;
+	public Command createAddAnnotationFieldCommand(String json) {
+		return gson.fromJson(json, AddAnnotationFieldCommand.class);
 	}
 
 	/**
@@ -200,10 +188,8 @@ public class CommandFactory {
 	 * @param json string to initiate class.
 	 * @return the actual command.
 	 */
-	public Command createAddAnnotationValueCommand(String json, UserType userType) {
-		AddAnnotationValueCommand exp = gson.fromJson(json, AddAnnotationValueCommand.class);
-		exp.setRights(userType);
-		return exp;
+	public Command createAddAnnotationValueCommand(String json) {
+		return gson.fromJson(json, AddAnnotationValueCommand.class);
 	}
 
 	/**
@@ -211,16 +197,16 @@ public class CommandFactory {
 	 * @param fieldName the name of the field.
 	 * @return the actual command.
 	 */
-	public Command createRemoveAnnotationFieldCommand(String fieldName, UserType userType) {
-		return new DeleteAnnotationFieldCommand(fieldName, userType);
+	public Command createRemoveAnnotationFieldCommand(String fieldName) {
+		return new DeleteAnnotationFieldCommand(fieldName);
 	}
 
 	/**
 	 * Used to create the command needed to get annotation privileges.
 	 * @return the actual command.
 	 */
-	public Command createGetAnnotationPrivilegesCommand(String userName, UserType userType) {
-		return new GetAnnotationPrivilegesCommand(userName, userType);
+	public Command createGetAnnotationPrivilegesCommand(String userName) {
+		return new GetAnnotationPrivilegesCommand(userName);
 	}
 
 	/**
@@ -235,8 +221,8 @@ public class CommandFactory {
 	 * @return the actual command.
 	 */
 	public Command createUpdateAnnotationPrivilegesCommand(String json,
-														   String userName, UserType userType) {
-		return new UpdateAnnotationPrivilegesCommand(json, userName, userType);
+														   String userName) {
+		return new UpdateAnnotationPrivilegesCommand(json, userName);
 	}
 
 	/**
@@ -244,10 +230,8 @@ public class CommandFactory {
 	 * @param json string to initiate class.
 	 * @return the actual command created.
 	 */
-	public Command createAddGenomeReleaseCommand(String json, UserType userType) {
-		AddGenomeReleaseCommand exp = gson.fromJson(json, AddGenomeReleaseCommand.class);
-		exp.setRights(userType);
-		return exp;
+	public Command createAddGenomeReleaseCommand(String json) {
+		return gson.fromJson(json, AddGenomeReleaseCommand.class);
 	}
 
 	/**
@@ -266,8 +250,8 @@ public class CommandFactory {
 	 * @return the actual command.
 	 */
 	public Command createDeleteGenomeReleaseCommand(String species,
-													String genomeVersion, UserType userType) {
-		return new DeleteGenomeReleaseCommand(species, genomeVersion, userType);
+													String genomeVersion) {
+		return new DeleteGenomeReleaseCommand(species, genomeVersion);
 	}
 
 	/**
@@ -277,8 +261,8 @@ public class CommandFactory {
 	 * @return the actual command created.
 	 */
 	public Command createDeleteAnnotationValueCommand(String value,
-													  String name, UserType userType) {
-		return new DeleteAnnotationValueCommand(value, name, userType);
+													  String name) {
+		return new DeleteAnnotationValueCommand(value, name);
 	}
 
 	/**
@@ -286,19 +270,16 @@ public class CommandFactory {
 	 * @param json string to initiate class.
 	 * @return the actual command.
 	 */
-	public Command createEditAnnotationFieldCommand(String json, UserType userType) {
-
-		EditAnnotationFieldCommand exp = gson.fromJson(json, EditAnnotationFieldCommand.class);
-		exp.setRights(userType);
-		return exp;
+	public Command createEditAnnotationFieldCommand(String json) {
+		return gson.fromJson(json, EditAnnotationFieldCommand.class);
 	}
 
 	/**
 	 * Used to create the command needed to get all genome releases.
 	 * @return the actual command.
 	 */
-	public Command createGetAllGenomeReleasesCommand(UserType userType) {
-		return new GetGenomeReleaseCommand(userType);
+	public Command createGetAllGenomeReleasesCommand() {
+		return new GetGenomeReleaseCommand();
 	}
 
 	/**
@@ -307,17 +288,17 @@ public class CommandFactory {
 	 * @param species to get.
 	 * @return the actual command.
 	 */
-	public Command createGetGenomeReleasesSpeciesCommand(String species, UserType userType) {
-		return new GetGenomeReleaseSpeciesCommand(species, userType);
+	public Command createGetGenomeReleasesSpeciesCommand(String species) {
+		return new GetGenomeReleaseSpeciesCommand(species);
 	}
 
 	/**
 	 * Used to create the command needed to get the process status.
-	 * @param workPool class object needed.
+	 * @param workHandler class object needed.
 	 * @return the actual command.
 	 */
-	public Command createGetProcessStatusCommand(WorkPool workPool, UserType userType) {
-		return new GetProcessStatusCommand(workPool, userType);
+	public Command createGetProcessStatusCommand(WorkPool workPool) {
+		return new GetProcessStatusCommand(workPool);
 	}
 
 	/**

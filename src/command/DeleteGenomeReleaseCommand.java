@@ -23,17 +23,12 @@ public class DeleteGenomeReleaseCommand extends Command {
 	private String genomeVersion;
 	private String species;
 
-	/**
-	 * Constructs a new instance of DeleteGenomeReleaseCommand using the
-	 * supplied species name and genome version.
-	 *
-	 * @param species the name of the species.
-	 * @param genomeVersion the genome version.
-	 */
-	public DeleteGenomeReleaseCommand(String species, String genomeVersion, UserType userType) {
-		this.genomeVersion = genomeVersion;
-		this.species = species;
+	@Override
+	public void setFields(String uri, String uuid, UserType userType) {
 		this.userType = userType;
+		String[] splitFields = uri.split("/");
+		species = splitFields[1];
+		genomeVersion = splitFields[2];
 	}
 
 	@Override
@@ -66,7 +61,7 @@ public class DeleteGenomeReleaseCommand extends Command {
 				}
 			}
 			return new ErrorResponse(StatusCode.BAD_REQUEST, "Version " +
-					genomeVersion + " or specie " + species +
+					genomeVersion + " or species " + species +
 					" does not exist.");
 		} catch (SQLException | IOException e) {
 			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());

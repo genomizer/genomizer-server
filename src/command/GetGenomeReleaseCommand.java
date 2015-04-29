@@ -20,9 +20,12 @@ import response.StatusCode;
  */
 
 public class GetGenomeReleaseCommand extends Command {
-
-	public GetGenomeReleaseCommand(UserType userType){
+	@Override
+	public void setFields(String uri, String uuid, UserType userType) {
 		this.userType = userType;
+
+		/*No fields from the URI is needed, neither is the UUID. Dummy
+		implementation*/
 	}
 
 	@Override

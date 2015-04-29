@@ -31,6 +31,13 @@ public class EditAnnotationFieldCommand extends Command {
 	private String newName = null;
 
 	@Override
+	public void setFields(String uri, String uuid) {
+
+		/*No fields from the URI is needed, neither is the UUID. Dummy
+		implementation*/
+	}
+
+	@Override
 	public void validate() throws ValidateException {
 		hasRights(UserRights.getRights(this.getClass()));
 		validateString(oldName, MaxLength.ANNOTATION_LABEL,

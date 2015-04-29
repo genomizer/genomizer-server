@@ -19,14 +19,10 @@ import response.StatusCode;
 public class DeleteUserCommand extends Command {
 	public String username;
 
-	/**
-	 * Constructs a new instance of DeleteUserCommand using the supplied
-	 * username.
-	 * @param username the username to delete.
-	 */
-	public DeleteUserCommand(String username, UserType userType) {
-		this.username = username;
+	@Override
+	public void setFields(String uri, String uuid, UserType userType) {
 		this.userType = userType;
+		username = uri.split("/")[1];
 	}
 
 	@Override

@@ -6,13 +6,20 @@ import response.Response;
 import response.StatusCode;
 
 /**
- * This class is used to check if a token is valid.
- *
- * @author Business Logic 2015.
- * @version 1.1
- */
+* This class is used to check if a token is valid.
+*
+* @author Business Logic 2015.
+* @version 1.1
+*/
 public class IsTokenValidCommand extends Command {
 	private String uuid;
+
+	@Override
+	public void setFields(String uri, String uuid) {
+
+		/*No fields from the URI is needed, neither is the UUID. Dummy
+		implementation*/
+	}
 
 	/**
 	 * Constructs a new instance of IsTokenValidCommand using the supplied

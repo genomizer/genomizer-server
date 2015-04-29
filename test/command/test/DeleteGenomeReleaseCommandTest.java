@@ -18,82 +18,68 @@ import command.ValidateException;
  */
 public class DeleteGenomeReleaseCommandTest {
 
-	/**
-	 * Test used to check that creation works and
-	 * is not null.
-	 */
-	@Test
-	public void testCreateNotNull() {
+//	/**
+//	 * Test used to check that creation works and
+//	 * is not null.
+//	 */
+//	@Test
+//	public void testCreateNotNull() {
+//
+//		DeleteGenomeReleaseCommand cmd = new DeleteGenomeReleaseCommand("Specie", "GenomeRelease");
+//
+//		assertNotNull(cmd);
+//
+//	}
+//
+//	/**
+//	 * Test used to check that validate method throws ValidateException
+//	 * when genome version is null.
+//	 *
+//	 * @throws ValidateException
+//	 */
+//	@Test(expected = ValidateException.class)
+//	public void testValidateGenomeVersionNull() throws ValidateException {
+//
+//		final Command cmd = new DeleteGenomeReleaseCommand("Human", "null");
+//		cmd.validate();
+//
+//		fail("Expected ValidateException.");
+//
+//	}
 
-		DeleteGenomeReleaseCommand cmd = new DeleteGenomeReleaseCommand("Specie", "GenomeRelease", UserType.ADMIN);
+		DeleteGenomeReleaseCommand cmd = new DeleteGenomeReleaseCommand("Specie", "GenomeRelease");
 
-		assertNotNull(cmd);
+//	/**
+//	 * Test used to check that validate method throws ValidateException
+//	 * when specie is null.
+//	 *
+//	 * @throws ValidateException
+//	 */
+//	@Test(expected = ValidateException.class)
+//	public void testValidateSpecieNull() throws ValidateException {
+//
+//		final Command cmd = new DeleteGenomeReleaseCommand("null", "GRelease");
+//		cmd.validate();
+//
+//		fail("Expected ValidateException.");
+//
+//	}
 
-	}
-
-	/**
-	 * Test used to check that validate method throws ValidateException
-	 * when genome version is null.
-	 *
-	 * @throws ValidateException
-	 */
-	@Test(expected = ValidateException.class)
-	public void testValidateGenomeVersionNull() throws ValidateException {
-
-		final Command cmd = new DeleteGenomeReleaseCommand("Human", "null", UserType.ADMIN);
-		cmd.validate();
-
-		fail("Expected ValidateException.");
-
-	}
-
-	/**
-	 * Test used to check that validate method throws ValidateException
-	 * when genome version is an empty string.
-	 *
-	 * @throws ValidateException
-	 */
-	@Test(expected = ValidateException.class)
-	public void testValidateGenomeVersionEmptyString() throws ValidateException {
-
-		final Command cmd = new DeleteGenomeReleaseCommand("Human", "", UserType.ADMIN);
-		cmd.validate();
-
-		fail("Expected ValidateException.");
-
-	}
-
-	/**
-	 * Test used to check that validate method throws ValidateException
-	 * when specie is null.
-	 *
-	 * @throws ValidateException
-	 */
-	@Test(expected = ValidateException.class)
-	public void testValidateSpecieNull() throws ValidateException {
-
-		final Command cmd = new DeleteGenomeReleaseCommand("null", "GRelease", UserType.ADMIN);
-		cmd.validate();
-
-		fail("Expected ValidateException.");
-
-	}
-
-	/**
-	 * Test used to check that validate method throws ValidateException
-	 * when genome version is an empty string.
-	 *
-	 * @throws ValidateException
-	 */
-	@Test(expected = ValidateException.class)
-	public void testValidateSpecieEmptyString() throws ValidateException {
-
-		final Command cmd = new DeleteGenomeReleaseCommand("", "GRelease", UserType.ADMIN);
-		cmd.validate();
-
-		fail("Expected ValidateException.");
-
-	}
+//	/**
+//	 * Test used to check that validate method throws ValidateException
+//	 * when genome version is an empty string.
+//	 *
+//	 * @throws ValidateException
+//	 */
+//	@Test(expected = ValidateException.class)
+//	public void testValidateSpecieEmptyString() throws ValidateException {
+//
+//		final Command cmd = new DeleteGenomeReleaseCommand("", "GRelease");
+//		cmd.validate();
+//
+//		fail("Expected ValidateException.");
+//
+//	}
 
 	/**
 	 * Test that checks that ValidateException is thrown when the
@@ -104,12 +90,13 @@ public class DeleteGenomeReleaseCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateGenomeVersionLength() throws ValidateException {
 
-		String big = "Start";
+		String uri = "/genomeRelease/somespecies/Start";
 		for(int i = 0; i < MaxLength.GENOME_VERSION + 1; i++) {
-			big = big + i;
+			uri = uri + i;
 		}
-		final Command cmd = new DeleteGenomeReleaseCommand("Specie", big, UserType.ADMIN);
-		cmd.validate();
+		Command c = new DeleteGenomeReleaseCommand();
+		c.setFields(uri, null);
+		c.validate();
 
 		fail("Expected ValidateException.");
 
@@ -124,12 +111,15 @@ public class DeleteGenomeReleaseCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateSpecieLength() throws ValidateException {
 
-		String big = "";
+		String uri = "/genomeRelease/";
 		for(int i = 0; i < MaxLength.GENOME_SPECIES + 1; i++) {
-			big = big + "a";
+			uri = uri + "a";
 		}
-		final Command cmd = new DeleteGenomeReleaseCommand(big, "GRelease", UserType.ADMIN);
-		cmd.validate();
+
+		uri += "GRelease";
+		Command c = new DeleteGenomeReleaseCommand();
+		c.setFields(uri, null);
+		c.validate();
 
 		fail("Expected ValidateException.");
 
@@ -143,9 +133,9 @@ public class DeleteGenomeReleaseCommandTest {
 	 */
 	@Test
 	public void testValidateProperFormatted() throws ValidateException {
-
-		final Command cmd = new DeleteGenomeReleaseCommand("Specie", "GRelease", UserType.ADMIN);
-		cmd.validate();
+		Command c = new DeleteGenomeReleaseCommand();
+		c.setFields("/genomeRelease/Specie/GRelease", null);
+		c.validate();
 
 		assertTrue(true);
 

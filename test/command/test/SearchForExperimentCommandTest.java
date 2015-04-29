@@ -5,8 +5,8 @@ import static org.junit.Assert.*;
 import command.ValidateException;
 import database.subClasses.UserMethods.UserType;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
-import command.CommandFactory;
 import command.SearchForExperimentsCommand;
 
 /**
@@ -18,38 +18,38 @@ import command.SearchForExperimentsCommand;
  */
 public class SearchForExperimentCommandTest {
 
-	private SearchForExperimentsCommand command;
-
-	@Before
-	public void setup() {
-
-		CommandFactory factory = new CommandFactory();
-		command = (SearchForExperimentsCommand) factory.createSearchForExperimentCommand("/search/annotations=Exp1[ExpID]", UserType.ADMIN);
-
-	}
-
-	/**
-	 * Test used to check that a search command object can
-	 * be created and is not null.
-	 */
-	@Test
-	public void shouldCreateSearchCommand() {
-
-		assertNotNull(command);
-
-	}
-
-	/**
-	 * Method used to check that strings are equal.
-	 *
-	 * @throws Exception
-	 */
-	@Test
-	public void shouldParseSearchString() throws Exception {
-
-		assertEquals("Exp1[ExpID]",command.getAnnotations());
-
-	}
+//	private SearchForExperimentsCommand command;
+//
+//	@Before
+//	public void setup() {
+//
+//		CommandFactory factory = new CommandFactory();
+//		command = (SearchForExperimentsCommand) factory.createSearchForExperimentCommand("/search/annotations=Exp1[ExpID]");
+//
+//	}
+//
+//	/**
+//	 * Test used to check that a search command object can
+//	 * be created and is not null.
+//	 */
+//	@Test
+//	public void shouldCreateSearchCommand() {
+//
+//		assertNotNull(command);
+//
+//	}
+//
+//	/**
+//	 * Method used to check that strings are equal.
+//	 *
+//	 * @throws Exception
+//	 */
+//	@Test
+//	public void shouldParseSearchString() throws Exception {
+//
+//		assertEquals("Exp1[ExpID]",command.getAnnotations());
+//
+//	}
 
 	/**
 	 * Test used to check that ValidateException is not thrown

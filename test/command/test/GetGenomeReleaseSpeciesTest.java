@@ -3,6 +3,7 @@ package command.test;
 import static org.junit.Assert.*;
 
 import command.GetGenomeReleaseCommand;
+import command.Command;
 import database.constants.MaxLength;
 import database.subClasses.UserMethods.UserType;
 import org.junit.Test;
@@ -18,14 +19,52 @@ import command.ValidateException;
  */
 public class GetGenomeReleaseSpeciesTest {
 
-	/**
-	 * Test used to check that creation works and object
-	 * is not null.
-	 */
-	@Test
-	public void testCreationNotNull() {
+//	/**
+//	 * Test used to check that creation works and object
+//	 * is not null.
+//	 */
+//	@Test
+//	public void testCreationNotNull() {
+//
+//		GetGenomeReleaseSpeciesCommand c = new GetGenomeReleaseSpeciesCommand("testing");
+//
+//		assertNotNull(c);
+//
+//	}
+//
+//	/**
+//	 * Test used to check that ValidateException is thrown when
+//	 * species is an empty string.
+//	 *
+//	 * @throws ValidateException
+//	 */
+//	@Test(expected = ValidateException.class)
+//	public void testValidateSpeciesEmptyString() throws ValidateException {
+//
+//		GetGenomeReleaseSpeciesCommand c = new GetGenomeReleaseSpeciesCommand("");
+//		c.validate();
+//
+//		fail("Expected ValidateException to be thrown.");
+//
+//	}
+//
+//	/**
+//	 * Test used to check that ValidateException is thrown when
+//	 * species is null.
+//	 *
+//	 * @throws ValidateException
+//	 */
+//	@Test(expected = ValidateException.class)
+//	public void testValidateSpeciesNotNull() throws ValidateException {
+//
+//		GetGenomeReleaseSpeciesCommand c = new GetGenomeReleaseSpeciesCommand(null);
+//		c.validate();
+//
+//		fail("Expected ValidateException to be thrown.");
+//
+//	}
 
-		GetGenomeReleaseSpeciesCommand c = new GetGenomeReleaseSpeciesCommand("testing", UserType.ADMIN);
+		GetGenomeReleaseSpeciesCommand c = new GetGenomeReleaseSpeciesCommand("testing");
 
 		assertNotNull(c);
 
@@ -40,7 +79,7 @@ public class GetGenomeReleaseSpeciesTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateSpeciesEmptyString() throws ValidateException {
 
-		GetGenomeReleaseSpeciesCommand c = new GetGenomeReleaseSpeciesCommand("", UserType.ADMIN);
+		GetGenomeReleaseSpeciesCommand c = new GetGenomeReleaseSpeciesCommand("");
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -56,7 +95,7 @@ public class GetGenomeReleaseSpeciesTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateSpeciesNotNull() throws ValidateException {
 
-		GetGenomeReleaseSpeciesCommand c = new GetGenomeReleaseSpeciesCommand(null, UserType.ADMIN);
+		GetGenomeReleaseSpeciesCommand c = new GetGenomeReleaseSpeciesCommand(null);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -72,11 +111,11 @@ public class GetGenomeReleaseSpeciesTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateSpeciesLength() throws ValidateException {
 
-		String big = "";
+		String uri = "/genomeRelease/";
 		for(int i = 0; i < MaxLength.GENOME_SPECIES + 1; i++) {
-			big = big + "a";
+			uri = uri + "a";
 		}
-		GetGenomeReleaseSpeciesCommand c = new GetGenomeReleaseSpeciesCommand(big, UserType.ADMIN);
+		GetGenomeReleaseSpeciesCommand c = new GetGenomeReleaseSpeciesCommand(big);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -92,7 +131,7 @@ public class GetGenomeReleaseSpeciesTest {
 	@Test
 	public void testValidateProperlyFormatted() throws ValidateException {
 
-		GetGenomeReleaseSpeciesCommand c = new GetGenomeReleaseSpeciesCommand("properly", UserType.ADMIN);
+		GetGenomeReleaseSpeciesCommand c = new GetGenomeReleaseSpeciesCommand("properly");
 		c.validate();
 
 		assertTrue(true);

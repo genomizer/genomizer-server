@@ -16,26 +16,27 @@ import command.UpdateFileInExperimentCommand;
  * @version 1.0
  */
 public class UpdateFileInExperimentTest {
+////TODO Implement tests later
+//
+//	/**
+//	 * Test that creation works and object is not null.
+//	 */
+//	@Test
+//	public void testCreateNotNull() {
+//		UpdateFileInExperimentCommand c = new UpdateFileInExperimentCommand("","");
+//		assertNotNull(c);
+//
+//	}
+//
+//	/**
+//	 * Test used to check that validate always returns true.
+//	 */
+//	@Test
+//	public void testValidateAlwaysTrue() {
+//		UpdateFileInExperimentCommand c = new UpdateFileInExperimentCommand("","");
+//		c.validate();
+//	}
 //TODO Implement tests later
-
-	/**
-	 * Test that creation works and object is not null.
-	 */
-	@Test
-	public void testCreateNotNull() {
-		UpdateFileInExperimentCommand c = new UpdateFileInExperimentCommand("","", UserType.ADMIN);
-		assertNotNull(c);
-
-	}
-
-	/**
-	 * Test used to check that validate always returns true.
-	 */
-	@Test
-	public void testValidateAlwaysTrue() throws ValidateException {
-		UpdateFileInExperimentCommand c = new UpdateFileInExperimentCommand("","",UserType.ADMIN);
-		c.validate();
-	}
 
 	/**
 	 * Test used to check that ValidateException is not thrown

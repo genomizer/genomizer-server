@@ -2,6 +2,8 @@ package command.test;
 
 import static org.junit.Assert.*;
 
+import org.junit.Ignore;
+
 import command.ValidateException;
 import database.subClasses.UserMethods.UserType;
 import org.junit.Test;
@@ -14,20 +16,32 @@ import command.UpdateExperimentCommand;
  * @author Kommunikation/kontroll 2014.
  * @version 1.0
  */
+
 public class UpdateExperimentCommandTest {
-	//TODO Implement more tests
-
-	/**
-	 * Test used to check that creation works and object
-	 * is not null.
-	 */
-	@Test
-	public void testCreationNotNull() {
-
-		UpdateExperimentCommand c = new UpdateExperimentCommand("", "", UserType.ADMIN);
-		assertNotNull(c);
-
-	}
+//	//TODO Implement tests later
+//
+//	/**
+//	 * Test used to check that creation works and object
+//	 * is not null.
+//	 */
+//	@Test
+//	public void testCreationNotNull() {
+//
+//		UpdateExperimentCommand c = new UpdateExperimentCommand("", "");
+//		assertNotNull(c);
+//
+//	}
+//
+//	/**
+//	 * Test used to check that validate always returns true.
+//	 */
+//	@Test
+//	public void testValidateAlwaysTrue() {
+//
+//		UpdateExperimentCommand c = new UpdateExperimentCommand("", "");
+//		c.validate();
+//
+//	}
 
 	/**
 	 * Test used to check that ValidateException is not thrown

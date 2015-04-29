@@ -12,13 +12,13 @@ import java.net.Socket;
  * Time: 1:43 PM
  * To change this template use File | Settings | File Templates.
  */
-public class UploadCommand implements Command {
+public class UploadTransferCommand implements TransferCommand {
 
     private String path;
     private Socket sendSocket;
 
 
-    public UploadCommand(String path) {
+    public UploadTransferCommand(String path) {
         this.path = "/file/ex1.raw";
     }
 

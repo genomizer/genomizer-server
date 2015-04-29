@@ -11,7 +11,7 @@ import java.net.URLDecoder;
 import database.DatabaseAccessor;
 import database.containers.Experiment;
 
-import database.subClasses.UserMethods;
+import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.Response;
 import response.SearchResponse;
@@ -26,15 +26,11 @@ import response.StatusCode;
 public class SearchForExperimentsCommand extends Command {
 	private String annotations;
 
-	/**
-	 * Constructs a new instance of SearchForExperimentsCommand using the
-	 * supplied annotations.
-	 * @param annotations the annotations (hopefully) belonging to the
-	 *                       experiment.
-	 */
-	public SearchForExperimentsCommand(String annotations, UserMethods.UserType userType) {
-		this.annotations = annotations;
+	@Override
+	public void setFields(String uri, String uuid, UserType userType) {
 		this.userType = userType;
+		int index = uri.indexOf("=");
+		annotations = uri.substring(index+1);
 	}
 
 	@Override

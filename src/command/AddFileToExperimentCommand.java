@@ -43,8 +43,12 @@ public class AddFileToExperimentCommand extends Command {
 	@Expose
 	private String grVersion = null;
 
-	//TODO: Find out what this does.
-	private boolean isPrivate = false;
+	@Override
+	public void setFields(String uri, String uuid) {
+
+		/*No fields from the URI is needed, neither is the UUID. Dummy
+		implementation*/
+	}
 
 	@Override
 	public void validate() throws ValidateException {
@@ -84,7 +88,7 @@ public class AddFileToExperimentCommand extends Command {
 		try {
 			db = initDB();
 			FileTuple ft = db.addNewFile(experimentID, fileType, fileName, null,
-					metaData, author, uploader, isPrivate, grVersion);
+					metaData, author, uploader, false, grVersion);
 			return new AddFileToExperimentResponse(StatusCode.OK,
 					ft.getUploadURL());
 		} catch (SQLException e) {

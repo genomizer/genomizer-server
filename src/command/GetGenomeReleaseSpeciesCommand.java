@@ -23,14 +23,10 @@ import database.containers.Genome;
 public class GetGenomeReleaseSpeciesCommand extends Command {
 	private String species;
 
-	/**
-	 * Constructs a new instance of GetGenomeReleaseSpeciesCommand using the
-	 * supplied restful string.
-	 * @param species the species of the genome.
-	 */
-	public GetGenomeReleaseSpeciesCommand(String species, UserType userType) {
-		this.species = species;
+	@Override
+	public void setFields(String uri, String uuid, UserType userType) {
 		this.userType = userType;
+		species = uri.split("/")[1];
 	}
 
 	@Override
