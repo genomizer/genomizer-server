@@ -21,7 +21,7 @@
 //
 //import authentication.Authenticate;
 //import com.sun.net.httpserver.*;
-//import command.RequestHandler;
+//import server.RequestHandler;
 //import command.CommandType;
 //import response.MinimalResponse;
 //import response.Response;

@@ -1,18 +1,15 @@
-package command;
+package server;
 
 import authentication.Authenticate;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import command.*;
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
-import server.Debug;
-import server.ErrorLogger;
-import server.Util;
-import sun.rmi.runtime.Log;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -51,10 +48,10 @@ public class RequestHandler implements HttpHandler {
 		Class<? extends Command> commandClass = CommandClasses.
 				get(requestMethod + " " + context);
 
-		/*Authenticate the user and send the appropriate response*/
-		String uuid = performAuthorization(exchange);
+		/*Authenticate the user and send the appropriate response if needed.*/
+		String username = performAuthorization(exchange);
 		if (commandClass == null) {
-			if (uuid == null) {
+			if (username == null) {
 				Debug.log("User could not be authenticated!");
 				Response response = new MinimalResponse(StatusCode.
 						UNAUTHORIZED);
@@ -65,7 +62,8 @@ public class RequestHandler implements HttpHandler {
 				respond(createBadRequestResponse(), exchange);
 				return;
 			}
-		} else if (uuid == null && !commandClass.equals(LoginCommand.class)) {
+		} else if (username == null && !commandClass.equals(LoginCommand.
+                class)) {
 			Debug.log("User could not be authenticated!");
 			Response response = new MinimalResponse(StatusCode.
 					UNAUTHORIZED);
@@ -73,24 +71,34 @@ public class RequestHandler implements HttpHandler {
 			return;
 		}
 
+        /*Log the user.*/
+        logUser(username);
+
         /*Retrieve the URI part of the request header.*/
 		String uri = exchange.getRequestURI().toString();
 
-		/*Does the length of the URI match the needed length??*/
+		/*Does the length of the URI match the needed length?*/
 		if (URILength.get(commandClass) != calculateURILength(uri)) {
 			Debug.log("Bad format on command");
 			respond(createBadRequestResponse(), exchange);
 			return;
 		}
 
-        /*Log the user.*/
-		logUser(uuid);
-
 		/*Read the json body and create the command.*/
 		String json = readBody(exchange);
 		logRequestBody(json);
-		Command command = gson.fromJson(json, commandClass);
-		command.setFields(uri, uuid);
+        Command command;
+        try {
+            command = fetchCommand(commandClass, json);
+        } catch (InstantiationException | IllegalAccessException e) {
+            ErrorResponse errorResponse = new ErrorResponse(StatusCode.
+                    INTERNAL_SERVER_ERROR, "Could not create command from " +
+                    "request");
+            respond(errorResponse, exchange);
+            return;
+        }
+
+		command.setFields(uri, username);
 
 		/*Attempt to validate the command.*/
 		try {
@@ -135,18 +143,8 @@ public class RequestHandler implements HttpHandler {
         return requestURI.split("/").length-1;
     }
 
-    /*Returns the uuid of the connected user. Returns null if the user
-	* is not authorized.*/
-    private String getUUID(HttpExchange exchange) {
-        String uuid = exchange.getRequestHeaders().get("Authorization").get(0);
-        if (uuid != null && Authenticate.idExists(uuid)) {
-            Authenticate.updateLatestRequest(uuid);
-            return uuid;
-        } else {
-            return null;
-        }
-    }
-
+    /*Performs authorization, returns null if the user could not be authorized,
+    * else it returns the username.*/
 	private String performAuthorization(HttpExchange exchange) {
 		String uuid = null;
 
@@ -166,8 +164,8 @@ public class RequestHandler implements HttpHandler {
 				if (uuid == null || uuid.equals(uuid2)) {
 					uuid = uuid2;
 				} else {
-					Debug.log("Authorization header "
-							+ "and token parameter values differ!");
+					Debug.log("Authorization header and token parameter " +
+                            "values differ!");
 					return null;
 				}
 			}
@@ -177,13 +175,8 @@ public class RequestHandler implements HttpHandler {
 		Debug.log("Trying to authenticate token " + uuid + "...");
 		if (uuid != null && Authenticate.idExists(uuid)) {
 			Authenticate.updateLatestRequest(uuid);
-			Debug.log("User " + Authenticate.getUsernameByID(uuid)
-					+ " authenticated successfully.");
 			return uuid;
 		} else {
-			Debug.log("Unauthorized request!");
-			Response errorResponse = new MinimalResponse(StatusCode.
-					UNAUTHORIZED);
 			return null;
 		}
 	}
@@ -198,6 +191,18 @@ public class RequestHandler implements HttpHandler {
 
         scanner.close();
         return body;
+    }
+
+    /*Attempts to create a command given a class object and a json string.*/
+    private Command fetchCommand(Class<? extends Command> commandClass,
+                                 String json) throws InstantiationException,
+            IllegalAccessException {
+        Command command = gson.fromJson(json, commandClass);
+        if (command == null) {
+            return commandClass.newInstance();
+        } else {
+            return command;
+        }
     }
 
 	/*Creates a bad request ErrorResponse.*/
@@ -226,8 +231,7 @@ public class RequestHandler implements HttpHandler {
 	}
 
 	/*Used to a log that a user was authenticated.*/
-	private void logUser(String uuid) {
-		String username = Authenticate.getUsernameByID(uuid);
-		Debug.log("Username: " + username + "\n");
+	private void logUser(String username) {
+        Debug.log("User " + username + " authenticated successfully.");
 	}
 }

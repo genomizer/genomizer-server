@@ -7,7 +7,6 @@ import java.util.concurrent.Executor;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
-import command.RequestHandler;
 
 /**
  * Used to receive requests and forward them to a request handler (which will
