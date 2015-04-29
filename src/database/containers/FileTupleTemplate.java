@@ -8,4 +8,27 @@ public class FileTupleTemplate extends AbstractFileTuple {
     public FileTupleTemplate() {
     }
 
+    public FileTuple toFileTuple(Integer id,
+                                 String type,
+                                 String filename,
+                                 String status) {
+
+        return  (new FileTupleBuilder()).fileTuple()
+                .withAuthor(this.getAuthor())
+                .withDate(this.getDate())
+                .withGrVersion(this.getGrVersion())
+                .withExpId(this.getExpId())
+                .withInputFilePath(this.getInputFilePath())
+                .withPath(this.getPath() + filename)
+                .withFilename(filename)
+                .withMetaData(this.getMetaData())
+                .withProcessFlags(this.getProcessFlags())
+                .withProcessName(this.getProcessName())
+                .withProcessVersion(this.getProcessVersion())
+                .withStatus(status)
+                .withType(type)
+                .withId(id)
+                .isPrivate(this.isPrivate())
+                .withUploader(this.getUploader()).build();
+    }
 }
