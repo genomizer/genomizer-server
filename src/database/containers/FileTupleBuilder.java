@@ -116,6 +116,21 @@ public class FileTupleBuilder {
         return this;
     }
 
+    public FileTupleBuilder withProcessName(String pName) {
+        product.setProcessName(pName);
+        return this;
+    }
+
+    public FileTupleBuilder withProcessVersion(String pVersion) {
+        product.setProcessVersion(pVersion);
+        return this;
+    }
+
+    public FileTupleBuilder withProcessFlags(String pFlags) {
+        product.setProcessFlags(pFlags);
+        return this;
+    }
+
     public FileTuple build(){
         return product;
     }
