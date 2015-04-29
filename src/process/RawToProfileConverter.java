@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Stack;
 
+import server.ServerSettings;
+
 /**
  * Class used to create profile data from .fastq format.
  * Can run a dynamic number of steps depending of which parameters thats sent
@@ -37,7 +39,6 @@ public class RawToProfileConverter extends Executor {
 	 * Constructor that initializes some datastructures used by the class.
 	 */
 	public RawToProfileConverter() {
-		super();
 		toBeRemoved = new Stack<String>();
 		checker = RawToProfileProcessChecker.rawToProfileCheckerFactory();
 		validator = new ParameterValidator();
@@ -61,9 +62,9 @@ public class RawToProfileConverter extends Executor {
 	 *
 	 * @param parameters
 	 *            String array with execution parameters
-	 * @param inFile
+	 * @param inFolder
 	 *            The filepath to the file to create a wig from
-	 * @param outFile
+	 * @param outFilePath
 	 *            Filepath to where the .wig file should be placed.
 	 * @throws ProcessException
 	 */
@@ -535,9 +536,9 @@ public class RawToProfileConverter extends Executor {
 			throws ProcessException {
 		String bowTieParams = checkBowTieProcessors(parameters[0]);
 
-		String[] bowTieParameters = parse("bowtie " + bowTieParams + " "
-				+ parameters[1] + " " + inFolder + "/" + fileOne + " " + dir
-				+ fileOneName + ".sam");
+		String[] bowTieParameters = parse(ServerSettings.bowtieLocation +
+				" " + bowTieParams + " " + parameters[1] + " " +
+				inFolder + "/" + fileOne + " " + dir + fileOneName + ".sam");
 
 		try {
 			return executeProgram(bowTieParameters);

@@ -1,6 +1,8 @@
 package command.test;
 
 import static org.junit.Assert.*;
+
+import database.constants.MaxLength;
 import org.junit.Test;
 import command.DeleteFileFromExperimentCommand;
 import command.ValidateException;
@@ -66,7 +68,7 @@ public class DeleteFileFromExperimentCommandTest {
 	public void testValidateFileExpIdLength() throws ValidateException {
 
 		String big = "";
-		for(int i = 0; i < database.constants.MaxSize.FILE_EXPID + 1; i++) {
+		for(int i = 0; i < MaxLength.FILE_EXPID + 1; i++) {
 			big = big + "a";
 		}
 		DeleteFileFromExperimentCommand c = new DeleteFileFromExperimentCommand(big);

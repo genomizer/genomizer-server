@@ -3,6 +3,7 @@ package command;
 import java.io.IOException;
 import java.sql.SQLException;
 import database.DatabaseAccessor;
+import database.constants.MaxLength;
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
@@ -11,59 +12,37 @@ import response.StatusCode;
 /**
  * Class used to represent a delete user command.
  *
- * @author Kommunikation/kontroll 2014.
- * @version 1.0
+ * @author Business Logic 2015.
+ * @version 1.1
  */
 public class DeleteUserCommand extends Command {
-
-
 	public String username;
 
 	/**
-	 * Constructor used to initiate the class.
-	 *
-	 * @param username to delete.
+	 * Constructs a new instance of DeleteUserCommand using the supplied
+	 * username.
+	 * @param username the username to delete.
 	 */
 	public DeleteUserCommand(String username) {
-
 		this.username = username;
-
 	}
 
-	/**
-	 * Method used to validate the DeleteUserCommand.
-	 *
-	 * @return boolean depending on result.
-	 * @throws ValidateException
-	 */
 	@Override
-	public boolean validate() throws ValidateException {
-
+	public void validate() throws ValidateException {
 		if(username == null) {
-
 			throw new ValidateException(StatusCode.BAD_REQUEST,
 					"Username was missing.");
-
 		} else if(username.length() < 1 || username.length() >
-				database.constants.MaxSize.USERNAME) {
-
+				MaxLength.USERNAME) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Username " +
 					"has to be between 1 and " +
-					database.constants.MaxSize.USERNAME + " characters long.");
-
+					MaxLength.USERNAME + " characters long.");
 		}
-
-		return true;
-
 	}
 
-	/**
-	 * Used to execute the actual removal of the user.
-	 */
 	@Override
 	public Response execute() {
-
-		DatabaseAccessor db = null;
+		DatabaseAccessor db;
 		System.out.println("DELETING USER: " + username);
 		try {
 			db = initDB();
@@ -81,7 +60,5 @@ public class DeleteUserCommand extends Command {
 					+ e.getMessage());
 		}
 		return new MinimalResponse(StatusCode.OK);
-
 	}
-
 }

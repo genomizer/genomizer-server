@@ -5,47 +5,37 @@ import com.google.gson.annotations.Expose;
 /**
  * Class used to store annotation.
  *
- * @author Kommunikation/kontroll 2014.
- * @version 1.0
+ * @author Business Logic 2015.
+ * @version 1.1
  */
 public class Annotation {
-	/* All attributes with @Expose are serialized in
-	 * with a JSON string.
-	 */
+	@Expose
+	private String name = null;
 
 	@Expose
-	private String name;
-
-	@Expose
-	private String value;
+	private String value = null;
 
 	/**
-	 * Empty constructor.
+	 * Empty constructor. Suggested when using Gson.
 	 */
 	public Annotation() {
 
 	}
 
 	/**
-	 * Method used to get the name.
-	 *
-	 * @return the name.
+	 * Returns the name of the annotation.
+	 * @return the name of the annotation.
 	 */
 	public String getName() {
-
 		return name;
-
 	}
 
 	/**
-	 * Method used to get the value.
-	 *
-	 * @return the value.
+	 * Returns the value of the annotation.
+	 * @return the value of the annotation.
 	 */
 	public String getValue() {
-
 		return value;
-
 	}
 
 }

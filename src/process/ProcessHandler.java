@@ -1,5 +1,7 @@
 package process;
 
+import command.ProcessCommand;
+
 /**
  * Class that acts as a handler for the procedure and calculation part of the
  * program. the rest of the serverside should always go through this class when
@@ -26,11 +28,11 @@ public class ProcessHandler {
 			String inFile, String outFile) throws ProcessException {
 		String logString = "";
 		switch (processName) {
-			case "rawToProfile":
+			case ProcessCommand.CMD_RAW_TO_PROFILE:
 				RawToProfileConverter rawToProfileConverter = new RawToProfileConverter();
 				logString = rawToProfileConverter.procedure(procedureParams, inFile, outFile);
 				break;
-			case "profileToRegion":
+			case ProcessCommand.CMD_PROFILE_TO_REGION:
 				// TODO
 				break;
 			default:

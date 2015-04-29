@@ -3,6 +3,8 @@ package command;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import database.constants.MaxLength;
 import response.ErrorResponse;
 import response.Response;
 import response.StatusCode;
@@ -13,58 +15,28 @@ import database.containers.Experiment;
 /**
  * Class used to retrieve an experiment.
  *
- * @author Kommunikation/kontroll 2014.
- * @version 1.0
+ * @author Business Logic 2015.
+ * @version 1.1
  */
 public class GetExperimentCommand extends Command {
-
 	/**
-	 * Empty constructor.
+	 * Constructs a new instance of GetExperimentCommand using the supplied
+	 * experiment ID.
+	 * @param expID header to set.
 	 */
-	public GetExperimentCommand(String rest) {
-		header = rest;
+	public GetExperimentCommand(String expID) {
+		this.setHeader(expID);
 	}
 
-	/**
-	 * Method used to validate the GetExperimentCommand class.
-	 *
-	 * @return boolean depending on result.
-	 * @throws ValidateException
-	 */
 	@Override
-	public boolean validate() throws ValidateException {
-
-		if(header == null) {
-
-			throw new ValidateException(StatusCode.BAD_REQUEST,
-					"Experiment name was missing.");
-
-		} else if(header.length() < 1 || header.length() >
-				database.constants.MaxSize.EXPID) {
-
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Experiment " +
-					"name has to be between 1 and "
-					+ database.constants.MaxSize.EXPID + " characters long.");
-
-		} else if(!hasOnlyValidCharacters(header)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
-					"characters in experiment name. Valid characters are: " +
-					validCharacters);
-		}
-
-		return true;
-
+	public void validate() throws ValidateException {
+		validateName(header, MaxLength.EXPID, "Experiment name");
 	}
 
-	/**
-	 * Method used to execute the actual command.
-	 */
 	@Override
 	public Response execute() {
-
 		Experiment exp;
-		DatabaseAccessor db = null;
-
+		DatabaseAccessor db;
 		try {
 			db = initDB();
 		}
@@ -72,16 +44,13 @@ public class GetExperimentCommand extends Command {
 			return new ErrorResponse(StatusCode.BAD_REQUEST, "Could not " +
 					"initialize db: " + e.getMessage());
 		}
-
 		try{
 			exp = db.getExperiment(header);
 		}catch(SQLException e){
 			return new ErrorResponse(StatusCode.BAD_REQUEST, "Could not get " +
 					"experiment: " + e.getMessage());
 		}
-
 		db.close();
-
 		if(exp == null) {
 			return new ErrorResponse(StatusCode.BAD_REQUEST, "Experiment " +
 					"requested from database is null, not found or does not " +
@@ -91,16 +60,10 @@ public class GetExperimentCommand extends Command {
 				exp.getAnnotations(), exp.getFiles());
 	}
 
-	/**
-	 * Method used to get the information.
-	 *
-	 * @param exp experiment object.
-	 * @return an arraylist with information.
-	 */
-	public ArrayList<String> getInfo(Experiment exp) {
-		ArrayList<String> info = new ArrayList<String>();
+	//TODO Handle multiple experiments?
+	private ArrayList<String> getInfo(Experiment exp) {
+		ArrayList<String> info = new ArrayList<>();
 		info.add(exp.getID());
 		return info;
 	}
-
 }

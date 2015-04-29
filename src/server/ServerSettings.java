@@ -11,15 +11,14 @@ public class ServerSettings {
 	public static String databasePassword = null;
 	public static String databaseHost = null;
 	public static String databaseName = null;
-	public static String publicAddress = null;
-	public static int apachePort = -1;
+	public static String wwwTunnelHost = null;
+	public static int wwwTunnelPort = -1;
 	public static String downloadURL = null;
 	public static String uploadURL = null;
 	public static int genomizerPort = -1;
-	public static String passwordHash = null;
-	public static String passwordSalt = null;
-	public static String webUrlUpload = null;
 	public static String fileLocation = "/var/www/data/";
+	public static String bowtieLocation = "bowtie";
+	public static int nrOfProcessThreads = 5;
 
 
 	public static void writeSettings(String path){
@@ -30,15 +29,14 @@ public class ServerSettings {
 					+ "databasePassword = " + databasePassword + "\n"
 					+ "databaseHost = " + databaseHost + "\n"
 					+ "databaseName = " + databaseName + "\n"
-					+ "publicAddress = " + publicAddress + "\n"
-					+ "apachePort = " + apachePort + "\n"
+					+ "wwwTunnelHost = " + wwwTunnelHost + "\n"
+					+ "wwwTunnelPort = " + wwwTunnelPort + "\n"
 					+ "downloadURL = " + downloadURL + "\n"
 					+ "uploadURL = " + uploadURL + "\n"
 					+ "genomizerPort = " + genomizerPort + "\n"
-					+ "passwordHash = " + passwordHash + "\n"
-					+ "passwordSalt = " + passwordSalt + "\n"
 					+ "fileLocation = " + fileLocation + "\n"
-					+ "webUrlUpload = " + webUrlUpload + "\n";
+					+ "nrOfProcessThreads = " + nrOfProcessThreads + "\n"
+					+ "bowtieLocation = " + bowtieLocation + "\n";
 
 			out.write(dataInfo);
 			out.close();
@@ -59,15 +57,14 @@ public class ServerSettings {
 		nullCheck(databasePassword, "databasePassword");
 		nullCheck(databaseHost, "databaseHost");
 		nullCheck(databaseName, "databaseName");
-		nullCheck(publicAddress, "publicAddress");
-		nullCheck(apachePort, "apachePort");
-		nullCheck(downloadURL, "downloadURL");
-		nullCheck(uploadURL, "uploadURL");
+		nullCheck(wwwTunnelHost, "wwwTunnelHost");
+		nullCheck(wwwTunnelPort, "wwwTunnelPort");
+		nullCheck(uploadURL,     "uploadURL");
+		nullCheck(downloadURL,   "downloadURL");
 		nullCheck(genomizerPort, "genomizerPort");
-		nullCheck(passwordHash, "passwordHash");
-		nullCheck(passwordSalt, "passwordSalt");
-		nullCheck(webUrlUpload, "webUrlUpload");
 		nullCheck(fileLocation, "fileLocation");
+		nullCheck(nrOfProcessThreads, "nrOfProcessThreads");
+		nullCheck(bowtieLocation, "bowtieLocation");
 	}
 
 	private static void nullCheck(int parameter, String name) {
@@ -100,6 +97,14 @@ public class ServerSettings {
 
 			while (scan.hasNextLine()) {
 				String line = scan.nextLine();
+
+				// Skip comments and empty lines.
+				if (line.trim().startsWith("#")
+						|| line.trim().equals("")) {
+					continue;
+				}
+				line = line.replaceAll("#.*$","");
+
 				int index = line.indexOf("=");
 
 				String key = line.substring(0, index).trim();
@@ -118,32 +123,29 @@ public class ServerSettings {
 				case "databasename":
 					databaseName = value;
 					break;
-				case "publicaddress":
-					publicAddress = value;
+				case "wwwtunnelhost":
+					wwwTunnelHost = value;
 					break;
-				case "apacheport":
-					apachePort = Integer.parseInt(value);
-					break;
-				case "downloadurl":
-					downloadURL = value;
+				case "wwwtunnelport":
+					wwwTunnelPort = Integer.parseInt(value);
 					break;
 				case "uploadurl":
 					uploadURL = value;
 					break;
+				case "downloadurl":
+					downloadURL = value;
+					break;
 				case "genomizerport":
 					genomizerPort = Integer.parseInt(value);
 					break;
-				case "passwordhash":
-					passwordHash = value;
-					break;
-				case "passwordsalt":
-					passwordSalt = value;
-					break;
-				case "weburlupload":
-					webUrlUpload = value;
-					break;
 				case "filelocation":
 					fileLocation = value;
+					break;
+				case "nrofprocessthreads":
+					nrOfProcessThreads = Integer.parseInt(value);
+					break;
+				case "bowtielocation":
+					bowtieLocation = value;
 					break;
 				default:
 					String msg = "Unrecognized setting: " + key;
@@ -153,25 +155,25 @@ public class ServerSettings {
 				}
 			}
 			scan.close();
-			ServerDependentValues.DownloadURL = publicAddress + ":" +
-					apachePort + downloadURL;
-			ServerDependentValues.UploadURL = publicAddress + ":" +
-					apachePort + uploadURL;
+			ServerDependentValues.DownloadURL = wwwTunnelHost + ":" +
+					wwwTunnelPort + downloadURL;
+			ServerDependentValues.UploadURL = wwwTunnelHost + ":" +
+					wwwTunnelPort + uploadURL;
 
 			String dataInfo =
 					"\tdatabaseUsername = " + databaseUsername + "\n"
 							+ "\tdatabasePassword = " + databasePassword + "\n"
 							+ "\tdatabaseHost = " + databaseHost + "\n"
 							+ "\tdatabaseName = " + databaseName + "\n"
-							+ "\tpublicAddress = " + publicAddress + "\n"
-							+ "\tapachePort = " + apachePort + "\n"
-							+ "\tdownloadURL = " + downloadURL + "\n"
+							+ "\twwwTunnelHost = " + wwwTunnelHost + "\n"
+							+ "\twwwTunnelPort = " + wwwTunnelPort + "\n"
 							+ "\tuploadURL = " + uploadURL + "\n"
+							+ "\tdownloadURL = " + downloadURL + "\n"
 							+ "\tgenomizerPort = " + genomizerPort + "\n"
-							+ "\tpasswordHash = " + passwordHash + "\n"
-							+ "\tpasswordSalt = " + passwordSalt + "\n"
 							+ "\tfileLocation = " + fileLocation + "\n"
-							+ "\twebUrlUpload = " + webUrlUpload + "\n";
+							+ "\tnrOfProcessThreads = " + nrOfProcessThreads + "\n"
+							+ "\tbowtieLocation = " + bowtieLocation
+							+ "\n";
 
 			Debug.log("Imported the following settings:\n" + dataInfo);
 			ErrorLogger.log("SYSTEM", "Imported the following settings:\n" +
