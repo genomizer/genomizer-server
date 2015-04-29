@@ -214,17 +214,16 @@ public abstract class Executor {
 				File[] fileList = file.listFiles();
 
 				// Delete each file with a reference in the array
-				for (int i = 0; i < fileList.length; i++) {
-					if (fileList[i].isFile()) {
+				for (File fileToDelete : fileList) {
+					if (fileToDelete.isFile()) {
 
-						if (fileList[i].delete()) {
+						if (fileToDelete.delete()) {
 							ErrorLogger.log("SYSTEM", "Deleting "
-									+ fileList[i].toString());
-							//throw new ProcessException("Failed to delete file "+fileList[i].toString());
+									+ fileToDelete.toString());
 						} else {
 							isOk = false;
 							ErrorLogger.log("SYSTEM", "Deletion of " +
-									fileList[i] +	" failed.");
+									fileToDelete +	" failed.");
 						}
 					}
 				}
@@ -265,31 +264,29 @@ public abstract class Executor {
 						"If you are running ratio calculation, " +
 						"make sure the name is correct");
 			} else {
-				for (int i = 0; i < filesInDir.length; i++) {
-
+				for (File endFile : filesInDir) {
 
 					// Path to source file
 					Path sourcePath = FileSystems.getDefault().getPath
-							(orgDir, filesInDir[i].getName());
+							(orgDir, endFile.getName());
 
 					// Path to target file
 					Path targetPath = FileSystems.getDefault().getPath
-							(destDir, filesInDir[i].getName());
+							(destDir, endFile.getName());
 
 					// Move file if it is not a directory
-					if (!filesInDir[i].isDirectory()) {
+					if (!endFile.isDirectory()) {
 						try {
 							Files.move(sourcePath, targetPath,
 									StandardCopyOption.REPLACE_EXISTING);
 						} catch (IOException e) {
 							ErrorLogger.log("SYSTEM", "Could not move file "
-									+ filesInDir[i].getName() + " from " +
+									+ endFile.getName() + " from " +
 									sourcePath.toString() + " to " +
 									targetPath.toString());
 						}
 					}
 				}
-
 			}
 		}
 	}
@@ -312,14 +309,13 @@ public abstract class Executor {
 		} else if (filesInDir.length == 1 && filesInDir[0].isDirectory()) {
 			return false;
 		} else if (filesInDir.length >= 1) {
-			for (int i = 0; i < filesInDir.length; i++) {
-				if (!filesInDir[i].isDirectory()) {
-					if (filesInDir[i].length() == 0) {
+			for (File file : filesInDir) {
+				if (!file.isDirectory()) {
+					if (file.length() == 0) {
 						return false;
 					}
 				}
 			}
-
 		}
 		return true;
 	}
