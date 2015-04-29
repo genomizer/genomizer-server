@@ -66,6 +66,7 @@ public class UploadHandler {
         for (String header : headers.keySet()) {
             System.out.println(header + ": " + headers.getFirst(header));
         }
+        @SuppressWarnings("deprecation")
         RequestContext ctx = new RequestContext() {
             @Override
             public String getCharacterEncoding() {
@@ -78,7 +79,6 @@ public class UploadHandler {
                 }
 
             @Override
-            @SuppressWarnings("deprecation")
             public int getContentLength() {
                     return 0; 
                 }
