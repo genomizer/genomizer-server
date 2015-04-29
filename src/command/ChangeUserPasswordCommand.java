@@ -30,8 +30,8 @@ public class ChangeUserPasswordCommand extends Command {
      */
     @Override
     public void validate() throws ValidateException {
-        validateString(username, MaxLength.USERNAME, "Username/Password");
-        validateString(password, MaxLength.PASSWORD, "Username/Password");
+        validateName(username, MaxLength.USERNAME, "Username/Password");
+        validateName(password, MaxLength.PASSWORD, "Username/Password");
     }
 
     /**

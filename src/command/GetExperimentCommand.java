@@ -30,7 +30,7 @@ public class GetExperimentCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-		validateString(header, MaxLength.EXPID, "Experiment name");
+		validateName(header, MaxLength.EXPID, "Experiment name");
 	}
 
 	@Override

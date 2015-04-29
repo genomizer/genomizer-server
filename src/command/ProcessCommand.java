@@ -64,11 +64,11 @@ public class ProcessCommand extends Command {
 	 */
 	@Override
 	public void validate() throws ValidateException {
-		validateString(username, MaxLength.USERNAME, "Username");
-		validateString(expid, MaxLength.EXPID, "Experiment name");
-		validateString(metadata, MaxLength.FILE_METADATA, "Metadata");
-		validateString(genomeVersion, MaxLength.GENOME_VERSION, "Genome version");
-		validateString(processtype, Integer.MAX_VALUE, "Processtype");
+		validateName(username, MaxLength.USERNAME, "Username");
+		validateName(expid, MaxLength.EXPID, "Experiment name");
+		validateName(metadata, MaxLength.FILE_METADATA, "Metadata");
+		validateName(genomeVersion, MaxLength.GENOME_VERSION, "Genome version");
+		validateName(processtype, Integer.MAX_VALUE, "Processtype");
 
 		if(parameters == null){
 			Debug.log("ProcessCommand - Validate\n" +
