@@ -28,7 +28,7 @@ public class SearchForExperimentCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateFileExpIdLength() throws ValidateException {
 
-		String uri = "";
+		String uri = "zz";
 		for(int i = 0; i < MaxLength.ANNOTATION_VALUE + 1; i++) {
 			uri  += "a";
 		}
