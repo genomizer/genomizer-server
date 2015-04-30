@@ -72,13 +72,10 @@ public abstract class Command {
 	 * @throws SQLException
 	 * @throws IOException
 	 */
-	public DatabaseAccessor initDB() throws SQLException, IOException {
-		DatabaseAccessor db;
-		db = new DatabaseAccessor(ServerSettings.databaseUsername,
+	public static DatabaseAccessor initDB() throws SQLException, IOException {
+		return new DatabaseAccessor(ServerSettings.databaseUsername,
 				ServerSettings.databasePassword, ServerSettings.databaseHost,
 				ServerSettings.databaseName);
-
-		return db;
 	}
 
 	/**
@@ -88,7 +85,7 @@ public abstract class Command {
 	 * @return boolean depending on validation result.
 	 */
 	public boolean hasInvalidCharacters(String string) {
-		Pattern p = Pattern.compile("[^A-Za-z0-9_\\. ]");
+		Pattern p = Pattern.compile("[^A-Za-z0-9_\\.\\^ ]");
 		return p.matcher(string).find();
 	}
 
@@ -100,7 +97,7 @@ public abstract class Command {
 	 * @param field the name of the field in question.
 	 * @throws ValidateException if the field does not conform.
 	 */
-	public void validateString(String string, int maxLength, String field)
+	public void validateName(String string, int maxLength, String field)
 			throws ValidateException {
 		if(string == null) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify " +
@@ -119,6 +116,31 @@ public abstract class Command {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid" +
 					" characters in " + field.toLowerCase() +
 					". Valid characters are: " + validCharacters);
+		}
+	}
+
+	/**
+	 * Validates a field by throwing a ValidateException if it doesn't conform
+	 * to specifications.
+	 * @param string the field to be validated.
+	 * @param maxLength the maximum length of the field.
+	 * @param field the name of the field in question.
+	 * @throws ValidateException if the field does not conform.
+	 */
+	public void validateExists(String string, int maxLength, String field)
+			throws ValidateException {
+		if(string == null) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify " +
+					"an " + field.toLowerCase() + ".");
+		}
+		if(string.equals("null")){
+			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid "
+					+ field.toLowerCase() + ".");
+		}
+		if(string.length() > maxLength || string.length() < 1) {
+			throw new ValidateException(StatusCode.BAD_REQUEST, field + ": " +
+					string + " has to be between 1 and " + maxLength +
+					" characters long.");
 		}
 	}
 }

@@ -83,6 +83,7 @@ public abstract class Executor {
 			throw new AccessControlException(
 					"No permission to execute "+executable);
 		}
+
 	}
 
 	/**
@@ -120,25 +121,26 @@ public abstract class Executor {
 		Process process;
 		process = builder.start();
 
-		Scanner s = new Scanner(process.getInputStream());
-		StringBuilder text = new StringBuilder();
-		while (s.hasNextLine()) {
-			text.append(s.nextLine());
-			text.append("\n");
+
+		Scanner processOutput = new Scanner(process.getInputStream());
+		StringBuilder results = new StringBuilder();
+		while (processOutput.hasNextLine()) {
+			results.append(processOutput.nextLine());
+			results.append("\n");
 		}
-		s.close();
+		processOutput.close();
 
 
 		process.waitFor();
 
 		/* Check if command finished successfully */
 		if(process.exitValue() != 0) {
-			throw new RuntimeException(text.toString());
+			throw new RuntimeException(results.toString());
 		}
 
 		// System.out.printf( "Process exited with result %d and output %s%n",
 		// result, text );
-		return text.toString();
+		return results.toString();
 	}
 
 	/**

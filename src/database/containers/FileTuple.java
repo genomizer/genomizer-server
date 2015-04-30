@@ -22,6 +22,9 @@ public class FileTuple extends AbstractFileTuple {
     private String filename;
     private String status;
 
+    //TODO Fix this
+    public final String checkSumMD5;
+
 
     public Integer getId() {
         return id;
@@ -81,10 +84,11 @@ public class FileTuple extends AbstractFileTuple {
         expId = resSet.getString("ExpID");
         grVersion = resSet.getString("GRVersion");
         status = resSet.getString("Status");
+        checkSumMD5 = resSet.getString("MD5");
     }
 
     FileTuple(){
-
+        checkSumMD5 = null;
     }
 
     /**
@@ -149,6 +153,6 @@ public class FileTuple extends AbstractFileTuple {
                 + ", date=" + date + ", metaData=" + metaData + ", author="
                 + author + ", uploader=" + uploader + ", isPrivate="
                 + isPrivate + ", expId=" + expId + ", grVersion=" + grVersion
-                + ", status=" + status + "]";
+                + ", status=" + status + ", md5=" + checkSumMD5 + "]";
     }
 }

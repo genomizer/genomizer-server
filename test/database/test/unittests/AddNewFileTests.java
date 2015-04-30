@@ -41,7 +41,7 @@ public class AddNewFileTests {
         dbac.addExperiment(testExpId);
         ft = dbac.addNewFile(testExpId, testFileType, testFileName,
                 testInputFileName, testMetaData, testAuthor, testUploader,
-                testIsPrivate, null);
+                testIsPrivate, null, null);
 
     }
 
@@ -81,7 +81,7 @@ public class AddNewFileTests {
 
         ft = dbac.addNewFile(testExpId, testFileType, testFileName,
                 testInputFileName, testMetaData, testAuthor, testUploader,
-                testIsPrivate, null);
+                testIsPrivate, null, null);
         ft = dbac.getFileTuple(expectedFilePath);
         assertEquals(expectedFilePath, ft.getPath());
 

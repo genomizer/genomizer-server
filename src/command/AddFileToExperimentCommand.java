@@ -42,18 +42,31 @@ public class AddFileToExperimentCommand extends Command {
 	@Expose
 	private String grVersion = null;
 
+	@Expose
+	private String checkSumMD5 = null;
+
 	//TODO: Find out what this does.
 	private boolean isPrivate = false;
 
 	@Override
 	public void validate() throws ValidateException {
-		validateString(experimentID, MaxLength.EXPID, "Experiment name");
-		validateString(type, MaxLength.FILE_FILETYPE, "File type");
-		validateString(author, MaxLength.FILE_AUTHOR, "Author");
-		validateString(uploader, MaxLength.FILE_UPLOADER, "Uploader");
-		validateString(grVersion, MaxLength.FILE_GRVERSION, "Genome release");
-		validateString(fileName, MaxLength.FILE_FILENAME, "Filename");
-		validateString(metaData, MaxLength.FILE_METADATA, "Metadata");
+		validateName(experimentID, MaxLength.EXPID, "Experiment name");
+		validateName(type, MaxLength.FILE_FILETYPE, "File type");
+		validateName(author, MaxLength.FILE_AUTHOR, "Author");
+		validateName(uploader, MaxLength.FILE_UPLOADER, "Uploader");
+		validateName(grVersion, MaxLength.FILE_GRVERSION, "Genome release");
+		validateName(fileName, MaxLength.FILE_FILENAME, "Filename");
+		validateExists(metaData, MaxLength.FILE_METADATA, "Metadata");
+
+		if (checkSumMD5 != null) {
+			if (checkSumMD5.length() != 32)
+				throw new ValidateException(StatusCode.BAD_REQUEST,
+						"MD5 checksum has incorrect length (should be 32)!");
+			if (!checkSumMD5.matches("[0-9a-fA-F]+"))
+				throw new ValidateException(StatusCode.BAD_REQUEST,
+						"Invalid characters in MD5 "
+						+ "checksum string (should be '[0-9a-fA-F]')!");
+		}
 	}
 
 	public void setUploader(String uploader) {
@@ -82,7 +95,7 @@ public class AddFileToExperimentCommand extends Command {
 		try {
 			db = initDB();
 			FileTuple ft = db.addNewFile(experimentID, fileType, fileName, null,
-					metaData, author, uploader, isPrivate, grVersion);
+					metaData, author, uploader, isPrivate, grVersion, checkSumMD5);
 			return new AddFileToExperimentResponse(StatusCode.OK,
 					ft.getUploadURL());
 		} catch (SQLException e) {
