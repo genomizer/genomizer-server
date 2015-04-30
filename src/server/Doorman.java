@@ -87,7 +87,7 @@ public class Doorman {
 		httpServer.createContext("/annotation/field", requestHandler);
 		httpServer.createContext("/annotation/value", requestHandler);
 		httpServer.createContext("/file", requestHandler);
-		httpServer.createContext("/search", requestHandler);
+		httpServer.createContext("/search/", requestHandler);
 		httpServer.createContext("/user", requestHandler);
 		httpServer.createContext("/process/rawtoprofile", requestHandler);
 		httpServer.createContext("/sysadm", requestHandler);
