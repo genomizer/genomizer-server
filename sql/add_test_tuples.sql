@@ -66,19 +66,18 @@ INSERT INTO Annotated_With  VALUES('Exp3', 'Development Stage', 'Child');
 -- This creates a user called "testuser" with the obvious password
 INSERT INTO User_Info VALUES('testuser', '$2a$10$i31YyxPjtntIVvslbM.esOKv4TaWzssP.MkHw5DpOCs3NhJp4goKq', '$2a$10$i31YyxPjtntIVvslbM.esOKv4TaWzssP.MkHw5DpOCs3NhJp4goKq', 'admin','Test User','test.user.pvt@cs.umu.se');
 
-INSERT INTO File VALUES(DEFAULT, '/var/www/data/Exp1/raw/file1.fastq', 'Raw', 'file1.fastq', CURRENT_TIMESTAMP, NULL, '/var/www/data/Exp1/raw/file1_input.fastq', 'Umeå Uni', 'user1', 'True', 'Exp1', NULL, DEFAULT);
+INSERT INTO File VALUES(DEFAULT, '/var/www/data/Exp1/raw/file1.fastq', 'Raw', 'file1.fastq', CURRENT_TIMESTAMP, NULL, '/var/www/data/Exp1/raw/file1_input.fastq', 'Umeå Uni', 'user1', 'True', 'Exp1', NULL, DEFAULT, NULL);
 
-INSERT INTO File VALUES(DEFAULT, '/var/www/data/Exp1/profile/0/file1.sam', 'Profile', 'file1.sam', CURRENT_TIMESTAMP, '-n 1 --best', '/var/www/data/Exp1/Profile/0/file1_input.sam', 'Genomizer', 'user1', 'false', 'Exp1', 'hg38', DEFAULT);
-
-
-INSERT INTO File VALUES(DEFAULT, '/var/www/data/Exp2/raw/file1.fastq', 'Raw', 'file1.fastq', CURRENT_TIMESTAMP, NULL, '/var/www/data/Exp2/raw/file1_input.fastq', 'UCSC', 'user1', 'false', 'Exp2', NULL, DEFAULT);
+INSERT INTO File VALUES(DEFAULT, '/var/www/data/Exp1/profile/0/file1.sam', 'Profile', 'file1.sam', CURRENT_TIMESTAMP, '-n 1 --best', '/var/www/data/Exp1/Profile/0/file1_input.sam', 'Genomizer', 'user1', 'false', 'Exp1', 'hg38', DEFAULT, NULL);
 
 
-INSERT INTO File VALUES(DEFAULT, '/var/www/data/Exp3/raw/file1.fastq', 'Raw', 'file1.fastq', CURRENT_TIMESTAMP, NULL, '/var/www/data/Exp3/raw/file1_input.fastq', 'UCSC', 'user1', 'false', 'Exp3', NULL, DEFAULT);
+INSERT INTO File VALUES(DEFAULT, '/var/www/data/Exp2/raw/file1.fastq', 'Raw', 'file1.fastq', CURRENT_TIMESTAMP, NULL, '/var/www/data/Exp2/raw/file1_input.fastq', 'UCSC', 'user1', 'false', 'Exp2', NULL, DEFAULT, NULL);
 
-INSERT INTO File VALUES(DEFAULT, '/var/www/data/Exp3/profile/0/file1.sam', 'Profile', 'file1.sam', CURRENT_TIMESTAMP, '-n 1 --best', '/var/www/data//Exp3/profile/0/file1_input.sam', 'Genomizer', 'user1', 'false', 'Exp3', 'rn5', DEFAULT);
+INSERT INTO File VALUES(DEFAULT, '/var/www/data/Exp3/raw/file1.fastq', 'Raw', 'file1.fastq', CURRENT_TIMESTAMP, NULL, '/var/www/data/Exp3/raw/file1_input.fastq', 'UCSC', 'user1', 'false', 'Exp3', NULL, DEFAULT, NULL);
 
-INSERT INTO File VALUES(DEFAULT, '/var/www/data/Exp3/profile/1/file1.sam', 'Profile', 'file2.sam', CURRENT_TIMESTAMP, '-n 2 --best', '/var/www/data/Exp3/profile/1/file1_input.sam', 'Genomizer', 'user1', 'false', 'Exp3', 'rn5', DEFAULT);
+INSERT INTO File VALUES(DEFAULT, '/var/www/data/Exp3/profile/0/file1.sam', 'Profile', 'file1.sam', CURRENT_TIMESTAMP, '-n 1 --best', '/var/www/data//Exp3/profile/0/file1_input.sam', 'Genomizer', 'user1', 'false', 'Exp3', 'rn5', DEFAULT, NULL);
+
+INSERT INTO File VALUES(DEFAULT, '/var/www/data/Exp3/profile/1/file1.sam', 'Profile', 'file2.sam', CURRENT_TIMESTAMP, '-n 2 --best', '/var/www/data/Exp3/profile/1/file1_input.sam', 'Genomizer', 'user1', 'false', 'Exp3', 'rn5', DEFAULT, NULL);
 
 
 
