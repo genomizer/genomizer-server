@@ -20,11 +20,7 @@ nrOfProcessThreads  = 5
 
 bowtieLocation      = resources/bowtie/bowtie
 
-# Address and port of the publicly visible WWW server (if any)
-# that is tunnelling requests to the genomizer server.
-# 'wwwTunnelPath' is the path on the WWW server that
-# requests to genomizer server are mapped to (usually '/api').
+# Publicly visible URL that is used to tunnel
+# user requests to the genomizer API.
 
-wwwTunnelHost       = http://localhost
-wwwTunnelPort       = 7000
-wwwTunnelPath       =
+wwwTunnelURL       = http://localhost:7000/api

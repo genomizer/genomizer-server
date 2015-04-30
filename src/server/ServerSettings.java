@@ -3,6 +3,12 @@ package server;
 import database.constants.ServerDependentValues;
 
 import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class ServerSettings {
@@ -11,11 +17,9 @@ public class ServerSettings {
 	public static String databasePassword = null;
 	public static String databaseHost = null;
 	public static String databaseName = null;
-	public static String wwwTunnelHost = null;
-	public static String wwwTunnelPath = null;
-	public static int wwwTunnelPort = -1;
+	public static URI    wwwTunnelURL = null;
 	public static int genomizerPort = -1;
-	public static String fileLocation = "/var/www/data/";
+	public static Path fileLocation = Paths.get("/var/www/data/");
 	public static String bowtieLocation = "bowtie";
 	public static int nrOfProcessThreads = 5;
 
@@ -30,9 +34,7 @@ public class ServerSettings {
 					+ "databasePassword = " + databasePassword + "\n"
 					+ "databaseHost = " + databaseHost + "\n"
 					+ "databaseName = " + databaseName + "\n"
-					+ "wwwTunnelHost = " + wwwTunnelHost + "\n"
-					+ "wwwTunnelPort = " + wwwTunnelPort + "\n"
-					+ "wwwTunnelPath = " + wwwTunnelPath + "\n"
+					+ "wwwTunnelURL = " + wwwTunnelURL + "\n"
 					+ "genomizerPort = " + genomizerPort + "\n"
 					+ "fileLocation = " + fileLocation + "\n"
 					+ "nrOfProcessThreads = " + nrOfProcessThreads + "\n"
@@ -57,9 +59,7 @@ public class ServerSettings {
 		nullCheck(databasePassword, "databasePassword");
 		nullCheck(databaseHost, "databaseHost");
 		nullCheck(databaseName, "databaseName");
-		nullCheck(wwwTunnelHost, "wwwTunnelHost");
-		nullCheck(wwwTunnelPort, "wwwTunnelPort");
-		nullCheck(wwwTunnelPath, "wwwTunnelPath");
+		nullCheck(wwwTunnelURL, "wwwTunnelURL");
 		nullCheck(genomizerPort, "genomizerPort");
 		nullCheck(fileLocation, "fileLocation");
 		nullCheck(nrOfProcessThreads, "nrOfProcessThreads");
@@ -77,7 +77,7 @@ public class ServerSettings {
 		}
 	}
 
-	private static void nullCheck(String parameter, String name) {
+	private static <T> void nullCheck(T parameter, String name) {
 		if (parameter == null) {
 			String msg = "Error! parameter " + name + " is not set. Check in " +
 					"settings.cfg if it is set and spelled correctly, " +
@@ -88,7 +88,8 @@ public class ServerSettings {
 		}
 	}
 
-	public static void readSettingsFile(String path) throws FileNotFoundException {
+	public static void readSettingsFile(String path)
+			throws FileNotFoundException, URISyntaxException, MalformedURLException {
 		File dbFile = new File(path);
 
 		if (dbFile.exists()) {
@@ -122,20 +123,14 @@ public class ServerSettings {
 				case "databasename":
 					databaseName = value;
 					break;
-				case "wwwtunnelhost":
-					wwwTunnelHost = value;
-					break;
-				case "wwwtunnelport":
-					wwwTunnelPort = Integer.parseInt(value);
-					break;
-				case "wwwtunnelpath":
-					wwwTunnelPath = value;
+				case "wwwtunnelurl":
+					wwwTunnelURL = new URI(value);
 					break;
 				case "genomizerport":
 					genomizerPort = Integer.parseInt(value);
 					break;
 				case "filelocation":
-					fileLocation = value;
+					fileLocation = Paths.get(value);
 					break;
 				case "nrofprocessthreads":
 					nrOfProcessThreads = Integer.parseInt(value);
@@ -151,19 +146,15 @@ public class ServerSettings {
 				}
 			}
 			scan.close();
-			ServerDependentValues.DownloadURL = wwwTunnelHost + ":" +
-					wwwTunnelPort + wwwTunnelPath + downloadURL;
-			ServerDependentValues.UploadURL = wwwTunnelHost + ":" +
-					wwwTunnelPort + wwwTunnelPath + uploadURL;
+			ServerDependentValues.DownloadURL = wwwTunnelURL.resolve(downloadURL);
+			ServerDependentValues.UploadURL = wwwTunnelURL.resolve(uploadURL);
 
 			String dataInfo =
 					"\tdatabaseUsername = " + databaseUsername + "\n"
 							+ "\tdatabasePassword = " + databasePassword + "\n"
 							+ "\tdatabaseHost = " + databaseHost + "\n"
 							+ "\tdatabaseName = " + databaseName + "\n"
-							+ "\twwwTunnelHost = " + wwwTunnelHost + "\n"
-							+ "\twwwTunnelPort = " + wwwTunnelPort + "\n"
-							+ "\twwwTunnelPath = " + wwwTunnelPath + "\n"
+							+ "\twwwTunnelURL = " + wwwTunnelURL + "\n"
 							+ "\tgenomizerPort = " + genomizerPort + "\n"
 							+ "\tfileLocation = " + fileLocation + "\n"
 							+ "\tnrOfProcessThreads = " + nrOfProcessThreads + "\n"
