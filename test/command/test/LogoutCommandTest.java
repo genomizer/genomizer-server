@@ -18,50 +18,21 @@ import command.ValidateException;
  */
 public class LogoutCommandTest {
 
-//	/**
-//	 * Method used to test creation and that object
-//	 * is not null.
-//	 */
-//	@Test
-//	public void testCreateNotNull() {
-//
-//		LogoutCommand c = new LogoutCommand("Username");
-//
-//		assertNotNull(c);
-//
-//	}
-//
-//	/**
-//	 * Test used to check that ValidateExpception is thrown when
-//	 * username is an empty string.
-//	 *
-//	 * @throws ValidateException
-//	 */
-//	@Test(expected = ValidateException.class)
-//	public void testValidateUsernameEmptyString() throws ValidateException {
-//
-//		LogoutCommand c = new LogoutCommand("");
-//		c.validate();
-//
-//		fail("Expected ValidateException to be thrown.");
-//
-//	}
-//
-//	/**
-//	 * Test used to check that ValidateException is thrown when
-//	 * username is null.
-//	 *
-//	 * @throws ValidateException
-//	 */
-//	@Test(expected = ValidateException.class)
-//	public void testValidateUsernameNull() throws ValidateException {
-//
-//		LogoutCommand c = new LogoutCommand(null);
-//		c.validate();
-//
-//		fail("Expected ValidateException to be thrown.");
-//
-//	}
+	/**
+	 * Test used to check that ValidateException is not thrown when
+	 * username is valid.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test
+	public void ShouldValidateCorrectUuid() throws ValidateException {
+		Command c = new LogoutCommand();
+		c.setFields(null, "uuid", UserType.ADMIN);
+		c.validate();
+
+		assertTrue(true);
+	}
+
 
 	/**
 	 * Test used to check that ValidateException is thrown when
@@ -70,7 +41,7 @@ public class LogoutCommandTest {
 	 * @throws ValidateException
 	 */
 	@Test(expected = ValidateException.class)
-	public void testValidateUsernameLength() throws ValidateException {
+	public void testValidateInvalidMaxUsernameLength() throws ValidateException {
 
 		String uuid = "";
 		for(int i = 0; i < MaxLength.USERNAME + 1; i++) {
@@ -81,7 +52,52 @@ public class LogoutCommandTest {
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
+	}
 
+	/**
+	 * Test used to check that ValidateException is thrown when
+	 * username is null
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testValidateUuidNull() throws ValidateException {
+		Command c = new LogoutCommand();
+		c.setFields(null, null, UserType.ADMIN);
+		c.validate();
+
+		fail("Expected ValidateException to be thrown.");
+	}
+
+	/**
+	 * Test used to check that ValidateException is thrown when
+	 * username is an empty string
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testValidateUuidEmptyString() throws ValidateException {
+		Command c = new LogoutCommand();
+		c.setFields(null, "", UserType.ADMIN);
+		c.validate();
+
+		fail("Expected ValidateException to be thrown.");
+	}
+
+
+	/**
+	 * Test used to check that ValidateException is thrown when
+	 * username is an empty string
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testValidateInvalidCharactersUuid() throws ValidateException {
+		Command c = new LogoutCommand();
+		c.setFields(null, "��!?,:;[]{}", UserType.ADMIN);
+		c.validate();
+
+		fail("Expected ValidateException to be thrown.");
 	}
 
 	/**

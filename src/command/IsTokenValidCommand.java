@@ -12,6 +12,7 @@ import response.StatusCode;
 * @author Business Logic 2015.
 * @version 1.1
 */
+@Deprecated
 public class IsTokenValidCommand extends Command {
 	private String uuid;
 
@@ -39,8 +40,9 @@ public class IsTokenValidCommand extends Command {
 
 	@Override
 	public Response execute() {
-		int code = Authenticate.idExists(uuid) ? StatusCode.OK :
-				StatusCode.UNAUTHORIZED;
-		return new MinimalResponse(code);
+		if(Authenticate.idExists(uuid)){
+			return new MinimalResponse(StatusCode.OK);
+		}
+		return new MinimalResponse(StatusCode.UNAUTHORIZED);
 	}
 }
