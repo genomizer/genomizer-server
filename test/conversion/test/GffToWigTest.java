@@ -13,7 +13,11 @@ import java.security.NoSuchAlgorithmException;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Created by c12arr on 2015-04-29.
+ * Tests for conversion from .wig of subtype bed to .sgr
+ * Created 2015-04-29.
+ *
+ * @author Albin Råstander <c12arr@cs.umu.se>
+ * @author Martin Larsson <dv13mln@cs.umu.se>
  */
 public class GffToWigTest {
     private final String outputPath = "resources/conversionTestData/output/";

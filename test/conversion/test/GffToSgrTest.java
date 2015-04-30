@@ -15,51 +15,28 @@ import java.util.Arrays;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Created by c12arr on 2015-04-29.
+ * Tests for conversion from .wig of subtype bed to .sgr
+ * Created 2015-04-29.
+ *
+ * @author Albin Råstander <c12arr@cs.umu.se>
+ * @author Martin Larsson <dv13mln@cs.umu.se>
  */
 public class GffToSgrTest {
     private final String outputPath = "resources/conversionTestData/output/";
-    private final String expectedResultPath = "resources/conversionTestData/expectedResults/";
+    private final String expectedResultPath = "resources/conversionTestData/" +
+            "expectedResults/";
     private File outputFile;
-
-
-    /*
-    *	Private method that uses checksum to compare two files.
-    *	returns true if equal false otherwise.
-     */
-    private boolean compareFiles(File fileA, File fileB) throws IOException, NoSuchAlgorithmException {
-        return (Arrays.equals(fileChecksum(fileA), fileChecksum(fileB)));
-    }
-
-    /*
-    * 	Private method that calculates a checksum for a file, used to compare
-    * 	files.
-    *
-    * 	returns the checksum in a byte array.
-    * */
-    private byte[] fileChecksum(File inputFile) throws NoSuchAlgorithmException, IOException {
-        MessageDigest md = MessageDigest.getInstance("SHA1");
-
-        FileInputStream fileStream = new FileInputStream(inputFile);
-
-        byte[] dataBytes = new byte[1024];
-        int nrOfLines;
-
-        while((nrOfLines = fileStream.read(dataBytes)) != -1) {
-            md.update(dataBytes, 0, nrOfLines);
-
-        }
-
-        return md.digest();
-    }
+    private ConversionResultCompare cmp = new ConversionResultCompare();
 
     /**
      * Tests null argument for input file
      * @throws java.io.FileNotFoundException
      */
     @Test(expected = IllegalArgumentException.class)
-    public void shouldThrowIllegalArgumentIfInputFileIsNull() throws FileNotFoundException {
-        Converter.gffToSgr(null, "resources/conversionTestData/expectedResults/gff2sgrResult.sgr");
+    public void shouldThrowIllegalArgumentIfInputFileIsNull()
+            throws FileNotFoundException {
+        Converter.gffToSgr(null, "resources/conversionTestData/" +
+                "expectedResults/gff2sgrResult.sgr");
     }
 
     /**
@@ -67,8 +44,10 @@ public class GffToSgrTest {
      * @throws FileNotFoundException
      */
     @Test (expected = IllegalArgumentException.class)
-    public void shouldThrowIllegalArgumentIfOutputFileIsNull() throws FileNotFoundException{
-        Converter.gffToSgr("resources/conversionTestData/GFF-testdata.gff", null);
+    public void shouldThrowIllegalArgumentIfOutputFileIsNull()
+            throws FileNotFoundException{
+        Converter.gffToSgr("resources/conversionTestData/GFF-testdata.gff",
+                null);
     }
 
     /**
@@ -76,7 +55,8 @@ public class GffToSgrTest {
      * @throws FileNotFoundException
      */
     @Test (expected = FileNotFoundException.class)
-    public void shouldThrowFileNotFoundIfInputPathIsntAFile() throws FileNotFoundException{
+    public void shouldThrowFileNotFoundIfInputPathIsntAFile()
+            throws FileNotFoundException{
         Converter.gffToSgr("hej", "hej");
     }
 
@@ -85,8 +65,10 @@ public class GffToSgrTest {
      * @throws FileNotFoundException
      */
     @Test (expected = IllegalArgumentException.class)
-    public void shouldThrowIllegalArgumentIfOutputPathIsAFile() throws FileNotFoundException{
-        Converter.gffToSgr("resources/conversionTestData/GFF-testdata.gff", "resources/conversionTestData/SGR-testdata.sgr");
+    public void shouldThrowIllegalArgumentIfOutputPathIsAFile()
+            throws FileNotFoundException{
+        Converter.gffToSgr("resources/conversionTestData/GFF-testdata.gff",
+                "resources/conversionTestData/SGR-testdata.sgr");
     }
 
     /**
@@ -94,8 +76,10 @@ public class GffToSgrTest {
      * @throws FileNotFoundException
      */
     @Test (expected = IllegalArgumentException.class)
-    public void shouldNotAcceptWrongFileTypeForInput() throws FileNotFoundException {
-        Converter.gffToSgr("resources/conversionTestData/BED-testdata.bed", "resources/conversionTestData/output/test.sgr");
+    public void shouldNotAcceptWrongFileTypeForInput()
+            throws FileNotFoundException {
+        Converter.gffToSgr("resources/conversionTestData/BED-testdata.bed",
+                "resources/conversionTestData/output/test.sgr");
     }
 
     /**
@@ -103,8 +87,10 @@ public class GffToSgrTest {
      * @throws FileNotFoundException
      */
     @Test (expected = IllegalArgumentException.class)
-    public void shouldNotAcceptWrongFileTypeForOutput() throws FileNotFoundException {
-        Converter.gffToSgr("resources/conversionTestData/GFF-testdata.gff", "resources/conversionTestData/output/test.bed");
+    public void shouldNotAcceptWrongFileTypeForOutput()
+            throws FileNotFoundException {
+        Converter.gffToSgr("resources/conversionTestData/GFF-testdata.gff",
+                "resources/conversionTestData/output/test.bed");
     }
 
 
@@ -113,13 +99,14 @@ public class GffToSgrTest {
      * @throws FileNotFoundException
      */
     @Test
-    public void shouldExsistAoutputFileAfterConversion() throws FileNotFoundException {
-        Converter.gffToSgr("resources/conversionTestData/GFF-testdata.gff", "resources/conversionTestData/output/test.sgr");
+    public void shouldExsistAoutputFileAfterConversion()
+            throws FileNotFoundException {
+        Converter.gffToSgr("resources/conversionTestData/GFF-testdata.gff",
+                "resources/conversionTestData/output/test.sgr");
 
         outputFile = new File("resources/conversionTestData/output/test.sgr");
 
         assertTrue(outputFile.exists());
-
     }
 
     /**
@@ -128,15 +115,16 @@ public class GffToSgrTest {
      * @throws IOException
      */
     @Test
-    public void gffToSgrCheckSumTest() throws InterruptedException ,IOException {
-        Converter.gffToSgr("resources/conversionTestData/GFF-testdata.gff", "resources/conversionTestData/output/test.sgr");
+    public void gffToSgrCheckSumTest() throws InterruptedException,IOException {
+        Converter.gffToSgr("resources/conversionTestData/GFF-testdata.gff",
+                "resources/conversionTestData/output/test.sgr");
         File expectedFile;
 
         try{
             outputFile = new File(outputPath+"test.sgr");
             expectedFile = new File(expectedResultPath+"gff2sgrResult.sgr");
 
-            assertTrue(compareFiles(outputFile, expectedFile));
+            assertTrue(cmp.compareFiles(outputFile, expectedFile));
         } catch (NullPointerException e) {
             e.printStackTrace();
         } catch (NoSuchAlgorithmException e) {
