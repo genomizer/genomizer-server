@@ -79,7 +79,7 @@ public class DatabaseAccessorThreadTests {
 		dbac.addGenomeRelease("banan", "Fly", "banan38.gr");
 		dbac.addExperiment("Exper1");
 		dbac.addNewFile("Exper1", 1, fileName , filePath,
-								"-m -a -te","Smurf", "Claes", true,"banan");
+								"-m -a -te","Smurf", "Claes", true,"banan", null);
 
 		List<Experiment> resExp = dbac.search("Claes[Uploader]");
 
@@ -168,14 +168,14 @@ public class DatabaseAccessorThreadTests {
 		    		dbac2.addNewFile("Exper1", 1, "StressTest" + i + "_t:" +
 		    				Thread.currentThread().getId() + ".hej" , "Stress" +
 		    				i + "_t:" +	Thread.currentThread().getId(),
-		    				"-m -a -te","Smurf", "Claes", true,"banan");
+		    				"-m -a -te","Smurf", "Claes", true,"banan", null);
 		    	}
 
 		    	dbac2.close();
 
 		    } catch (SQLException e) {
 		    	System.err.println("Failed to add so many files at the " +
-		    			"same time!, Expcetion thrown when " +
+		    			"same time!, Exception thrown when " +
 		    			"adding the " + nr + "file.");
 		    	e.printStackTrace();
 		    	fail();

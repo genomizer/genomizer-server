@@ -13,6 +13,7 @@ CREATE TABLE File
     ExpID VARCHAR(256),
     GRVersion VARCHAR(16),
     Status VARCHAR(16) DEFAULT 'In Progress',
+    MD5    VARCHAR(32),
     CONSTRAINT pkey_file PRIMARY KEY(FileID)
 );
 
