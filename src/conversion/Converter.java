@@ -1,6 +1,7 @@
 package conversion;
 
 import java.io.*;
+import java.util.IllegalFormatException;
 
 /**
  * Handles conversion between different profile file types.
@@ -228,7 +229,7 @@ public class Converter {
                 wigBedToSgr(inputPath, outputPath);
                 break;
             case "fixedStep":
-                //wigFixedStepToSgr(inputPath, outputPath);
+                wigFixedStepToSgr(inputPath, outputPath);
                 break;
             case "variableStep":
                 //wigVariableStepToSgr(inputPath, outputPath);
@@ -302,4 +303,64 @@ public class Converter {
             throw new IllegalArgumentException("Output file already exists.");
 
     }
+
+
+  private static void  wigFixedStepToSgr(String inputPath, String outputPath)
+          throws FileNotFoundException {
+          File inputFile;
+          File outputFile;
+          FileWriter fw;
+
+          checkArguments(inputPath, outputPath);
+
+          if (!inputPath.endsWith(".wig") || !outputPath.endsWith(".sgr")) {
+              throw new IllegalArgumentException("File type not " +
+                      "accepted for this conversion.");
+          }
+
+          inputFile = new File(inputPath);
+          outputFile = new File(outputPath);
+
+          try {
+              fw = new FileWriter(outputFile);
+
+              BufferedReader fr = new BufferedReader(new FileReader(inputFile));
+
+              String line;
+              String []columns;
+              String chrom;
+              int start;
+              int step;
+
+
+              fr.readLine();
+              line = fr.readLine();
+
+              columns = line.split("\\s+");
+
+              if(!columns[0].equals("fixedStep")) {
+                  throw new IllegalArgumentException("File is not of type" +
+                          " fixed step.");
+              }
+
+              chrom = columns[1].substring(6);
+              start = Integer.parseInt(columns[2].substring(6));
+              step = Integer.parseInt(columns[3].substring(5));
+
+
+              while ((line = fr.readLine()) != null) {
+                  if(line.equals("")) {
+                      continue;
+                  }
+                  fw.write(chrom+"\t"+start+"\t"+line+"\n");
+                  start+=step;
+              }
+
+              fw.close();
+              fr.close();
+          } catch (IOException e) {
+              e.printStackTrace();
+          }
+    }
+
 }
