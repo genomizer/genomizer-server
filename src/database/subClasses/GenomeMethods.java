@@ -364,9 +364,7 @@ public class GenomeMethods {
 		stmt.executeUpdate();
 		stmt.close();
 
-		String URL = ServerDependentValues.UploadURL;
-
-		return URL + filePath;
+		return ServerDependentValues.UploadURL.resolve(filePath).toString();
 	}
 
 	/**

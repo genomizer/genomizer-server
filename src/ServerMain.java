@@ -1,6 +1,8 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 // import java.util.Scanner;
 
 import org.apache.commons.cli.CommandLine;
@@ -28,8 +30,7 @@ public class ServerMain {
 	 * @throws ParseException
 	 * @throws FileNotFoundException
 	 */
-	public static void main(String[] args) throws ParseException,
-												  FileNotFoundException {
+	public static void main(String[] args) throws Exception {
 
 		/* First we need to read and validate the settings file. */
 		CommandLine com = loadSettingsFile(args);
@@ -100,6 +101,8 @@ public class ServerMain {
 	 */
 	private static CommandLine loadSettingsFile(String[] args)
 			throws 	FileNotFoundException,
+			        MalformedURLException,
+			        URISyntaxException,
 					ParseException {
 
 		CommandLineParser comline = new BasicParser();

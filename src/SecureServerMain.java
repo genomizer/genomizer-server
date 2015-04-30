@@ -1,6 +1,8 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 // import java.util.Scanner;
 
 import org.apache.commons.cli.CommandLine;
@@ -29,7 +31,10 @@ public class SecureServerMain {
 	 * @throws FileNotFoundException
 	 */
 	public static void main(String[] args) throws ParseException,
-			FileNotFoundException {
+			FileNotFoundException,
+	        MalformedURLException,
+			URISyntaxException
+	{
 
 		/* We firstly need to read and validate the settings file. */
 		CommandLine com = loadSettingsFile(args);
@@ -100,6 +105,8 @@ public class SecureServerMain {
 	 */
 	private static CommandLine loadSettingsFile(String[] args)
 			throws 	FileNotFoundException,
+			MalformedURLException,
+			URISyntaxException,
 			ParseException {
 		// Attempt to load the settings file
 		if (new File(settingsFile).exists()) {
@@ -127,7 +134,7 @@ public class SecureServerMain {
 	 * @throws FileNotFoundException
 	 */
 	private static void handleSuppliedCommandlineOptions(CommandLine com)
-			throws FileNotFoundException {
+			throws FileNotFoundException, URISyntaxException, MalformedURLException {
 		// Port flag
 		if (com.hasOption('p')) {
 			ServerSettings.genomizerPort =
