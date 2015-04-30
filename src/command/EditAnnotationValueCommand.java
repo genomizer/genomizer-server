@@ -44,7 +44,7 @@ public class EditAnnotationValueCommand extends Command {
 		validateString(name, MaxLength.ANNOTATION_LABEL, "Annotation label");
 		validateString(oldValue, MaxLength.ANNOTATION_LABEL,
 				"Old annotation value");
-		validateString(newValue, MaxLength.ANNOTATION_LABEL,
+		validateName(newValue, MaxLength.ANNOTATION_LABEL,
 				"New annotation value");
 	}
 
@@ -76,9 +76,5 @@ public class EditAnnotationValueCommand extends Command {
 				db.close();
 			}
 		}
-	}
-
-	public void setRights(UserType userType){
-		this.userType = userType;
 	}
 }

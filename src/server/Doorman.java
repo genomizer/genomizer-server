@@ -39,8 +39,42 @@ import com.sun.net.httpserver.HttpServer;
 
 //TODO Make the upload handling and download handling into commands.
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.InetSocketAddress;
+import java.net.URLDecoder;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Scanner;
+import java.util.concurrent.Executor;
+
+import command.ValidateException;
+import response.ErrorResponse;
+import response.MinimalResponse;
+import response.Response;
+import response.StatusCode;
+
+import authentication.Authenticate;
+
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
+import com.sun.net.httpserver.HttpServer;
+
+import command.CommandHandler;
+import command.CommandType;
+
+import transfer.DownloadHandler;
+import transfer.UploadHandler;
+import transfer.Util;
+
+
 public class Doorman {
 	private HttpServer httpServer;
+	private CommandHandler commandHandler;
+	private UploadHandler uploadHandler;
+	private DownloadHandler downloadHandler;
 
 	/**
 	 * Constructs a HTTP server (but doesn't start it) which listens on the

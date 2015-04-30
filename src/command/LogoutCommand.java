@@ -25,7 +25,7 @@ public class LogoutCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-		validateString(username, MaxLength.USERNAME, "Username");
+		validateName(username, MaxLength.USERNAME, "Username");
 	}
 
 	@Override

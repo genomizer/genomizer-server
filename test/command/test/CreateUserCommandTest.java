@@ -130,14 +130,13 @@ public class CreateUserCommandTest {
 	/**
 	 * Test used to check privileges min length validation
 	 */
-	@Test (expected = ValidateException.class)
-	public void testValidateInvalidPrivilegesMinLength() throws ValidateException {
+	@Test
+	public void testValidatePrivilegesLength() {
 		json = createJSON("a","b","","d","e");
 		CreateUserCommand cmd2 = gson.fromJson(json, CreateUserCommand.class);
 		cmd2.setFields("uri", "uuid", UserType.ADMIN);
 		cmd2.validate();
 	}
-
 	/**
 	 * Test used to check privileges Max length validation
 	 */

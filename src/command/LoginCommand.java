@@ -38,8 +38,8 @@ public class LoginCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-		validateString(username, MaxLength.USERNAME, "Username/Password");
-		validateString(password, MaxLength.PASSWORD, "Username/Password");
+		validateName(username, MaxLength.USERNAME, "Username/Password");
+		validateName(password, MaxLength.PASSWORD, "Username/Password");
 	}
 
 	@Override
@@ -50,7 +50,8 @@ public class LoginCommand extends Command {
 
 		try {
 			db = initDB();
-		} catch (Exception e) {
+			dbHash = db.getPasswordHash(username);
+		} catch (SQLException | IOException e) {
 			Debug.log("LOGIN WAS UNSUCCESSFUL FOR: " + username + ". REASON: " +
 					e.getMessage());
 			return new ErrorResponse(StatusCode.BAD_REQUEST,
@@ -58,23 +59,13 @@ public class LoginCommand extends Command {
 							e.getMessage());
 		}
 
-		try {
-			dbSalt = db.getPasswordSalt(username);
-			dbHash = db.getPasswordHash(username);
-		} catch (SQLException e) {
-			return new ErrorResponse(StatusCode.BAD_REQUEST, "Database error " +
-					e.getMessage());
+		if(dbHash == null || dbHash.isEmpty()){
+			return new ErrorResponse(StatusCode.UNAUTHORIZED, "Incorrect user name");
 		}
 
-		if(dbSalt == null || dbSalt.isEmpty() || dbHash == null ||
-				dbHash.isEmpty()) {
-			return new ErrorResponse(StatusCode.UNAUTHORIZED,
-					"Incorrect user name");
-		}
+		LoginAttempt login = Authenticate.login(username, password, dbHash);
 
-		LoginAttempt login = Authenticate.login(username, password, dbHash,
-				dbSalt);
-		if (login.wasSuccessful()) {
+		if(login.wasSuccessful()) {
 			Debug.log("LOGIN WAS SUCCESSFUL FOR: "+ username + ". GAVE UUID: " +
 					Authenticate.getID(username));
 			return new LoginResponse(200, login.getUUID());

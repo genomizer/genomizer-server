@@ -47,13 +47,7 @@ public class AddGenomeReleaseCommand extends Command {
 		validateString(genomeVersion, MaxLength.GENOME_VERSION, "Genome version");
 
 		for(int i = 0; i < files.size(); i++) {
-			int sizeCheck = files.get(i).length();
-			if(sizeCheck > MaxLength.GENOME_FILEPATH || sizeCheck < 1) {
-				throw new ValidateException(StatusCode.BAD_REQUEST, "File " +
-						"name has to be between 1 and " +
-						MaxLength.GENOME_FILEPATH +
-						" characters long.");
-			}
+			validateName(files.get(i), MaxLength.GENOME_FILEPATH, "File name");
 		}
 	}
 
@@ -79,7 +73,4 @@ public class AddGenomeReleaseCommand extends Command {
 		}
 	}
 
-	public void setRights(UserType rights) {
-		this.userType = rights;
-	}
 }

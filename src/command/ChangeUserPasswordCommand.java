@@ -1,6 +1,6 @@
 package command;
 
-import authentication.PasswordHash;
+import authentication.BCrypt;
 import com.google.gson.annotations.Expose;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
@@ -42,8 +42,8 @@ public class ChangeUserPasswordCommand extends Command {
     @Override
     public void validate() throws ValidateException {
         hasRights(UserRights.getRights(this.getClass()));
-        validateString(username, MaxLength.USERNAME, "Username/Password");
-        validateString(password, MaxLength.PASSWORD, "Username/Password");
+        validateName(username, MaxLength.USERNAME, "Username/Password");
+        validateName(password, MaxLength.PASSWORD, "Username/Password");
     }
 
     /**
@@ -51,7 +51,9 @@ public class ChangeUserPasswordCommand extends Command {
      */
     @Override
     public Response execute() {
-        DatabaseAccessor db;
+
+        DatabaseAccessor db = null;
+
         try {
             db = initDB();
         } catch (SQLException | IOException e) {
@@ -61,12 +63,10 @@ public class ChangeUserPasswordCommand extends Command {
                     "CHANGE OF PASSWORD FAILED FOR: " + username + ". REASON: " + e.getMessage());
         }
 
-		String salt = PasswordHash.getNewSalt();
-		// get hash using salt and password
-		String hash = PasswordHash.hashString(password+salt);
-		// insert into DB, requires method DB group
+		String hash = BCrypt.hashpw(password,BCrypt.gensalt());
+
         try {
-            db.resetPassword(username, hash, salt);
+            db.resetPassword(username, hash,"SALT");
         } catch (SQLException | IOException e) {
             return new ErrorResponse(StatusCode.BAD_REQUEST, "Database error " + e.getMessage());
         }

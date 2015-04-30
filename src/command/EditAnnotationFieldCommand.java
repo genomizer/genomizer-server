@@ -43,7 +43,7 @@ public class EditAnnotationFieldCommand extends Command {
 		hasRights(UserRights.getRights(this.getClass()));
 		validateString(oldName, MaxLength.ANNOTATION_LABEL,
 				"Old annotation label");
-		validateString(newName, MaxLength.ANNOTATION_LABEL,
+		validateName(newName, MaxLength.ANNOTATION_LABEL,
 				"New annotation label");
 	}
 
@@ -92,9 +92,5 @@ public class EditAnnotationFieldCommand extends Command {
 			}
 		}
 		return new MinimalResponse(StatusCode.OK);
-	}
-
-	public void setRights(UserType rights) {
-		this.userType = rights;
 	}
 }

@@ -31,6 +31,7 @@ public class FileTuple {
     public final String expId;
     public final String grVersion;
     public final String status;
+    public final String checkSumMD5;
 
     /**
      * Constructs a FileTuple object. Parameter: ResultSet
@@ -53,6 +54,7 @@ public class FileTuple {
         expId = resSet.getString("ExpID");
         grVersion = resSet.getString("GRVersion");
         status = resSet.getString("Status");
+        checkSumMD5 = resSet.getString("MD5");
     }
 
     /**
@@ -117,6 +119,6 @@ public class FileTuple {
                 + ", date=" + date + ", metaData=" + metaData + ", author="
                 + author + ", uploader=" + uploader + ", isPrivate="
                 + isPrivate + ", expId=" + expId + ", grVersion=" + grVersion
-                + ", status=" + status + "]";
+                + ", status=" + status + ", md5=" + checkSumMD5 + "]";
     }
 }

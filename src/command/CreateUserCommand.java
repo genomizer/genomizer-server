@@ -3,12 +3,13 @@ package command;
 import java.io.IOException;
 import java.sql.SQLException;
 
-import authentication.PasswordHash;
+import authentication.BCrypt;
 import com.google.gson.annotations.Expose;
 
 import database.DatabaseAccessor;
 
 import database.subClasses.UserMethods.UserType;
+import database.constants.MaxLength;
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
@@ -36,6 +37,10 @@ public class CreateUserCommand extends Command {
 	@Expose
 	private String email = null;
 
+	/**
+	 * Used to make sure the strings of the command are correct
+	 * @throws ValidateException
+	 */
 	@Override
 	public void setFields(String uri, String uuid, UserType userType) {
 		this.userType = userType;
@@ -63,8 +68,13 @@ public class CreateUserCommand extends Command {
 			return false;
 		}
 		return username.indexOf('/') == -1;*/
+
 	}
 
+	/**
+	 * Runs the command. The user gets added to the database.
+	 * @return a MinimalResponse or ErrorResponse
+	 */
 	@Override
 	public Response execute() {
 		DatabaseAccessor db;
@@ -77,18 +87,9 @@ public class CreateUserCommand extends Command {
 			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
 		}
 		try {
+			String hash = BCrypt.hashpw(password,BCrypt.gensalt());
+			db.addUser(username, hash, "SALT",privileges, name, email);
 
-
-
-			// get a new salt
-			String salt = PasswordHash.getNewSalt();
-			// get hash using salt and password
-			String hash = PasswordHash.hashString(password+salt);
-			// insert into DB, requires new table from DB group
-			db.addUser(username, salt, hash, privileges, name, email);
-
-
-			//db.addUser(username, password, privileges, name, email);
 		} catch (SQLException | IOException e) {
 			return new ErrorResponse(StatusCode.BAD_REQUEST, "Error when " +
 					"adding user to database, user probably already exists. " +

@@ -30,7 +30,7 @@ public class DeleteFileFromExperimentCommand extends Command {
 	@Override
 	public void validate() throws ValidateException {
 		hasRights(UserRights.getRights(this.getClass()));
-		validateString(fileID, MaxLength.EXPID, "Experiment name");
+		validateName(fileID, MaxLength.EXPID, "Experiment name");
 	}
 
 	@Override
