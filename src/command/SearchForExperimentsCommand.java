@@ -43,7 +43,7 @@ public class SearchForExperimentsCommand extends Command {
 			throw new ValidateException(StatusCode.BAD_REQUEST,
 					"Specify annotations to search for.");
 		}
-		validateString(annotations, MaxLength.ANNOTATION_VALUE, "Experiment ");
+		validateName(annotations, MaxLength.ANNOTATION_VALUE, "Experiment ");
 	}
 
 	@Override

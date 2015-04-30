@@ -31,7 +31,7 @@ public class GetExperimentCommand extends Command {
 	@Override
 	public void validate() throws ValidateException {
 		hasRights(UserRights.getRights(this.getClass()));
-		validateString(expID, MaxLength.EXPID, "Experiment name");
+		validateName(expID, MaxLength.EXPID, "Experiment name");
 	}
 
 	@Override

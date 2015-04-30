@@ -35,8 +35,8 @@ public class DeleteAnnotationValueCommand extends Command {
 	@Override
 	public void validate() throws ValidateException {
 		hasRights(UserRights.getRights(this.getClass()));
-		validateString(name, MaxLength.ANNOTATION_LABEL, "Annotation label");
-		validateString(value, MaxLength.ANNOTATION_VALUE, "Annotation value");
+		validateName(name, MaxLength.ANNOTATION_LABEL, "Annotation label");
+		validateName(value, MaxLength.ANNOTATION_VALUE, "Annotation value");
 	}
 
 	@Override

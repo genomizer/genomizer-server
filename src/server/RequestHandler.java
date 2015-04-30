@@ -10,6 +10,9 @@ import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.Response;
 import response.StatusCode;
+import transfer.DownloadHandler;
+import transfer.UploadHandler;
+import transfer.Util;
 
 import java.io.IOException;
 import java.io.OutputStream;

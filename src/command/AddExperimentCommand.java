@@ -38,7 +38,7 @@ public class AddExperimentCommand extends Command {
 	public void validate() throws ValidateException {
 
 		hasRights(UserRights.getRights(this.getClass()));
-		validateString(name, MaxLength.EXPID, "Experiment name");
+		validateName(name, MaxLength.EXPID, "Experiment name");
 
 		if(annotations == null || annotations.size() < 1) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify " +

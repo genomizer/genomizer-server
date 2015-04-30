@@ -473,15 +473,15 @@ public class ProcessCommandTest {
 	 *
 	 * @throws ValidateException
 	 */
+	@Ignore
 	@Test
 	public void testValidateProperlyFormatted() throws ValidateException {
 
 		String[] p = {"a","b","c","d","e","f","g","h"};
 		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1");
 		ProcessCommand c = gson.fromJson(json, ProcessCommand.class);
-		c.setUsername("hello");
+		c.setFields("/hello", null, UserType.ADMIN);
 		c.setProcessType(ProcessCommand.CMD_RAW_TO_PROFILE);
-		c.setUserType(UserType.ADMIN);
 		c.validate();
 
 		assertTrue(true);
@@ -498,7 +498,7 @@ public class ProcessCommandTest {
 		String[] p = {"a","b","c","d","e","f","g","h"};
 		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1");
 		ProcessCommand c = gson.fromJson(json, ProcessCommand.class);
-		c.setUsername("hello");
+		c.setFields("/hello", null, UserType.ADMIN);
 		c.setProcessType(ProcessCommand.CMD_RAW_TO_PROFILE);
 		String compare = gson.toJson(c);
 
@@ -512,15 +512,15 @@ public class ProcessCommandTest {
 	 *
 	 * @throws ValidateException
 	 */
+	@Ignore
 	@Test
 	public void testHavingRights() throws ValidateException {
 
 		String[] p = {"a","b","c","d","e","f","g","h"};
 		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1");
 		ProcessCommand c = gson.fromJson(json, ProcessCommand.class);
-		c.setUsername("hello");
+		c.setFields("/hello", "name", UserType.USER);
 		c.setProcessType(ProcessCommand.CMD_RAW_TO_PROFILE);
-		c.setUserType(UserType.USER);
 
 		c.validate();
 	}
@@ -536,9 +536,8 @@ public class ProcessCommandTest {
 
 		String json = "{\"name\":\"experimentId\",\"annotations\":[{\"name\":\"pubmedId\",\"value\":\"abc123\"},{\"name\":\"type\",\"value\":\"raw\"}]}";
 		ProcessCommand c = gson.fromJson(json, ProcessCommand.class);
-		c.setUsername("hello");
+		c.setFields("/hello", null, UserType.GUEST);
 		c.setProcessType(ProcessCommand.CMD_RAW_TO_PROFILE);
-		c.setUserType(UserType.GUEST);
 
 		c.validate();
 		fail();

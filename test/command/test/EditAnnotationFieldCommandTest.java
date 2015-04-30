@@ -57,7 +57,7 @@ public class EditAnnotationFieldCommandTest {
 	public void testValidateOldNameNotNull() throws ValidateException {
 
 		EditAnnotationFieldCommand c = gson.fromJson(jsonBuilder(null,"Two"), EditAnnotationFieldCommand.class);
-		c.setRights(UserType.ADMIN);
+		c.setFields("hello", null, UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -74,7 +74,7 @@ public class EditAnnotationFieldCommandTest {
 	public void testValidateOldNameEmptyString() throws ValidateException {
 
 		EditAnnotationFieldCommand c = gson.fromJson(jsonBuilder("","Two"), EditAnnotationFieldCommand.class);
-		c.setRights(UserType.ADMIN);
+		c.setFields("hello", null, UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -91,7 +91,7 @@ public class EditAnnotationFieldCommandTest {
 	public void testValidateOldNameInvalidCharacters() throws ValidateException {
 
 		EditAnnotationFieldCommand c = gson.fromJson(jsonBuilder("O/*ne","Two"), EditAnnotationFieldCommand.class);
-		c.setRights(UserType.ADMIN);
+		c.setFields("hello", null, UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -112,7 +112,7 @@ public class EditAnnotationFieldCommandTest {
 			big = big + "a";
 		}
 		EditAnnotationFieldCommand c = gson.fromJson(jsonBuilder(big,"Two"), EditAnnotationFieldCommand.class);
-		c.setRights(UserType.ADMIN);
+		c.setFields("hello", null, UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -129,7 +129,7 @@ public class EditAnnotationFieldCommandTest {
 	public void testValidateNewNameNotNull() throws ValidateException {
 
 		EditAnnotationFieldCommand c = gson.fromJson(jsonBuilder("One",null), EditAnnotationFieldCommand.class);
-		c.setRights(UserType.ADMIN);
+		c.setFields("hello", null, UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -146,7 +146,7 @@ public class EditAnnotationFieldCommandTest {
 	public void testValidateNewNameEmptyString() throws ValidateException {
 
 		EditAnnotationFieldCommand c = gson.fromJson(jsonBuilder("One",""), EditAnnotationFieldCommand.class);
-		c.setRights(UserType.ADMIN);
+		c.setFields("hello", null, UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -163,7 +163,7 @@ public class EditAnnotationFieldCommandTest {
 	public void testValidateNewNameInvalidCharacters() throws ValidateException {
 
 		EditAnnotationFieldCommand c = gson.fromJson(jsonBuilder("One","Tw/*o"), EditAnnotationFieldCommand.class);
-		c.setRights(UserType.ADMIN);
+		c.setFields("hello", null, UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -184,7 +184,7 @@ public class EditAnnotationFieldCommandTest {
 			big = big + "a";
 		}
 		EditAnnotationFieldCommand c = gson.fromJson(jsonBuilder("One",big), EditAnnotationFieldCommand.class);
-		c.setRights(UserType.ADMIN);
+		c.setFields("hello", null, UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -201,7 +201,7 @@ public class EditAnnotationFieldCommandTest {
 	public void testValidateProperlyFormatted() throws ValidateException {
 
 		EditAnnotationFieldCommand c = gson.fromJson(jsonBuilder("Species","Mouse"), EditAnnotationFieldCommand.class);
-		c.setRights(UserType.ADMIN);
+		c.setFields("hello", null, UserType.ADMIN);
 		c.validate();
 
 		assertTrue(true);
@@ -234,7 +234,7 @@ public class EditAnnotationFieldCommandTest {
 
 		String json = jsonBuilder("Species","Mouse");
 		EditAnnotationFieldCommand c = gson.fromJson(json, EditAnnotationFieldCommand.class);
-		c.setRights(UserType.USER);
+		c.setFields("hello", null, UserType.USER);
 
 		c.validate();
 	}
@@ -250,7 +250,7 @@ public class EditAnnotationFieldCommandTest {
 
 		String json = jsonBuilder("Species","Mouse");
 		EditAnnotationFieldCommand c = gson.fromJson(json, EditAnnotationFieldCommand.class);
-		c.setRights(UserType.GUEST);
+		c.setFields("hello", null, UserType.GUEST);
 
 		c.validate();
 		fail();

@@ -71,11 +71,11 @@ public class ProcessCommand extends Command {
 	public void validate() throws ValidateException {
 
 		hasRights(UserRights.getRights(this.getClass()));
-		validateString(username, MaxLength.USERNAME, "Username");
-		validateString(expid, MaxLength.EXPID, "Experiment name");
-		validateString(metadata, MaxLength.FILE_METADATA, "Metadata");
-		validateString(genomeVersion, MaxLength.GENOME_VERSION, "Genome version");
-		validateString(processType, Integer.MAX_VALUE, "Processtype");
+		validateName(username, MaxLength.USERNAME, "Username");
+		validateName(expid, MaxLength.EXPID, "Experiment name");
+		validateName(metadata, MaxLength.FILE_METADATA, "Metadata");
+		validateName(genomeVersion, MaxLength.GENOME_VERSION, "Genome version");
+		validateName(processType, Integer.MAX_VALUE, "Processtype");
 
 		if(parameters == null || parameters.length < 1) {
 			throw new ValidateException(StatusCode.BAD_REQUEST,
@@ -152,8 +152,8 @@ public class ProcessCommand extends Command {
 					try {
 						processHandler.executeProcess(
 								ProcessCommand.CMD_RAW_TO_PROFILE,
-								parameters, filepaths.getKey(),
-								filepaths.getValue());
+								parameters, filePaths.getKey(),
+								filePaths.getValue());
 
 					} catch (ProcessException e) {
 						return processError(db, e.getMessage(), "Process " +
@@ -178,8 +178,8 @@ public class ProcessCommand extends Command {
 				db = initDB();
 			}
 
-			db.addGeneratedProfiles(expid, filepaths.getValue(),
-					filepaths.getKey(), metadata, genomeVersion, username,
+			db.addGeneratedProfiles(expid, filePaths.getValue(),
+					filePaths.getKey(), metadata, genomeVersion, username,
 					false);
 
 		} catch (SQLException e) {
@@ -192,7 +192,7 @@ public class ProcessCommand extends Command {
 		
 		db.close();
 		Debug.log(username + "Raw to profile processing completed " +
-				"running " + processtype + " on experiment" + expid + "\n" +
+				"running " + processType + " on experiment" + expid + "\n" +
 				"metadata: " + metadata + "\n" +
 				"parameters: " + parameters + "\n" +
 				"genomeVersion: " + genomeVersion + "\n");
@@ -216,7 +216,7 @@ public class ProcessCommand extends Command {
 	 */
 	private Response processError(DatabaseAccessor db, String error, String headerError){
 		ErrorLogger.log(username, headerError +
-				" " + processtype +
+				" " + processType +
 				" on experiment" + expid + "\n"+
 				"metadata: " + metadata + "\n"+
 				"parameters: " + parameters + "\n" +
@@ -225,7 +225,7 @@ public class ProcessCommand extends Command {
 		db.close();
 		return new ProcessResponse(StatusCode.
 				SERVICE_UNAVAILABLE, headerError +
-				" when processing " + processtype +
+				" when processing " + processType +
 				" on experiment" + expid + "\n"+
 				"metadata: " + metadata + "\n"+
 				"parameters: " + parameters + "\n" +

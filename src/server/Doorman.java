@@ -62,9 +62,6 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 
-import command.CommandHandler;
-import command.CommandType;
-
 import transfer.DownloadHandler;
 import transfer.UploadHandler;
 import transfer.Util;
@@ -72,7 +69,6 @@ import transfer.Util;
 
 public class Doorman {
 	private HttpServer httpServer;
-	private CommandHandler commandHandler;
 	private UploadHandler uploadHandler;
 	private DownloadHandler downloadHandler;
 

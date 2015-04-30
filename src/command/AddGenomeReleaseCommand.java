@@ -43,8 +43,8 @@ public class AddGenomeReleaseCommand extends Command {
 	public void validate() throws ValidateException {
 
 		hasRights(UserRights.getRights(this.getClass()));
-		validateString(specie, MaxLength.GENOME_SPECIES, "Specie");
-		validateString(genomeVersion, MaxLength.GENOME_VERSION, "Genome version");
+		validateName(specie, MaxLength.GENOME_SPECIES, "Specie");
+		validateName(genomeVersion, MaxLength.GENOME_VERSION, "Genome version");
 
 		for(int i = 0; i < files.size(); i++) {
 			validateName(files.get(i), MaxLength.GENOME_FILEPATH, "File name");
