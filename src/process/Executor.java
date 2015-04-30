@@ -183,7 +183,7 @@ public abstract class Executor {
 
 		// Wait for the process to finish
 		process.waitFor();
-		
+
 		return text.toString();
 	}
 
@@ -194,7 +194,7 @@ public abstract class Executor {
 	 * @return
 	 * @throws ProcessException
 	 */
-	protected boolean cleanUp(Stack<String> files) throws ProcessException {
+	protected boolean cleanUp(Stack<String> files) {
 		boolean isOk = true;
 		/* TODO should this be replaced with FileUtils.deleteDirectory?*/
 		while (!files.isEmpty()) {

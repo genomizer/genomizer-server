@@ -65,7 +65,6 @@ public class WorkHandler implements Runnable {
 			ProcessStatus processStatus = workPool.getProcessStatus
 						(processCommand);
 
-
 			if (processCommand != null && processStatus != null) {
 				Debug.log("Executing process in experiment "
 						+ processCommand.getExpId());
@@ -98,10 +97,7 @@ public class WorkHandler implements Runnable {
 					processStatus.status = ProcessStatus.STATUS_CRASHED;
 				}
 
-
 				processStatus.timeFinished = System.currentTimeMillis();
-
-
 			}
 
 			removeOldStatuses();

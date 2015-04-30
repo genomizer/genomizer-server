@@ -9,9 +9,8 @@ import conversion.GenomeReleaseConverter;
 import java.io.*;
 
 
-@Ignore
-public class GenomeReleaseConverterTest {
 
+public class GenomeReleaseConverterTest {
 
 	@Test
 	public void shouldRunLiftoverWithoutFailing()
@@ -47,6 +46,19 @@ public class GenomeReleaseConverterTest {
 		File resFile = new File("resources/genomeConversionTestData/" +
 								"conversionResults/unlifted.bed");
 		assertTrue(resFile.exists());
+	}
+
+	@Ignore
+	@Test(expected=NullPointerException.class)
+	public void shouldFailOnNullInputFile()
+		throws IOException, InterruptedException{
+		GenomeReleaseConverter handler = new GenomeReleaseConverter();
+		handler.procedure(null,
+				"genomeConversionTestData/conversionResults/temp.bed",
+				"genomeConversionTestData/dm2ToDm3.over.chain.gz",
+				"genomeConversionTestData/conversionResults/unlifted.bed");
+
+
 	}
 
 
