@@ -123,25 +123,20 @@ public class Converter {
             String []columns;
             String tempChr, chr="chr";
             int tempStart, start=-1;
-            double sig=0, tempSig;
-            DecimalFormat formatter = new DecimalFormat("0.00");
-            formatter.setMaximumFractionDigits(16);
+            String sig="0", tempSig;
 
             while ((line = fr.readLine()) != null && !line.equals("")) {
                 columns = line.split("\\s+");
                 tempChr = columns[0];
                 tempStart = Integer.parseInt(columns[1])-1;
-                tempSig = Double.parseDouble(columns[2]);
+                tempSig = columns[2];
                 if (!chr.equals(tempChr)) {
                     chr = tempChr;
                     start = tempStart+1;
                     sig = tempSig;
                 }
                 else {
-                    if (sig != 0)
-                        fw.write(chr+"\t"+start+"\t"+tempStart+"\t"+formatter.format(sig)+"\n");
-                    else
-                        fw.write(chr+"\t"+start+"\t"+tempStart+"\t"+0+"\n");
+                    fw.write(chr+"\t"+start+"\t"+tempStart+"\t"+sig+"\n");
                     start = tempStart+1;
                     sig = tempSig;
                 }

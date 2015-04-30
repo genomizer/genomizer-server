@@ -91,7 +91,7 @@ public class GffToWigTest {
      * Tests that output exists after conversion
      * @throws FileNotFoundException
      */
-    @Ignore
+    @Test
     public void shouldExsistAnOutputFileAfterConversion()
             throws FileNotFoundException {
         Converter.gffToWig("resources/conversionTestData/GFF-testdata.gff",
@@ -133,7 +133,7 @@ public class GffToWigTest {
     public void deleteOutPutFile() {
         if(outputFile != null) {
             if(outputFile.exists()) {
-                //outputFile.delete();
+                outputFile.delete();
             }
         }
     }

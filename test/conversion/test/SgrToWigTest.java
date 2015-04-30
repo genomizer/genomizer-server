@@ -113,7 +113,7 @@ public class SgrToWigTest {
      * Tests that output exists after conversion
      * @throws FileNotFoundException
      */
-    @Ignore
+    @Test
     public void shouldExsistAoutputFileAfterConversion() throws FileNotFoundException {
         Converter.sgrToWig("resources/conversionTestData/SGR-testdata.sgr", "resources/conversionTestData/output/test.wig");
 
@@ -152,7 +152,7 @@ public class SgrToWigTest {
     public void deleteOutPutFile() {
         if(outputFile != null) {
             if(outputFile.exists()) {
-                //outputFile.delete();
+               outputFile.delete();
             }
         }
     }
