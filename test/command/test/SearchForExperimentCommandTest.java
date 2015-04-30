@@ -53,12 +53,15 @@ public class SearchForExperimentCommandTest {
 		assertTrue(true);
 	}
 
+	//TODO Add this test again after custom regex has beeen implemented.
+
 	/**
 	 * Test used to check that ValidateException is thrown
 	 * when invalid characters are used
 	 *
 	 * @throws ValidateException
 	 */
+	@Ignore
 	@Test(expected = ValidateException.class)
 	public void testValidateIncorrectlyFormatted() throws ValidateException {
 
@@ -68,6 +71,7 @@ public class SearchForExperimentCommandTest {
 
 		fail("Expected ValidateException to be thrown.");
 	}
+
 	/**
 	 * Test used to check that ValidateException is not thrown
 	 * when the user have the required rights.
