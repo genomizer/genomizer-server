@@ -14,12 +14,9 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 
 public class BedToSgrTest {
     private final String outputPath = "resources/conversionTestData/output/";
@@ -126,9 +123,7 @@ public class BedToSgrTest {
             expectedFile = new File(expectedResultPath+"bed2sgrResult.sgr");
 
             assertTrue(cmp.compareFiles(outputFile, expectedFile));
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
+        } catch (NullPointerException | NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
     }

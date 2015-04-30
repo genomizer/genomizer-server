@@ -1,51 +1,68 @@
 package conversion;
 
 import java.io.*;
-import java.text.DecimalFormat;
 
 /**
- * Created by c12arr on 2015-04-29.
+ * Handles conversion between different profile file types.
+ * Files supported: bed, gff, sgr, wig
+ * Conversions supported:   bed -> sgr
+ *                          gff -> sgr
+ *                          sgr -> wig
+ *                          bed -> wig
+ *                          gff -> wig
+ *                          wig -> sgr
+ *
+ * Created 2015-04-30.
+ *
+ * @author Albin Råstander <c12arr@cs.umu.se>
+ * @author Martin Larsson <dv13mln@cs.umu.se>
  */
 public class Converter {
 
 
     /**
      * Converts from .bed to .sgr
-     * @param inputPath
-     * @param outputPath
+     * @param inputPath path to input file
+     * @param outputPath path to output file
      * @throws FileNotFoundException
      * @throws IllegalArgumentException
      */
-    public static void bedToSgr(String inputPath, String outputPath) throws FileNotFoundException {
+    public static void bedToSgr(String inputPath, String outputPath)
+            throws FileNotFoundException {
         File inputFile;
         File outputFile;
-        FileWriter fw = null;
+        FileWriter fw;
         checkArguments(inputPath, outputPath);
 
         if (!inputPath.endsWith(".bed") || !outputPath.endsWith(".sgr")) {
-            throw new IllegalArgumentException("Filetype not accepted for this conversion.");
+            throw new IllegalArgumentException("File type not accepted " +
+                    "for this conversion.");
         }
 
         inputFile = new File(inputPath);
         outputFile = new File(outputPath);
 
         try {
-            outputFile.createNewFile();
             fw = new FileWriter(outputFile);
 
-
             BufferedReader fr = new BufferedReader(new FileReader(inputFile));
+
             String line;
             String []columns;
             int center;
+
             while((line =fr.readLine()) != null) {
                columns = line.split("\t");
 
-                center = Integer.parseInt(columns[1])+(Integer.parseInt(columns[2])-Integer.parseInt(columns[1]))/2;
+                center = Integer.parseInt(columns[1])+
+                        (Integer.parseInt(columns[2])-
+                                Integer.parseInt(columns[1]))/2;
                 fw.write(columns[0]+"\t"+center+"\t"+columns[4]+"\n");
             }
+
             fw.close();
             fr.close();
+
             } catch (IOException e) {
                 e.printStackTrace();
         }
@@ -54,40 +71,46 @@ public class Converter {
 
     /**
      * Converts from .gff to .sgr
-     * @param inputPath
-     * @param outputPath
+     * @param inputPath path to input file
+     * @param outputPath path to output file
      * @throws FileNotFoundException
      * @throws IllegalArgumentException
      */
-    public static void gffToSgr(String inputPath, String outputPath) throws FileNotFoundException {
+    public static void gffToSgr(String inputPath, String outputPath)
+            throws FileNotFoundException {
         File inputFile;
         File outputFile;
-        FileWriter fw = null;
+        FileWriter fw;
         checkArguments(inputPath, outputPath);
 
         if (!inputPath.endsWith(".gff") || !outputPath.endsWith(".sgr")) {
-            throw new IllegalArgumentException("Filetype not accepted for this conversion.");
+            throw new IllegalArgumentException("File type not " +
+                    "accepted for this conversion.");
         }
 
         inputFile = new File(inputPath);
         outputFile = new File(outputPath);
 
         try {
-            outputFile.createNewFile();
             fw = new FileWriter(outputFile);
 
             BufferedReader fr = new BufferedReader(new FileReader(inputFile));
+
             String line;
             String []columns;
             int center;
+
             while((line =fr.readLine()) != null) {
                 columns = line.split("\t");
 
-                center = Integer.parseInt(columns[3])+(Integer.parseInt(columns[4])-Integer.parseInt(columns[3]))/2;
+                center = Integer.parseInt(columns[3])+
+                        (Integer.parseInt(columns[4])-
+                                Integer.parseInt(columns[3]))/2;
                 fw.write(columns[0]+"\t"+center+"\t"+columns[5]+"\n");
             }
             fw.close();
             fr.close();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -95,30 +118,32 @@ public class Converter {
 
     /**
      * Converts from .sgr to .wig
-     * @param inputPath
-     * @param outputPath
+     * @param inputPath path to input file
+     * @param outputPath path to output file
      * @throws FileNotFoundException
      * @throws IllegalArgumentException
      */
-    public static void sgrToWig(String inputPath, String outputPath) throws FileNotFoundException {
+    public static void sgrToWig(String inputPath, String outputPath)
+            throws FileNotFoundException {
         File inputFile;
         File outputFile;
-        FileWriter fw = null;
+        FileWriter fw;
 
         checkArguments(inputPath, outputPath);
 
         if (!inputPath.endsWith(".sgr") || !outputPath.endsWith(".wig")) {
-            throw new IllegalArgumentException("Filetype not accepted for this conversion.");
+            throw new IllegalArgumentException("File type not " +
+                    "accepted for this conversion.");
         }
 
         inputFile = new File(inputPath);
         outputFile = new File(outputPath);
 
         try {
-            outputFile.createNewFile();
             fw = new FileWriter(outputFile);
 
             BufferedReader fr = new BufferedReader(new FileReader(inputFile));
+
             String line;
             String []columns;
             String tempChr, chr="chr";
@@ -144,6 +169,7 @@ public class Converter {
 
             fw.close();
             fr.close();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -151,12 +177,13 @@ public class Converter {
 
     /**
      * Converts from .bed to .wig via a temporary conversion to .sgr
-     * @param inputPath
-     * @param outputPath
+     * @param inputPath input file path
+     * @param outputPath output file path
      * @throws FileNotFoundException
      * @throws IllegalArgumentException
      */
-    public static void bedToWig(String inputPath, String outputPath) throws FileNotFoundException {
+    public static void bedToWig(String inputPath, String outputPath)
+            throws FileNotFoundException {
         String tempPath = "resources/conversionTestData/bed2sgrTemp.sgr";
         File tempFile;
         try {
@@ -194,7 +221,8 @@ public class Converter {
     }
 
 
-    public static void wigToSgr(String wigType, String inputPath, String outputPath) throws FileNotFoundException {
+    public static void wigToSgr(String wigType, String inputPath,
+                                String outputPath) throws FileNotFoundException {
         switch (wigType) {
             case "bed":
                 wigBedToSgr(inputPath, outputPath);
@@ -210,25 +238,27 @@ public class Converter {
         }
     }
 
-    private static void wigBedToSgr(String inputPath, String outputPath) throws FileNotFoundException {
+    private static void wigBedToSgr(String inputPath, String outputPath)
+            throws FileNotFoundException {
         File inputFile;
         File outputFile;
-        FileWriter fw = null;
+        FileWriter fw;
 
         checkArguments(inputPath, outputPath);
 
         if (!inputPath.endsWith(".wig") || !outputPath.endsWith(".sgr")) {
-            throw new IllegalArgumentException("Filetype not accepted for this conversion.");
+            throw new IllegalArgumentException("File type not " +
+                    "accepted for this conversion.");
         }
 
         inputFile = new File(inputPath);
         outputFile = new File(outputPath);
 
         try {
-            outputFile.createNewFile();
             fw = new FileWriter(outputFile);
 
             BufferedReader fr = new BufferedReader(new FileReader(inputFile));
+
             String line;
             String []columns;
 
@@ -239,6 +269,7 @@ public class Converter {
 
             fw.close();
             fr.close();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -247,26 +278,28 @@ public class Converter {
 
     /**
      * Checks if arguments are valid file paths
-     * @param inputPath
-     * @param outputPath
+     * @param inputPath path to input file
+     * @param outputPath path to output file
      * @throws FileNotFoundException
      * @throws IllegalArgumentException
      */
-    private static void checkArguments(String inputPath, String outputPath) throws FileNotFoundException {
-        File inputFile = null;
-        File outputFile = null;
+    private static void checkArguments(String inputPath, String outputPath)
+            throws FileNotFoundException {
+        File inputFile;
+        File outputFile;
+
         try {
             inputFile = new File(inputPath);
             outputFile = new File(outputPath);
         } catch (NullPointerException e) {
-            throw new IllegalArgumentException("Null path/paths");
-        }
-        if(!inputFile.exists()) {
-            throw new FileNotFoundException("Input file doesn't exists");
+            throw new IllegalArgumentException("Path can not be null.");
         }
 
-        if(outputFile.exists()) {
-            throw new IllegalArgumentException("Output file already exists");
-        }
+        if(!inputFile.exists())
+            throw new FileNotFoundException("Input file doesn't exists.");
+
+        if(outputFile.exists())
+            throw new IllegalArgumentException("Output file already exists.");
+
     }
 }
