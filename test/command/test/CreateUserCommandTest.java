@@ -67,8 +67,22 @@ public class CreateUserCommandTest {
 	 * Test used to check that username validation works
 	 * properly.
 	 */
-	@Test
-	public void testValidateUsernameLength() throws ValidateException {
+	@Test(expected = ValidateException.class)
+	public void testValidateInvalidUsernameMinLength() throws ValidateException {
+
+		json = createJSON("","b","c","d","e");
+		CreateUserCommand cmd2 = gson.fromJson(json, CreateUserCommand.class);
+		cmd2.setFields("uri", "uuid", UserType.ADMIN);
+
+		cmd2.validate();
+	}
+
+	/**
+	 * Test used to check that username validation works
+	 * properly.
+	 */
+	@Test (expected = ValidateException.class)
+	public void testValidateInvalidUsernameMaxLength() throws ValidateException {
 
 		String username = "";
 		for(int i = 0; i < MaxLength.USERNAME+1; i++) {
@@ -78,45 +92,57 @@ public class CreateUserCommandTest {
 		CreateUserCommand cmd = gson.fromJson(json, CreateUserCommand.class);
 		cmd.setFields("uri", "uuid", UserType.ADMIN);
 
-		json = createJSON("","b","c","d","e");
-		CreateUserCommand cmd2 = gson.fromJson(json, CreateUserCommand.class);
-		cmd2.setFields("uri", "uuid", UserType.ADMIN);
-
 		cmd.validate();
-		cmd2.validate();
 	}
 
 	/**
 	 * Test used to check that password validation works
 	 * properly.
 	 */
-	@Test
-	public void testValidatePasswordLength() throws ValidateException {
+	@Test(expected = ValidateException.class)
+	public void testValidateInvalidPasswordMaxLength() throws ValidateException {
 
 		String password = "";
 		for(int i = 0; i < MaxLength.PASSWORD+1; i++) {
 			password = password + "a";
 		}
-		json = createJSON("a", password,"c","d","e");
+		json = createJSON("a", password, "c", "d", "e");
 		CreateUserCommand cmd = gson.fromJson(json, CreateUserCommand.class);
 		cmd.setFields("uri", "uuid", UserType.ADMIN);
+
+		cmd.validate();
+	}
+
+	/**
+	 * Test used to check that password validation works
+	 * properly.
+	 */
+	@Test(expected = ValidateException.class)
+	public void testValidateInvalidPasswordMinLength() throws ValidateException {
 
 		json = createJSON("a","","c","d","e");
 		CreateUserCommand cmd2 = gson.fromJson(json, CreateUserCommand.class);
 		cmd2.setFields("uri", "uuid", UserType.ADMIN);
 
-		cmd.validate();
 		cmd2.validate();
-
 	}
 
 	/**
-	 * Test used to check that privileges validation works
-	 * properly.
+	 * Test used to check privileges min length validation
 	 */
-	@Test
-	public void testValidatePrivilegesLength() throws ValidateException {
+	@Test (expected = ValidateException.class)
+	public void testValidateInvalidPrivilegesMinLength() throws ValidateException {
+		json = createJSON("a","b","","d","e");
+		CreateUserCommand cmd2 = gson.fromJson(json, CreateUserCommand.class);
+		cmd2.setFields("uri", "uuid", UserType.ADMIN);
+		cmd2.validate();
+	}
 
+	/**
+	 * Test used to check privileges Max length validation
+	 */
+	@Test (expected = ValidateException.class)
+	public void testValidateInvalidPrivilegesMaxLength() throws ValidateException {
 		String privilege = "";
 		for(int i = 0; i < MaxLength.ROLE+1; i++) {
 			privilege = privilege + "a";
@@ -124,21 +150,41 @@ public class CreateUserCommandTest {
 		json = createJSON("a","b",privilege,"d","e");
 		CreateUserCommand cmd = gson.fromJson(json, CreateUserCommand.class);
 		cmd.setFields("uri", "uuid", UserType.ADMIN);
+		cmd.validate();
+	}
 
-		json = createJSON("a","b","","d","e");
-		CreateUserCommand cmd2 = gson.fromJson(json, CreateUserCommand.class);
-		cmd2.setFields("uri", "uuid", UserType.ADMIN);
+	/**
+	 * Test used to check that username validation works
+	 * properly.
+	 */
+	@Test (expected = ValidateException.class)
+	public void testValidateInvalidUsernameCharacters() throws ValidateException {
+
+		json = createJSON("��!?,:;/[]{}", "b", "c", "d", "e");
+		CreateUserCommand cmd = gson.fromJson(json, CreateUserCommand.class);
+		cmd.setFields("uri", "uuid", UserType.ADMIN);
 
 		cmd.validate();
-		cmd2.validate();
+	}
 
+	/**
+	 * Test used to check that password validation works
+	 * properly.
+	 */
+	@Test(expected = ValidateException.class)
+	public void testValidateInvalidPasswordCharacters() throws ValidateException {
+
+		json = createJSON("a","��!?,:;/[]{}","c","d","e");
+		CreateUserCommand cmd2 = gson.fromJson(json, CreateUserCommand.class);
+		cmd2.setFields("uri", "uuid", UserType.ADMIN);
+		cmd2.validate();
 	}
 
 	/**
 	 * Test used to check that username does not contains
 	 * any slashes.
 	 */
-	@Test
+	@Test (expected = ValidateException.class)
 	public void testNoSlashesUserName() throws ValidateException {
 
 		json = createJSON("a/b/c","b","c","d","e");
@@ -146,13 +192,12 @@ public class CreateUserCommandTest {
 		cmd.setFields("uri", "uuid", UserType.ADMIN);
 
 		cmd.validate();
-
 	}
 
 	/**
 	 * Test used to check a properly formatted creation.
 	 */
-	@Test
+	@Test (expected = ValidateException.class)
 	public void testValidationProperlyFormatted() throws ValidateException {
 		json = createJSON("a","b","c","d","e");
 		CreateUserCommand cmd = gson.fromJson(json, CreateUserCommand.class);
@@ -168,7 +213,7 @@ public class CreateUserCommandTest {
 	 *
 	 * @throws ValidateException
 	 */
-	@Test
+	@Test (expected = ValidateException.class)
 	public void testHavingRights() throws ValidateException {
 
 		json = createJSON("a","b","c","d","e");
@@ -192,7 +237,6 @@ public class CreateUserCommandTest {
 		c.setFields("uri", "uuid", UserType.USER);
 
 		c.validate();
-		fail();
 	}
 
 	/**
