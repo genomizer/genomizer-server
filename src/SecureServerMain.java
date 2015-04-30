@@ -42,7 +42,7 @@ public class SecureServerMain {
 
 		/* Create a work pool */
 		WorkPool workPool = new WorkPool();
-		
+
 		/* We attempt to start the secure doorman */
 		try {
 			new SecureDoorman(new CommandHandler(workPool),

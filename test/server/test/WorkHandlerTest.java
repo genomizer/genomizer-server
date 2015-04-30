@@ -16,16 +16,6 @@ public class WorkHandlerTest {
     public void setUp() {
         workPool = new WorkPool();
     }
-
-    @Test
-    public void testWorkPool() {
-        workPool.addWork(new ProcessCommand());
-        workPool.addWork(new ProcessCommand());
-        workPool.addWork(new ProcessCommand());
-        workPool.addWork(new ProcessCommand());
-
-        assertTrue(workPool.availableProcesses() == 4);
-    }
     
 
 }
