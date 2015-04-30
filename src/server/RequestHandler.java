@@ -115,9 +115,6 @@ public class RequestHandler implements HttpHandler {
 			return;
 		}
 
-        /*Log the user.*/
-		logUser(uuid);
-
 		/*TODO: Get the current user's user right level*/
 		UserType userType = UserType.ADMIN;
 
@@ -135,7 +132,7 @@ public class RequestHandler implements HttpHandler {
             return;
         }
 
-		command.setFields(uri, username);
+		command.setFields(uri, username, userType);
 
 		/*Attempt to validate the command.*/
 		try {
