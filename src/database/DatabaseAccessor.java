@@ -49,7 +49,7 @@ public class DatabaseAccessor implements AutoCloseable {
     public static Integer FREETEXT = 1;
     public static Integer DROPDOWN = 2;
     private Connection conn;
-    public static final String DATAFOLDER = ServerSettings.fileLocation;
+    public static final String DATAFOLDER = ServerSettings.fileLocation.toString();
     private FilePathGenerator fpg;
     private PubMedToSQLConverter pm2sql;
     private UserMethods userMethods;

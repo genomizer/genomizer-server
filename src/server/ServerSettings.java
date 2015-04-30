@@ -7,6 +7,8 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class ServerSettings {
@@ -17,7 +19,7 @@ public class ServerSettings {
 	public static String databaseName = null;
 	public static URI    wwwTunnelURL = null;
 	public static int genomizerPort = -1;
-	public static String fileLocation = "/var/www/data/";
+	public static Path fileLocation = Paths.get("/var/www/data/");
 	public static String bowtieLocation = "bowtie";
 	public static int nrOfProcessThreads = 5;
 
@@ -128,7 +130,7 @@ public class ServerSettings {
 					genomizerPort = Integer.parseInt(value);
 					break;
 				case "filelocation":
-					fileLocation = value;
+					fileLocation = Paths.get(value);
 					break;
 				case "nrofprocessthreads":
 					nrOfProcessThreads = Integer.parseInt(value);
