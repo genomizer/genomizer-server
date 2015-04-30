@@ -92,7 +92,7 @@ public class RawToProfileConverter extends Executor {
 
 		// Checks all parameters that they are correct before proceeding
 		if (!verifyInData(parameters, inFolder, outFilePath)
-				|| !CorrectInfiles(inFiles)) {
+				|| !correctInfiles(inFiles)) {
 			throw new ProcessException("Wrong format of input data");
 		}
 		// Runs the procedure.
@@ -266,7 +266,7 @@ public class RawToProfileConverter extends Executor {
 					"No files found in directory "
 					+ inFolder);
 		}
-		
+
 		ArrayList<File> files = new ArrayList<File>();
 
 		for (File rawDirFile: rawDirFiles) {
@@ -459,7 +459,7 @@ public class RawToProfileConverter extends Executor {
 	 * @throws ProcessException
 	 */
 
-	private boolean CorrectInfiles(File[] inFiles) throws ProcessException {
+	private boolean correctInfiles(File[] inFiles) throws ProcessException {
 
 		if (inFiles == null) {
 			throw new ProcessException("Filepath to raw file is null");
@@ -507,16 +507,7 @@ public class RawToProfileConverter extends Executor {
 	 * @param inFolder
 	 * @param outFile
 	 */
-//	private void printTrace(String[] parameters, String inFolder, String outFile) {
-//		System.out.println("dir " + fileDir.toString());
-//		System.out.println("INFOLDER = " + inFolder);
-//		System.out.println("OUTFILE = " + outFile);
-//		System.out.println("DIR = " + dir);
-//		System.out.println("SORTEDDIR = " + sortedDirForCommands);
-//		System.out.println("BOWTIE = "
-//				+ parse(parameters[0] + " " + inFolder + "/" + rawFile1 + " "
-//						+ dir + rawFile_1_Name + ".sam"));
-//	}
+
 
 	/**
 	 * Initiates strings that is used to run programs and scripts and also
