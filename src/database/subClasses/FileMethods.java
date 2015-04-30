@@ -83,10 +83,10 @@ public class FileMethods {
 			throw new IOException("Invalid filename");
 		}
 
-		if (inputFileName != null) {
-			if (!FileValidator.fileNameCheck(inputFileName)) {
-				throw new IOException("Invalid input filename");
-			}
+		if (inputFileName != null
+                && !FileValidator.fileNameCheck(inputFileName)) {
+            throw new IOException("Invalid input filename");
+
 		}
 
 		Experiment e = expMethods.getExperiment(expID);
@@ -124,37 +124,38 @@ public class FileMethods {
 				+ "(Path, FileType, FileName, Date, MetaData, InputFilePath, "
 				+ "Author, Uploader, IsPrivate, ExpID, GRVersion, MD5) "
 				+ "VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?, ?, ?, ?, ?, ?, ?)";
-		PreparedStatement stmt = conn.prepareStatement(query);
-		stmt.setString(1, path);
+		try(PreparedStatement stmt = conn.prepareStatement(query)) {
+			stmt.setString(1, path);
 
-		switch (fileType) {
-		case FileTuple.RAW:
-			stmt.setString(2, "Raw");
-			genomeRelease = null;
-			break;
-		case FileTuple.PROFILE:
-			stmt.setString(2, "Profile");
-			break;
-		case FileTuple.REGION:
-			stmt.setString(2, "Region");
-			break;
-		default:
-			stmt.setString(2, "Other");
-			break;
+			switch (fileType) {
+				case FileTuple.RAW:
+					stmt.setString(2, "Raw");
+					genomeRelease = null;
+					break;
+				case FileTuple.PROFILE:
+					stmt.setString(2, "Profile");
+					break;
+				case FileTuple.REGION:
+					stmt.setString(2, "Region");
+					break;
+				default:
+					stmt.setString(2, "Other");
+					break;
+			}
+
+			stmt.setString(3, fileName);
+			stmt.setString(4, metaData);
+			stmt.setString(5, inputFilePath);
+			stmt.setString(6, author);
+			stmt.setString(7, uploader);
+			stmt.setBoolean(8, isPrivate);
+			stmt.setString(9, expID);
+			stmt.setString(10, genomeRelease);
+			stmt.setString(11, checkSumMD5);
+
+			stmt.executeUpdate();
 		}
 
-		stmt.setString(3, fileName);
-		stmt.setString(4, metaData);
-		stmt.setString(5, inputFilePath);
-		stmt.setString(6, author);
-		stmt.setString(7, uploader);
-		stmt.setBoolean(8, isPrivate);
-		stmt.setString(9, expID);
-		stmt.setString(10, genomeRelease);
-		stmt.setString(11, checkSumMD5);
-
-		stmt.executeUpdate();
-		stmt.close();
 
 		return getFileTuple(path);
 	}
@@ -206,15 +207,15 @@ public class FileMethods {
 	public FileTuple getFileTuple(String filePath) throws SQLException {
 
 		String query = "SELECT * FROM File WHERE Path = ?";
-		PreparedStatement stmt = conn.prepareStatement(query);
-		stmt.setString(1, filePath);
-		ResultSet rs = stmt.executeQuery();
-		if (rs.next()) {
-			FileTuple fileTuple = new FileTuple(rs);
-			stmt.close();
-			return fileTuple;
-		}
-		stmt.close();
+		try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, filePath);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                FileTuple fileTuple = new FileTuple(rs);
+                //	stmt.close();
+                return fileTuple;
+            }
+        }
 		return null;
 	}
 
@@ -230,56 +231,56 @@ public class FileMethods {
 	 */
 	public FileTuple getFileTuple(int fileID) throws SQLException {
 
-		String query = "SELECT * FROM File WHERE FileID = ?";
-		PreparedStatement stmt = conn.prepareStatement(query);
-		stmt.setInt(1, fileID);
-		ResultSet rs = stmt.executeQuery();
-		if (rs.next()) {
-			FileTuple fileTuple = new FileTuple(rs);
-			stmt.close();
-			return fileTuple;
-		}
-		stmt.close();
-		return null;
-	}
+        String query = "SELECT * FROM File WHERE FileID = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, fileID);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                FileTuple fileTuple = new FileTuple(rs);
+                // stmt.close();
+                return fileTuple;
+            }
+        }
+        return null;
+    }
 
-	/**
-	 * Deletes a file from the database and the disk. Should throw an
-	 * IOException if the method failed to delete the file from disk.
-	 *
-	 * @param path
-	 *            String - the path to the file.
-	 * @return int - the number of deleted tuples in the database.
-	 * @throws SQLException
-	 *             if the query does not succeed
-	 * @throws IOException
-	 */
-	public int deleteFile(String path) throws SQLException, IOException {
+    /**
+     * Deletes a file from the database and the disk. Should throw an
+     * IOException if the method failed to delete the file from disk.
+     *
+     * @param path
+     *            String - the path to the file.
+     * @return int - the number of deleted tuples in the database.
+     * @throws SQLException
+     *             if the query does not succeed
+     * @throws IOException
+     */
+    public int deleteFile(String path) throws SQLException, IOException {
 
-		FileTuple ft = getFileTuple(path);
+        FileTuple ft = getFileTuple(path);
 
-		if (ft == null) {
-			throw new IOException("Could not find file at path " + path);
-		}
+        if (ft == null) {
+            throw new IOException("Could not find file at path " + path);
+        }
 
-		File fileToDelete = new File(path);
-		if (fileToDelete.exists()) {
-			fileToDelete.delete();
-		}
+        File fileToDelete = new File(path);
+        if (fileToDelete.exists()) {
+            fileToDelete.delete();
+        }
 
-		File parentFolder = new File(ft.getParentFolder());
-		if (ft.getType().equalsIgnoreCase("profile") && isEmptyFolder(parentFolder)) {
-			parentFolder.delete();
-		}
+        File parentFolder = new File(ft.getParentFolder());
+        if (ft.getType().equalsIgnoreCase("profile") && isEmptyFolder(parentFolder)) {
+            parentFolder.delete();
+        }
+        int resCount = 9;
+        String statementStr = "DELETE FROM File " + "WHERE (Path ~~* ?)";
+        try (PreparedStatement deleteFile = conn.prepareStatement(statementStr)) {
+            deleteFile.setString(1, path);
+            resCount = deleteFile.executeUpdate();
+        }
 
-		String statementStr = "DELETE FROM File " + "WHERE (Path ~~* ?)";
-		PreparedStatement deleteFile = conn.prepareStatement(statementStr);
-		deleteFile.setString(1, path);
-		int resCount = deleteFile.executeUpdate();
-		deleteFile.close();
-
-		return resCount;
-	}
+        return resCount;
+    }
 
 	/**
 	 * Deletes a file from the database and the disk using the fileID. Should
@@ -301,24 +302,25 @@ public class FileMethods {
 			throw new IOException("Could not find file with ID " + fileID);
 		}
 
-		File fileToDelete = new File(ft.getPath());
+        File fileToDelete = new File(ft.getPath());
 
-		if (fileToDelete.exists()) {
-			fileToDelete.delete();
-		}
+        if (fileToDelete.exists()) {
+            fileToDelete.delete();
+        }
 
-		File parentFolder = new File(ft.getParentFolder());
-		if (ft.getType().equalsIgnoreCase("profile") && isEmptyFolder(parentFolder)) {
-			parentFolder.delete();
-		}
+        File parentFolder = new File(ft.getParentFolder());
+        if (ft.getType().equalsIgnoreCase("profile") && isEmptyFolder(parentFolder)) {
+            parentFolder.delete();
+        }
 
-		String query = "DELETE FROM File " + "WHERE FileID = ?";
-		PreparedStatement stmt = conn.prepareStatement(query);
-		stmt.setInt(1, fileID);
-		int res = stmt.executeUpdate();
-		stmt.close();
-		return res;
-	}
+        String query = "DELETE FROM File " + "WHERE FileID = ?";
+        int res = 0;
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, fileID);
+            res = stmt.executeUpdate();
+        }
+        return res;
+    }
 
 	private boolean isEmptyFolder(File f) {
 
@@ -361,19 +363,20 @@ public class FileMethods {
 	public boolean hasFile(int fileID) throws SQLException {
 
 		String query = "SELECT fileID FROM File " + "WHERE fileID = ?";
-		PreparedStatement stmt = conn.prepareStatement(query);
-		stmt.setInt(1, fileID);
+        boolean hasResult;
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, fileID);
 
-		ResultSet rs = stmt.executeQuery();
-		boolean hasResult = rs.next();
+            ResultSet rs = stmt.executeQuery();
+            hasResult = rs.next();
 
-		if (rs.next()) {
-			hasResult = false;
-		}
+            if (rs.next()) {
+                hasResult = false;
+            }
 
-		stmt.close();
+        }
 
-		return hasResult;
+        return hasResult;
 	}
 
 	/**
@@ -386,13 +389,13 @@ public class FileMethods {
 	 */
 	public void addParent(int fileId, int parentId) throws SQLException {
 		String query = "INSERT INTO Parent "
-				+ "(FileID, ParentID) "
-				+ "VALUES (?, ?)";
-		PreparedStatement stmt = conn.prepareStatement(query);
-		stmt.setString(1, String.valueOf(fileId));
-		stmt.setString(2, String.valueOf(parentId));
-		stmt.executeUpdate();
-		stmt.close();
+                + "(FileID, ParentID) "
+                + "VALUES (?, ?)";
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, String.valueOf(fileId));
+            stmt.setString(2, String.valueOf(parentId));
+            stmt.executeUpdate();
+        }
 	}
 
 	/**
@@ -408,13 +411,13 @@ public class FileMethods {
 
 		String statusUpdateString = "UPDATE File SET Status = 'Done' "
 				+ "WHERE FileID = ?";
+        int resCount = 0;
+		try(PreparedStatement statusUpdate = conn
+				.prepareStatement(statusUpdateString)) {
+            statusUpdate.setInt(1, fileID);
 
-		PreparedStatement statusUpdate = conn
-				.prepareStatement(statusUpdateString);
-		statusUpdate.setInt(1, fileID);
-
-		int resCount = statusUpdate.executeUpdate();
-		statusUpdate.close();
+            resCount = statusUpdate.executeUpdate();
+        }
 
 		return resCount;
 	}
@@ -430,60 +433,57 @@ public class FileMethods {
 	 * @throws IOException
 	 *             if the chosen new file name already exist as a stored file.
 	 */
-	public int changeFileName(int fileID, String newFileName)
-			throws SQLException, IOException {
+    public int changeFileName(int fileID, String newFileName)
+            throws SQLException, IOException {
 
-		String oldFilePath = "";
+        String oldFilePath = "";
 
-		// search for current filepath.
-		String searchPathQuery = "SELECT Path FROM File WHERE fileID = ?";
-		PreparedStatement pathFind = conn.prepareStatement(searchPathQuery);
-		pathFind.setInt(1, fileID);
-		ResultSet res = pathFind.executeQuery();
+        // search for current filepath.
+        String searchPathQuery = "SELECT Path FROM File WHERE fileID = ?";
+        try (PreparedStatement pathFind = conn.prepareStatement(searchPathQuery)) {
+            pathFind.setInt(1, fileID);
+            ResultSet res = pathFind.executeQuery();
 
-		if (res.next()) {
-			oldFilePath = res.getString("Path");
-		} else {
-			throw new IOException("No file with ID " + fileID);
-		}
+            if (res.next()) {
+                oldFilePath = res.getString("Path");
+            } else {
+                throw new IOException("No file with ID " + fileID);
+            }
+        }
 
-		String folderPath = getParentFolder(oldFilePath);
-		String newFilePath = folderPath + newFileName;
+        String folderPath = getParentFolder(oldFilePath);
+        String newFilePath = folderPath + newFileName;
 
-		// change name on the actual stored file.
-		File oldfile = new File(oldFilePath);
-		File newFile = new File(newFilePath);
+        // change name on the actual stored file.
+        File oldfile = new File(oldFilePath);
+        File newFile = new File(newFilePath);
 
-		if (newFile.exists())
-			throw new java.io.IOException("New file exists");
+        if (newFile.exists())
+            throw new java.io.IOException("New file exists");
 
-		if (!oldfile.exists())
-			throw new java.io.IOException("Old file " + "does not exists");
+        if (!oldfile.exists())
+            throw new java.io.IOException("Old file " + "does not exists");
 
-		String chFileNameQuery = "UPDATE File SET FileName = ? "
-				+ "WHERE FileID = ?";
+        String chFileNameQuery = "UPDATE File SET FileName = ? "
+                + "WHERE FileID = ?";
+        int resCount = 0;
+        try (PreparedStatement nameUpdate = conn.prepareStatement(chFileNameQuery)) {
+            nameUpdate.setString(1, newFileName);
+            nameUpdate.setInt(2, fileID);
+            resCount = nameUpdate.executeUpdate();
+        }
+        oldfile.renameTo(newFile);
 
-		PreparedStatement nameUpdate = conn.prepareStatement(chFileNameQuery);
-		nameUpdate.setString(1, newFileName);
-		nameUpdate.setInt(2, fileID);
-		int resCount = nameUpdate.executeUpdate();
-
-		oldfile.renameTo(newFile);
-
-		// change filepath entry in database.
-		String chFilePathQuery = "UPDATE File SET Path = ? "
-				+ "WHERE FileID = ?";
-
-		PreparedStatement pathUpdate = conn.prepareStatement(chFilePathQuery);
-		pathUpdate.setString(1, newFilePath);
-		pathUpdate.setInt(2, fileID);
-		pathUpdate.executeUpdate();
-
-		nameUpdate.close();
-		pathUpdate.close();
-
-		return resCount;
-	}
+        // change filepath entry in database.
+        String chFilePathQuery = "UPDATE File SET Path = ? "
+                + "WHERE FileID = ?";
+        try (PreparedStatement pathUpdate = conn.prepareStatement(chFilePathQuery)) {
+            pathUpdate.setString(1, newFilePath);
+            pathUpdate.setInt(2, fileID);
+            pathUpdate.executeUpdate();
+        }
+        return resCount;
+    }
 
 	public FileTuple addGeneratedFile(String expId, int fileType,
 			String filePath, String inputFileName, String metaData,
@@ -510,7 +510,7 @@ public class FileMethods {
 				+ "Author, Uploader, IsPrivate, ExpID, GRVersion, Status, MD5) "
 				+ "VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?, 'Genomizer',"
 				+ " ?, ?, ?, ?, 'Done', ?)";
-		PreparedStatement stmt = conn.prepareStatement(query);
+		try (PreparedStatement stmt = conn.prepareStatement(query)) {
 		stmt.setString(1, filePath);
 
 		switch (fileType) {
@@ -538,7 +538,7 @@ public class FileMethods {
 		stmt.setString(10, checkSumMD5);
 
 		stmt.executeUpdate();
-		stmt.close();
+		}
 
 		return getFileTuple(filePath);
 	}
