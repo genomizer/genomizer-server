@@ -8,15 +8,25 @@ import response.StatusCode;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.LinkedList;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 
 public class WorkHandler implements Runnable {
 
 	private static final long statusTimeToLive = 2*1000*60*60*24;
 	private WorkPool workPool;
+	private ProcessCommand currentProcessCommand;
+	private ExecutorService executor;
+	private Future<Response> submit;
+
 
 	public WorkHandler(WorkPool workPool) {
 		this.workPool = workPool;
+		executor = Executors.newSingleThreadExecutor();
+		currentProcessCommand = null;
 	}
 
 	public void removeOldStatuses() {
@@ -47,7 +57,7 @@ public class WorkHandler implements Runnable {
 		}
 		for (ProcessCommand proc : toBeRemoved) {
 			Debug.log("Removing old process status: " + proc.getExpId());
-			workPool.removeProcess(proc);
+			workPool.cancelProcess(proc);
 		}
 
 
@@ -61,7 +71,7 @@ public class WorkHandler implements Runnable {
 
 		while (true) {
 
-			ProcessCommand processCommand = workPool.getProcess();
+			final ProcessCommand processCommand = workPool.getProcess();
 			ProcessStatus processStatus = workPool.getProcessStatus
 						(processCommand);
 
@@ -69,6 +79,8 @@ public class WorkHandler implements Runnable {
 			if (processCommand != null && processStatus != null) {
 				Debug.log("Executing process in experiment "
 						+ processCommand.getExpId());
+
+				currentProcessCommand = processCommand;
 
 				processStatus.status = ProcessStatus.STATUS_STARTED;
 
@@ -79,22 +91,35 @@ public class WorkHandler implements Runnable {
 					ErrorLogger.log(processStatus.author,
 							"Could not run process command: " +  e.getMessage());
 					processStatus.status = ProcessStatus.STATUS_CRASHED;
-
+					currentProcessCommand = null;
 					continue;
 				}
 
 				processStatus.outputFiles = processCommand.getFilePaths();
 				processStatus.timeStarted = System.currentTimeMillis();
 
+				/* Execute the process command */
 				try {
-					Response resp = processCommand.execute();
+					submit = executor.submit(processCommand);
+					Response resp = submit.get();
+
+					/* Interrupt the execution if the polling thread is
+					 interrupted */
+					/*try {
+						currentExecutingThread.join();
+					} catch(InterruptedException ex) {
+						currentExecutingThread.interrupt();
+					}*/
+
 					Debug.log("AFTER EXECUTE PROCESS");
 					if (resp.getCode()==StatusCode.CREATED){
 						processStatus.status = ProcessStatus.STATUS_FINISHED;
 					} else {
 						processStatus.status = ProcessStatus.STATUS_CRASHED;
 					}
-				} catch (NullPointerException e){
+				} catch (NullPointerException
+						| InterruptedException
+						| ExecutionException e) {
 					processStatus.status = ProcessStatus.STATUS_CRASHED;
 				}
 
@@ -104,11 +129,20 @@ public class WorkHandler implements Runnable {
 
 			}
 
+			currentProcessCommand = null;
+
 			removeOldStatuses();
 		}
 
 	}
 
+	public ProcessCommand getCurrentWork() {
+		return currentProcessCommand;
+	}
+
+	public Future<Response> getFutureProcess() {
+		return submit;
+	}
 
 }
 

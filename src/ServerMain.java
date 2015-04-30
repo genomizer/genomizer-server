@@ -40,11 +40,10 @@ public class ServerMain {
 		/* The database settings should be written upon startup. */
 		printDatabaseInformation();
 
-		/* Create a work pool */
+		/* Create work and thread pools */
 		WorkPool workPool = new WorkPool();
+		workPool.constructThreadPool();
 
-		/* Create a thread pool */
-		ProcessThreadPool procThreadPool = new ProcessThreadPool(workPool);
 
 		/* We attempt to start the doorman. */
 		try {

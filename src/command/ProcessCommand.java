@@ -7,6 +7,7 @@ package command;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Map.Entry;
+import java.util.concurrent.Callable;
 
 import process.ProcessException;
 import process.ProcessHandler;
@@ -24,7 +25,7 @@ import database.DatabaseAccessor;
 import database.containers.Genome;
 import database.constants.MaxLength;
 
-public class ProcessCommand extends Command {
+public class ProcessCommand extends Command implements Callable<Response> {
 
 	public static final String CMD_RAW_TO_PROFILE = "rawToProfile";
 	public static final String CMD_PROFILE_TO_REGION = "profileToRegion";
@@ -54,6 +55,11 @@ public class ProcessCommand extends Command {
 	//Empty constructor
 	public ProcessCommand() {
 
+	}
+
+	@Override
+	public Response call() {
+		return execute();
 	}
 
 	/**
