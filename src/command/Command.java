@@ -68,14 +68,9 @@ public abstract class Command {
 	 * @throws IOException
 	 */
 	public DatabaseAccessor initDB() throws SQLException, IOException {
-		DatabaseAccessor db;
-		System.err.println(ServerSettings.databaseUsername + " " +
-				ServerSettings.databasePassword + " " + ServerSettings.databaseHost + " " +
-				ServerSettings.databaseName);
-		db = new DatabaseAccessor(ServerSettings.databaseUsername,
+		return new DatabaseAccessor(ServerSettings.databaseUsername,
 				ServerSettings.databasePassword, ServerSettings.databaseHost,
 				ServerSettings.databaseName);
-		return db;
 	}
 
 	/**
@@ -99,23 +94,23 @@ public abstract class Command {
 	 */
 	public void validateString(String string, int maxLength, String field)
 			throws ValidateException {
-		if(string == null) {
+		if (string == null) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify " +
 					"an " + field.toLowerCase() + ".");
 		}
 
-		if(string.equals("null")){
+		if (string.equals("null")){
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid "
 					+ field.toLowerCase() + ".");
 		}
 
-		if(string.length() > maxLength || string.length() < 1) {
+		if (string.length() > maxLength || string.length() < 1) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, field + ": " +
 					string + " has to be between 1 and " + maxLength +
 					" characters long.");
 		}
 
-		if(hasInvalidCharacters(string)) {
+		if (hasInvalidCharacters(string)) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid" +
 					" characters in " + field.toLowerCase() +
 					". Valid characters are: " + validCharacters);

@@ -13,7 +13,7 @@
 //
 //import authentication.InactiveUuidsRemover;
 //
-//import command.RequestHandler;
+//import server.RequestHandler;
 //
 //import server.*;
 //
