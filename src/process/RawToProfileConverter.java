@@ -266,6 +266,7 @@ public class RawToProfileConverter extends Executor {
 					"No files found in directory "
 					+ inFolder);
 		}
+		
 		ArrayList<File> files = new ArrayList<File>();
 
 		for (File rawDirFile: rawDirFiles) {
