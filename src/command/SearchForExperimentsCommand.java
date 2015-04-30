@@ -9,6 +9,7 @@ import java.util.List;
 import java.net.URLDecoder;
 
 import database.DatabaseAccessor;
+import database.constants.MaxLength;
 import database.containers.Experiment;
 
 import database.subClasses.UserMethods.UserType;
@@ -42,6 +43,7 @@ public class SearchForExperimentsCommand extends Command {
 			throw new ValidateException(StatusCode.BAD_REQUEST,
 					"Specify annotations to search for.");
 		}
+		validateString(annotations, MaxLength.ANNOTATION_VALUE, "Experiment ");
 	}
 
 	@Override

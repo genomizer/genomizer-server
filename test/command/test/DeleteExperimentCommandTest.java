@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import command.Command;
 import database.constants.MaxLength;
 import database.subClasses.UserMethods.UserType;
+import org.junit.Ignore;
 import org.junit.Test;
 import command.DeleteExperimentCommand;
 import command.ValidateException;
@@ -18,38 +19,6 @@ import command.ValidateException;
  */
 public class DeleteExperimentCommandTest {
 
-//	/**
-//	 * Test that checks that ValidateException is thrown when
-//	 * the experiment-id is null.
-//	 *
-//	 * @throws ValidateException
-//	 */
-//	@Test(expected = ValidateException.class)
-//	public void testValidateNullExpId() throws ValidateException {
-//
-//		DeleteExperimentCommand c = new DeleteExperimentCommand(null);
-//		c.validate();
-//
-//		fail("Expected ValidateException.");
-//
-//	}
-
-//	/**
-//	 * Test that checks that ValidateException is thrown when
-//	 * experiment-id is an empty string.
-//	 *
-//	 * @throws ValidateException
-//	 */
-//	@Test(expected = ValidateException.class)
-//	public void testValidateExpIdEmptyString() throws ValidateException {
-//
-//		DeleteExperimentCommand c = new DeleteExperimentCommand("");
-//		c.validate();
-//
-//		fail("Expected ValidateException.");
-//
-//	}
-
 	/**
 	 * Method used to check that a ValidateException is thrown
 	 * when the experiment-id is to long.
@@ -57,7 +26,7 @@ public class DeleteExperimentCommandTest {
 	 * @throws ValidateException
 	 */
 	@Test(expected = ValidateException.class)
-	public void testValidateExpIdLength() throws ValidateException {
+	public void testValidateExpInvalidIdLength() throws ValidateException {
 		String uri = "/experiment/";
 		for(int i = 0; i < MaxLength.EXPID + 1; i++) {
 			uri += "a";
@@ -81,6 +50,22 @@ public class DeleteExperimentCommandTest {
 		c.validate();
 		assertTrue(true);
 
+	}
+
+	/**
+	 * Test used to check that ValidateException is thrown
+	 * when invalid characters are used
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testValidateIncorrectlyFormatted() throws ValidateException {
+
+		Command c = new DeleteExperimentCommand();
+		c.setFields("/experiment/��", null, UserType.ADMIN);
+		c.validate();
+
+		fail("Expected ValidateException to be thrown.");
 	}
 
 	/**
