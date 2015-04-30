@@ -1,17 +1,13 @@
 package conversion.test;
 
-import conversion.Converter;
+import conversion.ProfileDataConverter;
 import org.junit.After;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 
 import static org.junit.Assert.assertTrue;
 
@@ -36,7 +32,7 @@ public class SgrToWigTest {
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowIllegalArgumentIfInputFileIsNull()
             throws FileNotFoundException {
-        Converter.sgrToWig(null, "resources/conversionTestData/" +
+        ProfileDataConverter.sgrToWig(null, "resources/conversionTestData/" +
                 "expectedResults/sgr2wigResult.wig");
     }
 
@@ -47,7 +43,7 @@ public class SgrToWigTest {
     @Test (expected = IllegalArgumentException.class)
     public void shouldThrowIllegalArgumentIfOutputFileIsNull()
             throws FileNotFoundException{
-        Converter.sgrToWig("resources/conversionTestData/SGR-testdata.sgr",
+        ProfileDataConverter.sgrToWig("resources/conversionTestData/SGR-testdata.sgr",
                 null);
     }
 
@@ -58,7 +54,7 @@ public class SgrToWigTest {
     @Test (expected = FileNotFoundException.class)
     public void shouldThrowFileNotFoundIfInputPathIsntAFile()
             throws FileNotFoundException{
-        Converter.sgrToWig("hej", "hej");
+        ProfileDataConverter.sgrToWig("hej", "hej");
     }
 
     /**
@@ -68,7 +64,7 @@ public class SgrToWigTest {
     @Test (expected = IllegalArgumentException.class)
     public void shouldThrowIllegalArgumentIfOutputPathIsAFile()
             throws FileNotFoundException{
-        Converter.sgrToWig("resources/conversionTestData/SGR-testdata.sgr",
+        ProfileDataConverter.sgrToWig("resources/conversionTestData/SGR-testdata.sgr",
                 "resources/conversionTestData/WIG-testdata.wig");
     }
 
@@ -79,7 +75,7 @@ public class SgrToWigTest {
     @Test (expected = IllegalArgumentException.class)
     public void shouldNotAcceptWrongFileTypeForInput()
             throws FileNotFoundException {
-        Converter.sgrToWig("resources/conversionTestData/BED-testdata.bed",
+        ProfileDataConverter.sgrToWig("resources/conversionTestData/BED-testdata.bed",
                 "resources/conversionTestData/output/test.wig");
     }
 
@@ -90,7 +86,7 @@ public class SgrToWigTest {
     @Test (expected = IllegalArgumentException.class)
     public void shouldNotAcceptWrongFileTypeForOutput()
             throws FileNotFoundException {
-        Converter.sgrToWig("resources/conversionTestData/SGR-testdata.sgr",
+        ProfileDataConverter.sgrToWig("resources/conversionTestData/SGR-testdata.sgr",
                 "resources/conversionTestData/output/test.bed");
     }
 
@@ -102,7 +98,7 @@ public class SgrToWigTest {
     @Test
     public void shouldExsistAoutputFileAfterConversion()
             throws FileNotFoundException {
-        Converter.sgrToWig("resources/conversionTestData/SGR-testdata.sgr",
+        ProfileDataConverter.sgrToWig("resources/conversionTestData/SGR-testdata.sgr",
                 "resources/conversionTestData/output/test.wig");
 
         outputFile = new File("resources/conversionTestData/output/test.wig");
@@ -117,7 +113,7 @@ public class SgrToWigTest {
      */
     @Test
     public void sgrToWigCheckSumTest() throws InterruptedException,IOException {
-        Converter.sgrToWig("resources/conversionTestData/SGR-testdata.sgr",
+        ProfileDataConverter.sgrToWig("resources/conversionTestData/SGR-testdata.sgr",
                 "resources/conversionTestData/output/test.wig");
         File expectedFile;
 

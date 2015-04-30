@@ -12,13 +12,10 @@ import java.security.NoSuchAlgorithmException;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Tests for conversion from .wig of subtype bed to .sgr
- * Created 2015-04-29.
- *
- * @author Albin Råstander <c12arr@cs.umu.se>
- * @author Martin Larsson <dv13mln@cs.umu.se>
+ * Created by dv13mln on 2015-04-30.
  */
-public class GffToSgrTest {
+public class wigVariableStepToSgrTest {
+
     private final String outputPath = "resources/conversionTestData/output/";
     private final String expectedResultPath = "resources/conversionTestData/" +
             "expectedResults/";
@@ -32,8 +29,8 @@ public class GffToSgrTest {
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowIllegalArgumentIfInputFileIsNull()
             throws FileNotFoundException {
-        ProfileDataConverter.gffToSgr(null, "resources/conversionTestData/" +
-                "expectedResults/gff2sgrResult.sgr");
+        ProfileDataConverter.wigToSgr("variableStep", null,
+                "resources/conversionTestData/expectedResults/wigbedToSgr.sgr");
     }
 
     /**
@@ -43,8 +40,8 @@ public class GffToSgrTest {
     @Test (expected = IllegalArgumentException.class)
     public void shouldThrowIllegalArgumentIfOutputFileIsNull()
             throws FileNotFoundException{
-        ProfileDataConverter.gffToSgr("resources/conversionTestData/GFF-testdata.gff",
-                null);
+        ProfileDataConverter.wigToSgr("variableStep",
+                "resources/conversionTestData/WIG-varstep-testdata.wig", null);
     }
 
     /**
@@ -54,7 +51,7 @@ public class GffToSgrTest {
     @Test (expected = FileNotFoundException.class)
     public void shouldThrowFileNotFoundIfInputPathIsntAFile()
             throws FileNotFoundException{
-        ProfileDataConverter.gffToSgr("hej", "hej");
+        ProfileDataConverter.wigToSgr("variableStep", "hej", "hej");
     }
 
     /**
@@ -64,8 +61,9 @@ public class GffToSgrTest {
     @Test (expected = IllegalArgumentException.class)
     public void shouldThrowIllegalArgumentIfOutputPathIsAFile()
             throws FileNotFoundException{
-        ProfileDataConverter.gffToSgr("resources/conversionTestData/GFF-testdata.gff",
-                "resources/conversionTestData/SGR-testdata.sgr");
+        ProfileDataConverter.wigToSgr("variableStep",
+                "resources/conversionTestData/WIG-varstep-testdata.wig",
+                "resources/conversionTestData/expectedResults/bed2sgrResult.sgr");
     }
 
     /**
@@ -75,7 +73,8 @@ public class GffToSgrTest {
     @Test (expected = IllegalArgumentException.class)
     public void shouldNotAcceptWrongFileTypeForInput()
             throws FileNotFoundException {
-        ProfileDataConverter.gffToSgr("resources/conversionTestData/BED-testdata.bed",
+        ProfileDataConverter.wigToSgr("variableStep",
+                "resources/conversionTestData/BED-testdata.bed",
                 "resources/conversionTestData/output/test.sgr");
     }
 
@@ -86,21 +85,21 @@ public class GffToSgrTest {
     @Test (expected = IllegalArgumentException.class)
     public void shouldNotAcceptWrongFileTypeForOutput()
             throws FileNotFoundException {
-        ProfileDataConverter.gffToSgr("resources/conversionTestData/GFF-testdata.gff",
+        ProfileDataConverter.wigToSgr("variableStep",
+                "resources/conversionTestData/WIG-varstep-testdata.wig",
                 "resources/conversionTestData/output/test.bed");
     }
-
 
     /**
      * Tests that output exists after conversion
      * @throws FileNotFoundException
      */
     @Test
-    public void shouldExsistAoutputFileAfterConversion()
+    public void shouldExistAnOutputFileAfterConversion()
             throws FileNotFoundException {
-        ProfileDataConverter.gffToSgr("resources/conversionTestData/GFF-testdata.gff",
+        ProfileDataConverter.wigToSgr("variableStep",
+                "resources/conversionTestData/WIG-varstep-testdata.wig",
                 "resources/conversionTestData/output/test.sgr");
-
         outputFile = new File("resources/conversionTestData/output/test.sgr");
 
         assertTrue(outputFile.exists());
@@ -109,18 +108,20 @@ public class GffToSgrTest {
     /**
      * Tests that the converted files checksum equals the expected checksum
      * @throws InterruptedException
-     * @throws IOException
+     * @throws java.io.IOException
      */
     @Test
-    public void gffToSgrCheckSumTest() throws InterruptedException,IOException {
-        ProfileDataConverter.gffToSgr("resources/conversionTestData/GFF-testdata.gff",
+    public void wigbedToSgrCheckSumTest() throws InterruptedException,
+            IOException {
+        ProfileDataConverter.wigToSgr("variableStep",
+                "resources/conversionTestData/WIG-varstep-testdata.wig",
                 "resources/conversionTestData/output/test.sgr");
         File expectedFile;
 
         try{
             outputFile = new File(outputPath+"test.sgr");
-            expectedFile = new File(expectedResultPath+"gff2sgrResult.sgr");
-
+            expectedFile = new File("resources/conversionTestData/" +
+                    "expectedResults/wigVariableStepToSgr.sgr");
             assertTrue(cmp.compareFiles(outputFile, expectedFile));
         } catch (NullPointerException e) {
             e.printStackTrace();

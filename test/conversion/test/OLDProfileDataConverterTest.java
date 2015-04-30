@@ -15,8 +15,8 @@ import conversion.ConversionHandler;
 
 import static org.junit.Assert.assertFalse;
 
-
- public class ProfileDataConverterTest {
+@Ignore
+ public class OLDProfileDataConverterTest {
 
 	private final String outputPath = "resources/conversionTestData/output/";
 	private final String expectedResultPath = "resources/conversionTestData/expectedResults/";

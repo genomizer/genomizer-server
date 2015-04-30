@@ -3,8 +3,6 @@ package conversion;
 import java.io.File;
 import java.io.IOException;
 
-import conversion.ProfileDataConverter;
-
 /**
  * Class that acts as a handler for all the conversions that will be done.
  * All conversions should go through this class.
@@ -30,7 +28,7 @@ public class ConversionHandler {
 
 		checkValidity(conversionName, inFile, outFile, secondColumn);
 
-		ProfileDataConverter PDC = new ProfileDataConverter();
+		OLDProfileDataConverter PDC = new OLDProfileDataConverter();
 
 		switch (conversionName) {
 			case "wigToSgr":

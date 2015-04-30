@@ -8,7 +8,7 @@ package conversion.test;
  * @author Martin Larsson <dv13mln@cs.umu.se>
  */
 
-import conversion.Converter;
+import conversion.ProfileDataConverter;
 import org.junit.After;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -33,7 +33,7 @@ public class BedToSgrTest {
     @Test (expected = IllegalArgumentException.class)
     public void shouldThrowIllegalArgumentIfInputFileIsNull()
             throws FileNotFoundException{
-        Converter.bedToSgr(null, "resources/conversionTestData/" +
+        ProfileDataConverter.bedToSgr(null, "resources/conversionTestData/" +
                 "expectedResults/gff2sgrResult.sgr");
     }
 
@@ -44,7 +44,7 @@ public class BedToSgrTest {
     @Test (expected = IllegalArgumentException.class)
     public void shouldThrowIllegalArgumentIfOutputFileIsNull()
             throws FileNotFoundException{
-        Converter.bedToSgr("resources/conversionTestData/BED-testdata.bed",
+        ProfileDataConverter.bedToSgr("resources/conversionTestData/BED-testdata.bed",
                 null);
     }
 
@@ -55,7 +55,7 @@ public class BedToSgrTest {
     @Test (expected = FileNotFoundException.class)
     public void shouldThrowFileNotFoundIfInputPathIsntAFile()
             throws FileNotFoundException{
-        Converter.bedToSgr("hej", "hej");
+        ProfileDataConverter.bedToSgr("hej", "hej");
     }
 
     /**
@@ -65,7 +65,7 @@ public class BedToSgrTest {
     @Test (expected = IllegalArgumentException.class)
     public void shouldThrowIllegalArgumentIfOutputPathIsAFile()
             throws FileNotFoundException{
-        Converter.bedToSgr("resources/conversionTestData/BED-testdata.bed",
+        ProfileDataConverter.bedToSgr("resources/conversionTestData/BED-testdata.bed",
                 "resources/conversionTestData/BED-testdata.bed");
     }
 
@@ -76,7 +76,7 @@ public class BedToSgrTest {
     @Test (expected = IllegalArgumentException.class)
     public void shouldNotAcceptWrongFileTypeForInput()
             throws FileNotFoundException {
-        Converter.gffToSgr("resources/conversionTestData/GFF-testdata.gff",
+        ProfileDataConverter.gffToSgr("resources/conversionTestData/GFF-testdata.gff",
                 "resources/conversionTestData/SGR-testdata-4.sgr");
     }
 
@@ -87,7 +87,7 @@ public class BedToSgrTest {
     @Test (expected = IllegalArgumentException.class)
     public void shouldNotAcceptWrongFileTypeForOutput()
             throws FileNotFoundException {
-        Converter.gffToSgr("resources/conversionTestData/BED-testdata.bed",
+        ProfileDataConverter.gffToSgr("resources/conversionTestData/BED-testdata.bed",
                 "resources/conversionTestData/output/test.gff");
     }
 
@@ -98,7 +98,7 @@ public class BedToSgrTest {
     @Test
     public void shouldExsistAoutputFileAfterConversion()
             throws FileNotFoundException {
-        Converter.bedToSgr("resources/conversionTestData/BED-testdata.bed",
+        ProfileDataConverter.bedToSgr("resources/conversionTestData/BED-testdata.bed",
                 "resources/conversionTestData/output/test.sgr");
 
         outputFile = new File("resources/conversionTestData/output/test.sgr");
@@ -114,7 +114,7 @@ public class BedToSgrTest {
      */
     @Test
     public void bedToSgrCheckSumTest() throws InterruptedException,IOException {
-        Converter.bedToSgr("resources/conversionTestData/BED-testdata.bed",
+        ProfileDataConverter.bedToSgr("resources/conversionTestData/BED-testdata.bed",
                 "resources/conversionTestData/output/test.sgr");
         File expectedFile;
 

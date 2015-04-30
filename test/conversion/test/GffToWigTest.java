@@ -1,8 +1,7 @@
 package conversion.test;
 
-import conversion.Converter;
+import conversion.ProfileDataConverter;
 import org.junit.After;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -33,7 +32,7 @@ public class GffToWigTest {
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowIllegalArgumentIfInputFileIsNull()
             throws FileNotFoundException {
-        Converter.gffToWig(null, "resources/conversionTestData/" +
+        ProfileDataConverter.gffToWig(null, "resources/conversionTestData/" +
                 "expectedResults/sgr2wigResult.wig");
     }
 
@@ -44,7 +43,7 @@ public class GffToWigTest {
     @Test (expected = IllegalArgumentException.class)
     public void shouldThrowIllegalArgumentIfOutputFileIsNull()
             throws FileNotFoundException{
-        Converter.gffToWig("resources/conversionTestData/GFF-testdata.gff",
+        ProfileDataConverter.gffToWig("resources/conversionTestData/GFF-testdata.gff",
                 null);
     }
 
@@ -55,7 +54,7 @@ public class GffToWigTest {
     @Test (expected = FileNotFoundException.class)
     public void shouldThrowFileNotFoundIfInputPathIsntAFile()
             throws FileNotFoundException{
-        Converter.gffToWig("hej", "hej");
+        ProfileDataConverter.gffToWig("hej", "hej");
     }
 
     /**
@@ -65,7 +64,7 @@ public class GffToWigTest {
     @Test (expected = IllegalArgumentException.class)
     public void shouldThrowIllegalArgumentIfOutputPathIsAFile()
             throws FileNotFoundException{
-        Converter.gffToWig("resources/conversionTestData/GFF-testdata.gff",
+        ProfileDataConverter.gffToWig("resources/conversionTestData/GFF-testdata.gff",
                 "resources/conversionTestData/WIG-testdata.wig");
     }
 
@@ -76,7 +75,7 @@ public class GffToWigTest {
     @Test (expected = IllegalArgumentException.class)
     public void shouldNotAcceptWrongFileTypeForInput()
             throws FileNotFoundException {
-        Converter.gffToWig("resources/conversionTestData/BED-testdata.bed",
+        ProfileDataConverter.gffToWig("resources/conversionTestData/BED-testdata.bed",
                 "resources/conversionTestData/output/test.wig");
     }
 
@@ -87,7 +86,7 @@ public class GffToWigTest {
     @Test (expected = IllegalArgumentException.class)
     public void shouldNotAcceptWrongFileTypeForOutput()
             throws FileNotFoundException {
-        Converter.gffToWig("resources/conversionTestData/GFF-testdata.gff",
+        ProfileDataConverter.gffToWig("resources/conversionTestData/GFF-testdata.gff",
                 "resources/conversionTestData/output/test.bed");
     }
 
@@ -98,7 +97,7 @@ public class GffToWigTest {
     @Test
     public void shouldExsistAnOutputFileAfterConversion()
             throws FileNotFoundException {
-        Converter.gffToWig("resources/conversionTestData/GFF-testdata.gff",
+        ProfileDataConverter.gffToWig("resources/conversionTestData/GFF-testdata.gff",
                 "resources/conversionTestData/output/test.wig");
 
         outputFile = new File("resources/conversionTestData/output/test.wig");
@@ -115,7 +114,7 @@ public class GffToWigTest {
     @Test
     public void gffToWigCheckSumTest() throws InterruptedException,
             IOException {
-        Converter.gffToWig("resources/conversionTestData/GFF-testdata.gff",
+        ProfileDataConverter.gffToWig("resources/conversionTestData/GFF-testdata.gff",
                 "resources/conversionTestData/output/test.wig");
         File expectedFile;
 
