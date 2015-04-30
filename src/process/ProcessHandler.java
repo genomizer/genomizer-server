@@ -1,6 +1,7 @@
 package process;
 
 import command.ProcessCommand;
+import server.ErrorLogger;
 
 /**
  * Class that acts as a handler for the procedure and calculation part of the
@@ -29,14 +30,19 @@ public class ProcessHandler {
 		String logString = "";
 		switch (processName) {
 			case ProcessCommand.CMD_RAW_TO_PROFILE:
-				RawToProfileConverter rawToProfileConverter = new RawToProfileConverter();
-				logString = rawToProfileConverter.procedure(procedureParams, inFile, outFile);
+				RawToProfileConverter rawToProfileConverter =
+						new RawToProfileConverter();
+				logString = rawToProfileConverter.procedure(procedureParams,
+						inFile, outFile);
+				
+				ErrorLogger.log("SYSTEM","Process: "+logString);
 				break;
 			case ProcessCommand.CMD_PROFILE_TO_REGION:
 				// TODO
 				break;
 			default:
-				throw new IllegalArgumentException();
+				throw new IllegalArgumentException("Command "+processName
+												   +" not found.");
 			}
 			return logString;
 	}
