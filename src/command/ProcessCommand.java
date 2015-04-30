@@ -73,9 +73,9 @@ public class ProcessCommand extends Command {
 		hasRights(UserRights.getRights(this.getClass()));
 		validateName(username, MaxLength.USERNAME, "Username");
 		validateName(expid, MaxLength.EXPID, "Experiment name");
-		validateName(metadata, MaxLength.FILE_METADATA, "Metadata");
+		validateExists(metadata, MaxLength.FILE_METADATA, "Metadata");
 		validateName(genomeVersion, MaxLength.GENOME_VERSION, "Genome version");
-		validateName(processType, Integer.MAX_VALUE, "Processtype");
+		validateExists(processType, Integer.MAX_VALUE, "Processtype");
 
 		if(parameters == null || parameters.length < 1) {
 			throw new ValidateException(StatusCode.BAD_REQUEST,
