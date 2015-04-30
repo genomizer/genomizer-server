@@ -1,5 +1,7 @@
 package process;
 
+import server.ServerSettings;
+
 import java.io.*;
 
 /**
@@ -10,31 +12,28 @@ public class SRADownloader extends Executor{
     private final String prefetchExecutable = "sra-toolkit/prefetch";
     private final String fastqDumpExecutable ="sra-toolkit/fastq-dump";
     private final String metaDataQuery = "http://trace.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?save=efetch&db=sra&rettype=runinfo&term=";
-    private final String dir = "../data/sra/"; //ServerSettings.fileLocation + "sra/";
+    private final String dir = ServerSettings.fileLocation;
 
-    public SRADownloader() {
-
-    }
 
     /**
      * Downloads a file from the Sequence Read Archive
      *
-     * @param filename the SRA file name
+     * @param runID the SRA file name
      * @throws IOException
      * @throws InterruptedException
      *
      */
-    public void download(String filename) throws IOException, InterruptedException {
+    public void download(String runID) throws IOException, InterruptedException {
 
-        String command[] = parse(fastqDumpExecutable + " -O " + dir + " " + filename);
+        String command[] = parse(fastqDumpExecutable + " -O " + dir + "/sra/ " + runID);
         String result = executeProgram(command);
-        System.out.println(result);
-        System.out.println("Working Directory = " +
-                System.getProperty("user.dir"));
-        File downloaded = new File(System.getProperty("user.dir")+ "/data/sra/"+filename+".fastq");
+
+        File downloaded = new File(dir + "/sra/" + runID + ".fastq");
 
         if (!downloaded.exists())
-            throw new IOException("File download failed");
+            System.out.println(result);
+        else
+            System.out.println("Successfully downloaded file: " + runID);
 
         System.out.println("Downloaded file size= " + downloaded.length());
     }
@@ -47,14 +46,14 @@ public class SRADownloader extends Executor{
      * @throws IOException
      * @throws InterruptedException
      */
-    //TODO : create folders for meta data file
     public void getMetaData(String runID, String studyID) throws IOException, InterruptedException {
-        String command[] =parse("wget -O " + dir + "temp.csv" + " " + metaDataQuery + studyID);
-        String result = executeShellCommand(command);
+
+        String command[] = parse("wget -O " + dir + "/sra/temp.csv" + " " + metaDataQuery + studyID);
+        String result = executeCommand(command);
         System.out.println(result);
 
-        File tempFile = new File(System.getProperty("user.dir")+ "/data/sra/temp.csv");
-        File outFile = new File(System.getProperty("user.dir")+ "/data/sra/" + runID + ".csv");
+        File tempFile = new File(dir + "/sra/temp.csv");
+        File outFile = new File(dir + "/sra/" + runID + ".csv");
         BufferedReader br = new BufferedReader(new FileReader(tempFile));
 
         String line;
@@ -81,7 +80,9 @@ public class SRADownloader extends Executor{
 
 
     public static void main(String[] args) {
+
         try {
+            ServerSettings.readSettingsFile(System.getProperty("user.dir")+"/settings.cfg");
             SRADownloader sh = new SRADownloader();
             System.out.println(sh.getFileSize("SRR1970533"));
             sh.download("SRR1970533");

@@ -112,7 +112,7 @@ public abstract class Executor {
 	 * @throws InterruptedException
 	 * @throws IOException
 	 */
-	private String executeCommand(String[] command)
+	protected String executeCommand(String[] command)
 			throws InterruptedException, IOException {
 		ProcessBuilder builder = new ProcessBuilder(command);
 
@@ -130,8 +130,8 @@ public abstract class Executor {
 		}
 		processOutput.close();
 
-
 		process.waitFor();
+
 
 		/* Check if command finished successfully */
 		if(process.exitValue() != 0) {
@@ -191,41 +191,6 @@ public abstract class Executor {
 		// System.out.printf( "Process exited with result %d and output %s%n",
 		// result, text );
 		return text.toString();
-	}
-
-	/**
-	 * Execute shell command
-	 *
-	 * @param command array of shell command and args
-	 * @return shell command output
-	 * @throws IOException
-	 * @throws InterruptedException
-	 */
-	protected String executeShellCommand(String[] command)
-											throws IOException, InterruptedException {
-
-		ProcessBuilder builder = new ProcessBuilder(command);
-		builder.directory(new File(FILEPATH).getAbsoluteFile());
-		builder.redirectErrorStream(true);
-		Process process = builder.start();
-
-		Scanner processOutput = new Scanner(process.getInputStream());
-		StringBuilder results = new StringBuilder();
-
-		while (processOutput.hasNextLine()) {
-			results.append(processOutput.nextLine());
-			results.append("\n");
-		}
-
-		processOutput.close();
-
-		process.waitFor();
-
-		if(process.exitValue() != 0) {
-			throw new RuntimeException(results.toString());
-		}
-
-		return results.toString();
 	}
 
 	/**
