@@ -204,7 +204,6 @@ public class CreateUserCommandTest {
 		cmd.setFields("uri", "uuid", UserType.ADMIN);
 
 		cmd.validate();
-
 	}
 
 	/**
