@@ -12,14 +12,15 @@ public class ServerSettings {
 	public static String databaseHost = null;
 	public static String databaseName = null;
 	public static String wwwTunnelHost = null;
+	public static String wwwTunnelPath = null;
 	public static int wwwTunnelPort = -1;
-	public static String downloadURL = null;
-	public static String uploadURL = null;
 	public static int genomizerPort = -1;
 	public static String fileLocation = "/var/www/data/";
 	public static String bowtieLocation = "bowtie";
 	public static int nrOfProcessThreads = 5;
 
+	private static String downloadURL = "/download?path=";
+	private static String uploadURL = "/upload?path=";
 
 	public static void writeSettings(String path){
 		try {
@@ -31,8 +32,7 @@ public class ServerSettings {
 					+ "databaseName = " + databaseName + "\n"
 					+ "wwwTunnelHost = " + wwwTunnelHost + "\n"
 					+ "wwwTunnelPort = " + wwwTunnelPort + "\n"
-					+ "downloadURL = " + downloadURL + "\n"
-					+ "uploadURL = " + uploadURL + "\n"
+					+ "wwwTunnelPath = " + wwwTunnelPath + "\n"
 					+ "genomizerPort = " + genomizerPort + "\n"
 					+ "fileLocation = " + fileLocation + "\n"
 					+ "nrOfProcessThreads = " + nrOfProcessThreads + "\n"
@@ -59,8 +59,7 @@ public class ServerSettings {
 		nullCheck(databaseName, "databaseName");
 		nullCheck(wwwTunnelHost, "wwwTunnelHost");
 		nullCheck(wwwTunnelPort, "wwwTunnelPort");
-		nullCheck(uploadURL,     "uploadURL");
-		nullCheck(downloadURL,   "downloadURL");
+		nullCheck(wwwTunnelPath, "wwwTunnelPath");
 		nullCheck(genomizerPort, "genomizerPort");
 		nullCheck(fileLocation, "fileLocation");
 		nullCheck(nrOfProcessThreads, "nrOfProcessThreads");
@@ -129,11 +128,8 @@ public class ServerSettings {
 				case "wwwtunnelport":
 					wwwTunnelPort = Integer.parseInt(value);
 					break;
-				case "uploadurl":
-					uploadURL = value;
-					break;
-				case "downloadurl":
-					downloadURL = value;
+				case "wwwtunnelpath":
+					wwwTunnelPath = value;
 					break;
 				case "genomizerport":
 					genomizerPort = Integer.parseInt(value);
@@ -156,9 +152,9 @@ public class ServerSettings {
 			}
 			scan.close();
 			ServerDependentValues.DownloadURL = wwwTunnelHost + ":" +
-					wwwTunnelPort + downloadURL;
+					wwwTunnelPort + wwwTunnelPath + downloadURL;
 			ServerDependentValues.UploadURL = wwwTunnelHost + ":" +
-					wwwTunnelPort + uploadURL;
+					wwwTunnelPort + wwwTunnelPath + uploadURL;
 
 			String dataInfo =
 					"\tdatabaseUsername = " + databaseUsername + "\n"
@@ -167,8 +163,7 @@ public class ServerSettings {
 							+ "\tdatabaseName = " + databaseName + "\n"
 							+ "\twwwTunnelHost = " + wwwTunnelHost + "\n"
 							+ "\twwwTunnelPort = " + wwwTunnelPort + "\n"
-							+ "\tuploadURL = " + uploadURL + "\n"
-							+ "\tdownloadURL = " + downloadURL + "\n"
+							+ "\twwwTunnelPath = " + wwwTunnelPath + "\n"
 							+ "\tgenomizerPort = " + genomizerPort + "\n"
 							+ "\tfileLocation = " + fileLocation + "\n"
 							+ "\tnrOfProcessThreads = " + nrOfProcessThreads + "\n"
