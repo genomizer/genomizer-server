@@ -1,6 +1,6 @@
 package process;
 
-import java.io.IOException;
+import java.io.*;
 
 /**
  * Created by oi12fun & tfy12jsg on 2015-04-29.
@@ -26,34 +26,58 @@ public class SRADownloader extends Executor{
      */
     public void download(String filename) throws IOException, InterruptedException {
 
-        String command[] = parse(prefetchExecutable + " " + filename);
+        String command[] = parse(fastqDumpExecutable + " -O " + dir + " " + filename);
         String result = executeProgram(command);
         System.out.println(result);
+        System.out.println("Working Directory = " +
+                System.getProperty("user.dir"));
+        File downloaded = new File(System.getProperty("user.dir")+ "/data/sra/"+filename+".fastq");
 
+        if (!downloaded.exists())
+            throw new IOException("File download failed");
+
+        System.out.println("Downloaded file size= " + downloaded.length());
     }
 
     /**
-     * Retrieves meta data for a file (study)
+     * Retrieves meta data for a run file
      *
-     * @param filename
+     * @param runID
+     * @param studyID the study to which the run file belongs
      * @throws IOException
      * @throws InterruptedException
      */
-    //TODO : create folders for meta data file, extract metadata for specific run
-    public void getMetaData(String filename) throws IOException, InterruptedException {
-        String command[] =parse("wget -O " + dir + filename + ".csv" + " " + metaDataQuery + filename);
+    //TODO : create folders for meta data file
+    public void getMetaData(String runID, String studyID) throws IOException, InterruptedException {
+        String command[] =parse("wget -O " + dir + "temp.csv" + " " + metaDataQuery + studyID);
         String result = executeShellCommand(command);
         System.out.println(result);
-    }
 
+        File tempFile = new File(System.getProperty("user.dir")+ "/data/sra/temp.csv");
+        File outFile = new File(System.getProperty("user.dir")+ "/data/sra/" + runID + ".csv");
+        BufferedReader br = new BufferedReader(new FileReader(tempFile));
+
+        String line;
+
+        while((line = br.readLine()) != null) {
+            if (line.startsWith(runID)) {
+                if(!outFile.exists())
+                    outFile.createNewFile();
+
+                FileWriter fw = new FileWriter(outFile.getAbsoluteFile());
+                BufferedWriter bw = new BufferedWriter(fw);
+                bw.write(line);
+                bw.close();
+            }
+        }
+    }
 
     private String getFileSize(String filename) throws IOException, InterruptedException {
         String command[] = parse(prefetchExecutable + " -s " + filename);
         String result = executeProgram(command);
-
-        return result;
+        String[] fileSize = result.split(filename);
+        return fileSize[1].trim();
     }
-
 
 
     public static void main(String[] args) {
@@ -61,7 +85,7 @@ public class SRADownloader extends Executor{
             SRADownloader sh = new SRADownloader();
             System.out.println(sh.getFileSize("SRR1970533"));
             sh.download("SRR1970533");
-            sh.getMetaData("SRP056905");
+            sh.getMetaData("SRR1970533","SRP056905");
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
