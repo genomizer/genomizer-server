@@ -34,7 +34,6 @@ public class URILength {
 		uriLengths.put(AddAnnotationFieldCommand.class, 2);
 		uriLengths.put(AddAnnotationValueCommand.class, 2);
 		uriLengths.put(DeleteAnnotationFieldCommand.class, 3);
-		uriLengths.put(GetAnnotationInformationCommand.class, 2);
 		uriLengths.put(UpdateAnnotationPrivilegesCommand.class, 3);
 		uriLengths.put(AddGenomeReleaseCommand.class, 1);
 		uriLengths.put(EditAnnotationValueCommand.class, 2);
