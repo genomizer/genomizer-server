@@ -193,6 +193,58 @@ public class Converter {
             tempFile.delete();
     }
 
+
+    public static void wigToSgr(String wigType, String inputPath, String outputPath) throws FileNotFoundException {
+        switch (wigType) {
+            case "bed":
+                wigBedToSgr(inputPath, outputPath);
+                break;
+            case "fixedStep":
+                //wigFixedStepToSgr(inputPath, outputPath);
+                break;
+            case "variableStep":
+                //wigVariableStepToSgr(inputPath, outputPath);
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown wig type.");
+        }
+    }
+
+    private static void wigBedToSgr(String inputPath, String outputPath) throws FileNotFoundException {
+        File inputFile;
+        File outputFile;
+        FileWriter fw = null;
+
+        checkArguments(inputPath, outputPath);
+
+        if (!inputPath.endsWith(".wig") || !outputPath.endsWith(".sgr")) {
+            throw new IllegalArgumentException("Filetype not accepted for this conversion.");
+        }
+
+        inputFile = new File(inputPath);
+        outputFile = new File(outputPath);
+
+        try {
+            outputFile.createNewFile();
+            fw = new FileWriter(outputFile);
+
+            BufferedReader fr = new BufferedReader(new FileReader(inputFile));
+            String line;
+            String []columns;
+
+            while ((line = fr.readLine()) != null) {
+                columns = line.split("\\s+");
+                fw.write(columns[0]+"\t"+columns[1]+"\t"+columns[3]+"\n");
+            }
+
+            fw.close();
+            fr.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     /**
      * Checks if arguments are valid file paths
      * @param inputPath
