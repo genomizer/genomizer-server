@@ -27,7 +27,7 @@ public class SRADownloader extends Executor{
 
         String command[] = parse(fastqDumpExecutable + " -O " + dir + "/sra/ " + runID);
         String result = executeProgram(command);
-
+        System.out.println("hej");
         File downloaded = new File(dir + "/sra/" + runID + ".fastq");
 
         if (!downloaded.exists())
@@ -84,7 +84,6 @@ public class SRADownloader extends Executor{
         try {
             ServerSettings.readSettingsFile(System.getProperty("user.dir")+"/settings.cfg");
             SRADownloader sh = new SRADownloader();
-            System.out.println(sh.getFileSize("SRR1970533"));
             sh.download("SRR1970533");
             sh.getMetaData("SRR1970533","SRP056905");
         } catch (IOException e) {
