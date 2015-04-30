@@ -15,6 +15,7 @@ public class MaxLength {
 	public final static int FILE_UPLOADER = 32;
 	public final static int FILE_EXPID = 256;
 	public final static int FILE_GRVERSION = 16;
+	public final static int FILE_MD5 = 32;
 
 	public final static int ANNOTATION_LABEL = 32;
 	public final static int ANNOTATION_DATATYPE = 16;
@@ -26,6 +27,8 @@ public class MaxLength {
 	public final static int USERNAME = 32;
 	public final static int PASSWORD = 32;
 	public final static int ROLE = 32;
+	public final static int FULLNAME = 32;
+	public final static int EMAIL = 32;
 
 	public final static int WORKSPACEID = 32;
 	public final static int WORKSPACE_NAME = 64;
