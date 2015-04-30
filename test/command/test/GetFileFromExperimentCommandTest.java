@@ -17,52 +17,7 @@ import command.ValidateException;
  * @version 1.0
  */
 public class GetFileFromExperimentCommandTest {
-
-//	/**
-//	 * Test used to check that creation works and
-//	 * object is not null.
-//	 */
-//	@Test
-//	public void testCreateNotNull() {
-//
-//		GetFileFromExperimentCommand c = new GetFileFromExperimentCommand("Hello");
-//
-//		assertNotNull(c);
-//
-//	}
-//
-//	/**
-//	 * Test used to check that ValidateException is thrown
-//	 * when FileExpId is an empty string.
-//	 *
-//	 * @throws ValidateException
-//	 */
-//	@Test(expected = ValidateException.class)
-//	public void testValidateFileExpIdEmptyString() throws ValidateException {
-//
-//		GetFileFromExperimentCommand c = new GetFileFromExperimentCommand("");
-//		c.validate();
-//
-//		fail("Expected ValidateException to be thrown.");
-//
-//	}
-//
-//	/**
-//	 * Test used to check that ValidateException is thrown
-//	 * when FileExpId is null.
-//	 *
-//	 * @throws ValidateException
-//	 */
-//	@Test(expected = ValidateException.class)
-//	public void testValidateFileExpIdNotNull() throws ValidateException {
-//
-//		GetFileFromExperimentCommand c = new GetFileFromExperimentCommand(null);
-//		c.validate();
-//
-//		fail("Expected ValidateException to be thrown.");
-//
-//	}
-
+	
 	/**
 	 * Test used to check that ValidateException is thrown
 	 * when FileExpId length is to long.
@@ -70,7 +25,7 @@ public class GetFileFromExperimentCommandTest {
 	 * @throws ValidateException
 	 */
 	@Test(expected = ValidateException.class)
-	public void testValidateFileExpIdLength() throws ValidateException {
+	public void testValidateFileExpIdMaxLength() throws ValidateException {
 		String uri = "/file/";
 		for(int i = 0; i < MaxLength.FILE_EXPID + 1; i++) {
 			uri += "a";
@@ -78,9 +33,19 @@ public class GetFileFromExperimentCommandTest {
 		Command c = new GetFileFromExperimentCommand();
 		c.setFields(uri, null, UserType.ADMIN);
 		c.validate();
+	}
 
-		fail("Expected ValidateException to be thrown.");
-
+	/**
+	 * Test used to check that ValidateException is thrown
+	 * when FileExpId has invalidcharacters
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testValidateFileExpIdInvalidCharacters() throws ValidateException {
+		Command c = new GetFileFromExperimentCommand();
+		c.setFields( "/file/��!?,:;[]{}", null, UserType.ADMIN);
+		c.validate();
 	}
 
 	/**
