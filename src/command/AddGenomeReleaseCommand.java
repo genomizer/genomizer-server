@@ -33,17 +33,11 @@ public class AddGenomeReleaseCommand extends Command {
 	@Override
 	public void validate() throws ValidateException {
 
-		validateString(specie, MaxLength.GENOME_SPECIES, "Specie");
-		validateString(genomeVersion, MaxLength.GENOME_VERSION, "Genome version");
+		validateName(specie, MaxLength.GENOME_SPECIES, "Specie");
+		validateName(genomeVersion, MaxLength.GENOME_VERSION, "Genome version");
 
 		for(int i = 0; i < files.size(); i++) {
-			int sizeCheck = files.get(i).length();
-			if(sizeCheck > MaxLength.GENOME_FILEPATH || sizeCheck < 1) {
-				throw new ValidateException(StatusCode.BAD_REQUEST, "File " +
-						"name has to be between 1 and " +
-						MaxLength.GENOME_FILEPATH +
-						" characters long.");
-			}
+			validateName(files.get(i), MaxLength.GENOME_FILEPATH, "File name");
 		}
 	}
 

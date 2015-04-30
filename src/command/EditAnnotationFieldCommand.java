@@ -31,9 +31,9 @@ public class EditAnnotationFieldCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-		validateString(oldName, MaxLength.ANNOTATION_LABEL,
+		validateName(oldName, MaxLength.ANNOTATION_LABEL,
 				"Old annotation label");
-		validateString(newName, MaxLength.ANNOTATION_LABEL,
+		validateName(newName, MaxLength.ANNOTATION_LABEL,
 				"New annotation label");
 	}
 

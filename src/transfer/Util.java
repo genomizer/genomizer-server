@@ -1,4 +1,6 @@
-package server;
+package transfer;
+
+import server.Debug;
 
 import java.net.URI;
 import java.util.HashMap;
@@ -23,4 +25,5 @@ public class Util {
 
         return reqPath;
     }
+
 }

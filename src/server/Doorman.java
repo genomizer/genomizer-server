@@ -32,6 +32,8 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.Executor;
 
+import command.ValidateException;
+import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
@@ -45,11 +47,16 @@ import com.sun.net.httpserver.HttpServer;
 import command.CommandHandler;
 import command.CommandType;
 
+import transfer.DownloadHandler;
+import transfer.UploadHandler;
+import transfer.Util;
+
+
 public class Doorman {
 
 	private HttpServer httpServer;
 	private CommandHandler commandHandler;
-	private UploadHandler   uploadHandler;
+	private UploadHandler uploadHandler;
 	private DownloadHandler downloadHandler;
 
 	/**
@@ -321,7 +328,15 @@ public class Doorman {
 				Debug.log("Internal server error " + ex.getMessage());
 				ErrorLogger.log("SYSTEM", ex);
 				ex.printStackTrace();
-				respond(exchange, new MinimalResponse(StatusCode.INTERNAL_SERVER_ERROR));
+				Response resp;
+				if (ex instanceof ValidateException) {
+					ValidateException vEx = (ValidateException) ex;
+					resp = new ErrorResponse(vEx.getCode(), vEx.getMessage());
+				}
+				else {
+					resp = new MinimalResponse(StatusCode.INTERNAL_SERVER_ERROR);
+				}
+				respond(exchange, resp);
 		    }
 		    }
 		};

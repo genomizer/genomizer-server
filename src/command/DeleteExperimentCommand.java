@@ -29,7 +29,7 @@ public class DeleteExperimentCommand extends Command {
 	}
 
 	public void validate() throws ValidateException {
-		validateString(header, MaxLength.EXPID, "Experiment name");
+		validateName(header, MaxLength.EXPID, "Experiment name");
 	}
 
 	public Response execute() {
