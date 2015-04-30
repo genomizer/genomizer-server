@@ -69,7 +69,8 @@ public class GetProcessStatusCommandTest {
 	@Ignore
 	public void shouldContainStuff() {
 
-		new Thread(workHandler).start();
+		// TODO
+		//new Thread(workHandler).start();
 
 		try {
 			Thread.sleep(10000);

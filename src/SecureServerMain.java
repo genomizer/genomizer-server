@@ -42,10 +42,7 @@ public class SecureServerMain {
 
 		/* Create a work pool */
 		WorkPool workPool = new WorkPool();
-
-		/* Create process handlers */
-		createWorkHandlers(workPool);
-
+		
 		/* We attempt to start the secure doorman */
 		try {
 			new SecureDoorman(new CommandHandler(workPool),
@@ -76,11 +73,6 @@ public class SecureServerMain {
 		ErrorLogger.log("SYSTEM", info);
 	}
 
-	private static void createWorkHandlers(WorkPool workPool) {
-		for (int i=0; i<ServerSettings.nrOfProcessThreads; i++) {
-			new Thread(new WorkHandler(workPool)).start();
-		}
-	}
 
 	/**
 	 * This method attempts to read the settings file. It is defined to read

@@ -8,26 +8,19 @@ import response.StatusCode;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.LinkedList;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 
-public class WorkHandler implements Runnable {
+public class WorkHandler implements Callable<Response> {
 
 	private static final long statusTimeToLive = 2*1000*60*60*24;
 	private WorkPool workPool;
-	private ProcessCommand currentProcessCommand;
-	private ExecutorService executor;
-	private Future<Response> submit;
 
 
 	public WorkHandler(WorkPool workPool) {
 		this.workPool = workPool;
-		executor = Executors.newSingleThreadExecutor();
-		currentProcessCommand = null;
 	}
+
 
 	public void removeOldStatuses() {
 
@@ -67,82 +60,61 @@ public class WorkHandler implements Runnable {
 	//If the queue is not empty, the command at the head of the queue is
 	//is executed
 	@Override
-	public void run() {
+	public Response call() {
 
-		while (true) {
-
-			final ProcessCommand processCommand = workPool.getProcess();
-			ProcessStatus processStatus = workPool.getProcessStatus
-						(processCommand);
+		final ProcessCommand processCommand = workPool.getProcess();
+		ProcessStatus processStatus = workPool.getProcessStatus
+				(processCommand);
 
 
-			if (processCommand != null && processStatus != null) {
-				Debug.log("Executing process in experiment "
-						+ processCommand.getExpId());
+		Response response = null;
 
-				currentProcessCommand = processCommand;
+		if (processCommand != null && processStatus != null) {
+			Debug.log("Executing process in experiment "
+					+ processCommand.getExpId());
 
-				processStatus.status = ProcessStatus.STATUS_STARTED;
+			processStatus.status = ProcessStatus.STATUS_STARTED;
 
-				try {
-					processCommand.setFilePaths();
-				} catch (SQLException | IOException e) {
-					Debug.log(e.getMessage());
-					ErrorLogger.log(processStatus.author,
-							"Could not run process command: " +  e.getMessage());
-					processStatus.status = ProcessStatus.STATUS_CRASHED;
-					currentProcessCommand = null;
-					continue;
-				}
-
-				processStatus.outputFiles = processCommand.getFilePaths();
-				processStatus.timeStarted = System.currentTimeMillis();
-
-				/* Execute the process command */
-				try {
-					submit = executor.submit(processCommand);
-					Response resp = submit.get();
-
-					/* Interrupt the execution if the polling thread is
-					 interrupted */
-					/*try {
-						currentExecutingThread.join();
-					} catch(InterruptedException ex) {
-						currentExecutingThread.interrupt();
-					}*/
-
-					Debug.log("AFTER EXECUTE PROCESS");
-					if (resp.getCode()==StatusCode.CREATED){
-						processStatus.status = ProcessStatus.STATUS_FINISHED;
-					} else {
-						processStatus.status = ProcessStatus.STATUS_CRASHED;
-					}
-				} catch (NullPointerException
-						| InterruptedException
-						| ExecutionException e) {
-					processStatus.status = ProcessStatus.STATUS_CRASHED;
-				}
-
-
-				processStatus.timeFinished = System.currentTimeMillis();
-
-
+			try {
+				processCommand.setFilePaths();
+			} catch (SQLException | IOException e) {
+				Debug.log(e.getMessage());
+				ErrorLogger.log(processStatus.author,
+						"Could not run process command: " + e.getMessage());
+				processStatus.status = ProcessStatus.STATUS_CRASHED;
+				return null;
 			}
 
-			currentProcessCommand = null;
+			processStatus.outputFiles = processCommand.getFilePaths();
+			processStatus.timeStarted = System.currentTimeMillis();
 
-			removeOldStatuses();
+			/* Execute the process command */
+			try {
+				response = processCommand.execute();
+
+
+				Debug.log("AFTER EXECUTE PROCESS");
+				if (response.getCode() == StatusCode.CREATED) {
+					processStatus.status = ProcessStatus.STATUS_FINISHED;
+				} else {
+					processStatus.status = ProcessStatus.STATUS_CRASHED;
+				}
+			} catch (NullPointerException e) {
+				processStatus.status = ProcessStatus.STATUS_CRASHED;
+			}
+
+
+			processStatus.timeFinished = System.currentTimeMillis();
+
+
 		}
 
+		removeOldStatuses();
+
+		return response;
+
 	}
 
-	public ProcessCommand getCurrentWork() {
-		return currentProcessCommand;
-	}
-
-	public Future<Response> getFutureProcess() {
-		return submit;
-	}
 
 }
 

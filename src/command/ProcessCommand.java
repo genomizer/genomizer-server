@@ -25,7 +25,7 @@ import database.DatabaseAccessor;
 import database.containers.Genome;
 import database.constants.MaxLength;
 
-public class ProcessCommand extends Command implements Callable<Response> {
+public class ProcessCommand extends Command {
 
 	public static final String CMD_RAW_TO_PROFILE = "rawToProfile";
 	public static final String CMD_PROFILE_TO_REGION = "profileToRegion";
@@ -57,10 +57,6 @@ public class ProcessCommand extends Command implements Callable<Response> {
 
 	}
 
-	@Override
-	public Response call() {
-		return execute();
-	}
 
 	/**
 	 * Method for validating the process command.

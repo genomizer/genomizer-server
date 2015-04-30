@@ -42,8 +42,6 @@ public class ServerMain {
 
 		/* Create work and thread pools */
 		WorkPool workPool = new WorkPool();
-		workPool.constructThreadPool();
-
 
 		/* We attempt to start the doorman. */
 		try {
