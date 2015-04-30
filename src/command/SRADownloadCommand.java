@@ -19,8 +19,8 @@ public class SRADownloadCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-		validateString(runID, 10, "Invalid runID");
-		validateString(studyID, 10, "Invalid studyID");
+		validateName(runID, 10, "Invalid runID");
+		validateName(studyID, 10, "Invalid studyID");
 
 
 	}
