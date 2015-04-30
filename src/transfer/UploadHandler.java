@@ -115,6 +115,7 @@ public class UploadHandler {
                     throw new ValidateException(StatusCode.BAD_REQUEST,
                             "Incorrect checksum!");
                 }
+                outFile.getParentFile().mkdirs();
                 fileItem.write(outFile);
                 Debug.log("Successfully saved the uploaded file to '"
                         + outFile.toString() + "'.");
