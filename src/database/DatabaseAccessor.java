@@ -1,6 +1,7 @@
 package database;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
 
@@ -16,6 +17,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import server.ServerSettings;
 import database.containers.Annotation;
 import database.containers.ChainFile;
@@ -42,7 +44,7 @@ import database.subClasses.*;
  * @author yhi04jeo, Jonas Engbo
  * @author oi11mhn, Mattias Hinnerson
  */
-public class DatabaseAccessor {
+public class DatabaseAccessor implements AutoCloseable {
 
     public static Integer FREETEXT = 1;
     public static Integer DROPDOWN = 2;
@@ -690,9 +692,11 @@ public class DatabaseAccessor {
      * @param isPrivate
      *            whether or not the file is private
      * @param genomeRelease
-     *            String The genome release version identifyer (eg. "hg38") or
-     *            null if not applicable. OBS! If not null, this must reference
+     *            String The genome release version identifier (eg. "hg38") or
+     *            null if not applicable. NB! If not null, this must reference
      *            a genome release that has been previously uploaded.
+     * @param checkSumMD5
+     *            MD5 checksum of the file. Can be null.
      * @return FileTuple - The FileTuple inserted in the database or null if no
      *         file was entered into the database.
      * @throws SQLException
@@ -704,10 +708,11 @@ public class DatabaseAccessor {
      */
     public FileTuple addNewFile(String expID, int fileType, String fileName,
             String inputFileName, String metaData, String author,
-            String uploader, boolean isPrivate, String genomeRelease)
+            String uploader, boolean isPrivate, String genomeRelease,
+            String checkSumMD5)
             throws SQLException, IOException {
         return fileMethods.addNewFile(expID, fileType, fileName, inputFileName,
-                metaData, author, uploader, isPrivate, genomeRelease);
+                metaData, author, uploader, isPrivate, genomeRelease, checkSumMD5);
     }
 
     /**
@@ -913,9 +918,14 @@ public class DatabaseAccessor {
 
         for (File f : profileFolder.listFiles()) {
             if (!f.getName().equals(inputFileName)) {
+
+                String checkSumMD5;
+                try (FileInputStream is = new FileInputStream(f)) {
+                    checkSumMD5 = DigestUtils.md5Hex(is);
+                }
                 fileMethods.addGeneratedFile(e.getID(), FileTuple.PROFILE,
                         f.getPath(), inputFileName, metaData, uploader,
-                        isPrivate, grVersion);
+                        isPrivate, grVersion, checkSumMD5);
             }
         }
     }

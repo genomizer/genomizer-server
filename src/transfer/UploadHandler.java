@@ -3,6 +3,11 @@ package transfer;
 
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
+import command.Command;
+import command.ValidateException;
+import database.DatabaseAccessor;
+import database.containers.FileTuple;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUpload;
 import org.apache.commons.fileupload.RequestContext;
@@ -15,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -66,6 +72,7 @@ public class UploadHandler {
         for (String header : headers.keySet()) {
             System.out.println(header + ": " + headers.getFirst(header));
         }
+        @SuppressWarnings("deprecation")
         RequestContext ctx = new RequestContext() {
             @Override
             public String getCharacterEncoding() {
@@ -78,7 +85,6 @@ public class UploadHandler {
                 }
 
             @Override
-            @SuppressWarnings("deprecation")
             public int getContentLength() {
                     return 0; 
                 }
@@ -105,6 +111,11 @@ public class UploadHandler {
                 File outFile = new File(absUploadPath == null
                         ? this.uploadDir + fileItem.getName()
                         : absUploadPath);
+                if (!verifyMD5(absUploadPath, fileItem)) {
+                    throw new ValidateException(StatusCode.BAD_REQUEST,
+                            "Incorrect checksum!");
+                }
+                outFile.getParentFile().mkdirs();
                 fileItem.write(outFile);
                 Debug.log("Successfully saved the uploaded file to '"
                         + outFile.toString() + "'.");
@@ -117,5 +128,25 @@ public class UploadHandler {
         OutputStream out = exchange.getResponseBody();
         out.write(resp);
         out.close();
+    }
+
+    private boolean verifyMD5(String absUploadPath, FileItem fileItem)
+            throws SQLException, IOException {
+        try( DatabaseAccessor db = Command.initDB() )
+        {
+            FileTuple ft = db.getFileTuple(absUploadPath);
+            if (ft == null)
+                return true;
+            if (ft.checkSumMD5 != null) {
+                String actualMD5 = DigestUtils.md5Hex(fileItem.getInputStream());
+                if (!actualMD5.equals(ft.checkSumMD5)) {
+                    Debug.log("MD5 verification error. Expected: "
+                            + ft.checkSumMD5 + ", actual: " + actualMD5 + ".");
+                    return false;
+                }
+            }
+            Debug.log("MD5 checksum verified successfully.");
+            return true;
+        }
     }
 }
