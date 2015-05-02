@@ -26,7 +26,7 @@ public class ExperimentMethods {
     private AnnotationMethods annoMethods;
 
     public ExperimentMethods(Connection connection,
-            FilePathGenerator filePG, AnnotationMethods annoM) {
+                             FilePathGenerator filePG, AnnotationMethods annoM) {
 
         conn = connection;
         fpg = filePG;
@@ -47,18 +47,19 @@ public class ExperimentMethods {
         String query = "SELECT ExpID FROM Experiment "
                 + "WHERE ExpID ~~* ?";
 
-        PreparedStatement stmt = conn.prepareStatement(query);
-        stmt.setString(1, expID);
-        ResultSet rs = stmt.executeQuery();
         Experiment e = null;
+        try(PreparedStatement stmt = conn.prepareStatement(query)){
+            stmt.setString(1, expID);
+            ResultSet rs = stmt.executeQuery();
 
-        if (rs.next()) {
-            e = new Experiment(rs.getString("ExpID"));
-            e = fillAnnotations(e);
-            e = fillFiles(e);
+
+            if (rs.next()) {
+                e = new Experiment(rs.getString("ExpID"));
+                e = fillAnnotations(e);
+                e = fillFiles(e);
+            }
+
         }
-
-        stmt.close();
 
         return e;
     }
@@ -72,27 +73,27 @@ public class ExperimentMethods {
      * @throws SQLException
      *             if the query does not succeed
      * @throws IOException
-     * @throws DuplicatePrimaryKeyException
      *             If the experiment already exists.
      */
     public int addExperiment(String expID) throws SQLException, IOException {
 
-    	if (expID == null || expID.isEmpty()) {
-    		throw new IOException("Invalid experiment ID.");
-    	}
+        if (expID == null || expID.isEmpty()) {
+            throw new IOException("Invalid experiment ID.");
+        }
 
-    	Experiment e = getExperiment(expID);
-    	if (e != null) {
-    		throw new IOException(expID + " already exists");
-    	}
+        Experiment e = getExperiment(expID);
+        if (e != null) {
+            throw new IOException(expID + " already exists");
+        }
 
         String query = "INSERT INTO Experiment "
                 + "(ExpID) VALUES (?)";
-        PreparedStatement stmt = conn.prepareStatement(query);
-        stmt.setString(1, expID);
+        int rs;
+        try(PreparedStatement stmt = conn.prepareStatement(query)){
+            stmt.setString(1, expID);
 
-        int rs = stmt.executeUpdate();
-        stmt.close();
+            rs = stmt.executeUpdate();
+        }
 
         fpg.generateExperimentFolders(expID);
 
@@ -128,11 +129,12 @@ public class ExperimentMethods {
         String query = "DELETE FROM Experiment "
                 + "WHERE ExpID ~~* ?";
 
-        PreparedStatement stmt = conn.prepareStatement(query);
-        stmt.setString(1, expId);
+        int rs;
+        try(PreparedStatement stmt = conn.prepareStatement(query)){
+            stmt.setString(1, expId);
 
-        int rs = stmt.executeUpdate();
-        stmt.close();
+            rs = stmt.executeUpdate();
+        }
 
 
         File experimentFolder = new File(fpg.getRootDirectory() + e.getID());
@@ -159,7 +161,7 @@ public class ExperimentMethods {
      *             if the value is invalid for the annotation type.
      */
     public int updateExperiment(String expID, String label,
-            String value) throws SQLException, IOException {
+                                String value) throws SQLException, IOException {
 
         value = validateAnnotation(label, value);
 
@@ -170,14 +172,15 @@ public class ExperimentMethods {
         String query = "UPDATE Annotated_With SET Value = ?"
                 + " WHERE (Label ~~* ?) AND (ExpID ~~* ?)";
 
-        PreparedStatement stmt = conn.prepareStatement(query);
+        int rs;
+        try(PreparedStatement stmt = conn.prepareStatement(query)){
 
-        stmt.setString(1, value);
-        stmt.setString(2, label);
-        stmt.setString(3, expID);
+            stmt.setString(1, value);
+            stmt.setString(2, label);
+            stmt.setString(3, expID);
 
-        int rs = stmt.executeUpdate();
-        stmt.close();
+            rs = stmt.executeUpdate();
+        }
         return rs;
     }
 
@@ -198,19 +201,20 @@ public class ExperimentMethods {
      *             if the value is invalid for the annotation type.
      */
     public int annotateExperiment(String expID, String label,
-            String value) throws SQLException, IOException {
+                                  String value) throws SQLException, IOException {
 
         value = validateAnnotation(label, value);
 
         String query = "INSERT INTO Annotated_With "
                 + "VALUES (?, ?, ?)";
-        PreparedStatement stmt = conn.prepareStatement(query);
-        stmt.setString(1, expID);
-        stmt.setString(2, label);
-        stmt.setString(3, value);
+        int rs;
+        try(PreparedStatement stmt = conn.prepareStatement(query)){
+            stmt.setString(1, expID);
+            stmt.setString(2, label);
+            stmt.setString(3, value);
 
-        int rs = stmt.executeUpdate();
-        stmt.close();
+            rs = stmt.executeUpdate();
+        }
 
         return rs;
     }
@@ -232,12 +236,13 @@ public class ExperimentMethods {
         String query = "DELETE FROM Annotated_With "
                 + "WHERE (ExpID ~~* ? AND Label ~~* ?)";
 
-        PreparedStatement stmt = conn.prepareStatement(query);
-        stmt.setString(1, expID);
-        stmt.setString(2, label);
+        int rs;
+        try(PreparedStatement stmt = conn.prepareStatement(query)){
+            stmt.setString(1, expID);
+            stmt.setString(2, label);
 
-        int rs = stmt.executeUpdate();
-        stmt.close();
+            rs = stmt.executeUpdate();
+        }
 
         return rs;
     }
@@ -255,15 +260,15 @@ public class ExperimentMethods {
     public Experiment fillFiles(Experiment e) throws SQLException {
 
         String query = "SELECT * FROM File " + "WHERE ExpID ~~* ?";
-        PreparedStatement stmt = conn.prepareStatement(query);
-        stmt.setString(1, e.getID());
-        ResultSet rs = stmt.executeQuery();
+        try(PreparedStatement stmt = conn.prepareStatement(query)){
+            stmt.setString(1, e.getID());
+            ResultSet rs = stmt.executeQuery();
 
-        while (rs.next()) {
-            e.addFile(new FileTuple(rs));
+            while (rs.next()) {
+                e.addFile(new FileTuple(rs));
+            }
+
         }
-
-        stmt.close();
 
         return e;
     }
@@ -283,16 +288,16 @@ public class ExperimentMethods {
 
         String query = "SELECT Label, Value FROM Annotated_With "
                 + "WHERE ExpID ~~* ?";
-        PreparedStatement stmt = conn.prepareStatement(query);
-        stmt.setString(1, e.getID());
-        ResultSet rs = stmt.executeQuery();
+        try(PreparedStatement stmt = conn.prepareStatement(query)){
+            stmt.setString(1, e.getID());
+            ResultSet rs = stmt.executeQuery();
 
-        while (rs.next()) {
-            e.addAnnotation(rs.getString("Label"),
-                    rs.getString("Value"));
+            while (rs.next()) {
+                e.addAnnotation(rs.getString("Label"),
+                        rs.getString("Value"));
+            }
+
         }
-
-        stmt.close();
 
         return e;
     }

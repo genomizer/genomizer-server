@@ -211,13 +211,11 @@ public class FileMethods {
             stmt.setString(1, filePath);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                FileTuple fileTuple = new FileTuple(rs);
-                //	stmt.close();
-                return fileTuple;
+                return  new FileTuple(rs);
             }
         }
-		return null;
-	}
+        return null;
+    }
 
 	/**
 	 * Returns the FileTuple object associated with the given fileID.
@@ -236,9 +234,7 @@ public class FileMethods {
             stmt.setInt(1, fileID);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                FileTuple fileTuple = new FileTuple(rs);
-                // stmt.close();
-                return fileTuple;
+                return new FileTuple(rs);
             }
         }
         return null;
@@ -272,7 +268,7 @@ public class FileMethods {
         if (ft.getType().equalsIgnoreCase("profile") && isEmptyFolder(parentFolder)) {
             parentFolder.delete();
         }
-        int resCount = 9;
+        int resCount;
         String statementStr = "DELETE FROM File " + "WHERE (Path ~~* ?)";
         try (PreparedStatement deleteFile = conn.prepareStatement(statementStr)) {
             deleteFile.setString(1, path);
@@ -314,7 +310,7 @@ public class FileMethods {
         }
 
         String query = "DELETE FROM File " + "WHERE FileID = ?";
-        int res = 0;
+        int res;
         try (PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, fileID);
             res = stmt.executeUpdate();
@@ -324,12 +320,9 @@ public class FileMethods {
 
 	private boolean isEmptyFolder(File f) {
 
-		if (f.exists() && f.listFiles() != null && f.listFiles().length == 0) {
-			return true;
-		}
+        return f.exists() && f.listFiles() != null && f.listFiles().length == 0;
 
-		return false;
-	}
+    }
 
 	/**
 	 * Recursively deletes a folder with all it's subfolders and files.
@@ -406,12 +399,11 @@ public class FileMethods {
 	 * @return the number of tuples updated.
 	 * @throws SQLException
 	 */
-
 	public int fileReadyForDownload(int fileID) throws SQLException {
 
 		String statusUpdateString = "UPDATE File SET Status = 'Done' "
 				+ "WHERE FileID = ?";
-        int resCount = 0;
+        int resCount;
 		try(PreparedStatement statusUpdate = conn
 				.prepareStatement(statusUpdateString)) {
             statusUpdate.setInt(1, fileID);
@@ -436,7 +428,7 @@ public class FileMethods {
     public int changeFileName(int fileID, String newFileName)
             throws SQLException, IOException {
 
-        String oldFilePath = "";
+        String oldFilePath;
 
         // search for current filepath.
         String searchPathQuery = "SELECT Path FROM File WHERE fileID = ?";
@@ -466,7 +458,7 @@ public class FileMethods {
 
         String chFileNameQuery = "UPDATE File SET FileName = ? "
                 + "WHERE FileID = ?";
-        int resCount = 0;
+        int resCount;
         try (PreparedStatement nameUpdate = conn.prepareStatement(chFileNameQuery)) {
             nameUpdate.setString(1, newFileName);
             nameUpdate.setInt(2, fileID);
