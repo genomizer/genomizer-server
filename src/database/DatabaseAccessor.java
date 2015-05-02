@@ -638,8 +638,13 @@ public class DatabaseAccessor implements AutoCloseable {
      *             '(', ')', '[' or ']'.
      */
     public void changeAnnotationValue(String label, String oldValue,
-            String newValue) throws SQLException, IOException {
-        annoMethods.changeAnnotationValue(label, oldValue, newValue);
+            String newValue) throws SQLException, IOException{
+        try {
+            annoMethods.changeAnnotationValue(label, oldValue, newValue);
+        } catch (ParseException e){
+            //FIXME this is an ugly hack. Should be changed later. - NG
+            throw new IOException(e);
+        }
     }
 
     /**
@@ -1200,7 +1205,7 @@ public class DatabaseAccessor implements AutoCloseable {
      * @throws ParseException
      */
     private List<Experiment> searchExperiments(String pubMedString)
-            throws IOException, SQLException {
+            throws IOException, SQLException, ParseException {
 
         String query = pm2sql.convertExperimentSearch(pubMedString);
 
@@ -1229,7 +1234,7 @@ public class DatabaseAccessor implements AutoCloseable {
      * @throws ParseException
      */
     private List<Experiment> searchFiles(String pubMedString)
-            throws IOException, SQLException {
+            throws IOException, SQLException, ParseException {
 
         String query = pm2sql.convertFileSearch(pubMedString);
 
