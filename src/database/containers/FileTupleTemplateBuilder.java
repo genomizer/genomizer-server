@@ -30,7 +30,7 @@ public class FileTupleTemplateBuilder {
 
     /**
      *
-     * @param inputFilePath File path to the RAW input data-file in .fastq-format
+     * @param inputFilePath File path to the Raw input data-file in .fastq-format
      * @return
      */
     public FileTupleTemplateBuilder withInputFilePath(String inputFilePath) {

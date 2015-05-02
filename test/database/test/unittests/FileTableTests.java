@@ -217,7 +217,7 @@ public class FileTableTests {
 
         dbac.addGenomeRelease("te34", "Dog", "te34.txt");
         dbac.addExperiment("expert1");
-        FileTuple fileStore = dbac.addNewFile("expert1", 1, "temp1.txt", "temp2.txt",
+        FileTuple fileStore = dbac.addNewFile("expert1", FileTuple.RAW, "temp1.txt", "temp2.txt",
                 "-a -g", "Claes", "Claes", false, "te34",null);
         File temp1 = new File(fileStore.getPath());
         temp1.createNewFile();

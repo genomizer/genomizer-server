@@ -56,7 +56,7 @@ public class FileTupleTemplateBuilderTest {
         assertEquals(path + name,ft.getPath());
         assertTrue(ft.isPrivate());
 
-        assertEquals("raw", ft.getType());
+        assertTrue("raw".equalsIgnoreCase(ft.getType().name()));
         assertEquals(path + name, ft.getPath());
 
     }

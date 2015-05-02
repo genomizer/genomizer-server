@@ -38,7 +38,7 @@ public class FileTupleBuilder {
 
     /**
      *
-     * @param inputFilePath File path to the RAW input data-file in .fastq-format
+     * @param inputFilePath File path to the Raw input data-file in .fastq-format
      * @return
      */
     public FileTupleBuilder withInputFilePath(String inputFilePath) {
@@ -51,9 +51,13 @@ public class FileTupleBuilder {
      * @param type The type of data. Can be "Raw", "Profile", etc.
      * @return
      */
-    public FileTupleBuilder withType(String type) {
+    public FileTupleBuilder withType(FileTuple.Type type) {
         product.setType(type);
         return this;
+    }
+
+    public FileTupleBuilder withType(String str) {
+        return this.withType(FileTuple.Type.fromString(str));
     }
 
     public FileTupleBuilder withFilename(String filename) {

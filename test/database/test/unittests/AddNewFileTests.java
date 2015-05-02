@@ -15,8 +15,6 @@ import database.containers.Experiment;
 import database.containers.FileTuple;
 import database.test.TestInitializer;
 
-import java.io.File;
-
 public class AddNewFileTests {
 
     private static DatabaseAccessor dbac;
@@ -24,7 +22,7 @@ public class AddNewFileTests {
     private static FilePathGenerator fpg;
 
     private static String testFileName = "testFileName1.txt";
-    private static int testFileType = FileTuple.RAW;
+    private static FileTuple.Type testFileType = FileTuple.Type.Raw;
     private static String testFileTypeS = "Raw";
     private static String testAuthor = "test File Author1";
     private static String testUploader = "test Uploader 1";
@@ -43,7 +41,7 @@ public class AddNewFileTests {
 
         fpg = new FilePathGenerator(DatabaseAccessor.DATAFOLDER);
         dbac.addExperiment(testExpId);
-        ft = dbac.addNewFile(testExpId, testFileType, testFileName,
+        ft = dbac.addNewFile(testExpId, testFileType.val, testFileName,
                 testInputFileName, testMetaData, testAuthor, testUploader,
                 testIsPrivate, null, null);
 
@@ -87,7 +85,7 @@ public class AddNewFileTests {
                 .withMetaData(testMetaData)
                 .withFilename(testFileName)
                 .withUploader(testUploader)
-                .withType(testFileTypeS)
+                .withType(testFileType)
                 .isPrivate(testIsPrivate)
                 .withPath(ft.getParentFolder())
                 .build();
@@ -127,7 +125,7 @@ public class AddNewFileTests {
         e = dbac.getExperiment(testExpId);
         assertEquals(0, e.getFiles().size());
 
-        ft = dbac.addNewFile(testExpId, testFileType, testFileName,
+        ft = dbac.addNewFile(testExpId, testFileType.val, testFileName,
                 testInputFileName, testMetaData, testAuthor, testUploader,
                 testIsPrivate, null, null);
         ft = dbac.getFileTuple(expectedFilePath);
@@ -150,7 +148,7 @@ public class AddNewFileTests {
 
         assertEquals(expectedFilePath, ft.getPath());
         assertEquals(testExpId, ft.getExpId());
-        assertEquals("Raw", ft.getType());
+        assertEquals("Raw", ft.getType().name());
         assertEquals(testFileName, ft.getFilename());
         assertEquals(expectedInputFilePath, ft.getInputFilePath());
         assertEquals(testMetaData, ft.getMetaData());

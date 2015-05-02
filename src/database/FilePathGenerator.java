@@ -28,7 +28,7 @@ public class FilePathGenerator {
      * Used when first adding a new experiment. Creates a folder for the
      * experiment and subfolders for files
      *
-     * @param String expID, the ID for the experiment
+     * @param expID, the ID for the experiment
      */
     public void generateExperimentFolders(String expID) {
 
@@ -46,10 +46,10 @@ public class FilePathGenerator {
     }
 
     /**
-     * Gets the path to the RAW folder of an experiment.
+     * Gets the path to the Raw folder of an experiment.
      *
-     * @param String expID, the ID for the experiment
-     * @return String path to RAW folder
+     * @param expID, the ID for the experiment
+     * @return String path to Raw folder
      */
     public String getRawFolderPath(String expID) {
 
@@ -64,7 +64,7 @@ public class FilePathGenerator {
     /**
      * Gets the path to the profile folder of an experiment.
      *
-     * @param String expID, the ID for the experiment
+     * @param expID, the ID for the experiment
      * @return String path to profile folder
      */
     public String getProfileFolderPath(String expID) {
@@ -80,7 +80,7 @@ public class FilePathGenerator {
     /**
      * Gets the path to the region folder of an experiment.
      *
-     * @param String expID, the ID for the experiment
+     * @param expID, the ID for the experiment
      * @return String, path to region folder
      */
     public String getRegionFolderPath(String expID) {
@@ -96,7 +96,7 @@ public class FilePathGenerator {
     /**
      * Gets the path to the unknown folder (misc files) of an experiment.
      *
-     * @param String expID, the ID for the experiment
+     * @param expID, the ID for the experiment
      * @return String path to unknown folder
      */
     public String getUnknownFolderPath(String expID) {
@@ -113,25 +113,25 @@ public class FilePathGenerator {
      * Used when uploading and downloading files. Returns a string where the
      * file is or where is should be saved.
      *
-     * @param String expID, the ID for the experiment.
-     * @param String fileType, the type of the file.
-     * @param String fileName, the name of the file.
+     * @param  expID, the ID for the experiment.
+     * @param  fileType, the type of the file.
+     * @param  fileName, the name of the file.
      * @return String the path for the file.
      */
 
-    public String generateFilePath(String expID, int fileType, String fileName) {
+    public String generateFilePath(String expID, FileTuple.Type fileType, String fileName) {
 
         String folderPath;
 
         switch (fileType) {
-        case FileTuple.RAW:
+        case Raw:
             folderPath = getRawFolderPath(expID);
             break;
-        case FileTuple.PROFILE:
+        case Profile:
             folderPath = getProfileFolderPath(expID);
             folderPath = generateNewProfileSubFolder(folderPath);
             break;
-        case FileTuple.REGION:
+        case Region:
             folderPath = getRegionFolderPath(expID);
             break;
         default:
@@ -146,7 +146,7 @@ public class FilePathGenerator {
      * Creates subfolders in profile folder. Adds a number at the end of the
      * subfolder name according to the number of folders already there.
      *
-     * @param String folderPath
+     * @param folderPath
      * @return String path to the subfolder
      */
     public String generateNewProfileSubFolder(String folderPath) {
@@ -174,11 +174,11 @@ public class FilePathGenerator {
     /**
      * Creates the folder for chainfiles and returns the path to it.
      *
-     * @param String
+     * @param
      *            species
-     * @param String
+     * @param
      *            fromVersion
-     * @param String
+     * @param
      *            toVersion
      * @return String folderPath
      */
@@ -200,9 +200,9 @@ public class FilePathGenerator {
     /**
      * Gets the path to the folder where the chain files should be stored.
      *
-     * @param String species
-     * @param String fromVersion
-     * @param String toVersion
+     * @param species
+     * @param fromVersion
+     * @param toVersion
      * @return String The path to the folder where the chain files should be stored.
      */
     public String getChainFolderPath(String species, String fromVersion,
@@ -227,9 +227,9 @@ public class FilePathGenerator {
      * Creates and returns the path to the folder where the genome release files
      * should be stored.
      *
-     * @param String
+     * @param
      *            version, the genome version of the file,
-     * @param String
+     * @param
      *            species, the species that the genome versions belongs to.
      * @return String the path to the folder where the files can be stored.
      */
@@ -249,8 +249,8 @@ public class FilePathGenerator {
     /**
      * Gets the filepath to the genome release folder.
      *
-     * @param String version
-     * @param String species
+     * @param version
+     * @param species
      * @return String path to genome folder
      */
     public String getGenomeReleaseFolderPath(String version, String species) {

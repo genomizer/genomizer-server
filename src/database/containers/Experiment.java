@@ -72,7 +72,7 @@ public class Experiment {
     public int getNrRawFiles() {
         int res = 0;
         for (FileTuple ft: files) {
-            if (ft.getType().equalsIgnoreCase("raw")) {
+            if (ft.getType().name().equalsIgnoreCase("raw")) {
                 res ++;
             }
         }

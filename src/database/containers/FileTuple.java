@@ -12,14 +12,42 @@ import database.constants.ServerDependentValues;
  */
 public class FileTuple extends AbstractFileTuple {
 
-    public static final int RAW = 1;
-    public static final int PROFILE = 2;
-    public static final int REGION = 3;
-    public static final int OTHER = 4;
+
+    public static final int RAW = 0;
+    public static final int PROFILE = 1;
+    public static final int REGION = 2;
+    public static final int OTHER = 3;
+
+
+    public enum Type {
+        Raw(0), Profile(1), Region(2), Other(3);
+
+        public final int val;
+
+        Type(int i){
+            this.val = i;
+        }
+
+        public static Type fromInt(int i){
+            for(Type t : Type.values()){
+                if(t.val == i){
+                    return t;
+                }
+            }
+            throw new IllegalArgumentException("Unrecongized filetype!");
+        }
+        public static Type fromString(String s){
+            for(Type t: Type.values()){
+                if(s.equalsIgnoreCase(t.name())){
+                    return t;
+                }
+            }
+            throw new IllegalArgumentException("Unrecognized file type!");
+        }
+    }
 
     private Integer id;
-    private String type;
-    private Integer typei;
+    private Type type;
     private String filename;
     private String status;
 
@@ -31,7 +59,7 @@ public class FileTuple extends AbstractFileTuple {
         return id;
     }
 
-    public String getType() {
+    public Type getType() {
         return type;
     }
 
@@ -52,21 +80,9 @@ public class FileTuple extends AbstractFileTuple {
         this.id = id;
     }
 
-    void setType(String type) {
+    void setType(Type type) {
         this.type = type;
-        switch (type) {
-            case "Raw":
-                typei = FileTuple.RAW;
-                break;
-            case "Profile":
-                typei = FileTuple.PROFILE;
-                break;
-            case "Region":
-                typei = FileTuple.REGION;
-                break;
-            default:
-                typei = FileTuple.OTHER;
-        }
+
     }
 
     void setFilename(String filename) {
@@ -88,7 +104,7 @@ public class FileTuple extends AbstractFileTuple {
     	id = resSet.getInt("FileID");
         path = resSet.getString("Path");
         inputFilePath = resSet.getString("InputFilePath");
-        type = resSet.getString("FileType");
+        type = Type.fromString(resSet.getString("FileType"));
         filename = resSet.getString("FileName");
         date = resSet.getDate("Date");
         metaData = resSet.getString("MetaData");
@@ -100,19 +116,7 @@ public class FileTuple extends AbstractFileTuple {
         status = resSet.getString("Status");
         checkSumMD5 = resSet.getString("MD5");
 
-        switch (type) {
-            case "Raw":
-                typei = FileTuple.RAW;
-                break;
-            case "Profile":
-                typei = FileTuple.PROFILE;
-                break;
-            case "Region":
-                typei = FileTuple.REGION;
-                break;
-            default:
-                typei = FileTuple.OTHER;
-        }
+
     }
 
     FileTuple(){
@@ -127,10 +131,6 @@ public class FileTuple extends AbstractFileTuple {
     public String getUploadURL() {
 
     	return ServerDependentValues.UploadURL + path;
-    }
-
-    public Integer getTypeInt(){
-        return this.typei;
     }
 
     /**
@@ -181,7 +181,7 @@ public class FileTuple extends AbstractFileTuple {
     public String toString() {
 
     	return "FileTuple [id=" + id + ", path=" + path + ", inputFilePath="
-                + inputFilePath + ", type=" + type + ", filename=" + filename
+                + inputFilePath + ", type=" + type.name() + ", filename=" + filename
                 + ", date=" + date + ", metaData=" + metaData + ", author="
                 + author + ", uploader=" + uploader + ", isPrivate="
                 + isPrivate + ", expId=" + expId + ", grVersion=" + grVersion

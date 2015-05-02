@@ -44,7 +44,7 @@ public class FileMethods {
 	 *            this must reference an experiment that has been previously
 	 *            added.
 	 * @param fileType
-	 *            int An Integer identifying the file type eg. FileTuple.RAW
+	 *            int An Integer identifying the file type eg. FileTuple.Raw
 	 * @param fileName
 	 *            String
 	 * @param inputFileName
@@ -105,7 +105,7 @@ public class FileMethods {
 		FileTuple ft = getProfile(e, metaData);
 		String path;
 		if (ft == null) {
-			path = fpg.generateFilePath(expID, fileType, fileName);
+			path = fpg.generateFilePath(expID, FileTuple.Type.fromInt(fileType), fileName);
 		} else {
 			path = ft.getParentFolder() + fileName;
 			File profileToAdd = new File(path);
@@ -183,7 +183,7 @@ public class FileMethods {
         // TODO Check: is this needed? -NG
         String expID = e.getID(); // Correct expID for in case sensitivity
 
-        if (ft.getTypeInt() == FileTuple.RAW && e.getNrRawFiles() >= 2) {
+        if (ft.getType() == FileTuple.Type.Raw && e.getNrRawFiles() >= 2) {
             throw new IOException(
                     "There are already two raw files for this experiment!");
         }
@@ -191,7 +191,7 @@ public class FileMethods {
         FileTuple ftp = getProfile(e, ft.getMetaData());
         String path;
         if (ftp == null) {
-            path = fpg.generateFilePath(expID,ft.getTypeInt(), ft.getFilename());
+            path = fpg.generateFilePath(expID,ft.getType(), ft.getFilename());
         } else {
             path = ftp.getParentFolder() + ft.getFilename();
             File profileToAdd = new File(path);
@@ -209,15 +209,15 @@ public class FileMethods {
         try(PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, path);
 
-            switch (ft.getTypeInt()) {
-                case FileTuple.RAW:
+            switch (ft.getType()) {
+                case Raw:
                     stmt.setString(2, "Raw");
                     genomeRelease = null;
                     break;
-                case FileTuple.PROFILE:
+                case Profile:
                     stmt.setString(2, "Profile");
                     break;
-                case FileTuple.REGION:
+                case Region:
                     stmt.setString(2, "Region");
                     break;
                 default:
@@ -245,14 +245,14 @@ public class FileMethods {
 
         for (FileTuple ft : e.getFiles()) {
 
-            if (ft.getType().equalsIgnoreCase("profile")) {
+            if (ft.getType().name().equalsIgnoreCase("profile")) {
 
                 if (metaData == null && ft.getMetaData() == null) {
                     return ft;
                 }
 
                 if (ft.getMetaData() != null) {
-                    if (ft.getType().equalsIgnoreCase("profile")
+                    if (ft.getType().name().equalsIgnoreCase("profile")
                             && ft.getMetaData().equals(metaData)) {
                         return ft;
                     }
@@ -346,7 +346,7 @@ public class FileMethods {
         }
 
         File parentFolder = new File(ft.getParentFolder());
-        if (ft.getType().equalsIgnoreCase("profile") && isEmptyFolder(parentFolder)) {
+        if (ft.getType().name().equalsIgnoreCase("profile") && isEmptyFolder(parentFolder)) {
             parentFolder.delete();
         }
         int resCount;
@@ -386,7 +386,7 @@ public class FileMethods {
         }
 
         File parentFolder = new File(ft.getParentFolder());
-        if (ft.getType().equalsIgnoreCase("profile") && isEmptyFolder(parentFolder)) {
+        if (ft.getType().name().equalsIgnoreCase("profile") && isEmptyFolder(parentFolder)) {
             parentFolder.delete();
         }
 

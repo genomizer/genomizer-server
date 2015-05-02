@@ -215,7 +215,7 @@ public class AnnotationMethods {
 
     /**
      * Deletes an annotation from the list of possible annotations. Label
-     * SPECIES can't be changed because of dependencies in other tables.
+     * SPECIES can't be changed because of dependencies in Other tables.
      *
      * @param label
      *            String - the label of the annotation to delete.
@@ -580,7 +580,7 @@ public class AnnotationMethods {
 
         if (hasDependency) {
             throw new IOException(value
-                    + " is used in other experiments under label " + label
+                    + " is used in Other experiments under label " + label
                     + " and can therefore not be removed.");
         }
         if (hasDependency2) {
@@ -625,7 +625,7 @@ public class AnnotationMethods {
      * Changes the annotation label.
      *
      * OBS! This changes the label for all experiments. Label SPECIES can't be
-     * changed because of dependencies in other tables. If the Species label can
+     * changed because of dependencies in Other tables. If the Species label can
      * be changed to another, it becomes removable.
      *
      * @param oldLabel

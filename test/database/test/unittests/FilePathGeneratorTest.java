@@ -72,7 +72,7 @@ public class FilePathGeneratorTest {
         String expID = "expID";
         int fileType = FileTuple.RAW;
         String fileName = "fileName";
-        String filePath = fpg.generateFilePath(expID, fileType, fileName);
+        String filePath = fpg.generateFilePath(expID, FileTuple.Type.fromInt(fileType), fileName);
 
         assertEquals(testFolder.toString() + File.separator + expID
                 + File.separator + "raw" + File.separator + fileName, filePath);
@@ -160,7 +160,7 @@ public class FilePathGeneratorTest {
     public void shouldGenerateRightProfileFolderPath()
             throws Exception {
 
-        String profFolderPath = fpg.generateFilePath("Exp1", FileTuple.PROFILE,
+        String profFolderPath = fpg.generateFilePath("Exp1", FileTuple.Type.fromInt(FileTuple.PROFILE),
         		"prof.sam");
 
         assertEquals(testFolderPath + "Exp1/profile/0/prof.sam",
@@ -171,8 +171,8 @@ public class FilePathGeneratorTest {
     public void shouldGenerateRightRegionFolderPath()
             throws Exception {
 
-        String regFolderPath = fpg.generateFilePath("Exp1", FileTuple.REGION,
-        		"reg.sam");
+        String regFolderPath = fpg.generateFilePath("Exp1", FileTuple.Type.fromInt(FileTuple.REGION),
+                "reg.sam");
 
         assertEquals(testFolderPath + "Exp1/region/reg.sam", regFolderPath);
     }

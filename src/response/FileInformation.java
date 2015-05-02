@@ -35,7 +35,7 @@ public class FileInformation {
     	id = src.getId();
     	path = src.getPath();
     	url = src.getDownloadURL();
-    	type = src.getType();
+    	type = src.getType().name();
     	filename = src.getFilename();
     	date = src.getDate();
     	metaData = src.getMetaData();

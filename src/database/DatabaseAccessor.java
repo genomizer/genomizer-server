@@ -518,7 +518,7 @@ public class DatabaseAccessor implements AutoCloseable {
 
     /**
      * Deletes an annotation from the list of possible annotations. Label
-     * SPECIES can't be changed because of dependencies in other tables.
+     * SPECIES can't be changed because of dependencies in Other tables.
      *
      * @param label - the label of the annotation to delete.
      * @return the number of tuples deleted in the database.
@@ -600,7 +600,7 @@ public class DatabaseAccessor implements AutoCloseable {
      * Changes the annotation label.
      *
      * OBS! This changes the label for all experiments. Label Species can't be
-     * changed because of dependencies in other tables.
+     * changed because of dependencies in Other tables.
      *
      * @param oldLabel the previous label value
      * @param newLabel the new label value
@@ -682,7 +682,7 @@ public class DatabaseAccessor implements AutoCloseable {
      *            this must reference an experiment that has been previously
      *            added.
      * @param fileType
-     *            int An Integer identifying the file type eg. FileTuple.RAW
+     *            int An Integer identifying the file type eg. FileTuple.Raw
      * @param fileName
      *            the name of the file
      * @param inputFileName
@@ -1122,7 +1122,7 @@ public class DatabaseAccessor implements AutoCloseable {
 
     private FileTuple getRawFileTuple(List<FileTuple> fileTuples) {
         for (FileTuple ft : fileTuples) {
-            if (ft.getType().equalsIgnoreCase("raw")) {
+            if (ft.getType().name().equalsIgnoreCase("raw")) {
                 return ft;
             }
         }
