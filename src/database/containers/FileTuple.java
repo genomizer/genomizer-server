@@ -19,6 +19,7 @@ public class FileTuple extends AbstractFileTuple {
 
     private Integer id;
     private String type;
+    private Integer typei;
     private String filename;
     private String status;
 
@@ -53,6 +54,19 @@ public class FileTuple extends AbstractFileTuple {
 
     void setType(String type) {
         this.type = type;
+        switch (type) {
+            case "Raw":
+                typei = FileTuple.RAW;
+                break;
+            case "Profile":
+                typei = FileTuple.PROFILE;
+                break;
+            case "Region":
+                typei = FileTuple.REGION;
+                break;
+            default:
+                typei = FileTuple.OTHER;
+        }
     }
 
     void setFilename(String filename) {
@@ -85,6 +99,20 @@ public class FileTuple extends AbstractFileTuple {
         grVersion = resSet.getString("GRVersion");
         status = resSet.getString("Status");
         checkSumMD5 = resSet.getString("MD5");
+
+        switch (type) {
+            case "Raw":
+                typei = FileTuple.RAW;
+                break;
+            case "Profile":
+                typei = FileTuple.PROFILE;
+                break;
+            case "Region":
+                typei = FileTuple.REGION;
+                break;
+            default:
+                typei = FileTuple.OTHER;
+        }
     }
 
     FileTuple(){
@@ -99,6 +127,10 @@ public class FileTuple extends AbstractFileTuple {
     public String getUploadURL() {
 
     	return ServerDependentValues.UploadURL + path;
+    }
+
+    public Integer getTypeInt(){
+        return this.typei;
     }
 
     /**

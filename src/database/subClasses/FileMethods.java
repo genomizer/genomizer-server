@@ -160,6 +160,87 @@ public class FileMethods {
 		return getFileTuple(path);
 	}
 
+    public void addNewFile(FileTuple ft) throws SQLException, IOException {
+
+        if (!FileValidator.fileNameCheck(ft.getFilename())) {
+            throw new IOException("Invalid filename");
+        }
+
+        String inputFileName = ft.getInputFilePath() != null ?
+                ft.getInputFilePath().substring(ft.getParentFolder().length()+1) : null;
+        if (inputFileName != null
+                && !FileValidator.fileNameCheck(inputFileName)) {
+            throw new IOException("Invalid input filename:" + inputFileName );
+
+        }
+
+        Experiment e = expMethods.getExperiment(ft.getExpId());
+
+        if (e == null) {
+            throw new IOException("The experiment " + ft.getExpId()
+                    + " does not exist!");
+        }
+        // TODO Check: is this needed? -NG
+        String expID = e.getID(); // Correct expID for in case sensitivity
+
+        if (ft.getTypeInt() == FileTuple.RAW && e.getNrRawFiles() >= 2) {
+            throw new IOException(
+                    "There are already two raw files for this experiment!");
+        }
+
+        FileTuple ftp = getProfile(e, ft.getMetaData());
+        String path;
+        if (ftp == null) {
+            path = fpg.generateFilePath(expID,ft.getTypeInt(), ft.getFilename());
+        } else {
+            path = ftp.getParentFolder() + ft.getFilename();
+            File profileToAdd = new File(path);
+            if (profileToAdd.exists()) {
+                throw new IOException(ft.getFilename() + " with the parameters "
+                        + ft.getMetaData() + " already exists!");
+            }
+        }
+
+        String query = "INSERT INTO File "
+                + "(Path, FileType, FileName, Date, MetaData, InputFilePath, "
+                + "Author, Uploader, IsPrivate, ExpID, GRVersion, MD5) "
+                + "VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String genomeRelease = ft.getGrVersion();
+        try(PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, path);
+
+            switch (ft.getTypeInt()) {
+                case FileTuple.RAW:
+                    stmt.setString(2, "Raw");
+                    genomeRelease = null;
+                    break;
+                case FileTuple.PROFILE:
+                    stmt.setString(2, "Profile");
+                    break;
+                case FileTuple.REGION:
+                    stmt.setString(2, "Region");
+                    break;
+                default:
+                    stmt.setString(2, "Other");
+                    break;
+            }
+
+            stmt.setString(3, ft.getFilename());
+            stmt.setString(4, ft.getMetaData());
+            stmt.setString(5, ft.getInputFilePath());
+            stmt.setString(6, ft.getAuthor());
+            stmt.setString(7, ft.getUploader());
+            stmt.setBoolean(8, ft.isPrivate());
+            stmt.setString(9, expID);
+            stmt.setString(10, genomeRelease);
+            stmt.setString(11, ft.checkSumMD5);
+
+            stmt.executeUpdate();
+        }
+
+    }
+
+
 	private FileTuple getProfile(Experiment e, String metaData) {
 
         for (FileTuple ft : e.getFiles()) {
