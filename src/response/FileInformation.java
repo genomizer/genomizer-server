@@ -32,11 +32,11 @@ public class FileInformation {
      */
     public FileInformation(FileTuple src) {
 
-    	id = src.getId();
-    	path = src.getPath();
+    	id = src.getFileId();
+    	path = src.getFullPath();
     	url = src.getDownloadURL();
     	type = src.getType().name();
-    	filename = src.getFilename();
+    	filename = src.getFileName();
     	date = src.getDate();
     	metaData = src.getMetaData();
     	author = src.getAuthor();

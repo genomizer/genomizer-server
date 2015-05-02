@@ -53,11 +53,11 @@ public class FileTupleTemplateBuilderTest {
         FileTuple ft = f.toFileTuple(1,"raw",name,"Done");
 
         assertEquals(inputFP,ft.getInputFilePath());
-        assertEquals(path + name,ft.getPath());
+        assertEquals(path + name,ft.getFullPath());
         assertTrue(ft.isPrivate());
 
         assertTrue("raw".equalsIgnoreCase(ft.getType().name()));
-        assertEquals(path + name, ft.getPath());
+        assertEquals(path + name, ft.getFullPath());
 
     }
 

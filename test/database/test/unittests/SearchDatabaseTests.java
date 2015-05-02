@@ -103,7 +103,7 @@ public class SearchDatabaseTests {
         assertEquals(1, experiments.size());
         assertEquals(1, experiments.get(0).getFiles().size());
         assertEquals("/var/www/data/Exp1/raw/file1.fastq", experiments.get(0)
-                .getFiles().get(0).getPath());
+                .getFiles().get(0).getFullPath());
     }
 
     @Test
@@ -190,7 +190,7 @@ public class SearchDatabaseTests {
 
         List<Experiment> elist = dbac.search("exp2[expid] ANd UCSC[author]");
 
-        int id = elist.get(0).getFiles().get(0).getId();
+        int id = elist.get(0).getFiles().get(0).getFileId();
 
         String query = Integer.toString(id) + "[fileid]";
         List<Experiment> experiments = dbac.search(query);

@@ -10,12 +10,54 @@ import java.util.Date;
 public class FileTupleBuilder {
     
     private FileTuple product;
-    
-    public FileTupleBuilder fileTuple(){
-        product = new FileTuple();
+
+    public FileTupleBuilder rawFile(){
+        this.product = new FileTuple();
+        this.product.setType(FileTuple.Type.Raw);
         return this;
     }
 
+    public FileTupleBuilder profileFile(){
+        this.product = new FileTuple();
+        this.product.setType(FileTuple.Type.Profile);
+        return this;
+    }
+
+    public FileTupleBuilder regionFile(){
+        this.product = new FileTuple();
+        this.product.setType(FileTuple.Type.Region);
+        return this;
+    }
+
+    public FileTupleBuilder otherFile(){
+        this.product = new FileTuple();
+        this.product.setType(FileTuple.Type.Other);
+        return this;
+    }
+
+    public FileTupleBuilder fromType(FileTuple.Type t){
+        switch (t) {
+            case Raw:
+                return this.rawFile();
+            case Profile:
+                return this.profileFile();
+            case Region:
+                return this.regionFile();
+            case Other:
+                return this.otherFile();
+        }
+
+        // dummy return
+        return null;
+    }
+
+    public FileTupleBuilder fromType(String t){
+        return this.fromType(FileTuple.Type.fromString(t));
+    }
+
+    public FileTupleBuilder fromType(int i){
+        return this.fromType(FileTuple.Type.fromInt(i));
+    }
     /**
      *
      * @param id The ID of the File contained by the FileTuple.
@@ -43,25 +85,6 @@ public class FileTupleBuilder {
      */
     public FileTupleBuilder withInputFilePath(String inputFilePath) {
         product.setInputFilePath(inputFilePath);
-        return this;
-    }
-
-    /**
-     *
-     * @param type The type of data. Can be "Raw", "Profile", etc.
-     * @return
-     */
-    public FileTupleBuilder withType(FileTuple.Type type) {
-        product.setType(type);
-        return this;
-    }
-
-    public FileTupleBuilder withType(String str) {
-        return this.withType(FileTuple.Type.fromString(str));
-    }
-
-    public FileTupleBuilder withFilename(String filename) {
-        product.setFilename(filename);
         return this;
     }
 
@@ -136,7 +159,12 @@ public class FileTupleBuilder {
     }
 
     public FileTuple build(){
-        return product;
+        FileTuple temp = this.product;
+        this.product = null;
+        return temp;
     }
 
+    FileTupleBuilder(){
+
+    }
 }

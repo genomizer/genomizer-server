@@ -887,7 +887,7 @@ public class DatabaseAccessor implements AutoCloseable {
         }
         String profileFolderPath = fpg.generateNewProfileSubFolder(fpg
                 .getProfileFolderPath(e.getID()));
-        return new SimpleEntry<String, String>(rawFileTuple.getParentFolder(),
+        return new SimpleEntry<String, String>(rawFileTuple.getFolderPath(),
                 profileFolderPath);
     }
 
@@ -974,7 +974,7 @@ public class DatabaseAccessor implements AutoCloseable {
                     + " does not exist");
         }
 
-        File profileFolder = new File(ft.getParentFolder());
+        File profileFolder = new File(ft.getFolderPath());
 
         if (!profileFolder.exists()) {
             throw new IOException("There are no profiles in this folder!");
@@ -1016,7 +1016,7 @@ public class DatabaseAccessor implements AutoCloseable {
         }
         String filePath = folderPath + "processing...";
         FileTuple pft = getFileFromPath(filePath);
-        return fileMethods.deleteFile(pft.getId());
+        return fileMethods.deleteFile(pft.getFileId());
     }
 
     /**

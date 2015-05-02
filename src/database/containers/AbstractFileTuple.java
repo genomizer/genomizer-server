@@ -22,58 +22,111 @@ public abstract class AbstractFileTuple {
     private String processVersion;
     private String processFlags;
 
-    private List<String> parents = new ArrayList<>();
+    private List<Integer> parents = new ArrayList<>();
 
+    /**
+     * Gets the full path of the input file associated with this tuple.
+     * @return a path
+     */
     public String getInputFilePath() {
         return inputFilePath;
     }
 
+    /**
+     * Gets the timestamp associated with this tuple.
+     * @return a Date
+     */
     public Date getDate() {
         return date;
     }
 
+    /**
+     * Returns the metadata (actually the process flags right now).
+     * @return metadata as a string
+     */
     public String getMetaData() {
         return metaData;
     }
 
+    /**
+     * Author getter.
+     * @return the author
+     */
     public String getAuthor() {
         return author;
     }
 
+    /**
+     * Uploader getter.
+     * @return the uploader
+     */
     public String getUploader() {
         return uploader;
     }
 
+    /**
+     * Determines whether this file is private.
+     * @return a boolean
+     */
     public Boolean isPrivate() {
         return isPrivate;
     }
 
+    /**
+     * Gets the associated experiment id.
+     * @return expid
+     */
     public String getExpId() {
         return expId;
     }
 
+    /**
+     * Gets the associated genome release version.
+     * @return a genome release version string
+     */
     public String getGrVersion() {
         return grVersion;
     }
 
+    /**
+     * Gets the name of the process that generated this file (if applicable).
+     * @return process name
+     */
     public String getProcessName() {
         return processName;
     }
 
+    /**
+     * Gets the version number/string of the process that generated this file (if applicable).
+     * @return the process version
+     */
     public String getProcessVersion() {
         return processVersion;
     }
 
+    /**
+     * Gets the process flags.
+     * @return flags as a string.
+     */
     public String getProcessFlags() {
         return processFlags;
     }
 
-    public String getParentFolder() {
+    /**
+     * Gets the path of the folder containing the file associated with this tuple.
+     * @return a path
+     */
+    public String getFolderPath() {
         int filenameIndex = path.lastIndexOf(File.separator);
         return path.substring(0, filenameIndex + 1);
     }
 
-    public List<String> getParents() {
+    /**
+     * Gets a {@linkplain List} of fileid corresponding to the
+     * "parents" of this file (if applicable).
+     * @return a list of integers
+     */
+    public List<Integer> getParents() {
         return parents;
     }
 
@@ -125,7 +178,11 @@ public abstract class AbstractFileTuple {
         this.processFlags = pFlags;
     }
 
-    public void setParent(String newParentId) {
+    /**
+     * Add a new parent to this tuple.
+     * @param newParentId the parent to add
+     */
+    public void addParent(Integer newParentId) {
         this.parents.add(newParentId);
     }
 }

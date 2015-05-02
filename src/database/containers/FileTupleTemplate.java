@@ -13,20 +13,18 @@ public class FileTupleTemplate extends AbstractFileTuple {
                                  String filename,
                                  String status) {
 
-        return  (new FileTupleBuilder()).fileTuple()
+        return  (new FileTupleBuilder()).fromType(type)
                 .withAuthor(this.getAuthor())
                 .withDate(this.getDate())
                 .withGrVersion(this.getGrVersion())
                 .withExpId(this.getExpId())
                 .withInputFilePath(this.getInputFilePath())
                 .withPath(this.getFolderPath() + filename)
-                .withFilename(filename)
                 .withMetaData(this.getMetaData())
                 .withProcessFlags(this.getProcessFlags())
                 .withProcessName(this.getProcessName())
                 .withProcessVersion(this.getProcessVersion())
                 .withStatus(status)
-                .withType(type)
                 .withId(id)
                 .isPrivate(this.isPrivate())
                 .withUploader(this.getUploader()).build();

@@ -135,12 +135,12 @@ public class ProcessRawToProfileTests {
         FileTuple file2 = fileTuples.get(1);
         FileTuple file3 = fileTuples.get(2);
 
-        dbac.addParent(file1.getId(), file2.getId());
-        dbac.addParent(file1.getId(), file3.getId());
+        dbac.addParent(file1.getFileId(), file2.getFileId());
+        dbac.addParent(file1.getFileId(), file3.getFileId());
 
-        List<String> parents = file1.getParents();
-        assertTrue(parents.get(0).equals(String.valueOf(file2.getId())));
-        assertTrue(parents.get(1).equals(String.valueOf(file3.getId())));
+        List<Integer> parents = file1.getParents();
+        assertTrue(parents.get(0).equals(String.valueOf(file2.getFileId())));
+        assertTrue(parents.get(1).equals(String.valueOf(file3.getFileId())));
     }
 
     private void addMockFiles(String folderPath, String filename1,

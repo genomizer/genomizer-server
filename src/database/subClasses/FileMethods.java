@@ -107,7 +107,7 @@ public class FileMethods {
 		if (ft == null) {
 			path = fpg.generateFilePath(expID, FileTuple.Type.fromInt(fileType), fileName);
 		} else {
-			path = ft.getParentFolder() + fileName;
+			path = ft.getFolderPath() + fileName;
 			File profileToAdd = new File(path);
 			if (profileToAdd.exists()) {
 				throw new IOException(fileName + " with the parameters "
@@ -162,12 +162,12 @@ public class FileMethods {
 
     public void addNewFile(FileTuple ft) throws SQLException, IOException {
 
-        if (!FileValidator.fileNameCheck(ft.getFilename())) {
+        if (!FileValidator.fileNameCheck(ft.getFileName())) {
             throw new IOException("Invalid filename");
         }
 
         String inputFileName = ft.getInputFilePath() != null ?
-                ft.getInputFilePath().substring(ft.getParentFolder().length()+1) : null;
+                ft.getInputFilePath().substring(ft.getFolderPath().length()+1) : null;
         if (inputFileName != null
                 && !FileValidator.fileNameCheck(inputFileName)) {
             throw new IOException("Invalid input filename:" + inputFileName );
@@ -191,12 +191,12 @@ public class FileMethods {
         FileTuple ftp = getProfile(e, ft.getMetaData());
         String path;
         if (ftp == null) {
-            path = fpg.generateFilePath(expID,ft.getType(), ft.getFilename());
+            path = fpg.generateFilePath(expID,ft.getType(), ft.getFileName());
         } else {
-            path = ftp.getParentFolder() + ft.getFilename();
+            path = ftp.getFolderPath() + ft.getFileName();
             File profileToAdd = new File(path);
             if (profileToAdd.exists()) {
-                throw new IOException(ft.getFilename() + " with the parameters "
+                throw new IOException(ft.getFileName() + " with the parameters "
                         + ft.getMetaData() + " already exists!");
             }
         }
@@ -225,7 +225,7 @@ public class FileMethods {
                     break;
             }
 
-            stmt.setString(3, ft.getFilename());
+            stmt.setString(3, ft.getFileName());
             stmt.setString(4, ft.getMetaData());
             stmt.setString(5, ft.getInputFilePath());
             stmt.setString(6, ft.getAuthor());
@@ -345,7 +345,7 @@ public class FileMethods {
             fileToDelete.delete();
         }
 
-        File parentFolder = new File(ft.getParentFolder());
+        File parentFolder = new File(ft.getFolderPath());
         if (ft.getType().name().equalsIgnoreCase("profile") && isEmptyFolder(parentFolder)) {
             parentFolder.delete();
         }
@@ -379,13 +379,13 @@ public class FileMethods {
 			throw new IOException("Could not find file with ID " + fileID);
 		}
 
-        File fileToDelete = new File(ft.getPath());
+        File fileToDelete = new File(ft.getFullPath());
 
         if (fileToDelete.exists()) {
             fileToDelete.delete();
         }
 
-        File parentFolder = new File(ft.getParentFolder());
+        File parentFolder = new File(ft.getFolderPath());
         if (ft.getType().name().equalsIgnoreCase("profile") && isEmptyFolder(parentFolder)) {
             parentFolder.delete();
         }

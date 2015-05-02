@@ -12,31 +12,26 @@ import static org.junit.Assert.assertTrue;
  */
 public class FileTupleBuilderTest {
 
-    private static FileTupleBuilder fbuild;
-
-    @Before
-    public void setUp() {
-
-        fbuild = new FileTupleBuilder();
-    }
 
     @Test
     public void shouldGetNameRight(){
         String name = "AFileName";
-        FileTuple f = fbuild.fileTuple().withFilename(name).build();
+        FileTuple f = FileTuple.makeNew()
+                .rawFile().withPath(name).build();
 
-        assertEquals(name,f.getFilename());
+        assertEquals(name,f.getFileName());
     }
 
     @Test
-    public void shouldGetFilesRight() {
+    public void shouldGetPathsRight() {
         String inputFP = "/this/is/a/test";
-        String filename = "/also/a/test";
-        FileTuple f = fbuild.fileTuple().withFilename(filename)
+        String filepath = "/also/a/test";
+        FileTuple f = FileTuple.makeNew()
+                .rawFile().withPath(filepath)
                 .withInputFilePath(inputFP).isPrivate(true).build();
         
         assertEquals(inputFP,f.getInputFilePath());
-        assertEquals(filename,f.getFilename());
+        assertEquals(filepath,f.getFullPath());
         assertTrue(f.isPrivate());
     }
 }

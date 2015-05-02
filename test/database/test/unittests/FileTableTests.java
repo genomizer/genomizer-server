@@ -75,8 +75,8 @@ public class FileTableTests {
     @AfterClass
     public static void undoAllChanges() throws Exception {
 
-        if (dbac.hasFile(ft.getId())) {
-            dbac.deleteFile(ft.getId());
+        if (dbac.hasFile(ft.getFileId())) {
+            dbac.deleteFile(ft.getFileId());
         }
         dbac.deleteExperiment(testExpId);
         dbac.close();
@@ -90,14 +90,14 @@ public class FileTableTests {
         ft = dbac.addNewFile(testExpId, testFileType, testName, testInputFile,
                 testMetaData, testAuthor, testUploader, testIsPrivate,
                 testGRVersion,testMD5);
-        addMockFile(ft.getParentFolder(), ft.getFilename());
+        addMockFile(ft.getFolderPath(), ft.getFileName());
     }
 
 
     @After
     public void teardown() throws Exception {
 
-        dbac.deleteFile(ft.getPath());
+        dbac.deleteFile(ft.getFullPath());
     }
 
 
@@ -106,9 +106,9 @@ public class FileTableTests {
 
         Experiment e = dbac.getExperiment(testExpId);
         assertEquals(1, e.getFiles().size());
-        assertEquals(ft.getPath(), e.getFiles().get(0).getPath());
+        assertEquals(ft.getFullPath(), e.getFiles().get(0).getFullPath());
 
-        dbac.deleteFile(ft.getPath());
+        dbac.deleteFile(ft.getFullPath());
         e = dbac.getExperiment(testExpId);
         assertEquals(0, e.getFiles().size());
 
@@ -119,7 +119,7 @@ public class FileTableTests {
         assertEquals(1, e.getFiles().size());
 
         ft = e.getFiles().get(0);
-        assertEquals(fpg.getRawFolderPath(testExpId) + testName, ft.getPath());
+        assertEquals(fpg.getRawFolderPath(testExpId) + testName, ft.getFullPath());
     }
 
 
@@ -140,9 +140,9 @@ public class FileTableTests {
     @Test
     public void shouldBeAbleToCheckIfFileExistsInDatabase() throws Exception {
 
-        List<Experiment> experiments = dbac.search(ft.getPath() + "[Path]");
+        List<Experiment> experiments = dbac.search(ft.getFullPath() + "[Path]");
         Experiment experiment = experiments.get(0);
-        int fileID = experiment.getFiles().get(0).getId();
+        int fileID = experiment.getFiles().get(0).getFileId();
         assertTrue(dbac.hasFile(fileID));
     }
 
@@ -150,7 +150,7 @@ public class FileTableTests {
     @Test
     public void shouldBeAbleToDeleteFileUsingFileID() throws Exception {
 
-    	int fileID = ft.getId();
+    	int fileID = ft.getFileId();
         assertEquals(1, dbac.deleteFile(fileID));
         assertFalse(dbac.hasFile(fileID));
 
@@ -171,10 +171,10 @@ public class FileTableTests {
     @Test
     public void shouldRemoveFileFromDisk() throws Exception {
 
-        addMockFile(ft.getParentFolder(), testName);
-        File fileToDelete = new File(ft.getPath());
+        addMockFile(ft.getFolderPath(), testName);
+        File fileToDelete = new File(ft.getFullPath());
         assertTrue(fileToDelete.exists());
-        assertEquals(1, dbac.deleteFile(ft.getPath()));
+        assertEquals(1, dbac.deleteFile(ft.getFullPath()));
         assertFalse(fileToDelete.exists());
 
         dbac.addNewFile(testExpId, testFileType, testName, testInputFile,
@@ -203,7 +203,7 @@ public class FileTableTests {
     @Test
     public void shouldBeDoneAfterCallingReadyForDownload() throws Exception {
 
-        dbac.fileReadyForDownload(ft.getId());
+        dbac.fileReadyForDownload(ft.getFileId());
         Experiment e = dbac.getExperiment(testExpId);
         ft = e.getFiles().get(0);
 
@@ -219,22 +219,22 @@ public class FileTableTests {
         dbac.addExperiment("expert1");
         FileTuple fileStore = dbac.addNewFile("expert1", FileTuple.RAW, "temp1.txt", "temp2.txt",
                 "-a -g", "Claes", "Claes", false, "te34",null);
-        File temp1 = new File(fileStore.getPath());
+        File temp1 = new File(fileStore.getFullPath());
         temp1.createNewFile();
         assertTrue(temp1.exists());
 
         List<Experiment> res = dbac.search("Claes[Uploader]");
-        int rowCount = dbac.changeFileName(res.get(0).getFiles().get(0).getId(),
+        int rowCount = dbac.changeFileName(res.get(0).getFiles().get(0).getFileId(),
                 "final1");
         assertEquals(1, rowCount);
 
         res = dbac.search("Claes[Uploader]");
-        assertEquals("final1", res.get(0).getFiles().get(0).getFilename());
+        assertEquals("final1", res.get(0).getFiles().get(0).getFileName());
         assertEquals(testFolderPath + "expert1/raw/final1", res.get(0)
-                .getFiles().get(0).getPath());
-        assertFalse(res.get(0).getFiles().get(0).getFilename().equals("temp1"));
+                .getFiles().get(0).getFullPath());
+        assertFalse(res.get(0).getFiles().get(0).getFileName().equals("temp1"));
 
-        dbac.deleteFile(res.get(0).getFiles().get(0).getId());
+        dbac.deleteFile(res.get(0).getFiles().get(0).getFileId());
         dbac.deleteExperiment("expert1");
         dbac.removeGenomeRelease("te34");
     }

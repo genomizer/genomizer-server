@@ -259,7 +259,7 @@ public class ExperimentTests {
 		  		testMetaData, testAuthor, testUploader, testIsPrivate,
 		  		testGRVersion, testMD5);
     	fpg.generateExperimentFolders(testExpId2);
-		addMockFile(ft.getParentFolder(), testName);
+		addMockFile(ft.getFolderPath(), testName);
 		dbac.deleteExperiment(testExpId2);
 	}
 

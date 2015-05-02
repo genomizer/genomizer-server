@@ -107,7 +107,7 @@ public class Experiment {
 
         for (FileTuple ft: files) {
             sb.append("\n    ");
-            sb.append(ft.getPath());
+            sb.append(ft.getFullPath());
             sb.append(", ");
             sb.append(ft.getType());
             sb.append(", ");

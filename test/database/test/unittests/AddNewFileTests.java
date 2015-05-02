@@ -67,35 +67,33 @@ public class AddNewFileTests {
 
         FileTuple ft = dbac.getFileTuple(expectedFilePath);
 
-        assertEquals(expectedFilePath, ft.getPath());
+        assertEquals(expectedFilePath, ft.getFullPath());
 
         Experiment e = dbac.getExperiment(testExpId);
         ft = e.getFiles().get(0);
-        assertEquals(expectedFilePath, ft.getPath());
+        assertEquals(expectedFilePath, ft.getFullPath());
 
-        dbac.deleteFile(ft.getId());
+        dbac.deleteFile(ft.getFileId());
         assertNull(dbac.getFileTuple(expectedFilePath));
         e = dbac.getExperiment(testExpId);
         assertEquals(0, e.getFiles().size());
 
-        FileTuple ftt = (new FileTupleBuilder()).fileTuple()
+        FileTuple ftt = FileTuple.makeNew().fromType(testFileType)
                 .withExpId(testExpId)
                 .withAuthor(testAuthor)
-                .withInputFilePath(ft.getParentFolder() + testInputFileName)
+                .withInputFilePath(ft.getFolderPath() + testInputFileName)
                 .withMetaData(testMetaData)
-                .withFilename(testFileName)
                 .withUploader(testUploader)
-                .withType(testFileType)
                 .isPrivate(testIsPrivate)
-                .withPath(ft.getParentFolder())
+                .withPath(ft.getFolderPath() + testFileName)
                 .build();
         dbac.addNewFile(ftt);
         ft = dbac.getFileTuple(expectedFilePath);
-        assertEquals(expectedFilePath, ft.getPath());
+        assertEquals(expectedFilePath, ft.getFullPath());
 
         e = dbac.getExperiment(testExpId);
         ft = e.getFiles().get(0);
-        assertEquals(expectedFilePath, ft.getPath());
+        assertEquals(expectedFilePath, ft.getFullPath());
     }
 
 
@@ -114,13 +112,13 @@ public class AddNewFileTests {
 
         FileTuple ft = dbac.getFileTuple(expectedFilePath);
 
-        assertEquals(expectedFilePath, ft.getPath());
+        assertEquals(expectedFilePath, ft.getFullPath());
 
         Experiment e = dbac.getExperiment(testExpId);
         ft = e.getFiles().get(0);
-        assertEquals(expectedFilePath, ft.getPath());
+        assertEquals(expectedFilePath, ft.getFullPath());
 
-        dbac.deleteFile(ft.getId());
+        dbac.deleteFile(ft.getFileId());
         assertNull(dbac.getFileTuple(expectedFilePath));
         e = dbac.getExperiment(testExpId);
         assertEquals(0, e.getFiles().size());
@@ -129,11 +127,11 @@ public class AddNewFileTests {
                 testInputFileName, testMetaData, testAuthor, testUploader,
                 testIsPrivate, null, null);
         ft = dbac.getFileTuple(expectedFilePath);
-        assertEquals(expectedFilePath, ft.getPath());
+        assertEquals(expectedFilePath, ft.getFullPath());
 
         e = dbac.getExperiment(testExpId);
         ft = e.getFiles().get(0);
-        assertEquals(expectedFilePath, ft.getPath());
+        assertEquals(expectedFilePath, ft.getFullPath());
     }
 
     @Test
@@ -146,10 +144,10 @@ public class AddNewFileTests {
 
         FileTuple ft = dbac.getFileTuple(expectedFilePath);
 
-        assertEquals(expectedFilePath, ft.getPath());
+        assertEquals(expectedFilePath, ft.getFullPath());
         assertEquals(testExpId, ft.getExpId());
         assertEquals("Raw", ft.getType().name());
-        assertEquals(testFileName, ft.getFilename());
+        assertEquals(testFileName, ft.getFileName());
         assertEquals(expectedInputFilePath, ft.getInputFilePath());
         assertEquals(testMetaData, ft.getMetaData());
         assertEquals(testAuthor, ft.getAuthor());

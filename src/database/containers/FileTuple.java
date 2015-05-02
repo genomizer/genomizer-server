@@ -48,30 +48,62 @@ public class FileTuple extends AbstractFileTuple {
 
     private Integer id;
     private Type type;
-    private String filename;
+
     private String status;
 
     //TODO Fix this
     public final String checkSumMD5;
 
 
-    public Integer getId() {
+    public static FileTupleBuilder makeNew(){
+        return new FileTupleBuilder();
+    }
+
+
+    /**
+     * Getter for the FileID associated with this tuple.
+     * @return the fileid as an int
+     */
+    public Integer getFileId() {
         return id;
     }
 
+    /**
+     * Getter for the filetype associated with this file; see {@link database.containers.FileTuple.Type}.
+     * @return a FileTuple.Type
+     */
     public Type getType() {
         return type;
     }
 
-    public String getFilename() {
-        return filename;
+    /**
+     * Returns the filename of the file represented by this tuple.
+     *
+     * @see #getFullPath()
+     * @see #getFolderPath()
+     * @return
+     */
+    public String getFileName() {
+        int filenameIndex = path.lastIndexOf(File.separator);
+        return path.substring(filenameIndex + 1);
     }
 
+    /**
+     * Returns the contents of the "status" field of the file table associated with this tuple.
+     * @return a string
+     */
     public String getStatus() {
         return status;
     }
 
-    public String getPath() {
+    /**
+     * Returns the full path of the file associated with this tuple.
+     *
+     * @see #getFileName()
+     * @see #getFolderPath()
+     * @return
+     */
+    public String getFullPath() {
         return path;
     }
 
@@ -85,9 +117,7 @@ public class FileTuple extends AbstractFileTuple {
 
     }
 
-    void setFilename(String filename) {
-        this.filename = filename;
-    }
+
 
     void setStatus(String status) {
         this.status = status;
@@ -96,7 +126,7 @@ public class FileTuple extends AbstractFileTuple {
     /**
      * Constructs a FileTuple object. Parameter: ResultSet
      *
-     * @param resSet
+     * @param resSet a sql result set
      * @throws SQLException
      */
     public FileTuple(ResultSet resSet) throws SQLException {
@@ -105,7 +135,6 @@ public class FileTuple extends AbstractFileTuple {
         path = resSet.getString("Path");
         inputFilePath = resSet.getString("InputFilePath");
         type = Type.fromString(resSet.getString("FileType"));
-        filename = resSet.getString("FileName");
         date = resSet.getDate("Date");
         metaData = resSet.getString("MetaData");
         author = resSet.getString("Author");
@@ -115,6 +144,8 @@ public class FileTuple extends AbstractFileTuple {
         grVersion = resSet.getString("GRVersion");
         status = resSet.getString("Status");
         checkSumMD5 = resSet.getString("MD5");
+
+
 
 
     }
@@ -164,11 +195,13 @@ public class FileTuple extends AbstractFileTuple {
     }
 
     /**
-     * Gets the parent folder of the file on the file system.
+     * Gets path to the folder that the associated file is located in.
      *
+     * @see #getFileName()
+     * @see #getFullPath()
      * @return String folder URL
      */
-    public String getParentFolder() {
+    public String getFolderPath() {
 
     	int filenameIndex = path.lastIndexOf(File.separator);
         return path.substring(0, filenameIndex + 1);
@@ -181,7 +214,7 @@ public class FileTuple extends AbstractFileTuple {
     public String toString() {
 
     	return "FileTuple [id=" + id + ", path=" + path + ", inputFilePath="
-                + inputFilePath + ", type=" + type.name() + ", filename=" + filename
+                + inputFilePath + ", type=" + type.name() + ", filename=" + this.getFileName()
                 + ", date=" + date + ", metaData=" + metaData + ", author="
                 + author + ", uploader=" + uploader + ", isPrivate="
                 + isPrivate + ", expId=" + expId + ", grVersion=" + grVersion
