@@ -26,7 +26,7 @@ public class FileTupleTemplate extends AbstractFileTuple {
                 .withProcessVersion(this.getProcessVersion())
                 .withStatus(status)
                 .withId(id)
-                .isPrivate(this.isPrivate())
+                .withIsPrivate(this.isPrivate())
                 .withUploader(this.getUploader()).build();
     }
 

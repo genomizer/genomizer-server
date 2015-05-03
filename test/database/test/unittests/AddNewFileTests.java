@@ -3,7 +3,6 @@ package database.test.unittests;
 import static org.junit.Assert.*;
 
 
-import database.containers.FileTupleBuilder;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -84,7 +83,7 @@ public class AddNewFileTests {
                 .withInputFilePath(ft.getFolderPath() + testInputFileName)
                 .withMetaData(testMetaData)
                 .withUploader(testUploader)
-                .isPrivate(testIsPrivate)
+                .withIsPrivate(testIsPrivate)
                 .withPath(ft.getFolderPath() + testFileName)
                 .build();
         dbac.addNewFile(ftt);

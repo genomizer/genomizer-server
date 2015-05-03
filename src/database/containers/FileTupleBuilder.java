@@ -11,26 +11,39 @@ public class FileTupleBuilder {
     
     private FileTuple product;
 
+    private boolean hasPath;
+    private boolean hasUploader;
+    private boolean hasIsPrivate;
+
     public FileTupleBuilder rawFile(){
-        this.product = new FileTuple();
+        if (product == null) {
+            this.product = new FileTuple();
+        }
+
         this.product.setType(FileTuple.Type.Raw);
         return this;
     }
 
     public FileTupleBuilder profileFile(){
-        this.product = new FileTuple();
+        if (product == null) {
+            this.product = new FileTuple();
+        }
         this.product.setType(FileTuple.Type.Profile);
         return this;
     }
 
     public FileTupleBuilder regionFile(){
-        this.product = new FileTuple();
+        if (product == null) {
+            this.product = new FileTuple();
+        }
         this.product.setType(FileTuple.Type.Region);
         return this;
     }
 
     public FileTupleBuilder otherFile(){
-        this.product = new FileTuple();
+        if (product == null) {
+            this.product = new FileTuple();
+        }
         this.product.setType(FileTuple.Type.Other);
         return this;
     }
@@ -58,12 +71,14 @@ public class FileTupleBuilder {
     public FileTupleBuilder fromType(int i){
         return this.fromType(FileTuple.Type.fromInt(i));
     }
+
     /**
      *
      * @param id The ID of the File contained by the FileTuple.
      * @return
      */
     public FileTupleBuilder withId(Integer id) {
+        nullCheck("withId()");
         product.setId(id);
         return this;
     }
@@ -74,7 +89,9 @@ public class FileTupleBuilder {
      * @return
      */
     public FileTupleBuilder withPath(String path) {
+        nullCheck("withPath()");
         product.setPath(path);
+        this.hasPath = true;
         return this;
     }
 
@@ -84,11 +101,13 @@ public class FileTupleBuilder {
      * @return
      */
     public FileTupleBuilder withInputFilePath(String inputFilePath) {
+        nullCheck("withInputFilePath()");
         product.setInputFilePath(inputFilePath);
         return this;
     }
 
     public FileTupleBuilder withDate(Date date) {
+        nullCheck("withDate()");
         product.setDate(date);
         return this;
     }
@@ -99,26 +118,33 @@ public class FileTupleBuilder {
      * @return
      */
     public FileTupleBuilder withMetaData(String metaData) {
+        nullCheck("withMetaData()");
         product.setMetaData(metaData);
         return this;
     }
 
     public FileTupleBuilder withAuthor(String author) {
+        nullCheck("withAuthor()");
         product.setAuthor(author);
         return this;
     }
 
     public FileTupleBuilder withUploader(String uploader) {
+        nullCheck("withUploader()");
         product.setUploader(uploader);
+        this.hasUploader = true;
         return this;
     }
 
-    public FileTupleBuilder isPrivate(Boolean isPrivate) {
+    public FileTupleBuilder withIsPrivate(Boolean isPrivate) {
+        nullCheck("withIsPrivate()");
         product.setIsPrivate(isPrivate);
+        this.hasIsPrivate = true;
         return this;
     }
 
     public FileTupleBuilder withExpId(String expId) {
+        nullCheck("withExpId()");
         product.setExpId(expId);
         return this;
     }
@@ -129,6 +155,7 @@ public class FileTupleBuilder {
      * @return
      */
     public FileTupleBuilder withGrVersion(String grVersion) {
+        nullCheck("withGrVersion()");
         product.setGrVersion(grVersion);
         return this;
     }
@@ -139,32 +166,66 @@ public class FileTupleBuilder {
      * @return
      */
     public FileTupleBuilder withStatus(String status) {
+        nullCheck("withStatus()");
         product.setStatus(status);
         return this;
     }
 
     public FileTupleBuilder withProcessName(String pName) {
+        nullCheck("withProcessName()");
         product.setProcessName(pName);
         return this;
     }
 
     public FileTupleBuilder withProcessVersion(String pVersion) {
+        nullCheck("withProcessVersion()");
         product.setProcessVersion(pVersion);
         return this;
     }
 
     public FileTupleBuilder withProcessFlags(String pFlags) {
+        nullCheck("withProcessFlags()");
         product.setProcessFlags(pFlags);
         return this;
     }
 
     public FileTuple build(){
+        nullCheck("build()");
+        if (!hasPath)
+            fail("no path specified");
+        if (!hasUploader)
+            fail("no uploader specified");
+        if (!hasIsPrivate)
+            fail("withIsPrivate flag not set");
         FileTuple temp = this.product;
         this.product = null;
+
+        // reset state
+
+        this.hasPath = false;
+        this.hasUploader = false;
+        this.hasIsPrivate = false;
+
         return temp;
     }
 
     FileTupleBuilder(){
+        this.hasPath = false;
+        this.hasUploader = false;
+        this.hasIsPrivate = false;
+    }
 
+    private void nullCheck(String from) {
+        if (product == null) {
+            throw new IllegalStateException("FileTupleBuilder: Illegal call to "
+                    + from + "; construction must start with " +
+                    "FileTupleBuilder.<filetype>File() or " +
+                    "FileTupleBuilder.fromType(..)");
+        }
+    }
+
+    private void fail(String reason) throws IllegalStateException {
+        throw new IllegalStateException("FileTupleBuilder: Cannot instatiate " +
+                "FileTuple; " + reason);
     }
 }
