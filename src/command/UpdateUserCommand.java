@@ -79,10 +79,6 @@ public class UpdateUserCommand extends Command {
 
         LoginAttempt login = Authenticate.login(username, oldPassword, dbHash);
 
-
-        //TODO Enable below code when db method is implemented.
-        return new MinimalResponse(StatusCode.NO_CONTENT);
-        /*
         if(login.wasSuccessful()) {
 
 
@@ -106,7 +102,7 @@ public class UpdateUserCommand extends Command {
         return new ErrorResponse(StatusCode.UNAUTHORIZED, "Error with update of user " +username+
                 ". Incorrect old password"+ login.getErrorMessage());
 
-                */
+
     }
 
 }

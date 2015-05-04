@@ -70,9 +70,7 @@ public class EditUserCommand extends Command {
             return new ErrorResponse(StatusCode.BAD_REQUEST, "Error when " +
                     "initiating databaseAccessor. " + e.getMessage());
         }
-        //TODO Enable below code when db method is implemented.
-        return new MinimalResponse(StatusCode.NO_CONTENT);
-        /*
+
         try {
 
             String hash = BCrypt.hashpw(password, BCrypt.gensalt());
@@ -86,7 +84,7 @@ public class EditUserCommand extends Command {
         }
 
         return new MinimalResponse(StatusCode.OK);
-        */
+
     }
 }
 
