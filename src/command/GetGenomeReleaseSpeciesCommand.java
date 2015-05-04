@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import database.constants.MaxLength;
 import response.ErrorResponse;
 import response.GetGenomeReleaseResponse;
+import response.HttpStatusCode;
 import response.Response;
-import response.StatusCode;
 import database.DatabaseAccessor;
 import database.containers.Genome;
 /**
@@ -49,12 +49,12 @@ public class GetGenomeReleaseSpeciesCommand extends Command {
 			db = initDB();
 			ArrayList<Genome> genomeReleases =
 					db.getAllGenomeReleasesForSpecies(species);
-			return new GetGenomeReleaseResponse(StatusCode.OK, genomeReleases);
+			return new GetGenomeReleaseResponse(HttpStatusCode.OK, genomeReleases);
 		} catch (SQLException e) {
-			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE,
+			return new ErrorResponse(HttpStatusCode.SERVICE_UNAVAILABLE,
 					"DatabaseAccessor could not be created: " + e.getMessage());
 		} catch (IOException e) {
-			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, species +
+			return new ErrorResponse(HttpStatusCode.SERVICE_UNAVAILABLE, species +
 					" has no genome version released");
 		} finally {
 			if (db != null) {

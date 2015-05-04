@@ -36,7 +36,7 @@ import command.ValidateException;
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
-import response.StatusCode;
+import response.HttpStatusCode;
 
 import authentication.Authenticate;
 
@@ -179,7 +179,7 @@ public class Doorman {
 						break;
 					default:
 						Debug.log("HTTP 404 Not Found: " + method + " " + requestPath);
-						respond(exchange, new MinimalResponse(StatusCode.NOT_FOUND));
+						respond(exchange, new MinimalResponse(HttpStatusCode.NOT_FOUND));
 						break;
 					}
 					break;
@@ -224,7 +224,7 @@ public class Doorman {
 						break;
 					default:
 						Debug.log("HTTP 404 Not Found: " + method + " " + requestPath);
-						respond(exchange, new MinimalResponse(StatusCode.NOT_FOUND));
+						respond(exchange, new MinimalResponse(HttpStatusCode.NOT_FOUND));
 						break;
 					}
 					break;
@@ -267,7 +267,7 @@ public class Doorman {
 						break;
 					default:
 						Debug.log("HTTP 404 Not Found: " + method + " " + requestPath);
-						respond(exchange, new MinimalResponse(StatusCode.NOT_FOUND));
+						respond(exchange, new MinimalResponse(HttpStatusCode.NOT_FOUND));
 						break;
 					}
 					break;
@@ -306,7 +306,7 @@ public class Doorman {
 						break;
 					default:
 						Debug.log("HTTP 404 Not Found: " + method + " " + requestPath);
-						respond(exchange, new MinimalResponse(StatusCode.NOT_FOUND));
+						respond(exchange, new MinimalResponse(HttpStatusCode.NOT_FOUND));
 						break;
 					}
 					break;
@@ -320,7 +320,7 @@ public class Doorman {
 
 				default:
 					Debug.log("Unsupported HTTP method: " + method);
-					respond(exchange, new MinimalResponse(StatusCode.METHOD_NOT_ALLOWED));
+					respond(exchange, new MinimalResponse(HttpStatusCode.METHOD_NOT_ALLOWED));
 					break;
 				}
 		    }
@@ -334,7 +334,7 @@ public class Doorman {
 					resp = new ErrorResponse(vEx.getCode(), vEx.getMessage());
 				}
 				else {
-					resp = new MinimalResponse(StatusCode.INTERNAL_SERVER_ERROR);
+					resp = new MinimalResponse(HttpStatusCode.INTERNAL_SERVER_ERROR);
 				}
 				respond(exchange, resp);
 		    }
@@ -371,7 +371,7 @@ public class Doorman {
             } else {
               Debug.log("Authorization header "
                         + "and token parameter values differ!");
-              respond(exchange, new MinimalResponse(StatusCode.UNAUTHORIZED));
+              respond(exchange, new MinimalResponse(HttpStatusCode.UNAUTHORIZED));
               return null;
             }
           }
@@ -386,7 +386,7 @@ public class Doorman {
             return uuid;
 		} else {
 			Debug.log("Unauthorized request!");
-			Response errorResponse = new MinimalResponse(StatusCode.
+			Response errorResponse = new MinimalResponse(HttpStatusCode.
 					UNAUTHORIZED);
             respond(exchange, errorResponse);
             return null;

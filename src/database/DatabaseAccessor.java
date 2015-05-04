@@ -1063,7 +1063,7 @@ public class DatabaseAccessor implements AutoCloseable {
      */
     public ArrayList<Genome> getAllGenomeReleasesForSpecies(String species)
             throws SQLException {
-        return genMethods.getAllGenomReleasesForSpecies(species);
+        return genMethods.getAllGenomeReleasesForSpecies(species);
     }
 
     private FileTuple getRawFileTuple(List<FileTuple> fileTuples) {
@@ -1084,7 +1084,7 @@ public class DatabaseAccessor implements AutoCloseable {
      *             - if the query does not succeed
      */
     public List<Genome> getAllGenomReleases() throws SQLException {
-        return genMethods.getAllGenomReleases();
+        return genMethods.getAllGenomeReleases();
     }
 
     /**
@@ -1096,7 +1096,7 @@ public class DatabaseAccessor implements AutoCloseable {
      *             - if the query does not succeed
      */
     public List<String> getAllGenomReleaseSpecies() throws SQLException {
-        return genMethods.getAllGenomReleaseSpecies();
+        return genMethods.getAllGenomeReleaseSpecies();
     }
 
     /**

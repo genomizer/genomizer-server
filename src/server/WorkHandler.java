@@ -3,7 +3,7 @@ package server;
 import command.ProcessCommand;
 import command.ProcessStatus;
 import response.Response;
-import response.StatusCode;
+import response.HttpStatusCode;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -89,7 +89,7 @@ public class WorkHandler implements Runnable {
 				try {
 					Response resp = processCommand.execute();
 					Debug.log("AFTER EXECUTE PROCESS");
-					if (resp.getCode()==StatusCode.CREATED){
+					if (resp.getCode()== HttpStatusCode.CREATED){
 						processStatus.status = ProcessStatus.STATUS_FINISHED;
 					} else {
 						processStatus.status = ProcessStatus.STATUS_CRASHED;

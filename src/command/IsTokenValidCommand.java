@@ -3,7 +3,7 @@ package command;
 import authentication.Authenticate;
 import response.MinimalResponse;
 import response.Response;
-import response.StatusCode;
+import response.HttpStatusCode;
 
 /**
  * This class is used to check if a token is valid.
@@ -30,8 +30,8 @@ public class IsTokenValidCommand extends Command {
 
 	@Override
 	public Response execute() {
-		int code = Authenticate.idExists(uuid) ? StatusCode.OK :
-				StatusCode.UNAUTHORIZED;
+		int code = Authenticate.idExists(uuid) ? HttpStatusCode.OK :
+				HttpStatusCode.UNAUTHORIZED;
 		return new MinimalResponse(code);
 	}
 }

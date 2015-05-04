@@ -12,7 +12,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUpload;
 import org.apache.commons.fileupload.RequestContext;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import response.StatusCode;
+import response.HttpStatusCode;
 import server.*;
 
 import java.io.File;
@@ -53,7 +53,7 @@ public class UploadHandler {
                 "</body></html>").getBytes();
         Debug.log("Serving upload form...");
         exchange.getResponseHeaders().set("Content-Type", "text/html");
-        exchange.sendResponseHeaders(StatusCode.OK, form.length);
+        exchange.sendResponseHeaders(HttpStatusCode.OK, form.length);
         OutputStream out = exchange.getResponseBody();
         out.write(form);
         out.close();
@@ -112,7 +112,7 @@ public class UploadHandler {
                         ? this.uploadDir + fileItem.getName()
                         : absUploadPath);
                 if (!verifyMD5(absUploadPath, fileItem)) {
-                    throw new ValidateException(StatusCode.BAD_REQUEST,
+                    throw new ValidateException(HttpStatusCode.BAD_REQUEST,
                             "Incorrect checksum!");
                 }
                 outFile.getParentFile().mkdirs();
@@ -124,7 +124,7 @@ public class UploadHandler {
 
         // Report success to the client.
         byte [] resp = "OK".getBytes();
-        exchange.sendResponseHeaders(StatusCode.CREATED, resp.length);
+        exchange.sendResponseHeaders(HttpStatusCode.CREATED, resp.length);
         OutputStream out = exchange.getResponseBody();
         out.write(resp);
         out.close();
@@ -135,6 +135,7 @@ public class UploadHandler {
         try( DatabaseAccessor db = Command.initDB() )
         {
             FileTuple ft = db.getFileTuple(absUploadPath);
+            // TODO: Support genome release files and chain files. See #201.
             if (ft == null)
                 return true;
             if (ft.checkSumMD5 != null) {

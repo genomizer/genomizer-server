@@ -10,9 +10,9 @@ import database.DatabaseAccessor;
 import database.constants.MaxLength;
 
 import response.ErrorResponse;
+import response.HttpStatusCode;
 import response.MinimalResponse;
 import response.Response;
-import response.StatusCode;
 
 /**
  * Edits the label of an annotation. The object is generated directly from
@@ -52,35 +52,35 @@ public class EditAnnotationFieldCommand extends Command {
 		try {
 			db = initDB();
 		} catch(SQLException | IOException e) {
-			return new ErrorResponse(StatusCode.BAD_REQUEST, "Could not " +
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Could not " +
 					"initialize db: " + e.getMessage());
 		}
 		try {
 			Map<String,Integer> anno = db.getAnnotations();
 			if (!anno.containsKey(oldName)) {
-				return new ErrorResponse(StatusCode.BAD_REQUEST, "The " +
+				return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "The " +
 						"annotation field " + oldName + " does not exist in " +
 						"the database");
 			} else if (anno.containsKey(newName)) {
-				return new ErrorResponse(StatusCode.BAD_REQUEST, "The " +
+				return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "The " +
 						"annotation field " + newName + " already exists in " +
 						"the database");
 			}
 			try {
 				db.changeAnnotationLabel(oldName, newName);
 			} catch (IOException | SQLException e) {
-				return new ErrorResponse(StatusCode.BAD_REQUEST, "Could not " +
+				return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Could not " +
 						"change annotation label: " + e.getMessage());
 			}
 
 		} catch(SQLException e) {
-			return new ErrorResponse(StatusCode.BAD_REQUEST, "Could not " +
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Could not " +
 					"get annotations: " + e.getMessage());
 		} finally {
 			if (db != null) {
 				db.close();
 			}
 		}
-		return new MinimalResponse(StatusCode.OK);
+		return new MinimalResponse(HttpStatusCode.OK);
 	}
 }

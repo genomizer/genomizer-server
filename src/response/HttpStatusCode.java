@@ -7,7 +7,7 @@ package response;
  * @author ens10olm
  * @version 1.0
  */
-public class StatusCode {
+public class HttpStatusCode {
 
 	public static final int OK = 200;
 	public static final int CREATED = 201;
