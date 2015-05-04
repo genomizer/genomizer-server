@@ -254,6 +254,45 @@ public class DatabaseAccessor implements AutoCloseable {
     }
 
     /**
+     * Method to update a user's details. For use by administrators (since
+     * user's are not allowed to update their own user role).
+     *
+     * @param username The username to update.
+     * @param newPassword The user's new password.
+     * @param role The user's role.
+     * @param fullName The user's full name,
+     * @param email The user's email address.
+     * @return The number of tuples affected by the update in the database.
+     */
+    public int updateUser(String username, String newPassword, String role,
+                          String fullName, String email)
+            throws IOException, SQLException {
+        int pwd = resetPassword(username, newPassword);
+        int upd = userMethods.updateUser(username, role, fullName, email);
+        return Math.max(pwd, upd);
+
+    }
+
+    /**
+     * Method to update a user's details. For use by user's (since
+     * user's are not allowed to update their own user role).
+     *
+     * @param username The username to update.
+     * @param newPassword The user's new password.
+     * @param fullName The user's full name,
+     * @param email The user's email address.
+     * @return The number of tuples affected by the update in the database.
+     */
+    public int updateUser(String username, String newPassword, String fullName,
+                          String email) throws SQLException, IOException {
+        String role = getRole(username);
+        int pwd = resetPassword(username, newPassword);
+        int upd = userMethods.updateUser(username, role, fullName, email);
+        return Math.max(pwd, upd);
+
+    }
+
+    /**
      * Deletes a user from the database.
      *
      * @param username the user to delete
@@ -323,6 +362,8 @@ public class DatabaseAccessor implements AutoCloseable {
     }
 
     /**
+     * Deprecated: Use updateUser() instead.
+     *
      * Sets the role (permissions) for the user.
      *
      * @param username - the user to set the role for
@@ -331,6 +372,7 @@ public class DatabaseAccessor implements AutoCloseable {
      * @throws SQLException
      *             - if the query does not succeed
      */
+    @Deprecated
     public int setRole(String username, String role) throws SQLException {
         return userMethods.setRole(username, role);
     }
