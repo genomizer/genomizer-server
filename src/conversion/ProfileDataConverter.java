@@ -1,7 +1,6 @@
 package conversion;
 
 import java.io.*;
-import java.util.IllegalFormatException;
 
 /**
  * Handles conversion between different profile file types.
@@ -19,15 +18,15 @@ import java.util.IllegalFormatException;
  * @author Martin Larsson <dv13mln@cs.umu.se>
  */
 public class ProfileDataConverter {
-private File output;
+    private File outputPath;
 
     /**
      * Constructor
-     * @param outputPath
+     * @param outputPath path to archive storing converted files
      */
     public ProfileDataConverter(String outputPath) {
         try {
-            output = new File(outputPath);
+            this.outputPath = new File(outputPath);
         } catch (IllegalArgumentException e) {
             throw e;
         }
@@ -54,7 +53,7 @@ private File output;
         inputFile = new File(inputPath);
 
         try {
-            outputFile = File.createTempFile("bed2sgr", ".sgr", output);
+            outputFile = File.createTempFile("bed2sgr", ".sgr", outputPath);
             fw = new FileWriter(outputFile);
 
             BufferedReader fr = new BufferedReader(new FileReader(inputFile));
@@ -81,33 +80,31 @@ private File output;
 
         return outputFile.getPath();
     }
-/*
 
-    */
-/**
+    /**
      * Converts from .gff to .sgr
      * @param inputPath path to input file
-     * @param outputPath path to output file
-     * @throws FileNotFoundException
+     * @throws java.io.IOException
      * @throws IllegalArgumentException
-     *//*
+     */
 
-    public static void gffToSgr(String inputPath, String outputPath)
-            throws FileNotFoundException {
+    public String gffToSgr(String inputPath)
+            throws IOException, IllegalArgumentException {
         File inputFile;
-        File outputFile;
+        File outputFile = null;
         FileWriter fw;
-        checkArguments(inputPath, outputPath);
 
-        if (!inputPath.endsWith(".gff") || !outputPath.endsWith(".sgr")) {
+        checkArguments(inputPath);
+
+        if (!inputPath.endsWith(".gff")) {
             throw new IllegalArgumentException("File type not " +
                     "accepted for this conversion.");
         }
 
         inputFile = new File(inputPath);
-        outputFile = new File(outputPath);
 
         try {
+            outputFile = File.createTempFile("gff2sgr", ".gff", outputPath);
             fw = new FileWriter(outputFile);
 
             BufferedReader fr = new BufferedReader(new FileReader(inputFile));
@@ -128,36 +125,36 @@ private File output;
             fr.close();
 
         } catch (IOException e) {
-            e.printStackTrace();
+            throw e;
         }
+
+        return outputFile.getPath();
     }
 
-    */
-/**
+    /**
      * Converts from .sgr to .wig
      * @param inputPath path to input file
-     * @param outputPath path to output file
      * @throws FileNotFoundException
      * @throws IllegalArgumentException
-     *//*
+     */
 
-    public static void sgrToWig(String inputPath, String outputPath)
-            throws FileNotFoundException {
+    public String sgrToWig(String inputPath)
+            throws IOException {
         File inputFile;
-        File outputFile;
+        File outputFile = null;
         FileWriter fw;
 
-        checkArguments(inputPath, outputPath);
+        checkArguments(inputPath);
 
-        if (!inputPath.endsWith(".sgr") || !outputPath.endsWith(".wig")) {
+        if (!inputPath.endsWith(".sgr")) {
             throw new IllegalArgumentException("File type not " +
                     "accepted for this conversion.");
         }
 
         inputFile = new File(inputPath);
-        outputFile = new File(outputPath);
 
         try {
+            outputFile = File.createTempFile("sgr2wig", ".wig", outputPath);
             fw = new FileWriter(outputFile);
 
             BufferedReader fr = new BufferedReader(new FileReader(inputFile));
@@ -189,36 +186,36 @@ private File output;
             fr.close();
 
         } catch (IOException e) {
-            e.printStackTrace();
+            throw e;
         }
+
+        return outputFile.getPath();
     }
 
-    */
-/**
+    /**
      * Converts from .bed to .wig via a temporary conversion to .sgr
      * @param inputPath input file path
-     * @param outputPath output file path
-     * @throws FileNotFoundException
+     * @throws java.io.IOException
      * @throws IllegalArgumentException
-     *//*
+     */
 
-    public static void bedToWig(String inputPath, String outputPath)
-            throws FileNotFoundException {
-
-        //String tempPath = "resources/conversionTestData/bed2sgrTemp.sgr";
+    public String bedToWig(String inputPath)
+            throws IOException {
         File tempFile;
+        String tempPath = null;
+        String outputPath;
 
-        try {
+        /*try {
             tempFile = File.createTempFile("bed2sgr", ".sgr", outputPath);
 
             tempPath = tempFile.getPath();
             tempFile.delete();
         } catch (IOException e) {
-            e.printStackTrace();
-        }
+            throw e;
+        }*/
         try {
-            bedToSgr(inputPath, tempPath);
-            sgrToWig(tempPath, outputPath);
+            tempPath = bedToSgr(inputPath);
+            outputPath = sgrToWig(tempPath);
         } catch (Exception e) {
             tempFile = new File(tempPath);
             if (tempFile.exists())
@@ -229,15 +226,19 @@ private File output;
         tempFile = new File(tempPath);
         if (tempFile.exists())
             tempFile.delete();
+
+        return outputPath;
     }
 
-    public static void gffToWig(String inputPath, String outputPath)
-            throws FileNotFoundException {
+    public String gffToWig(String inputPath)
+            throws IOException {
         File tempFile;
-        String tempPath = "resources/conversionTestData/gff2sgrTemp.sgr";
+        String tempPath = null;
+        String outputPath;
+
         try {
-            gffToSgr(inputPath, tempPath);
-            sgrToWig(tempPath, outputPath);
+            tempPath = gffToSgr(inputPath);
+            outputPath = sgrToWig(tempPath);
         } catch (Exception e){
             tempFile = new File(tempPath);
             if (tempFile.exists())
@@ -248,43 +249,48 @@ private File output;
         tempFile = new File(tempPath);
         if (tempFile.exists())
             tempFile.delete();
+
+        return outputPath;
     }
 
 
-    public static void wigToSgr(String wigType, String inputPath,
-                                String outputPath) throws FileNotFoundException {
+    public String wigToSgr(String wigType, String inputPath)
+            throws IOException {
+        String outputFileString = null;
         switch (wigType) {
             case "bed":
-                wigBedToSgr(inputPath, outputPath);
+                outputFileString = wigBedToSgr(inputPath);
                 break;
             case "fixedStep":
-                wigFixedStepToSgr(inputPath, outputPath);
+                outputFileString = wigFixedStepToSgr(inputPath);
                 break;
             case "variableStep":
-                wigVariableStepToSgr(inputPath, outputPath);
+                outputFileString = wigVariableStepToSgr(inputPath);
                 break;
             default:
                 throw new IllegalArgumentException("Unknown wig type.");
         }
+
+        return outputFileString;
     }
 
-    private static void wigBedToSgr(String inputPath, String outputPath)
-            throws FileNotFoundException {
+    private String wigBedToSgr(String inputPath)
+            throws IOException {
         File inputFile;
         File outputFile;
         FileWriter fw;
 
-        checkArguments(inputPath, outputPath);
+        checkArguments(inputPath);
 
-        if (!inputPath.endsWith(".wig") || !outputPath.endsWith(".sgr")) {
+        if (!inputPath.endsWith(".wig")) {
             throw new IllegalArgumentException("File type not " +
                     "accepted for this conversion.");
         }
 
         inputFile = new File(inputPath);
-        outputFile = new File(outputPath);
 
         try {
+            outputFile = File.createTempFile("wigBed2sgr", ".sgr", outputPath);
             fw = new FileWriter(outputFile);
 
             BufferedReader fr = new BufferedReader(new FileReader(inputFile));
@@ -301,11 +307,12 @@ private File output;
             fr.close();
 
         } catch (IOException e) {
-            e.printStackTrace();
+        throw e;
         }
+
+        return outputFile.getPath();
     }
 
-*/
 
     /**
      * Checks if arguments are valid file paths
@@ -327,24 +334,23 @@ private File output;
             throw new FileNotFoundException("File doesn't exists.");
     }
 
-/*
-  private static void  wigFixedStepToSgr(String inputPath, String outputPath)
-          throws FileNotFoundException {
+  private String wigFixedStepToSgr(String inputPath)
+          throws IOException {
           File inputFile;
           File outputFile;
           FileWriter fw;
 
-          checkArguments(inputPath, outputPath);
+          checkArguments(inputPath);
 
-          if (!inputPath.endsWith(".wig") || !outputPath.endsWith(".sgr")) {
+          if (!inputPath.endsWith(".wig")) {
               throw new IllegalArgumentException("File type not " +
                       "accepted for this conversion.");
           }
 
           inputFile = new File(inputPath);
-          outputFile = new File(outputPath);
 
           try {
+              outputFile = File.createTempFile("wigFixedstep2sgr", ".sgr", outputPath);
               fw = new FileWriter(outputFile);
 
               BufferedReader fr = new BufferedReader(new FileReader(inputFile));
@@ -382,27 +388,29 @@ private File output;
               fw.close();
               fr.close();
           } catch (IOException e) {
-              e.printStackTrace();
+              throw e;
           }
+
+      return outputFile.getPath();
     }
 
-    private static void wigVariableStepToSgr(String inputPath, String outputPath)
-            throws FileNotFoundException {
+    private String wigVariableStepToSgr(String inputPath)
+            throws IOException {
         File inputFile;
         File outputFile;
         FileWriter fw;
 
-        checkArguments(inputPath, outputPath);
+        checkArguments(inputPath);
 
-        if (!inputPath.endsWith(".wig") || !outputPath.endsWith(".sgr")) {
+        if (!inputPath.endsWith(".wig")) {
             throw new IllegalArgumentException("File type not " +
                     "accepted for this conversion.");
         }
 
         inputFile = new File(inputPath);
-        outputFile = new File(outputPath);
 
         try {
+            outputFile = File.createTempFile("wigVariablestep2sgr", ".sgr", outputPath);
             fw = new FileWriter(outputFile);
 
             BufferedReader fr = new BufferedReader(new FileReader(inputFile));
@@ -435,7 +443,9 @@ private File output;
             fw.close();
             fr.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw e;
         }
-    }*/
+
+        return outputFile.getPath();
+    }
 }
