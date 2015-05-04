@@ -2,6 +2,7 @@ package conversion.test;
 
 import conversion.ProfileDataConverter;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
@@ -21,6 +22,16 @@ public class wigFixedStepToSgrTest {
             "expectedResults/";
     private File outputFile;
     private ConversionResultCompare cmp = new ConversionResultCompare();
+    private ProfileDataConverter pdc;
+    @Before
+    public void setUp() {
+        pdc = new ProfileDataConverter("resources/conversionTestData/output/");
+    }
+
+    @Test (expected = IllegalArgumentException.class)
+    public void shouldThrowIllegalArgumentException() {
+        pdc = new ProfileDataConverter("resources/nonexistent/");
+    }
 
     /**
      * Tests null argument for input file
@@ -29,20 +40,9 @@ public class wigFixedStepToSgrTest {
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowIllegalArgumentIfInputFileIsNull()
             throws FileNotFoundException {
-        ProfileDataConverter.wigToSgr("fixedStep", null,
-                "resources/conversionTestData/expectedResults/wigbedToSgr.sgr");
+        pdc.wigToSgr("fixedStep", null);
     }
 
-    /**
-     * Tests null argument for output file
-     * @throws FileNotFoundException
-     */
-    @Test (expected = IllegalArgumentException.class)
-    public void shouldThrowIllegalArgumentIfOutputFileIsNull()
-            throws FileNotFoundException{
-        ProfileDataConverter.wigToSgr("fixedStep",
-                "resources/conversionTestData/WIG-testdata.wig", null);
-    }
 
     /**
      * Test for file not found-exception
@@ -51,19 +51,7 @@ public class wigFixedStepToSgrTest {
     @Test (expected = FileNotFoundException.class)
     public void shouldThrowFileNotFoundIfInputPathIsntAFile()
             throws FileNotFoundException{
-        ProfileDataConverter.wigToSgr("fixedStep", "hej", "hej");
-    }
-
-    /**
-     * Tests for illegal argument when output already exists
-     * @throws FileNotFoundException
-     */
-    @Test (expected = IllegalArgumentException.class)
-    public void shouldThrowIllegalArgumentIfOutputPathIsAFile()
-            throws FileNotFoundException{
-        ProfileDataConverter.wigToSgr("fixedStep",
-                "resources/conversionTestData/WIG-testdata.wig",
-                "resources/conversionTestData/expectedResults/bed2sgrResult.sgr");
+        pdc.wigToSgr("fixedStep", "hej");
     }
 
     /**
@@ -73,21 +61,8 @@ public class wigFixedStepToSgrTest {
     @Test (expected = IllegalArgumentException.class)
     public void shouldNotAcceptWrongFileTypeForInput()
             throws FileNotFoundException {
-        ProfileDataConverter.wigToSgr("fixedStep",
-                "resources/conversionTestData/BED-testdata.bed",
-                "resources/conversionTestData/output/test.sgr");
-    }
-
-    /**
-     * Tests that exception is thrown when output file is of wrong type
-     * @throws FileNotFoundException
-     */
-    @Test (expected = IllegalArgumentException.class)
-    public void shouldNotAcceptWrongFileTypeForOutput()
-            throws FileNotFoundException {
-        ProfileDataConverter.wigToSgr("fixedStep",
-                "resources/conversionTestData/WIG-testdata.wig",
-                "resources/conversionTestData/output/test.bed");
+        pdc.wigToSgr("fixedStep",
+                "resources/conversionTestData/BED-testdata.bed");
     }
 
     /**
@@ -97,10 +72,9 @@ public class wigFixedStepToSgrTest {
     @Test
     public void shouldExistAnOutputFileAfterConversion()
             throws FileNotFoundException {
-        ProfileDataConverter.wigToSgr("fixedStep",
-                "resources/conversionTestData/WIG-testdata.wig",
-                "resources/conversionTestData/output/test.sgr");
-        outputFile = new File("resources/conversionTestData/output/test.sgr");
+        String output = pdc.wigToSgr("fixedStep",
+                "resources/conversionTestData/WIG-testdata.wig");
+        outputFile = new File(output);
 
         assertTrue(outputFile.exists());
     }
@@ -113,13 +87,12 @@ public class wigFixedStepToSgrTest {
     @Test
     public void wigbedToSgrCheckSumTest() throws InterruptedException,
             IOException {
-        ProfileDataConverter.wigToSgr("fixedStep",
-                "resources/conversionTestData/WIG-testdata.wig",
-                "resources/conversionTestData/output/test.sgr");
+        String output = pdc.wigToSgr("fixedStep",
+                "resources/conversionTestData/WIG-testdata.wig");
         File expectedFile;
 
         try{
-            outputFile = new File(outputPath+"test.sgr");
+            outputFile = new File(output);
             expectedFile = new File("resources/conversionTestData/" +
                     "expectedResults/wigFixedStepToSgr.sgr");
             assertTrue(cmp.compareFiles(outputFile, expectedFile));
