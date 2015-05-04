@@ -888,6 +888,35 @@ public class DatabaseAccessor implements AutoCloseable {
                 profileFolderPath);
     }
 
+
+    public Entry<String, FileTupleTemplateBuilder> processRawToProfile2(String expId)
+            throws IOException, SQLException {
+        Experiment e = expMethods.getExperiment(expId);
+        if (e == null) {
+            throw new IOException("Invalid experiment ID");
+        }
+        if (e.getFiles() == null || e.getFiles().isEmpty()) {
+            throw new IOException("There are no raw files to process!");
+        }
+        List<FileTuple> fileTuples = e.getFiles();
+        FileTuple rawFileTuple = getRawFileTuple(fileTuples);
+        if (rawFileTuple == null) {
+            throw new IOException(expId + " has no raw files to process!");
+        }
+        String profileFolderPath = fpg.generateNewProfileSubFolder(fpg
+                .getProfileFolderPath(e.getID()));
+        FileTupleTemplateBuilder ftb = (new FileTupleTemplateBuilder()).profileFile()
+                .withAuthor("Genomizer")
+                .withExpId(expId)
+                .withGrVersion(rawFileTuple.getGrVersion())
+                .withFolderPath(profileFolderPath)
+                .withUploader(rawFileTuple.getUploader());
+        ftb.withParentID(rawFileTuple.getFileId());
+
+        return new SimpleEntry<>(rawFileTuple.getFolderPath(),
+                ftb);
+    }
+
     /**
      * Adds all the files in the specified folder to the database's File table.
      * They will all be treated as profile files.
@@ -949,50 +978,43 @@ public class DatabaseAccessor implements AutoCloseable {
         }
     }
 
-    /**
-     * Adds all the files in the specified folder to the database's File table.
-     * They will all be treated as profile files.
-     *
-     * @param ft - A file tuple object.
-     * @throws IOException
-     */
-   /*
-    public void addGeneratedProfiles(FileTupleTemplate ft) throws SQLException,
-            IOException {
+    public List<FileTuple> addGeneratedProfiles(FileTupleTemplate ftt,
+                                                String inputFileName)
+            throws SQLException, IOException {
 
-        Experiment e = expMethods.getExperiment(ft.getExpId());
+        Experiment e = expMethods.getExperiment(ftt.getExpId());
 
         if (e == null) {
-            throw new IOException(ft.getExpId() + " does not exist.");
+            throw new IOException(ftt.getExpId() + " does not exist.");
         }
 
-        Genome g = genMethods.getGenomeRelease(ft.getGrVersion());
+        Genome g = genMethods.getGenomeRelease(ftt.getGrVersion());
         if (g == null) {
-            throw new IOException("Invalid Genome Release! " + ft.getGrVersion()
+            throw new IOException("Invalid Genome Release! " + ftt.getGrVersion()
                     + " does not exist");
         }
 
-        File profileFolder = new File(ft.getFolderPath());
+        File profileFolder = new File(ftt.getFolderPath());
 
         if (!profileFolder.exists()) {
             throw new IOException("There are no profiles in this folder!");
         }
 
-        for (File f : profileFolder.listFiles()) {
-            if (!f.getName().equals(ft.getInputFilePath())) {
+        List<FileTuple> lst = new ArrayList<>();
 
+        for (File f : profileFolder.listFiles()) {
+            if (!f.getName().equals(inputFileName)) {
 
                 String checkSumMD5;
                 try (FileInputStream is = new FileInputStream(f)) {
                     checkSumMD5 = DigestUtils.md5Hex(is);
                 }
-                fileMethods.addGeneratedFile(e.getID(), FileTuple.PROFILE,
-                        f.getPath(), ft.getInputFilePath(), ft.getMetaData(), ft.getUploader(),
-                        ft.isPrivate(), ft.getGrVersion(),checkSumMD5);
+                lst.add(fileMethods.addGeneratedFile(ftt, f.getName(), inputFileName));
             }
         }
+        return lst;
     }
-    */
+
 
 
 

@@ -46,6 +46,12 @@ public class FileTupleTemplateBuilder {
         return this;
     }
 
+    public FileTupleTemplateBuilder withParentID(int parentID) {
+        nullCheck("withParentID()");
+        this.product.addParent(parentID);
+        return this;
+    }
+
     public FileTupleTemplateBuilder fromType(FileTuple.Type t) {
         switch (t) {
             case Raw:

@@ -190,6 +190,11 @@ public class FileTupleBuilder {
         return this;
     }
 
+    public FileTupleBuilder withParent(Integer parentID) {
+        this.product.addParent(parentID);
+        return this;
+    }
+
     public FileTuple build(){
         nullCheck("build()");
         if (!hasPath)

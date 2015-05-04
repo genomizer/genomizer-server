@@ -583,4 +583,13 @@ public class FileMethods {
 
 		return getFileTuple(filePath);
 	}
+
+    public FileTuple addGeneratedFile(FileTupleTemplate ftt,
+                                      String filename,
+                                      String inputFileName)
+            throws SQLException, IOException {
+
+        return this.addNewFile(ftt, filename, inputFileName, null);
+
+    }
 }

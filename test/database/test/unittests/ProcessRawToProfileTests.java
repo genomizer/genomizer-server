@@ -8,12 +8,11 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map.Entry;
 
+import database.containers.*;
 import org.junit.*;
 
 import database.DatabaseAccessor;
 import database.FilePathGenerator;
-import database.containers.Experiment;
-import database.containers.FileTuple;
 import database.test.TestInitializer;
 
 public class ProcessRawToProfileTests {
@@ -120,24 +119,31 @@ public class ProcessRawToProfileTests {
      * Description: Should be able to add Parent to a file.
      */
     @Test
-    @Ignore
     public void shouldAcceptNewParent() throws Exception {
-        fpg.generateExperimentFolders("tmpExp");
-        Entry<String, String> folderPaths = dbac.processRawToProfile("Exp1");
-        addMockFiles(folderPaths.getValue(), "prof1.sam",
+        fpg.generateExperimentFolders("Exp");
+        Entry<String, FileTupleTemplateBuilder> folderPaths = dbac.processRawToProfile2("Exp1");
+        FileTupleTemplate ftt = folderPaths.getValue()
+                .withGrVersion("hg38")
+                .withIsPrivate(false).build();
+
+        addMockFiles(ftt.getFolderPath(), "prof1.sam",
                 "prof2.sam", "input.sam");
-        Experiment e = dbac.search("Exp1[ExpID]").get(0);
-        List<FileTuple> fileTuples = e.getFiles();
-        FileTuple file1 = fileTuples.get(0);
-        FileTuple file2 = fileTuples.get(1);
-        FileTuple file3 = fileTuples.get(2);
 
-        dbac.addParent(file1.getFileId(), file2.getFileId());
-        dbac.addParent(file1.getFileId(), file3.getFileId());
+        List<FileTuple> fileTuples = dbac.addGeneratedProfiles(ftt, "input.sam");
+        //Experiment e = dbac.search("Exp1[ExpID]").get(0);
+        //List<FileTuple> fileTuples = e.getFiles();
 
-        List<Integer> parents = file1.getParents();
-        assertTrue(parents.get(0).equals(String.valueOf(file2.getFileId())));
-        assertTrue(parents.get(1).equals(String.valueOf(file3.getFileId())));
+        for (FileTuple f : fileTuples) {
+            System.err.println(f.getFullPath());
+            System.err.println(f.getParents().size());
+        }
+
+        FileTuple profilef = fileTuples.get(1);
+
+        List<Integer> parents = profilef.getParents();
+        //assertTrue(parents.get(0).equals(String.valueOf(file2.getFileId())));
+        //assertTrue(parents.get(1).equals(String.valueOf(file3.getFileId())));
+        assertEquals(parents.size(), 1);
     }
 
     private void addMockFiles(String folderPath, String filename1,
