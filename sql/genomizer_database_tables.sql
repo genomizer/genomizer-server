@@ -13,6 +13,7 @@ CREATE TABLE File
     ExpID VARCHAR(256),
     GRVersion VARCHAR(16),
     Status VARCHAR(16) DEFAULT 'In Progress',
+    MD5    VARCHAR(32),
     CONSTRAINT pkey_file PRIMARY KEY(FileID)
 );
 
@@ -54,7 +55,8 @@ CREATE TABLE Annotation_Choices
 CREATE TABLE User_Info
 (
     Username VARCHAR(32) NOT NULL,
-    Password VARCHAR(32) NOT NULL,
+    PasswordHash VARCHAR(64) NOT NULL,
+    PasswordSalt VARCHAR(64) NOT NULL,
     Role VARCHAR(32) NOT NULL,
     FullName VARCHAR(62),
     Email VARCHAR(62),

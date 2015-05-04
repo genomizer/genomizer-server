@@ -1,5 +1,6 @@
 package command;
 
+import database.subClasses.UserMethods.UserType;
 import response.MinimalResponse;
 import response.Response;
 import response.StatusCode;
@@ -7,32 +8,27 @@ import response.StatusCode;
 /**
  * Class used to handle updateing files in experiments.
  *
- * @author Kommunikation/kontroll 2014.
- * @version 1.0
+ * @author Business Logic 2015.
+ * @version 1.1
  */
 public class UpdateFileInExperimentCommand extends Command {
+	//TODO Implement this class
 
-	/**
-	 * Method used to validate the information needed
-	 * to execute the command.
-	 */
 	@Override
-	public boolean validate() {
+	public void setFields(String uri, String uuid, UserType userType) {
 
-		// TODO Auto-generated method stub
-		return true;
-
+		/*No fields from the URI is needed, neither is the UUID. Dummy
+		implementation*/
+		this.userType = userType;
 	}
 
-	/**
-	 * Used to execute the actual command.
-	 */
+	@Override
+	public void validate() throws ValidateException {
+		hasRights(UserRights.getRights(this.getClass()));
+	}
+
 	@Override
 	public Response execute() {
-
-		//Method not implemented, send appropriate response
 		return 	new MinimalResponse(StatusCode.NO_CONTENT);
-
 	}
-
 }

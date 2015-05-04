@@ -1,6 +1,8 @@
 package command;
 
 import authentication.Authenticate;
+import database.constants.MaxLength;
+import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
@@ -9,54 +11,23 @@ import response.StatusCode;
 /**
  * Class used to represent a logout command.
  *
- * @author Kommunikation/kontroll 2014.
- * @version 1.0
+ * @author Business Logic 2015.
+ * @version 1.1
  */
 public class LogoutCommand extends Command {
-
 	private String username;
 
-	/**
-	 * Constructor used to initiate the class.
-	 *
-	 * @param username that wants to logout.
-	 */
-	public LogoutCommand(String username) {
-
-		this.username = username;
-
-	}
-
-	/**
-	 * Used to validate the LogoutCommand class.
-	 *
-	 * @return boolean depending on result.
-	 * @throws ValidateException
-	 */
 	@Override
-	public boolean validate() throws ValidateException {
-
-		if(username == null) {
-
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Username " +
-					"was missing.");
-
-		} else if(username.length() < 1 || username.length() >
-				database.constants.MaxSize.USERNAME) {
-
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Username " +
-					"has to be between 1 and "
-					+ database.constants.MaxSize.USERNAME + " characters long.");
-
-		}
-
-		return true;
-
+	public void setFields(String uri, String uuid, UserType userType) {
+		this.userType = userType;
+		this.username = uuid;
 	}
 
-	/**
-	 * Used to execute the logout command.
-	 */
+	@Override
+	public void validate() throws ValidateException {
+		validateName(username, MaxLength.USERNAME, "Username");
+	}
+
 	@Override
 	public Response execute() {
 		String id = Authenticate.getID(username);
@@ -64,9 +35,8 @@ public class LogoutCommand extends Command {
 			Authenticate.deleteActiveUser(id);
 			return new MinimalResponse(StatusCode.OK);
 		} else {
-			return 	new ErrorResponse(StatusCode.FILE_NOT_FOUND,
+			return 	new ErrorResponse(StatusCode.NOT_FOUND,
 					"User not found");
 		}
 	}
-
 }

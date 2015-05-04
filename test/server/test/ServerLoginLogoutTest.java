@@ -3,6 +3,7 @@ package server.test;
 import static org.junit.Assert.*;
 import java.net.HttpURLConnection;
 
+import database.constants.MaxLength;
 import org.junit.Ignore;
 import org.junit.Test;
 import response.StatusCode;
@@ -95,7 +96,7 @@ public class ServerLoginLogoutTest extends ServerAbstractTestClass {
 
 		JsonObject jj = new JsonObject();
 		String pw = "";
-		for(int i = 0; i < database.constants.MaxSize.PASSWORD + 1; i++) {
+		for(int i = 0; i < MaxLength.PASSWORD + 1; i++) {
 			pw = pw + "a";
 		}
 		jj.addProperty("username", username);
@@ -121,7 +122,7 @@ public class ServerLoginLogoutTest extends ServerAbstractTestClass {
 	public void testLoginBadUsername() throws Exception {
 
 		String un = "";
-		for(int i = 0; i < database.constants.MaxSize.USERNAME + 1; i++) {
+		for(int i = 0; i < MaxLength.USERNAME + 1; i++) {
 			un = un + "a";
 		}
 		JsonObject jj = new JsonObject();

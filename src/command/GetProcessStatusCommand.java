@@ -1,55 +1,51 @@
 package command;
 
-import java.util.Collection;
+import java.util.LinkedList;
 
+import database.subClasses.UserMethods.UserType;
 import response.GetProcessStatusResponse;
 import response.Response;
-import server.WorkHandler;
+import server.Doorman;
+import server.WorkPool;
 
 /**
- * Fetches status of all processes that have been added to the server.
- * Will be reset when the server restarts. A process can have one
- * of four states: Waiting, Started, Finished and Crashed.
+ * Fetches status of all processes that have been added to the server. Will be
+ * reset when the server restarts. A process can have one of four states:
+ * Waiting, Started, Finished and Crashed.
  *
- * @author Kommunikation/kontroll 2014.
- * @version 1.0
+ * @author Business Logic 2015.
+ * @version 1.1
  */
 public class GetProcessStatusCommand extends Command {
 
-	private WorkHandler workHandler;
-
-	/**
-	 * Constructor used to initiate the class.
-	 *
-	 * @param workHandler object.
-	 */
-	public GetProcessStatusCommand(WorkHandler workHandler) {
-
-		this.workHandler = workHandler;
-
+	@Override
+	public void setFields(String uri, String uuid, UserType userType) {
+		
+		/*No fields from the URI is needed, neither is the UUID. Dummy
+		implementation*/
+		this.userType = userType;
 	}
 
 	/**
 	 * Method that validates the class information.
-	 * This method always returns true.
 	 */
 	@Override
-	public boolean validate() {
-
-		return true;
-
+	public void validate() throws ValidateException {
+		/*Validation will always succeed for the content,
+		the command can not be corrupt.*/
+		hasRights(UserRights.getRights(this.getClass()));
 	}
 
-	/**
-	 * Method used to execute the actual command.
-	 */
 	@Override
 	public Response execute() {
 
-		Collection<ProcessStatus> processStatus =
-				workHandler.getProcessStatus();
-		return new GetProcessStatusResponse(processStatus);
-
+		WorkPool workPool = Doorman.getWorkPool();
+		LinkedList<ProcessCommand> processesList = workPool.getProcesses();
+		LinkedList<ProcessStatus> processStatuses = new LinkedList<>();
+        
+		for (ProcessCommand proc : processesList) {
+			processStatuses.add(workPool.getProcessStatus(proc));
+		}
+		return new GetProcessStatusResponse(processStatuses);
 	}
-
 }

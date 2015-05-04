@@ -5,8 +5,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import database.DatabaseAccessor;
-import database.constants.MaxSize;
+import database.constants.MaxLength;
 import database.containers.Genome;
+import database.subClasses.UserMethods.UserType;
 import response.DeleteGenomeReleaseResponse;
 import response.ErrorResponse;
 import response.Response;
@@ -15,96 +16,39 @@ import response.StatusCode;
 /**
  * Class used to delete a genome release.
  *
- * @author Kommunikation/kontroll 2014.
- * @version 1.0
+ * @author Business Logic 2015.
+ * @version 1.1
  */
 public class DeleteGenomeReleaseCommand extends Command {
+	private String genomeVersion;
+	private String species;
 
-	private String genomeVersion = null;
-
-	private String specie = null;
-
-	/**
-	 * Constructor used to initiate the class.
-	 *
-	 * @param specie name of specie
-	 * @param genomeVersion version
-	 */
-	public DeleteGenomeReleaseCommand(String specie, String genomeVersion) {
-
-		this.genomeVersion = genomeVersion;
-		this.specie = specie;
-
-	}
-
-	/**
-	 * Method used to validate the DeleteGenomeReleaseCommand.
-	 *
-	 * @return boolean depending on result.
-	 * @throws ValidateException
-	 */
 	@Override
-	public boolean validate() throws ValidateException {
-
-		if (genomeVersion == null || specie == null) {
-
-			throw new ValidateException(StatusCode.BAD_REQUEST, "The genome " +
-					"version was missing.");
-
-		} else if (genomeVersion.equals("null") || specie.equals("null")) {
-
-			throw new ValidateException(StatusCode.BAD_REQUEST, "The genome " +
-					"version and/or specie was missing.");
-
-		} else if(genomeVersion.length() > MaxSize.GENOME_VERSION ||
-				genomeVersion.length() < 1) {
-
-			throw new ValidateException(StatusCode.BAD_REQUEST, "The genome " +
-					"version must be between 1 and "+
-					database.constants.MaxSize.GENOME_VERSION +
-					" characters long.");
-
-		} else if(specie.length() > MaxSize.GENOME_SPECIES ||
-				specie.length() < 1) {
-
-			throw new ValidateException(StatusCode.BAD_REQUEST, "The species " +
-					"must be between 1 and " +
-					database.constants.MaxSize.GENOME_SPECIES +
-					" characters long.");
-
-		} else if(!hasOnlyValidCharacters(genomeVersion)) {
-
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
-					"characters in genome version. Valid characters are: " +
-					validCharacters);
-
-		} else if(!hasOnlyValidCharacters(specie)) {
-
-			throw new ValidateException(StatusCode.BAD_REQUEST,
-					"Invalid characters in specie name. Valid characters are: "
-							+ validCharacters);
-
-		}
-
-		return true;
-
+	public void setFields(String uri, String uuid, UserType userType) {
+		this.userType = userType;
+		String[] splitFields = uri.split("/");
+		species = splitFields[2];
+		genomeVersion = splitFields[3];
 	}
 
-	/**
-	 * method used to execute the command.
-	 */
+	@Override
+	public void validate() throws ValidateException {
+		hasRights(UserRights.getRights(this.getClass()));
+		validateName(genomeVersion, MaxLength.GENOME_VERSION, "Genome version");
+		validateName(species, MaxLength.GENOME_SPECIES, "Genome specie");
+	}
+
 	@Override
 	public Response execute() {
-
 		DatabaseAccessor db = null;
 		try {
 			db = initDB();
 			ArrayList<Genome> genomeReleases =
-					db.getAllGenomeReleasesForSpecies(specie);
+					db.getAllGenomeReleasesForSpecies(species);
 			if(genomeReleases != null) {
 				for(Genome g : genomeReleases) {
 					if (g != null && g.genomeVersion.equals(this.genomeVersion)
-							&& g.species.equals(this.specie)) {
+							&& g.species.equals(this.species)) {
 						boolean result = db.removeGenomeRelease(genomeVersion);
 						if(result) {
 							return new
@@ -117,16 +61,14 @@ public class DeleteGenomeReleaseCommand extends Command {
 				}
 			}
 			return new ErrorResponse(StatusCode.BAD_REQUEST, "Version " +
-					genomeVersion + " or specie " + specie +
+					genomeVersion + " or species " + species +
 					" does not exist.");
-
 		} catch (SQLException | IOException e) {
 			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
 		} finally {
-			if(db.isConnected()) {
+			if(db != null && db.isConnected()) {
 				db.close();
 			}
 		}
 	}
-
 }

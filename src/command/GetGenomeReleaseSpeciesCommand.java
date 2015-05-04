@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 
+import database.constants.MaxLength;
+import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.GetGenomeReleaseResponse;
 import response.Response;
@@ -13,60 +15,24 @@ import database.DatabaseAccessor;
 import database.containers.Genome;
 /**
  * A command which is used to get all the genome versions
- * for a specific specie.
+ * for a specific species.
  *
- * @author Kommunikation/kontroll 2014.
- * @version 1.0
+ * @author Business Logic 2015.
+ * @version 1.1
  */
-public class GetGenomeReleaseSpeciesCommand extends Command{
+public class GetGenomeReleaseSpeciesCommand extends Command {
+	private String species;
 
-	private String specie;
-
-	/**
-	 * Creates a GetGenomeReleaseSpeciesCommand and saves the
-	 * specie the genome versions should be retrieved for.
-	 *
-	 * @param restful - the restful header with specie information
-	 */
-	public GetGenomeReleaseSpeciesCommand(String restful) {
-
-		specie = restful;
-
+	@Override
+	public void setFields(String uri, String uuid, UserType userType) {
+		this.userType = userType;
+		species = uri.split("/")[1];
 	}
 
-	/**
-	 * Method used to validate the information needed
-	 * to execute the command.
-	 *
-	 * @return boolean depending on result.
-	 * @throws ValidateException
-	 */
 	@Override
-	public boolean validate() throws ValidateException {
-
-		if(specie == null) {
-
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specie was " +
-					"missing.");
-
-		} else if(specie.length() < 1 || specie.length() >
-				database.constants.MaxSize.GENOME_SPECIES) {
-
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specie has " +
-					"to be between 1 and "
-					+ database.constants.MaxSize.GENOME_SPECIES +
-					" characters long.");
-
-		} else if(!hasOnlyValidCharacters(specie)) {
-
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
-					"characters in specie name. Valid characters are: " +
-					validCharacters);
-
-		}
-
-		return true;
-
+	public void validate() throws ValidateException {
+		hasRights(UserRights.getRights(this.getClass()));
+		validateName(species, MaxLength.GENOME_SPECIES, "Genome specie");
 	}
 
 	/**
@@ -77,21 +43,22 @@ public class GetGenomeReleaseSpeciesCommand extends Command{
 	 */
 	@Override
 	public Response execute() {
-		DatabaseAccessor db=null;
-
+		DatabaseAccessor db = null;
 		try {
 			db = initDB();
 			ArrayList<Genome> genomeReleases =
-					db.getAllGenomeReleasesForSpecies(specie);
+					db.getAllGenomeReleasesForSpecies(species);
 			return new GetGenomeReleaseResponse(StatusCode.OK, genomeReleases);
 		} catch (SQLException e) {
 			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE,
 					"DatabaseAccessor could not be created: " + e.getMessage());
 		} catch (IOException e) {
-			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, specie +
+			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, species +
 					" has no genome version released");
-		}finally{
-			db.close();
+		} finally {
+			if (db != null) {
+				db.close();
+			}
 		}
 
 	}

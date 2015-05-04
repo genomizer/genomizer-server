@@ -1,13 +1,15 @@
 package command.test;
 
 import static org.junit.Assert.*;
+
+import database.subClasses.UserMethods.UserType;
 import org.junit.Before;
 import org.junit.Test;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import command.AddExperimentCommand;
 import command.ValidateException;
-import database.constants.MaxSize;
+import database.constants.MaxLength;
 
 /**
  * Test class used to check that AddExperimentCommand class
@@ -56,8 +58,7 @@ public class AddExperimentCommandTest {
 	public void testValidateNameNotPassed() throws ValidateException {
 
 		String json = "{\"annotations\":[{\"name\":\"pubmedId\",\"value\":\"abc123\"},{\"name\":\"type\",\"value\":\"raw\"}]}";
-		AddExperimentCommand c = new AddExperimentCommand();
-		c = gson.fromJson(json, AddExperimentCommand.class);
+		AddExperimentCommand c = gson.fromJson(json, AddExperimentCommand.class);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -74,8 +75,7 @@ public class AddExperimentCommandTest {
 	public void testValidateNameEmptyString() throws ValidateException {
 
 		String json = "{\"name\":\"\",\"annotations\":[{\"name\":\"pubmedId\",\"value\":\"abc123\"},{\"name\":\"type\",\"value\":\"raw\"}]}";
-		AddExperimentCommand c = new AddExperimentCommand();
-		c = gson.fromJson(json, AddExperimentCommand.class);
+		AddExperimentCommand c = gson.fromJson(json, AddExperimentCommand.class);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -92,13 +92,12 @@ public class AddExperimentCommandTest {
 	public void testValidateNameLengthToLong() throws ValidateException {
 
 		String big = "";
-		for(int i = 0; i < MaxSize.EXPID + 1; i++) {
+		for(int i = 0; i < MaxLength.EXPID + 1; i++) {
 			big = big + "A";
 		}
 		String json = "{\"name\":\"" + big +
 				"\",\"annotations\":[{\"name\":\"pubmedId\",\"value\":\"abc123\"},{\"name\":\"type\",\"value\":\"raw\"}]}";
-		AddExperimentCommand c = new AddExperimentCommand();
-		c = gson.fromJson(json, AddExperimentCommand.class);
+		AddExperimentCommand c = gson.fromJson(json, AddExperimentCommand.class);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -115,8 +114,7 @@ public class AddExperimentCommandTest {
 	public void testValidateNameInvalidCharacters() throws ValidateException {
 
 		String json = "{\"name\":\"hell/o\",\"annotations\":[{\"name\":\"pubmedId\",\"value\":\"abc123\"},{\"name\":\"type\",\"value\":\"raw\"}]}";
-		AddExperimentCommand c = new AddExperimentCommand();
-		c = gson.fromJson(json, AddExperimentCommand.class);
+		AddExperimentCommand c = gson.fromJson(json, AddExperimentCommand.class);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -133,8 +131,7 @@ public class AddExperimentCommandTest {
 	public void testValidateNameAnnotationMissingName() throws ValidateException {
 
 		String json = "{\"name\":\"valid\",\"annotations\":[{\"value\":\"abc123\"},{\"name\":\"type\",\"value\":\"raw\"}]}";
-		AddExperimentCommand c = new AddExperimentCommand();
-		c = gson.fromJson(json, AddExperimentCommand.class);
+		AddExperimentCommand c = gson.fromJson(json, AddExperimentCommand.class);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -151,8 +148,7 @@ public class AddExperimentCommandTest {
 	public void testValidateNameAnnotationEmptyString() throws ValidateException {
 
 		String json = "{\"name\":\"experimentId\",\"annotations\":[{\"name\":\"\",\"value\":\"abc123\"},{\"name\":\"type\",\"value\":\"raw\"}]}";
-		AddExperimentCommand c = new AddExperimentCommand();
-		c = gson.fromJson(json, AddExperimentCommand.class);
+		AddExperimentCommand c = gson.fromJson(json, AddExperimentCommand.class);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -169,8 +165,7 @@ public class AddExperimentCommandTest {
 	public void testValidateNameAnnotationInvalidCharacters() throws ValidateException {
 
 		String json = "{\"name\":\"experimentId\",\"annotations\":[{\"name\":\"pubme/dId\",\"value\":\"abc123\"},{\"name\":\"type\",\"value\":\"raw\"}]}";
-		AddExperimentCommand c = new AddExperimentCommand();
-		c = gson.fromJson(json, AddExperimentCommand.class);
+		AddExperimentCommand c = gson.fromJson(json, AddExperimentCommand.class);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -221,13 +216,12 @@ public class AddExperimentCommandTest {
 	public void testValidateAnnotationValueLengthToLong() throws ValidateException {
 
 		String big = "";
-		for(int i = 0; i < MaxSize.ANNOTATION_VALUE + 1; i++) {
+		for(int i = 0; i < MaxLength.ANNOTATION_VALUE + 1; i++) {
 			big = big + "A";
 		}
 		String json = "{\"name\":\"experimentId\",\"annotations\":[{\"name\":\"pubmedId\",\"value\":\"" + big +
 				"\"},{\"name\":\"type\",\"value\":\"raw\"}]}";
-		AddExperimentCommand c = new AddExperimentCommand();
-		c = gson.fromJson(json, AddExperimentCommand.class);
+		AddExperimentCommand c = gson.fromJson(json, AddExperimentCommand.class);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -244,8 +238,7 @@ public class AddExperimentCommandTest {
 	public void testValidateAnnotationValueInvalidCharacters() throws ValidateException {
 
 		String json = "{\"name\":\"experimentId\",\"annotations\":[{\"name\":\"pubmedId\",\"value\":\"abc/123\"},{\"name\":\"type\",\"val!ue\":\"raw\"}]}";
-		AddExperimentCommand c = new AddExperimentCommand();
-		c = gson.fromJson(json, AddExperimentCommand.class);
+		AddExperimentCommand c = gson.fromJson(json, AddExperimentCommand.class);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -262,8 +255,9 @@ public class AddExperimentCommandTest {
 	public void testValidateProperlyFormatted() throws ValidateException {
 
 		String json = "{\"name\":\"experimentId\",\"annotations\":[{\"name\":\"pubmedId\",\"value\":\"abc123\"},{\"name\":\"type\",\"value\":\"raw\"}]}";
-		AddExperimentCommand c = new AddExperimentCommand();
-		c = gson.fromJson(json, AddExperimentCommand.class);
+		AddExperimentCommand c = gson.fromJson(json, AddExperimentCommand.class);
+		c.setFields("uri", "uuid", UserType.USER);
+
 		c.validate();
 
 		assertTrue(true);
@@ -277,12 +271,45 @@ public class AddExperimentCommandTest {
 	public void testConvertToAndFromJSON() {
 
 		String json = "{\"name\":\"experimentId\",\"annotations\":[{\"name\":\"pubmedId\",\"value\":\"abc123\"},{\"name\":\"type\",\"value\":\"raw\"}]}";
-		AddExperimentCommand c = new AddExperimentCommand();
-		c = gson.fromJson(json, AddExperimentCommand.class);
+		AddExperimentCommand c = gson.fromJson(json, AddExperimentCommand.class);
 		String compare = gson.toJson(c);
+		c.setFields("uri", "uuid", UserType.ADMIN);
 
 		assertEquals(json, compare);
 
+	}
+
+	/**
+	 * Test used to check that ValidateException is not thrown
+	 * when the user have the required rights.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test
+	public void testHavingRights() throws ValidateException {
+
+		String json = "{\"name\":\"experimentId\",\"annotations\":[{\"name\":\"pubmedId\",\"value\":\"abc123\"},{\"name\":\"type\",\"value\":\"raw\"}]}";
+		AddExperimentCommand c = gson.fromJson(json, AddExperimentCommand.class);
+		c.setFields("uri", "uuid", UserType.USER);
+
+		c.validate();
+	}
+
+	/**
+	 * Test used to check that ValidateException is thrown
+	 * when the user doesn't have the required rights.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testNotHavingRights() throws ValidateException {
+
+		String json = "{\"name\":\"experimentId\",\"annotations\":[{\"name\":\"pubmedId\",\"value\":\"abc123\"},{\"name\":\"type\",\"value\":\"raw\"}]}";
+		AddExperimentCommand c = gson.fromJson(json, AddExperimentCommand.class);
+		c.setFields("uri", "uuid", UserType.GUEST);
+
+		c.validate();
+		fail();
 	}
 
 

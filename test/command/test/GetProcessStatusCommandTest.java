@@ -1,9 +1,9 @@
 package command.test;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+
+import command.*;
+import database.subClasses.UserMethods.UserType;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -14,10 +14,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
-import command.ProcessCommand;
-import command.ProcessStatus;
 import server.WorkHandler;
-import server.test.ProcessCommandMock;
+import server.WorkPool;
+import server.test.dummies.ProcessCommandMock;
+
+import static org.junit.Assert.fail;
 
 /**
  * Class used to test the process status command class
@@ -26,10 +27,11 @@ import server.test.ProcessCommandMock;
  * @author Kommunikation/kontroll 2014.
  * @version 1.0
  */
-@Ignore
+
 public class GetProcessStatusCommandTest {
 
-	private static WorkHandler workHandler = new WorkHandler();
+	private static WorkHandler workHandler;
+	private WorkPool workPool;
 
 	private ProcessCommand makeCmd(String author, String metadata, String genomeVersion, String expId) {
 		JsonObject comInfo = new JsonObject();
@@ -44,19 +46,21 @@ public class GetProcessStatusCommandTest {
 		comInfo.addProperty("metadata", metadata);
 		comInfo.addProperty("genomeVersion", genomeVersion);
 		comInfo.addProperty("author", author);
-		//System.out.println(comInfo.toString());
+
 		return new GsonBuilder().create().fromJson(comInfo.toString(), ProcessCommandMock.class);
 	}
 
 	@Before
 	public void setUp() throws Exception {
 
+		workPool = new WorkPool();
+		workHandler = new WorkHandler(workPool);
 
-		workHandler.addWork(makeCmd("yuri", "meta", "v123", "Exp1"));
-		workHandler.addWork(makeCmd("janne", "mea", "v1523", "Exp2"));
-		workHandler.addWork(makeCmd("philge", "meta", "v22", "Exp43"));
-		workHandler.addWork(makeCmd("per", "meta", "v12", "Exp234"));
-		workHandler.addWork(makeCmd("yuri", "meta", "v1", "Exp6"));
+		workPool.addWork(makeCmd("yuri", "meta", "v123", "Exp1"));
+		workPool.addWork(makeCmd("janne", "mea", "v1523", "Exp2"));
+		workPool.addWork(makeCmd("philge", "meta", "v22", "Exp43"));
+		workPool.addWork(makeCmd("per", "meta", "v12", "Exp234"));
+		workPool.addWork(makeCmd("yuri", "meta", "v1", "Exp6"));
 
 		//stat = new ProcessStatus(com);
 		//stat.outputFiles = com.getFilePaths();
@@ -67,7 +71,8 @@ public class GetProcessStatusCommandTest {
 	@Ignore
 	public void shouldContainStuff() {
 
-		workHandler.start();
+		new Thread(workHandler).start();
+
 		try {
 			Thread.sleep(10000);
 		} catch (InterruptedException e) {
@@ -75,20 +80,59 @@ public class GetProcessStatusCommandTest {
 			e.printStackTrace();
 		}
 
-		Collection<ProcessStatus> procStats = workHandler.getProcessStatus();
-		List<ProcessStatus> list = new ArrayList<ProcessStatus>( procStats);
+		LinkedList<ProcessCommand> processesList = workPool.getProcesses();
+		LinkedList<ProcessStatus> processStatuses = new LinkedList<>();
 
-		Collections.sort( list );
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-
-		JsonArray arr = new JsonArray();
-		for (ProcessStatus p : list) {
-			JsonElement elem = gson.toJsonTree(p, ProcessStatus.class);
-			arr.add(elem);
+		for (ProcessCommand proc : processesList) {
+			processStatuses.add(workPool.getProcessStatus(proc));
 		}
 
-		System.out.println(toPrettyFormat(arr.toString()));
+
+		if (processStatuses.size() > 0) {
+
+			Collections.sort( processStatuses );
+			Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+			JsonArray arr = new JsonArray();
+			for (ProcessStatus p : processStatuses) {
+				JsonElement elem = gson.toJsonTree(p, ProcessStatus.class);
+				arr.add(elem);
+			}
+
+			System.out.println(toPrettyFormat(arr.toString()));
+		}
+
+
 //		workHandler.interrupt();
+	}
+
+	/**
+	 * Test used to check that ValidateException is not thrown
+	 * when the user have the required rights.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test
+	public void testHavingRights() throws ValidateException {
+
+		Command c = new GetAnnotationPrivilegesCommand();
+		c.setFields("uri", null, UserType.GUEST);
+		c.validate();
+	}
+
+	/**
+	 * Test used to check that ValidateException is thrown
+	 * when the user doesn't have the required rights.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testNotHavingRights() throws ValidateException {
+
+		Command c = new GetAnnotationPrivilegesCommand();
+		c.setFields("uri", null, UserType.UNKNOWN);
+		c.validate();
+		fail();
 	}
 
     private static String toPrettyFormat(String jsonString)
@@ -97,9 +141,8 @@ public class GetProcessStatusCommandTest {
         JsonArray json = parser.parse(jsonString).getAsJsonArray();
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        String prettyJson = gson.toJson(json);
 
-        return prettyJson;
+		return gson.toJson(json);
     }
 
 }

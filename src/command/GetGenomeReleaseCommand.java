@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import database.DatabaseAccessor;
 import database.containers.Genome;
+import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.GetGenomeReleaseResponse;
 import response.Response;
@@ -18,33 +19,25 @@ import response.StatusCode;
  * @version 1.0
  */
 
-public class GetGenomeReleaseCommand extends Command{
-
-	/**
-	 * Empty constructor, used to get an object of GetGenomeReleaseCommand
-	 */
-	public GetGenomeReleaseCommand() {
-
-	}
-
-	/**
-	 * Validation is always true, this command is always sent to the database
-	 * because the command can't be corrupt.
-	 *
-	 * @return always true.
-	 */
+public class GetGenomeReleaseCommand extends Command {
 	@Override
-	public boolean validate() {
+	public void setFields(String uri, String uuid, UserType userType) {
+		this.userType = userType;
 
-		return true;
+		/*No fields from the URI is needed, neither is the UUID. Dummy
+		implementation*/
+	}
 
+	@Override
+	public void validate() throws ValidateException {
+		/*Validation will always succeed, the command can not be corrupt.*/
+		hasRights(UserRights.getRights(this.getClass()));
 	}
 
 	/**
-	 * Connects to the database, retrieves all the genomeReleases
-	 * and creates a response depending on the database return value.
-	 *
-	 * @return Object of the response class depending on result.
+	 * Connects to the database, retrieves all the genomeReleases and creates
+	 * a response depending on the database return value.
+	 * @return an appropriate Response.
 	 */
 	@Override
 	public Response execute() {
@@ -70,5 +63,4 @@ public class GetGenomeReleaseCommand extends Command{
 				db.close();
 		}
 	}
-
 }

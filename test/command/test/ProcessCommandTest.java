@@ -1,6 +1,9 @@
 package command.test;
 
 import static org.junit.Assert.*;
+
+import database.constants.MaxLength;
+import database.subClasses.UserMethods.UserType;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -57,7 +60,7 @@ public class ProcessCommandTest {
 		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1");
 		ProcessCommand c = gson.fromJson(json, ProcessCommand.class);
 		c.setUsername(null);
-		c.setProcessType("rawtoprofile");
+		c.setProcessType(ProcessCommand.CMD_RAW_TO_PROFILE);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -77,7 +80,7 @@ public class ProcessCommandTest {
 		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1");
 		ProcessCommand c = gson.fromJson(json, ProcessCommand.class);
 		c.setUsername("");
-		c.setProcessType("rawtoprofile");
+		c.setProcessType(ProcessCommand.CMD_RAW_TO_PROFILE);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -94,14 +97,14 @@ public class ProcessCommandTest {
 	public void testValidateUserNameLengthToLong() throws ValidateException {
 
 		String big = "";
-		for(int i = 0; i < database.constants.MaxSize.USERNAME + 1; i++) {
+		for(int i = 0; i < MaxLength.USERNAME + 1; i++) {
 			big = big + "a";
 		}
 		String[] p = {"a","b","c","d","e","f","g","h"};
 		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1");
 		ProcessCommand c = gson.fromJson(json, ProcessCommand.class);
 		c.setUsername(big);
-		c.setProcessType("rawtoprofile");
+		c.setProcessType(ProcessCommand.CMD_RAW_TO_PROFILE);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -121,7 +124,7 @@ public class ProcessCommandTest {
 		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1");
 		ProcessCommand c = gson.fromJson(json, ProcessCommand.class);
 		c.setUsername("hel/lo");
-		c.setProcessType("rawtoprofile");
+		c.setProcessType(ProcessCommand.CMD_RAW_TO_PROFILE);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -201,7 +204,7 @@ public class ProcessCommandTest {
 		String json = jsonAndInfoBuilder(null,p,"metadata","gen1");
 		ProcessCommand c = gson.fromJson(json, ProcessCommand.class);
 		c.setUsername("hello");
-		c.setProcessType("rawtoprofile");
+		c.setProcessType(ProcessCommand.CMD_RAW_TO_PROFILE);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -221,7 +224,7 @@ public class ProcessCommandTest {
 		String json = jsonAndInfoBuilder("",p,"metadata","gen1");
 		ProcessCommand c = gson.fromJson(json, ProcessCommand.class);
 		c.setUsername("hello");
-		c.setProcessType("rawtoprofile");
+		c.setProcessType(ProcessCommand.CMD_RAW_TO_PROFILE);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -238,14 +241,14 @@ public class ProcessCommandTest {
 	public void testValidateExperimentIdLengthToLong() throws ValidateException {
 
 		String big = "";
-		for(int i = 0; i < database.constants.MaxSize.FILE_EXPID + 1; i++) {
+		for(int i = 0; i < MaxLength.FILE_EXPID + 1; i++) {
 			big = big + "a";
 		}
 		String[] p = {"a","b","c","d","e","f","g","h"};
 		String json = jsonAndInfoBuilder(big,p,"metadata","gen1");
 		ProcessCommand c = gson.fromJson(json, ProcessCommand.class);
 		c.setUsername("hello");
-		c.setProcessType("rawtoprofile");
+		c.setProcessType(ProcessCommand.CMD_RAW_TO_PROFILE);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -265,7 +268,7 @@ public class ProcessCommandTest {
 		String json = jsonAndInfoBuilder("experi/mentID",p,"metadata","gen1");
 		ProcessCommand c = gson.fromJson(json, ProcessCommand.class);
 		c.setUsername("hello");
-		c.setProcessType("rawtoprofile");
+		c.setProcessType(ProcessCommand.CMD_RAW_TO_PROFILE);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -285,7 +288,7 @@ public class ProcessCommandTest {
 		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1");
 		ProcessCommand c = gson.fromJson(json, ProcessCommand.class);
 		c.setUsername("hello");
-		c.setProcessType("rawtoprofile");
+		c.setProcessType(ProcessCommand.CMD_RAW_TO_PROFILE);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -305,7 +308,7 @@ public class ProcessCommandTest {
 		String json = jsonAndInfoBuilder("experimentID",p,null,"gen1");
 		ProcessCommand c = gson.fromJson(json, ProcessCommand.class);
 		c.setUsername("hello");
-		c.setProcessType("rawtoprofile");
+		c.setProcessType(ProcessCommand.CMD_RAW_TO_PROFILE);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -316,7 +319,7 @@ public class ProcessCommandTest {
 	 * Test used to check that ValidateException is thrown if
 	 * MetaData is empty string.
 	 *
-	 * TODO: Looks like this test is not correct, metadata can be null.
+	 * TODO: This test is not working currently as metadata can be null.
 	 *
 	 * @throws ValidateException
 	 */
@@ -328,7 +331,7 @@ public class ProcessCommandTest {
 		String json = jsonAndInfoBuilder("experimentID",p,"","gen1");
 		ProcessCommand c = gson.fromJson(json, ProcessCommand.class);
 		c.setUsername("hello");
-		c.setProcessType("rawtoprofile");
+		c.setProcessType(ProcessCommand.CMD_RAW_TO_PROFILE);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -345,14 +348,14 @@ public class ProcessCommandTest {
 	public void testValidateMetaDataLengthToLong() throws ValidateException {
 
 		String big = "";
-		for(int i = 0; i < database.constants.MaxSize.FILE_METADATA + 1; i++) {
+		for(int i = 0; i < MaxLength.FILE_METADATA + 1; i++) {
 			big = big + "a";
 		}
 		String[] p = {"a","b","c","d","e","f","g","h"};
 		String json = jsonAndInfoBuilder("experimentID",p,big,"gen1");
 		ProcessCommand c = gson.fromJson(json, ProcessCommand.class);
 		c.setUsername("hello");
-		c.setProcessType("rawtoprofile");
+		c.setProcessType(ProcessCommand.CMD_RAW_TO_PROFILE);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -365,6 +368,7 @@ public class ProcessCommandTest {
 	 *
 	 * @throws ValidateException
 	 */
+	@Ignore
 	@Test(expected = ValidateException.class)
 	public void testValidateMetaDataInvalidCharacters() throws ValidateException {
 
@@ -372,7 +376,7 @@ public class ProcessCommandTest {
 		String json = jsonAndInfoBuilder("experimentID",p,"metad/ata","gen1");
 		ProcessCommand c = gson.fromJson(json, ProcessCommand.class);
 		c.setUsername("hello");
-		c.setProcessType("rawtoprofile");
+		c.setProcessType(ProcessCommand.CMD_RAW_TO_PROFILE);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -392,7 +396,7 @@ public class ProcessCommandTest {
 		String json = jsonAndInfoBuilder("experimentID",p,"metadata",null);
 		ProcessCommand c = gson.fromJson(json, ProcessCommand.class);
 		c.setUsername("hello");
-		c.setProcessType("rawtoprofile");
+		c.setProcessType(ProcessCommand.CMD_RAW_TO_PROFILE);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -412,7 +416,7 @@ public class ProcessCommandTest {
 		String json = jsonAndInfoBuilder("experimentID",p,"metadata","");
 		ProcessCommand c = gson.fromJson(json, ProcessCommand.class);
 		c.setUsername("hello");
-		c.setProcessType("rawtoprofile");
+		c.setProcessType(ProcessCommand.CMD_RAW_TO_PROFILE);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -429,14 +433,14 @@ public class ProcessCommandTest {
 	public void testValidateGenomeVersionLengthToLong() throws ValidateException {
 
 		String big = "";
-		for(int i = 0; i < database.constants.MaxSize.FILE_GRVERSION + 1; i++) {
+		for(int i = 0; i < MaxLength.FILE_GRVERSION + 1; i++) {
 			big = big + "a";
 		}
 		String[] p = {"a","b","c","d","e","f","g","h"};
 		String json = jsonAndInfoBuilder("experimentID",p,"metadata",big);
 		ProcessCommand c = gson.fromJson(json, ProcessCommand.class);
 		c.setUsername("hello");
-		c.setProcessType("rawtoprofile");
+		c.setProcessType(ProcessCommand.CMD_RAW_TO_PROFILE);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -456,7 +460,7 @@ public class ProcessCommandTest {
 		String json = jsonAndInfoBuilder("experimentID",p,"metadata","ge/n1");
 		ProcessCommand c = gson.fromJson(json, ProcessCommand.class);
 		c.setUsername("hello");
-		c.setProcessType("rawtoprofile");
+		c.setProcessType(ProcessCommand.CMD_RAW_TO_PROFILE);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -469,14 +473,15 @@ public class ProcessCommandTest {
 	 *
 	 * @throws ValidateException
 	 */
+	@Ignore
 	@Test
 	public void testValidateProperlyFormatted() throws ValidateException {
 
 		String[] p = {"a","b","c","d","e","f","g","h"};
 		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1");
 		ProcessCommand c = gson.fromJson(json, ProcessCommand.class);
-		c.setUsername("hello");
-		c.setProcessType("rawtoprofile");
+		c.setFields("/hello", null, UserType.ADMIN);
+		c.setProcessType(ProcessCommand.CMD_RAW_TO_PROFILE);
 		c.validate();
 
 		assertTrue(true);
@@ -493,8 +498,8 @@ public class ProcessCommandTest {
 		String[] p = {"a","b","c","d","e","f","g","h"};
 		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1");
 		ProcessCommand c = gson.fromJson(json, ProcessCommand.class);
-		c.setUsername("hello");
-		c.setProcessType("rawtoprofile");
+		c.setFields("/hello", null, UserType.ADMIN);
+		c.setProcessType(ProcessCommand.CMD_RAW_TO_PROFILE);
 		String compare = gson.toJson(c);
 
 		assertEquals(compare, json);
@@ -502,9 +507,46 @@ public class ProcessCommandTest {
 	}
 
 	/**
+	 * Test used to check that ValidateException is not thrown
+	 * when the user have the required rights.
+	 *
+	 * @throws ValidateException
+	 */
+	@Ignore
+	@Test
+	public void testHavingRights() throws ValidateException {
+
+		String[] p = {"a","b","c","d","e","f","g","h"};
+		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1");
+		ProcessCommand c = gson.fromJson(json, ProcessCommand.class);
+		c.setFields("/hello", "name", UserType.USER);
+		c.setProcessType(ProcessCommand.CMD_RAW_TO_PROFILE);
+
+		c.validate();
+	}
+
+	/**
+	 * Test used to check that ValidateException is thrown
+	 * when the user doesn't have the required rights.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testNotHavingRights() throws ValidateException {
+
+		String json = "{\"name\":\"experimentId\",\"annotations\":[{\"name\":\"pubmedId\",\"value\":\"abc123\"},{\"name\":\"type\",\"value\":\"raw\"}]}";
+		ProcessCommand c = gson.fromJson(json, ProcessCommand.class);
+		c.setFields("/hello", null, UserType.GUEST);
+		c.setProcessType(ProcessCommand.CMD_RAW_TO_PROFILE);
+
+		c.validate();
+		fail();
+	}
+
+	/**
 	 * Method used to build a JSON and return it as a string.
 	 *
-	 * @param strings to insert into JSON object.
+	 * @param expId and the other strings are used for inserting into JSON object.
 	 * @return JSON formatted string.
 	 */
 	private String jsonAndInfoBuilder(String expId, String[] param, String met, String genV) {

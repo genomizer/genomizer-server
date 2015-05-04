@@ -2,6 +2,7 @@ package command.test;
 
 import static org.junit.Assert.*;
 
+import database.subClasses.UserMethods.UserType;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -11,7 +12,7 @@ import com.google.gson.GsonBuilder;
 import command.AddGenomeReleaseCommand;
 import command.Command;
 import command.ValidateException;
-import database.constants.MaxSize;
+import database.constants.MaxLength;
 
 /**
  * Class used to test the AddGenomeRelease class.
@@ -72,7 +73,8 @@ public class AddGenomeReleaseCommandTest {
 	public void testValidateFileNameEmptyString() throws ValidateException {
 
 		String json = "{\"version\":\"hx16\",\"species\":\"human\",\"files\":[\"\",\"nameOfFile2\",\"nameOfFile3\"]}";
-		final Command cmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
+		AddGenomeReleaseCommand cmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
+		cmd.setFields("hello", null, UserType.ADMIN);
 		cmd.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -89,7 +91,8 @@ public class AddGenomeReleaseCommandTest {
 	public void testValidateFileNameNull() throws ValidateException {
 
 		String json = "{\"version\":\"hx16\",\"species\":\"human\",\"files\":[]}";
-		final Command cmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
+		AddGenomeReleaseCommand cmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
+		cmd.setFields("hello", null, UserType.ADMIN);
 		cmd.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -106,7 +109,8 @@ public class AddGenomeReleaseCommandTest {
 	public void testValidateFileNameNullSecondTest() throws ValidateException {
 
 		String json = "{\"version\":\"hx16\",\"species\":\"human\"}";
-		final Command cmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
+		AddGenomeReleaseCommand cmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
+		cmd.setFields("hello", null, UserType.ADMIN);
 		cmd.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -123,7 +127,8 @@ public class AddGenomeReleaseCommandTest {
 	public void testValidateSpecieEmptyString() throws ValidateException {
 
 		String json = "{\"version\":\"hx16\",\"species\":\"\",\"files\":[\"nameOfFile1\"]}";
-		final Command cmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
+		AddGenomeReleaseCommand cmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
+		cmd.setFields("hello", null, UserType.ADMIN);
 		cmd.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -140,7 +145,8 @@ public class AddGenomeReleaseCommandTest {
 	public void testValidateSpecieInvalidCharacters() throws ValidateException {
 
 		String json = "{\"version\":\"hx16\",\"species\":\"not/valid\",\"files\":[\"nameOfFile1\"]}";
-		final Command cmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
+		AddGenomeReleaseCommand cmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
+		cmd.setFields("hello", null, UserType.ADMIN);
 		cmd.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -157,7 +163,8 @@ public class AddGenomeReleaseCommandTest {
 	public void testValidateGenomeVersionInvalidCharacters() throws ValidateException {
 
 		String json = "{\"version\":\"hx/16\",\"species\":\"valid\",\"files\":[\"nameOfFile1\"]}";
-		final Command cmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
+		AddGenomeReleaseCommand cmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
+		cmd.setFields("hello", null, UserType.ADMIN);
 		cmd.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -174,7 +181,8 @@ public class AddGenomeReleaseCommandTest {
 	public void testValidateSpecieNull() throws ValidateException {
 
 		String json = "{\"version\":\"hx16\",\"species\":null,\"files\":[\"nameOfFile1\"]}";
-		final Command cmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
+		AddGenomeReleaseCommand cmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
+		cmd.setFields("hello", null, UserType.ADMIN);
 		cmd.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -191,7 +199,8 @@ public class AddGenomeReleaseCommandTest {
 	public void testValidateGenomeVersionEmptyString() throws ValidateException {
 
 		String json = "{\"version\":\"\",\"species\":\"human\",\"files\":[\"nameOfFile1\"]}";
-		final Command cmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
+		AddGenomeReleaseCommand cmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
+		cmd.setFields("hello", null, UserType.ADMIN);
 		cmd.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -207,7 +216,8 @@ public class AddGenomeReleaseCommandTest {
 	public void testValidateGenomeVersionNull() throws ValidateException {
 
 		String json = "{\"version\":null,\"species\":\"human\",\"files\":[\"nameOfFile1\"]}";
-		final Command cmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
+		AddGenomeReleaseCommand cmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
+		cmd.setFields("hello", null, UserType.ADMIN);
 		cmd.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -224,12 +234,13 @@ public class AddGenomeReleaseCommandTest {
 	public void testValidateFileNameLength() throws ValidateException {
 
 		String big_filename = "";
-		for(int i = 0; i < MaxSize.GENOME_FILEPATH + 1; i++) {
+		for(int i = 0; i < MaxLength.GENOME_FILEPATH + 1; i++) {
 			big_filename = big_filename + "A";
 		}
 		String json = "{\"version\":\"hx16\",\"species\":\"human\",\"files\":[\"" + big_filename +
 				"\"]}";
-		final Command cmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
+		AddGenomeReleaseCommand cmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
+		cmd.setFields("hello", null, UserType.ADMIN);
 		cmd.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -246,12 +257,13 @@ public class AddGenomeReleaseCommandTest {
 	public void testValidateSpecieLength() throws ValidateException {
 
 		String big_specie = "";
-		for(int i = 0; i < MaxSize.GENOME_SPECIES + 1; i++) {
+		for(int i = 0; i < MaxLength.GENOME_SPECIES + 1; i++) {
 			big_specie = big_specie + "A";
 		}
 		String json = "{\"version\":\"hx16\",\"species\":\"" + big_specie +
 				"\",\"files\":[\"nameOfFile1\",\"nameOfFile2\",\"nameOfFile3\"]}";
-		final Command cmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
+		AddGenomeReleaseCommand cmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
+		cmd.setFields("hello", null, UserType.ADMIN);
 		cmd.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -268,12 +280,13 @@ public class AddGenomeReleaseCommandTest {
 	public void testValidateGenomeVersionLength() throws ValidateException {
 
 		String big_gv = "";
-		for(int i = 0; i < MaxSize.GENOME_VERSION + 1; i++) {
+		for(int i = 0; i < MaxLength.GENOME_VERSION + 1; i++) {
 			big_gv = big_gv + "A";
 		}
 		String json = "{\"version\":\"" + big_gv +
 				"hx16\",\"species\":\"human\",\"files\":[\"nameOfFile1\"]}";
-		final Command cmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
+		AddGenomeReleaseCommand cmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
+		cmd.setFields("hello", null, UserType.ADMIN);
 		cmd.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -290,11 +303,47 @@ public class AddGenomeReleaseCommandTest {
 
 		String json = "{\"genomeVersion\":\"hx16\",\"specie\":\"human\"," +
 				"\"files\":[\"nameOfFile1\",\"nameOfFile2\",\"nameOfFile3\"]}";
-		final Command cmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
+		AddGenomeReleaseCommand cmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
+		cmd.setFields("hello", null, UserType.ADMIN);
 		cmd.validate();
 
 		assertTrue(true);
 
+	}
+
+	/**
+	 * Test used to check that ValidateException is not thrown
+	 * when the user have the required rights.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test
+	public void testHavingRights() throws ValidateException {
+
+		String json = "{\"genomeVersion\":\"hx16\",\"specie\":\"human\"," +
+				"\"files\":[\"nameOfFile1\",\"nameOfFile2\",\"nameOfFile3\"]}";
+		AddGenomeReleaseCommand c = gson.fromJson(json, AddGenomeReleaseCommand.class);
+		c.setFields("hello", null, UserType.USER);
+
+		c.validate();
+	}
+
+	/**
+	 * Test used to check that ValidateException is thrown
+	 * when the user doesn't have the required rights.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testNotHavingRights() throws ValidateException {
+
+		String json = "{\"genomeVersion\":\"hx16\",\"specie\":\"human\"," +
+				"\"files\":[\"nameOfFile1\",\"nameOfFile2\",\"nameOfFile3\"]}";
+		AddGenomeReleaseCommand c = gson.fromJson(json, AddGenomeReleaseCommand.class);
+		c.setFields("hello", null, UserType.GUEST);
+
+		c.validate();
+		fail();
 	}
 
 }

@@ -1,6 +1,10 @@
 package command.test;
 
 import static org.junit.Assert.*;
+
+import command.Command;
+import database.constants.MaxLength;
+import database.subClasses.UserMethods.UserType;
 import org.junit.Test;
 import command.DeleteFileFromExperimentCommand;
 import command.ValidateException;
@@ -15,49 +19,6 @@ import command.ValidateException;
 public class DeleteFileFromExperimentCommandTest {
 
 	/**
-	 * Test used to check that creation is not null.
-	 */
-	@Test
-	public void testCreationNotNull() {
-
-		DeleteFileFromExperimentCommand c = new DeleteFileFromExperimentCommand("a");
-
-		assertNotNull(c);
-
-	}
-
-	/**
-	 * Test used to check that ValidateException is thrown if the
-	 * header is null.
-	 * @throws ValidateException
-	 */
-	@Test(expected = ValidateException.class)
-	public void testValidateFileExpIdNull() throws ValidateException {
-
-		DeleteFileFromExperimentCommand c = new DeleteFileFromExperimentCommand(null);
-		c.validate();
-
-		fail("Expected ValidateException.");
-
-	}
-
-	/**
-	 * Test used to check that ValidateException is thrown if the
-	 * file experiment id is an empty string.
-	 *
-	 * @throws ValidateException
-	 */
-	@Test(expected = ValidateException.class)
-	public void testValidateFileExpIdEmptyString() throws ValidateException {
-
-		DeleteFileFromExperimentCommand c = new DeleteFileFromExperimentCommand("");
-		c.validate();
-
-		fail("Expected ValidateException.");
-
-	}
-
-	/**
 	 * Test used to check that ValidateException is thrown if the
 	 * file experiment id length is to long.
 	 * @throws ValidateException
@@ -65,15 +26,15 @@ public class DeleteFileFromExperimentCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateFileExpIdLength() throws ValidateException {
 
-		String big = "";
-		for(int i = 0; i < database.constants.MaxSize.FILE_EXPID + 1; i++) {
-			big = big + "a";
+		String uri = "/file/";
+		for(int i = 0; i < MaxLength.FILE_EXPID + 1; i++) {
+			uri  += "a";
 		}
-		DeleteFileFromExperimentCommand c = new DeleteFileFromExperimentCommand(big);
+
+		Command c = new DeleteFileFromExperimentCommand();
+		c.setFields(uri, null, UserType.ADMIN);
 		c.validate();
-
 		fail("Expected ValidateException.");
-
 	}
 
 	/**
@@ -84,12 +45,53 @@ public class DeleteFileFromExperimentCommandTest {
 	 */
 	@Test
 	public void textValidateProperlyFormatted() throws ValidateException {
+		Command c = new DeleteFileFromExperimentCommand();
+		c.setFields("/file/Hello", null, UserType.ADMIN);
+		c.validate();
+		assertTrue(true);
+	}
+	/**
+	 * Test used to check that ValidateException is thrown
+	 * when invalid characters are used
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testValidateIncorrectlyFormatted() throws ValidateException {
 
-		DeleteFileFromExperimentCommand c = new DeleteFileFromExperimentCommand("Hello");
+		Command c = new DeleteFileFromExperimentCommand();
+		c.setFields("/file/��", null, UserType.ADMIN);
 		c.validate();
 
-		assertTrue(true);
-
+		fail("Expected ValidateException to be thrown.");
 	}
 
+	/**
+	 * Test used to check that ValidateException is not thrown
+	 * when the user have the required rights.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test
+	public void testHavingRights() throws ValidateException {
+
+		Command c = new DeleteFileFromExperimentCommand();
+		c.setFields("/genomeRelease/Specie/GRelease", null, UserType.USER);
+		c.validate();
+	}
+
+	/**
+	 * Test used to check that ValidateException is thrown
+	 * when the user doesn't have the required rights.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testNotHavingRights() throws ValidateException {
+
+		Command c = new DeleteFileFromExperimentCommand();
+		c.setFields("/genomeRelease/Specie/GRelease", null, UserType.GUEST);
+		c.validate();
+		fail();
+	}
 }

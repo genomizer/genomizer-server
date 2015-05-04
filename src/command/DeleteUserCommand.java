@@ -3,6 +3,8 @@ package command;
 import java.io.IOException;
 import java.sql.SQLException;
 import database.DatabaseAccessor;
+import database.constants.MaxLength;
+import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
@@ -11,65 +13,41 @@ import response.StatusCode;
 /**
  * Class used to represent a delete user command.
  *
- * @author Kommunikation/kontroll 2014.
- * @version 1.0
+ * @author Business Logic 2015.
+ * @version 1.1
  */
 public class DeleteUserCommand extends Command {
-
-
 	public String username;
 
-	/**
-	 * Constructor used to initiate the class.
-	 *
-	 * @param username to delete.
-	 */
-	public DeleteUserCommand(String username) {
-
-		this.username = username;
-
+	@Override
+	public void setFields(String uri, String uuid, UserType userType) {
+		this.userType = userType;
+		username = uri.split("/")[2];
 	}
 
-	/**
-	 * Method used to validate the DeleteUserCommand.
-	 *
-	 * @return boolean depending on result.
-	 * @throws ValidateException
-	 */
 	@Override
-	public boolean validate() throws ValidateException {
-
+	public void validate() throws ValidateException {
+		hasRights(UserRights.getRights(this.getClass()));
 		if(username == null) {
-
 			throw new ValidateException(StatusCode.BAD_REQUEST,
 					"Username was missing.");
-
 		} else if(username.length() < 1 || username.length() >
-				database.constants.MaxSize.USERNAME) {
-
+				MaxLength.USERNAME) {
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Username " +
 					"has to be between 1 and " +
-					database.constants.MaxSize.USERNAME + " characters long.");
-
+					MaxLength.USERNAME + " characters long.");
 		}
-
-		return true;
-
 	}
 
-	/**
-	 * Used to execute the actual removal of the user.
-	 */
 	@Override
 	public Response execute() {
-
-		DatabaseAccessor db = null;
+		DatabaseAccessor db;
 		System.out.println("DELETING USER: " + username);
 		try {
 			db = initDB();
 		} catch (SQLException e) {
 			return new ErrorResponse(StatusCode.BAD_REQUEST, "Error when " +
-					"intiating daabaseaccessor. " + e.getMessage());
+					"initiating databaseAccessor. " + e.getMessage());
 		} catch (IOException e)  {
 			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
 		}
@@ -81,7 +59,5 @@ public class DeleteUserCommand extends Command {
 					+ e.getMessage());
 		}
 		return new MinimalResponse(StatusCode.OK);
-
 	}
-
 }

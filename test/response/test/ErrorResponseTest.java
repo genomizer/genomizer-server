@@ -12,7 +12,7 @@ public class ErrorResponseTest {
 
 	@Test
 	public void shouldHaveCorrectCode() {
-		assertEquals(404, new ErrorResponse(StatusCode.FILE_NOT_FOUND, "").getCode());
+		assertEquals(404, new ErrorResponse(StatusCode.NOT_FOUND, "").getCode());
 	}
 	
 	@Test

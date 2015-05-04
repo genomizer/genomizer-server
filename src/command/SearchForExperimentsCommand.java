@@ -9,8 +9,10 @@ import java.util.List;
 import java.net.URLDecoder;
 
 import database.DatabaseAccessor;
+import database.constants.MaxLength;
 import database.containers.Experiment;
 
+import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.Response;
 import response.SearchResponse;
@@ -19,52 +21,35 @@ import response.StatusCode;
 /**
  * Class used to handle searching for an experiment.
  *
- * @author Kommunikation/kontroll 2014.
- * @version 1.0
+ * @author Business Logic 2015.
+ * @version 1.1
  */
 public class SearchForExperimentsCommand extends Command {
-
 	private String annotations;
 
-	/**
-	 * Empty constructor.
-	 * 
-	 * @param params annotations to set.
-	 */
-	public SearchForExperimentsCommand(String params) {
-		
-		annotations = params;
-		
+	@Override
+	public void setFields(String uri, String uuid, UserType userType) {
+		this.userType = userType;
+		int index = uri.indexOf("=");
+		annotations = uri.substring(index+1);
 	}
 
-	/**
-	 * Used to validate the correctness of the
-	 * class when built.
-	 */
 	@Override
-	public boolean validate() throws ValidateException {
-		
+	public void validate() throws ValidateException {
+
+		hasRights(UserRights.getRights(this.getClass()));
+
 		if (annotations == null || annotations.equals("")) {
-			
 			throw new ValidateException(StatusCode.BAD_REQUEST,
 					"Specify annotations to search for.");
-			
 		}
-
-		return true;
-		
+		validateExists(annotations, MaxLength.ANNOTATION_VALUE, "Experiment ");
 	}
 
-	/**
-	 * Runs the actual code needed to search
-	 * the database.
-	 */
 	@Override
 	public Response execute() {
-
 	    DatabaseAccessor db = null;
 	    List<Experiment> searchResult = null;
-
 		try {
 			annotations = URLDecoder.decode(annotations, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
@@ -72,7 +57,6 @@ public class SearchForExperimentsCommand extends Command {
 			return new ErrorResponse(StatusCode.BAD_REQUEST, "Bad encoding " +
 					"on search query.");
 		}
-
 		try {
 			db = initDB();
 			searchResult = db.search(annotations);
@@ -90,14 +74,10 @@ public class SearchForExperimentsCommand extends Command {
 	}
 
 	/**
-	 * Method used to get the annotations that is set.
-	 * 
-	 * @return the annotations string.
+	 * Returns the annotations used to query for the experiment.
+	 * @return the annotations used to query for the experiment.
 	 */
 	public String getAnnotations() {
-		
 		return annotations;
-		
 	}
-	
 }
