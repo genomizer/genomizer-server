@@ -6,6 +6,7 @@ import response.Response;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -41,7 +42,12 @@ public class WorkPool {
         lock.lock();
 
         try {
-            return new LinkedList<>(processesList);
+            LinkedList<ProcessCommand> commandList =
+                    new LinkedList<>(processFutureMap.keySet());
+            commandList.addAll(processesList);
+
+            return commandList;
+
         }  finally {
             lock.unlock();
         }
@@ -66,7 +72,7 @@ public class WorkPool {
         }
     }
 
-    public ProcessCommand getProcess() {
+    public ProcessCommand pollProcess() {
         lock.lock();
 
         ProcessCommand processCommand = null;
@@ -105,19 +111,27 @@ public class WorkPool {
         lock.lock();
 
         try {
+
+            if (processFutureMap.get(process).isDone() && !processFutureMap
+                    .get(process).isCancelled()) {
+                processesStatus.get(process).status = ProcessStatus
+                        .STATUS_FINISHED;
+            }
+
             return processesStatus.get(process);
         } finally {
             lock.unlock();
         }
     }
 
-    public int availableProcesses() {
-        lock.lock();
+    public Response getProcessResponse(ProcessCommand processCommand) throws
+            InterruptedException, ExecutionException {
 
-        try {
-            return processesList.size();
-        } finally {
-            lock.unlock();
+        if (processesStatus.get(processCommand).status
+                .equals(ProcessStatus.STATUS_FINISHED)) {
+            return processFutureMap.get(processCommand).get();
         }
+        return null;
     }
+
 }

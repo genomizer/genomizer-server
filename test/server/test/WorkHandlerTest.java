@@ -1,12 +1,9 @@
 package server.test;
 
 
-import command.ProcessCommand;
 import org.junit.Before;
-import org.junit.Test;
 import server.WorkPool;
 
-import static org.junit.Assert.assertTrue;
 
 public class WorkHandlerTest {
 
@@ -16,6 +13,6 @@ public class WorkHandlerTest {
     public void setUp() {
         workPool = new WorkPool();
     }
-    
+
 
 }
