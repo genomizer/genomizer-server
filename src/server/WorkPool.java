@@ -36,6 +36,11 @@ public class WorkPool {
                 ServerSettings.nrOfProcessThreads);
     }
 
+    /**
+     * Gets a list of all submitted process commands
+     *
+     * @return a linked list with elements of type {@link command.ProcessCommand}
+     */
     public LinkedList<ProcessCommand> getProcesses() {
         lock.lock();
 
@@ -48,17 +53,26 @@ public class WorkPool {
 
     }
 
-    public void addProcess(ProcessCommand command) {
+
+    /**
+     * Adds a process command to the work pool
+     *
+     * @param processCommand - the process command to be added
+     */
+    public void addProcess(ProcessCommand processCommand) {
         lock.lock();
 
         try {
-            processesStatus.put(command, new ProcessStatus(command));
+            // Create a process command to process status mapping
+            processesStatus.put(processCommand, new ProcessStatus(processCommand));
 
+            // Submit the process with a new work handler for execution
             Future<Response> response = executor.submit(new WorkHandler(this,
-             command));
+             processCommand));
 
             if (response != null) {
-                processFutureMap.put(command, response);
+                // Create a process command to process response mapping
+                processFutureMap.put(processCommand, response);
             }
 
         } finally {
@@ -66,7 +80,12 @@ public class WorkPool {
         }
     }
 
-
+    /**
+     * Attempts to cancel the specified process if it is not completed or if
+     * it has not been cancelled already.
+     *
+     * @param processCommand - the process command to be cancelled
+     */
     public void cancelProcess(ProcessCommand processCommand) {
         lock.lock();
 
@@ -75,34 +94,55 @@ public class WorkPool {
            Future<Response> response = processFutureMap.get(processCommand);
 
             if (response != null) {
+                // Attempt to cancel if not done or cancelled already
                 if (!response.isDone() && !response.isCancelled()) {
                     response.cancel(true);
                 }
             }
 
+            // Cleanup the maps from stale processes
             processesStatus.remove(processCommand);
+            processFutureMap.remove(processCommand);
         } finally {
             lock.unlock();
         }
     }
 
-    public ProcessStatus getProcessStatus(ProcessCommand process) {
+    /**
+     * Gets the process status for the specified process command.
+     *
+     * @param processCommand - the process command which status to be retrieved
+     * @return processStatus - the process status of the specified process
+     * command
+     */
+    public ProcessStatus getProcessStatus(ProcessCommand processCommand) {
         lock.lock();
 
         try {
 
-            if (processFutureMap.get(process).isDone() && !processFutureMap
-                    .get(process).isCancelled()) {
-                processesStatus.get(process).status = ProcessStatus
+            // Change status of the process if it has completed
+            if (processFutureMap.get(processCommand).isDone() && !processFutureMap
+                    .get(processCommand).isCancelled()) {
+
+                processesStatus.get(processCommand).status = ProcessStatus
                         .STATUS_FINISHED;
             }
 
-            return processesStatus.get(process);
+            return processesStatus.get(processCommand);
         } finally {
             lock.unlock();
         }
     }
 
+    /**
+     * Retrieves the process response for the specified process command.
+     *
+     * @param processCommand
+     * @return processresponse - the response if the process has finished
+     * execution else null.
+     * @throws InterruptedException
+     * @throws ExecutionException
+     */
     public Response getProcessResponse(ProcessCommand processCommand) throws
             InterruptedException, ExecutionException {
 
