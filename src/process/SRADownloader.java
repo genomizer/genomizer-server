@@ -1,5 +1,6 @@
 package process;
 
+import server.ErrorLogger;
 import server.ServerSettings;
 
 import java.io.*;
@@ -9,26 +10,60 @@ import java.io.*;
  */
 public class SRADownloader extends Executor {
 
-    private final String metaDataHTTP = "http://trace.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?save=efetch&db=sra&rettype=runinfo&term=";
+    private final String http = "http://trace.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?save=efetch&db=sra&rettype=runinfo&term=";
     private final String dir = ServerSettings.fileLocation;
     private final String ftpRoot = "ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/sra/";
+    private final String outDir = dir + "/sra";
 
+    /**
+     *
+     * @param runID
+     *
+     * @return file paths to run file and meta data file
+     */
+    public String[] downloadSRA(String runID) throws ProcessException {
 
+        String filePaths[] = new String[2];
+
+        try {
+
+            filePaths[0] = getRunFile(runID);
+            filePaths[1] = getMetaData(runID);
+
+        } catch (RuntimeException e) {
+
+            ErrorLogger.log("SRA", e.getMessage());
+
+            if (e.getMessage().contains("No such directory"))
+                throw new ProcessException("File " + runID + " does not exist");
+
+            cleanUp(runID);
+
+            throw new ProcessException("Could not download file");
+
+        } catch (Exception e) {
+            ErrorLogger.log("SRA", e.getMessage());
+            cleanUp(runID);
+            throw new ProcessException("Could not download file");
+        }
+
+        return filePaths;
+    }
     /**
      * Downloads a file from the Sequence Read Archive
      *
      * @param runID the run file's ID
-     * @return the dowloaded file's path
+     * @return the downloaded file's path
      * @throws IOException
      * @throws InterruptedException
      *
      */
-    public String download(String runID) throws IOException, InterruptedException {
+    private String getRunFile(String runID) throws IOException, InterruptedException, RuntimeException {
 
-        String ftp = getFTP(runID);
+        String ftp = buildFTP(runID);
 
-        String command[] = parse("wget -nc -P " + dir + "/sra/" + " " + ftp);
-        File file = new File(dir + "/sra/" + runID + ".sra");
+        String command[] = parse("wget -nc -P " + outDir + " " + ftp);
+        File file = new File(outDir + runID + ".sra");
 
         executeCommand(command);
 
@@ -39,37 +74,17 @@ public class SRADownloader extends Executor {
      * Retrieves meta data for a run file and writes
      *
      * @param runID the run file's ID
-     * @param studyID the study to which the run file belongs
      * @return
      * @throws IOException
      * @throws InterruptedException
      */
-    public String getMetaData(String runID, String studyID) throws IOException, InterruptedException {
+    private String getMetaData(String runID) throws IOException, InterruptedException,
+                                                                    RuntimeException {
+        String command[] = parse("wget -O " + outDir +  "/" + runID + "_info.csv" + " " + http + runID);
 
-        String command[] = parse("wget -O " + dir + "/sra/temp.csv" + " " + metaDataHTTP + studyID);
-        executeCommand(command);
+        System.out.println(executeCommand(command));
 
-        File tempFile = new File(dir + "/sra/temp.csv");
-
-        File outFile = new File(dir + "/sra/" + runID + ".csv");
-        BufferedReader br = new BufferedReader(new FileReader(tempFile));
-
-        String line;
-
-        while((line = br.readLine()) != null) {
-            if (line.startsWith(runID)) {
-                if(!outFile.exists())
-                    outFile.createNewFile();
-
-                FileWriter fw = new FileWriter(outFile.getAbsoluteFile());
-                BufferedWriter bw = new BufferedWriter(fw);
-                bw.write(line);
-                bw.close();
-
-            }
-        }
-
-        tempFile.delete();
+        File outFile = new File(outDir + "/" + runID + "_info.csv");
 
         return outFile.getAbsolutePath();
     }
@@ -80,7 +95,7 @@ public class SRADownloader extends Executor {
      * @param runID
      * @return fpt download path
      */
-    private String getFTP(String runID) {
+    private String buildFTP(String runID) {
 
         StringBuilder sb = new StringBuilder();
         sb.append(ftpRoot);
@@ -91,5 +106,23 @@ public class SRADownloader extends Executor {
 
         return sb.toString();
     }
+
+    /**
+     * Removes any files after unsuccessful download
+     */
+    private void cleanUp(String runID) {
+
+        File metaFile = new File(outDir + runID + ".csv");
+        File runFile = new File(outDir + runID + ".sra");
+
+        if(runFile.exists())
+            runFile.delete();
+
+        if(metaFile.exists())
+            metaFile.delete();
+
+    }
+    
+    
 
 }

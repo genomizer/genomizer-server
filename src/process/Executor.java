@@ -113,7 +113,7 @@ public abstract class Executor {
 	 * @throws IOException
 	 */
 	protected String executeCommand(String[] command)
-			throws InterruptedException, IOException {
+			throws InterruptedException, IOException, RuntimeException {
 		ProcessBuilder builder = new ProcessBuilder(command);
 
 		builder.directory(new File(FILEPATH).getAbsoluteFile());
