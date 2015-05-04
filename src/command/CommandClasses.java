@@ -25,7 +25,7 @@ public class CommandClasses {
                 class);
         classes.put("DELETE /experiment", DeleteExperimentCommand.class);
         classes.put("DELETE /file", DeleteFileFromExperimentCommand.class);
-        classes.put("DELETE /genomeRelease", DeleteGenomeReleaseCommand.class);
+        classes.put("DELETE /genomeRelease/", DeleteGenomeReleaseCommand.class);
         classes.put("DELETE /user", DeleteUserCommand.class);
         classes.put("PUT /annotation/field", EditAnnotationFieldCommand.class);
         classes.put("PUT /annotation/value", EditAnnotationValueCommand.class);
