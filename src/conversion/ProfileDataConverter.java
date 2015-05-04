@@ -19,31 +19,42 @@ import java.util.IllegalFormatException;
  * @author Martin Larsson <dv13mln@cs.umu.se>
  */
 public class ProfileDataConverter {
+private File output;
 
+    /**
+     * Constructor
+     * @param outputPath
+     */
+    public ProfileDataConverter(String outputPath) {
+        try {
+            output = new File(outputPath);
+        } catch (IllegalArgumentException e) {
+            throw e;
+        }
+    }
 
     /**
      * Converts from .bed to .sgr
      * @param inputPath path to input file
-     * @param outputPath path to output file
-     * @throws FileNotFoundException
+     * @throws java.io.IOException
      * @throws IllegalArgumentException
      */
-    public static void bedToSgr(String inputPath, String outputPath)
-            throws FileNotFoundException {
+    public String bedToSgr(String inputPath)
+            throws IOException, IllegalArgumentException {
         File inputFile;
-        File outputFile;
+        File outputFile = null;
         FileWriter fw;
-        checkArguments(inputPath, outputPath);
+        checkArguments(inputPath);
 
-        if (!inputPath.endsWith(".bed") || !outputPath.endsWith(".sgr")) {
+        if (!inputPath.endsWith(".bed")) {
             throw new IllegalArgumentException("File type not accepted " +
                     "for this conversion.");
         }
 
         inputFile = new File(inputPath);
-        outputFile = new File(outputPath);
 
         try {
+            outputFile = File.createTempFile("bed2sgr", ".sgr", output);
             fw = new FileWriter(outputFile);
 
             BufferedReader fr = new BufferedReader(new FileReader(inputFile));
@@ -65,18 +76,22 @@ public class ProfileDataConverter {
             fr.close();
 
             } catch (IOException e) {
-                e.printStackTrace();
+                throw e;
         }
 
+        return outputFile.getPath();
     }
+/*
 
-    /**
+    */
+/**
      * Converts from .gff to .sgr
      * @param inputPath path to input file
      * @param outputPath path to output file
      * @throws FileNotFoundException
      * @throws IllegalArgumentException
-     */
+     *//*
+
     public static void gffToSgr(String inputPath, String outputPath)
             throws FileNotFoundException {
         File inputFile;
@@ -117,13 +132,15 @@ public class ProfileDataConverter {
         }
     }
 
-    /**
+    */
+/**
      * Converts from .sgr to .wig
      * @param inputPath path to input file
      * @param outputPath path to output file
      * @throws FileNotFoundException
      * @throws IllegalArgumentException
-     */
+     *//*
+
     public static void sgrToWig(String inputPath, String outputPath)
             throws FileNotFoundException {
         File inputFile;
@@ -176,21 +193,23 @@ public class ProfileDataConverter {
         }
     }
 
-    /**
+    */
+/**
      * Converts from .bed to .wig via a temporary conversion to .sgr
      * @param inputPath input file path
      * @param outputPath output file path
      * @throws FileNotFoundException
      * @throws IllegalArgumentException
-     */
+     *//*
+
     public static void bedToWig(String inputPath, String outputPath)
             throws FileNotFoundException {
 
-        String tempPath = "resources/conversionTestData/bed2sgrTemp.sgr";
+        //String tempPath = "resources/conversionTestData/bed2sgrTemp.sgr";
         File tempFile;
 
         try {
-            tempFile = File.createTempFile("bed2sgr", ".sgr");
+            tempFile = File.createTempFile("bed2sgr", ".sgr", outputPath);
 
             tempPath = tempFile.getPath();
             tempFile.delete();
@@ -286,35 +305,29 @@ public class ProfileDataConverter {
         }
     }
 
+*/
 
     /**
      * Checks if arguments are valid file paths
-     * @param inputPath path to input file
-     * @param outputPath path to output file
+     * @param path path to input file
      * @throws FileNotFoundException
      * @throws IllegalArgumentException
      */
-    private static void checkArguments(String inputPath, String outputPath)
+    private static void checkArguments(String path)
             throws FileNotFoundException {
-        File inputFile;
-        File outputFile;
+        File file;
 
         try {
-            inputFile = new File(inputPath);
-            outputFile = new File(outputPath);
+            file = new File(path);
         } catch (NullPointerException e) {
             throw new IllegalArgumentException("Path can not be null.");
         }
 
-        if(!inputFile.exists())
-            throw new FileNotFoundException("Input file doesn't exists.");
-
-        if(outputFile.exists())
-            throw new IllegalArgumentException("Output file already exists.");
-
+        if(!file.exists())
+            throw new FileNotFoundException("File doesn't exists.");
     }
 
-
+/*
   private static void  wigFixedStepToSgr(String inputPath, String outputPath)
           throws FileNotFoundException {
           File inputFile;
@@ -424,5 +437,5 @@ public class ProfileDataConverter {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 }

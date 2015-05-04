@@ -10,6 +10,7 @@ package conversion.test;
 
 import conversion.ProfileDataConverter;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -19,12 +20,21 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
 public class BedToSgrTest {
-    private final String outputPath = "resources/conversionTestData/output/";
     private final String expectedResultPath = "resources/conversionTestData/" +
             "expectedResults/";
     private File outputFile;
     private ConversionResultCompare cmp = new ConversionResultCompare();
+    private ProfileDataConverter pdc;
 
+    @Before
+    public void setUp() {
+        pdc = new ProfileDataConverter("resources/conversionTestData/output/");
+    }
+
+    @Test (expected = IllegalArgumentException.class)
+    public void shouldThrowIllegalArgumentException() {
+        pdc = new ProfileDataConverter("resources/nonexistent/");
+    }
 
     /**
      * Tests null argument for input file
@@ -32,20 +42,8 @@ public class BedToSgrTest {
      */
     @Test (expected = IllegalArgumentException.class)
     public void shouldThrowIllegalArgumentIfInputFileIsNull()
-            throws FileNotFoundException{
-        ProfileDataConverter.bedToSgr(null, "resources/conversionTestData/" +
-                "expectedResults/gff2sgrResult.sgr");
-    }
-
-    /**
-     * Tests null argument for output file
-     * @throws FileNotFoundException
-     */
-    @Test (expected = IllegalArgumentException.class)
-    public void shouldThrowIllegalArgumentIfOutputFileIsNull()
-            throws FileNotFoundException{
-        ProfileDataConverter.bedToSgr("resources/conversionTestData/BED-testdata.bed",
-                null);
+            throws IOException {
+        pdc.bedToSgr(null);
     }
 
     /**
@@ -54,20 +52,10 @@ public class BedToSgrTest {
      */
     @Test (expected = FileNotFoundException.class)
     public void shouldThrowFileNotFoundIfInputPathIsntAFile()
-            throws FileNotFoundException{
-        ProfileDataConverter.bedToSgr("hej", "hej");
+            throws IOException {
+        pdc.bedToSgr("hej");
     }
 
-    /**
-     * Tests for illegal argument when output already exists
-     * @throws FileNotFoundException
-     */
-    @Test (expected = IllegalArgumentException.class)
-    public void shouldThrowIllegalArgumentIfOutputPathIsAFile()
-            throws FileNotFoundException{
-        ProfileDataConverter.bedToSgr("resources/conversionTestData/BED-testdata.bed",
-                "resources/conversionTestData/BED-testdata.bed");
-    }
 
     /**
      * Tests that exception is thrown when input file is of wrong type
@@ -75,20 +63,8 @@ public class BedToSgrTest {
      */
     @Test (expected = IllegalArgumentException.class)
     public void shouldNotAcceptWrongFileTypeForInput()
-            throws FileNotFoundException {
-        ProfileDataConverter.gffToSgr("resources/conversionTestData/GFF-testdata.gff",
-                "resources/conversionTestData/SGR-testdata-4.sgr");
-    }
-
-    /**
-     * Tests that exception is thrown when output file is of wrong type
-     * @throws FileNotFoundException
-     */
-    @Test (expected = IllegalArgumentException.class)
-    public void shouldNotAcceptWrongFileTypeForOutput()
-            throws FileNotFoundException {
-        ProfileDataConverter.gffToSgr("resources/conversionTestData/BED-testdata.bed",
-                "resources/conversionTestData/output/test.gff");
+            throws IOException {
+        pdc.bedToSgr("resources/conversionTestData/GFF-testdata.gff");
     }
 
     /**
@@ -96,15 +72,14 @@ public class BedToSgrTest {
      * @throws FileNotFoundException
      */
     @Test
-    public void shouldExsistAoutputFileAfterConversion()
-            throws FileNotFoundException {
-        ProfileDataConverter.bedToSgr("resources/conversionTestData/BED-testdata.bed",
-                "resources/conversionTestData/output/test.sgr");
+    public void shouldExistAnOutputFileAfterConversion()
+            throws IOException {
+        String output;
+        output = pdc.bedToSgr("resources/conversionTestData/BED-testdata.bed");
 
-        outputFile = new File("resources/conversionTestData/output/test.sgr");
+        outputFile = new File(output);
 
         assertTrue(outputFile.exists());
-
     }
 
     /**
@@ -114,12 +89,12 @@ public class BedToSgrTest {
      */
     @Test
     public void bedToSgrCheckSumTest() throws InterruptedException,IOException {
-        ProfileDataConverter.bedToSgr("resources/conversionTestData/BED-testdata.bed",
-                "resources/conversionTestData/output/test.sgr");
+        String output;
+        output = pdc.bedToSgr("resources/conversionTestData/BED-testdata.bed");
         File expectedFile;
 
         try{
-            outputFile = new File(outputPath+"test.sgr");
+            outputFile = new File(output);
             expectedFile = new File(expectedResultPath+"bed2sgrResult.sgr");
 
             assertTrue(cmp.compareFiles(outputFile, expectedFile));
