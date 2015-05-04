@@ -22,7 +22,7 @@ public class GetProcessStatusCommand extends Command {
 	 * Constructs a new instance of GetProcessStatusCommand using the supplied
 	 * WorkHandler.
 	 *
-	 * @param processPool thw workPool in use by the server.
+	 * @param processPool the processPool in use by the server.
 	 */
 	public GetProcessStatusCommand(ProcessPool processPool) {
 
