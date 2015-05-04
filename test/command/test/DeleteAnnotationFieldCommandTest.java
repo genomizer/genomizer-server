@@ -59,7 +59,7 @@ public class DeleteAnnotationFieldCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidationLabelLength() throws ValidateException {
 
-		String uri = "annotation/field/";
+		String uri = "/annotation/field/testName";
 		for(int i = 0; i < MaxLength.ANNOTATION_LABEL + 1; i++) {
 			uri += "a";
 		}
