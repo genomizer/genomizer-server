@@ -9,8 +9,38 @@ import java.util.List;
  * Created by nils on 2015-04-29.
  */
 public abstract class AbstractFileTuple {
+
+    public enum Type {
+        Raw(0), Profile(1), Region(2), Other(3);
+
+        public final int val;
+
+        Type(int i) {
+            this.val = i;
+        }
+
+        public static Type fromInt(int i) {
+            for (Type t : Type.values()) {
+                if (t.val == i) {
+                    return t;
+                }
+            }
+            throw new IllegalArgumentException("Unrecongized filetype!");
+        }
+
+        public static Type fromString(String s) {
+            for (Type t : Type.values()) {
+                if (s.equalsIgnoreCase(t.name())) {
+                    return t;
+                }
+            }
+            throw new IllegalArgumentException("Unrecognized file type!");
+        }
+    }
+
+
+    protected Type type;
     protected String path;
-    protected String inputFilePath;
     protected Date date;
     protected String metaData;
     protected String author;
@@ -24,13 +54,7 @@ public abstract class AbstractFileTuple {
 
     private List<Integer> parents = new ArrayList<>();
 
-    /**
-     * Gets the full path of the input file associated with this tuple.
-     * @return a path
-     */
-    public String getInputFilePath() {
-        return inputFilePath;
-    }
+
 
     /**
      * Gets the timestamp associated with this tuple.
@@ -130,12 +154,14 @@ public abstract class AbstractFileTuple {
         return parents;
     }
 
-    void setPath(String path) {
-        this.path = path;
+
+    void setType(Type type) {
+        this.type = type;
+
     }
 
-    void setInputFilePath(String inputFilePath) {
-        this.inputFilePath = inputFilePath;
+    void setPath(String path) {
+        this.path = path;
     }
 
     void setDate(Date date) {

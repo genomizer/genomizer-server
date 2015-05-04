@@ -11,6 +11,8 @@ import database.FilePathGenerator;
 import database.FileValidator;
 import database.containers.Experiment;
 import database.containers.FileTuple;
+import database.containers.FileTupleTemplate;
+import database.containers.FileTupleTemplateBuilder;
 
 /**
  * Class that contains all the methods for adding,changing, getting and removing
@@ -80,63 +82,31 @@ public class FileMethods {
 			throws SQLException, IOException {
 
 
+        return this.addNewFile((new FileTupleTemplateBuilder())
+                        .fromType(fileType)
+                        .withExpId(expID)
+                        .withIsPrivate(isPrivate)
+                        .withAuthor(author)
+                        .withGrVersion(genomeRelease)
+                        .withMetaData(metaData)
+                        .withUploader(uploader)
+                        .build(),
+                fileName,
+                inputFileName,
+                checkSumMD5);
+
+	}
+
+    public FileTuple addNewFile(FileTupleTemplate ft,
+                                String fileName,
+                                String inputFileName,
+                                String MD5checksum)
+            throws SQLException, IOException {
+
         if (!FileValidator.fileNameCheck(fileName)) {
             throw new IOException("Invalid filename");
         }
 
-        if (inputFileName != null
-                && !FileValidator.fileNameCheck(inputFileName)) {
-            throw new IOException("Invalid input filename");
-
-        }
-
-        Experiment e = expMethods.getExperiment(expID);
-
-        if (e == null) {
-            throw new IOException("The experiment " + expID
-                    + " does not exist!");
-        }
-        expID = e.getID(); // Correct expID for in case sensitivity
-
-        if (fileType == FileTuple.RAW && e.getNrRawFiles() >= 2) {
-            throw new IOException(
-                    "There are already two raw files for this experiment!");
-        }
-
-        FileTuple ft = getProfile(e, metaData);
-        String path;
-        if (ft == null) {
-            path = fpg.generateFilePath(expID, FileTuple.Type.fromInt(fileType), fileName);
-        } else {
-            path = ft.getFolderPath() + fileName;
-            File profileToAdd = new File(path);
-            if (profileToAdd.exists()) {
-                throw new IOException(fileName + " with the parameters "
-                        + metaData + " already exists!");
-            }
-        }
-        FileTuple nft = FileTuple.makeNew()
-                .fromType(fileType)
-                .withExpId(expID)
-                .withInputFilePath(getParentFolder(path) + inputFileName)
-                .withPath(path)
-                .withUploader(uploader)
-                .withIsPrivate(isPrivate)
-                .withAuthor(author)
-                .withGrVersion(genomeRelease)
-                .build();
-        return this.addNewFile(nft);
-
-	}
-
-    public FileTuple addNewFile(FileTuple ft) throws SQLException, IOException {
-
-        if (!FileValidator.fileNameCheck(ft.getFileName())) {
-            throw new IOException("Invalid filename");
-        }
-
-        String inputFileName = ft.getInputFilePath() != null ?
-                ft.getInputFilePath().substring(ft.getFolderPath().length()+1) : null;
         if (inputFileName != null
                 && !FileValidator.fileNameCheck(inputFileName)) {
             throw new IOException("Invalid input filename:" + inputFileName );
@@ -160,14 +130,19 @@ public class FileMethods {
         FileTuple ftp = getProfile(e, ft.getMetaData());
         String path;
         if (ftp == null) {
-            path = fpg.generateFilePath(expID,ft.getType(), ft.getFileName());
+            path = fpg.generateFilePath(expID, ft.getType(), fileName);
         } else {
-            path = ftp.getFolderPath() + ft.getFileName();
+            path = ftp.getFolderPath() + fileName;
             File profileToAdd = new File(path);
             if (profileToAdd.exists()) {
-                throw new IOException(ft.getFileName() + " with the parameters "
+                throw new IOException(fileName + " with the parameters "
                         + ft.getMetaData() + " already exists!");
             }
+        }
+
+        String inputFilePath = null;
+        if (inputFileName != null) {
+            inputFilePath = getParentFolder(path) + inputFileName;
         }
 
         String query = "INSERT INTO File "
@@ -194,15 +169,15 @@ public class FileMethods {
                     break;
             }
 
-            stmt.setString(3, ft.getFileName());
+            stmt.setString(3, fileName);
             stmt.setString(4, ft.getMetaData());
-            stmt.setString(5, ft.getInputFilePath());
+            stmt.setString(5, inputFilePath);
             stmt.setString(6, ft.getAuthor());
             stmt.setString(7, ft.getUploader());
             stmt.setBoolean(8, ft.isPrivate());
             stmt.setString(9, expID);
             stmt.setString(10, genomeRelease);
-            stmt.setString(11, ft.checkSumMD5);
+            stmt.setString(11, MD5checksum);
 
             stmt.executeUpdate();
         }
@@ -211,7 +186,7 @@ public class FileMethods {
                 + "WHERE Path = ?";
         int id;
         try (PreparedStatement stmt = conn.prepareStatement(querygetID)) {
-            stmt.setString(1, ft.getFullPath());
+            stmt.setString(1, path);
             ResultSet rss = stmt.executeQuery();
             rss.next();
             id = rss.getInt(1);
@@ -230,18 +205,7 @@ public class FileMethods {
             }
         }
 
-        return FileTuple.makeNew()
-                .fromType(ft.getType())
-                .withPath(ft.getFullPath())
-                .withInputFilePath(ft.getInputFilePath())
-                .withAuthor(ft.getAuthor())
-                .withIsPrivate(ft.isPrivate())
-                .withMetaData(ft.getMetaData())
-                .withUploader(ft.getUploader())
-                .withExpId(ft.getExpId())
-                .withGrVersion(ft.getGrVersion())
-                .withId(id).build();
-
+        return ft.toFileTuple(id, path, inputFilePath);
     }
 
 

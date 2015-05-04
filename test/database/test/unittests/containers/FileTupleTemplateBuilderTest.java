@@ -25,7 +25,7 @@ public class FileTupleTemplateBuilderTest {
     @Test
     public void shouldGetNameRight(){
         String path = "/a/path/";
-        FileTupleTemplate f = fbuild.fileTupleTemplate().withFolderPath(path).build();
+        FileTupleTemplate f = fbuild.rawFile().withFolderPath(path).build();
 
         assertEquals(path,f.getFolderPath());
     }
@@ -34,10 +34,9 @@ public class FileTupleTemplateBuilderTest {
     public void shouldGetFilesRight() {
         String inputFP = "/this/is/a/test";
         String path = "/also/a/test/";
-        FileTupleTemplate f = fbuild.fileTupleTemplate().withFolderPath(path)
-                .withInputFilePath(inputFP).withIsPrivate(true).build();
+        FileTupleTemplate f = fbuild.rawFile().withFolderPath(path)
+                .withIsPrivate(true).build();
 
-        assertEquals(inputFP,f.getInputFilePath());
         assertEquals(path,f.getFolderPath());
         assertTrue(f.isPrivate());
     }
@@ -47,10 +46,10 @@ public class FileTupleTemplateBuilderTest {
         String inputFP = "/this/is/a/test";
         String path = "/also/a/test/";
         String name = "aName";
-        FileTupleTemplate f = fbuild.fileTupleTemplate().withFolderPath(path)
-                .withInputFilePath(inputFP).withIsPrivate(true).build();
+        FileTupleTemplate f = fbuild.rawFile().withFolderPath(path)
+                .withIsPrivate(true).build();
 
-        FileTuple ft = f.toFileTuple(1,"raw",name,"Done");
+        FileTuple ft = f.toFileTuple(1, path + name, inputFP);
 
         assertEquals(inputFP,ft.getInputFilePath());
         assertEquals(path + name,ft.getFullPath());
@@ -65,7 +64,7 @@ public class FileTupleTemplateBuilderTest {
     public void shouldNotAcceptMalFormedPath(){
         String badpath = "/a/path/to/a/file";
 
-        FileTupleTemplate f = fbuild.fileTupleTemplate().withFolderPath(badpath).build();
+        FileTupleTemplate f = fbuild.rawFile().withFolderPath(badpath).build();
     }
 
     @Test(expected = IllegalStateException.class)
@@ -73,10 +72,10 @@ public class FileTupleTemplateBuilderTest {
         String inputFP = "/this/is/a/test";
         String path = "/also/a/test/";
         String name = "aName";
-        FileTupleTemplate f = fbuild.fileTupleTemplate().withFolderPath(path)
-                .withInputFilePath(inputFP).withIsPrivate(true).build();
+        FileTupleTemplate f = fbuild.rawFile().withFolderPath(path)
+                .withIsPrivate(true).build();
 
-        FileTuple ft = f.toFileTuple(1, "raw", name, "Done");
+        FileTuple ft = f.toFileTuple(1, path + name, inputFP);
 
         assertEquals(inputFP, ft.getInputFilePath());
         assertEquals(path + name, ft.getFullPath());

@@ -19,36 +19,8 @@ public class FileTuple extends AbstractFileTuple {
     public static final int OTHER = 3;
 
 
-    public enum Type {
-        Raw(0), Profile(1), Region(2), Other(3);
-
-        public final int val;
-
-        Type(int i){
-            this.val = i;
-        }
-
-        public static Type fromInt(int i){
-            for(Type t : Type.values()){
-                if(t.val == i){
-                    return t;
-                }
-            }
-            throw new IllegalArgumentException("Unrecongized filetype!");
-        }
-        public static Type fromString(String s){
-            for(Type t: Type.values()){
-                if(s.equalsIgnoreCase(t.name())){
-                    return t;
-                }
-            }
-            throw new IllegalArgumentException("Unrecognized file type!");
-        }
-    }
-
+    private String inputFilePath;
     private Integer fileID;
-    private Type type;
-
     private String status;
 
     //TODO Fix this
@@ -66,6 +38,15 @@ public class FileTuple extends AbstractFileTuple {
      */
     public Integer getFileId() {
         return fileID;
+    }
+
+    /**
+     * Gets the full path of the input file associated with this tuple.
+     *
+     * @return a path
+     */
+    public String getInputFilePath() {
+        return inputFilePath;
     }
 
     /**
@@ -112,12 +93,9 @@ public class FileTuple extends AbstractFileTuple {
         this.fileID = fileID;
     }
 
-    void setType(Type type) {
-        this.type = type;
-
+    void setInputFilePath(String inputFilePath) {
+        this.inputFilePath = inputFilePath;
     }
-
-
 
     void setStatus(String status) {
         this.status = status;
@@ -133,6 +111,7 @@ public class FileTuple extends AbstractFileTuple {
 
         fileID = resSet.getInt("FileID");
         path = resSet.getString("Path");
+        //fileName = resSet.getString("FileName");
         inputFilePath = resSet.getString("InputFilePath");
         type = Type.fromString(resSet.getString("FileType"));
         date = resSet.getDate("Date");

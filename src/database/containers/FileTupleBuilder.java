@@ -95,6 +95,7 @@ public class FileTupleBuilder {
         return this;
     }
 
+
     /**
      *
      * @param inputFilePath File path to the Raw input data-file in .fastq-format

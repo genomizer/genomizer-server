@@ -12,10 +12,64 @@ public class FileTupleTemplateBuilder {
 
     private boolean hasUploader;
 
-    public FileTupleTemplateBuilder fileTupleTemplate(){
-        product = new FileTupleTemplate();
+
+    public FileTupleTemplateBuilder rawFile() {
+        if (product == null) {
+            this.product = new FileTupleTemplate();
+        }
+
+        this.product.setType(FileTuple.Type.Raw);
         return this;
     }
+
+    public FileTupleTemplateBuilder profileFile() {
+        if (product == null) {
+            this.product = new FileTupleTemplate();
+        }
+        this.product.setType(FileTuple.Type.Profile);
+        return this;
+    }
+
+    public FileTupleTemplateBuilder regionFile() {
+        if (product == null) {
+            this.product = new FileTupleTemplate();
+        }
+        this.product.setType(FileTuple.Type.Region);
+        return this;
+    }
+
+    public FileTupleTemplateBuilder otherFile() {
+        if (product == null) {
+            this.product = new FileTupleTemplate();
+        }
+        this.product.setType(FileTuple.Type.Other);
+        return this;
+    }
+
+    public FileTupleTemplateBuilder fromType(FileTuple.Type t) {
+        switch (t) {
+            case Raw:
+                return this.rawFile();
+            case Profile:
+                return this.profileFile();
+            case Region:
+                return this.regionFile();
+            case Other:
+                return this.otherFile();
+        }
+
+        // dummy return
+        return null;
+    }
+
+    public FileTupleTemplateBuilder fromType(String t) {
+        return this.fromType(FileTuple.Type.fromString(t));
+    }
+
+    public FileTupleTemplateBuilder fromType(int i) {
+        return this.fromType(FileTuple.Type.fromInt(i));
+    }
+
 
     /**
      *
@@ -23,7 +77,7 @@ public class FileTupleTemplateBuilder {
      * @return
      */
     public FileTupleTemplateBuilder withFolderPath(String path) {
-        nullCheck("withFolderPath()");
+        nullCheck("withPath()");
         if(!path.endsWith(File.separator))
             throw new IllegalArgumentException("FileTupleTemplates must point to "
                     + "folders, NOT files!");
@@ -31,21 +85,16 @@ public class FileTupleTemplateBuilder {
         return this;
     }
 
-    /**
-     *
-     * @param inputFilePath File path to the Raw input data-file in .fastq-format
-     * @return
-     */
-    public FileTupleTemplateBuilder withInputFilePath(String inputFilePath) {
-        nullCheck("withInputFilePath()");
-        product.setInputFilePath(inputFilePath);
-        return this;
-    }
-
 
     public FileTupleTemplateBuilder withDate(Date date) {
         nullCheck("withDate()");
         product.setDate(date);
+        return this;
+    }
+
+    public FileTupleTemplateBuilder withUploader(String uploader) {
+        nullCheck("withUploader()");
+        product.setUploader(uploader);
         return this;
     }
 
