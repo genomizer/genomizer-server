@@ -59,9 +59,7 @@ public class ProcessHandler implements Callable<Response> {
 
 	}
 
-	//The thread runs all the time and checks if the queue is empty
-	//If the queue is not empty, the command at the head of the queue is
-	//is executed
+
 	@Override
 	public Response call() {
 
@@ -77,6 +75,7 @@ public class ProcessHandler implements Callable<Response> {
 
 			processStatus.status = ProcessStatus.STATUS_STARTED;
 
+			// Attempt to setup file paths
 			try {
 				processCommand.setFilePaths();
 			} catch (SQLException | IOException e) {
@@ -90,24 +89,25 @@ public class ProcessHandler implements Callable<Response> {
 			processStatus.outputFiles = processCommand.getFilePaths();
 			processStatus.timeStarted = System.currentTimeMillis();
 
-			/* Execute the process command */
+
 			try {
+				/* Execute the process command */
 				response = processCommand.execute();
 
-
-				Debug.log("AFTER EXECUTE PROCESS");
 				if (response.getCode() == StatusCode.CREATED) {
 					processStatus.status = ProcessStatus.STATUS_FINISHED;
+					Debug.log("Process execution in experiment " +
+							processCommand.getExpId() + " has finished!");
 				} else {
 					processStatus.status = ProcessStatus.STATUS_CRASHED;
+					Debug.log("FAILURE! Process execution in experiment " +
+							processCommand.getExpId() + " has crashed.");
 				}
 			} catch (NullPointerException e) {
 				processStatus.status = ProcessStatus.STATUS_CRASHED;
 			}
 
-
 			processStatus.timeFinished = System.currentTimeMillis();
-
 
 		}
 
