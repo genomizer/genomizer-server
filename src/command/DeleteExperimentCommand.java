@@ -7,9 +7,9 @@ import database.DatabaseAccessor;
 
 import database.constants.MaxLength;
 import response.ErrorResponse;
+import response.HttpStatusCode;
 import response.MinimalResponse;
 import response.Response;
-import response.StatusCode;
 
 /**
  * Class used to represent a remove experiment command.
@@ -38,22 +38,22 @@ public class DeleteExperimentCommand extends Command {
 			db = initDB();
 			int tuples = db.deleteExperiment(header);
 			if(tuples == 0) {
-				return new ErrorResponse(StatusCode.BAD_REQUEST,
+				return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
 						"The experiment " + header + " does not exist and " +
 								"can not be deleted");
 
 			}
 		} catch (SQLException e) {
-			return new ErrorResponse(StatusCode.BAD_REQUEST,
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
 					Integer.toString(e.getErrorCode()));
 
 		} catch (IOException e) {
-			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
 		} finally {
 			if (db != null) {
 				db.close();
 			}
 		}
-		return new MinimalResponse(StatusCode.OK);
+		return new MinimalResponse(HttpStatusCode.OK);
 	}
 }

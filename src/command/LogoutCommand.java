@@ -5,7 +5,7 @@ import database.constants.MaxLength;
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
-import response.StatusCode;
+import response.HttpStatusCode;
 
 /**
  * Class used to represent a logout command.
@@ -35,9 +35,9 @@ public class LogoutCommand extends Command {
 		String id = Authenticate.getID(username);
 		if(Authenticate.idExists(id)) {
 			Authenticate.deleteActiveUser(id);
-			return new MinimalResponse(StatusCode.OK);
+			return new MinimalResponse(HttpStatusCode.OK);
 		} else {
-			return 	new ErrorResponse(StatusCode.NOT_FOUND,
+			return 	new ErrorResponse(HttpStatusCode.NOT_FOUND,
 					"User not found");
 		}
 	}
