@@ -56,7 +56,7 @@ public class ProcessPool {
 
 
     /**
-     * Adds a process command to the work pool
+     * Adds a process command to the process pool
      *
      * @param processCommand - the process command to be added
      */
