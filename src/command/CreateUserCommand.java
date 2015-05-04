@@ -53,22 +53,11 @@ public class CreateUserCommand extends Command {
 
 		hasRights(UserRights.getRights(this.getClass()));
 
-		//TODO Change to exceptions.
-
-		/*if(username == null || password == null || privileges == null) {
-			return false;
-		}
-		if(username.length() < 1 || username.length() > MaxSize.USERNAME) {
-			return false;
-		}
-		if(password.length() < 1 || password.length() > MaxSize.PASSWORD) {
-			return false;
-		}
-		if(privileges.length() < 1 || privileges.length() > MaxSize.ROLE) {
-			return false;
-		}
-		return username.indexOf('/') == -1;*/
-
+		validateName(username, MaxLength.USERNAME, "User");
+		validateName(password, MaxLength.PASSWORD, "Password");
+		validateName(privileges, MaxLength.ROLE, "Privileges");
+		validateExists(name, MaxLength.FULLNAME, "Name");
+		validateExists(email, MaxLength.EMAIL, "Email");
 	}
 
 	/**

@@ -65,6 +65,7 @@ public class RequestHandler implements HttpHandler {
                         respondWithAuthenticationFailure(exchange);
                     }
 
+                    Debug.log("END OF EXCHANGE\n------------------");
                     return;
                 case ("GET /upload"):
                     if (performAuthorization(exchange) != null) {
@@ -73,6 +74,7 @@ public class RequestHandler implements HttpHandler {
                         respondWithAuthenticationFailure(exchange);
                     }
 
+                    Debug.log("END OF EXCHANGE\n------------------");
                     return;
                 case ("POST /upload"):
                     if (performAuthorization(exchange) != null)
@@ -81,10 +83,12 @@ public class RequestHandler implements HttpHandler {
                         respondWithAuthenticationFailure(exchange);
                     }
 
+                    Debug.log("END OF EXCHANGE\n------------------");
                     return;
             }
         } catch (Exception e) {
             Debug.log("Could not handle upload/download");
+            return;
         }
 
 		/*Authenticate the user and send the appropriate response if needed.*/
@@ -94,7 +98,9 @@ public class RequestHandler implements HttpHandler {
                 respondWithAuthenticationFailure(exchange);
 				return;
 			} else {
-				Debug.log("Unrecognized command.");
+				Debug.log("Unrecognized command: " +
+                        exchange.getRequestMethod() + " " + exchange.
+                        getRequestURI());
 				respond(createBadRequestResponse(), exchange);
 				return;
 			}
@@ -113,7 +119,8 @@ public class RequestHandler implements HttpHandler {
 
 		/*Does the length of the URI match the needed length?*/
 		if (URILength.get(commandClass) != calculateURILength(uri)) {
-			Debug.log("Bad format on command");
+			Debug.log("Bad format on command: " + exchange.getRequestMethod()
+                    + " " + exchange.getRequestURI());
 			respond(createBadRequestResponse(), exchange);
 			return;
 		}
