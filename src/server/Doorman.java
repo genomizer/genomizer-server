@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.concurrent.Executor;
 
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 
 /**
@@ -37,40 +35,8 @@ import com.sun.net.httpserver.HttpServer;
  * for new requests.
  */
 
-//TODO Make the upload handling and download handling into commands.
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.InetSocketAddress;
-import java.net.URLDecoder;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Scanner;
-import java.util.concurrent.Executor;
-
-import command.ValidateException;
-import response.ErrorResponse;
-import response.MinimalResponse;
-import response.Response;
-import response.StatusCode;
-
-import authentication.Authenticate;
-
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
-import com.sun.net.httpserver.HttpServer;
-
-import transfer.DownloadHandler;
-import transfer.UploadHandler;
-import transfer.Util;
-
-
 public class Doorman {
 	private HttpServer httpServer;
-	private UploadHandler uploadHandler;
-	private DownloadHandler downloadHandler;
 	private static WorkPool workPool;
 
 	/**
@@ -80,7 +46,7 @@ public class Doorman {
 	 * @throws IOException if the Doorman object could not be created.
      */
     public Doorman(WorkPool workPool, int port) throws IOException {
-		this.workPool = workPool;
+		Doorman.workPool = workPool;
 		RequestHandler requestHandler = new RequestHandler();
 		httpServer = HttpServer.create(new InetSocketAddress(port),0);
         httpServer.createContext("/login", requestHandler);
@@ -126,5 +92,4 @@ public class Doorman {
 	public static WorkPool getWorkPool(){
 		return workPool;
 	}
-
 }
