@@ -28,8 +28,8 @@ public class DeleteAnnotationValueCommand extends Command {
 	public void setFields(String uri, String uuid, UserType userType) {
 		this.userType = userType;
 		String[] splitFields = uri.split("/");
-		name = splitFields[2];
-		value = splitFields[3];
+		name = splitFields[3];
+		value = splitFields[4];
 	}
 
 	@Override
