@@ -24,6 +24,7 @@ public class ProcessHandler implements Callable<Response> {
 	}
 
 
+	@Deprecated
 	public void removeOldStatuses() {
 
 		// Get current time
@@ -109,8 +110,6 @@ public class ProcessHandler implements Callable<Response> {
 
 
 		}
-
-		removeOldStatuses();
 
 		return response;
 

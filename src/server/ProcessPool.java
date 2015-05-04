@@ -16,6 +16,8 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class ProcessPool {
 
+    private static final long statusTimeToLive = 2*1000*60*60*24;
+
     // Process to status and response maps
     private HashMap<ProcessCommand, ProcessStatus> processStatusMap;
     private HashMap<ProcessCommand, Future<Response>> processFutureMap;
@@ -100,9 +102,8 @@ public class ProcessPool {
                 }
             }
 
-            // Cleanup the maps from stale processes
-            processStatusMap.remove(processCommand);
-            processFutureMap.remove(processCommand);
+            // Cleanup the mappings of stale processes
+            removeOldProcesses();
         } finally {
             lock.unlock();
         }
@@ -151,6 +152,50 @@ public class ProcessPool {
             return processFutureMap.get(processCommand).get();
         }
         return null;
+    }
+
+
+    /**
+     * Used internally to cleanup old processes that had either finished
+     * gracefully, crashed or were cancelled.
+     */
+    private void removeOldProcesses() {
+
+        // Get current time
+        long currentTime = System.currentTimeMillis();
+
+        // List to store processes to be removed
+        LinkedList<ProcessCommand> toBeRemoved = new LinkedList<>();
+
+        LinkedList<ProcessCommand> processesList =
+                new LinkedList<>(processFutureMap.keySet());
+
+		/* Loop through all processes and check statuses */
+        for (ProcessCommand processCommand : processesList) {
+
+            ProcessStatus processStatus = processStatusMap.get(processCommand);
+            String statusString = processStatus.status;
+
+            // Check if it has finished or crashed
+            if (statusString.equals(ProcessStatus.STATUS_FINISHED)
+                    || statusString.equals(ProcessStatus.STATUS_CRASHED)) {
+
+                long processTimeAdded = processStatus.timeAdded;
+                long timeDifference = currentTime - processTimeAdded;
+
+                if (timeDifference > statusTimeToLive) {
+                    toBeRemoved.add(processCommand);
+                }
+            }
+        }
+
+        for (ProcessCommand processCommand : toBeRemoved) {
+            Debug.log("Removing old process status: "
+                    + processCommand.getExpId());
+            processStatusMap.remove(processCommand);
+            processFutureMap.remove(processCommand);
+        }
+
     }
 
 }
