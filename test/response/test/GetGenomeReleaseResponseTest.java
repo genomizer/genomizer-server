@@ -38,7 +38,7 @@ public class GetGenomeReleaseResponseTest {
 		try {
 
 			new DatabaseAccessor(ServerSettings.databaseUsername, ServerSettings.databasePassword, ServerSettings.databaseHost, ServerSettings.databaseName);
-			//genomeList = db.getAllGenomReleases();
+			//genomeList = db.getAllGenomeReleases();
 			Command cmd=new GetGenomeReleaseSpeciesCommand("mouseTEST");
 			Response rsp=cmd.execute();
 			assertEquals(StatusCode.OK, rsp.getCode());
@@ -64,7 +64,7 @@ public class GetGenomeReleaseResponseTest {
 		try {
 
 			new DatabaseAccessor(ServerSettings.databaseUsername, ServerSettings.databasePassword, ServerSettings.databaseHost, ServerSettings.databaseName);
-			//genomeList = db.getAllGenomReleases();
+			//genomeList = db.getAllGenomeReleases();
 			Command cmd=new GetGenomeReleaseSpeciesCommand("hej");
 			Response rsp=cmd.execute();
 			assertEquals(StatusCode.BAD_REQUEST, rsp.getCode());
