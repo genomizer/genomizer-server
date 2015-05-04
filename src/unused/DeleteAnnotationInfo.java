@@ -3,6 +3,11 @@ package unused;
 import java.util.ArrayList;
 
 import com.google.gson.annotations.Expose;
+import command.Command;
+import command.UserRights;
+import command.ValidateException;
+import database.subClasses.UserMethods;
+import response.Response;
 
 /**
  * Class that is used to be able to delete annotation info.
@@ -11,7 +16,7 @@ import com.google.gson.annotations.Expose;
  * @version 1.0
  */
 
-public class DeleteAnnotationInfo {
+public class DeleteAnnotationInfo extends Command{
 	@Expose
 	public String name;
 
@@ -35,4 +40,18 @@ public class DeleteAnnotationInfo {
 		return values;
 	}
 
+	@Override
+	public void validate() throws ValidateException {
+		hasRights(UserRights.getRights(this.getClass()));
+	}
+
+	@Override
+	public Response execute() {
+		return null;
+	}
+
+	@Override
+	public void setFields(String uri, String username, UserMethods.UserType userType) {
+
+	}
 }

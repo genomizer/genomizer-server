@@ -2,6 +2,7 @@ package command;
 
 import java.util.LinkedList;
 
+import database.subClasses.UserMethods.UserType;
 import response.GetProcessStatusResponse;
 import response.Response;
 import server.WorkPool;
@@ -16,31 +17,28 @@ import server.WorkPool;
  */
 public class GetProcessStatusCommand extends Command {
 
-	private WorkPool workPool;
-
-	/**
-	 * Constructs a new instance of GetProcessStatusCommand using the supplied
-	 * WorkHandler.
-	 *
-	 * @param workPool thw workPool in use by the server.
-	 */
-	public GetProcessStatusCommand(WorkPool workPool) {
-
-		this.workPool = workPool;
-
+	@Override
+	public void setFields(String uri, String uuid, UserType userType) {
+		
+		/*No fields from the URI is needed, neither is the UUID. Dummy
+		implementation*/
+		this.userType = userType;
 	}
 
 	/**
 	 * Method that validates the class information.
-	 * This method always returns true.
 	 */
 	@Override
-	public void validate() {
-		/*Validation will always succeed, the command can not be corrupt.*/
+	public void validate() throws ValidateException {
+		/*Validation will always succeed for the content,
+		the command can not be corrupt.*/
+		hasRights(UserRights.getRights(this.getClass()));
 	}
 
 	@Override
 	public Response execute() {
+		//TODO Retrieve the right workpool
+		WorkPool workPool = null;
 		LinkedList<ProcessCommand> processesList = workPool.getProcesses();
 		LinkedList<ProcessStatus> processStatuses = new LinkedList<>();
         

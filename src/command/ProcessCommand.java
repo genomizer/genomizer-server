@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Map.Entry;
 
+import database.subClasses.UserMethods.UserType;
+import authentication.Authenticate;
 import process.ProcessException;
 import process.ProcessHandler;
 import response.ErrorResponse;
@@ -33,9 +35,9 @@ public class ProcessCommand extends Command {
 
 	private long timestamp;
 
-	private String processtype;
+	private String processType;
 
-	private Entry<String,String> filepaths;
+	private Entry<String,String> filePaths;
 
 	//Following fields corresponds to the JSON body of a process command.
 	@Expose
@@ -51,9 +53,12 @@ public class ProcessCommand extends Command {
 	private String genomeVersion;
 
 
-	//Empty constructor
-	public ProcessCommand() {
-
+	@Override
+	public void setFields(String uri, String username, UserType userType) {
+		this.userType = userType;
+		this.username = Authenticate.getUsernameByID(username);
+		setTimestamp(System.currentTimeMillis());
+		processType = uri.split("/")[1];
 	}
 
 	/**
@@ -64,18 +69,20 @@ public class ProcessCommand extends Command {
 	 */
 	@Override
 	public void validate() throws ValidateException {
+
+		hasRights(UserRights.getRights(this.getClass()));
 		validateName(username, MaxLength.USERNAME, "Username");
 		validateName(expid, MaxLength.EXPID, "Experiment name");
 		validateExists(metadata, MaxLength.FILE_METADATA, "Metadata");
 		validateName(genomeVersion, MaxLength.GENOME_VERSION, "Genome version");
-		validateExists(processtype, Integer.MAX_VALUE, "Processtype");
+		validateExists(processType, Integer.MAX_VALUE, "Processtype");
 
 		if(parameters == null || parameters.length < 1) {
 			throw new ValidateException(StatusCode.BAD_REQUEST,
 					"Specify parameters.");
 		}
 
-		switch (processtype) {
+		switch (processType) {
 			case CMD_RAW_TO_PROFILE:
 				if(parameters.length != 8){
 					throw new ValidateException(StatusCode.BAD_REQUEST,
@@ -103,16 +110,16 @@ public class ProcessCommand extends Command {
 			db = initDB();
 			processHandler = new ProcessHandler();
 
-			switch(processtype){
+			switch(processType){
 				case ProcessCommand.CMD_RAW_TO_PROFILE:
 					//Get the genome information from the database.
 					Genome g = db.getGenomeRelease(genomeVersion);
 
-					if(g == null){
+					if(g == null) {
 						return new ErrorResponse(StatusCode.BAD_REQUEST,
 								"Could not find genome version: " +
 										genomeVersion);
-					}else{
+					} else {
 						//Get the path of the genome.
 						String genomeFolderPath = g.folderPath;
 						//Get the prefix of the genome files.
@@ -140,8 +147,8 @@ public class ProcessCommand extends Command {
 					try {
 						processHandler.executeProcess(
 								ProcessCommand.CMD_RAW_TO_PROFILE,
-								parameters, filepaths.getKey(),
-								filepaths.getValue());
+								parameters, filePaths.getKey(),
+								filePaths.getValue());
 
 					} catch (ProcessException e) {
 						return processError(db, e.getMessage(), "Process " +
@@ -166,8 +173,8 @@ public class ProcessCommand extends Command {
 				db = initDB();
 			}
 
-			db.addGeneratedProfiles(expid, filepaths.getValue(),
-					filepaths.getKey(), metadata, genomeVersion, username,
+			db.addGeneratedProfiles(expid, filePaths.getValue(),
+					filePaths.getKey(), metadata, genomeVersion, username,
 					false);
 
 		} catch (SQLException e) {
@@ -180,12 +187,12 @@ public class ProcessCommand extends Command {
 		
 		db.close();
 		Debug.log(username + "Raw to profile processing completed " +
-				"running " + processtype + " on experiment" + expid + "\n" +
+				"running " + processType + " on experiment" + expid + "\n" +
 				"metadata: " + metadata + "\n" +
 				"parameters: " + parameters + "\n" +
 				"genomeVersion: " + genomeVersion + "\n");
 		return new ProcessResponse(StatusCode.CREATED, "Raw to profile " +
-				"processing completed running " + processtype +
+				"processing completed running " + processType +
 				" on experiment" + expid + "\n"+
 				"metadata: " + metadata + "\n"+
 				"parameters: " + parameters + "\n" +
@@ -204,7 +211,7 @@ public class ProcessCommand extends Command {
 	 */
 	private Response processError(DatabaseAccessor db, String error, String headerError){
 		ErrorLogger.log(username, headerError +
-				" " + processtype +
+				" " + processType +
 				" on experiment" + expid + "\n"+
 				"metadata: " + metadata + "\n"+
 				"parameters: " + parameters + "\n" +
@@ -213,7 +220,7 @@ public class ProcessCommand extends Command {
 		db.close();
 		return new ProcessResponse(StatusCode.
 				SERVICE_UNAVAILABLE, headerError +
-				" when processing " + processtype +
+				" when processing " + processType +
 				" on experiment" + expid + "\n"+
 				"metadata: " + metadata + "\n"+
 				"parameters: " + parameters + "\n" +
@@ -222,14 +229,13 @@ public class ProcessCommand extends Command {
 	}
 
 	/**
-	 * Set the username of the uploader wich will be added to the database
+	 * Set the username of the uploader which will be added to the database
 	 * annotation.
 	 *
 	 * @param username - the username of the uploader.
 	 */
 	public void setUsername(String username) {
 		this.username = username;
-
 	}
 
 	/**
@@ -238,10 +244,10 @@ public class ProcessCommand extends Command {
 	public String toString(){
 
 		return "Uploader of file: " + username + "\n" +
-				"Processtype: " + processtype + "\n" +
+				"ProcessType: " + processType + "\n" +
 				"metadata:" + metadata + "\n" +
 				"username: " + username + "\n" +
-				"expid: " + expid + "\n" +
+				"expId: " + expid + "\n" +
 				"genomeRelease: " + genomeVersion + "\n";
 	}
 
@@ -252,8 +258,8 @@ public class ProcessCommand extends Command {
 		return this.timestamp;
 	}
 
-	public void setProcessType(String processtype) {
-		this.processtype = processtype;
+	public void setProcessType(String processType) {
+		this.processType = processType;
 
 	}
 
@@ -265,7 +271,7 @@ public class ProcessCommand extends Command {
 		DatabaseAccessor db;
 
 		db = initDB();
-		filepaths = db.processRawToProfile(expid);
+		filePaths = db.processRawToProfile(expid);
 
 		if(db.isConnected()){
 			db.close();
@@ -274,7 +280,7 @@ public class ProcessCommand extends Command {
 	}
 
 	public String[] getFilePaths() {
-		return new String[] {filepaths.getKey(), filepaths.getValue()};
+		return new String[] {filePaths.getKey(), filePaths.getValue()};
 	}
 
 	public String getUsername() {

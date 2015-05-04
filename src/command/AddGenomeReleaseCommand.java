@@ -9,6 +9,7 @@ import com.google.gson.annotations.Expose;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
 
+import database.subClasses.UserMethods.UserType;
 import response.AddGenomeReleaseResponse;
 import response.ErrorResponse;
 import response.Response;
@@ -31,8 +32,17 @@ public class AddGenomeReleaseCommand extends Command {
 	private ArrayList<String> files = new ArrayList<>();
 
 	@Override
+	public void setFields(String uri, String uuid, UserType userType) {
+		this.userType = userType;
+
+		/*No fields from the URI is needed, neither is the UUID. Dummy
+		implementation*/
+	}
+
+	@Override
 	public void validate() throws ValidateException {
 
+		hasRights(UserRights.getRights(this.getClass()));
 		validateName(specie, MaxLength.GENOME_SPECIES, "Specie");
 		validateName(genomeVersion, MaxLength.GENOME_VERSION, "Genome version");
 
@@ -45,7 +55,7 @@ public class AddGenomeReleaseCommand extends Command {
 	@Override
 	public Response execute() {
 		DatabaseAccessor db = null;
-		ArrayList<String> uploadURLs = new ArrayList<String>();
+		ArrayList<String> uploadURLs = new ArrayList<>();
 		try {
 			db = initDB();
 			for(String fileName: files) {

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import database.subClasses.UserMethods;
 import database.test.TestInitializer;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -22,6 +23,7 @@ import response.Response;
 import response.StatusCode;
 import server.ServerSettings;
 
+@Ignore
 public class GetGenomeReleaseResponseTest {
 
 	@Before
@@ -39,7 +41,7 @@ public class GetGenomeReleaseResponseTest {
 
 			new DatabaseAccessor(ServerSettings.databaseUsername, ServerSettings.databasePassword, ServerSettings.databaseHost, ServerSettings.databaseName);
 			//genomeList = db.getAllGenomReleases();
-			Command cmd=new GetGenomeReleaseSpeciesCommand("mouseTEST");
+			Command cmd=new GetGenomeReleaseSpeciesCommand();
 			Response rsp=cmd.execute();
 			assertEquals(StatusCode.OK, rsp.getCode());
 
@@ -65,7 +67,7 @@ public class GetGenomeReleaseResponseTest {
 
 			new DatabaseAccessor(ServerSettings.databaseUsername, ServerSettings.databasePassword, ServerSettings.databaseHost, ServerSettings.databaseName);
 			//genomeList = db.getAllGenomReleases();
-			Command cmd=new GetGenomeReleaseSpeciesCommand("hej");
+			Command cmd=new GetGenomeReleaseSpeciesCommand();
 			Response rsp=cmd.execute();
 			assertEquals(StatusCode.BAD_REQUEST, rsp.getCode());
 
