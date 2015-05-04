@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import database.subClasses.UserMethods.UserType;
 import response.GetProcessStatusResponse;
 import response.Response;
+import server.Doorman;
 import server.WorkPool;
 
 /**
@@ -37,8 +38,8 @@ public class GetProcessStatusCommand extends Command {
 
 	@Override
 	public Response execute() {
-		//TODO Retrieve the right workpool
-		WorkPool workPool = null;
+
+		WorkPool workPool = Doorman.getWorkPool();
 		LinkedList<ProcessCommand> processesList = workPool.getProcesses();
 		LinkedList<ProcessStatus> processStatuses = new LinkedList<>();
         

@@ -71,6 +71,7 @@ public class Doorman {
 	private HttpServer httpServer;
 	private UploadHandler uploadHandler;
 	private DownloadHandler downloadHandler;
+	private static WorkPool workPool;
 
 	/**
 	 * Constructs a HTTP server (but doesn't start it) which listens on the
@@ -78,7 +79,8 @@ public class Doorman {
 	 * @param port the listening port.
 	 * @throws IOException if the Doorman object could not be created.
      */
-    public Doorman(int port) throws IOException {
+    public Doorman(WorkPool workPool, int port) throws IOException {
+		this.workPool = workPool;
 		RequestHandler requestHandler = new RequestHandler();
 		httpServer = HttpServer.create(new InetSocketAddress(port),0);
         httpServer.createContext("/login", requestHandler);
@@ -120,4 +122,9 @@ public class Doorman {
 		System.out.println("Doorman started on port " + ServerSettings.
 				genomizerPort);
 	}
+
+	public static WorkPool getWorkPool(){
+		return workPool;
+	}
+
 }
