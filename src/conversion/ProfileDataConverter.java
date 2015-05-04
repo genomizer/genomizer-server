@@ -35,6 +35,7 @@ public class ProfileDataConverter {
     /**
      * Converts from .bed to .sgr
      * @param inputPath path to input file
+     * @return String path to output fle
      * @throws java.io.IOException
      * @throws IllegalArgumentException
      */
@@ -84,10 +85,10 @@ public class ProfileDataConverter {
     /**
      * Converts from .gff to .sgr
      * @param inputPath path to input file
+     * @return String path to output fle
      * @throws java.io.IOException
      * @throws IllegalArgumentException
      */
-
     public String gffToSgr(String inputPath)
             throws IOException, IllegalArgumentException {
         File inputFile;
@@ -134,10 +135,10 @@ public class ProfileDataConverter {
     /**
      * Converts from .sgr to .wig
      * @param inputPath path to input file
+     * @return String path to output fle
      * @throws FileNotFoundException
      * @throws IllegalArgumentException
      */
-
     public String sgrToWig(String inputPath)
             throws IOException {
         File inputFile;
@@ -195,24 +196,16 @@ public class ProfileDataConverter {
     /**
      * Converts from .bed to .wig via a temporary conversion to .sgr
      * @param inputPath input file path
+     * @return String path to output fle
      * @throws java.io.IOException
      * @throws IllegalArgumentException
      */
-
     public String bedToWig(String inputPath)
             throws IOException {
         File tempFile;
         String tempPath = null;
         String outputPath;
 
-        /*try {
-            tempFile = File.createTempFile("bed2sgr", ".sgr", outputPath);
-
-            tempPath = tempFile.getPath();
-            tempFile.delete();
-        } catch (IOException e) {
-            throw e;
-        }*/
         try {
             tempPath = bedToSgr(inputPath);
             outputPath = sgrToWig(tempPath);
@@ -230,6 +223,12 @@ public class ProfileDataConverter {
         return outputPath;
     }
 
+    /**
+     * Converts from .gff to .wig
+     * @param inputPath
+     * @return String path to output file
+     * @throws IOException
+     */
     public String gffToWig(String inputPath)
             throws IOException {
         File tempFile;
@@ -253,7 +252,13 @@ public class ProfileDataConverter {
         return outputPath;
     }
 
-
+    /**
+     * Converts from .wig to .sgr
+     * @param wigType wigtype: "bed", "fixedStep", "variableStep"
+     * @param inputPath path to input file
+     * @return String path to output file
+     * @throws IOException
+     */
     public String wigToSgr(String wigType, String inputPath)
             throws IOException {
         String outputFileString = null;
@@ -274,6 +279,12 @@ public class ProfileDataConverter {
         return outputFileString;
     }
 
+    /**
+     * Converts from .wig (of subtype bed) to .sgr
+     * @param inputPath path to input file
+     * @return String path to output file
+     * @throws IOException
+     */
     private String wigBedToSgr(String inputPath)
             throws IOException {
         File inputFile;
@@ -334,7 +345,13 @@ public class ProfileDataConverter {
             throw new FileNotFoundException("File doesn't exists.");
     }
 
-  private String wigFixedStepToSgr(String inputPath)
+    /**
+     * Converts from .wig (of subtype fixedStep) to .sgr
+     * @param inputPath path to input file
+     * @return String path to output file
+     * @throws IOException
+     */
+    private String wigFixedStepToSgr(String inputPath)
           throws IOException {
           File inputFile;
           File outputFile;
@@ -394,6 +411,12 @@ public class ProfileDataConverter {
       return outputFile.getPath();
     }
 
+    /**
+     * Converts from .wig (of subtype variableStep) to .sgr
+     * @param inputPath path to input file
+     * @return String path to output file
+     * @throws IOException
+     */
     private String wigVariableStepToSgr(String inputPath)
             throws IOException {
         File inputFile;
