@@ -52,7 +52,9 @@ public class GetProcessStatusCommandTest {
 	public void setUp() throws Exception {
 
 		processPool = new ProcessPool();
-		processHandler = new ProcessHandler(processPool, new ProcessCommand());
+		ProcessCommand processCommand = new ProcessCommand();
+		processHandler = new ProcessHandler(processCommand,
+				new ProcessStatus(processCommand));
 
 		processPool.addProcess(makeCmd("yuri", "meta", "v123", "Exp1"));
 		processPool.addProcess(makeCmd("janne", "mea", "v1523", "Exp2"));

@@ -7,27 +7,26 @@ import response.StatusCode;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.LinkedList;
 import java.util.concurrent.*;
 
 
 public class ProcessHandler implements Callable<Response> {
 
-	private static final long statusTimeToLive = 2*1000*60*60*24;
-	private ProcessPool processPool;
 	private ProcessCommand processCommand;
+	private ProcessStatus processStatus;
 
 
-	public ProcessHandler(ProcessPool processPool, ProcessCommand processCommand) {
-		this.processPool = processPool;
+	public ProcessHandler(ProcessCommand processCommand,
+						  ProcessStatus processStatus) {
 		this.processCommand = processCommand;
+		this.processStatus = processStatus;
 	}
 
 
 	@Deprecated
 	public void removeOldStatuses() {
 
-		// Get current time
+	/*	// Get current time
 		long currentTime = System.currentTimeMillis();
 
 		// List to store processes to be removed
@@ -35,7 +34,7 @@ public class ProcessHandler implements Callable<Response> {
 
 		LinkedList<ProcessCommand> processesList = processPool.getProcesses();
 
-		/* Loop through all processes and check statuses */
+		*//* Loop through all processes and check statuses *//*
 		for (ProcessCommand proc : processesList) {
 
 			ProcessStatus procStat = processPool.getProcessStatus(proc);
@@ -55,17 +54,13 @@ public class ProcessHandler implements Callable<Response> {
 			Debug.log("Removing old process status: " + proc.getExpId());
 			processPool.cancelProcess(proc);
 		}
-
+*/
 
 	}
 
 
 	@Override
 	public Response call() {
-
-		ProcessStatus processStatus = processPool.getProcessStatus
-				(processCommand);
-
 
 		Response response = null;
 

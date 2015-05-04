@@ -65,12 +65,14 @@ public class ProcessPool {
         lock.lock();
 
         try {
+            ProcessStatus processStatus = new ProcessStatus(processCommand);
+
             // Create a process command to process status mapping
-            processStatusMap.put(processCommand, new ProcessStatus(processCommand));
+            processStatusMap.put(processCommand, processStatus);
 
             // Submit the process with a new work handler for execution
-            Future<Response> response = executor.submit(new ProcessHandler(this,
-             processCommand));
+            Future<Response> response = executor.submit(
+                    new ProcessHandler(processCommand, processStatus));
 
             if (response != null) {
                 // Create a process command to process response mapping
