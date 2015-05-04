@@ -41,7 +41,8 @@ public class SecureServerMain {
 		printDatabaseInformation();
 
 		/* Create a work pool */
-		ProcessPool processPool = new ProcessPool();
+		ProcessPool processPool = new ProcessPool(
+				ServerSettings.nrOfProcessThreads);
 
 		/* We attempt to start the secure doorman */
 		try {

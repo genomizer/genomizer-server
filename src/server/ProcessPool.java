@@ -29,13 +29,12 @@ public class ProcessPool {
     private ExecutorService executor;
 
 
-    public ProcessPool() {
+    public ProcessPool(int threads) {
         processStatusMap = new HashMap<>();
         processFutureMap = new HashMap<>();
         lock = new ReentrantLock();
 
-        executor = Executors.newFixedThreadPool(
-                ServerSettings.nrOfProcessThreads);
+        executor = Executors.newFixedThreadPool(threads);
     }
 
     /**
