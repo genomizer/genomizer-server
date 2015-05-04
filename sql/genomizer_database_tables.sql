@@ -24,13 +24,23 @@ CREATE UNIQUE INDEX path_index
 ON File (Path);
 
 CREATE TABLE Parent
-{
-    FileID,
-    ParentID,
-    CONSTRAINT pkey_parent PRIMARY KEY(FileID, ParentID),
+(
+    FileID     INTEGER NOT NULL,
+    ParentID   INTEGER NOT NULL,
+    CONSTRAINT pkey_parent PRIMARY KEY (FileID, ParentID),
     CONSTRAINT fkey_fileid FOREIGN KEY (FileID) REFERENCES File(FileID) ON UPDATE CASCADE ON DELETE CASCADE,
     CONSTRAINT fkey_parentid FOREIGN KEY (ParentID) REFERENCES File(FileID) ON UPDATE CASCADE ON DELETE CASCADE
-};
+);
+
+
+CREATE VIEW File_With_Parents AS
+SELECT File.FileID, Path, FileType, FileName,
+       Date, MetaData, InputFilePath, Author,
+       Uploader, IsPrivate, ExpID, GRVersion,
+       Status, MD5, ProcessName, ProcessVersion,
+       ProcessFlags, ParentID FROM
+    File LEFT OUTER JOIN Parent ON File.FileID = Parent.FileID;
+
 
 CREATE TABLE Annotation
 (

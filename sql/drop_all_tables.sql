@@ -12,3 +12,5 @@ DROP TABLE Genome_Release cascade;
 DROP TABLE Genome_Release_Files cascade;
 DROP TABLE Chain_File cascade;
 DROP TABLE Chain_File_Files cascade;
+DROP TABLE Parent cascade;
+DROP VIEW File_With_Parents;

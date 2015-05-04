@@ -11,7 +11,7 @@ import java.util.List;
 import database.FilePathGenerator;
 import database.containers.Annotation;
 import database.containers.Experiment;
-import database.containers.FileTuple;
+import database.containers.FileTupleBuilder;
 
 /**
  * Class that contains all the methods for adding,changing, getting and removing
@@ -259,14 +259,40 @@ public class ExperimentMethods {
      */
     public Experiment fillFiles(Experiment e) throws SQLException {
 
-        String query = "SELECT * FROM File " + "WHERE ExpID ~~* ?";
+        String query = "SELECT * FROM File " + "WHERE ExpID ~~* ? ";
+        String parQuery = "SELECT * FROM Parent WHERE FileID = ? ";
+
         try(PreparedStatement stmt = conn.prepareStatement(query)){
             stmt.setString(1, e.getID());
             ResultSet rs = stmt.executeQuery();
 
+            FileTupleBuilder ftb = new FileTupleBuilder();
             while (rs.next()) {
-                e.addFile(new FileTuple(rs));
+                int fileID = rs.getInt("FileID");
+                ftb.fromType(rs.getString("FileType"))
+                        .withId(fileID)
+                        .withPath(rs.getString("Path"))
+                        .withAuthor(rs.getString("Author"))
+                        .withDate(rs.getDate("Date"))
+                        .withMetaData(rs.getString("MetaData"))
+                        .withExpId(rs.getString("ExpID"))
+                        .withGrVersion(rs.getString("GRVersion"))
+                        .withUploader(rs.getString("Uploader"))
+                        .withInputFilePath(rs.getString("InputFilePath"))
+                        .withIsPrivate(rs.getBoolean("IsPrivate"))
+                        .withStatus(rs.getString("Status"))
+                        .withMD5Checksum(rs.getString("MD5"));
+
+                try (PreparedStatement st2 = conn.prepareStatement(parQuery)) {
+                    st2.setInt(1, fileID);
+                    ResultSet rs2 = st2.executeQuery();
+                    while (rs2.next())
+                        ftb.withParent(rs2.getInt(2));
+                }
+
+                e.addFile(ftb.build());
             }
+
 
         }
 

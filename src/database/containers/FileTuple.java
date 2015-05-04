@@ -23,9 +23,7 @@ public class FileTuple extends AbstractFileTuple {
     private Integer fileID;
     private String status;
 
-    //TODO Fix this
-    public final String checkSumMD5;
-
+    private String MD5Checksum;
 
     public static FileTupleBuilder makeNew(){
         return new FileTupleBuilder();
@@ -101,6 +99,10 @@ public class FileTuple extends AbstractFileTuple {
         this.status = status;
     }
 
+    void setMD5Checksum(String md5) {
+        MD5Checksum = md5;
+    }
+
     /**
      * Constructs a FileTuple object. Parameter: ResultSet
      *
@@ -122,15 +124,13 @@ public class FileTuple extends AbstractFileTuple {
         expId = resSet.getString("ExpID");
         grVersion = resSet.getString("GRVersion");
         status = resSet.getString("Status");
-        checkSumMD5 = resSet.getString("MD5");
-
-
+        MD5Checksum = resSet.getString("MD5");
 
 
     }
 
     FileTuple(){
-        checkSumMD5 = null;
+        MD5Checksum = null;
     }
 
     /**
@@ -186,6 +186,10 @@ public class FileTuple extends AbstractFileTuple {
         return path.substring(0, filenameIndex + 1);
     }
 
+    public String getMD5Checksum() {
+        return this.MD5Checksum;
+    }
+
     /**
      * Outputs the FileTuple as a String
      */
@@ -197,6 +201,6 @@ public class FileTuple extends AbstractFileTuple {
                 + ", date=" + date + ", metaData=" + metaData + ", author="
                 + author + ", uploader=" + uploader + ", isPrivate="
                 + isPrivate + ", expId=" + expId + ", grVersion=" + grVersion
-                + ", status=" + status + ", md5=" + checkSumMD5 + "]";
+                + ", status=" + status + ", md5=" + MD5Checksum + "]";
     }
 }

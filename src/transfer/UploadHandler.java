@@ -136,11 +136,11 @@ public class UploadHandler {
             FileTuple ft = db.getFileTuple(absUploadPath);
             if (ft == null)
                 return false;
-            if (ft.checkSumMD5 != null) {
+            if (ft.getMD5Checksum() != null) {
                 String actualMD5 = DigestUtils.md5Hex(fileItem.getInputStream());
-                if (!actualMD5.equals(ft.checkSumMD5)) {
+                if (!actualMD5.equals(ft.getMD5Checksum())) {
                     Debug.log("MD5 verification error. Expected: "
-                            + ft.checkSumMD5 + ", actual: " + actualMD5 + ".");
+                            + ft.getMD5Checksum() + ", actual: " + actualMD5 + ".");
                     return false;
                 }
             }

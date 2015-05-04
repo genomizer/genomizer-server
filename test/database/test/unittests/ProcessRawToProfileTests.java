@@ -93,7 +93,7 @@ public class ProcessRawToProfileTests {
                 "prof2.sam", "input.sam");
 
         dbac.addGeneratedProfiles("Exp1", folderPaths.getValue(), "input.sam",
-        		"-n1", "hg38", "Ruaridh", false);
+                "-n1", "hg38", "Ruaridh", false);
 
         List<Experiment> experiments =
         		dbac.search("Exp1[ExpID] AND prof1.sam[FileName]");
@@ -129,21 +129,27 @@ public class ProcessRawToProfileTests {
         addMockFiles(ftt.getFolderPath(), "prof1.sam",
                 "prof2.sam", "input.sam");
 
-        List<FileTuple> fileTuples = dbac.addGeneratedProfiles(ftt, "input.sam");
-        //Experiment e = dbac.search("Exp1[ExpID]").get(0);
-        //List<FileTuple> fileTuples = e.getFiles();
+        List<FileTuple> fileTuplesAdded = dbac.addGeneratedProfiles(ftt, "input.sam");
 
+        FileTuple profileAdded = fileTuplesAdded.get(1);
+        List<Integer> parAdd = profileAdded.getParents();
+        assertEquals(1, parAdd.size());
+
+
+        Experiment e = dbac.search("Exp1[ExpID]").get(0);
+        List<FileTuple> fileTuples = e.getFiles();
+
+        FileTuple profileSearched = null;
         for (FileTuple f : fileTuples) {
-            System.err.println(f.getFullPath());
-            System.err.println(f.getParents().size());
+            if (f.getFolderPath().contains("Genomizer Test Folder")) {
+                profileSearched = f;
+                break;
+            }
+
         }
 
-        FileTuple profilef = fileTuples.get(1);
-
-        List<Integer> parents = profilef.getParents();
-        //assertTrue(parents.get(0).equals(String.valueOf(file2.getFileId())));
-        //assertTrue(parents.get(1).equals(String.valueOf(file3.getFileId())));
-        assertEquals(parents.size(), 1);
+        List<Integer> parents = profileSearched.getParents();
+        assertEquals(1, parents.size());
     }
 
     private void addMockFiles(String folderPath, String filename1,

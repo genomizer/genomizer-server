@@ -7,3 +7,4 @@ DELETE FROM Experiment;
 DELETE FROM User_Info;
 DELETE FROM Annotation;
 DELETE FROM Genome_Release;
+DELETE FROM Parent;

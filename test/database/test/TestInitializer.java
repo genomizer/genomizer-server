@@ -162,16 +162,18 @@ public class TestInitializer {
      */
     public void removeTuples() throws SQLException {
         for (String s : clearTablesSqlStrings) {
-            Statement statement = conn.createStatement();
-            statement.execute(s);
+            try(Statement statement = conn.createStatement()) {
+                statement.execute(s);
+            }
         }
         dbac.close();
     }
 
     public void removeTuplesKeepConnection() throws SQLException {
         for (String s : clearTablesSqlStrings) {
-            Statement statement = conn.createStatement();
-            statement.execute(s);
+            try(Statement statement = conn.createStatement()) {
+                statement.execute(s);
+            }
         }
     }
 
@@ -184,8 +186,9 @@ public class TestInitializer {
      */
     public void addTuples() throws SQLException {
         for (String s : addTuplesSqlStrings) {
-            Statement statement = conn.createStatement();
-            statement.execute(s);
+            try(Statement statement = conn.createStatement()) {
+                statement.execute(s);
+            }
         }
     }
 

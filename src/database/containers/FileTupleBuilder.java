@@ -195,6 +195,12 @@ public class FileTupleBuilder {
         return this;
     }
 
+    public FileTupleBuilder withMD5Checksum(String md5) {
+        nullCheck("withMD5Checksum()");
+        this.product.setMD5Checksum(md5);
+        return this;
+    }
+
     public FileTuple build(){
         nullCheck("build()");
         if (!hasPath)
@@ -215,7 +221,7 @@ public class FileTupleBuilder {
         return temp;
     }
 
-    FileTupleBuilder(){
+    public FileTupleBuilder() {
         this.hasPath = false;
         this.hasUploader = false;
         this.hasIsPrivate = false;
@@ -235,4 +241,7 @@ public class FileTupleBuilder {
                 "FileTuple; " + reason);
     }
 
+    public boolean isEmpty() {
+        return this.product == null;
+    }
 }
