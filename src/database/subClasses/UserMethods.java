@@ -12,14 +12,14 @@ import java.util.List;
 /**
  * Class that contains all the methods for adding,changing, getting and removing
  * Users in the database. This class is a subClass of databaseAcessor.java
- *
+ * <p/>
  * date: 2014-05-14 version: 1.0
  */
 public class UserMethods {
 
 	public enum UserType {USER, GUEST, UNKNOWN, ADMIN}
-
-	private Connection conn;
+	
+    private Connection conn;
 
 	public UserMethods(Connection connection) {
 

@@ -20,7 +20,8 @@ public class UserInfoTests {
     private static String testUser2 = "testJAWSER";
 
     private static String testHash = "66e863ca7262669e5bd71d21d3eab0356136bd8569c6984430209deb50c55a23";
-    private static String testSalt = "5goh146chpisv949ehjjdepparq3a9vga4p114ovedf66k5c78e39vnhvfpbvi43";
+    //private static String testSalt = "5goh146chpisv949ehjjdepparq3a9vga4p114ovedf66k5c78e39vnhvfpbvi43";
+    private static String testSalt = null;
     private static String testRole = "testRole1";
     private static String testFullName = "Testis Test";
     private static String testEmail = "test@cs.umu.se";
@@ -46,9 +47,9 @@ public class UserInfoTests {
     @Before
     public void setup() throws SQLException, IOException {
 
-        dbac.addUser(testUser, testHash, testSalt, testRole, testFullName,
+        dbac.addUser(testUser, testHash, testRole, testFullName,
                 testEmail);
-        dbac.addUser(testUser2, testHash, testSalt, testRole, testFullName,
+        dbac.addUser(testUser2, testHash, testRole, testFullName,
                 testEmail);
     }
 
@@ -75,7 +76,7 @@ public class UserInfoTests {
         users = dbac.getUsers();
         assertFalse(users.contains(testUser));
 
-        dbac.addUser(testUser, testHash, testSalt, testRole, testFullName, testEmail);
+        dbac.addUser(testUser, testHash, testRole, testFullName, testEmail);
         users = dbac.getUsers();
         assertTrue(users.contains(testUser));
     }
@@ -94,7 +95,7 @@ public class UserInfoTests {
     @Test(expected = SQLException.class)
     public void testBiggerThanMaxSize() throws SQLException, IOException{
     	dbac.addUser("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
-                "aaaaaa", "passwd", "asdsad", "Admin", "Aaaaaaa bbbbbb", "ha@bla.se");
+                "aaaaaa", "passwd", "Admin", "Aaaaaaa bbbbbb", "ha@bla.se");
     }
 
     @Test
@@ -109,7 +110,7 @@ public class UserInfoTests {
 
     @Test
     public void shouldBeAbleToChangeHashAndSalt() throws SQLException, IOException {
-        dbac.resetPassword(testUser2, otherHash, otherSalt);
+        dbac.resetPassword(testUser2, otherHash);
         assertEquals(otherHash,dbac.getPasswordHash(testUser2));
         assertEquals(otherSalt,dbac.getPasswordSalt(testUser2));
     }

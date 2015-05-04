@@ -242,16 +242,54 @@ public class DatabaseAccessor implements AutoCloseable {
      *
      * @param username the username
      * @param hash the password's hash
-     * @param salt the password's salt
      * @param role the role given to the user ie. "Admin"
      * @param fullName the full name of the user
      * @param email the email of the user
      * @throws SQLException
      * @throws IOException
      */
-    public void addUser(String username, String hash, String salt, String role,
+    public void addUser(String username, String hash, String role,
             String fullName, String email) throws SQLException, IOException {
-        userMethods.addUser(username, hash, salt, role, fullName, email);
+        userMethods.addUser(username, hash, role, fullName, email);
+    }
+
+    /**
+     * Method to update a user's details. For use by administrators (since
+     * user's are not allowed to update their own user role).
+     *
+     * @param username The username to update.
+     * @param newPassword The user's new password.
+     * @param role The user's role.
+     * @param fullName The user's full name,
+     * @param email The user's email address.
+     * @return The number of tuples affected by the update in the database.
+     */
+    public int updateUser(String username, String newPassword, String role,
+                          String fullName, String email)
+            throws IOException, SQLException {
+        int pwd = resetPassword(username, newPassword);
+        int upd = userMethods.updateUser(username, role, fullName, email);
+        return Math.max(pwd, upd);
+
+    }
+
+    /**
+     * Method to update a user's details. For use by user's (since
+     * user's are not allowed to update their own user role).
+     *
+     * @param username The username to update.
+     * @param newPassword The user's new password.
+     * @param fullName The user's full name,
+     * @param email The user's email address.
+     * @return The number of tuples affected by the update in the database.
+     */
+    public int updateUser(String username, String newPassword, String fullName,
+                          String email) throws SQLException, IOException {
+        String role = getRole(username);
+        int pwd = resetPassword(username, newPassword);
+        int upd = userMethods.updateUser(username, role, fullName, email);
+        return Math.max(pwd, upd);
+
     }
 
     /**
@@ -279,6 +317,9 @@ public class DatabaseAccessor implements AutoCloseable {
     }
 
     /**
+     * Deprecated: Salt is not stored in the database since change
+     * of hashing mechanism.
+     *
      * Returns the password for the given user. Used for login.
      *
      * @param  user the username as string
@@ -286,8 +327,10 @@ public class DatabaseAccessor implements AutoCloseable {
      * @throws SQLException
      *             - if the query does not succeed
      */
+    @Deprecated
     public String getPasswordSalt(String user) throws SQLException {
-        return userMethods.getPasswordSalt(user);
+        //return userMethods.getPasswordSalt(user);
+        return null;
     }
 
     /**
@@ -295,16 +338,15 @@ public class DatabaseAccessor implements AutoCloseable {
      *
      * @param username - the user to change the password for
      * @param newPasswordHash - the new password
-     * @param newSalt - the new salt
      * @return the number of tuples updated in the database
      * @throws SQLException
      *             - if the query does not succeed
      * @throws IOException
      *             - if an argument is empty or null
      */
-    public int resetPassword(String username, String newPasswordHash, String newSalt)
+    public int resetPassword(String username, String newPasswordHash)
             throws SQLException, IOException {
-        return userMethods.resetPassword(username, newPasswordHash, newSalt);
+        return userMethods.resetPassword(username, newPasswordHash);
     }
 
     /**
@@ -320,6 +362,8 @@ public class DatabaseAccessor implements AutoCloseable {
     }
 
     /**
+     * Deprecated: Use updateUser() instead.
+     *
      * Sets the role (permissions) for the user.
      *
      * @param username - the user to set the role for
@@ -328,6 +372,7 @@ public class DatabaseAccessor implements AutoCloseable {
      * @throws SQLException
      *             - if the query does not succeed
      */
+    @Deprecated
     public int setRole(String username, String role) throws SQLException {
         return userMethods.setRole(username, role);
     }

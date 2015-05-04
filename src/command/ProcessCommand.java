@@ -88,12 +88,7 @@ public class ProcessCommand extends Command {
 					throw new ValidateException(StatusCode.BAD_REQUEST,
 							"Specify the right number of parameters.(8)");
 				}
-				for(int i = 0; i < parameters.length; i++) {
-					if(i != 1) {
-						validateExists(parameters[i], Integer.MAX_VALUE, "Parameter " +
-								parameters[i]);
-					}
-				}
+				validateExists(parameters[0], Integer.MAX_VALUE, "First parameter");
 				break;
 			case CMD_PROFILE_TO_REGION:
 				//TODO Implement parameter size
