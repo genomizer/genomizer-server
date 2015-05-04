@@ -136,25 +136,66 @@ public class GenomeMethods {
 	 * Retrieve the MD5 checksum corresponding to a given file
 	 * (either a genome release file or a chain file).
 	 *
-	 * @param  fileName      file name.
+	 * @param  file          file name.
 	 * @throws SQLException  if something went wrong.
 	 */
-	public String getFileCheckSumMD5(String fileName) throws SQLException {
+	public String getFileCheckSumMD5(String file) throws SQLException {
+		File fileFile   = new File(file);
+		String fileName = fileFile.getName();
+		String fileDir  = fileFile.getParent();
+		if (!fileDir.endsWith(File.separator))
+			fileDir += File.separator;
+
+		// Is this a genome release file?
+		// Given directory name, get genome release version...
+		String genomeReleaseVersion = null;
 		try (PreparedStatement stmt = conn.prepareStatement(
-				"SELECT MD5 FROM Genome_Release_Files WHERE FileName = ?")) {
-			stmt.setString(1, new File(fileName).getName());
+				"SELECT Version FROM Genome_Release WHERE FolderPath = ?")) {
+			stmt.setString(1, fileDir);
 			ResultSet rs = stmt.executeQuery();
 			if (rs.next()) {
-				return rs.getString("MD5");
+				genomeReleaseVersion = rs.getString("Version");
 			}
 		}
 
+		// Given genome release version and file name, get MD5.
+		if (genomeReleaseVersion != null) {
+			try (PreparedStatement stmt = conn.prepareStatement(
+					"SELECT MD5 FROM Genome_Release_Files WHERE FileName = ? AND Version = ?")) {
+				stmt.setString(1, fileName);
+				stmt.setString(2, genomeReleaseVersion);
+				ResultSet rs = stmt.executeQuery();
+				if (rs.next()) {
+					return rs.getString("MD5");
+				}
+			}
+		}
+
+		// OK, maybe this is a chain file?
+		// Given a directory name, get from- and to-versions.
+		String chainFileFromVersion = null;
+		String chainFileToVersion = null;
 		try (PreparedStatement stmt = conn.prepareStatement(
-				"SELECT MD5 FROM Chain_File_Files WHERE FileName = ?")) {
-			stmt.setString(1, new File(fileName).getName());
+				"SELECT FromVersion, ToVersion FROM Chain_File WHERE FolderPath = ?")) {
+			stmt.setString(1, fileDir);
 			ResultSet rs = stmt.executeQuery();
 			if (rs.next()) {
-				return rs.getString("MD5");
+				chainFileFromVersion = rs.getString("FromVersion");
+				chainFileToVersion   = rs.getString("ToVersion");
+			}
+		}
+
+		// Given from- and to-versions and chain file name, get MD5.
+		if (chainFileFromVersion != null && chainFileToVersion != null) {
+			try (PreparedStatement stmt = conn.prepareStatement(
+					"SELECT MD5 FROM Chain_File_Files WHERE FileName = ? AND FromVersion = ? AND ToVersion = ?")) {
+				stmt.setString(1, fileName);
+				stmt.setString(2, chainFileFromVersion);
+				stmt.setString(3, chainFileToVersion);
+				ResultSet rs = stmt.executeQuery();
+				if (rs.next()) {
+					return rs.getString("MD5");
+				}
 			}
 		}
 
