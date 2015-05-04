@@ -132,6 +132,35 @@ public class GenomeMethods {
 		return filePathBuilder.toString();
 	}
 
+	/**
+	 * Retrieve the MD5 checksum corresponding to a given file
+	 * (either a genome release file or a chain file).
+	 *
+	 * @param  fileName      file name.
+	 * @throws SQLException  if something went wrong.
+	 */
+	public String getFileCheckSumMD5(String fileName) throws SQLException {
+		try (PreparedStatement stmt = conn.prepareStatement(
+				"SELECT MD5 FROM Genome_Release_Files WHERE FileName = ?")) {
+			stmt.setString(1, new File(fileName).getName());
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				return rs.getString("MD5");
+			}
+		}
+
+		try (PreparedStatement stmt = conn.prepareStatement(
+				"SELECT MD5 FROM Chain_File_Files WHERE FileName = ?")) {
+			stmt.setString(1, new File(fileName).getName());
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				return rs.getString("MD5");
+			}
+		}
+
+		return null;
+	}
+
     private boolean genomeReleaseFileExists(String genomeVersion,
             String filename) throws SQLException {
 

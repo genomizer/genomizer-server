@@ -134,20 +134,21 @@ public class UploadHandler {
             throws SQLException, IOException {
         try( DatabaseAccessor db = Command.initDB() )
         {
-            FileTuple ft = db.getFileTuple(absUploadPath);
-            // TODO: Support genome release files and chain files. See #201.
-            if (ft == null)
-                return true;
-            if (ft.checkSumMD5 != null) {
+            String checkSumMD5 = db.getFileCheckSumMD5(absUploadPath);
+            if (checkSumMD5 != null) {
                 String actualMD5 = DigestUtils.md5Hex(fileItem.getInputStream());
-                if (!actualMD5.equals(ft.checkSumMD5)) {
+                if (!actualMD5.equals(checkSumMD5)) {
                     Debug.log("MD5 verification error. Expected: "
-                            + ft.checkSumMD5 + ", actual: " + actualMD5 + ".");
+                            + checkSumMD5 + ", actual: " + actualMD5 + ".");
                     return false;
                 }
+                Debug.log("MD5 checksum verified successfully.");
+                return true;
             }
-            Debug.log("MD5 checksum verified successfully.");
-            return true;
+            else {
+                Debug.log("MD5 checksum not found for this file: skipping the check.");
+                return true;
+            }
         }
     }
 }

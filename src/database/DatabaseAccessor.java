@@ -1244,4 +1244,15 @@ public class DatabaseAccessor implements AutoCloseable {
         }
         folder.delete();
     }
+
+
+    public String getFileCheckSumMD5(String fileName) throws SQLException {
+        FileTuple ft = getFileTuple(fileName);
+        if (ft != null) {
+            return ft.checkSumMD5;
+        }
+        else {
+            return genMethods.getFileCheckSumMD5(fileName);
+        }
+    }
 }
