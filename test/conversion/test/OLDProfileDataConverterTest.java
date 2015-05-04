@@ -1,3 +1,4 @@
+/*
 package conversion.test;
 
 import java.io.File;
@@ -23,20 +24,24 @@ import static org.junit.Assert.assertFalse;
 
 
 
-	/*
+	*/
+/*
 *	Private method that uses checksum to compare two files.
 *	returns true if equal false otherwise.
- */
+ *//*
+
 	private boolean compareFiles(File fileA, File fileB) throws IOException, NoSuchAlgorithmException {
 		return (Arrays.equals(fileChecksum(fileA), fileChecksum(fileB)));
 	}
 
-	/*
+	*/
+/*
 	* 	Private method that calculates a checksum for a file, used to compare
 	* 	files.
 	*
 	* 	returns the checksum in a byte array.
-	* */
+	* *//*
+
 	private byte[] fileChecksum(File inputFile) throws NoSuchAlgorithmException, IOException {
 		MessageDigest md = MessageDigest.getInstance("SHA1");
 
@@ -53,13 +58,15 @@ import static org.junit.Assert.assertFalse;
 		return md.digest();
 	}
 
+*/
 /*
 	@Test
 	public void sgrToBedtest() throws InterruptedException, IOException {
 		ConversionHandler ch = new ConversionHandler();
 		ch.executeProfileDataConversion("sgrToBed", "conversionTestData/SGR-testdata.sgr","conversionTestData/output/bed1.bed", "Unknown");
 	}
-*/
+*//*
+
 	@Test
 	public void bedToSgrtest() throws InterruptedException, IOException {
 		ConversionHandler ch = new ConversionHandler();
@@ -136,23 +143,29 @@ import static org.junit.Assert.assertFalse;
 		}
 	}
 
+*/
 /*	@Test
 	public void wigToSgrtest() throws InterruptedException, IOException {
 		ConversionHandler ch = new ConversionHandler();
 		ch.executeProfileDataConversion("wigToSgr", "conversionTestData/WIG-testdata.wig", "conversionTestData/output/sgr3.sgr", null);
 	}
-*/
-	/*@Test
+*//*
+
+	*/
+/*@Test
 	public void wigToBedtest() throws InterruptedException, IOException {
 		ConversionHandler ch = new ConversionHandler();
 		ch.executeProfileDataConversion("wigToBed", "conversionTestData/WIG-testdata.wig", "conversionTestData/output/bed2.bed", "Unknown");
-	}*/
+	}*//*
 
+
+*/
 /*	@Test
 	public void gff3ToBedtest() throws InterruptedException, IOException {
 		ConversionHandler ch = new ConversionHandler();
 		ch.executeProfileDataConversion("gff3ToBed", "conversionTestData/GFF-testdata.gff", "conversionTestData/output/bed3.bed", "Unknown");
-	}*/
+	}*//*
+
 
 	@Test
 	public void gff3ToWigtest() throws InterruptedException, IOException {
@@ -274,6 +287,7 @@ import static org.junit.Assert.assertFalse;
 		ConversionHandler ch = new ConversionHandler();
 		ch.executeProfileDataConversion(null, null,null,null);
 	}
+*/
 /*
 	@Test(expected=IllegalArgumentException.class)
 	public void badPathTest() throws InterruptedException, IOException {
@@ -281,5 +295,6 @@ import static org.junit.Assert.assertFalse;
 		ch.executeProfileDataConversion("gff3ToBed", "conversionTestData/GFF-testdata.gff", "conversionTestData/output", "Unknown");
 	}
 
-*/
-}
+*//*
+
+}*/
