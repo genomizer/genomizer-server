@@ -4,7 +4,7 @@ import java.util.LinkedList;
 
 import response.GetProcessStatusResponse;
 import response.Response;
-import server.WorkPool;
+import server.ProcessPool;
 
 /**
  * Fetches status of all processes that have been added to the server. Will be
@@ -16,17 +16,17 @@ import server.WorkPool;
  */
 public class GetProcessStatusCommand extends Command {
 
-	private WorkPool workPool;
+	private ProcessPool processPool;
 
 	/**
 	 * Constructs a new instance of GetProcessStatusCommand using the supplied
 	 * WorkHandler.
 	 *
-	 * @param workPool thw workPool in use by the server.
+	 * @param processPool thw workPool in use by the server.
 	 */
-	public GetProcessStatusCommand(WorkPool workPool) {
+	public GetProcessStatusCommand(ProcessPool processPool) {
 
-		this.workPool = workPool;
+		this.processPool = processPool;
 
 	}
 
@@ -41,11 +41,11 @@ public class GetProcessStatusCommand extends Command {
 
 	@Override
 	public Response execute() {
-		LinkedList<ProcessCommand> processesList = workPool.getProcesses();
+		LinkedList<ProcessCommand> processesList = processPool.getProcesses();
 		LinkedList<ProcessStatus> processStatuses = new LinkedList<>();
         
 		for (ProcessCommand proc : processesList) {
-			processStatuses.add(workPool.getProcessStatus(proc));
+			processStatuses.add(processPool.getProcessStatus(proc));
 		}
 		return new GetProcessStatusResponse(processStatuses);
 	}

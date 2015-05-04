@@ -2,16 +2,16 @@ package server.test;
 
 
 import org.junit.Before;
-import server.WorkPool;
+import server.ProcessPool;
 
 
 public class WorkHandlerTest {
 
-    private WorkPool workPool;
+    private ProcessPool processPool;
 
     @Before
     public void setUp() {
-        workPool = new WorkPool();
+        processPool = new ProcessPool();
     }
 
 

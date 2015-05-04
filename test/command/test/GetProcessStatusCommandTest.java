@@ -14,8 +14,8 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 import command.ProcessCommand;
 import command.ProcessStatus;
-import server.WorkHandler;
-import server.WorkPool;
+import server.ProcessHandler;
+import server.ProcessPool;
 import server.test.dummies.ProcessCommandMock;
 
 /**
@@ -28,8 +28,8 @@ import server.test.dummies.ProcessCommandMock;
 @Ignore
 public class GetProcessStatusCommandTest {
 
-	private static WorkHandler workHandler;
-	private WorkPool workPool;
+	private static ProcessHandler processHandler;
+	private ProcessPool processPool;
 
 	private ProcessCommand makeCmd(String author, String metadata, String genomeVersion, String expId) {
 		JsonObject comInfo = new JsonObject();
@@ -51,14 +51,14 @@ public class GetProcessStatusCommandTest {
 	@Before
 	public void setUp() throws Exception {
 
-		workPool = new WorkPool();
-		workHandler = new WorkHandler(workPool, new ProcessCommand());
+		processPool = new ProcessPool();
+		processHandler = new ProcessHandler(processPool, new ProcessCommand());
 
-		workPool.addProcess(makeCmd("yuri", "meta", "v123", "Exp1"));
-		workPool.addProcess(makeCmd("janne", "mea", "v1523", "Exp2"));
-		workPool.addProcess(makeCmd("philge", "meta", "v22", "Exp43"));
-		workPool.addProcess(makeCmd("per", "meta", "v12", "Exp234"));
-		workPool.addProcess(makeCmd("yuri", "meta", "v1", "Exp6"));
+		processPool.addProcess(makeCmd("yuri", "meta", "v123", "Exp1"));
+		processPool.addProcess(makeCmd("janne", "mea", "v1523", "Exp2"));
+		processPool.addProcess(makeCmd("philge", "meta", "v22", "Exp43"));
+		processPool.addProcess(makeCmd("per", "meta", "v12", "Exp234"));
+		processPool.addProcess(makeCmd("yuri", "meta", "v1", "Exp6"));
 
 		//stat = new ProcessStatus(com);
 		//stat.outputFiles = com.getFilePaths();
@@ -79,11 +79,11 @@ public class GetProcessStatusCommandTest {
 			e.printStackTrace();
 		}
 
-		LinkedList<ProcessCommand> processesList = workPool.getProcesses();
+		LinkedList<ProcessCommand> processesList = processPool.getProcesses();
 		LinkedList<ProcessStatus> processStatuses = new LinkedList<>();
 
 		for (ProcessCommand proc : processesList) {
-			processStatuses.add(workPool.getProcessStatus(proc));
+			processStatuses.add(processPool.getProcessStatus(proc));
 		}
 
 

@@ -14,7 +14,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 
-public class WorkPool {
+public class ProcessPool {
 
     // Process to status and response maps
     private HashMap<ProcessCommand, ProcessStatus> processesStatus;
@@ -27,7 +27,7 @@ public class WorkPool {
     private ExecutorService executor;
 
 
-    public WorkPool() {
+    public ProcessPool() {
         processesStatus = new HashMap<>();
         processFutureMap = new HashMap<>();
         lock = new ReentrantLock();
@@ -67,7 +67,7 @@ public class WorkPool {
             processesStatus.put(processCommand, new ProcessStatus(processCommand));
 
             // Submit the process with a new work handler for execution
-            Future<Response> response = executor.submit(new WorkHandler(this,
+            Future<Response> response = executor.submit(new ProcessHandler(this,
              processCommand));
 
             if (response != null) {

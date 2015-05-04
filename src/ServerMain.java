@@ -41,11 +41,11 @@ public class ServerMain {
 		printDatabaseInformation();
 
 		/* Create work and thread pools */
-		WorkPool workPool = new WorkPool();
+		ProcessPool processPool = new ProcessPool();
 
 		/* We attempt to start the doorman. */
 		try {
-			new Doorman(new CommandHandler(workPool),
+			new Doorman(new CommandHandler(processPool),
 					ServerSettings.genomizerPort).start();
 		} catch (IOException e) {
 			System.err.println("Error when starting server");

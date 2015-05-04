@@ -11,15 +11,15 @@ import java.util.LinkedList;
 import java.util.concurrent.*;
 
 
-public class WorkHandler implements Callable<Response> {
+public class ProcessHandler implements Callable<Response> {
 
 	private static final long statusTimeToLive = 2*1000*60*60*24;
-	private WorkPool workPool;
+	private ProcessPool processPool;
 	private ProcessCommand processCommand;
 
 
-	public WorkHandler(WorkPool workPool, ProcessCommand processCommand) {
-		this.workPool = workPool;
+	public ProcessHandler(ProcessPool processPool, ProcessCommand processCommand) {
+		this.processPool = processPool;
 		this.processCommand = processCommand;
 	}
 
@@ -32,12 +32,12 @@ public class WorkHandler implements Callable<Response> {
 		// List to store processes to be removed
 		LinkedList<ProcessCommand> toBeRemoved = new LinkedList<>();
 
-		LinkedList<ProcessCommand> processesList = workPool.getProcesses();
+		LinkedList<ProcessCommand> processesList = processPool.getProcesses();
 
 		/* Loop through all processes and check statuses */
 		for (ProcessCommand proc : processesList) {
 
-			ProcessStatus procStat = workPool.getProcessStatus(proc);
+			ProcessStatus procStat = processPool.getProcessStatus(proc);
 			String statusString = procStat.status;
 
 			if (statusString.equals(ProcessStatus.STATUS_FINISHED)
@@ -52,7 +52,7 @@ public class WorkHandler implements Callable<Response> {
 		}
 		for (ProcessCommand proc : toBeRemoved) {
 			Debug.log("Removing old process status: " + proc.getExpId());
-			workPool.cancelProcess(proc);
+			processPool.cancelProcess(proc);
 		}
 
 
@@ -64,7 +64,7 @@ public class WorkHandler implements Callable<Response> {
 	@Override
 	public Response call() {
 
-		ProcessStatus processStatus = workPool.getProcessStatus
+		ProcessStatus processStatus = processPool.getProcessStatus
 				(processCommand);
 
 

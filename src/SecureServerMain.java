@@ -41,11 +41,11 @@ public class SecureServerMain {
 		printDatabaseInformation();
 
 		/* Create a work pool */
-		WorkPool workPool = new WorkPool();
+		ProcessPool processPool = new ProcessPool();
 
 		/* We attempt to start the secure doorman */
 		try {
-			new SecureDoorman(new CommandHandler(workPool),
+			new SecureDoorman(new CommandHandler(processPool),
 					ServerSettings.genomizerPort).start();
 		} catch (IOException e) {
 			System.err.println("Error when starting server");
