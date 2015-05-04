@@ -136,7 +136,7 @@ public class UploadHandler {
         {
             FileTuple ft = db.getFileTuple(absUploadPath);
             if (ft == null)
-                return false;
+                return true;
             if (ft.checkSumMD5 != null) {
                 String actualMD5 = DigestUtils.md5Hex(fileItem.getInputStream());
                 if (!actualMD5.equals(ft.checkSumMD5)) {
