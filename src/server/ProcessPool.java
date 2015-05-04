@@ -151,11 +151,17 @@ public class ProcessPool {
     public Response getProcessResponse(ProcessCommand processCommand) throws
             InterruptedException, ExecutionException {
 
-        if (processStatusMap.get(processCommand).status
-                .equals(ProcessStatus.STATUS_FINISHED)) {
-            return processFutureMap.get(processCommand).get();
+        lock.lock();
+
+        try {
+            if (processStatusMap.get(processCommand).status
+                    .equals(ProcessStatus.STATUS_FINISHED)) {
+                return processFutureMap.get(processCommand).get();
+            }
+            return null;
+        } finally {
+            lock.unlock();
         }
-        return null;
     }
 
 
