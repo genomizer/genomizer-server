@@ -2,6 +2,7 @@ package conversion.test;
 
 import conversion.ProfileDataConverter;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
@@ -24,6 +25,17 @@ public class GffToSgrTest {
             "expectedResults/";
     private File outputFile;
     private ConversionResultCompare cmp = new ConversionResultCompare();
+    private ProfileDataConverter pdc;
+
+    @Before
+    public void setUp() {
+        pdc = new ProfileDataConverter("resources/nonexistent/");
+    }
+
+    @Test (expected = IllegalArgumentException.class)
+    public void shouldThrowIllegalArgumentException() {
+        pdc = new ProfileDataConverter("resources/nonexistent/");
+    }
 
     /**
      * Tests null argument for input file
@@ -32,20 +44,9 @@ public class GffToSgrTest {
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowIllegalArgumentIfInputFileIsNull()
             throws FileNotFoundException {
-        ProfileDataConverter.gffToSgr(null, "resources/conversionTestData/" +
-                "expectedResults/gff2sgrResult.sgr");
+        pdc.gffToSgr(null);
     }
 
-    /**
-     * Tests null argument for output file
-     * @throws FileNotFoundException
-     */
-    @Test (expected = IllegalArgumentException.class)
-    public void shouldThrowIllegalArgumentIfOutputFileIsNull()
-            throws FileNotFoundException{
-        ProfileDataConverter.gffToSgr("resources/conversionTestData/GFF-testdata.gff",
-                null);
-    }
 
     /**
      * Test for file not found-exception
@@ -54,19 +55,9 @@ public class GffToSgrTest {
     @Test (expected = FileNotFoundException.class)
     public void shouldThrowFileNotFoundIfInputPathIsntAFile()
             throws FileNotFoundException{
-        ProfileDataConverter.gffToSgr("hej", "hej");
+        pdc.gffToSgr("hej");
     }
 
-    /**
-     * Tests for illegal argument when output already exists
-     * @throws FileNotFoundException
-     */
-    @Test (expected = IllegalArgumentException.class)
-    public void shouldThrowIllegalArgumentIfOutputPathIsAFile()
-            throws FileNotFoundException{
-        ProfileDataConverter.gffToSgr("resources/conversionTestData/GFF-testdata.gff",
-                "resources/conversionTestData/SGR-testdata.sgr");
-    }
 
     /**
      * Tests that exception is thrown when input file is of wrong type
@@ -75,19 +66,7 @@ public class GffToSgrTest {
     @Test (expected = IllegalArgumentException.class)
     public void shouldNotAcceptWrongFileTypeForInput()
             throws FileNotFoundException {
-        ProfileDataConverter.gffToSgr("resources/conversionTestData/BED-testdata.bed",
-                "resources/conversionTestData/output/test.sgr");
-    }
-
-    /**
-     * Tests that exception is thrown when output file is of wrong type
-     * @throws FileNotFoundException
-     */
-    @Test (expected = IllegalArgumentException.class)
-    public void shouldNotAcceptWrongFileTypeForOutput()
-            throws FileNotFoundException {
-        ProfileDataConverter.gffToSgr("resources/conversionTestData/GFF-testdata.gff",
-                "resources/conversionTestData/output/test.bed");
+        pdc.gffToSgr("resources/conversionTestData/BED-testdata.bed");
     }
 
 
@@ -98,10 +77,10 @@ public class GffToSgrTest {
     @Test
     public void shouldExsistAoutputFileAfterConversion()
             throws FileNotFoundException {
-        ProfileDataConverter.gffToSgr("resources/conversionTestData/GFF-testdata.gff",
-                "resources/conversionTestData/output/test.sgr");
+        String output;
+        output = pdc.gffToSgr("resources/conversionTestData/GFF-testdata.gff");
 
-        outputFile = new File("resources/conversionTestData/output/test.sgr");
+        outputFile = new File(output);
 
         assertTrue(outputFile.exists());
     }
@@ -113,12 +92,13 @@ public class GffToSgrTest {
      */
     @Test
     public void gffToSgrCheckSumTest() throws InterruptedException,IOException {
-        ProfileDataConverter.gffToSgr("resources/conversionTestData/GFF-testdata.gff",
+        String output;
+        output = pdc.gffToSgr("resources/conversionTestData/GFF-testdata.gff",
                 "resources/conversionTestData/output/test.sgr");
         File expectedFile;
 
         try{
-            outputFile = new File(outputPath+"test.sgr");
+            outputFile = new File(output);
             expectedFile = new File(expectedResultPath+"gff2sgrResult.sgr");
 
             assertTrue(cmp.compareFiles(outputFile, expectedFile));

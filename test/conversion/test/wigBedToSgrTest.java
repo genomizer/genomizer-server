@@ -2,6 +2,7 @@ package conversion.test;
 
 import conversion.ProfileDataConverter;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
@@ -24,6 +25,17 @@ public class wigBedToSgrTest {
             "expectedResults/";
     private File outputFile;
     private ConversionResultCompare cmp = new ConversionResultCompare();
+    private ProfileDataConverter pdc;
+
+    @Before
+    public void setUp() {
+        pdc = new ProfileDataConverter("resources/conversionTestData/output/");
+    }
+
+    @Test (expected = IllegalArgumentException.class)
+    public void shouldThrowIllegalArgumentException() {
+        pdc = new ProfileDataConverter("resources/nonexistent/");
+    }
 
     /**
      * Tests null argument for input file
@@ -32,19 +44,7 @@ public class wigBedToSgrTest {
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowIllegalArgumentIfInputFileIsNull()
             throws FileNotFoundException {
-        ProfileDataConverter.wigToSgr("bed", null,
-                "resources/conversionTestData/expectedResults/wigbedToSgr.sgr");
-    }
-
-    /**
-     * Tests null argument for output file
-     * @throws FileNotFoundException
-     */
-    @Test (expected = IllegalArgumentException.class)
-    public void shouldThrowIllegalArgumentIfOutputFileIsNull()
-            throws FileNotFoundException{
-        ProfileDataConverter.wigToSgr("bed",
-                "resources/conversionTestData/WIG-from-SGR-testdata.wig", null);
+        pdc.wigToSgr("bed", null);
     }
 
     /**
@@ -54,19 +54,7 @@ public class wigBedToSgrTest {
     @Test (expected = FileNotFoundException.class)
     public void shouldThrowFileNotFoundIfInputPathIsntAFile()
             throws FileNotFoundException{
-        ProfileDataConverter.wigToSgr("bed", "hej", "hej");
-    }
-
-    /**
-     * Tests for illegal argument when output already exists
-     * @throws FileNotFoundException
-     */
-    @Test (expected = IllegalArgumentException.class)
-    public void shouldThrowIllegalArgumentIfOutputPathIsAFile()
-            throws FileNotFoundException{
-        ProfileDataConverter.wigToSgr("bed",
-                "resources/conversionTestData/WIG-from-SGR-testdata.wig",
-                "resources/conversionTestData/WIG-testdata.wig");
+        pdc.wigToSgr("bed", "hej");
     }
 
     /**
@@ -76,22 +64,10 @@ public class wigBedToSgrTest {
     @Test (expected = IllegalArgumentException.class)
     public void shouldNotAcceptWrongFileTypeForInput()
             throws FileNotFoundException {
-        ProfileDataConverter.wigToSgr("bed",
-                "resources/conversionTestData/BED-testdata.bed",
-                "resources/conversionTestData/output/test.sgr");
+        pdc.wigToSgr("bed",
+                "resources/conversionTestData/BED-testdata.bed");
     }
 
-    /**
-     * Tests that exception is thrown when output file is of wrong type
-     * @throws FileNotFoundException
-     */
-    @Test (expected = IllegalArgumentException.class)
-    public void shouldNotAcceptWrongFileTypeForOutput()
-            throws FileNotFoundException {
-        ProfileDataConverter.wigToSgr("bed",
-                "resources/conversionTestData/WIG-from-SGR-testdata.wig",
-                "resources/conversionTestData/output/test.bed");
-    }
 
     /**
      * Tests that output exists after conversion
@@ -100,10 +76,10 @@ public class wigBedToSgrTest {
     @Test
     public void shouldExistAnOutputFileAfterConversion()
             throws FileNotFoundException {
-        ProfileDataConverter.wigToSgr("bed",
+        String output =ProfileDataConverter.wigToSgr("bed",
                 "resources/conversionTestData/WIG-from-SGR-testdata.wig",
                 "resources/conversionTestData/output/test.sgr");
-        outputFile = new File("resources/conversionTestData/output/test.sgr");
+        outputFile = new File(output);
 
         assertTrue(outputFile.exists());
     }
@@ -116,13 +92,13 @@ public class wigBedToSgrTest {
     @Test
     public void wigbedToSgrCheckSumTest() throws InterruptedException,
             IOException {
-        ProfileDataConverter.wigToSgr("bed",
+        String output = ProfileDataConverter.wigToSgr("bed",
                 "resources/conversionTestData/WIG-from-SGR-testdata.wig",
                 "resources/conversionTestData/output/test.sgr");
         File expectedFile;
 
         try{
-            outputFile = new File(outputPath+"test.sgr");
+            outputFile = new File(output);
             expectedFile = new File("resources/conversionTestData/" +
                     "expectedResults/wigbedToSgr.sgr");
             assertTrue(cmp.compareFiles(outputFile, expectedFile));

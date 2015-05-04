@@ -2,6 +2,7 @@ package conversion.test;
 
 import conversion.ProfileDataConverter;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
@@ -24,6 +25,18 @@ public class BedToWigTest {
             "expectedResults/";
     private File outputFile;
     private ConversionResultCompare cmp = new ConversionResultCompare();
+    private ProfileDataConverter pdc;
+
+    @Before
+    public void setUp() {
+        pdc = new ProfileDataConverter("resources/conversionTestData/output/");
+    }
+
+    @Test (expected = IllegalArgumentException.class)
+    public void shouldThrowIllegalArgumentException() {
+        pdc = new ProfileDataConverter("resources/nonexistent");
+    }
+
 
     /**
      * Tests null argument for input file
@@ -32,20 +45,9 @@ public class BedToWigTest {
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowIllegalArgumentIfInputFileIsNull()
             throws FileNotFoundException {
-        ProfileDataConverter.bedToWig(null, "resources/conversionTestData/" +
-                "expectedResults/sgr2wigResult.wig");
+        pdc.bedToWig(null);
     }
 
-    /**
-     * Tests null argument for output file
-     * @throws FileNotFoundException
-     */
-    @Test (expected = IllegalArgumentException.class)
-    public void shouldThrowIllegalArgumentIfOutputFileIsNull()
-            throws FileNotFoundException{
-        ProfileDataConverter.bedToWig("resources/conversionTestData/BED-testdata.bed",
-                null);
-    }
 
     /**
      * Test for file not found-exception
@@ -54,18 +56,7 @@ public class BedToWigTest {
     @Test (expected = FileNotFoundException.class)
     public void shouldThrowFileNotFoundIfInputPathIsntAFile()
             throws FileNotFoundException{
-        ProfileDataConverter.bedToWig("hej", "hej");
-    }
-
-    /**
-     * Tests for illegal argument when output already exists
-     * @throws FileNotFoundException
-     */
-    @Test (expected = IllegalArgumentException.class)
-    public void shouldThrowIllegalArgumentIfOutputPathIsAFile()
-            throws FileNotFoundException{
-        ProfileDataConverter.bedToWig("resources/conversionTestData/BED-testdata.bed",
-                "resources/conversionTestData/WIG-testdata.wig");
+        pdc.bedToWig("hej");
     }
 
     /**
@@ -75,20 +66,9 @@ public class BedToWigTest {
     @Test (expected = IllegalArgumentException.class)
     public void shouldNotAcceptWrongFileTypeForInput()
             throws FileNotFoundException {
-        ProfileDataConverter.bedToWig("resources/conversionTestData/SGR-testdata.sgr",
-                "resources/conversionTestData/output/test.wig");
+        pdc.bedToWig("resources/conversionTestData/SGR-testdata.sgr");
     }
 
-    /**
-     * Tests that exception is thrown when output file is of wrong type
-     * @throws FileNotFoundException
-     */
-    @Test (expected = IllegalArgumentException.class)
-    public void shouldNotAcceptWrongFileTypeForOutput()
-            throws FileNotFoundException {
-        ProfileDataConverter.bedToWig("resources/conversionTestData/BED-testdata.bed",
-                "resources/conversionTestData/output/test.sgr");
-    }
 
     /**
      * Tests that output exists after conversion
@@ -97,10 +77,10 @@ public class BedToWigTest {
     @Test
     public void shouldExsistAnOutputFileAfterConversion()
             throws FileNotFoundException {
-        ProfileDataConverter.bedToWig("resources/conversionTestData/BED-testdata.bed",
-                "resources/conversionTestData/output/test.wig");
+        String output;
+        output = pdc.bedToWig("resources/conversionTestData/BED-testdata.bed");
 
-        outputFile = new File("resources/conversionTestData/output/test.wig");
+        outputFile = new File(output);
 
         assertTrue(outputFile.exists());
 
@@ -114,12 +94,13 @@ public class BedToWigTest {
     @Test
     public void bedToWigCheckSumTest() throws InterruptedException,
             IOException {
-        ProfileDataConverter.bedToWig("resources/conversionTestData/BED-testdata.bed",
-                "resources/conversionTestData/output/test.wig");
+
+        String output;
+        output = pdc.bedToWig("resources/conversionTestData/BED-testdata.bed");
         File expectedFile;
 
         try{
-            outputFile = new File(outputPath+"test.wig");
+            outputFile = new File(output);
             expectedFile = new File(expectedResultPath+"bed2wigResult.wig");
             assertTrue(cmp.compareFiles(outputFile, expectedFile));
         } catch (NullPointerException e) {
