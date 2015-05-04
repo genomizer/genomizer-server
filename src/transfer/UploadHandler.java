@@ -135,6 +135,7 @@ public class UploadHandler {
         try( DatabaseAccessor db = Command.initDB() )
         {
             FileTuple ft = db.getFileTuple(absUploadPath);
+            // TODO: Support genome release files and chain files. See #201.
             if (ft == null)
                 return true;
             if (ft.checkSumMD5 != null) {
