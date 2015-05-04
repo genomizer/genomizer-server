@@ -23,9 +23,9 @@ import authentication.Authenticate;
 import com.sun.net.httpserver.*;
 import command.CommandHandler;
 import command.CommandType;
+import response.HttpStatusCode;
 import response.MinimalResponse;
 import response.Response;
-import response.StatusCode;
 
 import javax.net.ssl.*;
 import java.io.*;
@@ -331,7 +331,7 @@ System.err.println("Https server started");
 				Authenticate.updateLatestRequest(uuid);
 			} else {
 				Debug.log("Unauthorized request!");
-				Response errorResponse = new MinimalResponse(StatusCode.UNAUTHORIZED);
+				Response errorResponse = new MinimalResponse(HttpStatusCode.UNAUTHORIZED);
 				try {
 					respond(exchange, errorResponse);
 				} catch (IOException e1) {

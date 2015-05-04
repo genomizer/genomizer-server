@@ -47,10 +47,10 @@ public class GetAnnotationInformationCommand extends Command {
 								values, annotationObject.isRequired);
 				annotations.add(annotation);
 			}
-			return new GetAnnotationInformationResponse(StatusCode.OK,
+			return new GetAnnotationInformationResponse(HttpStatusCode.OK,
 					annotations);
 		} catch(SQLException | IOException e) {
-			return new ErrorResponse(StatusCode.BAD_REQUEST,
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
 					"Could not initialize db: " + e.getMessage());
 		} finally {
 			if (db != null) {

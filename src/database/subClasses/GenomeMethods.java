@@ -138,14 +138,14 @@ public class GenomeMethods {
         if (g == null) {
             return false;
         }
-        if (inCaseSensitiveSearch(filename, g.getFiles()) != null) {
+        if (caseInsensitiveSearch(filename, g.getFiles()) != null) {
             return true;
         }
         return false;
     }
 
-    private String inCaseSensitiveSearch(String target,
-            List<String> list) {
+    private String caseInsensitiveSearch(String target,
+										 List<String> list) {
         for (String s: list) {
             if (s.equalsIgnoreCase(target)) {
                 return s;
@@ -244,7 +244,7 @@ public class GenomeMethods {
 	 *         have a genomeRelase entry in the database.
 	 * @throws SQLException
 	 */
-	public ArrayList<Genome> getAllGenomReleasesForSpecies(String species)
+	public ArrayList<Genome> getAllGenomeReleasesForSpecies(String species)
 			throws SQLException {
 
         String query = "SELECT * FROM Genome_Release "
@@ -438,7 +438,7 @@ public class GenomeMethods {
 	 * @throws SQLException
 	 *             - if the query does not succeed
 	 */
-	public List<String> getAllGenomReleaseSpecies() throws SQLException {
+	public List<String> getAllGenomeReleaseSpecies() throws SQLException {
 		String query = "SELECT DISTINCT Species FROM Genome_Release";
 		Statement stmt = conn.createStatement();
 		ResultSet rs = stmt.executeQuery(query);
@@ -457,7 +457,7 @@ public class GenomeMethods {
 	 * @throws SQLException
 	 *             - if the query does not succeed
 	 */
-	public List<Genome> getAllGenomReleases() throws SQLException {
+	public List<Genome> getAllGenomeReleases() throws SQLException {
 		String query = "SELECT * FROM Genome_Release "
 				+ "NATURAL JOIN Genome_Release_Files ";
 

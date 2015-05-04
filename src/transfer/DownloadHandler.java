@@ -2,7 +2,7 @@ package transfer;
 
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
-import response.StatusCode;
+import response.HttpStatusCode;
 import server.*;
 
 import java.io.*;
@@ -102,7 +102,7 @@ public class DownloadHandler {
             Debug.log(file.toString() + " does not exist, failing...");
             byte [] resp = ("404 Not Found").getBytes();
             exchange.getResponseHeaders().set("Content-Type", "text/plain");
-            exchange.sendResponseHeaders(StatusCode.NOT_FOUND, resp.length);
+            exchange.sendResponseHeaders(HttpStatusCode.NOT_FOUND, resp.length);
             out.write(resp);
         }
 

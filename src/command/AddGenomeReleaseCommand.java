@@ -11,8 +11,8 @@ import database.constants.MaxLength;
 
 import response.AddGenomeReleaseResponse;
 import response.ErrorResponse;
+import response.HttpStatusCode;
 import response.Response;
-import response.StatusCode;
 
 /**
  * Class used to handle adding a genome release.
@@ -52,9 +52,9 @@ public class AddGenomeReleaseCommand extends Command {
 				 uploadURLs.add(db.addGenomeRelease(genomeVersion, specie,
 						 fileName));
 			}
-			return new AddGenomeReleaseResponse(StatusCode.CREATED, uploadURLs);
+			return new AddGenomeReleaseResponse(HttpStatusCode.CREATED, uploadURLs);
 		} catch (SQLException | IOException e) {
-				return new ErrorResponse(StatusCode.BAD_REQUEST,
+				return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
 						e.getMessage());
 		} finally {
 			if (db != null) {

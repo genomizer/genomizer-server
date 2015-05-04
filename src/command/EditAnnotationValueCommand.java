@@ -11,7 +11,7 @@ import database.constants.MaxLength;
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
-import response.StatusCode;
+import response.HttpStatusCode;
 
 /**
  * This class is used to handle changes to annotation values.
@@ -48,19 +48,19 @@ public class EditAnnotationValueCommand extends Command {
 				List<String> values = db.getChoices(name);
 				if(values.contains(oldValue)) {
 					db.changeAnnotationValue(name, oldValue, newValue);
-					return new MinimalResponse(StatusCode.OK);
+					return new MinimalResponse(HttpStatusCode.OK);
 				} else {
-					return new ErrorResponse(StatusCode.BAD_REQUEST,
+					return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
 							"The value" + oldValue + " does not exist");
 				}
 			} else {
-				return new ErrorResponse(StatusCode.BAD_REQUEST,
+				return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
 						"The annotation " + name + " does not");
 			}
 
 		} catch (SQLException | IOException e) {
 			e.printStackTrace();
-			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
 		} finally {
 			if (db != null) {
 				db.close();

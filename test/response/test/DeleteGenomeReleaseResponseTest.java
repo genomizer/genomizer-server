@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import response.DeleteGenomeReleaseResponse;
 import response.Response;
-import response.StatusCode;
+import response.HttpStatusCode;
 
 /**
  * Class used to test the DeleteGenomeReleaseResponse class.
@@ -20,7 +20,7 @@ public class DeleteGenomeReleaseResponseTest {
 	@Test
 	public void testCreateNotNull() {
 
-		Response rsp = new DeleteGenomeReleaseResponse(StatusCode.OK);
+		Response rsp = new DeleteGenomeReleaseResponse(HttpStatusCode.OK);
 
 		assertNotNull(rsp);
 
@@ -33,9 +33,9 @@ public class DeleteGenomeReleaseResponseTest {
 	@Test
 	public void testGetResponseCode() {
 
-		Response rsp = new DeleteGenomeReleaseResponse(StatusCode.OK);
+		Response rsp = new DeleteGenomeReleaseResponse(HttpStatusCode.OK);
 
-		assertEquals(StatusCode.OK, rsp.getCode());
+		assertEquals(HttpStatusCode.OK, rsp.getCode());
 
 	}
 
