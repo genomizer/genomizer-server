@@ -44,7 +44,7 @@ public class BedToWigTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowIllegalArgumentIfInputFileIsNull()
-            throws FileNotFoundException {
+            throws IOException {
         pdc.bedToWig(null);
     }
 
@@ -55,7 +55,7 @@ public class BedToWigTest {
      */
     @Test (expected = FileNotFoundException.class)
     public void shouldThrowFileNotFoundIfInputPathIsntAFile()
-            throws FileNotFoundException{
+            throws IOException {
         pdc.bedToWig("hej");
     }
 
@@ -65,7 +65,7 @@ public class BedToWigTest {
      */
     @Test (expected = IllegalArgumentException.class)
     public void shouldNotAcceptWrongFileTypeForInput()
-            throws FileNotFoundException {
+            throws IOException {
         pdc.bedToWig("resources/conversionTestData/SGR-testdata.sgr");
     }
 
@@ -76,7 +76,7 @@ public class BedToWigTest {
      */
     @Test
     public void shouldExsistAnOutputFileAfterConversion()
-            throws FileNotFoundException {
+            throws IOException {
         String output;
         output = pdc.bedToWig("resources/conversionTestData/BED-testdata.bed");
 

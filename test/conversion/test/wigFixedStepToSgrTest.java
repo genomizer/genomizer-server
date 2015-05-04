@@ -39,7 +39,7 @@ public class wigFixedStepToSgrTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowIllegalArgumentIfInputFileIsNull()
-            throws FileNotFoundException {
+            throws IOException {
         pdc.wigToSgr("fixedStep", null);
     }
 
@@ -50,7 +50,7 @@ public class wigFixedStepToSgrTest {
      */
     @Test (expected = FileNotFoundException.class)
     public void shouldThrowFileNotFoundIfInputPathIsntAFile()
-            throws FileNotFoundException{
+            throws IOException {
         pdc.wigToSgr("fixedStep", "hej");
     }
 
@@ -60,7 +60,7 @@ public class wigFixedStepToSgrTest {
      */
     @Test (expected = IllegalArgumentException.class)
     public void shouldNotAcceptWrongFileTypeForInput()
-            throws FileNotFoundException {
+            throws IOException {
         pdc.wigToSgr("fixedStep",
                 "resources/conversionTestData/BED-testdata.bed");
     }
@@ -71,7 +71,7 @@ public class wigFixedStepToSgrTest {
      */
     @Test
     public void shouldExistAnOutputFileAfterConversion()
-            throws FileNotFoundException {
+            throws IOException {
         String output = pdc.wigToSgr("fixedStep",
                 "resources/conversionTestData/WIG-testdata.wig");
         outputFile = new File(output);

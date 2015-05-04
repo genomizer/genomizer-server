@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
+import static conversion.ProfileDataConverter.*;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -44,7 +45,7 @@ public class GffToWigTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowIllegalArgumentIfInputFileIsNull()
-            throws FileNotFoundException {
+            throws IOException {
         pdc.gffToWig(null);
     }
 
@@ -55,7 +56,7 @@ public class GffToWigTest {
      */
     @Test (expected = FileNotFoundException.class)
     public void shouldThrowFileNotFoundIfInputPathIsntAFile()
-            throws FileNotFoundException{
+            throws IOException {
         pdc.gffToWig("hej");
     }
 
@@ -65,7 +66,7 @@ public class GffToWigTest {
      */
     @Test (expected = IllegalArgumentException.class)
     public void shouldNotAcceptWrongFileTypeForInput()
-            throws FileNotFoundException {
+            throws IOException {
         pdc.gffToWig("resources/conversionTestData/BED-testdata.bed");
     }
 
@@ -75,9 +76,9 @@ public class GffToWigTest {
      */
     @Test
     public void shouldExsistAnOutputFileAfterConversion()
-            throws FileNotFoundException {
+            throws IOException {
         String output;
-        output = ProfileDataConverter.gffToWig("resources/conversionTestData/GFF-testdata.gff");
+        output = pdc.gffToWig("resources/conversionTestData/GFF-testdata.gff");
 
         outputFile = new File(output);
 

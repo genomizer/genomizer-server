@@ -43,7 +43,7 @@ public class SgrToWigTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowIllegalArgumentIfInputFileIsNull()
-            throws FileNotFoundException {
+            throws IOException {
         pdc.sgrToWig(null);
     }
 
@@ -53,7 +53,7 @@ public class SgrToWigTest {
      */
     @Test (expected = FileNotFoundException.class)
     public void shouldThrowFileNotFoundIfInputPathIsntAFile()
-            throws FileNotFoundException{
+            throws IOException {
         pdc.sgrToWig("hej");
     }
 
@@ -64,8 +64,8 @@ public class SgrToWigTest {
      */
     @Test (expected = IllegalArgumentException.class)
     public void shouldNotAcceptWrongFileTypeForInput()
-            throws FileNotFoundException {
-        ProfileDataConverter.sgrToWig("resources/conversionTestData/BED-testdata.bed");
+            throws IOException {
+        pdc.sgrToWig("resources/conversionTestData/BED-testdata.bed");
     }
 
     /**
@@ -74,10 +74,9 @@ public class SgrToWigTest {
      */
     @Test
     public void shouldExsistAoutputFileAfterConversion()
-            throws FileNotFoundException {
+            throws IOException {
         String output;
-        output = ProfileDataConverter.sgrToWig("resources/conversionTestData/SGR-testdata.sgr",
-                "resources/conversionTestData/output/test.wig");
+        output = pdc.sgrToWig("resources/conversionTestData/SGR-testdata.sgr");
 
         outputFile = new File(output);
 

@@ -43,7 +43,7 @@ public class wigBedToSgrTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowIllegalArgumentIfInputFileIsNull()
-            throws FileNotFoundException {
+            throws IOException {
         pdc.wigToSgr("bed", null);
     }
 
@@ -53,7 +53,7 @@ public class wigBedToSgrTest {
      */
     @Test (expected = FileNotFoundException.class)
     public void shouldThrowFileNotFoundIfInputPathIsntAFile()
-            throws FileNotFoundException{
+            throws IOException {
         pdc.wigToSgr("bed", "hej");
     }
 
@@ -63,7 +63,7 @@ public class wigBedToSgrTest {
      */
     @Test (expected = IllegalArgumentException.class)
     public void shouldNotAcceptWrongFileTypeForInput()
-            throws FileNotFoundException {
+            throws IOException {
         pdc.wigToSgr("bed",
                 "resources/conversionTestData/BED-testdata.bed");
     }
@@ -75,10 +75,9 @@ public class wigBedToSgrTest {
      */
     @Test
     public void shouldExistAnOutputFileAfterConversion()
-            throws FileNotFoundException {
-        String output =ProfileDataConverter.wigToSgr("bed",
-                "resources/conversionTestData/WIG-from-SGR-testdata.wig",
-                "resources/conversionTestData/output/test.sgr");
+            throws IOException {
+        String output =pdc.wigToSgr("bed",
+                "resources/conversionTestData/WIG-from-SGR-testdata.wig");
         outputFile = new File(output);
 
         assertTrue(outputFile.exists());
@@ -92,9 +91,8 @@ public class wigBedToSgrTest {
     @Test
     public void wigbedToSgrCheckSumTest() throws InterruptedException,
             IOException {
-        String output = ProfileDataConverter.wigToSgr("bed",
-                "resources/conversionTestData/WIG-from-SGR-testdata.wig",
-                "resources/conversionTestData/output/test.sgr");
+        String output = pdc.wigToSgr("bed",
+                "resources/conversionTestData/WIG-from-SGR-testdata.wig");
         File expectedFile;
 
         try{

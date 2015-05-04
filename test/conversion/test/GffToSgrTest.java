@@ -43,7 +43,7 @@ public class GffToSgrTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowIllegalArgumentIfInputFileIsNull()
-            throws FileNotFoundException {
+            throws IOException {
         pdc.gffToSgr(null);
     }
 
@@ -54,7 +54,7 @@ public class GffToSgrTest {
      */
     @Test (expected = FileNotFoundException.class)
     public void shouldThrowFileNotFoundIfInputPathIsntAFile()
-            throws FileNotFoundException{
+            throws IOException {
         pdc.gffToSgr("hej");
     }
 
@@ -65,7 +65,7 @@ public class GffToSgrTest {
      */
     @Test (expected = IllegalArgumentException.class)
     public void shouldNotAcceptWrongFileTypeForInput()
-            throws FileNotFoundException {
+            throws IOException {
         pdc.gffToSgr("resources/conversionTestData/BED-testdata.bed");
     }
 
@@ -76,7 +76,7 @@ public class GffToSgrTest {
      */
     @Test
     public void shouldExsistAoutputFileAfterConversion()
-            throws FileNotFoundException {
+            throws IOException {
         String output;
         output = pdc.gffToSgr("resources/conversionTestData/GFF-testdata.gff");
 
@@ -93,8 +93,7 @@ public class GffToSgrTest {
     @Test
     public void gffToSgrCheckSumTest() throws InterruptedException,IOException {
         String output;
-        output = pdc.gffToSgr("resources/conversionTestData/GFF-testdata.gff",
-                "resources/conversionTestData/output/test.sgr");
+        output = pdc.gffToSgr("resources/conversionTestData/GFF-testdata.gff");
         File expectedFile;
 
         try{
