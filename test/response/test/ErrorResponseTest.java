@@ -6,18 +6,18 @@ import org.junit.Test;
 
 import response.ErrorResponse;
 import response.Response;
-import response.StatusCode;
+import response.HttpStatusCode;
 
 public class ErrorResponseTest {
 
 	@Test
 	public void shouldHaveCorrectCode() {
-		assertEquals(404, new ErrorResponse(StatusCode.NOT_FOUND, "").getCode());
+		assertEquals(404, new ErrorResponse(HttpStatusCode.NOT_FOUND, "").getCode());
 	}
 	
 	@Test
 	public void shouldGenerateJsonMessage() {
-		Response resp = new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, "Error text");
+		Response resp = new ErrorResponse(HttpStatusCode.SERVICE_UNAVAILABLE, "Error text");
 		String expected = "{\"message\":\"Error text\"}\n";
 		assertEquals(expected, resp.getBody());
 	}

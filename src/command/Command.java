@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.regex.Pattern;
 
+import response.HttpStatusCode;
 import response.Response;
-import response.StatusCode;
 import server.ServerSettings;
 import database.DatabaseAccessor;
 
@@ -100,20 +100,20 @@ public abstract class Command {
 	public void validateName(String string, int maxLength, String field)
 			throws ValidateException {
 		if(string == null) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify " +
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Specify " +
 					"an " + field.toLowerCase() + ".");
 		}
 		if(string.equals("null")){
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid "
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Invalid "
 					+ field.toLowerCase() + ".");
 		}
 		if(string.length() > maxLength || string.length() < 1) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, field + ": " +
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST, field + ": " +
 					string + " has to be between 1 and " + maxLength +
 					" characters long.");
 		}
 		if(hasInvalidCharacters(string)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid" +
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Invalid" +
 					" characters in " + field.toLowerCase() +
 					". Valid characters are: " + validCharacters);
 		}
@@ -130,15 +130,15 @@ public abstract class Command {
 	public void validateExists(String string, int maxLength, String field)
 			throws ValidateException {
 		if(string == null) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify " +
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Specify " +
 					"an " + field.toLowerCase() + ".");
 		}
 		if(string.equals("null")){
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid "
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Invalid "
 					+ field.toLowerCase() + ".");
 		}
 		if(string.length() > maxLength || string.length() < 1) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, field + ": " +
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST, field + ": " +
 					string + " has to be between 1 and " + maxLength +
 					" characters long.");
 		}

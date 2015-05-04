@@ -18,8 +18,8 @@ import database.DatabaseAccessor;
 //import database.Genome;
 
 import response.GetGenomeReleaseResponse;
+import response.HttpStatusCode;
 import response.Response;
-import response.StatusCode;
 import server.ServerSettings;
 
 public class GetGenomeReleaseResponseTest {
@@ -41,7 +41,7 @@ public class GetGenomeReleaseResponseTest {
 			//genomeList = db.getAllGenomeReleases();
 			Command cmd=new GetGenomeReleaseSpeciesCommand("mouseTEST");
 			Response rsp=cmd.execute();
-			assertEquals(StatusCode.OK, rsp.getCode());
+			assertEquals(HttpStatusCode.OK, rsp.getCode());
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -67,7 +67,7 @@ public class GetGenomeReleaseResponseTest {
 			//genomeList = db.getAllGenomeReleases();
 			Command cmd=new GetGenomeReleaseSpeciesCommand("hej");
 			Response rsp=cmd.execute();
-			assertEquals(StatusCode.BAD_REQUEST, rsp.getCode());
+			assertEquals(HttpStatusCode.BAD_REQUEST, rsp.getCode());
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -96,7 +96,7 @@ public class GetGenomeReleaseResponseTest {
 			}*/
 
 			//genomeList =db.getAllGenomeReleasesForSpecies("Human");
-			GetGenomeReleaseResponse gResp=new GetGenomeReleaseResponse(StatusCode.OK,genomeList);
+			GetGenomeReleaseResponse gResp=new GetGenomeReleaseResponse(HttpStatusCode.OK,genomeList);
 			System.out.println(gResp.getBody());
 
 		} catch (SQLException e) {
