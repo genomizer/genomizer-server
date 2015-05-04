@@ -228,4 +228,5 @@ public class FileTupleBuilder {
         throw new IllegalStateException("FileTupleBuilder: Cannot instatiate " +
                 "FileTuple; " + reason);
     }
+
 }

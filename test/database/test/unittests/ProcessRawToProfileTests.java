@@ -8,11 +8,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map.Entry;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 
 import database.DatabaseAccessor;
 import database.FilePathGenerator;
@@ -124,6 +120,7 @@ public class ProcessRawToProfileTests {
      * Description: Should be able to add Parent to a file.
      */
     @Test
+    @Ignore
     public void shouldAcceptNewParent() throws Exception {
         fpg.generateExperimentFolders("tmpExp");
         Entry<String, String> folderPaths = dbac.processRawToProfile("Exp1");

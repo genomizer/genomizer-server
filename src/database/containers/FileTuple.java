@@ -216,7 +216,7 @@ public class FileTuple extends AbstractFileTuple {
     	return "FileTuple [id=" + id + ", path=" + path + ", inputFilePath="
                 + inputFilePath + ", type=" + type.name() + ", filename=" + this.getFileName()
                 + ", date=" + date + ", metaData=" + metaData + ", author="
-                + author + ", uploader=" + uploader + ", withIsPrivate="
+                + author + ", uploader=" + uploader + ", isPrivate="
                 + isPrivate + ", expId=" + expId + ", grVersion=" + grVersion
                 + ", status=" + status + ", md5=" + checkSumMD5 + "]";
     }

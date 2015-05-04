@@ -10,6 +10,8 @@ public class FileTupleTemplateBuilder {
 
     private FileTupleTemplate product;
 
+    private boolean hasUploader;
+
     public FileTupleTemplateBuilder fileTupleTemplate(){
         product = new FileTupleTemplate();
         return this;
@@ -21,6 +23,7 @@ public class FileTupleTemplateBuilder {
      * @return
      */
     public FileTupleTemplateBuilder withFolderPath(String path) {
+        nullCheck("withFolderPath()");
         if(!path.endsWith(File.separator))
             throw new IllegalArgumentException("FileTupleTemplates must point to "
                     + "folders, NOT files!");
@@ -34,12 +37,14 @@ public class FileTupleTemplateBuilder {
      * @return
      */
     public FileTupleTemplateBuilder withInputFilePath(String inputFilePath) {
+        nullCheck("withInputFilePath()");
         product.setInputFilePath(inputFilePath);
         return this;
     }
 
 
     public FileTupleTemplateBuilder withDate(Date date) {
+        nullCheck("withDate()");
         product.setDate(date);
         return this;
     }
@@ -50,26 +55,25 @@ public class FileTupleTemplateBuilder {
      * @return
      */
     public FileTupleTemplateBuilder withMetaData(String metaData) {
+        nullCheck("withMetaData()");
         product.setMetaData(metaData);
         return this;
     }
 
     public FileTupleTemplateBuilder withAuthor(String author) {
+        nullCheck("withAuthor()");
         product.setAuthor(author);
         return this;
     }
 
-    public FileTupleTemplateBuilder withUploader(String uploader) {
-        product.setUploader(uploader);
-        return this;
-    }
-
-    public FileTupleTemplateBuilder isPrivate(Boolean isPrivate) {
+    public FileTupleTemplateBuilder withIsPrivate(Boolean isPrivate) {
+        nullCheck("withIsPrivate()");
         product.setIsPrivate(isPrivate);
         return this;
     }
 
     public FileTupleTemplateBuilder withExpId(String expId) {
+        nullCheck("withExpId()");
         product.setExpId(expId);
         return this;
     }
@@ -80,27 +84,44 @@ public class FileTupleTemplateBuilder {
      * @return
      */
     public FileTupleTemplateBuilder withGrVersion(String grVersion) {
+        nullCheck("withGrVersion()");
         product.setGrVersion(grVersion);
         return this;
     }
 
     public FileTupleTemplateBuilder withProcessName(String pName) {
+        nullCheck("withProcessName()");
         product.setProcessName(pName);
         return this;
     }
 
     public FileTupleTemplateBuilder withProcessVersion(String pVersion) {
+        nullCheck("withProcessVersion()");
         product.setProcessVersion(pVersion);
         return this;
     }
 
     public FileTupleTemplateBuilder withProcessFlags(String pFlags) {
+        nullCheck("withProcessFlags()");
         product.setProcessFlags(pFlags);
         return this;
     }
 
     public FileTupleTemplate build(){
-        return product;
+        nullCheck("build()");
+        FileTupleTemplate temp = product;
+        this.product = null;
+        return temp;
     }
+
+    private void nullCheck(String from) {
+        if (product == null) {
+            throw new IllegalStateException("FileTupleBuilder: Illegal call to "
+                    + from + "; construction must start with " +
+                    "FileTupleBuilder.<filetype>File() or " +
+                    "FileTupleBuilder.fromType(..)");
+        }
+    }
+
 
 }

@@ -11,7 +11,7 @@ public class FileTupleTemplate extends AbstractFileTuple {
     public FileTuple toFileTuple(Integer id,
                                  String type,
                                  String filename,
-                                 String status) {
+                                 String uploader) {
 
         return  (new FileTupleBuilder()).fromType(type)
                 .withAuthor(this.getAuthor())
@@ -24,10 +24,9 @@ public class FileTupleTemplate extends AbstractFileTuple {
                 .withProcessFlags(this.getProcessFlags())
                 .withProcessName(this.getProcessName())
                 .withProcessVersion(this.getProcessVersion())
-                .withStatus(status)
                 .withId(id)
                 .withIsPrivate(this.isPrivate())
-                .withUploader(this.getUploader()).build();
+                .withUploader(uploader).build();
     }
 
     public String getFolderPath() {
