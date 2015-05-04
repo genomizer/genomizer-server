@@ -9,70 +9,47 @@ import java.io.*;
  */
 public class SRADownloader extends Executor {
 
-    private final String prefetchExecutable = "sra-toolkit/prefetch";
-    private final String fastqDumpExecutable ="sra-toolkit/fastq-dump";
     private final String metaDataHTTP = "http://trace.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?save=efetch&db=sra&rettype=runinfo&term=";
     private final String dir = ServerSettings.fileLocation;
-    private String ftpRoot = "ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/sra/";
+    private final String ftpRoot = "ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/sra/";
 
 
     /**
      * Downloads a file from the Sequence Read Archive
      *
      * @param runID the run file's ID
+     * @return the dowloaded file's path
      * @throws IOException
      * @throws InterruptedException
      *
      */
-    public void download(String runID) throws IOException, InterruptedException {
+    public String download(String runID) throws IOException, InterruptedException {
+
         String ftp = getFTP(runID);
-        String command[] = parse("wget -P " + dir + "/sra/" + " " + ftp);
-        String result = executeCommand(command);
-        File downloaded = new File(dir + "/sra/" + runID + ".sra");
 
-        if (!downloaded.exists())
-            System.out.println(result);
-        else
-            System.out.println("Successfully downloaded file: " + runID);
+        String command[] = parse("wget -nc -P " + dir + "/sra/" + " " + ftp);
+        File file = new File(dir + "/sra/" + runID + ".sra");
 
-        System.out.println("Downloaded file size = " + downloaded.length());
+        executeCommand(command);
+
+        return file.getAbsolutePath();
     }
 
     /**
-     *
-     * @param runID
-     * @return
-     */
-    private String getFTP(String runID) {
-
-        StringBuilder sb = new StringBuilder();
-        sb.append(ftpRoot);
-        sb.append(runID.substring(0,3) + "/");
-        sb.append(runID.substring(0,6) + "/");
-        sb.append(runID + "/");
-        sb.append(runID + ".sra");
-
-        return sb.toString();
-    }
-
-    /**
-     * Retrieves meta data for a run file
+     * Retrieves meta data for a run file and writes
      *
      * @param runID the run file's ID
      * @param studyID the study to which the run file belongs
+     * @return
      * @throws IOException
      * @throws InterruptedException
      */
-    public void getMetaData(String runID, String studyID) throws IOException, InterruptedException {
+    public String getMetaData(String runID, String studyID) throws IOException, InterruptedException {
 
         String command[] = parse("wget -O " + dir + "/sra/temp.csv" + " " + metaDataHTTP + studyID);
-        String result = executeCommand(command);
-        System.out.println(result);
+        executeCommand(command);
 
         File tempFile = new File(dir + "/sra/temp.csv");
-
-        if (!tempFile.exists())
-            System.out.println("nu blev det fel");
 
         File outFile = new File(dir + "/sra/" + runID + ".csv");
         BufferedReader br = new BufferedReader(new FileReader(tempFile));
@@ -88,31 +65,31 @@ public class SRADownloader extends Executor {
                 BufferedWriter bw = new BufferedWriter(fw);
                 bw.write(line);
                 bw.close();
+
             }
         }
+
+        tempFile.delete();
+
+        return outFile.getAbsolutePath();
     }
 
-    private String getFileSize(String filename) throws IOException, InterruptedException {
-        String command[] = parse(prefetchExecutable + " -s " + filename);
-        String result = executeProgram(command);
-        String[] fileSize = result.split(filename);
-        return fileSize[1].trim();
-    }
+    /**
+     * Builds the ftp download path for a run file
+     *
+     * @param runID
+     * @return fpt download path
+     */
+    private String getFTP(String runID) {
 
+        StringBuilder sb = new StringBuilder();
+        sb.append(ftpRoot);
+        sb.append(runID.substring(0,3) + "/");
+        sb.append(runID.substring(0,6) + "/");
+        sb.append(runID + "/");
+        sb.append(runID + ".sra");
 
-    public static void main(String[] args) {
-
-        try {
-            ServerSettings.readSettingsFile(System.getProperty("user.dir")+"/settings.cfg");
-            SRADownloader sh = new SRADownloader();
-            sh.download("SRR1970533");
-            sh.getMetaData("SRR1970533","SRP056905");
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
+        return sb.toString();
     }
 
 }
