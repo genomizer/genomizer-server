@@ -251,7 +251,7 @@ public class DatabaseAccessor implements AutoCloseable {
      */
     public void addUser(String username, String hash, String salt, String role,
             String fullName, String email) throws SQLException, IOException {
-        userMethods.addUser(username, hash, salt, role, fullName, email);
+        userMethods.addUser(username, hash, role, fullName, email);
     }
 
     /**
@@ -279,6 +279,9 @@ public class DatabaseAccessor implements AutoCloseable {
     }
 
     /**
+     * Deprecated: Salt is not stored in the database since change
+     * of hashing mechanism.
+     *
      * Returns the password for the given user. Used for login.
      *
      * @param  user the username as string
@@ -286,8 +289,10 @@ public class DatabaseAccessor implements AutoCloseable {
      * @throws SQLException
      *             - if the query does not succeed
      */
+    @Deprecated
     public String getPasswordSalt(String user) throws SQLException {
-        return userMethods.getPasswordSalt(user);
+        //return userMethods.getPasswordSalt(user);
+        return null;
     }
 
     /**
