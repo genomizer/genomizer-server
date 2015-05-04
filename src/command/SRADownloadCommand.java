@@ -7,6 +7,10 @@ import response.Response;
 import response.StatusCode;
 import server.ServerSettings;
 
+/**
+ * Created by oi12fun & tfy12jsg on 2015-04-29.
+ */
+
 public class SRADownloadCommand extends Command {
 
 	private String runID;
@@ -25,18 +29,11 @@ public class SRADownloadCommand extends Command {
 		if (!(studyID.startsWith("SRP") || studyID.startsWith("DRP") || studyID.startsWith("ERP")))
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid study file prefix.");
 
-		try {
-			Integer.parseInt(runID.substring(3));
-		} catch (NumberFormatException e) {
+		if (!runID.substring(3).matches("^[0-9]{1,}$"))
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid run file.");
-		}
 
-		try {
-			Integer.parseInt(studyID.substring(3));
-		} catch (NumberFormatException e) {
+		if (!studyID.substring(3).matches("^[0-9]{1,}$"))
 			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid study file.");
-		}
-
 
 	}
 
