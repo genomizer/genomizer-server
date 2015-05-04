@@ -66,6 +66,9 @@ public class ProcessPool {
         try {
             ProcessStatus processStatus = new ProcessStatus(processCommand);
 
+            // TODO Add id
+            //processCommand.setId();
+
             // Create a process command to process status mapping
             processStatusMap.put(processCommand, processStatus);
 

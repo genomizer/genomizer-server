@@ -51,7 +51,7 @@ public class GetProcessStatusCommandTest {
 	@Before
 	public void setUp() throws Exception {
 
-		processPool = new ProcessPool();
+		processPool = new ProcessPool(5);
 		ProcessCommand processCommand = new ProcessCommand();
 		processHandler = new ProcessHandler(processCommand,
 				new ProcessStatus(processCommand));

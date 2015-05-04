@@ -21,7 +21,7 @@ public class CommandHandlerTest {
 	@Test
 	public void testCreateClass() {
 
-		CommandHandler cmdh = new CommandHandler(new ProcessPool());
+		CommandHandler cmdh = new CommandHandler(new ProcessPool(3));
 		assertNotNull(cmdh);
 
 	}
