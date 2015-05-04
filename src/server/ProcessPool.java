@@ -17,7 +17,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class ProcessPool {
 
     // Process to status and response maps
-    private HashMap<ProcessCommand, ProcessStatus> processesStatus;
+    private HashMap<ProcessCommand, ProcessStatus> processStatusMap;
     private HashMap<ProcessCommand, Future<Response>> processFutureMap;
 
     // Synchronization objects
@@ -28,7 +28,7 @@ public class ProcessPool {
 
 
     public ProcessPool() {
-        processesStatus = new HashMap<>();
+        processStatusMap = new HashMap<>();
         processFutureMap = new HashMap<>();
         lock = new ReentrantLock();
 
@@ -64,7 +64,7 @@ public class ProcessPool {
 
         try {
             // Create a process command to process status mapping
-            processesStatus.put(processCommand, new ProcessStatus(processCommand));
+            processStatusMap.put(processCommand, new ProcessStatus(processCommand));
 
             // Submit the process with a new work handler for execution
             Future<Response> response = executor.submit(new ProcessHandler(this,
@@ -101,7 +101,7 @@ public class ProcessPool {
             }
 
             // Cleanup the maps from stale processes
-            processesStatus.remove(processCommand);
+            processStatusMap.remove(processCommand);
             processFutureMap.remove(processCommand);
         } finally {
             lock.unlock();
@@ -124,11 +124,11 @@ public class ProcessPool {
             if (processFutureMap.get(processCommand).isDone() && !processFutureMap
                     .get(processCommand).isCancelled()) {
 
-                processesStatus.get(processCommand).status = ProcessStatus
+                processStatusMap.get(processCommand).status = ProcessStatus
                         .STATUS_FINISHED;
             }
 
-            return processesStatus.get(processCommand);
+            return processStatusMap.get(processCommand);
         } finally {
             lock.unlock();
         }
@@ -146,7 +146,7 @@ public class ProcessPool {
     public Response getProcessResponse(ProcessCommand processCommand) throws
             InterruptedException, ExecutionException {
 
-        if (processesStatus.get(processCommand).status
+        if (processStatusMap.get(processCommand).status
                 .equals(ProcessStatus.STATUS_FINISHED)) {
             return processFutureMap.get(processCommand).get();
         }
