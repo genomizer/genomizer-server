@@ -84,7 +84,7 @@ public class GenomeMethods {
      * @throws IOException
      */
     public String addGenomeRelease(String genomeVersion, String species,
-            String filename) throws SQLException, IOException {
+            String filename, String checkSumMD5) throws SQLException, IOException {
 
     	if(!FileValidator.fileNameCheck(filename)){
     		throw new IOException("Invalid file name");
@@ -118,11 +118,12 @@ public class GenomeMethods {
         }
 
         String query2 = "INSERT INTO Genome_Release_Files "
-                + "(Version, FileName) VALUES (?, ?)";
+                + "(Version, FileName, MD5) VALUES (?, ?, ?)";
 
 		stmt = conn.prepareStatement(query2);
 		stmt.setString(1, genomeVersion);
 		stmt.setString(2, filename);
+		stmt.setString(3, checkSumMD5);
 		stmt.executeUpdate();
 		stmt.close();
 
@@ -318,7 +319,7 @@ public class GenomeMethods {
 	 * @throws IOException
 	 */
 	public String addChainFile(String fromVersion, String toVersion,
-			String fileName) throws SQLException, IOException {
+			String fileName, String checkSumMD5) throws SQLException, IOException {
 
     	if(!FileValidator.fileNameCheck(fileName)){
     		throw new IOException("Invalid file name");
@@ -345,7 +346,7 @@ public class GenomeMethods {
 				+ "(FromVersion, ToVersion, FolderPath) VALUES (?, ?, ?)";
 
         String insertQuery2 = "INSERT INTO Chain_File_Files "
-                + "(FromVersion, ToVersion, FileName) " + "VALUES (?, ?, ?)";
+                + "(FromVersion, ToVersion, FileName, MD5) " + "VALUES (?, ?, ?, ?)";
 
         ChainFile cf = getChainFile(fromVersion, toVersion);
         if (cf == null) {
@@ -361,6 +362,7 @@ public class GenomeMethods {
 		stmt.setString(1, fromVersion);
 		stmt.setString(2, toVersion);
 		stmt.setString(3, fileName);
+		stmt.setString(4, checkSumMD5);
 		stmt.executeUpdate();
 		stmt.close();
 

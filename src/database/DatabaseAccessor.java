@@ -1001,8 +1001,8 @@ public class DatabaseAccessor implements AutoCloseable {
      * @throws IOException
      */
     public String addGenomeRelease(String genomeVersion, String species,
-            String filename) throws SQLException, IOException {
-        return genMethods.addGenomeRelease(genomeVersion, species, filename);
+            String filename, String checkSumMD5) throws SQLException, IOException {
+        return genMethods.addGenomeRelease(genomeVersion, species, filename, checkSumMD5);
     }
 
     /**
@@ -1126,8 +1126,8 @@ public class DatabaseAccessor implements AutoCloseable {
      * @throws IOException
      */
     public String addChainFile(String fromVersion, String toVersion,
-            String fileName) throws SQLException, IOException {
-        return genMethods.addChainFile(fromVersion, toVersion, fileName);
+            String fileName, String checkSumMD5) throws SQLException, IOException {
+        return genMethods.addChainFile(fromVersion, toVersion, fileName, checkSumMD5);
     }
 
     /**

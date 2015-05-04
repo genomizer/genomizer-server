@@ -63,7 +63,7 @@ public class ChainFilesTest {
         String fromVersion = "hg19";
         String toVersion = "hg38";
         String fileName = "chainHuman.txt";
-        String filePath = dbac.addChainFile(fromVersion, toVersion, fileName);
+        String filePath = dbac.addChainFile(fromVersion, toVersion, fileName, null);
 
         assertEquals(ServerDependentValues.UploadURL +
         		fpg.getChainFolderPath("Human", fromVersion, toVersion)
@@ -107,7 +107,7 @@ public class ChainFilesTest {
     public void shouldRemoveChainFilesFromDatabaseAndFileSystem()
     		throws Exception {
 
-        dbac.addChainFile("rn3", "rn5", "rat.over.chain");
+        dbac.addChainFile("rn3", "rn5", "rat.over.chain", null);
 
         String folderPath = fpg.generateChainFolder("Rat", "rn3", "rn5");
         File folder = new File(folderPath);
@@ -131,8 +131,8 @@ public class ChainFilesTest {
         String testName1 = "testName1.txt";
         String testName2 = "testName2.txt";
 
-        dbac.addChainFile(fromVersion, toVersion, testName1);
-        dbac.addChainFile(fromVersion, toVersion, testName2);
+        dbac.addChainFile(fromVersion, toVersion, testName1, null);
+        dbac.addChainFile(fromVersion, toVersion, testName2, null);
         ChainFile cf = dbac.getChainFile(fromVersion, toVersion);
 
         assertEquals(fromVersion, cf.fromVersion);
@@ -153,9 +153,9 @@ public class ChainFilesTest {
         String testName2 = "testName2.txt";
         String testName3 = "testName3.txt";
 
-		dbac.addChainFile(fromVersion, toVersion, testName1);
-		dbac.addChainFile(fromVersion, toVersion, testName2);
-		dbac.addChainFile(fromVersion, toVersion, testName3);
+		dbac.addChainFile(fromVersion, toVersion, testName1, null);
+		dbac.addChainFile(fromVersion, toVersion, testName2, null);
+		dbac.addChainFile(fromVersion, toVersion, testName3, null);
 
 		ChainFile cf = dbac.getChainFile(fromVersion, toVersion);
 		HashMap<String, String> files =
