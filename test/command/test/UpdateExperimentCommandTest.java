@@ -1,6 +1,12 @@
 package command.test;
 
 import static org.junit.Assert.*;
+
+import command.Command;
+import org.junit.Ignore;
+
+import command.ValidateException;
+import database.subClasses.UserMethods.UserType;
 import org.junit.Test;
 import command.UpdateExperimentCommand;
 
@@ -11,30 +17,60 @@ import command.UpdateExperimentCommand;
  * @author Kommunikation/kontroll 2014.
  * @version 1.0
  */
+
 public class UpdateExperimentCommandTest {
-	//TODO Implement tests later
+//	//TODO Implement tests later
+//
+//	/**
+//	 * Test used to check that creation works and object
+//	 * is not null.
+//	 */
+//	@Test
+//	public void testCreationNotNull() {
+//
+//		UpdateExperimentCommand c = new UpdateExperimentCommand("", "");
+//		assertNotNull(c);
+//
+//	}
+//
+//	/**
+//	 * Test used to check that validate always returns true.
+//	 */
+//	@Test
+//	public void testValidateAlwaysTrue() {
+//
+//		UpdateExperimentCommand c = new UpdateExperimentCommand("", "");
+//		c.validate();
+//
+//	}
 
 	/**
-	 * Test used to check that creation works and object
-	 * is not null.
+	 * Test used to check that ValidateException is not thrown
+	 * when the user have the required rights.
+	 *
+	 * @throws command.ValidateException
 	 */
 	@Test
-	public void testCreationNotNull() {
+	public void testHavingRights() throws ValidateException {
 
-		UpdateExperimentCommand c = new UpdateExperimentCommand("", "");
-		assertNotNull(c);
-
+		Command c = new UpdateExperimentCommand();
+		c.setFields("uri", null, UserType.USER);
+		c.validate();
 	}
 
 	/**
-	 * Test used to check that validate always returns true.
+	 * Test used to check that ValidateException is thrown
+	 * when the user doesn't have the required rights.
+	 *
+	 * @throws ValidateException
 	 */
-	@Test
-	public void testValidateAlwaysTrue() {
+	@Test(expected = ValidateException.class)
+	public void testNotHavingRights() throws ValidateException {
 
-		UpdateExperimentCommand c = new UpdateExperimentCommand("", "");
+		Command c = new UpdateExperimentCommand();
+		c.setFields("uri", null, UserType.GUEST);
 		c.validate();
-
+		fail();
 	}
 
 }

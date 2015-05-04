@@ -1,6 +1,10 @@
 package command.test;
 
 import static org.junit.Assert.*;
+
+import command.Command;
+import command.ValidateException;
+import database.subClasses.UserMethods.UserType;
 import org.junit.Test;
 import command.GetAnnotationInformationCommand;
 
@@ -28,16 +32,31 @@ public class GetAnnotationInformationCommandTest {
 
 	/**
 	 * Test used to check that ValidateException is not thrown
-	 * when calling validate.
+	 * when the user have the required rights.
+	 *
+	 * @throws ValidateException
 	 */
 	@Test
-	public void testValidateAlwaysTrue() {
+	public void testHavingRights() throws ValidateException {
 
-		GetAnnotationInformationCommand c = new GetAnnotationInformationCommand();
+		Command c = new GetAnnotationInformationCommand();
+		c.setFields("uri", null, UserType.GUEST);
 		c.validate();
+	}
 
-		assertTrue(true);
+	/**
+	 * Test used to check that ValidateException is thrown
+	 * when the user doesn't have the required rights.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testNotHavingRights() throws ValidateException {
 
+		Command c = new GetAnnotationInformationCommand();
+		c.setFields("uri", null, UserType.UNKNOWN);
+		c.validate();
+		fail();
 	}
 
 }

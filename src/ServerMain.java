@@ -13,8 +13,6 @@ import process.StartUpCleaner;
 
 import authentication.InactiveUuidsRemover;
 
-import command.CommandHandler;
-
 import server.*;
 
 
@@ -48,8 +46,7 @@ public class ServerMain {
 
 		/* We attempt to start the doorman. */
 		try {
-			new Doorman(new CommandHandler(workPool),
-					ServerSettings.genomizerPort).start();
+			new Doorman(workPool, ServerSettings.genomizerPort).start();
 		} catch (IOException e) {
 			System.err.println("Error when starting server");
 			Debug.log(e.getMessage());
@@ -193,5 +190,4 @@ public class ServerMain {
 //			ServerSettings.databaseHost = host;
 //		}
 //	}
-
 }
