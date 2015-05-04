@@ -208,6 +208,7 @@ public class UserMethods {
         stmt.close();
         return result;
     }
+    
 
     /**
      * Deprecated: Use updateUser(String username, String role, String fullName,
