@@ -52,7 +52,7 @@ public class UserMethods {
      * Adds a new user to the database.
      *
      * @param username     the username of the user
-     * @param passwordHash the hash of the user's password and salt
+     * @param passwordHash the hash of the user's password
      * @param role         role given to the user ie. "Admin"
      * @param fullName     the full name of the user
      * @param email        email address of the new user.
@@ -128,13 +128,12 @@ public class UserMethods {
      * Changes the password for a user.
      *
      * @param username      the user to change the password for
-     * @param newPasswdHash the new password/salt hash
-     * @param newSalt       the salt for the new password
+     * @param newPasswdHash the new password hash
      * @return the number of tuples updated in the database
      * @throws SQLException if the query does not succeed
      * @throws IOException
      */
-    public int resetPassword(String username, String newPasswdHash, String newSalt)
+    public int resetPassword(String username, String newPasswdHash)
             throws SQLException, IOException {
 
         if (username == null || username.contentEquals("") ||

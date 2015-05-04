@@ -242,14 +242,13 @@ public class DatabaseAccessor implements AutoCloseable {
      *
      * @param username the username
      * @param hash the password's hash
-     * @param salt the password's salt
      * @param role the role given to the user ie. "Admin"
      * @param fullName the full name of the user
      * @param email the email of the user
      * @throws SQLException
      * @throws IOException
      */
-    public void addUser(String username, String hash, String salt, String role,
+    public void addUser(String username, String hash, String role,
             String fullName, String email) throws SQLException, IOException {
         userMethods.addUser(username, hash, role, fullName, email);
     }
@@ -300,16 +299,15 @@ public class DatabaseAccessor implements AutoCloseable {
      *
      * @param username - the user to change the password for
      * @param newPasswordHash - the new password
-     * @param newSalt - the new salt
      * @return the number of tuples updated in the database
      * @throws SQLException
      *             - if the query does not succeed
      * @throws IOException
      *             - if an argument is empty or null
      */
-    public int resetPassword(String username, String newPasswordHash, String newSalt)
+    public int resetPassword(String username, String newPasswordHash)
             throws SQLException, IOException {
-        return userMethods.resetPassword(username, newPasswordHash, newSalt);
+        return userMethods.resetPassword(username, newPasswordHash);
     }
 
     /**
