@@ -6,12 +6,11 @@ import org.junit.Ignore;
 
 import server.ProcessPool;
 
-
+@Ignore
 public class ProcessPoolTest {
 
     private ProcessPool processPool;
-
-    @Ignore
+    
     @Before
     public void setUp() {
         processPool = new ProcessPool(1);
