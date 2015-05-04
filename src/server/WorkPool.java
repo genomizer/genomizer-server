@@ -16,8 +16,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class WorkPool {
 
-    // Process storage objects
-    private LinkedList<ProcessCommand> processesList;
+    // Process to status and response maps
     private HashMap<ProcessCommand, ProcessStatus> processesStatus;
     private HashMap<ProcessCommand, Future<Response>> processFutureMap;
 
@@ -29,7 +28,6 @@ public class WorkPool {
 
 
     public WorkPool() {
-        processesList = new LinkedList<>();
         processesStatus = new HashMap<>();
         processFutureMap = new HashMap<>();
         lock = new ReentrantLock();
@@ -42,11 +40,7 @@ public class WorkPool {
         lock.lock();
 
         try {
-            LinkedList<ProcessCommand> commandList =
-                    new LinkedList<>(processFutureMap.keySet());
-            commandList.addAll(processesList);
-
-            return commandList;
+            return new LinkedList<>(processFutureMap.keySet());
 
         }  finally {
             lock.unlock();
@@ -54,14 +48,14 @@ public class WorkPool {
 
     }
 
-    public void addWork(ProcessCommand command) {
+    public void addProcess(ProcessCommand command) {
         lock.lock();
 
         try {
-            processesList.add(command);
             processesStatus.put(command, new ProcessStatus(command));
 
-            Future<Response> response = executor.submit(new WorkHandler(this));
+            Future<Response> response = executor.submit(new WorkHandler(this,
+             command));
 
             if (response != null) {
                 processFutureMap.put(command, response);
@@ -72,20 +66,6 @@ public class WorkPool {
         }
     }
 
-    public ProcessCommand pollProcess() {
-        lock.lock();
-
-        ProcessCommand processCommand = null;
-
-        try {
-            processCommand = processesList.poll();
-        } finally {
-            lock.unlock();
-        }
-
-        return processCommand;
-
-    }
 
     public void cancelProcess(ProcessCommand processCommand) {
         lock.lock();
@@ -100,7 +80,6 @@ public class WorkPool {
                 }
             }
 
-            processesList.remove(processCommand);
             processesStatus.remove(processCommand);
         } finally {
             lock.unlock();

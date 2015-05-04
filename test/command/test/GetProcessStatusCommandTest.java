@@ -52,13 +52,13 @@ public class GetProcessStatusCommandTest {
 	public void setUp() throws Exception {
 
 		workPool = new WorkPool();
-		workHandler = new WorkHandler(workPool);
+		workHandler = new WorkHandler(workPool, new ProcessCommand());
 
-		workPool.addWork(makeCmd("yuri", "meta", "v123", "Exp1"));
-		workPool.addWork(makeCmd("janne", "mea", "v1523", "Exp2"));
-		workPool.addWork(makeCmd("philge", "meta", "v22", "Exp43"));
-		workPool.addWork(makeCmd("per", "meta", "v12", "Exp234"));
-		workPool.addWork(makeCmd("yuri", "meta", "v1", "Exp6"));
+		workPool.addProcess(makeCmd("yuri", "meta", "v123", "Exp1"));
+		workPool.addProcess(makeCmd("janne", "mea", "v1523", "Exp2"));
+		workPool.addProcess(makeCmd("philge", "meta", "v22", "Exp43"));
+		workPool.addProcess(makeCmd("per", "meta", "v12", "Exp234"));
+		workPool.addProcess(makeCmd("yuri", "meta", "v1", "Exp6"));
 
 		//stat = new ProcessStatus(com);
 		//stat.outputFiles = com.getFilePaths();

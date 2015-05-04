@@ -15,10 +15,12 @@ public class WorkHandler implements Callable<Response> {
 
 	private static final long statusTimeToLive = 2*1000*60*60*24;
 	private WorkPool workPool;
+	private ProcessCommand processCommand;
 
 
-	public WorkHandler(WorkPool workPool) {
+	public WorkHandler(WorkPool workPool, ProcessCommand processCommand) {
 		this.workPool = workPool;
+		this.processCommand = processCommand;
 	}
 
 
@@ -62,7 +64,6 @@ public class WorkHandler implements Callable<Response> {
 	@Override
 	public Response call() {
 
-		ProcessCommand processCommand = workPool.pollProcess();
 		ProcessStatus processStatus = workPool.getProcessStatus
 				(processCommand);
 

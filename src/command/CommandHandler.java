@@ -52,7 +52,7 @@ public class CommandHandler {
 					* starts in the heavy work thread, followed by returning a
 					* OK status to the client.*/
 					Debug.log("Adding processCommand to work queue.");
-					workPool.addWork((ProcessCommand)myCom);
+					workPool.addProcess((ProcessCommand) myCom);
 					return new ProcessResponse(StatusCode.OK);
 				}else {
 
