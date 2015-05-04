@@ -93,11 +93,6 @@ public class ProcessCommand extends Command {
 		}
 	}
 
-	/**
-	 * Method that runs when the processCommand is executed.
-	 *
-	 */
-
 	@Override
 	public Response execute() {
 
@@ -168,8 +163,6 @@ public class ProcessCommand extends Command {
 
 		//The execute executed correctly
 		try {
-			//TODO isPrivate hardcoded.
-			//TODO Check if the connection is open
 			if(!db.isConnected()){
 				db = initDB();
 			}
@@ -185,8 +178,7 @@ public class ProcessCommand extends Command {
 			return processError(db, e.getMessage(), "IO Exception after" +
 					"finished processing");
 		}
-
-
+		
 		db.close();
 		Debug.log(username + "Raw to profile processing completed " +
 				"running " + processtype + " on experiment" + expid + "\n" +
