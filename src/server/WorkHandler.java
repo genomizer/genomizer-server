@@ -62,7 +62,7 @@ public class WorkHandler implements Callable<Response> {
 	@Override
 	public Response call() {
 
-		final ProcessCommand processCommand = workPool.pollProcess();
+		ProcessCommand processCommand = workPool.pollProcess();
 		ProcessStatus processStatus = workPool.getProcessStatus
 				(processCommand);
 
