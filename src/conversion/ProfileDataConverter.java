@@ -30,6 +30,8 @@ public class ProfileDataConverter {
         } catch (IllegalArgumentException e) {
             throw e;
         }
+        if (!this.outputPath.exists())
+            throw new IllegalArgumentException("Archive does not exist.");
     }
 
     /**
@@ -105,7 +107,7 @@ public class ProfileDataConverter {
         inputFile = new File(inputPath);
 
         try {
-            outputFile = File.createTempFile("gff2sgr", ".gff", outputPath);
+            outputFile = File.createTempFile("gff2sgr", ".sgr", outputPath);
             fw = new FileWriter(outputFile);
 
             BufferedReader fr = new BufferedReader(new FileReader(inputFile));
@@ -206,6 +208,13 @@ public class ProfileDataConverter {
         String tempPath = null;
         String outputPath;
 
+        checkArguments(inputPath);
+
+        if (!inputPath.endsWith(".bed")) {
+            throw new IllegalArgumentException("File type not " +
+                    "accepted for this conversion.");
+        }
+
         try {
             tempPath = bedToSgr(inputPath);
             outputPath = sgrToWig(tempPath);
@@ -235,8 +244,15 @@ public class ProfileDataConverter {
         String tempPath = null;
         String outputPath;
 
+        checkArguments(inputPath);
+        if (!inputPath.endsWith(".gff")) {
+            throw new IllegalArgumentException("File type not " +
+                    "accepted for this conversion.");
+        }
+
         try {
             tempPath = gffToSgr(inputPath);
+            System.out.println(tempPath);
             outputPath = sgrToWig(tempPath);
         } catch (Exception e){
             tempFile = new File(tempPath);

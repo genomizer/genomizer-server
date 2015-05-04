@@ -29,7 +29,7 @@ public class GffToSgrTest {
 
     @Before
     public void setUp() {
-        pdc = new ProfileDataConverter("resources/nonexistent/");
+        pdc = new ProfileDataConverter("resources/conversionTestData/output/");
     }
 
     @Test (expected = IllegalArgumentException.class)
