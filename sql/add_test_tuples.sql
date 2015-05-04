@@ -10,27 +10,27 @@ INSERT INTO Genome_Release VALUES('rn5', 'Rat', '/var/www/data/genome_releases/R
 INSERT INTO Genome_Release VALUES('rn4', 'Rat', '/var/www/data/genome_releases/Rat/rn4/');
 INSERT INTO Genome_Release VALUES('rn3', 'Rat', '/var/www/data/genome_releases/Rat/rn3/');
 
-INSERT INTO Genome_Release_Files VALUES('hg38', 'hg38.fasta', DEFAULT);
-INSERT INTO Genome_Release_Files VALUES('hg38', 'hg38(2).fasta', DEFAULT);
-INSERT INTO Genome_Release_Files VALUES('hg19', 'hg19.fasta', DEFAULT);
-INSERT INTO Genome_Release_Files VALUES('hg19', 'hg19(2).fasta', DEFAULT);
-INSERT INTO Genome_Release_Files VALUES('hg18', 'hg18.fasta', DEFAULT);
-INSERT INTO Genome_Release_Files VALUES('rn5', 'rn5.fasta', DEFAULT);
-INSERT INTO Genome_Release_Files VALUES('rn4', 'rn4.fasta', DEFAULT);
-INSERT INTO Genome_Release_Files VALUES('rn3', 'rn3.fasta', DEFAULT);
+INSERT INTO Genome_Release_Files VALUES('hg38', 'hg38.fasta', NULL, DEFAULT);
+INSERT INTO Genome_Release_Files VALUES('hg38', 'hg38(2).fasta', NULL, DEFAULT);
+INSERT INTO Genome_Release_Files VALUES('hg19', 'hg19.fasta', NULL, DEFAULT);
+INSERT INTO Genome_Release_Files VALUES('hg19', 'hg19(2).fasta', NULL, DEFAULT);
+INSERT INTO Genome_Release_Files VALUES('hg18', 'hg18.fasta', NULL, DEFAULT);
+INSERT INTO Genome_Release_Files VALUES('rn5', 'rn5.fasta', NULL, DEFAULT);
+INSERT INTO Genome_Release_Files VALUES('rn4', 'rn4.fasta', NULL, DEFAULT);
+INSERT INTO Genome_Release_Files VALUES('rn3', 'rn3.fasta', NULL, DEFAULT);
 
 INSERT INTO Chain_File VALUES('rn3', 'rn4', '/var/www/data/chain_files/Rat/rn3 - rn4/');
 INSERT INTO Chain_File VALUES('rn4', 'rn5', '/var/www/data/chain_files/Rat/rn4 - rn5/');
 INSERT INTO Chain_File VALUES('hg18', 'hg38', '/var/www/data/chain_files/Human/hg18 - hg38/');
 INSERT INTO Chain_File VALUES('hg38', 'hg18', '/var/www/data/chain_files/Human/hg38 - hg18/');
 
-INSERT INTO Chain_File_Files VALUES('rn3', 'rn4', 'rn3ToRn4.chain.over', DEFAULT);
-INSERT INTO Chain_File_Files VALUES('rn3', 'rn4', 'rn3ToRn4.chain(2).over', DEFAULT);
-INSERT INTO Chain_File_Files VALUES('rn3', 'rn4', 'rn3ToRn4.chain(3).over', DEFAULT);
-INSERT INTO Chain_File_Files VALUES('rn4', 'rn5', 'rn4ToRn5.over.chain', DEFAULT);
-INSERT INTO Chain_File_Files VALUES('hg18', 'hg38', 'hg18ToHg38.over.chain', DEFAULT);
-INSERT INTO Chain_File_Files VALUES('hg38', 'hg18', 'hg38ToHg18.over.chain', DEFAULT);
-INSERT INTO Chain_File_Files VALUES('hg38', 'hg18', 'hg38ToHg18.over(2).chain', DEFAULT);
+INSERT INTO Chain_File_Files VALUES('rn3', 'rn4', 'rn3ToRn4.chain.over', NULL, DEFAULT);
+INSERT INTO Chain_File_Files VALUES('rn3', 'rn4', 'rn3ToRn4.chain(2).over', NULL, DEFAULT);
+INSERT INTO Chain_File_Files VALUES('rn3', 'rn4', 'rn3ToRn4.chain(3).over', NULL, DEFAULT);
+INSERT INTO Chain_File_Files VALUES('rn4', 'rn5', 'rn4ToRn5.over.chain', NULL, DEFAULT);
+INSERT INTO Chain_File_Files VALUES('hg18', 'hg38', 'hg18ToHg38.over.chain', NULL, DEFAULT);
+INSERT INTO Chain_File_Files VALUES('hg38', 'hg18', 'hg38ToHg18.over.chain', NULL, DEFAULT);
+INSERT INTO Chain_File_Files VALUES('hg38', 'hg18', 'hg38ToHg18.over(2).chain', NULL, DEFAULT);
 
 INSERT INTO Annotation VALUES ('Species', 'DropDown', NULL, TRUE);
 INSERT INTO Annotation_Choices VALUES('Species', 'Human');
