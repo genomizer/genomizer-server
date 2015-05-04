@@ -46,7 +46,6 @@ public class LoginCommand extends Command {
 	public Response execute() {
 		DatabaseAccessor db;
 		String dbHash;
-		String dbSalt;
 
 		try {
 			db = initDB();

@@ -77,7 +77,7 @@ public class CreateUserCommand extends Command {
 		}
 		try {
 			String hash = BCrypt.hashpw(password,BCrypt.gensalt());
-			db.addUser(username, hash, "SALT",privileges, name, email);
+			db.addUser(username, hash,privileges, name, email);
 
 		} catch (SQLException | IOException e) {
 			return new ErrorResponse(StatusCode.BAD_REQUEST, "Error when " +
