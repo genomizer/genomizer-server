@@ -79,88 +79,57 @@ public class FileMethods {
 			String checkSumMD5)
 			throws SQLException, IOException {
 
-		if (!FileValidator.fileNameCheck(fileName)) {
-			throw new IOException("Invalid filename");
-		}
 
-		if (inputFileName != null
+        if (!FileValidator.fileNameCheck(fileName)) {
+            throw new IOException("Invalid filename");
+        }
+
+        if (inputFileName != null
                 && !FileValidator.fileNameCheck(inputFileName)) {
             throw new IOException("Invalid input filename");
 
-		}
+        }
 
-		Experiment e = expMethods.getExperiment(expID);
+        Experiment e = expMethods.getExperiment(expID);
 
-		if (e == null) {
-			throw new IOException("The experiment " + expID
-					+ " does not exist!");
-		}
-		expID = e.getID(); // Correct expID for in case sensitivity
+        if (e == null) {
+            throw new IOException("The experiment " + expID
+                    + " does not exist!");
+        }
+        expID = e.getID(); // Correct expID for in case sensitivity
 
-		if (fileType == FileTuple.RAW && e.getNrRawFiles() >= 2) {
-			throw new IOException(
-					"There are already two raw files for this experiment!");
-		}
+        if (fileType == FileTuple.RAW && e.getNrRawFiles() >= 2) {
+            throw new IOException(
+                    "There are already two raw files for this experiment!");
+        }
 
-		FileTuple ft = getProfile(e, metaData);
-		String path;
-		if (ft == null) {
-			path = fpg.generateFilePath(expID, FileTuple.Type.fromInt(fileType), fileName);
-		} else {
-			path = ft.getFolderPath() + fileName;
-			File profileToAdd = new File(path);
-			if (profileToAdd.exists()) {
-				throw new IOException(fileName + " with the parameters "
-						+ metaData + " already exists!");
-			}
-		}
+        FileTuple ft = getProfile(e, metaData);
+        String path;
+        if (ft == null) {
+            path = fpg.generateFilePath(expID, FileTuple.Type.fromInt(fileType), fileName);
+        } else {
+            path = ft.getFolderPath() + fileName;
+            File profileToAdd = new File(path);
+            if (profileToAdd.exists()) {
+                throw new IOException(fileName + " with the parameters "
+                        + metaData + " already exists!");
+            }
+        }
+        FileTuple nft = FileTuple.makeNew()
+                .fromType(fileType)
+                .withExpId(expID)
+                .withInputFilePath(getParentFolder(path) + inputFileName)
+                .withPath(path)
+                .withUploader(uploader)
+                .withIsPrivate(isPrivate)
+                .withAuthor(author)
+                .withGrVersion(genomeRelease)
+                .build();
+        return this.addNewFile(nft);
 
-		String inputFilePath = null;
-		if (inputFileName != null) {
-			inputFilePath = getParentFolder(path) + inputFileName;
-		}
-
-		String query = "INSERT INTO File "
-				+ "(Path, FileType, FileName, Date, MetaData, InputFilePath, "
-				+ "Author, Uploader, IsPrivate, ExpID, GRVersion, MD5) "
-				+ "VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?, ?, ?, ?, ?, ?, ?)";
-		try(PreparedStatement stmt = conn.prepareStatement(query)) {
-			stmt.setString(1, path);
-
-			switch (fileType) {
-				case FileTuple.RAW:
-					stmt.setString(2, "Raw");
-					genomeRelease = null;
-					break;
-				case FileTuple.PROFILE:
-					stmt.setString(2, "Profile");
-					break;
-				case FileTuple.REGION:
-					stmt.setString(2, "Region");
-					break;
-				default:
-					stmt.setString(2, "Other");
-					break;
-			}
-
-			stmt.setString(3, fileName);
-			stmt.setString(4, metaData);
-			stmt.setString(5, inputFilePath);
-			stmt.setString(6, author);
-			stmt.setString(7, uploader);
-			stmt.setBoolean(8, isPrivate);
-			stmt.setString(9, expID);
-			stmt.setString(10, genomeRelease);
-			stmt.setString(11, checkSumMD5);
-
-			stmt.executeUpdate();
-		}
-
-
-		return getFileTuple(path);
 	}
 
-    public void addNewFile(FileTuple ft) throws SQLException, IOException {
+    public FileTuple addNewFile(FileTuple ft) throws SQLException, IOException {
 
         if (!FileValidator.fileNameCheck(ft.getFileName())) {
             throw new IOException("Invalid filename");
@@ -237,6 +206,41 @@ public class FileMethods {
 
             stmt.executeUpdate();
         }
+
+        String querygetID = "SELECT FileID FROM File "
+                + "WHERE Path = ?";
+        int id;
+        try (PreparedStatement stmt = conn.prepareStatement(querygetID)) {
+            stmt.setString(1, ft.getFullPath());
+            ResultSet rss = stmt.executeQuery();
+            rss.next();
+            id = rss.getInt(1);
+
+        }
+
+
+        String query2 = "INSERT INTO Parent "
+                + "(FileID, ParentID) "
+                + "VALUES (?, ?) ";
+        for (Integer i : ft.getParents()) {
+            try (PreparedStatement stmt = conn.prepareStatement(query2)) {
+                stmt.setInt(1, id);
+                stmt.setInt(2, i);
+                stmt.executeUpdate();
+            }
+        }
+
+        return FileTuple.makeNew()
+                .fromType(ft.getType())
+                .withPath(ft.getFullPath())
+                .withInputFilePath(ft.getInputFilePath())
+                .withAuthor(ft.getAuthor())
+                .withIsPrivate(ft.isPrivate())
+                .withMetaData(ft.getMetaData())
+                .withUploader(ft.getUploader())
+                .withExpId(ft.getExpId())
+                .withGrVersion(ft.getGrVersion())
+                .withId(id).build();
 
     }
 

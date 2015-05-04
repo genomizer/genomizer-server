@@ -79,7 +79,7 @@ public class FileTupleBuilder {
      */
     public FileTupleBuilder withId(Integer id) {
         nullCheck("withId()");
-        product.setId(id);
+        product.setFileID(id);
         return this;
     }
 

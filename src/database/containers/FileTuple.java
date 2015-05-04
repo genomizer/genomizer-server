@@ -46,7 +46,7 @@ public class FileTuple extends AbstractFileTuple {
         }
     }
 
-    private Integer id;
+    private Integer fileID;
     private Type type;
 
     private String status;
@@ -65,7 +65,7 @@ public class FileTuple extends AbstractFileTuple {
      * @return the fileid as an int
      */
     public Integer getFileId() {
-        return id;
+        return fileID;
     }
 
     /**
@@ -108,8 +108,8 @@ public class FileTuple extends AbstractFileTuple {
     }
 
 
-    void setId(Integer id) {
-        this.id = id;
+    void setFileID(Integer fileID) {
+        this.fileID = fileID;
     }
 
     void setType(Type type) {
@@ -131,7 +131,7 @@ public class FileTuple extends AbstractFileTuple {
      */
     public FileTuple(ResultSet resSet) throws SQLException {
 
-    	id = resSet.getInt("FileID");
+        fileID = resSet.getInt("FileID");
         path = resSet.getString("Path");
         inputFilePath = resSet.getString("InputFilePath");
         type = Type.fromString(resSet.getString("FileType"));
@@ -213,7 +213,7 @@ public class FileTuple extends AbstractFileTuple {
     @Override
     public String toString() {
 
-    	return "FileTuple [id=" + id + ", path=" + path + ", inputFilePath="
+        return "FileTuple [id=" + fileID + ", path=" + path + ", inputFilePath="
                 + inputFilePath + ", type=" + type.name() + ", filename=" + this.getFileName()
                 + ", date=" + date + ", metaData=" + metaData + ", author="
                 + author + ", uploader=" + uploader + ", isPrivate="

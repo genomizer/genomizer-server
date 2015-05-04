@@ -115,6 +115,21 @@ public class FileTupleBuilderTest {
         ftb.build();
     }
 
+    @Test
+    public void shouldGetFileIDRight() throws Exception {
+        int id = 123;
+        FileTuple f = FileTuple.makeNew()
+                .rawFile()
+                .withPath(fpath + name)
+                .withDate(new Date())
+                .withUploader(uploader)
+                .withIsPrivate(false)
+                .withId(id).build();
+
+        assertEquals(id, f.getFileId().intValue());
+
+
+    }
 
 }
 
