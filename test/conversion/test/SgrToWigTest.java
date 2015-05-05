@@ -29,13 +29,9 @@ public class SgrToWigTest {
 
     @Before
     public void setUp() {
-        pdc = new ProfileDataConverter("resources/conversionTestData/output/");
+        pdc = new ProfileDataConverter();
     }
 
-    @Test (expected = IllegalArgumentException.class)
-    public void shouldThrowIllegalArgumentException() {
-        pdc = new ProfileDataConverter("resources/nonexistent/");
-    }
 
     /**
      * Tests null argument for input file

@@ -29,12 +29,7 @@ public class wigBedToSgrTest {
 
     @Before
     public void setUp() {
-        pdc = new ProfileDataConverter("resources/conversionTestData/output/");
-    }
-
-    @Test (expected = IllegalArgumentException.class)
-    public void shouldThrowIllegalArgumentException() {
-        pdc = new ProfileDataConverter("resources/nonexistent/");
+        pdc = new ProfileDataConverter();
     }
 
     /**

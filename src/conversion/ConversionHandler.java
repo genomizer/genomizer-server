@@ -22,7 +22,6 @@ import java.sql.SQLException;
 public class ConversionHandler {
 	private DatabaseAccessor db;
 	private ProfileDataConverter pdc;
-	private static String OUTPUTPATH = "resources/conversionTestData/output/";
 	private String outputFile;
 	private String fileInDB;
 
@@ -30,7 +29,7 @@ public class ConversionHandler {
 	 * Constructor
 	 */
 	public ConversionHandler() {
-		pdc = new ProfileDataConverter(OUTPUTPATH);
+		pdc = new ProfileDataConverter();
 		outputFile = null;
 	}
 

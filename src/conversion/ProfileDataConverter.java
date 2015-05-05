@@ -19,21 +19,11 @@ import java.nio.file.Files;
  * @author Martin Larsson <dv13mln@cs.umu.se>
  */
 public class ProfileDataConverter {
-    private File outputFolder;
 
     /**
      * Constructor
-     * @param outputFolder path to archive storing converted files
      */
-    public ProfileDataConverter(String outputFolder) {
-        try {
-            this.outputFolder = new File(outputFolder);
-        } catch (IllegalArgumentException e) {
-            throw e;
-        }
-        if (!this.outputFolder.exists())
-            throw new IllegalArgumentException("Archive does not exist.");
-    }
+    public ProfileDataConverter() {}
 
     /**
      * Converts from .bed to .sgr
@@ -55,7 +45,6 @@ public class ProfileDataConverter {
         }
 
         inputFile = new File(inputPath);
-        setOutputFolder(new File(inputFile.getParent()));
 
         try {
             outputFile = new File(inputPath.replace(".bed",".sgr"));
@@ -85,10 +74,6 @@ public class ProfileDataConverter {
         }
 
         return outputFile.getPath();
-    }
-
-    private void setOutputFolder(File outputFolder) {
-        this.outputFolder = outputFolder;
     }
 
     /**
