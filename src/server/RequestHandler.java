@@ -8,8 +8,8 @@ import com.sun.net.httpserver.HttpHandler;
 import command.*;
 import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
+import response.HttpStatusCode;
 import response.Response;
-import response.StatusCode;
 import transfer.DownloadHandler;
 import transfer.UploadHandler;
 import transfer.Util;
@@ -135,7 +135,7 @@ public class RequestHandler implements HttpHandler {
         try {
             command = fetchCommand(commandClass, json);
         } catch (InstantiationException | IllegalAccessException e) {
-            ErrorResponse errorResponse = new ErrorResponse(StatusCode.
+            ErrorResponse errorResponse = new ErrorResponse(HttpStatusCode.
                     INTERNAL_SERVER_ERROR, "Could not create command from " +
                     "request");
             respond(errorResponse, exchange);
@@ -251,7 +251,7 @@ public class RequestHandler implements HttpHandler {
 
 	/*Creates a bad request ErrorResponse.*/
 	private ErrorResponse createBadRequestResponse() {
-		return new ErrorResponse(StatusCode.BAD_REQUEST, "Could not create a " +
+		return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Could not create a " +
 				"command from request. Bad format on request.");
 	}
 
@@ -282,7 +282,7 @@ public class RequestHandler implements HttpHandler {
     /*Sends a authentication failure response. Logs the event.*/
     private void respondWithAuthenticationFailure(HttpExchange exchange) {
         Debug.log("User could not be authenticated!");
-        ErrorResponse errorResponse = new ErrorResponse(StatusCode.
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatusCode.
                 INTERNAL_SERVER_ERROR, "Could not create command from " +
                 "request");
         respond(errorResponse, exchange);

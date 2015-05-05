@@ -164,19 +164,19 @@ public abstract class Command {
 	public void hasRights(UserType required) throws ValidateException {
 
 		if (userType == UserType.UNKNOWN)
-			throw new ValidateException(StatusCode.FORBIDDEN, "You don't have permission.");
+			throw new ValidateException(HttpStatusCode.FORBIDDEN, "You don't have permission.");
 
 		if (required == userType)
 			return;
 
 		else if (required == UserType.ADMIN)
-			throw new ValidateException(StatusCode.FORBIDDEN, "You don't have permission.");
+			throw new ValidateException(HttpStatusCode.FORBIDDEN, "You don't have permission.");
 
 		else if (required == UserType.USER && userType != UserType.ADMIN)
-			throw new ValidateException(StatusCode.FORBIDDEN, "You don't have permission.");
+			throw new ValidateException(HttpStatusCode.FORBIDDEN, "You don't have permission.");
 
 		else if (required == UserType.UNKNOWN && !(userType == UserType.ADMIN))
-			throw new ValidateException(StatusCode.FORBIDDEN, "You don't have permission.");
+			throw new ValidateException(HttpStatusCode.FORBIDDEN, "You don't have permission.");
 	}
 
 }
