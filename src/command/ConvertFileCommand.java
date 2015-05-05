@@ -5,7 +5,7 @@ import conversion.ConversionHandler;
 import database.constants.MaxLength;
 import response.MinimalResponse;
 import response.Response;
-import response.StatusCode;
+import response.HttpStatusCode;
 
 /**
  * command that handles fileconversion.
@@ -39,6 +39,6 @@ public class ConvertFileCommand extends Command{
     public Response execute() {
         ConversionHandler convHandler = new ConversionHandler();
         //TODO convert with filepath and currentformat + toformat. and stuff
-        return new MinimalResponse(StatusCode.NO_CONTENT);
+        return new MinimalResponse(HttpStatusCode.NO_CONTENT);
     }
 }
