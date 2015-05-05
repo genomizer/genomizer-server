@@ -1,6 +1,8 @@
 package command.test;
 
 import static org.junit.Assert.*;
+
+import database.constants.MaxLength;
 import org.junit.Before;
 import org.junit.Test;
 import com.google.gson.Gson;
@@ -106,7 +108,7 @@ public class EditAnnotationFieldCommandTest {
 	public void testValidateOldNameLengthNotToLong() throws ValidateException {
 
 		String big = "";
-		for(int i = 0; i < database.constants.MaxSize.ANNOTATION_LABEL + 1; i++) {
+		for(int i = 0; i < MaxLength.ANNOTATION_LABEL + 1; i++) {
 			big = big + "a";
 		}
 		EditAnnotationFieldCommand c = new EditAnnotationFieldCommand();
@@ -178,7 +180,7 @@ public class EditAnnotationFieldCommandTest {
 	public void testValidateNewNameLengthNotToLong() throws ValidateException {
 
 		String big = "";
-		for(int i = 0; i < database.constants.MaxSize.ANNOTATION_LABEL + 1; i++) {
+		for(int i = 0; i < MaxLength.ANNOTATION_LABEL + 1; i++) {
 			big = big + "a";
 		}
 		EditAnnotationFieldCommand c = new EditAnnotationFieldCommand();

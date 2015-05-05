@@ -1,9 +1,6 @@
 package response;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -12,28 +9,47 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
 import command.ProcessStatus;
+import server.ErrorLogger;
 
 /**
- * Class that represents the response for the get process status
+ * Class that represents the response for the get process status.
+ *
+ * @author
+ * @version 1.0
  */
 public class GetProcessStatusResponse extends Response {
 
-	private Collection<ProcessStatus> procStats;
+	private LinkedList<ProcessStatus> processStatuses;
 
-	public GetProcessStatusResponse(Collection<ProcessStatus> procStats) {
-		this.procStats = procStats;
+
+	/**
+	 * Creator for the response. Always returns 200 as return code.
+	 * @param processStatus The process status to return.
+	 */
+	public GetProcessStatusResponse(LinkedList<ProcessStatus> processStatus) {
+
+		this.processStatuses = processStatus;
 		code = 200;
 	}
 
+	/**
+	 * Creates a Json representation of the body
+	 * @return The response body as a String
+	 */
 	@Override
 	public String getBody() {
-		List<ProcessStatus> list = new ArrayList<>( procStats);
 
-		Collections.sort( list );
+		if (processStatuses.size() > 0) {
+			ErrorLogger.log("SYSTEM", "GetProcessStatusResponse.getBody(): " +
+					"Error getting process status");
+			return "";
+		}
+
+		Collections.sort( processStatuses );
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
 		JsonArray arr = new JsonArray();
-		for (ProcessStatus p : list) {
+		for (ProcessStatus p : processStatuses) {
 			JsonElement elem = gson.toJsonTree(p, ProcessStatus.class);
 			arr.add(elem);
 		}
@@ -41,8 +57,9 @@ public class GetProcessStatusResponse extends Response {
 		return toPrettyFormat(arr.toString());
 	}
 
-    private static String toPrettyFormat(String jsonString)
-    {
+	//Parses the json string to a nice format for sending
+    private String toPrettyFormat(String jsonString) {
+
         JsonParser parser = new JsonParser();
         JsonArray json = parser.parse(jsonString).getAsJsonArray();
 

@@ -25,44 +25,45 @@ public class ConversionHandler {
 	 * @throws InterruptedException
 	 */
 	public String executeProfileDataConversion(String conversionName,
-			String inFile, String outFile, String secondColumn) throws InterruptedException, IOException {
+			String inFile, String outFile, String secondColumn)
+			throws InterruptedException, IOException {
 
 		checkValidity(conversionName, inFile, outFile, secondColumn);
 
-
 		ProfileDataConverter PDC = new ProfileDataConverter();
 
-				switch (conversionName) {
-				case "wigToSgr":
-					PDC.wigToSgr(inFile, outFile);
-					break;
-				case "wigToBed":
-					PDC.wigToBed(inFile, outFile, secondColumn);
-					break;
-				case "bedToSgr":
-						PDC.bedToSgr(inFile, outFile);
-					break;
-				case "sgrToBed":
-					PDC.sgrToBed(inFile, outFile, secondColumn);
-					break;
-				case "gff3ToBed":
-					PDC.gff3ToBed(inFile, outFile, secondColumn);
-					break;
-				case "gff3ToSgr":
-						PDC.gff3ToSgr(inFile, outFile);
-					break;
-				case "gff3ToWig":
-					PDC.gff3ToWig(inFile, outFile);
+		switch (conversionName) {
+			case "wigToSgr":
+				PDC.wigToSgr(inFile, outFile);
 				break;
-				case "sgrToWig":
-					PDC.sgrToWig(inFile, outFile);
+			case "wigToBed":
+				PDC.wigToBed(inFile, outFile, secondColumn);
 				break;
-				case "bedToWig":
-					PDC.bedToWig(inFile, outFile);
+			case "bedToSgr":
+					PDC.bedToSgr(inFile, outFile);
 				break;
-				default:
-					throw new IllegalArgumentException();
-				}
+			case "sgrToBed":
+				PDC.sgrToBed(inFile, outFile, secondColumn);
+				break;
+			case "gff3ToBed":
+				PDC.gff3ToBed(inFile, outFile, secondColumn);
+				break;
+			case "gff3ToSgr":
+					PDC.gff3ToSgr(inFile, outFile);
+				break;
+			case "gff3ToWig":
+				PDC.gff3ToWig(inFile, outFile);
+				break;
+			case "sgrToWig":
+				PDC.sgrToWig(inFile, outFile);
+				break;
+			case "bedToWig":
+				PDC.bedToWig(inFile, outFile);
+				break;
+			default:
+				throw new IllegalArgumentException();
+		}
+
 		return "success";
 	}
 
@@ -72,27 +73,32 @@ public class ConversionHandler {
 		if (conversionName == null || inFile == null || outFile == null) {
 			throw new IllegalArgumentException();
 		}
-		if ((conversionName == "wigToBed" || conversionName == "sgrToBed" || conversionName == "gff3ToBed")
+
+		if ((conversionName == "wigToBed"
+				|| conversionName == "sgrToBed"
+				|| conversionName == "gff3ToBed")
 				&& secondColumn == null) {
 			throw new IllegalArgumentException();
 		}
+
 		File f = new File(outFile);
 		if(f.isDirectory()) {
 			throw new IllegalArgumentException();
 		}
+
 		return true;
 	}
 
 	public String checkFileType(String filePath){
 		String type = "";
+
 		if((filePath.length()-filePath.replaceAll("\\.","").length())>=1){
+
 			String[] splitArray = filePath.split("\\.");
 			int lengthOfArray = splitArray.length;
 			type = splitArray[lengthOfArray-1];
 			System.err.println(type);
 		}
-
-
 
 		return type;
 	}

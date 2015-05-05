@@ -1,38 +1,28 @@
 package command;
 
+import response.HttpStatusCode;
 import response.MinimalResponse;
 import response.Response;
-import response.StatusCode;
 
 /**
  * Class used to handle updateing files in experiments.
  *
- * @author Kommunikation/kontroll 2014.
- * @version 1.0
+ * @author Business Logic 2015.
+ * @version 1.1
  */
 public class UpdateFileInExperimentCommand extends Command {
+	//TODO Implement this class
 
-	/**
-	 * Method used to validate the information needed
-	 * to execute the command.
-	 */
-	@Override
-	public boolean validate() {
-
-		// TODO Auto-generated method stub
-		return true;
+	public UpdateFileInExperimentCommand(String json, String expID) {
 
 	}
 
-	/**
-	 * Used to execute the actual command.
-	 */
+	@Override
+	public void validate() {
+	}
+
 	@Override
 	public Response execute() {
-
-		//Method not implemented, send appropriate response
-		return 	new MinimalResponse(StatusCode.NO_CONTENT);
-
+		return 	new MinimalResponse(HttpStatusCode.NO_CONTENT);
 	}
-
 }

@@ -10,7 +10,7 @@ import org.junit.Test;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import command.DeleteAnnotationInfo;
+import unused.DeleteAnnotationInfo;
 
 /**
  * Class used to test that the DeleteAnnotationInfo class

@@ -75,17 +75,16 @@ public class GenomeMethods {
     /**
      * Add one genomerelease to the database.
      *
-     * @param String
-     *            genomeVersion.
-     * @param String
-     *            species.
+     * @param genomeVersion the genome version
+     * @param species the species
+	 * @param filename a filename
      * @return String The upload URL.
      * @throws SQLException
      *             if adding query failed.
      * @throws IOException
      */
     public String addGenomeRelease(String genomeVersion, String species,
-            String filename) throws SQLException, IOException {
+            String filename, String checkSumMD5) throws SQLException, IOException {
 
     	if(!FileValidator.fileNameCheck(filename)){
     		throw new IOException("Invalid file name");
@@ -119,17 +118,88 @@ public class GenomeMethods {
         }
 
         String query2 = "INSERT INTO Genome_Release_Files "
-                + "(Version, FileName) VALUES (?, ?)";
+                + "(Version, FileName, MD5) VALUES (?, ?, ?)";
 
 		stmt = conn.prepareStatement(query2);
 		stmt.setString(1, genomeVersion);
 		stmt.setString(2, filename);
+		stmt.setString(3, checkSumMD5);
 		stmt.executeUpdate();
 		stmt.close();
 
 		filePathBuilder.insert(0, ServerDependentValues.UploadURL);
 		stmt.close();
 		return filePathBuilder.toString();
+	}
+
+	/**
+	 * Retrieve the MD5 checksum corresponding to a given file
+	 * (either a genome release file or a chain file).
+	 *
+	 * @param  file          file name.
+	 * @throws SQLException  if something went wrong.
+	 */
+	public String getFileCheckSumMD5(String file) throws SQLException {
+		File fileFile   = new File(file);
+		String fileName = fileFile.getName();
+		String fileDir  = fileFile.getParent();
+		if (!fileDir.endsWith(File.separator))
+			fileDir += File.separator;
+
+		// Is this a genome release file?
+		// Given directory name, get genome release version...
+		String genomeReleaseVersion = null;
+		try (PreparedStatement stmt = conn.prepareStatement(
+				"SELECT Version FROM Genome_Release WHERE FolderPath = ?")) {
+			stmt.setString(1, fileDir);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				genomeReleaseVersion = rs.getString("Version");
+			}
+		}
+
+		// Given genome release version and file name, get MD5.
+		if (genomeReleaseVersion != null) {
+			try (PreparedStatement stmt = conn.prepareStatement(
+					"SELECT MD5 FROM Genome_Release_Files WHERE FileName = ? AND Version = ?")) {
+				stmt.setString(1, fileName);
+				stmt.setString(2, genomeReleaseVersion);
+				ResultSet rs = stmt.executeQuery();
+				if (rs.next()) {
+					return rs.getString("MD5");
+				}
+			}
+		}
+
+		// OK, maybe this is a chain file?
+		// Given a directory name, get from- and to-versions.
+		String chainFileFromVersion = null;
+		String chainFileToVersion = null;
+		try (PreparedStatement stmt = conn.prepareStatement(
+				"SELECT FromVersion, ToVersion FROM Chain_File WHERE FolderPath = ?")) {
+			stmt.setString(1, fileDir);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				chainFileFromVersion = rs.getString("FromVersion");
+				chainFileToVersion   = rs.getString("ToVersion");
+			}
+		}
+
+		// Given from- and to-versions and chain file name, get MD5.
+		if (chainFileFromVersion != null && chainFileToVersion != null) {
+			try (PreparedStatement stmt = conn.prepareStatement(
+					"SELECT MD5 FROM Chain_File_Files WHERE FileName = ? AND FromVersion = ? AND ToVersion = ?")) {
+				stmt.setString(1, fileName);
+				stmt.setString(2, chainFileFromVersion);
+				stmt.setString(3, chainFileToVersion);
+				ResultSet rs = stmt.executeQuery();
+				if (rs.next()) {
+					return rs.getString("MD5");
+				}
+			}
+		}
+
+		return null;
 	}
 
     private boolean genomeReleaseFileExists(String genomeVersion,
@@ -139,14 +209,14 @@ public class GenomeMethods {
         if (g == null) {
             return false;
         }
-        if (inCaseSensitiveSearch(filename, g.getFiles()) != null) {
+        if (caseInsensitiveSearch(filename, g.getFiles()) != null) {
             return true;
         }
         return false;
     }
 
-    private String inCaseSensitiveSearch(String target,
-            List<String> list) {
+    private String caseInsensitiveSearch(String target,
+										 List<String> list) {
         for (String s: list) {
             if (s.equalsIgnoreCase(target)) {
                 return s;
@@ -187,10 +257,8 @@ public class GenomeMethods {
 	/**
 	 * Removes one specific genome version stored in the database.
 	 *
-	 * @param version
+	 * @param genomeVersion
 	 *            the genome version.
-	 * @param specie
-	 *            .
 	 * @return boolean true if succeded, false if failed.
 	 * @throws SQLException
 	 * @throws IOException
@@ -247,7 +315,7 @@ public class GenomeMethods {
 	 *         have a genomeRelase entry in the database.
 	 * @throws SQLException
 	 */
-	public ArrayList<Genome> getAllGenomReleasesForSpecies(String species)
+	public ArrayList<Genome> getAllGenomeReleasesForSpecies(String species)
 			throws SQLException {
 
         String query = "SELECT * FROM Genome_Release "
@@ -313,18 +381,15 @@ public class GenomeMethods {
 	 * Adds a chain file to database for conversions. Parameters: Oldversion,
 	 * new version and filename. Returns: upload URL
 	 *
-	 * @param String
-	 *            fromVersion
-	 * @param String
-	 *            toVersion
-	 * @param String
-	 *            fileName
-	 * @return String upload URL
+	 * @param fromVersion version to convert from
+	 * @param toVersion version to convert to
+	 * @param fileName the name of the file
+	 * @return the upload URL
 	 * @throws SQLException
 	 * @throws IOException
 	 */
 	public String addChainFile(String fromVersion, String toVersion,
-			String fileName) throws SQLException, IOException {
+			String fileName, String checkSumMD5) throws SQLException, IOException {
 
     	if(!FileValidator.fileNameCheck(fileName)){
     		throw new IOException("Invalid file name");
@@ -351,7 +416,7 @@ public class GenomeMethods {
 				+ "(FromVersion, ToVersion, FolderPath) VALUES (?, ?, ?)";
 
         String insertQuery2 = "INSERT INTO Chain_File_Files "
-                + "(FromVersion, ToVersion, FileName) " + "VALUES (?, ?, ?)";
+                + "(FromVersion, ToVersion, FileName, MD5) " + "VALUES (?, ?, ?, ?)";
 
         ChainFile cf = getChainFile(fromVersion, toVersion);
         if (cf == null) {
@@ -367,6 +432,7 @@ public class GenomeMethods {
 		stmt.setString(1, fromVersion);
 		stmt.setString(2, toVersion);
 		stmt.setString(3, fileName);
+		stmt.setString(4, checkSumMD5);
 		stmt.executeUpdate();
 		stmt.close();
 
@@ -422,7 +488,7 @@ public class GenomeMethods {
 
 	/**
 	 * Deletes a folder if it is empty, else open folder and repeat.
-	 * @param folder
+	 * @param folder the folder to delete
 	 */
 	private void recursiveDelete(File folder) {
 		File[] contents = folder.listFiles();
@@ -444,7 +510,7 @@ public class GenomeMethods {
 	 * @throws SQLException
 	 *             - if the query does not succeed
 	 */
-	public List<String> getAllGenomReleaseSpecies() throws SQLException {
+	public List<String> getAllGenomeReleaseSpecies() throws SQLException {
 		String query = "SELECT DISTINCT Species FROM Genome_Release";
 		Statement stmt = conn.createStatement();
 		ResultSet rs = stmt.executeQuery(query);
@@ -463,7 +529,7 @@ public class GenomeMethods {
 	 * @throws SQLException
 	 *             - if the query does not succeed
 	 */
-	public List<Genome> getAllGenomReleases() throws SQLException {
+	public List<Genome> getAllGenomeReleases() throws SQLException {
 		String query = "SELECT * FROM Genome_Release "
 				+ "NATURAL JOIN Genome_Release_Files ";
 

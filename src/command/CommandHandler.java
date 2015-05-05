@@ -2,11 +2,12 @@ package command;
 
 import authentication.Authenticate;
 import response.ErrorResponse;
+import response.HttpStatusCode;
 import response.ProcessResponse;
 import response.Response;
-import response.StatusCode;
 import server.Debug;
-import server.WorkHandler;
+import server.ErrorLogger;
+import server.WorkPool;
 
 /**
  * Should be used to handle and create different commands using information
@@ -17,12 +18,10 @@ import server.WorkHandler;
  */
 public class CommandHandler {
 	private CommandFactory cmdFactory = new CommandFactory();
-	
-	/*Used to execute heavy work such as process commands execute*/
-	private WorkHandler heavyWorkThread = new WorkHandler();
+	private WorkPool workPool;
 
-	public CommandHandler() {
-		heavyWorkThread.start();
+	public CommandHandler(WorkPool workPool) {
+		this.workPool = workPool;
 	}
 
 	/**
@@ -36,42 +35,34 @@ public class CommandHandler {
 	public Response processNewCommand(String json, String uri,
 									  String uuid, CommandType cmdt) {
 		Command myCom = createCommand(json, uri, uuid, cmdt);
-
 		if(myCom == null) {
 
 			/*If a command could not be created from the given request, return
 			* an error response.*/
 			Debug.log("COMMAND IS NULL, COULD NOT CREATE A COMMAND FROM JSON");
-			return new ErrorResponse(StatusCode.BAD_REQUEST, "Could not " +
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Could not " +
 					"create a command from request. Bad format on request.");
 		}
 
 		try {
-			if (myCom.validate()) {
-				if(CommandType.PROCESS_COMMAND.equals(cmdt)){
+			myCom.validate();
+			if (CommandType.PROCESS_COMMAND.equals(cmdt)) {
 
 					/*If the command is a process command, execution of it
 					* starts in the heavy work thread, followed by returning a
 					* OK status to the client.*/
 					Debug.log("Adding processCommand to work queue.");
-					heavyWorkThread.addWork((ProcessCommand)myCom);
-					return new ProcessResponse(StatusCode.OK);
+					workPool.addWork((ProcessCommand)myCom);
+					return new ProcessResponse(HttpStatusCode.OK);
 				}else {
 
-					/*If the command is of the common kind, execute the
-					* command and return the response.*/
-					return myCom.execute();
-				}
-			} else {
-
-				/*If the command is not valid, return an error response.*/
-				Debug.log("Command not valid");
-				return new ErrorResponse(StatusCode.BAD_REQUEST, "The " +
-						"command was invalid. Check the input! Valid " +
-						"characters are A-Z, a-z, 0-9 and space");
-			}
-
+				/*If the command is of the common kind, execute the command
+				* and return the response.*/
+				return myCom.execute();
+ 			}
 		} catch(ValidateException e) {
+			Debug.log(e.getMessage());
+			ErrorLogger.log("ValidateException", e.getMessage());
 			return new ErrorResponse(e.getCode(), e.getMessage());
 		}
 	}
@@ -86,125 +77,85 @@ public class CommandHandler {
 	 */
 	private Command createCommand(String json, String uri, String uuid,
 								  CommandType cmdt) {
-		if (RestfulSizes.getSize(cmdt) != calculateURISize(uri)) {
+		if (RestfulLengths.getSize(cmdt) != calculateURISize(uri)) {
 			return null;
 		}
 
-		Command newCommand = null;
 		String parsedURI = parseRequestURI(uri);
 		String username = Authenticate.getUsernameByID(uuid);
 		String[] rest;
-
 		switch (cmdt) {
 			case DELETE_ANNOTATION_VALUE_COMMAND:
 				rest = uri.split("/");
-				newCommand = cmdFactory.
+				return cmdFactory.
 						createDeleteAnnotationValueCommand(rest[3], rest[4]);
-				break;
 			case LOGIN_COMMAND:
-				newCommand = cmdFactory.createLoginCommand(json);
-				break;
+				return cmdFactory.createLoginCommand(json);
 			case LOGOUT_COMMAND:
-				newCommand = cmdFactory.createLogoutCommand(username);
-				break;
+				return cmdFactory.createLogoutCommand(username);
 			case GET_EXPERIMENT_COMMAND:
-				newCommand = cmdFactory.createGetExperimentCommand(parsedURI);
-				break;
+				return cmdFactory.createGetExperimentCommand(parsedURI);
 			case ADD_EXPERIMENT_COMMAND:
-				newCommand = cmdFactory.createAddExperimentCommand(json);
-				break;
+				return cmdFactory.createAddExperimentCommand(json);
 			case UPDATE_EXPERIMENT_COMMAND:
-				newCommand = cmdFactory.
+				return cmdFactory.
 						createUpdateExperimentCommand(json, parsedURI);
-				break;
 			case DELETE_EXPERIMENT_COMMAND:
-				newCommand = cmdFactory.
-						createDeleteExperimentCommand(parsedURI);
-				break;
+				return cmdFactory.createDeleteExperimentCommand(parsedURI);
 			case GET_FILE_FROM_EXPERIMENT_COMMAND:
-				newCommand = cmdFactory.
-						createGetFileFromExperimentCommand(parsedURI);
-				break;
+				return cmdFactory.createGetFileFromExperimentCommand(parsedURI);
 			case ADD_FILE_TO_EXPERIMENT_COMMAND:
-				newCommand = cmdFactory.createAddFileToExperimentCommand(json);
-				break;
+				return cmdFactory.createAddFileToExperimentCommand(json);
 			case UPDATE_FILE_IN_EXPERIMENT_COMMAND:
-				newCommand = cmdFactory.
-						createUpdateFileInExperimentCommand(json, parsedURI);
-				break;
-			case DELETE_FILE_FROM_EXPERIMENT_COMMAND:
-				newCommand = cmdFactory.
-						createDeleteFileFromExperimentCommand(parsedURI);
-				break;
-			case SEARCH_FOR_EXPERIMENTS_COMMAND:
-				newCommand = cmdFactory.
-						createSearchForExperimentCommand(parsedURI);
-				break;
-			case DELETE_USER_COMMAND:
-				newCommand = cmdFactory.createDeleteUserCommand(parsedURI);
-				break;
-			case PROCESS_COMMAND:
-				newCommand = cmdFactory.createProcessCommand(json, username,
+				return cmdFactory.createUpdateFileInExperimentCommand(json,
 						parsedURI);
-				break;
+			case DELETE_FILE_FROM_EXPERIMENT_COMMAND:
+				return cmdFactory.
+                        createDeleteFileFromExperimentCommand(parsedURI);
+			case SEARCH_FOR_EXPERIMENTS_COMMAND:
+				return cmdFactory.createSearchForExperimentCommand(parsedURI);
+			case DELETE_USER_COMMAND:
+				return cmdFactory.createDeleteUserCommand(parsedURI);
+			case PROCESS_COMMAND:
+				return cmdFactory.createProcessCommand(json, username,
+						parsedURI);
 			case GET_PROCESS_STATUS_COMMAND:
-				newCommand = cmdFactory.
-						createGetProcessStatusCommand(heavyWorkThread);
-				break;
+				return cmdFactory.createGetProcessStatusCommand(workPool);
 			case GET_ANNOTATION_INFORMATION_COMMAND:
-				newCommand = cmdFactory.
-						createGetAnnotationInformationCommand(json);
-				break;
+				return cmdFactory.createGetAnnotationInformationCommand();
 			case ADD_ANNOTATION_FIELD_COMMAND:
-				newCommand = cmdFactory.
-						createAddAnnotationFieldCommand(parsedURI);
-				break;
+				return cmdFactory.createAddAnnotationFieldCommand(json);
 			case ADD_ANNOTATION_VALUE_COMMAND:
-				newCommand = cmdFactory.createAddAnnotationValueCommand(json);
-				break;
+				return cmdFactory.createAddAnnotationValueCommand(json);
 			case RENAME_ANNOTATION_VALUE_COMMAND:
-				newCommand = cmdFactory.creatRenameAnnotationValueCommand(json);
-				break;
+				return cmdFactory.createEditAnnotationFieldCommand(json);
 			case RENAME_ANNOTATION_FIELD_COMMAND:
-				newCommand = cmdFactory.createEditAnnotationFieldCommand(json);
-				break;
+				return cmdFactory.createEditAnnotationFieldCommand(json);
 			case REMOVE_ANNOTATION_FIELD_COMMAND:
-				newCommand = cmdFactory.
-						createRemoveAnnotationFieldCommand(parsedURI);
-				break;
+				return cmdFactory.createRemoveAnnotationFieldCommand(parsedURI);
 			case GET_ANNOTATION_PRIVILEGES_COMMAND:
-				newCommand = cmdFactory.
-						createGetAnnotationPrivilegesCommand(json);
-				break;
+				return cmdFactory.createGetAnnotationPrivilegesCommand(json);
 			case UPDATE_ANNOTATION_PRIVILEGES_COMMAND:
-				newCommand = cmdFactory.
-						createUpdateAnnotationPrivilegesCommand(json,
-								parsedURI);
-				break;
+				return cmdFactory.createUpdateAnnotationPrivilegesCommand(json,
+						parsedURI);
 			case ADD_GENOME_RELEASE_COMMAND:
-				newCommand = cmdFactory.createAddGenomeReleaseCommand(json);
-				break;
+				return cmdFactory.createAddGenomeReleaseCommand(json);
 			case DELETE_GENOME_RELEASE_COMMAND:
 				rest = uri.split("/");
-				newCommand = cmdFactory.
-						createDeleteGenomeReleaseCommand(rest[2], rest[3]);
-				break;
+				return cmdFactory.createDeleteGenomeReleaseCommand(rest[2],
+						rest[3]);
 			case GET_ALL_GENOME_RELEASE_COMMAND:
-				newCommand=cmdFactory.createGetAllGenomeReleasesCommand();
-				break;
+				return cmdFactory.createGetAllGenomeReleasesCommand();
 			case GET_GENOME_RELEASE_SPECIES_COMMAND:
-				newCommand=cmdFactory.
+				return cmdFactory.
 						createGetGenomeReleasesSpeciesCommand(parsedURI);
-				break;
 			case CREATE_USER_COMMAND:
-				newCommand=cmdFactory.createCreateUserCommand(json);
-				break;
+				return cmdFactory.createCreateUserCommand(json);
 			case IS_TOKEN_VALID_COMMAND:
-				newCommand=cmdFactory.createIsTokenValidCommand(uuid);
-				break;
+				return cmdFactory.createIsTokenValidCommand(uuid);
+			default:
+				return null;
 		}
-
-		return newCommand;
 	}
 
 	/**
