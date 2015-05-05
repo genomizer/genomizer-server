@@ -721,6 +721,13 @@ public class DatabaseAccessor implements AutoCloseable {
                 metaData, author, uploader, isPrivate, genomeRelease, checkSumMD5);
     }
 
+    public FileTuple addNewFile(FileTupleTemplate ft,
+                                String fileName,
+                                String inputFileName,
+                                String md5)
+            throws SQLException, IOException {
+        return fileMethods.addNewFile(ft, fileName, inputFileName, md5);
+    }
 
     /**
      * Sets the status of a file to "Done".

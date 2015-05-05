@@ -58,7 +58,6 @@ public class AddNewFileTests {
      * @throws Exception
      */
     @Test
-    @Ignore
     public void testGetDeleteGetAddGetFileFileUsingTuples() throws Exception {
 
         String expectedFilePath = fpg.generateFilePath(testExpId,
@@ -83,8 +82,9 @@ public class AddNewFileTests {
                 .withAuthor(testAuthor)
                 .withMetaData(testMetaData)
                 .withIsPrivate(testIsPrivate)
+                .withUploader(testUploader)
                 .build();
-        //dbac.addNewFile(ftt,testFileName,testInputFileName,testUploader);
+        dbac.addNewFile(ftt, testFileName, testInputFileName, null);
         ft = dbac.getFileTuple(expectedFilePath);
         assertEquals(expectedFilePath, ft.getFullPath());
 

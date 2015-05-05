@@ -33,15 +33,6 @@ CREATE TABLE Parent
 );
 
 
-CREATE VIEW File_With_Parents AS
-SELECT File.FileID, Path, FileType, FileName,
-       Date, MetaData, InputFilePath, Author,
-       Uploader, IsPrivate, ExpID, GRVersion,
-       Status, MD5, ProcessName, ProcessVersion,
-       ProcessFlags, ParentID FROM
-    File LEFT OUTER JOIN Parent ON File.FileID = Parent.FileID;
-
-
 CREATE TABLE Annotation
 (
     Label           VARCHAR(32)     NOT NULL,
