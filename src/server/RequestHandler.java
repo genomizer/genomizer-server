@@ -92,9 +92,9 @@ public class RequestHandler implements HttpHandler {
         }
 
 		/*Authenticate the user and send the appropriate response if needed.*/
-		String username = performAuthorization(exchange);
+		String uuid = performAuthorization(exchange);
 		if (commandClass == null) {
-			if (username == null) {
+			if (uuid == null) {
                 respondWithAuthenticationFailure(exchange);
 				return;
 			} else {
@@ -104,7 +104,7 @@ public class RequestHandler implements HttpHandler {
 				respond(createBadRequestResponse(), exchange);
 				return;
 			}
-		} else if (username == null && !commandClass.equals(LoginCommand.
+		} else if (uuid == null && !commandClass.equals(LoginCommand.
                 class)) {
 			Debug.log("User could not be authenticated!");
             respondWithAuthenticationFailure(exchange);
@@ -112,7 +112,7 @@ public class RequestHandler implements HttpHandler {
 		}
 
         /*Log the user.*/
-        logUser(username);
+        logUser(Authenticate.getUsernameByID(uuid));
 
         /*Retrieve the URI part of the request header.*/
 		String uri = exchange.getRequestURI().toString();
@@ -142,7 +142,7 @@ public class RequestHandler implements HttpHandler {
             return;
         }
 
-		command.setFields(uri, username, userType);
+		command.setFields(uri, Authenticate.getUsernameByID(uuid), userType);
 
 		/*Attempt to validate the command.*/
 		try {
@@ -188,7 +188,7 @@ public class RequestHandler implements HttpHandler {
     }
 
     /*Performs authorization, returns null if the user could not be authorized,
-    * else it returns the username.*/
+    * else it returns the uuid.*/
 	private String performAuthorization(HttpExchange exchange) {
 		String uuid = null;
 
@@ -219,7 +219,7 @@ public class RequestHandler implements HttpHandler {
 		Debug.log("Trying to authenticate token " + uuid + "...");
 		if (uuid != null && Authenticate.idExists(uuid)) {
 			Authenticate.updateLatestRequest(uuid);
-            return Authenticate.getUsernameByID(uuid);
+            return uuid;
 		} else {
 			return null;
 		}
