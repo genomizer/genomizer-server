@@ -6,7 +6,10 @@ import com.sun.net.httpserver.HttpExchange;
 import command.Command;
 import command.ValidateException;
 import database.DatabaseAccessor;
+import database.containers.ChainFile;
 import database.containers.FileTuple;
+import database.containers.GenomeFile;
+import database.containers.HasCheckSumMD5;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUpload;
@@ -20,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
+import java.nio.file.Files;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
@@ -115,10 +119,7 @@ public class UploadHandler {
                 File outFile = new File(absUploadPath == null
                         ? this.uploadDir + fileItem.getName()
                         : absUploadPath);
-                if (!verifyMD5(absUploadPath, fileItem)) {
-                    throw new ValidateException(HttpStatusCode.BAD_REQUEST,
-                            "Incorrect checksum!");
-                }
+                commitFile(absUploadPath, fileItem);
                 outFile.getParentFile().mkdirs();
                 fileItem.write(outFile);
                 Debug.log("Successfully saved the uploaded file to '"
@@ -134,25 +135,61 @@ public class UploadHandler {
         out.close();
     }
 
-    private boolean verifyMD5(String absUploadPath, FileItem fileItem)
-            throws SQLException, IOException {
+    // Verify the file's integrity and mark it as available for downloading.
+    private void commitFile(String absUploadPath, FileItem fileItem)
+            throws SQLException, ValidateException, IOException {
         try( DatabaseAccessor db = Command.initDB() )
         {
-            String checkSumMD5 = db.getFileCheckSumMD5(absUploadPath);
-            if (checkSumMD5 != null) {
-                String actualMD5 = DigestUtils.md5Hex(fileItem.getInputStream());
-                if (!actualMD5.equals(checkSumMD5)) {
-                    Debug.log("MD5 verification error. Expected: "
-                            + checkSumMD5 + ", actual: " + actualMD5 + ".");
-                    return false;
-                }
-                Debug.log("MD5 checksum verified successfully.");
-                return true;
+            String actualMD5 = DigestUtils.md5Hex(fileItem.getInputStream());
+
+            FileTuple  ft = db.getFileTuple(absUploadPath);
+            if (ft != null) {
+                verifyOrUpdateMD5(ft, actualMD5, db);
+                return;
+            }
+
+            GenomeFile gf = db.getGenomeReleaseFile(absUploadPath);
+            if (gf != null) {
+                verifyOrUpdateMD5(gf, actualMD5, db);
+                return;
+            }
+
+            ChainFile  cf = db.getChainFile(absUploadPath);
+            if (cf != null) {
+                verifyOrUpdateMD5(cf, actualMD5, db);
+                return;
+            }
+
+            Debug.log("File '" + absUploadPath + "' not registered in the database!");
+            Files.delete(new File(absUploadPath).toPath());
+            throw new ValidateException(HttpStatusCode.BAD_REQUEST,
+                    "Request to upload a file that wasn't previously registered!");
+        }
+    }
+
+    // Verify the file's MD5 checksum.
+    // If the client hasn't sent us one, just save the actual checksum.
+    private void verifyOrUpdateMD5(HasCheckSumMD5 file, String actualMD5, DatabaseAccessor db)
+            throws SQLException, ValidateException {
+        String checkSumMD5 = file.getCheckSumMD5();
+
+        if (checkSumMD5 != null) {
+            if (!actualMD5.equals(checkSumMD5)) {
+                Debug.log("MD5 verification error. Expected: "
+                        + checkSumMD5 + ", actual: " + actualMD5 + ".");
+                throw new ValidateException(HttpStatusCode.BAD_REQUEST,
+                        "Incorrect checksum!");
             }
             else {
-                Debug.log("MD5 checksum not found for this file: skipping the check.");
-                return true;
+                Debug.log("MD5 checksum verified successfully.");
+                return;
             }
+        }
+        else {
+            Debug.log("MD5 checksum not provided by the client: "
+                    + "updating the database with actual checksum.");
+            file.setCheckSumMD5(db, actualMD5);
+            return;
         }
     }
 }

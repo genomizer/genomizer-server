@@ -5,13 +5,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 
+import database.DatabaseAccessor;
 import database.constants.ServerDependentValues;
 
 /**
  * Container class for holding data on a file in the database. Public variables
  * are used to get the different values of the file.
  */
-public class FileTuple {
+public class FileTuple implements HasCheckSumMD5 {
 
     public static final int RAW = 1;
     public static final int PROFILE = 2;
@@ -106,6 +107,14 @@ public class FileTuple {
 
     	int filenameIndex = path.lastIndexOf(File.separator);
         return path.substring(0, filenameIndex + 1);
+    }
+
+    public String getCheckSumMD5() {
+        return checkSumMD5;
+    }
+
+    public void setCheckSumMD5(DatabaseAccessor db, String checkSumMD5) throws SQLException {
+        db.setFileCheckSumMD5(this, checkSumMD5);
     }
 
     /**
