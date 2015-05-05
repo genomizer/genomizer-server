@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Must be executed in the genomizer folder!
+
 # This script will change the path where sra-files are stored.
 # sra-toolkit uses the home directory as default path to store
 # sra-files. By using this script all sra-files is stored in 
