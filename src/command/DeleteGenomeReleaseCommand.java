@@ -37,7 +37,7 @@ public class DeleteGenomeReleaseCommand extends Command {
 	@Override
 	public void validate() throws ValidateException {
 		validateName(genomeVersion, MaxLength.GENOME_VERSION, "Genome version");
-		validateName(species, MaxLength.GENOME_SPECIES, "Genome specie");
+		validateName(species, MaxLength.GENOME_SPECIES, "Genome species");
 	}
 
 	@Override
@@ -57,13 +57,13 @@ public class DeleteGenomeReleaseCommand extends Command {
 									DeleteGenomeReleaseResponse(HttpStatusCode.OK);
 						} else {
 							return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
-									"Could not delete genomrelease");
+									"Could not delete genome release");
 						}
 					}
 				}
 			}
 			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Version " +
-					genomeVersion + " or specie " + species +
+					genomeVersion + " or species " + species +
 					" does not exist.");
 		} catch (SQLException | IOException e) {
 			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());

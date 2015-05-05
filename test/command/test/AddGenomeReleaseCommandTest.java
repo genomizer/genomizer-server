@@ -55,11 +55,11 @@ public class AddGenomeReleaseCommandTest {
 	public void testAddGenomeReleaseJSON() {
 
 		String json = "{\"genomeVersion\":\"hx16\",\"specie\":\"human\"," +
-				"\"files\":[\"nameOfFile1\",\"nameOfFile2\",\"nameOfFile3\"]}";
+				"\"files\":[\"nameOfFile1\",\"nameOfFile2\",\"nameOfFile3\"],\"checkSumsMD5\":[]}";
 		final Command cmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
 	    String json2 = gson.toJson(cmd);
 
-	    assertEquals(json2, json);
+	    assertEquals(json, json2);
 
 	}
 
@@ -115,12 +115,12 @@ public class AddGenomeReleaseCommandTest {
 
 	/**
 	 * Test used to check that ValidateException is thrown when
-	 * specie is an empty string.
+	 * species is an empty string.
 	 *
 	 * @throws ValidateException
 	 */
 	@Test(expected = ValidateException.class)
-	public void testValidateSpecieEmptyString() throws ValidateException {
+	public void testValidateSpeciesEmptyString() throws ValidateException {
 
 		String json = "{\"version\":\"hx16\",\"species\":\"\",\"files\":[\"nameOfFile1\"]}";
 		final Command cmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
@@ -132,12 +132,12 @@ public class AddGenomeReleaseCommandTest {
 
 	/**
 	 * Test used to check that ValidateException is thrown if
-	 * specie contains invalid characters.
+	 * species contains invalid characters.
 	 *
 	 * @throws ValidateException
 	 */
 	@Test(expected = ValidateException.class)
-	public void testValidateSpecieInvalidCharacters() throws ValidateException {
+	public void testValidateSpeciesInvalidCharacters() throws ValidateException {
 
 		String json = "{\"version\":\"hx16\",\"species\":\"not/valid\",\"files\":[\"nameOfFile1\"]}";
 		final Command cmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
@@ -166,12 +166,12 @@ public class AddGenomeReleaseCommandTest {
 
 	/**
 	 * Test used to check that ValidateException is thrown when
-	 * specie is null.
+	 * species is null.
 	 *
 	 * @throws ValidateException
 	 */
 	@Test(expected = ValidateException.class)
-	public void testValidateSpecieNull() throws ValidateException {
+	public void testValidateSpeciesNull() throws ValidateException {
 
 		String json = "{\"version\":\"hx16\",\"species\":null,\"files\":[\"nameOfFile1\"]}";
 		final Command cmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
@@ -238,18 +238,18 @@ public class AddGenomeReleaseCommandTest {
 
 	/**
 	 * Test that checks that ValidateException is thrown if
-	 * specie length is to big.
+	 * species length is to big.
 	 *
 	 * @throws ValidateException
 	 */
 	@Test(expected = ValidateException.class)
-	public void testValidateSpecieLength() throws ValidateException {
+	public void testValidateSpeciesLength() throws ValidateException {
 
-		String big_specie = "";
+		String big_species = "";
 		for(int i = 0; i < MaxLength.GENOME_SPECIES + 1; i++) {
-			big_specie = big_specie + "A";
+			big_species = big_species + "A";
 		}
-		String json = "{\"version\":\"hx16\",\"species\":\"" + big_specie +
+		String json = "{\"version\":\"hx16\",\"species\":\"" + big_species +
 				"\",\"files\":[\"nameOfFile1\",\"nameOfFile2\",\"nameOfFile3\"]}";
 		final Command cmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
 		cmd.validate();

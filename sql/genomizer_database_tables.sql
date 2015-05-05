@@ -112,6 +112,7 @@ CREATE TABLE Genome_Release_Files
 (
     Version VARCHAR(16) NOT NULL,
     FileName VARCHAR(512) NOT NULL,
+    MD5    VARCHAR(32),
     Status VARCHAR(16) DEFAULT 'In Progress',
     CONSTRAINT pkey_version_filename PRIMARY KEY(Version, FileName),
     CONSTRAINT fkey_version FOREIGN KEY (Version) REFERENCES Genome_Release(Version) ON DELETE CASCADE
@@ -132,6 +133,7 @@ CREATE TABLE Chain_File_Files
     FromVersion VARCHAR(16) NOT NULL,
     ToVersion VARCHAR(16) NOT NULL,
     FileName VARCHAR(512) NOT NULL,
+    MD5    VARCHAR(32),
     Status VARCHAR(16) DEFAULT 'In Progress',
     CONSTRAINT pkey_chain_file_files PRIMARY KEY(FromVersion, ToVersion, fileName),
     CONSTRAINT fkey_from_version_to_version FOREIGN KEY (FromVersion, ToVersion) REFERENCES Chain_File(FromVersion, ToVersion) ON DELETE CASCADE
