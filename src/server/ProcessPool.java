@@ -35,6 +35,23 @@ public class ProcessPool {
         lock = new ReentrantLock();
 
         executor = Executors.newFixedThreadPool(threads);
+
+        // Start a cleanup thread that will remove stale processes every 10 mins
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    removeOldProcesses();
+                    try {
+                        Thread.sleep(600000);
+                    } catch (InterruptedException ex) {
+                        Debug.log("Process purging thread was unexpectedly " +
+                                "interrupted");
+                    }
+
+                }
+            }
+        }).start();
     }
 
     /**
@@ -106,8 +123,6 @@ public class ProcessPool {
                 }
             }
 
-            // Cleanup the mappings of stale processes
-            removeOldProcesses();
         } finally {
             lock.unlock();
         }
@@ -177,34 +192,42 @@ public class ProcessPool {
         // List to store processes to be removed
         LinkedList<ProcessCommand> toBeRemoved = new LinkedList<>();
 
-        LinkedList<ProcessCommand> processesList =
-                new LinkedList<>(processFutureMap.keySet());
+        lock.lock();
+
+        try {
+            LinkedList<ProcessCommand> processesList =
+                    new LinkedList<>(processFutureMap.keySet());
 
 		/* Loop through all processes and check statuses */
-        for (ProcessCommand processCommand : processesList) {
+            for (ProcessCommand processCommand : processesList) {
 
-            ProcessStatus processStatus = processStatusMap.get(processCommand);
-            String statusString = processStatus.status;
+                ProcessStatus processStatus = processStatusMap.get(processCommand);
+                String statusString = processStatus.status;
 
-            // Check if it has finished or crashed
-            if (statusString.equals(ProcessStatus.STATUS_FINISHED)
-                    || statusString.equals(ProcessStatus.STATUS_CRASHED)) {
+                // Check if it has finished or crashed
+                if (statusString.equals(ProcessStatus.STATUS_FINISHED)
+                        || statusString.equals(ProcessStatus.STATUS_CRASHED)) {
 
-                long processTimeAdded = processStatus.timeAdded;
-                long timeDifference = currentTime - processTimeAdded;
+                    long processTimeAdded = processStatus.timeAdded;
+                    long timeDifference = currentTime - processTimeAdded;
 
-                if (timeDifference > statusTimeToLive) {
-                    toBeRemoved.add(processCommand);
+                    if (timeDifference > statusTimeToLive) {
+                        toBeRemoved.add(processCommand);
+                    }
                 }
             }
+
+            for (ProcessCommand processCommand : toBeRemoved) {
+                Debug.log("Removing old process status: "
+                        + processCommand.getExpId());
+                processStatusMap.remove(processCommand);
+                processFutureMap.remove(processCommand);
+            }
+        } finally {
+            lock.unlock();
         }
 
-        for (ProcessCommand processCommand : toBeRemoved) {
-            Debug.log("Removing old process status: "
-                    + processCommand.getExpId());
-            processStatusMap.remove(processCommand);
-            processFutureMap.remove(processCommand);
-        }
+
 
     }
 
