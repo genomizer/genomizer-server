@@ -20,7 +20,7 @@ public class SRADownloader extends Executor {
      * @param runID the run file's ID
      * @return file paths to run file and meta data file
      *
-     */
+     **/
     public String[] downloadFromSRA(String runID) throws ProcessException {
 
         String filePaths[] = new String[2];
@@ -73,7 +73,10 @@ public class SRADownloader extends Executor {
 
         executeProgram(command);
 
-        File file = new File(outDir + runID + ".sra");
+        File file = new File(outDir + runID + ".fastq");
+
+        if(!file.exists())
+            throw new RuntimeException("Error while downloading file");
 
         return file.getAbsolutePath();
     }
@@ -108,7 +111,6 @@ public class SRADownloader extends Executor {
 
         if(runFile.exists())
             runFile.delete();
-
 
     }
     
