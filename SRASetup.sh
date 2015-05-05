@@ -19,8 +19,8 @@ read -a arr <<< "$line"
 PATH=${arr[2]}
 
 `$VDB_CONFIG --set repository/user/main/public/root=$PATH`
+`$VDB_CONFIG --set repository/user/default-path=$PATH`
 if [ $? != 0 ]; then
-	echo $?
 	echo "Could not configure SRA"
 	exit -1
 fi
