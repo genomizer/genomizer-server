@@ -55,11 +55,11 @@ public class AddGenomeReleaseCommandTest {
 	public void testAddGenomeReleaseJSON() {
 
 		String json = "{\"genomeVersion\":\"hx16\",\"specie\":\"human\"," +
-				"\"files\":[\"nameOfFile1\",\"nameOfFile2\",\"nameOfFile3\"]}";
+				"\"files\":[\"nameOfFile1\",\"nameOfFile2\",\"nameOfFile3\"],\"checkSumsMD5\":[]}";
 		final Command cmd = gson.fromJson(json, AddGenomeReleaseCommand.class);
 	    String json2 = gson.toJson(cmd);
 
-	    assertEquals(json2, json);
+	    assertEquals(json, json2);
 
 	}
 
