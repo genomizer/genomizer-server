@@ -11,8 +11,8 @@ import database.containers.FileTuple;
 
 import response.AddFileToExperimentResponse;
 import response.ErrorResponse;
+import response.HttpStatusCode;
 import response.Response;
-import response.StatusCode;
 
 /**
  * Class used to represent a command of the type AddFile.
@@ -57,16 +57,7 @@ public class AddFileToExperimentCommand extends Command {
 		validateName(grVersion, MaxLength.FILE_GRVERSION, "Genome release");
 		validateName(fileName, MaxLength.FILE_FILENAME, "Filename");
 		validateExists(metaData, MaxLength.FILE_METADATA, "Metadata");
-
-		if (checkSumMD5 != null) {
-			if (checkSumMD5.length() != 32)
-				throw new ValidateException(StatusCode.BAD_REQUEST,
-						"MD5 checksum has incorrect length (should be 32)!");
-			if (!checkSumMD5.matches("[0-9a-fA-F]+"))
-				throw new ValidateException(StatusCode.BAD_REQUEST,
-						"Invalid characters in MD5 "
-						+ "checksum string (should be '[0-9a-fA-F]')!");
-		}
+		validateMD5(this.checkSumMD5);
 	}
 
 	public void setUploader(String uploader) {
@@ -96,14 +87,14 @@ public class AddFileToExperimentCommand extends Command {
 			db = initDB();
 			FileTuple ft = db.addNewFile(experimentID, fileType, fileName, null,
 					metaData, author, uploader, isPrivate, grVersion, checkSumMD5);
-			return new AddFileToExperimentResponse(StatusCode.OK,
+			return new AddFileToExperimentResponse(HttpStatusCode.OK,
 					ft.getUploadURL());
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
 		} catch (IOException e) {
 			e.printStackTrace();
-			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE,
+			return new ErrorResponse(HttpStatusCode.SERVICE_UNAVAILABLE,
 					e.getMessage());
 		} finally {
 			if (db != null) {

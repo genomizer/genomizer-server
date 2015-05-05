@@ -2,9 +2,9 @@ package command;
 
 import authentication.Authenticate;
 import response.ErrorResponse;
+import response.HttpStatusCode;
 import response.ProcessResponse;
 import response.Response;
-import response.StatusCode;
 import server.Debug;
 import server.ErrorLogger;
 import server.WorkPool;
@@ -40,7 +40,7 @@ public class CommandHandler {
 			/*If a command could not be created from the given request, return
 			* an error response.*/
 			Debug.log("COMMAND IS NULL, COULD NOT CREATE A COMMAND FROM JSON");
-			return new ErrorResponse(StatusCode.BAD_REQUEST, "Could not " +
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Could not " +
 					"create a command from request. Bad format on request.");
 		}
 
@@ -53,7 +53,7 @@ public class CommandHandler {
 					* OK status to the client.*/
 					Debug.log("Adding processCommand to work queue.");
 					workPool.addWork((ProcessCommand)myCom);
-					return new ProcessResponse(StatusCode.OK);
+					return new ProcessResponse(HttpStatusCode.OK);
 				}else {
 
 				/*If the command is of the common kind, execute the command

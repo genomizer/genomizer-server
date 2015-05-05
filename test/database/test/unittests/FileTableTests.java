@@ -215,7 +215,7 @@ public class FileTableTests {
     public void changeFileNameTest() throws SQLException, IOException,
             ParseException {
 
-        dbac.addGenomeRelease("te34", "Dog", "te34.txt");
+        dbac.addGenomeRelease("te34", "Dog", "te34.txt", null);
         dbac.addExperiment("expert1");
         FileTuple fileStore = dbac.addNewFile("expert1", 1, "temp1.txt", "temp2.txt",
                 "-a -g", "Claes", "Claes", false, "te34", null);

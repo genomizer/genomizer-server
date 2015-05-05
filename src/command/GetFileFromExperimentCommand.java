@@ -1,9 +1,9 @@
 package command;
 
 import database.constants.MaxLength;
+import response.HttpStatusCode;
 import response.MinimalResponse;
 import response.Response;
-import response.StatusCode;
 
 /**
  * Class used to represent a command of the type GetFileFromExperimentCommand.
@@ -56,6 +56,6 @@ public class GetFileFromExperimentCommand extends Command {
 //		}
 
 		//Method not implemented, send appropriate response
-		return 	new MinimalResponse(StatusCode.NO_CONTENT);
+		return 	new MinimalResponse(HttpStatusCode.NO_CONTENT);
 	}
 }

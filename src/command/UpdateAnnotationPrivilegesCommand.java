@@ -1,8 +1,8 @@
 package command;
 
+import response.HttpStatusCode;
 import response.MinimalResponse;
 import response.Response;
-import response.StatusCode;
 
 /**
  * Class used to handle updates on annotation privileges.
@@ -29,7 +29,7 @@ public class UpdateAnnotationPrivilegesCommand extends Command {
 
 	@Override
 	public Response execute() {
-		return 	new MinimalResponse(StatusCode.NO_CONTENT);
+		return 	new MinimalResponse(HttpStatusCode.NO_CONTENT);
 	}
 
 }

@@ -1001,8 +1001,8 @@ public class DatabaseAccessor implements AutoCloseable {
      * @throws IOException
      */
     public String addGenomeRelease(String genomeVersion, String species,
-            String filename) throws SQLException, IOException {
-        return genMethods.addGenomeRelease(genomeVersion, species, filename);
+            String filename, String checkSumMD5) throws SQLException, IOException {
+        return genMethods.addGenomeRelease(genomeVersion, species, filename, checkSumMD5);
     }
 
     /**
@@ -1063,7 +1063,7 @@ public class DatabaseAccessor implements AutoCloseable {
      */
     public ArrayList<Genome> getAllGenomeReleasesForSpecies(String species)
             throws SQLException {
-        return genMethods.getAllGenomReleasesForSpecies(species);
+        return genMethods.getAllGenomeReleasesForSpecies(species);
     }
 
     private FileTuple getRawFileTuple(List<FileTuple> fileTuples) {
@@ -1084,7 +1084,7 @@ public class DatabaseAccessor implements AutoCloseable {
      *             - if the query does not succeed
      */
     public List<Genome> getAllGenomReleases() throws SQLException {
-        return genMethods.getAllGenomReleases();
+        return genMethods.getAllGenomeReleases();
     }
 
     /**
@@ -1096,7 +1096,7 @@ public class DatabaseAccessor implements AutoCloseable {
      *             - if the query does not succeed
      */
     public List<String> getAllGenomReleaseSpecies() throws SQLException {
-        return genMethods.getAllGenomReleaseSpecies();
+        return genMethods.getAllGenomeReleaseSpecies();
     }
 
     /**
@@ -1126,8 +1126,8 @@ public class DatabaseAccessor implements AutoCloseable {
      * @throws IOException
      */
     public String addChainFile(String fromVersion, String toVersion,
-            String fileName) throws SQLException, IOException {
-        return genMethods.addChainFile(fromVersion, toVersion, fileName);
+            String fileName, String checkSumMD5) throws SQLException, IOException {
+        return genMethods.addChainFile(fromVersion, toVersion, fileName, checkSumMD5);
     }
 
     /**
@@ -1243,5 +1243,16 @@ public class DatabaseAccessor implements AutoCloseable {
             }
         }
         folder.delete();
+    }
+
+
+    public String getFileCheckSumMD5(String fileName) throws SQLException {
+        FileTuple ft = getFileTuple(fileName);
+        if (ft != null) {
+            return ft.checkSumMD5;
+        }
+        else {
+            return genMethods.getFileCheckSumMD5(fileName);
+        }
     }
 }
