@@ -139,4 +139,43 @@ public class ConversionHandlerTest {
     }
 
 
+
+    /* IllegalArgumentException should be thrown when converting from sgr to bed
+* Test created: 2015-05-04
+*/
+    @Test (expected = IllegalArgumentException.class)
+    public void shouldThrowExceptionOnGffToBed()
+            throws IOException, SQLException {
+        ch.convertProfileData("bed", gffFileID);
+    }
+
+    /* IllegalArgumentException should be thrown when converting from sgr to bed
+ * Test created: 2015-05-04
+ */
+    @Test (expected = IllegalArgumentException.class)
+    public void shouldThrowExceptionOnGffToGff()
+            throws IOException, SQLException {
+        ch.convertProfileData("gff", gffFileID);
+    }
+
+    /* A file tuple should be present in database after conversion
+ * Test created: 2015-05-04
+ */
+    @Test
+    public void shouldBeAbleToFetchFileFromDatabaseAfterConversionFromGffToSgr()
+            throws IOException, SQLException {
+        ch.convertProfileData("sgr", gffFileID);
+        assertNotNull(db.getFileTuple(System.getProperty("user.dir")+"/resources/conversionTestData/output/Exp3/profile/0/SGR-testdata.sgr"));
+    }
+
+    /* A file tuple should be present in database after conversion
+     * Test created: 2015-05-04
+     */
+    @Test
+    public void shouldBeAbleToFetchFileFromDatabaseAfterConversionFromGffToWig()
+            throws IOException, SQLException {
+        ch.convertProfileData("wig", gffFileID);
+        assertNotNull(db.getFileTuple(System.getProperty("user.dir")+"/resources/conversionTestData/output/Exp3/profile/0/WIG-testdata.wig"));
+    }
+
 }
