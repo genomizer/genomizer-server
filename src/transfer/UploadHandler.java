@@ -99,11 +99,15 @@ public class UploadHandler {
         // Move uploaded files to uploadDir.
         URI requestURI = exchange.getRequestURI();
         HashMap<String,String> reqParams = new HashMap<>();
-        Util.parseURI(requestURI, reqParams);
+        String reqPath = Util.parseURI(requestURI, reqParams);
         String absUploadPath = null;
         if (reqParams.containsKey("path")) {
             Debug.log("Using legacy upload method ('upload?path=/absolute/path').");
             absUploadPath = reqParams.get("path");
+        }
+        else {
+            String relPath = reqPath.substring(this.handlerRoot.length() + 1);
+            absUploadPath = this.uploadDir + relPath;
         }
 
         for (FileItem fileItem : fileItems) {
