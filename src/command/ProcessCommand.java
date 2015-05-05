@@ -55,7 +55,7 @@ public class ProcessCommand extends Command {
 	@Override
 	public void setFields(String uri, String username, UserType userType) {
 		this.userType = userType;
-		this.username = Authenticate.getUsernameByID(username);
+		this.username = username;
 		setTimestamp(System.currentTimeMillis());
 		processType = uri.split("/")[2];
 	}
