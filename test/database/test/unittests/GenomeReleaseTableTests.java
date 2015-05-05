@@ -171,7 +171,7 @@ public class GenomeReleaseTableTests {
     }
 
     @Test(expected = IOException.class)
-    public void shouldNotDeleteGenomReleaseWhenFileNeedsIt() throws Exception{
+    public void shouldNotDeleteGenomeReleaseWhenFileNeedsIt() throws Exception{
     	dbac.removeGenomeRelease("hg38");
     }
 
@@ -194,13 +194,13 @@ public class GenomeReleaseTableTests {
 
     @Test
     public void shouldBeAbleToGetAllSpeciesThatHaveAGenomeRelease() throws Exception {
-        List<String> species = dbac.getAllGenomReleaseSpecies();
+        List<String> species = dbac.getAllGenomeReleaseSpecies();
         assertEquals(2, species.size());
     }
 
     @Test
     public void shouldBeAbleToGetAllGenomeReleases() throws Exception {
-        List<Genome> genomes = dbac.getAllGenomReleases();
+        List<Genome> genomes = dbac.getAllGenomeReleases();
         assertEquals(6, genomes.size());
     }
 
@@ -222,7 +222,7 @@ public class GenomeReleaseTableTests {
 
     	tearDown();
 
-    	assertEquals(0, dbac.getAllGenomReleases().size());
+    	assertEquals(0, dbac.getAllGenomeReleases().size());
     }
 
 

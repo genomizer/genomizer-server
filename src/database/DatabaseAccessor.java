@@ -1083,7 +1083,7 @@ public class DatabaseAccessor implements AutoCloseable {
      * @throws SQLException
      *             - if the query does not succeed
      */
-    public List<Genome> getAllGenomReleases() throws SQLException {
+    public List<Genome> getAllGenomeReleases() throws SQLException {
         return genMethods.getAllGenomeReleases();
     }
 
@@ -1095,7 +1095,7 @@ public class DatabaseAccessor implements AutoCloseable {
      * @throws SQLException
      *             - if the query does not succeed
      */
-    public List<String> getAllGenomReleaseSpecies() throws SQLException {
+    public List<String> getAllGenomeReleaseSpecies() throws SQLException {
         return genMethods.getAllGenomeReleaseSpecies();
     }
 

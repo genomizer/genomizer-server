@@ -57,7 +57,7 @@ public class DeleteGenomeReleaseCommand extends Command {
 									DeleteGenomeReleaseResponse(HttpStatusCode.OK);
 						} else {
 							return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
-									"Could not delete genomrelease");
+									"Could not delete genome release");
 						}
 					}
 				}
