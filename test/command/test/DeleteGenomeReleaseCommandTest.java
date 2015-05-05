@@ -64,12 +64,12 @@ public class DeleteGenomeReleaseCommandTest {
 
 	/**
 	 * Test used to check that validate method throws ValidateException
-	 * when specie is null.
+	 * when species is null.
 	 *
 	 * @throws ValidateException
 	 */
 	@Test(expected = ValidateException.class)
-	public void testValidateSpecieNull() throws ValidateException {
+	public void testValidateSpeciesNull() throws ValidateException {
 
 		final Command cmd = new DeleteGenomeReleaseCommand("null", "GRelease");
 		cmd.validate();
@@ -85,7 +85,7 @@ public class DeleteGenomeReleaseCommandTest {
 	 * @throws ValidateException
 	 */
 	@Test(expected = ValidateException.class)
-	public void testValidateSpecieEmptyString() throws ValidateException {
+	public void testValidateSpeciesEmptyString() throws ValidateException {
 
 		final Command cmd = new DeleteGenomeReleaseCommand("", "GRelease");
 		cmd.validate();
@@ -116,12 +116,12 @@ public class DeleteGenomeReleaseCommandTest {
 
 	/**
 	 * Test that checks that ValidateException is thrown when the
-	 * specie length is to large.
+	 * species length is to large.
 	 *
 	 * @throws ValidateException
 	 */
 	@Test(expected = ValidateException.class)
-	public void testValidateSpecieLength() throws ValidateException {
+	public void testValidateSpeciesLength() throws ValidateException {
 
 		String big = "";
 		for(int i = 0; i < MaxLength.GENOME_SPECIES + 1; i++) {
@@ -135,7 +135,7 @@ public class DeleteGenomeReleaseCommandTest {
 	}
 
 	/**
-	 * Test that checks that if specie and genomeVersion is
+	 * Test that checks that if species and genomeVersion is
 	 * properly formatted, then the validate returns true.
 	 *
 	 * @throws ValidateException

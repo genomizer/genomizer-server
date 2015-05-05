@@ -24,6 +24,7 @@ public class AddGenomeReleaseCommand extends Command {
 	@Expose
 	private String genomeVersion = null;
 
+	// TODO: rename to "species".
 	@Expose
 	private String specie = null;
 
@@ -36,7 +37,7 @@ public class AddGenomeReleaseCommand extends Command {
 	@Override
 	public void validate() throws ValidateException {
 
-		validateName(specie, MaxLength.GENOME_SPECIES, "Specie");
+		validateName(specie, MaxLength.GENOME_SPECIES, "Species");
 		validateName(genomeVersion, MaxLength.GENOME_VERSION, "Genome version");
 
 		for(String fileName : files) {

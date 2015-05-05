@@ -309,10 +309,10 @@ public class GenomeMethods {
 	 *
 	 * @param species
 	 *            String, the name of the species you want to get genome
-	 *            realeases for.
+	 *            releases for.
 	 * @return genomelist ArrayList<Genome>, list of all the genome releases for
-	 *         a specific species. Returns NULL if the specified specie did NOT
-	 *         have a genomeRelase entry in the database.
+	 *         a specific species. Returns NULL if the specified species did NOT
+	 *         have a genomeRelease entry in the database.
 	 * @throws SQLException
 	 */
 	public ArrayList<Genome> getAllGenomeReleasesForSpecies(String species)

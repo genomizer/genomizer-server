@@ -1057,7 +1057,7 @@ public class DatabaseAccessor implements AutoCloseable {
      *            String, the name of the species you want to get genome
      *            realeases for.
      * @return genomelist ArrayList<Genome>, list of all the genome releases for
-     *         a specific species. Returns NULL if the specified specie did NOT
+     *         a specific species. Returns NULL if the specified species did NOT
      *         have a genomeRelase entry in the database.
      * @throws SQLException
      */
@@ -1088,7 +1088,7 @@ public class DatabaseAccessor implements AutoCloseable {
     }
 
     /**
-     * Returns a list of all genome releases in the database for a specie.
+     * Returns a list of all genome releases in the database for a species.
      *
      * @return a list of genomes, if no genomes are found the
      *         list is empty
