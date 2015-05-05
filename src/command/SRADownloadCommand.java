@@ -38,7 +38,7 @@ public class SRADownloadCommand extends Command {
 
 		SRADownloader sh = new SRADownloader();
 		try {
-			sh.downloadSRA(runID);
+			sh.downloadFromSRA(runID);
 		} catch (ProcessException e) {
 			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, e.getMessage());
 		}

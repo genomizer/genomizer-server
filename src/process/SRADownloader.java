@@ -90,7 +90,7 @@ public class SRADownloader extends Executor {
                                                                     RuntimeException {
         String command[] = parse("wget -O " + outDir + runID + "_info.csv" + " " + http + runID);
 
-        System.out.println(executeCommand(command));
+        executeCommand(command);
 
         File outFile = new File(outDir + runID + "_info.csv");
 
