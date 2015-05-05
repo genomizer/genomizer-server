@@ -35,6 +35,10 @@ public class ProcessHandler {
 			case ProcessCommand.CMD_PROFILE_TO_REGION:
 				// TODO
 				break;
+			case ProcessCommand.CMD_CANCEL_PROCESS:
+				// TODO cancel process in workpool
+				break;
+
 			default:
 				throw new IllegalArgumentException();
 			}

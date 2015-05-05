@@ -4,31 +4,26 @@ package command;
  * @author Robin Ödling - c11rog
  */
 
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.Map.Entry;
-
+import com.google.gson.annotations.Expose;
+import database.DatabaseAccessor;
+import database.constants.MaxLength;
+import database.containers.Genome;
 import process.ProcessException;
 import process.ProcessHandler;
-
-import response.ErrorResponse;
-import response.ProcessResponse;
-import response.Response;
-import response.StatusCode;
-
+import response.*;
 import server.Debug;
 import server.ErrorLogger;
 
-import com.google.gson.annotations.Expose;
-
-import database.DatabaseAccessor;
-import database.containers.Genome;
-import database.constants.MaxLength;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.Map.Entry;
+import java.util.UUID;
 
 public class ProcessCommand extends Command {
 
 	public static final String CMD_RAW_TO_PROFILE = "rawtoprofile";
 	public static final String CMD_PROFILE_TO_REGION = "profiletoregion";
+	public static final String CMD_CANCEL_PROCESS = "cancelprocess";
 
 	private String username;
 
@@ -51,6 +46,8 @@ public class ProcessCommand extends Command {
 	@Expose
 	private String genomeVersion;
 
+	@Expose
+	private UUID PID;
 
 	//Empty constructor
 	public ProcessCommand() {
@@ -92,6 +89,9 @@ public class ProcessCommand extends Command {
 				break;
 			case CMD_PROFILE_TO_REGION:
 				//TODO Implement parameter size
+				break;
+			case CMD_CANCEL_PROCESS:
+				//TODO validate PID
 				break;
 			default:
 				throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
@@ -155,6 +155,17 @@ public class ProcessCommand extends Command {
 								"exception when processing");
 					}
 					break;
+
+				//TODO check everything
+				case ProcessCommand.CMD_CANCEL_PROCESS:
+					try {
+						//Parameter = PID
+						processHandler.executeProcess(CMD_CANCEL_PROCESS, parameters, null, null);
+						return new MinimalResponse(StatusCode.OK);
+					} catch (ProcessException e) {
+						return processError(db, e.getMessage(), "Process " + "exception when processing");
+					}
+
 				default:
 					return processError(db, "", "ERROR: Unknown process " +
 							"type when processing");
@@ -190,13 +201,15 @@ public class ProcessCommand extends Command {
 				"running " + processtype + " on experiment" + expid + "\n" +
 				"metadata: " + metadata + "\n" +
 				"parameters: " + parameters + "\n" +
-				"genomeVersion: " + genomeVersion + "\n");
+				"genomeVersion: " + genomeVersion + "\n" +
+		        "PID: " + PID + "\n");
 		return new ProcessResponse(StatusCode.CREATED, "Raw to profile " +
 				"processing completed running " + processtype +
 				" on experiment" + expid + "\n"+
 				"metadata: " + metadata + "\n"+
 				"parameters: " + parameters + "\n" +
-				"genomeVersion: " + genomeVersion + "\n");
+				"genomeVersion: " + genomeVersion + "\n" +
+		        "PID: " + PID + "\n");
 
 
 	}
@@ -212,10 +225,11 @@ public class ProcessCommand extends Command {
 	private Response processError(DatabaseAccessor db, String error, String headerError){
 		ErrorLogger.log(username, headerError +
 				" " + processtype +
-				" on experiment" + expid + "\n"+
-				"metadata: " + metadata + "\n"+
+				" on experiment" + expid + "\n" +
+				"metadata: " + metadata + "\n" +
 				"parameters: " + parameters + "\n" +
 				"genomeVersion: " + genomeVersion + "\n" +
+				"PID: " + PID + "\n" +
 				error + "\n");
 		db.close();
 		return new ProcessResponse(StatusCode.
@@ -225,6 +239,7 @@ public class ProcessCommand extends Command {
 				"metadata: " + metadata + "\n"+
 				"parameters: " + parameters + "\n" +
 				"genomeVersion: " + genomeVersion + "\n" +
+				"PID: " + PID + "\n" +
 				error + "\n");
 	}
 
@@ -249,7 +264,8 @@ public class ProcessCommand extends Command {
 				"metadata:" + metadata + "\n" +
 				"username: " + username + "\n" +
 				"expid: " + expid + "\n" +
-				"genomeRelease: " + genomeVersion + "\n";
+				"genomeRelease: " + genomeVersion + "\n" +
+				"PID: " + PID + "\n";
 	}
 
 	public void setTimestamp(long currentTimeMillis) {
@@ -268,6 +284,14 @@ public class ProcessCommand extends Command {
 		return expid;
 	}
 
+	public UUID getPID() {
+		return PID;
+	}
+
+	public void setPID(UUID PID) {
+		this.PID = PID;
+	}
+
 	public void setFilePaths() throws SQLException, IOException {
 		DatabaseAccessor db;
 
@@ -276,6 +300,7 @@ public class ProcessCommand extends Command {
 
 		if(db.isConnected()){
 			db.close();
+
 		}
 
 	}

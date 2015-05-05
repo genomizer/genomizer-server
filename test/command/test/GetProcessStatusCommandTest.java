@@ -91,7 +91,7 @@ public class GetProcessStatusCommandTest {
 
 		if (processStatuses.size() > 0) {
 
-			Collections.sort( processStatuses );
+			Collections.sort(processStatuses);
 			Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
 			JsonArray arr = new JsonArray();
@@ -102,7 +102,6 @@ public class GetProcessStatusCommandTest {
 
 			System.out.println(toPrettyFormat(arr.toString()));
 		}
-
 
 //		workHandler.interrupt();
 	}
