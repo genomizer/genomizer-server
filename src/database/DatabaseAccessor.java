@@ -1188,6 +1188,10 @@ public class DatabaseAccessor implements AutoCloseable {
         return genMethods.getChainFile(fromVersion, toVersion);
     }
 
+    public List<Integer> getParentIDs(int fileID) throws SQLException {
+        return fileMethods.getParentIDs(fileID);
+    }
+
     /**
      * Adds a chain file to database for conversions. Parameters: Oldversion,
      * new version and filename. Returns: upload URL

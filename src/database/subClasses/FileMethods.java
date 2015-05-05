@@ -6,6 +6,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import database.FilePathGenerator;
 import database.FileValidator;
@@ -289,6 +291,24 @@ public class FileMethods {
         return null;
     }
 
+    public List<Integer> getParentIDs(int fileID) throws
+            SQLException {
+        ArrayList<Integer> parids = new ArrayList<>();
+
+        String query = "SELECT ParentID FROM Parent " +
+                "WHERE FileID = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, fileID);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                parids.add(rs.getInt(1));
+            }
+        }
+
+        return parids;
+
+    }
     /**
      * Deletes a file from the database and the disk. Should throw an
      * IOException if the method failed to delete the file from disk.

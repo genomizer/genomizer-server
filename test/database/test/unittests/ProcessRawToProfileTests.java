@@ -148,8 +148,9 @@ public class ProcessRawToProfileTests {
 
         }
 
-        List<Integer> parents = profileSearched.getParents();
+        List<Integer> parents = dbac.getParentIDs(profileSearched.getFileId());
         assertEquals(1, parents.size());
+        assertEquals(parAdd.get(0), parents.get(0));
     }
 
     private void addMockFiles(String folderPath, String filename1,

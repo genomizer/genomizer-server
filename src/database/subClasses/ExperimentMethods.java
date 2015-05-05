@@ -260,7 +260,6 @@ public class ExperimentMethods {
     public Experiment fillFiles(Experiment e) throws SQLException {
 
         String query = "SELECT * FROM File " + "WHERE ExpID ~~* ? ";
-        String parQuery = "SELECT * FROM Parent WHERE FileID = ? ";
 
         try(PreparedStatement stmt = conn.prepareStatement(query)){
             stmt.setString(1, e.getID());
@@ -282,13 +281,6 @@ public class ExperimentMethods {
                         .withIsPrivate(rs.getBoolean("IsPrivate"))
                         .withStatus(rs.getString("Status"))
                         .withMD5Checksum(rs.getString("MD5"));
-
-                try (PreparedStatement st2 = conn.prepareStatement(parQuery)) {
-                    st2.setInt(1, fileID);
-                    ResultSet rs2 = st2.executeQuery();
-                    while (rs2.next())
-                        ftb.withParent(rs2.getInt(2));
-                }
 
                 e.addFile(ftb.build());
             }
