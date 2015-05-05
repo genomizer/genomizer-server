@@ -2,8 +2,10 @@ package command;
 
 import process.ProcessException;
 import process.SRADownloader;
+import response.ErrorResponse;
+import response.HttpStatusCode;
+import response.MinimalResponse;
 import response.Response;
-import response.StatusCode;
 import server.ServerSettings;
 
 import java.io.IOException;
@@ -15,7 +17,6 @@ import java.io.IOException;
 public class SRADownloadCommand extends Command {
 
 	private String runID;
-	private String studyID;
 
 	public SRADownloadCommand(String runID) {
 		this.runID = runID;
@@ -24,10 +25,10 @@ public class SRADownloadCommand extends Command {
 	@Override
 	public void validate() throws ValidateException {
 		if (!(runID.startsWith("SRR") || runID.startsWith("DRR") || runID.startsWith("ERR")))
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid run file prefix.");
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Invalid run file prefix.");
 
 		if (!runID.substring(3).matches("^[0-9]{1,}$"))
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid run file.");
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Invalid run file.");
 
 
 	}
@@ -37,13 +38,12 @@ public class SRADownloadCommand extends Command {
 
 		SRADownloader sh = new SRADownloader();
 		try {
-			sh.downloadSRA(runID, studyID);
+			sh.downloadSRA(runID);
 		} catch (ProcessException e) {
-			e.printStackTrace();
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 
-
-		return null;
+		return new MinimalResponse(HttpStatusCode.OK);
 	}
 
 	  public static void main(String[] args) {
