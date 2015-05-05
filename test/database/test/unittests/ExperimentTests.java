@@ -48,6 +48,7 @@ public class ExperimentTests {
     private static String testUploader = "testUploader1";
     private static String testMetaData = "testMetaData";
     private static boolean testIsPrivate = false;
+    private static String testMD5 = null;
     private static String testGRVersion = null;
 
     private static FilePathGenerator fpg;
@@ -256,7 +257,7 @@ public class ExperimentTests {
     	dbac.addExperiment(testExpId2);
 		ft = dbac.addNewFile(testExpId2, testFileType, testName, testInputFile,
 		  		testMetaData, testAuthor, testUploader, testIsPrivate,
-		  		testGRVersion);
+		  		testGRVersion, testMD5);
     	fpg.generateExperimentFolders(testExpId2);
 		addMockFile(ft.getParentFolder(), testName);
 		dbac.deleteExperiment(testExpId2);

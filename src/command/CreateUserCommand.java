@@ -3,27 +3,24 @@ package command;
 import java.io.IOException;
 import java.sql.SQLException;
 
+import authentication.BCrypt;
 import com.google.gson.annotations.Expose;
 
 import database.DatabaseAccessor;
-import database.constants.MaxSize;
 
+import database.constants.MaxLength;
 import response.ErrorResponse;
+import response.HttpStatusCode;
 import response.MinimalResponse;
 import response.Response;
-import response.StatusCode;
 
 /**
  * command used to create a user.
  *
- * @author Kommunikation/kontroll 2014.
- * @version 1.0
+ * @author Business Logic 2015.
+ * @version 1.1
  */
 public class CreateUserCommand extends Command {
-	/** All attributes in this class are serialized with
-	 * a JSON string. This is done in CommandHandler.
-	 */
-
 	@Expose
 	private String username = null;
 
@@ -40,67 +37,45 @@ public class CreateUserCommand extends Command {
 	private String email = null;
 
 	/**
-	 * Used to validate the CreateUserCommand.
+	 * Used to make sure the strings of the command are correct
+	 * @throws ValidateException
 	 */
 	@Override
-	public boolean validate() {
+	public void validate() throws ValidateException {
 
-		if(username == null || password == null || privileges == null) {
-			return false;
-		}
-		if(username.length() < 1 || username.length() > MaxSize.USERNAME) {
-			return false;
-		}
-		if(password.length() < 1 || password.length() > MaxSize.PASSWORD) {
-			return false;
-		}
-		if(privileges.length() < 1 || privileges.length() > MaxSize.ROLE) {
-			return false;
-		}
-		if(username.indexOf('/') != -1) {
-			return false;
-		}
+		validateName(username, MaxLength.USERNAME, "User");
+		validateName(password, MaxLength.PASSWORD, "Password");
+		validateName(privileges, MaxLength.ROLE, "Privileges");
+		validateExists(name, MaxLength.FULLNAME, "Name");
+		validateExists(email, MaxLength.EMAIL, "Email");
 
-		return true;
 	}
 
 	/**
-	 * Used to execute the actual creation of the user.
+	 * Runs the command. The user gets added to the database.
+	 * @return a MinimalResponse or ErrorResponse
 	 */
 	@Override
 	public Response execute() {
-
-
-
-		DatabaseAccessor db = null;
+		DatabaseAccessor db;
 		try {
 			db = initDB();
 		} catch (SQLException e) {
-			return new ErrorResponse(StatusCode.BAD_REQUEST, "Error when " +
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Error when " +
 					"initiating databaseAccessor. " + e.getMessage());
 		} catch (IOException e)  {
-			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
 		}
 		try {
+			String hash = BCrypt.hashpw(password,BCrypt.gensalt());
+			db.addUser(username, hash, "SALT",privileges, name, email);
 
-			/* For insertion of new user into db
-
-			// get a new salt
-			String salt = PasswordHash.getNewSalt();
-			// get hash using salt and password
-			String hash = PasswordHash.hashString(password+salt);
-			// insert into DB, requires new table from DB group
-			db.addUser(username, salt, hash, privileges, name, email);
-			*/
-
-
-			db.addUser(username, password, privileges, name, email);
 		} catch (SQLException | IOException e) {
-			return new ErrorResponse(StatusCode.BAD_REQUEST, "Error when " +
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Error when " +
 					"adding user to database, user probably already exists. " +
 					e.getMessage());
 		}
-		return new MinimalResponse(StatusCode.CREATED);
+		return new MinimalResponse(HttpStatusCode.CREATED);
 
 	}
 

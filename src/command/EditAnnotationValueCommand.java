@@ -7,97 +7,40 @@ import java.util.List;
 
 import com.google.gson.annotations.Expose;
 import database.DatabaseAccessor;
-import database.constants.MaxSize;
+import database.constants.MaxLength;
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
-import response.StatusCode;
+import response.HttpStatusCode;
 
 /**
  * This class is used to handle changes to annotation values.
  *
- * @author Kommunikation/kontroll 2014.
- * @version 1.0
+ * @author Business Logic 2015.
+ * @version 1.1
  */
 public class EditAnnotationValueCommand extends Command {
-	/** All attributes with @Expose are serialized with a
-	 * JSON string.
-	 */
+	@Expose
+	private String name = null;
 
 	@Expose
-	String name;
+	private String oldValue = null;
 
 	@Expose
-	String oldValue;
+	private String newValue = null;
 
-	@Expose
-	String newValue;
-
-	/**
-	 * Method used to validate the information needed to execute
-	 * the actual command.
-	 */
 	@Override
-	public boolean validate() throws ValidateException {
-
-		if(name == null) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify an " +
-					"annotation label.");
-		}
-		if(oldValue == null) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify the " +
-					"old annotation value.");
-		}
-		if(newValue == null) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify the " +
-					"new annotation value.");
-		}
-		if(name.length() > MaxSize.ANNOTATION_LABEL || name.length() < 1) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Annotation " +
-					"label has to be between 1 and "
-					+ database.constants.MaxSize.GENOME_SPECIES +
-					" characters long.");
-		}
-		if(oldValue.length() > MaxSize.ANNOTATION_VALUE ||
-				oldValue.length() < 1) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Old " +
-					"annotation value has to be between 1 and "
-					+ database.constants.MaxSize.GENOME_SPECIES +
-					" characters long.");
-		}
-		if(newValue.length() > MaxSize.ANNOTATION_VALUE ||
-				newValue.length() < 1) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "New " +
-					"annotation value has to be between 1 and "
-					+ database.constants.MaxSize.GENOME_SPECIES +
-					" characters long.");
-		}
-		if(!hasOnlyValidCharacters(name)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
-					"characters in annotation label. Valid characters are: " +
-					validCharacters);
-		}
-		if(!hasOnlyValidCharacters(oldValue)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
-					"characters in old annotation value. Valid characters are: "
-					+ validCharacters);
-		}
-		if(!hasOnlyValidCharacters(newValue)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
-					"characters in new annotation value. Valid characters are: "
-					+ validCharacters);
-		}
-		return true;
+	public void validate() throws ValidateException {
+		validateName(name, MaxLength.ANNOTATION_LABEL, "Annotation label");
+		validateName(oldValue, MaxLength.ANNOTATION_LABEL,
+				"Old annotation value");
+		validateName(newValue, MaxLength.ANNOTATION_LABEL,
+				"New annotation value");
 	}
 
-	/**
-	 * Method used to execute the actual command.
-	 */
 	@Override
 	public Response execute() {
-
 		DatabaseAccessor db = null;
-
 		try {
 			db = initDB();
 			ArrayList<String> annotations = db.getAllAnnotationLabels();
@@ -105,22 +48,23 @@ public class EditAnnotationValueCommand extends Command {
 				List<String> values = db.getChoices(name);
 				if(values.contains(oldValue)) {
 					db.changeAnnotationValue(name, oldValue, newValue);
-					return new MinimalResponse(StatusCode.OK);
+					return new MinimalResponse(HttpStatusCode.OK);
 				} else {
-					return new ErrorResponse(StatusCode.BAD_REQUEST,
+					return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
 							"The value" + oldValue + " does not exist");
 				}
 			} else {
-				return new ErrorResponse(StatusCode.BAD_REQUEST,
+				return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
 						"The annotation " + name + " does not");
 			}
 
 		} catch (SQLException | IOException e) {
 			e.printStackTrace();
-			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
 		} finally {
-			db.close();
+			if (db != null) {
+				db.close();
+			}
 		}
 	}
-
 }

@@ -1,31 +1,32 @@
 package command;
 
-import java.util.Collection;
+import java.util.LinkedList;
 
 import response.GetProcessStatusResponse;
 import response.Response;
-import server.WorkHandler;
+import server.WorkPool;
 
 /**
- * Fetches status of all processes that have been added to the server.
- * Will be reset when the server restarts. A process can have one
- * of four states: Waiting, Started, Finished and Crashed.
+ * Fetches status of all processes that have been added to the server. Will be
+ * reset when the server restarts. A process can have one of four states:
+ * Waiting, Started, Finished and Crashed.
  *
- * @author Kommunikation/kontroll 2014.
- * @version 1.0
+ * @author Business Logic 2015.
+ * @version 1.1
  */
 public class GetProcessStatusCommand extends Command {
 
-	private WorkHandler workHandler;
+	private WorkPool workPool;
 
 	/**
-	 * Constructor used to initiate the class.
+	 * Constructs a new instance of GetProcessStatusCommand using the supplied
+	 * WorkHandler.
 	 *
-	 * @param workHandler object.
+	 * @param workPool thw workPool in use by the server.
 	 */
-	public GetProcessStatusCommand(WorkHandler workHandler) {
+	public GetProcessStatusCommand(WorkPool workPool) {
 
-		this.workHandler = workHandler;
+		this.workPool = workPool;
 
 	}
 
@@ -34,22 +35,18 @@ public class GetProcessStatusCommand extends Command {
 	 * This method always returns true.
 	 */
 	@Override
-	public boolean validate() {
-
-		return true;
-
+	public void validate() {
+		/*Validation will always succeed, the command can not be corrupt.*/
 	}
 
-	/**
-	 * Method used to execute the actual command.
-	 */
 	@Override
 	public Response execute() {
-
-		Collection<ProcessStatus> processStatus =
-				workHandler.getProcessStatus();
-		return new GetProcessStatusResponse(processStatus);
-
+		LinkedList<ProcessCommand> processesList = workPool.getProcesses();
+		LinkedList<ProcessStatus> processStatuses = new LinkedList<>();
+        
+		for (ProcessCommand proc : processesList) {
+			processStatuses.add(workPool.getProcessStatus(proc));
+		}
+		return new GetProcessStatusResponse(processStatuses);
 	}
-
 }

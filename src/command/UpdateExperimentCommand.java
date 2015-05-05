@@ -1,38 +1,33 @@
 package command;
 
+import response.HttpStatusCode;
 import response.MinimalResponse;
 import response.Response;
-import response.StatusCode;
 
 /**
- * Class used to handle updateing experiments.
+ * Class used to handle updating experiments.
  *
- * @author Kommunikation/kontroll 2014.
- * @version 1.0
+ * @author Business Logic 2015.
+ * @version 1.1
  */
 public class UpdateExperimentCommand extends Command {
+	//TODO Implement this class
+
+	public UpdateExperimentCommand(String json, String expID) {
+
+	}
 
 	/**
 	 * Used to validate the information that is needed
 	 * to execute the actual command.
 	 */
 	@Override
-	public boolean validate() {
-
-		// TODO Auto-generated method stub
-		return true;
-
+	public void validate() {
 	}
 
-	/**
-	 * Used to execute the actual command.
-	 */
 	@Override
 	public Response execute() {
-
-		//Method not implemented, send appropriate response
-		return 	new MinimalResponse(StatusCode.NO_CONTENT);
-
+		return 	new MinimalResponse(HttpStatusCode.NO_CONTENT);
 	}
 
 }

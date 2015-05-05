@@ -11,7 +11,9 @@ import process.Executor;
  */
 public class GenomeReleaseConverter extends Executor {
 	
-	public String procedure(String inFilePath, String outFilePath, String chainFilePath,String unliftedPath ){
+	public String procedure(String inFilePath, String outFilePath,
+							String chainFilePath,String unliftedPath )
+	throws InterruptedException, IOException{
 		String outString = "";
 		String [] liftover = new String[5];
 		liftover[0] = "liftOver";
@@ -19,16 +21,10 @@ public class GenomeReleaseConverter extends Executor {
 		liftover[2] = chainFilePath;
 		liftover[3] = outFilePath;
 		liftover[4] = unliftedPath;
-		try {
-			outString = executeProgram(liftover);
-			System.err.println(outString);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
+		/* Will throw exceptions if erroneous */
+		outString = executeProgram(liftover);
+		System.err.println(outString);
 		
 		return outString;
 		

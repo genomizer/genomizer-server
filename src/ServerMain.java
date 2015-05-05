@@ -15,10 +15,7 @@ import authentication.InactiveUuidsRemover;
 
 import command.CommandHandler;
 
-import server.ServerSettings;
-import server.Debug;
-import server.Doorman;
-import server.ErrorLogger;
+import server.*;
 
 
 public class ServerMain {
@@ -34,18 +31,24 @@ public class ServerMain {
 	public static void main(String[] args) throws ParseException,
 												  FileNotFoundException {
 
-		/* We firstly need to read and validate the settings file. */
+		/* First we need to read and validate the settings file. */
 		CommandLine com = loadSettingsFile(args);
 
-		/* We delete possible fragments from previous runs */
+		/* We delete possible fragments from previous runs. */
 		StartUpCleaner.removeOldTempDirectories("resources/");
 
-		/* The database settings should be written upon startup*/
+		/* The database settings should be written upon startup. */
 		printDatabaseInformation();
 
-		/* We attempt to start the doorman */
+		/* Create a work pool */
+		WorkPool workPool = new WorkPool();
+
+		/* Create process handlers */
+		createWorkHandlers(workPool);
+
+		/* We attempt to start the doorman. */
 		try {
-			new Doorman(new CommandHandler(),
+			new Doorman(new CommandHandler(workPool),
 					ServerSettings.genomizerPort).start();
 		} catch (IOException e) {
 			System.err.println("Error when starting server");
@@ -53,7 +56,7 @@ public class ServerMain {
 			System.exit(1);
 		}
 
-		/* By default we run a UID remover */
+		/* By default we run a UID remover. */
 		if (!com.hasOption("nri")) {
 			(new Thread(new InactiveUuidsRemover())).start();
 		}
@@ -64,9 +67,7 @@ public class ServerMain {
 	 * Print the database settings currently loaded into ServerSettings.
 	 */
 	private static void printDatabaseInformation() {
-		String info = "Doorman started on port "
-				+ ServerSettings.genomizerPort + "\n"
-				+ "Database:" + "\n"
+		String info = "Database information:" + "\n"
 				+ "  username " + ServerSettings.databaseUsername + "\n"
 				+ "  password " + ServerSettings.databasePassword + "\n"
 				+ "  name     " + ServerSettings.databaseName + "\n"
@@ -75,14 +76,20 @@ public class ServerMain {
 		ErrorLogger.log("SYSTEM", info);
 	}
 
+	private static void createWorkHandlers(WorkPool workPool) {
+		for (int i=0; i<ServerSettings.nrOfProcessThreads; i++) {
+			new Thread(new WorkHandler(workPool)).start();
+		}
+	}
+
 	/**
 	 * This method attempts to read the settings file. It is defined to read
 	 * from the file in fileSettings. It validates the final settings to be
 	 * sane (e.g. not containing 'null').
 	 *
-	 * It parses the commandline arguments and constructs a CommandLine
+	 * It parses the command-line arguments and constructs a CommandLine
 	 * object containing the information.
-	 * @param args The commandline arguments
+	 * @param args Command-line arguments
 	 * @return A CommandLine object containing the relevant commandline
 	 * 		   options. The function also contains a side effect: It modifies
 	 * 		   the static attributes of the ServerSettings class with the

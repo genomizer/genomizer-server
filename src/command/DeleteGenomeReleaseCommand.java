@@ -5,128 +5,72 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import database.DatabaseAccessor;
-import database.constants.MaxSize;
+import database.constants.MaxLength;
 import database.containers.Genome;
 import response.DeleteGenomeReleaseResponse;
 import response.ErrorResponse;
 import response.Response;
-import response.StatusCode;
+import response.HttpStatusCode;
 
 /**
  * Class used to delete a genome release.
  *
- * @author Kommunikation/kontroll 2014.
- * @version 1.0
+ * @author Business Logic 2015.
+ * @version 1.1
  */
 public class DeleteGenomeReleaseCommand extends Command {
-
-	private String genomeVersion = null;
-
-	private String specie = null;
+	private String genomeVersion;
+	private String species;
 
 	/**
-	 * Constructor used to initiate the class.
+	 * Constructs a new instance of DeleteGenomeReleaseCommand using the
+	 * supplied species name and genome version.
 	 *
-	 * @param specie name of specie
-	 * @param genomeVersion version
+	 * @param species the name of the species.
+	 * @param genomeVersion the genome version.
 	 */
-	public DeleteGenomeReleaseCommand(String specie, String genomeVersion) {
-
+	public DeleteGenomeReleaseCommand(String species, String genomeVersion) {
 		this.genomeVersion = genomeVersion;
-		this.specie = specie;
-
+		this.species = species;
 	}
 
-	/**
-	 * Method used to validate the DeleteGenomeReleaseCommand.
-	 *
-	 * @return boolean depending on result.
-	 * @throws ValidateException
-	 */
 	@Override
-	public boolean validate() throws ValidateException {
-
-		if (genomeVersion == null || specie == null) {
-
-			throw new ValidateException(StatusCode.BAD_REQUEST, "The genome " +
-					"version was missing.");
-
-		} else if (genomeVersion.equals("null") || specie.equals("null")) {
-
-			throw new ValidateException(StatusCode.BAD_REQUEST, "The genome " +
-					"version and/or specie was missing.");
-
-		} else if(genomeVersion.length() > MaxSize.GENOME_VERSION ||
-				genomeVersion.length() < 1) {
-
-			throw new ValidateException(StatusCode.BAD_REQUEST, "The genome " +
-					"version must be between 1 and "+
-					database.constants.MaxSize.GENOME_VERSION +
-					" characters long.");
-
-		} else if(specie.length() > MaxSize.GENOME_SPECIES ||
-				specie.length() < 1) {
-
-			throw new ValidateException(StatusCode.BAD_REQUEST, "The species " +
-					"must be between 1 and " +
-					database.constants.MaxSize.GENOME_SPECIES +
-					" characters long.");
-
-		} else if(!hasOnlyValidCharacters(genomeVersion)) {
-
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
-					"characters in genome version. Valid characters are: " +
-					validCharacters);
-
-		} else if(!hasOnlyValidCharacters(specie)) {
-
-			throw new ValidateException(StatusCode.BAD_REQUEST,
-					"Invalid characters in specie name. Valid characters are: "
-							+ validCharacters);
-
-		}
-
-		return true;
-
+	public void validate() throws ValidateException {
+		validateName(genomeVersion, MaxLength.GENOME_VERSION, "Genome version");
+		validateName(species, MaxLength.GENOME_SPECIES, "Genome specie");
 	}
 
-	/**
-	 * method used to execute the command.
-	 */
 	@Override
 	public Response execute() {
-
 		DatabaseAccessor db = null;
 		try {
 			db = initDB();
 			ArrayList<Genome> genomeReleases =
-					db.getAllGenomeReleasesForSpecies(specie);
+					db.getAllGenomeReleasesForSpecies(species);
 			if(genomeReleases != null) {
 				for(Genome g : genomeReleases) {
 					if (g != null && g.genomeVersion.equals(this.genomeVersion)
-							&& g.species.equals(this.specie)) {
+							&& g.species.equals(this.species)) {
 						boolean result = db.removeGenomeRelease(genomeVersion);
 						if(result) {
 							return new
-									DeleteGenomeReleaseResponse(StatusCode.OK);
+									DeleteGenomeReleaseResponse(HttpStatusCode.OK);
 						} else {
-							return new ErrorResponse(StatusCode.BAD_REQUEST,
+							return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
 									"Could not delete genomrelease");
 						}
 					}
 				}
 			}
-			return new ErrorResponse(StatusCode.BAD_REQUEST, "Version " +
-					genomeVersion + " or specie " + specie +
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Version " +
+					genomeVersion + " or specie " + species +
 					" does not exist.");
-
 		} catch (SQLException | IOException e) {
-			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
 		} finally {
-			if(db.isConnected()) {
+			if(db != null && db.isConnected()) {
 				db.close();
 			}
 		}
 	}
-
 }

@@ -5,7 +5,7 @@ import java.net.HttpURLConnection;
 
 import org.junit.Ignore;
 import org.junit.Test;
-import response.StatusCode;
+import response.HttpStatusCode;
 import com.google.gson.JsonObject;
 
 /**
@@ -52,7 +52,7 @@ public class ServerAnnotationTest extends ServerAbstractTestClass {
 		sendLogout();
 
 		assertTrue(wasAdded);
-		assertTrue(deleteResponse == StatusCode.OK);
+		assertTrue(deleteResponse == HttpStatusCode.OK);
 
 	}
 
@@ -87,7 +87,7 @@ public class ServerAnnotationTest extends ServerAbstractTestClass {
 		sendLogout();
 
 		assertTrue(wasAdded);
-		assertTrue(deleteResponse == StatusCode.OK);
+		assertTrue(deleteResponse == HttpStatusCode.OK);
 
 	}
 
@@ -113,8 +113,8 @@ public class ServerAnnotationTest extends ServerAbstractTestClass {
 
 		sendLogout();
 
-		assertTrue(responseCode == StatusCode.CREATED);
-		assertTrue(deleteResponse == StatusCode.OK);
+		assertTrue(responseCode == HttpStatusCode.CREATED);
+		assertTrue(deleteResponse == HttpStatusCode.OK);
 
 	}
 
@@ -140,7 +140,7 @@ public class ServerAnnotationTest extends ServerAbstractTestClass {
 
 		sendLogout();
 
-		assertTrue(responseCode == StatusCode.CREATED);
+		assertTrue(responseCode == HttpStatusCode.CREATED);
 
 	}
 

@@ -4,15 +4,11 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import command.ChangeUserPasswordCommand;
-import command.CreateUserCommand;
-import database.constants.MaxSize;
+import command.ValidateException;
+import database.constants.MaxLength;
 import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 
 /**
  * Test to see if ChangeUserPasswordCommand class works correctly
@@ -71,7 +67,7 @@ public class ChangeUserPasswordCommandTest extends TestCase {
     public void testValidateUsernameLength() {
 
         String username = "";
-        for(int i = 0; i < MaxSize.USERNAME+1; i++) {
+        for(int i = 0; i < MaxLength.USERNAME+1; i++) {
             username = username + "a";
         }
         json = createJSON(username,"b");
@@ -82,9 +78,13 @@ public class ChangeUserPasswordCommandTest extends TestCase {
         ChangeUserPasswordCommand cmd2 = new ChangeUserPasswordCommand();
         cmd2 = gson.fromJson(json, ChangeUserPasswordCommand.class);
 
-        assertFalse(cmd.validate());
-        assertFalse(cmd2.validate());
+        try {
+            cmd.validate();
+            cmd2.validate();
+            fail("Expected ValidateException to be thrown.");
+        }catch(ValidateException e){
 
+        }
     }
 
     /**
@@ -95,7 +95,7 @@ public class ChangeUserPasswordCommandTest extends TestCase {
     public void testValidatePasswordLength() {
 
         String password = "";
-        for(int i = 0; i < MaxSize.PASSWORD+1; i++) {
+        for(int i = 0; i < MaxLength.PASSWORD+1; i++) {
             password = password + "a";
         }
         json = createJSON("a",password);
@@ -106,9 +106,13 @@ public class ChangeUserPasswordCommandTest extends TestCase {
         ChangeUserPasswordCommand cmd2 = new ChangeUserPasswordCommand();
         cmd2 = gson.fromJson(json, ChangeUserPasswordCommand.class);
 
-        assertFalse(cmd.validate());
-        assertFalse(cmd2.validate());
+        try {
+            cmd.validate();
+            cmd2.validate();
+            fail("Expected ValidateException to be thrown.");
+        }catch(ValidateException e){
 
+        }
     }
 
     /**

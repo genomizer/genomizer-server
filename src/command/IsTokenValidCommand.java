@@ -3,50 +3,35 @@ package command;
 import authentication.Authenticate;
 import response.MinimalResponse;
 import response.Response;
-import response.StatusCode;
+import response.HttpStatusCode;
 
 /**
  * This class is used to check if a token is valid.
  *
- * @author Kommunikation/kontroll 2014.
- * @version 1.0
+ * @author Business Logic 2015.
+ * @version 1.1
  */
 public class IsTokenValidCommand extends Command {
-
 	private String uuid;
 
 	/**
-	 * Constructor used to initiate the class.
-	 *
-	 * @param uuid user identification
+	 * Constructs a new instance of IsTokenValidCommand using the supplied
+	 * uuid.
+	 * @param uuid the unique user identification.
 	 */
 	public IsTokenValidCommand(String uuid) {
-
 		this.uuid = uuid;
-
 	}
 
-	/**
-	 * Method used to validate the information in the command.
-	 * This method always returns true.
-	 */
 	@Override
-	public boolean validate() {
-
-		return true;
-
+	public void validate() {
+		/*Validation will always succeed, the command can not be corrupt.*/
 	}
 
-	/**
-	 * Method used to execute the actual command.
-	 */
 	@Override
 	public Response execute() {
-
-		int code = Authenticate.idExists(uuid) ? StatusCode.OK :
-				StatusCode.UNAUTHORIZED;
+		int code = Authenticate.idExists(uuid) ? HttpStatusCode.OK :
+				HttpStatusCode.UNAUTHORIZED;
 		return new MinimalResponse(code);
-
 	}
-
 }

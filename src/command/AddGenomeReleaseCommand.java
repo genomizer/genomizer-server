@@ -7,24 +7,20 @@ import java.util.ArrayList;
 import com.google.gson.annotations.Expose;
 
 import database.DatabaseAccessor;
-import database.constants.MaxSize;
+import database.constants.MaxLength;
 
 import response.AddGenomeReleaseResponse;
 import response.ErrorResponse;
+import response.HttpStatusCode;
 import response.Response;
-import response.StatusCode;
 
 /**
  * Class used to handle adding a genome release.
  *
- * @author Kommunikation/kontroll 2014.
- * @version 1.0
+ * @author Business Logic 2015.
+ * @version 1.1
  */
 public class AddGenomeReleaseCommand extends Command {
-	/* All attributes with @Expose are serialized with
-	 * a JSON string.
-	 */
-
 	@Expose
 	private String genomeVersion = null;
 
@@ -32,91 +28,51 @@ public class AddGenomeReleaseCommand extends Command {
 	private String specie = null;
 
 	@Expose
-	private ArrayList<String> files = new ArrayList<String>();
+	private ArrayList<String> files = new ArrayList<>();
 
-	/**
-	 * Method used to validate the information needed in order to
-	 * execute the command properly.
-	 */
+	@Expose
+	private ArrayList<String> checkSumsMD5 = new ArrayList<>();
+
 	@Override
-	public boolean validate() throws ValidateException {
+	public void validate() throws ValidateException {
 
-		if(files == null || files.size() == 0) {
-			throw new ValidateException(StatusCode.BAD_REQUEST,
-					"Specify release files.");
-		}
-		if(genomeVersion == null) {
-			throw new ValidateException(StatusCode.BAD_REQUEST,
-					"Specify a genome release version.");
-		}
-		for(int i = 0; i < files.size(); i++) {
-			int sizeCheck = files.get(i).length();
-			if(sizeCheck > MaxSize.GENOME_FILEPATH || sizeCheck < 1) {
-				throw new ValidateException(StatusCode.BAD_REQUEST, "File " +
-						"name has to be between 1 and " +
-						database.constants.MaxSize.GENOME_FILEPATH +
-						" characters long.");
-			}
-		}
-		if(specie == null) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify a " +
-					"specie.");
-		}
-		if(specie.length() > MaxSize.GENOME_SPECIES || specie.length() < 1) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specie name " +
-					"has to be between 1 and "
-					+ database.constants.MaxSize.GENOME_SPECIES +
-					" characters long.");
+		validateName(specie, MaxLength.GENOME_SPECIES, "Specie");
+		validateName(genomeVersion, MaxLength.GENOME_VERSION, "Genome version");
+
+		for(String fileName : files) {
+			validateName(fileName, MaxLength.GENOME_FILEPATH, "File name");
 		}
 
-		if(genomeVersion.length() > MaxSize.GENOME_VERSION ||
-				genomeVersion.length() < 1) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Genome " +
-					"version has to be between 1 and "
-					+ database.constants.MaxSize.GENOME_VERSION +
-					" characters long.");
+		for (String checkSumMD5 : checkSumsMD5) {
+			validateMD5(checkSumMD5);
 		}
-
-		if(genomeVersion.indexOf('/') != -1) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Wrong " +
-					"format on request.");
-		}
-		if(!hasOnlyValidCharacters(genomeVersion)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
-					"characters in genome version name. Valid characters are: "
-					+ validCharacters);
-		}
-		if(!hasOnlyValidCharacters(specie)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
-					"characters in specie name. Valid characters are: " +
-					validCharacters);
-		}
-
-		return true;
-
 	}
 
-	/**
-	 * Method used to execute the actual command.
-	 */
+
 	@Override
 	public Response execute() {
-
 		DatabaseAccessor db = null;
 		ArrayList<String> uploadURLs = new ArrayList<String>();
 
 		try {
 			db = initDB();
-			for(String fileName: files) {
+			for(int i = 0; i < files.size(); ++i) {
+				String fileName = files.get(i);
+				String checkSumMD5 = null;
+				if (i < checkSumsMD5.size()) {
+					checkSumMD5 = checkSumsMD5.get(i);
+				}
 				 uploadURLs.add(db.addGenomeRelease(genomeVersion, specie,
-						 fileName));
+						 fileName, checkSumMD5));
 			}
-			return new AddGenomeReleaseResponse(StatusCode.CREATED, uploadURLs);
+			return new AddGenomeReleaseResponse(HttpStatusCode.CREATED, uploadURLs);
 		} catch (SQLException | IOException e) {
-				return new ErrorResponse(StatusCode.BAD_REQUEST,
+				return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
 						e.getMessage());
 		} finally {
-			db.close();
+			if (db != null) {
+				db.close();
+			}
 		}
 	}
 
