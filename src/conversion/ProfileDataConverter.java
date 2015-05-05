@@ -60,7 +60,6 @@ public class ProfileDataConverter {
         try {
             outputFile = new File(inputPath.replace(".bed",".sgr"));
             outputFile.createNewFile();
-            //outputFile = File.createTempFile("bed2sgr", ".sgr", outputFolder);
             fw = new FileWriter(outputFile);
 
             BufferedReader fr = new BufferedReader(new FileReader(inputFile));
@@ -115,7 +114,8 @@ public class ProfileDataConverter {
         inputFile = new File(inputPath);
 
         try {
-            outputFile = File.createTempFile("gff2sgr", ".sgr", outputFolder);
+            outputFile = new File(inputPath.replace(".gff",".sgr"));
+            outputFile.createNewFile();
             fw = new FileWriter(outputFile);
 
             BufferedReader fr = new BufferedReader(new FileReader(inputFile));
@@ -167,7 +167,6 @@ public class ProfileDataConverter {
         try {
             outputFile = new File(inputPath.replace(".sgr", ".wig"));
             outputFile.createNewFile();
-            //outputFile = File.createTempFile("sgr2wig", ".wig", outputFolder);
             fw = new FileWriter(outputFile);
 
             BufferedReader fr = new BufferedReader(new FileReader(inputFile));
@@ -214,7 +213,6 @@ public class ProfileDataConverter {
      */
     public String bedToWig(String inputPath)
             throws IOException {
-        File tempFile;
         String tempPath = null;
         String outputPath;
 
@@ -270,9 +268,24 @@ public class ProfileDataConverter {
                     "accepted for this conversion.");
         }
 
-        try {
+        File inputFile =  new File(inputPath.replace(".gff",".sgr"));
+        if(!inputFile.exists()) {
+            try {
+                tempPath = gffToSgr(inputPath);
+                outputPath = sgrToWig(tempPath);
+                deleteFile(tempPath);
+            } catch (Exception e) {
+                deleteFile(tempPath);
+                throw e;
+            }
+        }
+        else {
+            tempPath = inputPath.replace(".gff", ".sgr");
+            outputPath = gffToWig(tempPath);
+        }
+
+        /*try {
             tempPath = gffToSgr(inputPath);
-            System.out.println(tempPath);
             outputPath = sgrToWig(tempPath);
         } catch (Exception e){
             tempFile = new File(tempPath);
@@ -284,7 +297,7 @@ public class ProfileDataConverter {
         tempFile = new File(tempPath);
         if (tempFile.exists())
             tempFile.delete();
-
+*/
         return outputPath;
     }
 
@@ -337,7 +350,8 @@ public class ProfileDataConverter {
         inputFile = new File(inputPath);
 
         try {
-            outputFile = File.createTempFile("wigBed2sgr", ".sgr", outputFolder);
+            outputFile = new File(inputPath.replace(".wig", ".sgr"));
+            outputFile.createNewFile();
             fw = new FileWriter(outputFile);
 
             BufferedReader fr = new BufferedReader(new FileReader(inputFile));
@@ -403,7 +417,8 @@ public class ProfileDataConverter {
           inputFile = new File(inputPath);
 
           try {
-              outputFile = File.createTempFile("wigFixedstep2sgr", ".sgr", outputFolder);
+              outputFile = new File(inputPath.replace(".wig", ".sgr"));
+              outputFile.createNewFile();
               fw = new FileWriter(outputFile);
 
               BufferedReader fr = new BufferedReader(new FileReader(inputFile));
@@ -469,7 +484,8 @@ public class ProfileDataConverter {
         inputFile = new File(inputPath);
 
         try {
-            outputFile = File.createTempFile("wigVariablestep2sgr", ".sgr", outputFolder);
+            outputFile = new File(inputPath.replace(".wig", ".sgr"));
+            outputFile.createNewFile();
             fw = new FileWriter(outputFile);
 
             BufferedReader fr = new BufferedReader(new FileReader(inputFile));

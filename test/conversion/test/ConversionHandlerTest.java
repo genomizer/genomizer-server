@@ -99,4 +99,6 @@ public class ConversionHandlerTest {
         ch.convertProfileData("wig", bedFileID);
         assertNotNull(db.getFileTuple(System.getProperty("user.dir")+"/resources/conversionTestData/output/Exp3/profile/0/BED-testdata.wig"));
     }
+
+
 }
