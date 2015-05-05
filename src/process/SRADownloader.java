@@ -12,16 +12,16 @@ public class SRADownloader extends Executor {
 
     private final String http = "http://trace.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?save=efetch&db=sra&rettype=runinfo&term=";
     private final String dir = ServerSettings.fileLocation;
-    private final String ftpRoot = "ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/sra/";
-    private final String outDir = dir + "/sra";
+    private final String outDir = dir + "/sra/";
+    private final String fastqDumpExecutable = "sra-toolkit/fastq-dump";
 
     /**
-     *
-     * @param runID
-     *
+     * Downloads a run file and meta data from the Sequence Read Archive
+     * @param runID the run file's ID
      * @return file paths to run file and meta data file
+     *
      */
-    public String[] downloadSRA(String runID) throws ProcessException {
+    public String[] downloadFromSRA(String runID) throws ProcessException {
 
         String filePaths[] = new String[2];
 
@@ -34,23 +34,30 @@ public class SRADownloader extends Executor {
 
             ErrorLogger.log("SRA", e.getMessage());
 
-            if (e.getMessage().contains("No such directory"))
+            if (e.getMessage().contains("No such directory")) {
+
                 throw new ProcessException("File " + runID + " does not exist");
 
-            cleanUp(runID);
+            } else {
 
-            throw new ProcessException("Could not download file");
+                throw new ProcessException("Could not download file");
+
+            }
 
         } catch (Exception e) {
+
             ErrorLogger.log("SRA", e.getMessage());
-            cleanUp(runID);
+
             throw new ProcessException("Could not download file");
+
         }
+
+        cleanUp(runID);
 
         return filePaths;
     }
     /**
-     * Downloads a file from the Sequence Read Archive
+     * Downloads a run file from the Sequence Read Archive
      *
      * @param runID the run file's ID
      * @return the downloaded file's path
@@ -60,66 +67,48 @@ public class SRADownloader extends Executor {
      */
     private String getRunFile(String runID) throws IOException, InterruptedException, RuntimeException {
 
-        String ftp = buildFTP(runID);
+        //String ftp = buildFTP(runID);
 
-        String command[] = parse("wget -nc -P " + outDir + " " + ftp);
+        String command[] = parse(fastqDumpExecutable + " -O "  + outDir + " " + runID);
+
+        executeProgram(command);
+
         File file = new File(outDir + runID + ".sra");
-
-        executeCommand(command);
 
         return file.getAbsolutePath();
     }
 
     /**
-     * Retrieves meta data for a run file and writes
+     * Retrieves meta data for a run file
      *
      * @param runID the run file's ID
-     * @return
+     * @return the file path
      * @throws IOException
      * @throws InterruptedException
      */
     private String getMetaData(String runID) throws IOException, InterruptedException,
                                                                     RuntimeException {
-        String command[] = parse("wget -O " + outDir +  "/" + runID + "_info.csv" + " " + http + runID);
+        String command[] = parse("wget -O " + outDir + runID + "_info.csv" + " " + http + runID);
 
         System.out.println(executeCommand(command));
 
-        File outFile = new File(outDir + "/" + runID + "_info.csv");
+        File outFile = new File(outDir + runID + "_info.csv");
 
         return outFile.getAbsolutePath();
     }
 
-    /**
-     * Builds the ftp download path for a run file
-     *
-     * @param runID
-     * @return fpt download path
-     */
-    private String buildFTP(String runID) {
-
-        StringBuilder sb = new StringBuilder();
-        sb.append(ftpRoot);
-        sb.append(runID.substring(0,3) + "/");
-        sb.append(runID.substring(0,6) + "/");
-        sb.append(runID + "/");
-        sb.append(runID + ".sra");
-
-        return sb.toString();
-    }
 
     /**
-     * Removes any files after unsuccessful download
+     * Removes temporary .sra files after download
+     * @param runID the run file's ID
      */
     private void cleanUp(String runID) {
 
-        File metaFile = new File(outDir + runID + ".csv");
-        File runFile = new File(outDir + runID + ".sra");
+        File runFile = new File(outDir + runID + ".sra").getAbsoluteFile();
 
         if(runFile.exists())
             runFile.delete();
 
-        if(metaFile.exists())
-            metaFile.delete();
 
     }
     
