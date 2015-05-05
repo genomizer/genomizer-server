@@ -9,7 +9,6 @@ import java.sql.SQLException;
 import java.util.Map.Entry;
 
 import database.subClasses.UserMethods.UserType;
-import authentication.Authenticate;
 import process.ProcessException;
 import process.ProcessHandler;
 import response.ErrorResponse;
@@ -34,7 +33,7 @@ public class ProcessCommand extends Command {
 
 	private long timestamp;
 
-	private String processType;
+	private String processtype;
 
 	private Entry<String,String> filePaths;
 
@@ -57,7 +56,7 @@ public class ProcessCommand extends Command {
 		this.userType = userType;
 		this.username = username;
 		setTimestamp(System.currentTimeMillis());
-		processType = uri.split("/")[2];
+		processtype = uri.split("/")[2];
 	}
 
 	/**
@@ -74,14 +73,14 @@ public class ProcessCommand extends Command {
 		validateName(expid, MaxLength.EXPID, "Experiment name");
 		validateExists(metadata, MaxLength.FILE_METADATA, "Metadata");
 		validateName(genomeVersion, MaxLength.GENOME_VERSION, "Genome version");
-		validateExists(processType, Integer.MAX_VALUE, "Processtype");
+		validateExists(processtype, Integer.MAX_VALUE, "Processtype");
 
 		if(parameters == null || parameters.length < 1) {
 			throw new ValidateException(HttpStatusCode.BAD_REQUEST,
 					"Specify parameters.");
 		}
 
-		switch (processType) {
+		switch (processtype) {
 			case CMD_RAW_TO_PROFILE:
 				if(parameters.length != 8){
 					throw new ValidateException(HttpStatusCode.BAD_REQUEST,
@@ -109,7 +108,7 @@ public class ProcessCommand extends Command {
 			db = initDB();
 			processHandler = new ProcessHandler();
 
-			switch(processType){
+			switch(processtype){
 				case ProcessCommand.CMD_RAW_TO_PROFILE:
 					//Get the genome information from the database.
 					Genome g = db.getGenomeRelease(genomeVersion);
@@ -186,12 +185,12 @@ public class ProcessCommand extends Command {
 		
 		db.close();
 		Debug.log(username + "Raw to profile processing completed " +
-				"running " + processType + " on experiment" + expid + "\n" +
+				"running " + processtype + " on experiment" + expid + "\n" +
 				"metadata: " + metadata + "\n" +
 				"parameters: " + parameters + "\n" +
 				"genomeVersion: " + genomeVersion + "\n");
 		return new ProcessResponse(HttpStatusCode.CREATED, "Raw to profile " +
-				"processing completed running " + processType +
+				"processing completed running " + processtype +
 				" on experiment" + expid + "\n"+
 				"metadata: " + metadata + "\n"+
 				"parameters: " + parameters + "\n" +
@@ -210,7 +209,7 @@ public class ProcessCommand extends Command {
 	 */
 	private Response processError(DatabaseAccessor db, String error, String headerError){
 		ErrorLogger.log(username, headerError +
-				" " + processType +
+				" " + processtype +
 				" on experiment" + expid + "\n"+
 				"metadata: " + metadata + "\n"+
 				"parameters: " + parameters + "\n" +
@@ -219,7 +218,7 @@ public class ProcessCommand extends Command {
 		db.close();
 		return new ProcessResponse(HttpStatusCode.
 				SERVICE_UNAVAILABLE, headerError +
-				" when processing " + processType +
+				" when processing " + processtype +
 				" on experiment" + expid + "\n"+
 				"metadata: " + metadata + "\n"+
 				"parameters: " + parameters + "\n" +
@@ -243,7 +242,7 @@ public class ProcessCommand extends Command {
 	public String toString(){
 
 		return "Uploader of file: " + username + "\n" +
-				"ProcessType: " + processType + "\n" +
+				"ProcessType: " + processtype + "\n" +
 				"metadata:" + metadata + "\n" +
 				"username: " + username + "\n" +
 				"expId: " + expid + "\n" +
@@ -257,8 +256,8 @@ public class ProcessCommand extends Command {
 		return this.timestamp;
 	}
 
-	public void setProcessType(String processType) {
-		this.processType = processType;
+	public void setProcesstype(String processtype) {
+		this.processtype = processtype;
 
 	}
 
