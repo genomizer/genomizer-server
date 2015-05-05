@@ -498,7 +498,7 @@ public class ProcessCommandTest {
 		String[] p = {"a","b","c","d","e","f","g","h"};
 		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1");
 		ProcessCommand c = gson.fromJson(json, ProcessCommand.class);
-		c.setFields("/hello", null, UserType.ADMIN);
+		c.setFields("/hello/hiho", null, UserType.ADMIN);
 		c.setProcesstype(ProcessCommand.CMD_RAW_TO_PROFILE);
 		String compare = gson.toJson(c);
 
@@ -536,7 +536,7 @@ public class ProcessCommandTest {
 
 		String json = "{\"name\":\"experimentId\",\"annotations\":[{\"name\":\"pubmedId\",\"value\":\"abc123\"},{\"name\":\"type\",\"value\":\"raw\"}]}";
 		ProcessCommand c = gson.fromJson(json, ProcessCommand.class);
-		c.setFields("/hello", null, UserType.GUEST);
+		c.setFields("/hello/hiho", null, UserType.GUEST);
 		c.setProcesstype(ProcessCommand.CMD_RAW_TO_PROFILE);
 
 		c.validate();
