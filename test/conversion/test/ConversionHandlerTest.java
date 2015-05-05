@@ -13,6 +13,7 @@ import java.io.IOException;
 
 import java.sql.SQLException;
 
+import static junit.framework.Assert.assertNotNull;
 import static junit.framework.TestCase.fail;
 
 
@@ -86,7 +87,7 @@ public class ConversionHandlerTest {
     public void shouldBeAbleToFetchFileFromDatabaseAfterConversionFromBedToSgr()
             throws IOException, SQLException {
         ch.convertProfileData("sgr", bedFileID);
-
+        assertNotNull(db.getFileTuple(System.getProperty("user.dir")+"/resources/conversionTestData/output/Exp3/profile/0/BED-testdata.sgr"));
     }
 
     /* A file tuple should be present in database after conversion
@@ -96,7 +97,6 @@ public class ConversionHandlerTest {
     public void shouldBeAbleToFetchFileFromDatabaseAfterConversionFromBedToWig()
             throws IOException, SQLException {
         ch.convertProfileData("wig", bedFileID);
-        //TODO check against database
-
+        assertNotNull(db.getFileTuple(System.getProperty("user.dir")+"/resources/conversionTestData/output/Exp3/profile/0/BED-testdata.wig"));
     }
 }

@@ -1,6 +1,7 @@
 package conversion;
 
 import java.io.*;
+import java.nio.file.Files;
 
 /**
  * Handles conversion between different profile file types.
@@ -224,21 +225,31 @@ public class ProfileDataConverter {
                     "accepted for this conversion.");
         }
 
-        try {
+        File inputFile =  new File(inputPath.replace(".bed",".sgr"));
+        if(!inputFile.exists()) {
+
+            try {
             tempPath = bedToSgr(inputPath);
             outputPath = sgrToWig(tempPath);
-        } catch (Exception e) {
-            tempFile = new File(tempPath);
-            if (tempFile.exists())
-                tempFile.delete();
-            throw e;
+            deleteFile(tempPath);
+            } catch (Exception e) {
+                deleteFile(tempPath);
+                throw e;
+            }
+        }
+        else {
+            tempPath = inputPath.replace(".bed", ".sgr");
+            outputPath = sgrToWig(tempPath);
         }
 
+        return outputPath;
+    }
+
+    private void deleteFile(String tempPath) {
+        File tempFile;
         tempFile = new File(tempPath);
         if (tempFile.exists())
             tempFile.delete();
-
-        return outputPath;
     }
 
     /**
