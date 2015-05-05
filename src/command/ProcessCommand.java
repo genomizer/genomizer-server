@@ -35,7 +35,7 @@ public class ProcessCommand extends Command {
 
 	private String processtype;
 
-	private Entry<String,String> filePaths;
+	private Entry<String,String> filepaths;
 
 	//Following fields corresponds to the JSON body of a process command.
 	@Expose
@@ -145,8 +145,8 @@ public class ProcessCommand extends Command {
 					try {
 						processHandler.executeProcess(
 								ProcessCommand.CMD_RAW_TO_PROFILE,
-								parameters, filePaths.getKey(),
-								filePaths.getValue());
+								parameters, filepaths.getKey(),
+								filepaths.getValue());
 
 					} catch (ProcessException e) {
 						return processError(db, e.getMessage(), "Process " +
@@ -171,8 +171,8 @@ public class ProcessCommand extends Command {
 				db = initDB();
 			}
 
-			db.addGeneratedProfiles(expid, filePaths.getValue(),
-					filePaths.getKey(), metadata, genomeVersion, username,
+			db.addGeneratedProfiles(expid, filepaths.getValue(),
+					filepaths.getKey(), metadata, genomeVersion, username,
 					false);
 
 		} catch (SQLException e) {
@@ -269,7 +269,7 @@ public class ProcessCommand extends Command {
 		DatabaseAccessor db;
 
 		db = initDB();
-		filePaths = db.processRawToProfile(expid);
+		filepaths = db.processRawToProfile(expid);
 
 		if(db.isConnected()){
 			db.close();
@@ -277,8 +277,8 @@ public class ProcessCommand extends Command {
 
 	}
 
-	public String[] getFilePaths() {
-		return new String[] {filePaths.getKey(), filePaths.getValue()};
+	public String[] getFilepaths() {
+		return new String[] {filepaths.getKey(), filepaths.getValue()};
 	}
 
 	public String getUsername() {
