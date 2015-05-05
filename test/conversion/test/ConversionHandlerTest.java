@@ -31,12 +31,20 @@ public class ConversionHandlerTest {
             "resources/conversionTestData/GFF-testdata.gff";
     private static final String sgrFilePath =
             "resources/conversionTestData/SGR-testdata.sgr";
-    private static final String wigFilePath =
+    private static final String wigVarStepFilePath =
+            "resources/conversionTestData/WIG-varstep-testdata.wig";
+    private static final String wigBedFilePath =
+            "resources/conversionTestData/WIG-from-SGR-testdata.wig";
+    private static final String wigFixedStepFilePath =
             "resources/conversionTestData/WIG-testdata.wig";
+
     private static int bedFileID;
     private static int gffFileID;
     private static int sgrFileID;
-    private static int wigFileID;
+    private static int wigVarStepFileID;
+    private static int wigBedFileID;
+    private static int wigFixedStepFileID;
+
     private static String tempdbUser, tempdbPw, tempdbHost, tempdbName;
 
     @BeforeClass
@@ -55,7 +63,9 @@ public class ConversionHandlerTest {
         bedFileID = db.getFileTuple(bedFilePath).id;
         gffFileID = db.getFileTuple(gffFilePath).id;
         sgrFileID = db.getFileTuple(sgrFilePath).id;
-        wigFileID = db.getFileTuple(wigFilePath).id;
+        wigVarStepFileID = db.getFileTuple(wigVarStepFilePath).id;
+        wigBedFileID = db.getFileTuple(wigBedFilePath).id;
+        wigFixedStepFileID = db.getFileTuple(wigFixedStepFilePath).id;
     }
 
     @AfterClass
@@ -175,6 +185,69 @@ public class ConversionHandlerTest {
     public void shouldBeAbleToFetchFileFromDatabaseAfterConversionFromGffToWig()
             throws IOException, SQLException {
         ch.convertProfileData("wig", gffFileID);
+        assertNotNull(db.getFileTuple(System.getProperty("user.dir")+"/resources/conversionTestData/output/Exp3/profile/0/WIG-testdata.wig"));
+    }
+
+
+    /* IllegalArgumentException should be thrown when converting from sgr to bed
+* Test created: 2015-05-04
+*/
+    @Test (expected = IllegalArgumentException.class)
+    public void shouldThrowExceptionOnWigToBed()
+            throws IOException, SQLException {
+        ch.convertProfileData("bed", wigFixedStepFileID);
+    }
+
+
+    /* IllegalArgumentException should be thrown when converting from sgr to bed
+* Test created: 2015-05-04
+*/
+    @Test (expected = IllegalArgumentException.class)
+    public void shouldThrowExceptionOnWigToGff()
+            throws IOException, SQLException {
+        ch.convertProfileData("gff", wigFixedStepFileID);
+    }
+
+    /* IllegalArgumentException should be thrown when converting from sgr to bed
+* Test created: 2015-05-04
+*/
+    @Test (expected = IllegalArgumentException.class)
+    public void shouldThrowExceptionOnWigToWig()
+            throws IOException, SQLException {
+        ch.convertProfileData("wig", wigFixedStepFileID);
+    }
+
+
+
+
+    /* A file tuple should be present in database after conversion
+     * Test created: 2015-05-04
+     */
+    @Test
+    public void shouldBeAbleToFetchFileFromDatabaseAfterConversionFromWigBedToSgr()
+            throws IOException, SQLException {
+        ch.convertProfileData("sgr", wigBedFileID);
+        assertNotNull(db.getFileTuple(System.getProperty("user.dir")+"/resources/conversionTestData/output/Exp3/profile/0/WIG-from-SGR-testdata.wig"));
+    }
+
+    /* A file tuple should be present in database after conversion
+     * Test created: 2015-05-04
+     */
+    @Test
+    public void shouldBeAbleToFetchFileFromDatabaseAfterConversionFromWigVarStepToSgr()
+            throws IOException, SQLException {
+        ch.convertProfileData("sgr", wigVarStepFileID);
+        assertNotNull(db.getFileTuple(System.getProperty("user.dir")+"/resources/conversionTestData/output/Exp3/profile/0/WIG-varstep-testdata.wig"));
+    }
+
+
+    /* A file tuple should be present in database after conversion
+     * Test created: 2015-05-04
+     */
+    @Test
+    public void shouldBeAbleToFetchFileFromDatabaseAfterConversionFromWigFixedStepToSgr()
+            throws IOException, SQLException {
+        ch.convertProfileData("sgr", wigBedFileID);
         assertNotNull(db.getFileTuple(System.getProperty("user.dir")+"/resources/conversionTestData/output/Exp3/profile/0/WIG-testdata.wig"));
     }
 
