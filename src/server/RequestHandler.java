@@ -219,7 +219,7 @@ public class RequestHandler implements HttpHandler {
 		Debug.log("Trying to authenticate token " + uuid + "...");
 		if (uuid != null && Authenticate.idExists(uuid)) {
 			Authenticate.updateLatestRequest(uuid);
-			return uuid;
+            return Authenticate.getUsernameByID(uuid);
 		} else {
 			return null;
 		}
