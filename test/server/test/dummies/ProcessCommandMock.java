@@ -34,7 +34,7 @@ public class ProcessCommandMock extends ProcessCommand {
 	}
 
 	@Override
-	public String[] getFilePaths() {
+	public String[] getFilepaths() {
 		return new String[] {"file1", "file2"};
 	}
 

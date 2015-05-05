@@ -9,6 +9,7 @@ import command.*;
 import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.HttpStatusCode;
+import response.ProcessResponse;
 import response.Response;
 import transfer.DownloadHandler;
 import transfer.UploadHandler;
@@ -154,8 +155,15 @@ public class RequestHandler implements HttpHandler {
 			return;
 		}
 
-		/*Execute the command and respond.*/
-		respond(command.execute(), exchange);
+        if (commandClass.equals(ProcessCommand.class)) {
+            Doorman.getWorkPool().addWork((ProcessCommand) command);
+            respond(new ProcessResponse(HttpStatusCode.OK), exchange);
+            return;
+        } else {
+
+            /*Execute the command and respond.*/
+            respond(command.execute(), exchange);
+        }
 	}
 
     /*Used to send a response back to the client*/
