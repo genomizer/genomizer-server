@@ -57,7 +57,7 @@ public class ProcessCommand extends Command {
 		this.userType = userType;
 		this.username = Authenticate.getUsernameByID(username);
 		setTimestamp(System.currentTimeMillis());
-		processType = uri.split("/")[1];
+		processType = uri.split("/")[2];
 	}
 
 	/**
