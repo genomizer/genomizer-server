@@ -13,10 +13,9 @@ import authentication.Authenticate;
 import process.ProcessException;
 import process.ProcessHandler;
 import response.ErrorResponse;
+import response.HttpStatusCode;
 import response.ProcessResponse;
 import response.Response;
-import response.StatusCode;
-import server.ServerSettings;
 import server.Debug;
 import server.ErrorLogger;
 
@@ -78,14 +77,14 @@ public class ProcessCommand extends Command {
 		validateExists(processType, Integer.MAX_VALUE, "Processtype");
 
 		if(parameters == null || parameters.length < 1) {
-			throw new ValidateException(StatusCode.BAD_REQUEST,
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST,
 					"Specify parameters.");
 		}
 
 		switch (processType) {
 			case CMD_RAW_TO_PROFILE:
 				if(parameters.length != 8){
-					throw new ValidateException(StatusCode.BAD_REQUEST,
+					throw new ValidateException(HttpStatusCode.BAD_REQUEST,
 							"Specify the right number of parameters.(8)");
 				}
 				validateExists(parameters[0], Integer.MAX_VALUE, "First parameter");
@@ -94,7 +93,7 @@ public class ProcessCommand extends Command {
 				//TODO Implement parameter size
 				break;
 			default:
-				throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
+				throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Invalid " +
 						"process type");
 		}
 	}
@@ -115,8 +114,8 @@ public class ProcessCommand extends Command {
 					//Get the genome information from the database.
 					Genome g = db.getGenomeRelease(genomeVersion);
 
-					if(g == null) {
-						return new ErrorResponse(StatusCode.BAD_REQUEST,
+					if(g == null){
+						return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
 								"Could not find genome version: " +
 										genomeVersion);
 					} else {
@@ -191,7 +190,7 @@ public class ProcessCommand extends Command {
 				"metadata: " + metadata + "\n" +
 				"parameters: " + parameters + "\n" +
 				"genomeVersion: " + genomeVersion + "\n");
-		return new ProcessResponse(StatusCode.CREATED, "Raw to profile " +
+		return new ProcessResponse(HttpStatusCode.CREATED, "Raw to profile " +
 				"processing completed running " + processType +
 				" on experiment" + expid + "\n"+
 				"metadata: " + metadata + "\n"+
@@ -218,7 +217,7 @@ public class ProcessCommand extends Command {
 				"genomeVersion: " + genomeVersion + "\n" +
 				error + "\n");
 		db.close();
-		return new ProcessResponse(StatusCode.
+		return new ProcessResponse(HttpStatusCode.
 				SERVICE_UNAVAILABLE, headerError +
 				" when processing " + processType +
 				" on experiment" + expid + "\n"+

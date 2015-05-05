@@ -1001,8 +1001,8 @@ public class DatabaseAccessor implements AutoCloseable {
      * @throws IOException
      */
     public String addGenomeRelease(String genomeVersion, String species,
-            String filename) throws SQLException, IOException {
-        return genMethods.addGenomeRelease(genomeVersion, species, filename);
+            String filename, String checkSumMD5) throws SQLException, IOException {
+        return genMethods.addGenomeRelease(genomeVersion, species, filename, checkSumMD5);
     }
 
     /**
@@ -1057,13 +1057,13 @@ public class DatabaseAccessor implements AutoCloseable {
      *            String, the name of the species you want to get genome
      *            realeases for.
      * @return genomelist ArrayList<Genome>, list of all the genome releases for
-     *         a specific species. Returns NULL if the specified specie did NOT
+     *         a specific species. Returns NULL if the specified species did NOT
      *         have a genomeRelase entry in the database.
      * @throws SQLException
      */
     public ArrayList<Genome> getAllGenomeReleasesForSpecies(String species)
             throws SQLException {
-        return genMethods.getAllGenomReleasesForSpecies(species);
+        return genMethods.getAllGenomeReleasesForSpecies(species);
     }
 
     private FileTuple getRawFileTuple(List<FileTuple> fileTuples) {
@@ -1083,20 +1083,20 @@ public class DatabaseAccessor implements AutoCloseable {
      * @throws SQLException
      *             - if the query does not succeed
      */
-    public List<Genome> getAllGenomReleases() throws SQLException {
-        return genMethods.getAllGenomReleases();
+    public List<Genome> getAllGenomeReleases() throws SQLException {
+        return genMethods.getAllGenomeReleases();
     }
 
     /**
-     * Returns a list of all genome releases in the database for a specie.
+     * Returns a list of all genome releases in the database for a species.
      *
      * @return a list of genomes, if no genomes are found the
      *         list is empty
      * @throws SQLException
      *             - if the query does not succeed
      */
-    public List<String> getAllGenomReleaseSpecies() throws SQLException {
-        return genMethods.getAllGenomReleaseSpecies();
+    public List<String> getAllGenomeReleaseSpecies() throws SQLException {
+        return genMethods.getAllGenomeReleaseSpecies();
     }
 
     /**
@@ -1126,8 +1126,8 @@ public class DatabaseAccessor implements AutoCloseable {
      * @throws IOException
      */
     public String addChainFile(String fromVersion, String toVersion,
-            String fileName) throws SQLException, IOException {
-        return genMethods.addChainFile(fromVersion, toVersion, fileName);
+            String fileName, String checkSumMD5) throws SQLException, IOException {
+        return genMethods.addChainFile(fromVersion, toVersion, fileName, checkSumMD5);
     }
 
     /**
@@ -1243,5 +1243,16 @@ public class DatabaseAccessor implements AutoCloseable {
             }
         }
         folder.delete();
+    }
+
+
+    public String getFileCheckSumMD5(String fileName) throws SQLException {
+        FileTuple ft = getFileTuple(fileName);
+        if (ft != null) {
+            return ft.checkSumMD5;
+        }
+        else {
+            return genMethods.getFileCheckSumMD5(fileName);
+        }
     }
 }

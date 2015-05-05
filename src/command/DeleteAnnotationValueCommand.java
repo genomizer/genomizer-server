@@ -12,7 +12,7 @@ import database.DatabaseAccessor;
 import response.ErrorResponse;
 import response.MinimalResponse;
 
-import response.StatusCode;
+import response.HttpStatusCode;
 
 /**
  * Class used to handle removal of annotation values.
@@ -48,22 +48,22 @@ public class DeleteAnnotationValueCommand extends Command {
 			if(values.contains(value)) {
 				db.removeDropDownAnnotationValue(name, value);
 			} else {
-				return new ErrorResponse(StatusCode.BAD_REQUEST, "The value " +
+				return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "The value " +
 						value + " does not exist in " + name + " and can not " +
 						"be deleted");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return new ErrorResponse(StatusCode.NO_CONTENT, e.getMessage());
+			return new ErrorResponse(HttpStatusCode.NO_CONTENT, e.getMessage());
 		} catch (IOException e) {
 			e.printStackTrace();
-			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE,
+			return new ErrorResponse(HttpStatusCode.SERVICE_UNAVAILABLE,
 					e.getMessage());
 		} finally {
 			if (db != null) {
 				db.close();
 			}
 		}
-		return new MinimalResponse(StatusCode.OK);
+		return new MinimalResponse(HttpStatusCode.OK);
 	}
 }

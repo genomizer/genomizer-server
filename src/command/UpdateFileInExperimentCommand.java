@@ -1,9 +1,9 @@
 package command;
 
 import database.subClasses.UserMethods.UserType;
+import response.HttpStatusCode;
 import response.MinimalResponse;
 import response.Response;
-import response.StatusCode;
 
 /**
  * Class used to handle updateing files in experiments.
@@ -29,6 +29,6 @@ public class UpdateFileInExperimentCommand extends Command {
 
 	@Override
 	public Response execute() {
-		return 	new MinimalResponse(StatusCode.NO_CONTENT);
+		return 	new MinimalResponse(HttpStatusCode.NO_CONTENT);
 	}
 }

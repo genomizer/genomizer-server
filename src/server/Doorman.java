@@ -34,7 +34,6 @@ import com.sun.net.httpserver.HttpServer;
  * creates a new Executor (on  a new thread) and afterwards continues listening
  * for new requests.
  */
-
 public class Doorman {
 	private HttpServer httpServer;
 	private static WorkPool workPool;

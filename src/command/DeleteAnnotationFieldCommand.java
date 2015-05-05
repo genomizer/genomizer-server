@@ -8,9 +8,9 @@ import database.DatabaseAccessor;
 import database.constants.MaxLength;
 import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
+import response.HttpStatusCode;
 import response.MinimalResponse;
 import response.Response;
-import response.StatusCode;
 
 /**
  * Class used to handle removal on an existing annotation-field.
@@ -44,16 +44,16 @@ public class DeleteAnnotationFieldCommand extends Command {
 				db.deleteAnnotation(name);
 				return new MinimalResponse(200);
 			} else {
-				return new ErrorResponse(StatusCode.BAD_REQUEST,
+				return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
 						"The annotation " + name + " does not exist and " +
 								"can not be deleted");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
 		} catch (IOException e) {
 			e.printStackTrace();
-			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE,
+			return new ErrorResponse(HttpStatusCode.SERVICE_UNAVAILABLE,
 					e.getMessage());
 		} finally {
 			if (db != null) {

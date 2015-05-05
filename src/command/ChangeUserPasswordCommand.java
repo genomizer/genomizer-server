@@ -8,7 +8,7 @@ import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
-import response.StatusCode;
+import response.HttpStatusCode;
 import server.Debug;
 
 import java.io.IOException;
@@ -59,7 +59,7 @@ public class ChangeUserPasswordCommand extends Command {
         } catch (SQLException | IOException e) {
             Debug.log("CHANGE OF PASSWORD FAILED FOR: " + username + ". REASON: " +
                     e.getMessage());
-            return new ErrorResponse(StatusCode.BAD_REQUEST,
+            return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
                     "CHANGE OF PASSWORD FAILED FOR: " + username + ". REASON: " + e.getMessage());
         }
 
@@ -68,9 +68,9 @@ public class ChangeUserPasswordCommand extends Command {
         try {
             db.resetPassword(username, hash,"SALT");
         } catch (SQLException | IOException e) {
-            return new ErrorResponse(StatusCode.BAD_REQUEST, "Database error " + e.getMessage());
+            return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Database error " + e.getMessage());
         }
 
-        return new MinimalResponse(StatusCode.CREATED);
+        return new MinimalResponse(HttpStatusCode.CREATED);
     }
 }
