@@ -40,6 +40,7 @@ public class SRADownloadCommand extends Command {
 		String paths[] = null;
 		try {
 			paths = sh.downloadFromSRA(runID);
+
 		} catch (ProcessException e) {
 			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
