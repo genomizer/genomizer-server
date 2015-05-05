@@ -150,7 +150,7 @@ public class ConversionHandler {
 			case "sgr":
 				throw new IllegalArgumentException("Cannot convert from sgr to sgr.");
 			case "wig":
-				outputFile = pdc.bedToSgr(fileInDB);
+				outputFile = pdc.sgrToWig(fileInDB);
 				break;
 			default:
 				throw new IllegalArgumentException("Unknown conversion.");

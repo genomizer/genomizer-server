@@ -281,23 +281,9 @@ public class ProfileDataConverter {
         }
         else {
             tempPath = inputPath.replace(".gff", ".sgr");
-            outputPath = gffToWig(tempPath);
-        }
-
-        /*try {
-            tempPath = gffToSgr(inputPath);
             outputPath = sgrToWig(tempPath);
-        } catch (Exception e){
-            tempFile = new File(tempPath);
-            if (tempFile.exists())
-                tempFile.delete();
-            throw e;
         }
 
-        tempFile = new File(tempPath);
-        if (tempFile.exists())
-            tempFile.delete();
-*/
         return outputPath;
     }
 
