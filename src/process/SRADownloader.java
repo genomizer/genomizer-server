@@ -10,6 +10,9 @@ import java.io.*;
  */
 public class SRADownloader extends Executor {
 
+	public static final int FASTQPATH = 0;
+	public static final int METADATAPATH = 1;
+
     private final String http = "http://trace.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?save=efetch&db=sra&rettype=runinfo&term=";
     private final String dir = ServerSettings.fileLocation;
     private final String outDir = dir + "/sra/";
@@ -111,7 +114,7 @@ public class SRADownloader extends Executor {
 
 
     }
-    
-    
+
+
 
 }

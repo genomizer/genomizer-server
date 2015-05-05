@@ -37,11 +37,20 @@ public class SRADownloadCommand extends Command {
 	public Response execute() {
 
 		SRADownloader sh = new SRADownloader();
+		String paths[] = null;
 		try {
-			sh.downloadSRA(runID);
+			paths = sh.downloadFromSRA(runID);
 		} catch (ProcessException e) {
 			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
+
+		if (paths == null)
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Could not download file");
+
+
+
+		System.out.println(paths[SRADownloader.FASTQPATH]);
+		System.out.println(paths[SRADownloader.METADATAPATH]);
 
 		return new MinimalResponse(HttpStatusCode.OK);
 	}
@@ -52,7 +61,8 @@ public class SRADownloadCommand extends Command {
 	            ServerSettings.readSettingsFile(System.getProperty("user.dir")+"/settings.cfg");
 	            SRADownloadCommand sdc = new SRADownloadCommand("SRR1970533");
 	            sdc.validate();
-	            sdc.execute();
+	            Response response = sdc.execute();
+	            System.out.println(response.toString());
 	        } catch (IOException e) {
 	            e.printStackTrace();
 	        } catch (ValidateException e) {
