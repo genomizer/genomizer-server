@@ -36,7 +36,7 @@ public class GetGenomeReleaseCommand extends Command{
 			db = initDB();
 			try{
 				ArrayList<Genome> genomeReleases =
-						(ArrayList<Genome>)db.getAllGenomReleases();
+						(ArrayList<Genome>)db.getAllGenomeReleases();
 				return new GetGenomeReleaseResponse(HttpStatusCode.OK,
 						genomeReleases);
 			}catch(SQLException e){

@@ -120,6 +120,23 @@ public abstract class Command {
 	}
 
 	/**
+	 * Validates that a string is a valid MD5 checksum.
+	 * @param checkSumMD5 the field to be validated.
+	 * @throws ValidateException if the field does not conform.
+	 */
+	public void validateMD5(String checkSumMD5) throws ValidateException {
+		if (checkSumMD5 != null) {
+			if (checkSumMD5.length() != 32)
+				throw new ValidateException(HttpStatusCode.BAD_REQUEST,
+						"MD5 checksum has incorrect length (should be 32)!");
+			if (!checkSumMD5.matches("[0-9a-fA-F]+"))
+				throw new ValidateException(HttpStatusCode.BAD_REQUEST,
+						"Invalid characters in MD5 "
+								+ "checksum string (should be '[0-9a-fA-F]')!");
+		}
+	}
+
+	/**
 	 * Validates a field by throwing a ValidateException if it doesn't conform
 	 * to specifications.
 	 * @param string the field to be validated.

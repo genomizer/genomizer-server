@@ -59,7 +59,7 @@ public class Genome {
     	return genomeVersion;
     }
 
-    public String getSpecie() {
+    public String getSpecies() {
     	return species;
     }
 }

@@ -57,16 +57,7 @@ public class AddFileToExperimentCommand extends Command {
 		validateName(grVersion, MaxLength.FILE_GRVERSION, "Genome release");
 		validateName(fileName, MaxLength.FILE_FILENAME, "Filename");
 		validateExists(metaData, MaxLength.FILE_METADATA, "Metadata");
-
-		if (checkSumMD5 != null) {
-			if (checkSumMD5.length() != 32)
-				throw new ValidateException(HttpStatusCode.BAD_REQUEST,
-						"MD5 checksum has incorrect length (should be 32)!");
-			if (!checkSumMD5.matches("[0-9a-fA-F]+"))
-				throw new ValidateException(HttpStatusCode.BAD_REQUEST,
-						"Invalid characters in MD5 "
-						+ "checksum string (should be '[0-9a-fA-F]')!");
-		}
+		validateMD5(this.checkSumMD5);
 	}
 
 	public void setUploader(String uploader) {

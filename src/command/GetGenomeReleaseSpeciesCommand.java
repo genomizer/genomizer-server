@@ -33,7 +33,7 @@ public class GetGenomeReleaseSpeciesCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-		validateName(species, MaxLength.GENOME_SPECIES, "Genome specie");
+		validateName(species, MaxLength.GENOME_SPECIES, "Genome species");
 	}
 
 	/**

@@ -84,7 +84,7 @@ public class GetGenomeReleaseResponseTest {
 		ArrayList<database.containers.Genome> genomeList;
 		try {
 			DatabaseAccessor db=new DatabaseAccessor(ServerSettings.databaseUsername, ServerSettings.databasePassword, ServerSettings.databaseHost, ServerSettings.databaseName);
-			genomeList = (ArrayList<database.containers.Genome>) db.getAllGenomReleases();
+			genomeList = (ArrayList<database.containers.Genome>) db.getAllGenomeReleases();
 
 		/*	for(int i=0; i<db.getAllAnnotationLabels().size();i++){
 				System.out.println(db.getAllAnnotationLabels().get(i));
