@@ -23,42 +23,6 @@ public class ProcessHandler implements Callable<Response> {
 	}
 
 
-	@Deprecated
-	public void removeOldStatuses() {
-
-	/*	// Get current time
-		long currentTime = System.currentTimeMillis();
-
-		// List to store processes to be removed
-		LinkedList<ProcessCommand> toBeRemoved = new LinkedList<>();
-
-		LinkedList<ProcessCommand> processesList = processPool.getProcesses();
-
-		*//* Loop through all processes and check statuses *//*
-		for (ProcessCommand proc : processesList) {
-
-			ProcessStatus procStat = processPool.getProcessStatus(proc);
-			String statusString = procStat.status;
-
-			if (statusString.equals(ProcessStatus.STATUS_FINISHED)
-					|| statusString.equals(ProcessStatus.STATUS_CRASHED)) {
-				long processTimeAdded = procStat.timeAdded;
-				long timeDifference = currentTime - processTimeAdded;
-
-				if (timeDifference > statusTimeToLive) {
-					toBeRemoved.add(proc);
-				}
-			}
-		}
-		for (ProcessCommand proc : toBeRemoved) {
-			Debug.log("Removing old process status: " + proc.getExpId());
-			processPool.cancelProcess(proc);
-		}
-*/
-
-	}
-
-
 	@Override
 	public Response call() {
 
