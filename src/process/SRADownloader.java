@@ -19,9 +19,9 @@ public class SRADownloader extends Executor {
     private final String fastqDumpExecutable = "sra-toolkit/fastq-dump";
 
     /**
-     * Downloads a run file and meta data from the Sequence Read Archive
+     * Downloads a fastq file and meta data from the Sequence Read Archive
      * @param runID the run file's ID
-     * @return file paths to run file and meta data file
+     * @return file paths to fastq file and meta data file
      *
      **/
     public String[] downloadFromSRA(String runID) throws ProcessException {
@@ -37,7 +37,7 @@ public class SRADownloader extends Executor {
 
             ErrorLogger.log("SRA", e.getMessage());
 
-            if (e.getMessage().contains("No such directory")) {
+            if (e.getMessage().contains("item not found")) {
 
                 throw new ProcessException("File " + runID + " does not exist");
 
@@ -60,7 +60,7 @@ public class SRADownloader extends Executor {
         return filePaths;
     }
     /**
-     * Downloads a run file from the Sequence Read Archive
+     * Downloads a fastq file from the Sequence Read Archive
      *
      * @param runID the run file's ID
      * @return the downloaded file's path
@@ -69,8 +69,6 @@ public class SRADownloader extends Executor {
      *
      */
     private String getRunFile(String runID) throws IOException, InterruptedException, RuntimeException {
-
-        //String ftp = buildFTP(runID);
 
         String command[] = parse(fastqDumpExecutable + " -O "  + outDir + " " + runID);
 
