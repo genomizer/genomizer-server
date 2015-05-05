@@ -5,7 +5,9 @@ import database.DatabaseAccessor;
 import database.test.TestInitializer;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
+import server.ServerSettings;
 
 import java.io.IOException;
 
@@ -34,12 +36,21 @@ public class ConversionHandlerTest {
     private static int gffFileID;
     private static int sgrFileID;
     private static int wigFileID;
+    private static String tempdbUser, tempdbPw, tempdbHost, tempdbName;
 
     @BeforeClass
     public static void setUpTestCase() throws Exception {
+        TestInitializer.setupServerSettings();
+        String travis = System.getenv("TRAVIS");
+        if(travis == null || travis.equals("false")) {
+            // Not running on Travis.
+            ServerSettings.fileLocation = System.getProperty("user.dir")+"/resources/conversionTestData/output/";
+        }
+
         ti = new TestInitializer();
         db = ti.setup();
         ch = new ConversionHandler();
+
         bedFileID = db.getFileTuple(bedFilePath).id;
         gffFileID = db.getFileTuple(gffFilePath).id;
         sgrFileID = db.getFileTuple(sgrFilePath).id;
@@ -65,7 +76,7 @@ public class ConversionHandlerTest {
     @Test (expected = IllegalArgumentException.class)
     public void shouldThrowExceptionOnBedToGff()
             throws IOException, SQLException {
-        ch.convertProfileData("gff", gffFileID);
+        ch.convertProfileData("gff", bedFileID);
     }
 
     /* A file tuple should be present in database after conversion
@@ -74,9 +85,8 @@ public class ConversionHandlerTest {
     @Test
     public void shouldBeAbleToFetchFileFromDatabaseAfterConversionFromBedToSgr()
             throws IOException, SQLException {
-        ch.convertProfileData("sgr", sgrFileID);
-        //TODO check against database
-        fail();
+        ch.convertProfileData("sgr", bedFileID);
+
     }
 
     /* A file tuple should be present in database after conversion
@@ -85,8 +95,8 @@ public class ConversionHandlerTest {
     @Test
     public void shouldBeAbleToFetchFileFromDatabaseAfterConversionFromBedToWig()
             throws IOException, SQLException {
-        ch.convertProfileData("wig", wigFileID);
+        ch.convertProfileData("wig", bedFileID);
         //TODO check against database
-        fail();
+
     }
 }

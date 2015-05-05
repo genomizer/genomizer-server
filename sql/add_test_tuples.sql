@@ -81,13 +81,12 @@ INSERT INTO File VALUES(DEFAULT, '/var/www/data/Exp3/profile/0/file1.sam', 'Prof
 
 INSERT INTO File VALUES(DEFAULT, '/var/www/data/Exp3/profile/1/file1.sam', 'Profile', 'file2.sam', CURRENT_TIMESTAMP, '-n 2 --best', '/var/www/data/Exp3/profile/1/file1_input.sam', 'Genomizer', 'user1', 'false', 'Exp3', 'rn5', DEFAULT);
 
--- HERE COMES THE FILE CONVERSION TEST FILES
 
-INSERT INTO File VALUES(DEFAULT, 'resources/conversionTestData/BED-testdata.bed', 'Profile', 'bedTest.bed', CURRENT_TIMESTAMP, '-n --best', 'resources/conversionTestData/BED-testdata.bed', 'Genomizer', 'user1', 'false', 'Exp3', 'rn5', DEFAULT);
+INSERT INTO File VALUES(DEFAULT, 'resources/conversionTestData/BED-testdata.bed', 'Profile', 'BED-testdata.bed', CURRENT_TIMESTAMP, '-n --best', 'resources/conversionTestData/BED-testdata.bed', 'Genomizer', 'user1', 'false', 'Exp3', 'rn5', DEFAULT);
 
-INSERT INTO File VALUES(DEFAULT, 'resources/conversionTestData/GFF-testdata.gff', 'Profile', 'gffTest.sgr', CURRENT_TIMESTAMP, '-n --best', 'resources/conversionTestData/GFF-testdata.gff', 'Genomizer', 'user1', 'false', 'Exp3', 'rn5', DEFAULT);
+INSERT INTO File VALUES(DEFAULT, 'resources/conversionTestData/GFF-testdata.gff', 'Profile', 'GFF-testdata.gff', CURRENT_TIMESTAMP, '-n --best', 'resources/conversionTestData/GFF-testdata.gff', 'Genomizer', 'user1', 'false', 'Exp3', 'rn5', DEFAULT);
 
-INSERT INTO File VALUES(DEFAULT, 'resources/conversionTestData/SGR-testdata.sgr', 'Profile', 'sgrTest.sgr', CURRENT_TIMESTAMP, '-n --best', 'resources/conversionTestData/SGR-testdata.sgr', 'Genomizer', 'user1', 'false', 'Exp3', 'rn5', DEFAULT);
+INSERT INTO File VALUES(DEFAULT, 'resources/conversionTestData/SGR-testdata.sgr', 'Profile', 'SGR-testdata.sgr', CURRENT_TIMESTAMP, '-n --best', 'resources/conversionTestData/SGR-testdata.sgr', 'Genomizer', 'user1', 'false', 'Exp3', 'rn5', DEFAULT);
 
 INSERT INTO File VALUES(DEFAULT, 'resources/conversionTestData/SGR-testdata-2.sgr', 'Profile', 'sgrTest2.sam', CURRENT_TIMESTAMP, '-n --best', 'resources/conversionTestData/SGR-testdata-2.sgr', 'Genomizer', 'user1', 'false', 'Exp3', 'rn5', DEFAULT);
 
@@ -97,6 +96,6 @@ INSERT INTO File VALUES(DEFAULT, 'resources/conversionTestData/SGR-testdata-4.sg
 
 INSERT INTO File VALUES(DEFAULT, 'resources/conversionTestData/WIG-from-SGR-testdata.sgr', 'Profile', 'sgr2wigTest.wig', CURRENT_TIMESTAMP, '-n --best', 'resources/conversionTestData/WIG-from-SGR-testdata.sgr', 'Genomizer', 'user1', 'false', 'Exp3', 'rn5', DEFAULT);
 
-INSERT INTO File VALUES(DEFAULT, 'resources/conversionTestData/WIG-testdata.wig', 'Profile', 'wigTest.wig', CURRENT_TIMESTAMP, '-n --best', 'resources/conversionTestData/WIG-testdata.wig', 'Genomizer', 'user1', 'false', 'Exp3', 'rn5', DEFAULT);
+INSERT INTO File VALUES(DEFAULT, 'resources/conversionTestData/WIG-testdata.wig', 'Profile', 'WIG-testdata.wig', CURRENT_TIMESTAMP, '-n --best', 'resources/conversionTestData/WIG-testdata.wig', 'Genomizer', 'user1', 'false', 'Exp3', 'rn5', DEFAULT);
 
 INSERT INTO File VALUES(DEFAULT, 'resources/conversionTestData/WIG-varstep-testdata.wig', 'Profile', 'wigVarStepTest.wig', CURRENT_TIMESTAMP, '-n --best', 'resources/conversionTestData/WIG-varstep-testdata.wig', 'Genomizer', 'user1', 'false', 'Exp3', 'rn5', DEFAULT);

@@ -150,7 +150,6 @@ public class FilePathGenerator {
      * @return String path to the subfolder
      */
     public String generateNewProfileSubFolder(String folderPath) {
-
         File profileFolder = new File(folderPath);
 
         if (!profileFolder.exists()) {
