@@ -1,5 +1,7 @@
 package conversion.test;
 
+import org.junit.Ignore;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -14,6 +16,7 @@ import java.util.Arrays;
  * @author Albin Råstander <c12arr>
  * @author Martin Larsson <dv13mln>
  */
+@Ignore
 public class ConversionResultCompare {
     /**
      *	Private method that uses checksum to compare two files.
