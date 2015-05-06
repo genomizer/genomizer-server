@@ -70,9 +70,9 @@ public class Doorman {
 	public Doorman(CommandHandler commandHandler, int port) throws IOException {
 
 		this.commandHandler = commandHandler;
-		// TODO: Don't hard-code the upload and temp directories' locations.
-		this.uploadHandler   = new UploadHandler("/upload", "resources/", "/tmp");
-		this.downloadHandler = new DownloadHandler("/download", "resources/");
+		this.uploadHandler   = new UploadHandler("/upload", ServerSettings.fileLocation,
+				System.getProperty("java.io.tmpdir"));
+		this.downloadHandler = new DownloadHandler("/download", ServerSettings.fileLocation);
 
 		httpServer = HttpServer.create(new InetSocketAddress(port),0);
 		httpServer.createContext("/login", createHandler());
