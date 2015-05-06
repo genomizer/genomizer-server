@@ -14,7 +14,9 @@ import database.FilePathGenerator;
 import database.FileValidator;
 import database.constants.ServerDependentValues;
 import database.containers.ChainFile;
+import database.containers.ChainFiles;
 import database.containers.Genome;
+import database.containers.GenomeFile;
 
 /**
  * Class that contains all the methods for adding,changing, getting and removing
@@ -73,7 +75,7 @@ public class GenomeMethods {
 	}
 
     /**
-     * Add one genomerelease to the database.
+     * Add one genome release to the database.
      *
      * @param genomeVersion the genome version
      * @param species the species
@@ -133,73 +135,102 @@ public class GenomeMethods {
 	}
 
 	/**
-	 * Retrieve the MD5 checksum corresponding to a given file
-	 * (either a genome release file or a chain file).
+	 * Given a filesystem path, retrieve the corresponding genome release file record.
 	 *
 	 * @param  file          file name.
 	 * @throws SQLException  if something went wrong.
 	 */
-	public String getFileCheckSumMD5(String file) throws SQLException {
+	public GenomeFile getGenomeReleaseFile (String file) throws SQLException {
 		File fileFile   = new File(file);
 		String fileName = fileFile.getName();
 		String fileDir  = fileFile.getParent();
 		if (!fileDir.endsWith(File.separator))
 			fileDir += File.separator;
 
-		// Is this a genome release file?
-		// Given directory name, get genome release version...
+		// Given a directory name, get genome release version...
 		String genomeReleaseVersion = null;
 		try (PreparedStatement stmt = conn.prepareStatement(
-				"SELECT Version FROM Genome_Release WHERE FolderPath = ?")) {
+				"SELECT * FROM Genome_Release_Files "
+				+ "NATURAL JOIN Genome_Release "
+				+ "WHERE FolderPath ~~* ? AND FileName ~~* ?")) {
 			stmt.setString(1, fileDir);
+			stmt.setString(2, fileName);
 			ResultSet rs = stmt.executeQuery();
 			if (rs.next()) {
-				genomeReleaseVersion = rs.getString("Version");
+				return new GenomeFile(rs);
 			}
 		}
 
-		// Given genome release version and file name, get MD5.
-		if (genomeReleaseVersion != null) {
-			try (PreparedStatement stmt = conn.prepareStatement(
-					"SELECT MD5 FROM Genome_Release_Files WHERE FileName = ? AND Version = ?")) {
-				stmt.setString(1, fileName);
-				stmt.setString(2, genomeReleaseVersion);
-				ResultSet rs = stmt.executeQuery();
-				if (rs.next()) {
-					return rs.getString("MD5");
-				}
-			}
-		}
+		return  null;
+	}
 
-		// OK, maybe this is a chain file?
-		// Given a directory name, get from- and to-versions.
+	/**
+	 * Update the MD5 checksum corresponding to a given genome release file.
+	 *
+	 * @param  gf            file record.
+	 * @param  checkSumMD5   check sum.
+	 * @throws SQLException  if something went wrong.
+	 */
+	public void setGenomeReleaseFileCheckSumMD5 (GenomeFile gf, String checkSumMD5) throws SQLException {
+		try(PreparedStatement stmt = conn.prepareStatement(
+				"UPDATE Genome_Release_Files "
+				+ "SET MD5 = ? "
+				+ "WHERE Version ~~* ? AND FileName ~~* ?")) {
+			stmt.setString(1, checkSumMD5);
+			stmt.setString(2, gf.genomeVersion);
+			stmt.setString(3, gf.fileName);
+			stmt.executeUpdate();
+		}
+	}
+
+	/**
+	 * Given a filesystem path, retrieve the corresponding chain file record.
+	 *
+	 * @param  file          file name.
+	 * @throws SQLException  if something went wrong.
+	 */
+	public ChainFile getChainFile (String file) throws SQLException {
+		File fileFile   = new File(file);
+		String fileName = fileFile.getName();
+		String fileDir  = fileFile.getParent();
+		if (!fileDir.endsWith(File.separator))
+			fileDir += File.separator;
+
 		String chainFileFromVersion = null;
 		String chainFileToVersion = null;
 		try (PreparedStatement stmt = conn.prepareStatement(
-				"SELECT FromVersion, ToVersion FROM Chain_File WHERE FolderPath = ?")) {
+				"SELECT * FROM Chain_File_Files "
+				+ "NATURAL JOIN Chain_File "
+				+ "WHERE FolderPath ~~* ? AND FileName ~~* ?")) {
 			stmt.setString(1, fileDir);
+			stmt.setString(2, fileName);
 			ResultSet rs = stmt.executeQuery();
 			if (rs.next()) {
-				chainFileFromVersion = rs.getString("FromVersion");
-				chainFileToVersion   = rs.getString("ToVersion");
-			}
-		}
-
-		// Given from- and to-versions and chain file name, get MD5.
-		if (chainFileFromVersion != null && chainFileToVersion != null) {
-			try (PreparedStatement stmt = conn.prepareStatement(
-					"SELECT MD5 FROM Chain_File_Files WHERE FileName = ? AND FromVersion = ? AND ToVersion = ?")) {
-				stmt.setString(1, fileName);
-				stmt.setString(2, chainFileFromVersion);
-				stmt.setString(3, chainFileToVersion);
-				ResultSet rs = stmt.executeQuery();
-				if (rs.next()) {
-					return rs.getString("MD5");
-				}
+				return new ChainFile(rs);
 			}
 		}
 
 		return null;
+	}
+
+	/**
+	 * Update the MD5 checksum corresponding to a given chain file.
+	 *
+	 * @param  cf            file record.
+	 * @param  checkSumMD5   check sum.
+	 * @throws SQLException  if something went wrong.
+	 */
+	public void setChainFileCheckSumMD5 (ChainFile cf, String checkSumMD5) throws SQLException {
+		try(PreparedStatement stmt = conn.prepareStatement(
+				"UPDATE Chain_File_Files "
+						+ "SET MD5 = ? "
+						+ "WHERE FromVersion ~~* ? AND ToVersion ~~* ? AND FileName ~~* ?")) {
+			stmt.setString(1, checkSumMD5);
+			stmt.setString(2, cf.fromVersion);
+			stmt.setString(3, cf.toVersion);
+			stmt.setString(4, cf.fileName);
+			stmt.executeUpdate();
+		}
 	}
 
     private boolean genomeReleaseFileExists(String genomeVersion,
@@ -355,7 +386,7 @@ public class GenomeMethods {
 	 * @return resFilePath String, the filePath of that chain file.
 	 * @throws SQLException
 	 */
-	public ChainFile getChainFile(String fromVersion, String toVersion)
+	public ChainFiles getChainFiles(String fromVersion, String toVersion)
 			throws SQLException {
 
         String query = "SELECT * FROM Chain_File NATURAL JOIN Chain_File_Files"
@@ -366,10 +397,10 @@ public class GenomeMethods {
 		stmt.setString(2, toVersion);
 		ResultSet rs = stmt.executeQuery();
 
-		ChainFile cf = null;
+		ChainFiles cf = null;
 
 		if (rs.next()) {
-			cf = new ChainFile(rs);
+			cf = new ChainFiles(rs);
 		}
 
 		stmt.close();
@@ -418,7 +449,7 @@ public class GenomeMethods {
         String insertQuery2 = "INSERT INTO Chain_File_Files "
                 + "(FromVersion, ToVersion, FileName, MD5) " + "VALUES (?, ?, ?, ?)";
 
-        ChainFile cf = getChainFile(fromVersion, toVersion);
+        ChainFiles cf = getChainFiles(fromVersion, toVersion);
         if (cf == null) {
             PreparedStatement insertStat = conn.prepareStatement(insertQuery);
             insertStat.setString(1, fromVersion);
@@ -442,7 +473,7 @@ public class GenomeMethods {
 	}
 
 	/**
-	 * Deletes a chain_file from the database and the physical file on the
+	 * Deletes a chain_file from the database and the physical files on the
 	 * system. You find the unique file by sending in the genome version the
 	 * file converts from and the genome version the file converts to.
 	 *
@@ -455,12 +486,12 @@ public class GenomeMethods {
 	 * @throws SQLException
 	 *             - if the query does not succeed
 	 */
-	public int removeChainFile(String fromVersion, String toVersion)
+	public int removeChainFiles(String fromVersion, String toVersion)
 			throws SQLException {
 
 		int resCount = 0;
 
-		ChainFile cf = getChainFile(fromVersion, toVersion);
+		ChainFiles cf = getChainFiles(fromVersion, toVersion);
 
         if (cf == null) {
             return 0;

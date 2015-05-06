@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
 
+import database.containers.ChainFiles;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -17,7 +18,6 @@ import org.junit.Test;
 import database.DatabaseAccessor;
 import database.FilePathGenerator;
 import database.constants.ServerDependentValues;
-import database.containers.ChainFile;
 import database.test.TestInitializer;
 
 public class ChainFilesTest {
@@ -76,7 +76,7 @@ public class ChainFilesTest {
         String fromVersion = "hg38";
         String toVersion = "hg18";
 
-        ChainFile cf = dbac.getChainFile(fromVersion, toVersion);
+        ChainFiles cf = dbac.getChainFiles(fromVersion, toVersion);
         String filePath = cf.folderPath;
 
         assertEquals("/var/www/data/chain_files/Human/hg38 - hg18/", filePath);
@@ -88,7 +88,7 @@ public class ChainFilesTest {
 
         String fromVersion = "hg99";
         String toVersion = "hg38";
-        ChainFile cf = dbac.getChainFile(fromVersion, toVersion);
+        ChainFiles cf = dbac.getChainFiles(fromVersion, toVersion);
 
         assertNull(cf);
     }
@@ -99,8 +99,8 @@ public class ChainFilesTest {
         String fromVersion = "hg18";
         String toVersion = "hg38";
 
-        assertEquals(1, dbac.removeChainFile(fromVersion, toVersion));
-        assertNull(dbac.getChainFile(fromVersion, toVersion));
+        assertEquals(1, dbac.removeChainFiles(fromVersion, toVersion));
+        assertNull(dbac.getChainFiles(fromVersion, toVersion));
     }
 
     @Test
@@ -117,8 +117,8 @@ public class ChainFilesTest {
         File mockFile = new File(folderPath + "rat.over.chain");
         assertTrue(mockFile.exists());
 
-        dbac.removeChainFile("rn3", "rn5");
-        assertNull(dbac.getChainFile("rn3", "rn5"));
+        dbac.removeChainFiles("rn3", "rn5");
+        assertNull(dbac.getChainFiles("rn3", "rn5"));
         assertFalse(mockFile.exists());
         assertFalse(folder.exists());
     }
@@ -133,7 +133,7 @@ public class ChainFilesTest {
 
         dbac.addChainFile(fromVersion, toVersion, testName1, null);
         dbac.addChainFile(fromVersion, toVersion, testName2, null);
-        ChainFile cf = dbac.getChainFile(fromVersion, toVersion);
+        ChainFiles cf = dbac.getChainFiles(fromVersion, toVersion);
 
         assertEquals(fromVersion, cf.fromVersion);
         assertEquals(toVersion, cf.toVersion);
@@ -157,7 +157,7 @@ public class ChainFilesTest {
 		dbac.addChainFile(fromVersion, toVersion, testName2, null);
 		dbac.addChainFile(fromVersion, toVersion, testName3, null);
 
-		ChainFile cf = dbac.getChainFile(fromVersion, toVersion);
+		ChainFiles cf = dbac.getChainFiles(fromVersion, toVersion);
 		HashMap<String, String> files =
 				(HashMap<String, String>) cf.getFilesWithStatus();
 
