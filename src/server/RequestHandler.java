@@ -38,8 +38,10 @@ public class RequestHandler implements HttpHandler {
 		GsonBuilder builder = new GsonBuilder();
 		builder.excludeFieldsWithoutExposeAnnotation();
 		gson = builder.create();
-        uploadHandler = new UploadHandler("/upload", "resources/", "/tmp");
-        downloadHandler = new DownloadHandler("/download", "resources/");
+        uploadHandler = new UploadHandler("/upload", ServerSettings.
+                fileLocation, System.getProperty("java.io.tmpdir"));
+        downloadHandler = new DownloadHandler("/download", ServerSettings.
+                fileLocation);
 	}
 
 	@Override
