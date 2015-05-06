@@ -715,15 +715,11 @@ public class DatabaseAccessor implements AutoCloseable {
     /**
      * Sets the status of a file to "Done".
      *
-     * NOT USED IN 2014!
-     *
-     * @param fileID
-     *            the ID of the file to set to "Done".
-     * @return the number of tuples updated.
-     * @throws SQLException
+     * @param ft   the file to set to "Done".
+     * @return     the number of tuples updated (either 0 or 1).
      */
-    public int fileReadyForDownload(int fileID) throws SQLException {
-        return fileMethods.fileReadyForDownload(fileID);
+    public int markReadyForDownload(FileTuple ft) throws SQLException {
+        return fileMethods.markReadyForDownload(ft.id);
     }
 
     /**
@@ -737,6 +733,20 @@ public class DatabaseAccessor implements AutoCloseable {
      */
     public FileTuple getFileTuple(String filePath) throws SQLException {
         return fileMethods.getFileTuple(filePath);
+    }
+
+    /**
+     * Returns the FileTuple object associated with the given filePath.
+     * File must *not* be marked as ready for download.
+     *
+     * @param filePath the path of the file
+     * @return FileTuple - The corresponding FileTuple or null if no such file
+     *         exists
+     * @throws SQLException
+     *             - If the query could not be executed.
+     */
+    public FileTuple getFileTupleInProgress(String filePath) throws SQLException {
+        return fileMethods.getFileTupleWithStatus(filePath, "In Progress");
     }
 
     /**
@@ -1005,19 +1015,47 @@ public class DatabaseAccessor implements AutoCloseable {
     /**
      * Sets the status for a genome release file to "Done".
      *
-     * NOT USED IN 2014!
-     *
-     * @param version
-     *            the file version.
-     * @param fileName
-     *            the file name.
-     * @return the number of tuples updated.
-     * @throws SQLException
+     * @param gf     the file to be updated.
+     * @return       the number of tuples updated.
      */
-    public int genomeReleaseFileUploaded(String version, String fileName)
+    public int markReadyForDownload(GenomeFile gf)
             throws SQLException {
-        return genMethods.fileReadyForDownload(version, fileName);
+        return genMethods.markReadyForDownload(gf.genomeVersion, gf.fileName);
     }
+
+    // TODO: Get rid of this function, use GenomeFile everywhere.
+    /**
+     * Sets the status for a genome release file to "Done".
+     *
+     * @return       the number of tuples updated.
+     */
+    public int markReadyForDownload(String genomeVersion, String fileName)
+            throws SQLException {
+        return genMethods.markReadyForDownload(genomeVersion, fileName);
+    }
+
+    /**
+     * Sets the status for a chain file to "Done".
+     *
+     * @param cf     the file to be updated.
+     * @return       the number of tuples updated.
+     */
+    public int markReadyForDownload(ChainFile cf)
+            throws SQLException {
+        return genMethods.markReadyForDownload(cf.fromVersion, cf.toVersion, cf.fileName);
+    }
+
+    // TODO: Get rid of this function, use ChainFile everywhere.
+    /**
+     * Sets the status for a chain file to "Done".
+     *
+     * @return       the number of tuples updated.
+     */
+    public int markReadyForDownload(String fromVersion, String toVersion, String fileName)
+            throws SQLException {
+        return genMethods.markReadyForDownload(fromVersion, toVersion, fileName);
+    }
+
 
     //FIXME This is incorrect
     /*
@@ -1253,6 +1291,17 @@ public class DatabaseAccessor implements AutoCloseable {
     }
 
     /**
+     * Given a filesystem path, retrieve the corresponding genome release file record.
+     * File must *not* be marked as ready for download.
+     *
+     * @param  file          file name.
+     * @throws SQLException  if something went wrong.
+     */
+    public GenomeFile getGenomeReleaseFileInProgress (String file) throws SQLException {
+        return genMethods.getGenomeReleaseFileWithStatus(file, "In Progress");
+    }
+
+    /**
      * Given a filesystem path, retrieve the corresponding chain file record.
      *
      * @param  file          file name.
@@ -1260,6 +1309,17 @@ public class DatabaseAccessor implements AutoCloseable {
      */
     public ChainFile getChainFile (String file) throws SQLException {
         return genMethods.getChainFile(file);
+    }
+
+    /**
+     * Given a filesystem path, retrieve the corresponding chain file record.
+     * File must *not* be marked as ready for download.
+     *
+     * @param  file          file name.
+     * @throws SQLException  if something went wrong.
+     */
+    public ChainFile getChainFileInProgress (String file) throws SQLException {
+        return genMethods.getChainFileWithStatus(file, "In Progress");
     }
 
     /**

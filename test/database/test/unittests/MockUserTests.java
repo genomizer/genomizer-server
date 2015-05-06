@@ -299,7 +299,7 @@ public class MockUserTests {
                 FileTuple.RAW, "rawFile.fastq", "rawInput.fasta",
                 null, "Umu", "Ruaridh", false, null, null);
 
-    	dbac.fileReadyForDownload(ft.id);
+    	dbac.markReadyForDownload(ft);
         ft = dbac.getFileTuple(ft.id);
 
         assertEquals("Done", ft.status);

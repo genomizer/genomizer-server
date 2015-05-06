@@ -203,7 +203,7 @@ public class FileTableTests {
     @Test
     public void shouldBeDoneAfterCallingReadyForDownload() throws Exception {
 
-        dbac.fileReadyForDownload(ft.id);
+        dbac.markReadyForDownload(ft);
         Experiment e = dbac.getExperiment(testExpId);
         ft = e.getFiles().get(0);
 
