@@ -192,6 +192,7 @@ public class ConversionHandlerTest {
     @Test
     public void shouldBeAbleToFetchFileFromDatabaseAfterConversionFromGffToSgr()
             throws IOException, SQLException {
+        System.out.println(gffFileID);
         ch.convertProfileData("sgr", gffFileID);
         assertNotNull(db.getFileTuple(userDir+"/resources/conversionTestData/output/Exp3/profile/0/GFF-testdata.sgr"));
     }
