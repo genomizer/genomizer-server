@@ -526,7 +526,8 @@ public class RawToProfileConverter extends Executor {
 			throws ProcessException {
 		String bowTieParams = checkBowTieProcessors(parameters[0]);
 
-		String[] bowTieParameters = parse(ServerSettings.bowtieLocation +
+		String[] bowTieParameters = parse("nice -n 19 " +
+				ServerSettings.bowtieLocation +
 				" " + bowTieParams + " " + parameters[1] + " " +
 				inFolder + "/" + fileOne + " " + dir + fileOneName + ".sam");
 
