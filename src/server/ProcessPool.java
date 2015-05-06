@@ -6,6 +6,7 @@ import response.Response;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -19,8 +20,9 @@ public class ProcessPool {
     private static final long statusTimeToLive = 2*1000*60*60*24;
 
     // Process to status and response maps
-    private HashMap<ProcessCommand, ProcessStatus> processStatusMap;
-    private HashMap<ProcessCommand, Future<Response>> processFutureMap;
+    private HashMap<UUID, ProcessStatus> processStatusMap;
+    private HashMap<UUID, Future<Response>> processFutureMap;
+    private LinkedList<ProcessCommand> processesList;
 
     // Synchronization objects
     private final Lock lock;
@@ -32,6 +34,7 @@ public class ProcessPool {
     public ProcessPool(int threads) {
         processStatusMap = new HashMap<>();
         processFutureMap = new HashMap<>();
+        processesList = new LinkedList<>();
         lock = new ReentrantLock();
 
         executor = Executors.newFixedThreadPool(threads);
@@ -63,7 +66,7 @@ public class ProcessPool {
         lock.lock();
 
         try {
-            return new LinkedList<>(processFutureMap.keySet());
+            return new LinkedList<>(processesList);
 
         }  finally {
             lock.unlock();
@@ -83,11 +86,12 @@ public class ProcessPool {
         try {
             ProcessStatus processStatus = new ProcessStatus(processCommand);
 
-            // TODO Add id
-            //processCommand.setId();
+            processCommand.setPID(UUID.randomUUID());
+
+            processesList.add(processCommand);
 
             // Create a process command to process status mapping
-            processStatusMap.put(processCommand, processStatus);
+            processStatusMap.put(processCommand.getPID(), processStatus);
 
             // Submit the process with a new work handler for execution
             Future<Response> response = executor.submit(
@@ -95,7 +99,7 @@ public class ProcessPool {
 
             if (response != null) {
                 // Create a process command to process response mapping
-                processFutureMap.put(processCommand, response);
+                processFutureMap.put(processCommand.getPID(), response);
             }
 
         } finally {
@@ -107,14 +111,14 @@ public class ProcessPool {
      * Attempts to cancel the specified process if it is not completed or if
      * it has not been cancelled already.
      *
-     * @param processCommand - the process command to be cancelled
+     * @param processID - the id of the process to be cancelled
      */
-    public void cancelProcess(ProcessCommand processCommand) {
+    public void cancelProcess(UUID processID) {
         lock.lock();
 
         try {
 
-           Future<Response> response = processFutureMap.get(processCommand);
+           Future<Response> response = processFutureMap.get(processID);
 
             if (response != null) {
                 // Attempt to cancel if not done or cancelled already
@@ -129,49 +133,49 @@ public class ProcessPool {
     }
 
     /**
-     * Gets the process status for the specified process command.
+     * Gets the process status for the specified process id.
      *
-     * @param processCommand - the process command which status to be retrieved
+     * @param processID - the id of the process which status to be retrieved
      * @return processStatus - the process status of the specified process
      * command
      */
-    public ProcessStatus getProcessStatus(ProcessCommand processCommand) {
+    public ProcessStatus getProcessStatus(UUID processID) {
         lock.lock();
 
         try {
 
             // Change status of the process if it has completed
-            if (processFutureMap.get(processCommand).isDone() && !processFutureMap
-                    .get(processCommand).isCancelled()) {
+            if (processFutureMap.get(processID).isDone() && !processFutureMap
+                    .get(processID).isCancelled()) {
 
-                processStatusMap.get(processCommand).status = ProcessStatus
+                processStatusMap.get(processID).status = ProcessStatus
                         .STATUS_FINISHED;
             }
 
-            return processStatusMap.get(processCommand);
+            return processStatusMap.get(processID);
         } finally {
             lock.unlock();
         }
     }
 
     /**
-     * Retrieves the process response for the specified process command.
+     * Retrieves the process response for the specified process id.
      *
-     * @param processCommand
+     * @param processID
      * @return processresponse - the response if the process has finished
      * execution else null.
      * @throws InterruptedException
      * @throws ExecutionException
      */
-    public Response getProcessResponse(ProcessCommand processCommand) throws
+    public Response getProcessResponse(UUID processID) throws
             InterruptedException, ExecutionException {
 
         lock.lock();
 
         try {
-            if (processStatusMap.get(processCommand).status
+            if (processStatusMap.get(processID).status
                     .equals(ProcessStatus.STATUS_FINISHED)) {
-                return processFutureMap.get(processCommand).get();
+                return processFutureMap.get(processID).get();
             }
             return null;
         } finally {
@@ -195,8 +199,6 @@ public class ProcessPool {
         lock.lock();
 
         try {
-            LinkedList<ProcessCommand> processesList =
-                    new LinkedList<>(processFutureMap.keySet());
 
 		/* Loop through all processes and check statuses */
             for (ProcessCommand processCommand : processesList) {
@@ -222,6 +224,7 @@ public class ProcessPool {
                         + processCommand.getExpId());
                 processStatusMap.remove(processCommand);
                 processFutureMap.remove(processCommand);
+                processesList.remove(processCommand);
             }
         } finally {
             lock.unlock();

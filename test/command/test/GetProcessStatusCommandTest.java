@@ -85,7 +85,7 @@ public class GetProcessStatusCommandTest {
 		LinkedList<ProcessStatus> processStatuses = new LinkedList<>();
 
 		for (ProcessCommand proc : processesList) {
-			processStatuses.add(processPool.getProcessStatus(proc));
+			processStatuses.add(processPool.getProcessStatus(proc.getPID()));
 		}
 
 

@@ -45,7 +45,7 @@ public class GetProcessStatusCommand extends Command {
 		LinkedList<ProcessStatus> processStatuses = new LinkedList<>();
         
 		for (ProcessCommand proc : processesList) {
-			processStatuses.add(processPool.getProcessStatus(proc));
+			processStatuses.add(processPool.getProcessStatus(proc.getPID()));
 		}
 		return new GetProcessStatusResponse(processStatuses);
 	}
