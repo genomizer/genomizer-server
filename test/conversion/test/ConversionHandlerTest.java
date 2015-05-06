@@ -54,14 +54,11 @@ public class ConversionHandlerTest {
     public static void setUpTestCase() throws Exception {
 
         userDir = new File("").getAbsolutePath();
-        
+
         TestInitializer.setupServerSettings();
-        String travis = System.getenv("TRAVIS");
-        if(travis == null || travis.equals("false")) {
-            // Not running on Travis.
-            ServerSettings.fileLocation = userDir+"/resources/conversionTestData/output/";
-        }
-        
+
+        ServerSettings.fileLocation = userDir+"/resources/conversionTestData/output/";
+
         ti = new TestInitializer();
         db = ti.setup();
         ch = new ConversionHandler();
