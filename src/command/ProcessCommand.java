@@ -139,7 +139,7 @@ public class ProcessCommand extends Command {
 						}
 
 						//Set parameter on index 1 to the path to the
-						// genomefolder + the name of the genome files.
+						// genome folder + the name of the genome files.
 						parameters[1] = genomeFolderPath + genomeFilePrefix;
 
 					}
