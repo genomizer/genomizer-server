@@ -523,4 +523,16 @@ public class FileMethods {
 
 		return getFileTuple(filePath);
 	}
+
+	public void setFileCheckSumMD5(FileTuple file, String checkSumMD5) throws SQLException {
+		try(PreparedStatement stmt = conn.prepareStatement(
+				"UPDATE File "
+				+ "SET MD5 = ? "
+				+ "WHERE FileID = ?")) {
+			stmt.setString(1, checkSumMD5);
+			stmt.setInt(2, file.id);
+			stmt.executeUpdate();
+		}
+	}
+
 }
