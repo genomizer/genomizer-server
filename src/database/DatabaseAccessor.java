@@ -17,13 +17,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
+import database.containers.*;
+import database.containers.Genome;
 import org.apache.commons.codec.digest.DigestUtils;
 import server.ServerSettings;
-import database.containers.Annotation;
-import database.containers.ChainFile;
-import database.containers.Experiment;
-import database.containers.FileTuple;
-import database.containers.Genome;
 import database.subClasses.*;
 
 /**
@@ -1022,7 +1019,7 @@ public class DatabaseAccessor implements AutoCloseable {
         return genMethods.fileReadyForDownload(version, fileName);
     }
 
-    //FIXME This i incorrect
+    //FIXME This is incorrect
     /*
     /**
      * Removes one specific genome version stored in the database.
@@ -1105,13 +1102,13 @@ public class DatabaseAccessor implements AutoCloseable {
      *
      * @param fromVersion - the name of the old genome release version
      * @param toVersion - the name of the new genome release version
-     * @return a ChainFile object containing all information about the chain
+     * @return a ChainFiles object containing all information about the chain
      *         file.
      * @throws SQLException
      */
-    public ChainFile getChainFile(String fromVersion, String toVersion)
+    public ChainFiles getChainFiles(String fromVersion, String toVersion)
             throws SQLException {
-        return genMethods.getChainFile(fromVersion, toVersion);
+        return genMethods.getChainFiles(fromVersion, toVersion);
     }
 
     /**
@@ -1142,9 +1139,9 @@ public class DatabaseAccessor implements AutoCloseable {
      * @throws SQLException
      *             - if the query does not succeed
      */
-    public int removeChainFile(String fromVersion, String toVersion)
+    public int removeChainFiles(String fromVersion, String toVersion)
             throws SQLException {
-        return genMethods.removeChainFile(fromVersion, toVersion);
+        return genMethods.removeChainFiles(fromVersion, toVersion);
     }
 
     /**
@@ -1245,14 +1242,56 @@ public class DatabaseAccessor implements AutoCloseable {
         folder.delete();
     }
 
+    /**
+     * Given a filesystem path, retrieve the corresponding genome release file record.
+     *
+     * @param  file          file name.
+     * @throws SQLException  if something went wrong.
+     */
+    public GenomeFile getGenomeReleaseFile (String file) throws SQLException {
+        return genMethods.getGenomeReleaseFile(file);
+    }
 
-    public String getFileCheckSumMD5(String fileName) throws SQLException {
-        FileTuple ft = getFileTuple(fileName);
-        if (ft != null) {
-            return ft.checkSumMD5;
-        }
-        else {
-            return genMethods.getFileCheckSumMD5(fileName);
-        }
+    /**
+     * Given a filesystem path, retrieve the corresponding chain file record.
+     *
+     * @param  file          file name.
+     * @throws SQLException  if something went wrong.
+     */
+    public ChainFile getChainFile (String file) throws SQLException {
+        return genMethods.getChainFile(file);
+    }
+
+    /**
+     * Update the MD5 checksum corresponding to a given (raw/profile/region) file.
+     *
+     * @param  file          file name.
+     * @param  checkSumMD5   check sum.
+     * @throws SQLException  if something went wrong.
+     */
+    public void setFileCheckSumMD5(FileTuple file, String checkSumMD5) throws SQLException {
+        fileMethods.setFileCheckSumMD5(file, checkSumMD5);
+    }
+
+    /**
+     * Update the MD5 checksum corresponding to a given genome release file.
+     *
+     * @param  file          file name.
+     * @param  checkSumMD5   check sum.
+     * @throws SQLException  if something went wrong.
+     */
+    public void setGenomeReleaseFileCheckSumMD5 (GenomeFile file, String checkSumMD5) throws SQLException {
+        genMethods.setGenomeReleaseFileCheckSumMD5(file, checkSumMD5);
+    }
+
+    /**
+     * Update the MD5 checksum corresponding to a given chain file.
+     *
+     * @param  file          file name.
+     * @param  checkSumMD5   check sum.
+     * @throws SQLException  if something went wrong.
+     */
+    public void setChainFileCheckSumMD5 (ChainFile file, String checkSumMD5) throws SQLException {
+        genMethods.setChainFileCheckSumMD5(file, checkSumMD5);
     }
 }
