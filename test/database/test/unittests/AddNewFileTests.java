@@ -42,6 +42,7 @@ public class AddNewFileTests {
         ft = dbac.addNewFile(testExpId, testFileType, testFileName,
                 testInputFileName, testMetaData, testAuthor, testUploader,
                 testIsPrivate, null, null);
+        dbac.markReadyForDownload(ft);
 
     }
 
@@ -82,6 +83,7 @@ public class AddNewFileTests {
         ft = dbac.addNewFile(testExpId, testFileType, testFileName,
                 testInputFileName, testMetaData, testAuthor, testUploader,
                 testIsPrivate, null, null);
+        dbac.markReadyForDownload(ft);
         ft = dbac.getFileTuple(expectedFilePath);
         assertEquals(expectedFilePath, ft.path);
 
