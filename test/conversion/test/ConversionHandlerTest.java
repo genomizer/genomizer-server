@@ -48,7 +48,7 @@ public class ConversionHandlerTest {
 
 
    private static  String userDir;
-    private static String tempdbUser, tempdbPw, tempdbHost, tempdbName;
+    private static String tempdbUser, tempdbPw, tempdbHost, tempdbName, tempFilenLocation;
 
     @BeforeClass
     public static void setUpTestCase() throws Exception {
@@ -56,7 +56,7 @@ public class ConversionHandlerTest {
         userDir = new File("").getAbsolutePath();
 
         TestInitializer.setupServerSettings();
-
+        tempFilenLocation = ServerSettings.fileLocation;
         ServerSettings.fileLocation = userDir+"/resources/conversionTestData/output/";
 
         ti = new TestInitializer();
@@ -74,6 +74,7 @@ public class ConversionHandlerTest {
     @AfterClass
     public static void undoAllChanges() throws SQLException, IOException {
         ti.removeTuples();
+        ServerSettings.fileLocation = tempFilenLocation;
         new File("resources/conversionTestData/BED-testdata.sgr").delete();
         new File("resources/conversionTestData/BED-testdata.wig").delete();
         new File("resources/conversionTestData/GFF-testdata.sgr").delete();
