@@ -2,9 +2,9 @@ package command;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
 import response.ErrorResponse;
+import response.HttpStatusCode;
 import response.LoginResponse;
 import response.Response;
-import response.StatusCode;
 import server.Debug;
 import authentication.Authenticate;
 import authentication.LoginAttempt;
@@ -29,39 +29,31 @@ public class LoginCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-		validateString(username, MaxLength.USERNAME, "Username/Password");
-		validateString(password, MaxLength.PASSWORD, "Username/Password");
+		validateName(username, MaxLength.USERNAME, "Username/Password");
+		validateName(password, MaxLength.PASSWORD, "Username/Password");
 	}
 
 	@Override
 	public Response execute() {
 
 		DatabaseAccessor db = null;
-
 		String dbHash = null;
-		String dbSalt = null;
 
 		try {
 			db = initDB();
+			dbHash = db.getPasswordHash(username);
 		} catch (SQLException | IOException e) {
 			Debug.log("LOGIN WAS UNSUCCESSFUL FOR: " + username + ". REASON: " +
 					e.getMessage());
-			return new ErrorResponse(StatusCode.BAD_REQUEST,
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
 					"LOGIN WAS UNSUCCESSFUL FOR: " + username + ". REASON: " + e.getMessage());
 		}
 
-		try {
-			dbSalt = db.getPasswordSalt(username);
-			dbHash = db.getPasswordHash(username);
-		}catch (SQLException e) {
-			return new ErrorResponse(StatusCode.BAD_REQUEST, "Database error " + e.getMessage());
+		if(dbHash == null || dbHash.isEmpty()){
+			return new ErrorResponse(HttpStatusCode.UNAUTHORIZED, "Incorrect user name");
 		}
 
-		if(dbSalt == null || dbSalt.isEmpty() || dbHash == null || dbHash.isEmpty()){
-			return new ErrorResponse(StatusCode.UNAUTHORIZED, "Incorrect user name");
-		}
-
-		LoginAttempt login = Authenticate.login(username, password, dbHash, dbSalt);
+		LoginAttempt login = Authenticate.login(username, password, dbHash);
 
 		if(login.wasSuccessful()) {
 			Debug.log("LOGIN WAS SUCCESSFUL FOR: "+ username + ". GAVE UUID: " +
@@ -70,7 +62,7 @@ public class LoginCommand extends Command {
 		}
 		Debug.log("LOGIN WAS UNSUCCESSFUL FOR: " + username + ". REASON: " +
 				login.getErrorMessage());
-		return new ErrorResponse(StatusCode.UNAUTHORIZED,
+		return new ErrorResponse(HttpStatusCode.UNAUTHORIZED,
 				login.getErrorMessage());
 	}
 }

@@ -8,9 +8,9 @@ import com.google.gson.annotations.Expose;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
 import response.ErrorResponse;
+import response.HttpStatusCode;
 import response.MinimalResponse;
 import response.Response;
-import response.StatusCode;
 
 /**
  * Class used to handle the process of adding annotation
@@ -28,8 +28,8 @@ public class AddAnnotationValueCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-		validateString(name, MaxLength.ANNOTATION_LABEL, "Annotation label");
-		validateString(value, MaxLength.ANNOTATION_VALUE, "Annotation value");
+		validateName(name, MaxLength.ANNOTATION_LABEL, "Annotation label");
+		validateName(value, MaxLength.ANNOTATION_VALUE, "Annotation value");
 	}
 
 	@Override
@@ -40,17 +40,17 @@ public class AddAnnotationValueCommand extends Command {
 			List<String> values = db.getChoices(name);
 			if(values.contains(value)) {
 				db.close();
-				return new ErrorResponse(StatusCode.BAD_REQUEST, "The " +
+				return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "The " +
 						"annotation " + name + " already contains the value " +
 						value);
 			}
 			db.addDropDownAnnotationValue(name, value);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
 		} catch (IOException e) {
 			e.printStackTrace();
-			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE,
+			return new ErrorResponse(HttpStatusCode.SERVICE_UNAVAILABLE,
 					e.getMessage());
 		} finally {
 			if (db != null) {
@@ -58,7 +58,7 @@ public class AddAnnotationValueCommand extends Command {
 			}
  		}
 
-		return new MinimalResponse(StatusCode.CREATED);
+		return new MinimalResponse(HttpStatusCode.CREATED);
 	}
 
 }

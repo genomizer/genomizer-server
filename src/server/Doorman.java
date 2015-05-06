@@ -12,6 +12,8 @@ package server;
  * /sysadm
  * /genomeRelease
  * /token
+ * /upload
+ * /download
  *
  * Whenever a request is received the Doorman checks what context is has and
  * creates a new Executor (on  a new thread) and afterwards continues listening
@@ -25,13 +27,16 @@ import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.URLDecoder;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.Executor;
 
+import command.ValidateException;
+import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
-import response.StatusCode;
+import response.HttpStatusCode;
 
 import authentication.Authenticate;
 
@@ -42,9 +47,17 @@ import com.sun.net.httpserver.HttpServer;
 import command.CommandHandler;
 import command.CommandType;
 
+import transfer.DownloadHandler;
+import transfer.UploadHandler;
+import transfer.Util;
+
+
 public class Doorman {
+
 	private HttpServer httpServer;
 	private CommandHandler commandHandler;
+	private UploadHandler uploadHandler;
+	private DownloadHandler downloadHandler;
 
 	/**
 	 * Constructor. Creates a HTTPServer (but doesn't start it) which listens on
@@ -55,7 +68,12 @@ public class Doorman {
 	 * @throws IOException
 	 */
 	public Doorman(CommandHandler commandHandler, int port) throws IOException {
+
 		this.commandHandler = commandHandler;
+		// TODO: Don't hard-code the upload and temp directories' locations.
+		this.uploadHandler   = new UploadHandler("/upload", "resources/", "/tmp");
+		this.downloadHandler = new DownloadHandler("/download", "resources/");
+
 		httpServer = HttpServer.create(new InetSocketAddress(port),0);
 		httpServer.createContext("/login", createHandler());
 		httpServer.createContext("/experiment", createHandler());
@@ -67,10 +85,13 @@ public class Doorman {
 		httpServer.createContext("/sysadm", createHandler());
 		httpServer.createContext("/genomeRelease", createHandler());
 		httpServer.createContext("/token", createHandler());
+		httpServer.createContext("/upload", createHandler());
+		httpServer.createContext("/download", createHandler());
 
 		httpServer.setExecutor(new Executor() {
 			@Override
 			public void execute(Runnable command) {
+
 				try {
 				    new Thread(command).start();
 				} catch(Exception e) {
@@ -84,28 +105,30 @@ public class Doorman {
 	}
 
 	/**
-	 * Starts the HTTPServer
+	 * Start the HTTPServer.
 	 */
 	public void start() {
 		httpServer.start();
-		System.out.println("Doorman started on port " + ServerSettings.
-                genomizerPort);
+		System.out.println("Doorman started on port " +
+						   ServerSettings.genomizerPort);
 	}
 
 	/**
 	 * Determines the specific command which is to be created.
-	 * @return
 	 */
 	HttpHandler createHandler() {
 		return new HttpHandler() {
 			@Override
 			public void handle(HttpExchange exchange) throws IOException {
+
+			    try {
 				String method = exchange.getRequestMethod();
+				String requestPath = exchange.getHttpContext().getPath();
 				Debug.log("\n-----------------\nNEW EXCHANGE: " + method
-						+ " " + exchange.getHttpContext().getPath());
+						+ " " + requestPath);
 				switch(method) {
 				case "GET":
-					switch(exchange.getHttpContext().getPath()) {
+					switch(requestPath) {
 					case "/experiment":
 						handleRequest(exchange, CommandType.
                                 GET_EXPERIMENT_COMMAND);
@@ -143,11 +166,26 @@ public class Doorman {
 					case "/token":
 						handleRequest(exchange, CommandType.
                                 IS_TOKEN_VALID_COMMAND);
+						break;
+					case "/upload":
+						if (performAuthorization(exchange) != null) {
+							uploadHandler.handleGET(exchange);
+						}
+						break;
+					case "/download":
+						if (performAuthorization(exchange) != null) {
+							downloadHandler.handleGET(exchange);
+						}
+						break;
+					default:
+						Debug.log("HTTP 404 Not Found: " + method + " " + requestPath);
+						respond(exchange, new MinimalResponse(HttpStatusCode.NOT_FOUND));
+						break;
 					}
 					break;
 
 				case "PUT":
-					switch(exchange.getHttpContext().getPath()) {
+					switch(requestPath) {
 					case "/experiment":
 						handleRequest(exchange, CommandType.
                                 UPDATE_EXPERIMENT_COMMAND);
@@ -184,11 +222,15 @@ public class Doorman {
                                     UPDATE_ANNOTATION_PRIVILEGES_COMMAND);
 						}
 						break;
+					default:
+						Debug.log("HTTP 404 Not Found: " + method + " " + requestPath);
+						respond(exchange, new MinimalResponse(HttpStatusCode.NOT_FOUND));
+						break;
 					}
 					break;
 
 				case "POST":
-					switch(exchange.getHttpContext().getPath()) {
+					switch(requestPath) {
 					case "/login":
 						handleRequest(exchange, CommandType.LOGIN_COMMAND);
 						break;
@@ -218,11 +260,20 @@ public class Doorman {
 						handleRequest(exchange, CommandType.
                                 ADD_GENOME_RELEASE_COMMAND);
 						break;
+					case "/upload":
+						if (performAuthorization(exchange) != null) {
+							uploadHandler.handlePOST(exchange);
+						}
+						break;
+					default:
+						Debug.log("HTTP 404 Not Found: " + method + " " + requestPath);
+						respond(exchange, new MinimalResponse(HttpStatusCode.NOT_FOUND));
+						break;
 					}
 					break;
 
 				case "DELETE":
-					switch(exchange.getHttpContext().getPath()) {
+					switch(requestPath) {
 					case "/login":
 						handleRequest(exchange, CommandType.LOGOUT_COMMAND);
 						break;
@@ -253,6 +304,10 @@ public class Doorman {
 						handleRequest(exchange, CommandType.
                                 DELETE_GENOME_RELEASE_COMMAND);
 						break;
+					default:
+						Debug.log("HTTP 404 Not Found: " + method + " " + requestPath);
+						respond(exchange, new MinimalResponse(HttpStatusCode.NOT_FOUND));
+						break;
 					}
 					break;
 
@@ -265,10 +320,77 @@ public class Doorman {
 
 				default:
 					Debug.log("Unsupported HTTP method: " + method);
+					respond(exchange, new MinimalResponse(HttpStatusCode.METHOD_NOT_ALLOWED));
 					break;
 				}
-			}
+		    }
+		    catch (Exception ex) {
+				Debug.log("Internal server error " + ex.getMessage());
+				ErrorLogger.log("SYSTEM", ex);
+				ex.printStackTrace();
+				Response resp;
+				if (ex instanceof ValidateException) {
+					ValidateException vEx = (ValidateException) ex;
+					resp = new ErrorResponse(vEx.getCode(), vEx.getMessage());
+				}
+				else {
+					resp = new MinimalResponse(HttpStatusCode.INTERNAL_SERVER_ERROR);
+				}
+				respond(exchange, resp);
+		    }
+		    }
 		};
+	}
+
+	/**
+	 * Actually perform authorization. Supports both the 'Authorization' header
+	 * and '?token=some-token' parameter (special casing needed by the web
+	 * client, see https://github.com/genomizer/genomizer-server/issues/185).
+	 *
+	 * @param exchange the HTTPExchange
+	 * @return         null in case of error, name of the logged in user otherwise.
+	 */
+	private String performAuthorization(HttpExchange exchange) throws Exception {
+		String uuid = null;
+
+        // Get the value of the 'Authorization' header.
+		List<String> authHeader = exchange.getRequestHeaders().
+				get("Authorization");
+        if (authHeader != null)
+          uuid = authHeader.get(0);
+
+        // Get the value of the 'token' parameter.
+        String uuid2;
+        HashMap<String, String> reqParams = new HashMap<>();
+        Util.parseURI(exchange.getRequestURI(), reqParams);
+        if (reqParams.containsKey("token")) {
+          uuid2 = reqParams.get("token");
+          if (uuid2 != null) {
+            if (uuid == null || uuid.equals(uuid2)) {
+              uuid = uuid2;
+            } else {
+              Debug.log("Authorization header "
+                        + "and token parameter values differ!");
+              respond(exchange, new MinimalResponse(HttpStatusCode.UNAUTHORIZED));
+              return null;
+            }
+          }
+        }
+
+        // Actual authentication.
+		Debug.log("Trying to authenticate token " + uuid + "...");
+		if (uuid != null && Authenticate.idExists(uuid)) {
+			Authenticate.updateLatestRequest(uuid);
+			Debug.log("User " + Authenticate.getUsernameByID(uuid)
+					+ " authenticated successfully.");
+            return uuid;
+		} else {
+			Debug.log("Unauthorized request!");
+			Response errorResponse = new MinimalResponse(HttpStatusCode.
+					UNAUTHORIZED);
+            respond(exchange, errorResponse);
+            return null;
+		}
 	}
 
 	/**
@@ -277,65 +399,33 @@ public class Doorman {
 	 * @param exchange the HTTPExchange
 	 * @param type which specific type of command it is.
 	 */
-	private void handleRequest(HttpExchange exchange, CommandType type) {
+	private void handleRequest(HttpExchange exchange, CommandType type) throws Exception {
 		InputStream bodyStream = exchange.getRequestBody();
-		Scanner scanner = new Scanner(bodyStream);
-		String body = "";
 		String uuid = null;
 		Debug.log("Exchange: " + type);
 
 		/** authorization */
 		if(type != CommandType.LOGIN_COMMAND) {
-			List<String> auth = exchange.getRequestHeaders().
-                    get("Authorization");
-			if (auth != null && Authenticate.idExists(auth.get(0))) {
-				uuid = auth.get(0);
-				Authenticate.updateLatestRequest(uuid);
-			} else {
-				Debug.log("Unauthorized request!");
-				Response errorResponse = new MinimalResponse(StatusCode.
-                        UNAUTHORIZED);
-				try {
-					respond(exchange, errorResponse);
-				} catch (IOException e1) {
-					Debug.log("Could not send response to client. " + e1.
-                            getMessage());
-				}
-				scanner.close();
+			uuid = performAuthorization(exchange);
+			if (uuid == null)
 				return;
-			}
 		}
 
+		Scanner scanner = new Scanner(bodyStream);
+		String body = "";
 		while(scanner.hasNext()) {
 			body = body.concat(" " + scanner.next());
 		}
 		scanner.close();
 
-		String username = null;
-		//username = Authenticate.getUsernameByID(uuid);
-		Debug.log("Username: " + username + "\n");
 		Debug.log("Body from client: " + body);
 
-		Response response = null;
-		try {
-			String header = URLDecoder.decode(exchange.getRequestURI().
-                    toString(), "UTF-8");
-			response = commandHandler.processNewCommand(body, header, uuid,
-                    type);
-		} catch(Exception e ) {
-			Debug.log("Could not create/process new command " + e.getMessage());
-			ErrorLogger.log("SYSTEM", e);
-			e.printStackTrace();
-		}
+        String header = URLDecoder.decode(exchange.getRequestURI().
+                                          toString(), "UTF-8");
+        Response response =
+				commandHandler.processNewCommand(body, header, uuid, type);
 
-		//TODO Should there be some error checking?
-		try {
-			respond(exchange, response);
-		} catch (IOException e) {
-			Debug.log("IOError when sending response back to client. " +
-                    e.getMessage());
-			ErrorLogger.log("SYSTEM", e);
-		}
+        respond(exchange, response);
 	}
 
 	/**
@@ -352,6 +442,7 @@ public class Doorman {
 		} else {
 			String body = response.getBody();
 			Debug.log("Response: " + body);
+			exchange.getResponseHeaders().set("Content-Type", "application/json");
 			exchange.sendResponseHeaders(response.getCode(), body.getBytes().
                     length);
 			OutputStream os = exchange.getResponseBody();

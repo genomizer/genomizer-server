@@ -8,7 +8,7 @@ import database.constants.MaxLength;
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
-import response.StatusCode;
+import response.HttpStatusCode;
 
 /**
  * Class used to represent a command that is used to
@@ -30,7 +30,7 @@ public class DeleteFileFromExperimentCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-		validateString(header, MaxLength.EXPID, "Experiment name");
+		validateName(header, MaxLength.FILE_EXPID, "Experiment name");
 	}
 
 	@Override
@@ -40,27 +40,27 @@ public class DeleteFileFromExperimentCommand extends Command {
 			db = initDB();
 			try {
 				if(db.deleteFile(Integer.parseInt(header))==1) {
-					return new MinimalResponse(StatusCode.OK);
+					return new MinimalResponse(HttpStatusCode.OK);
 				} else {
-					return new ErrorResponse(StatusCode.BAD_REQUEST,
+					return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
 							"The file " + header + " does not exist and can " +
 									"not be deleted");
 				}
 			} catch (NumberFormatException e) {
 				if (db.deleteFile(header) > 0) {
-					return new MinimalResponse(StatusCode.OK);
+					return new MinimalResponse(HttpStatusCode.OK);
 				} else {
-					return new ErrorResponse(StatusCode.BAD_REQUEST,
+					return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
 							"The file " + header + " does not exist and can " +
 									"not be deleted");
 				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE,
+			return new ErrorResponse(HttpStatusCode.SERVICE_UNAVAILABLE,
 					e.getMessage());
 		} catch (IOException e) {
-			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
 		} finally {
 			if (db != null) {
 				db.close();

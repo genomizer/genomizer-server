@@ -35,6 +35,7 @@ public class FileTableTests {
     private boolean testIsPrivate = false;
     private static String testExpId = "testExpId2";
     private String testGRVersion = null;
+    private String testMD5       = null;
     private static FileTuple ft;
 
     private static String testFolderName =
@@ -88,7 +89,7 @@ public class FileTableTests {
 
         ft = dbac.addNewFile(testExpId, testFileType, testName, testInputFile,
                 testMetaData, testAuthor, testUploader, testIsPrivate,
-                testGRVersion);
+                testGRVersion, testMD5);
         addMockFile(ft.getParentFolder(), ft.filename);
     }
 
@@ -113,7 +114,7 @@ public class FileTableTests {
 
         FileTuple ft = dbac.addNewFile(testExpId, testFileType, testName,
                 testInputFile, testMetaData, testAuthor, testUploader,
-                testIsPrivate, testGRVersion);
+                testIsPrivate, testGRVersion, testMD5);
         e = dbac.getExperiment(testExpId);
         assertEquals(1, e.getFiles().size());
 
@@ -155,7 +156,7 @@ public class FileTableTests {
 
         dbac.addNewFile(testExpId, testFileType, testName,
                 testInputFile, testMetaData, testAuthor, testUploader,
-                testIsPrivate, testGRVersion);
+                testIsPrivate, testGRVersion, testMD5);
     }
 
 
@@ -178,7 +179,7 @@ public class FileTableTests {
 
         dbac.addNewFile(testExpId, testFileType, testName, testInputFile,
         		testMetaData, testAuthor, testUploader, testIsPrivate,
-        		testGRVersion);
+        		testGRVersion, testMD5);
     }
 
     private void addMockFile(String folderPath, String filename1)
@@ -214,10 +215,10 @@ public class FileTableTests {
     public void changeFileNameTest() throws SQLException, IOException,
             ParseException {
 
-        dbac.addGenomeRelease("te34", "Dog", "te34.txt");
+        dbac.addGenomeRelease("te34", "Dog", "te34.txt", null);
         dbac.addExperiment("expert1");
         FileTuple fileStore = dbac.addNewFile("expert1", 1, "temp1.txt", "temp2.txt",
-                "-a -g", "Claes", "Claes", false, "te34");
+                "-a -g", "Claes", "Claes", false, "te34", null);
         File temp1 = new File(fileStore.path);
         temp1.createNewFile();
         assertTrue(temp1.exists());

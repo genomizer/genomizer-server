@@ -5,8 +5,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import response.AddAnnotationFieldResponse;
 import response.ErrorResponse;
+import response.HttpStatusCode;
 import response.Response;
-import response.StatusCode;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import database.DatabaseAccessor;
@@ -36,28 +36,25 @@ public class AddAnnotationFieldCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-		validateString(name, MaxLength.ANNOTATION_LABEL, "Annotation label");
+		validateName(name, MaxLength.ANNOTATION_LABEL, "Annotation label");
+
 		if(defaults != null) {
-			validateString(defaults, MaxLength.ANNOTATION_DEFAULTVALUE,
+			validateName(defaults, MaxLength.ANNOTATION_DEFAULTVALUE,
 					"Default value");
 		}
 
 		if(forced == null) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify if " +
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Specify if " +
 					"the value is forced.");
 		}
 
 		if(type == null || type.size() < 1) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify a " +
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Specify a " +
 					"type for the annotation.");
 		}
 
 		for(int i = 0; i < type.size(); i++) {
-			if(hasInvalidCharacters(type.get(i))){
-				throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
-						"characters in annotation type. Valid characters are: "
-						+ validCharacters);
-			}
+			validateName(type.get(i), MaxLength.ANNOTATION_VALUE, "Annotation type");
 		}
 	}
 
@@ -83,25 +80,25 @@ public class AddAnnotationFieldCommand extends Command {
 						defaultValueIndex, forced);
 			}
 			if(addedAnnotations != 0) {
-				return new AddAnnotationFieldResponse(StatusCode.CREATED);
+				return new AddAnnotationFieldResponse(HttpStatusCode.CREATED);
 			} else {
-				return new ErrorResponse(StatusCode.BAD_REQUEST, "Annotation " +
+				return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Annotation " +
 						"could not be added, database error.");
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 			if(e.getErrorCode() == 0) {
-				return new ErrorResponse(StatusCode.BAD_REQUEST, "The " +
+				return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "The " +
 						"annotation " + name + " already exists.");
 			} else {
-				return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE,
+				return new ErrorResponse(HttpStatusCode.SERVICE_UNAVAILABLE,
 						e.getMessage());
 			}
 
 		} catch (IOException e) {
 			e.printStackTrace();
-			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
 		} finally {
 			if (db != null) {
 				db.close();

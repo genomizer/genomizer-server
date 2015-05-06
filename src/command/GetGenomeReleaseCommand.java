@@ -7,8 +7,8 @@ import database.DatabaseAccessor;
 import database.containers.Genome;
 import response.ErrorResponse;
 import response.GetGenomeReleaseResponse;
+import response.HttpStatusCode;
 import response.Response;
-import response.StatusCode;
 
 /**
  * A command which is used to get all the genome versions
@@ -36,16 +36,16 @@ public class GetGenomeReleaseCommand extends Command{
 			db = initDB();
 			try{
 				ArrayList<Genome> genomeReleases =
-						(ArrayList<Genome>)db.getAllGenomReleases();
-				return new GetGenomeReleaseResponse(StatusCode.OK,
+						(ArrayList<Genome>)db.getAllGenomeReleases();
+				return new GetGenomeReleaseResponse(HttpStatusCode.OK,
 						genomeReleases);
 			}catch(SQLException e){
-				return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE,
+				return new ErrorResponse(HttpStatusCode.SERVICE_UNAVAILABLE,
 						"Could not fetch all genome releases: " +
 								e.getMessage());
 			}
 		} catch (SQLException | IOException e) {
-			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE,
+			return new ErrorResponse(HttpStatusCode.SERVICE_UNAVAILABLE,
 					"SQLException - Could not create connection to database: " +
 							e.getMessage());
 		} finally {

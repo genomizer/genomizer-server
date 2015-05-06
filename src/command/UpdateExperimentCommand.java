@@ -1,8 +1,8 @@
 package command;
 
+import response.HttpStatusCode;
 import response.MinimalResponse;
 import response.Response;
-import response.StatusCode;
 
 /**
  * Class used to handle updating experiments.
@@ -27,7 +27,7 @@ public class UpdateExperimentCommand extends Command {
 
 	@Override
 	public Response execute() {
-		return 	new MinimalResponse(StatusCode.NO_CONTENT);
+		return 	new MinimalResponse(HttpStatusCode.NO_CONTENT);
 	}
 
 }

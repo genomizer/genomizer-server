@@ -270,7 +270,7 @@ public class FilePathGenerator {
     /**
      * Sets the root directory where all data is stored.
      *
-     * @param String rootDir
+     * @param rootDir
      * @throws IOException
      */
     public void setRootDirectory(String rootDir) throws IOException {
@@ -279,8 +279,8 @@ public class FilePathGenerator {
             this.rootDir = rootDir;
         } else {
             throw new IOException(
-                    "Root directory has the wrong format. Make sure it"
-                            + "ends with a separator.");
+                    "Root directory is in wrong format. Make sure it"
+                            + "starts and ends with a separator.");
         }
     }
 

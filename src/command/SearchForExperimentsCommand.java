@@ -12,9 +12,9 @@ import database.DatabaseAccessor;
 import database.containers.Experiment;
 
 import response.ErrorResponse;
+import response.HttpStatusCode;
 import response.Response;
 import response.SearchResponse;
-import response.StatusCode;
 
 /**
  * Class used to handle searching for an experiment.
@@ -37,8 +37,9 @@ public class SearchForExperimentsCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-		if (annotations == null || annotations.equals("")) {
-			throw new ValidateException(StatusCode.BAD_REQUEST,
+		if (annotations == null || annotations.equals("") ||
+				annotations.equals("null")) {
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST,
 					"Specify annotations to search for.");
 		}
 	}
@@ -51,17 +52,17 @@ public class SearchForExperimentsCommand extends Command {
 			annotations = URLDecoder.decode(annotations, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
-			return new ErrorResponse(StatusCode.BAD_REQUEST, "Bad encoding " +
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Bad encoding " +
 					"on search query.");
 		}
 		try {
 			db = initDB();
 			searchResult = db.search(annotations);
 		} catch (SQLException | IOException e) {
-			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE,
+			return new ErrorResponse(HttpStatusCode.SERVICE_UNAVAILABLE,
 					e.getMessage());
 		} catch (ParseException e) {
-			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
 		} finally {
 			if (db != null)
 				db.close();

@@ -11,8 +11,8 @@ import database.containers.FileTuple;
 
 import response.AddFileToExperimentResponse;
 import response.ErrorResponse;
+import response.HttpStatusCode;
 import response.Response;
-import response.StatusCode;
 
 /**
  * Class used to represent a command of the type AddFile.
@@ -42,18 +42,22 @@ public class AddFileToExperimentCommand extends Command {
 	@Expose
 	private String grVersion = null;
 
+	@Expose
+	private String checkSumMD5 = null;
+
 	//TODO: Find out what this does.
 	private boolean isPrivate = false;
 
 	@Override
 	public void validate() throws ValidateException {
-		validateString(experimentID, MaxLength.EXPID, "Experiment name");
-		validateString(type, MaxLength.FILE_FILETYPE, "File type");
-		validateString(author, MaxLength.FILE_AUTHOR, "Author");
-		validateString(uploader, MaxLength.FILE_UPLOADER, "Uploader");
-		validateString(grVersion, MaxLength.FILE_GRVERSION, "Genome release");
-		validateString(fileName, MaxLength.FILE_FILENAME, "Filename");
-		validateString(metaData, MaxLength.FILE_METADATA, "Metadata");
+		validateName(experimentID, MaxLength.EXPID, "Experiment name");
+		validateName(type, MaxLength.FILE_FILETYPE, "File type");
+		validateName(author, MaxLength.FILE_AUTHOR, "Author");
+		validateName(uploader, MaxLength.FILE_UPLOADER, "Uploader");
+		validateName(grVersion, MaxLength.FILE_GRVERSION, "Genome release");
+		validateName(fileName, MaxLength.FILE_FILENAME, "Filename");
+		validateExists(metaData, MaxLength.FILE_METADATA, "Metadata");
+		validateMD5(this.checkSumMD5);
 	}
 
 	public void setUploader(String uploader) {
@@ -82,15 +86,15 @@ public class AddFileToExperimentCommand extends Command {
 		try {
 			db = initDB();
 			FileTuple ft = db.addNewFile(experimentID, fileType, fileName, null,
-					metaData, author, uploader, isPrivate, grVersion);
-			return new AddFileToExperimentResponse(StatusCode.OK,
+					metaData, author, uploader, isPrivate, grVersion, checkSumMD5);
+			return new AddFileToExperimentResponse(HttpStatusCode.OK,
 					ft.getUploadURL());
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
 		} catch (IOException e) {
 			e.printStackTrace();
-			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE,
+			return new ErrorResponse(HttpStatusCode.SERVICE_UNAVAILABLE,
 					e.getMessage());
 		} finally {
 			if (db != null) {

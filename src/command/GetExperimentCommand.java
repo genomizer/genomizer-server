@@ -6,8 +6,8 @@ import java.util.ArrayList;
 
 import database.constants.MaxLength;
 import response.ErrorResponse;
+import response.HttpStatusCode;
 import response.Response;
-import response.StatusCode;
 import response.GetExperimentResponse;
 import database.DatabaseAccessor;
 import database.containers.Experiment;
@@ -30,7 +30,7 @@ public class GetExperimentCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-		validateString(header, MaxLength.EXPID, "Experiment name");
+		validateName(header, MaxLength.EXPID, "Experiment name");
 	}
 
 	@Override
@@ -41,22 +41,22 @@ public class GetExperimentCommand extends Command {
 			db = initDB();
 		}
 		catch(SQLException | IOException e){
-			return new ErrorResponse(StatusCode.BAD_REQUEST, "Could not " +
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Could not " +
 					"initialize db: " + e.getMessage());
 		}
 		try{
 			exp = db.getExperiment(header);
 		}catch(SQLException e){
-			return new ErrorResponse(StatusCode.BAD_REQUEST, "Could not get " +
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Could not get " +
 					"experiment: " + e.getMessage());
 		}
 		db.close();
 		if(exp == null) {
-			return new ErrorResponse(StatusCode.BAD_REQUEST, "Experiment " +
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Experiment " +
 					"requested from database is null, not found or does not " +
 					"exist.");
 		}
-		return new GetExperimentResponse(StatusCode.OK, getInfo(exp),
+		return new GetExperimentResponse(HttpStatusCode.OK, getInfo(exp),
 				exp.getAnnotations(), exp.getFiles());
 	}
 

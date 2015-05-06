@@ -10,7 +10,7 @@ import database.containers.Genome;
 import response.DeleteGenomeReleaseResponse;
 import response.ErrorResponse;
 import response.Response;
-import response.StatusCode;
+import response.HttpStatusCode;
 
 /**
  * Class used to delete a genome release.
@@ -36,8 +36,8 @@ public class DeleteGenomeReleaseCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-		validateString(genomeVersion, MaxLength.GENOME_VERSION, "Genome version");
-		validateString(species, MaxLength.GENOME_SPECIES, "Genome specie");
+		validateName(genomeVersion, MaxLength.GENOME_VERSION, "Genome version");
+		validateName(species, MaxLength.GENOME_SPECIES, "Genome species");
 	}
 
 	@Override
@@ -54,19 +54,19 @@ public class DeleteGenomeReleaseCommand extends Command {
 						boolean result = db.removeGenomeRelease(genomeVersion);
 						if(result) {
 							return new
-									DeleteGenomeReleaseResponse(StatusCode.OK);
+									DeleteGenomeReleaseResponse(HttpStatusCode.OK);
 						} else {
-							return new ErrorResponse(StatusCode.BAD_REQUEST,
-									"Could not delete genomrelease");
+							return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
+									"Could not delete genome release");
 						}
 					}
 				}
 			}
-			return new ErrorResponse(StatusCode.BAD_REQUEST, "Version " +
-					genomeVersion + " or specie " + species +
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Version " +
+					genomeVersion + " or species " + species +
 					" does not exist.");
 		} catch (SQLException | IOException e) {
-			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
 		} finally {
 			if(db != null && db.isConnected()) {
 				db.close();
