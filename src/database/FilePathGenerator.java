@@ -129,7 +129,6 @@ public class FilePathGenerator {
             break;
         case FileTuple.PROFILE:
             folderPath = getProfileFolderPath(expID);
-            System.out.println("Before generate: "+folderPath);
             folderPath = generateNewProfileSubFolder(folderPath);
             break;
         case FileTuple.REGION:
