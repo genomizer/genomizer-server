@@ -156,7 +156,7 @@ public class FileMethods {
 		stmt.executeUpdate();
 		stmt.close();
 
-		return getFileTuple(path);
+		return getFileTupleWithStatus(path, "In Progress");
 	}
 
 	private FileTuple getProfile(Experiment e, String metaData) {
@@ -196,26 +196,41 @@ public class FileMethods {
 	/**
 	 * Returns the FileTuple object associated with the given filePath.
 	 *
-	 * @param filePath
-	 *            String
-	 * @return FileTuple - The corresponding FileTuple or null if no such file
-	 *         exists
+	 * @param filePath  file name.
+	 * @return          The corresponding FileTuple or null if no such file exists.
 	 * @throws SQLException
 	 *             If the query could not be executed.
 	 */
 	public FileTuple getFileTuple(String filePath) throws SQLException {
+		return getFileTupleWithStatus(filePath, "Done");
+	}
 
-		String query = "SELECT * FROM File WHERE Path = ?";
-		PreparedStatement stmt = conn.prepareStatement(query);
-		stmt.setString(1, filePath);
-		ResultSet rs = stmt.executeQuery();
-		if (rs.next()) {
-			FileTuple fileTuple = new FileTuple(rs);
-			stmt.close();
-			return fileTuple;
+	/**
+	 * Returns the FileTuple object associated with the given filePath
+	 * and having the given status.
+	 *
+	 * @param filePath  file name.
+	 * @param status    file status.
+	 * @return          The corresponding FileTuple or null if no such file exists.
+	 * @throws SQLException
+	 *             If the query could not be executed.
+	 */
+	public FileTuple getFileTupleWithStatus(String filePath, String status) throws SQLException {
+
+		String query = "SELECT * FROM File WHERE Path = ? AND Status = ?";
+
+		try (PreparedStatement stmt = conn.prepareStatement(query)) {
+			stmt.setString(1, filePath);
+			stmt.setString(2, status);
+
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				return new FileTuple(rs);
+			}
+			else {
+				return null;
+			}
 		}
-		stmt.close();
-		return null;
 	}
 
 	/**
@@ -230,7 +245,7 @@ public class FileMethods {
 	 */
 	public FileTuple getFileTuple(int fileID) throws SQLException {
 
-		String query = "SELECT * FROM File WHERE FileID = ?";
+		String query = "SELECT * FROM File WHERE Status = 'Done' AND FileID = ?";
 		PreparedStatement stmt = conn.prepareStatement(query);
 		stmt.setInt(1, fileID);
 		ResultSet rs = stmt.executeQuery();
@@ -360,7 +375,8 @@ public class FileMethods {
 	 */
 	public boolean hasFile(int fileID) throws SQLException {
 
-		String query = "SELECT fileID FROM File " + "WHERE fileID = ?";
+		String query = "SELECT fileID FROM File "
+				+ "WHERE Status = 'Done' AND fileID = ?";
 		PreparedStatement stmt = conn.prepareStatement(query);
 		stmt.setInt(1, fileID);
 
@@ -385,19 +401,17 @@ public class FileMethods {
 	 * @throws SQLException
 	 */
 
-	public int fileReadyForDownload(int fileID) throws SQLException {
+	public int markReadyForDownload(int fileID) throws SQLException {
 
 		String statusUpdateString = "UPDATE File SET Status = 'Done' "
 				+ "WHERE FileID = ?";
 
-		PreparedStatement statusUpdate = conn
-				.prepareStatement(statusUpdateString);
-		statusUpdate.setInt(1, fileID);
+		try (PreparedStatement statusUpdate = conn
+				.prepareStatement(statusUpdateString)) {
+			statusUpdate.setInt(1, fileID);
 
-		int resCount = statusUpdate.executeUpdate();
-		statusUpdate.close();
-
-		return resCount;
+			return statusUpdate.executeUpdate();
+		}
 	}
 
 	/**
@@ -417,7 +431,7 @@ public class FileMethods {
 		String oldFilePath = "";
 
 		// search for current filepath.
-		String searchPathQuery = "SELECT Path FROM File WHERE fileID = ?";
+		String searchPathQuery = "SELECT Path FROM File WHERE Status = 'Done' AND fileID = ?";
 		PreparedStatement pathFind = conn.prepareStatement(searchPathQuery);
 		pathFind.setInt(1, fileID);
 		ResultSet res = pathFind.executeQuery();

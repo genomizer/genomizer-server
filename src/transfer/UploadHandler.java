@@ -142,21 +142,27 @@ public class UploadHandler {
         {
             String actualMD5 = DigestUtils.md5Hex(fileItem.getInputStream());
 
-            FileTuple  ft = db.getFileTuple(absUploadPath);
+            FileTuple  ft = db.getFileTupleInProgress(absUploadPath);
             if (ft != null) {
                 verifyOrUpdateMD5(ft, actualMD5, db);
+                int count = db.markReadyForDownload(ft);
+                checkMarkReadyForDownloadSucceeded(count, ft.filename);
                 return;
             }
 
-            GenomeFile gf = db.getGenomeReleaseFile(absUploadPath);
+            GenomeFile gf = db.getGenomeReleaseFileInProgress(absUploadPath);
             if (gf != null) {
                 verifyOrUpdateMD5(gf, actualMD5, db);
+                int count = db.markReadyForDownload(gf);
+                checkMarkReadyForDownloadSucceeded(count, gf.fileName);
                 return;
             }
 
-            ChainFile  cf = db.getChainFile(absUploadPath);
+            ChainFile cf = db.getChainFileInProgress(absUploadPath);
             if (cf != null) {
                 verifyOrUpdateMD5(cf, actualMD5, db);
+                int count = db.markReadyForDownload(cf);
+                checkMarkReadyForDownloadSucceeded(count, cf.fileName);
                 return;
             }
 
@@ -164,6 +170,15 @@ public class UploadHandler {
             Files.delete(new File(absUploadPath).toPath());
             throw new ValidateException(HttpStatusCode.BAD_REQUEST,
                     "Request to upload a file that wasn't previously registered!");
+        }
+    }
+
+    // Helper function for 'commitFile'.
+    private void checkMarkReadyForDownloadSucceeded (int countUpdated, String fileName)
+            throws ValidateException {
+        if (countUpdated <= 0) {
+            throw new ValidateException(HttpStatusCode.INTERNAL_SERVER_ERROR,
+                    "Couldn't mark file '" + fileName + "' as ready for download!");
         }
     }
 

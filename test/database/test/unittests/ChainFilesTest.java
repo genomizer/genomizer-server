@@ -64,6 +64,7 @@ public class ChainFilesTest {
         String toVersion = "hg38";
         String fileName = "chainHuman.txt";
         String filePath = dbac.addChainFile(fromVersion, toVersion, fileName, null);
+        dbac.markReadyForDownload(fromVersion, toVersion, fileName);
 
         assertEquals(ServerDependentValues.UploadURL +
         		fpg.getChainFolderPath("Human", fromVersion, toVersion)
@@ -108,6 +109,7 @@ public class ChainFilesTest {
     		throws Exception {
 
         dbac.addChainFile("rn3", "rn5", "rat.over.chain", null);
+        dbac.markReadyForDownload("rn3", "rn5", "rat.over.chain");
 
         String folderPath = fpg.generateChainFolder("Rat", "rn3", "rn5");
         File folder = new File(folderPath);
@@ -132,7 +134,9 @@ public class ChainFilesTest {
         String testName2 = "testName2.txt";
 
         dbac.addChainFile(fromVersion, toVersion, testName1, null);
+        dbac.markReadyForDownload(fromVersion, toVersion, testName1);
         dbac.addChainFile(fromVersion, toVersion, testName2, null);
+        dbac.markReadyForDownload(fromVersion, toVersion, testName2);
         ChainFiles cf = dbac.getChainFiles(fromVersion, toVersion);
 
         assertEquals(fromVersion, cf.fromVersion);
@@ -154,8 +158,11 @@ public class ChainFilesTest {
         String testName3 = "testName3.txt";
 
 		dbac.addChainFile(fromVersion, toVersion, testName1, null);
+        dbac.markReadyForDownload(fromVersion, toVersion, testName1);
 		dbac.addChainFile(fromVersion, toVersion, testName2, null);
+        dbac.markReadyForDownload(fromVersion, toVersion, testName2);
 		dbac.addChainFile(fromVersion, toVersion, testName3, null);
+        dbac.markReadyForDownload(fromVersion, toVersion, testName3);
 
 		ChainFiles cf = dbac.getChainFiles(fromVersion, toVersion);
 		HashMap<String, String> files =
