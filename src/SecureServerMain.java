@@ -44,14 +44,14 @@ public class SecureServerMain {
 		/* Create process handlers */
         createWorkHandlers(workPool);
 
-		/* We attempt to start the secure doorman. */
-        try {
-            new SecureDoorman(ServerSettings.genomizerPort).start();
-        } catch (IOException e) {
-            System.err.println("Error when starting server");
-            Debug.log(e.getMessage());
-            System.exit(1);
-        }
+		/* We attempt to start the secure doorman */
+		try {
+			new SecureDoorman(ServerSettings.genomizerHttpPort).start();
+		} catch (IOException e) {
+			System.err.println("Error when starting server");
+			Debug.log(e.getMessage());
+			System.exit(1);
+		}
 
 		/* By default we run a UID remover. */
         if (!com.hasOption("nri")) {
