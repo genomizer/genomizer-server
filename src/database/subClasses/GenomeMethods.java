@@ -22,8 +22,6 @@ import database.containers.GenomeFile;
  * Class that contains all the methods for adding,changing, getting and removing
  * genome releases and chain files. This class is a subClass of
  * databaseAcessor.java.
- *
- * date: 2014-05-14 version: 1.0
  */
 public class GenomeMethods {
 
@@ -55,10 +53,10 @@ public class GenomeMethods {
 
 	public Genome getGenomeRelease(String genomeVersion) throws SQLException {
 
-        String query = "SELECT * FROM Genome_Release "
-                + "JOIN Genome_Release_Files "
-                + "ON (Genome_Release.Version = Genome_Release_Files.Version) "
-                + "WHERE (Genome_Release.Version ~~* ?)";
+        String query = "SELECT * FROM Genome_Release AS R "
+                + "JOIN Genome_Release_Files AS F "
+                + "ON (R.Version = F.Version) "
+                + "WHERE (R.Version ~~* ? AND F.Status = 'Done')";
 
 		PreparedStatement stmt = conn.prepareStatement(query);
 		stmt.setString(1, genomeVersion);
@@ -135,26 +133,41 @@ public class GenomeMethods {
 	}
 
 	/**
-	 * Given a filesystem path, retrieve the corresponding genome release file record.
+	 * Given a filesystem path,
+	 * retrieve the corresponding genome release file record.
 	 *
 	 * @param  file          file name.
 	 * @throws SQLException  if something went wrong.
 	 */
 	public GenomeFile getGenomeReleaseFile (String file) throws SQLException {
+		return getGenomeReleaseFileWithStatus(file, "Done");
+	}
+
+	/**
+	 * Given a filesystem path and a status string,
+	 * retrieve the corresponding genome release file record.
+	 *
+	 * @param  file          file name.
+	 * @param  status        file status.
+	 * @throws SQLException  if something went wrong.
+	 */
+	public GenomeFile getGenomeReleaseFileWithStatus (String file, String status)
+			throws SQLException {
 		File fileFile   = new File(file);
 		String fileName = fileFile.getName();
 		String fileDir  = fileFile.getParent();
 		if (!fileDir.endsWith(File.separator))
 			fileDir += File.separator;
 
-		// Given a directory name, get genome release version...
+		// Given a directory and a file name, get genome release version...
 		String genomeReleaseVersion = null;
 		try (PreparedStatement stmt = conn.prepareStatement(
 				"SELECT * FROM Genome_Release_Files "
 				+ "NATURAL JOIN Genome_Release "
-				+ "WHERE FolderPath ~~* ? AND FileName ~~* ?")) {
+				+ "WHERE FolderPath ~~* ? AND FileName ~~* ? AND Status = ?")) {
 			stmt.setString(1, fileDir);
 			stmt.setString(2, fileName);
+			stmt.setString(3, status);
 			ResultSet rs = stmt.executeQuery();
 			if (rs.next()) {
 				return new GenomeFile(rs);
@@ -190,6 +203,16 @@ public class GenomeMethods {
 	 * @throws SQLException  if something went wrong.
 	 */
 	public ChainFile getChainFile (String file) throws SQLException {
+		return getChainFileWithStatus(file, "Done");
+	}
+
+	/**
+	 * Given a filesystem path, retrieve the corresponding chain file record.
+	 *
+	 * @param  file          file name.
+	 * @throws SQLException  if something went wrong.
+	 */
+	public ChainFile getChainFileWithStatus (String file, String status) throws SQLException {
 		File fileFile   = new File(file);
 		String fileName = fileFile.getName();
 		String fileDir  = fileFile.getParent();
@@ -201,16 +224,18 @@ public class GenomeMethods {
 		try (PreparedStatement stmt = conn.prepareStatement(
 				"SELECT * FROM Chain_File_Files "
 				+ "NATURAL JOIN Chain_File "
-				+ "WHERE FolderPath ~~* ? AND FileName ~~* ?")) {
+				+ "WHERE FolderPath ~~* ? AND FileName ~~* ? AND Status = ?")) {
 			stmt.setString(1, fileDir);
 			stmt.setString(2, fileName);
+			stmt.setString(3, status);
 			ResultSet rs = stmt.executeQuery();
 			if (rs.next()) {
 				return new ChainFile(rs);
 			}
+			else {
+				return null;
+			}
 		}
-
-		return null;
 	}
 
 	/**
@@ -266,23 +291,43 @@ public class GenomeMethods {
 	 * @return the number of tuples updated.
 	 * @throws SQLException
 	 */
-	public int fileReadyForDownload(String version, String fileName)
+	public int markReadyForDownload(String version, String fileName)
 			throws SQLException {
 
         String statusUpdateString = "UPDATE Genome_Release_Files SET Status = 'Done' "
                 + "WHERE Version = ? AND FileName = ?";
 
 
-        PreparedStatement statusUpdate = conn
-                .prepareStatement(statusUpdateString);
-        statusUpdate.setString(1, version);
-        statusUpdate.setString(2, fileName);
+        try(PreparedStatement statusUpdate = conn
+                .prepareStatement(statusUpdateString)) {
+			statusUpdate.setString(1, version);
+			statusUpdate.setString(2, fileName);
 
 
-		int resCount = statusUpdate.executeUpdate();
-		statusUpdate.close();
+			return statusUpdate.executeUpdate();
+		}
+	}
 
-		return resCount;
+	/**
+	 * Sets the status for a chain file to "Done".
+	 *
+	 * @return    the number of tuples updated.
+	 * @throws    SQLException
+	 */
+	public int markReadyForDownload(String fromVersion, String toVersion, String fileName)
+			throws SQLException {
+
+		String statusUpdateString = "UPDATE Chain_File_Files SET Status = 'Done' "
+				+ "WHERE FromVersion = ? AND ToVersion = ? AND FileName = ?";
+
+		try (PreparedStatement statusUpdate = conn
+				.prepareStatement(statusUpdateString)) {
+			statusUpdate.setString(1, fromVersion);
+			statusUpdate.setString(2, toVersion);
+			statusUpdate.setString(3, fileName);
+
+			return statusUpdate.executeUpdate();
+		}
 	}
 
 	/**
@@ -349,10 +394,10 @@ public class GenomeMethods {
 	public ArrayList<Genome> getAllGenomeReleasesForSpecies(String species)
 			throws SQLException {
 
-        String query = "SELECT * FROM Genome_Release "
-                + "JOIN Genome_Release_Files "
-                + "ON (Genome_Release.Version = Genome_Release_Files.Version) "
-                + "WHERE (Genome_Release.Species ~~* ?) ORDER BY Genome_Release.Version";
+        String query = "SELECT * FROM Genome_Release AS R "
+                + "JOIN Genome_Release_Files AS F "
+                + "ON (R.Version = F.Version) "
+                + "WHERE (R.Species ~~* ? AND F.Status = 'Done') ORDER BY R.Version";
 
 		PreparedStatement stmt = conn.prepareStatement(query);
 		stmt.setString(1, species);
@@ -390,7 +435,8 @@ public class GenomeMethods {
 			throws SQLException {
 
         String query = "SELECT * FROM Chain_File NATURAL JOIN Chain_File_Files"
-                + " WHERE (FromVersion ~~* ?)" + " AND (ToVersion ~~* ?)";
+                + " WHERE (FromVersion ~~* ?)" + " AND (ToVersion ~~* ?)"
+				+ " AND (Status = 'Done')";
         PreparedStatement stmt = conn.prepareStatement(query);
 
 		stmt.setString(1, fromVersion);
@@ -562,7 +608,8 @@ public class GenomeMethods {
 	 */
 	public List<Genome> getAllGenomeReleases() throws SQLException {
 		String query = "SELECT * FROM Genome_Release "
-				+ "NATURAL JOIN Genome_Release_Files ";
+				+ "NATURAL JOIN Genome_Release_Files "
+				+ "WHERE Status = 'Done' ";
 
 		PreparedStatement stmt = conn.prepareStatement(query);
 		ResultSet rs = stmt.executeQuery();
