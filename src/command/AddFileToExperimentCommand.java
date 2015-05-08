@@ -9,6 +9,7 @@ import database.DatabaseAccessor;
 import database.constants.MaxLength;
 import database.containers.FileTuple;
 
+import database.subClasses.UserMethods.UserType;
 import response.AddFileToExperimentResponse;
 import response.ErrorResponse;
 import response.HttpStatusCode;
@@ -45,11 +46,17 @@ public class AddFileToExperimentCommand extends Command {
 	@Expose
 	private String checkSumMD5 = null;
 
-	//TODO: Find out what this does.
-	private boolean isPrivate = false;
+	@Override
+	public void setFields(String uri, String uuid, UserType userType) {
+		this.userType = userType;
+
+		/*No fields from the URI is needed, neither is the UUID. Dummy
+		implementation*/
+	}
 
 	@Override
 	public void validate() throws ValidateException {
+		hasRights(UserRights.getRights(this.getClass()));
 		validateName(experimentID, MaxLength.EXPID, "Experiment name");
 		validateName(type, MaxLength.FILE_FILETYPE, "File type");
 		validateName(author, MaxLength.FILE_AUTHOR, "Author");
@@ -86,7 +93,7 @@ public class AddFileToExperimentCommand extends Command {
 		try {
 			db = initDB();
 			FileTuple ft = db.addNewFile(experimentID, fileType, fileName, null,
-					metaData, author, uploader, isPrivate, grVersion, checkSumMD5);
+					metaData, author, uploader, false, grVersion, checkSumMD5);
 			return new AddFileToExperimentResponse(HttpStatusCode.OK,
 					ft.getUploadURL());
 		} catch (SQLException e) {

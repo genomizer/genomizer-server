@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import database.DatabaseAccessor;
 
 import database.constants.MaxLength;
+import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.HttpStatusCode;
 import response.MinimalResponse;
@@ -18,28 +19,27 @@ import response.Response;
  * @version 1.1
  */
 public class DeleteExperimentCommand extends Command {
+	private String expID;
 
-	/**
-	 * Constructs a new instance of DeleteExperimentCommand using the supplied
-	 * restful string.
-	 * @param expID the ID of the experiment.
-	 */
-	public DeleteExperimentCommand(String expID) {
-		this.setHeader(expID);
+	@Override
+	public void setFields(String uri, String uuid, UserType userType) {
+		this.userType = userType;
+		expID = uri.split("/")[2];
 	}
 
 	public void validate() throws ValidateException {
-		validateName(header, MaxLength.EXPID, "Experiment name");
+		hasRights(UserRights.getRights(this.getClass()));
+		validateName(expID, MaxLength.EXPID, "Experiment name");
 	}
 
 	public Response execute() {
 		DatabaseAccessor db = null;
 		try {
 			db = initDB();
-			int tuples = db.deleteExperiment(header);
+			int tuples = db.deleteExperiment(expID);
 			if(tuples == 0) {
 				return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
-						"The experiment " + header + " does not exist and " +
+						"The experiment " + expID + " does not exist and " +
 								"can not be deleted");
 
 			}

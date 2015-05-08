@@ -9,8 +9,10 @@ import java.util.List;
 import java.net.URLDecoder;
 
 import database.DatabaseAccessor;
+import database.constants.MaxLength;
 import database.containers.Experiment;
 
+import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.HttpStatusCode;
 import response.Response;
@@ -25,23 +27,23 @@ import response.SearchResponse;
 public class SearchForExperimentsCommand extends Command {
 	private String annotations;
 
-	/**
-	 * Constructs a new instance of SearchForExperimentsCommand using the
-	 * supplied annotations.
-	 * @param annotations the annotations (hopefully) belonging to the
-	 *                       experiment.
-	 */
-	public SearchForExperimentsCommand(String annotations) {
-		this.annotations = annotations;
+	@Override
+	public void setFields(String uri, String uuid, UserType userType) {
+		this.userType = userType;
+		int index = uri.indexOf("=");
+		annotations = uri.substring(index+1);
 	}
 
 	@Override
 	public void validate() throws ValidateException {
-		if (annotations == null || annotations.equals("") ||
-				annotations.equals("null")) {
+
+		hasRights(UserRights.getRights(this.getClass()));
+
+		if (annotations == null || annotations.equals("")) {
 			throw new ValidateException(HttpStatusCode.BAD_REQUEST,
 					"Specify annotations to search for.");
 		}
+		validateExists(annotations, MaxLength.ANNOTATION_VALUE, "Experiment ");
 	}
 
 	@Override

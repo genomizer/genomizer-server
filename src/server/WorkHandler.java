@@ -83,7 +83,7 @@ public class WorkHandler implements Runnable {
 					continue;
 				}
 
-				processStatus.outputFiles = processCommand.getFilePaths();
+				processStatus.outputFiles = processCommand.getFilepaths();
 				processStatus.timeStarted = System.currentTimeMillis();
 
 				try {

@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Map.Entry;
 
+import database.subClasses.UserMethods.UserType;
 import process.ProcessException;
 import process.ProcessHandler;
 import response.ErrorResponse;
@@ -50,9 +51,12 @@ public class ProcessCommand extends Command {
 	private String genomeVersion;
 
 
-	//Empty constructor
-	public ProcessCommand() {
-
+	@Override
+	public void setFields(String uri, String username, UserType userType) {
+		this.userType = userType;
+		this.username = username;
+		setTimestamp(System.currentTimeMillis());
+		processtype = uri.split("/")[2];
 	}
 
 	/**
@@ -63,6 +67,8 @@ public class ProcessCommand extends Command {
 	 */
 	@Override
 	public void validate() throws ValidateException {
+
+		hasRights(UserRights.getRights(this.getClass()));
 		validateName(username, MaxLength.USERNAME, "Username");
 		validateName(expid, MaxLength.EXPID, "Experiment name");
 		validateExists(metadata, MaxLength.FILE_METADATA, "Metadata");
@@ -111,7 +117,7 @@ public class ProcessCommand extends Command {
 						return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
 								"Could not find genome version: " +
 										genomeVersion);
-					}else{
+					} else {
 						//Get the path of the genome.
 						String genomeFolderPath = g.folderPath;
 						//Get the prefix of the genome files.
@@ -221,14 +227,13 @@ public class ProcessCommand extends Command {
 	}
 
 	/**
-	 * Set the username of the uploader wich will be added to the database
+	 * Set the username of the uploader which will be added to the database
 	 * annotation.
 	 *
 	 * @param username - the username of the uploader.
 	 */
 	public void setUsername(String username) {
 		this.username = username;
-
 	}
 
 	/**
@@ -237,10 +242,10 @@ public class ProcessCommand extends Command {
 	public String toString(){
 
 		return "Uploader of file: " + username + "\n" +
-				"Processtype: " + processtype + "\n" +
+				"ProcessType: " + processtype + "\n" +
 				"metadata:" + metadata + "\n" +
 				"username: " + username + "\n" +
-				"expid: " + expid + "\n" +
+				"expId: " + expid + "\n" +
 				"genomeRelease: " + genomeVersion + "\n";
 	}
 
@@ -251,7 +256,7 @@ public class ProcessCommand extends Command {
 		return this.timestamp;
 	}
 
-	public void setProcessType(String processtype) {
+	public void setProcesstype(String processtype) {
 		this.processtype = processtype;
 
 	}
@@ -272,7 +277,7 @@ public class ProcessCommand extends Command {
 
 	}
 
-	public String[] getFilePaths() {
+	public String[] getFilepaths() {
 		return new String[] {filepaths.getKey(), filepaths.getValue()};
 	}
 

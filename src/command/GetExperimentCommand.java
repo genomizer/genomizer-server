@@ -11,6 +11,7 @@ import response.Response;
 import response.GetExperimentResponse;
 import database.DatabaseAccessor;
 import database.containers.Experiment;
+import database.subClasses.UserMethods.UserType;
 
 /**
  * Class used to retrieve an experiment.
@@ -19,18 +20,18 @@ import database.containers.Experiment;
  * @version 1.1
  */
 public class GetExperimentCommand extends Command {
-	/**
-	 * Constructs a new instance of GetExperimentCommand using the supplied
-	 * experiment ID.
-	 * @param expID header to set.
-	 */
-	public GetExperimentCommand(String expID) {
-		this.setHeader(expID);
+	private String expID;
+
+	@Override
+	public void setFields(String uri, String uuid, UserType userType) {
+		this.userType = userType;
+		expID = uri.split("/")[2];
 	}
 
 	@Override
 	public void validate() throws ValidateException {
-		validateName(header, MaxLength.EXPID, "Experiment name");
+		hasRights(UserRights.getRights(this.getClass()));
+		validateName(expID, MaxLength.EXPID, "Experiment name");
 	}
 
 	@Override
@@ -45,7 +46,7 @@ public class GetExperimentCommand extends Command {
 					"initialize db: " + e.getMessage());
 		}
 		try{
-			exp = db.getExperiment(header);
+			exp = db.getExperiment(expID);
 		}catch(SQLException e){
 			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Could not get " +
 					"experiment: " + e.getMessage());

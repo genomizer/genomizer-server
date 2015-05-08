@@ -1,5 +1,6 @@
 package command;
 
+import database.subClasses.UserMethods.UserType;
 import response.HttpStatusCode;
 import response.MinimalResponse;
 import response.Response;
@@ -13,8 +14,12 @@ import response.Response;
 public class UpdateAnnotationPrivilegesCommand extends Command {
 	//TODO Implement this class
 
-	public UpdateAnnotationPrivilegesCommand(String json, String userName) {
+	@Override
+	public void setFields(String uri, String uuid, UserType userType) {
+		this.userType = userType;
 
+		/*No fields from the URI is needed, neither is the UUID. Dummy
+		implementation*/
 	}
 
 	/**
@@ -22,8 +27,8 @@ public class UpdateAnnotationPrivilegesCommand extends Command {
 	 * the command.
 	 */
 	@Override
-	public void validate() {
-
+	public void validate() throws ValidateException {
+		hasRights(UserRights.getRights(this.getClass()));
 	}
 
 
