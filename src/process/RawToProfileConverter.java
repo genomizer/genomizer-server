@@ -71,7 +71,7 @@ public class RawToProfileConverter extends Executor {
 	 */
 	public String procedure(String[] parameters, String inFolder,
 			String outFilePath) throws ProcessException {
-		
+
 		File[] inFiles = null;
 
 		// Error handling
@@ -79,7 +79,8 @@ public class RawToProfileConverter extends Executor {
 			inFolder = validateInFolder(inFolder);
 			inFiles = getRawFiles(inFolder);
 		} else {
-			throw new ProcessException("Fatal error: This should never happen");
+			throw new ProcessException("Directory for input files was not " +
+					"specified");
 		}
 
 		if (inFiles == null || inFiles.length == 0) {
@@ -101,7 +102,7 @@ public class RawToProfileConverter extends Executor {
 					+ "/sorted");
 			checker.calculateWhichProcessesToRun(parameters);
 
-			if(!ValidateParameters(parameters)) {
+			if (!ValidateParameters(parameters)) {
 				throw new ProcessException("Parameters are incorrect");
 			}
 			rawFile1 = inFiles[0].getName();
