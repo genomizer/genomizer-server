@@ -83,6 +83,7 @@ public class RawToProfileConverter extends Executor {
 					"specified");
 		}
 
+		// Check if there are any raw files
 		if (inFiles == null || inFiles.length == 0) {
 			throw new ProcessException("Folder does not contain raw files");
 		}
@@ -95,7 +96,7 @@ public class RawToProfileConverter extends Executor {
 				|| !CorrectInfiles(inFiles)) {
 			throw new ProcessException("Wrong format of input data");
 		}
-		// Runs the procedure.
+		// Run the procedure.
 		else {
 			initiateConversionStrings(parameters, outFilePath);
 			makeConversionDirectories(remoteExecution + "resources/" + dir
@@ -207,12 +208,16 @@ public class RawToProfileConverter extends Executor {
 							+ "reads_gff/allnucs_sgr/smoothed/ratios/smoothed/";
 					toBeRemoved.push(filesToBeMoved);
 				}
+
+				// Move files to the output folder
 				try {
 					moveEndFiles(filesToBeMoved, outFilePath);
 				} catch (ProcessException e) {
 					cleanUp(toBeRemoved);
 					throw e;
 				}
+
+				// Clean intermediate files
 				cleanUp(toBeRemoved);
 
 			} else {
