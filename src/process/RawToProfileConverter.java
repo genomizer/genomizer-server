@@ -22,7 +22,7 @@ public class RawToProfileConverter extends Executor {
 	private String sortedDirForCommands;
 	private String samToGff;
 	private String gffToAllnusgr;
-	private File fileDir;
+	private File outputDir;
 	private String inFolder;
 	private String[] parameters;
 	private String rawFile1;
@@ -115,7 +115,7 @@ public class RawToProfileConverter extends Executor {
 			initiateConversionStrings(parameters, outFilePath);
 
 			// printTrace(parameters, inFolder, outFilePath);
-			if (fileDir.exists()) {
+			if (outputDir.exists()) {
 				//Runs bowtie on files. and sorts them.
 				if (checker.shouldRunBowTie()) {
 					ErrorLogger.log("SYSTEM", "Running Bowtie");
@@ -218,7 +218,7 @@ public class RawToProfileConverter extends Executor {
 			} else {
 
 				logString = logString + " " + "Failed to create directory "
-						+ fileDir.toString();
+						+ outputDir.toString();
 			}
 		}
 		return logString;
@@ -481,7 +481,7 @@ public class RawToProfileConverter extends Executor {
 	 * @param outFile
 	 */
 //	private void printTrace(String[] parameters, String inFolder, String outFile) {
-//		System.out.println("dir " + fileDir.toString());
+//		System.out.println("dir " + outputDir.toString());
 //		System.out.println("INFOLDER = " + inFolder);
 //		System.out.println("OUTFILE = " + outFile);
 //		System.out.println("DIR = " + dir);
@@ -613,9 +613,9 @@ public class RawToProfileConverter extends Executor {
 	 *            the directory to create if it doesn't exist
 	 */
 	private void makeConversionDirectories(String directoryPath) {
-		fileDir = new File(directoryPath);
-		if (!fileDir.exists()) {
-			fileDir.mkdirs();
+		outputDir = new File(directoryPath);
+		if (!outputDir.exists()) {
+			outputDir.mkdirs();
 		}
 	}
 
