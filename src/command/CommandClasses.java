@@ -38,6 +38,7 @@ public class CommandClasses {
         classes.put("GET /genomeRelease/", GetGenomeReleaseSpeciesCommand.
                 class);
         classes.put("GET /process", GetProcessStatusCommand.class);
+        classes.put("DELETE /process", CancelProcessCommand.class);
         classes.put("GET /token", IsTokenValidCommand.class);
         classes.put("POST /login", LoginCommand.class);
         classes.put("DELETE /login", LogoutCommand.class);
