@@ -17,13 +17,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
+import database.containers.*;
+import database.containers.Genome;
 import org.apache.commons.codec.digest.DigestUtils;
 import server.ServerSettings;
-import database.containers.Annotation;
-import database.containers.ChainFile;
-import database.containers.Experiment;
-import database.containers.FileTuple;
-import database.containers.Genome;
 import database.subClasses.*;
 
 /**
@@ -718,15 +715,11 @@ public class DatabaseAccessor implements AutoCloseable {
     /**
      * Sets the status of a file to "Done".
      *
-     * NOT USED IN 2014!
-     *
-     * @param fileID
-     *            the ID of the file to set to "Done".
-     * @return the number of tuples updated.
-     * @throws SQLException
+     * @param ft   the file to set to "Done".
+     * @return     the number of tuples updated (either 0 or 1).
      */
-    public int fileReadyForDownload(int fileID) throws SQLException {
-        return fileMethods.fileReadyForDownload(fileID);
+    public int markReadyForDownload(FileTuple ft) throws SQLException {
+        return fileMethods.markReadyForDownload(ft.id);
     }
 
     /**
@@ -740,6 +733,20 @@ public class DatabaseAccessor implements AutoCloseable {
      */
     public FileTuple getFileTuple(String filePath) throws SQLException {
         return fileMethods.getFileTuple(filePath);
+    }
+
+    /**
+     * Returns the FileTuple object associated with the given filePath.
+     * File must *not* be marked as ready for download.
+     *
+     * @param filePath the path of the file
+     * @return FileTuple - The corresponding FileTuple or null if no such file
+     *         exists
+     * @throws SQLException
+     *             - If the query could not be executed.
+     */
+    public FileTuple getFileTupleInProgress(String filePath) throws SQLException {
+        return fileMethods.getFileTupleWithStatus(filePath, "In Progress");
     }
 
     /**
@@ -1001,28 +1008,56 @@ public class DatabaseAccessor implements AutoCloseable {
      * @throws IOException
      */
     public String addGenomeRelease(String genomeVersion, String species,
-            String filename) throws SQLException, IOException {
-        return genMethods.addGenomeRelease(genomeVersion, species, filename);
+            String filename, String checkSumMD5) throws SQLException, IOException {
+        return genMethods.addGenomeRelease(genomeVersion, species, filename, checkSumMD5);
     }
 
     /**
      * Sets the status for a genome release file to "Done".
      *
-     * NOT USED IN 2014!
-     *
-     * @param version
-     *            the file version.
-     * @param fileName
-     *            the file name.
-     * @return the number of tuples updated.
-     * @throws SQLException
+     * @param gf     the file to be updated.
+     * @return       the number of tuples updated.
      */
-    public int genomeReleaseFileUploaded(String version, String fileName)
+    public int markReadyForDownload(GenomeFile gf)
             throws SQLException {
-        return genMethods.fileReadyForDownload(version, fileName);
+        return genMethods.markReadyForDownload(gf.genomeVersion, gf.fileName);
     }
 
-    //FIXME This i incorrect
+    // TODO: Get rid of this function, use GenomeFile everywhere.
+    /**
+     * Sets the status for a genome release file to "Done".
+     *
+     * @return       the number of tuples updated.
+     */
+    public int markReadyForDownload(String genomeVersion, String fileName)
+            throws SQLException {
+        return genMethods.markReadyForDownload(genomeVersion, fileName);
+    }
+
+    /**
+     * Sets the status for a chain file to "Done".
+     *
+     * @param cf     the file to be updated.
+     * @return       the number of tuples updated.
+     */
+    public int markReadyForDownload(ChainFile cf)
+            throws SQLException {
+        return genMethods.markReadyForDownload(cf.fromVersion, cf.toVersion, cf.fileName);
+    }
+
+    // TODO: Get rid of this function, use ChainFile everywhere.
+    /**
+     * Sets the status for a chain file to "Done".
+     *
+     * @return       the number of tuples updated.
+     */
+    public int markReadyForDownload(String fromVersion, String toVersion, String fileName)
+            throws SQLException {
+        return genMethods.markReadyForDownload(fromVersion, toVersion, fileName);
+    }
+
+
+    //FIXME This is incorrect
     /*
     /**
      * Removes one specific genome version stored in the database.
@@ -1057,13 +1092,13 @@ public class DatabaseAccessor implements AutoCloseable {
      *            String, the name of the species you want to get genome
      *            realeases for.
      * @return genomelist ArrayList<Genome>, list of all the genome releases for
-     *         a specific species. Returns NULL if the specified specie did NOT
+     *         a specific species. Returns NULL if the specified species did NOT
      *         have a genomeRelase entry in the database.
      * @throws SQLException
      */
     public ArrayList<Genome> getAllGenomeReleasesForSpecies(String species)
             throws SQLException {
-        return genMethods.getAllGenomReleasesForSpecies(species);
+        return genMethods.getAllGenomeReleasesForSpecies(species);
     }
 
     private FileTuple getRawFileTuple(List<FileTuple> fileTuples) {
@@ -1083,20 +1118,20 @@ public class DatabaseAccessor implements AutoCloseable {
      * @throws SQLException
      *             - if the query does not succeed
      */
-    public List<Genome> getAllGenomReleases() throws SQLException {
-        return genMethods.getAllGenomReleases();
+    public List<Genome> getAllGenomeReleases() throws SQLException {
+        return genMethods.getAllGenomeReleases();
     }
 
     /**
-     * Returns a list of all genome releases in the database for a specie.
+     * Returns a list of all genome releases in the database for a species.
      *
      * @return a list of genomes, if no genomes are found the
      *         list is empty
      * @throws SQLException
      *             - if the query does not succeed
      */
-    public List<String> getAllGenomReleaseSpecies() throws SQLException {
-        return genMethods.getAllGenomReleaseSpecies();
+    public List<String> getAllGenomeReleaseSpecies() throws SQLException {
+        return genMethods.getAllGenomeReleaseSpecies();
     }
 
     /**
@@ -1105,13 +1140,13 @@ public class DatabaseAccessor implements AutoCloseable {
      *
      * @param fromVersion - the name of the old genome release version
      * @param toVersion - the name of the new genome release version
-     * @return a ChainFile object containing all information about the chain
+     * @return a ChainFiles object containing all information about the chain
      *         file.
      * @throws SQLException
      */
-    public ChainFile getChainFile(String fromVersion, String toVersion)
+    public ChainFiles getChainFiles(String fromVersion, String toVersion)
             throws SQLException {
-        return genMethods.getChainFile(fromVersion, toVersion);
+        return genMethods.getChainFiles(fromVersion, toVersion);
     }
 
     /**
@@ -1126,8 +1161,8 @@ public class DatabaseAccessor implements AutoCloseable {
      * @throws IOException
      */
     public String addChainFile(String fromVersion, String toVersion,
-            String fileName) throws SQLException, IOException {
-        return genMethods.addChainFile(fromVersion, toVersion, fileName);
+            String fileName, String checkSumMD5) throws SQLException, IOException {
+        return genMethods.addChainFile(fromVersion, toVersion, fileName, checkSumMD5);
     }
 
     /**
@@ -1142,9 +1177,9 @@ public class DatabaseAccessor implements AutoCloseable {
      * @throws SQLException
      *             - if the query does not succeed
      */
-    public int removeChainFile(String fromVersion, String toVersion)
+    public int removeChainFiles(String fromVersion, String toVersion)
             throws SQLException {
-        return genMethods.removeChainFile(fromVersion, toVersion);
+        return genMethods.removeChainFiles(fromVersion, toVersion);
     }
 
     /**
@@ -1243,5 +1278,80 @@ public class DatabaseAccessor implements AutoCloseable {
             }
         }
         folder.delete();
+    }
+
+    /**
+     * Given a filesystem path, retrieve the corresponding genome release file record.
+     *
+     * @param  file          file name.
+     * @throws SQLException  if something went wrong.
+     */
+    public GenomeFile getGenomeReleaseFile (String file) throws SQLException {
+        return genMethods.getGenomeReleaseFile(file);
+    }
+
+    /**
+     * Given a filesystem path, retrieve the corresponding genome release file record.
+     * File must *not* be marked as ready for download.
+     *
+     * @param  file          file name.
+     * @throws SQLException  if something went wrong.
+     */
+    public GenomeFile getGenomeReleaseFileInProgress (String file) throws SQLException {
+        return genMethods.getGenomeReleaseFileWithStatus(file, "In Progress");
+    }
+
+    /**
+     * Given a filesystem path, retrieve the corresponding chain file record.
+     *
+     * @param  file          file name.
+     * @throws SQLException  if something went wrong.
+     */
+    public ChainFile getChainFile (String file) throws SQLException {
+        return genMethods.getChainFile(file);
+    }
+
+    /**
+     * Given a filesystem path, retrieve the corresponding chain file record.
+     * File must *not* be marked as ready for download.
+     *
+     * @param  file          file name.
+     * @throws SQLException  if something went wrong.
+     */
+    public ChainFile getChainFileInProgress (String file) throws SQLException {
+        return genMethods.getChainFileWithStatus(file, "In Progress");
+    }
+
+    /**
+     * Update the MD5 checksum corresponding to a given (raw/profile/region) file.
+     *
+     * @param  file          file name.
+     * @param  checkSumMD5   check sum.
+     * @throws SQLException  if something went wrong.
+     */
+    public void setFileCheckSumMD5(FileTuple file, String checkSumMD5) throws SQLException {
+        fileMethods.setFileCheckSumMD5(file, checkSumMD5);
+    }
+
+    /**
+     * Update the MD5 checksum corresponding to a given genome release file.
+     *
+     * @param  file          file name.
+     * @param  checkSumMD5   check sum.
+     * @throws SQLException  if something went wrong.
+     */
+    public void setGenomeReleaseFileCheckSumMD5 (GenomeFile file, String checkSumMD5) throws SQLException {
+        genMethods.setGenomeReleaseFileCheckSumMD5(file, checkSumMD5);
+    }
+
+    /**
+     * Update the MD5 checksum corresponding to a given chain file.
+     *
+     * @param  file          file name.
+     * @param  checkSumMD5   check sum.
+     * @throws SQLException  if something went wrong.
+     */
+    public void setChainFileCheckSumMD5 (ChainFile file, String checkSumMD5) throws SQLException {
+        genMethods.setChainFileCheckSumMD5(file, checkSumMD5);
     }
 }

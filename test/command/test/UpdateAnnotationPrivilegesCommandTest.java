@@ -2,6 +2,8 @@ package command.test;
 
 import static org.junit.Assert.*;
 
+import command.ValidateException;
+import database.subClasses.UserMethods.UserType;
 import org.junit.Ignore;
 import org.junit.Test;
 import command.UpdateAnnotationPrivilegesCommand;
@@ -14,29 +16,59 @@ import command.UpdateAnnotationPrivilegesCommand;
  * @version 1.0
  */
 public class UpdateAnnotationPrivilegesCommandTest {
-	//TODO Implement tests later
+	//TODO Implement tests when the class is implemented
+//
+//	/**
+//	 * Test used to check that creation works and object
+//	 * is not null.
+//	 */
+//	@Test
+//	public void testCreationNotNull() {
+//
+//		UpdateAnnotationPrivilegesCommand c = new UpdateAnnotationPrivilegesCommand("", "");
+//		assertNotNull(c);
+//
+//	}
+//
+//	/**
+//	 * Test used to check that validate always returns true.
+//	 */
+//	@Test
+//	public void testValidateAlwaysTrue() {
+//
+//		UpdateAnnotationPrivilegesCommand c = new UpdateAnnotationPrivilegesCommand("", "");
+//		c.validate();
+//
+//	}
 
 	/**
-	 * Test used to check that creation works and object
-	 * is not null.
+	 * Test used to check that ValidateException is not thrown
+	 * when the user have the required rights.
+	 *
+	 * @throws ValidateException
 	 */
 	@Test
-	public void testCreationNotNull() {
+	public void testHavingRights() throws ValidateException {
 
-		UpdateAnnotationPrivilegesCommand c = new UpdateAnnotationPrivilegesCommand("", "");
-		assertNotNull(c);
-
+		UpdateAnnotationPrivilegesCommand com = new UpdateAnnotationPrivilegesCommand();
+		com.setFields("json", "string", UserType.USER);
+		com.validate();
 	}
 
 	/**
-	 * Test used to check that validate always returns true.
+	 * Test used to check that ValidateException is thrown
+	 * when the user doesn't have the required rights.
+	 *
+	 * @throws ValidateException
 	 */
-	@Test
-	public void testValidateAlwaysTrue() {
+	@Test(expected = ValidateException.class)
+	public void testNotHavingRights() throws ValidateException {
 
-		UpdateAnnotationPrivilegesCommand c = new UpdateAnnotationPrivilegesCommand("", "");
-		c.validate();
-
+		UpdateAnnotationPrivilegesCommand com = new UpdateAnnotationPrivilegesCommand();
+		com.setFields("name", "string", UserType.GUEST);
+		com.validate();
+		fail();
 	}
+
 
 }

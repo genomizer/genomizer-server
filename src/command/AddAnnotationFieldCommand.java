@@ -3,10 +3,12 @@ package command;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import database.subClasses.UserMethods.UserType;
 import response.AddAnnotationFieldResponse;
 import response.ErrorResponse;
+import response.HttpStatusCode;
 import response.Response;
-import response.StatusCode;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import database.DatabaseAccessor;
@@ -35,21 +37,31 @@ public class AddAnnotationFieldCommand extends Command {
 	private Boolean forced = null;
 
 	@Override
-	public void validate() throws ValidateException {
-		validateName(name, MaxLength.ANNOTATION_LABEL, "Annotation label");
+	public void setFields(String uri, String uuid, UserType userType) {
+		this.userType = userType;
+		/*No fields from the URI is needed, neither is the UUID. Dummy
+		implementation*/
+	}
 
+	@Override
+	public void validate() throws ValidateException {
+		
+		hasRights(UserRights.getRights(this.getClass()));
+
+		validateName(name, MaxLength.ANNOTATION_LABEL, "Annotation label");
+		
 		if(defaults != null) {
 			validateName(defaults, MaxLength.ANNOTATION_DEFAULTVALUE,
 					"Default value");
 		}
 
 		if(forced == null) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify if " +
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Specify if " +
 					"the value is forced.");
 		}
 
 		if(type == null || type.size() < 1) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify a " +
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Specify a " +
 					"type for the annotation.");
 		}
 
@@ -80,25 +92,25 @@ public class AddAnnotationFieldCommand extends Command {
 						defaultValueIndex, forced);
 			}
 			if(addedAnnotations != 0) {
-				return new AddAnnotationFieldResponse(StatusCode.CREATED);
+				return new AddAnnotationFieldResponse(HttpStatusCode.CREATED);
 			} else {
-				return new ErrorResponse(StatusCode.BAD_REQUEST, "Annotation " +
+				return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Annotation " +
 						"could not be added, database error.");
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 			if(e.getErrorCode() == 0) {
-				return new ErrorResponse(StatusCode.BAD_REQUEST, "The " +
+				return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "The " +
 						"annotation " + name + " already exists.");
 			} else {
-				return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE,
+				return new ErrorResponse(HttpStatusCode.SERVICE_UNAVAILABLE,
 						e.getMessage());
 			}
 
 		} catch (IOException e) {
 			e.printStackTrace();
-			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
 		} finally {
 			if (db != null) {
 				db.close();

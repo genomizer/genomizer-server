@@ -4,10 +4,11 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.regex.Pattern;
 
+import response.HttpStatusCode;
 import response.Response;
-import response.StatusCode;
 import server.ServerSettings;
 import database.DatabaseAccessor;
+import database.subClasses.UserMethods.UserType;
 
 /**
  * This class contains common methods and attributes that are needed
@@ -31,8 +32,8 @@ public abstract class Command {
 	/*These are valid characters that are used with the validation method.*/
 	final protected String validCharacters = "^, A-Z, a-z, 0-9, space, _ and .";
 
-	/*This is used to store a RESTful-header.*/
-	protected String header;
+	/*Keeps track of the user rights level for the command sender. */
+	protected UserType userType = UserType.UNKNOWN;
 
 	/**
 	 * Used to validate the object and its information. The validate method
@@ -51,20 +52,13 @@ public abstract class Command {
 	public abstract Response execute();
 
 	/**
-	 * Method used to get the RESTful-header.
-	 * @return the header that is set.
+	 * Used to set the required fields of the command. Provided the URI
+	 * from the request as well as the UUID of the user the implementation
+	 * of this function should make sure the necessary information is set.
+	 * @param uri the URI from the http request.
+	 * @param username the UUID for the user who made the request.
 	 */
-	public String getHeader() {
-		return header;
-	}
-
-	/**
-	 * Method used to set the RESTful-header.
-	 * @param header the header as a string.
-	 */
-	public void setHeader(String header) {
-		this.header = header;
-	}
+	public abstract void setFields(String uri, String username, UserType userType);
 
 	/**
 	 * Method used to connect to the database.
@@ -100,22 +94,39 @@ public abstract class Command {
 	public void validateName(String string, int maxLength, String field)
 			throws ValidateException {
 		if(string == null) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify " +
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Specify " +
 					"an " + field.toLowerCase() + ".");
 		}
 		if(string.equals("null")){
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid "
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Invalid "
 					+ field.toLowerCase() + ".");
 		}
 		if(string.length() > maxLength || string.length() < 1) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, field + ": " +
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST, field + ": " +
 					string + " has to be between 1 and " + maxLength +
 					" characters long.");
 		}
 		if(hasInvalidCharacters(string)) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid" +
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Invalid" +
 					" characters in " + field.toLowerCase() +
 					". Valid characters are: " + validCharacters);
+		}
+	}
+
+	/**
+	 * Validates that a string is a valid MD5 checksum.
+	 * @param checkSumMD5 the field to be validated.
+	 * @throws ValidateException if the field does not conform.
+	 */
+	public void validateMD5(String checkSumMD5) throws ValidateException {
+		if (checkSumMD5 != null) {
+			if (checkSumMD5.length() != 32)
+				throw new ValidateException(HttpStatusCode.BAD_REQUEST,
+						"MD5 checksum has incorrect length (should be 32)!");
+			if (!checkSumMD5.matches("[0-9a-fA-F]+"))
+				throw new ValidateException(HttpStatusCode.BAD_REQUEST,
+						"Invalid characters in MD5 "
+								+ "checksum string (should be '[0-9a-fA-F]')!");
 		}
 	}
 
@@ -130,17 +141,42 @@ public abstract class Command {
 	public void validateExists(String string, int maxLength, String field)
 			throws ValidateException {
 		if(string == null) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify " +
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Specify " +
 					"an " + field.toLowerCase() + ".");
 		}
 		if(string.equals("null")){
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid "
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Invalid "
 					+ field.toLowerCase() + ".");
 		}
 		if(string.length() > maxLength || string.length() < 1) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, field + ": " +
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST, field + ": " +
 					string + " has to be between 1 and " + maxLength +
 					" characters long.");
 		}
 	}
+
+
+	/**
+	 * Methods which verifies if the user has the requested user rights.
+	 * @param required The user rights level required
+	 * @throws ValidateException If the user rights level wasn't high enough
+	 */
+	public void hasRights(UserType required) throws ValidateException {
+
+		if (userType == UserType.UNKNOWN)
+			throw new ValidateException(HttpStatusCode.FORBIDDEN, "You don't have permission.");
+
+		if (required == userType)
+			return;
+
+		else if (required == UserType.ADMIN)
+			throw new ValidateException(HttpStatusCode.FORBIDDEN, "You don't have permission.");
+
+		else if (required == UserType.USER && userType != UserType.ADMIN)
+			throw new ValidateException(HttpStatusCode.FORBIDDEN, "You don't have permission.");
+
+		else if (required == UserType.UNKNOWN && !(userType == UserType.ADMIN))
+			throw new ValidateException(HttpStatusCode.FORBIDDEN, "You don't have permission.");
+	}
+
 }

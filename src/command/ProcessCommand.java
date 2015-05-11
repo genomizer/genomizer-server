@@ -8,9 +8,14 @@ import com.google.gson.annotations.Expose;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
 import database.containers.Genome;
+import database.subClasses.UserMethods.UserType;
 import process.ProcessException;
 import process.ProcessHandler;
-import response.*;
+import response.ErrorResponse;
+import response.HttpStatusCode;
+import response.ProcessResponse;
+import response.Response;
+import response.MinimalResponse;
 import server.Debug;
 import server.ErrorLogger;
 
@@ -49,9 +54,12 @@ public class ProcessCommand extends Command {
 	@Expose
 	private UUID PID;
 
-	//Empty constructor
-	public ProcessCommand() {
-
+	@Override
+	public void setFields(String uri, String username, UserType userType) {
+		this.userType = userType;
+		this.username = username;
+		setTimestamp(System.currentTimeMillis());
+		processtype = uri.split("/")[2];
 	}
 
 
@@ -63,6 +71,8 @@ public class ProcessCommand extends Command {
 	 */
 	@Override
 	public void validate() throws ValidateException {
+
+		hasRights(UserRights.getRights(this.getClass()));
 		validateName(username, MaxLength.USERNAME, "Username");
 		validateName(expid, MaxLength.EXPID, "Experiment name");
 		validateExists(metadata, MaxLength.FILE_METADATA, "Metadata");
@@ -70,22 +80,17 @@ public class ProcessCommand extends Command {
 		validateExists(processtype, Integer.MAX_VALUE, "Processtype");
 
 		if(parameters == null || parameters.length < 1) {
-			throw new ValidateException(StatusCode.BAD_REQUEST,
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST,
 					"Specify parameters.");
 		}
 
 		switch (processtype) {
 			case CMD_RAW_TO_PROFILE:
 				if(parameters.length != 8){
-					throw new ValidateException(StatusCode.BAD_REQUEST,
+					throw new ValidateException(HttpStatusCode.BAD_REQUEST,
 							"Specify the right number of parameters.(8)");
 				}
-				for(int i = 0; i < parameters.length; i++) {
-					if(i != 1) {
-						validateExists(parameters[i], Integer.MAX_VALUE, "Parameter " +
-								parameters[i]);
-					}
-				}
+				validateExists(parameters[0], Integer.MAX_VALUE, "First parameter");
 				break;
 			case CMD_PROFILE_TO_REGION:
 				//TODO Implement parameter size
@@ -94,7 +99,7 @@ public class ProcessCommand extends Command {
 				//TODO validate PID
 				break;
 			default:
-				throw new ValidateException(StatusCode.BAD_REQUEST, "Invalid " +
+				throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Invalid " +
 						"process type");
 		}
 	}
@@ -116,10 +121,10 @@ public class ProcessCommand extends Command {
 					Genome g = db.getGenomeRelease(genomeVersion);
 
 					if(g == null){
-						return new ErrorResponse(StatusCode.BAD_REQUEST,
+						return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
 								"Could not find genome version: " +
 										genomeVersion);
-					}else{
+					} else {
 						//Get the path of the genome.
 						String genomeFolderPath = g.folderPath;
 						//Get the prefix of the genome files.
@@ -161,7 +166,7 @@ public class ProcessCommand extends Command {
 					try {
 						//Parameter = PID
 						processHandler.executeProcess(CMD_CANCEL_PROCESS, parameters, null, null);
-						return new MinimalResponse(StatusCode.OK);
+						return new MinimalResponse(HttpStatusCode.OK);
 					} catch (ProcessException e) {
 						return processError(db, e.getMessage(), "Process " + "exception when processing");
 					}
@@ -203,7 +208,7 @@ public class ProcessCommand extends Command {
 				"parameters: " + parameters + "\n" +
 				"genomeVersion: " + genomeVersion + "\n" +
 		        "PID: " + PID + "\n");
-		return new ProcessResponse(StatusCode.CREATED, "Raw to profile " +
+		return new ProcessResponse(HttpStatusCode.CREATED, "Raw to profile " +
 				"processing completed running " + processtype +
 				" on experiment" + expid + "\n"+
 				"metadata: " + metadata + "\n"+
@@ -232,7 +237,7 @@ public class ProcessCommand extends Command {
 				"PID: " + PID + "\n" +
 				error + "\n");
 		db.close();
-		return new ProcessResponse(StatusCode.
+		return new ProcessResponse(HttpStatusCode.
 				SERVICE_UNAVAILABLE, headerError +
 				" when processing " + processtype +
 				" on experiment" + expid + "\n"+
@@ -244,14 +249,13 @@ public class ProcessCommand extends Command {
 	}
 
 	/**
-	 * Set the username of the uploader wich will be added to the database
+	 * Set the username of the uploader which will be added to the database
 	 * annotation.
 	 *
 	 * @param username - the username of the uploader.
 	 */
 	public void setUsername(String username) {
 		this.username = username;
-
 	}
 
 	/**
@@ -260,10 +264,10 @@ public class ProcessCommand extends Command {
 	public String toString(){
 
 		return "Uploader of file: " + username + "\n" +
-				"Processtype: " + processtype + "\n" +
+				"ProcessType: " + processtype + "\n" +
 				"metadata:" + metadata + "\n" +
 				"username: " + username + "\n" +
-				"expid: " + expid + "\n" +
+				"expId: " + expid + "\n" +
 				"genomeRelease: " + genomeVersion + "\n" +
 				"PID: " + PID + "\n";
 	}
@@ -275,7 +279,7 @@ public class ProcessCommand extends Command {
 		return this.timestamp;
 	}
 
-	public void setProcessType(String processtype) {
+	public void setProcesstype(String processtype) {
 		this.processtype = processtype;
 
 	}

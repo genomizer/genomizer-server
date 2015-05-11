@@ -2,8 +2,10 @@ package command;
 
 import java.util.LinkedList;
 
+import database.subClasses.UserMethods.UserType;
 import response.GetProcessStatusResponse;
 import response.Response;
+import server.Doorman;
 import server.ProcessPool;
 
 /**
@@ -16,31 +18,28 @@ import server.ProcessPool;
  */
 public class GetProcessStatusCommand extends Command {
 
-	private ProcessPool processPool;
-
-	/**
-	 * Constructs a new instance of GetProcessStatusCommand using the supplied
-	 * WorkHandler.
-	 *
-	 * @param processPool the processPool in use by the server.
-	 */
-	public GetProcessStatusCommand(ProcessPool processPool) {
-
-		this.processPool = processPool;
-
+	@Override
+	public void setFields(String uri, String uuid, UserType userType) {
+		
+		/*No fields from the URI is needed, neither is the UUID. Dummy
+		implementation*/
+		this.userType = userType;
 	}
 
 	/**
 	 * Method that validates the class information.
-	 * This method always returns true.
 	 */
 	@Override
-	public void validate() {
-		/*Validation will always succeed, the command can not be corrupt.*/
+	public void validate() throws ValidateException {
+		/*Validation will always succeed for the content,
+		the command can not be corrupt.*/
+		hasRights(UserRights.getRights(this.getClass()));
 	}
 
 	@Override
 	public Response execute() {
+
+		ProcessPool processPool = Doorman.getProcessPool();
 		LinkedList<ProcessCommand> processesList = processPool.getProcesses();
 		LinkedList<ProcessStatus> processStatuses = new LinkedList<>();
         

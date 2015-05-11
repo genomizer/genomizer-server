@@ -4,10 +4,11 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
+import response.HttpStatusCode;
 import response.MinimalResponse;
 import response.Response;
-import response.StatusCode;
 import com.google.gson.annotations.Expose;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
@@ -26,17 +27,27 @@ public class AddExperimentCommand extends Command {
 	private ArrayList<Annotation> annotations = new ArrayList<>();
 
 	@Override
+	public void setFields(String uri, String uuid, UserType userType) {
+		this.userType = userType;
+
+		/*No fields from the URI is needed, neither is the UUID. Dummy
+		implementation*/
+	}
+
+	@Override
 	public void validate() throws ValidateException {
+
+		hasRights(UserRights.getRights(this.getClass()));
 		validateName(name, MaxLength.EXPID, "Experiment name");
 
 		if(annotations == null || annotations.size() < 1) {
-			throw new ValidateException(StatusCode.BAD_REQUEST, "Specify " +
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Specify " +
 					"annotations for the experiment.");
 		}
 
 		for(int i =0;i<annotations.size();i++){
 			if(annotations.get(i) == null){
-				throw new ValidateException(StatusCode.BAD_REQUEST, "Found " +
+				throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Found " +
 						"an empty annotation or annotation value, please " +
 						"specify annotations.");
 			}
@@ -57,10 +68,10 @@ public class AddExperimentCommand extends Command {
 				db.annotateExperiment(name, annotation.getName(),
 						annotation.getValue());
 			}
-			return new MinimalResponse(StatusCode.CREATED);
+			return new MinimalResponse(HttpStatusCode.CREATED);
 		} catch (IOException | SQLException e) {
 			e.printStackTrace();
-			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
 		} finally {
 			if (db != null) {
 				db.close();

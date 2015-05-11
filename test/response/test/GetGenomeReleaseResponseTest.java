@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import database.subClasses.UserMethods;
 import database.test.TestInitializer;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -18,10 +19,11 @@ import database.DatabaseAccessor;
 //import database.Genome;
 
 import response.GetGenomeReleaseResponse;
+import response.HttpStatusCode;
 import response.Response;
-import response.StatusCode;
 import server.ServerSettings;
 
+@Ignore
 public class GetGenomeReleaseResponseTest {
 
 	@Before
@@ -39,9 +41,9 @@ public class GetGenomeReleaseResponseTest {
 
 			new DatabaseAccessor(ServerSettings.databaseUsername, ServerSettings.databasePassword, ServerSettings.databaseHost, ServerSettings.databaseName);
 			//genomeList = db.getAllGenomReleases();
-			Command cmd=new GetGenomeReleaseSpeciesCommand("mouseTEST");
+			Command cmd=new GetGenomeReleaseSpeciesCommand();
 			Response rsp=cmd.execute();
-			assertEquals(StatusCode.OK, rsp.getCode());
+			assertEquals(HttpStatusCode.OK, rsp.getCode());
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -65,9 +67,9 @@ public class GetGenomeReleaseResponseTest {
 
 			new DatabaseAccessor(ServerSettings.databaseUsername, ServerSettings.databasePassword, ServerSettings.databaseHost, ServerSettings.databaseName);
 			//genomeList = db.getAllGenomReleases();
-			Command cmd=new GetGenomeReleaseSpeciesCommand("hej");
+			Command cmd=new GetGenomeReleaseSpeciesCommand();
 			Response rsp=cmd.execute();
-			assertEquals(StatusCode.BAD_REQUEST, rsp.getCode());
+			assertEquals(HttpStatusCode.BAD_REQUEST, rsp.getCode());
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -84,7 +86,7 @@ public class GetGenomeReleaseResponseTest {
 		ArrayList<database.containers.Genome> genomeList;
 		try {
 			DatabaseAccessor db=new DatabaseAccessor(ServerSettings.databaseUsername, ServerSettings.databasePassword, ServerSettings.databaseHost, ServerSettings.databaseName);
-			genomeList = (ArrayList<database.containers.Genome>) db.getAllGenomReleases();
+			genomeList = (ArrayList<database.containers.Genome>) db.getAllGenomeReleases();
 
 		/*	for(int i=0; i<db.getAllAnnotationLabels().size();i++){
 				System.out.println(db.getAllAnnotationLabels().get(i));
@@ -96,7 +98,7 @@ public class GetGenomeReleaseResponseTest {
 			}*/
 
 			//genomeList =db.getAllGenomeReleasesForSpecies("Human");
-			GetGenomeReleaseResponse gResp=new GetGenomeReleaseResponse(StatusCode.OK,genomeList);
+			GetGenomeReleaseResponse gResp=new GetGenomeReleaseResponse(HttpStatusCode.OK,genomeList);
 			System.out.println(gResp.getBody());
 
 		} catch (SQLException e) {

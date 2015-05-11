@@ -1,3 +1,4 @@
+resources/genome_releases
 .settings/
 bin/
 .idea/*
@@ -5,9 +6,7 @@ bin/
 .idea/
 .idea
 junit/
-secure-server.jar
-server.jar
-smoothing.jar
+*.jar
 *.orig
 .classpath
 .project

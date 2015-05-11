@@ -17,6 +17,8 @@ import java.util.List;
  */
 public class UserMethods {
 
+	public enum UserType {USER, GUEST, UNKNOWN, ADMIN}
+
 	private Connection conn;
 
 	public UserMethods(Connection connection) {

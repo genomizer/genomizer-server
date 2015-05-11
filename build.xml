@@ -87,27 +87,19 @@
                            value="smoothing.SmoothingAndStep" />
             </manifest>
         </jar>
-        <jar destfile="secure-server.jar">
-            <fileset refid="fileset.class"/>
-            <zipgroupfileset refid="fileset.jars"/>
-            <manifest>
-                <attribute name="Main-Class" value="SecureServerMain" />
-            </manifest>
-        </jar>
     </target>
 
     <target name="clean">
         <delete dir="bin"/>
         <delete dir="${junit.output.dir}"/>
         <delete file="server.jar"/>
-        <delete file="sequreserver.jar"/>
     </target>
 
-	<target name="run" depends="jar">
-		<java jar="server.jar" fork="true">
-			<arg value="-debug"/>
-		</java>
-	</target>
+    <target name="run" depends="jar">
+      <java jar="server.jar" fork="true">
+	<arg value="-debug"/>
+      </java>
+    </target>
 
     <target name="test" depends="build">
       <junit printsummary="withOutAndErr">

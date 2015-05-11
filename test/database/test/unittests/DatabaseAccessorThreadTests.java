@@ -76,7 +76,7 @@ public class DatabaseAccessorThreadTests {
 		String fileName = "StressTest0_t:9.hej";
 		String filePath = "Stress0_t:9.hej";
 
-		dbac.addGenomeRelease("banan", "Fly", "banan38.gr");
+		dbac.addGenomeRelease("banan", "Fly", "banan38.gr", null);
 		dbac.addExperiment("Exper1");
 		dbac.addNewFile("Exper1", 1, fileName , filePath,
 								"-m -a -te","Smurf", "Claes", true,"banan", null);
@@ -116,7 +116,7 @@ public class DatabaseAccessorThreadTests {
     	DatabaseAccessor dbac = new DatabaseAccessor(username, password,
     			host, database);
 
-    	dbac.addGenomeRelease("banan", "Fly", "banan38.gr");
+    	dbac.addGenomeRelease("banan", "Fly", "banan38.gr", null);
     	dbac.addExperiment(experimentId);
 
     	// start all the threads

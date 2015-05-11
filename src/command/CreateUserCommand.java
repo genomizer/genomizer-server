@@ -8,11 +8,12 @@ import com.google.gson.annotations.Expose;
 
 import database.DatabaseAccessor;
 
+import database.subClasses.UserMethods.UserType;
 import database.constants.MaxLength;
 import response.ErrorResponse;
+import response.HttpStatusCode;
 import response.MinimalResponse;
 import response.Response;
-import response.StatusCode;
 
 /**
  * command used to create a user.
@@ -41,14 +42,23 @@ public class CreateUserCommand extends Command {
 	 * @throws ValidateException
 	 */
 	@Override
+	public void setFields(String uri, String uuid, UserType userType) {
+		this.userType = userType;
+
+		/*No fields from the URI is needed, neither is the UUID. Dummy
+		implementation*/
+	}
+
+	@Override
 	public void validate() throws ValidateException {
+
+		hasRights(UserRights.getRights(this.getClass()));
 
 		validateName(username, MaxLength.USERNAME, "User");
 		validateName(password, MaxLength.PASSWORD, "Password");
 		validateName(privileges, MaxLength.ROLE, "Privileges");
 		validateExists(name, MaxLength.FULLNAME, "Name");
 		validateExists(email, MaxLength.EMAIL, "Email");
-
 	}
 
 	/**
@@ -61,21 +71,21 @@ public class CreateUserCommand extends Command {
 		try {
 			db = initDB();
 		} catch (SQLException e) {
-			return new ErrorResponse(StatusCode.BAD_REQUEST, "Error when " +
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Error when " +
 					"initiating databaseAccessor. " + e.getMessage());
 		} catch (IOException e)  {
-			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
 		}
 		try {
 			String hash = BCrypt.hashpw(password,BCrypt.gensalt());
 			db.addUser(username, hash, "SALT",privileges, name, email);
 
 		} catch (SQLException | IOException e) {
-			return new ErrorResponse(StatusCode.BAD_REQUEST, "Error when " +
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Error when " +
 					"adding user to database, user probably already exists. " +
 					e.getMessage());
 		}
-		return new MinimalResponse(StatusCode.CREATED);
+		return new MinimalResponse(HttpStatusCode.CREATED);
 
 	}
 

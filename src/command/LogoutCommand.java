@@ -2,10 +2,11 @@ package command;
 
 import authentication.Authenticate;
 import database.constants.MaxLength;
+import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
-import response.StatusCode;
+import response.HttpStatusCode;
 
 /**
  * Class used to represent a logout command.
@@ -16,13 +17,10 @@ import response.StatusCode;
 public class LogoutCommand extends Command {
 	private String username;
 
-	/**
-	 * Constructs a new instance of LogoutCommand using the supplied
-	 * username.
-	 * @param username the username of the user that should be logged out.
-	 */
-	public LogoutCommand(String username) {
-		this.username = username;
+	@Override
+	public void setFields(String uri, String uuid, UserType userType) {
+		this.userType = userType;
+		this.username = uuid;
 	}
 
 	@Override
@@ -35,11 +33,10 @@ public class LogoutCommand extends Command {
 		String id = Authenticate.getID(username);
 		if(Authenticate.idExists(id)) {
 			Authenticate.deleteActiveUser(id);
-			return new MinimalResponse(StatusCode.OK);
+			return new MinimalResponse(HttpStatusCode.OK);
 		} else {
-			return 	new ErrorResponse(StatusCode.NOT_FOUND,
+			return 	new ErrorResponse(HttpStatusCode.NOT_FOUND,
 					"User not found");
 		}
 	}
-
 }

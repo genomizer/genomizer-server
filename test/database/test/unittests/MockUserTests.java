@@ -268,6 +268,7 @@ public class MockUserTests {
         FileTuple ft = dbac.addNewFile("my first experiment",
                 FileTuple.RAW, "rawFile.fastq", "rawInput.fasta",
                 null, "Umu", "Ruaridh", false, null, null);
+        dbac.markReadyForDownload(ft);
 
         String expectedRawFileUploadURL = ServerDependentValues.UploadURL
                 + testFolderPath
@@ -299,7 +300,7 @@ public class MockUserTests {
                 FileTuple.RAW, "rawFile.fastq", "rawInput.fasta",
                 null, "Umu", "Ruaridh", false, null, null);
 
-    	dbac.fileReadyForDownload(ft.id);
+    	dbac.markReadyForDownload(ft);
         ft = dbac.getFileTuple(ft.id);
 
         assertEquals("Done", ft.status);
@@ -310,7 +311,8 @@ public class MockUserTests {
     public void addGenomeReleaseFile() throws Exception {
 
     	String uploadURL = dbac.addGenomeRelease("hg38", "Human",
-                "hg38.fasta");
+                "hg38.fasta", null);
+        dbac.markReadyForDownload("hg38", "hg38.fasta");
 
         String expectedUploadURL = ServerDependentValues.UploadURL
                 + testFolderPath + "genome_releases" + File.separator
@@ -387,7 +389,8 @@ public class MockUserTests {
         addGenomeReleaseFile();
 
         String uploadURL = dbac.addGenomeRelease("hg38", "Human",
-                "hg38.2.fasta");
+                "hg38.2.fasta", null);
+        dbac.markReadyForDownload("hg38", "hg38.2.fasta");
 
         String expectedUploadURL = ServerDependentValues.UploadURL
                 + testFolderPath + "genome_releases" + File.separator

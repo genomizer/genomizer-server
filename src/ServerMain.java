@@ -13,8 +13,6 @@ import process.StartUpCleaner;
 
 import authentication.InactiveUuidsRemover;
 
-import command.CommandHandler;
-
 import server.*;
 
 
@@ -35,7 +33,7 @@ public class ServerMain {
 		CommandLine com = loadSettingsFile(args);
 
 		/* We delete possible fragments from previous runs. */
-		StartUpCleaner.removeOldTempDirectories("resources/");
+		StartUpCleaner.removeOldTempDirectories("/tmp/");
 
 		/* The database settings should be written upon startup. */
 		printDatabaseInformation();
@@ -46,8 +44,8 @@ public class ServerMain {
 
 		/* We attempt to start the doorman. */
 		try {
-			new Doorman(new CommandHandler(processPool),
-					ServerSettings.genomizerPort).start();
+			new Doorman(processPool,
+					ServerSettings.genomizerHttpPort).start();
 		} catch (IOException e) {
 			System.err.println("Error when starting server");
 			Debug.log(e.getMessage());
@@ -125,7 +123,7 @@ public class ServerMain {
 			throws FileNotFoundException {
 		// Port flag
 		if (com.hasOption('p')) {
-			ServerSettings.genomizerPort =
+			ServerSettings.genomizerHttpPort =
 					Integer.parseInt(com.getOptionValue('p'));
 		}
 		// Debug flag

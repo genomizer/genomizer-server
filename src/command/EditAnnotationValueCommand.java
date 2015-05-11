@@ -8,10 +8,11 @@ import java.util.List;
 import com.google.gson.annotations.Expose;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
+import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
-import response.StatusCode;
+import response.HttpStatusCode;
 
 /**
  * This class is used to handle changes to annotation values.
@@ -30,7 +31,16 @@ public class EditAnnotationValueCommand extends Command {
 	private String newValue = null;
 
 	@Override
+	public void setFields(String uri, String uuid, UserType userType) {
+		this.userType = userType;
+
+		/*No fields from the URI is needed, neither is the UUID. Dummy
+		implementation*/
+	}
+
+	@Override
 	public void validate() throws ValidateException {
+		hasRights(UserRights.getRights(this.getClass()));
 		validateName(name, MaxLength.ANNOTATION_LABEL, "Annotation label");
 		validateName(oldValue, MaxLength.ANNOTATION_LABEL,
 				"Old annotation value");
@@ -48,19 +58,19 @@ public class EditAnnotationValueCommand extends Command {
 				List<String> values = db.getChoices(name);
 				if(values.contains(oldValue)) {
 					db.changeAnnotationValue(name, oldValue, newValue);
-					return new MinimalResponse(StatusCode.OK);
+					return new MinimalResponse(HttpStatusCode.OK);
 				} else {
-					return new ErrorResponse(StatusCode.BAD_REQUEST,
+					return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
 							"The value" + oldValue + " does not exist");
 				}
 			} else {
-				return new ErrorResponse(StatusCode.BAD_REQUEST,
+				return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
 						"The annotation " + name + " does not");
 			}
 
 		} catch (SQLException | IOException e) {
 			e.printStackTrace();
-			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
 		} finally {
 			if (db != null) {
 				db.close();
