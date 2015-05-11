@@ -40,7 +40,7 @@ public class ProcessPool {
         executor = Executors.newFixedThreadPool(threads);
 
         // Start a cleanup thread that will remove stale processes every 10 mins
-        new Thread(new Runnable() {
+        /*new Thread(new Runnable() {
             @Override
             public void run() {
                 while (true) {
@@ -54,7 +54,7 @@ public class ProcessPool {
 
                 }
             }
-        }).start();
+        }).start();*/
     }
 
     /**
