@@ -7,6 +7,7 @@ bin/
 junit/
 secure-server.jar
 server.jar
+smoothing.jar
 *.orig
 .classpath
 .project

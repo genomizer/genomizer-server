@@ -126,7 +126,7 @@ public class RawToProfileConverter extends Executor {
 							"resources/" + dir + rawFile_1_Name
 							+ ".sam", rawFile_1_Name);
 
-					ErrorLogger.log("SYSTEM","Running SortSam");
+					ErrorLogger.log("SYSTEM", "Running SortSam");
 					sortSamFile(rawFile_1_Name);
 
 					if (inFiles.length == 2) {
@@ -146,7 +146,7 @@ public class RawToProfileConverter extends Executor {
 
 				// Runs SamToGff script on files
 				if (checker.shouldRunSamToGff()) {
-					ErrorLogger.log("SYSTEM","Running SamToGff");
+					ErrorLogger.log("SYSTEM", "Running SamToGff");
 					try {
 						logString = logString + "\n"
 								+ executeScript(parse(samToGff));
@@ -164,7 +164,7 @@ public class RawToProfileConverter extends Executor {
 
 				// Runs GffToAllnucsgr on files.
 				if (checker.shouldRunGffToAllnusgr()) {
-					ErrorLogger.log("SYSTEM","Running gffToAllnucsgr");
+					ErrorLogger.log("SYSTEM", "Running gffToAllnucsgr");
 					try {
 						logString = logString + "\n"
 								+ executeScript(parse(gffToAllnusgr));
@@ -182,7 +182,7 @@ public class RawToProfileConverter extends Executor {
 
 				// Runs smoothing on files.
 				if (checker.shouldRunSmoothing()) {
-					ErrorLogger.log("SYSTEM","Running Smoothing");
+					ErrorLogger.log("SYSTEM", "Running Smoothing");
 
 					// Second parameter should be false when ratio
 					// calculation should not run.
@@ -372,21 +372,11 @@ public class RawToProfileConverter extends Executor {
 			parameterArray = parse(parameters[4]);
 		}
 
-		int[] intParams = new int[parameterArray.length];
-		for (int i = 0; i < parameterArray.length; i++) {
-			try {
-				intParams[i] = Integer.parseInt(parameterArray[i]);
-			} catch (NumberFormatException e) {
-				throw new ProcessException(
-						"Smoothing parameters are wrong format");
-			}
-		}
 
 		if (!dirToFiles.exists()) {
 			dirToFiles.mkdirs();
 		}
 
-		SmoothingAndStep smooth = new SmoothingAndStep();
 		if (filesToSmooth != null) {
 			for (File fileToSmooth : filesToSmooth) {
 				if (fileToSmooth.isFile()
@@ -409,7 +399,20 @@ public class RawToProfileConverter extends Executor {
 					}
 					outFile = dirToFiles.toString() + "/" + outFile;
 
-					smooth.smoothing(intParams, inFile, outFile, stepSize);
+
+					// TODO: Don't hardcode path to smoothing.jar.
+					ProcessBuilder pb = new ProcessBuilder("java", "-jar",
+							"smoothing.jar", parameterArray[0],
+							parameterArray[1], parameterArray[2],
+							parameterArray[3], parameterArray[4],
+							inFile, outFile, String.valueOf(stepSize));
+					try {
+						Process p = pb.start();
+						p.waitFor();
+					} catch (IOException | InterruptedException ex) {
+						throw new ProcessException(ex.getMessage());
+					}
+
 				}
 			}
 		}

@@ -69,10 +69,22 @@
             <fileset dir="bin/" id="fileset.class">
                 <include name ="**/*.class" />
                 <exclude name="**/test/**/*" />
+                <exclude name="smoothing/*" />
             </fileset>
-            <zipgroupfileset refid="fileset.jars"/>
+            <zipgroupfileset refid="fileset.jars" />
             <manifest>
                 <attribute name="Main-Class" value="ServerMain" />
+            </manifest>
+        </jar>
+        <jar destfile="smoothing.jar">
+            <fileset dir="bin/" id="fileset.smoothing.class">
+                <include name ="smoothing/SmoothingAndStep.class" />
+                <include name ="process/ProcessException.class" />
+                <include name ="process/Tuple.class" />
+            </fileset>
+            <manifest>
+                <attribute name="Main-Class"
+                           value="smoothing.SmoothingAndStep" />
             </manifest>
         </jar>
         <jar destfile="secure-server.jar">
