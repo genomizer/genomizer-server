@@ -239,30 +239,40 @@ public class RawToProfileConverter extends Executor {
 	 */
 	private File[] getRawFiles(String inFolder) throws ProcessException {
 
-		File[] rawDirFiles = new File(inFolder).listFiles();
-		File[] rawFilesIsFile = null;
-		if (rawDirFiles != null && !(rawDirFiles.length == 0)) {
-			ArrayList<File> files = new ArrayList<File>();
+		File[] filesArr = new File(inFolder).listFiles();
+		File[] rawFilesArr = null;
 
-			for (File rawDirFile: rawDirFiles) {
-				if (rawDirFile.isFile()) {
-					files.add(rawDirFile);
+		// Check if there exists a directory with raw files
+		if (filesArr != null && filesArr.length != 0) {
+			ArrayList<File> rawFilesList = new ArrayList<File>();
+
+			// Add raw files to the raw files list
+			for (File rawFile: filesArr) {
+				if (rawFile.isFile()) {
+					rawFilesList.add(rawFile);
 				}
 			}
 
-			rawFilesIsFile = new File[files.size()];
-			for (int i = 0; i < rawFilesIsFile.length; i++) {
-				rawFilesIsFile[i] = files.get(i);
-			}
-			if (rawFilesIsFile.length == 0) {
+			int rowFilesCount = rawFilesList.size();
+
+			// Check if there were any raw files
+			if (rowFilesCount == 0) {
 				throw new ProcessException("No files found in directory "
 						+ inFolder);
 			}
+
+			// Add raw file references to a new array
+			rawFilesArr = new File[rowFilesCount];
+			for (int i = 0; i < rowFilesCount; i++) {
+				rawFilesArr[i] = rawFilesList.get(i);
+			}
+
+
 		} else {
 			throw new ProcessException("No files found in directory "
 					+ inFolder);
 		}
-		return rawFilesIsFile;
+		return rawFilesArr;
 	}
 
 	/**
@@ -332,8 +342,8 @@ public class RawToProfileConverter extends Executor {
 
 	/**
 	 * Runs the smoothing and step procedures. Checks if its smoothing after
-	 * ratio calculation or (parameters[5])[1])just normal smoothing. Changes
-	 * some parameters depending on ratio calculation or not. runs smoothing
+	 * ratio calculation or (parameters[5])[1]) just normal smoothing. Changes
+	 * some parameters depending on ratio calculation or not. Runs smoothing
 	 * with the incoming parameters and runs stepping if it should.
 	 *
 	 * @param parameters
@@ -350,6 +360,7 @@ public class RawToProfileConverter extends Executor {
 
 		File[] filesToSmooth;
 		File dirToFiles;
+
 		if (isRatioCalc) {
 			parameterArray = parse(parameters[7]);
 			stepSize = 1;
