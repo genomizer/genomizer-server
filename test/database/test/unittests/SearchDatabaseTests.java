@@ -209,10 +209,23 @@ public class SearchDatabaseTests {
     }
 
     @Test
-    public void shouldGetAllExperimentsWhenSearchingAnEmptySring()
+    public void shouldGetAllExperimentsWhenSearchingAnEmptyString()
             throws Exception {
 
         List<Experiment> exps = dbac.search("");
+        assertEquals(4, exps.size());
+
+        Experiment e = getExp("Exp1", exps);
+
+        assertEquals(4, e.getAnnotations().size());
+        assertEquals(2, e.getFiles().size());
+    }
+
+    @Test
+    public void shouldGetAllExperimentsWhenSearchingANullString()
+            throws Exception {
+
+        List<Experiment> exps = dbac.search(null);
         assertEquals(4, exps.size());
 
         Experiment e = getExp("Exp1", exps);
