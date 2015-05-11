@@ -7,6 +7,7 @@ import java.util.HashMap;
  * retrieved using the request method followed by a " " and the request context
  * as a key.
  */
+@SuppressWarnings("deprecation")
 public class CommandClasses {
     private static final HashMap<String, Class<? extends Command>> classes;
 

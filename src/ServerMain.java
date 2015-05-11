@@ -46,7 +46,8 @@ public class ServerMain {
 
 		/* We attempt to start the doorman. */
 		try {
-			new Doorman(workPool, ServerSettings.genomizerPort).start();
+			new Doorman(workPool,
+					ServerSettings.genomizerHttpPort).start();
 		} catch (IOException e) {
 			System.err.println("Error when starting server");
 			Debug.log(e.getMessage());
@@ -129,7 +130,7 @@ public class ServerMain {
 			throws FileNotFoundException {
 		// Port flag
 		if (com.hasOption('p')) {
-			ServerSettings.genomizerPort =
+			ServerSettings.genomizerHttpPort =
 					Integer.parseInt(com.getOptionValue('p'));
 		}
 		// Debug flag
@@ -190,4 +191,5 @@ public class ServerMain {
 //			ServerSettings.databaseHost = host;
 //		}
 //	}
+
 }
