@@ -4,9 +4,10 @@ import com.google.gson.annotations.Expose;
 import conversion.ConversionHandler;
 import database.constants.MaxLength;
 import database.subClasses.UserMethods;
-import response.MinimalResponse;
-import response.Response;
-import response.HttpStatusCode;
+import response.*;
+
+import java.io.IOException;
+import java.sql.SQLException;
 
 /**
  * command that handles fileconversion.
@@ -17,7 +18,7 @@ import response.HttpStatusCode;
 public class ConvertFileCommand extends Command{
 
     @Expose
-    private String fileid;
+    private int fileid;
 
     @Expose
     private String toformat;
@@ -36,7 +37,6 @@ public class ConvertFileCommand extends Command{
      */
     @Override
     public void validate() throws ValidateException {
-        validateName(fileid, MaxLength.FILE_FILENAME,"file id");
         validateName(toformat,MaxLength.FILE_FILETYPE,"to format");
     }
 
@@ -47,7 +47,17 @@ public class ConvertFileCommand extends Command{
     @Override
     public Response execute() {
         ConversionHandler convHandler = new ConversionHandler();
-        //TODO convert with filepath and currentformat + toformat. and stuff
-        return new MinimalResponse(HttpStatusCode.NO_CONTENT);
+        String fileUrl;
+        try {
+            fileUrl = convHandler.convertProfileData(toformat,fileid);
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+            return new ErrorResponse(HttpStatusCode.BAD_REQUEST,"database error" + e.getMessage());
+        }
+
+        if(fileUrl == null || fileUrl.isEmpty()){
+            return new ErrorResponse(HttpStatusCode.BAD_REQUEST,"Could not convert file");
+        }
+        return new UrlUploadResponse(HttpStatusCode.OK,fileUrl);
     }
 }

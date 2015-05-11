@@ -42,6 +42,7 @@ public class URILength {
 		uriLengths.put(DeleteGenomeReleaseCommand.class, 3);
 		uriLengths.put(GetGenomeReleaseCommand.class, 1);
 		uriLengths.put(GetGenomeReleaseSpeciesCommand.class, 2);
+		uriLengths.put(ConvertFileCommand.class, 1);
 	}
 
 	/**

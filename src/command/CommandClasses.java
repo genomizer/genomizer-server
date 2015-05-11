@@ -47,6 +47,7 @@ public class CommandClasses {
                 class);
         classes.put("PUT /experiment", UpdateExperimentCommand.class);
         classes.put("PUT /file", UpdateFileInExperimentCommand.class);
+        classes.put("PUT /convertfile",ConvertFileCommand.class);
     }
 
     /**

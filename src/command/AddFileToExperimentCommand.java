@@ -10,7 +10,7 @@ import database.constants.MaxLength;
 import database.containers.FileTuple;
 
 import database.subClasses.UserMethods.UserType;
-import response.AddFileToExperimentResponse;
+import response.UrlUploadResponse;
 import response.ErrorResponse;
 import response.HttpStatusCode;
 import response.Response;
@@ -94,7 +94,7 @@ public class AddFileToExperimentCommand extends Command {
 			db = initDB();
 			FileTuple ft = db.addNewFile(experimentID, fileType, fileName, null,
 					metaData, author, uploader, false, grVersion, checkSumMD5);
-			return new AddFileToExperimentResponse(HttpStatusCode.OK,
+			return new UrlUploadResponse(HttpStatusCode.OK,
 					ft.getUploadURL());
 		} catch (SQLException e) {
 			e.printStackTrace();
