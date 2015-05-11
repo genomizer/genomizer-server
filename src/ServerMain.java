@@ -33,7 +33,7 @@ public class ServerMain {
 		CommandLine com = loadSettingsFile(args);
 
 		/* We delete possible fragments from previous runs. */
-		StartUpCleaner.removeOldTempDirectories("resources/");
+		StartUpCleaner.removeOldTempDirectories("/tmp/");
 
 		/* The database settings should be written upon startup. */
 		printDatabaseInformation();

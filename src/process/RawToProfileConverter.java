@@ -22,7 +22,7 @@ public class RawToProfileConverter extends Executor {
 	private String sortedDirForCommands;
 	private String samToGff;
 	private String gffToAllnusgr;
-	private File fileDir;
+	private File outputDir;
 	private String inFolder;
 	private String[] parameters;
 	private String rawFile1;
@@ -72,8 +72,6 @@ public class RawToProfileConverter extends Executor {
 	public String procedure(String[] parameters, String inFolder,
 			String outFilePath) throws ProcessException {
 
-		/*If you want to run several processes simultaneously, this would need to be changed*/
-		StartUpCleaner.removeOldTempDirectories("resources/");
 		File[] inFiles = null;
 
 		// Error handling
@@ -81,9 +79,11 @@ public class RawToProfileConverter extends Executor {
 			inFolder = validateInFolder(inFolder);
 			inFiles = getRawFiles(inFolder);
 		} else {
-			throw new ProcessException("Fatal error: This should never happen");
+			throw new ProcessException("Directory for input files was not " +
+					"specified");
 		}
 
+		// Check if there are any raw files
 		if (inFiles == null || inFiles.length == 0) {
 			throw new ProcessException("Folder does not contain raw files");
 		}
@@ -96,14 +96,14 @@ public class RawToProfileConverter extends Executor {
 				|| !CorrectInfiles(inFiles)) {
 			throw new ProcessException("Wrong format of input data");
 		}
-		// Runs the procedure.
+		// Run the procedure.
 		else {
 			initiateConversionStrings(parameters, outFilePath);
 			makeConversionDirectories(remoteExecution + "resources/" + dir
 					+ "/sorted");
 			checker.calculateWhichProcessesToRun(parameters);
 
-			if(!ValidateParameters(parameters)) {
+			if (!ValidateParameters(parameters)) {
 				throw new ProcessException("Parameters are incorrect");
 			}
 			rawFile1 = inFiles[0].getName();
@@ -116,7 +116,7 @@ public class RawToProfileConverter extends Executor {
 			initiateConversionStrings(parameters, outFilePath);
 
 			// printTrace(parameters, inFolder, outFilePath);
-			if (fileDir.exists()) {
+			if (outputDir.exists()) {
 				//Runs bowtie on files. and sorts them.
 				if (checker.shouldRunBowTie()) {
 					ErrorLogger.log("SYSTEM", "Running Bowtie");
@@ -208,18 +208,22 @@ public class RawToProfileConverter extends Executor {
 							+ "reads_gff/allnucs_sgr/smoothed/ratios/smoothed/";
 					toBeRemoved.push(filesToBeMoved);
 				}
+
+				// Move files to the output folder
 				try {
 					moveEndFiles(filesToBeMoved, outFilePath);
 				} catch (ProcessException e) {
 					cleanUp(toBeRemoved);
 					throw e;
 				}
+
+				// Clean intermediate files
 				cleanUp(toBeRemoved);
 
 			} else {
 
 				logString = logString + " " + "Failed to create directory "
-						+ fileDir.toString();
+						+ outputDir.toString();
 			}
 		}
 		return logString;
@@ -235,30 +239,40 @@ public class RawToProfileConverter extends Executor {
 	 */
 	private File[] getRawFiles(String inFolder) throws ProcessException {
 
-		File[] rawDirFiles = new File(inFolder).listFiles();
-		File[] rawFilesIsFile = null;
-		if (rawDirFiles != null && !(rawDirFiles.length == 0)) {
-			ArrayList<File> files = new ArrayList<File>();
+		File[] filesArr = new File(inFolder).listFiles();
+		File[] rawFilesArr = null;
 
-			for (File rawDirFile: rawDirFiles) {
-				if (rawDirFile.isFile()) {
-					files.add(rawDirFile);
+		// Check if there exists a directory with raw files
+		if (filesArr != null && filesArr.length != 0) {
+			ArrayList<File> rawFilesList = new ArrayList<File>();
+
+			// Add raw files to the raw files list
+			for (File rawFile: filesArr) {
+				if (rawFile.isFile()) {
+					rawFilesList.add(rawFile);
 				}
 			}
 
-			rawFilesIsFile = new File[files.size()];
-			for (int i = 0; i < rawFilesIsFile.length; i++) {
-				rawFilesIsFile[i] = files.get(i);
-			}
-			if (rawFilesIsFile.length == 0) {
+			int rowFilesCount = rawFilesList.size();
+
+			// Check if there were any raw files
+			if (rowFilesCount == 0) {
 				throw new ProcessException("No files found in directory "
 						+ inFolder);
 			}
+
+			// Add raw file references to a new array
+			rawFilesArr = new File[rowFilesCount];
+			for (int i = 0; i < rowFilesCount; i++) {
+				rawFilesArr[i] = rawFilesList.get(i);
+			}
+
+
 		} else {
 			throw new ProcessException("No files found in directory "
 					+ inFolder);
 		}
-		return rawFilesIsFile;
+		return rawFilesArr;
 	}
 
 	/**
@@ -328,8 +342,8 @@ public class RawToProfileConverter extends Executor {
 
 	/**
 	 * Runs the smoothing and step procedures. Checks if its smoothing after
-	 * ratio calculation or (parameters[5])[1])just normal smoothing. Changes
-	 * some parameters depending on ratio calculation or not. runs smoothing
+	 * ratio calculation or (parameters[5])[1]) just normal smoothing. Changes
+	 * some parameters depending on ratio calculation or not. Runs smoothing
 	 * with the incoming parameters and runs stepping if it should.
 	 *
 	 * @param parameters
@@ -346,6 +360,7 @@ public class RawToProfileConverter extends Executor {
 
 		File[] filesToSmooth;
 		File dirToFiles;
+
 		if (isRatioCalc) {
 			parameterArray = parse(parameters[7]);
 			stepSize = 1;
@@ -461,7 +476,8 @@ public class RawToProfileConverter extends Executor {
 
 		try {
 			logString = logString + executeScript(parse(ratioCalc));
-			System.out.println("RATIO LOGSTRING = " + logString);
+			ErrorLogger.log("RawToProfileConverter::doRatioCalculation",
+					"RATIO LOGSTRING = " + logString);
 		} catch (InterruptedException e) {
 			throw new ProcessException(
 					"Process interrupted while running ratio calculation on files in folder "
@@ -482,7 +498,7 @@ public class RawToProfileConverter extends Executor {
 	 * @param outFile
 	 */
 //	private void printTrace(String[] parameters, String inFolder, String outFile) {
-//		System.out.println("dir " + fileDir.toString());
+//		System.out.println("dir " + outputDir.toString());
 //		System.out.println("INFOLDER = " + inFolder);
 //		System.out.println("OUTFILE = " + outFile);
 //		System.out.println("DIR = " + dir);
@@ -614,9 +630,9 @@ public class RawToProfileConverter extends Executor {
 	 *            the directory to create if it doesn't exist
 	 */
 	private void makeConversionDirectories(String directoryPath) {
-		fileDir = new File(directoryPath);
-		if (!fileDir.exists()) {
-			fileDir.mkdirs();
+		outputDir = new File(directoryPath);
+		if (!outputDir.exists()) {
+			outputDir.mkdirs();
 		}
 	}
 
@@ -630,27 +646,31 @@ public class RawToProfileConverter extends Executor {
 	 */
 	private boolean verifyInData(String[] parameters, String inFolder,
 			String outFilePath) {
-		/* TODO Log these errors correctly */
+
 		if (parameters == null) {
-			System.out.println("Parameters are null");
+			ErrorLogger.log("RawToProfileConverter::verifyInData",
+					"Parameters are " +
+					"null");
 			return false;
 		}
 		if (parameters.length < 0) {
-			System.out.println("param < 0");
+			ErrorLogger.log("RawToProfileConverter::verifyInData", "param < 0");
 			return false;
 
 		} else if (parameters.length > 8) {
-			System.out.println("param > 8");
+			ErrorLogger.log("RawToProfileConverter::verifyInData", "param > 8");
 			return false;
 		}
 
 		if (inFolder == null || outFilePath == null) {
-			System.out.println("inFOlder || outFolder == null");
+			ErrorLogger.log("RawToProfileConverter::verifyInData",
+					"inFOlder || outFolder == null");
 			return false;
 		}
 
 		if (!checkIfFolderExists(outFilePath) || !checkIfFolderExists(inFolder)) {
-			System.out.println("Folders does not exist");
+			ErrorLogger.log("RawToProfileConverter::verifyInData",
+					"Folders does not exist");
 			return false;
 		}
 
