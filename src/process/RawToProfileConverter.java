@@ -460,7 +460,8 @@ public class RawToProfileConverter extends Executor {
 
 		try {
 			logString = logString + executeScript(parse(ratioCalc));
-			System.out.println("RATIO LOGSTRING = " + logString);
+			ErrorLogger.log("RawToProfileConverter::doRatioCalculation",
+					"RATIO LOGSTRING = " + logString);
 		} catch (InterruptedException e) {
 			throw new ProcessException(
 					"Process interrupted while running ratio calculation on files in folder "
@@ -629,27 +630,31 @@ public class RawToProfileConverter extends Executor {
 	 */
 	private boolean verifyInData(String[] parameters, String inFolder,
 			String outFilePath) {
-		/* TODO Log these errors correctly */
+
 		if (parameters == null) {
-			System.out.println("Parameters are null");
+			ErrorLogger.log("RawToProfileConverter::verifyInData",
+					"Parameters are " +
+					"null");
 			return false;
 		}
 		if (parameters.length < 0) {
-			System.out.println("param < 0");
+			ErrorLogger.log("RawToProfileConverter::verifyInData", "param < 0");
 			return false;
 
 		} else if (parameters.length > 8) {
-			System.out.println("param > 8");
+			ErrorLogger.log("RawToProfileConverter::verifyInData", "param > 8");
 			return false;
 		}
 
 		if (inFolder == null || outFilePath == null) {
-			System.out.println("inFOlder || outFolder == null");
+			ErrorLogger.log("RawToProfileConverter::verifyInData",
+					"inFOlder || outFolder == null");
 			return false;
 		}
 
 		if (!checkIfFolderExists(outFilePath) || !checkIfFolderExists(inFolder)) {
-			System.out.println("Folders does not exist");
+			ErrorLogger.log("RawToProfileConverter::verifyInData",
+					"Folders does not exist");
 			return false;
 		}
 
