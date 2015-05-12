@@ -53,6 +53,6 @@ public class GetFileCommand extends Command {
 //		}
 
 		//Method not implemented, send appropriate response
-		return 	new MinimalResponse(HttpStatusCode.NO_CONTENT);
+		return 	new MinimalResponse(HttpStatusCode.METHOD_NOT_YET_IMPLEMENTED);
 	}
 }

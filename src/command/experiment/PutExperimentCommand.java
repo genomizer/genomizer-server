@@ -36,7 +36,7 @@ public class PutExperimentCommand extends Command {
 
 	@Override
 	public Response execute() {
-		return 	new MinimalResponse(HttpStatusCode.NO_CONTENT);
+		return 	new MinimalResponse(HttpStatusCode.METHOD_NOT_YET_IMPLEMENTED);
 	}
 
 }

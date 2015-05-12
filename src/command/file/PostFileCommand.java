@@ -40,7 +40,6 @@ public class PostFileCommand extends Command {
 	@Expose
 	private String author = null;
 
-	@Expose
 	private String uploader;
 
 	@Expose
@@ -59,6 +58,8 @@ public class PostFileCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
+		uploader = "TEMPORARY";
+
 		hasRights(UserRights.getRights(this.getClass()));
 		validateName(experimentID, MaxLength.EXPID, "Experiment name");
 		validateName(type, MaxLength.FILE_FILETYPE, "File type");
@@ -104,7 +105,7 @@ public class PostFileCommand extends Command {
 			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
 		} catch (IOException e) {
 			e.printStackTrace();
-			return new ErrorResponse(HttpStatusCode.SERVICE_UNAVAILABLE,
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
 					e.getMessage());
 		} finally {
 			if (db != null) {
