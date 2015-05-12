@@ -3,7 +3,7 @@ package server;
 import command.ProcessCommand;
 import command.ProcessStatus;
 import response.Response;
-import response.StatusCode;
+import response.HttpStatusCode;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -53,7 +53,7 @@ public class ProcessHandler implements Callable<Response> {
 				/* Execute the process command */
 				response = processCommand.execute();
 
-				if (response.getCode() == StatusCode.CREATED) {
+				if (response.getCode() == HttpStatusCode.CREATED) {
 					processStatus.status = ProcessStatus.STATUS_FINISHED;
 					Debug.log("Process execution in experiment " +
 							processCommand.getExpId() + " has finished!");
