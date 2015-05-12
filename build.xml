@@ -76,7 +76,7 @@
                 <attribute name="Main-Class" value="ServerMain" />
             </manifest>
         </jar>
-        <jar destfile="smoothing.jar">
+        <jar destfile="resources/smoothing.jar">
             <fileset dir="bin/" id="fileset.smoothing.class">
                 <include name ="smoothing/SmoothingAndStep.class" />
                 <include name ="process/ProcessException.class" />

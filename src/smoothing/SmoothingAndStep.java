@@ -11,9 +11,8 @@ import java.util.Arrays;
 public class SmoothingAndStep {
 
     public static void main(String[] args) throws ProcessException {
-        System.out.println("Smoothing");
-        int [] params = new int [5];
-        for (int i =0; i<5; ++i) {
+        int[] params = new int[5];
+        for (int i=0; i<5; ++i) {
             params[i] = Integer.parseInt(args[i]);
         }
 
