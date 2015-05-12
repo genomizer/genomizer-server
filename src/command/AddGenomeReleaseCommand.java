@@ -37,10 +37,8 @@ public class AddGenomeReleaseCommand extends Command {
 
 	@Override
 	public void setFields(String uri, String uuid, UserType userType) {
-		this.userType = userType;
 
-		/*No fields from the URI is needed, neither is the UUID. Dummy
-		implementation*/
+		super.setFields(uuid, userType);
 	}
 
 	@Override

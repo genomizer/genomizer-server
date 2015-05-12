@@ -20,10 +20,8 @@ public class GetProcessStatusCommand extends Command {
 
 	@Override
 	public void setFields(String uri, String uuid, UserType userType) {
-		
-		/*No fields from the URI is needed, neither is the UUID. Dummy
-		implementation*/
-		this.userType = userType;
+
+		super.setFields(uuid, userType);
 	}
 
 	/**

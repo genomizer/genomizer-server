@@ -21,7 +21,8 @@ public class DeleteUserCommand extends Command {
 
 	@Override
 	public void setFields(String uri, String uuid, UserType userType) {
-		this.userType = userType;
+
+		super.setFields(uuid, userType);
 		username = uri.split("/")[2];
 	}
 

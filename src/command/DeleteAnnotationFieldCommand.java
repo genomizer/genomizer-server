@@ -23,7 +23,7 @@ public class DeleteAnnotationFieldCommand extends Command {
 
 	@Override
 	public void setFields(String uri, String uuid, UserType userType) {
-		this.userType = userType;
+		super.setFields(uuid, userType);
 		name = uri.split("/")[3];
 	}
 

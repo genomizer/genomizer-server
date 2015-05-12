@@ -23,7 +23,8 @@ public class DeleteFileFromExperimentCommand extends Command {
 
 	@Override
 	public void setFields(String uri, String uuid, UserType userType) {
-		this.userType = userType;
+
+		super.setFields(uuid, userType);
 		fileID = uri.split("/")[2];
 	}
 

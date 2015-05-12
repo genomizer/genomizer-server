@@ -29,7 +29,8 @@ public class SearchForExperimentsCommand extends Command {
 
 	@Override
 	public void setFields(String uri, String uuid, UserType userType) {
-		this.userType = userType;
+
+		super.setFields(uuid, userType);
 		int index = uri.indexOf("=");
 		annotations = uri.substring(index+1);
 	}

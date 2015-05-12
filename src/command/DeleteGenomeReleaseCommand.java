@@ -25,7 +25,8 @@ public class DeleteGenomeReleaseCommand extends Command {
 
 	@Override
 	public void setFields(String uri, String uuid, UserType userType) {
-		this.userType = userType;
+
+		super.setFields(uuid, userType);
 		String[] splitFields = uri.split("/");
 		species = splitFields[2];
 		genomeVersion = splitFields[3];
