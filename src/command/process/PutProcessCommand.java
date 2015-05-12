@@ -55,9 +55,9 @@ public class PutProcessCommand extends Command {
 
 
 	@Override
-	public void setFields(String uri, String username, UserType userType) {
-		this.userType = userType;
-		this.username = username;
+	public void setFields(String uri, String uuid, UserType userType) {
+
+		super.setFields(uri, uuid, userType);
 		setTimestamp(System.currentTimeMillis());
 		processtype = uri.split("/")[2];
 	}

@@ -17,13 +17,6 @@ import response.Response;
 public class PutExperimentCommand extends Command {
 	//TODO Implement this class
 
-	@Override
-	public void setFields(String uri, String uuid, UserType userType) {
-		this.userType = userType;
-
-		/*No fields from the URI is needed, neither is the UUID. Dummy
-		implementation*/
-	}
 
 	/**
 	 * Used to validate the information that is needed
