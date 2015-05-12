@@ -6,9 +6,13 @@ import command.ValidateException;
 import conversion.ConversionHandler;
 import database.constants.MaxLength;
 import database.subClasses.UserMethods;
+import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
 import response.HttpStatusCode;
+
+import java.io.IOException;
+import java.sql.SQLException;
 
 /**
  * command that handles fileconversion.
@@ -49,7 +53,17 @@ public class PutConvertFileCommand extends Command {
     @Override
     public Response execute() {
         ConversionHandler convHandler = new ConversionHandler();
-        //TODO convert with filepath and currentformat + toformat. and stuff
+
+        try {
+            convHandler.convertProfileData(toformat,Integer.getInteger(fileid));
+        } catch (SQLException | IOException e) {
+            return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Could not " +
+                    "convert file : " + e.getMessage());
+
+        }
+
+
+
         return new MinimalResponse(HttpStatusCode.NO_CONTENT);
     }
 }
