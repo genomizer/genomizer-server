@@ -3,7 +3,7 @@ package command.test;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import command.Command;
-import command.process.PutProcessConvertFileCommand;
+import command.convertfile.PutConvertFileCommand;
 import command.ValidateException;
 import database.constants.MaxLength;
 import org.junit.Before;
@@ -16,7 +16,7 @@ import org.junit.Test;
  * @version 1.0
  */
 
-public class PutProcessConvertFileCommandTest {
+public class PutConvertFileCommandTest {
 
     public Gson gson = null;
 
@@ -39,7 +39,7 @@ public class PutProcessConvertFileCommandTest {
     @Test(expected = ValidateException.class)
     public void testValidateFormatEmptyString() throws ValidateException {
         String json = "{\"fileid\":\"255\",\"toformat\":\"\"}";
-        final Command convertFileCommand = gson.fromJson(json, PutProcessConvertFileCommand.class);
+        final Command convertFileCommand = gson.fromJson(json, PutConvertFileCommand.class);
         convertFileCommand.validate();
     }
 
@@ -52,7 +52,7 @@ public class PutProcessConvertFileCommandTest {
     @Test(expected = ValidateException.class)
     public void testValidateFileIDEmptyString() throws ValidateException {
         String json = "{\"fileid\":\"\",\"toformat\":\"wig\"}";
-        final Command convertFileCommand = gson.fromJson(json, PutProcessConvertFileCommand.class);
+        final Command convertFileCommand = gson.fromJson(json, PutConvertFileCommand.class);
         convertFileCommand.validate();
     }
 
@@ -65,7 +65,7 @@ public class PutProcessConvertFileCommandTest {
     @Test(expected = ValidateException.class)
     public void testValidateFormatNull() throws ValidateException {
         String json = "{\"fileid\":\"255\"}";
-        final Command convertFileCommand = gson.fromJson(json, PutProcessConvertFileCommand.class);
+        final Command convertFileCommand = gson.fromJson(json, PutConvertFileCommand.class);
         convertFileCommand.validate();
     }
 
@@ -78,7 +78,7 @@ public class PutProcessConvertFileCommandTest {
     @Test(expected = ValidateException.class)
     public void testValidateFileIDNull() throws ValidateException {
         String json = "{\"toformat\":\"wig\"}";
-        final Command convertFileCommand = gson.fromJson(json, PutProcessConvertFileCommand.class);
+        final Command convertFileCommand = gson.fromJson(json, PutConvertFileCommand.class);
         convertFileCommand.validate();
     }
 
@@ -95,7 +95,7 @@ public class PutProcessConvertFileCommandTest {
             format += "i";
         }
         String json = "{\"fileid\":\"255\",\"toformat\":\""+format+"\"}";
-        final Command convertFileCommand = gson.fromJson(json, PutProcessConvertFileCommand.class);
+        final Command convertFileCommand = gson.fromJson(json, PutConvertFileCommand.class);
         convertFileCommand.validate();
     }
 
@@ -112,7 +112,7 @@ public class PutProcessConvertFileCommandTest {
             fileID += "1";
         }
         String json = "{\"fileid\":\""+fileID+"\",\"toformat\":\"wig\"}";
-        final Command convertFileCommand = gson.fromJson(json, PutProcessConvertFileCommand.class);
+        final Command convertFileCommand = gson.fromJson(json, PutConvertFileCommand.class);
         convertFileCommand.validate();
     }
 
@@ -125,7 +125,7 @@ public class PutProcessConvertFileCommandTest {
     @Test
     public void testValidateProperlyFormatted() throws ValidateException {
         String json = "{\"fileid\":\"255\",\"toformat\":\"wig\"}";
-        final Command convertFileCommand = gson.fromJson(json, PutProcessConvertFileCommand.class);
+        final Command convertFileCommand = gson.fromJson(json, PutConvertFileCommand.class);
         convertFileCommand.validate();
     }
 }

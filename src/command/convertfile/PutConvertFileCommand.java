@@ -1,4 +1,4 @@
-package command.process;
+package command.convertfile;
 
 import com.google.gson.annotations.Expose;
 import command.Command;
@@ -16,7 +16,7 @@ import response.HttpStatusCode;
  * @author dv13thg
  * @version 1.0
  */
-public class PutProcessConvertFileCommand extends Command {
+public class PutConvertFileCommand extends Command {
 
     @Expose
     private String fileid;

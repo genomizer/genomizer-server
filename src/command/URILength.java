@@ -3,6 +3,7 @@ package command;
 import command.annotation.*;
 import command.connection.DeleteLoginCommand;
 import command.connection.PostLoginCommand;
+import command.convertfile.PutConvertFileCommand;
 import command.experiment.DeleteExperimentCommand;
 import command.experiment.GetExperimentCommand;
 import command.experiment.PostExperimentCommand;
@@ -63,7 +64,7 @@ public class URILength {
 		uriLengths.put(DeleteGenomeReleaseCommand.class, 3);
 		uriLengths.put(GetGenomeReleaseCommand.class, 1);
 		uriLengths.put(GetGenomeReleaseSpeciesCommand.class, 2);
-		uriLengths.put(ConvertFileCommand.class, 1);
+		uriLengths.put(PutConvertFileCommand.class, 1);
 	}
 
 	/**
