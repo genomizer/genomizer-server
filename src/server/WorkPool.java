@@ -1,7 +1,7 @@
 package server;
 
-import command.ProcessCommand;
-import command.ProcessStatus;
+import command.Process;
+import command.process.PutProcessCommand;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -13,8 +13,8 @@ import java.util.concurrent.locks.ReentrantLock;
  * Created by c12smi on 4/21/15.
  */
 public class WorkPool {
-    private LinkedList<ProcessCommand> processesList;
-    private HashMap<ProcessCommand,ProcessStatus> processesStatus;
+    private LinkedList<PutProcessCommand> processesList;
+    private HashMap<PutProcessCommand, Process> processesStatus;
 
     private final Lock lock;
     private Condition notEmptyCond;
@@ -27,7 +27,7 @@ public class WorkPool {
         notEmptyCond = lock.newCondition();
     }
 
-    public LinkedList<ProcessCommand> getProcesses() {
+    public LinkedList<PutProcessCommand> getProcesses() {
         lock.lock();
 
         try {
@@ -38,28 +38,28 @@ public class WorkPool {
 
     }
 
-    public void addWork(ProcessCommand command) {
+    public void addWork(PutProcessCommand command) {
         lock.lock();
 
         try {
             processesList.add(command);
-            processesStatus.put(command, new ProcessStatus(command));
+            processesStatus.put(command, new Process(command));
             notEmptyCond.signalAll();
         } finally {
             lock.unlock();
         }
     }
 
-    public ProcessCommand getProcess() {
+    public PutProcessCommand getProcess() {
         lock.lock();
 
-        ProcessCommand processCommand = null;
+        PutProcessCommand putProcessCommand = null;
 
         try {
             while (processesList.size() == 0) {
                 notEmptyCond.await();
             }
-            processCommand = processesList.poll();
+            putProcessCommand = processesList.poll();
         }
         catch (InterruptedException ex) {
             ErrorLogger.log("SYSTEM", "Error acquiring processes: " +
@@ -69,22 +69,22 @@ public class WorkPool {
             lock.unlock();
         }
 
-        return processCommand;
+        return putProcessCommand;
 
     }
 
-    public void removeProcess(ProcessCommand processCommand) {
+    public void removeProcess(PutProcessCommand putProcessCommand) {
         lock.lock();
 
         try {
-            processesList.remove(processCommand);
-            processesStatus.remove(processCommand);
+            processesList.remove(putProcessCommand);
+            processesStatus.remove(putProcessCommand);
         } finally {
             lock.unlock();
         }
     }
 
-    public ProcessStatus getProcessStatus(ProcessCommand process) {
+    public command.Process getProcessStatus(PutProcessCommand process) {
         lock.lock();
 
         try {

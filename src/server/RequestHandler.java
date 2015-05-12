@@ -6,6 +6,8 @@ import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import command.*;
+import command.connection.PostLoginCommand;
+import command.process.PutProcessCommand;
 import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.HttpStatusCode;
@@ -107,7 +109,7 @@ public class RequestHandler implements HttpHandler {
 				respond(createBadRequestResponse(), exchange);
 				return;
 			}
-		} else if (uuid == null && !commandClass.equals(LoginCommand.
+		} else if (uuid == null && !commandClass.equals(PostLoginCommand.
                 class)) {
 			Debug.log("User could not be authenticated!");
             respondWithAuthenticationFailure(exchange);
@@ -157,8 +159,8 @@ public class RequestHandler implements HttpHandler {
 			return;
 		}
 
-        if (commandClass.equals(ProcessCommand.class)) {
-            Doorman.getWorkPool().addWork((ProcessCommand) command);
+        if (commandClass.equals(PutProcessCommand.class)) {
+            Doorman.getWorkPool().addWork((PutProcessCommand) command);
             respond(new ProcessResponse(HttpStatusCode.OK), exchange);
             return;
         } else {
