@@ -39,25 +39,17 @@ public abstract class Command {
 	protected String uuid;
 
 	/**
-	 * Used to set the username and user type of the caller of the command.
-	 * Should be called in the the other setField method.
-	 */
-	protected void setFields(String uuid, UserType userType){
-		this.uuid = uuid;
-		this.userType = userType;
-	}
-
-	/**
 	 * Used to set the required fields of the command. Provided the URI
 	 * from the request as well as the UUID of the user the implementation
 	 * of this function should make sure the necessary information is set.
-	 * Should call the other setFields method to set the username and userType
-	 * fields.
-	 * @param uri the URI from the http request.
-	 * @param username the UUID for the user who made the request.
+	 * @param uri isn't used. Override it to use it.
+	 * @param uuid the UUID for the user who made the request.
 	 * @param userType the user type for the command caller.
 	 */
-	public abstract void setFields(String uri, String username, UserType userType);
+	public void setFields(String uri, String uuid, UserType userType){
+		this.uuid = uuid;
+		this.userType = userType;
+	}
 
 	/**
 	 * Used to validate the object and its information. The validate method

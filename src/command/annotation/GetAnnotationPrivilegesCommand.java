@@ -18,12 +18,6 @@ import response.HttpStatusCode;
 public class GetAnnotationPrivilegesCommand extends Command {
 	//TODO Implement this class
 
-	@Override
-	public void setFields(String uri, String uuid, UserType userType) {
-
-		super.setFields(uuid, userType);
-	}
-	
 
 	@Override
 	public void validate() throws ValidateException {

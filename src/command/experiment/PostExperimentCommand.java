@@ -30,11 +30,6 @@ public class PostExperimentCommand extends Command {
 	@Expose
 	private ArrayList<Annotation> annotations = new ArrayList<>();
 
-	@Override
-	public void setFields(String uri, String uuid, UserType userType) {
-
-		super.setFields(uuid, userType);
-	}
 
 	@Override
 	public void validate() throws ValidateException {

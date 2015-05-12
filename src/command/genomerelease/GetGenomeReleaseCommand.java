@@ -24,11 +24,7 @@ import response.Response;
  */
 
 public class GetGenomeReleaseCommand extends Command {
-	@Override
-	public void setFields(String uri, String uuid, UserType userType) {
 
-		super.setFields(uuid, userType);
-	}
 
 	@Override
 	public void validate() throws ValidateException {

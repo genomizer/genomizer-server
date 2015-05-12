@@ -33,7 +33,7 @@ public class SearchCommand extends Command {
 	@Override
 	public void setFields(String uri, String uuid, UserType userType) {
 
-		super.setFields(uuid, userType);
+		super.setFields(uri, uuid, userType);
 		int index = uri.indexOf("=");
 		annotations = uri.substring(index+1);
 	}

@@ -20,11 +20,7 @@ import response.*;
  * @version 1.1
  */
 public class GetAnnotationCommand extends Command {
-	@Override
-	public void setFields(String uri, String uuid, UserType userType) {
 
-		super.setFields(uuid, userType);
-	}
 
 	@Override
 	public void validate() throws ValidateException {

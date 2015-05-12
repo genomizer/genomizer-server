@@ -39,11 +39,6 @@ public class PostAnnotationFieldCommand extends Command {
 	@Expose
 	private Boolean forced = null;
 
-	@Override
-	public void setFields(String uri, String uuid, UserType userType) {
-
-		super.setFields(uuid, userType);
-	}
 
 	@Override
 	public void validate() throws ValidateException {

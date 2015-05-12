@@ -30,11 +30,6 @@ public class PostAnnotationValueCommand extends Command {
 	@Expose
 	private String value = null;
 
-	@Override
-	public void setFields(String uri, String username, UserType userType) {
-
-		super.setFields(uuid, userType);
-	}
 
 	@Override
 	public void validate() throws ValidateException {

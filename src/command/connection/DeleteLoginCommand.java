@@ -17,13 +17,7 @@ import response.HttpStatusCode;
  * @version 1.1
  */
 public class DeleteLoginCommand extends Command {
-	private String username;
 
-	@Override
-	public void setFields(String uri, String uuid, UserType userType) {
-
-		super.setFields(uuid, userType);
-	}
 
 	@Override
 	public void validate() throws ValidateException {

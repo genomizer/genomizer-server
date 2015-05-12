@@ -22,11 +22,6 @@ import server.WorkPool;
  */
 public class GetProcessStatusCommand extends Command {
 
-	@Override
-	public void setFields(String uri, String uuid, UserType userType) {
-
-		super.setFields(uuid, userType);
-	}
 
 	/**
 	 * Method that validates the class information.

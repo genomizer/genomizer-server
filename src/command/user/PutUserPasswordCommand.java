@@ -31,12 +31,6 @@ public class PutUserPasswordCommand extends Command {
     @Expose
     private String password = null;
 
-    @Override
-    public void setFields(String uri, String uuid, UserType userType) {
-
-        super.setFields(uuid, userType);
-    }
-
     /**
      * Used to validate the PutUserPasswordCommand.
      */

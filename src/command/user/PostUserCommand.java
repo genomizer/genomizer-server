@@ -45,12 +45,6 @@ public class PostUserCommand extends Command {
 	 * @throws command.ValidateException
 	 */
 	@Override
-	public void setFields(String uri, String uuid, UserType userType) {
-		super.setFields(uuid, userType);
-
-	}
-
-	@Override
 	public void validate() throws ValidateException {
 
 		hasRights(UserRights.getRights(this.getClass()));

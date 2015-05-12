@@ -38,11 +38,6 @@ public class PostGenomeReleaseCommand extends Command {
 	@Expose
 	private ArrayList<String> checkSumsMD5 = new ArrayList<>();
 
-	@Override
-	public void setFields(String uri, String uuid, UserType userType) {
-
-		super.setFields(uuid, userType);
-	}
 
 	@Override
 	public void validate() throws ValidateException {
