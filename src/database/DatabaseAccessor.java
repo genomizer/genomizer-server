@@ -1229,7 +1229,6 @@ public class DatabaseAccessor implements AutoCloseable {
             throws IOException, SQLException {
 
         String query = pm2sql.convertExperimentSearch(pubMedString);
-        System.out.println(query);
 
         List<Entry<String, String>> params = pm2sql.getParameters();
 
@@ -1259,7 +1258,6 @@ public class DatabaseAccessor implements AutoCloseable {
             throws IOException, SQLException {
 
         String query = pm2sql.convertFileSearch(pubMedString);
-        System.out.println(query);
 
         List<Entry<String, String>> params = pm2sql.getParameters();
 
