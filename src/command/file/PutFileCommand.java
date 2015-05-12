@@ -17,13 +17,6 @@ import response.Response;
 public class PutFileCommand extends Command {
 	//TODO Implement this class
 
-	@Override
-	public void setFields(String uri, String uuid, UserType userType) {
-
-		/*No fields from the URI is needed, neither is the UUID. Dummy
-		implementation*/
-		this.userType = userType;
-	}
 
 	@Override
 	public void validate() throws ValidateException {
