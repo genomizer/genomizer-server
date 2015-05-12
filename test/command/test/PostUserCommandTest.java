@@ -3,7 +3,7 @@ package command.test;
 import static org.junit.Assert.*;
 
 import command.ValidateException;
-import command.user.PostUserCommand;
+import command.admin.PostUserCommand;
 import database.subClasses.UserMethods.UserType;
 import org.junit.Before;
 import org.junit.Ignore;
