@@ -5,11 +5,9 @@ import command.Command;
 import command.ValidateException;
 import conversion.ConversionHandler;
 import database.constants.MaxLength;
+import database.containers.FileTuple;
 import database.subClasses.UserMethods;
-import response.ErrorResponse;
-import response.MinimalResponse;
-import response.Response;
-import response.HttpStatusCode;
+import response.*;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -53,17 +51,22 @@ public class PutConvertFileCommand extends Command {
     @Override
     public Response execute() {
         ConversionHandler convHandler = new ConversionHandler();
+        FileTuple filetuple;
 
         try {
-            convHandler.convertProfileData(toformat,Integer.getInteger(fileid));
+            filetuple = convHandler.convertProfileData(toformat,Integer.getInteger(fileid));
         } catch (SQLException | IOException e) {
             return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Could not " +
                     "convert file : " + e.getMessage());
 
         }
 
+        if(filetuple == null){
+            return new MinimalResponse(HttpStatusCode.NOT_FOUND);
+        }
+        FileInformation fileInformation = new FileInformation(filetuple);
 
+        return new
 
-        return new MinimalResponse(HttpStatusCode.NO_CONTENT);
     }
 }
