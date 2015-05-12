@@ -1,4 +1,4 @@
-package command.user;
+package command.admin;
 
 import java.io.IOException;
 import java.sql.SQLException;

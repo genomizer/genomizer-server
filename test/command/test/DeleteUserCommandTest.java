@@ -6,7 +6,7 @@ import command.Command;
 import database.constants.MaxLength;
 import database.subClasses.UserMethods.UserType;
 import org.junit.Test;
-import command.user.DeleteUserCommand;
+import command.admin.DeleteUserCommand;
 import command.ValidateException;
 
 /**
