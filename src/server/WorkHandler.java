@@ -89,7 +89,7 @@ public class WorkHandler implements Runnable {
 				try {
 					Response resp = putProcessCommand.execute();
 					Debug.log("AFTER EXECUTE PROCESS");
-					if (resp.getCode()== HttpStatusCode.CREATED){
+					if (resp.getCode()== HttpStatusCode.OK){
 						process.status = Process.STATUS_FINISHED;
 					} else {
 						process.status = command.Process.STATUS_CRASHED;
