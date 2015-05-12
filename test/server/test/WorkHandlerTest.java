@@ -1,7 +1,7 @@
 package server.test;
 
 
-import command.ProcessCommand;
+import command.process.PutProcessCommand;
 import org.junit.Before;
 import org.junit.Test;
 import server.WorkPool;
@@ -19,10 +19,10 @@ public class WorkHandlerTest {
 
     @Test
     public void testWorkPool() {
-        workPool.addWork(new ProcessCommand());
-        workPool.addWork(new ProcessCommand());
-        workPool.addWork(new ProcessCommand());
-        workPool.addWork(new ProcessCommand());
+        workPool.addWork(new PutProcessCommand());
+        workPool.addWork(new PutProcessCommand());
+        workPool.addWork(new PutProcessCommand());
+        workPool.addWork(new PutProcessCommand());
 
         assertTrue(workPool.availableProcesses() == 4);
     }

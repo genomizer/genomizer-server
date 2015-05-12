@@ -13,7 +13,7 @@ import server.WorkPool;
 * @author Kommunikation/kontroll 2014.
 * @version 1.0
 */
-
+@Deprecated
 @Ignore
 public class RequestHandlerTest {
 //

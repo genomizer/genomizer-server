@@ -1,5 +1,26 @@
 package command;
 
+import command.annotation.*;
+import command.connection.DeleteLoginCommand;
+import command.connection.PostLoginCommand;
+import command.experiment.DeleteExperimentCommand;
+import command.experiment.GetExperimentCommand;
+import command.experiment.PostExperimentCommand;
+import command.experiment.PutExperimentCommand;
+import command.file.DeleteFileCommand;
+import command.file.GetFileCommand;
+import command.file.PostFileCommand;
+import command.file.PutFileCommand;
+import command.genomerelease.DeleteGenomeReleaseCommand;
+import command.genomerelease.GetGenomeReleaseCommand;
+import command.genomerelease.GetGenomeReleaseSpeciesCommand;
+import command.genomerelease.PostGenomeReleaseCommand;
+import command.process.GetProcessStatusCommand;
+import command.process.PutProcessCommand;
+import command.search.SearchCommand;
+import command.user.DeleteUserCommand;
+import command.user.PostUserCommand;
+
 import java.util.HashMap;
 
 /**
@@ -15,29 +36,29 @@ public class URILength {
 
 	static {
 		uriLengths = new HashMap<>();
-		uriLengths.put(LoginCommand.class, 1);
-		uriLengths.put(LogoutCommand.class, 1);
+		uriLengths.put(PostLoginCommand.class, 1);
+		uriLengths.put(DeleteLoginCommand.class, 1);
 		uriLengths.put(GetExperimentCommand.class, 2);
-		uriLengths.put(AddExperimentCommand.class, 1);
-		uriLengths.put(UpdateExperimentCommand.class, 2);
+		uriLengths.put(PostExperimentCommand.class, 1);
+		uriLengths.put(PutExperimentCommand.class, 2);
 		uriLengths.put(DeleteExperimentCommand.class, 2);
-		uriLengths.put(GetFileFromExperimentCommand.class, 2);
-		uriLengths.put(AddFileToExperimentCommand.class, 1);
-		uriLengths.put(UpdateFileInExperimentCommand.class, 2);
-		uriLengths.put(DeleteFileFromExperimentCommand.class, 2);
-		uriLengths.put(SearchForExperimentsCommand.class, 2);
-		uriLengths.put(CreateUserCommand.class, 1);
+		uriLengths.put(GetFileCommand.class, 2);
+		uriLengths.put(PostFileCommand.class, 1);
+		uriLengths.put(PutFileCommand.class, 2);
+		uriLengths.put(DeleteFileCommand.class, 2);
+		uriLengths.put(SearchCommand.class, 2);
+		uriLengths.put(PostUserCommand.class, 1);
 		uriLengths.put(DeleteUserCommand.class, 2);
-		uriLengths.put(ProcessCommand.class, 2);
+		uriLengths.put(PutProcessCommand.class, 2);
 		uriLengths.put(GetProcessStatusCommand.class, 1);
-		uriLengths.put(GetAnnotationInformationCommand.class, 1);
-		uriLengths.put(AddAnnotationFieldCommand.class, 2);
-		uriLengths.put(AddAnnotationValueCommand.class, 2);
+		uriLengths.put(GetAnnotationCommand.class, 1);
+		uriLengths.put(PostAnnotationFieldCommand.class, 2);
+		uriLengths.put(PostAnnotationValueCommand.class, 2);
 		uriLengths.put(DeleteAnnotationFieldCommand.class, 3);
-		uriLengths.put(UpdateAnnotationPrivilegesCommand.class, 3);
-		uriLengths.put(AddGenomeReleaseCommand.class, 1);
-		uriLengths.put(EditAnnotationValueCommand.class, 2);
-		uriLengths.put(EditAnnotationFieldCommand.class , 2);
+		uriLengths.put(PutAnnotationPrivilegesCommand.class, 3);
+		uriLengths.put(PostGenomeReleaseCommand.class, 1);
+		uriLengths.put(PutAnnotationValueCommand.class, 2);
+		uriLengths.put(PutAnnotationFieldCommand.class , 2);
 		uriLengths.put(DeleteAnnotationValueCommand.class, 4);
 		uriLengths.put(DeleteGenomeReleaseCommand.class, 3);
 		uriLengths.put(GetGenomeReleaseCommand.class, 1);
