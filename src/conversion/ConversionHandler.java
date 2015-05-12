@@ -54,7 +54,7 @@ public class ConversionHandler {
 	 * @throws SQLException
 	 * @throws IOException
 	 */
-	public String convertProfileData(String newFormat, int id) throws SQLException, IOException {
+	public FileTuple convertProfileData(String newFormat, int id) throws SQLException, IOException {
 		db = initDB();
 		FileTuple file = db.getFileTuple(id);
 		fileInDB = file.path;
@@ -84,7 +84,7 @@ public class ConversionHandler {
 		db.markReadyForDownload(ft);
 		db.close();
 
-		return outputFile;
+		return ft;
 	}
 
 	/**
