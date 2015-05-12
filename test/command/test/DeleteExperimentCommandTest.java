@@ -5,9 +5,8 @@ import static org.junit.Assert.*;
 import command.Command;
 import database.constants.MaxLength;
 import database.subClasses.UserMethods.UserType;
-import org.junit.Ignore;
 import org.junit.Test;
-import command.DeleteExperimentCommand;
+import command.experiment.DeleteExperimentCommand;
 import command.ValidateException;
 
 /**

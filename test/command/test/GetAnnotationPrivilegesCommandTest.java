@@ -5,9 +5,8 @@ import static org.junit.Assert.*;
 import command.Command;
 import command.ValidateException;
 import database.subClasses.UserMethods.UserType;
-import org.junit.Ignore;
 import org.junit.Test;
-import command.GetAnnotationPrivilegesCommand;
+import command.annotation.GetAnnotationPrivilegesCommand;
 
 /**
  * Class used to test that GetAnnotationPrivileges works

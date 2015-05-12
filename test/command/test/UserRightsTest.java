@@ -3,7 +3,7 @@ package command.test;
 import static org.junit.Assert.*;
 
 import command.Command;
-import command.DeleteAnnotationValueCommand;
+import command.annotation.DeleteAnnotationValueCommand;
 import command.ValidateException;
 import database.subClasses.UserMethods.UserType;
 import org.junit.Test;
