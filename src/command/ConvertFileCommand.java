@@ -18,7 +18,7 @@ import java.sql.SQLException;
 public class ConvertFileCommand extends Command{
 
     @Expose
-    private int fileid;
+    private String fileid;
 
     @Expose
     private String toformat;
@@ -38,6 +38,7 @@ public class ConvertFileCommand extends Command{
     @Override
     public void validate() throws ValidateException {
         validateName(toformat,MaxLength.FILE_FILETYPE,"to format");
+        validateExists(fileid,MaxLength.FILE_FILENAME,"FileId");
     }
 
     /**
@@ -49,7 +50,7 @@ public class ConvertFileCommand extends Command{
         ConversionHandler convHandler = new ConversionHandler();
         String fileUrl;
         try {
-            fileUrl = convHandler.convertProfileData(toformat,fileid);
+            fileUrl = convHandler.convertProfileData(toformat,Integer.getInteger(fileid));
         } catch (SQLException | IOException e) {
             e.printStackTrace();
             return new ErrorResponse(HttpStatusCode.BAD_REQUEST,"database error" + e.getMessage());

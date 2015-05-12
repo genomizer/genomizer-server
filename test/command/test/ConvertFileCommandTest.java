@@ -109,7 +109,7 @@ public class ConvertFileCommandTest {
     public void testValidateInvalidFileIDLength() throws ValidateException {
         String fileID = "";
         for(int i = 0; i < MaxLength.FILE_FILENAME+ 1; i++) {
-            fileID += "i";
+            fileID += "1";
         }
         String json = "{\"fileid\":\""+fileID+"\",\"toformat\":\"wig\"}";
         final Command convertFileCommand = gson.fromJson(json, ConvertFileCommand.class);
