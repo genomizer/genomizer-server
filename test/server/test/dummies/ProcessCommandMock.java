@@ -4,7 +4,7 @@ import org.junit.Ignore;
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
-import response.StatusCode;
+import response.HttpStatusCode;
 import command.ProcessCommand;
 
 @Ignore
@@ -20,12 +20,12 @@ public class ProcessCommandMock extends ProcessCommand {
 		try {
 			Thread.sleep(1000);
 			if (this.getUsername().equals("philge")) {
-				return new ErrorResponse(StatusCode.METHOD_NOT_ALLOWED, "Something bad happened");
+				return new ErrorResponse(HttpStatusCode.METHOD_NOT_ALLOWED, "Something bad happened");
 			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		return new MinimalResponse(StatusCode.CREATED);
+		return new MinimalResponse(HttpStatusCode.CREATED);
 	}
 
 	@Override
@@ -34,7 +34,7 @@ public class ProcessCommandMock extends ProcessCommand {
 	}
 
 	@Override
-	public String[] getFilePaths() {
+	public String[] getFilepaths() {
 		return new String[] {"file1", "file2"};
 	}
 

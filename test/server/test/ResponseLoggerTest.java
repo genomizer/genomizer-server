@@ -6,9 +6,9 @@ import org.junit.Test;
 
 import authentication.Authenticate;
 
+import response.HttpStatusCode;
 import response.MinimalResponse;
 //import response.Response;
-import response.StatusCode;
 import server.ErrorLogger;
 
 public class ResponseLoggerTest {
@@ -29,12 +29,12 @@ public class ResponseLoggerTest {
 	public void shouldLogBADREQUESTandOKResponse(){
 		String username = "splutt";
 		Authenticate.updateActiveUser(username);
-		new MinimalResponse(StatusCode.BAD_REQUEST);
-		new MinimalResponse(StatusCode.OK);
+		new MinimalResponse(HttpStatusCode.BAD_REQUEST);
+		new MinimalResponse(HttpStatusCode.OK);
 //
 //		if(ErrorLogger.log(username, r1) && ErrorLogger.log(username, r2)){
-//			assertEquals(StatusCode.BAD_REQUEST, ErrorLogger.getUserLog(username).get(0).getCode());
-//			assertEquals(StatusCode.OK, ErrorLogger.getUserLog(username).get(1).getCode());
+//			assertEquals(HttpStatusCode.BAD_REQUEST, ErrorLogger.getUserLog(username).get(0).getCode());
+//			assertEquals(HttpStatusCode.OK, ErrorLogger.getUserLog(username).get(1).getCode());
 //			ErrorLogger.printUserLog("splutt");
 //		}else{
 //			fail();
@@ -48,10 +48,10 @@ public class ResponseLoggerTest {
 		//		ResponseLogger logger = new ResponseLogger();
 		//String username = "splutt";
 
-		new MinimalResponse(StatusCode.BAD_REQUEST);
+		new MinimalResponse(HttpStatusCode.BAD_REQUEST);
 
 //		if(ErrorLogger.log(username, r)){
-//			assertEquals(StatusCode.BAD_REQUEST, ErrorLogger.getUserLog(username).get(0).getCode());
+//			assertEquals(HttpStatusCode.BAD_REQUEST, ErrorLogger.getUserLog(username).get(0).getCode());
 //		}else{
 //			fail();
 //		}
@@ -64,12 +64,12 @@ public class ResponseLoggerTest {
 		//		ResponseLogger logger = new ResponseLogger();
 
 		//String username = "splutt";
-		new MinimalResponse(StatusCode.BAD_REQUEST);
-		new MinimalResponse(StatusCode.BAD_REQUEST);
+		new MinimalResponse(HttpStatusCode.BAD_REQUEST);
+		new MinimalResponse(HttpStatusCode.BAD_REQUEST);
 //
 //		if(ErrorLogger.log(username, r1) && ErrorLogger.log(username, r2)){
-//			assertEquals(StatusCode.BAD_REQUEST, ErrorLogger.getUserLog(username).get(0).getCode());
-//			assertEquals(StatusCode.BAD_REQUEST, ErrorLogger.getUserLog(username).get(1).getCode());
+//			assertEquals(HttpStatusCode.BAD_REQUEST, ErrorLogger.getUserLog(username).get(0).getCode());
+//			assertEquals(HttpStatusCode.BAD_REQUEST, ErrorLogger.getUserLog(username).get(1).getCode());
 //		}else{
 //			fail();
 //		}

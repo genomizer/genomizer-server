@@ -6,11 +6,12 @@ import java.util.ArrayList;
 
 import database.constants.MaxLength;
 import response.ErrorResponse;
+import response.HttpStatusCode;
 import response.Response;
-import response.StatusCode;
 import response.GetExperimentResponse;
 import database.DatabaseAccessor;
 import database.containers.Experiment;
+import database.subClasses.UserMethods.UserType;
 
 /**
  * Class used to retrieve an experiment.
@@ -19,18 +20,18 @@ import database.containers.Experiment;
  * @version 1.1
  */
 public class GetExperimentCommand extends Command {
-	/**
-	 * Constructs a new instance of GetExperimentCommand using the supplied
-	 * experiment ID.
-	 * @param expID header to set.
-	 */
-	public GetExperimentCommand(String expID) {
-		this.setHeader(expID);
+	private String expID;
+
+	@Override
+	public void setFields(String uri, String uuid, UserType userType) {
+		this.userType = userType;
+		expID = uri.split("/")[2];
 	}
 
 	@Override
 	public void validate() throws ValidateException {
-		validateString(header, MaxLength.EXPID, "Experiment name");
+		hasRights(UserRights.getRights(this.getClass()));
+		validateName(expID, MaxLength.EXPID, "Experiment name");
 	}
 
 	@Override
@@ -41,22 +42,22 @@ public class GetExperimentCommand extends Command {
 			db = initDB();
 		}
 		catch(SQLException | IOException e){
-			return new ErrorResponse(StatusCode.BAD_REQUEST, "Could not " +
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Could not " +
 					"initialize db: " + e.getMessage());
 		}
 		try{
-			exp = db.getExperiment(header);
+			exp = db.getExperiment(expID);
 		}catch(SQLException e){
-			return new ErrorResponse(StatusCode.BAD_REQUEST, "Could not get " +
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Could not get " +
 					"experiment: " + e.getMessage());
 		}
 		db.close();
 		if(exp == null) {
-			return new ErrorResponse(StatusCode.BAD_REQUEST, "Experiment " +
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Experiment " +
 					"requested from database is null, not found or does not " +
 					"exist.");
 		}
-		return new GetExperimentResponse(StatusCode.OK, getInfo(exp),
+		return new GetExperimentResponse(HttpStatusCode.OK, getInfo(exp),
 				exp.getAnnotations(), exp.getFiles());
 	}
 

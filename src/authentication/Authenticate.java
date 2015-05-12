@@ -21,22 +21,13 @@ public class Authenticate {
 	private static ConcurrentHashMap<String, Date> latestRequests = new ConcurrentHashMap<String, Date>();
 
 
-	static public LoginAttempt login(String username, String password, String dbHash, String dbSalt) {
-
-		// Apply salt to password.
-		String hash = PasswordHash.hashString(password + dbSalt);
-
-		// Check if new hash matches DB hash.
-		if(hash.equals(dbHash))
+	static public LoginAttempt login(String username, String password, String dbHash) {
+		if(BCrypt.checkpw(password,dbHash))
 			return new LoginAttempt(true, updateActiveUser(username), null);
 
 		return new LoginAttempt(false, null, "Wrong password.");
 	}
-
-	public static ConcurrentHashMap<String, Date> getLatestRequestsMap() {
-		return latestRequests;
-	}
-
+	
 	/**
 	 * Method used to update active users. The user is added to the list of
 	 * active users or the user is updated.
@@ -62,9 +53,12 @@ public class Authenticate {
 		latestRequests.put(uuid, new Date());
 
 		return uuid;
-
 	}
 
+	/**
+	 * updates the date for which the user did the most recent request
+	 * @param uuid the uuid of the user
+	 */
 	static public void updateLatestRequest(String uuid) {
 		if(latestRequests.containsKey(uuid)) {
 			latestRequests.put(uuid, new Date());
@@ -121,6 +115,10 @@ public class Authenticate {
 
 		return (userID == null ? "" : activeUsersID.get(userID));
 
+	}
+
+	public static ConcurrentHashMap<String, Date> getLatestRequestsMap() {
+		return latestRequests;
 	}
 
 }

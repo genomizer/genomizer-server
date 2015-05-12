@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import database.DatabaseAccessor;
+import database.subClasses.UserMethods.UserType;
 import response.*;
 
 /**
@@ -16,8 +17,18 @@ import response.*;
  */
 public class GetAnnotationInformationCommand extends Command {
 	@Override
-	public void validate() {
-		/*Validation will always succeed, the command can not be corrupt.*/
+	public void setFields(String uri, String uuid, UserType userType) {
+		this.userType = userType;
+
+		/*No fields from the URI is needed, neither is the UUID. Dummy
+		implementation*/
+	}
+
+	@Override
+	public void validate() throws ValidateException {
+		/*Validation of the information will always succeed,
+		the command can not be corrupt.*/
+		hasRights(UserRights.getRights(this.getClass()));
 	}
 
 	@Override
@@ -47,10 +58,10 @@ public class GetAnnotationInformationCommand extends Command {
 								values, annotationObject.isRequired);
 				annotations.add(annotation);
 			}
-			return new GetAnnotationInformationResponse(StatusCode.OK,
+			return new GetAnnotationInformationResponse(HttpStatusCode.OK,
 					annotations);
 		} catch(SQLException | IOException e) {
-			return new ErrorResponse(StatusCode.BAD_REQUEST,
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
 					"Could not initialize db: " + e.getMessage());
 		} finally {
 			if (db != null) {

@@ -28,7 +28,7 @@ public class FileValidator {
 	 * @return boolean
 	 */
 	@Deprecated
-	public boolean isgameOk(String fileName) {
+	public boolean isNameOk(String fileName) {
 
 		File file = new File(home + File.separator + fileName);
 		boolean isOk = false;

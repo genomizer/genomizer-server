@@ -6,10 +6,11 @@ import java.util.ArrayList;
 
 
 import database.constants.MaxLength;
+import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.GetGenomeReleaseResponse;
+import response.HttpStatusCode;
 import response.Response;
-import response.StatusCode;
 import database.DatabaseAccessor;
 import database.containers.Genome;
 /**
@@ -22,18 +23,16 @@ import database.containers.Genome;
 public class GetGenomeReleaseSpeciesCommand extends Command {
 	private String species;
 
-	/**
-	 * Constructs a new instance of GetGenomeReleaseSpeciesCommand using the
-	 * supplied restful string.
-	 * @param species the species of the genome.
-	 */
-	public GetGenomeReleaseSpeciesCommand(String species) {
-		this.species = species;
+	@Override
+	public void setFields(String uri, String uuid, UserType userType) {
+		this.userType = userType;
+		species = uri.split("/")[2];
 	}
 
 	@Override
 	public void validate() throws ValidateException {
-		validateString(species, MaxLength.GENOME_SPECIES, "Genome specie");
+		hasRights(UserRights.getRights(this.getClass()));
+		validateName(species, MaxLength.GENOME_SPECIES, "Genome species");
 	}
 
 	/**
@@ -49,12 +48,12 @@ public class GetGenomeReleaseSpeciesCommand extends Command {
 			db = initDB();
 			ArrayList<Genome> genomeReleases =
 					db.getAllGenomeReleasesForSpecies(species);
-			return new GetGenomeReleaseResponse(StatusCode.OK, genomeReleases);
+			return new GetGenomeReleaseResponse(HttpStatusCode.OK, genomeReleases);
 		} catch (SQLException e) {
-			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE,
+			return new ErrorResponse(HttpStatusCode.SERVICE_UNAVAILABLE,
 					"DatabaseAccessor could not be created: " + e.getMessage());
 		} catch (IOException e) {
-			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE, species +
+			return new ErrorResponse(HttpStatusCode.SERVICE_UNAVAILABLE, species +
 					" has no genome version released");
 		} finally {
 			if (db != null) {

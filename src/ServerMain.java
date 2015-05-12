@@ -13,8 +13,6 @@ import process.StartUpCleaner;
 
 import authentication.InactiveUuidsRemover;
 
-import command.CommandHandler;
-
 import server.*;
 
 
@@ -48,8 +46,8 @@ public class ServerMain {
 
 		/* We attempt to start the doorman. */
 		try {
-			new Doorman(new CommandHandler(workPool),
-					ServerSettings.genomizerPort).start();
+			new Doorman(workPool,
+					ServerSettings.genomizerHttpPort).start();
 		} catch (IOException e) {
 			System.err.println("Error when starting server");
 			Debug.log(e.getMessage());
@@ -132,7 +130,7 @@ public class ServerMain {
 			throws FileNotFoundException {
 		// Port flag
 		if (com.hasOption('p')) {
-			ServerSettings.genomizerPort =
+			ServerSettings.genomizerHttpPort =
 					Integer.parseInt(com.getOptionValue('p'));
 		}
 		// Debug flag
@@ -166,32 +164,5 @@ public class ServerMain {
  							 "the server.");
 		return comOptions;
 	}
-
-	/**
-	 * This method reads a 'database' file. This method is never called
-	 * anywhere.
-	 *
-	 * TODO: Remove this piece of dead code. (When safe)
-	 * @param path Path of database file
-	 * @throws FileNotFoundException If database file could not be
-	 * 		   found/opened.
-	 */
-//	private static void readDatabaseFile(String path)
-//			throws FileNotFoundException {
-//		File dbFile = new File(path);
-//		if (dbFile.exists()) {
-//			Scanner scan = new Scanner(dbFile);
-//			String username = scan.next();
-//			String password = scan.next();
-//			String database = scan.next();
-//			String host = scan.next();
-//			scan.close();
-//
-//			ServerSettings.databaseUsername = username;
-//			ServerSettings.databasePassword = password;
-//			ServerSettings.databaseName = database;
-//			ServerSettings.databaseHost = host;
-//		}
-//	}
 
 }

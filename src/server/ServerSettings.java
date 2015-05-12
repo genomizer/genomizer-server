@@ -12,14 +12,16 @@ public class ServerSettings {
 	public static String databaseHost = null;
 	public static String databaseName = null;
 	public static String wwwTunnelHost = null;
+	public static String wwwTunnelPath = null;
 	public static int wwwTunnelPort = -1;
-	public static String downloadURL = null;
-	public static String uploadURL = null;
-	public static int genomizerPort = -1;
+	public static int genomizerHttpPort  = -1;
+	public static int genomizerHttpsPort = -1;
 	public static String fileLocation = "/var/www/data/";
 	public static String bowtieLocation = "bowtie";
 	public static int nrOfProcessThreads = 5;
 
+	private static String downloadURL = "/download?path=";
+	private static String uploadURL = "/upload?path=";
 
 	public static void writeSettings(String path){
 		try {
@@ -31,9 +33,9 @@ public class ServerSettings {
 					+ "databaseName = " + databaseName + "\n"
 					+ "wwwTunnelHost = " + wwwTunnelHost + "\n"
 					+ "wwwTunnelPort = " + wwwTunnelPort + "\n"
-					+ "downloadURL = " + downloadURL + "\n"
-					+ "uploadURL = " + uploadURL + "\n"
-					+ "genomizerPort = " + genomizerPort + "\n"
+					+ "wwwTunnelPath = " + wwwTunnelPath + "\n"
+					+ "genomizerHttpPort  = " + genomizerHttpPort + "\n"
+					+ "genomizerHttpsPort = " + genomizerHttpsPort + "\n"
 					+ "fileLocation = " + fileLocation + "\n"
 					+ "nrOfProcessThreads = " + nrOfProcessThreads + "\n"
 					+ "bowtieLocation = " + bowtieLocation + "\n";
@@ -59,26 +61,27 @@ public class ServerSettings {
 		nullCheck(databaseName, "databaseName");
 		nullCheck(wwwTunnelHost, "wwwTunnelHost");
 		nullCheck(wwwTunnelPort, "wwwTunnelPort");
-		nullCheck(uploadURL,     "uploadURL");
-		nullCheck(downloadURL,   "downloadURL");
-		nullCheck(genomizerPort, "genomizerPort");
+		nullCheck(wwwTunnelPath, "wwwTunnelPath");
+
+		// Either 'genomizerHttpsPort' or 'genomizerHttpPort' can be null,
+		// but not both at the same time.
+		if (genomizerHttpsPort < 0)
+			nullCheck(genomizerHttpPort, "genomizerHttpPort");
+		if (genomizerHttpPort < 0)
+			nullCheck(genomizerHttpsPort, "genomizerHttpsPort");
+
 		nullCheck(fileLocation, "fileLocation");
 		nullCheck(nrOfProcessThreads, "nrOfProcessThreads");
 		nullCheck(bowtieLocation, "bowtieLocation");
 	}
 
 	private static void nullCheck(int parameter, String name) {
-		if (parameter == -1) {
-			String msg = "Error! parameter " + name + " is not set. Check in " +
-					"settings.cfg if it is set and spelled correctly, " +
-					"capitalization does not matter.\nExiting";
-			Debug.log(msg);
-			ErrorLogger.log("SYSTEM", msg);
-			System.exit(1);
+		if (parameter < 0) {
+			nullCheck(null, name);
 		}
 	}
 
-	private static void nullCheck(String parameter, String name) {
+	private static void nullCheck(Object parameter, String name) {
 		if (parameter == null) {
 			String msg = "Error! parameter " + name + " is not set. Check in " +
 					"settings.cfg if it is set and spelled correctly, " +
@@ -129,14 +132,15 @@ public class ServerSettings {
 				case "wwwtunnelport":
 					wwwTunnelPort = Integer.parseInt(value);
 					break;
-				case "uploadurl":
-					uploadURL = value;
+				case "wwwtunnelpath":
+					wwwTunnelPath = value;
 					break;
-				case "downloadurl":
-					downloadURL = value;
-					break;
+				case "genomizerhttpport":
 				case "genomizerport":
-					genomizerPort = Integer.parseInt(value);
+					genomizerHttpPort = Integer.parseInt(value);
+					break;
+				case "genomizerhttpsport":
+					genomizerHttpsPort = Integer.parseInt(value);
 					break;
 				case "filelocation":
 					fileLocation = value;
@@ -156,9 +160,9 @@ public class ServerSettings {
 			}
 			scan.close();
 			ServerDependentValues.DownloadURL = wwwTunnelHost + ":" +
-					wwwTunnelPort + downloadURL;
+					wwwTunnelPort + wwwTunnelPath + downloadURL;
 			ServerDependentValues.UploadURL = wwwTunnelHost + ":" +
-					wwwTunnelPort + uploadURL;
+					wwwTunnelPort + wwwTunnelPath + uploadURL;
 
 			String dataInfo =
 					"\tdatabaseUsername = " + databaseUsername + "\n"
@@ -167,9 +171,9 @@ public class ServerSettings {
 							+ "\tdatabaseName = " + databaseName + "\n"
 							+ "\twwwTunnelHost = " + wwwTunnelHost + "\n"
 							+ "\twwwTunnelPort = " + wwwTunnelPort + "\n"
-							+ "\tuploadURL = " + uploadURL + "\n"
-							+ "\tdownloadURL = " + downloadURL + "\n"
-							+ "\tgenomizerPort = " + genomizerPort + "\n"
+							+ "\twwwTunnelPath = " + wwwTunnelPath + "\n"
+							+ "\tgenomizerHttpPort = " + genomizerHttpPort + "\n"
+							+ "\tgenomizerHttpsPort = " + genomizerHttpsPort + "\n"
 							+ "\tfileLocation = " + fileLocation + "\n"
 							+ "\tnrOfProcessThreads = " + nrOfProcessThreads + "\n"
 							+ "\tbowtieLocation = " + bowtieLocation

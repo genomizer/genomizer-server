@@ -76,10 +76,10 @@ public class DatabaseAccessorThreadTests {
 		String fileName = "StressTest0_t:9.hej";
 		String filePath = "Stress0_t:9.hej";
 
-		dbac.addGenomeRelease("banan", "Fly", "banan38.gr");
+		dbac.addGenomeRelease("banan", "Fly", "banan38.gr", null);
 		dbac.addExperiment("Exper1");
 		dbac.addNewFile("Exper1", 1, fileName , filePath,
-								"-m -a -te","Smurf", "Claes", true,"banan");
+								"-m -a -te","Smurf", "Claes", true,"banan", null);
 
 		List<Experiment> resExp = dbac.search("Claes[Uploader]");
 
@@ -116,7 +116,7 @@ public class DatabaseAccessorThreadTests {
     	DatabaseAccessor dbac = new DatabaseAccessor(username, password,
     			host, database);
 
-    	dbac.addGenomeRelease("banan", "Fly", "banan38.gr");
+    	dbac.addGenomeRelease("banan", "Fly", "banan38.gr", null);
     	dbac.addExperiment(experimentId);
 
     	// start all the threads
@@ -168,14 +168,14 @@ public class DatabaseAccessorThreadTests {
 		    		dbac2.addNewFile("Exper1", 1, "StressTest" + i + "_t:" +
 		    				Thread.currentThread().getId() + ".hej" , "Stress" +
 		    				i + "_t:" +	Thread.currentThread().getId(),
-		    				"-m -a -te","Smurf", "Claes", true,"banan");
+		    				"-m -a -te","Smurf", "Claes", true,"banan", null);
 		    	}
 
 		    	dbac2.close();
 
 		    } catch (SQLException e) {
 		    	System.err.println("Failed to add so many files at the " +
-		    			"same time!, Expcetion thrown when " +
+		    			"same time!, Exception thrown when " +
 		    			"adding the " + nr + "file.");
 		    	e.printStackTrace();
 		    	fail();

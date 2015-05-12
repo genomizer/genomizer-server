@@ -1,9 +1,10 @@
 package command;
 
 import database.constants.MaxLength;
+import database.subClasses.UserMethods.UserType;
+import response.HttpStatusCode;
 import response.MinimalResponse;
 import response.Response;
-import response.StatusCode;
 
 /**
  * Class used to represent a command of the type GetFileFromExperimentCommand.
@@ -16,23 +17,16 @@ public class GetFileFromExperimentCommand extends Command {
 
 	private String fileID;
 
-	/**
-	 * Constructor. Takes the fileID as argument.
-	 * @param fileID the file id.
-	 */
-
-	/**
-	 * Constructs a new instance of GetFileExperimentCommand using the supplied
-	 * file ID.
-	 * @param fileID the file ID of the wanted file.
-	 */
-	public GetFileFromExperimentCommand(String fileID) {
-		this.fileID = fileID;
+	@Override
+	public void setFields(String uri, String uuid, UserType userType) {
+		this.userType = userType;
+		fileID = uri.split("/")[2];
 	}
 
 	@Override
 	public void validate() throws ValidateException {
-		validateString(fileID, MaxLength.FILE_EXPID, "Filename");
+		hasRights(UserRights.getRights(this.getClass()));
+		validateName(fileID, MaxLength.FILE_EXPID, "Filename");
 	}
 
 	@Override
@@ -56,6 +50,6 @@ public class GetFileFromExperimentCommand extends Command {
 //		}
 
 		//Method not implemented, send appropriate response
-		return 	new MinimalResponse(StatusCode.NO_CONTENT);
+		return 	new MinimalResponse(HttpStatusCode.NO_CONTENT);
 	}
 }

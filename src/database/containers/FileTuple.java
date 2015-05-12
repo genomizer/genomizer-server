@@ -5,13 +5,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 
+import database.DatabaseAccessor;
 import database.constants.ServerDependentValues;
 
 /**
  * Container class for holding data on a file in the database. Public variables
  * are used to get the different values of the file.
  */
-public class FileTuple {
+public class FileTuple implements HasCheckSumMD5 {
 
     public static final int RAW = 1;
     public static final int PROFILE = 2;
@@ -31,6 +32,7 @@ public class FileTuple {
     public final String expId;
     public final String grVersion;
     public final String status;
+    public final String checkSumMD5;
 
     /**
      * Constructs a FileTuple object. Parameter: ResultSet
@@ -53,6 +55,7 @@ public class FileTuple {
         expId = resSet.getString("ExpID");
         grVersion = resSet.getString("GRVersion");
         status = resSet.getString("Status");
+        checkSumMD5 = resSet.getString("MD5");
     }
 
     /**
@@ -106,6 +109,14 @@ public class FileTuple {
         return path.substring(0, filenameIndex + 1);
     }
 
+    public String getCheckSumMD5() {
+        return checkSumMD5;
+    }
+
+    public void setCheckSumMD5(DatabaseAccessor db, String checkSumMD5) throws SQLException {
+        db.setFileCheckSumMD5(this, checkSumMD5);
+    }
+
     /**
      * Outputs the FileTuple as a String
      */
@@ -117,6 +128,6 @@ public class FileTuple {
                 + ", date=" + date + ", metaData=" + metaData + ", author="
                 + author + ", uploader=" + uploader + ", isPrivate="
                 + isPrivate + ", expId=" + expId + ", grVersion=" + grVersion
-                + ", status=" + status + "]";
+                + ", status=" + status + ", md5=" + checkSumMD5 + "]";
     }
 }

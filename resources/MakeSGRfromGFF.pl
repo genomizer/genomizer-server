@@ -35,9 +35,9 @@ $VERSION = '1';
 use strict;
 use warnings;
 
-my $gff_format_file = $ARGV[1];
+my $gff_format_file = $ARGV[0];
 open(IN, "<", $gff_format_file);
-my $sgr_format_file = $ARGV[2];
+my $sgr_format_file = $ARGV[1];
 open(OUT, ">", $sgr_format_file);
 
 my ($line, $centre) = ('', 0);

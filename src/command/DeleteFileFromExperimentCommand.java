@@ -5,10 +5,11 @@ import java.sql.SQLException;
 
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
+import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
-import response.StatusCode;
+import response.HttpStatusCode;
 
 /**
  * Class used to represent a command that is used to
@@ -18,19 +19,18 @@ import response.StatusCode;
  * @version 1.1
  */
 public class DeleteFileFromExperimentCommand extends Command {
+	private String fileID;
 
-	/**
-	 * Constructs a new instance of DeleteFileFromExperimentCommand using the
-	 * supplied restful string.
-	 * @param fileID the file ID of the file you wish to delete.
-	 */
-	public DeleteFileFromExperimentCommand(String fileID) {
-		this.setHeader(fileID);
+	@Override
+	public void setFields(String uri, String uuid, UserType userType) {
+		this.userType = userType;
+		fileID = uri.split("/")[2];
 	}
 
 	@Override
 	public void validate() throws ValidateException {
-		validateString(header, MaxLength.EXPID, "Experiment name");
+		hasRights(UserRights.getRights(this.getClass()));
+		validateName(fileID, MaxLength.EXPID, "Experiment name");
 	}
 
 	@Override
@@ -39,28 +39,28 @@ public class DeleteFileFromExperimentCommand extends Command {
 		try {
 			db = initDB();
 			try {
-				if(db.deleteFile(Integer.parseInt(header))==1) {
-					return new MinimalResponse(StatusCode.OK);
+				if(db.deleteFile(Integer.parseInt(fileID))==1) {
+					return new MinimalResponse(HttpStatusCode.OK);
 				} else {
-					return new ErrorResponse(StatusCode.BAD_REQUEST,
-							"The file " + header + " does not exist and can " +
+					return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
+							"The file " + fileID + " does not exist and can " +
 									"not be deleted");
 				}
 			} catch (NumberFormatException e) {
-				if (db.deleteFile(header) > 0) {
-					return new MinimalResponse(StatusCode.OK);
+				if (db.deleteFile(fileID) > 0) {
+					return new MinimalResponse(HttpStatusCode.OK);
 				} else {
-					return new ErrorResponse(StatusCode.BAD_REQUEST,
-							"The file " + header + " does not exist and can " +
+					return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
+							"The file " + fileID + " does not exist and can " +
 									"not be deleted");
 				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE,
+			return new ErrorResponse(HttpStatusCode.SERVICE_UNAVAILABLE,
 					e.getMessage());
 		} catch (IOException e) {
-			return new ErrorResponse(StatusCode.BAD_REQUEST, e.getMessage());
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
 		} finally {
 			if (db != null) {
 				db.close();

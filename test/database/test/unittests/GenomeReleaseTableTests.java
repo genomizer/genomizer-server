@@ -73,7 +73,8 @@ public class GenomeReleaseTableTests {
         g = dbac.getGenomeRelease("hg19");
         assertNull(g);
 
-        dbac.addGenomeRelease("hg19", "Human", "hg19.txt");
+        dbac.addGenomeRelease("hg19", "Human", "hg19.txt", null);
+        dbac.markReadyForDownload("hg19", "hg19.txt");
         g = dbac.getGenomeRelease("hg19");
         assertEquals("hg19", g.genomeVersion);
     }
@@ -82,8 +83,9 @@ public class GenomeReleaseTableTests {
     public void shouldThrowExceptionWhenAddFileAlreadyExist()
     									throws Exception {
 
-    	dbac.addGenomeRelease("test12", "Bear", "test12.txt");
-    	dbac.addGenomeRelease("test12", "Bear", "test12.txt");
+    	dbac.addGenomeRelease("test12", "Bear", "test12.txt", null);
+        dbac.markReadyForDownload("test12", "test12.txt");
+    	dbac.addGenomeRelease("test12", "Bear", "test12.txt", null);
     }
 
     @Test
@@ -115,7 +117,7 @@ public class GenomeReleaseTableTests {
 
     @Test
     public void shouldReturnUploadURLUponAdd() throws Exception {
-        String uploadURL = dbac.addGenomeRelease("hg39", "Human", "hg39.fasta");
+        String uploadURL = dbac.addGenomeRelease("hg39", "Human", "hg39.fasta", null);
         String expectedUploadURL = ServerDependentValues.UploadURL
                 + fpg.generateGenomeReleaseFolder("hg39", "Human")
                 + "hg39.fasta";
@@ -124,12 +126,13 @@ public class GenomeReleaseTableTests {
 
     @Test (expected = IOException.class)
     public void shouldThrowIOExceptionWhenAttemptingToAddDuplicateFile() throws Exception {
-        dbac.addGenomeRelease("hg38", "Human", "hg38.fasta");
+        dbac.addGenomeRelease("hg38", "Human", "hg38.fasta", null);
     }
 
     @Test
     public void shouldUpdateDatabaseUponAdd() throws Exception {
-        dbac.addGenomeRelease("hg40", "Human", "hg40.fasta");
+        dbac.addGenomeRelease("hg40", "Human", "hg40.fasta", null);
+        dbac.markReadyForDownload("hg40", "hg40.fasta");
         String expectedFolderPath = fpg.getGenomeReleaseFolderPath("hg40",
                 "Human");
         Genome genome = dbac.getGenomeRelease("hg40");
@@ -138,7 +141,8 @@ public class GenomeReleaseTableTests {
 
     @Test
     public void shouldReturnFileName() throws Exception {
-        dbac.addGenomeRelease("rn50", "Rat", "aRatFile.fasta");
+        dbac.addGenomeRelease("rn50", "Rat", "aRatFile.fasta", null);
+        dbac.markReadyForDownload("rn50", "aRatFile.fasta");
         Genome genome = dbac.getGenomeRelease("rn50");
 
         assertEquals(1, genome.getFiles().size());
@@ -150,7 +154,8 @@ public class GenomeReleaseTableTests {
 
     @Test
     public void shouldDeleteFromBothDatabaseAndFileSystem() throws Exception {
-        dbac.addGenomeRelease("hg41", "Human", "hg41.txt");
+        dbac.addGenomeRelease("hg41", "Human", "hg41.txt", null);
+        dbac.markReadyForDownload("hg41", "hg41.txt");
 
         String genomeReleaseFolderPath = fpg.generateGenomeReleaseFolder(
                 "hg41", "Human");
@@ -171,7 +176,7 @@ public class GenomeReleaseTableTests {
     }
 
     @Test(expected = IOException.class)
-    public void shouldNotDeleteGenomReleaseWhenFileNeedsIt() throws Exception{
+    public void shouldNotDeleteGenomeReleaseWhenFileNeedsIt() throws Exception{
     	dbac.removeGenomeRelease("hg38");
     }
 
@@ -194,13 +199,13 @@ public class GenomeReleaseTableTests {
 
     @Test
     public void shouldBeAbleToGetAllSpeciesThatHaveAGenomeRelease() throws Exception {
-        List<String> species = dbac.getAllGenomReleaseSpecies();
+        List<String> species = dbac.getAllGenomeReleaseSpecies();
         assertEquals(2, species.size());
     }
 
     @Test
     public void shouldBeAbleToGetAllGenomeReleases() throws Exception {
-        List<Genome> genomes = dbac.getAllGenomReleases();
+        List<Genome> genomes = dbac.getAllGenomeReleases();
         assertEquals(6, genomes.size());
     }
 
@@ -212,7 +217,8 @@ public class GenomeReleaseTableTests {
 
     @Test
     public void shouldGetFilePrefixForComplexFileNames() throws Exception {
-        dbac.addGenomeRelease("rua888", "Superhero", "superheroRua888.ping.pong");
+        dbac.addGenomeRelease("rua888", "Superhero", "superheroRua888.ping.pong", null);
+        dbac.markReadyForDownload("rua888", "superheroRua888.ping.pong");
         Genome g = dbac.getGenomeRelease("rua888");
         assertEquals("superheroRua888", g.getFilePrefix());
     }
@@ -222,7 +228,7 @@ public class GenomeReleaseTableTests {
 
     	tearDown();
 
-    	assertEquals(0, dbac.getAllGenomReleases().size());
+    	assertEquals(0, dbac.getAllGenomeReleases().size());
     }
 
 

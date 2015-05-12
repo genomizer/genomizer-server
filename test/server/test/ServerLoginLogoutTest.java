@@ -6,7 +6,7 @@ import java.net.HttpURLConnection;
 import database.constants.MaxLength;
 import org.junit.Ignore;
 import org.junit.Test;
-import response.StatusCode;
+import response.HttpStatusCode;
 import com.google.gson.JsonObject;
 
 /* TODO:	- Add login authorization tests when code is implemented.
@@ -41,7 +41,7 @@ public class ServerLoginLogoutTest extends ServerAbstractTestClass {
 		int loginResponseCode = sendLogin(jj);
 		sendLogout();
 
-		assertEquals(loginResponseCode, StatusCode.OK);
+		assertEquals(loginResponseCode, HttpStatusCode.OK);
 
 	}
 
@@ -60,7 +60,7 @@ public class ServerLoginLogoutTest extends ServerAbstractTestClass {
 		sendLogin(jj);
 		int logoutResponseCode = sendLogout();
 
-		assertEquals(logoutResponseCode, StatusCode.OK);
+		assertEquals(logoutResponseCode, HttpStatusCode.OK);
 
 	}
 
@@ -108,7 +108,7 @@ public class ServerLoginLogoutTest extends ServerAbstractTestClass {
 
 		int loginResponseCode = con.getResponseCode();
 
-		assertTrue(StatusCode.BAD_REQUEST == loginResponseCode);
+		assertTrue(HttpStatusCode.BAD_REQUEST == loginResponseCode);
 
 	}
 
@@ -136,7 +136,7 @@ public class ServerLoginLogoutTest extends ServerAbstractTestClass {
 
 		int loginResponseCode = con.getResponseCode();
 
-		assertTrue(StatusCode.BAD_REQUEST == loginResponseCode);
+		assertTrue(HttpStatusCode.BAD_REQUEST == loginResponseCode);
 
 	}
 
@@ -159,7 +159,7 @@ public class ServerLoginLogoutTest extends ServerAbstractTestClass {
 
 		int loginResponseCode = con.getResponseCode();
 
-		assertTrue(StatusCode.BAD_REQUEST == loginResponseCode);
+		assertTrue(HttpStatusCode.BAD_REQUEST == loginResponseCode);
 
 	}
 
@@ -182,7 +182,7 @@ public class ServerLoginLogoutTest extends ServerAbstractTestClass {
 
 		int loginResponseCode = con.getResponseCode();
 
-		assertTrue(StatusCode.BAD_REQUEST == loginResponseCode);
+		assertTrue(HttpStatusCode.BAD_REQUEST == loginResponseCode);
 
 	}
 

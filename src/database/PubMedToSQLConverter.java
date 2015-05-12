@@ -59,12 +59,12 @@ public class PubMedToSQLConverter {
     private String sqlFragmentForExpAttrInFileSearch = "SELECT * FROM File AS F "
             + "WHERE EXISTS (SELECT * FROM Annotated_With AS A "
             + "WHERE F.ExpID = A.ExpID AND "
-            + "A.Label ~~* ? AND A.Value ~* ?)";
+            + "A.Label ~~* ? AND A.Value ~* ?) AND F.Status = 'Done'";
 
     private String sqlFragmentForExpAttrInFileSearchNegated = "SELECT * FROM File AS F "
             + "WHERE NOT EXISTS (SELECT * FROM Annotated_With AS A "
             + "WHERE F.ExpID = A.ExpID AND "
-            + "A.Label ~~* ? AND A.Value ~* ?)";
+            + "A.Label ~~* ? AND A.Value ~* ?) AND F.Status = 'Done'";
 
     private String sqlFragmentForExpIdSearch = "SELECT ExpID FROM Experiment "
             + "WHERE ExpID ~* ?";
@@ -72,7 +72,8 @@ public class PubMedToSQLConverter {
     private String sqlFragmentForExpIdSearchNegated = "SELECT ExpID FROM Experiment "
             + "WHERE NOT ExpID ~* ?";
 
-    private String sqlFragmentForFileAttr = "SELECT * FROM File " + "WHERE ";
+    private String sqlFragmentForFileAttr = "SELECT * FROM File "
+            + "WHERE Status='Done' AND ";
 
     private String orderBySqlFragment = "\nORDER BY ExpID";
 

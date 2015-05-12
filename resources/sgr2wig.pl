@@ -15,7 +15,7 @@ while(<IN>)
         my $temp_chr=$line[0]; 
         my $temp_start=$line[1]-1; 
         my $temp_sig=$line[2]; 
-        if ($chr ne $temp_chr){ 
+        if ($chr ne $temp_chr){
                 $chr=$temp_chr; 
                 $start=$temp_start+1; 
                 $sig=$temp_sig; 

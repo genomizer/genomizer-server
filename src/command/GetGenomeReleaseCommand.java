@@ -5,10 +5,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import database.DatabaseAccessor;
 import database.containers.Genome;
+import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.GetGenomeReleaseResponse;
+import response.HttpStatusCode;
 import response.Response;
-import response.StatusCode;
 
 /**
  * A command which is used to get all the genome versions
@@ -18,10 +19,19 @@ import response.StatusCode;
  * @version 1.0
  */
 
-public class GetGenomeReleaseCommand extends Command{
+public class GetGenomeReleaseCommand extends Command {
 	@Override
-	public void validate() {
+	public void setFields(String uri, String uuid, UserType userType) {
+		this.userType = userType;
+
+		/*No fields from the URI is needed, neither is the UUID. Dummy
+		implementation*/
+	}
+
+	@Override
+	public void validate() throws ValidateException {
 		/*Validation will always succeed, the command can not be corrupt.*/
+		hasRights(UserRights.getRights(this.getClass()));
 	}
 
 	/**
@@ -36,16 +46,16 @@ public class GetGenomeReleaseCommand extends Command{
 			db = initDB();
 			try{
 				ArrayList<Genome> genomeReleases =
-						(ArrayList<Genome>)db.getAllGenomReleases();
-				return new GetGenomeReleaseResponse(StatusCode.OK,
+						(ArrayList<Genome>)db.getAllGenomeReleases();
+				return new GetGenomeReleaseResponse(HttpStatusCode.OK,
 						genomeReleases);
 			}catch(SQLException e){
-				return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE,
+				return new ErrorResponse(HttpStatusCode.SERVICE_UNAVAILABLE,
 						"Could not fetch all genome releases: " +
 								e.getMessage());
 			}
 		} catch (SQLException | IOException e) {
-			return new ErrorResponse(StatusCode.SERVICE_UNAVAILABLE,
+			return new ErrorResponse(HttpStatusCode.SERVICE_UNAVAILABLE,
 					"SQLException - Could not create connection to database: " +
 							e.getMessage());
 		} finally {
