@@ -30,6 +30,7 @@ import java.util.HashMap;
  *
  * Created by ens11afk on 2015-04-29.
  */
+@SuppressWarnings("deprecation")
 public class UserRights {
 
     private static final HashMap<Class<? extends Command>,UserType> userRights;
