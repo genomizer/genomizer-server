@@ -417,7 +417,7 @@ public class RawToProfileConverter extends Executor {
 
 					// TODO: Don't hardcode path to smoothing.jar.
 					ProcessBuilder pb = new ProcessBuilder("java", "-jar",
-							ServerSettings.fileLocation+"smoothing.jar",
+							"resources/smoothing.jar",
 							parameterArray[0],
 							parameterArray[1], parameterArray[2],
 							parameterArray[3], parameterArray[4],
