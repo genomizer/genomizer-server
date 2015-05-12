@@ -70,8 +70,6 @@ public class SRADownloader extends Executor {
      */
     private String getRunFile(String runID) throws IOException, InterruptedException, RuntimeException {
 
-        //String ftp = buildFTP(runID);
-
         String command[] = parse(fastqDumpExecutable + " -O "  + outDir + " " + runID);
 
         executeProgram(command);
