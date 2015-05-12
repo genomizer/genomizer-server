@@ -43,7 +43,7 @@ public class CommandClasses {
         classes.put("POST /login", LoginCommand.class);
         classes.put("DELETE /login", LogoutCommand.class);
         classes.put("PUT /process/rawtoprofile", ProcessCommand.class);
-        classes.put("GET /search/", SearchForExperimentsCommand.class);
+        classes.put("GET /search", SearchForExperimentsCommand.class);
         classes.put("PUT /sysadm/annpriv", UpdateAnnotationPrivilegesCommand.
                 class);
         classes.put("PUT /experiment", UpdateExperimentCommand.class);
