@@ -80,7 +80,7 @@ public class PostUserCommand extends Command {
 					"adding user to database, user probably already exists. " +
 					e.getMessage());
 		}
-		return new MinimalResponse(HttpStatusCode.CREATED);
+		return new MinimalResponse(HttpStatusCode.OK);
 
 	}
 

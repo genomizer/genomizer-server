@@ -71,7 +71,7 @@ public class PostGenomeReleaseCommand extends Command {
 				 uploadURLs.add(db.addGenomeRelease(genomeVersion, specie,
 						 fileName, checkSumMD5));
 			}
-			return new AddGenomeReleaseResponse(HttpStatusCode.CREATED, uploadURLs);
+			return new AddGenomeReleaseResponse(HttpStatusCode.OK, uploadURLs);
 		} catch (SQLException | IOException e) {
 				return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
 						e.getMessage());
