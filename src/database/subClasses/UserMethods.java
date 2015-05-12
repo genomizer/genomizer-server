@@ -167,12 +167,11 @@ public class UserMethods {
 	 *
 	 * @param username the user to change the password for
 	 * @param newPasswdHash the new password/salt hash
-	 * @param newSalt the salt for the new password
 	 * @return the number of tuples updated in the database
 	 * @throws SQLException if the query does not succeed
 	 * @throws IOException
 	 */
-	public int resetPassword(String username, String newPasswdHash, String newSalt)
+	public int resetPassword(String username, String newPasswdHash)
 			throws SQLException, IOException {
 
 		if (username == null || username.contentEquals("") ||
@@ -180,17 +179,45 @@ public class UserMethods {
 			throw new IOException("Invalid arguments");
 		}
 
-		String query = "UPDATE User_Info SET PasswordHash = ?, PasswordSalt = ?"
+		String query = "UPDATE User_Info SET PasswordHash = ?"
 				+ "WHERE (Username = ?)";
 
 		PreparedStatement stmt = conn.prepareStatement(query);
 		stmt.setString(1, newPasswdHash);
-		stmt.setString(2, newSalt);
-		stmt.setString(3, username);
+		stmt.setString(2, username);
 		int resCount = stmt.executeUpdate();
 		stmt.close();
 
 		return resCount;
+	}
+
+	/**
+	 * Update a user's info. Changes a user's Role, Full Name
+	 * and Email in the database.
+	 *
+	 * @param username - The user to update.
+	 * @param role     - The user's new role.
+	 * @param fullName - The user's full name.
+	 * @param email    - The user's email.
+	 * @return the number of tuples updated in the database.
+	 */
+	public int updateUser(String username, String role, String fullName,
+						  String email) throws SQLException, IOException {
+		isValidArgument(username);
+		isValidArgument(role);
+		isValidArgument(fullName);
+		isValidArgument(email);
+		String query = "UPDATE User_Info" +
+				"SET Role = ?, FullName = ?, Email = ?" +
+				"WHERE UserName = ?";
+		PreparedStatement stmt = conn.prepareStatement(query);
+		stmt.setString(1, role);
+		stmt.setString(2, fullName);
+		stmt.setString(3, email);
+		stmt.setString(4, username);
+		int result = stmt.executeUpdate();
+		stmt.close();
+		return result;
 	}
 
 	/**

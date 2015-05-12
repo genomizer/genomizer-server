@@ -152,6 +152,6 @@ public class HackingTest {
 			throws SQLException, IOException {
 
 		dbac.addUser("Rolf", "1234","ads", "Admin", "Rolf Persson", "dffddf@mail.com");
-		dbac.resetPassword("Rolf", "","asd");
+		dbac.resetPassword("Rolf", "");
 	}
 }
