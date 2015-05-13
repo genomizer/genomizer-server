@@ -265,6 +265,7 @@ public class RequestHandler implements HttpHandler {
 	private ErrorResponse createBadRequestResponse() {
 		return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Could not create a " +
 				"command from request. Bad format on request.");
+
 	}
 
 	/*Used to log a request.*/

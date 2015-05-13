@@ -3,11 +3,14 @@ package command.file;
 import command.Command;
 import command.UserRights;
 import command.ValidateException;
+import database.DatabaseAccessor;
 import database.constants.MaxLength;
+import database.containers.FileTuple;
 import database.subClasses.UserMethods.UserType;
-import response.HttpStatusCode;
-import response.MinimalResponse;
-import response.Response;
+import response.*;
+
+import java.io.IOException;
+import java.sql.SQLException;
 
 /**
  * retrieves a file linked to an experiment.
@@ -35,25 +38,21 @@ public class GetFileCommand extends Command {
 
 	@Override
 	public Response execute() {
-//		Response rsp = rsp;
-//		ArrayList<String> attributes = new ArrayList<String>();
-//
-//		results = db.searchExperiment(fileID);
-//
-//
-//		if(results == null) {
-//			 File not found, send appropriate response (404)
-//			rsp = new ErrorResponse(404);
-//		} else {
-//			int rowNr = results.getRowCount();
-//			for (int i = 0; i < rowNr; i++) {
-//				attributes = results.getRowValues(i);
-//			}
-//			System.out.println(attributes.toString());
-//			rsp = new DownloadResponse(200, attributes);
-//		}
 
-		//Method not implemented, send appropriate response
-		return 	new MinimalResponse(HttpStatusCode.METHOD_NOT_YET_IMPLEMENTED);
+		DatabaseAccessor db;
+		FileTuple fileTuple;
+
+		try {
+			db = initDB();
+			fileTuple = db.getFileTuple(fileID);
+		} catch (SQLException | IOException e) {
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, e.getMessage());
+		}
+
+		if(fileTuple == null){
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST,"Could not find file");
+		}
+
+		return new SingleFileResponse(fileTuple);
 	}
 }
