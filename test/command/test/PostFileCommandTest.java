@@ -58,7 +58,7 @@ public class PostFileCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateExpIdMissing() throws ValidateException {
 
-		String json = jsonBuilder(null,"name","raw","metameta","name","user1","releaseNr");
+		String json = jsonBuilder(null,"name","raw","metameta","name","releaseNr");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
 		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
@@ -76,7 +76,7 @@ public class PostFileCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateExpIdEmptyString() throws ValidateException {
 
-		String json = jsonBuilder("","name","raw","metameta","name","user1","releaseNr");
+		String json = jsonBuilder("","name","raw","metameta","name","releaseNr");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
 		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
@@ -98,7 +98,7 @@ public class PostFileCommandTest {
 		for(int i = 0; i < MaxLength.FILE_EXPID + 1; i++) {
 			big = big + "a";
 		}
-		String json = jsonBuilder(big,"name","raw","metameta","name","user1","releaseNr");
+		String json = jsonBuilder(big,"name","raw","metameta","name","releaseNr");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
 		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
@@ -116,7 +116,7 @@ public class PostFileCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateExpIdInvalidCharacters() throws ValidateException {
 
-		String json = jsonBuilder("i/d","name","raw","metameta","name","user1","releaseNr");
+		String json = jsonBuilder("i/d","name","raw","metameta","name","releaseNr");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
 		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
@@ -134,7 +134,7 @@ public class PostFileCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateFileNameMissing() throws ValidateException {
 
-		String json = jsonBuilder("id",null,"raw","metameta","name","user1","releaseNr");
+		String json = jsonBuilder("id",null,"raw","metameta","name","releaseNr");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
 		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
@@ -152,7 +152,7 @@ public class PostFileCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateFileNameEmptyString() throws ValidateException {
 
-		String json = jsonBuilder("id","","raw","metameta","name","user1","releaseNr");
+		String json = jsonBuilder("id","","raw","metameta","name","releaseNr");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
 		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
@@ -174,7 +174,7 @@ public class PostFileCommandTest {
 		for(int i = 0; i < MaxLength.FILE_FILENAME + 1; i++) {
 			big = big + "a";
 		}
-		String json = jsonBuilder("id",big,"raw","metameta","name","user1","releaseNr");
+		String json = jsonBuilder("id",big,"raw","metameta","name","releaseNr");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
 		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
@@ -192,7 +192,7 @@ public class PostFileCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateFileNameContainsSlashes() throws ValidateException {
 
-		String json = jsonBuilder("id","nam/e","raw","metameta","name","user1","releaseNr");
+		String json = jsonBuilder("id","nam/e","raw","metameta","name","releaseNr");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
 		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
@@ -210,7 +210,7 @@ public class PostFileCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateTypeMissing() throws ValidateException {
 
-		String json = jsonBuilder("id","name",null,"metameta","name","user1","releaseNr");
+		String json = jsonBuilder("id","name",null,"metameta","name","releaseNr");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
 		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
@@ -228,7 +228,7 @@ public class PostFileCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateTypeEmptyString() throws ValidateException {
 
-		String json = jsonBuilder("id","name","","metameta","name","user1","releaseNr");
+		String json = jsonBuilder("id","name","","metameta","name","releaseNr");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
 		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
@@ -250,7 +250,7 @@ public class PostFileCommandTest {
 		for(int i = 0; i < MaxLength.FILE_FILETYPE + 1; i++) {
 			big = big + "a";
 		}
-		String json = jsonBuilder("id","name",big,"metameta","name","user1","releaseNr");
+		String json = jsonBuilder("id","name",big,"metameta","name","releaseNr");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
 		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
@@ -268,7 +268,7 @@ public class PostFileCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateTypeInvalidCharacters() throws ValidateException {
 
-		String json = jsonBuilder("id","name","ra/w","metameta","name","user1","releaseNr");
+		String json = jsonBuilder("id","name","ra/w","metameta","name","releaseNr");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
 		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
@@ -286,7 +286,7 @@ public class PostFileCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateMetaDataMissing() throws ValidateException {
 
-		String json = jsonBuilder("id","name","raw",null,"name","user1","releaseNr");
+		String json = jsonBuilder("id","name","raw",null,"name","releaseNr");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
 		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
@@ -304,7 +304,7 @@ public class PostFileCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateMetaDataEmptyString() throws ValidateException {
 
-		String json = jsonBuilder("id","name","raw","","name","user1","releaseNr");
+		String json = jsonBuilder("id","name","raw","","name","releaseNr");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
 		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
@@ -326,7 +326,7 @@ public class PostFileCommandTest {
 		for(int i = 0; i < MaxLength.FILE_METADATA + 1; i++) {
 			big = big + "a";
 		}
-		String json = jsonBuilder("id","name","raw",big,"name","user1","releaseNr");
+		String json = jsonBuilder("id","name","raw",big,"name","releaseNr");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
 		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
@@ -345,7 +345,7 @@ public class PostFileCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateMetaDataInvalidCharacters() throws ValidateException {
 
-		String json = jsonBuilder("id","name","raw","metam/eta","name","user1","releaseNr");
+		String json = jsonBuilder("id","name","raw","metam/eta","name","releaseNr");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
 		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
@@ -363,7 +363,7 @@ public class PostFileCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateAuthorMissing() throws ValidateException {
 
-		String json = jsonBuilder("id","name","raw","metameta",null,"user1","releaseNr");
+		String json = jsonBuilder("id","name","raw","metameta",null,"releaseNr");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
 		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
@@ -381,7 +381,7 @@ public class PostFileCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateAuthorEmptyString() throws ValidateException {
 
-		String json = jsonBuilder("id","name","raw","metameta","","user1","releaseNr");
+		String json = jsonBuilder("id","name","raw","metameta","","releaseNr");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
 		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
@@ -403,7 +403,7 @@ public class PostFileCommandTest {
 		for(int i = 0; i < MaxLength.FILE_AUTHOR + 1; i++) {
 			big = big + "a";
 		}
-		String json = jsonBuilder("id","name","raw","metameta",big,"user1","releaseNr");
+		String json = jsonBuilder("id","name","raw","metameta",big,"releaseNr");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
 		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
@@ -421,88 +421,13 @@ public class PostFileCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateAuthorInvalidCharacters() throws ValidateException {
 
-		String json = jsonBuilder("id","name","raw","metameta","na/me","user1","releaseNr");
+		String json = jsonBuilder("id","name","raw","metameta","na/me","releaseNr");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
 		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
 
-	}
-
-	/**
-	 * Test used to check that ValidateException is thrown when
-	 * Uploader is missing.
-	 *
-	 * @throws ValidateException
-	 */
-	@Test(expected = ValidateException.class)
-	public void testValidateUploaderMissing() throws ValidateException {
-
-		String json = jsonBuilder("id","name","raw","metameta","name",null,"releaseNr");
-		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
-		c.setFields("uri", "uuid", UserType.ADMIN);
-		c.validate();
-
-		fail("Expected ValidateException to be thrown.");
-
-	}
-
-	/**
-	 * Test used to check that ValidateException is thrown when
-	 * Uploader is and empty string.
-	 *
-	 * @throws ValidateException
-	 */
-	@Test(expected = ValidateException.class)
-	public void testValidateUploaderEmptyString() throws ValidateException {
-
-		String json = jsonBuilder("id","name","raw","metameta","name","","releaseNr");
-		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
-		c.setFields("uri", "uuid", UserType.ADMIN);
-		c.validate();
-
-		fail("Expected ValidateException to be thrown.");
-
-	}
-
-	/**
-	 * Test used to check that ValidateException is thrown when
-	 * Uploader length is to long.
-	 *
-	 * @throws ValidateException
-	 */
-	@Test(expected = ValidateException.class)
-	public void testValidateUploaderToLong() throws ValidateException {
-
-		String big = "";
-		for(int i = 0; i < MaxLength.FILE_UPLOADER + 1; i++) {
-			big = big + "a";
-		}
-		String json = jsonBuilder("id","name","raw","metameta","name",big,"releaseNr");
-		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
-		c.setFields("uri", "uuid", UserType.ADMIN);
-		c.validate();
-
-		fail("Expected ValidateException to be thrown.");
-
-	}
-
-	/**
-	 * Test used to check that ValidateException is thrown when
-	 * Uploader contains invalid characters.
-	 *
-	 * @throws ValidateException
-	 */
-	@Test(expected = ValidateException.class)
-	public void testValidateUploaderInvalidCharacters() throws ValidateException {
-
-		String json = jsonBuilder("id","name","raw","metameta","name","use/r1","releaseNr");
-		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
-		c.setFields("uri", "uuid", UserType.ADMIN);
-		c.validate();
-
-		fail("Expected ValidateException to be thrown.");
 	}
 
 	/**
@@ -514,7 +439,7 @@ public class PostFileCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateGrVersionMissing() throws ValidateException {
 
-		String json = jsonBuilder("id","name","raw","metameta","name","user1",null);
+		String json = jsonBuilder("id","name","raw","metameta","name",null);
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
 		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
@@ -532,7 +457,7 @@ public class PostFileCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateGrVersionEmptyString() throws ValidateException {
 
-		String json = jsonBuilder("id","name","raw","metameta","name","user1","");
+		String json = jsonBuilder("id","name","raw","metameta","name","");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
 		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
@@ -554,7 +479,7 @@ public class PostFileCommandTest {
 		for(int i = 0; i < MaxLength.FILE_GRVERSION + 1; i++) {
 			big = big + "a";
 		}
-		String json = jsonBuilder("id","name","raw","metameta","name","user1",big);
+		String json = jsonBuilder("id","name","raw","metameta","name",big);
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
 		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
@@ -572,7 +497,7 @@ public class PostFileCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateGrVersionInvalidCharacters() throws ValidateException {
 
-		String json = jsonBuilder("id","name","raw","metameta","name","user1","relea/seNr");
+		String json = jsonBuilder("id","name","raw","metameta","name","relea/seNr");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
 		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
@@ -590,7 +515,7 @@ public class PostFileCommandTest {
 	@Test
 	public void testValidateProperlyFormatted() throws ValidateException {
 
-		String json = jsonBuilder("id","name.txt","raw","metameta","name","user1","releaseNr");
+		String json = jsonBuilder("id","name.txt","raw","metameta","name","releaseNr");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
 		c.setFields("uri", "uuid", UserType.ADMIN);
 		c.validate();
@@ -606,7 +531,7 @@ public class PostFileCommandTest {
 	@Test
 	public void testConvertJSON() {
 
-		String json = jsonBuilder("id","name","raw","metameta","name","user1","releaseNr");
+		String json = jsonBuilder("id","name","raw","metameta","name","releaseNr");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
 		String compare = gson.toJson(c);
 
@@ -623,7 +548,7 @@ public class PostFileCommandTest {
 	@Test
 	public void testHavingFieldsRights() throws ValidateException {
 
-		String json = jsonBuilder("id","name","raw","metameta","name","user1","releaseNr");
+		String json = jsonBuilder("id","name","raw","metameta","name","releaseNr");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
 		c.setFields("uri", "uuid", UserType.USER);
 
@@ -639,7 +564,7 @@ public class PostFileCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testNotHavingRights() throws ValidateException {
 
-		String json = jsonBuilder("id","name","raw","metameta","name","user1","releaseNr");
+		String json = jsonBuilder("id","name","raw","metameta","name","releaseNr");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
 		c.setFields("uri", "uuid", UserType.GUEST);
 
@@ -653,7 +578,7 @@ public class PostFileCommandTest {
 	 * @param expID and the others strings are used for inserting into JSON object.
 	 * @return JSON formatted string.
 	 */
-	private String jsonBuilder(String expID, String fileN, String type, String metaD, String ath, String up, String grV) {
+	private String jsonBuilder(String expID, String fileN, String type, String metaD, String ath, String grV) {
 
 	    JsonObject j = new JsonObject();
 		j.addProperty("experimentID", expID);
@@ -661,7 +586,6 @@ public class PostFileCommandTest {
 		j.addProperty("type", type);
 		j.addProperty("metaData", metaD);
 		j.addProperty("author", ath);
-		j.addProperty("uploader", up);
 		j.addProperty("grVersion", grV);
 
 		return j.toString();

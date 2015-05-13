@@ -56,7 +56,7 @@ public class PostAnnotationValueCommand extends Command {
 			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
 		} catch (IOException e) {
 			e.printStackTrace();
-			return new ErrorResponse(HttpStatusCode.SERVICE_UNAVAILABLE,
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
 					e.getMessage());
 		} finally {
 			if (db != null) {
@@ -64,6 +64,6 @@ public class PostAnnotationValueCommand extends Command {
 			}
  		}
 
-		return new MinimalResponse(HttpStatusCode.CREATED);
+		return new MinimalResponse(HttpStatusCode.OK);
 	}
 }

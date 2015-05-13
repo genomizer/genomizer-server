@@ -66,6 +66,6 @@ public class PutUserPasswordCommand extends Command {
             return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Database error " + e.getMessage());
         }
 
-        return new MinimalResponse(HttpStatusCode.CREATED);
+        return new MinimalResponse(HttpStatusCode.OK);
     }
 }

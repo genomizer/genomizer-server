@@ -26,6 +26,6 @@ public class GetAnnotationPrivilegesCommand extends Command {
 
 	@Override
 	public Response execute() {
-		return new MinimalResponse(HttpStatusCode.NO_CONTENT);
+		return new MinimalResponse(HttpStatusCode.OK);
 	}
 }
