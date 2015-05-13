@@ -26,9 +26,7 @@ import response.MinimalResponse;
 import server.Debug;
 import server.ErrorLogger;
 
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.Map.Entry;
+
 import java.util.UUID;
 
 public class PutProcessCommand extends Command {
@@ -68,6 +66,7 @@ public class PutProcessCommand extends Command {
 		super.setFields(uri, uuid, userType);
 		setTimestamp(System.currentTimeMillis());
 		processtype = uri.split("/")[2];
+		username = uuid;
 	}
 
 	/**
