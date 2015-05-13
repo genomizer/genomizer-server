@@ -28,8 +28,8 @@ public class GenomeRelease {
 		System.out.println("Response Body: " +testSettings. printResponse(con));
 	}
 
-	static void sendGetGenomeReleaseSpecies(String specie) throws Exception {
-		URL obj = new URL(testSettings.url + "/genomeRelease/" + specie);
+	static void sendGetGenomeReleaseSpecies(String species) throws Exception {
+		URL obj = new URL(testSettings.url + "/genomeRelease/" + species);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
 		con.setRequestMethod("GET");
@@ -40,7 +40,7 @@ public class GenomeRelease {
 		System.out.println("Response Body: " +testSettings. printResponse(con));
 	}
 
-	static void sendAddGenomeRelease(String specie, String version) throws Exception {
+	static void sendAddGenomeRelease(String species, String version) throws Exception {
 		URL obj = new URL(testSettings.url + "/genomeRelease/");
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
@@ -49,7 +49,7 @@ public class GenomeRelease {
 
 		JsonObject jj=new JsonObject();
 		jj.addProperty("genomeVersion", version);
-		jj.addProperty("specie", specie);
+		jj.addProperty("specie", species);
 
 		JsonArray ja = new JsonArray();
 		JsonPrimitive element = new JsonPrimitive("GR1338");
@@ -67,8 +67,8 @@ public class GenomeRelease {
 		System.out.println("Response Body: " +testSettings. printResponse(con));
 	}
 
-	static void sendDeleteGenomeReleaseSpecies(String specie, String version) throws Exception {
-		URL obj = new URL(testSettings.url + "/genomeRelease/" + specie + "/" + version);
+	static void sendDeleteGenomeReleaseSpecies(String species, String version) throws Exception {
+		URL obj = new URL(testSettings.url + "/genomeRelease/" + species + "/" + version);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
 		con.setRequestMethod("DELETE");

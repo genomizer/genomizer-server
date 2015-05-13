@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
 import database.containers.Genome;
+import database.subClasses.UserMethods.UserType;
 import response.DeleteGenomeReleaseResponse;
 import response.ErrorResponse;
 import response.Response;
@@ -22,22 +23,19 @@ public class DeleteGenomeReleaseCommand extends Command {
 	private String genomeVersion;
 	private String species;
 
-	/**
-	 * Constructs a new instance of DeleteGenomeReleaseCommand using the
-	 * supplied species name and genome version.
-	 *
-	 * @param species the name of the species.
-	 * @param genomeVersion the genome version.
-	 */
-	public DeleteGenomeReleaseCommand(String species, String genomeVersion) {
-		this.genomeVersion = genomeVersion;
-		this.species = species;
+	@Override
+	public void setFields(String uri, String uuid, UserType userType) {
+		this.userType = userType;
+		String[] splitFields = uri.split("/");
+		species = splitFields[2];
+		genomeVersion = splitFields[3];
 	}
 
 	@Override
 	public void validate() throws ValidateException {
+		hasRights(UserRights.getRights(this.getClass()));
 		validateName(genomeVersion, MaxLength.GENOME_VERSION, "Genome version");
-		validateName(species, MaxLength.GENOME_SPECIES, "Genome specie");
+		validateName(species, MaxLength.GENOME_SPECIES, "Genome species");
 	}
 
 	@Override
@@ -57,13 +55,13 @@ public class DeleteGenomeReleaseCommand extends Command {
 									DeleteGenomeReleaseResponse(HttpStatusCode.OK);
 						} else {
 							return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
-									"Could not delete genomrelease");
+									"Could not delete genome release");
 						}
 					}
 				}
 			}
 			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Version " +
-					genomeVersion + " or specie " + species +
+					genomeVersion + " or species " + species +
 					" does not exist.");
 		} catch (SQLException | IOException e) {
 			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());

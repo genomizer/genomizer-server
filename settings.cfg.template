@@ -5,8 +5,10 @@ databasePassword    = pvt
 databaseHost        = localhost:6000
 databaseName        = genomizer
 
-# Port number for the genomizer server to use.
-genomizerPort       = 7000
+# Port numbers for the genomizer server to use. Set to -1 or comment
+# out either of these two to disable HTTP/HTTPS.
+genomizerHTTPPort   = 7000
+genomizerHTTPSPort  = 7443
 
 # Directory on the server where uploaded files are stored.
 

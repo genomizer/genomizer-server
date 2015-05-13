@@ -7,6 +7,7 @@ import java.util.List;
 import com.google.gson.annotations.Expose;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
+import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.HttpStatusCode;
 import response.MinimalResponse;
@@ -27,7 +28,16 @@ public class AddAnnotationValueCommand extends Command {
 	private String value = null;
 
 	@Override
+	public void setFields(String uri, String username, UserType userType) {
+		this.userType = userType;
+
+		/*No fields from the URI is needed, neither is the UUID. Dummy
+		implementation*/
+	}
+
+	@Override
 	public void validate() throws ValidateException {
+		hasRights(UserRights.getRights(this.getClass()));
 		validateName(name, MaxLength.ANNOTATION_LABEL, "Annotation label");
 		validateName(value, MaxLength.ANNOTATION_VALUE, "Annotation value");
 	}
@@ -60,5 +70,4 @@ public class AddAnnotationValueCommand extends Command {
 
 		return new MinimalResponse(HttpStatusCode.CREATED);
 	}
-
 }

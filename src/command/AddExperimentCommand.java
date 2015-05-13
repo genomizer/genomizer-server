@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.HttpStatusCode;
 import response.MinimalResponse;
@@ -26,7 +27,17 @@ public class AddExperimentCommand extends Command {
 	private ArrayList<Annotation> annotations = new ArrayList<>();
 
 	@Override
+	public void setFields(String uri, String uuid, UserType userType) {
+		this.userType = userType;
+
+		/*No fields from the URI is needed, neither is the UUID. Dummy
+		implementation*/
+	}
+
+	@Override
 	public void validate() throws ValidateException {
+
+		hasRights(UserRights.getRights(this.getClass()));
 		validateName(name, MaxLength.EXPID, "Experiment name");
 
 		if(annotations == null || annotations.size() < 1) {

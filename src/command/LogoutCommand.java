@@ -2,6 +2,7 @@ package command;
 
 import authentication.Authenticate;
 import database.constants.MaxLength;
+import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
@@ -16,13 +17,10 @@ import response.HttpStatusCode;
 public class LogoutCommand extends Command {
 	private String username;
 
-	/**
-	 * Constructs a new instance of LogoutCommand using the supplied
-	 * username.
-	 * @param username the username of the user that should be logged out.
-	 */
-	public LogoutCommand(String username) {
-		this.username = username;
+	@Override
+	public void setFields(String uri, String uuid, UserType userType) {
+		this.userType = userType;
+		this.username = uuid;
 	}
 
 	@Override
@@ -41,5 +39,4 @@ public class LogoutCommand extends Command {
 					"User not found");
 		}
 	}
-
 }

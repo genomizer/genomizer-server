@@ -4,6 +4,7 @@ import authentication.BCrypt;
 import com.google.gson.annotations.Expose;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
+import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
@@ -14,9 +15,10 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 /**
- * Command for changing user.
+ * Command class which enables the user to change their password.
  *
- * Created by dv13jen on 2015-04-16.
+ * @author dv13jen
+ * @version 1.0
  */
 public class ChangeUserPasswordCommand extends Command {
     
@@ -26,12 +28,20 @@ public class ChangeUserPasswordCommand extends Command {
     @Expose
     private String password = null;
 
+    @Override
+    public void setFields(String uri, String uuid, UserType userType) {
+        this.userType = userType;
+
+        /*No fields from the URI is needed, neither is the UUID. Dummy
+		implementation*/
+    }
 
     /**
      * Used to validate the ChangeUserPasswordCommand.
      */
     @Override
     public void validate() throws ValidateException {
+        hasRights(UserRights.getRights(this.getClass()));
         validateName(username, MaxLength.USERNAME, "Username/Password");
         validateName(password, MaxLength.PASSWORD, "Username/Password");
     }
@@ -56,7 +66,7 @@ public class ChangeUserPasswordCommand extends Command {
 		String hash = BCrypt.hashpw(password,BCrypt.gensalt());
 
         try {
-            db.resetPassword(username, hash,"SALT");
+            db.resetPassword(username, hash);
         } catch (SQLException | IOException e) {
             return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Database error " + e.getMessage());
         }

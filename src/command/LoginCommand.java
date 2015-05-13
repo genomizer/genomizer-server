@@ -1,6 +1,7 @@
 package command;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
+import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.HttpStatusCode;
 import response.LoginResponse;
@@ -28,6 +29,14 @@ public class LoginCommand extends Command {
 	private String password = null;
 
 	@Override
+	public void setFields(String uri, String uuid, UserType userType) {
+		this.userType = userType;
+
+		/*No fields from the URI is needed, neither is the UUID. Dummy
+		implementation*/
+	}
+
+	@Override
 	public void validate() throws ValidateException {
 		validateName(username, MaxLength.USERNAME, "Username/Password");
 		validateName(password, MaxLength.PASSWORD, "Username/Password");
@@ -35,10 +44,8 @@ public class LoginCommand extends Command {
 
 	@Override
 	public Response execute() {
-
-		DatabaseAccessor db = null;
-		String dbHash = null;
-
+		DatabaseAccessor db;
+		String dbHash;
 		try {
 			db = initDB();
 			dbHash = db.getPasswordHash(username);
@@ -60,6 +67,7 @@ public class LoginCommand extends Command {
 					Authenticate.getID(username));
 			return new LoginResponse(200, login.getUUID());
 		}
+
 		Debug.log("LOGIN WAS UNSUCCESSFUL FOR: " + username + ". REASON: " +
 				login.getErrorMessage());
 		return new ErrorResponse(HttpStatusCode.UNAUTHORIZED,

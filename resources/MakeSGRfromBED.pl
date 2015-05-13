@@ -35,10 +35,10 @@ $VERSION = '1';
 use strict;
 use warnings;
 
-my $bed_format_file = $ARGV[1];
+my $bed_format_file = $ARGV[0];
 open(IN, "<", $bed_format_file);
 my $sgr_format_file = $bed_format_file;
-$sgr_format_file =~ $ARGV[2];
+$sgr_format_file = $ARGV[1];
 open(OUT, ">", $sgr_format_file);
 
 my ($line, $centre) = ('', 0);

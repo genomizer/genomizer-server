@@ -8,6 +8,7 @@ import com.google.gson.annotations.Expose;
 
 import database.DatabaseAccessor;
 
+import database.subClasses.UserMethods.UserType;
 import database.constants.MaxLength;
 import response.ErrorResponse;
 import response.HttpStatusCode;
@@ -41,14 +42,23 @@ public class CreateUserCommand extends Command {
 	 * @throws ValidateException
 	 */
 	@Override
+	public void setFields(String uri, String uuid, UserType userType) {
+		this.userType = userType;
+
+		/*No fields from the URI is needed, neither is the UUID. Dummy
+		implementation*/
+	}
+
+	@Override
 	public void validate() throws ValidateException {
+
+		hasRights(UserRights.getRights(this.getClass()));
 
 		validateName(username, MaxLength.USERNAME, "User");
 		validateName(password, MaxLength.PASSWORD, "Password");
 		validateName(privileges, MaxLength.ROLE, "Privileges");
 		validateExists(name, MaxLength.FULLNAME, "Name");
 		validateExists(email, MaxLength.EMAIL, "Email");
-
 	}
 
 	/**

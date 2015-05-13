@@ -14,7 +14,8 @@ public class ServerSettings {
 	public static String wwwTunnelHost = null;
 	public static String wwwTunnelPath = null;
 	public static int wwwTunnelPort = -1;
-	public static int genomizerPort = -1;
+	public static int genomizerHttpPort  = -1;
+	public static int genomizerHttpsPort = -1;
 	public static String fileLocation = "/var/www/data/";
 	public static String bowtieLocation = "bowtie";
 	public static int nrOfProcessThreads = 5;
@@ -33,7 +34,8 @@ public class ServerSettings {
 					+ "wwwTunnelHost = " + wwwTunnelHost + "\n"
 					+ "wwwTunnelPort = " + wwwTunnelPort + "\n"
 					+ "wwwTunnelPath = " + wwwTunnelPath + "\n"
-					+ "genomizerPort = " + genomizerPort + "\n"
+					+ "genomizerHttpPort  = " + genomizerHttpPort + "\n"
+					+ "genomizerHttpsPort = " + genomizerHttpsPort + "\n"
 					+ "fileLocation = " + fileLocation + "\n"
 					+ "nrOfProcessThreads = " + nrOfProcessThreads + "\n"
 					+ "bowtieLocation = " + bowtieLocation + "\n";
@@ -60,24 +62,26 @@ public class ServerSettings {
 		nullCheck(wwwTunnelHost, "wwwTunnelHost");
 		nullCheck(wwwTunnelPort, "wwwTunnelPort");
 		nullCheck(wwwTunnelPath, "wwwTunnelPath");
-		nullCheck(genomizerPort, "genomizerPort");
+
+		// Either 'genomizerHttpsPort' or 'genomizerHttpPort' can be null,
+		// but not both at the same time.
+		if (genomizerHttpsPort < 0)
+			nullCheck(genomizerHttpPort, "genomizerHttpPort");
+		if (genomizerHttpPort < 0)
+			nullCheck(genomizerHttpsPort, "genomizerHttpsPort");
+
 		nullCheck(fileLocation, "fileLocation");
 		nullCheck(nrOfProcessThreads, "nrOfProcessThreads");
 		nullCheck(bowtieLocation, "bowtieLocation");
 	}
 
 	private static void nullCheck(int parameter, String name) {
-		if (parameter == -1) {
-			String msg = "Error! parameter " + name + " is not set. Check in " +
-					"settings.cfg if it is set and spelled correctly, " +
-					"capitalization does not matter.\nExiting";
-			Debug.log(msg);
-			ErrorLogger.log("SYSTEM", msg);
-			System.exit(1);
+		if (parameter < 0) {
+			nullCheck(null, name);
 		}
 	}
 
-	private static void nullCheck(String parameter, String name) {
+	private static void nullCheck(Object parameter, String name) {
 		if (parameter == null) {
 			String msg = "Error! parameter " + name + " is not set. Check in " +
 					"settings.cfg if it is set and spelled correctly, " +
@@ -131,8 +135,12 @@ public class ServerSettings {
 				case "wwwtunnelpath":
 					wwwTunnelPath = value;
 					break;
+				case "genomizerhttpport":
 				case "genomizerport":
-					genomizerPort = Integer.parseInt(value);
+					genomizerHttpPort = Integer.parseInt(value);
+					break;
+				case "genomizerhttpsport":
+					genomizerHttpsPort = Integer.parseInt(value);
 					break;
 				case "filelocation":
 					fileLocation = value;
@@ -164,7 +172,8 @@ public class ServerSettings {
 							+ "\twwwTunnelHost = " + wwwTunnelHost + "\n"
 							+ "\twwwTunnelPort = " + wwwTunnelPort + "\n"
 							+ "\twwwTunnelPath = " + wwwTunnelPath + "\n"
-							+ "\tgenomizerPort = " + genomizerPort + "\n"
+							+ "\tgenomizerHttpPort = " + genomizerHttpPort + "\n"
+							+ "\tgenomizerHttpsPort = " + genomizerHttpsPort + "\n"
 							+ "\tfileLocation = " + fileLocation + "\n"
 							+ "\tnrOfProcessThreads = " + nrOfProcessThreads + "\n"
 							+ "\tbowtieLocation = " + bowtieLocation

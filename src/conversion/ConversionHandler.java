@@ -1,262 +1,229 @@
 package conversion;
 
-import java.io.File;
-import java.io.IOException;
+import database.DatabaseAccessor;
+import database.containers.FileTuple;
+import response.ErrorResponse;
+import response.HttpStatusCode;
+import server.ServerSettings;
 
-import conversion.ProfileDataConverter;
+import javax.naming.ConfigurationException;
+import java.io.*;
+import java.sql.SQLException;
+
+import static org.apache.commons.codec.digest.DigestUtils.md5Hex;
 
 /**
  * Class that acts as a handler for all the conversions that will be done.
  * All conversions should go through this class.
  *
+ * Created 2015-05-04.
+ * @author Albin Råstander <c12arr@cs.umu.se>
+ * @author Martin Larsson <dv13mln@cs.umu.se>
+ *
  */
 public class ConversionHandler {
+	private DatabaseAccessor db;
+	private ProfileDataConverter pdc;
+	private String outputFile;
+	private String fileInDB;
 
-	public ConversionHandler createConversionHandler() {
-		return new ConversionHandler();
+	/**
+	 * Constructor
+	 */
+	public ConversionHandler() {
+		pdc = new ProfileDataConverter();
+		outputFile = null;
 	}
 
 	/**
-	 * Converts profile data from wig, sgr, gff3 and bed to all the others
-	 *
-	 *
-	 * @param secondColumn -- IMPORTANT, null unless converting to bed
+	 * Initiate database
+	 * @return DatabaseAccessor
+	 * @throws SQLException
 	 * @throws IOException
-	 * @throws InterruptedException
 	 */
-	public String executeProfileDataConversion(String conversionName,
-			String inFile, String outFile, String secondColumn)
-			throws InterruptedException, IOException {
+	private DatabaseAccessor initDB() throws SQLException, IOException {
+		return new DatabaseAccessor(ServerSettings.databaseUsername,
+				ServerSettings.databasePassword, ServerSettings.databaseHost,
+				ServerSettings.databaseName);
+	}
 
-		checkValidity(conversionName, inFile, outFile, secondColumn);
+	/**
+	 * Convert between profile data formats
+	 * @param newFormat Format to convert to
+	 * @param id Database id of file to convert from
+	 * @throws SQLException
+	 * @throws IOException
+	 */
+	public String convertProfileData(String newFormat, int id) throws SQLException, IOException {
+		db = initDB();
+		FileTuple file = db.getFileTuple(id);
+		fileInDB = file.path;
+		String currentFormat = getFileType(file.path);
 
-		ProfileDataConverter PDC = new ProfileDataConverter();
+		switch (currentFormat) {
+			case "bed":
+				convertFromBedTo(newFormat);
+				break;
+			case "gff":
+				convertFromGffTo(newFormat);
+				break;
+			case "sgr":
+				convertFromSgrTo(newFormat);
+				break;
+			case "wig":
+				convertFromWigTo(newFormat);
+				break;
+		}
 
-		switch (conversionName) {
-			case "wigToSgr":
-				PDC.wigToSgr(inFile, outFile);
+		String inputFileName = file.path.substring(file.path.lastIndexOf('/')+1);
+		String fileName = outputFile.substring(outputFile.lastIndexOf('/')+1);
+
+		FileTuple ft = db.addNewFile(file.expId, FileTuple.PROFILE, fileName,
+				inputFileName, null, file.author,
+				"ConversionHandler", file.isPrivate, file.grVersion, md5Hex(new FileInputStream(new File(outputFile))));
+		db.markReadyForDownload(ft);
+		db.close();
+
+		return outputFile;
+	}
+
+	/**
+	 * Get file extension
+	 * @param filepath
+	 * @return
+	 */
+	private String getFileType(String filepath) {
+		return filepath.substring(filepath.lastIndexOf('.')+1);
+	}
+
+	/**
+	 * All conversions from bed type
+	 * @param format
+	 * @throws IOException
+	 */
+	private void convertFromBedTo(String format) throws IOException {
+		switch (format) {
+			case "bed":
+				throw new IllegalArgumentException("Cannot convert from bed to bed.");
+			case "gff":
+				throw new IllegalArgumentException("Conversion from bed to gff not implemented.");
+			case "sgr":
+				outputFile = pdc.bedToSgr(fileInDB);
 				break;
-			case "wigToBed":
-				PDC.wigToBed(inFile, outFile, secondColumn);
-				break;
-			case "bedToSgr":
-					PDC.bedToSgr(inFile, outFile);
-				break;
-			case "sgrToBed":
-				PDC.sgrToBed(inFile, outFile, secondColumn);
-				break;
-			case "gff3ToBed":
-				PDC.gff3ToBed(inFile, outFile, secondColumn);
-				break;
-			case "gff3ToSgr":
-					PDC.gff3ToSgr(inFile, outFile);
-				break;
-			case "gff3ToWig":
-				PDC.gff3ToWig(inFile, outFile);
-				break;
-			case "sgrToWig":
-				PDC.sgrToWig(inFile, outFile);
-				break;
-			case "bedToWig":
-				PDC.bedToWig(inFile, outFile);
+			case "wig":
+				outputFile = pdc.bedToWig(fileInDB);
 				break;
 			default:
-				throw new IllegalArgumentException();
+				throw new IllegalArgumentException("Unkown conversion.");
 		}
-
-		return "success";
 	}
 
-	private boolean checkValidity(String conversionName, String inFile,
-			String outFile, String secondColumn) {
-
-		if (conversionName == null || inFile == null || outFile == null) {
-			throw new IllegalArgumentException();
+	/**
+	 * All conversions from gff type
+	 * @param format
+	 * @throws IOException
+	 */
+	private	void convertFromGffTo(String format) throws IOException {
+		switch (format) {
+			case "bed":
+				throw new IllegalArgumentException("Conversion from gff to bed mot implemented.");
+			case "gff":
+				throw new IllegalArgumentException("Cannot convert from gff to gff");
+			case "sgr":
+				outputFile = pdc.gffToSgr(fileInDB);
+				break;
+			case "wig":
+				outputFile = pdc.gffToWig(fileInDB);
+				break;
+			default:
+				throw new IllegalArgumentException("Unknown conversion.");
 		}
-
-		if ((conversionName == "wigToBed"
-				|| conversionName == "sgrToBed"
-				|| conversionName == "gff3ToBed")
-				&& secondColumn == null) {
-			throw new IllegalArgumentException();
-		}
-
-		File f = new File(outFile);
-		if(f.isDirectory()) {
-			throw new IllegalArgumentException();
-		}
-
-		return true;
 	}
 
-	public String checkFileType(String filePath){
-		String type = "";
-
-		if((filePath.length()-filePath.replaceAll("\\.","").length())>=1){
-
-			String[] splitArray = filePath.split("\\.");
-			int lengthOfArray = splitArray.length;
-			type = splitArray[lengthOfArray-1];
-			System.err.println(type);
+	/**
+	 * All conversion from sgr type
+	 * @param format
+	 * @throws IOException
+	 */
+	private void convertFromSgrTo(String format) throws IOException {
+		switch (format) {
+			case "bed":
+				throw new IllegalArgumentException("Cannot convert from sgr to bed.");
+			case "gff":
+				throw new IllegalArgumentException("Cannot convert from sgr to gff.");
+			case "sgr":
+				throw new IllegalArgumentException("Cannot convert from sgr to sgr.");
+			case "wig":
+				outputFile = pdc.sgrToWig(fileInDB);
+				break;
+			default:
+				throw new IllegalArgumentException("Unknown conversion.");
 		}
-
-		return type;
 	}
 
+	/**
+	 * All conversions from wig type
+	 * @param format
+	 * @throws IOException
+	 */
+	private void convertFromWigTo(String format) throws IOException {
+		String wigType = checkWigType(fileInDB);
+		switch (format) {
+			case "bed":
+				throw new IllegalArgumentException("Cannot convert from wig to bed.");
+			case "gff":
+				throw new IllegalArgumentException("Cannot convert from wig to gff.");
+			case "sgr":
+				convertFromWigToSgr(fileInDB, wigType);
+				break;
+			case "wig":
+				throw new IllegalArgumentException("Cannot convert from wig to wig.");
+			default:
+				throw new IllegalArgumentException("Unknown conversion.");
+		}
+	}
 
-// TODO
-//	public String executeRegionDataConversion(String conversionName,
-//			String inFile) {
-//
-//		//convert the outputfile to the inputfiles original filetype
-//		switch(fileType){
-//		case "wig":
-//			typeConverter.bedToWig(outfileBed);
-//			File file = new File(outfileBed);
-//			file.delete();
-//			break;
-//		case "sgr":
-//			typeConverter.bedToSgr(outfileBed);
-//			File file = new File(outfileBed);
-//			file.delete();
-//			break;
-//		case "bed":
-//
-//			break;
-//
-//		default:
-//			throw new IllegalArgumentException();
-//		}
-//
-//		return null;
-//
-//		}
+	/**
+	 * Return type of wig file
+	 * @param path
+	 * @return
+	 * @throws IOException
+	 */
+	private String checkWigType(String path) throws IOException {
+		BufferedReader fr = new BufferedReader(new FileReader(path));
 
-	// public void executeGenomeReleaseConversion(String chainfilePath, String
-	// infilePath,String outfilePath){
-	// String fileType = checkFileType(infilePath);
-	// String path = infilePath;
-	// GenomeReleaseConverter genomeConverter = new GenomeReleaseConverter();
-	// ProfileDataConverter typeConverter = new ProfileDataConverter();
-	//
-	// // turn the inputfile to bed
-	// switch(fileType){
-	// case "wig":
-	// path = typeConverter.wigToBed(infilePath);
-	// break;
-	// case "sgr":
-	// path = typeConverter.sgrToBed(infilePath);
-	// break;
-	// case "gff3":
-	// path = typeConverter.gff3ToBed(infilePath);
-	// case "bed":
-	// break;
-	// default:
-	// throw new IllegalArgumentException();
-	// }
-	//
-	//
-	// String outfileBed = outfilePath.split("\\.")[0];
-	// outfileBed = outfileBed+".bed";
-	//
-	// genomeConverter.procedure(path, outfileBed, chainfilePath);
-	//
-	// //convert the outputfile to the inputfiles original filetype
-	// switch(fileType){
-	// case "wig":
-	// typeConverter.bedToWig(outfileBed);
-	// break;
-	// case "sgr":// public void executeGenomeReleaseConversion(String
-	// chainfilePath, String infilePath,String outfilePath){
-	// String fileType = checkFileType(infilePath);
-	// String path = infilePath;
-	// GenomeReleaseConverter genomeConverter = new GenomeReleaseConverter();
-	// ProfileDataConverter typeConverter = new ProfileDataConverter();
-	//
-	// // turn the inputfile to bed
-	// switch(fileType){
-	// case "wig":
-	// path = typeConverter.wigToBed(infilePath);
-	// break;
-	// case "sgr":
-	// path = typeConverter.sgrToBed(infilePath);
-	// break;
-	// case "gff3":
-	// path = typeConverter.gff3ToBed(infilePath);
-	// case "bed":
-	// break;
-	// default:
-	// throw new IllegalArgumentException();
-	// }
-	//
-	//
-	// String outfileBed = outfilePath.split("\\.")[0];
-	// outfileBed = outfileBed+".bed";
-	//
-	// genomeConverter.procedure(path, outfileBed, chainfilePath);
-	//
-	// //convert the outputfile to the inputfiles original filetype
-	// switch(fileType){
-	// case "wig":
-	// typeConverter.bedToWig(outfileBed);
-	// break;
-	// case "sgr":
-	// typeConverter.bedToSgr(outfileBed);
-	// break;
-	// case "gff3":
-	// typeConverter.bedToGff3(outfileBed);
-	// case "bed":
-	// break;
-	// default:
-	// throw new IllegalArgumentException();
-	// }
-	//
-	// //delete the bedfile
-	// File file = new File(outfileBed);
-	// file.delete();
-	//
-	// }
-	// public String checkFileType(String filePath){
-	// String type = "";
-	// if((filePath.length()-filePath.replaceAll("\\.","").length())==1){
-	// type = filePath.split("\\.", 10)[1];
-	// System.err.println(type);
-	// }
-	//
-	//
-	//
-	// return type;
-	//
-	//
-	//
-	// }
-	// typeConverter.bedToSgr(outfileBed);
-	// break;
-	// case "gff3":
-	// typeConverter.bedToGff3(outfileBed);
-	// case "bed":
-	// break;
-	// default:
-	// throw new IllegalArgumentException();
-	// }
-	//
-	// //delete the bedfile
-	// File file = new File(outfileBed);
-	// file.delete();
-	//
-	// }
-	// public String checkFileType(String filePath){
-	// String type = "";
-	// if((filePath.length()-filePath.replaceAll("\\.","").length())==1){
-	// type = filePath.split("\\.", 10)[1];
-	// System.err.println(type);
-	// }
-	//
-	//
-	//
-	// return type;
-	//
-	//
-	//
-	// }
+		fr.readLine();
+		String line = fr.readLine();
+		String[] columns = line.split("\\s+");
+
+		if (columns[0].equals("variableStep"))
+			return "variableStep";
+		else if (columns[0].equals("fixedStep"))
+			return "fixedStep";
+		else
+			return "bed";
+	}
+
+	/**
+	 * All conversions from different wig types to sgr
+	 * @param fileInDB
+	 * @param wigType
+	 * @throws IOException
+	 */
+	private void convertFromWigToSgr(String fileInDB, String wigType) throws IOException {
+		switch (wigType) {
+			case "variableStep":
+				outputFile = pdc.wigToSgr("variableStep", fileInDB);
+				break;
+			case "fixedStep":
+				outputFile = pdc.wigToSgr("fixedStep", fileInDB);
+				break;
+			case "bed":
+				outputFile = pdc.wigToSgr("bed", fileInDB);
+				break;
+			default:
+				throw new IllegalArgumentException("Unknown conversion.");
+		}
+	}
+
 }
