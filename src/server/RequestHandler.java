@@ -111,7 +111,6 @@ public class RequestHandler implements HttpHandler {
 			}
 		} else if (uuid == null && !commandClass.equals(PostLoginCommand.
                 class)) {
-			Debug.log("User could not be authenticated!");
             respondWithAuthenticationFailure(exchange);
 			return;
 		}
@@ -121,6 +120,7 @@ public class RequestHandler implements HttpHandler {
 
         /*Retrieve the URI part of the request header.*/
 		String uri = exchange.getRequestURI().toString();
+        uri = removeTimeStamp(uri);
 
 		/*Does the length of the URI match the needed length?*/
 		if (URILength.get(commandClass) != calculateURILength(uri)) {
@@ -298,5 +298,38 @@ public class RequestHandler implements HttpHandler {
                 INTERNAL_SERVER_ERROR, "Could not create command from " +
                 "request");
         respond(errorResponse, exchange);
+    }
+
+    /* Finds the timestamp and removes it.*/
+    private String removeTimeStamp(String uri){
+
+        String newUri;
+
+        if (!uri.contains("_="))
+            return uri;
+
+        int pos = uri.lastIndexOf("_=");
+        int length = uri.length();
+        int end = pos +2;
+
+        if (length <= end ){
+            return uri;
+        }
+
+        if ('0' > uri.charAt(end) || '9' < uri.charAt(end)){
+            return uri;
+        }
+
+        if (pos > 0 && uri.charAt(pos-1) == '&') {
+            pos -= 1;
+        }
+
+        while(length > end && '0' <= uri.charAt(end) && '9' >= uri.charAt(end)){
+            end++;
+        }
+
+        newUri = uri.substring(0,pos) + uri.substring(end);
+
+        return newUri;
     }
 }
