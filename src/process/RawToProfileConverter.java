@@ -684,4 +684,20 @@ public class RawToProfileConverter extends Executor {
 		File dir = new File(folder);
 		return dir.exists();
 	}
+
+	private String runRemoveDuplicates(String inputFile, String outputFile,
+									 String metrics) {
+		/* TODO Check if input is .sam format */
+		/* TODO Should metric file be returned/stored/used? */
+		/* TODO Set command parameters  */
+		/* 	java -jar picard.jar MarkDuplicates INPUT=inputFile
+			OUTPUT=outputFile REMOVE_DUPLICATES=true
+			This needs to be called from the same directory as picard.jar
+			or include that in the path
+		*/
+
+		/* TODO Should the output file name be returned? */
+		return null;
+	}
+
 }
