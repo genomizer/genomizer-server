@@ -704,6 +704,8 @@ public class DatabaseAccessor implements AutoCloseable {
     }
 
     /**
+     * Add a new file to the File table and mark it as 'Done'.
+     *
      * @param expID
      *            String The unique name of the experiment. OBS! If not null,
      *            this must reference an experiment that has been previously
@@ -744,8 +746,18 @@ public class DatabaseAccessor implements AutoCloseable {
             String uploader, boolean isPrivate, String genomeRelease,
             String checkSumMD5)
             throws SQLException, IOException {
-        return fileMethods.addNewFile(expID, fileType, fileName, inputFileName,
-                metaData, author, uploader, isPrivate, genomeRelease, checkSumMD5);
+        return fileMethods.addNewFileWithStatus(expID, fileType, fileName, inputFileName,
+                metaData, author, uploader, isPrivate, genomeRelease, checkSumMD5, "Done");
+    }
+
+    /* Like addNewFile, but marks the file as 'In Progress'. */
+    public FileTuple addNewInProgressFile(String expID, int fileType, String fileName,
+                                          String inputFileName, String metaData, String author,
+                                          String uploader, boolean isPrivate, String genomeRelease,
+                                          String checkSumMD5)
+            throws SQLException, IOException {
+        return fileMethods.addNewFileWithStatus(expID, fileType, fileName, inputFileName,
+                metaData, author, uploader, isPrivate, genomeRelease, checkSumMD5, "In Progress");
     }
 
     /**

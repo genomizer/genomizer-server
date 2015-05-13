@@ -81,7 +81,6 @@ public class ConversionHandler {
 		FileTuple ft = db.addNewFile(file.expId, FileTuple.PROFILE, fileName,
 				inputFileName, null, file.author,
 				"ConversionHandler", file.isPrivate, file.grVersion, md5Hex(new FileInputStream(new File(outputFile))));
-		db.markReadyForDownload(ft);
 		db.close();
 
 		return ft;

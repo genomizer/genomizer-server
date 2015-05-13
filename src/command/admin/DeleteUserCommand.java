@@ -1,4 +1,4 @@
-package command.user;
+package command.admin;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -25,7 +25,8 @@ public class DeleteUserCommand extends Command {
 
 	@Override
 	public void setFields(String uri, String uuid, UserType userType) {
-		this.userType = userType;
+
+		super.setFields(uri, uuid, userType);
 		username = uri.split("/")[2];
 	}
 

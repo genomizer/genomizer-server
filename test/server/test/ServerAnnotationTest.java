@@ -113,7 +113,7 @@ public class ServerAnnotationTest extends ServerAbstractTestClass {
 
 		sendLogout();
 
-		assertTrue(responseCode == HttpStatusCode.CREATED);
+		assertTrue(responseCode == HttpStatusCode.OK);
 		assertTrue(deleteResponse == HttpStatusCode.OK);
 
 	}
@@ -140,7 +140,7 @@ public class ServerAnnotationTest extends ServerAbstractTestClass {
 
 		sendLogout();
 
-		assertTrue(responseCode == HttpStatusCode.CREATED);
+		assertTrue(responseCode == HttpStatusCode.OK);
 
 	}
 

@@ -1,5 +1,6 @@
 package command;
 
+import command.admin.PutUserAdminCommand;
 import command.annotation.*;
 import command.connection.DeleteLoginCommand;
 import command.connection.PostLoginCommand;
@@ -19,8 +20,9 @@ import command.genomerelease.PostGenomeReleaseCommand;
 import command.process.GetProcessStatusCommand;
 import command.process.PutProcessCommand;
 import command.search.SearchCommand;
-import command.user.DeleteUserCommand;
-import command.user.PostUserCommand;
+import command.admin.DeleteUserCommand;
+import command.admin.PostUserCommand;
+import command.user.PutUserCommand;
 
 import java.util.HashMap;
 
@@ -48,8 +50,8 @@ public class URILength {
 		uriLengths.put(PutFileCommand.class, 2);
 		uriLengths.put(DeleteFileCommand.class, 2);
 		uriLengths.put(SearchCommand.class, 2);
-		uriLengths.put(PostUserCommand.class, 1);
-		uriLengths.put(DeleteUserCommand.class, 2);
+		uriLengths.put(PostUserCommand.class, 2);
+		uriLengths.put(DeleteUserCommand.class, 3);
 		uriLengths.put(PutProcessCommand.class, 2);
 		uriLengths.put(GetProcessStatusCommand.class, 1);
 		uriLengths.put(GetAnnotationCommand.class, 1);
@@ -65,6 +67,8 @@ public class URILength {
 		uriLengths.put(GetGenomeReleaseCommand.class, 1);
 		uriLengths.put(GetGenomeReleaseSpeciesCommand.class, 2);
 		uriLengths.put(PutConvertFileCommand.class, 1);
+		uriLengths.put(PutUserAdminCommand.class, 2);
+		uriLengths.put(PutUserCommand.class, 1);
 	}
 
 	/**

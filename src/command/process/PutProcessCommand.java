@@ -55,9 +55,9 @@ public class PutProcessCommand extends Command {
 
 
 	@Override
-	public void setFields(String uri, String username, UserType userType) {
-		this.userType = userType;
-		this.username = username;
+	public void setFields(String uri, String uuid, UserType userType) {
+
+		super.setFields(uri, uuid, userType);
 		setTimestamp(System.currentTimeMillis());
 		processtype = uri.split("/")[2];
 	}
@@ -192,7 +192,7 @@ public class PutProcessCommand extends Command {
 				"metadata: " + metadata + "\n" +
 				"parameters: " + parameters + "\n" +
 				"genomeVersion: " + genomeVersion + "\n");
-		return new ProcessResponse(HttpStatusCode.CREATED, "Raw to profile " +
+		return new ProcessResponse(HttpStatusCode.OK, "Raw to profile " +
 				"processing completed running " + processtype +
 				" on experiment" + expid + "\n"+
 				"metadata: " + metadata + "\n"+
@@ -220,7 +220,7 @@ public class PutProcessCommand extends Command {
 				error + "\n");
 		db.close();
 		return new ProcessResponse(HttpStatusCode.
-				SERVICE_UNAVAILABLE, headerError +
+				INTERNAL_SERVER_ERROR, headerError +
 				" when processing " + processtype +
 				" on experiment" + expid + "\n"+
 				"metadata: " + metadata + "\n"+

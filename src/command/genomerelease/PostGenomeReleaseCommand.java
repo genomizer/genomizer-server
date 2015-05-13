@@ -38,13 +38,6 @@ public class PostGenomeReleaseCommand extends Command {
 	@Expose
 	private ArrayList<String> checkSumsMD5 = new ArrayList<>();
 
-	@Override
-	public void setFields(String uri, String uuid, UserType userType) {
-		this.userType = userType;
-
-		/*No fields from the URI is needed, neither is the UUID. Dummy
-		implementation*/
-	}
 
 	@Override
 	public void validate() throws ValidateException {
@@ -78,7 +71,7 @@ public class PostGenomeReleaseCommand extends Command {
 				 uploadURLs.add(db.addGenomeRelease(genomeVersion, specie,
 						 fileName, checkSumMD5));
 			}
-			return new AddGenomeReleaseResponse(HttpStatusCode.CREATED, uploadURLs);
+			return new AddGenomeReleaseResponse(HttpStatusCode.OK, uploadURLs);
 		} catch (SQLException | IOException e) {
 				return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
 						e.getMessage());

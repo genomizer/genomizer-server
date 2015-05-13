@@ -39,12 +39,6 @@ public class PostAnnotationFieldCommand extends Command {
 	@Expose
 	private Boolean forced = null;
 
-	@Override
-	public void setFields(String uri, String uuid, UserType userType) {
-		this.userType = userType;
-		/*No fields from the URI is needed, neither is the UUID. Dummy
-		implementation*/
-	}
 
 	@Override
 	public void validate() throws ValidateException {
@@ -95,7 +89,7 @@ public class PostAnnotationFieldCommand extends Command {
 						defaultValueIndex, forced);
 			}
 			if(addedAnnotations != 0) {
-				return new AddAnnotationFieldResponse(HttpStatusCode.CREATED);
+				return new AddAnnotationFieldResponse(HttpStatusCode.OK);
 			} else {
 				return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Annotation " +
 						"could not be added, database error.");
@@ -107,7 +101,7 @@ public class PostAnnotationFieldCommand extends Command {
 				return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "The " +
 						"annotation " + name + " already exists.");
 			} else {
-				return new ErrorResponse(HttpStatusCode.SERVICE_UNAVAILABLE,
+				return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
 						e.getMessage());
 			}
 

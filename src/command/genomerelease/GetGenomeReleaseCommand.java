@@ -24,13 +24,7 @@ import response.Response;
  */
 
 public class GetGenomeReleaseCommand extends Command {
-	@Override
-	public void setFields(String uri, String uuid, UserType userType) {
-		this.userType = userType;
 
-		/*No fields from the URI is needed, neither is the UUID. Dummy
-		implementation*/
-	}
 
 	@Override
 	public void validate() throws ValidateException {
@@ -54,12 +48,12 @@ public class GetGenomeReleaseCommand extends Command {
 				return new GetGenomeReleaseResponse(HttpStatusCode.OK,
 						genomeReleases);
 			}catch(SQLException e){
-				return new ErrorResponse(HttpStatusCode.SERVICE_UNAVAILABLE,
+				return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
 						"Could not fetch all genome releases: " +
 								e.getMessage());
 			}
 		} catch (SQLException | IOException e) {
-			return new ErrorResponse(HttpStatusCode.SERVICE_UNAVAILABLE,
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
 					"SQLException - Could not create connection to database: " +
 							e.getMessage());
 		} finally {

@@ -1,4 +1,4 @@
-package command.user;
+package command.admin;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -45,14 +45,6 @@ public class PostUserCommand extends Command {
 	 * @throws command.ValidateException
 	 */
 	@Override
-	public void setFields(String uri, String uuid, UserType userType) {
-		this.userType = userType;
-
-		/*No fields from the URI is needed, neither is the UUID. Dummy
-		implementation*/
-	}
-
-	@Override
 	public void validate() throws ValidateException {
 
 		hasRights(UserRights.getRights(this.getClass()));
@@ -88,7 +80,7 @@ public class PostUserCommand extends Command {
 					"adding user to database, user probably already exists. " +
 					e.getMessage());
 		}
-		return new MinimalResponse(HttpStatusCode.CREATED);
+		return new MinimalResponse(HttpStatusCode.OK);
 
 	}
 

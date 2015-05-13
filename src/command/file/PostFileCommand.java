@@ -40,7 +40,6 @@ public class PostFileCommand extends Command {
 	@Expose
 	private String author = null;
 
-	@Expose
 	private String uploader;
 
 	@Expose
@@ -49,16 +48,11 @@ public class PostFileCommand extends Command {
 	@Expose
 	private String checkSumMD5 = null;
 
-	@Override
-	public void setFields(String uri, String uuid, UserType userType) {
-		this.userType = userType;
-
-		/*No fields from the URI is needed, neither is the UUID. Dummy
-		implementation*/
-	}
 
 	@Override
 	public void validate() throws ValidateException {
+		uploader = "TEMPORARY";
+
 		hasRights(UserRights.getRights(this.getClass()));
 		validateName(experimentID, MaxLength.EXPID, "Experiment name");
 		validateName(type, MaxLength.FILE_FILETYPE, "File type");
@@ -95,7 +89,7 @@ public class PostFileCommand extends Command {
 		}
 		try {
 			db = initDB();
-			FileTuple ft = db.addNewFile(experimentID, fileType, fileName, null,
+			FileTuple ft = db.addNewInProgressFile(experimentID, fileType, fileName, null,
 					metaData, author, uploader, false, grVersion, checkSumMD5);
 			return new UrlUploadResponse(HttpStatusCode.OK,
 					ft.getUploadURL());
@@ -104,7 +98,7 @@ public class PostFileCommand extends Command {
 			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
 		} catch (IOException e) {
 			e.printStackTrace();
-			return new ErrorResponse(HttpStatusCode.SERVICE_UNAVAILABLE,
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
 					e.getMessage());
 		} finally {
 			if (db != null) {

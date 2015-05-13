@@ -28,7 +28,8 @@ public class GetGenomeReleaseSpeciesCommand extends Command {
 
 	@Override
 	public void setFields(String uri, String uuid, UserType userType) {
-		this.userType = userType;
+
+		super.setFields(uri, uuid, userType);
 		species = uri.split("/")[2];
 	}
 
@@ -53,10 +54,10 @@ public class GetGenomeReleaseSpeciesCommand extends Command {
 					db.getAllGenomeReleasesForSpecies(species);
 			return new GetGenomeReleaseResponse(HttpStatusCode.OK, genomeReleases);
 		} catch (SQLException e) {
-			return new ErrorResponse(HttpStatusCode.SERVICE_UNAVAILABLE,
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
 					"DatabaseAccessor could not be created: " + e.getMessage());
 		} catch (IOException e) {
-			return new ErrorResponse(HttpStatusCode.SERVICE_UNAVAILABLE, species +
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, species +
 					" has no genome version released");
 		} finally {
 			if (db != null) {

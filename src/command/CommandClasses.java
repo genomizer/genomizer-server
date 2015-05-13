@@ -1,9 +1,10 @@
 package command;
 
+import command.admin.DeleteUserCommand;
+import command.admin.PostUserCommand;
+import command.admin.PutUserAdminCommand;
 import command.annotation.*;
-import command.connection.IsTokenValidCommand;
-import command.connection.PostLoginCommand;
-import command.connection.DeleteLoginCommand;
+import command.connection.*;
 import command.experiment.DeleteExperimentCommand;
 import command.experiment.GetExperimentCommand;
 import command.experiment.PostExperimentCommand;
@@ -19,9 +20,8 @@ import command.genomerelease.PostGenomeReleaseCommand;
 import command.process.GetProcessStatusCommand;
 import command.process.PutProcessCommand;
 import command.search.SearchCommand;
+import command.user.PutUserCommand;
 import command.user.PutUserPasswordCommand;
-import command.user.DeleteUserCommand;
-import command.user.PostUserCommand;
 
 import java.util.HashMap;
 
@@ -41,8 +41,6 @@ public class CommandClasses {
         classes.put("POST /experiment", PostExperimentCommand.class);
         classes.put("POST /file", PostFileCommand.class);
         classes.put("POST /genomeRelease", PostGenomeReleaseCommand.class);
-        classes.put("PUT /user", PutUserPasswordCommand.class);
-        classes.put("POST /user", PostUserCommand.class);
         classes.put("DELETE /annotation/field", DeleteAnnotationFieldCommand.
                 class);
         classes.put("DELETE /annotation/value", DeleteAnnotationValueCommand.
@@ -50,7 +48,7 @@ public class CommandClasses {
         classes.put("DELETE /experiment", DeleteExperimentCommand.class);
         classes.put("DELETE /file", DeleteFileCommand.class);
         classes.put("DELETE /genomeRelease/", DeleteGenomeReleaseCommand.class);
-        classes.put("DELETE /user", DeleteUserCommand.class);
+
         classes.put("PUT /annotation/field", PutAnnotationFieldCommand.class);
         classes.put("PUT /annotation/value", PutAnnotationValueCommand.class);
         classes.put("GET /annotation", GetAnnotationCommand.class);
@@ -70,6 +68,11 @@ public class CommandClasses {
                 class);
         classes.put("PUT /experiment", PutExperimentCommand.class);
         classes.put("PUT /file", PutFileCommand.class);
+        classes.put("POST /admin/user", PostUserCommand.class);
+        classes.put("DELETE /admin/user/", DeleteUserCommand.class);
+        classes.put("PUT /admin/user", PutUserAdminCommand.class);
+        classes.put("PUT /user", PutUserPasswordCommand.class);
+        classes.put("PUT /user", PutUserCommand.class);
     }
 
     /**

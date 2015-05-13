@@ -17,22 +17,16 @@ import response.HttpStatusCode;
  * @version 1.1
  */
 public class DeleteLoginCommand extends Command {
-	private String username;
 
-	@Override
-	public void setFields(String uri, String uuid, UserType userType) {
-		this.userType = userType;
-		this.username = uuid;
-	}
 
 	@Override
 	public void validate() throws ValidateException {
-		validateName(username, MaxLength.USERNAME, "Username");
+		validateName(uuid, MaxLength.USERNAME, "Username");
 	}
 
 	@Override
 	public Response execute() {
-		String id = Authenticate.getID(username);
+		String id = Authenticate.getID(uuid);
 		if(Authenticate.idExists(id)) {
 			Authenticate.deleteActiveUser(id);
 			return new MinimalResponse(HttpStatusCode.OK);

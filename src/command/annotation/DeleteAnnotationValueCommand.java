@@ -29,7 +29,9 @@ public class DeleteAnnotationValueCommand extends Command {
 
 	@Override
 	public void setFields(String uri, String uuid, UserType userType) {
-		this.userType = userType;
+
+		super.setFields(uri, uuid, userType);
+
 		String[] splitFields = uri.split("/");
 		name = splitFields[3];
 		value = splitFields[4];
@@ -57,10 +59,10 @@ public class DeleteAnnotationValueCommand extends Command {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return new ErrorResponse(HttpStatusCode.NO_CONTENT, e.getMessage());
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, e.getMessage());
 		} catch (IOException e) {
 			e.printStackTrace();
-			return new ErrorResponse(HttpStatusCode.SERVICE_UNAVAILABLE,
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
 					e.getMessage());
 		} finally {
 			if (db != null) {
