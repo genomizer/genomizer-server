@@ -17,6 +17,7 @@ import response.AddFileToExperimentResponse;
 import response.ErrorResponse;
 import response.HttpStatusCode;
 import response.Response;
+import server.Debug;
 
 /**
  * Adds a file to an experiment.
@@ -92,13 +93,11 @@ public class PostFileCommand extends Command {
 					metaData, author, uploader, false, grVersion, checkSumMD5);
 			return new AddFileToExperimentResponse(HttpStatusCode.OK,
 					ft.getUploadURL());
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
-		} catch (IOException e) {
-			e.printStackTrace();
-			return new ErrorResponse(HttpStatusCode.SERVICE_UNAVAILABLE,
+		} catch (SQLException | IOException e) {
+			Debug.log("Adding of file " + fileName + " to experiment "+experimentID+" didn't work, reason: " +
 					e.getMessage());
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Adding of file " + fileName +
+					" to experiment "+experimentID+" didn't work because of temporary problems with database.");
 		} finally {
 			if (db != null) {
 				db.close();

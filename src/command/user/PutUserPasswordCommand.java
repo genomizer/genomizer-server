@@ -47,15 +47,15 @@ public class PutUserPasswordCommand extends Command {
     @Override
     public Response execute() {
 
-        DatabaseAccessor db = null;
+        DatabaseAccessor db;
 
         try {
             db = initDB();
         } catch (SQLException | IOException e) {
             Debug.log("CHANGE OF PASSWORD FAILED FOR: " + username + ". REASON: " +
                     e.getMessage());
-            return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
-                    "CHANGE OF PASSWORD FAILED FOR: " + username + ". REASON: " + e.getMessage());
+            return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+                    "Change of password failed for user: "+username+". Temporary problems with database.");
         }
 
 		String hash = BCrypt.hashpw(password,BCrypt.gensalt());
@@ -63,9 +63,14 @@ public class PutUserPasswordCommand extends Command {
         try {
             db.resetPassword(username, hash);
         } catch (SQLException | IOException e) {
-            return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Database error " + e.getMessage());
+            Debug.log("CHANGE OF PASSWORD FAILED FOR: " + username + ". REASON: " +
+                    e.getMessage());
+            return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+                    "Change of password failed for user: "+username+". Temporary problems with database.");
+        }finally {
+            if (db != null)
+                db.close();
         }
-
         return new MinimalResponse(HttpStatusCode.CREATED);
     }
 }

@@ -16,6 +16,7 @@ import response.Response;
 import com.google.gson.annotations.Expose;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
+import server.Debug;
 
 /**
  * Class used to add an experiment represented as a command.
@@ -68,7 +69,10 @@ public class PostExperimentCommand extends Command {
 			return new MinimalResponse(HttpStatusCode.CREATED);
 		} catch (IOException | SQLException e) {
 			e.printStackTrace();
-			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
+			Debug.log("Adding of experiment " + name + " didn't work, reason: " +
+					e.getMessage());
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Adding of experiment "+ name+
+					" didn't work due to temporary problems with the database.");
 		} finally {
 			if (db != null) {
 				db.close();

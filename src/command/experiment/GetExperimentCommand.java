@@ -8,6 +8,7 @@ import command.Command;
 import command.UserRights;
 import command.ValidateException;
 import database.constants.MaxLength;
+import org.apache.http.protocol.HTTP;
 import response.ErrorResponse;
 import response.HttpStatusCode;
 import response.Response;
@@ -15,6 +16,7 @@ import response.GetExperimentResponse;
 import database.DatabaseAccessor;
 import database.containers.Experiment;
 import database.subClasses.UserMethods.UserType;
+import server.Debug;
 
 /**
  * Class used to retrieve an experiment.
@@ -46,16 +48,23 @@ public class GetExperimentCommand extends Command {
 			db = initDB();
 		}
 		catch(SQLException | IOException e){
-			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Could not " +
-					"initialize db: " + e.getMessage());
+			Debug.log("Retrieval of experiment " + expID + " didn't work, reason: " +
+					e.getMessage());
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Temporarily could not " +
+					"initialize db.");
 		}
 		try{
 			exp = db.getExperiment(expID);
 		}catch(SQLException e){
-			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Could not get " +
-					"experiment: " + e.getMessage());
+			Debug.log("Retrieval of experiment " + expID + " didn't work, reason: " +
+					e.getMessage());
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Could not get " +
+					"experiment: " + expID+ ". The reason was temporary problems with the database.");
+		}finally {
+			if (db != null) {
+				db.close();
+			}
 		}
-		db.close();
 		if(exp == null) {
 			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Experiment " +
 					"requested from database is null, not found or does not " +

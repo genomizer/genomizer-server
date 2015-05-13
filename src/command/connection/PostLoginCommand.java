@@ -39,7 +39,7 @@ public class PostLoginCommand extends Command {
 
 	@Override
 	public Response execute() {
-		DatabaseAccessor db;
+		DatabaseAccessor db = null;
 		String dbHash;
 		try {
 			db = initDB();
@@ -47,8 +47,13 @@ public class PostLoginCommand extends Command {
 		} catch (SQLException | IOException e) {
 			Debug.log("LOGIN WAS UNSUCCESSFUL FOR: " + username + ". REASON: " +
 					e.getMessage());
-			return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
-					"LOGIN WAS UNSUCCESSFUL FOR: " + username + ". REASON: " + e.getMessage());
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+					"Login was unsuccessful for user: " + username +
+							". The reason is temporary problems with database.");
+		}finally {
+			if (db != null) {
+				db.close();
+			}
 		}
 
 		if(dbHash == null || dbHash.isEmpty()){
