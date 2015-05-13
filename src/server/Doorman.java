@@ -79,6 +79,7 @@ public class Doorman {
 		server.createContext("/file", requestHandler);
 		server.createContext("/search/", requestHandler);
 		server.createContext("/user", requestHandler);
+		server.createContext("/process", requestHandler);
 		server.createContext("/process/rawtoprofile", requestHandler);
 		server.createContext("/sysadm", requestHandler);
 	    server.createContext("/sysadm/annpriv", requestHandler);
