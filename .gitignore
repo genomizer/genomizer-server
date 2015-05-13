@@ -5,6 +5,7 @@ bin/
 .idea/
 .idea
 junit/
+!picard.jar
 secure-server.jar
 server.jar
 *.orig
