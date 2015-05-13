@@ -686,18 +686,45 @@ public class RawToProfileConverter extends Executor {
 	}
 
 	private String runRemoveDuplicates(String inputFile, String outputFile,
-									 String metrics) {
-		/* TODO Check if input is .sam format */
+									   String metrics) throws ProcessException {
+		/* Check if input is .sam format */
+		if(!inputFile.endsWith(".sam")) {
+			throw new IllegalArgumentException("Could not run Picard on file: "
+											   +inputFile +
+											   ", as it was not in .sam format");
+		}
+
+		/* Check if output is .sam format */
+		if(!outputFile.endsWith(".sam")) {
+			throw new IllegalArgumentException("Could not run Picard to file: "
+											   +outputFile +
+											   ", as it was not in .sam format");
+		}
+
 		/* TODO Should metric file be returned/stored/used? */
-		/* TODO Set command parameters  */
+		/* Set command parameters  */
 		/* 	java -jar picard.jar MarkDuplicates INPUT=inputFile
 			OUTPUT=outputFile REMOVE_DUPLICATES=true
 			This needs to be called from the same directory as picard.jar
 			or include that in the path
 		*/
+		String [] picardParameters = parse("java -jar " +
+										   ServerSettings.picardLocation +
+										   " MarkDuplicates " +
+										   " INPUT=" + inputFile +
+										   " OUTPUT=" + outputFile +
+										   "REMOVE_DUPLICATES=true");
+		try {
+			return executeProgram(picardParameters);
+		} catch (InterruptedException e) {
+			throw new ProcessException(
+					"Process interrupted while running picard on file: "
+					+ inputFile);
+		} catch (IOException e) {
+			throw new ProcessException("Could not run picard on file: "
+									   + inputFile + ", please check your input and permissions");
+		}
 
-		/* TODO Should the output file name be returned? */
-		return null;
 	}
 
 }
