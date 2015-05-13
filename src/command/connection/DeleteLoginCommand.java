@@ -24,9 +24,8 @@ public class DeleteLoginCommand extends Command {
 
 	@Override
 	public Response execute() {
-		String id = Authenticate.getID(uuid);
-		if(Authenticate.idExists(id)) {
-			Authenticate.deleteActiveUser(id);
+		if(Authenticate.idExists(uuid)) {
+			Authenticate.deleteActiveUser(uuid);
 			return new MinimalResponse(HttpStatusCode.OK);
 		} else {
 			return 	new ErrorResponse(HttpStatusCode.NOT_FOUND,
