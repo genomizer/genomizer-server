@@ -121,6 +121,7 @@ public class RequestHandler implements HttpHandler {
 
         /*Retrieve the URI part of the request header.*/
 		String uri = exchange.getRequestURI().toString();
+        uri = removeTimeStamp(uri);
 
 		/*Does the length of the URI match the needed length?*/
 		if (URILength.get(commandClass) != calculateURILength(uri)) {
@@ -318,6 +319,10 @@ public class RequestHandler implements HttpHandler {
 
         if ('0' > uri.charAt(end) || '9' < uri.charAt(end)){
             return uri;
+        }
+
+        if (pos > 0 && uri.charAt(pos-1) == '&') {
+            pos -= 1;
         }
 
         while(length > end && '0' <= uri.charAt(end) && '9' >= uri.charAt(end)){
