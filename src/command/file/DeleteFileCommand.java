@@ -61,7 +61,7 @@ public class DeleteFileCommand extends Command {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return new ErrorResponse(HttpStatusCode.SERVICE_UNAVAILABLE,
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
 					e.getMessage());
 		} catch (IOException e) {
 			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());

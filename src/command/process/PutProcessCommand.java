@@ -215,7 +215,7 @@ public class PutProcessCommand extends Command {
 				"parameters: " + parameters + "\n" +
 				"genomeVersion: " + genomeVersion + "\n" +
 		        "PID: " + PID + "\n");
-		return new ProcessResponse(HttpStatusCode.CREATED, "Raw to profile " +
+		return new ProcessResponse(HttpStatusCode.OK, "Raw to profile " +
 				"processing completed running " + processtype +
 				" on experiment" + expid + "\n"+
 				"metadata: " + metadata + "\n"+
@@ -245,7 +245,7 @@ public class PutProcessCommand extends Command {
 				error + "\n");
 		db.close();
 		return new ProcessResponse(HttpStatusCode.
-				SERVICE_UNAVAILABLE, headerError +
+				INTERNAL_SERVER_ERROR, headerError +
 				" when processing " + processtype +
 				" on experiment" + expid + "\n"+
 				"metadata: " + metadata + "\n"+

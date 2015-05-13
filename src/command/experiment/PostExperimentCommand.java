@@ -65,7 +65,7 @@ public class PostExperimentCommand extends Command {
 				db.annotateExperiment(name, annotation.getName(),
 						annotation.getValue());
 			}
-			return new MinimalResponse(HttpStatusCode.CREATED);
+			return new MinimalResponse(HttpStatusCode.OK);
 		} catch (IOException | SQLException e) {
 			e.printStackTrace();
 			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());

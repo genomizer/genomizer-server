@@ -40,14 +40,7 @@ public class SearchCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-
 		hasRights(UserRights.getRights(this.getClass()));
-
-		if (annotations == null || annotations.equals("")) {
-			throw new ValidateException(HttpStatusCode.BAD_REQUEST,
-					"Specify annotations to search for.");
-		}
-		validateExists(annotations, MaxLength.ANNOTATION_VALUE, "Experiment ");
 	}
 
 	@Override
@@ -65,7 +58,7 @@ public class SearchCommand extends Command {
 			db = initDB();
 			searchResult = db.search(annotations);
 		} catch (SQLException | IOException e) {
-			return new ErrorResponse(HttpStatusCode.SERVICE_UNAVAILABLE,
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
 					e.getMessage());
 		} catch (ParseException e) {
 			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());

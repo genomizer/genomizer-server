@@ -17,7 +17,7 @@ public class ErrorResponseTest {
 	
 	@Test
 	public void shouldGenerateJsonMessage() {
-		Response resp = new ErrorResponse(HttpStatusCode.SERVICE_UNAVAILABLE, "Error text");
+		Response resp = new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Error text");
 		String expected = "{\"message\":\"Error text\"}\n";
 		assertEquals(expected, resp.getBody());
 	}

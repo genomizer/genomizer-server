@@ -43,6 +43,6 @@ public class PutProcessConvertFileCommand extends Command {
     public Response execute() {
         ConversionHandler convHandler = new ConversionHandler();
         //TODO convert with filepath and currentformat + toformat. and stuff
-        return new MinimalResponse(HttpStatusCode.NO_CONTENT);
+        return new MinimalResponse(HttpStatusCode.OK);
     }
 }
