@@ -98,7 +98,7 @@ public class SearchDatabaseTests {
     public void shouldBeAbleToSearchUsingPubMedString5() throws Exception {
 
         List<Experiment> experiments = dbac
-                .search("Human[SpeCies] AnD Ume? uni[author]");
+                .search("Human[SpeCies] AnD Umeå uni[author]");
 
         assertEquals(1, experiments.size());
         assertEquals(1, experiments.get(0).getFiles().size());
@@ -122,7 +122,7 @@ public class SearchDatabaseTests {
         List<Experiment> experiments = dbac
                 .search("not ChiLd[Development Stage]");
 
-        assertEquals(2, experiments.size());
+        assertEquals(4, experiments.size());
     }
 
     @Test
@@ -209,11 +209,11 @@ public class SearchDatabaseTests {
     }
 
     @Test
-    public void shouldGetAllExperimentsWhenSearchingAnEmptySring()
+    public void shouldGetAllExperimentsWhenSearchingAnEmptyString()
             throws Exception {
 
         List<Experiment> exps = dbac.search("");
-        assertEquals(4, exps.size());
+        assertEquals(6, exps.size());
 
         Experiment e = getExp("Exp1", exps);
 

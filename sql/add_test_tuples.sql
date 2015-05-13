@@ -90,8 +90,6 @@ INSERT INTO File VALUES(DEFAULT, 'resources/conversionTestData/WIG-testdata.wig'
 INSERT INTO File VALUES(DEFAULT, 'resources/conversionTestData/WIG-varstep-testdata.wig', 'Profile', 'wigVarStepTest.wig', CURRENT_TIMESTAMP, '-n --best', 'resources/conversionTestData/WIG-varstep-testdata.wig', 'Genomizer', 'user1', 'false', 'Exp3', 'rn5', 'Done', NULL);
 
 
--- NEW TEST FILES :)
-
 INSERT INTO Experiment VALUES('ExpSmall');
 INSERT INTO Experiment VALUES('ExpBig');
 
