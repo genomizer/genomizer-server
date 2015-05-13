@@ -73,10 +73,10 @@ public class FileMethods {
 	 * @throws IOException
 	 *             If the experiment does not exist.
 	 */
-	public FileTuple addNewFile(String expID, int fileType, String fileName,
-			String inputFileName, String metaData, String author,
-			String uploader, boolean isPrivate, String genomeRelease,
-			String checkSumMD5)
+	public FileTuple addNewFileWithStatus(String expID, int fileType, String fileName,
+										  String inputFileName, String metaData, String author,
+										  String uploader, boolean isPrivate, String genomeRelease,
+										  String checkSumMD5, String status)
 			throws SQLException, IOException {
 
 		if (!FileValidator.fileNameCheck(fileName)) {
@@ -115,6 +115,10 @@ public class FileMethods {
 			}
 		}
 
+		if (!status.equals("Done") && !status.equals("In Progress")) {
+			throw new IOException("Invalid status type!");
+		}
+
 		String inputFilePath = null;
 		if (inputFileName != null) {
 			inputFilePath = getParentFolder(path) + inputFileName;
@@ -122,8 +126,8 @@ public class FileMethods {
 
 		String query = "INSERT INTO File "
 				+ "(Path, FileType, FileName, Date, MetaData, InputFilePath, "
-				+ "Author, Uploader, IsPrivate, ExpID, GRVersion, MD5) "
-				+ "VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?, ?, ?, ?, ?, ?, ?)";
+				+ "Author, Uploader, IsPrivate, ExpID, GRVersion, Status, MD5) "
+				+ "VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		PreparedStatement stmt = conn.prepareStatement(query);
 		stmt.setString(1, path);
 
@@ -151,12 +155,13 @@ public class FileMethods {
 		stmt.setBoolean(8, isPrivate);
 		stmt.setString(9, expID);
 		stmt.setString(10, genomeRelease);
-		stmt.setString(11, checkSumMD5);
+		stmt.setString(11, status);
+		stmt.setString(12, checkSumMD5);
 
 		stmt.executeUpdate();
 		stmt.close();
 
-		return getFileTupleWithStatus(path, "In Progress");
+		return getFileTupleWithStatus(path, status);
 	}
 
 	private FileTuple getProfile(Experiment e, String metaData) {

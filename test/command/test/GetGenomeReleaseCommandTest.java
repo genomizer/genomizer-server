@@ -7,7 +7,7 @@ import command.ValidateException;
 import database.subClasses.UserMethods.UserType;
 import org.junit.Test;
 
-import command.GetGenomeReleaseCommand;
+import command.genomerelease.GetGenomeReleaseCommand;
 
 /**
  * Test used to check that GetGenomeReleaseCommand class
