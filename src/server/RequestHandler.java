@@ -303,15 +303,24 @@ public class RequestHandler implements HttpHandler {
     /* Finds the timestamp and removes it.*/
     private String removeTimeStamp(String uri){
 
-        String newUri = null;
+        String newUri;
 
         if (!uri.contains("_="))
             return uri;
 
         int pos = uri.lastIndexOf("_=");
-
+        int length = uri.length();
         int end = pos +2;
-        while('0' <= uri.charAt(end) && '9' >= uri.charAt(end)){
+
+        if (length <= end ){
+            return uri;
+        }
+
+        if ('0' > uri.charAt(end) || '9' < uri.charAt(end)){
+            return uri;
+        }
+
+        while(length > end && '0' <= uri.charAt(end) && '9' >= uri.charAt(end)){
             end++;
         }
 
