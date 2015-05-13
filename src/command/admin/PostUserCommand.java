@@ -40,6 +40,11 @@ public class PostUserCommand extends Command {
 	@Expose
 	private String email = null;
 
+	@Override
+	public int getExpectedNumberOfURIFields() {
+		return 2;
+	}
+
 	/**
 	 * Used to make sure the strings of the command are correct
 	 * @throws command.ValidateException

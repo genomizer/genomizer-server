@@ -24,6 +24,10 @@ public class PutProcessConvertFileCommand extends Command {
     @Expose
     private String toformat;
 
+    @Override
+    public int getExpectedNumberOfURIFields() {
+        return 1;
+    }
 
     /**
      * @see command.Command

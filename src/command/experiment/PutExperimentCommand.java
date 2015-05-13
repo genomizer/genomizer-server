@@ -18,6 +18,11 @@ public class PutExperimentCommand extends Command {
 	//TODO Implement this class
 
 
+	@Override
+	public int getExpectedNumberOfURIFields() {
+		return 2;
+	}
+
 	/**
 	 * Used to validate the information that is needed
 	 * to execute the actual command.

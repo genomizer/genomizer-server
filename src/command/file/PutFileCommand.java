@@ -17,6 +17,10 @@ import response.Response;
 public class PutFileCommand extends Command {
 	//TODO Implement this class
 
+	@Override
+	public int getExpectedNumberOfURIFields() {
+		return 2;
+	}
 
 	@Override
 	public void validate() throws ValidateException {

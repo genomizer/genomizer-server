@@ -30,6 +30,10 @@ public class PostLoginCommand extends Command {
 	@Expose
 	private String password = null;
 
+	@Override
+	public int getExpectedNumberOfURIFields() {
+		return 1;
+	}
 
 	@Override
 	public void validate() throws ValidateException {
