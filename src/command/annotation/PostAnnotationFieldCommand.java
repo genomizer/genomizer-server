@@ -39,6 +39,10 @@ public class PostAnnotationFieldCommand extends Command {
 	@Expose
 	private Boolean forced = null;
 
+	@Override
+	public int getExpectedNumberOfURIFields() {
+		return 2;
+	}
 
 	@Override
 	public void validate() throws ValidateException {

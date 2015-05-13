@@ -21,6 +21,11 @@ public class GetFileCommand extends Command {
 	private String fileID;
 
 	@Override
+	public int getExpectedNumberOfURIFields() {
+		return 2;
+	}
+
+	@Override
 	public void setFields(String uri, String uuid, UserType userType) {
 
 		super.setFields(uri, uuid, userType);
