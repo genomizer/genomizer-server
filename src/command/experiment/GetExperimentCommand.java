@@ -2,7 +2,6 @@ package command.experiment;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 import command.Command;
 import command.UserRights;
@@ -17,14 +16,22 @@ import database.containers.Experiment;
 import database.subClasses.UserMethods.UserType;
 
 /**
- * Class used to retrieve an experiment.
+ * Class used to retrieve an experiment from the database.
  *
  * @author Business Logic 2015.
  * @version 1.1
  */
 public class GetExperimentCommand extends Command {
+
 	private String expID;
 
+
+	/**
+	 * Overrides the original command in order to use the uri.
+	 * @param uri Contains the experiment id to fetch.
+	 * @param uuid the UUID for the user who made the request.
+	 * @param userType the user type for the command caller.
+	 */
 	@Override
 	public int getExpectedNumberOfURIFields() {
 		return 2;
@@ -66,14 +73,7 @@ public class GetExperimentCommand extends Command {
 					"requested from database is null, not found or does not " +
 					"exist.");
 		}
-		return new GetExperimentResponse(HttpStatusCode.OK, getInfo(exp),
+		return new GetExperimentResponse(HttpStatusCode.OK, exp.getID(),
 				exp.getAnnotations(), exp.getFiles());
-	}
-
-	//TODO Handle multiple experiments?
-	private ArrayList<String> getInfo(Experiment exp) {
-		ArrayList<String> info = new ArrayList<>();
-		info.add(exp.getID());
-		return info;
 	}
 }

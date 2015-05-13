@@ -5,7 +5,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import command.*;
+import command.Command;
+import command.CommandClasses;
+import command.URILength;
+import command.ValidateException;
 import command.connection.PostLoginCommand;
 import command.process.PutProcessCommand;
 import database.subClasses.UserMethods.UserType;
@@ -111,7 +114,6 @@ public class RequestHandler implements HttpHandler {
 			}
 		} else if (uuid == null && !commandClass.equals(PostLoginCommand.
                 class)) {
-			Debug.log("User could not be authenticated!");
             respondWithAuthenticationFailure(exchange);
 			return;
 		}
@@ -121,6 +123,7 @@ public class RequestHandler implements HttpHandler {
 
         /*Retrieve the URI part of the request header.*/
 		String uri = exchange.getRequestURI().toString();
+        uri = removeTimeStamp(uri);
 
 		/*TODO: Get the current user's user right level*/
 		UserType userType = UserType.ADMIN;
@@ -298,5 +301,38 @@ public class RequestHandler implements HttpHandler {
                 INTERNAL_SERVER_ERROR, "Could not create command from " +
                 "request");
         respond(errorResponse, exchange);
+    }
+
+    /* Finds the timestamp and removes it.*/
+    private String removeTimeStamp(String uri){
+
+        String newUri;
+
+        if (!uri.contains("_="))
+            return uri;
+
+        int pos = uri.lastIndexOf("_=");
+        int length = uri.length();
+        int end = pos +2;
+
+        if (length <= end ){
+            return uri;
+        }
+
+        if ('0' > uri.charAt(end) || '9' < uri.charAt(end)){
+            return uri;
+        }
+
+        if (pos > 0 && uri.charAt(pos-1) == '&') {
+            pos -= 1;
+        }
+
+        while(length > end && '0' <= uri.charAt(end) && '9' >= uri.charAt(end)){
+            end++;
+        }
+
+        newUri = uri.substring(0,pos) + uri.substring(end);
+
+        return newUri;
     }
 }

@@ -3,7 +3,6 @@ package command.annotation;
 import command.Command;
 import command.UserRights;
 import command.ValidateException;
-import database.subClasses.UserMethods.UserType;
 import response.MinimalResponse;
 import response.Response;
 import response.HttpStatusCode;

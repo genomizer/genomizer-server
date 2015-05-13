@@ -5,7 +5,7 @@ import com.google.gson.annotations.Expose;
 /**
  * Response to a command which adds a file to the experiment
  */
-public class AddFileToExperimentResponse extends Response {
+public class UrlUploadResponse extends Response {
 
 	@Expose
 	String URLupload;
@@ -15,7 +15,7 @@ public class AddFileToExperimentResponse extends Response {
 	 * @param code The return code
 	 * @param UrlUpload URL for the experiment to upload
 	 */
-	public AddFileToExperimentResponse(int code, String UrlUpload) {
+	public UrlUploadResponse(int code, String UrlUpload) {
 
 		this.code = code;
 		this.URLupload = UrlUpload;
