@@ -1,7 +1,8 @@
 package server;
 
-import command.ProcessCommand;
-import command.ProcessStatus;
+
+import command.process.PutProcessCommand;
+import command.Process;
 import response.Response;
 import response.HttpStatusCode;
 
@@ -12,14 +13,14 @@ import java.util.concurrent.*;
 
 public class ProcessHandler implements Callable<Response> {
 
-	private ProcessCommand processCommand;
-	private ProcessStatus processStatus;
+	private PutProcessCommand processCommand;
+	private Process process;
 
 
-	public ProcessHandler(ProcessCommand processCommand,
-						  ProcessStatus processStatus) {
+	public ProcessHandler(PutProcessCommand processCommand,
+						  Process process) {
 		this.processCommand = processCommand;
-		this.processStatus = processStatus;
+		this.process = process;
 	}
 
 
@@ -28,25 +29,25 @@ public class ProcessHandler implements Callable<Response> {
 
 		Response response = null;
 
-		if (processCommand != null && processStatus != null) {
+		if (processCommand != null && process != null) {
 			Debug.log("Executing process in experiment "
 					+ processCommand.getExpId());
 
-			processStatus.status = ProcessStatus.STATUS_STARTED;
+			process.status = Process.STATUS_STARTED;
 
 			// Attempt to setup file paths
 			try {
 				processCommand.setFilePaths();
 			} catch (SQLException | IOException e) {
 				Debug.log(e.getMessage());
-				ErrorLogger.log(processStatus.author,
+				ErrorLogger.log(process.author,
 						"Could not run process command: " + e.getMessage());
-				processStatus.status = ProcessStatus.STATUS_CRASHED;
+				process.status = Process.STATUS_CRASHED;
 				return null;
 			}
 
-			processStatus.outputFiles = processCommand.getFilePaths();
-			processStatus.timeStarted = System.currentTimeMillis();
+			process.outputFiles = processCommand.getFilePaths();
+			process.timeStarted = System.currentTimeMillis();
 
 
 			try {
@@ -54,19 +55,19 @@ public class ProcessHandler implements Callable<Response> {
 				response = processCommand.execute();
 
 				if (response.getCode() == HttpStatusCode.CREATED) {
-					processStatus.status = ProcessStatus.STATUS_FINISHED;
+					process.status = Process.STATUS_FINISHED;
 					Debug.log("Process execution in experiment " +
 							processCommand.getExpId() + " has finished!");
 				} else {
-					processStatus.status = ProcessStatus.STATUS_CRASHED;
+					process.status = Process.STATUS_CRASHED;
 					Debug.log("FAILURE! Process execution in experiment " +
 							processCommand.getExpId() + " has crashed.");
 				}
 			} catch (NullPointerException e) {
-				processStatus.status = ProcessStatus.STATUS_CRASHED;
+				process.status = Process.STATUS_CRASHED;
 			}
 
-			processStatus.timeFinished = System.currentTimeMillis();
+			process.timeFinished = System.currentTimeMillis();
 
 		}
 

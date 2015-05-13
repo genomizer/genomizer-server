@@ -8,7 +8,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
-import command.ProcessStatus;
+import command.Process;
 import server.ErrorLogger;
 
 /**
@@ -19,16 +19,16 @@ import server.ErrorLogger;
  */
 public class GetProcessStatusResponse extends Response {
 
-	private LinkedList<ProcessStatus> processStatuses;
+	private LinkedList<command.Process> getProcessStatuses;
 
 
 	/**
 	 * Creator for the response. Always returns 200 as return code.
-	 * @param processStatus The process status to return.
+	 * @param getProcessStatus The process status to return.
 	 */
-	public GetProcessStatusResponse(LinkedList<ProcessStatus> processStatus) {
+	public GetProcessStatusResponse(LinkedList<Process> getProcessStatus) {
 
-		this.processStatuses = processStatus;
+		this.getProcessStatuses = getProcessStatus;
 		code = 200;
 	}
 
@@ -39,18 +39,18 @@ public class GetProcessStatusResponse extends Response {
 	@Override
 	public String getBody() {
 
-		if (processStatuses.size() > 0) {
+		if (getProcessStatuses.size() > 0) {
 			ErrorLogger.log("SYSTEM", "GetProcessStatusResponse.getBody(): " +
 					"Error getting process status");
 			return "";
 		}
 
-		Collections.sort( processStatuses );
+		Collections.sort(getProcessStatuses);
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
 		JsonArray arr = new JsonArray();
-		for (ProcessStatus p : processStatuses) {
-			JsonElement elem = gson.toJsonTree(p, ProcessStatus.class);
+		for (Process p : getProcessStatuses) {
+			JsonElement elem = gson.toJsonTree(p, Process.class);
 			arr.add(elem);
 		}
 

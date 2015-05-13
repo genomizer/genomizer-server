@@ -1,7 +1,7 @@
 package server.test;
 
 
-import command.ProcessCommand;
+import command.process.PutProcessCommand;
 import org.junit.Before;
 import org.junit.Ignore;
 
@@ -20,15 +20,15 @@ public class ProcessPoolTest {
 
     @Test
     public void testProcessSubmission() {
-        processPool.addProcess(new ProcessCommand());
-        processPool.addProcess(new ProcessCommand());
-        processPool.addProcess(new ProcessCommand());
-        processPool.addProcess(new ProcessCommand());
-        processPool.addProcess(new ProcessCommand());
-        processPool.addProcess(new ProcessCommand());
-        processPool.addProcess(new ProcessCommand());
-        processPool.addProcess(new ProcessCommand());
-        processPool.addProcess(new ProcessCommand());
+        processPool.addProcess(new PutProcessCommand());
+        processPool.addProcess(new PutProcessCommand());
+        processPool.addProcess(new PutProcessCommand());
+        processPool.addProcess(new PutProcessCommand());
+        processPool.addProcess(new PutProcessCommand());
+        processPool.addProcess(new PutProcessCommand());
+        processPool.addProcess(new PutProcessCommand());
+        processPool.addProcess(new PutProcessCommand());
+        processPool.addProcess(new PutProcessCommand());
     }
 
 }

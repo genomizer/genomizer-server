@@ -158,31 +158,4 @@ public class ServerMain {
 		return comOptions;
 	}
 
-	/**
-	 * This method reads a 'database' file. This method is never called
-	 * anywhere.
-	 *
-	 * TODO: Remove this piece of dead code. (When safe)
-	 * @param path Path of database file
-	 * @throws FileNotFoundException If database file could not be
-	 * 		   found/opened.
-	 */
-//	private static void readDatabaseFile(String path)
-//			throws FileNotFoundException {
-//		File dbFile = new File(path);
-//		if (dbFile.exists()) {
-//			Scanner scan = new Scanner(dbFile);
-//			String username = scan.next();
-//			String password = scan.next();
-//			String database = scan.next();
-//			String host = scan.next();
-//			scan.close();
-//
-//			ServerSettings.databaseUsername = username;
-//			ServerSettings.databasePassword = password;
-//			ServerSettings.databaseName = database;
-//			ServerSettings.databaseHost = host;
-//		}
-//	}
-
 }

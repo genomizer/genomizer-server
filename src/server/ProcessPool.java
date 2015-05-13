@@ -1,8 +1,8 @@
 package server;
 
-import command.ProcessCommand;
-import command.ProcessStatus;
+import command.Process;
 import response.Response;
+import command.process.PutProcessCommand;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -20,9 +20,9 @@ public class ProcessPool {
     private static final long statusTimeToLive = 2*1000*60*60*24;
 
     // Process to status and response maps
-    private HashMap<UUID, ProcessStatus> processStatusMap;
+    private HashMap<UUID, Process> processStatusMap;
     private HashMap<UUID, Future<Response>> processFutureMap;
-    private LinkedList<ProcessCommand> processesList;
+    private LinkedList<PutProcessCommand> processesList;
 
     // Synchronization objects
     private final Lock lock;
@@ -62,7 +62,7 @@ public class ProcessPool {
      *
      * @return a linked list with elements of type {@link command.ProcessCommand}
      */
-    public LinkedList<ProcessCommand> getProcesses() {
+    public LinkedList<PutProcessCommand> getProcesses() {
         lock.lock();
 
         try {
@@ -80,22 +80,22 @@ public class ProcessPool {
      *
      * @param processCommand - the process command to be added
      */
-    public void addProcess(ProcessCommand processCommand) {
+    public void addProcess(PutProcessCommand processCommand) {
         lock.lock();
 
         try {
-            ProcessStatus processStatus = new ProcessStatus(processCommand);
+            Process process = new Process(processCommand);
 
             processCommand.setPID(UUID.randomUUID());
 
             processesList.add(processCommand);
 
             // Create a process command to process status mapping
-            processStatusMap.put(processCommand.getPID(), processStatus);
+            processStatusMap.put(processCommand.getPID(), process);
 
             // Submit the process with a new work handler for execution
             Future<Response> response = executor.submit(
-                    new ProcessHandler(processCommand, processStatus));
+                    new ProcessHandler(processCommand, process));
 
             if (response != null) {
                 // Create a process command to process response mapping
@@ -139,7 +139,7 @@ public class ProcessPool {
      * @return processStatus - the process status of the specified process
      * command
      */
-    public ProcessStatus getProcessStatus(UUID processID) {
+    public Process getProcessStatus(UUID processID) {
         lock.lock();
 
         try {
@@ -148,8 +148,7 @@ public class ProcessPool {
             if (processFutureMap.get(processID).isDone() && !processFutureMap
                     .get(processID).isCancelled()) {
 
-                processStatusMap.get(processID).status = ProcessStatus
-                        .STATUS_FINISHED;
+                processStatusMap.get(processID).status = Process.STATUS_FINISHED;
             }
 
             return processStatusMap.get(processID);
@@ -174,7 +173,7 @@ public class ProcessPool {
 
         try {
             if (processStatusMap.get(processID).status
-                    .equals(ProcessStatus.STATUS_FINISHED)) {
+                    .equals(Process.STATUS_FINISHED)) {
                 return processFutureMap.get(processID).get();
             }
             return null;
@@ -194,21 +193,21 @@ public class ProcessPool {
         long currentTime = System.currentTimeMillis();
 
         // List to store processes to be removed
-        LinkedList<ProcessCommand> toBeRemoved = new LinkedList<>();
+        LinkedList<PutProcessCommand> toBeRemoved = new LinkedList<>();
 
         lock.lock();
 
         try {
 
 		/* Loop through all processes and check statuses */
-            for (ProcessCommand processCommand : processesList) {
+            for (PutProcessCommand processCommand : processesList) {
 
-                ProcessStatus processStatus = processStatusMap.get(processCommand);
+                Process processStatus = processStatusMap.get(processCommand);
                 String statusString = processStatus.status;
 
                 // Check if it has finished or crashed
-                if (statusString.equals(ProcessStatus.STATUS_FINISHED)
-                        || statusString.equals(ProcessStatus.STATUS_CRASHED)) {
+                if (statusString.equals(Process.STATUS_FINISHED)
+                        || statusString.equals(Process.STATUS_CRASHED)) {
 
                     long processTimeAdded = processStatus.timeAdded;
                     long timeDifference = currentTime - processTimeAdded;
@@ -219,7 +218,7 @@ public class ProcessPool {
                 }
             }
 
-            for (ProcessCommand processCommand : toBeRemoved) {
+            for (PutProcessCommand processCommand : toBeRemoved) {
                 Debug.log("Removing old process status: "
                         + processCommand.getExpId());
                 processStatusMap.remove(processCommand);

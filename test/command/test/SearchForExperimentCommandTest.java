@@ -6,10 +6,9 @@ import command.Command;
 import command.ValidateException;
 import database.constants.MaxLength;
 import database.subClasses.UserMethods.UserType;
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import command.SearchForExperimentsCommand;
+import command.search.SearchCommand;
 
 /**
  * Test class used to check that the SearchForExperimentCommand class
@@ -33,7 +32,7 @@ public class SearchForExperimentCommandTest {
 			uri  += "a";
 		}
 
-		Command c = new SearchForExperimentsCommand();
+		Command c = new SearchCommand();
 		c.setFields(uri, null, UserType.ADMIN);
 		c.validate();
 		fail("Expected ValidateException.");
@@ -47,7 +46,7 @@ public class SearchForExperimentCommandTest {
 	 */
 	@Test
 	public void textValidateProperlyFormatted() throws ValidateException {
-		Command c = new SearchForExperimentsCommand();
+		Command c = new SearchCommand();
 		c.setFields("Hello", null, UserType.ADMIN);
 		c.validate();
 		assertTrue(true);
@@ -65,7 +64,7 @@ public class SearchForExperimentCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateIncorrectlyFormatted() throws ValidateException {
 
-		Command c = new SearchForExperimentsCommand();
+		Command c = new SearchCommand();
 		c.setFields("uri��", null, UserType.ADMIN);
 		c.validate();
 
@@ -81,7 +80,7 @@ public class SearchForExperimentCommandTest {
 	@Test
 	public void testHavingRights() throws ValidateException {
 
-		Command c = new SearchForExperimentsCommand();
+		Command c = new SearchCommand();
 		c.setFields("uri", null, UserType.GUEST);
 		c.validate();
 	}
@@ -95,7 +94,7 @@ public class SearchForExperimentCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testNotHavingRights() throws ValidateException {
 
-		Command c = new SearchForExperimentsCommand();
+		Command c = new SearchCommand();
 		c.setFields("uri", null, UserType.UNKNOWN);
 		c.validate();
 		fail();

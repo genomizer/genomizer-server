@@ -1,6 +1,6 @@
 package process;
 
-import command.ProcessCommand;
+import command.process.PutProcessCommand;
 
 /**
  * Class that acts as a handler for the procedure and calculation part of the
@@ -28,14 +28,14 @@ public class ProcessHandler {
 			String inFile, String outFile) throws ProcessException {
 		String logString = "";
 		switch (processName) {
-			case ProcessCommand.CMD_RAW_TO_PROFILE:
+			case PutProcessCommand.CMD_RAW_TO_PROFILE:
 				RawToProfileConverter rawToProfileConverter = new RawToProfileConverter();
 				logString = rawToProfileConverter.procedure(procedureParams, inFile, outFile);
 				break;
-			case ProcessCommand.CMD_PROFILE_TO_REGION:
+			case PutProcessCommand.CMD_PROFILE_TO_REGION:
 				// TODO
 				break;
-			case ProcessCommand.CMD_CANCEL_PROCESS:
+			case PutProcessCommand.CMD_CANCEL_PROCESS:
 				// TODO cancel process in workpool
 				break;
 

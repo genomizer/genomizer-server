@@ -1,5 +1,28 @@
 package command;
 
+import command.admin.DeleteUserCommand;
+import command.admin.PostUserCommand;
+import command.admin.PutUserAdminCommand;
+import command.annotation.*;
+import command.connection.*;
+import command.experiment.DeleteExperimentCommand;
+import command.experiment.GetExperimentCommand;
+import command.experiment.PostExperimentCommand;
+import command.experiment.PutExperimentCommand;
+import command.file.DeleteFileCommand;
+import command.file.GetFileCommand;
+import command.file.PostFileCommand;
+import command.file.PutFileCommand;
+import command.genomerelease.DeleteGenomeReleaseCommand;
+import command.genomerelease.GetGenomeReleaseCommand;
+import command.genomerelease.GetGenomeReleaseSpeciesCommand;
+import command.genomerelease.PostGenomeReleaseCommand;
+import command.process.GetProcessStatusCommand;
+import command.process.PutProcessCommand;
+import command.search.SearchCommand;
+import command.user.PutUserCommand;
+import command.user.PutUserPasswordCommand;
+
 import java.util.HashMap;
 
 /**
@@ -13,41 +36,44 @@ public class CommandClasses {
 
     static {
         classes = new HashMap<>();
-        classes.put("POST /annotation/field", AddAnnotationFieldCommand.class);
-        classes.put("POST /annotation/value", AddAnnotationValueCommand.class);
-        classes.put("POST /experiment", AddExperimentCommand.class);
-        classes.put("POST /file", AddFileToExperimentCommand.class);
-        classes.put("POST /genomeRelease", AddGenomeReleaseCommand.class);
-        classes.put("PUT /user", ChangeUserPasswordCommand.class);
-        classes.put("POST /user", CreateUserCommand.class);
+        classes.put("POST /annotation/field", PostAnnotationFieldCommand.class);
+        classes.put("POST /annotation/value", PostAnnotationValueCommand.class);
+        classes.put("POST /experiment", PostExperimentCommand.class);
+        classes.put("POST /file", PostFileCommand.class);
+        classes.put("POST /genomeRelease", PostGenomeReleaseCommand.class);
         classes.put("DELETE /annotation/field", DeleteAnnotationFieldCommand.
                 class);
         classes.put("DELETE /annotation/value", DeleteAnnotationValueCommand.
                 class);
         classes.put("DELETE /experiment", DeleteExperimentCommand.class);
-        classes.put("DELETE /file", DeleteFileFromExperimentCommand.class);
+        classes.put("DELETE /file", DeleteFileCommand.class);
         classes.put("DELETE /genomeRelease/", DeleteGenomeReleaseCommand.class);
-        classes.put("DELETE /user", DeleteUserCommand.class);
-        classes.put("PUT /annotation/field", EditAnnotationFieldCommand.class);
-        classes.put("PUT /annotation/value", EditAnnotationValueCommand.class);
-        classes.put("GET /annotation", GetAnnotationInformationCommand.class);
+
+        classes.put("PUT /annotation/field", PutAnnotationFieldCommand.class);
+        classes.put("PUT /annotation/value", PutAnnotationValueCommand.class);
+        classes.put("GET /annotation", GetAnnotationCommand.class);
         classes.put("GET /sysadm", GetAnnotationPrivilegesCommand.class);
         classes.put("GET /experiment", GetExperimentCommand.class);
-        classes.put("GET /file", GetFileFromExperimentCommand.class);
+        classes.put("GET /file", GetFileCommand.class);
         classes.put("GET /genomeRelease", GetGenomeReleaseCommand.class);
         classes.put("GET /genomeRelease/", GetGenomeReleaseSpeciesCommand.
                 class);
         classes.put("GET /process", GetProcessStatusCommand.class);
         classes.put("DELETE /process", CancelProcessCommand.class);
         classes.put("GET /token", IsTokenValidCommand.class);
-        classes.put("POST /login", LoginCommand.class);
-        classes.put("DELETE /login", LogoutCommand.class);
-        classes.put("PUT /process/rawtoprofile", ProcessCommand.class);
-        classes.put("GET /search", SearchForExperimentsCommand.class);
-        classes.put("PUT /sysadm/annpriv", UpdateAnnotationPrivilegesCommand.
+        classes.put("POST /login", PostLoginCommand.class);
+        classes.put("DELETE /login", DeleteLoginCommand.class);
+        classes.put("PUT /process/rawtoprofile", PutProcessCommand.class);
+        classes.put("GET /search/", SearchCommand.class);
+        classes.put("PUT /sysadm/annpriv", PutAnnotationPrivilegesCommand.
                 class);
-        classes.put("PUT /experiment", UpdateExperimentCommand.class);
-        classes.put("PUT /file", UpdateFileInExperimentCommand.class);
+        classes.put("PUT /experiment", PutExperimentCommand.class);
+        classes.put("PUT /file", PutFileCommand.class);
+        classes.put("POST /admin/user", PostUserCommand.class);
+        classes.put("DELETE /admin/user/", DeleteUserCommand.class);
+        classes.put("PUT /admin/user", PutUserAdminCommand.class);
+        classes.put("PUT /user", PutUserPasswordCommand.class);
+        classes.put("PUT /user", PutUserCommand.class);
     }
 
     /**

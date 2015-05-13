@@ -6,14 +6,13 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import database.subClasses.UserMethods;
 import database.test.TestInitializer;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import command.Command;
-import command.GetGenomeReleaseSpeciesCommand;
+import command.genomerelease.GetGenomeReleaseSpeciesCommand;
 
 import database.DatabaseAccessor;
 //import database.Genome;

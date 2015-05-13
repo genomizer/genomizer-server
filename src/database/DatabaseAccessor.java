@@ -252,6 +252,43 @@ public class DatabaseAccessor implements AutoCloseable {
     }
 
     /**
+     * Method to update a user's details. For use by administrators (since
+     * user's are not allowed to update their own user role).
+     *
+     * @param username    The username to update.
+     * @param newPassword The user's new password.
+     * @param role        The user's role.
+     * @param fullName    The user's full name,
+     * @param email       The user's email address.
+     * @return The number of tuples affected by the update in the database.
+     */
+    public int updateUser(String username, String newPassword, String role,
+                          String fullName, String email)
+            throws IOException, SQLException {
+        int pwd = resetPassword(username, newPassword);
+        int upd = userMethods.updateUser(username, role, fullName, email);
+        return Math.max(pwd, upd);
+    }
+
+    /**
+     * Method to update a user's details. For use by user's (since
+     * user's are not allowed to update their own user role).
+     *
+     * @param username    The username to update.
+     * @param newPassword The user's new password.
+     * @param fullName    The user's full name,
+     * @param email       The user's email address.
+     * @return The number of tuples affected by the update in the database.
+     */
+    public int updateUser(String username, String newPassword, String fullName,
+                          String email) throws SQLException, IOException {
+        String role = getRole(username);
+        int pwd = resetPassword(username, newPassword);
+        int upd = userMethods.updateUser(username, role, fullName, email);
+        return Math.max(pwd, upd);
+    }
+
+    /**
      * Deletes a user from the database.
      *
      * @param username the user to delete
@@ -292,16 +329,15 @@ public class DatabaseAccessor implements AutoCloseable {
      *
      * @param username - the user to change the password for
      * @param newPasswordHash - the new password
-     * @param newSalt - the new salt
      * @return the number of tuples updated in the database
      * @throws SQLException
      *             - if the query does not succeed
      * @throws IOException
      *             - if an argument is empty or null
      */
-    public int resetPassword(String username, String newPasswordHash, String newSalt)
+    public int resetPassword(String username, String newPasswordHash)
             throws SQLException, IOException {
-        return userMethods.resetPassword(username, newPasswordHash, newSalt);
+        return userMethods.resetPassword(username, newPasswordHash);
     }
 
     /**
@@ -668,6 +704,8 @@ public class DatabaseAccessor implements AutoCloseable {
     }
 
     /**
+     * Add a new file to the File table and mark it as 'Done'.
+     *
      * @param expID
      *            String The unique name of the experiment. OBS! If not null,
      *            this must reference an experiment that has been previously
@@ -708,8 +746,18 @@ public class DatabaseAccessor implements AutoCloseable {
             String uploader, boolean isPrivate, String genomeRelease,
             String checkSumMD5)
             throws SQLException, IOException {
-        return fileMethods.addNewFile(expID, fileType, fileName, inputFileName,
-                metaData, author, uploader, isPrivate, genomeRelease, checkSumMD5);
+        return fileMethods.addNewFileWithStatus(expID, fileType, fileName, inputFileName,
+                metaData, author, uploader, isPrivate, genomeRelease, checkSumMD5, "Done");
+    }
+
+    /* Like addNewFile, but marks the file as 'In Progress'. */
+    public FileTuple addNewInProgressFile(String expID, int fileType, String fileName,
+                                          String inputFileName, String metaData, String author,
+                                          String uploader, boolean isPrivate, String genomeRelease,
+                                          String checkSumMD5)
+            throws SQLException, IOException {
+        return fileMethods.addNewFileWithStatus(expID, fileType, fileName, inputFileName,
+                metaData, author, uploader, isPrivate, genomeRelease, checkSumMD5, "In Progress");
     }
 
     /**
