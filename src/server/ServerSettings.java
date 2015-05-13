@@ -37,7 +37,7 @@ public class ServerSettings {
 					+ "genomizerPort = " + genomizerPort + "\n"
 					+ "fileLocation = " + fileLocation + "\n"
 					+ "nrOfProcessThreads = " + nrOfProcessThreads + "\n"
-					+ "bowtieLocation = " + bowtieLocation + "\n";
+					+ "bowtieLocation = " + bowtieLocation + "\n"
 					+ "picardLocation = " + picardLocation + "\n";
 
 			out.write(dataInfo);
