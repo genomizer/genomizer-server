@@ -13,7 +13,7 @@ import database.constants.MaxLength;
 import database.containers.FileTuple;
 
 import database.subClasses.UserMethods.UserType;
-import response.AddFileToExperimentResponse;
+import response.UrlUploadResponse;
 import response.ErrorResponse;
 import response.HttpStatusCode;
 import response.Response;
@@ -41,7 +41,6 @@ public class PostFileCommand extends Command {
 	@Expose
 	private String author = null;
 
-	@Expose
 	private String uploader;
 
 	@Expose
@@ -53,6 +52,8 @@ public class PostFileCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
+		uploader = "TEMPORARY";
+
 		hasRights(UserRights.getRights(this.getClass()));
 		validateName(experimentID, MaxLength.EXPID, "Experiment name");
 		validateName(type, MaxLength.FILE_FILETYPE, "File type");
@@ -91,7 +92,7 @@ public class PostFileCommand extends Command {
 			db = initDB();
 			FileTuple ft = db.addNewInProgressFile(experimentID, fileType, fileName, null,
 					metaData, author, uploader, false, grVersion, checkSumMD5);
-			return new AddFileToExperimentResponse(HttpStatusCode.OK,
+			return new UrlUploadResponse(HttpStatusCode.OK,
 					ft.getUploadURL());
 		} catch (SQLException | IOException e) {
 			Debug.log("Adding of file " + fileName + " to experiment "+experimentID+" didn't work, reason: " +

@@ -1,9 +1,7 @@
 package response;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -14,10 +12,10 @@ import com.google.gson.JsonObject;
 import database.containers.FileTuple;
 
 /**
- * Class that represents the response when getting the experiment response.
+ * Class that represents the response when returning the experiment information.
  *
- * @author
- * @version 1.0
+ * @author Business Logic 2015
+ * @version 1.1
  */
 public class GetExperimentResponse extends Response {
 
@@ -25,20 +23,20 @@ public class GetExperimentResponse extends Response {
 
 
 	/**
-	 * Creator for the response.
+	 * Creator for the response which contains the experiment and all the
+	 * associated information and files.
 	 * @param code The return code for the response.
-	 * @param info
-	 * @param annotations
-	 * @param list
+	 * @param name A String containing the name of the experiment.
+	 * @param annotations A Map containing the annotations for the experiment .
+	 * @param list A list containing the files associated with the experiment.
 	 */
-	//TODO Handle multiple experiments? --> Info
-	public GetExperimentResponse(int code, ArrayList<String> info, Map<String, String> annotations, List<FileTuple> list) {
+	public GetExperimentResponse(int code, String name, Map<String, String> annotations, List<FileTuple> list) {
 
 		this.code = code;
 
 		//Creates a JsonObject and adds the information as jsonArrays
 		jsonObj = new JsonObject();
-		jsonObj.addProperty("name", info.get(0));
+		jsonObj.addProperty("name", name);
 
 		//Creates a jsonArray from the FileTuple list with FileInformation
 		// objects

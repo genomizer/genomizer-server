@@ -96,7 +96,7 @@ public class PostUserCommand extends Command {
 		}finally {
 			db.close();
 		}
-		return new MinimalResponse(HttpStatusCode.CREATED);
+		return new MinimalResponse(HttpStatusCode.OK);
 
 	}
 

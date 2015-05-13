@@ -129,7 +129,7 @@ public class UploadHandler {
 
         // Report success to the client.
         byte [] resp = "OK".getBytes();
-        exchange.sendResponseHeaders(HttpStatusCode.CREATED, resp.length);
+        exchange.sendResponseHeaders(HttpStatusCode.OK, resp.length);
         OutputStream out = exchange.getResponseBody();
         out.write(resp);
         out.close();

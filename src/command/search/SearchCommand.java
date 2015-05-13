@@ -47,14 +47,7 @@ public class SearchCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-
 		hasRights(UserRights.getRights(this.getClass()));
-
-		if (annotations == null || annotations.equals("")) {
-			throw new ValidateException(HttpStatusCode.BAD_REQUEST,
-					"Specify annotations to search for.");
-		}
-		validateExists(annotations, MaxLength.ANNOTATION_VALUE, "Experiment ");
 	}
 
 	@Override

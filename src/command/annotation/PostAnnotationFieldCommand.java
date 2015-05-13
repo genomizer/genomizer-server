@@ -102,7 +102,7 @@ public class PostAnnotationFieldCommand extends Command {
 						defaultValueIndex, forced);
 			}
 			if(addedAnnotations != 0) {
-				return new AddAnnotationFieldResponse(HttpStatusCode.CREATED);
+				return new AddAnnotationFieldResponse(HttpStatusCode.OK);
 			} else {
 				return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Annotation " + name+
 						" could not be added, database error.");

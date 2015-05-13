@@ -76,6 +76,6 @@ public class PostAnnotationValueCommand extends Command {
 			}
  		}
 
-		return new MinimalResponse(HttpStatusCode.CREATED);
+		return new MinimalResponse(HttpStatusCode.OK);
 	}
 }

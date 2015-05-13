@@ -6,7 +6,7 @@ import command.Command;
 import command.ValidateException;
 import database.subClasses.UserMethods.UserType;
 import org.junit.Test;
-import command.annotation.GetAnnotationPrivilegesCommand;
+import command.annotation.*;
 
 /**
  * Class used to test that GetAnnotationPrivileges works
@@ -15,6 +15,7 @@ import command.annotation.GetAnnotationPrivilegesCommand;
  * @author Kommunikation/kontroll 2014.
  * @version 1.0
  */
+@SuppressWarnings("deprecation")
 public class GetAnnotationPrivilegesCommandTest {
 	//TODO Implement tests when implementing the class
 

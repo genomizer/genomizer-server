@@ -83,6 +83,6 @@ public class PutUserPasswordCommand extends Command {
             db.close();
         }
 
-        return new MinimalResponse(HttpStatusCode.CREATED);
+        return new MinimalResponse(HttpStatusCode.OK);
     }
 }
