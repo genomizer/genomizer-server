@@ -129,5 +129,6 @@ public class DownloadHandler {
             String relPath = reqPath.substring(this.handlerRoot.length() + 1);
             serveFile(exchange, new File(this.downloadDir + relPath));
         }
+        Debug.log("END OF EXCHANGE\n------------------");
     }
 }

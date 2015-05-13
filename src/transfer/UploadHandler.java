@@ -61,6 +61,7 @@ public class UploadHandler {
         OutputStream out = exchange.getResponseBody();
         out.write(form);
         out.close();
+        Debug.log("END OF EXCHANGE\n------------------");
     }
 
     // Handle a 'multipart/form-data' upload.
@@ -133,6 +134,7 @@ public class UploadHandler {
         OutputStream out = exchange.getResponseBody();
         out.write(resp);
         out.close();
+        Debug.log("END OF EXCHANGE\n------------------");
     }
 
     // Verify the file's integrity and mark it as available for downloading.

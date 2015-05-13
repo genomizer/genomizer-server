@@ -1,9 +1,11 @@
 package authentication;
 
 
-import java.util.Date;
-import java.util.Iterator;
-import java.util.UUID;
+import com.sun.net.httpserver.HttpExchange;
+import server.Debug;
+import transfer.Util;
+
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 
@@ -119,6 +121,46 @@ public class Authenticate {
 
 	public static ConcurrentHashMap<String, Date> getLatestRequestsMap() {
 		return latestRequests;
+	}
+
+	/**
+	 * Performs authorization, returns null if the user could not be authorized,
+	 * else it returns the uuid.
+	 */
+ 	public static String AuthenticateAuthorization(HttpExchange exchange) {
+		String uuid = null;
+
+		// Get the value of the 'Authorization' header.
+		List<String> authHeader = exchange.getRequestHeaders().
+				get("Authorization");
+		if (authHeader != null)
+			uuid = authHeader.get(0);
+
+		// Get the value of the 'token' parameter.
+		String uuid2;
+		HashMap<String, String> reqParams = new HashMap<>();
+		Util.parseURI(exchange.getRequestURI(), reqParams);
+		if (reqParams.containsKey("token")) {
+			uuid2 = reqParams.get("token");
+			if (uuid2 != null) {
+				if (uuid == null || uuid.equals(uuid2)) {
+					uuid = uuid2;
+				} else {
+					Debug.log("Authorization header and token parameter " +
+							"values differ!");
+					return null;
+				}
+			}
+		}
+
+		// Actual authentication.
+		Debug.log("Trying to authenticate token " + uuid + "...");
+		if (uuid != null && Authenticate.idExists(uuid)) {
+			Authenticate.updateLatestRequest(uuid);
+			return uuid;
+		} else {
+			return null;
+		}
 	}
 
 }
