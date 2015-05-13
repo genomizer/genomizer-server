@@ -1,16 +1,16 @@
 package database.subClasses;
 
+import database.FilePathGenerator;
+import database.FileValidator;
+import database.containers.Experiment;
+import database.containers.FileTuple;
+
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import database.FilePathGenerator;
-import database.FileValidator;
-import database.containers.Experiment;
-import database.containers.FileTuple;
 
 /**
  * Class that contains all the methods for adding,changing, getting and removing
@@ -554,4 +554,19 @@ public class FileMethods {
 		}
 	}
 
+	public int updateFileSize(int fileID, Long size) throws  SQLException{
+
+		int res;
+
+		try(PreparedStatement stmt = conn.prepareStatement(
+				"UPDATE File "
+				+"SET FileSize = ? "
+				+"WHERE FileID = ?")) {
+			stmt.setString(1, size.toString());
+			stmt.setInt(2, fileID);
+			res = stmt.executeUpdate();
+		}
+
+		return res;
+	}
 }
