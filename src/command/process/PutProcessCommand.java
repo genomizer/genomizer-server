@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Map.Entry;
 
+import authentication.Authenticate;
 import command.Command;
 import command.UserRights;
 import command.ValidateException;
@@ -60,6 +61,7 @@ public class PutProcessCommand extends Command {
 		super.setFields(uri, uuid, userType);
 		setTimestamp(System.currentTimeMillis());
 		processtype = uri.split("/")[2];
+		username = Authenticate.getUsernameByID(uuid);
 	}
 
 	/**
