@@ -60,7 +60,8 @@ public class ProcessPool {
     /**
      * Gets a list of all submitted process commands
      *
-     * @return a linked list with elements of type {@link command.ProcessCommand}
+     * @return a linked list with elements of type {@link command
+     * .PutProcessCommand}
      */
     public LinkedList<PutProcessCommand> getProcesses() {
         lock.lock();
