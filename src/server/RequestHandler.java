@@ -99,7 +99,7 @@ public class RequestHandler implements HttpHandler {
 		String uri = removeTimeStamp(exchange.getRequestURI().toString());
 
 		/*Does the length of the URI match the needed length?*/
-		if (URILength.get(commandClass) != uri.split("/").length-1) {
+		if (URILength.get(commandClass) != (uri.split("/").length-1)) {
 			Debug.log("Bad format on command: " + exchange.getRequestMethod()
                     + " " + exchange.getRequestURI());
 			respond(createBadRequestResponse(), exchange);
