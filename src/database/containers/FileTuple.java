@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.util.Date;
 
 import database.DatabaseAccessor;
-import database.constants.ServerDependentValues;
+import server.ServerSettings;
 
 /**
  * Container class for holding data on a file in the database. Public variables
@@ -67,7 +67,7 @@ public class FileTuple implements HasCheckSumMD5 {
      */
     public String getUploadURL() {
 
-    	return ServerDependentValues.UploadURL + path;
+    	return ServerSettings.generateUploadURL(path);
     }
 
     /**
@@ -77,7 +77,7 @@ public class FileTuple implements HasCheckSumMD5 {
      */
     public String getDownloadURL() {
 
-    	return ServerDependentValues.DownloadURL + path;
+    	return ServerSettings.generateDownloadURL(path);
     }
 
     /**
@@ -87,7 +87,7 @@ public class FileTuple implements HasCheckSumMD5 {
      */
     public String getInputFileUploadURL() {
 
-    	return ServerDependentValues.UploadURL + inputFilePath;
+    	return ServerSettings.generateUploadURL(inputFilePath);
     }
 
     /**
@@ -97,7 +97,7 @@ public class FileTuple implements HasCheckSumMD5 {
      */
     public String getInputFileDownloadURL() {
 
-    	return ServerDependentValues.DownloadURL + inputFilePath;
+    	return ServerSettings.generateDownloadURL(inputFilePath);
     }
 
     /**

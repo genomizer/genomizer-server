@@ -17,8 +17,8 @@ import org.junit.Test;
 
 import database.DatabaseAccessor;
 import database.FilePathGenerator;
-import database.constants.ServerDependentValues;
 import database.test.TestInitializer;
+import server.ServerSettings;
 
 public class ChainFilesTest {
 
@@ -34,6 +34,7 @@ public class ChainFilesTest {
 
         ti = new TestInitializer();
         dbac = ti.setup();
+        TestInitializer.setupServerSettings();
 
         testFolderPath = TestInitializer.createScratchDir();
         testFolder = new File(testFolderPath);
@@ -57,8 +58,8 @@ public class ChainFilesTest {
         String fileName = "chainHuman.txt";
         String filePath = dbac.addChainFile(fromVersion, toVersion, fileName, null);
 
-        assertEquals(ServerDependentValues.UploadURL +
-        		fpg.getChainFolderPath("Human", fromVersion, toVersion)
+        assertEquals(ServerSettings.generateUploadURL(
+        		fpg.getChainFolderPath("Human", fromVersion, toVersion))
         		, filePath);
     }
 

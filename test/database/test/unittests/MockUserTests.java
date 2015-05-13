@@ -18,12 +18,12 @@ import org.junit.Test;
 
 import database.DatabaseAccessor;
 import database.FilePathGenerator;
-import database.constants.ServerDependentValues;
 import database.containers.Annotation;
 import database.containers.Experiment;
 import database.containers.FileTuple;
 import database.containers.Genome;
 import database.test.TestInitializer;
+import server.ServerSettings;
 
 public class MockUserTests {
 
@@ -39,6 +39,7 @@ public class MockUserTests {
         ti = new TestInitializer();
 
         dbac = ti.setupWithoutAddingTuples();
+        TestInitializer.setupServerSettings();
 
         testFolderPath = TestInitializer.createScratchDir();
 
@@ -261,21 +262,21 @@ public class MockUserTests {
                 FileTuple.RAW, "rawFile.fastq", "rawInput.fasta",
                 null, "Umu", "Ruaridh", false, null, null);
 
-        String expectedRawFileUploadURL = ServerDependentValues.UploadURL
-                + testFolderPath
+        String expectedRawFileUploadURL = ServerSettings.generateUploadURL(
+                testFolderPath
                 + "My First Experiment"
                 + File.separator
                 + "raw"
                 + File.separator
-                + "rawFile.fastq";
+                + "rawFile.fastq");
 
-        String expectedInputFileUploadURL = ServerDependentValues.UploadURL
-                + testFolderPath
+        String expectedInputFileUploadURL = ServerSettings.generateUploadURL(
+                testFolderPath
                 + "My First Experiment"
                 + File.separator
                 + "raw"
                 + File.separator
-                + "rawInput.fasta";
+                + "rawInput.fasta");
 
         assertEquals(expectedRawFileUploadURL, ft.getUploadURL());
         assertEquals(expectedInputFileUploadURL,
@@ -305,10 +306,10 @@ public class MockUserTests {
                 "hg38.fasta", null);
         dbac.markReadyForDownload("hg38", "hg38.fasta");
 
-        String expectedUploadURL = ServerDependentValues.UploadURL
-                + testFolderPath + "genome_releases" + File.separator
+        String expectedUploadURL = ServerSettings.generateUploadURL(
+                testFolderPath + "genome_releases" + File.separator
                 + "Human" + File.separator + "hg38" + File.separator
-                + "hg38.fasta";
+                + "hg38.fasta");
 
         assertEquals(expectedUploadURL, uploadURL);
 
@@ -361,15 +362,15 @@ public class MockUserTests {
 
         assertEquals(1, g.getDownloadURLs().size());
 
-        String expectedDownloadURL = ServerDependentValues.DownloadURL
-                + testFolderPath
+        String expectedDownloadURL = ServerSettings.generateDownloadURL(
+                testFolderPath
                 + "genome_releases"
                 + File.separator
                 + "Human"
                 + File.separator
                 + "hg38"
                 + File.separator
-                + "hg38.fasta";
+                + "hg38.fasta");
 
         assertEquals(expectedDownloadURL, g.getDownloadURLs().get(0));
     }
@@ -383,10 +384,10 @@ public class MockUserTests {
                 "hg38.2.fasta", null);
         dbac.markReadyForDownload("hg38", "hg38.2.fasta");
 
-        String expectedUploadURL = ServerDependentValues.UploadURL
-                + testFolderPath + "genome_releases" + File.separator
+        String expectedUploadURL = ServerSettings.generateUploadURL(
+                testFolderPath + "genome_releases" + File.separator
                 + "Human" + File.separator + "hg38" + File.separator
-                + "hg38.2.fasta";
+                + "hg38.2.fasta");
 
         assertEquals(expectedUploadURL, uploadURL);
     }

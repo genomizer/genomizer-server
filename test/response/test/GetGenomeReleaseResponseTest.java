@@ -2,12 +2,13 @@ package response.test;
 
 import static org.junit.Assert.*;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 import database.test.TestInitializer;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -25,8 +26,8 @@ import server.ServerSettings;
 @Ignore
 public class GetGenomeReleaseResponseTest {
 
-	@Before
-	public void setup() {
+	@BeforeClass
+	public void setupBeforeClass() throws FileNotFoundException {
 		TestInitializer.setupServerSettings();
 	}
 

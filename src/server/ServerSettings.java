@@ -1,6 +1,6 @@
 
 package server;
-import database.constants.ServerDependentValues;
+import util.PathUtils;
 
 import java.io.*;
 import java.util.Scanner;
@@ -20,8 +20,11 @@ public class ServerSettings {
 	public static String picardLocation = "picard";
 	public static int nrOfProcessThreads = 5;
 
-	private static String downloadURL = "/download?path=";
-	private static String uploadURL = "/upload?path=";
+	private static String downloadHandlerRoot = "/download";
+	private static String uploadHandlerRoot = "/upload";
+
+	private static String downloadURL;
+	private static String uploadURL;
 
 	public static void writeSettings(String path){
 		try {
@@ -64,6 +67,11 @@ public class ServerSettings {
 		nullCheck(wwwTunnelPath, "wwwTunnelPath");
 		nullCheck(genomizerPort, "genomizerPort");
 		nullCheck(fileLocation, "fileLocation");
+		if (!fileLocation.endsWith(File.pathSeparator)) {
+			fatalError("Invalid value for 'fileLocation': '" + fileLocation
+					+ "' - must end with a path separator ('"
+					+ File.pathSeparator + "')!");
+		}
 		nullCheck(nrOfProcessThreads, "nrOfProcessThreads");
 		nullCheck(bowtieLocation, "bowtieLocation");
 		nullCheck(picardLocation, "picardLocation");
@@ -80,10 +88,14 @@ public class ServerSettings {
 			String msg = "Error! parameter " + name + " is not set. Check in " +
 					"settings.cfg if it is set and spelled correctly, " +
 					"capitalization does not matter.\nExiting";
-			Debug.log(msg);
-			ErrorLogger.log("SYSTEM", msg);
-			System.exit(1);
+			fatalError(msg);
 		}
+	}
+
+	private static void fatalError(String msg) {
+		Debug.log(msg);
+		ErrorLogger.log("SYSTEM", msg);
+		System.exit(1);
 	}
 
 	public static void readSettingsFile(String path) throws FileNotFoundException {
@@ -153,10 +165,10 @@ public class ServerSettings {
 				}
 			}
 			scan.close();
-			ServerDependentValues.DownloadURL = wwwTunnelHost + ":" +
-					wwwTunnelPort + wwwTunnelPath + downloadURL;
-			ServerDependentValues.UploadURL = wwwTunnelHost + ":" +
-					wwwTunnelPort + wwwTunnelPath + uploadURL;
+			downloadURL = wwwTunnelHost + ":" +
+					wwwTunnelPort + wwwTunnelPath + downloadHandlerRoot;
+			uploadURL = wwwTunnelHost + ":" +
+					wwwTunnelPort + wwwTunnelPath + uploadHandlerRoot;
 
 			String dataInfo =
 					"\tdatabaseUsername = " + databaseUsername + "\n"
@@ -182,5 +194,15 @@ public class ServerSettings {
 			Debug.log(msg);
 			ErrorLogger.log("SYSTEM", msg);
 		}
+	}
+
+	// Given an absolute path on the file system, generate a download URL.
+	public static String generateDownloadURL(String path) throws IllegalArgumentException {
+		return PathUtils.join(downloadURL, PathUtils.pathMapLocalToPublic(path));
+	}
+
+	// Given an absolute path on the file system, generate an upload URL.
+	public static String generateUploadURL(String path) throws IllegalArgumentException {
+		return PathUtils.join(uploadURL, PathUtils.pathMapLocalToPublic(path));
 	}
 }

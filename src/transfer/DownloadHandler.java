@@ -17,11 +17,9 @@ import java.util.HashMap;
 // Implements file downloading.
 public class DownloadHandler {
     private String handlerRoot;
-    private String downloadDir;
 
-    public DownloadHandler (String handlerRoot, String downloadDir) {
+    public DownloadHandler (String handlerRoot) {
         this.handlerRoot = handlerRoot;
-        this.downloadDir = downloadDir;
     }
 
     // Serve an index page listing all files in the downloadDir.
@@ -31,7 +29,8 @@ public class DownloadHandler {
 
         // List the directory contents. Quite verbose, but...
         final ArrayList<String> fileList = new ArrayList<>();
-        Files.walkFileTree((new File(downloadDir)).toPath(), new FileVisitor<Path>() {
+        Files.walkFileTree((new File(ServerSettings.fileLocation)).toPath(),
+                new FileVisitor<Path>() {
             @Override
             public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
                 return FileVisitResult.CONTINUE;
@@ -57,7 +56,7 @@ public class DownloadHandler {
 
         // Render the HTML page.
         String fileListHTML = "";
-        int parentLen = downloadDir.length();
+        int parentLen = ServerSettings.fileLocation.length();
         for (String file : fileList) {
             String f = file.substring(parentLen);
             fileListHTML += "<li>" + "<a href=\"/download/" + f
@@ -114,20 +113,15 @@ public class DownloadHandler {
     public void handleGET(HttpExchange exchange) throws IOException {
         HashMap<String, String> reqParams = new HashMap<>();
         String reqPath = Util.parseURI(exchange.getRequestURI(), reqParams);
+        Util.validatePath(reqPath);
 
         if (reqPath.equals(this.handlerRoot)
                 || reqPath.equals(this.handlerRoot + "/")) {
-            if (reqParams.containsKey("path")) {
-                Debug.log("Using legacy download method ('?path=/absolute/path').");
-                serveFile(exchange, new File(reqParams.get("path")));
-            }
-            else {
-                serveIndex(exchange);
-            }
+            serveIndex(exchange);
         }
         else {
             String relPath = reqPath.substring(this.handlerRoot.length() + 1);
-            serveFile(exchange, new File(this.downloadDir + relPath));
+            serveFile(exchange, new File(ServerSettings.fileLocation + relPath));
         }
     }
 }

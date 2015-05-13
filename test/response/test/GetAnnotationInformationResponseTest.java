@@ -1,12 +1,14 @@
 package response.test;
 
 import static org.junit.Assert.*;
+
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 import command.annotation.GetAnnotationCommand;
 import database.subClasses.UserMethods.UserType;
 import database.test.TestInitializer;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import response.AnnotationInformation;
 import response.GetAnnotationInformationResponse;
@@ -43,8 +45,8 @@ public class GetAnnotationInformationResponseTest {
 		assertEquals(air.getBody(), "{\"annotations\":[{\"id\":1,\"name\":\"Gender\",\"type\":1,\"values\":[\"male\",\"female\",\"unknown\"],\"forced\":true},{\"id\":2,\"name\":\"Cell Line\",\"type\":1,\"values\":[\"true\",\"false\",\"unknown\"],\"forced\":true}]}");
 	}
 
-	@Before
-	public void setup() {
+	@BeforeClass
+	public void setupBeforeClass() throws FileNotFoundException {
 		TestInitializer.setupServerSettings();
 	}
 

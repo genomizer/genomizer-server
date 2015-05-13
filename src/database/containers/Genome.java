@@ -5,7 +5,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import database.constants.ServerDependentValues;
+import server.ServerSettings;
+import util.PathUtils;
 
 public class Genome {
 
@@ -35,7 +36,7 @@ public class Genome {
     public List<String> getDownloadURLs() {
         List<String> downloadURLs = new ArrayList<String>();
         for (String s: files) {
-            downloadURLs.add(ServerDependentValues.DownloadURL + folderPath + s);
+            downloadURLs.add(ServerSettings.generateDownloadURL(PathUtils.join(folderPath, s)));
         }
         return downloadURLs;
     }

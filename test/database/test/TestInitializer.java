@@ -1,10 +1,6 @@
 package database.test;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -93,7 +89,8 @@ public class TestInitializer {
         return dbac;
     }
 
-    public static void setupServerSettings() {
+    public static void setupServerSettings() throws FileNotFoundException {
+        ServerSettings.readSettingsFile("settings.cfg");
         ServerSettings.databaseUsername = TestInitializer.username;
         ServerSettings.databasePassword = TestInitializer.password;
         ServerSettings.databaseHost     = TestInitializer.host;

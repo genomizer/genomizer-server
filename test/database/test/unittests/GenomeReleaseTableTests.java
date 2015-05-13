@@ -17,9 +17,9 @@ import org.junit.Test;
 
 import database.DatabaseAccessor;
 import database.FilePathGenerator;
-import database.constants.ServerDependentValues;
 import database.containers.Genome;
 import database.test.TestInitializer;
+import server.ServerSettings;
 
 public class GenomeReleaseTableTests {
     public static TestInitializer ti;
@@ -32,6 +32,7 @@ public class GenomeReleaseTableTests {
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
         ti = new TestInitializer();
+        TestInitializer.setupServerSettings();
         dbac = ti.setupWithoutAddingTuples();
         fpg = dbac.getFilePathGenerator();
 
@@ -109,9 +110,9 @@ public class GenomeReleaseTableTests {
     @Test
     public void shouldReturnUploadURLUponAdd() throws Exception {
         String uploadURL = dbac.addGenomeRelease("hg39", "Human", "hg39.fasta", null);
-        String expectedUploadURL = ServerDependentValues.UploadURL
-                + fpg.generateGenomeReleaseFolder("hg39", "Human")
-                + "hg39.fasta";
+        String expectedUploadURL = ServerSettings.generateUploadURL(
+                fpg.generateGenomeReleaseFolder("hg39", "Human")
+                        + "hg39.fasta");
         assertEquals(expectedUploadURL, uploadURL);
     }
 
@@ -176,7 +177,7 @@ public class GenomeReleaseTableTests {
         Genome g = dbac.getGenomeRelease("hg38");
         assertEquals(2, g.getFiles().size());
         String downloadURL = getDownloadURL(g, "hg38.fasta");
-        assertEquals(ServerDependentValues.DownloadURL + g.folderPath + "hg38.fasta", downloadURL);
+        assertEquals(ServerSettings.generateDownloadURL(g.folderPath + "hg38.fasta"), downloadURL);
     }
 
     private String getDownloadURL(Genome g, String string) {

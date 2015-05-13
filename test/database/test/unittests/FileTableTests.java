@@ -48,10 +48,9 @@ public class FileTableTests {
 
     @BeforeClass
     public static void setupTestCase() throws Exception {
-
-        dbac = new DatabaseAccessor(TestInitializer.username,
-                TestInitializer.password, TestInitializer.host,
-                TestInitializer.database);
+        ti = new TestInitializer();
+        TestInitializer.setupServerSettings();
+        dbac = ti.setupWithoutAddingTuples();
 
         testFolderPath = TestInitializer.createScratchDir();
         testFolder = new File(testFolderPath);
@@ -60,8 +59,6 @@ public class FileTableTests {
         fpg.setRootDirectory(testFolderPath);
 
         dbac.addExperiment(testExpId);
-
-        ti = new TestInitializer();
     }
 
 

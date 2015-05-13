@@ -17,6 +17,7 @@ import org.apache.commons.fileupload.RequestContext;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import response.HttpStatusCode;
 import server.*;
+import util.PathUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,11 +34,9 @@ import java.util.List;
 // and so can't be implemented with the Command interface.
 public class UploadHandler {
     private String handlerRoot;
-    private String uploadDir;
     private String tmpDir;
 
-    public UploadHandler (String handlerRoot, String uploadDir, String tmpDir) {
-        this.uploadDir   = uploadDir;
+    public UploadHandler (String handlerRoot, String tmpDir) {
         this.handlerRoot = handlerRoot;
         this.tmpDir      = tmpDir;
     }
@@ -48,7 +47,7 @@ public class UploadHandler {
         byte [] form = ("<html><body>" +
                 "<form method=\"POST\" " +
                 "enctype=\"multipart/form-data\" action=\""
-                + this.handlerRoot + "\">" +
+                + this.handlerRoot + "/upload.test\">" +
                 "File to upload: <input type=\"file\" " +
                 // "accept=\".wig,.fastq,.gff,.sgr\" "
                 "name=\"uploadfile\"/>" +
@@ -100,24 +99,20 @@ public class UploadHandler {
         };
         List<FileItem> fileItems = fileUpload.parseRequest(ctx);
 
-        // Move uploaded files to uploadDir.
+        // Move uploaded files to fileLocation.
         URI requestURI = exchange.getRequestURI();
         HashMap<String,String> reqParams = new HashMap<>();
         String reqPath = Util.parseURI(requestURI, reqParams);
         String absUploadPath = null;
-        if (reqParams.containsKey("path")) {
-            Debug.log("Using legacy upload method ('upload?path=/absolute/path').");
-            absUploadPath = reqParams.get("path");
-        }
-        else {
-            String relPath = reqPath.substring(this.handlerRoot.length() + 1);
-            absUploadPath = this.uploadDir + relPath;
-        }
+
+        String relPath = reqPath.substring(this.handlerRoot.length() + 1);
+        Util.validatePath(relPath);
+        absUploadPath = PathUtils.join(ServerSettings.fileLocation, relPath);
 
         for (FileItem fileItem : fileItems) {
             if (!fileItem.isFormField()) {
                 File outFile = new File(absUploadPath == null
-                        ? this.uploadDir + fileItem.getName()
+                        ? ServerSettings.fileLocation + fileItem.getName()
                         : absUploadPath);
                 commitFile(absUploadPath, fileItem);
                 outFile.getParentFile().mkdirs();

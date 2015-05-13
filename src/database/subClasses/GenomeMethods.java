@@ -12,11 +12,11 @@ import java.util.List;
 
 import database.FilePathGenerator;
 import database.FileValidator;
-import database.constants.ServerDependentValues;
 import database.containers.ChainFile;
 import database.containers.ChainFiles;
 import database.containers.Genome;
 import database.containers.GenomeFile;
+import server.ServerSettings;
 
 /**
  * Class that contains all the methods for adding,changing, getting and removing
@@ -94,9 +94,6 @@ public class GenomeMethods {
 		String folderPath = fpg.generateGenomeReleaseFolder(genomeVersion,
 				species);
 
-		StringBuilder filePathBuilder = new StringBuilder(folderPath);
-		filePathBuilder.append(filename);
-
 		if (getGenomeRelease(genomeVersion) == null) {
 			try (PreparedStatement stmt =
 						 conn.prepareStatement("INSERT INTO Genome_Release "
@@ -125,9 +122,7 @@ public class GenomeMethods {
 			stmt.executeUpdate();
 		}
 
-		filePathBuilder.insert(0, ServerDependentValues.UploadURL);
-
-		return filePathBuilder.toString();
+		return ServerSettings.generateUploadURL(folderPath + filename);
 	}
 
 	/**
@@ -505,9 +500,7 @@ public class GenomeMethods {
 			stmt.executeUpdate();
 		}
 
-		String URL = ServerDependentValues.UploadURL;
-
-		return URL + filePath;
+		return ServerSettings.generateUploadURL(filePath);
 	}
 
 	/**
