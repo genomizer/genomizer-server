@@ -98,13 +98,7 @@ public class RequestHandler implements HttpHandler {
         /*Retrieve the URI part of the request header.*/
 		String uri = removeTimeStamp(exchange.getRequestURI().toString());
 
-		/*Does the length of the URI match the needed length?*/
-		if (URILength.get(commandClass) != (uri.split("/").length-1)) {
-			Debug.log("Bad format on command: " + exchange.getRequestMethod()
-                    + " " + exchange.getRequestURI());
-			respond(createBadRequestResponse(), exchange);
-			return;
-		}
+
 
 		String json = readBody(exchange);
         if (json.equals("") || json.isEmpty()) {
@@ -113,6 +107,14 @@ public class RequestHandler implements HttpHandler {
 		logRequestBody(json);
 
         Command command = gson.fromJson(json, commandClass);
+
+        /*Does the length of the URI match the needed length?*/
+        if (command.getExpectedNumberOfURIFields() != (uri.split("/").length-1)) {
+            Debug.log("Bad format on command: " + exchange.getRequestMethod()
+                    + " " + exchange.getRequestURI());
+            respond(createBadRequestResponse(), exchange);
+            return;
+        }
 
 		command.setFields(uri, uuid, UserType.ADMIN);
 
@@ -128,7 +130,6 @@ public class RequestHandler implements HttpHandler {
         if (commandClass.equals(PutProcessCommand.class)) {
             Doorman.getWorkPool().addWork((PutProcessCommand) command);
             respond(new ProcessResponse(HttpStatusCode.OK), exchange);
-            return;
         } else {
             /*Execute the command and respond.*/
             respond(command.execute(), exchange);

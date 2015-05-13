@@ -42,7 +42,6 @@ public class DeleteLoginCommandTest {
 	 */
 	@Test(expected = ValidateException.class)
 	public void testValidateInvalidMaxUsernameLength() throws ValidateException {
-
 		String uuid = "";
 		for(int i = 0; i < MaxLength.USERNAME + 1; i++) {
 			uuid = uuid + "a";
@@ -50,8 +49,6 @@ public class DeleteLoginCommandTest {
 		Command c = new DeleteLoginCommand();
 		c.setFields(null, uuid, UserType.ADMIN);
 		c.validate();
-
-		fail("Expected ValidateException to be thrown.");
 	}
 
 	/**
@@ -65,8 +62,6 @@ public class DeleteLoginCommandTest {
 		Command c = new DeleteLoginCommand();
 		c.setFields(null, null, UserType.ADMIN);
 		c.validate();
-
-		fail("Expected ValidateException to be thrown.");
 	}
 
 	/**
@@ -80,8 +75,6 @@ public class DeleteLoginCommandTest {
 		Command c = new DeleteLoginCommand();
 		c.setFields(null, "", UserType.ADMIN);
 		c.validate();
-
-		fail("Expected ValidateException to be thrown.");
 	}
 
 
@@ -96,8 +89,6 @@ public class DeleteLoginCommandTest {
 		Command c = new DeleteLoginCommand();
 		c.setFields(null, "��!?,:;[]{}", UserType.ADMIN);
 		c.validate();
-
-		fail("Expected ValidateException to be thrown.");
 	}
 
 	/**
@@ -108,12 +99,9 @@ public class DeleteLoginCommandTest {
 	 */
 	@Test
 	public void testValidateProperlyFormatted() throws ValidateException {
-
 		Command c = new DeleteLoginCommand();
 		c.setFields(null, "properly", UserType.ADMIN);
 		c.validate();
-
-		assertTrue(true);
 	}
 
 }
