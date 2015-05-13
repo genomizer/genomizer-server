@@ -19,7 +19,6 @@ import java.sql.SQLException;
  * @version 1.1
  */
 public class GetFileCommand extends Command {
-	//TODO Implement this class
 
 	private String fileID;
 
