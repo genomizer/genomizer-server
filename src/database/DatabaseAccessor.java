@@ -1,5 +1,6 @@
 package database;
 
+import database.subClasses.UserMethods.UserType;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -54,6 +55,7 @@ public class DatabaseAccessor implements AutoCloseable {
     private AnnotationMethods annoMethods;
     private FileMethods fileMethods;
     private GenomeMethods genMethods;
+
 
     /**
      * Creates a databaseAccessor that opens a connection to a database.
@@ -262,7 +264,7 @@ public class DatabaseAccessor implements AutoCloseable {
      * @param email       The user's email address.
      * @return The number of tuples affected by the update in the database.
      */
-    public int updateUser(String username, String newPassword, String role,
+    public int updateUser(String username, String newPassword, UserType role,
                           String fullName, String email)
             throws IOException, SQLException {
         int pwd = resetPassword(username, newPassword);
@@ -282,7 +284,7 @@ public class DatabaseAccessor implements AutoCloseable {
      */
     public int updateUser(String username, String newPassword, String fullName,
                           String email) throws SQLException, IOException {
-        String role = getRole(username);
+        UserType role = getRole(username);
         int pwd = resetPassword(username, newPassword);
         int upd = userMethods.updateUser(username, role, fullName, email);
         return Math.max(pwd, upd);
@@ -348,7 +350,7 @@ public class DatabaseAccessor implements AutoCloseable {
      * @throws SQLException
      *             - if the query does not succeed
      */
-    public String getRole(String username) throws SQLException {
+    public UserType getRole(String username) throws SQLException {
         return userMethods.getRole(username);
     }
 
@@ -361,7 +363,7 @@ public class DatabaseAccessor implements AutoCloseable {
      * @throws SQLException
      *             - if the query does not succeed
      */
-    public int setRole(String username, String role) throws SQLException {
+    public int setRole(String username, UserType role) throws SQLException {
         return userMethods.setRole(username, role);
     }
 
