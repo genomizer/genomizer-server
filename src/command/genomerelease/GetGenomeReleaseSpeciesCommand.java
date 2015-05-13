@@ -16,6 +16,8 @@ import response.HttpStatusCode;
 import response.Response;
 import database.DatabaseAccessor;
 import database.containers.Genome;
+import server.Debug;
+
 /**
  * A command which is used to get all the genome versions
  * for a specific species.
@@ -54,10 +56,14 @@ public class GetGenomeReleaseSpeciesCommand extends Command {
 					db.getAllGenomeReleasesForSpecies(species);
 			return new GetGenomeReleaseResponse(HttpStatusCode.OK, genomeReleases);
 		} catch (SQLException e) {
-			return new ErrorResponse(HttpStatusCode.SERVICE_UNAVAILABLE,
-					"DatabaseAccessor could not be created: " + e.getMessage());
+			Debug.log("Error when fetching all genome versions for species "+species+". Temporary error with database: "
+					+ e.getMessage());
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+					"Error when fetching all genome versions for species "+species+". Temporary error with database.");
 		} catch (IOException e) {
-			return new ErrorResponse(HttpStatusCode.SERVICE_UNAVAILABLE, species +
+			Debug.log("Error when fetching all genome versions for species "+species+". The specie has no released " +
+					"genome versions: " + e.getMessage());
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, species +
 					" has no genome version released");
 		} finally {
 			if (db != null) {

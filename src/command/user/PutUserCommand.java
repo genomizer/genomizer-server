@@ -5,6 +5,7 @@ import authentication.BCrypt;
 import authentication.LoginAttempt;
 import com.google.gson.annotations.Expose;
 import command.Command;
+import command.UserRights;
 import command.ValidateException;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
@@ -38,8 +39,8 @@ public class PutUserCommand extends Command {
     /**
      * Set username using uuid along with the usertype
      * @param uri the URI from the http request.
-     * @param uuid
-     * @param userType
+     * @param uuid the uuid from the http request.
+     * @param userType the userType
      */
     @Override
     public void setFields(String uri, String uuid, UserMethods.UserType userType) {
@@ -53,6 +54,7 @@ public class PutUserCommand extends Command {
      */
     @Override
     public void validate() throws ValidateException {
+        hasRights(UserRights.getRights(this.getClass()));
 
         validateName(oldPassword, MaxLength.PASSWORD, "oldPassword");
         validateName(newPassword, MaxLength.PASSWORD, "newPassword");
@@ -98,8 +100,7 @@ public class PutUserCommand extends Command {
                 return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Update of user information" +
                         " didn't work because of temporary problems with database.");
             }finally {
-                if (db != null)
-                    db.close();
+                db.close();
             }
             return new MinimalResponse(HttpStatusCode.OK);
         }

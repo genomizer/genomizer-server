@@ -9,11 +9,12 @@ import command.UserRights;
 import command.ValidateException;
 import database.DatabaseAccessor;
 import database.containers.Genome;
-import database.subClasses.UserMethods.UserType;
+import database.subClasses.UserMethods;
 import response.ErrorResponse;
 import response.GetGenomeReleaseResponse;
 import response.HttpStatusCode;
 import response.Response;
+import server.Debug;
 
 /**
  * A command which is used to get all the genome versions
@@ -26,6 +27,18 @@ import response.Response;
 public class GetGenomeReleaseCommand extends Command {
 
 
+	/**
+	 * Set the UserType. Uri and Uuid not used in this command.
+	 * @param uri the URI from the http request.
+	 * @param uuid the uuid from the http request.
+	 * @param userType the userType
+	 */
+	@Override
+	public void setFields(String uri, String uuid, UserMethods.UserType userType) {
+		this.userType = userType;
+		/*No fields from the URI is needed, neither is the UUID. Dummy
+		implementation*/
+	}
 	@Override
 	public void validate() throws ValidateException {
 		/*Validation will always succeed, the command can not be corrupt.*/
@@ -48,14 +61,16 @@ public class GetGenomeReleaseCommand extends Command {
 				return new GetGenomeReleaseResponse(HttpStatusCode.OK,
 						genomeReleases);
 			}catch(SQLException e){
-				return new ErrorResponse(HttpStatusCode.SERVICE_UNAVAILABLE,
-						"Could not fetch all genome releases: " +
-								e.getMessage());
+				Debug.log("Error when fetching all genome releases. Temporary error with database: "
+						+ e.getMessage());
+				return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+						"Could not fetch all genome releases due to temporary database error.");
 			}
 		} catch (SQLException | IOException e) {
-			return new ErrorResponse(HttpStatusCode.SERVICE_UNAVAILABLE,
-					"SQLException - Could not create connection to database: " +
-							e.getMessage());
+			Debug.log("Error when fetching all genome releases. Temporary error with database: "
+					+ e.getMessage());
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+					"Could not fetch all genome releases due to temporary database error.");
 		} finally {
 			if (db != null)
 				db.close();

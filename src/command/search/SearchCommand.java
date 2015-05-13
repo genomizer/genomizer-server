@@ -31,6 +31,12 @@ import server.Debug;
 public class SearchCommand extends Command {
 	private String annotations;
 
+	/**
+	 * Set the UserType Uri and Uuid. annotations also set from uri.
+	 * @param uri the URI from the http request.
+	 * @param uuid the uuid from the http request.
+	 * @param userType the userType
+	 */
 	@Override
 	public void setFields(String uri, String uuid, UserType userType) {
 
@@ -79,8 +85,7 @@ public class SearchCommand extends Command {
 			if (db != null)
 				db.close();
 		}
-		SearchResponse response = new SearchResponse(searchResult);
-		return response;
+		return new SearchResponse(searchResult);
 	}
 
 	/**

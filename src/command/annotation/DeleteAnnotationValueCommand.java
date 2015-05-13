@@ -16,6 +16,7 @@ import response.ErrorResponse;
 import response.MinimalResponse;
 
 import response.HttpStatusCode;
+import server.Debug;
 
 /**
  * Class used to handle removal of annotation values.
@@ -57,13 +58,11 @@ public class DeleteAnnotationValueCommand extends Command {
 						value + " does not exist in " + name + " and can not " +
 						"be deleted");
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return new ErrorResponse(HttpStatusCode.NO_CONTENT, e.getMessage());
-		} catch (IOException e) {
-			e.printStackTrace();
-			return new ErrorResponse(HttpStatusCode.SERVICE_UNAVAILABLE,
-					e.getMessage());
+		} catch (IOException | SQLException e) {
+			Debug.log("Deleting annotation value " + value + " on annotation " + name +
+					" failed due to database error. Reason: " + e.getMessage());
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Deleting annotation value " + value +
+					" on annotation "+name + " failed due to database error.");
 		} finally {
 			if (db != null) {
 				db.close();

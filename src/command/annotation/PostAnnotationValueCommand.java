@@ -10,11 +10,12 @@ import command.UserRights;
 import command.ValidateException;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
-import database.subClasses.UserMethods.UserType;
+import database.subClasses.UserMethods;
 import response.ErrorResponse;
 import response.HttpStatusCode;
 import response.MinimalResponse;
 import response.Response;
+import server.Debug;
 
 /**
  * Class used to handle the process of adding annotation
@@ -30,6 +31,19 @@ public class PostAnnotationValueCommand extends Command {
 	@Expose
 	private String value = null;
 
+
+	/**
+	 * Set the UserType. Uri and Uuid not used in this command.
+	 * @param uri the URI from the http request.
+	 * @param uuid the uuid from the http request.
+	 * @param userType the userType
+	 */
+	@Override
+	public void setFields(String uri, String uuid, UserMethods.UserType userType) {
+		this.userType = userType;
+		/*No fields from the URI is needed, neither is the UUID. Dummy
+		implementation*/
+	}
 
 	@Override
 	public void validate() throws ValidateException {
@@ -51,13 +65,11 @@ public class PostAnnotationValueCommand extends Command {
 						value);
 			}
 			db.addDropDownAnnotationValue(name, value);
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
-		} catch (IOException e) {
-			e.printStackTrace();
-			return new ErrorResponse(HttpStatusCode.SERVICE_UNAVAILABLE,
+		} catch(SQLException | IOException e) {
+			Debug.log("Adding of annotation value: "+value+" on annotation "+name+" failed. Reason: " +
 					e.getMessage());
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Could not add annotation value: "
+					+value+ " on annotation "+name+" because of temporary problems with database.");
 		} finally {
 			if (db != null) {
 				db.close();

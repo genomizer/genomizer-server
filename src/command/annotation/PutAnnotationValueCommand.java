@@ -11,11 +11,12 @@ import command.UserRights;
 import command.ValidateException;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
-import database.subClasses.UserMethods.UserType;
+import database.subClasses.UserMethods;
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
 import response.HttpStatusCode;
+import server.Debug;
 
 /**
  * This class is used to handle changes to annotation values.
@@ -34,6 +35,18 @@ public class PutAnnotationValueCommand extends Command {
 	private String newValue = null;
 
 
+	/**
+	 * Set the UserType. Uri and Uuid not used in this command.
+	 * @param uri the URI from the http request.
+	 * @param uuid the uuid from the http request.
+	 * @param userType the userType
+	 */
+	@Override
+	public void setFields(String uri, String uuid, UserMethods.UserType userType) {
+		this.userType = userType;
+		/*No fields from the URI is needed, neither is the UUID. Dummy
+		implementation*/
+	}
 	@Override
 	public void validate() throws ValidateException {
 		hasRights(UserRights.getRights(this.getClass()));
@@ -57,16 +70,18 @@ public class PutAnnotationValueCommand extends Command {
 					return new MinimalResponse(HttpStatusCode.OK);
 				} else {
 					return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
-							"The value" + oldValue + " does not exist");
+							"The value" + oldValue + " does not exist.");
 				}
 			} else {
 				return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
-						"The annotation " + name + " does not");
+						"The annotation " + name + " does not exist.");
 			}
 
-		} catch (SQLException | IOException e) {
-			e.printStackTrace();
-			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
+		}catch (IOException | SQLException e) {
+			Debug.log("Editing annotation value " + oldValue + " on annotation "+name+
+					" failed due to database error. Reason: " + e.getMessage());
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Editing annotation value " + oldValue +
+					" on annotation "+name + " failed due to database error.");
 		} finally {
 			if (db != null) {
 				db.close();

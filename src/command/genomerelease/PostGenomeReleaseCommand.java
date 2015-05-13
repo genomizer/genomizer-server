@@ -12,11 +12,12 @@ import command.ValidateException;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
 
-import database.subClasses.UserMethods.UserType;
+import database.subClasses.UserMethods;
 import response.AddGenomeReleaseResponse;
 import response.ErrorResponse;
 import response.HttpStatusCode;
 import response.Response;
+import server.Debug;
 
 /**
  * Class used to handle adding a genome release.
@@ -38,6 +39,19 @@ public class PostGenomeReleaseCommand extends Command {
 	@Expose
 	private ArrayList<String> checkSumsMD5 = new ArrayList<>();
 
+
+	/**
+	 * Set the UserType. Uri and Uuid not used in this command.
+	 * @param uri the URI from the http request.
+	 * @param uuid the uuid from the http request.
+	 * @param userType the userType
+	 */
+	@Override
+	public void setFields(String uri, String uuid, UserMethods.UserType userType) {
+		this.userType = userType;
+		/*No fields from the URI is needed, neither is the UUID. Dummy
+		implementation*/
+	}
 
 	@Override
 	public void validate() throws ValidateException {
@@ -73,8 +87,10 @@ public class PostGenomeReleaseCommand extends Command {
 			}
 			return new AddGenomeReleaseResponse(HttpStatusCode.CREATED, uploadURLs);
 		} catch (SQLException | IOException e) {
-				return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
-						e.getMessage());
+			Debug.log("Error when adding genome release "+genomeVersion+". Temporary error with database: "
+					+ e.getMessage());
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+					"Error when adding genome release "+genomeVersion+" due to temporary database error.");
 		} finally {
 			if (db != null) {
 				db.close();

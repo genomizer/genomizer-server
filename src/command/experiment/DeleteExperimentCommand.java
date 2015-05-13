@@ -25,6 +25,12 @@ import server.Debug;
 public class DeleteExperimentCommand extends Command {
 	private String expID;
 
+	/**
+	 * Set the UserType Uri and Uuid. expID also set from uri.
+	 * @param uri the URI from the http request.
+	 * @param uuid the uuid from the http request.
+	 * @param userType the userType
+	 */
 	@Override
 	public void setFields(String uri, String uuid, UserType userType) {
 

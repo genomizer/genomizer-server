@@ -17,6 +17,7 @@ import response.ErrorResponse;
 import response.HttpStatusCode;
 import response.MinimalResponse;
 import response.Response;
+import server.Debug;
 
 /**
  * command used to create a user.
@@ -40,6 +41,18 @@ public class PostUserCommand extends Command {
 	@Expose
 	private String email = null;
 
+	/**
+	 * Set the UserType. Uri and Uuid not used in this command.
+	 * @param uri the URI from the http request.
+	 * @param uuid the uuid from the http request.
+	 * @param userType the userType
+	 */
+	@Override
+	public void setFields(String uri, String uuid, UserType userType) {
+		this.userType = userType;
+		/*No fields from the URI is needed, neither is the UUID. Dummy
+		implementation*/
+	}
 	/**
 	 * Used to make sure the strings of the command are correct
 	 * @throws command.ValidateException
@@ -65,20 +78,23 @@ public class PostUserCommand extends Command {
 		DatabaseAccessor db;
 		try {
 			db = initDB();
-		} catch (SQLException e) {
-			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Error when " +
-					"initiating databaseAccessor. " + e.getMessage());
-		} catch (IOException e)  {
-			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
+		} catch (SQLException | IOException e) {
+			Debug.log("Creation of user: " + username + " didn't work, reason: " +
+					e.getMessage());
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Creation of user: " + username +
+					" didn't work because of temporary problems with database.");
 		}
 		try {
 			String hash = BCrypt.hashpw(password,BCrypt.gensalt());
 			db.addUser(username, hash, "SALT",privileges, name, email);
 
 		} catch (SQLException | IOException e) {
-			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Error when " +
-					"adding user to database, user probably already exists. " +
+			Debug.log("Creation of user: " + username + " didn't work, reason: " +
 					e.getMessage());
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Creation of user: " + username +
+					" didn't work because of temporary problems with database.");
+		}finally {
+			db.close();
 		}
 		return new MinimalResponse(HttpStatusCode.CREATED);
 

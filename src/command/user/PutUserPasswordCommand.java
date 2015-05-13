@@ -7,7 +7,7 @@ import command.UserRights;
 import command.ValidateException;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
-import database.subClasses.UserMethods.UserType;
+import database.subClasses.UserMethods;
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
@@ -31,6 +31,18 @@ public class PutUserPasswordCommand extends Command {
     @Expose
     private String password = null;
 
+    /**
+     * Set the UserType. Uri and Uuid not used in this command.
+     * @param uri the URI from the http request.
+     * @param uuid the uuid from the http request.
+     * @param userType the userType
+     */
+    @Override
+    public void setFields(String uri, String uuid, UserMethods.UserType userType) {
+        this.userType = userType;
+        /*No fields from the URI is needed, neither is the UUID. Dummy
+		implementation*/
+    }
     /**
      * Used to validate the PutUserPasswordCommand.
      */
@@ -68,9 +80,9 @@ public class PutUserPasswordCommand extends Command {
             return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
                     "Change of password failed for user: "+username+". Temporary problems with database.");
         }finally {
-            if (db != null)
-                db.close();
+            db.close();
         }
+
         return new MinimalResponse(HttpStatusCode.CREATED);
     }
 }

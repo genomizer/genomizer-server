@@ -8,7 +8,6 @@ import command.Command;
 import command.UserRights;
 import command.ValidateException;
 import database.constants.MaxLength;
-import org.apache.http.protocol.HTTP;
 import response.ErrorResponse;
 import response.HttpStatusCode;
 import response.Response;
@@ -27,6 +26,12 @@ import server.Debug;
 public class GetExperimentCommand extends Command {
 	private String expID;
 
+	/**
+	 * Set the UserType Uri and Uuid. expID also set from uri.
+	 * @param uri the URI from the http request.
+	 * @param uuid the uuid from the http request.
+	 * @param userType the userType
+	 */
 	@Override
 	public void setFields(String uri, String uuid, UserType userType) {
 
@@ -61,9 +66,7 @@ public class GetExperimentCommand extends Command {
 			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Could not get " +
 					"experiment: " + expID+ ". The reason was temporary problems with the database.");
 		}finally {
-			if (db != null) {
 				db.close();
-			}
 		}
 		if(exp == null) {
 			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Experiment " +
