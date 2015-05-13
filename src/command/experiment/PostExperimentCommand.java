@@ -31,23 +31,12 @@ public class PostExperimentCommand extends Command {
 	@Expose
 	private ArrayList<Annotation> annotations = new ArrayList<>();
 
-	/**
-	 * Set the UserType. Uri and Uuid not used in this command.
-	 * @param uri the URI from the http request.
-	 * @param uuid the uuid from the http request.
-	 * @param userType the userType
-	 */
+
 	@Override
 	public int getExpectedNumberOfURIFields() {
 		return 1;
 	}
 
-	@Override
-	public void setFields(String uri, String uuid, UserType userType) {
-		this.userType = userType;
-		/*No fields from the URI is needed, neither is the UUID. Dummy
-		implementation*/
-	}
 	@Override
 	public void validate() throws ValidateException {
 

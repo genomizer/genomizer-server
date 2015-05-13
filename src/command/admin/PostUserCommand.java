@@ -11,7 +11,6 @@ import command.UserRights;
 import command.ValidateException;
 import database.DatabaseAccessor;
 
-import database.subClasses.UserMethods.UserType;
 import database.constants.MaxLength;
 import response.ErrorResponse;
 import response.HttpStatusCode;
@@ -44,19 +43,7 @@ public class PostUserCommand extends Command {
 	@Override
 	public int getExpectedNumberOfURIFields() {
 		return 2;
-	}
 
-	/**
-	 * Set the UserType. Uri and Uuid not used in this command.
-	 * @param uri the URI from the http request.
-	 * @param uuid the uuid from the http request.
-	 * @param userType the userType
-	 */
-	@Override
-	public void setFields(String uri, String uuid, UserType userType) {
-		this.userType = userType;
-		/*No fields from the URI is needed, neither is the UUID. Dummy
-		implementation*/
 	}
 	/**
 	 * Used to make sure the strings of the command are correct

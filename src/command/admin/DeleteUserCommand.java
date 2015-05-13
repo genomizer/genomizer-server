@@ -24,12 +24,7 @@ import server.Debug;
 public class DeleteUserCommand extends Command {
 	public String username;
 
-	/**
-	 * Set the UserType Uri and Uuid. Username also set from uri.
-	 * @param uri the URI from the http request.
-	 * @param uuid the uuid from the http request.
-	 * @param userType the userType
-	 */
+
 	@Override
 	public int getExpectedNumberOfURIFields() {
 		return 3;

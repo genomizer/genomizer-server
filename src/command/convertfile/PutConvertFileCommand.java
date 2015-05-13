@@ -32,13 +32,6 @@ public class PutConvertFileCommand extends Command {
         return 1;
     }
 
-    @Override
-    public void setFields(String uri, String uuid, UserMethods.UserType userType) {
-        this.userType = userType;
-
-		/*No fields from the URI is needed, neither is the UUID. Dummy
-		implementation*/
-    }
 
     /**
      * @see command.Command

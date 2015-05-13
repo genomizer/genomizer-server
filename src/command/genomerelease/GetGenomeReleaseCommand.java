@@ -30,18 +30,6 @@ public class GetGenomeReleaseCommand extends Command {
 		return 1;
 	}
 
-	/**
-	 * Set the UserType. Uri and Uuid not used in this command.
-	 * @param uri the URI from the http request.
-	 * @param uuid the uuid from the http request.
-	 * @param userType the userType
-	 */
-	@Override
-	public void setFields(String uri, String uuid, UserMethods.UserType userType) {
-		this.userType = userType;
-		/*No fields from the URI is needed, neither is the UUID. Dummy
-		implementation*/
-	}
 	@Override
 	public void validate() throws ValidateException {
 		/*Validation will always succeed, the command can not be corrupt.*/

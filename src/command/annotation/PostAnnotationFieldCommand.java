@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import command.Command;
 import command.UserRights;
 import command.ValidateException;
-import database.subClasses.UserMethods;
 import response.AddAnnotationFieldResponse;
 import response.ErrorResponse;
 import response.HttpStatusCode;
@@ -45,18 +44,6 @@ public class PostAnnotationFieldCommand extends Command {
 		return 2;
 	}
 
-	/**
-	 * Set the UserType. Uri and Uuid not used in this command.
-	 * @param uri the URI from the http request.
-	 * @param uuid the uuid from the http request.
-	 * @param userType the userType
-	 */
-	@Override
-	public void setFields(String uri, String uuid, UserMethods.UserType userType) {
-		this.userType = userType;
-		/*No fields from the URI is needed, neither is the UUID. Dummy
-		implementation*/
-	}
 	@Override
 	public void validate() throws ValidateException {
 		
