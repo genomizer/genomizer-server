@@ -31,14 +31,13 @@ public class GetExperimentResponse extends Response {
 	 * @param annotations
 	 * @param list
 	 */
-	//TODO Handle multiple experiments? --> Info
-	public GetExperimentResponse(int code, ArrayList<String> info, Map<String, String> annotations, List<FileTuple> list) {
+	public GetExperimentResponse(int code, String info, Map<String, String> annotations, List<FileTuple> list) {
 
 		this.code = code;
 
 		//Creates a JsonObject and adds the information as jsonArrays
 		jsonObj = new JsonObject();
-		jsonObj.addProperty("name", info.get(0));
+		jsonObj.addProperty("name", info);
 
 		//Creates a jsonArray from the FileTuple list with FileInformation
 		// objects

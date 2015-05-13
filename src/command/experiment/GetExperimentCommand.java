@@ -61,14 +61,7 @@ public class GetExperimentCommand extends Command {
 					"requested from database is null, not found or does not " +
 					"exist.");
 		}
-		return new GetExperimentResponse(HttpStatusCode.OK, getInfo(exp),
+		return new GetExperimentResponse(HttpStatusCode.OK, exp.getID(),
 				exp.getAnnotations(), exp.getFiles());
-	}
-
-	//TODO Handle multiple experiments?
-	private ArrayList<String> getInfo(Experiment exp) {
-		ArrayList<String> info = new ArrayList<>();
-		info.add(exp.getID());
-		return info;
 	}
 }
