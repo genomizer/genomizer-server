@@ -34,8 +34,7 @@ import java.util.HashMap;
  * @author Business Logic 2015.
  * @version 1.1
  */
-
-
+@SuppressWarnings("deprecation")
 public class URILength {
 	private static final HashMap<Class<? extends Command>, Integer> uriLengths;
 
@@ -60,7 +59,7 @@ public class URILength {
 		uriLengths.put(PostAnnotationFieldCommand.class, 2);
 		uriLengths.put(PostAnnotationValueCommand.class, 2);
 		uriLengths.put(DeleteAnnotationFieldCommand.class, 3);
-		//uriLengths.put(PutAnnotationPrivilegesCommand.class, 3);
+		uriLengths.put(PutAnnotationPrivilegesCommand.class, 3);
 		uriLengths.put(PostGenomeReleaseCommand.class, 1);
 		uriLengths.put(PutAnnotationValueCommand.class, 2);
 		uriLengths.put(PutAnnotationFieldCommand.class , 2);
