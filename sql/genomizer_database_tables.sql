@@ -14,7 +14,7 @@ CREATE TABLE File
     GRVersion VARCHAR(16),
     Status VARCHAR(16) DEFAULT 'In Progress',
     MD5    VARCHAR(32),
-    FileSize VARCHAR(32),
+    FileSize VARCHAR(32) DEFAULT 'N/A',
     CONSTRAINT pkey_file PRIMARY KEY(FileID)
 );
 
