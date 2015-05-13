@@ -2,6 +2,7 @@ package command;
 
 import command.admin.PutUserAdminCommand;
 import command.annotation.*;
+import command.convertfile.PutConvertFileCommand;
 import command.experiment.DeleteExperimentCommand;
 import command.experiment.GetExperimentCommand;
 import command.experiment.PostExperimentCommand;
@@ -66,6 +67,7 @@ public class UserRights {
         userRights.put(PutFileCommand.class, UserType.USER);
         userRights.put(PutUserCommand.class, UserType.USER);
         userRights.put(PutUserAdminCommand.class, UserType.ADMIN);
+        userRights.put(PutConvertFileCommand.class, UserType.USER);
     }
 
 
