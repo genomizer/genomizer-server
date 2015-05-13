@@ -10,10 +10,9 @@ import server.ServerSettings;
 
 import java.io.File;
 import java.io.IOException;
-
 import java.sql.SQLException;
 
-import static junit.framework.Assert.assertNotNull;
+import static org.junit.Assert.assertNotNull;
 
 
 /*
