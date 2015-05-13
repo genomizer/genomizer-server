@@ -18,7 +18,7 @@ public class GetExperimentCommandTest {
 
 	/**
 	 * Test used to check that ValidateException is thrown
-	 * when experiment-id length is to long.
+	 * when experiment-id length is too long.
 	 *
 	 * @throws ValidateException
 	 */
