@@ -34,6 +34,7 @@ import java.util.HashMap;
  * @author Business Logic 2015.
  * @version 1.1
  */
+@SuppressWarnings("deprecation")
 public class URILength {
 	private static final HashMap<Class<? extends Command>, Integer> uriLengths;
 
