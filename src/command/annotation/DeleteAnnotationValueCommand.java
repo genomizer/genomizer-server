@@ -29,6 +29,11 @@ public class DeleteAnnotationValueCommand extends Command {
 	private String value;
 
 	@Override
+	public int getExpectedNumberOfURIFields() {
+		return 4;
+	}
+
+	@Override
 	public void setFields(String uri, String uuid, UserType userType) {
 
 		super.setFields(uri, uuid, userType);

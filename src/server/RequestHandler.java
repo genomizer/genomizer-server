@@ -7,7 +7,6 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import command.Command;
 import command.CommandClasses;
-import command.URILength;
 import command.ValidateException;
 import command.connection.PostLoginCommand;
 import command.process.PutProcessCommand;
@@ -125,14 +124,6 @@ public class RequestHandler implements HttpHandler {
 		String uri = exchange.getRequestURI().toString();
         uri = removeTimeStamp(uri);
 
-		/*Does the length of the URI match the needed length?*/
-		if (URILength.get(commandClass) != calculateURILength(uri)) {
-			Debug.log("Bad format on command: " + exchange.getRequestMethod()
-                    + " " + exchange.getRequestURI());
-			respond(createBadRequestResponse(), exchange);
-			return;
-		}
-
 		/*TODO: Get the current user's user right level*/
 		UserType userType = UserType.ADMIN;
 
@@ -147,6 +138,14 @@ public class RequestHandler implements HttpHandler {
                     INTERNAL_SERVER_ERROR, "Could not create command from " +
                     "request");
             respond(errorResponse, exchange);
+            return;
+        }
+
+        /*Does the length of the URI match the needed length?*/
+        if (command.getExpectedNumberOfURIFields() != calculateURILength(uri)) {
+            Debug.log("Bad format on command: " + exchange.getRequestMethod()
+                    + " " + exchange.getRequestURI());
+            respond(createBadRequestResponse(), exchange);
             return;
         }
 

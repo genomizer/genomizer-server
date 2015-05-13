@@ -21,7 +21,10 @@ import server.Debug;
  * @version 1.1
  */
 public class GetAnnotationCommand extends Command {
-
+	@Override
+	public int getExpectedNumberOfURIFields() {
+		return 1;
+	}
 
 	/**
 	 * Set the UserType. Uri and Uuid not used in this command.

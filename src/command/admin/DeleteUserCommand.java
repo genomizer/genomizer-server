@@ -31,6 +31,11 @@ public class DeleteUserCommand extends Command {
 	 * @param userType the userType
 	 */
 	@Override
+	public int getExpectedNumberOfURIFields() {
+		return 3;
+	}
+
+	@Override
 	public void setFields(String uri, String uuid, UserType userType) {
 
 		super.setFields(uri, uuid, userType);

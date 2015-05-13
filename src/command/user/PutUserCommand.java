@@ -36,6 +36,11 @@ public class PutUserCommand extends Command {
     @Expose
     private String email = null;
 
+    @Override
+    public int getExpectedNumberOfURIFields() {
+        return 1;
+    }
+
     /**
      * Set username using uuid along with the usertype
      * @param uri the URI from the http request.

@@ -34,6 +34,10 @@ public class PutAnnotationFieldCommand extends Command {
 	@Expose
 	private String newName = null;
 
+	@Override
+	public int getExpectedNumberOfURIFields() {
+		return 2;
+	}
 
 	/**
 	 * Set the UserType. Uri and Uuid not used in this command.

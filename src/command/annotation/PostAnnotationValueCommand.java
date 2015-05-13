@@ -31,6 +31,10 @@ public class PostAnnotationValueCommand extends Command {
 	@Expose
 	private String value = null;
 
+	@Override
+	public int getExpectedNumberOfURIFields() {
+		return 2;
+	}
 
 	/**
 	 * Set the UserType. Uri and Uuid not used in this command.

@@ -38,6 +38,11 @@ public class PostExperimentCommand extends Command {
 	 * @param userType the userType
 	 */
 	@Override
+	public int getExpectedNumberOfURIFields() {
+		return 1;
+	}
+
+	@Override
 	public void setFields(String uri, String uuid, UserType userType) {
 		this.userType = userType;
 		/*No fields from the URI is needed, neither is the UUID. Dummy

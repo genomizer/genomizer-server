@@ -16,6 +16,11 @@ import response.HttpStatusCode;
 @Deprecated
 public class IsTokenValidCommand extends Command {
 
+	@Override
+	public int getExpectedNumberOfURIFields() {
+		return 1;
+	}
+
 	/**
 	 * Constructs a new instance of IsTokenValidCommand using the supplied
 	 * uuid.

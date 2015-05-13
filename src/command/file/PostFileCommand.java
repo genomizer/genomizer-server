@@ -49,6 +49,10 @@ public class PostFileCommand extends Command {
 	@Expose
 	private String checkSumMD5 = null;
 
+	@Override
+	public int getExpectedNumberOfURIFields() {
+		return 1;
+	}
 
 	@Override
 	public void validate() throws ValidateException {
