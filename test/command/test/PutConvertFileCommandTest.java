@@ -6,6 +6,7 @@ import command.Command;
 import command.convertfile.PutConvertFileCommand;
 import command.ValidateException;
 import database.constants.MaxLength;
+import database.subClasses.UserMethods;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -40,6 +41,7 @@ public class PutConvertFileCommandTest {
     public void testValidateFormatEmptyString() throws ValidateException {
         String json = "{\"fileid\":\"255\",\"toformat\":\"\"}";
         final Command convertFileCommand = gson.fromJson(json, PutConvertFileCommand.class);
+        convertFileCommand.setFields(null,null, UserMethods.UserType.USER);
         convertFileCommand.validate();
     }
 
@@ -53,6 +55,7 @@ public class PutConvertFileCommandTest {
     public void testValidateFileIDEmptyString() throws ValidateException {
         String json = "{\"fileid\":\"\",\"toformat\":\"wig\"}";
         final Command convertFileCommand = gson.fromJson(json, PutConvertFileCommand.class);
+        convertFileCommand.setFields(null,null, UserMethods.UserType.USER);
         convertFileCommand.validate();
     }
 
@@ -66,6 +69,7 @@ public class PutConvertFileCommandTest {
     public void testValidateFormatNull() throws ValidateException {
         String json = "{\"fileid\":\"255\"}";
         final Command convertFileCommand = gson.fromJson(json, PutConvertFileCommand.class);
+        convertFileCommand.setFields(null,null, UserMethods.UserType.USER);
         convertFileCommand.validate();
     }
 
@@ -79,6 +83,7 @@ public class PutConvertFileCommandTest {
     public void testValidateFileIDNull() throws ValidateException {
         String json = "{\"toformat\":\"wig\"}";
         final Command convertFileCommand = gson.fromJson(json, PutConvertFileCommand.class);
+        convertFileCommand.setFields(null,null, UserMethods.UserType.USER);
         convertFileCommand.validate();
     }
 
@@ -96,6 +101,7 @@ public class PutConvertFileCommandTest {
         }
         String json = "{\"fileid\":\"255\",\"toformat\":\""+format+"\"}";
         final Command convertFileCommand = gson.fromJson(json, PutConvertFileCommand.class);
+        convertFileCommand.setFields(null,null, UserMethods.UserType.USER);
         convertFileCommand.validate();
     }
 
@@ -113,6 +119,7 @@ public class PutConvertFileCommandTest {
         }
         String json = "{\"fileid\":\""+fileID+"\",\"toformat\":\"wig\"}";
         final Command convertFileCommand = gson.fromJson(json, PutConvertFileCommand.class);
+        convertFileCommand.setFields(null,null, UserMethods.UserType.USER);
         convertFileCommand.validate();
     }
 
@@ -126,6 +133,7 @@ public class PutConvertFileCommandTest {
     public void testValidateProperlyFormatted() throws ValidateException {
         String json = "{\"fileid\":\"255\",\"toformat\":\"wig\"}";
         final Command convertFileCommand = gson.fromJson(json, PutConvertFileCommand.class);
+        convertFileCommand.setFields(null,null, UserMethods.UserType.USER);
         convertFileCommand.validate();
     }
 }
