@@ -2,7 +2,6 @@ package command.experiment;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 import command.Command;
 import command.UserRights;
@@ -17,14 +16,22 @@ import database.containers.Experiment;
 import database.subClasses.UserMethods.UserType;
 
 /**
- * Class used to retrieve an experiment.
+ * Class used to retrieve an experiment from the database.
  *
  * @author Business Logic 2015.
  * @version 1.1
  */
 public class GetExperimentCommand extends Command {
+
 	private String expID;
 
+
+	/**
+	 * Overrides the original command in order to use the uri.
+	 * @param uri Contains the experiment id to fetch.
+	 * @param uuid the UUID for the user who made the request.
+	 * @param userType the user type for the command caller.
+	 */
 	@Override
 	public void setFields(String uri, String uuid, UserType userType) {
 
