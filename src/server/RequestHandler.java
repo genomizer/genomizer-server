@@ -111,7 +111,6 @@ public class RequestHandler implements HttpHandler {
 			}
 		} else if (uuid == null && !commandClass.equals(PostLoginCommand.
                 class)) {
-			Debug.log("User could not be authenticated!");
             respondWithAuthenticationFailure(exchange);
 			return;
 		}
