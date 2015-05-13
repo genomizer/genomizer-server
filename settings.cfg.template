@@ -5,10 +5,8 @@ databasePassword    = pvt
 databaseHost        = localhost:6000
 databaseName        = genomizer
 
-# Port numbers for the genomizer server to use. Set to -1 or comment
-# out either of these two to disable HTTP/HTTPS.
-genomizerHTTPPort   = 7000
-genomizerHTTPSPort  = 7443
+# Port number on which the server listens for HTTP connections.
+genomizerPort       = 7000
 
 # Directory on the server where uploaded files are stored.
 
@@ -27,6 +25,6 @@ bowtieLocation      = resources/bowtie/bowtie
 # 'wwwTunnelPath' is the path on the WWW server that
 # requests to genomizer server are mapped to (usually '/api').
 
-wwwTunnelHost       = http://localhost
+wwwTunnelHost       = https://localhost
 wwwTunnelPort       = 7000
-wwwTunnelPath       =
+wwwTunnelPath       = /api

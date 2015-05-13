@@ -37,6 +37,11 @@ public class PutUserAdminCommand extends Command {
     @Expose
     private String email = null;
 
+    @Override
+    public int getExpectedNumberOfURIFields() {
+        return 2;
+    }
+
     /**
      * Set the UserType. Uri and Uuid not used in this command.
      * @param uri the URI from the http request.

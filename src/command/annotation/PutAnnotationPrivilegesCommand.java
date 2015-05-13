@@ -18,6 +18,12 @@ import response.Response;
 public class PutAnnotationPrivilegesCommand extends Command {
 	//TODO Implement this class
 
+
+	@Override
+	public int getExpectedNumberOfURIFields() {
+		return 3;
+	}
+
 	/**
 	 * Used to validate the information needed to execute
 	 * the command.

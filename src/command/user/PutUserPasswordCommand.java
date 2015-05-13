@@ -31,6 +31,11 @@ public class PutUserPasswordCommand extends Command {
     @Expose
     private String password = null;
 
+    @Override
+    public int getExpectedNumberOfURIFields() {
+        return 1;
+    }
+
     /**
      * Used to validate the PutUserPasswordCommand.
      */

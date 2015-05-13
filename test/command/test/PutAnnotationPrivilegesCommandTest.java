@@ -3,7 +3,7 @@ package command.test;
 import static org.junit.Assert.*;
 
 import command.ValidateException;
-import command.annotation.PutAnnotationPrivilegesCommand;
+import command.annotation.*;
 import database.subClasses.UserMethods.UserType;
 import org.junit.Test;
 
@@ -14,6 +14,7 @@ import org.junit.Test;
  * @author Kommunikation/kontroll 2014.
  * @version 1.0
  */
+@SuppressWarnings("deprecation")
 public class PutAnnotationPrivilegesCommandTest {
 	//TODO Implement tests when the class is implemented
 //

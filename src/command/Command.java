@@ -39,6 +39,16 @@ public abstract class Command {
 	protected String uuid;
 
 	/**
+	 * Returns the number of expected fields in the URI of the request that
+	 * corresponds to this command. For example, number of URI fields in a
+	 * "remove annotation value" request is 4 as the URI has 4 fields
+	 * (/annotation/value/<field-name>/<value-name>).
+	 * @return the expected number of fields in the URI of the request that
+	 * corresponds to this command.
+	 */
+	public abstract int getExpectedNumberOfURIFields();
+
+	/**
 	 * Used to set the required fields of the command. Provided the URI
 	 * from the request as well as the UUID of the user the implementation
 	 * of this function should make sure the necessary information is set.

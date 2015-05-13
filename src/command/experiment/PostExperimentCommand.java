@@ -30,6 +30,10 @@ public class PostExperimentCommand extends Command {
 	@Expose
 	private ArrayList<Annotation> annotations = new ArrayList<>();
 
+	@Override
+	public int getExpectedNumberOfURIFields() {
+		return 1;
+	}
 
 	@Override
 	public void validate() throws ValidateException {

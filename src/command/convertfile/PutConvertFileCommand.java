@@ -28,6 +28,11 @@ public class PutConvertFileCommand extends Command {
     private String toformat;
 
     @Override
+    public int getExpectedNumberOfURIFields() {
+        return 1;
+    }
+
+    @Override
     public void setFields(String uri, String uuid, UserMethods.UserType userType) {
         this.userType = userType;
 
