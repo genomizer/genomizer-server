@@ -1,6 +1,7 @@
 package command;
 
 import command.annotation.*;
+import command.convertfile.PutConvertFileCommand;
 import command.experiment.DeleteExperimentCommand;
 import command.experiment.GetExperimentCommand;
 import command.experiment.PostExperimentCommand;
@@ -61,6 +62,7 @@ public class UserRights {
         userRights.put(PutAnnotationPrivilegesCommand.class, UserType.USER);
         userRights.put(PutExperimentCommand.class, UserType.USER);
         userRights.put(PutFileCommand.class, UserType.USER);
+        userRights.put(PutConvertFileCommand.class, UserType.USER);
     }
 
 

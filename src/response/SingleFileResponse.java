@@ -12,9 +12,9 @@ import database.containers.FileTuple;
  */
 public class SingleFileResponse extends Response {
 
-    private JsonObject jsonObj;
+    private JsonObject jsonObj = new JsonObject();
 
-    public void AddSingleFileToJSON(FileTuple fileTuple){
+    public SingleFileResponse(FileTuple fileTuple){
 
         GsonBuilder gsonBuilder = new GsonBuilder();
         Gson gson = gsonBuilder.setPrettyPrinting().create();

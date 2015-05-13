@@ -2,6 +2,7 @@ package command.convertfile;
 
 import com.google.gson.annotations.Expose;
 import command.Command;
+import command.UserRights;
 import command.ValidateException;
 import conversion.ConversionHandler;
 import database.constants.MaxLength;
@@ -40,6 +41,7 @@ public class PutConvertFileCommand extends Command {
      */
     @Override
     public void validate() throws ValidateException {
+        hasRights(UserRights.getRights(this.getClass()));
         validateName(fileid, MaxLength.FILE_FILENAME,"file id");
         validateName(toformat, MaxLength.FILE_FILETYPE, "to format");
     }
@@ -60,13 +62,9 @@ public class PutConvertFileCommand extends Command {
                     "convert file : " + e.getMessage());
 
         }
-
         if(filetuple == null){
             return new MinimalResponse(HttpStatusCode.NOT_FOUND);
         }
-        FileInformation fileInformation = new FileInformation(filetuple);
-
-        return new
-
+        return new SingleFileResponse(filetuple);
     }
 }
