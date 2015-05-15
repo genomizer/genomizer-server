@@ -1,6 +1,9 @@
-package command;
+package command.process;
 
 import com.google.gson.annotations.Expose;
+import command.Command;
+import command.UserRights;
+import command.ValidateException;
 import database.subClasses.UserMethods;
 import response.HttpStatusCode;
 import response.MinimalResponse;
