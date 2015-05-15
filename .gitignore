@@ -7,7 +7,6 @@ bin/
 .idea
 junit/
 *.jar
-*.orig
 .classpath
 .project
 *~
