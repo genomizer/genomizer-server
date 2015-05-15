@@ -51,7 +51,7 @@ public class GetAnnotationInformationResponseTest {
 	@Test
 	public void testDatabaseConnection() {
 		GetAnnotationCommand cmd = new GetAnnotationCommand();
-		cmd.setFields("uri",null ,UserType.ADMIN);
+		cmd.setFields("uri", "key=val", null, UserType.ADMIN);
 		Response rsp = cmd.execute();
 		rsp.getBody();
 	}

@@ -47,7 +47,7 @@ public class UpdateFileInExperimentTest {
 	public void testHavingRights() throws ValidateException {
 
 		Command c = new PutFileCommand();
-		c.setFields("uri", null, UserType.USER);
+		c.setFields("uri", "", null, UserType.USER);
 		c.validate();
 	}
 
@@ -61,7 +61,7 @@ public class UpdateFileInExperimentTest {
 	public void testNotHavingRights() throws ValidateException {
 
 		Command c = new PutFileCommand();
-		c.setFields("uri", null, UserType.GUEST);
+		c.setFields("uri", "", null, UserType.GUEST);
 		c.validate();
 		fail();
 	}

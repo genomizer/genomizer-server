@@ -53,7 +53,7 @@ public class PutExperimentCommandTest {
 	public void testHavingRights() throws ValidateException {
 
 		Command c = new PutExperimentCommand();
-		c.setFields("uri", null, UserType.USER);
+		c.setFields("uri", "key=val", null, UserType.USER);
 		c.validate();
 	}
 
@@ -67,7 +67,7 @@ public class PutExperimentCommandTest {
 	public void testNotHavingRights() throws ValidateException {
 
 		Command c = new PutExperimentCommand();
-		c.setFields("uri", null, UserType.GUEST);
+		c.setFields("uri", "key=val", null, UserType.GUEST);
 		c.validate();
 		fail();
 	}

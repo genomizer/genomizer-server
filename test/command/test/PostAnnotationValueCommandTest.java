@@ -42,7 +42,7 @@ public class PostAnnotationValueCommandTest {
 
 		String json = "{\"value\":\"mouse\"}";
 		PostAnnotationValueCommand c = gson.fromJson(json, PostAnnotationValueCommand.class);
-		c.setFields("uri", "uuid", UserType.ADMIN);
+		c.setFields("uri", "key=val", "uuid", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -65,7 +65,7 @@ public class PostAnnotationValueCommandTest {
 		String json = "{\"name\":\"" + big +
 				"\",\"value\":\"mouse\"}";
 		PostAnnotationValueCommand c = gson.fromJson(json, PostAnnotationValueCommand.class);
-		c.setFields("uri", "uuid", UserType.ADMIN);
+		c.setFields("uri", "key=val", "uuid", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -83,7 +83,7 @@ public class PostAnnotationValueCommandTest {
 
 		String json = "{\"name\":\"spec/ies\",\"value\":\"mouse\"}";
 		PostAnnotationValueCommand c = gson.fromJson(json, PostAnnotationValueCommand.class);
-		c.setFields("uri", "uuid", UserType.ADMIN);
+		c.setFields("uri", "key=val", "uuid", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -101,7 +101,7 @@ public class PostAnnotationValueCommandTest {
 
 		String json = "{\"name\":\"species\"}";
 		PostAnnotationValueCommand c = gson.fromJson(json, PostAnnotationValueCommand.class);
-		c.setFields("uri", "uuid", UserType.ADMIN);
+		c.setFields("uri", "key=val", "uuid", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -124,7 +124,7 @@ public class PostAnnotationValueCommandTest {
 		String json = "{\"name\":\"species\",\"value\":\"" + big +
 				"\"}";
 		PostAnnotationValueCommand c = gson.fromJson(json, PostAnnotationValueCommand.class);
-		c.setFields("uri", "uuid", UserType.ADMIN);
+		c.setFields("uri", "key=val", "uuid", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -142,7 +142,7 @@ public class PostAnnotationValueCommandTest {
 
 		String json = "{\"name\":\"species\",\"value\":\"m*/ouse!\"}";
 		PostAnnotationValueCommand c = gson.fromJson(json, PostAnnotationValueCommand.class);
-		c.setFields("uri", "uuid", UserType.ADMIN);
+		c.setFields("uri", "key=val", "uuid", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -160,7 +160,7 @@ public class PostAnnotationValueCommandTest {
 
 		String json = "{\"name\":\"species\",\"value\":\"mouse\"}";
 		PostAnnotationValueCommand c = gson.fromJson(json, PostAnnotationValueCommand.class);
-		c.setFields("uri", "uuid", UserType.ADMIN);
+		c.setFields("uri", "key=val", "uuid", UserType.ADMIN);
 		c.validate();
 
 		assertTrue(true);
@@ -178,7 +178,7 @@ public class PostAnnotationValueCommandTest {
 
 		String json = "{\"name\":\"species\",\"value\":\"mouse\"}";
 		PostAnnotationValueCommand c = gson.fromJson(json, PostAnnotationValueCommand.class);
-		c.setFields("uri", "uuid", UserType.USER);
+		c.setFields("uri", "key=val", "uuid", UserType.USER);
 
 		c.validate();
 	}
@@ -194,7 +194,7 @@ public class PostAnnotationValueCommandTest {
 
 		String json = "{\"name\":\"species\",\"value\":\"mouse\"}";
 		PostAnnotationValueCommand c = gson.fromJson(json, PostAnnotationValueCommand.class);
-		c.setFields("uri", "uuid", UserType.GUEST);
+		c.setFields("uri", "key=val", "uuid", UserType.GUEST);
 
 		c.validate();
 		fail();

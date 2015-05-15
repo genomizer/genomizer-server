@@ -12,7 +12,6 @@ import command.Command;
 import command.UserRights;
 import command.ValidateException;
 import database.DatabaseAccessor;
-import database.constants.MaxLength;
 import database.containers.Experiment;
 
 import database.subClasses.UserMethods.UserType;
@@ -36,9 +35,9 @@ public class SearchCommand extends Command {
 	}
 
 	@Override
-	public void setFields(String uri, String uuid, UserType userType) {
+	public void setFields(String uri, String query, String uuid, UserType userType) {
 
-		super.setFields(uri, uuid, userType);
+		super.setFields(uri, query, uuid, userType);
 		int index = uri.indexOf("=");
 		annotations = uri.substring(index+1);
 	}
