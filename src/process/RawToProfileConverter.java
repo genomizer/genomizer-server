@@ -72,42 +72,10 @@ public class RawToProfileConverter extends Executor {
 	public String procedure(String[] parameters, String inFolder,
 			String outFilePath) throws ProcessException {
 
-		/*If you want to run several processes simultaneously, this would need to be changed*/
-		StartUpCleaner.removeOldTempDirectories("resources/");
-		File[] inFiles = null;
+		/* Will initiate files, directories et c. needed to run procedure,
+		 * can cast exceptions */
+		File[] inFiles = initiateProcedure(parameters, inFolder, outFilePath);
 
-		// Error handling
-		if (inFolder == null) {
-			throw new ProcessException("Fatal error: This should never happen");
-		}
-		inFolder = validateInFolder(inFolder);
-		inFiles = getRawFiles(inFolder);
-
-		// Check if there are any raw files
-		if (inFiles == null || inFiles.length == 0) {
-			throw new ProcessException("Folder does not contain raw files");
-		}
-
-		this.parameters = parameters;
-		this.inFolder = inFolder;
-
-		// Checks all parameters that they are correct before proceeding
-		if (!verifyInData(parameters, inFolder, outFilePath)
-				|| !correctInfiles(inFiles)) {
-			throw new ProcessException("Wrong format of input data");
-		}
-		// Runs the procedure.
-
-		initiateConversionStrings(parameters, outFilePath);
-		makeConversionDirectories(remoteExecution + "resources/" + dir
-				+ "/sorted");
-		checker.calculateWhichProcessesToRun(parameters);
-		if(!ValidateParameters(parameters)) {
-			throw new ProcessException("Parameters are incorrect");
-		}
-		/* Updates attribute raw files. */
-		parseRawFiles(inFiles);
-		initiateConversionStrings(parameters, outFilePath);
 
 		// printTrace(parameters, inFolder, outFilePath);
 		if (fileDir.exists()) {
@@ -192,6 +160,49 @@ public class RawToProfileConverter extends Executor {
 		}
 
 		return logString;
+	}
+
+	private File[] initiateProcedure(
+			String[] parameters,
+			String inFolder,
+			String outFilePath) throws ProcessException {
+    /*If you want to run several processes simultaneously, this would need to be changed*/
+		StartUpCleaner.removeOldTempDirectories("resources/");
+		File[] inFiles = null;
+
+		// Error handling
+		if (inFolder == null) {
+			throw new ProcessException("Fatal error: This should never happen");
+		}
+		inFolder = validateInFolder(inFolder);
+		inFiles = getRawFiles(inFolder);
+
+		// Check if there are any raw files
+		if (inFiles == null || inFiles.length == 0) {
+			throw new ProcessException("Folder does not contain raw files");
+		}
+
+		this.parameters = parameters;
+		this.inFolder = inFolder;
+
+		// Checks all parameters that they are correct before proceeding
+		if (!verifyInData(parameters, inFolder, outFilePath)
+				|| !correctInfiles(inFiles)) {
+			throw new ProcessException("Wrong format of input data");
+		}
+		// Runs the procedure.
+
+		initiateConversionStrings(parameters, outFilePath);
+		makeConversionDirectories(remoteExecution + "resources/" + dir
+				+ "/sorted");
+		checker.calculateWhichProcessesToRun(parameters);
+		if(!ValidateParameters(parameters)) {
+			throw new ProcessException("Parameters are incorrect");
+		}
+		/* Updates attribute raw files. */
+		parseRawFiles(inFiles);
+		initiateConversionStrings(parameters, outFilePath);
+		return inFiles;
 	}
 
 	/**
