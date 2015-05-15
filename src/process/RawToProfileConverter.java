@@ -691,6 +691,18 @@ public class RawToProfileConverter extends Executor {
 		return dir.exists();
 	}
 
+	/**
+	 * Makes external call to Picard that removes duplicates in input .sam file.
+	 *
+	 * @param inputFile An input .sam file
+	 * @param outputFile .sam file without duplicates
+	 * @param metrics File to save data on removal of duplicates in
+	 * @return Process finish status
+	 * @throws ProcessException cast if execution of picard MarkDuplicates
+	 * was erroneous.
+	 * @throws IllegalArgumentException If input or output file was
+	 * not .sam format
+	 */
 	private String runRemoveDuplicates(String inputFile, String outputFile,
 									   String metrics) throws ProcessException {
 		/* Check if input is .sam format */
