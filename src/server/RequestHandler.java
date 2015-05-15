@@ -121,7 +121,8 @@ public class RequestHandler implements HttpHandler {
         logUser(Authenticate.getUsernameByID(uuid));
 
         /*Retrieve the URI part of the request header.*/
-		String uri = exchange.getRequestURI().toString();
+		String uri = exchange.getRequestURI().toString().split("\\?")[0];
+        String query = exchange.getRequestURI().getQuery();
         uri = removeTimeStamp(uri);
 
 		/*TODO: Get the current user's user right level*/
@@ -149,7 +150,7 @@ public class RequestHandler implements HttpHandler {
             return;
         }
 
-		command.setFields(uri, Authenticate.getUsernameByID(uuid), userType);
+		command.setFields(uri, query, Authenticate.getUsernameByID(uuid), userType);
 
 		/*Attempt to validate the command.*/
 		try {

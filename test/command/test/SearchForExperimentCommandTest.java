@@ -34,7 +34,7 @@ public class SearchForExperimentCommandTest {
 		}
 
 		Command c = new SearchCommand();
-		c.setFields(uri, null, UserType.ADMIN);
+		c.setFields(uri, "", null, UserType.ADMIN);
 		c.validate();
 		fail("Expected ValidateException.");
 	}
@@ -48,7 +48,7 @@ public class SearchForExperimentCommandTest {
 	@Test
 	public void textValidateProperlyFormatted() throws ValidateException {
 		Command c = new SearchCommand();
-		c.setFields("Hello", null, UserType.ADMIN);
+		c.setFields("Hello", "", null, UserType.ADMIN);
 		c.validate();
 		assertTrue(true);
 	}
@@ -66,7 +66,7 @@ public class SearchForExperimentCommandTest {
 	public void testValidateIncorrectlyFormatted() throws ValidateException {
 
 		Command c = new SearchCommand();
-		c.setFields("uri��", null, UserType.ADMIN);
+		c.setFields("uri��", "", null, UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -82,7 +82,7 @@ public class SearchForExperimentCommandTest {
 	public void testHavingRights() throws ValidateException {
 
 		Command c = new SearchCommand();
-		c.setFields("uri", null, UserType.GUEST);
+		c.setFields("uri", "", null, UserType.GUEST);
 		c.validate();
 	}
 
@@ -96,7 +96,7 @@ public class SearchForExperimentCommandTest {
 	public void testNotHavingRights() throws ValidateException {
 
 		Command c = new SearchCommand();
-		c.setFields("uri", null, UserType.UNKNOWN);
+		c.setFields("uri", "", null, UserType.UNKNOWN);
 		c.validate();
 		fail();
 	}

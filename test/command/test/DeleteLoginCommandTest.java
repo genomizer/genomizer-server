@@ -27,7 +27,7 @@ public class DeleteLoginCommandTest {
 	@Test
 	public void ShouldValidateCorrectUuid() throws ValidateException {
 		Command c = new DeleteLoginCommand();
-		c.setFields(null, "uuid", UserType.ADMIN);
+		c.setFields(null, "", "uuid", UserType.ADMIN);
 		c.validate();
 
 		assertTrue(true);
@@ -48,7 +48,7 @@ public class DeleteLoginCommandTest {
 			uuid = uuid + "a";
 		}
 		Command c = new DeleteLoginCommand();
-		c.setFields(null, uuid, UserType.ADMIN);
+		c.setFields(null, "", uuid, UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -63,7 +63,7 @@ public class DeleteLoginCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateUuidNull() throws ValidateException {
 		Command c = new DeleteLoginCommand();
-		c.setFields(null, null, UserType.ADMIN);
+		c.setFields(null, "", null, UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -78,7 +78,7 @@ public class DeleteLoginCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateUuidEmptyString() throws ValidateException {
 		Command c = new DeleteLoginCommand();
-		c.setFields(null, "", UserType.ADMIN);
+		c.setFields(null, "", "", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -94,7 +94,7 @@ public class DeleteLoginCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateInvalidCharactersUuid() throws ValidateException {
 		Command c = new DeleteLoginCommand();
-		c.setFields(null, "��!?,:;[]{}", UserType.ADMIN);
+		c.setFields(null, "", "��!?,:;[]{}", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -110,7 +110,7 @@ public class DeleteLoginCommandTest {
 	public void testValidateProperlyFormatted() throws ValidateException {
 
 		Command c = new DeleteLoginCommand();
-		c.setFields(null, "properly", UserType.ADMIN);
+		c.setFields(null, "", "properly", UserType.ADMIN);
 		c.validate();
 
 		assertTrue(true);
