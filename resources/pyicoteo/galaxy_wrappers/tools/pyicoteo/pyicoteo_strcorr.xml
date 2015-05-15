@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<tool id="pyicoteo_strcorr" name="Strand correlation" version="2.0">
+  <description>Pyicoteo strand correlation operations.</description>
+  <command interpreter="python">
+          pyicos strcorr $experiment $output
+                -f $experiment_format_cond.experiment_format
+                -F $output_format_cond.output_format
+                $is_experiment_open
+                $is_output_open
+                --galaxy-workarounds
+                --min-delta $min_delta
+                --max-delta $max_delta
+                --height-filter $height_filter
+                --delta-step $delta_step
+                --max-correlations $max_correlations
+
+          #if $output_format_cond.output_format == "custom"
+                --f-custom-out $output_format_cond.f_custom_out
+                --custom-out-sep $output_format_cond.custom_out_sep
+          #end if
+  </command>
+  <inputs>
+    <!--<param format="tabular" name="experiment" type="data" label="Experiment file" />-->
+    <param name="experiment" type="data" label="Experiment file" />
+
+    <!-- Experiment arguments -->
+    <conditional name="experiment_format_cond">
+      <param name="experiment_format" type="select" label="Experiment format" format="text">
+        <option value="bed" selected="true">Bed</option>
+        <option value="sam">Sam</option>
+        <option value="eland">Eland</option>
+        <option value="bed_wig">Wiggle (Bed)</option>
+        <option value="bed_pk">Bed pk</option>
+        <option value="custom">Custom</option>
+      </param>
+  
+      <when value="custom">
+        <param name="f_custom_in" type="text" size="10" label="Custom experiment format fields" />
+        <param name="custom_in_sep" type="text" label="Custom experiment format separator" />
+      </when>
+    </conditional>
+    <param name="is_experiment_open" type="boolean" label="Is the experiment half-open?" truevalue="--open-experiment" falsevalue="" />
+
+    <!-- Output arguments -->
+    <conditional name="output_format_cond">
+      <param name="output_format" type="select" label="Output format">
+        <option value="bed" selected="true">Bed</option>
+        <option value="sam">Sam</option>
+        <option value="eland">Eland</option>
+        <option value="bed_wig">Wiggle (Bed)</option>
+        <option value="variable_wig">Wiggle (Variable)</option>
+        <option value="bed_pk">Bed pk</option>
+        <option value="custom">Custom</option>
+      </param>
+      <when value="custom">
+        <param name="f_custom_out" type="text" label="Custom output format fields" />
+        <param name="custom_out_sep" type="text" label="Custom output format separator" />
+      </when>
+    </conditional>
+    <param name="is_output_open" type="boolean" label="Is the output half-open?" truevalue="--open-output" falsevalue="" />
+
+    <param name="min_delta" type="integer" label="Minimum delta" value="20" />
+    <param name="max_delta" type="integer" label="Maximum delta" value="250" />
+    <param name="height_filter" type="integer" label="Height filter" value="8" />
+    <param name="delta_step" type="integer" label="Delta step" value="1" />
+    <param name="max_correlations" type="integer" label="Maximum correlations" value="200" />
+
+  </inputs>
+  <outputs>
+    <data format="tabular" name="output" />
+  </outputs>
+  <stdio>
+    <exit_code range="1:" level="error" />
+  </stdio>
+  <help>
+        More information at: http://regulatorygenomics.upf.edu/pyicos
+  </help>
+</tool>

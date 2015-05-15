@@ -1,0 +1,396 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Pyicos Classes &mdash; pyicos 1.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="pyicos 1.2 documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="index.html">pyicos 1.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Pyicos Classes</a><ul>
+<li><a class="reference internal" href="#cluster">Cluster</a></li>
+<li><a class="reference internal" href="#region">Region</a></li>
+<li><a class="reference internal" href="#abstractcore">AbstractCore</a></li>
+<li><a class="reference internal" href="#bigsort">BigSort</a></li>
+<li><a class="reference internal" href="#dualsortedreader">DualSortedReader</a></li>
+<li><a class="reference internal" href="#sortedfilereader">SortedFileReader</a></li>
+<li><a class="reference internal" href="#sortedfileclusterreader">SortedFileClusterReader</a></li>
+<li><a class="reference internal" href="#sortedfilecountreader">SortedFileCountReader</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/classes.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="pyicos-classes">
+<h1>Pyicos Classes<a class="headerlink" href="#pyicos-classes" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="cluster">
+<h2>Cluster<a class="headerlink" href="#cluster" title="Permalink to this headline">¶</a></h2>
+<p>The Cluster object is the representation of a short read or a series of clustered short reads. You can perform common and basic arithmetic operations with these objects, simplifying the development of scripts that work with this kind of data.</p>
+<dl class="class">
+<dt id="pyicoslib.core.Cluster">
+<em class="property">class </em><tt class="descclassname">pyicoslib.core.</tt><tt class="descname">Cluster</tt><big>(</big><em>name=''</em>, <em>start=0</em>, <em>end=-1</em>, <em>strand='.'</em>, <em>name2='noname'</em>, <em>score=0</em>, <em>rounding=False</em>, <em>read='bed_pk'</em>, <em>write='bed_pk'</em>, <em>read_half_open=False</em>, <em>write_half_open=False</em>, <em>normalize_factor=1.0</em>, <em>tag_length=0</em>, <em>sequence=None</em>, <em>span=20</em>, <em>cached=False</em>, <em>logger=None</em><big>)</big><a class="headerlink" href="#pyicoslib.core.Cluster" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represents one cluster of overlapping tags or a single Tag. This object can read and write in every format provided.
+It can be added, compared, subtracted to other cluster objects.</p>
+<dl class="method">
+<dt id="pyicoslib.core.Cluster.absolute_split">
+<tt class="descname">absolute_split</tt><big>(</big><em>threshold</em><big>)</big><a class="headerlink" href="#pyicoslib.core.Cluster.absolute_split" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the original cluster or several clusters if we find subclusters</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyicoslib.core.Cluster.area">
+<tt class="descname">area</tt><big>(</big><big>)</big><a class="headerlink" href="#pyicoslib.core.Cluster.area" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the area of the peak</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyicoslib.core.Cluster.clear">
+<tt class="descname">clear</tt><big>(</big><big>)</big><a class="headerlink" href="#pyicoslib.core.Cluster.clear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Empties the cluster</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyicoslib.core.Cluster.copy_cluster">
+<tt class="descname">copy_cluster</tt><big>(</big><big>)</big><a class="headerlink" href="#pyicoslib.core.Cluster.copy_cluster" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a copy of the self cluster. Faster than copy.deepcopy()</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyicoslib.core.Cluster.copy_cluster_data">
+<tt class="descname">copy_cluster_data</tt><big>(</big><em>other</em><big>)</big><a class="headerlink" href="#pyicoslib.core.Cluster.copy_cluster_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copies the info in the other cluster, keeping the readers. Faster than copy_cluster</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyicoslib.core.Cluster.decompose">
+<tt class="descname">decompose</tt><big>(</big><big>)</big><a class="headerlink" href="#pyicoslib.core.Cluster.decompose" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of Singletons that form the cluster given a tag length. If the tag length is not provided the cluster was formed by tags with
+different lengths, it&#8217;s impossible to reconstruct the tags due to ambiguity (multiple different combination of tags can be used to obtain the same cluster)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyicoslib.core.Cluster.get_heights">
+<tt class="descname">get_heights</tt><big>(</big><big>)</big><a class="headerlink" href="#pyicoslib.core.Cluster.get_heights" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all the heights in an array</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyicoslib.core.Cluster.has_duplicates">
+<tt class="descname">has_duplicates</tt><big>(</big><em>limit=20</em><big>)</big><a class="headerlink" href="#pyicoslib.core.Cluster.has_duplicates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns true if the cluster has any ocurrence that exceeds the number of duplicated reads
+specified in the limit variable</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyicoslib.core.Cluster.is_artifact">
+<tt class="descname">is_artifact</tt><big>(</big><em>condition=0.3</em><big>)</big><a class="headerlink" href="#pyicoslib.core.Cluster.is_artifact" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True if the cluster is considered an artifact.
+It is considered an artifact if it&#8217;s shorter than 100 nucleotides,
+or the maximum height length is more than 30% of the cluster (block cluster)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyicoslib.core.Cluster.is_empty">
+<tt class="descname">is_empty</tt><big>(</big><big>)</big><a class="headerlink" href="#pyicoslib.core.Cluster.is_empty" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True if the Cluster object is empty, returns False otherwise.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyicoslib.core.Cluster.is_significant">
+<tt class="descname">is_significant</tt><big>(</big><em>threshold</em>, <em>poisson_type='height'</em>, <em>frag_size=1</em><big>)</big><a class="headerlink" href="#pyicoslib.core.Cluster.is_significant" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True if the cluster is significant provided a threshold, otherwise False</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyicoslib.core.Cluster.max_height">
+<tt class="descname">max_height</tt><big>(</big><big>)</big><a class="headerlink" href="#pyicoslib.core.Cluster.max_height" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the maximum height in the cluster</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyicoslib.core.Cluster.max_height_pos">
+<tt class="descname">max_height_pos</tt><big>(</big><big>)</big><a class="headerlink" href="#pyicoslib.core.Cluster.max_height_pos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the position where the maximum height is located.
+The central positions of the first and the last maximum are calculated.
+The max_height_pos will be in the middle of these two positions.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyicoslib.core.Cluster.split">
+<tt class="descname">split</tt><big>(</big><em>percentage=0.9</em>, <em>absolute=0</em><big>)</big><a class="headerlink" href="#pyicoslib.core.Cluster.split" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scans each cluster position from start to end and looks for local maxima x and local minima y.
+Given two consecutive local maxima x_{i} and x_{i+1} we define the smallest of them as x_{min}.
+For every y_{j} between two local maxima, the condition for splitting the cluster at y is defined as follows:</p>
+<p>y_{j}leq x_{min}(1-t)</p>
+<p>Where t is a proportion threshold between 0 and 1. By default t=0.05. The cluster will divide at the local minimum.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyicoslib.core.Cluster.touches">
+<tt class="descname">touches</tt><big>(</big><em>other</em><big>)</big><a class="headerlink" href="#pyicoslib.core.Cluster.touches" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns if the clusters are contiguous in any way (first one and then the other) or intersecting</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyicoslib.core.Cluster.trim">
+<tt class="descname">trim</tt><big>(</big><em>percentage=0.3</em>, <em>absolute=0</em><big>)</big><a class="headerlink" href="#pyicoslib.core.Cluster.trim" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trims the cluster to a given threshold</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="region">
+<h2>Region<a class="headerlink" href="#region" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pyicoslib.core.Region">
+<em class="property">class </em><tt class="descclassname">pyicoslib.core.</tt><tt class="descname">Region</tt><big>(</big><em>name='undefined'</em>, <em>start=0</em>, <em>end=-1</em>, <em>name2='noname'</em>, <em>strand=None</em>, <em>logger=None</em>, <em>cached=True</em>, <em>exome_size=0</em><big>)</big><a class="headerlink" href="#pyicoslib.core.Region" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="pyicoslib.core.Region.add_tags">
+<tt class="descname">add_tags</tt><big>(</big><em>tags</em>, <em>clusterize=False</em><big>)</big><a class="headerlink" href="#pyicoslib.core.Region.add_tags" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method reads a list of tags or a single tag (Cluster objects, not unprocessed lines). If strand is set, then only the tags with the selected strand are added</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyicoslib.core.Region.clusterize">
+<tt class="descname">clusterize</tt><big>(</big><big>)</big><a class="headerlink" href="#pyicoslib.core.Region.clusterize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates the Cluster objects of the tags in the Region object</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyicoslib.core.Region.copy">
+<tt class="descname">copy</tt><big>(</big><big>)</big><a class="headerlink" href="#pyicoslib.core.Region.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copies a Region object into another one</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyicoslib.core.Region.get_array">
+<tt class="descname">get_array</tt><big>(</big><big>)</big><a class="headerlink" href="#pyicoslib.core.Region.get_array" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the heights of the whole region, including 0s between clusters</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyicoslib.core.Region.get_clusters">
+<tt class="descname">get_clusters</tt><big>(</big><em>height=1</em><big>)</big><a class="headerlink" href="#pyicoslib.core.Region.get_clusters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the clusters inside the region higher than the marked height. By default returns all clusters with at least 2 reads</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyicoslib.core.Region.get_heights">
+<tt class="descname">get_heights</tt><big>(</big><big>)</big><a class="headerlink" href="#pyicoslib.core.Region.get_heights" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the number of nucleotides that have a certain height. Returns a defaultdict</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyicoslib.core.Region.get_metacluster">
+<tt class="descname">get_metacluster</tt><big>(</big><big>)</big><a class="headerlink" href="#pyicoslib.core.Region.get_metacluster" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a Cluster object that contains the levels of all previous clusters combined, with gaps (zeros) between them</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyicoslib.core.Region.join">
+<tt class="descname">join</tt><big>(</big><em>other</em><big>)</big><a class="headerlink" href="#pyicoslib.core.Region.join" title="Permalink to this definition">¶</a></dt>
+<dd><p>Joins two regions. Works with a cluster object too (if flushed properly). If the regions don&#8217;t overlap, the space in between will be included too.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyicoslib.core.Region.numtags">
+<tt class="descname">numtags</tt><big>(</big><em>pseudocount=False</em><big>)</big><a class="headerlink" href="#pyicoslib.core.Region.numtags" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the number of reads in the region, gives the possibility of returning +1 reads if pseudocounts are being used</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyicoslib.core.Region.percentage_covered">
+<tt class="descname">percentage_covered</tt><big>(</big><big>)</big><a class="headerlink" href="#pyicoslib.core.Region.percentage_covered" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the percentage of the region covered by tags</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyicoslib.core.Region.rpkm">
+<tt class="descname">rpkm</tt><big>(</big><em>total_reads</em>, <em>total_regions_analyzed=0</em>, <em>pseudocount=False</em><big>)</big><a class="headerlink" href="#pyicoslib.core.Region.rpkm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Original definition: Reads per kilobase of exon model per million mapped reads. We generalize to: Reads per kilobase of region per million mapped reads. Added 1 pseudocount per region to avoid 0s</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyicoslib.core.Region.shuffle_tags">
+<tt class="descname">shuffle_tags</tt><big>(</big><em>masker_tags=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#pyicoslib.core.Region.shuffle_tags" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shuffle the present tags in the region randomly</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyicoslib.core.Region.swap">
+<tt class="descname">swap</tt><big>(</big><em>region_b</em>, <em>ratio=1</em><big>)</big><a class="headerlink" href="#pyicoslib.core.Region.swap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given 2 regions, returns 2 new regions with the reads of both regions mixed randomly</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyicoslib.core.Region.write">
+<tt class="descname">write</tt><big>(</big><big>)</big><a class="headerlink" href="#pyicoslib.core.Region.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a line in bed format</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="abstractcore">
+<h2>AbstractCore<a class="headerlink" href="#abstractcore" title="Permalink to this headline">¶</a></h2>
+<p>Abstract class with some basic operations. It it inherited by Cluster and Region</p>
+<dl class="class">
+<dt id="pyicoslib.core.AbstractCore">
+<em class="property">class </em><tt class="descclassname">pyicoslib.core.</tt><tt class="descname">AbstractCore</tt><a class="headerlink" href="#pyicoslib.core.AbstractCore" title="Permalink to this definition">¶</a></dt>
+<dd><p>Do not cast, abstract class</p>
+<dl class="method">
+<dt id="pyicoslib.core.AbstractCore.intersects">
+<tt class="descname">intersects</tt><big>(</big><em>other</em><big>)</big><a class="headerlink" href="#pyicoslib.core.AbstractCore.intersects" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns true if a Cluster/Region intersects with another Cluster/Region</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyicoslib.core.AbstractCore.is_contiguous">
+<tt class="descname">is_contiguous</tt><big>(</big><em>other</em><big>)</big><a class="headerlink" href="#pyicoslib.core.AbstractCore.is_contiguous" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns true if a Cluster read is contiguous to another one.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyicoslib.core.AbstractCore.overlap">
+<tt class="descname">overlap</tt><big>(</big><em>other</em><big>)</big><a class="headerlink" href="#pyicoslib.core.AbstractCore.overlap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the percentage of overlap of the self cluster with another cluster, from 0 to 1</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="bigsort">
+<h2>BigSort<a class="headerlink" href="#bigsort" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pyicoslib.utils.BigSort">
+<em class="property">class </em><tt class="descclassname">pyicoslib.utils.</tt><tt class="descname">BigSort</tt><big>(</big><em>file_format</em>, <em>read_half_open=False</em>, <em>frag_size=0</em>, <em>id=0</em>, <em>logger=True</em>, <em>filter_chunks=True</em>, <em>push_distance=0</em>, <em>buffer_size=320000</em>, <em>temp_file_size=8000000</em><big>)</big><a class="headerlink" href="#pyicoslib.utils.BigSort" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class can sort huge files without loading them fully into memory.
+Based on a recipe by Tomasz Bieruta found at c</p>
+<p>NOTE: This class is becoming a preprocessing module. This is a good thing, I think! But its not
+only a sorting class then. We have to think about renaming it, or extracting functionality from it...</p>
+</dd></dl>
+
+</div>
+<div class="section" id="dualsortedreader">
+<h2>DualSortedReader<a class="headerlink" href="#dualsortedreader" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pyicoslib.utils.DualSortedReader">
+<em class="property">class </em><tt class="descclassname">pyicoslib.utils.</tt><tt class="descname">DualSortedReader</tt><big>(</big><em>file_a_path</em>, <em>file_b_path</em>, <em>format</em>, <em>read_half_open=False</em>, <em>logger=None</em><big>)</big><a class="headerlink" href="#pyicoslib.utils.DualSortedReader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given two sorted files of tags in a format supported by Pyicos, iterates through them returning them in order</p>
+</dd></dl>
+
+</div>
+<div class="section" id="sortedfilereader">
+<h2>SortedFileReader<a class="headerlink" href="#sortedfilereader" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pyicoslib.utils.SortedFileReader">
+<em class="property">class </em><tt class="descclassname">pyicoslib.utils.</tt><tt class="descname">SortedFileReader</tt><big>(</big><em>file_path</em>, <em>experiment_format</em>, <em>read_half_open=False</em>, <em>rounding=True</em>, <em>logger=None</em><big>)</big><a class="headerlink" href="#pyicoslib.utils.SortedFileReader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Holds a cursor and a file path. Given a start and an end, it iterates through the file starting on the cursor position,
+and yields the clusters that overlap with the region specified. The cursor will be left behind the position of the last region fed to the SortedFileReader.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="sortedfileclusterreader">
+<h2>SortedFileClusterReader<a class="headerlink" href="#sortedfileclusterreader" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pyicoslib.utils.SortedFileClusterReader">
+<em class="property">class </em><tt class="descclassname">pyicoslib.utils.</tt><tt class="descname">SortedFileClusterReader</tt><big>(</big><em>file_path</em>, <em>experiment_format</em>, <em>read_half_open=False</em>, <em>rounding=True</em>, <em>cached=True</em>, <em>logger=None</em><big>)</big><a class="headerlink" href="#pyicoslib.utils.SortedFileClusterReader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Holds a cursor and a file path. Given a start and an end, it iterates through the file starting on the cursor position,
+and retrieves the clusters that overlap with the region specified.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="sortedfilecountreader">
+<h2>SortedFileCountReader<a class="headerlink" href="#sortedfilecountreader" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pyicoslib.utils.SortedFileCountReader">
+<em class="property">class </em><tt class="descclassname">pyicoslib.utils.</tt><tt class="descname">SortedFileCountReader</tt><big>(</big><em>file_path</em>, <em>experiment_format</em>, <em>read_half_open=False</em>, <em>rounding=True</em>, <em>cached=True</em>, <em>logger=None</em><big>)</big><a class="headerlink" href="#pyicoslib.utils.SortedFileCountReader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Holds a cursor and a file path. Given a start and an end, it iterates through the file starting on the cursor position,
+and retrieves the <em>counts</em> (number of reads) that overlap with the region specified. Because this class doesn&#8217;t store the reads, but only counts them, 
+it doesn&#8217;t have memory problems when encountering huge clusters of reads.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="index.html">pyicos 1.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Juan González-Vallinas.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

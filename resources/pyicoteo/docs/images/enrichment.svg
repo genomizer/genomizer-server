@@ -1,0 +1,1624 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg6099"
+   sodipodi:version="0.32"
+   inkscape:version="0.46"
+   sodipodi:docname="enrichment.svg"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape">
+  <defs
+     id="defs6101">
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Arrow1Lend"
+       style="overflow:visible;">
+      <path
+         id="path9530"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
+         transform="scale(0.8) rotate(180) translate(12.5,0)" />
+    </marker>
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       id="perspective6107" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     gridtolerance="10000"
+     guidetolerance="10"
+     objecttolerance="10"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.899916"
+     inkscape:cx="873.76697"
+     inkscape:cy="885.58805"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1674"
+     inkscape:window-height="749"
+     inkscape:window-x="0"
+     inkscape:window-y="25"
+     showguides="true"
+     inkscape:guide-bbox="true" />
+  <metadata
+     id="metadata6104">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#03ff00;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect10434"
+       width="1115.8668"
+       height="523.97223"
+       x="27.345352"
+       y="0.0071606133"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 249.37791,126.39101 L 297.89631,126.39101 L 297.89631,267.78608 L 249.37791,267.78608 L 249.37791,126.39101 z"
+       id="path2536"
+       style="opacity:0.43555555;fill:#0b5394;fill-rule:nonzero;stroke:#000000;stroke-width:0;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 434.97189,265.95376 L 496.92361,265.95376 L 496.92361,270.53125 L 434.97189,270.53125 L 434.97189,265.95376 z"
+       id="path2546"
+       style="fill:#0b5394;fill-rule:nonzero;stroke:#000000;stroke-width:0.50168341;stroke-linecap:butt;stroke-linejoin:round;marker-start:none;marker-mid:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 79.097422,268.2517 L 555.18067,268.68076"
+       id="path2628"
+       style="fill-rule:nonzero;stroke:#073763;stroke-width:1.12964106;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 249.17553,134.84354 L 289.28213,134.84354"
+       id="path6162"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 249.19218,135.04317 L 289.29878,135.04317"
+       id="path6164"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 250.9564,142.39685 L 291.063,142.39685"
+       id="path6166"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 250.9564,138.39685 L 291.063,138.39685"
+       id="path6168"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 250.9564,146.39685 L 291.063,146.39685"
+       id="path6170"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 250.9564,150.39685 L 291.063,150.39685"
+       id="path6172"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 250.9564,154.39685 L 291.063,154.39685"
+       id="path6174"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 250.9564,158.39685 L 291.063,158.39685"
+       id="path6176"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 250.9564,162.39685 L 291.063,162.39685"
+       id="path6178"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 250.9564,166.39685 L 291.063,166.39685"
+       id="path6180"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 257.62769,170.55084 L 297.73429,170.55084"
+       id="path6182"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 455.24212,226.77065 L 495.34872,226.77065"
+       id="path6223"
+       style="fill:#801000;fill-opacity:1;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round;marker-start:none;marker-mid:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 457.24212,230.77065 L 497.34872,230.77065"
+       id="path6225"
+       style="fill:#800000;fill-opacity:1;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round;marker-start:none;marker-mid:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 457.24212,234.77065 L 497.34872,234.77065"
+       id="path6227"
+       style="fill:#801000;fill-opacity:1;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round;marker-start:none;marker-mid:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 457.24212,238.77065 L 497.34872,238.77065"
+       id="path6229"
+       style="fill:#801000;fill-opacity:1;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round;marker-start:none;marker-mid:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 435.29605,124.4793 L 497.60268,124.4793 L 497.60268,265.54887 L 435.29605,265.54887 L 435.29605,124.4793 z"
+       id="path6966"
+       style="opacity:0.43555555;fill:#0b5394;fill-rule:nonzero;stroke:#000000;stroke-width:0;stroke-linecap:butt;stroke-linejoin:round;marker-start:none;marker-mid:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <g
+       id="g8023"
+       transform="translate(0,11.00769)"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60">
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path7990"
+         d="M 436.38912,127.98984 L 476.49572,127.98984" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path7992"
+         d="M 436.40577,128.18947 L 476.51237,128.18947" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path7994"
+         d="M 438.16999,135.54315 L 478.27659,135.54315" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path7996"
+         d="M 438.16999,131.54315 L 478.27659,131.54315" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path7998"
+         d="M 438.16999,139.54315 L 478.27659,139.54315" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path8000"
+         d="M 438.16999,143.54315 L 478.27659,143.54315" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path8002"
+         d="M 438.16999,147.54315 L 478.27659,147.54315" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path8004"
+         d="M 438.16999,151.54315 L 478.27659,151.54315" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path8006"
+         d="M 438.16999,155.54315 L 478.27659,155.54315" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path8008"
+         d="M 438.16999,159.54315 L 478.27659,159.54315" />
+    </g>
+    <path
+       d="M 248.50341,266.73444 L 297.27743,266.73444 L 297.27743,271.36585 L 248.50341,271.36585 L 248.50341,266.73444 z"
+       id="path8035"
+       style="fill:#0b5394;fill-rule:nonzero;stroke:#000000;stroke-width:0.44775522;stroke-linecap:butt;stroke-linejoin:round;marker-start:none;marker-mid:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <text
+       xml:space="preserve"
+       style="font-size:20px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Sans;-inkscape-font-specification:Sans Bold;text-anchor:start;text-align:start;writing-mode:lr;line-height:125%"
+       x="114.67406"
+       y="107.62436"
+       id="text8037"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60"><tspan
+         sodipodi:role="line"
+         id="tspan8039"
+         x="114.67406"
+         y="107.62436">Union</tspan></text>
+    <path
+       d="M 251.68039,174.60355 L 291.78699,174.60355"
+       id="path8060"
+       style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2.12300000000000022;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:0.94117647;stroke-miterlimit:4;stroke-dasharray:none"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <text
+       xml:space="preserve"
+       style="font-size:16px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Sans;-inkscape-font-specification:Sans"
+       x="318.31067"
+       y="208.30675"
+       id="text8064"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60"><tspan
+         sodipodi:role="line"
+         id="tspan10420">Pseudocounts</tspan></text>
+    <path
+       d="M 414.97432,194.16527 L 427.68959,185.27961 L 436.86484,178.86779 L 440.74633,176.15534"
+       id="path9522"
+       style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#030a00;stroke-width:1.0063045;stroke-linecap:butt;stroke-linejoin:round;marker-end:url(#Arrow1Lend);stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       sodipodi:nodetypes="cccc"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 420.1787,220.82831 L 431.68168,230.11273 L 439.98215,236.81229 L 443.49358,239.64646"
+       id="path10304"
+       style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#030a00;stroke-width:0.97837275;stroke-linecap:butt;stroke-linejoin:round;marker-end:url(#Arrow1Lend);stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       sodipodi:nodetypes="cccc"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 325.26254,194.67566 L 310.86525,186.71023 L 300.47627,180.96245 L 296.08131,178.53091"
+       id="path10306"
+       style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#030a00;stroke-width:1.10110915;stroke-linecap:butt;stroke-linejoin:round;marker-end:url(#Arrow1Lend);stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       sodipodi:nodetypes="cccc"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 323.42376,211.38195 L 307.97991,218.90476 L 296.83572,224.33316 L 292.12129,226.62959"
+       id="path10308"
+       style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#030a00;stroke-width:1.02044594;stroke-linecap:butt;stroke-linejoin:round;marker-end:url(#Arrow1Lend);stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       sodipodi:nodetypes="cccc"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <text
+       xml:space="preserve"
+       style="font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Sans;-inkscape-font-specification:Sans"
+       x="87.153954"
+       y="160.73392"
+       id="text10310"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60"><tspan
+         sodipodi:role="line"
+         id="tspan10312"
+         x="87.153954"
+         y="160.73392">Condition A</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Sans;-inkscape-font-specification:Sans"
+       x="88.364891"
+       y="233.16917"
+       id="text10314"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60"><tspan
+         sodipodi:role="line"
+         id="tspan10318"
+         x="88.364891"
+         y="233.16917">Condition B</tspan></text>
+    <path
+       d="M 450.02697,490.76922 L 471.61816,490.76922 L 471.61816,495.01505 L 450.02697,495.01505 L 450.02697,490.76922 z"
+       id="path10322"
+       style="fill:#0b5394;fill-rule:nonzero;stroke:#000000;stroke-width:0.28523886;stroke-linecap:butt;stroke-linejoin:round;marker-start:none;marker-mid:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 74.33007,492.90133 L 550.41332,493.33039"
+       id="path10324"
+       style="fill-rule:nonzero;stroke:#073763;stroke-width:1.12964106;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 244.40818,359.49317 L 284.51478,359.49317"
+       id="path10326"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 244.42483,359.6928 L 284.53143,359.6928"
+       id="path10328"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 246.18905,367.04648 L 286.29565,367.04648"
+       id="path10330"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 246.18905,363.04648 L 286.29565,363.04648"
+       id="path10332"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 246.18905,371.04648 L 286.29565,371.04648"
+       id="path10334"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 246.18905,375.04648 L 286.29565,375.04648"
+       id="path10336"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 246.18905,379.04648 L 286.29565,379.04648"
+       id="path10338"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 246.18905,383.04648 L 286.29565,383.04648"
+       id="path10340"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 246.18905,387.04648 L 286.29565,387.04648"
+       id="path10342"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 246.18905,391.04648 L 286.29565,391.04648"
+       id="path10344"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 252.86034,395.20047 L 292.96694,395.20047"
+       id="path10346"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 450.47477,451.42028 L 490.58137,451.42028"
+       id="path10348"
+       style="fill:#801000;fill-opacity:1;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round;marker-start:none;marker-mid:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 452.47477,455.42028 L 492.58137,455.42028"
+       id="path10350"
+       style="fill:#800000;fill-opacity:1;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round;marker-start:none;marker-mid:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 452.47477,459.42028 L 492.58137,459.42028"
+       id="path10352"
+       style="fill:#801000;fill-opacity:1;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round;marker-start:none;marker-mid:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 452.47477,463.42028 L 492.58137,463.42028"
+       id="path10354"
+       style="fill:#801000;fill-opacity:1;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round;marker-start:none;marker-mid:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 449.93508,349.12893 L 472.54684,349.12893 L 472.54684,490.1985 L 449.93508,490.1985 L 449.93508,349.12893 z"
+       id="path10356"
+       style="opacity:0.43555555;fill:#0b5394;fill-rule:nonzero;stroke:#000000;stroke-width:0;stroke-linecap:butt;stroke-linejoin:round;marker-start:none;marker-mid:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <g
+       id="g10358"
+       transform="translate(-4.767354,235.65732)"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60">
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path10360"
+         d="M 436.38912,127.98984 L 476.49572,127.98984" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path10362"
+         d="M 436.40577,128.18947 L 476.51237,128.18947" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path10364"
+         d="M 438.16999,135.54315 L 478.27659,135.54315" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path10366"
+         d="M 438.16999,131.54315 L 478.27659,131.54315" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path10368"
+         d="M 438.16999,139.54315 L 478.27659,139.54315" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path10370"
+         d="M 438.16999,143.54315 L 478.27659,143.54315" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path10372"
+         d="M 438.16999,147.54315 L 478.27659,147.54315" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path10374"
+         d="M 438.16999,151.54315 L 478.27659,151.54315" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path10376"
+         d="M 438.16999,155.54315 L 478.27659,155.54315" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path10378"
+         d="M 438.16999,159.54315 L 478.27659,159.54315" />
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-size:20px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Sans;-inkscape-font-specification:Sans Bold"
+       x="109.90671"
+       y="332.27399"
+       id="text10382"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60"><tspan
+         sodipodi:role="line"
+         id="tspan10414">Intersection</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Sans;-inkscape-font-specification:Sans"
+       x="82.386597"
+       y="385.38354"
+       id="text10406"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60"><tspan
+         sodipodi:role="line"
+         id="tspan10408"
+         x="82.386597"
+         y="385.38354">Condition A</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Sans;-inkscape-font-specification:Sans"
+       x="83.597527"
+       y="457.81882"
+       id="text10410"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60"><tspan
+         sodipodi:role="line"
+         id="tspan10412"
+         x="83.597527"
+         y="457.81882">Condition B</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:16px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Sans;-inkscape-font-specification:Sans"
+       x="285.02634"
+       y="292.9281"
+       id="text10416"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60"><tspan
+         sodipodi:role="line"
+         id="tspan10552"
+         x="285.02634"
+         y="292.9281">Determined regions</tspan></text>
+    <path
+       d="M 332.6848,280.36378 L 316.71648,276.39606 L 305.19386,273.533 L 300.31933,272.32181"
+       id="path10422"
+       style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#030a00;stroke-width:1.10110915;stroke-linecap:butt;stroke-linejoin:round;marker-end:url(#Arrow1Lend);stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       sodipodi:nodetypes="cccc"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 400.28481,281.47 L 414.8666,276.17807 L 425.38871,272.35945 L 429.83998,270.74403"
+       id="path10424"
+       style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#030a00;stroke-width:1.0063045;stroke-linecap:butt;stroke-linejoin:round;marker-end:url(#Arrow1Lend);stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       sodipodi:nodetypes="cccc"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 417.92586,506.49489 L 432.50765,501.20296 L 443.02976,497.38434 L 447.48103,495.76892"
+       id="path10430"
+       style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#030a00;stroke-width:1.0063045;stroke-linecap:butt;stroke-linejoin:round;marker-end:url(#Arrow1Lend);stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       sodipodi:nodetypes="cccc"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <text
+       xml:space="preserve"
+       style="font-size:30px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Sans;-inkscape-font-specification:Sans"
+       x="146.29959"
+       y="49.824081"
+       id="text10436"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60"><tspan
+         sodipodi:role="line"
+         id="tspan10438"
+         x="146.29959"
+         y="49.824081">No regions defined</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:30px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Sans;-inkscape-font-specification:Sans"
+       x="713.45905"
+       y="49.824081"
+       id="text10440"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60"><tspan
+         sodipodi:role="line"
+         id="tspan10444"
+         x="713.45905"
+         y="49.824081">Regions defined</tspan></text>
+    <path
+       d="M 806.00582,126.65192 L 899.51174,126.65192 L 899.51174,268.04699 L 806.00582,268.04699 L 806.00582,126.65192 z"
+       id="path10446"
+       style="opacity:0.43555555;fill:#0b5394;fill-rule:nonzero;stroke:#000000;stroke-width:0;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 1007.5998,266.21467 L 1069.5515,266.21467 L 1069.5515,270.79216 L 1007.5998,270.79216 L 1007.5998,266.21467 z"
+       id="path10448"
+       style="fill:#000080;fill-rule:nonzero;stroke:#000000;stroke-width:0.50168341000000005;stroke-linecap:butt;stroke-linejoin:round;marker-start:none;marker-mid:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 635.72533,268.51261 L 1111.8086,268.94167"
+       id="path10450"
+       style="fill-rule:nonzero;stroke:#073763;stroke-width:1.12964106;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 805.80344,135.10445 L 845.91004,135.10445"
+       id="path10452"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 805.82009,135.30408 L 845.92669,135.30408"
+       id="path10454"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 807.58431,142.65776 L 847.69091,142.65776"
+       id="path10456"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 807.58431,138.65776 L 847.69091,138.65776"
+       id="path10458"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 807.58431,146.65776 L 847.69091,146.65776"
+       id="path10460"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 807.58431,150.65776 L 847.69091,150.65776"
+       id="path10462"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 807.58431,154.65776 L 847.69091,154.65776"
+       id="path10464"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 807.58431,158.65776 L 847.69091,158.65776"
+       id="path10466"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 807.58431,162.65776 L 847.69091,162.65776"
+       id="path10468"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 807.58431,166.65776 L 847.69091,166.65776"
+       id="path10470"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 814.2556,170.81175 L 854.3622,170.81175"
+       id="path10472"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 1011.87,227.03156 L 1051.9766,227.03156"
+       id="path10474"
+       style="fill:#801000;fill-opacity:1;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round;marker-start:none;marker-mid:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 1013.87,231.03156 L 1053.9766,231.03156"
+       id="path10476"
+       style="fill:#800000;fill-opacity:1;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round;marker-start:none;marker-mid:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 1013.87,235.03156 L 1053.9766,235.03156"
+       id="path10478"
+       style="fill:#801000;fill-opacity:1;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round;marker-start:none;marker-mid:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 1013.87,239.03156 L 1053.9766,239.03156"
+       id="path10480"
+       style="fill:#801000;fill-opacity:1;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round;marker-start:none;marker-mid:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 1007.924,124.74021 L 1070.2306,124.74021 L 1070.2306,265.80978 L 1007.924,265.80978 L 1007.924,124.74021 z"
+       id="path10482"
+       style="opacity:0.43555555;fill:#0b5394;fill-rule:nonzero;stroke:#000000;stroke-width:0;stroke-linecap:butt;stroke-linejoin:round;marker-start:none;marker-mid:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <g
+       id="g10484"
+       transform="translate(556.62791,11.268602)"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60">
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path10486"
+         d="M 436.38912,127.98984 L 476.49572,127.98984" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path10488"
+         d="M 436.40577,128.18947 L 476.51237,128.18947" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path10490"
+         d="M 438.16999,135.54315 L 478.27659,135.54315" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path10492"
+         d="M 438.16999,131.54315 L 478.27659,131.54315" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path10494"
+         d="M 438.16999,139.54315 L 478.27659,139.54315" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path10496"
+         d="M 438.16999,143.54315 L 478.27659,143.54315" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path10498"
+         d="M 438.16999,147.54315 L 478.27659,147.54315" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path10500"
+         d="M 438.16999,151.54315 L 478.27659,151.54315" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path10502"
+         d="M 438.16999,155.54315 L 478.27659,155.54315" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path10504"
+         d="M 438.16999,159.54315 L 478.27659,159.54315" />
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-size:16px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Sans;-inkscape-font-specification:Sans"
+       x="874.9386"
+       y="208.56766"
+       id="text10520"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60"><tspan
+         sodipodi:role="line"
+         id="tspan10522"
+         x="874.9386"
+         y="208.56766">Pseudocounts</tspan></text>
+    <path
+       d="M 989.60223,196.42618 L 1002.3175,187.54052 L 1011.4928,181.1287 L 1015.3742,178.41625"
+       id="path10524"
+       style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#030a00;stroke-width:1.0063045;stroke-linecap:butt;stroke-linejoin:round;marker-end:url(#Arrow1Lend);stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       sodipodi:nodetypes="cccc"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 984.40205,218.05495 L 1000.7188,230.022 L 1012.493,238.65732 L 1017.4738,242.31039"
+       id="path10526"
+       style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#030a00;stroke-width:1.34784579;stroke-linecap:butt;stroke-linejoin:round;marker-end:url(#Arrow1Lend);stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       sodipodi:nodetypes="cccc"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 881.89045,194.93657 L 867.49316,186.97114 L 857.10418,181.22336 L 852.70922,178.79182"
+       id="path10528"
+       style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#030a00;stroke-width:1.10110915;stroke-linecap:butt;stroke-linejoin:round;marker-end:url(#Arrow1Lend);stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       sodipodi:nodetypes="cccc"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 880.05167,211.64286 L 864.60782,219.16567 L 853.46363,224.59407 L 848.7492,226.8905"
+       id="path10530"
+       style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#030a00;stroke-width:1.02044594;stroke-linecap:butt;stroke-linejoin:round;marker-end:url(#Arrow1Lend);stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       sodipodi:nodetypes="cccc"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <text
+       xml:space="preserve"
+       style="font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Sans;-inkscape-font-specification:Sans"
+       x="643.78186"
+       y="160.99483"
+       id="text10532"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60"><tspan
+         sodipodi:role="line"
+         id="tspan10534"
+         x="643.78186"
+         y="160.99483">Condition A</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Sans;-inkscape-font-specification:Sans"
+       x="644.9928"
+       y="233.43008"
+       id="text10536"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60"><tspan
+         sodipodi:role="line"
+         id="tspan10538"
+         x="644.9928"
+         y="233.43008">Condition B</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:16px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Sans;-inkscape-font-specification:Sans"
+       x="889.65424"
+       y="303.18903"
+       id="text10540"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60"><tspan
+         sodipodi:role="line"
+         id="tspan10550"
+         x="889.65424"
+         y="303.18903">Defined regions</tspan></text>
+    <path
+       d="M 915.43388,289.08046 L 901.26734,280.71149 L 891.04489,274.67252 L 886.72037,272.11781"
+       id="path10544"
+       style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#030a00;stroke-width:1.10110915;stroke-linecap:butt;stroke-linejoin:round;marker-end:url(#Arrow1Lend);stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       sodipodi:nodetypes="cccc"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 988.8043,291.37289 L 1001.5196,282.48724 L 1010.6948,276.07541 L 1014.5763,273.36296"
+       id="path10546"
+       style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#030a00;stroke-width:1.0063045;stroke-linecap:butt;stroke-linejoin:round;marker-end:url(#Arrow1Lend);stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       sodipodi:nodetypes="cccc"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 807.30787,265.13576 L 899.16085,265.13576 L 899.16085,269.43611 L 807.30787,269.43611 L 807.30787,265.13576 z"
+       id="path10548"
+       style="fill:#000080;fill-rule:nonzero;stroke:#000000;stroke-width:0.59209025000000004;stroke-linecap:butt;stroke-linejoin:round;marker-start:none;marker-mid:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <text
+       xml:space="preserve"
+       style="font-size:16px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Sans;-inkscape-font-specification:Sans"
+       x="264.69833"
+       y="510.69031"
+       id="text10554"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60"><tspan
+         sodipodi:role="line"
+         id="tspan10558"
+         x="264.69833"
+         y="510.69031">Determined region</tspan></text>
+    <rect
+       style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#030a00;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect10968"
+       width="1122.5902"
+       height="322.85159"
+       x="0"
+       y="645.71033"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <text
+       xml:space="preserve"
+       style="font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Sans;-inkscape-font-specification:Sans"
+       x="47.529449"
+       y="785.27081"
+       id="text10644"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60"><tspan
+         sodipodi:role="line"
+         id="tspan10646"
+         x="47.529449"
+         y="785.27081">Condition A</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Sans;-inkscape-font-specification:Sans"
+       x="48.740387"
+       y="857.70605"
+       id="text10648"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60"><tspan
+         sodipodi:role="line"
+         id="tspan10650"
+         x="48.740387"
+         y="857.70605">Condition B</tspan></text>
+    <path
+       d="M 800.36921,750.79735 L 893.87513,750.79735 L 893.87513,892.19244 L 800.36921,892.19244 L 800.36921,750.79735 z"
+       id="path10662"
+       style="opacity:0.43555555;fill:#0b5394;fill-rule:nonzero;stroke:#000000;stroke-width:0;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 1001.9632,890.36014 L 1063.9149,890.36014 L 1063.9149,894.93754 L 1001.9632,894.93754 L 1001.9632,890.36014 z"
+       id="path10664"
+       style="fill:#000080;fill-rule:nonzero;stroke:#000000;stroke-width:0.50168341;stroke-linecap:butt;stroke-linejoin:round;marker-start:none;marker-mid:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 630.08871,892.65804 L 1106.172,893.08714"
+       id="path10666"
+       style="fill-rule:nonzero;stroke:#073763;stroke-width:1.12964106;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 820.16683,759.24988 L 860.27343,759.24988"
+       id="path10668"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 820.18348,759.44951 L 860.29008,759.44951"
+       id="path10670"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 821.9477,766.80319 L 862.0543,766.80319"
+       id="path10672"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 821.9477,762.80319 L 862.0543,762.80319"
+       id="path10674"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 821.9477,770.80319 L 862.0543,770.80319"
+       id="path10676"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 821.9477,774.80319 L 862.0543,774.80319"
+       id="path10678"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 821.9477,778.80319 L 862.0543,778.80319"
+       id="path10680"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 821.9477,782.80319 L 862.0543,782.80319"
+       id="path10682"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 821.9477,786.80319 L 862.0543,786.80319"
+       id="path10684"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 821.9477,790.80319 L 862.0543,790.80319"
+       id="path10686"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 828.61899,794.95718 L 868.72559,794.95718"
+       id="path10688"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 1002.2874,748.88564 L 1064.594,748.88564 L 1064.594,889.95524 L 1002.2874,889.95524 L 1002.2874,748.88564 z"
+       id="path10698"
+       style="opacity:0.43555555;fill:#0b5394;fill-rule:nonzero;stroke:#000000;stroke-width:0;stroke-linecap:butt;stroke-linejoin:round;marker-start:none;marker-mid:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <g
+       id="g10700"
+       transform="translate(568.99129,635.41403)"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60">
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path10702"
+         d="M 436.38912,127.98984 L 476.49572,127.98984" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path10704"
+         d="M 436.40577,128.18947 L 476.51237,128.18947" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path10706"
+         d="M 438.16999,135.54315 L 478.27659,135.54315" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path10708"
+         d="M 438.16999,131.54315 L 478.27659,131.54315" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path10710"
+         d="M 438.16999,139.54315 L 478.27659,139.54315" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path10712"
+         d="M 438.16999,143.54315 L 478.27659,143.54315" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path10714"
+         d="M 438.16999,147.54315 L 478.27659,147.54315" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path10716"
+         d="M 438.16999,151.54315 L 478.27659,151.54315" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path10718"
+         d="M 438.16999,155.54315 L 478.27659,155.54315" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path10720"
+         d="M 438.16999,159.54315 L 478.27659,159.54315" />
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Sans;-inkscape-font-specification:Sans"
+       x="638.14526"
+       y="785.14026"
+       id="text10722"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60"><tspan
+         sodipodi:role="line"
+         id="tspan10742"
+         x="638.14526"
+         y="785.14026">Replica 1</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Sans;-inkscape-font-specification:Sans"
+       x="639.3562"
+       y="857.5755"
+       id="text10726"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60"><tspan
+         sodipodi:role="line"
+         id="tspan10744"
+         x="639.3562"
+         y="857.5755">Replica 2</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:16px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Sans;-inkscape-font-specification:Sans"
+       x="884.01764"
+       y="927.33447"
+       id="text10730"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60"><tspan
+         sodipodi:role="line"
+         id="tspan10732"
+         x="884.01764"
+         y="927.33447">Defined regions</tspan></text>
+    <path
+       d="M 909.79727,913.22584 L 895.63073,904.85694 L 885.40828,898.81794 L 881.08376,896.26324"
+       id="path10734"
+       style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#030a00;stroke-width:1.10110915;stroke-linecap:butt;stroke-linejoin:round;marker-end:url(#Arrow1Lend);stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       sodipodi:nodetypes="cccc"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 983.16769,915.51834 L 995.88299,906.63264 L 1005.0582,900.22084 L 1008.9397,897.50834"
+       id="path10736"
+       style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#030a00;stroke-width:1.0063045;stroke-linecap:butt;stroke-linejoin:round;marker-end:url(#Arrow1Lend);stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       sodipodi:nodetypes="cccc"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 801.67126,889.28114 L 893.52424,889.28114 L 893.52424,893.58154 L 801.67126,893.58154 L 801.67126,889.28114 z"
+       id="path10738"
+       style="fill:#000080;fill-rule:nonzero;stroke:#000000;stroke-width:0.59209025;stroke-linecap:butt;stroke-linejoin:round;marker-start:none;marker-mid:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 820.07357,832.68885 L 860.18017,832.68885"
+       id="path10746"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 820.09022,832.88848 L 860.19682,832.88848"
+       id="path10748"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 821.85444,840.24216 L 861.96104,840.24216"
+       id="path10750"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 821.85444,836.24216 L 861.96104,836.24216"
+       id="path10752"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 821.85444,844.24216 L 861.96104,844.24216"
+       id="path10754"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 821.85444,848.24216 L 861.96104,848.24216"
+       id="path10756"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 821.85444,852.24216 L 861.96104,852.24216"
+       id="path10758"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 821.85444,856.24216 L 861.96104,856.24216"
+       id="path10760"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 821.85444,860.24216 L 861.96104,860.24216"
+       id="path10764"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 828.52573,864.39615 L 868.63233,864.39615"
+       id="path10766"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <g
+       id="g10768"
+       transform="translate(568.89803,708.853)"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60">
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path10770"
+         d="M 436.38912,127.98984 L 476.49572,127.98984" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path10772"
+         d="M 436.40577,128.18947 L 476.51237,128.18947" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path10774"
+         d="M 438.16999,135.54315 L 478.27659,135.54315" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path10776"
+         d="M 438.16999,131.54315 L 478.27659,131.54315" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path10778"
+         d="M 438.16999,139.54315 L 478.27659,139.54315" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path10780"
+         d="M 438.16999,143.54315 L 478.27659,143.54315" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path10782"
+         d="M 438.16999,147.54315 L 478.27659,147.54315" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path10784"
+         d="M 438.16999,151.54315 L 478.27659,151.54315" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path10786"
+         d="M 438.16999,155.54315 L 478.27659,155.54315" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path10788"
+         d="M 438.16999,159.54315 L 478.27659,159.54315" />
+    </g>
+    <path
+       d="M 1011.3489,872.98145 L 1051.4555,872.98145"
+       id="path10834"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 1018.0202,877.13544 L 1058.1268,877.13544"
+       id="path10836"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 226.34979,750.56157 L 319.85571,750.56157 L 319.85571,891.95666 L 226.34979,891.95666 L 226.34979,750.56157 z"
+       id="path10838"
+       style="opacity:0.43555555;fill:#0b5394;fill-rule:nonzero;stroke:#000000;stroke-width:0;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 427.94377,890.12436 L 489.89547,890.12436 L 489.89547,894.70176 L 427.94377,894.70176 L 427.94377,890.12436 z"
+       id="path10840"
+       style="fill:#000080;fill-rule:nonzero;stroke:#000000;stroke-width:0.50168341;stroke-linecap:butt;stroke-linejoin:round;marker-start:none;marker-mid:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 56.06929,892.42226 L 532.15258,892.85136"
+       id="path10842"
+       style="fill-rule:nonzero;stroke:#073763;stroke-width:1.12964106;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 246.14741,759.0141 L 286.25401,759.0141"
+       id="path10844"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 246.16406,759.21373 L 286.27066,759.21373"
+       id="path10846"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 247.92828,766.56741 L 288.03488,766.56741"
+       id="path10848"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 247.92828,762.56741 L 288.03488,762.56741"
+       id="path10850"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 247.92828,770.56741 L 288.03488,770.56741"
+       id="path10852"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 247.92828,774.56741 L 288.03488,774.56741"
+       id="path10854"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 247.92828,778.56741 L 288.03488,778.56741"
+       id="path10856"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 247.92828,782.56741 L 288.03488,782.56741"
+       id="path10858"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 247.92828,786.56741 L 288.03488,786.56741"
+       id="path10860"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 247.92828,790.56741 L 288.03488,790.56741"
+       id="path10862"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 254.59957,794.7214 L 294.70617,794.7214"
+       id="path10864"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 428.26797,748.64986 L 490.57457,748.64986 L 490.57457,889.71946 L 428.26797,889.71946 L 428.26797,748.64986 z"
+       id="path10866"
+       style="opacity:0.43555555;fill:#0b5394;fill-rule:nonzero;stroke:#000000;stroke-width:0;stroke-linecap:butt;stroke-linejoin:round;marker-start:none;marker-mid:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <g
+       id="g10868"
+       transform="translate(-5.02813,635.17825)"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60">
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path10870"
+         d="M 436.38912,127.98984 L 476.49572,127.98984" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path10872"
+         d="M 436.40577,128.18947 L 476.51237,128.18947" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path10874"
+         d="M 438.16999,135.54315 L 478.27659,135.54315" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path10876"
+         d="M 438.16999,131.54315 L 478.27659,131.54315" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path10878"
+         d="M 438.16999,139.54315 L 478.27659,139.54315" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path10880"
+         d="M 438.16999,143.54315 L 478.27659,143.54315" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path10882"
+         d="M 438.16999,147.54315 L 478.27659,147.54315" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path10884"
+         d="M 438.16999,151.54315 L 478.27659,151.54315" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path10886"
+         d="M 438.16999,155.54315 L 478.27659,155.54315" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+         id="path10888"
+         d="M 438.16999,159.54315 L 478.27659,159.54315" />
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-size:16px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Sans;-inkscape-font-specification:Sans"
+       x="309.99823"
+       y="927.09869"
+       id="text10898"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60"><tspan
+         sodipodi:role="line"
+         id="tspan10900"
+         x="309.99823"
+         y="927.09869">Defined regions</tspan></text>
+    <path
+       d="M 335.77785,912.99006 L 321.61131,904.62116 L 311.38886,898.58216 L 307.06434,896.02746"
+       id="path10902"
+       style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#030a00;stroke-width:1.10110915;stroke-linecap:butt;stroke-linejoin:round;marker-end:url(#Arrow1Lend);stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       sodipodi:nodetypes="cccc"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 409.14827,915.28256 L 421.86357,906.39686 L 431.03877,899.98506 L 434.92027,897.27256"
+       id="path10904"
+       style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#030a00;stroke-width:1.0063045;stroke-linecap:butt;stroke-linejoin:round;marker-end:url(#Arrow1Lend);stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       sodipodi:nodetypes="cccc"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 227.65184,889.04536 L 319.50482,889.04536 L 319.50482,893.34576 L 227.65184,893.34576 L 227.65184,889.04536 z"
+       id="path10906"
+       style="fill:#000080;fill-rule:nonzero;stroke:#000000;stroke-width:0.59209025;stroke-linecap:butt;stroke-linejoin:round;marker-start:none;marker-mid:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 212.50631,874.16037 L 252.61291,874.16037"
+       id="path10926"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 377.32946,872.74567 L 417.43606,872.74567"
+       id="path10950"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 384.00075,876.89966 L 424.10735,876.89966"
+       id="path10952"
+       style="fill:#008000;fill-rule:evenodd;stroke:#38761d;stroke-width:2.12323499;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <text
+       xml:space="preserve"
+       style="font-size:30px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Sans;-inkscape-font-specification:Sans"
+       x="119.3287"
+       y="684.52307"
+       id="text10954"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60"><tspan
+         sodipodi:role="line"
+         id="tspan10966">Comparing conditions</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:30px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Sans;-inkscape-font-specification:Sans"
+       x="710.68018"
+       y="684.52307"
+       id="text10958"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/enrichment.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60"><tspan
+         sodipodi:role="line"
+         id="tspan10964"
+         x="710.68018"
+         y="684.52307">Comparing replicas</tspan></text>
+    <path
+       d="M 251.33354,229.11657 L 291.44014,229.11657"
+       id="path11282"
+       style="fill:#ffff00;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2.12299990999999988;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 449.52787,174.9669 L 489.63447,174.9669"
+       id="path11284"
+       style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2.12299990999999988;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.94117647"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 452.03843,243.75507 L 492.14503,243.75507"
+       id="path11286"
+       style="fill:#ffff00;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2.12299990999999988;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 815.93703,175.71162 L 856.04363,175.71162"
+       id="path11288"
+       style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2.12299990999999988;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.94117647"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 812.51157,229.86129 L 852.61817,229.86129"
+       id="path11290"
+       style="fill:#ffff00;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2.12299990999999988;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 1016.5357,175.37125 L 1056.6423,175.37125"
+       id="path11292"
+       style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2.12299990999999988;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.94117647"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+    <path
+       d="M 1022.0251,243.98923 L 1062.1317,243.98923"
+       id="path11294"
+       style="fill:#ffff00;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2.12299990999999988;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:export-filename="/home/daniela/sphinx_doc/images/region_definition.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
+  </g>
+</svg>

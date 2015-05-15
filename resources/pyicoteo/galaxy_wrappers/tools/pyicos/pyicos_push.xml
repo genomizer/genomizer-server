@@ -1,0 +1,36 @@
+<tool id="pyicos_push" name="Push" version="1.2">
+    <description>Push the reads in the corresponding strand.</description>
+    <command interpreter="python">pyicos push $experiment $output $push_distance -f $experiment_format -F $output_format $is_output_open $is_output_open</command>
+    <inputs>
+        <param format="tabular" name="experiment" type="data" label="Experiment file" />
+        <param name="experiment_format" type="select" label="Experiment format" format="text">
+            <option value="bed" selected="true">Bed</option>
+            <option value="sam">Sam</option>
+            <option value="eland">Eland</option>
+        </param>
+        <param name="is_experiment_open" type="boolean" label="Is the experiment half-open?" truevalue="--open-experiment" falsevalue="" />
+        <param name="output_format" type="select" label="Output format">
+            <option value="bed" selected="true">Bed</option>
+            <option value="sam">Sam</option>
+            <option value="eland">Eland</option>
+            <option value="bed_wig" selected="true">Wiggle(Bed)</option>
+            <option value="variable_wig">Wiggle(Variable)</option>
+            <option value="bed_pk">Bed pk</option>
+        </param>
+        <param name="is_output_open" type="boolean" label="Is output half-open?" truevalue="--open-output" falsevalue="" />
+        <param name="push_distance" type="integer" label="Push distance" size="4" value="1" min="1" />
+    </inputs>
+    <outputs>
+        <data format="tabular" name="output" />
+    </outputs>
+    <stdio>
+        <exit_code range="1:" level="error" />
+    </stdio>
+    <help>
+        Push the reads in the corresponding strand. If a read doesn\'t have a strand, it will be pushed from left to right.
+
+        This operation requires tag-like files (bed, eland, sam).
+
+        More information at: http://regulatorygenomics.upf.edu/pyicos
+    </help>
+</tool>

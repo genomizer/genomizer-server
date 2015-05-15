@@ -20,7 +20,10 @@ import server.ProcessPool;
  * @version 1.1
  */
 public class GetProcessStatusCommand extends Command {
-
+	@Override
+	public int getExpectedNumberOfURIFields() {
+		return 1;
+	}
 
 	/**
 	 * Method that validates the class information.

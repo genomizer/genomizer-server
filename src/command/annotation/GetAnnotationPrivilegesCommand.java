@@ -19,6 +19,11 @@ public class GetAnnotationPrivilegesCommand extends Command {
 
 
 	@Override
+	public int getExpectedNumberOfURIFields() {
+		return 2;
+	}
+
+	@Override
 	public void validate() throws ValidateException {
 		hasRights(UserRights.getRights(this.getClass()));
 	}

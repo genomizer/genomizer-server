@@ -33,6 +33,10 @@ public class PutAnnotationFieldCommand extends Command {
 	@Expose
 	private String newName = null;
 
+	@Override
+	public int getExpectedNumberOfURIFields() {
+		return 2;
+	}
 
 	@Override
 	public void validate() throws ValidateException {

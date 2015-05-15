@@ -17,7 +17,10 @@ import response.HttpStatusCode;
  * @version 1.1
  */
 public class DeleteLoginCommand extends Command {
-
+	@Override
+	public int getExpectedNumberOfURIFields() {
+		return 1;
+	}
 
 	@Override
 	public void validate() throws ValidateException {

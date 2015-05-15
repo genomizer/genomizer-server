@@ -20,6 +20,11 @@ public class CancelProcessCommand extends Command {
     private final int pidLength = 36;
 
     @Override
+    public int getExpectedNumberOfURIFields() {
+        return 1;
+    }
+
+    @Override
     public void validate() throws ValidateException {
         
         hasRights(UserRights.getRights(this.getClass()));

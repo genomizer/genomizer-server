@@ -1,19 +1,13 @@
+import authentication.InactiveUuidsRemover;
+import org.apache.commons.cli.*;
+import process.StartUpCleaner;
+import server.*;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+
 // import java.util.Scanner;
-
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.BasicParser;
-import org.apache.commons.cli.ParseException;
-
-import process.StartUpCleaner;
-
-import authentication.InactiveUuidsRemover;
-
-import server.*;
 
 
 public class ServerMain {
@@ -45,7 +39,7 @@ public class ServerMain {
 		/* We attempt to start the doorman. */
 		try {
 			new Doorman(processPool,
-					ServerSettings.genomizerHttpPort).start();
+					ServerSettings.genomizerPort).start();
 		} catch (IOException e) {
 			System.err.println("Error when starting server");
 			Debug.log(e.getMessage());
@@ -123,7 +117,7 @@ public class ServerMain {
 			throws FileNotFoundException {
 		// Port flag
 		if (com.hasOption('p')) {
-			ServerSettings.genomizerHttpPort =
+			ServerSettings.genomizerPort =
 					Integer.parseInt(com.getOptionValue('p'));
 		}
 		// Debug flag
