@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<toolbox>
+  <section name="Get Data" id="getext">
+    <tool file="data_source/upload.xml"/>
+  </section>
+
+  <section name="NGS:Pyicos" id="Pyicos">
+    <tool file="pyicos/pyicos_extend.xml" />
+    <tool file="pyicos/pyicos_remdup.xml" />
+    <tool file="pyicos/pyicos_normalize.xml" />
+    <tool file="pyicos/pyicos_subtract.xml" />
+    <tool file="pyicos/pyicos_split.xml" />
+    <tool file="pyicos/pyicos_all.xml" />
+    <tool file="pyicos/pyicos_convert.xml" />    
+    <tool file="pyicos/pyicos_trim.xml" />    
+    <tool file="pyicos/pyicos_filter.xml" />    
+ </section>
+
+  <section name="NGS: Peak Calling" id="peak_calling">
+   <tool file="peak_calling/macs_wrapper.xml" />
+   <tool file="genetrack/genetrack_indexer.xml" />
+   <tool file="genetrack/genetrack_peak_prediction.xml" />
+  </section>
+
+
+</toolbox>

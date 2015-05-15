@@ -108,10 +108,9 @@ public class UserInfoTests {
     }
 
     @Test
-    public void shouldBeAbleToChangeHashAndSalt() throws SQLException, IOException {
-        dbac.resetPassword(testUser2, otherHash, otherSalt);
+    public void shouldBeAbleToChangeHash() throws SQLException, IOException {
+        dbac.resetPassword(testUser2, otherHash);
         assertEquals(otherHash,dbac.getPasswordHash(testUser2));
-        assertEquals(otherSalt,dbac.getPasswordSalt(testUser2));
     }
 
     @Test

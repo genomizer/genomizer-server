@@ -2,9 +2,12 @@ package command.test;
 
 import static org.junit.Assert.*;
 
+import command.Command;
+import command.ValidateException;
+import database.subClasses.UserMethods.UserType;
 import org.junit.Test;
 
-import command.GetGenomeReleaseCommand;
+import command.genomerelease.GetGenomeReleaseCommand;
 
 /**
  * Test used to check that GetGenomeReleaseCommand class
@@ -25,21 +28,35 @@ public class GetGenomeReleaseCommandTest {
 		GetGenomeReleaseCommand c = new GetGenomeReleaseCommand();
 
 		assertNotNull(c);
-
 	}
 
 	/**
 	 * Test used to check that ValidateException is not thrown
-	 * when calling validate method.
+	 * when the user have the required rights.
+	 *
+	 * @throws ValidateException
 	 */
 	@Test
-	public void testValidateAlwaysTrue() {
+	public void testHavingRights() throws ValidateException {
 
-		GetGenomeReleaseCommand c = new GetGenomeReleaseCommand();
+		Command c = new GetGenomeReleaseCommand();
+		c.setFields("uri", null, UserType.GUEST);
 		c.validate();
+	}
 
-		assertTrue(true);
+	/**
+	 * Test used to check that ValidateException is thrown
+	 * when the user doesn't have the required rights.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testNotHavingRights() throws ValidateException {
 
+		Command c = new GetGenomeReleaseCommand();
+		c.setFields("uri", null, UserType.UNKNOWN);
+		c.validate();
+		fail();
 	}
 
 }

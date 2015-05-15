@@ -4,7 +4,8 @@ import static org.junit.Assert.*;
 
 import org.junit.Ignore;
 import org.junit.Test;
-import response.StatusCode;
+import response.HttpStatusCode;
+
 import java.net.HttpURLConnection;
 
 import com.google.gson.JsonObject;
@@ -65,10 +66,10 @@ public class ServerChainTestClass extends ServerAbstractTestClass {
 
 		int logoutResponseCode = sendLogout();
 
-		assertTrue(loginResponseCode == StatusCode.OK);
-		assertTrue(addAnnotationResponseCode == StatusCode.CREATED);
-		assertTrue(getAnnotationResponseCode == StatusCode.OK);
-		assertTrue(logoutResponseCode == StatusCode.OK);
+		assertTrue(loginResponseCode == HttpStatusCode.OK);
+		assertTrue(addAnnotationResponseCode == HttpStatusCode.OK);
+		assertTrue(getAnnotationResponseCode == HttpStatusCode.OK);
+		assertTrue(logoutResponseCode == HttpStatusCode.OK);
 
 	}
 
@@ -111,10 +112,10 @@ public class ServerChainTestClass extends ServerAbstractTestClass {
 
 		int logoutResponseCode = sendLogout();
 
-		assertTrue(loginResponseCode == StatusCode.OK);
-		assertTrue(addAnnotationResponseCode == StatusCode.CREATED);
-		assertTrue(getAnnotationResponseCode == StatusCode.OK);
-		assertTrue(logoutResponseCode == StatusCode.OK);
+		assertTrue(loginResponseCode == HttpStatusCode.OK);
+		assertTrue(addAnnotationResponseCode == HttpStatusCode.OK);
+		assertTrue(getAnnotationResponseCode == HttpStatusCode.OK);
+		assertTrue(logoutResponseCode == HttpStatusCode.OK);
 
 	}
 

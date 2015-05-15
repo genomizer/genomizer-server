@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
 
+import database.containers.ChainFiles;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -17,7 +18,6 @@ import org.junit.Test;
 import database.DatabaseAccessor;
 import database.FilePathGenerator;
 import database.constants.ServerDependentValues;
-import database.containers.ChainFile;
 import database.test.TestInitializer;
 
 public class ChainFilesTest {
@@ -63,7 +63,8 @@ public class ChainFilesTest {
         String fromVersion = "hg19";
         String toVersion = "hg38";
         String fileName = "chainHuman.txt";
-        String filePath = dbac.addChainFile(fromVersion, toVersion, fileName);
+        String filePath = dbac.addChainFile(fromVersion, toVersion, fileName, null);
+        dbac.markReadyForDownload(fromVersion, toVersion, fileName);
 
         assertEquals(ServerDependentValues.UploadURL +
         		fpg.getChainFolderPath("Human", fromVersion, toVersion)
@@ -76,7 +77,7 @@ public class ChainFilesTest {
         String fromVersion = "hg38";
         String toVersion = "hg18";
 
-        ChainFile cf = dbac.getChainFile(fromVersion, toVersion);
+        ChainFiles cf = dbac.getChainFiles(fromVersion, toVersion);
         String filePath = cf.folderPath;
 
         assertEquals("/var/www/data/chain_files/Human/hg38 - hg18/", filePath);
@@ -88,7 +89,7 @@ public class ChainFilesTest {
 
         String fromVersion = "hg99";
         String toVersion = "hg38";
-        ChainFile cf = dbac.getChainFile(fromVersion, toVersion);
+        ChainFiles cf = dbac.getChainFiles(fromVersion, toVersion);
 
         assertNull(cf);
     }
@@ -99,15 +100,16 @@ public class ChainFilesTest {
         String fromVersion = "hg18";
         String toVersion = "hg38";
 
-        assertEquals(1, dbac.removeChainFile(fromVersion, toVersion));
-        assertNull(dbac.getChainFile(fromVersion, toVersion));
+        assertEquals(1, dbac.removeChainFiles(fromVersion, toVersion));
+        assertNull(dbac.getChainFiles(fromVersion, toVersion));
     }
 
     @Test
     public void shouldRemoveChainFilesFromDatabaseAndFileSystem()
     		throws Exception {
 
-        dbac.addChainFile("rn3", "rn5", "rat.over.chain");
+        dbac.addChainFile("rn3", "rn5", "rat.over.chain", null);
+        dbac.markReadyForDownload("rn3", "rn5", "rat.over.chain");
 
         String folderPath = fpg.generateChainFolder("Rat", "rn3", "rn5");
         File folder = new File(folderPath);
@@ -117,8 +119,8 @@ public class ChainFilesTest {
         File mockFile = new File(folderPath + "rat.over.chain");
         assertTrue(mockFile.exists());
 
-        dbac.removeChainFile("rn3", "rn5");
-        assertNull(dbac.getChainFile("rn3", "rn5"));
+        dbac.removeChainFiles("rn3", "rn5");
+        assertNull(dbac.getChainFiles("rn3", "rn5"));
         assertFalse(mockFile.exists());
         assertFalse(folder.exists());
     }
@@ -131,9 +133,11 @@ public class ChainFilesTest {
         String testName1 = "testName1.txt";
         String testName2 = "testName2.txt";
 
-        dbac.addChainFile(fromVersion, toVersion, testName1);
-        dbac.addChainFile(fromVersion, toVersion, testName2);
-        ChainFile cf = dbac.getChainFile(fromVersion, toVersion);
+        dbac.addChainFile(fromVersion, toVersion, testName1, null);
+        dbac.markReadyForDownload(fromVersion, toVersion, testName1);
+        dbac.addChainFile(fromVersion, toVersion, testName2, null);
+        dbac.markReadyForDownload(fromVersion, toVersion, testName2);
+        ChainFiles cf = dbac.getChainFiles(fromVersion, toVersion);
 
         assertEquals(fromVersion, cf.fromVersion);
         assertEquals(toVersion, cf.toVersion);
@@ -153,11 +157,14 @@ public class ChainFilesTest {
         String testName2 = "testName2.txt";
         String testName3 = "testName3.txt";
 
-		dbac.addChainFile(fromVersion, toVersion, testName1);
-		dbac.addChainFile(fromVersion, toVersion, testName2);
-		dbac.addChainFile(fromVersion, toVersion, testName3);
+		dbac.addChainFile(fromVersion, toVersion, testName1, null);
+        dbac.markReadyForDownload(fromVersion, toVersion, testName1);
+		dbac.addChainFile(fromVersion, toVersion, testName2, null);
+        dbac.markReadyForDownload(fromVersion, toVersion, testName2);
+		dbac.addChainFile(fromVersion, toVersion, testName3, null);
+        dbac.markReadyForDownload(fromVersion, toVersion, testName3);
 
-		ChainFile cf = dbac.getChainFile(fromVersion, toVersion);
+		ChainFiles cf = dbac.getChainFiles(fromVersion, toVersion);
 		HashMap<String, String> files =
 				(HashMap<String, String>) cf.getFilesWithStatus();
 

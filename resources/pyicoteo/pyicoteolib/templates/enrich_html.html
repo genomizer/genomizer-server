@@ -1,0 +1,32 @@
+<html>
+<!--  <head>
+    <title>{{ page_title }}</title>
+  </head>-->
+
+  <body>
+    <script language="javascript">
+        function toggleHidden(text) {
+            var div = document.getElementById(text);
+            var a = document.getElementById(text + "_a");
+            if (div.style.display == "none") {
+                div.style.display = "block";
+                a.innerHTML = "Hide text";
+            } else {
+                div.style.display = "none";
+                a.innerHTML = "Show text";
+            }
+        }
+    </script>
+    <div id="img_div">
+      <h3>Enrichment plot</h3>
+      <img src="{{ plot_path }}" />
+    </div>
+    <!--<a href="javascript:void(0);" onclick="javascript:toggleHidden('output_contents')" id="output_contents_a">Show text</a>-->
+    <div id="output_contents" style="display: none;">
+      <h3><a href="{{ bed_path }}">Download Results (BED)</a></h3>
+      <pre>{{ results_output }}</pre>
+    </div>
+  </body>
+
+</html>
+

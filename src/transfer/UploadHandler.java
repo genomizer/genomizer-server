@@ -6,13 +6,16 @@ import com.sun.net.httpserver.HttpExchange;
 import command.Command;
 import command.ValidateException;
 import database.DatabaseAccessor;
+import database.containers.ChainFile;
 import database.containers.FileTuple;
+import database.containers.GenomeFile;
+import database.containers.HasCheckSumMD5;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUpload;
 import org.apache.commons.fileupload.RequestContext;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import response.StatusCode;
+import response.HttpStatusCode;
 import server.*;
 
 import java.io.File;
@@ -20,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
+import java.nio.file.Files;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
@@ -53,7 +57,7 @@ public class UploadHandler {
                 "</body></html>").getBytes();
         Debug.log("Serving upload form...");
         exchange.getResponseHeaders().set("Content-Type", "text/html");
-        exchange.sendResponseHeaders(StatusCode.OK, form.length);
+        exchange.sendResponseHeaders(HttpStatusCode.OK, form.length);
         OutputStream out = exchange.getResponseBody();
         out.write(form);
         out.close();
@@ -99,11 +103,15 @@ public class UploadHandler {
         // Move uploaded files to uploadDir.
         URI requestURI = exchange.getRequestURI();
         HashMap<String,String> reqParams = new HashMap<>();
-        Util.parseURI(requestURI, reqParams);
+        String reqPath = Util.parseURI(requestURI, reqParams);
         String absUploadPath = null;
         if (reqParams.containsKey("path")) {
             Debug.log("Using legacy upload method ('upload?path=/absolute/path').");
             absUploadPath = reqParams.get("path");
+        }
+        else {
+            String relPath = reqPath.substring(this.handlerRoot.length() + 1);
+            absUploadPath = this.uploadDir + relPath;
         }
 
         for (FileItem fileItem : fileItems) {
@@ -111,10 +119,7 @@ public class UploadHandler {
                 File outFile = new File(absUploadPath == null
                         ? this.uploadDir + fileItem.getName()
                         : absUploadPath);
-                if (!verifyMD5(absUploadPath, fileItem)) {
-                    throw new ValidateException(StatusCode.BAD_REQUEST,
-                            "Incorrect checksum!");
-                }
+                commitFile(absUploadPath, fileItem);
                 outFile.getParentFile().mkdirs();
                 fileItem.write(outFile);
                 Debug.log("Successfully saved the uploaded file to '"
@@ -124,29 +129,82 @@ public class UploadHandler {
 
         // Report success to the client.
         byte [] resp = "OK".getBytes();
-        exchange.sendResponseHeaders(StatusCode.CREATED, resp.length);
+        exchange.sendResponseHeaders(HttpStatusCode.OK, resp.length);
         OutputStream out = exchange.getResponseBody();
         out.write(resp);
         out.close();
     }
 
-    private boolean verifyMD5(String absUploadPath, FileItem fileItem)
-            throws SQLException, IOException {
+    // Verify the file's integrity and mark it as available for downloading.
+    private void commitFile(String absUploadPath, FileItem fileItem)
+            throws SQLException, ValidateException, IOException {
         try( DatabaseAccessor db = Command.initDB() )
         {
-            FileTuple ft = db.getFileTuple(absUploadPath);
-            if (ft == null)
-                return false;
-            if (ft.checkSumMD5 != null) {
-                String actualMD5 = DigestUtils.md5Hex(fileItem.getInputStream());
-                if (!actualMD5.equals(ft.checkSumMD5)) {
-                    Debug.log("MD5 verification error. Expected: "
-                            + ft.checkSumMD5 + ", actual: " + actualMD5 + ".");
-                    return false;
-                }
+            String actualMD5 = DigestUtils.md5Hex(fileItem.getInputStream());
+
+            FileTuple  ft = db.getFileTupleInProgress(absUploadPath);
+            if (ft != null) {
+                verifyOrUpdateMD5(ft, actualMD5, db);
+                int count = db.markReadyForDownload(ft);
+                checkMarkReadyForDownloadSucceeded(count, ft.filename);
+                return;
             }
-            Debug.log("MD5 checksum verified successfully.");
-            return true;
+
+            GenomeFile gf = db.getGenomeReleaseFileInProgress(absUploadPath);
+            if (gf != null) {
+                verifyOrUpdateMD5(gf, actualMD5, db);
+                int count = db.markReadyForDownload(gf);
+                checkMarkReadyForDownloadSucceeded(count, gf.fileName);
+                return;
+            }
+
+            ChainFile cf = db.getChainFileInProgress(absUploadPath);
+            if (cf != null) {
+                verifyOrUpdateMD5(cf, actualMD5, db);
+                int count = db.markReadyForDownload(cf);
+                checkMarkReadyForDownloadSucceeded(count, cf.fileName);
+                return;
+            }
+
+            Debug.log("File '" + absUploadPath + "' not registered in the database!");
+            Files.delete(new File(absUploadPath).toPath());
+            throw new ValidateException(HttpStatusCode.BAD_REQUEST,
+                    "Request to upload a file that wasn't previously registered!");
+        }
+    }
+
+    // Helper function for 'commitFile'.
+    private void checkMarkReadyForDownloadSucceeded (int countUpdated, String fileName)
+            throws ValidateException {
+        if (countUpdated <= 0) {
+            throw new ValidateException(HttpStatusCode.INTERNAL_SERVER_ERROR,
+                    "Couldn't mark file '" + fileName + "' as ready for download!");
+        }
+    }
+
+    // Verify the file's MD5 checksum.
+    // If the client hasn't sent us one, just save the actual checksum.
+    private void verifyOrUpdateMD5(HasCheckSumMD5 file, String actualMD5, DatabaseAccessor db)
+            throws SQLException, ValidateException {
+        String checkSumMD5 = file.getCheckSumMD5();
+
+        if (checkSumMD5 != null) {
+            if (!actualMD5.equals(checkSumMD5)) {
+                Debug.log("MD5 verification error. Expected: "
+                        + checkSumMD5 + ", actual: " + actualMD5 + ".");
+                throw new ValidateException(HttpStatusCode.BAD_REQUEST,
+                        "Incorrect checksum!");
+            }
+            else {
+                Debug.log("MD5 checksum verified successfully.");
+                return;
+            }
+        }
+        else {
+            Debug.log("MD5 checksum not provided by the client: "
+                    + "updating the database with actual checksum.");
+            file.setCheckSumMD5(db, actualMD5);
+            return;
         }
     }
 }

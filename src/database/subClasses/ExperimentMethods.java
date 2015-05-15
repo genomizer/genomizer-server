@@ -254,7 +254,7 @@ public class ExperimentMethods {
      */
     public Experiment fillFiles(Experiment e) throws SQLException {
 
-        String query = "SELECT * FROM File " + "WHERE ExpID ~~* ?";
+        String query = "SELECT * FROM File " + "WHERE ExpID ~~* ? AND Status = 'Done'";
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setString(1, e.getID());
         ResultSet rs = stmt.executeQuery();
@@ -347,7 +347,7 @@ public class ExperimentMethods {
     }
 
     /**
-     * Recursively deletes a folder with all it's subfolders and
+     * Recursively deletes a folder with all its subfolders and
      * files.
      *
      * @param folder

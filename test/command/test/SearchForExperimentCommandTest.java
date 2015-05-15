@@ -1,10 +1,14 @@
 package command.test;
 
 import static org.junit.Assert.*;
-import org.junit.Before;
+
+import command.Command;
+import command.ValidateException;
+import database.constants.MaxLength;
+import database.subClasses.UserMethods.UserType;
+import org.junit.Ignore;
 import org.junit.Test;
-import command.CommandFactory;
-import command.SearchForExperimentsCommand;
+import command.search.SearchCommand;
 
 /**
  * Test class used to check that the SearchForExperimentCommand class
@@ -15,37 +19,86 @@ import command.SearchForExperimentsCommand;
  */
 public class SearchForExperimentCommandTest {
 
-	private SearchForExperimentsCommand command;
-
-	@Before
-	public void setup() {
-
-		CommandFactory factory = new CommandFactory();
-		command = (SearchForExperimentsCommand) factory.createSearchForExperimentCommand("/search/annotations=Exp1[ExpID]");
-
-	}
-
 	/**
-	 * Test used to check that a search command object can
-	 * be created and is not null.
+	 * Test used to check that ValidateException is thrown if the
+	 * file experiment id length is to long.
+	 * @throws ValidateException
 	 */
-	@Test
-	public void shouldCreateSearchCommand() {
+	@Ignore
+	@Test(expected = ValidateException.class)
+	public void testValidateFileExpIdLength() throws ValidateException {
 
-		assertNotNull(command);
+		String uri = "zz";
+		for(int i = 0; i < MaxLength.FILE_EXPID + 1; i++) {
+			uri  += "a";
+		}
 
+		Command c = new SearchCommand();
+		c.setFields(uri, null, UserType.ADMIN);
+		c.validate();
+		fail("Expected ValidateException.");
 	}
 
 	/**
-	 * Method used to check that strings are equal.
+	 * Test used to check that no validateException is thrown and
+	 * that everything works properly if everything is correctly formatted.
 	 *
-	 * @throws Exception
+	 * @throws ValidateException
 	 */
 	@Test
-	public void shouldParseSearchString() throws Exception {
+	public void textValidateProperlyFormatted() throws ValidateException {
+		Command c = new SearchCommand();
+		c.setFields("Hello", null, UserType.ADMIN);
+		c.validate();
+		assertTrue(true);
+	}
 
-		assertEquals("Exp1[ExpID]",command.getAnnotations());
+	//TODO Add this test again after custom regex has beeen implemented.
 
+	/**
+	 * Test used to check that ValidateException is thrown
+	 * when invalid characters are used
+	 *
+	 * @throws ValidateException
+	 */
+	@Ignore
+	@Test(expected = ValidateException.class)
+	public void testValidateIncorrectlyFormatted() throws ValidateException {
+
+		Command c = new SearchCommand();
+		c.setFields("uri��", null, UserType.ADMIN);
+		c.validate();
+
+		fail("Expected ValidateException to be thrown.");
+	}
+
+	/**
+	 * Test used to check that ValidateException is not thrown
+	 * when the user have the required rights.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test
+	public void testHavingRights() throws ValidateException {
+
+		Command c = new SearchCommand();
+		c.setFields("uri", null, UserType.GUEST);
+		c.validate();
+	}
+
+	/**
+	 * Test used to check that ValidateException is thrown
+	 * when the user doesn't have the required rights.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testNotHavingRights() throws ValidateException {
+
+		Command c = new SearchCommand();
+		c.setFields("uri", null, UserType.UNKNOWN);
+		c.validate();
+		fail();
 	}
 
 }

@@ -7,7 +7,7 @@ import java.net.HttpURLConnection;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import response.StatusCode;
+import response.HttpStatusCode;
 
 import com.google.gson.JsonObject;
 
@@ -42,10 +42,10 @@ public class ServerGenomeReleaseTest extends ServerAbstractTestClass {
 
 		sendLogout();
 
-		assertTrue(StatusCode.CREATED == firstAdd);
-		assertTrue(StatusCode.OK == firstRemove);
-		assertTrue(StatusCode.CREATED == secondAdd);
-		assertTrue(StatusCode.OK == secondDelete);
+		assertTrue(HttpStatusCode.OK == firstAdd);
+		assertTrue(HttpStatusCode.OK == firstRemove);
+		assertTrue(HttpStatusCode.OK == secondAdd);
+		assertTrue(HttpStatusCode.OK == secondDelete);
 
 	}
 
@@ -69,7 +69,7 @@ public class ServerGenomeReleaseTest extends ServerAbstractTestClass {
 
 		sendLogout();
 
-		assertTrue(StatusCode.BAD_REQUEST == result);
+		assertTrue(HttpStatusCode.BAD_REQUEST == result);
 
 	}
 
@@ -92,7 +92,7 @@ public class ServerGenomeReleaseTest extends ServerAbstractTestClass {
 		int responseCode = con.getResponseCode();
 		sendLogout();
 
-		assertTrue(responseCode == StatusCode.BAD_REQUEST);
+		assertTrue(responseCode == HttpStatusCode.BAD_REQUEST);
 
 	}
 

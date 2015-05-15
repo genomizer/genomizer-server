@@ -3,13 +3,14 @@ package response.test;
 import static org.junit.Assert.*;
 import java.util.ArrayList;
 
+import command.annotation.GetAnnotationCommand;
+import database.subClasses.UserMethods.UserType;
 import database.test.TestInitializer;
 import org.junit.Before;
 import org.junit.Test;
 import response.AnnotationInformation;
 import response.GetAnnotationInformationResponse;
 import response.Response;
-import command.GetAnnotationInformationCommand;
 
 /**
  * Test used to check that GetAnnotationInformationResponse
@@ -49,7 +50,8 @@ public class GetAnnotationInformationResponseTest {
 
 	@Test
 	public void testDatabaseConnection() {
-		GetAnnotationInformationCommand cmd = new GetAnnotationInformationCommand();
+		GetAnnotationCommand cmd = new GetAnnotationCommand();
+		cmd.setFields("uri",null ,UserType.ADMIN);
 		Response rsp = cmd.execute();
 		rsp.getBody();
 	}

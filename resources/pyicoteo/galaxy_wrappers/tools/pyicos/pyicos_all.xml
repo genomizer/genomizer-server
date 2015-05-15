@@ -1,0 +1,66 @@
+<tool id="pyicos_all" name="Complete Pyicos">
+  <description>All Pyicos exposed</description>
+  <command interpreter="python">
+      pyicos all $input $output --frag-size $extension -f $input_format -F $output_format $is_input_open $is_output_open --control $control --control-format $control_format $is_control_open --round $round --split-proportion $split_proportion --split-absolute $split_absolute
+  </command>
+  <inputs>
+    <param format="tabular" name="input" type="data" label="Input file"/>
+    <param  name="input_format" type="select" label="Input format" format="text">
+        <option value="bed" selected="true">Bed</option>
+        <option value="sam">Sam</option>
+        <option value="eland">Eland</option>
+        <option value="bed_wig">Wiggle(Bed)</option>
+        <option value="bedpk">Bed pk</option>
+    </param>
+    <param  name="is_input_open" type="boolean" label="Is input half-open?" truevalue="--open-input" falsevalue=""/>
+
+    <param format="tabular" name="control" type="data" label="Control file"/>
+    <param  name="control_format" type="select" label="Control format" format="text">
+        <option value="bed" selected="true">Bed</option>
+        <option value="sam">Sam</option>
+        <option value="eland">Eland</option>
+        <option value="bed_wig">Wiggle(Bed)</option>
+        <option value="bedpk">Bed pk</option>
+    </param>
+    <param  name="is_control_open" type="boolean" label="Is control half-open?" truevalue="--open-control" falsevalue=""/>
+
+    <param  name="output_format" type="select" label="Output format">
+        <option value="bed" selected="true">Bed</option>
+        <option value="sam">Sam</option>
+        <option value="eland">Eland</option>
+        <option value="bed_wig">Wiggle(Bed)</option>
+        <option value="variable_wig">Wiggle(Variable)</option>
+        <option value="bedpk">Bed pk</option>
+    </param>
+    <param  name="is_output_open" type="boolean" label="Is output half-open?" truevalue="--open-output" falsevalue=""/>
+
+    <param  name="tolerated_duplicates" type="integer" label="Tolerated Duplicates" size="4" value="3"/>
+    <param  name="extension" type="integer" label="Extension length" size="4" value="100"/>
+    <param  name="label" type="boolean" label="Is control half-open?" truevalue="--open-control" falsevalue=""/>
+    <param  name="round" type="boolean" label="Return the heights rounded to the closest integer" truevalue="--round" falsevalue="" checked="true"/>
+    <param  name="split_proportion" type="float" label="Split Proportion" size="4" value="0.9"/>
+    <param  name="split_absolute" type="integer" label="Split Absolute" size="4" value="0"/>
+
+  </inputs>
+  <outputs>
+    <data format="tabular" name="output" />
+  </outputs>
+  <help>
+        Extend the reads of a bed file to the desired length, or a calculated 
+
+        usage: pyicos all input output
+                  [-h] [-o] [-f INPUT_FORMAT] [--debug] [--no-sort] [--silent]
+                  [--disable-cache] [--control CONTROL] [--control-format
+                  CONTROL_FORMAT] [--open-control] [--region REGION] [-O] [-F
+                  OUTPUT_FORMAT] [-x FRAG_SIZE] [--round] [--label LABEL]
+                  [--span SPAN] [--no-subtract] [--discard DISCARD] [--p-value
+                  P_VALUE] [--height-limit HEIGHT_LIMIT] [--correction
+                  CORRECTION] [--trim-proportion TRIM_PROPORTION] [-p SPECIES]
+                  [--duplicates DUPLICATES] [--masker MASKER] [--max-delta
+                  MAX_DELTA] [--min-delta MIN_DELTA] [--height-filter
+                  HEIGHT_FILTER] [--delta-step DELTA_STEP] [--normalize]
+                  [--extend] [--subtract] [--filter] [--poisson] [--modfdr]
+                  [--remduplicates] [--split] [--trim] [--strcorr]
+                  [--remregions] [--remartifacts]
+  </help>
+</tool>

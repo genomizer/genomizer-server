@@ -34,7 +34,7 @@ public class ServerSettings {
 					+ "wwwTunnelHost = " + wwwTunnelHost + "\n"
 					+ "wwwTunnelPort = " + wwwTunnelPort + "\n"
 					+ "wwwTunnelPath = " + wwwTunnelPath + "\n"
-					+ "genomizerPort = " + genomizerPort + "\n"
+					+ "genomizerPort  = " + genomizerPort + "\n"
 					+ "fileLocation = " + fileLocation + "\n"
 					+ "nrOfProcessThreads = " + nrOfProcessThreads + "\n"
 					+ "bowtieLocation = " + bowtieLocation + "\n"
@@ -70,17 +70,12 @@ public class ServerSettings {
 	}
 
 	private static void nullCheck(int parameter, String name) {
-		if (parameter == -1) {
-			String msg = "Error! parameter " + name + " is not set. Check in " +
-					"settings.cfg if it is set and spelled correctly, " +
-					"capitalization does not matter.\nExiting";
-			Debug.log(msg);
-			ErrorLogger.log("SYSTEM", msg);
-			System.exit(1);
+		if (parameter < 0) {
+			nullCheck(null, name);
 		}
 	}
 
-	private static void nullCheck(String parameter, String name) {
+	private static void nullCheck(Object parameter, String name) {
 		if (parameter == null) {
 			String msg = "Error! parameter " + name + " is not set. Check in " +
 					"settings.cfg if it is set and spelled correctly, " +
@@ -134,6 +129,7 @@ public class ServerSettings {
 				case "wwwtunnelpath":
 					wwwTunnelPath = value;
 					break;
+				case "genomizerhttpport":
 				case "genomizerport":
 					genomizerPort = Integer.parseInt(value);
 					break;

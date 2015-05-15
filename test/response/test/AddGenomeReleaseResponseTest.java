@@ -12,7 +12,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import response.AddGenomeReleaseResponse;
-import response.StatusCode;
+import response.HttpStatusCode;
 
 /**
  * Class used to test the AddGenomeReleaseResponse class.
@@ -44,7 +44,7 @@ public class AddGenomeReleaseResponseTest {
 		ArrayList<String> array = new ArrayList<String>();
 		array.add("FIRST");
 		array.add("SECOND");
-		AddGenomeReleaseResponse rsp = new AddGenomeReleaseResponse(StatusCode.CREATED, array);
+		AddGenomeReleaseResponse rsp = new AddGenomeReleaseResponse(HttpStatusCode.OK, array);
 		String checker = rsp.getBody();
 		assertEquals("[\"FIRST\",\"SECOND\"]", checker);
 
