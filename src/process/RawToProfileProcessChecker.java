@@ -68,4 +68,6 @@ public class RawToProfileProcessChecker {
 	public boolean shouldRunRatioCalc() {
 		return shouldRunRatioCalculation;
 	}
+
+	public boolean shouldRunRemoveDuplicates() { return shouldRunBowTie; }
 }
