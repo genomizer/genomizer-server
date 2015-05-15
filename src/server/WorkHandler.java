@@ -1,9 +1,9 @@
 package server;
 
-import command.ProcessCommand;
-import command.ProcessStatus;
+import command.Process;
+import command.process.PutProcessCommand;
 import response.Response;
-import response.StatusCode;
+import response.HttpStatusCode;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -25,18 +25,18 @@ public class WorkHandler implements Runnable {
 		long currentTime = System.currentTimeMillis();
 
 		// List to store processes to be removed
-		LinkedList<ProcessCommand> toBeRemoved = new LinkedList<>();
+		LinkedList<PutProcessCommand> toBeRemoved = new LinkedList<>();
 
-		LinkedList<ProcessCommand> processesList = workPool.getProcesses();
+		LinkedList<PutProcessCommand> processesList = workPool.getProcesses();
 
 		/* Loop through all processes and check statuses */
-		for (ProcessCommand proc : processesList) {
+		for (PutProcessCommand proc : processesList) {
 
-			ProcessStatus procStat = workPool.getProcessStatus(proc);
+			Process procStat = workPool.getProcessStatus(proc);
 			String statusString = procStat.status;
 
-			if (statusString.equals(ProcessStatus.STATUS_FINISHED)
-					|| statusString.equals(ProcessStatus.STATUS_CRASHED)) {
+			if (statusString.equals(Process.STATUS_FINISHED)
+					|| statusString.equals(Process.STATUS_CRASHED)) {
 				long processTimeAdded = procStat.timeAdded;
 				long timeDifference = currentTime - processTimeAdded;
 
@@ -45,7 +45,7 @@ public class WorkHandler implements Runnable {
 				}
 			}
 		}
-		for (ProcessCommand proc : toBeRemoved) {
+		for (PutProcessCommand proc : toBeRemoved) {
 			Debug.log("Removing old process status: " + proc.getExpId());
 			workPool.removeProcess(proc);
 		}
@@ -61,45 +61,45 @@ public class WorkHandler implements Runnable {
 
 		while (true) {
 
-			ProcessCommand processCommand = workPool.getProcess();
-			ProcessStatus processStatus = workPool.getProcessStatus
-						(processCommand);
+			PutProcessCommand putProcessCommand = workPool.getProcess();
+			Process process = workPool.getProcessStatus
+						(putProcessCommand);
 
 
-			if (processCommand != null && processStatus != null) {
+			if (putProcessCommand != null && process != null) {
 				Debug.log("Executing process in experiment "
-						+ processCommand.getExpId());
+						+ putProcessCommand.getExpId());
 
-				processStatus.status = ProcessStatus.STATUS_STARTED;
+				process.status = Process.STATUS_STARTED;
 
 				try {
-					processCommand.setFilePaths();
+					putProcessCommand.setFilePaths();
 				} catch (SQLException | IOException e) {
 					Debug.log(e.getMessage());
-					ErrorLogger.log(processStatus.author,
+					ErrorLogger.log(process.author,
 							"Could not run process command: " +  e.getMessage());
-					processStatus.status = ProcessStatus.STATUS_CRASHED;
+					process.status = Process.STATUS_CRASHED;
 
 					continue;
 				}
 
-				processStatus.outputFiles = processCommand.getFilePaths();
-				processStatus.timeStarted = System.currentTimeMillis();
+				process.outputFiles = putProcessCommand.getFilepaths();
+				process.timeStarted = System.currentTimeMillis();
 
 				try {
-					Response resp = processCommand.execute();
+					Response resp = putProcessCommand.execute();
 					Debug.log("AFTER EXECUTE PROCESS");
-					if (resp.getCode()==StatusCode.CREATED){
-						processStatus.status = ProcessStatus.STATUS_FINISHED;
+					if (resp.getCode()== HttpStatusCode.OK){
+						process.status = Process.STATUS_FINISHED;
 					} else {
-						processStatus.status = ProcessStatus.STATUS_CRASHED;
+						process.status = command.Process.STATUS_CRASHED;
 					}
 				} catch (NullPointerException e){
-					processStatus.status = ProcessStatus.STATUS_CRASHED;
+					process.status = Process.STATUS_CRASHED;
 				}
 
 
-				processStatus.timeFinished = System.currentTimeMillis();
+				process.timeFinished = System.currentTimeMillis();
 
 
 			}
