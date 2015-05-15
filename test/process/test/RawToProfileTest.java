@@ -11,9 +11,9 @@ import process.RawToProfileConverter;
 public class RawToProfileTest {
 	RawToProfileConverter rtp = null;
 	String path = "test/male.sam";
-	String bowTie = "bowtie -a -m 1 --best -p 10 -v 2 ";
+	String bowTie = "-a -m 1 --best -p 10 -v 2 resources/bowtie/indexes/e_coli.1.ebwt";
 	//"d_melanogaster_fb5_22 -q reads/MOF_male_wt_reads_sample.fastq -S " +path;
-	String[] parameters = new String[]{bowTie};
+	String[] parameters = new String[]{bowTie, "y", "", "","","","",""};
 
 	@Before
 	public void setup() {
@@ -85,4 +85,13 @@ public class RawToProfileTest {
 //	public void SpecificShouldGetString() {
 //		rtp.specificParamProcedure(new String[]{""});
 //	}
+
+	@Test
+	public void shouldProduceNewSamFile() throws ProcessException{
+		String inFolder = "resources/processTest";
+		String outFilePath = "resources/processTest";
+		rtp.runRemoveDuplicates(
+				"resources/processTest/test.sam",
+				"resources/processTest/test_without_duplicates.sam", null);
+	}
 }
