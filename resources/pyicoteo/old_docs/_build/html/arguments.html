@@ -1,0 +1,3115 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Optional arguments &mdash; pyicos 1.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="pyicos 1.2 documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="index.html">pyicos 1.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Optional arguments</a><ul>
+<li><a class="reference internal" href="#trim">trim</a></li>
+<li><a class="reference internal" href="#plot">plot</a></li>
+<li><a class="reference internal" href="#convert">convert</a></li>
+<li><a class="reference internal" href="#remduplicates">remduplicates</a></li>
+<li><a class="reference internal" href="#enrichma">enrichma</a></li>
+<li><a class="reference internal" href="#extend">extend</a></li>
+<li><a class="reference internal" href="#remregions">remregions</a></li>
+<li><a class="reference internal" href="#modfdr">modfdr</a></li>
+<li><a class="reference internal" href="#filter">filter</a></li>
+<li><a class="reference internal" href="#strcorr">strcorr</a></li>
+<li><a class="reference internal" href="#split">split</a></li>
+<li><a class="reference internal" href="#poisson">poisson</a></li>
+<li><a class="reference internal" href="#discard">discard</a></li>
+<li><a class="reference internal" href="#push">push</a></li>
+<li><a class="reference internal" href="#callpeaks">callpeaks</a></li>
+<li><a class="reference internal" href="#checkrepcount">checkrepcount</a></li>
+<li><a class="reference internal" href="#subtract">subtract</a></li>
+<li><a class="reference internal" href="#enrichment">enrichment</a></li>
+<li><a class="reference internal" href="#enrichcount">enrichcount</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/arguments.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="optional-arguments">
+<h1>Optional arguments<a class="headerlink" href="#optional-arguments" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="trim">
+<h2>trim<a class="headerlink" href="#trim" title="Permalink to this headline">¶</a></h2>
+<dl class="cmdoption">
+<dt id="cmdoption--help">
+<tt class="descname">--help</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">-h</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--help" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show this help message and exit</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-o">
+<tt class="descname">-o</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--open-experiment</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-o" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines if the experiment is half-open or closed notation. [Default False]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-f">
+<tt class="descname">-f</tt><tt class="descclassname"> EXPERIMENT_FORMAT</tt><tt class="descclassname">, </tt><tt class="descname">--experiment-format</tt><tt class="descclassname"> EXPERIMENT_FORMAT</tt><a class="headerlink" href="#cmdoption-f" title="Permalink to this definition">¶</a></dt>
+<dd><p>The format the experiment file is written as. The options are (&#8216;eland&#8217;, &#8216;bed&#8217;, &#8216;bed_wig&#8217;, &#8216;bed_pk&#8217;, &#8216;bed_spk&#8217;, &#8216;sam&#8217;, &#8216;bam&#8217;, &#8216;counts&#8217;). [Default pk]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--debug">
+<tt class="descname">--debug</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--debug" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--no-sort">
+<tt class="descname">--no-sort</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--no-sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Force skip the sorting step. WARNING: Use only if you know what you are doing. Processing unsorted files assuming they are will outcome in erroneous results</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--force-sort">
+<tt class="descname">--force-sort</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--force-sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Force the sorting step</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--silent">
+<tt class="descname">--silent</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--silent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run without printing in screen</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--disable-cache">
+<tt class="descname">--disable-cache</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--disable-cache" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disable internal reading cache. When Clustering low coverage files, it will increase speed and improve memory usage. With very read dense files, the speed will decrease.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--keep-temp">
+<tt class="descname">--keep-temp</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--keep-temp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Keep the temporary files</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--postscript">
+<tt class="descname">--postscript</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--postscript" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the output graphs in postscript format instead of .png</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--showplots">
+<tt class="descname">--showplots</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--showplots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show the plots as they are being calculated by matplotlib. Note that the execution will be stopped until you close the window pop up that will arise</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--label1">
+<tt class="descname">--label1</tt><tt class="descclassname"> LABEL1</tt><a class="headerlink" href="#cmdoption--label1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the first label of the graphs.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--label2">
+<tt class="descname">--label2</tt><tt class="descclassname"> LABEL2</tt><a class="headerlink" href="#cmdoption--label2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the second label of the graphs.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--tempdir">
+<tt class="descname">--tempdir</tt><tt class="descclassname"> TEMPDIR</tt><a class="headerlink" href="#cmdoption--tempdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the temporary directory where Pyicos will write. By default Pyicos will use the temporary directory the system provides (For example, /tmp in unix systems)</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--samtools">
+<tt class="descname">--samtools</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--samtools" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use samtools for reading BAM files [Default: Pyicos uses its own library] (reading BAM works without samtools for convert, extend, and other operations, but not for enrichment yet)]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--skip-header">
+<tt class="descname">--skip-header</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--skip-header" title="Permalink to this definition">¶</a></dt>
+<dd><p>Skip writing the header for the output file. [Default False]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-O">
+<tt class="descname">-O</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--open-output</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-O" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define if the output is half-open or closed notation.  [Default closed]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-F">
+<tt class="descname">-F</tt><tt class="descclassname"> OUTPUT_FORMAT</tt><tt class="descclassname">, </tt><tt class="descname">--output-format</tt><tt class="descclassname"> OUTPUT_FORMAT</tt><a class="headerlink" href="#cmdoption-F" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format desired for the output. You can choose between (&#8216;eland&#8217;, &#8216;bed&#8217;, &#8216;bed_wig&#8217;, &#8216;variable_wig&#8217;, &#8216;bed_pk&#8217;, &#8216;bed_spk&#8217;). WARNING, for some operations, some outputs are not valid. See operation help for more info.  [default pk]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--round">
+<tt class="descname">--round</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--round" title="Permalink to this definition">¶</a></dt>
+<dd><p>Round the final results to an integer</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--trim-absolute">
+<tt class="descname">--trim-absolute</tt><tt class="descclassname"> TRIM_ABSOLUTE</tt><a class="headerlink" href="#cmdoption--trim-absolute" title="Permalink to this definition">¶</a></dt>
+<dd><p>The height threshold to trim the clusters. Overrides the trim proportion. [Default 0]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--trim-proportion">
+<tt class="descname">--trim-proportion</tt><tt class="descclassname"> TRIM_PROPORTION</tt><a class="headerlink" href="#cmdoption--trim-proportion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fraction of the cluster height below which the peak is trimmed. Example: For a cluster of height 40, if the flag is 0.05, 40*0.05=2. Every cluster will be trimmed to that height. A position of height 1 is always considered insignificant, no matter what the cluster height is. [Default 0.3]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--wig-label">
+<tt class="descname">--wig-label</tt><tt class="descclassname"> WIG_LABEL</tt><a class="headerlink" href="#cmdoption--wig-label" title="Permalink to this definition">¶</a></dt>
+<dd><p>The label that will identify the experiment in the WIG tracks.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--remlabels">
+<tt class="descname">--remlabels</tt><tt class="descclassname"> REMLABELS</tt><a class="headerlink" href="#cmdoption--remlabels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Discard the reads that have this particular label.  Example: &#8211;discard chr1 will discard all reads with chr1 as tag. You can specify multiple tags to discard using the following notation &#8211;discard chr1 chr2 tagN</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--span">
+<tt class="descname">--span</tt><tt class="descclassname"> SPAN</tt><a class="headerlink" href="#cmdoption--span" title="Permalink to this definition">¶</a></dt>
+<dd><p>The span of the variable and fixed wig formats [Default 40]</p>
+</dd></dl>
+
+</div>
+<div class="section" id="plot">
+<h2>plot<a class="headerlink" href="#plot" title="Permalink to this headline">¶</a></h2>
+<dl class="cmdoption">
+<dt id="cmdoption-h">
+<tt class="descname">-h</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--help</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-h" title="Permalink to this definition">¶</a></dt>
+<dd><p>show this help message and exit</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--debug">
+<tt class="descname">--debug</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--debug" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--no-sort">
+<tt class="descname">--no-sort</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--no-sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Force skip the sorting step. WARNING: Use only if you know what you are doing. Processing unsorted files assuming they are will outcome in erroneous results</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--force-sort">
+<tt class="descname">--force-sort</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--force-sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Force the sorting step</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--silent">
+<tt class="descname">--silent</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--silent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run without printing in screen</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--disable-cache">
+<tt class="descname">--disable-cache</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--disable-cache" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disable internal reading cache. When Clustering low coverage files, it will increase speed and improve memory usage. With very read dense files, the speed will decrease</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--keep-temp">
+<tt class="descname">--keep-temp</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--keep-temp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Keep the temporary files</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--postscript">
+<tt class="descname">--postscript</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--postscript" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the output graphs in postscript format instead of .png</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--showplots">
+<tt class="descname">--showplots</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--showplots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show the plots as they are being calculated by matplotlib. Note that the execution will be stopped until you close the window pop up that will arise</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--label1">
+<tt class="descname">--label1</tt><tt class="descclassname"> label1</tt><a class="headerlink" href="#cmdoption--label1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the first label of the graphs.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--label2">
+<tt class="descname">--label2</tt><tt class="descclassname"> label2</tt><a class="headerlink" href="#cmdoption--label2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the second label of the graphs.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--tempdir">
+<tt class="descname">--tempdir</tt><tt class="descclassname"> tempdir</tt><a class="headerlink" href="#cmdoption--tempdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the temporary directory where Pyicos will write. By default Pyicos will use the temporary directory the system provides (For example, /tmp in unix systems)</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--samtools">
+<tt class="descname">--samtools</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--samtools" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use samtools for reading BAM files [Default: Pyicos uses its own library] (reading BAM works without samtools for convert, extend, and other operations, but not for enrichment yet)]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--skip-header">
+<tt class="descname">--skip-header</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--skip-header" title="Permalink to this definition">¶</a></dt>
+<dd><p>Skip writing the header for the output file. [Default False]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--zscore">
+<tt class="descname">--zscore</tt><tt class="descclassname"> zscore</tt><a class="headerlink" href="#cmdoption--zscore" title="Permalink to this definition">¶</a></dt>
+<dd><p>Significant Z-score value. [Default 2]</p>
+</dd></dl>
+
+</div>
+<div class="section" id="convert">
+<h2>convert<a class="headerlink" href="#convert" title="Permalink to this headline">¶</a></h2>
+<dl class="cmdoption">
+<dt id="cmdoption-h">
+<tt class="descname">-h</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--help</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-h" title="Permalink to this definition">¶</a></dt>
+<dd><p>show this help message and exit</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-o">
+<tt class="descname">-o</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--open-experiment</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-o" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines if the experiment is half-open or closed notation. [Default False]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-f">
+<tt class="descname">-f</tt><tt class="descclassname"> EXPERIMENT_FORMAT</tt><tt class="descclassname">, </tt><tt class="descname">--experiment-format</tt><tt class="descclassname"> EXPERIMENT_FORMAT</tt><a class="headerlink" href="#cmdoption-f" title="Permalink to this definition">¶</a></dt>
+<dd><p>The format the experiment file is written as. The options are (&#8216;eland&#8217;, &#8216;bed&#8217;, &#8216;bed_wig&#8217;, &#8216;bed_pk&#8217;, &#8216;bed_spk&#8217;, &#8216;sam&#8217;, &#8216;bam&#8217;, &#8216;counts&#8217;). [Default pk]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--debug">
+<tt class="descname">--debug</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--debug" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--no-sort">
+<tt class="descname">--no-sort</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--no-sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Force skip the sorting step. WARNING: Use only if you know what you are doing. Processing unsorted files assuming they are will outcome in erroneous results</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--force-sort">
+<tt class="descname">--force-sort</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--force-sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Force the sorting step</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--silent">
+<tt class="descname">--silent</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--silent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run without printing in screen</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--disable-cache">
+<tt class="descname">--disable-cache</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--disable-cache" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disable internal reading cache. When Clustering low coverage files, it will increase speed and improve memory usage. With very read dense files, the speed will decrease.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--keep-temp">
+<tt class="descname">--keep-temp</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--keep-temp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Keep the temporary files</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--postscript">
+<tt class="descname">--postscript</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--postscript" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the output graphs in postscript format instead of .png</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--showplots">
+<tt class="descname">--showplots</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--showplots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show the plots as they are being calculated by matplotlib. Note that the execution will be stopped until you close the window pop up that will arise</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--label1">
+<tt class="descname">--label1</tt><tt class="descclassname"> LABEL1</tt><a class="headerlink" href="#cmdoption--label1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the first label of the graphs.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--label2">
+<tt class="descname">--label2</tt><tt class="descclassname"> LABEL2</tt><a class="headerlink" href="#cmdoption--label2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the second label of the graphs.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--tempdir">
+<tt class="descname">--tempdir</tt><tt class="descclassname"> TEMPDIR</tt><a class="headerlink" href="#cmdoption--tempdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the temporary directory where Pyicos will write. By default Pyicos will use the temporary directory the system provides (For example, /tmp in unix systems)</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--samtools">
+<tt class="descname">--samtools</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--samtools" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use samtools for reading BAM files [Default: Pyicos uses its own library] (reading BAM works without samtools for convert, extend, and other operations, but not for enrichment yet)]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--skip-header">
+<tt class="descname">--skip-header</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--skip-header" title="Permalink to this definition">¶</a></dt>
+<dd><p>Skip writing the header for the output file. [Default False]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-O">
+<tt class="descname">-O</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--open-output</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-O" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define if the output is half-open or closed notation.  [Default closed]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-F">
+<tt class="descname">-F</tt><tt class="descclassname"> OUTPUT_FORMAT</tt><tt class="descclassname">, </tt><tt class="descname">--output-format</tt><tt class="descclassname"> OUTPUT_FORMAT</tt><a class="headerlink" href="#cmdoption-F" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format desired for the output. You can choose between (&#8216;eland&#8217;, &#8216;bed&#8217;, &#8216;bed_wig&#8217;, &#8216;variable_wig&#8217;, &#8216;bed_pk&#8217;, &#8216;bed_spk&#8217;). WARNING, for some operations, some outputs are not valid. See operation help for more info.  [default pk]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--round">
+<tt class="descname">--round</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--round" title="Permalink to this definition">¶</a></dt>
+<dd><p>Round the final results to an integer</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--wig-label">
+<tt class="descname">--wig-label</tt><tt class="descclassname"> WIG_LABEL</tt><a class="headerlink" href="#cmdoption--wig-label" title="Permalink to this definition">¶</a></dt>
+<dd><p>The label that will identify the experiment in the WIG tracks.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--tag-length">
+<tt class="descname">--tag-length</tt><tt class="descclassname"> TAG_LENGTH</tt><a class="headerlink" href="#cmdoption--tag-length" title="Permalink to this definition">¶</a></dt>
+<dd><p>The tag length, or the extended one. Needed when converting from a Clustered format (wig, pk) to a non clustered format (bed, eland) [Default 0]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--span">
+<tt class="descname">--span</tt><tt class="descclassname"> SPAN</tt><a class="headerlink" href="#cmdoption--span" title="Permalink to this definition">¶</a></dt>
+<dd><p>The span of the variable and fixed wig formats [Default 40]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-x">
+<tt class="descname">-x</tt><tt class="descclassname"> FRAG_SIZE</tt><tt class="descclassname">, </tt><tt class="descname">--frag-size</tt><tt class="descclassname"> FRAG_SIZE</tt><a class="headerlink" href="#cmdoption-x" title="Permalink to this definition">¶</a></dt>
+<dd><p>The estimated inmmunoprecipitated fragment size. This is used by Pyicos to reconstruct the original signal in the original wet lab experiment.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--remlabels">
+<tt class="descname">--remlabels</tt><tt class="descclassname"> REMLABELS</tt><a class="headerlink" href="#cmdoption--remlabels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Discard the reads that have this particular label.  Example: &#8211;discard chr1 will discard all reads with chr1 as tag. You can specify multiple tags to discard using the following notation &#8211;discard chr1 chr2 tagN</p>
+</dd></dl>
+
+</div>
+<div class="section" id="remduplicates">
+<h2>remduplicates<a class="headerlink" href="#remduplicates" title="Permalink to this headline">¶</a></h2>
+<dl class="cmdoption">
+<dt id="cmdoption-h">
+<tt class="descname">-h</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--help</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-h" title="Permalink to this definition">¶</a></dt>
+<dd><p>show this help message and exit</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-o">
+<tt class="descname">-o</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--open-experiment</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-o" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines if the experiment is half-open or closed notation. [Default False]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-f">
+<tt class="descname">-f</tt><tt class="descclassname"> EXPERIMENT_FORMAT</tt><tt class="descclassname">, </tt><tt class="descname">--experiment-format</tt><tt class="descclassname"> EXPERIMENT_FORMAT</tt><a class="headerlink" href="#cmdoption-f" title="Permalink to this definition">¶</a></dt>
+<dd><p>The format the experiment file is written as. The options are (&#8216;eland&#8217;, &#8216;bed&#8217;, &#8216;bed_wig&#8217;, &#8216;bed_pk&#8217;, &#8216;bed_spk&#8217;, &#8216;sam&#8217;, &#8216;bam&#8217;, &#8216;counts&#8217;). [Default pk]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--debug">
+<tt class="descname">--debug</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--debug" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--no-sort">
+<tt class="descname">--no-sort</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--no-sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Force skip the sorting step. WARNING: Use only if you know what you are doing. Processing unsorted files assuming they are will outcome in erroneous results</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--force-sort">
+<tt class="descname">--force-sort</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--force-sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Force the sorting step</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--silent">
+<tt class="descname">--silent</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--silent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run without printing in screen</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--disable-cache">
+<tt class="descname">--disable-cache</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--disable-cache" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disable internal reading cache. When Clustering low coverage files, it will increase speed and improve memory usage. With very read dense files, the speed will decrease.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--keep-temp">
+<tt class="descname">--keep-temp</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--keep-temp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Keep the temporary files</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--postscript">
+<tt class="descname">--postscript</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--postscript" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the output graphs in postscript format instead of .png</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--showplots">
+<tt class="descname">--showplots</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--showplots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show the plots as they are being calculated by matplotlib. Note that the execution will be stopped until you close the window pop up that will arise</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--label1">
+<tt class="descname">--label1</tt><tt class="descclassname"> LABEL1</tt><a class="headerlink" href="#cmdoption--label1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the first label of the graphs.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--label2">
+<tt class="descname">--label2</tt><tt class="descclassname"> LABEL2</tt><a class="headerlink" href="#cmdoption--label2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the second label of the graphs.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--tempdir">
+<tt class="descname">--tempdir</tt><tt class="descclassname"> TEMPDIR</tt><a class="headerlink" href="#cmdoption--tempdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the temporary directory where Pyicos will write. By default Pyicos will use the temporary directory the system provides (For example, /tmp in unix systems)</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--samtools">
+<tt class="descname">--samtools</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--samtools" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use samtools for reading BAM files [Default: Pyicos uses its own library] (reading BAM works without samtools for convert, extend, and other operations, but not for enrichment yet)]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--skip-header">
+<tt class="descname">--skip-header</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--skip-header" title="Permalink to this definition">¶</a></dt>
+<dd><p>Skip writing the header for the output file. [Default False]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-O">
+<tt class="descname">-O</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--open-output</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-O" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define if the output is half-open or closed notation.  [Default closed]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-F">
+<tt class="descname">-F</tt><tt class="descclassname"> OUTPUT_FORMAT</tt><tt class="descclassname">, </tt><tt class="descname">--output-format</tt><tt class="descclassname"> OUTPUT_FORMAT</tt><a class="headerlink" href="#cmdoption-F" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format desired for the output. You can choose between (&#8216;eland&#8217;, &#8216;bed&#8217;, &#8216;bed_wig&#8217;, &#8216;variable_wig&#8217;, &#8216;bed_pk&#8217;, &#8216;bed_spk&#8217;). WARNING, for some operations, some outputs are not valid. See operation help for more info.  [default pk]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--duplicates">
+<tt class="descname">--duplicates</tt><tt class="descclassname"> DUPLICATES</tt><a class="headerlink" href="#cmdoption--duplicates" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of duplicated reads accept will be counted.  Any duplicated read after this threshold will be discarded. [Default 0]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--round">
+<tt class="descname">--round</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--round" title="Permalink to this definition">¶</a></dt>
+<dd><p>Round the final results to an integer</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--span">
+<tt class="descname">--span</tt><tt class="descclassname"> SPAN</tt><a class="headerlink" href="#cmdoption--span" title="Permalink to this definition">¶</a></dt>
+<dd><p>The span of the variable and fixed wig formats [Default 40]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--wig-label">
+<tt class="descname">--wig-label</tt><tt class="descclassname"> WIG_LABEL</tt><a class="headerlink" href="#cmdoption--wig-label" title="Permalink to this definition">¶</a></dt>
+<dd><p>The label that will identify the experiment in the WIG tracks.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--remlabels">
+<tt class="descname">--remlabels</tt><tt class="descclassname"> REMLABELS</tt><a class="headerlink" href="#cmdoption--remlabels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Discard the reads that have this particular label.  Example: &#8211;discard chr1 will discard all reads with chr1 as tag. You can specify multiple tags to discard using the following notation &#8211;discard chr1 chr2 tagN</p>
+</dd></dl>
+
+</div>
+<div class="section" id="enrichma">
+<h2>enrichma<a class="headerlink" href="#enrichma" title="Permalink to this headline">¶</a></h2>
+<dl class="cmdoption">
+<dt id="cmdoption-h">
+<tt class="descname">-h</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--help</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-h" title="Permalink to this definition">¶</a></dt>
+<dd><p>show this help message and exit</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--debug">
+<tt class="descname">--debug</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--debug" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--no-sort">
+<tt class="descname">--no-sort</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--no-sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Force skip the sorting step. WARNING: Use only if you know what you are doing. Processing unsorted files assuming they are will outcome in erroneous results</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--force-sort">
+<tt class="descname">--force-sort</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--force-sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Force the sorting step</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--silent">
+<tt class="descname">--silent</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--silent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run without printing in screen</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--disable-cache">
+<tt class="descname">--disable-cache</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--disable-cache" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disable internal reading cache. When Clustering low coverage files, it will increase speed and improve memory usage. With very read dense files, the speed will decrease.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--keep-temp">
+<tt class="descname">--keep-temp</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--keep-temp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Keep the temporary files</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--postscript">
+<tt class="descname">--postscript</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--postscript" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the output graphs in postscript format instead of .png</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--showplots">
+<tt class="descname">--showplots</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--showplots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show the plots as they are being calculated by matplotlib. Note that the execution will be stopped until you close the window pop up that will arise</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--label1">
+<tt class="descname">--label1</tt><tt class="descclassname"> LABEL1</tt><a class="headerlink" href="#cmdoption--label1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the first label of the graphs.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--label2">
+<tt class="descname">--label2</tt><tt class="descclassname"> LABEL2</tt><a class="headerlink" href="#cmdoption--label2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the second label of the graphs.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--tempdir">
+<tt class="descname">--tempdir</tt><tt class="descclassname"> TEMPDIR</tt><a class="headerlink" href="#cmdoption--tempdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the temporary directory where Pyicos will write. By default Pyicos will use the temporary directory the system provides (For example, /tmp in unix systems)</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--samtools">
+<tt class="descname">--samtools</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--samtools" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use samtools for reading BAM files [Default: Pyicos uses its own library] (reading BAM works without samtools for convert, extend, and other operations, but not for enrichment yet)]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--skip-header">
+<tt class="descname">--skip-header</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--skip-header" title="Permalink to this definition">¶</a></dt>
+<dd><p>Skip writing the header for the output file. [Default False]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-O">
+<tt class="descname">-O</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--open-output</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-O" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define if the output is half-open or closed notation.  [Default closed]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-F">
+<tt class="descname">-F</tt><tt class="descclassname"> OUTPUT_FORMAT</tt><tt class="descclassname">, </tt><tt class="descname">--output-format</tt><tt class="descclassname"> OUTPUT_FORMAT</tt><a class="headerlink" href="#cmdoption-F" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format desired for the output. You can choose between (&#8216;eland&#8217;, &#8216;bed&#8217;, &#8216;bed_wig&#8217;, &#8216;variable_wig&#8217;, &#8216;bed_pk&#8217;, &#8216;bed_spk&#8217;). WARNING, for some operations, some outputs are not valid. See operation help for more info.  [default pk]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--replica">
+<tt class="descname">--replica</tt><tt class="descclassname"> REPLICA</tt><a class="headerlink" href="#cmdoption--replica" title="Permalink to this definition">¶</a></dt>
+<dd><p>Experiment A replica file</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--region-format">
+<tt class="descname">--region-format</tt><tt class="descclassname"> REGION_FORMAT</tt><a class="headerlink" href="#cmdoption--region-format" title="Permalink to this definition">¶</a></dt>
+<dd><p>The format the region file is written as. [default bed]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--open-region">
+<tt class="descname">--open-region</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--open-region" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define if the region file is half-open or closed notation. [Default closed]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--stranded">
+<tt class="descname">--stranded</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--stranded" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decide if the strand is taken into consideration for the analysis. This requires a region file in bed format with the strand information in its 6th column.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--proximity">
+<tt class="descname">--proximity</tt><tt class="descclassname"> PROXIMITY</tt><a class="headerlink" href="#cmdoption--proximity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines if two regions calculated automatically are close enough to be clustered. Default 50 nt</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--binsize">
+<tt class="descname">--binsize</tt><tt class="descclassname"> BINSIZE</tt><a class="headerlink" href="#cmdoption--binsize" title="Permalink to this definition">¶</a></dt>
+<dd><p>The size of the bins to calculate the local sd and mean for the background model, as a ratio of total number or regions. Regardless of the ratio selected, the minimum window size is 50 regions, since below that threshold the results will no longer be statistically meaningful. [Default 0.3]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--sdfold">
+<tt class="descname">--sdfold</tt><tt class="descclassname"> SDFOLD</tt><a class="headerlink" href="#cmdoption--sdfold" title="Permalink to this definition">¶</a></dt>
+<dd><p>The standard deviation fold used to generate the background model. [Default 1]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--recalculate">
+<tt class="descname">--recalculate</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--recalculate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Recalculate the z-score when plotting. Useful for doing different plots with &#8216;pyicos plot&#8217; [Default False]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--mintags">
+<tt class="descname">--mintags</tt><tt class="descclassname"> MINTAGS</tt><a class="headerlink" href="#cmdoption--mintags" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of tags (of the union of the experiment and experiment_b datasets) for a region to qualify to be analyzed. [Default 6]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--binstep">
+<tt class="descname">--binstep</tt><tt class="descclassname"> BINSTEP</tt><a class="headerlink" href="#cmdoption--binstep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Step of the sliding window for the calculation of the z-score, as a ratio of the window size selected. If you want max precision, in the zscore calculation. You can set this value to 0 in order to use a sliding window that slides only 1 region at a time, but if you have many regions the calculation can get very slow.  [Default 0.1]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--skip-plot">
+<tt class="descname">--skip-plot</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--skip-plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Skip the plotting step. [Default False]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--n-norm">
+<tt class="descname">--n-norm</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--n-norm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Divide the read counts by the total number of reads (units of million reads)</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--len-norm">
+<tt class="descname">--len-norm</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--len-norm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Divide the read counts by region (gene, transcript...) length (reads per kilobase units)</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--zscore">
+<tt class="descname">--zscore</tt><tt class="descclassname"> ZSCORE</tt><a class="headerlink" href="#cmdoption--zscore" title="Permalink to this definition">¶</a></dt>
+<dd><p>Significant Z-score value. [Default 2]</p>
+</dd></dl>
+
+</div>
+<div class="section" id="extend">
+<h2>extend<a class="headerlink" href="#extend" title="Permalink to this headline">¶</a></h2>
+<dl class="cmdoption">
+<dt id="cmdoption-h">
+<tt class="descname">-h</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--help</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-h" title="Permalink to this definition">¶</a></dt>
+<dd><p>show this help message and exit</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-o">
+<tt class="descname">-o</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--open-experiment</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-o" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines if the experiment is half-open or closed notation. [Default False]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-f">
+<tt class="descname">-f</tt><tt class="descclassname"> EXPERIMENT_FORMAT</tt><tt class="descclassname">, </tt><tt class="descname">--experiment-format</tt><tt class="descclassname"> EXPERIMENT_FORMAT</tt><a class="headerlink" href="#cmdoption-f" title="Permalink to this definition">¶</a></dt>
+<dd><p>The format the experiment file is written as. The options are (&#8216;eland&#8217;, &#8216;bed&#8217;, &#8216;bed_wig&#8217;, &#8216;bed_pk&#8217;, &#8216;bed_spk&#8217;, &#8216;sam&#8217;, &#8216;bam&#8217;, &#8216;counts&#8217;). [Default pk]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--debug">
+<tt class="descname">--debug</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--debug" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--no-sort">
+<tt class="descname">--no-sort</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--no-sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Force skip the sorting step. WARNING: Use only if you know what you are doing. Processing unsorted files assuming they are will outcome in erroneous results</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--force-sort">
+<tt class="descname">--force-sort</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--force-sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Force the sorting step</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--silent">
+<tt class="descname">--silent</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--silent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run without printing in screen</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--disable-cache">
+<tt class="descname">--disable-cache</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--disable-cache" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disable internal reading cache. When Clustering low coverage files, it will increase speed and improve memory usage. With very read dense files, the speed will decrease.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--keep-temp">
+<tt class="descname">--keep-temp</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--keep-temp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Keep the temporary files</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--postscript">
+<tt class="descname">--postscript</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--postscript" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the output graphs in postscript format instead of .png</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--showplots">
+<tt class="descname">--showplots</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--showplots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show the plots as they are being calculated by matplotlib. Note that the execution will be stopped until you close the window pop up that will arise</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--label1">
+<tt class="descname">--label1</tt><tt class="descclassname"> LABEL1</tt><a class="headerlink" href="#cmdoption--label1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the first label of the graphs.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--label2">
+<tt class="descname">--label2</tt><tt class="descclassname"> LABEL2</tt><a class="headerlink" href="#cmdoption--label2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the second label of the graphs.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--tempdir">
+<tt class="descname">--tempdir</tt><tt class="descclassname"> TEMPDIR</tt><a class="headerlink" href="#cmdoption--tempdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the temporary directory where Pyicos will write. By default Pyicos will use the temporary directory the system provides (For example, /tmp in unix systems)</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--samtools">
+<tt class="descname">--samtools</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--samtools" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use samtools for reading BAM files [Default: Pyicos uses its own library] (reading BAM works without samtools for convert, extend, and other operations, but not for enrichment yet)]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--skip-header">
+<tt class="descname">--skip-header</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--skip-header" title="Permalink to this definition">¶</a></dt>
+<dd><p>Skip writing the header for the output file. [Default False]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-O">
+<tt class="descname">-O</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--open-output</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-O" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define if the output is half-open or closed notation.  [Default closed]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-F">
+<tt class="descname">-F</tt><tt class="descclassname"> OUTPUT_FORMAT</tt><tt class="descclassname">, </tt><tt class="descname">--output-format</tt><tt class="descclassname"> OUTPUT_FORMAT</tt><a class="headerlink" href="#cmdoption-F" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format desired for the output. You can choose between (&#8216;eland&#8217;, &#8216;bed&#8217;, &#8216;bed_wig&#8217;, &#8216;variable_wig&#8217;, &#8216;bed_pk&#8217;, &#8216;bed_spk&#8217;). WARNING, for some operations, some outputs are not valid. See operation help for more info.  [default pk]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--round">
+<tt class="descname">--round</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--round" title="Permalink to this definition">¶</a></dt>
+<dd><p>Round the final results to an integer</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--wig-label">
+<tt class="descname">--wig-label</tt><tt class="descclassname"> WIG_LABEL</tt><a class="headerlink" href="#cmdoption--wig-label" title="Permalink to this definition">¶</a></dt>
+<dd><p>The label that will identify the experiment in the WIG tracks.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--span">
+<tt class="descname">--span</tt><tt class="descclassname"> SPAN</tt><a class="headerlink" href="#cmdoption--span" title="Permalink to this definition">¶</a></dt>
+<dd><p>The span of the variable and fixed wig formats [Default 40]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--remlabels">
+<tt class="descname">--remlabels</tt><tt class="descclassname"> REMLABELS</tt><a class="headerlink" href="#cmdoption--remlabels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Discard the reads that have this particular label.  Example: &#8211;discard chr1 will discard all reads with chr1 as tag. You can specify multiple tags to discard using the following notation &#8211;discard chr1 chr2 tagN</p>
+</dd></dl>
+
+</div>
+<div class="section" id="remregions">
+<h2>remregions<a class="headerlink" href="#remregions" title="Permalink to this headline">¶</a></h2>
+<dl class="cmdoption">
+<dt id="cmdoption-h">
+<tt class="descname">-h</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--help</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-h" title="Permalink to this definition">¶</a></dt>
+<dd><p>show this help message and exit</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-o">
+<tt class="descname">-o</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--open-experiment</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-o" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines if the experiment is half-open or closed notation. [Default False]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-f">
+<tt class="descname">-f</tt><tt class="descclassname"> EXPERIMENT_FORMAT</tt><tt class="descclassname">, </tt><tt class="descname">--experiment-format</tt><tt class="descclassname"> EXPERIMENT_FORMAT</tt><a class="headerlink" href="#cmdoption-f" title="Permalink to this definition">¶</a></dt>
+<dd><p>The format the experiment file is written as. The options are (&#8216;eland&#8217;, &#8216;bed&#8217;, &#8216;bed_wig&#8217;, &#8216;bed_pk&#8217;, &#8216;bed_spk&#8217;, &#8216;sam&#8217;, &#8216;bam&#8217;, &#8216;counts&#8217;). [Default pk]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--debug">
+<tt class="descname">--debug</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--debug" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--no-sort">
+<tt class="descname">--no-sort</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--no-sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Force skip the sorting step. WARNING: Use only if you know what you are doing. Processing unsorted files assuming they are will outcome in erroneous results</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--force-sort">
+<tt class="descname">--force-sort</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--force-sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Force the sorting step</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--silent">
+<tt class="descname">--silent</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--silent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run without printing in screen</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--disable-cache">
+<tt class="descname">--disable-cache</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--disable-cache" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disable internal reading cache. When Clustering low coverage files, it will increase speed and improve memory usage. With very read dense files, the speed will decrease.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--keep-temp">
+<tt class="descname">--keep-temp</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--keep-temp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Keep the temporary files</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--postscript">
+<tt class="descname">--postscript</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--postscript" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the output graphs in postscript format instead of .png</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--showplots">
+<tt class="descname">--showplots</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--showplots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show the plots as they are being calculated by matplotlib. Note that the execution will be stopped until you close the window pop up that will arise</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--label1">
+<tt class="descname">--label1</tt><tt class="descclassname"> LABEL1</tt><a class="headerlink" href="#cmdoption--label1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the first label of the graphs.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--label2">
+<tt class="descname">--label2</tt><tt class="descclassname"> LABEL2</tt><a class="headerlink" href="#cmdoption--label2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the second label of the graphs.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--tempdir">
+<tt class="descname">--tempdir</tt><tt class="descclassname"> TEMPDIR</tt><a class="headerlink" href="#cmdoption--tempdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the temporary directory where Pyicos will write. By default Pyicos will use the temporary directory the system provides (For example, /tmp in unix systems)</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--samtools">
+<tt class="descname">--samtools</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--samtools" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use samtools for reading BAM files [Default: Pyicos uses its own library] (reading BAM works without samtools for convert, extend, and other operations, but not for enrichment yet)]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--skip-header">
+<tt class="descname">--skip-header</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--skip-header" title="Permalink to this definition">¶</a></dt>
+<dd><p>Skip writing the header for the output file. [Default False]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-O">
+<tt class="descname">-O</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--open-output</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-O" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define if the output is half-open or closed notation.  [Default closed]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-F">
+<tt class="descname">-F</tt><tt class="descclassname"> OUTPUT_FORMAT</tt><tt class="descclassname">, </tt><tt class="descname">--output-format</tt><tt class="descclassname"> OUTPUT_FORMAT</tt><a class="headerlink" href="#cmdoption-F" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format desired for the output. You can choose between (&#8216;eland&#8217;, &#8216;bed&#8217;, &#8216;bed_wig&#8217;, &#8216;variable_wig&#8217;, &#8216;bed_pk&#8217;, &#8216;bed_spk&#8217;). WARNING, for some operations, some outputs are not valid. See operation help for more info.  [default pk]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--region-format">
+<tt class="descname">--region-format</tt><tt class="descclassname"> REGION_FORMAT</tt><a class="headerlink" href="#cmdoption--region-format" title="Permalink to this definition">¶</a></dt>
+<dd><p>The format the region file is written as. [default bed]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--open-region">
+<tt class="descname">--open-region</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--open-region" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define if the region file is half-open or closed notation. [Default closed]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--remlabels">
+<tt class="descname">--remlabels</tt><tt class="descclassname"> REMLABELS</tt><a class="headerlink" href="#cmdoption--remlabels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Discard the reads that have this particular label.  Example: &#8211;discard chr1 will discard all reads with chr1 as tag. You can specify multiple tags to discard using the following notation &#8211;discard chr1 chr2 tagN</p>
+</dd></dl>
+
+</div>
+<div class="section" id="modfdr">
+<h2>modfdr<a class="headerlink" href="#modfdr" title="Permalink to this headline">¶</a></h2>
+<dl class="cmdoption">
+<dt id="cmdoption-h">
+<tt class="descname">-h</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--help</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-h" title="Permalink to this definition">¶</a></dt>
+<dd><p>show this help message and exit</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-o">
+<tt class="descname">-o</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--open-experiment</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-o" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines if the experiment is half-open or closed notation. [Default False]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-f">
+<tt class="descname">-f</tt><tt class="descclassname"> EXPERIMENT_FORMAT</tt><tt class="descclassname">, </tt><tt class="descname">--experiment-format</tt><tt class="descclassname"> EXPERIMENT_FORMAT</tt><a class="headerlink" href="#cmdoption-f" title="Permalink to this definition">¶</a></dt>
+<dd><p>The format the experiment file is written as. The options are (&#8216;eland&#8217;, &#8216;bed&#8217;, &#8216;bed_wig&#8217;, &#8216;bed_pk&#8217;, &#8216;bed_spk&#8217;, &#8216;sam&#8217;, &#8216;bam&#8217;, &#8216;counts&#8217;). [Default pk]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--debug">
+<tt class="descname">--debug</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--debug" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--no-sort">
+<tt class="descname">--no-sort</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--no-sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Force skip the sorting step. WARNING: Use only if you know what you are doing. Processing unsorted files assuming they are will outcome in erroneous results</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--force-sort">
+<tt class="descname">--force-sort</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--force-sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Force the sorting step</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--silent">
+<tt class="descname">--silent</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--silent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run without printing in screen</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--disable-cache">
+<tt class="descname">--disable-cache</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--disable-cache" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disable internal reading cache. When Clustering low coverage files, it will increase speed and improve memory usage. With very read dense files, the speed will decrease.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--keep-temp">
+<tt class="descname">--keep-temp</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--keep-temp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Keep the temporary files</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--postscript">
+<tt class="descname">--postscript</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--postscript" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the output graphs in postscript format instead of .png</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--showplots">
+<tt class="descname">--showplots</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--showplots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show the plots as they are being calculated by matplotlib. Note that the execution will be stopped until you close the window pop up that will arise</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--label1">
+<tt class="descname">--label1</tt><tt class="descclassname"> LABEL1</tt><a class="headerlink" href="#cmdoption--label1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the first label of the graphs.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--label2">
+<tt class="descname">--label2</tt><tt class="descclassname"> LABEL2</tt><a class="headerlink" href="#cmdoption--label2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the second label of the graphs.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--tempdir">
+<tt class="descname">--tempdir</tt><tt class="descclassname"> TEMPDIR</tt><a class="headerlink" href="#cmdoption--tempdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the temporary directory where Pyicos will write. By default Pyicos will use the temporary directory the system provides (For example, /tmp in unix systems)</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--samtools">
+<tt class="descname">--samtools</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--samtools" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use samtools for reading BAM files [Default: Pyicos uses its own library] (reading BAM works without samtools for convert, extend, and other operations, but not for enrichment yet)]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--skip-header">
+<tt class="descname">--skip-header</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--skip-header" title="Permalink to this definition">¶</a></dt>
+<dd><p>Skip writing the header for the output file. [Default False]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-O">
+<tt class="descname">-O</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--open-output</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-O" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define if the output is half-open or closed notation.  [Default closed]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-F">
+<tt class="descname">-F</tt><tt class="descclassname"> OUTPUT_FORMAT</tt><tt class="descclassname">, </tt><tt class="descname">--output-format</tt><tt class="descclassname"> OUTPUT_FORMAT</tt><a class="headerlink" href="#cmdoption-F" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format desired for the output. You can choose between (&#8216;eland&#8217;, &#8216;bed&#8217;, &#8216;bed_wig&#8217;, &#8216;variable_wig&#8217;, &#8216;bed_pk&#8217;, &#8216;bed_spk&#8217;). WARNING, for some operations, some outputs are not valid. See operation help for more info.  [default pk]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--round">
+<tt class="descname">--round</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--round" title="Permalink to this definition">¶</a></dt>
+<dd><p>Round the final results to an integer</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--p-value">
+<tt class="descname">--p-value</tt><tt class="descclassname"> P_VALUE</tt><a class="headerlink" href="#cmdoption--p-value" title="Permalink to this definition">¶</a></dt>
+<dd><p>The threshold p-value that will make a cluster significant. [Default 0.01]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--repeats">
+<tt class="descname">--repeats</tt><tt class="descclassname"> REPEATS</tt><a class="headerlink" href="#cmdoption--repeats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of random repeats when generating the &#8220;background&#8221; for the modfdr operation[Default 100]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--remlabels">
+<tt class="descname">--remlabels</tt><tt class="descclassname"> REMLABELS</tt><a class="headerlink" href="#cmdoption--remlabels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Discard the reads that have this particular label.  Example: &#8211;discard chr1 will discard all reads with chr1 as tag. You can specify multiple tags to discard using the following notation &#8211;discard chr1 chr2 tagN</p>
+</dd></dl>
+
+</div>
+<div class="section" id="filter">
+<h2>filter<a class="headerlink" href="#filter" title="Permalink to this headline">¶</a></h2>
+<dl class="cmdoption">
+<dt id="cmdoption-h">
+<tt class="descname">-h</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--help</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-h" title="Permalink to this definition">¶</a></dt>
+<dd><p>show this help message and exit</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-o">
+<tt class="descname">-o</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--open-experiment</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-o" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines if the experiment is half-open or closed notation. [Default False]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-f">
+<tt class="descname">-f</tt><tt class="descclassname"> EXPERIMENT_FORMAT</tt><tt class="descclassname">, </tt><tt class="descname">--experiment-format</tt><tt class="descclassname"> EXPERIMENT_FORMAT</tt><a class="headerlink" href="#cmdoption-f" title="Permalink to this definition">¶</a></dt>
+<dd><p>The format the experiment file is written as. The options are (&#8216;eland&#8217;, &#8216;bed&#8217;, &#8216;bed_wig&#8217;, &#8216;bed_pk&#8217;, &#8216;bed_spk&#8217;, &#8216;sam&#8217;, &#8216;bam&#8217;, &#8216;counts&#8217;). [Default pk]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--debug">
+<tt class="descname">--debug</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--debug" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--no-sort">
+<tt class="descname">--no-sort</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--no-sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Force skip the sorting step. WARNING: Use only if you know what you are doing. Processing unsorted files assuming they are will outcome in erroneous results</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--force-sort">
+<tt class="descname">--force-sort</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--force-sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Force the sorting step</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--silent">
+<tt class="descname">--silent</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--silent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run without printing in screen</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--disable-cache">
+<tt class="descname">--disable-cache</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--disable-cache" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disable internal reading cache. When Clustering low coverage files, it will increase speed and improve memory usage. With very read dense files, the speed will decrease.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--keep-temp">
+<tt class="descname">--keep-temp</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--keep-temp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Keep the temporary files</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--postscript">
+<tt class="descname">--postscript</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--postscript" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the output graphs in postscript format instead of .png</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--showplots">
+<tt class="descname">--showplots</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--showplots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show the plots as they are being calculated by matplotlib. Note that the execution will be stopped until you close the window pop up that will arise</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--label1">
+<tt class="descname">--label1</tt><tt class="descclassname"> LABEL1</tt><a class="headerlink" href="#cmdoption--label1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the first label of the graphs.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--label2">
+<tt class="descname">--label2</tt><tt class="descclassname"> LABEL2</tt><a class="headerlink" href="#cmdoption--label2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the second label of the graphs.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--tempdir">
+<tt class="descname">--tempdir</tt><tt class="descclassname"> TEMPDIR</tt><a class="headerlink" href="#cmdoption--tempdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the temporary directory where Pyicos will write. By default Pyicos will use the temporary directory the system provides (For example, /tmp in unix systems)</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--samtools">
+<tt class="descname">--samtools</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--samtools" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use samtools for reading BAM files [Default: Pyicos uses its own library] (reading BAM works without samtools for convert, extend, and other operations, but not for enrichment yet)]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--skip-header">
+<tt class="descname">--skip-header</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--skip-header" title="Permalink to this definition">¶</a></dt>
+<dd><p>Skip writing the header for the output file. [Default False]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-O">
+<tt class="descname">-O</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--open-output</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-O" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define if the output is half-open or closed notation.  [Default closed]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-F">
+<tt class="descname">-F</tt><tt class="descclassname"> OUTPUT_FORMAT</tt><tt class="descclassname">, </tt><tt class="descname">--output-format</tt><tt class="descclassname"> OUTPUT_FORMAT</tt><a class="headerlink" href="#cmdoption-F" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format desired for the output. You can choose between (&#8216;eland&#8217;, &#8216;bed&#8217;, &#8216;bed_wig&#8217;, &#8216;variable_wig&#8217;, &#8216;bed_pk&#8217;, &#8216;bed_spk&#8217;). WARNING, for some operations, some outputs are not valid. See operation help for more info.  [default pk]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--round">
+<tt class="descname">--round</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--round" title="Permalink to this definition">¶</a></dt>
+<dd><p>Round the final results to an integer</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--p-value">
+<tt class="descname">--p-value</tt><tt class="descclassname"> P_VALUE</tt><a class="headerlink" href="#cmdoption--p-value" title="Permalink to this definition">¶</a></dt>
+<dd><p>The threshold p-value that will make a cluster significant. [Default 0.01]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--k-limit">
+<tt class="descname">--k-limit</tt><tt class="descclassname"> K_LIMIT</tt><a class="headerlink" href="#cmdoption--k-limit" title="Permalink to this definition">¶</a></dt>
+<dd><p>The k limit Pyicos will analize to when performing a poisson test. Every cluster that goes over the threshold will have a p-value of 0, therefore considered significant. For performance purposes, raising it will give more precision when defining low p-values, but will take longer to execute. [Default 400]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--correction">
+<tt class="descname">--correction</tt><tt class="descclassname"> CORRECTION</tt><a class="headerlink" href="#cmdoption--correction" title="Permalink to this definition">¶</a></dt>
+<dd><p>This value will correct the size of the genome you are analyzing. This way you can take into consideration the real mappable genome [Default 1.0]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--threshold">
+<tt class="descname">--threshold</tt><tt class="descclassname"> THRESHOLD</tt><a class="headerlink" href="#cmdoption--threshold" title="Permalink to this definition">¶</a></dt>
+<dd><p>The height threshold used to cut</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-p">
+<tt class="descname">-p</tt><tt class="descclassname"> SPECIES</tt><tt class="descclassname">, </tt><tt class="descname">--species</tt><tt class="descclassname"> SPECIES</tt><a class="headerlink" href="#cmdoption-p" title="Permalink to this definition">¶</a></dt>
+<dd><p>The species that you are analyzing. This will read the length of the chromosomes of this species from the files inside the folder &#8220;chrdesc&#8221;. If the species information is not known, the filtering step will assume that the chromosomes are as long as the position of the furthest read. [Default hg19]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--remlabels">
+<tt class="descname">--remlabels</tt><tt class="descclassname"> REMLABELS</tt><a class="headerlink" href="#cmdoption--remlabels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Discard the reads that have this particular label.  Example: &#8211;discard chr1 will discard all reads with chr1 as tag. You can specify multiple tags to discard using the following notation &#8211;discard chr1 chr2 tagN</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--poisson-test">
+<tt class="descname">--poisson-test</tt><tt class="descclassname"> POISSON_TEST</tt><a class="headerlink" href="#cmdoption--poisson-test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decide what property of the cluster will be used for the poisson analysis. Choices are (&#8216;height&#8217;, &#8216;numtags&#8217;, &#8216;length&#8217;) [Default height]</p>
+</dd></dl>
+
+</div>
+<div class="section" id="strcorr">
+<h2>strcorr<a class="headerlink" href="#strcorr" title="Permalink to this headline">¶</a></h2>
+<dl class="cmdoption">
+<dt id="cmdoption-h">
+<tt class="descname">-h</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--help</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-h" title="Permalink to this definition">¶</a></dt>
+<dd><p>show this help message and exit</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-o">
+<tt class="descname">-o</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--open-experiment</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-o" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines if the experiment is half-open or closed notation. [Default False]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-f">
+<tt class="descname">-f</tt><tt class="descclassname"> EXPERIMENT_FORMAT</tt><tt class="descclassname">, </tt><tt class="descname">--experiment-format</tt><tt class="descclassname"> EXPERIMENT_FORMAT</tt><a class="headerlink" href="#cmdoption-f" title="Permalink to this definition">¶</a></dt>
+<dd><p>The format the experiment file is written as. The options are (&#8216;eland&#8217;, &#8216;bed&#8217;, &#8216;bed_wig&#8217;, &#8216;bed_pk&#8217;, &#8216;bed_spk&#8217;, &#8216;sam&#8217;, &#8216;bam&#8217;, &#8216;counts&#8217;). [Default pk]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--debug">
+<tt class="descname">--debug</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--debug" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--no-sort">
+<tt class="descname">--no-sort</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--no-sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Force skip the sorting step. WARNING: Use only if you know what you are doing. Processing unsorted files assuming they are will outcome in erroneous results</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--force-sort">
+<tt class="descname">--force-sort</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--force-sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Force the sorting step</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--silent">
+<tt class="descname">--silent</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--silent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run without printing in screen</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--disable-cache">
+<tt class="descname">--disable-cache</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--disable-cache" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disable internal reading cache. When Clustering low coverage files, it will increase speed and improve memory usage. With very read dense files, the speed will decrease.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--keep-temp">
+<tt class="descname">--keep-temp</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--keep-temp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Keep the temporary files</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--postscript">
+<tt class="descname">--postscript</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--postscript" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the output graphs in postscript format instead of .png</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--showplots">
+<tt class="descname">--showplots</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--showplots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show the plots as they are being calculated by matplotlib. Note that the execution will be stopped until you close the window pop up that will arise</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--label1">
+<tt class="descname">--label1</tt><tt class="descclassname"> LABEL1</tt><a class="headerlink" href="#cmdoption--label1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the first label of the graphs.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--label2">
+<tt class="descname">--label2</tt><tt class="descclassname"> LABEL2</tt><a class="headerlink" href="#cmdoption--label2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the second label of the graphs.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--tempdir">
+<tt class="descname">--tempdir</tt><tt class="descclassname"> TEMPDIR</tt><a class="headerlink" href="#cmdoption--tempdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the temporary directory where Pyicos will write. By default Pyicos will use the temporary directory the system provides (For example, /tmp in unix systems)</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--samtools">
+<tt class="descname">--samtools</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--samtools" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use samtools for reading BAM files [Default: Pyicos uses its own library] (reading BAM works without samtools for convert, extend, and other operations, but not for enrichment yet)]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--skip-header">
+<tt class="descname">--skip-header</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--skip-header" title="Permalink to this definition">¶</a></dt>
+<dd><p>Skip writing the header for the output file. [Default False]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-O">
+<tt class="descname">-O</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--open-output</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-O" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define if the output is half-open or closed notation.  [Default closed]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-F">
+<tt class="descname">-F</tt><tt class="descclassname"> OUTPUT_FORMAT</tt><tt class="descclassname">, </tt><tt class="descname">--output-format</tt><tt class="descclassname"> OUTPUT_FORMAT</tt><a class="headerlink" href="#cmdoption-F" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format desired for the output. You can choose between (&#8216;eland&#8217;, &#8216;bed&#8217;, &#8216;bed_wig&#8217;, &#8216;variable_wig&#8217;, &#8216;bed_pk&#8217;, &#8216;bed_spk&#8217;). WARNING, for some operations, some outputs are not valid. See operation help for more info.  [default pk]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--max-delta">
+<tt class="descname">--max-delta</tt><tt class="descclassname"> MAX_DELTA</tt><a class="headerlink" href="#cmdoption--max-delta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maximum distance to consider when correlating the positive and the negative groups of reads [Default 250]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--min-delta">
+<tt class="descname">--min-delta</tt><tt class="descclassname"> MIN_DELTA</tt><a class="headerlink" href="#cmdoption--min-delta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Minimum distance to consider when correlating the positive and the negative groups of reads [Default 20]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--height-filter">
+<tt class="descname">--height-filter</tt><tt class="descclassname"> HEIGHT_FILTER</tt><a class="headerlink" href="#cmdoption--height-filter" title="Permalink to this definition">¶</a></dt>
+<dd><p>The minimum number of overlapping reads in a cluster to include it in the test [Default 8]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--delta-step">
+<tt class="descname">--delta-step</tt><tt class="descclassname"> DELTA_STEP</tt><a class="headerlink" href="#cmdoption--delta-step" title="Permalink to this definition">¶</a></dt>
+<dd><p>The step of the delta values to test [Default 1] &#8211;max-correlations MAX_CORRELATIONS The maximum pairs of clusters to analyze before considering the test complete. Lower this parameter to increase time performance [Default 200]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--remlabels">
+<tt class="descname">--remlabels</tt><tt class="descclassname"> REMLABELS</tt><a class="headerlink" href="#cmdoption--remlabels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Discard the reads that have this particular label.  Example: &#8211;discard chr1 will discard all reads with chr1 as tag. You can specify multiple tags to discard using the following notation &#8211;discard chr1 chr2 tagN</p>
+</dd></dl>
+
+</div>
+<div class="section" id="split">
+<h2>split<a class="headerlink" href="#split" title="Permalink to this headline">¶</a></h2>
+<dl class="cmdoption">
+<dt id="cmdoption-h">
+<tt class="descname">-h</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--help</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-h" title="Permalink to this definition">¶</a></dt>
+<dd><p>show this help message and exit</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-o">
+<tt class="descname">-o</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--open-experiment</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-o" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines if the experiment is half-open or closed notation. [Default False]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-f">
+<tt class="descname">-f</tt><tt class="descclassname"> EXPERIMENT_FORMAT</tt><tt class="descclassname">, </tt><tt class="descname">--experiment-format</tt><tt class="descclassname"> EXPERIMENT_FORMAT</tt><a class="headerlink" href="#cmdoption-f" title="Permalink to this definition">¶</a></dt>
+<dd><p>The format the experiment file is written as. The options are (&#8216;eland&#8217;, &#8216;bed&#8217;, &#8216;bed_wig&#8217;, &#8216;bed_pk&#8217;, &#8216;bed_spk&#8217;, &#8216;sam&#8217;, &#8216;bam&#8217;, &#8216;counts&#8217;). [Default pk]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--debug">
+<tt class="descname">--debug</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--debug" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--no-sort">
+<tt class="descname">--no-sort</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--no-sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Force skip the sorting step. WARNING: Use only if you know what you are doing. Processing unsorted files assuming they are will outcome in erroneous results</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--force-sort">
+<tt class="descname">--force-sort</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--force-sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Force the sorting step</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--silent">
+<tt class="descname">--silent</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--silent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run without printing in screen</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--disable-cache">
+<tt class="descname">--disable-cache</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--disable-cache" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disable internal reading cache. When Clustering low coverage files, it will increase speed and improve memory usage. With very read dense files, the speed will decrease.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--keep-temp">
+<tt class="descname">--keep-temp</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--keep-temp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Keep the temporary files</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--postscript">
+<tt class="descname">--postscript</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--postscript" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the output graphs in postscript format instead of .png</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--showplots">
+<tt class="descname">--showplots</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--showplots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show the plots as they are being calculated by matplotlib. Note that the execution will be stopped until you close the window pop up that will arise</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--label1">
+<tt class="descname">--label1</tt><tt class="descclassname"> LABEL1</tt><a class="headerlink" href="#cmdoption--label1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the first label of the graphs.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--label2">
+<tt class="descname">--label2</tt><tt class="descclassname"> LABEL2</tt><a class="headerlink" href="#cmdoption--label2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the second label of the graphs.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--tempdir">
+<tt class="descname">--tempdir</tt><tt class="descclassname"> TEMPDIR</tt><a class="headerlink" href="#cmdoption--tempdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the temporary directory where Pyicos will write. By default Pyicos will use the temporary directory the system provides (For example, /tmp in unix systems)</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--samtools">
+<tt class="descname">--samtools</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--samtools" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use samtools for reading BAM files [Default: Pyicos uses its own library] (reading BAM works without samtools for convert, extend, and other operations, but not for enrichment yet)]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--skip-header">
+<tt class="descname">--skip-header</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--skip-header" title="Permalink to this definition">¶</a></dt>
+<dd><p>Skip writing the header for the output file. [Default False]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-O">
+<tt class="descname">-O</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--open-output</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-O" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define if the output is half-open or closed notation.  [Default closed]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-F">
+<tt class="descname">-F</tt><tt class="descclassname"> OUTPUT_FORMAT</tt><tt class="descclassname">, </tt><tt class="descname">--output-format</tt><tt class="descclassname"> OUTPUT_FORMAT</tt><a class="headerlink" href="#cmdoption-F" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format desired for the output. You can choose between (&#8216;eland&#8217;, &#8216;bed&#8217;, &#8216;bed_wig&#8217;, &#8216;variable_wig&#8217;, &#8216;bed_pk&#8217;, &#8216;bed_spk&#8217;). WARNING, for some operations, some outputs are not valid. See operation help for more info.  [default pk]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--round">
+<tt class="descname">--round</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--round" title="Permalink to this definition">¶</a></dt>
+<dd><p>Round the final results to an integer</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--split-proportion">
+<tt class="descname">--split-proportion</tt><tt class="descclassname"> SPLIT_PROPORTION</tt><a class="headerlink" href="#cmdoption--split-proportion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fraction of the cluster height below which the cluster is splitted. [Default 0.1]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--split-absolute">
+<tt class="descname">--split-absolute</tt><tt class="descclassname"> SPLIT_ABSOLUTE</tt><a class="headerlink" href="#cmdoption--split-absolute" title="Permalink to this definition">¶</a></dt>
+<dd><p>The height threshold to split the clusters. [Default 0]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--wig-label">
+<tt class="descname">--wig-label</tt><tt class="descclassname"> WIG_LABEL</tt><a class="headerlink" href="#cmdoption--wig-label" title="Permalink to this definition">¶</a></dt>
+<dd><p>The label that will identify the experiment in the WIG tracks.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--remlabels">
+<tt class="descname">--remlabels</tt><tt class="descclassname"> REMLABELS</tt><a class="headerlink" href="#cmdoption--remlabels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Discard the reads that have this particular label.  Example: &#8211;discard chr1 will discard all reads with chr1 as tag. You can specify multiple tags to discard using the following notation &#8211;discard chr1 chr2 tagN</p>
+</dd></dl>
+
+</div>
+<div class="section" id="poisson">
+<h2>poisson<a class="headerlink" href="#poisson" title="Permalink to this headline">¶</a></h2>
+<dl class="cmdoption">
+<dt id="cmdoption-h">
+<tt class="descname">-h</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--help</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-h" title="Permalink to this definition">¶</a></dt>
+<dd><p>show this help message and exit</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-o">
+<tt class="descname">-o</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--open-experiment</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-o" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines if the experiment is half-open or closed notation. [Default False]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-f">
+<tt class="descname">-f</tt><tt class="descclassname"> EXPERIMENT_FORMAT</tt><tt class="descclassname">, </tt><tt class="descname">--experiment-format</tt><tt class="descclassname"> EXPERIMENT_FORMAT</tt><a class="headerlink" href="#cmdoption-f" title="Permalink to this definition">¶</a></dt>
+<dd><p>The format the experiment file is written as. The options are (&#8216;eland&#8217;, &#8216;bed&#8217;, &#8216;bed_wig&#8217;, &#8216;bed_pk&#8217;, &#8216;bed_spk&#8217;, &#8216;sam&#8217;, &#8216;bam&#8217;, &#8216;counts&#8217;). [Default pk]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--debug">
+<tt class="descname">--debug</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--debug" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--no-sort">
+<tt class="descname">--no-sort</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--no-sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Force skip the sorting step. WARNING: Use only if you know what you are doing. Processing unsorted files assuming they are will outcome in erroneous results</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--force-sort">
+<tt class="descname">--force-sort</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--force-sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Force the sorting step</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--silent">
+<tt class="descname">--silent</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--silent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run without printing in screen</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--disable-cache">
+<tt class="descname">--disable-cache</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--disable-cache" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disable internal reading cache. When Clustering low coverage files, it will increase speed and improve memory usage. With very read dense files, the speed will decrease.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--keep-temp">
+<tt class="descname">--keep-temp</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--keep-temp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Keep the temporary files</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--postscript">
+<tt class="descname">--postscript</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--postscript" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the output graphs in postscript format instead of .png</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--showplots">
+<tt class="descname">--showplots</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--showplots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show the plots as they are being calculated by matplotlib. Note that the execution will be stopped until you close the window pop up that will arise</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--label1">
+<tt class="descname">--label1</tt><tt class="descclassname"> LABEL1</tt><a class="headerlink" href="#cmdoption--label1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the first label of the graphs.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--label2">
+<tt class="descname">--label2</tt><tt class="descclassname"> LABEL2</tt><a class="headerlink" href="#cmdoption--label2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the second label of the graphs.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--tempdir">
+<tt class="descname">--tempdir</tt><tt class="descclassname"> TEMPDIR</tt><a class="headerlink" href="#cmdoption--tempdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the temporary directory where Pyicos will write. By default Pyicos will use the temporary directory the system provides (For example, /tmp in unix systems)</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--samtools">
+<tt class="descname">--samtools</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--samtools" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use samtools for reading BAM files [Default: Pyicos uses its own library] (reading BAM works without samtools for convert, extend, and other operations, but not for enrichment yet)]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--skip-header">
+<tt class="descname">--skip-header</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--skip-header" title="Permalink to this definition">¶</a></dt>
+<dd><p>Skip writing the header for the output file. [Default False]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-O">
+<tt class="descname">-O</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--open-output</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-O" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define if the output is half-open or closed notation.  [Default closed]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-F">
+<tt class="descname">-F</tt><tt class="descclassname"> OUTPUT_FORMAT</tt><tt class="descclassname">, </tt><tt class="descname">--output-format</tt><tt class="descclassname"> OUTPUT_FORMAT</tt><a class="headerlink" href="#cmdoption-F" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format desired for the output. You can choose between (&#8216;eland&#8217;, &#8216;bed&#8217;, &#8216;bed_wig&#8217;, &#8216;variable_wig&#8217;, &#8216;bed_pk&#8217;, &#8216;bed_spk&#8217;). WARNING, for some operations, some outputs are not valid. See operation help for more info.  [default pk]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-x">
+<tt class="descname">-x</tt><tt class="descclassname"> FRAG_SIZE</tt><tt class="descclassname">, </tt><tt class="descname">--frag-size</tt><tt class="descclassname"> FRAG_SIZE</tt><a class="headerlink" href="#cmdoption-x" title="Permalink to this definition">¶</a></dt>
+<dd><p>The estimated inmmunoprecipitated fragment size. This is used by Pyicos to reconstruct the original signal in the original wet lab experiment.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--p-value">
+<tt class="descname">--p-value</tt><tt class="descclassname"> P_VALUE</tt><a class="headerlink" href="#cmdoption--p-value" title="Permalink to this definition">¶</a></dt>
+<dd><p>The threshold p-value that will make a cluster significant. [Default 0.01]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--k-limit">
+<tt class="descname">--k-limit</tt><tt class="descclassname"> K_LIMIT</tt><a class="headerlink" href="#cmdoption--k-limit" title="Permalink to this definition">¶</a></dt>
+<dd><p>The k limit Pyicos will analize to when performing a poisson test. Every cluster that goes over the threshold will have a p-value of 0, therefore considered significant. For performance purposes, raising it will give more precision when defining low p-values, but will take longer to execute. [Default 400]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--correction">
+<tt class="descname">--correction</tt><tt class="descclassname"> CORRECTION</tt><a class="headerlink" href="#cmdoption--correction" title="Permalink to this definition">¶</a></dt>
+<dd><p>This value will correct the size of the genome you are analyzing. This way you can take into consideration the real mappable genome [Default 1.0]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-p">
+<tt class="descname">-p</tt><tt class="descclassname"> SPECIES</tt><tt class="descclassname">, </tt><tt class="descname">--species</tt><tt class="descclassname"> SPECIES</tt><a class="headerlink" href="#cmdoption-p" title="Permalink to this definition">¶</a></dt>
+<dt>
+<tt class="descname">The species that you are analyzing. This will read the length of the chromosomes of this species from the files inside the folder &quot;chrdesc&quot;. If the species information is not known, the filtering step will assume that the chromosomes are as long as the position of the furthest read. [Default hg19]</tt></dt>
+<dd></dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--remlabels">
+<tt class="descname">--remlabels</tt><tt class="descclassname"> REMLABELS</tt><a class="headerlink" href="#cmdoption--remlabels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Discard the reads that have this particular label.  Example: &#8211;discard chr1 will discard all reads with chr1 as tag. You can specify multiple tags to discard using the following notation &#8211;discard chr1 chr2 tagN</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--poisson-test">
+<tt class="descname">--poisson-test</tt><tt class="descclassname"> POISSON_TEST</tt><a class="headerlink" href="#cmdoption--poisson-test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decide what property of the cluster will be used for the poisson analysis. Choices are (&#8216;height&#8217;, &#8216;numtags&#8217;, &#8216;length&#8217;) [Default height]</p>
+</dd></dl>
+
+</div>
+<div class="section" id="discard">
+<h2>discard<a class="headerlink" href="#discard" title="Permalink to this headline">¶</a></h2>
+<dl class="cmdoption">
+<dt id="cmdoption-h">
+<tt class="descname">-h</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--help</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-h" title="Permalink to this definition">¶</a></dt>
+<dd><p>show this help message and exit</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-o">
+<tt class="descname">-o</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--open-experiment</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-o" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines if the experiment is half-open or closed notation. [Default False]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-f">
+<tt class="descname">-f</tt><tt class="descclassname"> EXPERIMENT_FORMAT</tt><tt class="descclassname">, </tt><tt class="descname">--experiment-format</tt><tt class="descclassname"> EXPERIMENT_FORMAT</tt><a class="headerlink" href="#cmdoption-f" title="Permalink to this definition">¶</a></dt>
+<dd><p>The format the experiment file is written as. The options are (&#8216;eland&#8217;, &#8216;bed&#8217;, &#8216;bed_wig&#8217;, &#8216;bed_pk&#8217;, &#8216;bed_spk&#8217;, &#8216;sam&#8217;, &#8216;bam&#8217;, &#8216;counts&#8217;). [Default pk]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--debug">
+<tt class="descname">--debug</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--debug" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--no-sort">
+<tt class="descname">--no-sort</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--no-sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Force skip the sorting step. WARNING: Use only if you know what you are doing. Processing unsorted files assuming they are will outcome in erroneous results</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--force-sort">
+<tt class="descname">--force-sort</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--force-sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Force the sorting step</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--silent">
+<tt class="descname">--silent</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--silent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run without printing in screen</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--disable-cache">
+<tt class="descname">--disable-cache</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--disable-cache" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disable internal reading cache. When Clustering low coverage files, it will increase speed and improve memory usage. With very read dense files, the speed will decrease.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--keep-temp">
+<tt class="descname">--keep-temp</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--keep-temp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Keep the temporary files</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--postscript">
+<tt class="descname">--postscript</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--postscript" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the output graphs in postscript format instead of .png</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--showplots">
+<tt class="descname">--showplots</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--showplots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show the plots as they are being calculated by matplotlib. Note that the execution will be stopped until you close the window pop up that will arise</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--label1">
+<tt class="descname">--label1</tt><tt class="descclassname"> LABEL1</tt><a class="headerlink" href="#cmdoption--label1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the first label of the graphs.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--label2">
+<tt class="descname">--label2</tt><tt class="descclassname"> LABEL2</tt><a class="headerlink" href="#cmdoption--label2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the second label of the graphs.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--tempdir">
+<tt class="descname">--tempdir</tt><tt class="descclassname"> TEMPDIR</tt><a class="headerlink" href="#cmdoption--tempdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the temporary directory where Pyicos will write. By default Pyicos will use the temporary directory the system provides (For example, /tmp in unix systems)</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--samtools">
+<tt class="descname">--samtools</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--samtools" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use samtools for reading BAM files [Default: Pyicos uses its own library] (reading BAM works without samtools for convert, extend, and other operations, but not for enrichment yet)]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--skip-header">
+<tt class="descname">--skip-header</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--skip-header" title="Permalink to this definition">¶</a></dt>
+<dd><p>Skip writing the header for the output file. [Default False]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-O">
+<tt class="descname">-O</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--open-output</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-O" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define if the output is half-open or closed notation.  [Default closed]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-F">
+<tt class="descname">-F</tt><tt class="descclassname"> OUTPUT_FORMAT</tt><tt class="descclassname">, </tt><tt class="descname">--output-format</tt><tt class="descclassname"> OUTPUT_FORMAT</tt><a class="headerlink" href="#cmdoption-F" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format desired for the output. You can choose between (&#8216;eland&#8217;, &#8216;bed&#8217;, &#8216;bed_wig&#8217;, &#8216;variable_wig&#8217;, &#8216;bed_pk&#8217;, &#8216;bed_spk&#8217;). WARNING, for some operations, some outputs are not valid. See operation help for more info.  [default pk]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--round">
+<tt class="descname">--round</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--round" title="Permalink to this definition">¶</a></dt>
+<dd><p>Round the final results to an integer</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--span">
+<tt class="descname">--span</tt><tt class="descclassname"> SPAN</tt><a class="headerlink" href="#cmdoption--span" title="Permalink to this definition">¶</a></dt>
+<dd><p>The span of the variable and fixed wig formats [Default 40]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--wig-label">
+<tt class="descname">--wig-label</tt><tt class="descclassname"> WIG_LABEL</tt><a class="headerlink" href="#cmdoption--wig-label" title="Permalink to this definition">¶</a></dt>
+<dd><p>The label that will identify the experiment in the WIG tracks.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--remlabels">
+<tt class="descname">--remlabels</tt><tt class="descclassname"> REMLABELS</tt><a class="headerlink" href="#cmdoption--remlabels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Discard the reads that have this particular label.  Example: &#8211;discard chr1 will discard all reads with chr1 as tag. You can specify multiple tags to discard using the following notation &#8211;discard chr1 chr2 tagN</p>
+</dd></dl>
+
+</div>
+<div class="section" id="push">
+<h2>push<a class="headerlink" href="#push" title="Permalink to this headline">¶</a></h2>
+<dl class="cmdoption">
+<dt id="cmdoption-h">
+<tt class="descname">-h</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--help</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-h" title="Permalink to this definition">¶</a></dt>
+<dd><p>show this help message and exit</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-o">
+<tt class="descname">-o</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--open-experiment</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-o" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines if the experiment is half-open or closed notation. [Default False]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-f">
+<tt class="descname">-f</tt><tt class="descclassname"> EXPERIMENT_FORMAT</tt><tt class="descclassname">, </tt><tt class="descname">--experiment-format</tt><tt class="descclassname"> EXPERIMENT_FORMAT</tt><a class="headerlink" href="#cmdoption-f" title="Permalink to this definition">¶</a></dt>
+<dd><p>The format the experiment file is written as. The options are (&#8216;eland&#8217;, &#8216;bed&#8217;, &#8216;bed_wig&#8217;, &#8216;bed_pk&#8217;, &#8216;bed_spk&#8217;, &#8216;sam&#8217;, &#8216;bam&#8217;, &#8216;counts&#8217;). [Default pk]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--debug">
+<tt class="descname">--debug</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--debug" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--no-sort">
+<tt class="descname">--no-sort</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--no-sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Force skip the sorting step. WARNING: Use only if you know what you are doing. Processing unsorted files assuming they are will outcome in erroneous results</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--force-sort">
+<tt class="descname">--force-sort</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--force-sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Force the sorting step</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--silent">
+<tt class="descname">--silent</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--silent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run without printing in screen</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--disable-cache">
+<tt class="descname">--disable-cache</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--disable-cache" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disable internal reading cache. When Clustering low coverage files, it will increase speed and improve memory usage. With very read dense files, the speed will decrease.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--keep-temp">
+<tt class="descname">--keep-temp</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--keep-temp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Keep the temporary files</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--postscript">
+<tt class="descname">--postscript</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--postscript" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the output graphs in postscript format instead of .png</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--showplots">
+<tt class="descname">--showplots</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--showplots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show the plots as they are being calculated by matplotlib. Note that the execution will be stopped until you close the window pop up that will arise</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--label1">
+<tt class="descname">--label1</tt><tt class="descclassname"> LABEL1</tt><a class="headerlink" href="#cmdoption--label1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the first label of the graphs.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--label2">
+<tt class="descname">--label2</tt><tt class="descclassname"> LABEL2</tt><a class="headerlink" href="#cmdoption--label2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the second label of the graphs.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--tempdir">
+<tt class="descname">--tempdir</tt><tt class="descclassname"> TEMPDIR</tt><a class="headerlink" href="#cmdoption--tempdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the temporary directory where Pyicos will write. By default Pyicos will use the temporary directory the system provides (For example, /tmp in unix systems)</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--samtools">
+<tt class="descname">--samtools</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--samtools" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use samtools for reading BAM files [Default: Pyicos uses its own library] (reading BAM works without samtools for convert, extend, and other operations, but not for enrichment yet)]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--skip-header">
+<tt class="descname">--skip-header</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--skip-header" title="Permalink to this definition">¶</a></dt>
+<dd><p>Skip writing the header for the output file. [Default False]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-O">
+<tt class="descname">-O</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--open-output</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-O" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define if the output is half-open or closed notation.  [Default closed]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-F">
+<tt class="descname">-F</tt><tt class="descclassname"> OUTPUT_FORMAT</tt><tt class="descclassname">, </tt><tt class="descname">--output-format</tt><tt class="descclassname"> OUTPUT_FORMAT</tt><a class="headerlink" href="#cmdoption-F" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format desired for the output. You can choose between (&#8216;eland&#8217;, &#8216;bed&#8217;, &#8216;bed_wig&#8217;, &#8216;variable_wig&#8217;, &#8216;bed_pk&#8217;, &#8216;bed_spk&#8217;). WARNING, for some operations, some outputs are not valid. See operation help for more info.  [default pk]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--round">
+<tt class="descname">--round</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--round" title="Permalink to this definition">¶</a></dt>
+<dd><p>Round the final results to an integer</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--wig-label">
+<tt class="descname">--wig-label</tt><tt class="descclassname"> WIG_LABEL</tt><a class="headerlink" href="#cmdoption--wig-label" title="Permalink to this definition">¶</a></dt>
+<dd><p>The label that will identify the experiment in the WIG tracks.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--span">
+<tt class="descname">--span</tt><tt class="descclassname"> SPAN</tt><a class="headerlink" href="#cmdoption--span" title="Permalink to this definition">¶</a></dt>
+<dd><p>The span of the variable and fixed wig formats [Default 40]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--remlabels">
+<tt class="descname">--remlabels</tt><tt class="descclassname"> REMLABELS</tt><a class="headerlink" href="#cmdoption--remlabels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Discard the reads that have this particular label.  Example: &#8211;discard chr1 will discard all reads with chr1 as tag. You can specify multiple tags to discard using the following notation &#8211;discard chr1 chr2 tagN</p>
+</dd></dl>
+
+</div>
+<div class="section" id="callpeaks">
+<h2>callpeaks<a class="headerlink" href="#callpeaks" title="Permalink to this headline">¶</a></h2>
+<dl class="cmdoption">
+<dt id="cmdoption-h">
+<tt class="descname">-h</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--help</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-h" title="Permalink to this definition">¶</a></dt>
+<dd><p>show this help message and exit</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-o">
+<tt class="descname">-o</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--open-experiment</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-o" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines if the experiment is half-open or closed notation. [Default False]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-f">
+<tt class="descname">-f</tt><tt class="descclassname"> EXPERIMENT_FORMAT</tt><tt class="descclassname">, </tt><tt class="descname">--experiment-format</tt><tt class="descclassname"> EXPERIMENT_FORMAT</tt><a class="headerlink" href="#cmdoption-f" title="Permalink to this definition">¶</a></dt>
+<dd><p>The format the experiment file is written as. The options are (&#8216;eland&#8217;, &#8216;bed&#8217;, &#8216;bed_wig&#8217;, &#8216;bed_pk&#8217;, &#8216;bed_spk&#8217;, &#8216;sam&#8217;, &#8216;bam&#8217;, &#8216;counts&#8217;). [Default pk]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--debug">
+<tt class="descname">--debug</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--debug" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--no-sort">
+<tt class="descname">--no-sort</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--no-sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Force skip the sorting step. WARNING: Use only if you know what you are doing. Processing unsorted files assuming they are will outcome in erroneous results</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--force-sort">
+<tt class="descname">--force-sort</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--force-sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Force the sorting step</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--silent">
+<tt class="descname">--silent</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--silent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run without printing in screen</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--disable-cache">
+<tt class="descname">--disable-cache</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--disable-cache" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disable internal reading cache. When Clustering low coverage files, it will increase speed and improve memory usage. With very read dense files, the speed will decrease.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--keep-temp">
+<tt class="descname">--keep-temp</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--keep-temp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Keep the temporary files</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--postscript">
+<tt class="descname">--postscript</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--postscript" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the output graphs in postscript format instead of .png</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--showplots">
+<tt class="descname">--showplots</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--showplots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show the plots as they are being calculated by matplotlib. Note that the execution will be stopped until you close the window pop up that will arise</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--label1">
+<tt class="descname">--label1</tt><tt class="descclassname"> LABEL1</tt><a class="headerlink" href="#cmdoption--label1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the first label of the graphs.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--label2">
+<tt class="descname">--label2</tt><tt class="descclassname"> LABEL2</tt><a class="headerlink" href="#cmdoption--label2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the second label of the graphs.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--tempdir">
+<tt class="descname">--tempdir</tt><tt class="descclassname"> TEMPDIR</tt><a class="headerlink" href="#cmdoption--tempdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the temporary directory where Pyicos will write. By default Pyicos will use the temporary directory the system provides (For example, /tmp in unix systems)</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--samtools">
+<tt class="descname">--samtools</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--samtools" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use samtools for reading BAM files [Default: Pyicos uses its own library] (reading BAM works without samtools for convert, extend, and other operations, but not for enrichment yet)]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--skip-header">
+<tt class="descname">--skip-header</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--skip-header" title="Permalink to this definition">¶</a></dt>
+<dd><p>Skip writing the header for the output file. [Default False]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--control">
+<tt class="descname">--control</tt><tt class="descclassname"> CONTROL</tt><a class="headerlink" href="#cmdoption--control" title="Permalink to this definition">¶</a></dt>
+<dd><p>The control file or directory</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--control-format">
+<tt class="descname">--control-format</tt><tt class="descclassname"> CONTROL_FORMAT</tt><a class="headerlink" href="#cmdoption--control-format" title="Permalink to this definition">¶</a></dt>
+<dd><p>The format the control file is written as. [default: The same as experiment format]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--open-control">
+<tt class="descname">--open-control</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--open-control" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define if the region file is half-open or closed notation. [Default closed]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--blacklist">
+<tt class="descname">--blacklist</tt><tt class="descclassname"> BLACKLIST</tt><a class="headerlink" href="#cmdoption--blacklist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads a bed file with coordinates that you want to exclude from the analysis. Useful for discarding &#8220;noisy&#8221; probable artifactual regions like centromeres and repeat regions. [Default None]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-O">
+<tt class="descname">-O</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--open-output</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-O" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define if the output is half-open or closed notation.  [Default closed]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-F">
+<tt class="descname">-F</tt><tt class="descclassname"> OUTPUT_FORMAT</tt><tt class="descclassname">, </tt><tt class="descname">--output-format</tt><tt class="descclassname"> OUTPUT_FORMAT</tt><a class="headerlink" href="#cmdoption-F" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format desired for the output. You can choose between (&#8216;eland&#8217;, &#8216;bed&#8217;, &#8216;bed_wig&#8217;, &#8216;variable_wig&#8217;, &#8216;bed_pk&#8217;, &#8216;bed_spk&#8217;). WARNING, for some operations, some outputs are not valid. See operation help for more info.  [default pk]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-x">
+<tt class="descname">-x</tt><tt class="descclassname"> FRAG_SIZE</tt><tt class="descclassname">, </tt><tt class="descname">--frag-size</tt><tt class="descclassname"> FRAG_SIZE</tt><a class="headerlink" href="#cmdoption-x" title="Permalink to this definition">¶</a></dt>
+<dd><p>The estimated inmmunoprecipitated fragment size. This is used by Pyicos to reconstruct the original signal in the original wet lab experiment.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--round">
+<tt class="descname">--round</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--round" title="Permalink to this definition">¶</a></dt>
+<dd><p>Round the final results to an integer</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--wig-label">
+<tt class="descname">--wig-label</tt><tt class="descclassname"> WIG_LABEL</tt><a class="headerlink" href="#cmdoption--wig-label" title="Permalink to this definition">¶</a></dt>
+<dd><p>The label that will identify the experiment in the WIG tracks.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--span">
+<tt class="descname">--span</tt><tt class="descclassname"> SPAN</tt><a class="headerlink" href="#cmdoption--span" title="Permalink to this definition">¶</a></dt>
+<dd><p>The span of the variable and fixed wig formats [Default 40]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--no-subtract">
+<tt class="descname">--no-subtract</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--no-subtract" title="Permalink to this definition">¶</a></dt>
+<dd><p>Don&#8217;t subtract the control to the output, only normalize.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--remlabels">
+<tt class="descname">--remlabels</tt><tt class="descclassname"> REMLABELS</tt><a class="headerlink" href="#cmdoption--remlabels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Discard the reads that have this particular label.  Example: &#8211;discard chr1 will discard all reads with chr1 as tag. You can specify multiple tags to discard using the following notation &#8211;discard chr1 chr2 tagN</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--p-value">
+<tt class="descname">--p-value</tt><tt class="descclassname"> P_VALUE</tt><a class="headerlink" href="#cmdoption--p-value" title="Permalink to this definition">¶</a></dt>
+<dd><p>The threshold p-value that will make a cluster significant. [Default 0.01]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--k-limit">
+<tt class="descname">--k-limit</tt><tt class="descclassname"> K_LIMIT</tt><a class="headerlink" href="#cmdoption--k-limit" title="Permalink to this definition">¶</a></dt>
+<dd><p>The k limit Pyicos will analize to when performing a poisson test. Every cluster that goes over the threshold will have a p-value of 0, therefore considered significant. For performance purposes, raising it will give more precision when defining low p-values, but will take longer to execute. [Default 400]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--correction">
+<tt class="descname">--correction</tt><tt class="descclassname"> CORRECTION</tt><a class="headerlink" href="#cmdoption--correction" title="Permalink to this definition">¶</a></dt>
+<dd><p>This value will correct the size of the genome you are analyzing. This way you can take into consideration the real mappable genome [Default 1.0]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--trim-proportion">
+<tt class="descname">--trim-proportion</tt><tt class="descclassname"> TRIM_PROPORTION</tt><a class="headerlink" href="#cmdoption--trim-proportion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fraction of the cluster height below which the peak is trimmed. Example: For a cluster of height 40, if the flag is 0.05, 40*0.05=2. Every cluster will be trimmed to that height. A position of height 1 is always considered insignificant, no matter what the cluster height is. [Default 0.3]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-p">
+<tt class="descname">-p</tt><tt class="descclassname"> SPECIES</tt><tt class="descclassname">, </tt><tt class="descname">--species</tt><tt class="descclassname"> SPECIES</tt><a class="headerlink" href="#cmdoption-p" title="Permalink to this definition">¶</a></dt>
+<dd><p>The species that you are analyzing. This will read the length of the chromosomes of this species from the files inside the folder &#8220;chrdesc&#8221;. If the species information is not known, the filtering step will assume that the chromosomes are as long as the position of the furthest read. [Default hg19]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--duplicates">
+<tt class="descname">--duplicates</tt><tt class="descclassname"> DUPLICATES</tt><a class="headerlink" href="#cmdoption--duplicates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decide what property of the cluster will be used for the poisson analysis. Choices are (&#8216;height&#8217;, &#8216;numtags&#8217;, &#8216;length&#8217;) [Default height]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--poisson-test">
+<tt class="descname">--poisson-test</tt><tt class="descclassname"> POISSON_TEST</tt><a class="headerlink" href="#cmdoption--poisson-test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decide what property of the cluster will be used for the poisson analysis. Choices are (&#8216;height&#8217;, &#8216;numtags&#8217;, &#8216;length&#8217;) [Default height]</p>
+</dd></dl>
+
+</div>
+<div class="section" id="checkrepcount">
+<h2>checkrepcount<a class="headerlink" href="#checkrepcount" title="Permalink to this headline">¶</a></h2>
+<dl class="cmdoption">
+<dt id="cmdoption-h">
+<tt class="descname">-h</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--help</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-h" title="Permalink to this definition">¶</a></dt>
+<dd><p>show this help message and exit</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--debug">
+<tt class="descname">--debug</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--debug" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--no-sort">
+<tt class="descname">--no-sort</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--no-sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Force skip the sorting step. WARNING: Use only if you know what you are doing. Processing unsorted files assuming they are will outcome in erroneous results</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--force-sort">
+<tt class="descname">--force-sort</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--force-sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Force the sorting step</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--silent">
+<tt class="descname">--silent</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--silent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run without printing in screen</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--disable-cache">
+<tt class="descname">--disable-cache</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--disable-cache" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disable internal reading cache. When Clustering low coverage files, it will increase speed and improve memory usage. With very read dense files, the speed will decrease.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--keep-temp">
+<tt class="descname">--keep-temp</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--keep-temp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Keep the temporary files</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--postscript">
+<tt class="descname">--postscript</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--postscript" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the output graphs in postscript format instead of .png</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--showplots">
+<tt class="descname">--showplots</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--showplots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show the plots as they are being calculated by matplotlib. Note that the execution will be stopped until you close the window pop up that will arise</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--label1">
+<tt class="descname">--label1</tt><tt class="descclassname"> LABEL1</tt><a class="headerlink" href="#cmdoption--label1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the first label of the graphs.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--label2">
+<tt class="descname">--label2</tt><tt class="descclassname"> LABEL2</tt><a class="headerlink" href="#cmdoption--label2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the second label of the graphs.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--tempdir">
+<tt class="descname">--tempdir</tt><tt class="descclassname"> TEMPDIR</tt><a class="headerlink" href="#cmdoption--tempdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the temporary directory where Pyicos will write. By default Pyicos will use the temporary directory the system provides (For example, /tmp in unix systems)</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--samtools">
+<tt class="descname">--samtools</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--samtools" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use samtools for reading BAM files [Default: Pyicos uses its own library] (reading BAM works without samtools for convert, extend, and other operations, but not for enrichment yet)]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--skip-header">
+<tt class="descname">--skip-header</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--skip-header" title="Permalink to this definition">¶</a></dt>
+<dd><p>Skip writing the header for the output file. [Default False]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--stranded">
+<tt class="descname">--stranded</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--stranded" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decide if the strand is taken into consideration for the analysis. This requires a region file in bed format with the strand information in its 6th column.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--proximity">
+<tt class="descname">--proximity</tt><tt class="descclassname"> PROXIMITY</tt><a class="headerlink" href="#cmdoption--proximity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines if two regions calculated automatically are close enough to be clustered. Default 50 nt</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--binsize">
+<tt class="descname">--binsize</tt><tt class="descclassname"> BINSIZE</tt><a class="headerlink" href="#cmdoption--binsize" title="Permalink to this definition">¶</a></dt>
+<dd><p>The size of the bins to calculate the local sd and mean for the background model, as a ratio of total number or regions. Regardless of the ratio selected, the minimum window size is 50 regions, since below that threshold the results will no longer be statistically meaningful. [Default 0.3]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--sdfold">
+<tt class="descname">--sdfold</tt><tt class="descclassname"> SDFOLD</tt><a class="headerlink" href="#cmdoption--sdfold" title="Permalink to this definition">¶</a></dt>
+<dd><p>The standard deviation fold used to generate the background model. [Default 1]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--recalculate">
+<tt class="descname">--recalculate</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--recalculate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Recalculate the z-score when plotting. Useful for doing different plots with &#8216;pyicos plot&#8217; [Default False]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--mintags">
+<tt class="descname">--mintags</tt><tt class="descclassname"> MINTAGS</tt><a class="headerlink" href="#cmdoption--mintags" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of tags (of the union of the experiment and experiment_b datasets) for a region to qualify to be analyzed. [Default 6]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--binstep">
+<tt class="descname">--binstep</tt><tt class="descclassname"> BINSTEP</tt><a class="headerlink" href="#cmdoption--binstep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Step of the sliding window for the calculation of the z-score, as a ratio of the window size selected. If you want max precision, in the zscore calculation. You can set this value to 0 in order to use a sliding window that slides only 1 region at a time, but if you have many regions the calculation can get very slow.  [Default 0.1]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--skip-plot">
+<tt class="descname">--skip-plot</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--skip-plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Skip the plotting step. [Default False]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--n-norm">
+<tt class="descname">--n-norm</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--n-norm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Divide the read counts by the total number of reads (units of million reads)</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--len-norm">
+<tt class="descname">--len-norm</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--len-norm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Divide the read counts by region (gene, transcript...) length (reads per kilobase units)</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--total-reads-a">
+<tt class="descname">--total-reads-a</tt><tt class="descclassname"> TOTAL_READS_A</tt><a class="headerlink" href="#cmdoption--total-reads-a" title="Permalink to this definition">¶</a></dt>
+<dd><p>To manually set how many reads the dataset in &#8216;experiment&#8217; has. If not used, it will be counted from the read or counts file. Default (automatically calculated from reads or counts files)</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--total-reads-b">
+<tt class="descname">--total-reads-b</tt><tt class="descclassname"> TOTAL_READS_B</tt><a class="headerlink" href="#cmdoption--total-reads-b" title="Permalink to this definition">¶</a></dt>
+<dd><p>To manually set how many reads the dataset in &#8216;experiment_b&#8217; has. If not used, it will be counted from the read or counts file. Default (automatically calculated from reads or counts files)</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--total-reads-replica">
+<tt class="descname">--total-reads-replica</tt><tt class="descclassname"> TOTAL_READS_REPLICA</tt><a class="headerlink" href="#cmdoption--total-reads-replica" title="Permalink to this definition">¶</a></dt>
+<dd><p>To manually set how many reads the dataset in &#8216;experiment_replica&#8217; has. If not used, it will be calculated from the read or the counts file. Default 0 (not used)</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--a-trim">
+<tt class="descname">--a-trim</tt><tt class="descclassname"> A_TRIM</tt><a class="headerlink" href="#cmdoption--a-trim" title="Permalink to this definition">¶</a></dt>
+<dd><p>Proportion of A values to be discarded when doing the TMM normalization. Only applied when combined with &#8211;tmm-norm. [Default 0.05]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--m-trim">
+<tt class="descname">--m-trim</tt><tt class="descclassname"> M_TRIM</tt><a class="headerlink" href="#cmdoption--m-trim" title="Permalink to this definition">¶</a></dt>
+<dd><p>Proportion of M values to be discarded when doing the TMM normalization. Only applied when combined with &#8211;tmm-norm. [Default 0.25]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--experiment-label">
+<tt class="descname">--experiment-label</tt><tt class="descclassname"> EXPERIMENT_LABEL</tt><a class="headerlink" href="#cmdoption--experiment-label" title="Permalink to this definition">¶</a></dt>
+<dd><p>The label that will identify the experiment file in the &#8220;check replicas&#8221; plot</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--replica-label">
+<tt class="descname">--replica-label</tt><tt class="descclassname"> REPLICA_LABEL</tt><a class="headerlink" href="#cmdoption--replica-label" title="Permalink to this definition">¶</a></dt>
+<dd><p>The label that will identify the experiment file in the &#8220;check replicas&#8221; plot</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--title-label">
+<tt class="descname">--title-label</tt><tt class="descclassname"> TITLE_LABEL</tt><a class="headerlink" href="#cmdoption--title-label" title="Permalink to this definition">¶</a></dt>
+<dd><p>The label that will identify the experiment file in the &#8220;check replicas&#8221; plot</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--count-filter">
+<tt class="descname">--count-filter</tt><tt class="descclassname"> COUNT_FILTER</tt><a class="headerlink" href="#cmdoption--count-filter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filter the points that go below a threshold to better visualize the correlation between the replicas</p>
+</dd></dl>
+
+</div>
+<div class="section" id="subtract">
+<h2>subtract<a class="headerlink" href="#subtract" title="Permalink to this headline">¶</a></h2>
+<dl class="cmdoption">
+<dt id="cmdoption-h">
+<tt class="descname">-h</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--help</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-h" title="Permalink to this definition">¶</a></dt>
+<dd><p>show this help message and exit</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-o">
+<tt class="descname">-o</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--open-experiment</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-o" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines if the experiment is half-open or closed notation. [Default False]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-f">
+<tt class="descname">-f</tt><tt class="descclassname"> EXPERIMENT_FORMAT</tt><tt class="descclassname">, </tt><tt class="descname">--experiment-format</tt><tt class="descclassname"> EXPERIMENT_FORMAT</tt><a class="headerlink" href="#cmdoption-f" title="Permalink to this definition">¶</a></dt>
+<dd><p>The format the experiment file is written as. The options are (&#8216;eland&#8217;, &#8216;bed&#8217;, &#8216;bed_wig&#8217;, &#8216;bed_pk&#8217;, &#8216;bed_spk&#8217;, &#8216;sam&#8217;, &#8216;bam&#8217;, &#8216;counts&#8217;). [Default pk]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--debug">
+<tt class="descname">--debug</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--debug" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--no-sort">
+<tt class="descname">--no-sort</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--no-sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Force skip the sorting step. WARNING: Use only if you know what you are doing. Processing unsorted files assuming they are will outcome in erroneous results</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--force-sort">
+<tt class="descname">--force-sort</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--force-sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Force the sorting step</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--silent">
+<tt class="descname">--silent</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--silent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run without printing in screen</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--disable-cache">
+<tt class="descname">--disable-cache</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--disable-cache" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disable internal reading cache. When Clustering low coverage files, it will increase speed and improve memory usage. With very read dense files, the speed will decrease.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--keep-temp">
+<tt class="descname">--keep-temp</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--keep-temp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Keep the temporary files</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--postscript">
+<tt class="descname">--postscript</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--postscript" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the output graphs in postscript format instead of .png</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--showplots">
+<tt class="descname">--showplots</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--showplots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show the plots as they are being calculated by matplotlib. Note that the execution will be stopped until you close the window pop up that will arise</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--label1">
+<tt class="descname">--label1</tt><tt class="descclassname"> LABEL1</tt><a class="headerlink" href="#cmdoption--label1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the first label of the graphs.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--label2">
+<tt class="descname">--label2</tt><tt class="descclassname"> LABEL2</tt><a class="headerlink" href="#cmdoption--label2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the second label of the graphs.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--tempdir">
+<tt class="descname">--tempdir</tt><tt class="descclassname"> TEMPDIR</tt><a class="headerlink" href="#cmdoption--tempdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the temporary directory where Pyicos will write. By default Pyicos will use the temporary directory the system provides (For example, /tmp in unix systems)</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--samtools">
+<tt class="descname">--samtools</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--samtools" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use samtools for reading BAM files [Default: Pyicos uses its own library] (reading BAM works without samtools for convert, extend, and other operations, but not for enrichment yet)]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--skip-header">
+<tt class="descname">--skip-header</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--skip-header" title="Permalink to this definition">¶</a></dt>
+<dd><p>Skip writing the header for the output file. [Default False]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--control-format">
+<tt class="descname">--control-format</tt><tt class="descclassname"> CONTROL_FORMAT</tt><a class="headerlink" href="#cmdoption--control-format" title="Permalink to this definition">¶</a></dt>
+<dd><p>The format the control file is written as. [default: The same as experiment format]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--open-control">
+<tt class="descname">--open-control</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--open-control" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define if the region file is half-open or closed notation. [Default closed]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-O">
+<tt class="descname">-O</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--open-output</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-O" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define if the output is half-open or closed notation.  [Default closed]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-F">
+<tt class="descname">-F</tt><tt class="descclassname"> OUTPUT_FORMAT</tt><tt class="descclassname">, </tt><tt class="descname">--output-format</tt><tt class="descclassname"> OUTPUT_FORMAT</tt><a class="headerlink" href="#cmdoption-F" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format desired for the output. You can choose between (&#8216;eland&#8217;, &#8216;bed&#8217;, &#8216;bed_wig&#8217;, &#8216;variable_wig&#8217;, &#8216;bed_pk&#8217;, &#8216;bed_spk&#8217;). WARNING, for some operations, some outputs are not valid. See operation help for more info.  [default pk]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--round">
+<tt class="descname">--round</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--round" title="Permalink to this definition">¶</a></dt>
+<dd><p>Round the final results to an integer</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--normalize">
+<tt class="descname">--normalize</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--normalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Normalize to the control before subtracting</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--tag-length">
+<tt class="descname">--tag-length</tt><tt class="descclassname"> TAG_LENGTH</tt><a class="headerlink" href="#cmdoption--tag-length" title="Permalink to this definition">¶</a></dt>
+<dd><p>The tag length, or the extended one. Needed when converting from a Clustered format (wig, pk) to a non clustered format (bed, eland) [Default 0]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--span">
+<tt class="descname">--span</tt><tt class="descclassname"> SPAN</tt><a class="headerlink" href="#cmdoption--span" title="Permalink to this definition">¶</a></dt>
+<dd><p>The span of the variable and fixed wig formats [Default 40]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--wig-label">
+<tt class="descname">--wig-label</tt><tt class="descclassname"> WIG_LABEL</tt><a class="headerlink" href="#cmdoption--wig-label" title="Permalink to this definition">¶</a></dt>
+<dd><p>The label that will identify the experiment in the WIG tracks.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--remlabels">
+<tt class="descname">--remlabels</tt><tt class="descclassname"> REMLABELS</tt><a class="headerlink" href="#cmdoption--remlabels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Discard the reads that have this particular label.  Example: &#8211;discard chr1 will discard all reads with chr1 as tag. You can specify multiple tags to discard using the following notation &#8211;discard chr1 chr2 tagN</p>
+</dd></dl>
+
+</div>
+<div class="section" id="enrichment">
+<h2>enrichment<a class="headerlink" href="#enrichment" title="Permalink to this headline">¶</a></h2>
+<dl class="cmdoption">
+<dt id="cmdoption-h">
+<tt class="descname">-h</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--help</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-h" title="Permalink to this definition">¶</a></dt>
+<dd><p>show this help message and exit</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-o">
+<tt class="descname">-o</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--open-experiment</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-o" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines if the experiment is half-open or closed notation. [Default False]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-f">
+<tt class="descname">-f</tt><tt class="descclassname"> EXPERIMENT_FORMAT</tt><tt class="descclassname">, </tt><tt class="descname">--experiment-format</tt><tt class="descclassname"> EXPERIMENT_FORMAT</tt><a class="headerlink" href="#cmdoption-f" title="Permalink to this definition">¶</a></dt>
+<dd><p>The format the experiment file is written as. The options are (&#8216;eland&#8217;, &#8216;bed&#8217;, &#8216;bed_wig&#8217;, &#8216;bed_pk&#8217;, &#8216;bed_spk&#8217;, &#8216;sam&#8217;, &#8216;bam&#8217;, &#8216;counts&#8217;). [Default pk]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--debug">
+<tt class="descname">--debug</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--debug" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--no-sort">
+<tt class="descname">--no-sort</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--no-sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Force skip the sorting step. WARNING: Use only if you know what you are doing. Processing unsorted files assuming they are will outcome in erroneous results</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--force-sort">
+<tt class="descname">--force-sort</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--force-sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Force the sorting step</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--silent">
+<tt class="descname">--silent</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--silent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run without printing in screen</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--disable-cache">
+<tt class="descname">--disable-cache</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--disable-cache" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disable internal reading cache. When Clustering low coverage files, it will increase speed and improve memory usage. With very read dense files, the speed will decrease.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--keep-temp">
+<tt class="descname">--keep-temp</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--keep-temp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Keep the temporary files</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--postscript">
+<tt class="descname">--postscript</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--postscript" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the output graphs in postscript format instead of .png</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--showplots">
+<tt class="descname">--showplots</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--showplots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show the plots as they are being calculated by matplotlib. Note that the execution will be stopped until you close the window pop up that will arise</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--label1">
+<tt class="descname">--label1</tt><tt class="descclassname"> LABEL1</tt><a class="headerlink" href="#cmdoption--label1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the first label of the graphs.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--label2">
+<tt class="descname">--label2</tt><tt class="descclassname"> LABEL2</tt><a class="headerlink" href="#cmdoption--label2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the second label of the graphs.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--tempdir">
+<tt class="descname">--tempdir</tt><tt class="descclassname"> TEMPDIR</tt><a class="headerlink" href="#cmdoption--tempdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the temporary directory where Pyicos will write. By default Pyicos will use the temporary directory the system provides (For example, /tmp in unix systems)</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--samtools">
+<tt class="descname">--samtools</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--samtools" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use samtools for reading BAM files [Default: Pyicos uses its own library] (reading BAM works without samtools for convert, extend, and other operations, but not for enrichment yet)]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--skip-header">
+<tt class="descname">--skip-header</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--skip-header" title="Permalink to this definition">¶</a></dt>
+<dd><p>Skip writing the header for the output file. [Default False]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-O">
+<tt class="descname">-O</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--open-output</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-O" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define if the output is half-open or closed notation.  [Default closed]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-F">
+<tt class="descname">-F</tt><tt class="descclassname"> OUTPUT_FORMAT</tt><tt class="descclassname">, </tt><tt class="descname">--output-format</tt><tt class="descclassname"> OUTPUT_FORMAT</tt><a class="headerlink" href="#cmdoption-F" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format desired for the output. You can choose between (&#8216;eland&#8217;, &#8216;bed&#8217;, &#8216;bed_wig&#8217;, &#8216;variable_wig&#8217;, &#8216;bed_pk&#8217;, &#8216;bed_spk&#8217;). WARNING, for some operations, some outputs are not valid. See operation help for more info.  [default pk]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--replica">
+<tt class="descname">--replica</tt><tt class="descclassname"> REPLICA</tt><a class="headerlink" href="#cmdoption--replica" title="Permalink to this definition">¶</a></dt>
+<dd><p>Experiment A replica file</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--region">
+<tt class="descname">--region</tt><tt class="descclassname"> REGION</tt><a class="headerlink" href="#cmdoption--region" title="Permalink to this definition">¶</a></dt>
+<dd><p>The region file or directory. In the enrichment analysis, if its not specified it will be calculated automatically from the tags in both files and the distance of clustering specified in the &#8211;proximity flag</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--region-format">
+<tt class="descname">--region-format</tt><tt class="descclassname"> REGION_FORMAT</tt><a class="headerlink" href="#cmdoption--region-format" title="Permalink to this definition">¶</a></dt>
+<dd><p>The format the region file is written as. [default bed]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--open-region">
+<tt class="descname">--open-region</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--open-region" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define if the region file is half-open or closed notation. [Default closed]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--stranded">
+<tt class="descname">--stranded</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--stranded" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decide if the strand is taken into consideration for the analysis. This requires a region file in bed format with the strand information in its 6th column.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--proximity">
+<tt class="descname">--proximity</tt><tt class="descclassname"> PROXIMITY</tt><a class="headerlink" href="#cmdoption--proximity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines if two regions calculated automatically are close enough to be clustered. Default 50 nt</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--binsize">
+<tt class="descname">--binsize</tt><tt class="descclassname"> BINSIZE</tt><a class="headerlink" href="#cmdoption--binsize" title="Permalink to this definition">¶</a></dt>
+<dd><p>The size of the bins to calculate the local sd and mean for the background model, as a ratio of total number or regions. Regardless of the ratio selected, the minimum window size is 50 regions, since below that threshold the results will no longer be statistically meaningful. [Default 0.3]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--sdfold">
+<tt class="descname">--sdfold</tt><tt class="descclassname"> SDFOLD</tt><a class="headerlink" href="#cmdoption--sdfold" title="Permalink to this definition">¶</a></dt>
+<dd><p>The standard deviation fold used to generate the background model. [Default 1]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--recalculate">
+<tt class="descname">--recalculate</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--recalculate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Recalculate the z-score when plotting. Useful for doing different plots with &#8216;pyicos plot&#8217; [Default False]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--mintags">
+<tt class="descname">--mintags</tt><tt class="descclassname"> MINTAGS</tt><a class="headerlink" href="#cmdoption--mintags" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of tags (of the union of the experiment and experiment_b datasets) for a region to qualify to be analyzed. [Default 6]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--binstep">
+<tt class="descname">--binstep</tt><tt class="descclassname"> BINSTEP</tt><a class="headerlink" href="#cmdoption--binstep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Step of the sliding window for the calculation of the z-score, as a ratio of the window size selected. If you want max precision, in the zscore calculation. You can set this value to 0 in order to use a sliding window that slides only 1 region at a time, but if you have many regions the calculation can get very slow.  [Default 0.1]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--skip-plot">
+<tt class="descname">--skip-plot</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--skip-plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Skip the plotting step. [Default False]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--n-norm">
+<tt class="descname">--n-norm</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--n-norm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Divide the read counts by the total number of reads (units of million reads)</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--len-norm">
+<tt class="descname">--len-norm</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--len-norm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Divide the read counts by region (gene, transcript...) length (reads per kilobase units)</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--tmm-norm">
+<tt class="descname">--tmm-norm</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--tmm-norm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trimming the extreme A and M to correct the dataset for the differences in read density between samples.  [Default False]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--total-reads-a">
+<tt class="descname">--total-reads-a</tt><tt class="descclassname"> TOTAL_READS_A</tt><a class="headerlink" href="#cmdoption--total-reads-a" title="Permalink to this definition">¶</a></dt>
+<dd><p>To manually set how many reads the dataset in &#8216;experiment&#8217; has. If not used, it will be counted from the read or counts file. Default (automatically calculated from reads or counts files)</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--total-reads-b">
+<tt class="descname">--total-reads-b</tt><tt class="descclassname"> TOTAL_READS_B</tt><a class="headerlink" href="#cmdoption--total-reads-b" title="Permalink to this definition">¶</a></dt>
+<dd><p>To manually set how many reads the dataset in &#8216;experiment_b&#8217; has. If not used, it will be counted from the read or counts file. Default (automatically calculated from reads or counts files)</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--total-reads-replica">
+<tt class="descname">--total-reads-replica</tt><tt class="descclassname"> TOTAL_READS_REPLICA</tt><a class="headerlink" href="#cmdoption--total-reads-replica" title="Permalink to this definition">¶</a></dt>
+<dd><p>To manually set how many reads the dataset in &#8216;experiment_replica&#8217; has. If not used, it will be calculated from the read or the counts file. Default 0 (not used)</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--a-trim">
+<tt class="descname">--a-trim</tt><tt class="descclassname"> A_TRIM</tt><a class="headerlink" href="#cmdoption--a-trim" title="Permalink to this definition">¶</a></dt>
+<dd><p>Proportion of A values to be discarded when doing the TMM normalization. Only applied when combined with &#8211;tmm-norm. [Default 0.05]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--m-trim">
+<tt class="descname">--m-trim</tt><tt class="descclassname"> M_TRIM</tt><a class="headerlink" href="#cmdoption--m-trim" title="Permalink to this definition">¶</a></dt>
+<dd><p>Proportion of M values to be discarded when doing the TMM normalization. Only applied when combined with &#8211;tmm-norm. [Default 0.25]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--pseudocount">
+<tt class="descname">--pseudocount</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--pseudocount" title="Permalink to this definition">¶</a></dt>
+<dd><p>The usage of pseudocounts in the enrichment calculation allows the inclusion of regions that have n reads in one dataset and 0 reads in the other.  [Default False]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--zscore">
+<tt class="descname">--zscore</tt><tt class="descclassname"> ZSCORE</tt><a class="headerlink" href="#cmdoption--zscore" title="Permalink to this definition">¶</a></dt>
+<dd><p>Significant Z-score value. [Default 2]</p>
+</dd></dl>
+
+</div>
+<div class="section" id="enrichcount">
+<h2>enrichcount<a class="headerlink" href="#enrichcount" title="Permalink to this headline">¶</a></h2>
+<dl class="cmdoption">
+<dt id="cmdoption-h">
+<tt class="descname">-h</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--help</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-h" title="Permalink to this definition">¶</a></dt>
+<dd><p>show this help message and exit</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--debug">
+<tt class="descname">--debug</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--debug" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--no-sort">
+<tt class="descname">--no-sort</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--no-sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Force skip the sorting step. WARNING: Use only if you know what you are doing. Processing unsorted files assuming they are will outcome in erroneous results</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--force-sort">
+<tt class="descname">--force-sort</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--force-sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Force the sorting step</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--silent">
+<tt class="descname">--silent</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--silent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run without printing in screen</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--disable-cache">
+<tt class="descname">--disable-cache</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--disable-cache" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disable internal reading cache. When Clustering low coverage files, it will increase speed and improve memory usage. With very read dense files, the speed will decrease.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--keep-temp">
+<tt class="descname">--keep-temp</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--keep-temp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Keep the temporary files</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--postscript">
+<tt class="descname">--postscript</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--postscript" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the output graphs in postscript format instead of .png</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--showplots">
+<tt class="descname">--showplots</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--showplots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show the plots as they are being calculated by matplotlib. Note that the execution will be stopped until you close the window pop up that will arise</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--label1">
+<tt class="descname">--label1</tt><tt class="descclassname"> LABEL1</tt><a class="headerlink" href="#cmdoption--label1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the first label of the graphs.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--label2">
+<tt class="descname">--label2</tt><tt class="descclassname"> LABEL2</tt><a class="headerlink" href="#cmdoption--label2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the second label of the graphs.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--tempdir">
+<tt class="descname">--tempdir</tt><tt class="descclassname"> TEMPDIR</tt><a class="headerlink" href="#cmdoption--tempdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually define the temporary directory where Pyicos will write. By default Pyicos will use the temporary directory the system provides (For example, /tmp in unix systems)</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--samtools">
+<tt class="descname">--samtools</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--samtools" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use samtools for reading BAM files [Default: Pyicos uses its own library] (reading BAM works without samtools for convert, extend, and other operations, but not for enrichment yet)]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--skip-header">
+<tt class="descname">--skip-header</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--skip-header" title="Permalink to this definition">¶</a></dt>
+<dd><p>Skip writing the header for the output file. [Default False]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-O">
+<tt class="descname">-O</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--open-output</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-O" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define if the output is half-open or closed notation.  [Default closed]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-F">
+<tt class="descname">-F</tt><tt class="descclassname"> OUTPUT_FORMAT</tt><tt class="descclassname">, </tt><tt class="descname">--output-format</tt><tt class="descclassname"> OUTPUT_FORMAT</tt><a class="headerlink" href="#cmdoption-F" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format desired for the output. You can choose between (&#8216;eland&#8217;, &#8216;bed&#8217;, &#8216;bed_wig&#8217;, &#8216;variable_wig&#8217;, &#8216;bed_pk&#8217;, &#8216;bed_spk&#8217;). WARNING, for some operations, some outputs are not valid. See operation help for more info.  [default pk]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--replica">
+<tt class="descname">--replica</tt><tt class="descclassname"> REPLICA</tt><a class="headerlink" href="#cmdoption--replica" title="Permalink to this definition">¶</a></dt>
+<dd><p>Experiment A replica file</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--region-format">
+<tt class="descname">--region-format</tt><tt class="descclassname"> REGION_FORMAT</tt><a class="headerlink" href="#cmdoption--region-format" title="Permalink to this definition">¶</a></dt>
+<dd><p>The format the region file is written as. [default bed]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--open-region">
+<tt class="descname">--open-region</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--open-region" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define if the region file is half-open or closed notation. [Default closed]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--stranded">
+<tt class="descname">--stranded</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--stranded" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decide if the strand is taken into consideration for the analysis. This requires a region file in bed format with the strand information in its 6th column.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--proximity">
+<tt class="descname">--proximity</tt><tt class="descclassname"> PROXIMITY</tt><a class="headerlink" href="#cmdoption--proximity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines if two regions calculated automatically are close enough to be clustered. Default 50 nt</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--binsize">
+<tt class="descname">--binsize</tt><tt class="descclassname"> BINSIZE</tt><a class="headerlink" href="#cmdoption--binsize" title="Permalink to this definition">¶</a></dt>
+<dd><p>The size of the bins to calculate the local sd and mean for the background model, as a ratio of total number or regions. Regardless of the ratio selected, the minimum window size is 50 regions, since below that threshold the results will no longer be statistically meaningful. [Default 0.3]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--sdfold">
+<tt class="descname">--sdfold</tt><tt class="descclassname"> SDFOLD</tt><a class="headerlink" href="#cmdoption--sdfold" title="Permalink to this definition">¶</a></dt>
+<dd><p>The standard deviation fold used to generate the background model. [Default 1]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--recalculate">
+<tt class="descname">--recalculate</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--recalculate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Recalculate the z-score when plotting. Useful for doing different plots with &#8216;pyicos plot&#8217; [Default False]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--mintags">
+<tt class="descname">--mintags</tt><tt class="descclassname"> MINTAGS</tt><a class="headerlink" href="#cmdoption--mintags" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of tags (of the union of the experiment and experiment_b datasets) for a region to qualify to be analyzed. [Default 6]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--binstep">
+<tt class="descname">--binstep</tt><tt class="descclassname"> BINSTEP</tt><a class="headerlink" href="#cmdoption--binstep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Step of the sliding window for the calculation of the z-score, as a ratio of the window size selected. If you want max precision, in the zscore calculation. You can set this value to 0 in order to use a sliding window that slides only 1 region at a time, but if you have many regions the calculation can get very slow.  [Default 0.1]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--skip-plot">
+<tt class="descname">--skip-plot</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--skip-plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Skip the plotting step. [Default False]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--n-norm">
+<tt class="descname">--n-norm</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--n-norm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Divide the read counts by the total number of reads (units of million reads)</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--len-norm">
+<tt class="descname">--len-norm</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--len-norm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Divide the read counts by region (gene, transcript...) length (reads per kilobase units)</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--tmm-norm">
+<tt class="descname">--tmm-norm</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--tmm-norm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trimming the extreme A and M to correct the dataset for the differences in read density between samples.  [Default False]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--total-reads-a">
+<tt class="descname">--total-reads-a</tt><tt class="descclassname"> TOTAL_READS_A</tt><a class="headerlink" href="#cmdoption--total-reads-a" title="Permalink to this definition">¶</a></dt>
+<dd><p>To manually set how many reads the dataset in &#8216;experiment&#8217; has. If not used, it will be counted from the read or counts file. Default (automatically calculated from reads or counts files)</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--total-reads-b">
+<tt class="descname">--total-reads-b</tt><tt class="descclassname"> TOTAL_READS_B</tt><a class="headerlink" href="#cmdoption--total-reads-b" title="Permalink to this definition">¶</a></dt>
+<dd><p>To manually set how many reads the dataset in &#8216;experiment_b&#8217; has. If not used, it will be counted from the read or counts file. Default (automatically calculated from reads or counts files)</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--total-reads-replica">
+<tt class="descname">--total-reads-replica</tt><tt class="descclassname"> TOTAL_READS_REPLICA</tt><a class="headerlink" href="#cmdoption--total-reads-replica" title="Permalink to this definition">¶</a></dt>
+<dd><p>To manually set how many reads the dataset in &#8216;experiment_replica&#8217; has. If not used, it will be calculated from the read or the counts file. Default 0 (not used)</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--a-trim">
+<tt class="descname">--a-trim</tt><tt class="descclassname"> A_TRIM</tt><a class="headerlink" href="#cmdoption--a-trim" title="Permalink to this definition">¶</a></dt>
+<dd><p>Proportion of A values to be discarded when doing the TMM normalization. Only applied when combined with &#8211;tmm-norm. [Default 0.05]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--m-trim">
+<tt class="descname">--m-trim</tt><tt class="descclassname"> M_TRIM</tt><a class="headerlink" href="#cmdoption--m-trim" title="Permalink to this definition">¶</a></dt>
+<dd><p>Proportion of M values to be discarded when doing the TMM normalization. Only applied when combined with &#8211;tmm-norm. [Default 0.25]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--zscore">
+<tt class="descname">--zscore</tt><tt class="descclassname"> ZSCORE</tt><a class="headerlink" href="#cmdoption--zscore" title="Permalink to this definition">¶</a></dt>
+<dd><p>Significant Z-score value. [Default 2]</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption--use-replica">
+<tt class="descname">--use-replica</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--use-replica" title="Permalink to this definition">¶</a></dt>
+<dd><p>Indicates that for the calculation of the counts tables, a replica was used. [Default False]</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="index.html">pyicos 1.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Juan González-Vallinas.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
