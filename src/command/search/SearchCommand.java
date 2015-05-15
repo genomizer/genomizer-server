@@ -31,15 +31,19 @@ public class SearchCommand extends Command {
 
 	@Override
 	public int getExpectedNumberOfURIFields() {
-		return 2;
+		return 1;
 	}
 
 	@Override
 	public void setFields(String uri, String query, String uuid, UserType userType) {
 
 		super.setFields(uri, query, uuid, userType);
-		int index = uri.indexOf("=");
-		annotations = uri.substring(index+1);
+		for (String keyVal : query.split("&")) {
+			String[] splitKeyVal = keyVal.split("=");
+			if (splitKeyVal[0].equals("annotations") && splitKeyVal.length == 2) {
+				annotations = splitKeyVal[1];
+			}
+		}
 	}
 
 	@Override
