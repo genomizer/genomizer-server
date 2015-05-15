@@ -3,6 +3,7 @@ package process;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Stack;
 
 import server.ErrorLogger;
@@ -76,6 +77,7 @@ public class RawToProfileConverter extends Executor {
 		 * can cast exceptions */
 		File[] inFiles = initiateProcedure(parameters, inFolder, outFilePath);
 
+		System.out.println(Arrays.toString(parameters));
 
 		// printTrace(parameters, inFolder, outFilePath);
 		if (fileDir.exists()) {
@@ -104,6 +106,12 @@ public class RawToProfileConverter extends Executor {
 				toBeRemoved.push(remoteExecution + "resources/" + dir);
 				filesToBeMoved = sortedDirForFile;
 				toBeRemoved.push(filesToBeMoved);
+			}
+
+			if(checker.shouldRunRemoveDuplicates()) {
+				runRemoveDuplicates(
+						rawFile_1_Name,
+						rawFile_1_Name + "_without_duplicates", null);
 			}
 
 			// Runs SamToGff script on files
@@ -560,6 +568,7 @@ public class RawToProfileConverter extends Executor {
 			throws ProcessException {
 		String bowTieParams = checkBowTieProcessors(parameters[0]);
 
+		System.err.println(bowTieParams);
 		String[] bowTieParameters = parse(ServerSettings.bowtieLocation +
 				" " + bowTieParams + " " + parameters[1] + " " +
 				inFolder + "/" + fileOne + " " + dir + fileOneName + ".sam");
@@ -571,6 +580,7 @@ public class RawToProfileConverter extends Executor {
 					"Process interrupted while running bowtie on file: "
 							+ fileOneName);
 		} catch (IOException e) {
+			e.printStackTrace();
 			throw new ProcessException("Could not run bowTie on file: "
 					+ fileOneName + ", please check your input and permissions");
 		}
@@ -714,7 +724,7 @@ public class RawToProfileConverter extends Executor {
 	 * @throws IllegalArgumentException If input or output file was
 	 * not .sam format
 	 */
-	private String runRemoveDuplicates(String inputFile, String outputFile,
+	public String runRemoveDuplicates(String inputFile, String outputFile,
 									   String metrics) throws ProcessException {
 		/* Check if input is .sam format */
 		if(!inputFile.endsWith(".sam")) {
@@ -739,10 +749,11 @@ public class RawToProfileConverter extends Executor {
 		*/
 		String [] picardParameters = parse("java -jar " +
 										   ServerSettings.picardLocation +
-										   " MarkDuplicates " +
+										   "/picard.jar MarkDuplicates " +
 										   " INPUT=" + inputFile +
 										   " OUTPUT=" + outputFile +
-										   "REMOVE_DUPLICATES=true");
+										   "REMOVE_DUPLICATES=true"+"" +
+										   " METRICS_FILE=metrics.txt");
 		try {
 			return executeProgram(picardParameters);
 		} catch (InterruptedException e) {
@@ -750,6 +761,7 @@ public class RawToProfileConverter extends Executor {
 					"Process interrupted while running picard on file: "
 					+ inputFile);
 		} catch (IOException e) {
+			e.printStackTrace();
 			throw new ProcessException("Could not run picard on file: "
 									   + inputFile + ", please check your input and permissions");
 		}
