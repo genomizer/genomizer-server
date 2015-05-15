@@ -6,7 +6,7 @@ bin/
 .idea/
 .idea
 junit/
-*.jar
+!picard.jar
 *.orig
 .classpath
 .project

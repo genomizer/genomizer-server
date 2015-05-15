@@ -3,6 +3,8 @@ package conversion;
 import java.io.IOException;
 
 import process.Executor;
+import server.ErrorLogger;
+
 /**A class that runs liftover to convert old profile data to a newer genome release
  * 
  * 
@@ -24,7 +26,7 @@ public class GenomeReleaseConverter extends Executor {
 
 		/* Will throw exceptions if erroneous */
 		outString = executeProgram(liftover);
-		System.err.println(outString);
+		ErrorLogger.log("SYSTEM",outString);
 		
 		return outString;
 		
