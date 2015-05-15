@@ -9,7 +9,7 @@ import response.MinimalResponse;
 import response.Response;
 
 /**
- * Class used to handle updating experiments.
+ * Class used to handle the updating of the experiments.
  *
  * @author Business Logic 2015.
  * @version 1.1
@@ -17,6 +17,13 @@ import response.Response;
 public class PutExperimentCommand extends Command {
 	//TODO Implement this class
 
+	private String expID;
+
+	@Override
+	public void setFields(String uri, String uuid, UserType userType) {
+		super.setFields(uri,uuid,userType);
+		expID = uri.split("/")[2];
+	}
 
 	@Override
 	public int getExpectedNumberOfURIFields() {
