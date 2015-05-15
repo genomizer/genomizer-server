@@ -83,6 +83,7 @@ public class RawToProfileConverter extends Executor {
 		inFolder = validateInFolder(inFolder);
 		inFiles = getRawFiles(inFolder);
 
+		// Check if there are any raw files
 		if (inFiles == null || inFiles.length == 0) {
 			throw new ProcessException("Folder does not contain raw files");
 		}
@@ -354,8 +355,8 @@ public class RawToProfileConverter extends Executor {
 
 	/**
 	 * Runs the smoothing and step procedures. Checks if its smoothing after
-	 * ratio calculation or (parameters[5])[1])just normal smoothing. Changes
-	 * some parameters depending on ratio calculation or not. runs smoothing
+	 * ratio calculation or (parameters[5])[1]) just normal smoothing. Changes
+	 * some parameters depending on ratio calculation or not. Runs smoothing
 	 * with the incoming parameters and runs stepping if it should.
 	 *
 	 * @param parameters
@@ -372,6 +373,7 @@ public class RawToProfileConverter extends Executor {
 
 		File[] filesToSmooth;
 		File dirToFiles;
+
 		if (isRatioCalc) {
 			parameterArray = parse(parameters[7]);
 			stepSize = 1;
@@ -398,21 +400,11 @@ public class RawToProfileConverter extends Executor {
 			parameterArray = parse(parameters[4]);
 		}
 
-		int[] intParams = new int[parameterArray.length];
-		for (int i = 0; i < parameterArray.length; i++) {
-			try {
-				intParams[i] = Integer.parseInt(parameterArray[i]);
-			} catch (NumberFormatException e) {
-				throw new ProcessException(
-						"Smoothing parameters are wrong format");
-			}
-		}
 
 		if (!dirToFiles.exists()) {
 			dirToFiles.mkdirs();
 		}
 
-		SmoothingAndStep smooth = new SmoothingAndStep();
 		if (filesToSmooth != null) {
 			for (File fileToSmooth : filesToSmooth) {
 				if (fileToSmooth.isFile()
@@ -435,7 +427,21 @@ public class RawToProfileConverter extends Executor {
 					}
 					outFile = dirToFiles.toString() + "/" + outFile;
 
-					smooth.smoothing(intParams, inFile, outFile, stepSize);
+
+					// TODO: Don't hardcode path to smoothing.jar.
+					ProcessBuilder pb = new ProcessBuilder("java", "-jar",
+							"resources/smoothing.jar",
+							parameterArray[0],
+							parameterArray[1], parameterArray[2],
+							parameterArray[3], parameterArray[4],
+							inFile, outFile, String.valueOf(stepSize));
+					try {
+						Process p = pb.start();
+						p.waitFor();
+					} catch (IOException | InterruptedException ex) {
+						throw new ProcessException(ex.getMessage());
+					}
+
 				}
 			}
 		}

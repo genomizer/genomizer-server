@@ -3,6 +3,8 @@ package command;
 import com.google.gson.annotations.Expose;
 import command.process.PutProcessCommand;
 
+import java.util.UUID;
+
 /**
  * Class used to handle the process status.
  *
@@ -29,6 +31,8 @@ public class Process implements Comparable<Process> {
 	public long timeStarted;
 	@Expose
 	public long timeFinished;
+	@Expose
+	public UUID PID;
 
 	/**
 	 * Constructs a new instance of DeleteExperimentCommand using the supplied

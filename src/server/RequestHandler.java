@@ -162,7 +162,7 @@ public class RequestHandler implements HttpHandler {
 		}
 
         if (commandClass.equals(PutProcessCommand.class)) {
-            Doorman.getWorkPool().addWork((PutProcessCommand) command);
+            Doorman.getProcessPool().addProcess((PutProcessCommand) command);
             respond(new ProcessResponse(HttpStatusCode.OK), exchange);
             return;
         } else {

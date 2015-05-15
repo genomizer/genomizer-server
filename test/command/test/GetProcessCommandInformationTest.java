@@ -17,8 +17,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
-import server.WorkHandler;
-import server.WorkPool;
+import server.ProcessHandler;
+import server.ProcessPool;
 import server.test.dummies.PutProcessCommandMock;
 
 import static org.junit.Assert.fail;
@@ -34,8 +34,8 @@ import static org.junit.Assert.fail;
 @SuppressWarnings("deprecation")
 public class GetProcessCommandInformationTest {
 
-	private static WorkHandler workHandler;
-	private WorkPool workPool;
+	private static ProcessHandler processHandler;
+	private ProcessPool processPool;
 
 	private PutProcessCommand makeCmd(String author, String metadata, String genomeVersion, String expId) {
 		JsonObject comInfo = new JsonObject();
@@ -57,14 +57,16 @@ public class GetProcessCommandInformationTest {
 	@Before
 	public void setUp() throws Exception {
 
-		workPool = new WorkPool();
-		workHandler = new WorkHandler(workPool);
+		processPool = new ProcessPool(5);
+		PutProcessCommand processCommand = new PutProcessCommand();
+		processHandler = new ProcessHandler(processCommand,
+				new Process(processCommand));
 
-		workPool.addWork(makeCmd("yuri", "meta", "v123", "Exp1"));
-		workPool.addWork(makeCmd("janne", "mea", "v1523", "Exp2"));
-		workPool.addWork(makeCmd("philge", "meta", "v22", "Exp43"));
-		workPool.addWork(makeCmd("per", "meta", "v12", "Exp234"));
-		workPool.addWork(makeCmd("yuri", "meta", "v1", "Exp6"));
+		processPool.addProcess(makeCmd("yuri", "meta", "v123", "Exp1"));
+		processPool.addProcess(makeCmd("janne", "mea", "v1523", "Exp2"));
+		processPool.addProcess(makeCmd("philge", "meta", "v22", "Exp43"));
+		processPool.addProcess(makeCmd("per", "meta", "v12", "Exp234"));
+		processPool.addProcess(makeCmd("yuri", "meta", "v1", "Exp6"));
 
 		//stat = new Process(com);
 		//stat.outputFiles = com.getFilePaths();
@@ -75,7 +77,8 @@ public class GetProcessCommandInformationTest {
 	@Ignore
 	public void shouldContainStuff() {
 
-		new Thread(workHandler).start();
+		// TODO
+		//new Thread(workHandler).start();
 
 		try {
 			Thread.sleep(10000);
@@ -84,11 +87,11 @@ public class GetProcessCommandInformationTest {
 			e.printStackTrace();
 		}
 
-		LinkedList<PutProcessCommand> processesList = workPool.getProcesses();
+		LinkedList<PutProcessCommand> processesList = processPool.getProcesses();
 		LinkedList<Process> getProcessStatuses = new LinkedList<>();
 
 		for (PutProcessCommand proc : processesList) {
-			getProcessStatuses.add(workPool.getProcessStatus(proc));
+			getProcessStatuses.add(processPool.getProcessStatus(proc.getPID()));
 		}
 
 
@@ -105,7 +108,6 @@ public class GetProcessCommandInformationTest {
 
 			System.out.println(toPrettyFormat(arr.toString()));
 		}
-
 
 //		workHandler.interrupt();
 	}
