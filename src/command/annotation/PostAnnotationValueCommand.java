@@ -42,6 +42,10 @@ public class PostAnnotationValueCommand extends Command {
 		hasRights(UserRights.getRights(this.getClass()));
 		validateName(name, MaxLength.ANNOTATION_LABEL, "Annotation label");
 		validateName(value, MaxLength.ANNOTATION_VALUE, "Annotation value");
+		if(value.equals("freetext")){
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Can not" +
+					"name a value \"freetext\"");
+		}
 	}
 
 	@Override
@@ -58,7 +62,7 @@ public class PostAnnotationValueCommand extends Command {
 			}
 			db.addDropDownAnnotationValue(name, value);
 		} catch(SQLException | IOException e) {
-			Debug.log("Adding of annotation value: "+value+" on annotation "+name+" failed. Reason: " +
+			Debug.log("Adding of annotation value: " + value + " on annotation " + name + " failed. Reason: " +
 					e.getMessage());
 			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Could not add annotation value: "
 					+value+ " on annotation "+name+" because of temporary problems with database.");
