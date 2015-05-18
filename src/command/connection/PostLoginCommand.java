@@ -60,7 +60,7 @@ public class PostLoginCommand extends Command {
 		}
 
 		if(dbHash == null || dbHash.isEmpty()){
-			return new ErrorResponse(HttpStatusCode.UNAUTHORIZED, "Invalid username");
+			return new ErrorResponse(HttpStatusCode.UNAUTHORIZED, "Login failed, invalid username");
 		}
 
 		LoginAttempt login = Authenticate.login(username, password, dbHash);
@@ -69,7 +69,7 @@ public class PostLoginCommand extends Command {
 			Debug.log("LOGIN WAS UNSUCCESSFUL FOR: " + username + ". REASON: " +
 					login.getErrorMessage());
 			return new ErrorResponse(HttpStatusCode.UNAUTHORIZED,
-					login.getErrorMessage());
+					"Login failed, incorrect password");
 		}
 
 		Debug.log("LOGIN WAS SUCCESSFUL FOR: "+ username + ". GAVE UUID: " +
