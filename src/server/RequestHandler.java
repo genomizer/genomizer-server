@@ -60,7 +60,6 @@ public class RequestHandler implements HttpHandler {
         String key = requestMethod + " " + context;
         Class<? extends Command> commandClass = CommandClasses.get(key);
 
-        /*Authenticate the user and send the appropriate response if needed.*/
         String uuid = Authenticate.AuthenticateAuthorization(exchange);
 
         if(uuid == null && !commandClass.equals(PostLoginCommand.class)){
@@ -71,11 +70,10 @@ public class RequestHandler implements HttpHandler {
                 !key.equals("GET /upload") && !key.equals("POST /upload")){
             Debug.log("Unrecognized command: " + exchange.getRequestMethod()
                     + " " + exchange.getRequestURI());
-            respond(createBadRequestResponse(), exchange);
+            respond(new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Could not create a " +
+                    "command from request. Bad format on request."), exchange);
         }
-
         Debug.log("User " + Authenticate.getUsernameByID(uuid) + " authenticated successfully.");
-
         try {
             switch (key) {
                 case ("GET /download"):
@@ -106,7 +104,8 @@ public class RequestHandler implements HttpHandler {
         if (command.getExpectedNumberOfURIFields() != (uri.split("/").length-1)) {
             Debug.log("Bad format on command: " + exchange.getRequestMethod()
                     + " " + exchange.getRequestURI());
-            respond(createBadRequestResponse(), exchange);
+            respond(new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Could not create a " +
+                    "command from request. Bad format on request."), exchange);
             return;
         }
 
@@ -118,6 +117,7 @@ public class RequestHandler implements HttpHandler {
 			Debug.log(e.getMessage());
 			ErrorLogger.log("ValidateException", e.getMessage());
 			respond(new ErrorResponse(e.getCode(), e.getMessage()), exchange);
+            return;
 		}
         if (commandClass.equals(PutProcessCommand.class)) {
             Doorman.getWorkPool().addWork((PutProcessCommand) command);
@@ -162,12 +162,6 @@ public class RequestHandler implements HttpHandler {
 
         scanner.close();
         return body;
-    }
-
-    /*Creates a bad request ErrorResponse.*/
-    private ErrorResponse createBadRequestResponse() {
-        return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Could not create a " +
-                "command from request. Bad format on request.");
     }
 
     /* Finds the timestamp and removes it.*/
