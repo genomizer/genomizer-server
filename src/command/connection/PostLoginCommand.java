@@ -42,7 +42,7 @@ public class PostLoginCommand extends Command {
 
 	@Override
 	public Response execute() {
-		DatabaseAccessor db;
+		DatabaseAccessor db = null;
 		String dbHash;
 		try {
 			db = initDB();
@@ -51,11 +51,16 @@ public class PostLoginCommand extends Command {
 			Debug.log("LOGIN WAS UNSUCCESSFUL FOR: " + username + ". REASON: " +
 					e.getMessage());
 			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
-					"could not verify username and password");
+					"Login was unsuccessful for user: " + username +
+							". The reason is temporary problems with database.");
+		}finally {
+			if (db != null) {
+				db.close();
+			}
 		}
 
 		if(dbHash == null || dbHash.isEmpty()){
-			return new ErrorResponse(HttpStatusCode.UNAUTHORIZED, "Invalid username");
+			return new ErrorResponse(HttpStatusCode.UNAUTHORIZED, "Login failed, invalid username");
 		}
 
 		LoginAttempt login = Authenticate.login(username, password, dbHash);
@@ -64,7 +69,7 @@ public class PostLoginCommand extends Command {
 			Debug.log("LOGIN WAS UNSUCCESSFUL FOR: " + username + ". REASON: " +
 					login.getErrorMessage());
 			return new ErrorResponse(HttpStatusCode.UNAUTHORIZED,
-					login.getErrorMessage());
+					"Login failed, incorrect password");
 		}
 
 		Debug.log("LOGIN WAS SUCCESSFUL FOR: "+ username + ". GAVE UUID: " +

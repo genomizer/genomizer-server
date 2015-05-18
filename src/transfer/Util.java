@@ -1,11 +1,9 @@
 package transfer;
 
 import database.FileValidator;
-import server.Debug;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Util {

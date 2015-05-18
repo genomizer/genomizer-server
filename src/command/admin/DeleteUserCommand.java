@@ -13,6 +13,7 @@ import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
 import response.HttpStatusCode;
+import server.Debug;
 
 /**
  * Class used to represent a delete user command.
@@ -22,6 +23,7 @@ import response.HttpStatusCode;
  */
 public class DeleteUserCommand extends Command {
 	public String username;
+
 
 	@Override
 	public int getExpectedNumberOfURIFields() {
@@ -52,21 +54,24 @@ public class DeleteUserCommand extends Command {
 	@Override
 	public Response execute() {
 		DatabaseAccessor db;
-		System.out.println("DELETING USER: " + username);
 		try {
 			db = initDB();
-		} catch (SQLException e) {
-			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Error when " +
-					"intiating daabaseaccessor. " + e.getMessage());
-		} catch (IOException e)  {
-			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
+		} catch (SQLException | IOException e) {
+			Debug.log("Deletion of user: " + username + " didn't work, reason: " +
+					e.getMessage());
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Deletion of user: " + username +
+					" didn't work because of temporary problems with database.");
 		}
 		try {
 			db.deleteUser(username);
 		} catch (SQLException e) {
+			Debug.log("Deletion of user: " + username + " didn't work, reason: " +
+					e.getMessage());
 			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Error when " +
-					"removing user from database, user probably don't exists. "
-					+ e.getMessage());
+					"removing user from database, user probably don't exists. ");
+		}finally {
+			db.close();
+
 		}
 		return new MinimalResponse(HttpStatusCode.OK);
 	}

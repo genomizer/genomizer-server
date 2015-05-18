@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import command.Command;
 import command.UserRights;
 import command.ValidateException;
-import database.subClasses.UserMethods.UserType;
 import response.AddAnnotationFieldResponse;
 import response.ErrorResponse;
 import response.HttpStatusCode;
@@ -16,6 +15,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
+import server.Debug;
 
 /**
  * This class is created to handle the process of adding a new
@@ -95,23 +95,29 @@ public class PostAnnotationFieldCommand extends Command {
 			if(addedAnnotations != 0) {
 				return new AddAnnotationFieldResponse(HttpStatusCode.OK);
 			} else {
-				return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Annotation " +
-						"could not be added, database error.");
+				return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Annotation " + name+
+						" could not be added, database error.");
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
 			if(e.getErrorCode() == 0) {
+				Debug.log("Adding of new annotation field "+name+" failed. Reason: " +
+						e.getMessage());
 				return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "The " +
 						"annotation " + name + " already exists.");
 			} else {
-				return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+				Debug.log("Adding of new annotation field "+name+" failed. Reason: " +
 						e.getMessage());
+				return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+						"Could not create new annotation field "+name+
+								" due to temporary database problems.");
 			}
 
 		} catch (IOException e) {
-			e.printStackTrace();
-			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
+			Debug.log("Adding of new annotation field "+name+" failed. Reason: " +
+					e.getMessage());
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Could not create new " +
+					"annotation field "+name+" due to temporary database problems.");
 		} finally {
 			if (db != null) {
 				db.close();
