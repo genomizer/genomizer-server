@@ -47,9 +47,13 @@ public class PutAnnotationValueCommand extends Command {
 				"Old annotation value");
 		validateName(newValue, MaxLength.ANNOTATION_LABEL,
 				"New annotation value");
+		if(oldValue.equals("freetext")){
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Can not" +
+					" rename a value from \"freetext\"");
+		}
 		if(newValue.equals("freetext")){
 			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Can not" +
-					"rename a value to \"freetext\"");
+					" rename a value to \"freetext\"");
 		}
 	}
 
@@ -74,7 +78,7 @@ public class PutAnnotationValueCommand extends Command {
 			}
 
 		}catch (IOException | SQLException e) {
-			Debug.log("Editing annotation value " + oldValue + " on annotation "+name+
+			Debug.log("Editing annotation value " + oldValue + " on annotation " + name +
 					" failed due to database error. Reason: " + e.getMessage());
 			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Editing annotation value " + oldValue +
 					" on annotation "+name + " failed due to database error.");
