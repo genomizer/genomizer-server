@@ -34,6 +34,7 @@ public class PostAnnotationFieldCommand extends Command {
 	@Expose
 	private ArrayList<String> type = new ArrayList<>();
 
+	@Expose
 	@SerializedName("default")
 	private String defaults = null;
 
