@@ -8,6 +8,7 @@ import response.HttpStatusCode;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.concurrent.*;
 
 
@@ -30,8 +31,9 @@ public class ProcessHandler implements Callable<Response> {
 		Response response = null;
 
 		if (processCommand != null && process != null) {
-			Debug.log("Executing process in experiment "
-					+ processCommand.getExpId());
+			Debug.log("Execution of process with id " + processCommand.getPID()
+					+ " in experiment "
+					+ processCommand.getExpId() + "has begun.");
 
 			process.status = Process.STATUS_STARTED;
 
@@ -56,18 +58,30 @@ public class ProcessHandler implements Callable<Response> {
 
 				if (response.getCode() == HttpStatusCode.CREATED) {
 					process.status = Process.STATUS_FINISHED;
-					Debug.log("Process execution in experiment " +
-							processCommand.getExpId() + " has finished!");
+					String successMsg = "Execution of process with id " + processCommand.getPID()
+							+ " in experiment "
+							+ processCommand.getExpId() + " has finished.";
+					Debug.log(successMsg);
+					ErrorLogger.log("PROCESS", successMsg);
 				} else {
 					process.status = Process.STATUS_CRASHED;
-					Debug.log("FAILURE! Process execution in experiment " +
-							processCommand.getExpId() + " has crashed.");
+					String crashedMsg = "FAILURE! Execution of process with id "
+							+ processCommand.getPID() + " in experiment "
+							+ processCommand.getExpId() + " has crashed.";
+					Debug.log(crashedMsg);
+					ErrorLogger.log("PROCESS", crashedMsg);
 				}
+
 			} catch (NullPointerException e) {
 				process.status = Process.STATUS_CRASHED;
 			}
 
 			process.timeFinished = System.currentTimeMillis();
+
+			String timeMsg = "Elapsed time: " + new Date(process
+					.timeFinished-process.timeStarted).toString();
+			Debug.log(timeMsg);
+			ErrorLogger.log("PROCESS", timeMsg);
 
 		}
 
