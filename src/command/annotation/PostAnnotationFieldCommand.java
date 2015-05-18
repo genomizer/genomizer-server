@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import command.Command;
 import command.UserRights;
 import command.ValidateException;
+import database.containers.Annotation;
 import database.subClasses.UserMethods.UserType;
+import org.apache.http.protocol.HTTP;
 import response.AddAnnotationFieldResponse;
 import response.ErrorResponse;
 import response.HttpStatusCode;
@@ -33,7 +35,6 @@ public class PostAnnotationFieldCommand extends Command {
 	private ArrayList<String> type = new ArrayList<>();
 
 	@SerializedName("default")
-	@Expose
 	private String defaults = null;
 
 	@Expose
@@ -51,10 +52,7 @@ public class PostAnnotationFieldCommand extends Command {
 
 		validateName(name, MaxLength.ANNOTATION_LABEL, "Annotation label");
 		
-		if(defaults != null) {
-			validateName(defaults, MaxLength.ANNOTATION_DEFAULTVALUE,
-					"Default value");
-		}
+		defaults = "";
 
 		if(forced == null) {
 			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Specify if " +
@@ -68,7 +66,14 @@ public class PostAnnotationFieldCommand extends Command {
 
 		for(int i = 0; i < type.size(); i++) {
 			validateName(type.get(i), MaxLength.ANNOTATION_VALUE, "Annotation type");
+			if(type.get(i).equals("")){
+				type.remove(i);
+				i--;
+			}
 		}
+
+		type.add(0, "");
+
 	}
 
 	@Override
@@ -89,6 +94,10 @@ public class PostAnnotationFieldCommand extends Command {
 				addedAnnotations = db.addFreeTextAnnotation(name, defaults,
 						forced);
 			} else {
+				if(type.contains("freetext")){
+					return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Can not " +
+							"add a dropdown option called \"freetext\"");
+				}
 				addedAnnotations = db.addDropDownAnnotation(name, type,
 						defaultValueIndex, forced);
 			}
