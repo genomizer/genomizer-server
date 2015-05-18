@@ -278,7 +278,7 @@ public class PutUserAdminCommandTest {
         json = createJSON("a","b","c","d","e");
         PutUserAdminCommand cmd = gson.fromJson(json, PutUserAdminCommand.class);
 
-        cmd.setFields(null, null, UserMethods.UserType.ADMIN);
+        cmd.setFields(null, null, null, UserMethods.UserType.ADMIN);
         cmd.validate();
 
     }

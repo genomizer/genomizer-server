@@ -250,7 +250,7 @@ public class PutUserCommandTest {
     public void testValidationProperlyFormatted() throws ValidateException {
         json = createJSON("a","b","c","d");
         PutUserCommand cmd = gson.fromJson(json, PutUserCommand.class);
-        cmd.setFields(null, null, UserMethods.UserType.ADMIN);
+        cmd.setFields(null, null, null, UserMethods.UserType.ADMIN);
         cmd.validate();
 
     }

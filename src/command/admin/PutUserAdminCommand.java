@@ -12,7 +12,7 @@ import response.MinimalResponse;
 import response.Response;
 import response.HttpStatusCode;
 import server.Debug;
-
+import database.subClasses.UserMethods;
 import java.io.IOException;
 import java.sql.SQLException;
 
