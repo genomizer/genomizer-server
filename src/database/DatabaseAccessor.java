@@ -137,7 +137,7 @@ public class DatabaseAccessor implements AutoCloseable {
     public List<Experiment> search(String pubMedString) throws IOException,
             SQLException, ParseException {
 
-        if (pubMedString.isEmpty()) {
+        if (pubMedString == null || pubMedString.isEmpty()) {
             return getAllExperiments();
         }
 
