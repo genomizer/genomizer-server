@@ -26,10 +26,6 @@ public class GetExperimentCommand extends Command {
 
 	private String expID;
 
-	@Override
-	public int getExpectedNumberOfURIFields() {
-		return 2;
-	}
 
 	/**
 	 * Overrides the original command in order to use the uri.
@@ -38,9 +34,14 @@ public class GetExperimentCommand extends Command {
 	 * @param userType the user type for the command caller.
 	 */
 	@Override
-	public void setFields(String uri, String uuid, UserType userType) {
+	public int getExpectedNumberOfURIFields() {
+		return 2;
+	}
 
-		super.setFields(uri, uuid, userType);
+	@Override
+	public void setFields(String uri, String query, String uuid, UserType userType) {
+
+		super.setFields(uri, query, uuid, userType);
 		expID = uri.split("/")[2];
 	}
 

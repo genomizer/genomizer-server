@@ -40,9 +40,9 @@ public class GetGenomeReleaseSpeciesCommand extends Command {
 	 * @param userType the user type for the command caller.
 	 */
 	@Override
-	public void setFields(String uri, String uuid, UserType userType) {
+	public void setFields(String uri, String query, String uuid, UserType userType) {
 
-		super.setFields(uri, uuid, userType);
+		super.setFields(uri, query, uuid, userType);
 		species = uri.split("/")[2];
 	}
 

@@ -43,6 +43,20 @@ public class PutUserAdminCommand extends Command {
     }
 
     /**
+     * Set the UserType. Uri and Uuid not used in this command.
+     * @param uri the URI from the http request.
+     * @param query
+     * @param uuid
+     * @param userType
+     */
+    @Override
+    public void setFields(String uri, String query, String uuid, UserMethods.UserType userType) {
+        this.userType = userType;
+		/*No fields from the URI is needed, neither is the UUID. Dummy
+		implementation*/
+    }
+
+    /**
      * Used to make sure the strings of the command are correct
      * @throws command.ValidateException
      */

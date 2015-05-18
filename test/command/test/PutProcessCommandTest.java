@@ -11,6 +11,9 @@ import org.junit.Test;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import command.ValidateException;
+import response.MinimalResponse;
+
+import java.util.UUID;
 
 /**
  * Class used to test that the PutProcessCommand class
@@ -21,6 +24,7 @@ import command.ValidateException;
  */
 public class PutProcessCommandTest {
 
+	UUID PID = UUID.randomUUID();
 	private Gson gson;
 
 	/**
@@ -57,7 +61,7 @@ public class PutProcessCommandTest {
 	public void testValidationUserNameNotNull() throws ValidateException {
 
 		String[] p = {"a","b","c","d","e","f","g","h"};
-		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1");
+		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1",  PID);
 		PutProcessCommand c = gson.fromJson(json, PutProcessCommand.class);
 		c.setUsername(null);
 		c.setProcesstype(PutProcessCommand.CMD_RAW_TO_PROFILE);
@@ -77,7 +81,7 @@ public class PutProcessCommandTest {
 	public void testValidationUserNameEmptyString() throws ValidateException {
 
 		String[] p = {"a","b","c","d","e","f","g","h"};
-		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1");
+		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1", PID);
 		PutProcessCommand c = gson.fromJson(json, PutProcessCommand.class);
 		c.setUsername("");
 		c.setProcesstype(PutProcessCommand.CMD_RAW_TO_PROFILE);
@@ -101,7 +105,7 @@ public class PutProcessCommandTest {
 			big = big + "a";
 		}
 		String[] p = {"a","b","c","d","e","f","g","h"};
-		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1");
+		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1", PID);
 		PutProcessCommand c = gson.fromJson(json, PutProcessCommand.class);
 		c.setUsername(big);
 		c.setProcesstype(PutProcessCommand.CMD_RAW_TO_PROFILE);
@@ -121,7 +125,7 @@ public class PutProcessCommandTest {
 	public void testValidateUserNameInvalidCharacters() throws ValidateException {
 
 		String[] p = {"a","b","c","d","e","f","g","h"};
-		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1");
+		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1", PID);
 		PutProcessCommand c = gson.fromJson(json, PutProcessCommand.class);
 		c.setUsername("hel/lo");
 		c.setProcesstype(PutProcessCommand.CMD_RAW_TO_PROFILE);
@@ -141,7 +145,7 @@ public class PutProcessCommandTest {
 	public void testValidationProcessTypeNotNull() throws ValidateException {
 
 		String[] p = {"a","b","c","d","e","f","g","h"};
-		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1");
+		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1", PID);
 		PutProcessCommand c = gson.fromJson(json, PutProcessCommand.class);
 		c.setUsername("hello");
 		c.setProcesstype(null);
@@ -161,7 +165,7 @@ public class PutProcessCommandTest {
 	public void testValidationProcessTypeEmptyString() throws ValidateException {
 
 		String[] p = {"a","b","c","d","e","f","g","h"};
-		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1");
+		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1", PID);
 		PutProcessCommand c = gson.fromJson(json, PutProcessCommand.class);
 		c.setUsername("hello");
 		c.setProcesstype("");
@@ -181,7 +185,7 @@ public class PutProcessCommandTest {
 	public void testValidateProcessTypeInvalidSelection() throws ValidateException {
 
 		String[] p = {"a","b","c","d","e","f","g","h"};
-		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1");
+		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1", PID);
 		PutProcessCommand c = gson.fromJson(json, PutProcessCommand.class);
 		c.setUsername("hello");
 		c.setProcesstype("I Dont Exist");
@@ -201,7 +205,7 @@ public class PutProcessCommandTest {
 	public void testValidationExperimentIdNotNull() throws ValidateException {
 
 		String[] p = {"a","b","c","d","e","f","g","h"};
-		String json = jsonAndInfoBuilder(null,p,"metadata","gen1");
+		String json = jsonAndInfoBuilder(null,p,"metadata","gen1", PID);
 		PutProcessCommand c = gson.fromJson(json, PutProcessCommand.class);
 		c.setUsername("hello");
 		c.setProcesstype(PutProcessCommand.CMD_RAW_TO_PROFILE);
@@ -221,7 +225,7 @@ public class PutProcessCommandTest {
 	public void testValidationExperimentIdEmptyString() throws ValidateException {
 
 		String[] p = {"a","b","c","d","e","f","g","h"};
-		String json = jsonAndInfoBuilder("",p,"metadata","gen1");
+		String json = jsonAndInfoBuilder("",p,"metadata","gen1", PID);
 		PutProcessCommand c = gson.fromJson(json, PutProcessCommand.class);
 		c.setUsername("hello");
 		c.setProcesstype(PutProcessCommand.CMD_RAW_TO_PROFILE);
@@ -245,7 +249,7 @@ public class PutProcessCommandTest {
 			big = big + "a";
 		}
 		String[] p = {"a","b","c","d","e","f","g","h"};
-		String json = jsonAndInfoBuilder(big,p,"metadata","gen1");
+		String json = jsonAndInfoBuilder(big,p,"metadata","gen1", PID);
 		PutProcessCommand c = gson.fromJson(json, PutProcessCommand.class);
 		c.setUsername("hello");
 		c.setProcesstype(PutProcessCommand.CMD_RAW_TO_PROFILE);
@@ -265,7 +269,7 @@ public class PutProcessCommandTest {
 	public void testValidateExperimentIdInvalidCharacters() throws ValidateException {
 
 		String[] p = {"a","b","c","d","e","f","g","h"};
-		String json = jsonAndInfoBuilder("experi/mentID",p,"metadata","gen1");
+		String json = jsonAndInfoBuilder("experi/mentID",p,"metadata","gen1", PID);
 		PutProcessCommand c = gson.fromJson(json, PutProcessCommand.class);
 		c.setUsername("hello");
 		c.setProcesstype(PutProcessCommand.CMD_RAW_TO_PROFILE);
@@ -285,7 +289,7 @@ public class PutProcessCommandTest {
 	public void testValidationParametersRawToProfileSize() throws ValidateException {
 
 		String[] p = {"a","b","c","d"};
-		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1");
+		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1",PID);
 		PutProcessCommand c = gson.fromJson(json, PutProcessCommand.class);
 		c.setUsername("hello");
 		c.setProcesstype(PutProcessCommand.CMD_RAW_TO_PROFILE);
@@ -305,7 +309,7 @@ public class PutProcessCommandTest {
 	public void testValidationMetaDataEmpty() throws ValidateException {
 
 		String[] p = {"a","b","c","d","e","f","g","h"};
-		String json = jsonAndInfoBuilder("experimentID",p,null,"gen1");
+		String json = jsonAndInfoBuilder("experimentID",p,null,"gen1", PID);
 		PutProcessCommand c = gson.fromJson(json, PutProcessCommand.class);
 		c.setUsername("hello");
 		c.setProcesstype(PutProcessCommand.CMD_RAW_TO_PROFILE);
@@ -328,7 +332,7 @@ public class PutProcessCommandTest {
 	public void testValidationMetaDataEmptyString() throws ValidateException {
 
 		String[] p = {"a","b","c","d","e","f","g","h"};
-		String json = jsonAndInfoBuilder("experimentID",p,"","gen1");
+		String json = jsonAndInfoBuilder("experimentID",p,"","gen1", PID);
 		PutProcessCommand c = gson.fromJson(json, PutProcessCommand.class);
 		c.setUsername("hello");
 		c.setProcesstype(PutProcessCommand.CMD_RAW_TO_PROFILE);
@@ -352,7 +356,7 @@ public class PutProcessCommandTest {
 			big = big + "a";
 		}
 		String[] p = {"a","b","c","d","e","f","g","h"};
-		String json = jsonAndInfoBuilder("experimentID",p,big,"gen1");
+		String json = jsonAndInfoBuilder("experimentID",p,big,"gen1", PID);
 		PutProcessCommand c = gson.fromJson(json, PutProcessCommand.class);
 		c.setUsername("hello");
 		c.setProcesstype(PutProcessCommand.CMD_RAW_TO_PROFILE);
@@ -373,7 +377,7 @@ public class PutProcessCommandTest {
 	public void testValidateMetaDataInvalidCharacters() throws ValidateException {
 
 		String[] p = {"a","b","c","d","e","f","g","h"};
-		String json = jsonAndInfoBuilder("experimentID",p,"metad/ata","gen1");
+		String json = jsonAndInfoBuilder("experimentID",p,"metad/ata","gen1", PID);
 		PutProcessCommand c = gson.fromJson(json, PutProcessCommand.class);
 		c.setUsername("hello");
 		c.setProcesstype(PutProcessCommand.CMD_RAW_TO_PROFILE);
@@ -393,7 +397,7 @@ public class PutProcessCommandTest {
 	public void testValidationGenomeVersionNotNull() throws ValidateException {
 
 		String[] p = {"a","b","c","d","e","f","g","h"};
-		String json = jsonAndInfoBuilder("experimentID",p,"metadata",null);
+		String json = jsonAndInfoBuilder("experimentID",p,"metadata",null, PID);
 		PutProcessCommand c = gson.fromJson(json, PutProcessCommand.class);
 		c.setUsername("hello");
 		c.setProcesstype(PutProcessCommand.CMD_RAW_TO_PROFILE);
@@ -413,7 +417,7 @@ public class PutProcessCommandTest {
 	public void testValidationGenomeVersionEmptyString() throws ValidateException {
 
 		String[] p = {"a","b","c","d","e","f","g","h"};
-		String json = jsonAndInfoBuilder("experimentID",p,"metadata","");
+		String json = jsonAndInfoBuilder("experimentID",p,"metadata","", PID);
 		PutProcessCommand c = gson.fromJson(json, PutProcessCommand.class);
 		c.setUsername("hello");
 		c.setProcesstype(PutProcessCommand.CMD_RAW_TO_PROFILE);
@@ -437,7 +441,7 @@ public class PutProcessCommandTest {
 			big = big + "a";
 		}
 		String[] p = {"a","b","c","d","e","f","g","h"};
-		String json = jsonAndInfoBuilder("experimentID",p,"metadata",big);
+		String json = jsonAndInfoBuilder("experimentID",p,"metadata",big, PID);
 		PutProcessCommand c = gson.fromJson(json, PutProcessCommand.class);
 		c.setUsername("hello");
 		c.setProcesstype(PutProcessCommand.CMD_RAW_TO_PROFILE);
@@ -457,7 +461,7 @@ public class PutProcessCommandTest {
 	public void testValidateGenomeVersionInvalidCharacters() throws ValidateException {
 
 		String[] p = {"a","b","c","d","e","f","g","h"};
-		String json = jsonAndInfoBuilder("experimentID",p,"metadata","ge/n1");
+		String json = jsonAndInfoBuilder("experimentID",p,"metadata","ge/n1", PID);
 		PutProcessCommand c = gson.fromJson(json, PutProcessCommand.class);
 		c.setUsername("hello");
 		c.setProcesstype(PutProcessCommand.CMD_RAW_TO_PROFILE);
@@ -478,9 +482,9 @@ public class PutProcessCommandTest {
 	public void testValidateProperlyFormatted() throws ValidateException {
 
 		String[] p = {"a","b","c","d","e","f","g","h"};
-		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1");
+		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1", PID);
 		PutProcessCommand c = gson.fromJson(json, PutProcessCommand.class);
-		c.setFields("/hello", null, UserType.ADMIN);
+		c.setFields("/hello", "", null, UserType.ADMIN);
 		c.setProcesstype(PutProcessCommand.CMD_RAW_TO_PROFILE);
 		c.validate();
 
@@ -496,15 +500,17 @@ public class PutProcessCommandTest {
 	public void testConvertJSON() {
 
 		String[] p = {"a","b","c","d","e","f","g","h"};
-		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1");
+		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1", PID);
 		PutProcessCommand c = gson.fromJson(json, PutProcessCommand.class);
-		c.setFields("/hello/hiho", null, UserType.ADMIN);
+		c.setFields("/hello/hiho", "", null, UserType.ADMIN);
 		c.setProcesstype(PutProcessCommand.CMD_RAW_TO_PROFILE);
 		String compare = gson.toJson(c);
 
 		assertEquals(compare, json);
 
 	}
+
+	//TODO Test for CMD_CANCEL_PROCESS
 
 	/**
 	 * Test used to check that ValidateException is not thrown
@@ -517,9 +523,10 @@ public class PutProcessCommandTest {
 	public void testHavingRights() throws ValidateException {
 
 		String[] p = {"a","b","c","d","e","f","g","h"};
-		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1");
+		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1",
+				UUID.randomUUID());
 		PutProcessCommand c = gson.fromJson(json, PutProcessCommand.class);
-		c.setFields("/hello", "name", UserType.USER);
+		c.setFields("/hello", "", "name", UserType.USER);
 		c.setProcesstype(PutProcessCommand.CMD_RAW_TO_PROFILE);
 
 		c.validate();
@@ -536,7 +543,7 @@ public class PutProcessCommandTest {
 
 		String json = "{\"name\":\"experimentId\",\"annotations\":[{\"name\":\"pubmedId\",\"value\":\"abc123\"},{\"name\":\"type\",\"value\":\"raw\"}]}";
 		PutProcessCommand c = gson.fromJson(json, PutProcessCommand.class);
-		c.setFields("/hello/hiho", null, UserType.GUEST);
+		c.setFields("/hello/hiho", "", null, UserType.GUEST);
 		c.setProcesstype(PutProcessCommand.CMD_RAW_TO_PROFILE);
 
 		c.validate();
@@ -549,7 +556,7 @@ public class PutProcessCommandTest {
 	 * @param expId and the other strings are used for inserting into JSON object.
 	 * @return JSON formatted string.
 	 */
-	private String jsonAndInfoBuilder(String expId, String[] param, String met, String genV) {
+	private String jsonAndInfoBuilder(String expId, String[] param, String met, String genV, UUID PID) {
 
 		String parameters = "";
 		if(param != null) {

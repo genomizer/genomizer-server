@@ -32,7 +32,7 @@ public class DeleteFileCommandTest {
 		}
 
 		Command c = new DeleteFileCommand();
-		c.setFields(uri, null, UserType.ADMIN);
+		c.setFields(uri, "", null, UserType.ADMIN);
 		c.validate();
 		fail("Expected ValidateException.");
 	}
@@ -46,7 +46,7 @@ public class DeleteFileCommandTest {
 	@Test
 	public void textValidateProperlyFormatted() throws ValidateException {
 		Command c = new DeleteFileCommand();
-		c.setFields("/file/Hello", null, UserType.ADMIN);
+		c.setFields("/file/Hello", "", null, UserType.ADMIN);
 		c.validate();
 		assertTrue(true);
 	}
@@ -60,7 +60,7 @@ public class DeleteFileCommandTest {
 	public void testValidateIncorrectlyFormatted() throws ValidateException {
 
 		Command c = new DeleteFileCommand();
-		c.setFields("/file/��", null, UserType.ADMIN);
+		c.setFields("/file/��", "", null, UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -76,7 +76,7 @@ public class DeleteFileCommandTest {
 	public void testHavingRights() throws ValidateException {
 
 		Command c = new DeleteFileCommand();
-		c.setFields("/genomeRelease/Specie/GRelease", null, UserType.USER);
+		c.setFields("/genomeRelease/Specie/GRelease", "", null, UserType.USER);
 		c.validate();
 	}
 
@@ -90,7 +90,7 @@ public class DeleteFileCommandTest {
 	public void testNotHavingRights() throws ValidateException {
 
 		Command c = new DeleteFileCommand();
-		c.setFields("/genomeRelease/Specie/GRelease", null, UserType.GUEST);
+		c.setFields("/genomeRelease/Specie/GRelease", "", null, UserType.GUEST);
 		c.validate();
 		fail();
 	}

@@ -17,6 +17,7 @@ public class ServerSettings {
 	public static int genomizerPort = -1;
 	public static String fileLocation = "/var/www/data/";
 	public static String bowtieLocation = "bowtie";
+	public static String picardLocation = "picard";
 	public static int nrOfProcessThreads = 5;
 
 	private static String downloadURL = "/download?path=";
@@ -36,7 +37,8 @@ public class ServerSettings {
 					+ "genomizerPort  = " + genomizerPort + "\n"
 					+ "fileLocation = " + fileLocation + "\n"
 					+ "nrOfProcessThreads = " + nrOfProcessThreads + "\n"
-					+ "bowtieLocation = " + bowtieLocation + "\n";
+					+ "bowtieLocation = " + bowtieLocation + "\n"
+					+ "picardLocation = " + picardLocation + "\n";
 
 			out.write(dataInfo);
 			out.close();
@@ -64,6 +66,7 @@ public class ServerSettings {
 		nullCheck(fileLocation, "fileLocation");
 		nullCheck(nrOfProcessThreads, "nrOfProcessThreads");
 		nullCheck(bowtieLocation, "bowtieLocation");
+		nullCheck(picardLocation, "picardLocation");
 	}
 
 	private static void nullCheck(int parameter, String name) {
@@ -138,6 +141,9 @@ public class ServerSettings {
 					break;
 				case "bowtielocation":
 					bowtieLocation = value;
+					break;
+				case "picardlocation":
+					picardLocation = value;
 					break;
 				default:
 					String msg = "Unrecognized setting: " + key;

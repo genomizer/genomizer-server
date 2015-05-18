@@ -30,15 +30,10 @@ public class DeleteFileCommand extends Command {
 		return 2;
 	}
 
-	/**
-	 * Overrides the original command in order to use the uri.
-	 * @param uri Contains the experiment id to fetch.
-	 * @param uuid the UUID for the user who made the request.
-	 * @param userType the user type for the command caller.
-	 */
 	@Override
-	public void setFields(String uri, String uuid, UserType userType) {
-		super.setFields(uri, uuid, userType);
+	public void setFields(String uri, String query, String uuid, UserType userType) {
+
+		super.setFields(uri, query, uuid, userType);
 		fileID = uri.split("/")[2];
 	}
 

@@ -1,0 +1,52 @@
+<tool id="pyicos_convert" name="Convert" version="1.2">
+  <description>Convert between supported Pyicos formats.</description>
+  <command interpreter="python">
+      #if $output_format_cond.output_format == "variable_wig" #pyicos convert $experiment $output -f $experiment_format -F $output_format_cond.output_format $is_experiment_open $is_output_open $round --span $output_format_cond.span --tag-length $tag_length
+      #else #pyicos convert $experiment $output -f $experiment_format -F $output_format_cond.output_format $is_experiment_open $is_output_open $round --tag-length $tag_length
+      #end if
+  </command>
+  <inputs>
+
+    <param format="tabular" name="experiment" type="data" label="Experiment file"/>
+    <param  name="experiment_format" type="select" label="Experiment format" format="text">
+        <option value="bed" selected="true">Bed</option>
+        <option value="sam">Sam</option>
+        <option value="eland">Eland</option>
+        <option value="bed_wig">Wiggle(Bed)</option>
+        <option value="bed_pk">Bed pk</option>
+    </param>
+    <param  name="is_experiment_open" type="boolean" label="Is the experiment half-open?" truevalue="--open-experiment" falsevalue=""/>
+    <conditional name="output_format_cond">
+        <param  name="output_format" type="select" label="Output format">
+            <option value="bed">Bed</option>
+            <option value="sam">Sam</option>
+            <option value="eland">Eland</option>
+            <option value="bed_wig" selected="true">Wiggle(Bed)</option>
+            <option value="variable_wig">Wiggle(Variable)</option>
+            <option value="bed_pk">Bed pk</option>
+        </param>
+        <when value="variable_wig">
+            <param  name="span" type="integer" label="Variable Wig resolution" size="4" value="10"/>
+        </when>
+        <when value="bed"><!-- do nothing here --></when>
+        <when value="sam"><!-- do nothing here --></when>
+        <when value="eland"><!-- do nothing here --></when>
+        <when value="bed_wig"><!-- do nothing here --></when>
+        <when value="bed_pk"><!-- do nothing here --></when>
+    </conditional>
+        <param  name="is_output_open" type="boolean" label="Is output half-open?" truevalue="--open-output" falsevalue=""/>
+        <param  name="round" type="boolean" label="Return the heights rounded to the closest integer" truevalue="--round" falsevalue="" checked="true"/>
+        <param name="tag_length" type="integer" label="Tag length" size="4" value="0" />
+  </inputs>
+  <outputs>
+    <data format="tabular" name="output" />
+  </outputs>
+  <stdio>
+    <exit_code range="1:" level="error" />
+  </stdio>
+
+  <help>
+        A handy parser to convert any format that pyicos can read to any other format.
+        More information at: http://regulatorygenomics.upf.edu/pyicos
+  </help>
+</tool>

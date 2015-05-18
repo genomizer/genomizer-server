@@ -53,10 +53,11 @@ public abstract class Command {
 	 * from the request as well as the UUID of the user the implementation
 	 * of this function should make sure the necessary information is set.
 	 * @param uri isn't used. Override it to use it.
+	 * @param query
 	 * @param uuid the UUID for the user who made the request.
 	 * @param userType the user type for the command caller.
 	 */
-	public void setFields(String uri, String uuid, UserType userType){
+	public void setFields(String uri, String query, String uuid, UserType userType){
 		this.uuid = uuid;
 		this.userType = userType;
 	}
