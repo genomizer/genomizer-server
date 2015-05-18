@@ -73,9 +73,9 @@ public class PostAnnotationFieldCommand extends Command {
 				i--;
 			}
 		}
-
-		type.add(0, "");
-
+		if(!(type.size() == 1 && type.get(0).equals("freetext"))) {
+			type.add(0, "");
+		}
 	}
 
 	@Override
