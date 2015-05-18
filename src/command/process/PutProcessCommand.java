@@ -215,18 +215,32 @@ public class PutProcessCommand extends Command {
 		Debug.log(username + "Raw to profile processing completed " +
 				"running " + processtype + " on experiment" + expid + "\n" +
 				"metadata: " + metadata + "\n" +
-				"parameters: " + parameters + "\n" +
+				"parameters: "
+					+ arrayToString(parameters, parameters.length) + "\n" +
 				"genomeVersion: " + genomeVersion + "\n" +
 		        "PID: " + PID + "\n");
 		return new ProcessResponse(HttpStatusCode.OK, "Raw to profile " +
 				"processing completed running " + processtype +
 				" on experiment" + expid + "\n"+
 				"metadata: " + metadata + "\n"+
-				"parameters: " + parameters + "\n" +
+				"parameters: "
+					+ arrayToString(parameters, parameters.length) + "\n" +
 				"genomeVersion: " + genomeVersion + "\n" +
 		        "PID: " + PID + "\n");
 
 
+	}
+
+
+	private String arrayToString(String[] arr, int length) {
+
+		StringBuilder stringBuilder = new StringBuilder();
+
+		for (int i=0; i<length; i++) {
+			stringBuilder.append(arr[i]);
+		}
+
+		return stringBuilder.toString();
 	}
 
 	/**
