@@ -1057,7 +1057,16 @@ public class DatabaseAccessor implements AutoCloseable {
      */
     public String addGenomeRelease(String genomeVersion, String species,
             String filename, String checkSumMD5) throws SQLException, IOException {
-        return genMethods.addGenomeRelease(genomeVersion, species, filename, checkSumMD5);
+        return genMethods.addGenomeReleaseWithStatus(genomeVersion, species, filename, checkSumMD5, "Done");
+    }
+
+    // Like 'addGenomeRelease', but sets the status to 'In Progress'.
+    // You'll later need to call 'markReadyForDownload' to finalize the upload.
+    public String addInProgressGenomeRelease(String genomeVersion, String species,
+                                             String filename, String checkSumMD5)
+            throws SQLException, IOException {
+        return genMethods.addGenomeReleaseWithStatus(genomeVersion, species,
+                filename, checkSumMD5, "In Progress");
     }
 
     /**

@@ -83,8 +83,8 @@ public class GenomeMethods {
      *             if adding query failed.
      * @throws IOException
      */
-    public String addGenomeRelease(String genomeVersion, String species,
-            String filename, String checkSumMD5) throws SQLException, IOException {
+    public String addGenomeReleaseWithStatus(String genomeVersion, String species,
+            String filename, String checkSumMD5, String status) throws SQLException, IOException {
 
     	if(!FileValidator.fileNameCheck(filename)){
     		throw new IOException("Invalid file name");
@@ -97,19 +97,17 @@ public class GenomeMethods {
 		StringBuilder filePathBuilder = new StringBuilder(folderPath);
 		filePathBuilder.append(filename);
 
-		PreparedStatement stmt;
-
 		if (getGenomeRelease(genomeVersion) == null) {
-			String query = "INSERT INTO Genome_Release "
-					+ "(Version, Species, FolderPath) " + "VALUES (?, ?, ?)";
+			try (PreparedStatement stmt =
+						 conn.prepareStatement("INSERT INTO Genome_Release "
+								 + "(Version, Species, FolderPath) " + "VALUES (?, ?, ?)")) {
 
-			stmt = conn.prepareStatement(query);
-			stmt.setString(1, genomeVersion);
-			stmt.setString(2, species);
-			stmt.setString(3, folderPath);
+				stmt.setString(1, genomeVersion);
+				stmt.setString(2, species);
+				stmt.setString(3, folderPath);
 
-			stmt.executeUpdate();
-			stmt.close();
+				stmt.executeUpdate();
+			}
 		}
 
         if (genomeReleaseFileExists(genomeVersion, filename)) {
@@ -117,18 +115,18 @@ public class GenomeMethods {
                     + " already exists for this genome release!");
         }
 
-        String query2 = "INSERT INTO Genome_Release_Files "
-                + "(Version, FileName, MD5) VALUES (?, ?, ?)";
-
-		stmt = conn.prepareStatement(query2);
-		stmt.setString(1, genomeVersion);
-		stmt.setString(2, filename);
-		stmt.setString(3, checkSumMD5);
-		stmt.executeUpdate();
-		stmt.close();
+		try (PreparedStatement stmt = conn.prepareStatement(
+				"INSERT INTO Genome_Release_Files "
+						+ "(Version, FileName, MD5, Status) VALUES (?, ?, ?, ?)")) {
+			stmt.setString(1, genomeVersion);
+			stmt.setString(2, filename);
+			stmt.setString(3, checkSumMD5);
+			stmt.setString(4, status);
+			stmt.executeUpdate();
+		}
 
 		filePathBuilder.insert(0, ServerDependentValues.UploadURL);
-		stmt.close();
+
 		return filePathBuilder.toString();
 	}
 

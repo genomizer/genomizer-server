@@ -74,7 +74,7 @@ public class PostGenomeReleaseCommand extends Command {
 				if (i < checkSumsMD5.size()) {
 					checkSumMD5 = checkSumsMD5.get(i);
 				}
-				 uploadURLs.add(db.addGenomeRelease(genomeVersion, specie,
+				 uploadURLs.add(db.addInProgressGenomeRelease(genomeVersion, specie,
 						 fileName, checkSumMD5));
 			}
 			return new AddGenomeReleaseResponse(HttpStatusCode.OK, uploadURLs);
