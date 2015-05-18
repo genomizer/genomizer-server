@@ -5,7 +5,7 @@
 # ratio_calculator_v2.pl, by answering the four questions asked by the
 # script, instead taking them as commandline arguments.
 #
-# Useage example(s):
+# Usage example(s):
 # expect ratio_calc_wrapper.sh "Argument1" "Split arg" "Argument3" "Argument4"
 # expect ratio_calc_wrapper.sh test1 test2 test3 test4
 
