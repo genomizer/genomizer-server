@@ -256,7 +256,8 @@ public class PutProcessCommand extends Command {
 				" " + processtype +
 				" on experiment" + expid + "\n" +
 				"metadata: " + metadata + "\n" +
-				"parameters: " + parameters + "\n" +
+				"parameters: "
+					+ arrayToString(parameters, parameters.length) + "\n" +
 				"genomeVersion: " + genomeVersion + "\n" +
 				"PID: " + PID + "\n" +
 				error + "\n");
@@ -266,7 +267,8 @@ public class PutProcessCommand extends Command {
 				" when processing " + processtype +
 				" on experiment" + expid + "\n"+
 				"metadata: " + metadata + "\n"+
-				"parameters: " + parameters + "\n" +
+				"parameters: "
+					+ arrayToString(parameters, parameters.length) + "\n" +
 				"genomeVersion: " + genomeVersion + "\n" +
 				"PID: " + PID + "\n" +
 				error + "\n");
