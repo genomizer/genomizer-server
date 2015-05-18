@@ -2,11 +2,15 @@ package command.test;
 
 import static org.junit.Assert.*;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import command.Command;
 
 import command.ValidateException;
 import command.experiment.PutExperimentCommand;
+import database.constants.MaxLength;
 import database.subClasses.UserMethods.UserType;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -18,30 +22,208 @@ import org.junit.Test;
  */
 
 public class PutExperimentCommandTest {
-//	//TODO Implement tests later
-//
-//	/**
-//	 * Test used to check that creation works and object
-//	 * is not null.
-//	 */
-//	@Test
-//	public void testCreationNotNull() {
-//
-//		PutExperimentCommand c = new PutExperimentCommand("", "");
-//		assertNotNull(c);
-//
-//	}
-//
-//	/**
-//	 * Test used to check that validate always returns true.
-//	 */
-//	@Test
-//	public void testValidateAlwaysTrue() {
-//
-//		PutExperimentCommand c = new PutExperimentCommand("", "");
-//		c.validate();
-//
-//	}
+
+	public Gson gson = null;
+	private String json = "{\"name\": \"experimentId\"," +
+			"\"annotations\": [" +
+				"{\"name\": \"pubmedId\", \"value\": \"abc123\"}," +
+				"{ \"name\": \"type\", \"value\": \"raw\"}," +
+				"{ \"name\": \"specie\", \"value\": \"human\"}," +
+				"{ \"name\": \"genome release\", \"value\": \"v.123\"}," +
+				"{ \"name\": \"cell line\", \"value\": \"yes\"}," +
+				"{ \"name\": \"development stage\", \"value\": \"larva\"}," +
+				"{ \"name\": \"sex\", \"value\": \"male\"}," +
+				"{ \"name\": \"tissue\", \"value\": \"eye\"} " +
+			"]}";
+
+	/**
+	 * Setup method containing the gson builder.
+	 *
+	 * @throws Exception
+	 */
+	@Before
+	public void setUp() throws Exception {
+
+		final GsonBuilder builder = new GsonBuilder();
+		builder.excludeFieldsWithoutExposeAnnotation();
+		gson = builder.create();
+	}
+
+	/**
+	 * Test used to check that creation is not null.
+	 */
+	@Test
+	public void testCreationNotNull() {
+
+		PutExperimentCommand c = new PutExperimentCommand();
+
+		assertNotNull(c);
+	}
+
+	/**
+	 * Test used to check that ValidateException is thrown when
+	 * name is an empty string.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testValidateNameEmptyString() throws ValidateException {
+
+		String faultyJson = "{\"name\": \"\"," +
+				"\"annotations\": [" +
+				"{\"name\": \"pubmedId\", \"value\": \"abc123\"}," +
+				"{ \"name\": \"type\", \"value\": \"raw\"}," +
+				"{ \"name\": \"specie\", \"value\": \"human\"}," +
+				"{ \"name\": \"genome release\", \"value\": \"v.123\"}," +
+				"{ \"name\": \"cell line\", \"value\": \"yes\"}," +
+				"{ \"name\": \"development stage\", \"value\": \"larva\"}," +
+				"{ \"name\": \"sex\", \"value\": \"male\"}," +
+				"{ \"name\": \"tissue\", \"value\": \"eye\"} " +
+				"]}";
+		PutExperimentCommand c = gson.fromJson(faultyJson, PutExperimentCommand.class);
+		c.validate();
+
+		fail("Expected ValidateException to be thrown.");
+	}
+
+	/**
+	 * Test used to check that ValidateException is thrown when
+	 * name length is to long.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testValidateNameLengthToLong() throws ValidateException {
+
+		String big = "";
+		for(int i = 0; i < MaxLength.EXPID + 1; i++) {
+			big = big + "A";
+		}
+		String faultyJson = "{\"name\": \"" + big + "\"," +
+				"\"annotations\": [" +
+				"{\"name\": \"pubmedId\", \"value\": \"abc123\"}," +
+				"{ \"name\": \"type\", \"value\": \"raw\"}," +
+				"{ \"name\": \"specie\", \"value\": \"human\"}," +
+				"{ \"name\": \"genome release\", \"value\": \"v.123\"}," +
+				"{ \"name\": \"cell line\", \"value\": \"yes\"}," +
+				"{ \"name\": \"development stage\", \"value\": \"larva\"}," +
+				"{ \"name\": \"sex\", \"value\": \"male\"}," +
+				"{ \"name\": \"tissue\", \"value\": \"eye\"} " +
+				"]}";
+		PutExperimentCommand c = gson.fromJson(faultyJson, PutExperimentCommand.class);
+		c.validate();
+
+		fail("Expected ValidateException to be thrown.");
+	}
+
+	/**
+	 * Test used to check that ValidateException is thrown when
+	 * name contains invalid characters.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testValidateNameInvalidCharacters() throws ValidateException {
+
+		String faultyJson = "{\"name\": \"hell/o\"," +
+				"\"annotations\": [" +
+				"{\"name\": \"pubmedId\", \"value\": \"abc123\"}," +
+				"{ \"name\": \"type\", \"value\": \"raw\"}," +
+				"{ \"name\": \"specie\", \"value\": \"human\"}," +
+				"{ \"name\": \"genome release\", \"value\": \"v.123\"}," +
+				"{ \"name\": \"cell line\", \"value\": \"yes\"}," +
+				"{ \"name\": \"development stage\", \"value\": \"larva\"}," +
+				"{ \"name\": \"sex\", \"value\": \"male\"}," +
+				"{ \"name\": \"tissue\", \"value\": \"eye\"} " +
+				"]}";
+		PutExperimentCommand c = gson.fromJson(faultyJson, PutExperimentCommand.class);
+		c.validate();
+
+		fail("Expected ValidateException to be thrown.");
+	}
+
+	/**
+	 * Test used to check that ValidateException is thrown when
+	 * name is an empty string.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testValidateAnnotationEmptyString() throws ValidateException {
+
+		String faultyJson = "{\"name\": \"experimentId\"," +
+				"\"annotations\": [" +
+				"{\"name\": \"\", \"value\": \"abc123\"}," +
+				"{ \"name\": \"type\", \"value\": \"raw\"}," +
+				"{ \"name\": \"specie\", \"value\": \"human\"}," +
+				"{ \"name\": \"genome release\", \"value\": \"v.123\"}," +
+				"{ \"name\": \"cell line\", \"value\": \"yes\"}," +
+				"{ \"name\": \"development stage\", \"value\": \"larva\"}," +
+				"{ \"name\": \"sex\", \"value\": \"male\"}," +
+				"{ \"name\": \"tissue\", \"value\": \"eye\"} " +
+				"]}";
+		PutExperimentCommand c = gson.fromJson(faultyJson, PutExperimentCommand.class);
+		c.validate();
+
+		fail("Expected ValidateException to be thrown.");
+	}
+
+	/**
+	 * Test used to check that ValidateException is thrown when
+	 * name length is to long.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testValidateAnnotationLengthToLong() throws ValidateException {
+
+		String big = "";
+		for(int i = 0; i < MaxLength.EXPID + 1; i++) {
+			big = big + "A";
+		}
+		String faultyJson = "{\"name\": \"experimentId\"," +
+				"\"annotations\": [" +
+				"{\"name\": \"" + big + "\", \"value\": \"abc123\"}," +
+				"{ \"name\": \"type\", \"value\": \"raw\"}," +
+				"{ \"name\": \"specie\", \"value\": \"human\"}," +
+				"{ \"name\": \"genome release\", \"value\": \"v.123\"}," +
+				"{ \"name\": \"cell line\", \"value\": \"yes\"}," +
+				"{ \"name\": \"development stage\", \"value\": \"larva\"}," +
+				"{ \"name\": \"sex\", \"value\": \"male\"}," +
+				"{ \"name\": \"tissue\", \"value\": \"eye\"} " +
+				"]}";
+		PutExperimentCommand c = gson.fromJson(faultyJson, PutExperimentCommand.class);
+		c.validate();
+
+		fail("Expected ValidateException to be thrown.");
+	}
+
+	/**
+	 * Test used to check that ValidateException is thrown when
+	 * name contains invalid characters.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testValidateAnnotationInvalidCharacters() throws ValidateException {
+
+		String faultyJson = "{\"name\": \"experimentId\"," +
+				"\"annotations\": [" +
+				"{\"name\": \"not/correct\", \"value\": \"abc123\"}," +
+				"{ \"name\": \"type\", \"value\": \"raw\"}," +
+				"{ \"name\": \"specie\", \"value\": \"human\"}," +
+				"{ \"name\": \"genome release\", \"value\": \"v.123\"}," +
+				"{ \"name\": \"cell line\", \"value\": \"yes\"}," +
+				"{ \"name\": \"development stage\", \"value\": \"larva\"}," +
+				"{ \"name\": \"sex\", \"value\": \"male\"}," +
+				"{ \"name\": \"tissue\", \"value\": \"eye\"} " +
+				"]}";
+		PutExperimentCommand c = gson.fromJson(faultyJson, PutExperimentCommand.class);
+		c.validate();
+
+		fail("Expected ValidateException to be thrown.");
+	}
+
 
 	/**
 	 * Test used to check that ValidateException is not thrown
@@ -52,8 +234,8 @@ public class PutExperimentCommandTest {
 	@Test
 	public void testHavingRights() throws ValidateException {
 
-		Command c = new PutExperimentCommand();
-		c.setFields("uri", null, UserType.USER);
+		Command c = gson.fromJson(json,PutExperimentCommand.class);
+		c.setFields("/exp/uri", "uuid", UserType.USER);
 		c.validate();
 	}
 
@@ -66,8 +248,8 @@ public class PutExperimentCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testNotHavingRights() throws ValidateException {
 
-		Command c = new PutExperimentCommand();
-		c.setFields("uri", null, UserType.GUEST);
+		Command c = gson.fromJson(json,PutExperimentCommand.class);
+		c.setFields("/exp/uri", null, UserType.GUEST);
 		c.validate();
 		fail();
 	}
