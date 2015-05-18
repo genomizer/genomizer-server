@@ -1,5 +1,6 @@
 package command.admin;
 
+import database.subClasses.UserMethods.UserType;
 import authentication.BCrypt;
 import com.google.gson.annotations.Expose;
 import command.Command;
@@ -86,7 +87,7 @@ public class PutUserAdminCommand extends Command {
 
         try {
             String hash = BCrypt.hashpw(password, BCrypt.gensalt());
-            db.updateUser(username, hash, privileges, name, email);
+            db.updateUser(username, hash, UserType.valueOf(privileges), name, email);
 
         } catch (SQLException | IOException e) {
             Debug.log("UPDATE WAS UNSUCCESSFUL FOR: " + username + ". REASON: " +
