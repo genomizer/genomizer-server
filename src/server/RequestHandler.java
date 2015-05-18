@@ -55,9 +55,8 @@ public class RequestHandler implements HttpHandler {
         /*Extract the request method and the context. Together they form a
         * key that is used to retrieve the appropriate command from a
         * hash map of all existing commands.*/
-        String requestMethod = exchange.getRequestMethod();
-		String context = exchange.getHttpContext().getPath();
-        String key = requestMethod + " " + context;
+        String key = exchange.getRequestMethod() + " "
+                + exchange.getHttpContext().getPath();
         Class<? extends Command> commandClass = CommandClasses.get(key);
 
         String uuid = Authenticate.AuthenticateAuthorization(exchange);
@@ -91,37 +90,6 @@ public class RequestHandler implements HttpHandler {
             return;
         }
 
-		/*Authenticate the user and send the appropriate response if needed.*/
-		String uuid = performAuthorization(exchange);
-		if (commandClass == null) {
-			if (uuid == null) {
-                respondWithAuthenticationFailure(exchange);
-				return;
-			} else {
-				Debug.log("Unrecognized command: " +
-                        exchange.getRequestMethod() + " " + exchange.
-                        getRequestURI());
-				respond(createBadRequestResponse(), exchange);
-				return;
-			}
-		} else if (uuid == null && !commandClass.equals(PostLoginCommand.
-                class)) {
-            respondWithAuthenticationFailure(exchange);
-			return;
-		}
-
-        /*Log the user.*/
-        logUser(Authenticate.getUsernameByID(uuid));
-
-        /*Retrieve the URI part of the request header.*/
-		String uri = exchange.getRequestURI().toString().split("\\?")[0];
-        String query = exchange.getRequestURI().getQuery();
-        uri = removeTimeStamp(uri);
-
-		/*TODO: Get the current user's user right level*/
-		UserType userType = UserType.ADMIN;
-
-		/*Read the json body and create the command.*/
 		String json = readBody(exchange);
         if (json.equals("") || json.isEmpty()) {
             json = "{}";
@@ -130,7 +98,7 @@ public class RequestHandler implements HttpHandler {
 
         Command command = gson.fromJson(json, commandClass);
 
-        String uri = removeTimeStamp(exchange.getRequestURI().toString());
+        String uri = removeTimeStamp(exchange.getRequestURI().toString().split("\\?")[0]);
 
         if (command.getExpectedNumberOfURIFields() != (uri.split("/").length-1)) {
             Debug.log("Bad format on command: " + exchange.getRequestMethod()
@@ -140,7 +108,7 @@ public class RequestHandler implements HttpHandler {
             return;
         }
 
-		command.setFields(uri, query, uuid, userType);
+		command.setFields(uri, exchange.getRequestURI().getQuery(), uuid, UserType.ADMIN);
 
 		try {
 			command.validate();
