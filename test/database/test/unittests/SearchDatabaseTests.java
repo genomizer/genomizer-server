@@ -50,7 +50,7 @@ public class SearchDatabaseTests {
             throws Exception {
 
         List<Experiment> experiments = dbac.search("Exp[EXpid]");
-        assertEquals(4, experiments.size());
+        assertEquals(6, experiments.size());
 
     }
 
@@ -193,7 +193,7 @@ public class SearchDatabaseTests {
         List<Experiment> experiments = dbac
                 .search("UCS[author]");
 
-        assertEquals(2, getNumberOfFiles(experiments));
+        assertEquals(6, getNumberOfFiles(experiments));
     }
 
     @Test
@@ -203,7 +203,7 @@ public class SearchDatabaseTests {
         List<Experiment> experiments = dbac
                 .search("ser1[uploader]");
 
-        assertEquals(15, getNumberOfFiles(experiments));
+        assertEquals(19, getNumberOfFiles(experiments));
     }
 
     @Test
@@ -223,7 +223,7 @@ public class SearchDatabaseTests {
         List<Experiment> experiments = dbac
                 .search("Do[status]");
 
-        assertEquals(15, getNumberOfFiles(experiments));
+        assertEquals(19, getNumberOfFiles(experiments));
     }
 
     private int getNumberOfFiles(List<Experiment> experiments) {
@@ -241,7 +241,7 @@ public class SearchDatabaseTests {
         List<Experiment> experiments = dbac
                 .search(".fastq[PaTH]");
 
-        assertEquals(3, experiments.size());
+        assertEquals(5, experiments.size());
     }
 
     @Test
@@ -415,7 +415,7 @@ public class SearchDatabaseTests {
             throws Exception {
 
         List<Experiment> exps = dbac.search(null);
-        assertEquals(4, exps.size());
+        assertEquals(6, exps.size());
 
         Experiment e = getExp("Exp1", exps);
 
