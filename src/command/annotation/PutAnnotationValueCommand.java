@@ -47,6 +47,10 @@ public class PutAnnotationValueCommand extends Command {
 				"Old annotation value");
 		validateName(newValue, MaxLength.ANNOTATION_LABEL,
 				"New annotation value");
+		if(newValue.equals("freetext")){
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Can not" +
+					"rename a value to \"freetext\"");
+		}
 	}
 
 	@Override
