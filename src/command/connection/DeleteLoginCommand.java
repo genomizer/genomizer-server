@@ -22,7 +22,6 @@ public class DeleteLoginCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-
 	}
 
 	@Override
