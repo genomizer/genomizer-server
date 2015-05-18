@@ -9,11 +9,12 @@ import command.UserRights;
 import command.ValidateException;
 import database.DatabaseAccessor;
 import database.containers.Genome;
-import database.subClasses.UserMethods.UserType;
+import database.subClasses.UserMethods;
 import response.ErrorResponse;
 import response.GetGenomeReleaseResponse;
 import response.HttpStatusCode;
 import response.Response;
+import server.Debug;
 
 /**
  * A command which is used to get all the genome versions
@@ -51,14 +52,16 @@ public class GetGenomeReleaseCommand extends Command {
 				return new GetGenomeReleaseResponse(HttpStatusCode.OK,
 						genomeReleases);
 			}catch(SQLException e){
+				Debug.log("Error when fetching all genome releases. Temporary error with database: "
+						+ e.getMessage());
 				return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
-						"Could not fetch all genome releases: " +
-								e.getMessage());
+						"Could not fetch all genome releases due to temporary database error.");
 			}
 		} catch (SQLException | IOException e) {
+			Debug.log("Error when fetching all genome releases. Temporary error with database: "
+					+ e.getMessage());
 			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
-					"SQLException - Could not create connection to database: " +
-							e.getMessage());
+					"Could not fetch all genome releases due to temporary database error.");
 		} finally {
 			if (db != null)
 				db.close();

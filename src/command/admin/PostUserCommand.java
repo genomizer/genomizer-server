@@ -11,12 +11,12 @@ import command.UserRights;
 import command.ValidateException;
 import database.DatabaseAccessor;
 
-import database.subClasses.UserMethods.UserType;
 import database.constants.MaxLength;
 import response.ErrorResponse;
 import response.HttpStatusCode;
 import response.MinimalResponse;
 import response.Response;
+import server.Debug;
 
 /**
  * command used to create a user.
@@ -43,8 +43,8 @@ public class PostUserCommand extends Command {
 	@Override
 	public int getExpectedNumberOfURIFields() {
 		return 2;
-	}
 
+	}
 	/**
 	 * Used to make sure the strings of the command are correct
 	 * @throws command.ValidateException
@@ -70,20 +70,23 @@ public class PostUserCommand extends Command {
 		DatabaseAccessor db;
 		try {
 			db = initDB();
-		} catch (SQLException e) {
-			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Error when " +
-					"initiating databaseAccessor. " + e.getMessage());
-		} catch (IOException e)  {
-			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
+		} catch (SQLException | IOException e) {
+			Debug.log("Creation of user: " + username + " didn't work, reason: " +
+					e.getMessage());
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Creation of user: " + username +
+					" didn't work because of temporary problems with database.");
 		}
 		try {
 			String hash = BCrypt.hashpw(password,BCrypt.gensalt());
 			db.addUser(username, hash, "SALT",privileges, name, email);
 
 		} catch (SQLException | IOException e) {
-			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Error when " +
-					"adding user to database, user probably already exists. " +
+			Debug.log("Creation of user: " + username + " didn't work, reason: " +
 					e.getMessage());
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Creation of user: " + username +
+					" didn't work because of temporary problems with database.");
+		}finally {
+			db.close();
 		}
 		return new MinimalResponse(HttpStatusCode.OK);
 

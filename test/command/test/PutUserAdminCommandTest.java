@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import command.admin.PutUserAdminCommand;
 import command.ValidateException;
 import database.constants.MaxLength;
+import database.subClasses.UserMethods;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -277,6 +278,7 @@ public class PutUserAdminCommandTest {
         json = createJSON("a","b","c","d","e");
         PutUserAdminCommand cmd = gson.fromJson(json, PutUserAdminCommand.class);
 
+        cmd.setFields(null, null, null, UserMethods.UserType.ADMIN);
         cmd.validate();
 
     }
