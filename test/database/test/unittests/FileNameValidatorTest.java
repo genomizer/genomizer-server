@@ -15,10 +15,8 @@ public class FileNameValidatorTest {
 		assertTrue(FileValidator.fileNameCheck("hej.txt"));
 	}
 
-	// TODO: Re-enable. Encoding should probably be changed to utf-8.
-	@Ignore
 	@Test
-	public void sholdReturnTrueWithSpecialSymbols(){
+	public void shouldReturnTrueWithSpecialSymbols(){
 		assertTrue(FileValidator.fileNameCheck("håj.tät"));
 	}
 

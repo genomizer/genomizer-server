@@ -25,8 +25,6 @@ public class ChainFilesTest {
     private static DatabaseAccessor dbac;
     private static TestInitializer ti;
 
-    private static String testFolderName =
-    		"Genomizer Test Folder - Dont be afraid to delete me";
     private static File testFolder;
     private static String testFolderPath;
     private static FilePathGenerator fpg;
@@ -37,14 +35,8 @@ public class ChainFilesTest {
         ti = new TestInitializer();
         dbac = ti.setup();
 
-        testFolderPath = System.getProperty("user.home") + File.separator
-                + testFolderName + File.separator;
-
+        testFolderPath = ti.createScratchDir();
         testFolder = new File(testFolderPath);
-
-        if (!testFolder.exists()) {
-            testFolder.mkdirs();
-        }
 
         fpg = dbac.getFilePathGenerator();
         fpg.setRootDirectory(testFolderPath);

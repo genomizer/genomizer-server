@@ -41,7 +41,7 @@ public class RawToProfileConverter extends Executor {
 	 */
 	public RawToProfileConverter() {
 		toBeRemoved = new Stack<String>();
-		checker = RawToProfileProcessChecker.rawToProfileCheckerFactory();
+		checker = new RawToProfileProcessChecker();
 		validator = new ParameterValidator();
 	}
 
@@ -102,7 +102,7 @@ public class RawToProfileConverter extends Executor {
 		makeConversionDirectories(remoteExecution + "resources/" + dir
 				+ "/sorted");
 		checker.calculateWhichProcessesToRun(parameters);
-		if(!ValidateParameters(parameters)) {
+		if(!validateParameters(parameters)) {
 			throw new ProcessException("Parameters are incorrect");
 		}
 		/* Updates attribute raw files. */
@@ -294,7 +294,7 @@ public class RawToProfileConverter extends Executor {
 	 * @return
 	 * @throws ProcessException
 	 */
-	private boolean ValidateParameters(String[] parameters)
+	private boolean validateParameters(String[] parameters)
 			throws ProcessException {
 		boolean isOk = true;
 		if (checker.shouldRunSmoothing()
