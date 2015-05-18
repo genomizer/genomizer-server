@@ -298,7 +298,7 @@ public abstract class Executor {
 	}
 
 	/**
-	 * Checks if a a analysis step is executed correctly and made a file.
+	 * Checks if a a analysis step is executed correctly and produced a file.
 	 *
 	 * @param dirToCheck
 	 * @return

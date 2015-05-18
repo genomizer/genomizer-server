@@ -1,4 +1,4 @@
-package process;
+package smoothing;
 
 
 public class Tuple {

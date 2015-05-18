@@ -40,7 +40,7 @@ public class ProcessHandler {
 				// TODO
 				break;
 			case PutProcessCommand.CMD_CANCEL_PROCESS:
-				// TODO cancel process in workpool
+				// TODO cancel process in process pool.
 				break;
 
 			default:

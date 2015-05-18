@@ -2,7 +2,6 @@ package smoothing;
 
 
 import process.ProcessException;
-import process.Tuple;
 
 import java.io.*;
 import java.util.ArrayList;
