@@ -133,7 +133,7 @@ public class PostUserCommandTest {
 	/**
 	 * Test used to check privileges min length validation
 	 */
-	@Test
+	@Test (expected = ValidateException.class)
 	public void testValidatePrivilegesLength() throws ValidateException {
 		json = createJSON("a","b","","d","e");
 		PostUserCommand cmd2 = gson.fromJson(json, PostUserCommand.class);
@@ -185,7 +185,7 @@ public class PostUserCommandTest {
 	/**
 	 * Test used to check a properly formatted creation.
 	 */
-	@Test (expected = ValidateException.class)
+	@Test
 	public void testValidationProperlyFormatted() throws ValidateException {
 		json = createJSON("a","b","c","d","e");
 		PostUserCommand cmd = gson.fromJson(json, PostUserCommand.class);

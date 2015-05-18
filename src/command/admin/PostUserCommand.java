@@ -54,11 +54,33 @@ public class PostUserCommand extends Command {
 
 		hasRights(UserRights.getRights(this.getClass()));
 
-		validateName(username, MaxLength.USERNAME, "User");
-		validateName(password, MaxLength.PASSWORD, "Password");
+		validateUserAndPass(username, MaxLength.USERNAME, "Username");
+		validateUserAndPass(password, MaxLength.PASSWORD, "Password");
 		validateName(privileges, MaxLength.ROLE, "Privileges");
 		validateExists(name, MaxLength.FULLNAME, "Name");
 		validateExists(email, MaxLength.EMAIL, "Email");
+	}
+
+	public void validateUserAndPass(String string, int maxLength, String field)
+			throws ValidateException {
+		if(string == null) {
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Specify " +
+					"an " + field.toLowerCase() + ".");
+		}
+		if(string.equals("null")){
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Invalid "
+					+ field.toLowerCase() + ".");
+		}
+		if(string.length() > maxLength || string.length() < 1) {
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST, field +
+					 " has to be between 1 and " + maxLength +
+					" characters long.");
+		}
+		if(hasInvalidCharacters(string)) {
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Invalid" +
+					" characters in " + field.toLowerCase() +
+					". Valid characters are: " + validCharacters);
+		}
 	}
 
 	/**
