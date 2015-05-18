@@ -460,8 +460,8 @@ public class GenomeMethods {
 	 * @throws SQLException
 	 * @throws IOException
 	 */
-	public String addChainFile(String fromVersion, String toVersion,
-			String fileName, String checkSumMD5) throws SQLException, IOException {
+	public String addChainFileWithStatus(String fromVersion, String toVersion,
+			String fileName, String checkSumMD5, String status) throws SQLException, IOException {
 
     	if(!FileValidator.fileNameCheck(fileName)){
     		throw new IOException("Invalid file name");
@@ -484,29 +484,29 @@ public class GenomeMethods {
 		String filePath = fpg.generateChainFolder(species, fromVersion,
 				toVersion);
 
-		String insertQuery = "INSERT INTO Chain_File "
-				+ "(FromVersion, ToVersion, FolderPath) VALUES (?, ?, ?)";
-
-        String insertQuery2 = "INSERT INTO Chain_File_Files "
-                + "(FromVersion, ToVersion, FileName, MD5) " + "VALUES (?, ?, ?, ?)";
-
         ChainFiles cf = getChainFiles(fromVersion, toVersion);
         if (cf == null) {
-            PreparedStatement insertStat = conn.prepareStatement(insertQuery);
-            insertStat.setString(1, fromVersion);
-            insertStat.setString(2, toVersion);
-            insertStat.setString(3, filePath);
-            insertStat.executeUpdate();
-            insertStat.close();
+            try (PreparedStatement stmt =
+						 conn.prepareStatement("INSERT INTO Chain_File "
+								 + "(FromVersion, ToVersion, FolderPath) VALUES (?, ?, ?)")) {
+				stmt.setString(1, fromVersion);
+				stmt.setString(2, toVersion);
+				stmt.setString(3, filePath);
+				stmt.executeUpdate();
+			}
         }
 
-		PreparedStatement stmt = conn.prepareStatement(insertQuery2);
-		stmt.setString(1, fromVersion);
-		stmt.setString(2, toVersion);
-		stmt.setString(3, fileName);
-		stmt.setString(4, checkSumMD5);
-		stmt.executeUpdate();
-		stmt.close();
+		try (PreparedStatement stmt =
+					 conn.prepareStatement("INSERT INTO Chain_File_Files "
+							 + "(FromVersion, ToVersion, FileName, MD5, Status) "
+							 + "VALUES (?, ?, ?, ?, ?)")) {
+			stmt.setString(1, fromVersion);
+			stmt.setString(2, toVersion);
+			stmt.setString(3, fileName);
+			stmt.setString(4, checkSumMD5);
+			stmt.setString(5, status);
+			stmt.executeUpdate();
+		}
 
 		String URL = ServerDependentValues.UploadURL;
 
