@@ -12,7 +12,6 @@ import command.ValidateException;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
 
-import database.subClasses.UserMethods;
 import response.AddGenomeReleaseResponse;
 import response.ErrorResponse;
 import response.HttpStatusCode;

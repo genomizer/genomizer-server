@@ -12,7 +12,6 @@ import database.DatabaseAccessor;
 import database.constants.MaxLength;
 import database.containers.FileTuple;
 
-import database.subClasses.UserMethods.UserType;
 import response.UrlUploadResponse;
 import response.ErrorResponse;
 import response.HttpStatusCode;

@@ -691,7 +691,7 @@ public class RawToProfileConverter extends Executor {
 		return dir.exists();
 	}
 
-	private String runRemoveDuplicates(String inputFile, String outputFile,
+	public String runRemoveDuplicates(String inputFile, String outputFile,
 									   String metrics) throws ProcessException {
 		/* Check if input is .sam format */
 		if(!inputFile.endsWith(".sam")) {

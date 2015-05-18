@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class GetAnnotationInformationResponse extends Response {
 
 	@Expose
-	private ArrayList<AnnotationInformation> annotations;
+	ArrayList<AnnotationInformation> annotations;
 
 	private JsonArray annotationsArray;
 

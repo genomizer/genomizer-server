@@ -181,7 +181,7 @@ public class ProcessPool {
      * Used internally to cleanup old processes that had either finished
      * gracefully, crashed or were cancelled.
      */
-    private void removeOldProcesses() {
+    public void removeOldProcesses() {
 
         // Get current time
         long currentTime = System.currentTimeMillis();

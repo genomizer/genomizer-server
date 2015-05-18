@@ -158,7 +158,6 @@ public class GenomeMethods {
 			fileDir += File.separator;
 
 		// Given a directory and a file name, get genome release version...
-		String genomeReleaseVersion = null;
 		try (PreparedStatement stmt = conn.prepareStatement(
 				"SELECT * FROM Genome_Release_Files "
 				+ "NATURAL JOIN Genome_Release "
@@ -217,8 +216,6 @@ public class GenomeMethods {
 		if (!fileDir.endsWith(File.separator))
 			fileDir += File.separator;
 
-		String chainFileFromVersion = null;
-		String chainFileToVersion = null;
 		try (PreparedStatement stmt = conn.prepareStatement(
 				"SELECT * FROM Chain_File_Files "
 				+ "NATURAL JOIN Chain_File "

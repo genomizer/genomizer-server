@@ -1,12 +1,7 @@
 package database;
 
 
-import javax.swing.filechooser.FileSystemView;
-
 public class FileValidator {
-
-	private String home = FileSystemView.getFileSystemView()
-			.getHomeDirectory().toString();
 
 	public FileValidator() {}
 

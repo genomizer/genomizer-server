@@ -53,7 +53,6 @@ public class ExperimentTests {
 
     private static FilePathGenerator fpg;
     private static String testFolderPath;
-    private static File testFolder;
 
     private static TestInitializer ti;
 
@@ -69,7 +68,6 @@ public class ExperimentTests {
         testChoices.add(testChoice + "2");
 
         testFolderPath = TestInitializer.createScratchDir();
-        testFolder = new File(testFolderPath);
 
         fpg = dbac.getFilePathGenerator();
         fpg.setRootDirectory(testFolderPath);

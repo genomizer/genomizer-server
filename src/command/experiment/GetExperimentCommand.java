@@ -78,7 +78,7 @@ public class GetExperimentCommand extends Command {
 		}
 		if (exp == null) {
 			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Experiment "
-					+ "with id " + exp.getID() + " could not be found.");
+					+ "with id " + expID + " could not be found.");
 		}
 		return new GetExperimentResponse(HttpStatusCode.OK, exp.getID(),
 				exp.getAnnotations(), exp.getFiles());

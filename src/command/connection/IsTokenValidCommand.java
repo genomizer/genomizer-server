@@ -2,7 +2,6 @@ package command.connection;
 
 import authentication.Authenticate;
 import command.Command;
-import database.subClasses.UserMethods.UserType;
 import response.MinimalResponse;
 import response.Response;
 import response.HttpStatusCode;

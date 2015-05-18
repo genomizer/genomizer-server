@@ -10,7 +10,6 @@ import command.UserRights;
 import command.ValidateException;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
-import database.subClasses.UserMethods;
 import response.ErrorResponse;
 import response.HttpStatusCode;
 import response.MinimalResponse;

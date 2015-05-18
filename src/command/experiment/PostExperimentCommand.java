@@ -8,7 +8,6 @@ import command.Annotation;
 import command.Command;
 import command.UserRights;
 import command.ValidateException;
-import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.HttpStatusCode;
 import response.MinimalResponse;

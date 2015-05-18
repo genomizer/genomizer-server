@@ -1,7 +1,6 @@
 package conversion;
 
 import java.io.*;
-import java.nio.file.Files;
 
 /**
  * Handles conversion between different profile file types.
@@ -243,7 +242,6 @@ public class ProfileDataConverter {
      */
     public String gffToWig(String inputPath)
             throws IOException {
-        File tempFile;
         String tempPath = null;
         String outputPath;
 
