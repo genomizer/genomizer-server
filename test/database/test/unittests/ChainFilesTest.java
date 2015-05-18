@@ -35,7 +35,7 @@ public class ChainFilesTest {
         ti = new TestInitializer();
         dbac = ti.setup();
 
-        testFolderPath = ti.createScratchDir();
+        testFolderPath = TestInitializer.createScratchDir();
         testFolder = new File(testFolderPath);
 
         fpg = dbac.getFilePathGenerator();

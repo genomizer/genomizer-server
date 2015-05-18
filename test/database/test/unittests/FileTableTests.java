@@ -53,7 +53,7 @@ public class FileTableTests {
                 TestInitializer.password, TestInitializer.host,
                 TestInitializer.database);
 
-        testFolderPath = ti.createScratchDir();
+        testFolderPath = TestInitializer.createScratchDir();
         testFolder = new File(testFolderPath);
 
         fpg = dbac.getFilePathGenerator();

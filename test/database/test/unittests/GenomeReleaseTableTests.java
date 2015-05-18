@@ -35,7 +35,7 @@ public class GenomeReleaseTableTests {
         dbac = ti.setupWithoutAddingTuples();
         fpg = dbac.getFilePathGenerator();
 
-        testFolderPath = ti.createScratchDir();
+        testFolderPath = TestInitializer.createScratchDir();
         testFolder = new File(testFolderPath);
         fpg.setRootDirectory(testFolderPath);
     }

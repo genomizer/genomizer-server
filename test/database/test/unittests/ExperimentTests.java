@@ -68,7 +68,7 @@ public class ExperimentTests {
         testChoices.add(testChoice);
         testChoices.add(testChoice + "2");
 
-        testFolderPath = ti.createScratchDir();
+        testFolderPath = TestInitializer.createScratchDir();
         testFolder = new File(testFolderPath);
 
         fpg = dbac.getFilePathGenerator();

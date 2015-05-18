@@ -40,7 +40,7 @@ public class MockUserTests {
 
         dbac = ti.setupWithoutAddingTuples();
 
-        testFolderPath = ti.createScratchDir();
+        testFolderPath = TestInitializer.createScratchDir();
 
         fpg = dbac.getFilePathGenerator();
         fpg.setRootDirectory(testFolderPath);
