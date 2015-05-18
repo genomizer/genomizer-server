@@ -322,7 +322,7 @@ public class PubMedToSQLConverter {
         } else if (attributeType.equals(STRING_PARAM)) {
             sb.append(sqlFragmentForFileAttr);
             sb.append(label);
-            sb.append(" ~~* ?");
+            sb.append(" ~* ?");
             parametersResult.add(new SimpleEntry<String, String>(value, attributeType));
         } else {
             sb.append(sqlFragmentForFileAttr);

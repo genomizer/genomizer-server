@@ -145,13 +145,6 @@ public class ProcessPool {
 
         try {
 
-            // Change status of the process if it has completed
-            if (processFutureMap.get(processID).isDone() && !processFutureMap
-                    .get(processID).isCancelled()) {
-
-                processStatusMap.get(processID).status = Process.STATUS_FINISHED;
-            }
-
             return processStatusMap.get(processID);
         } finally {
             lock.unlock();

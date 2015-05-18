@@ -11,6 +11,7 @@ import java.util.List;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import database.DatabaseAccessor;
@@ -45,6 +46,15 @@ public class SearchDatabaseTests {
     }
 
     @Test
+    public void shouldBeAbleToSearchForExperimentUsingPartialPubMedString()
+            throws Exception {
+
+        List<Experiment> experiments = dbac.search("Exp[EXpid]");
+        assertEquals(6, experiments.size());
+
+    }
+
+    @Test
     public void shouldBeAbleToSearchForFilesUsingPubMedString()
             throws Exception {
 
@@ -53,6 +63,185 @@ public class SearchDatabaseTests {
 
         assertEquals(1, experiments.size());
         assertEquals(1, experiments.get(0).getFiles().size());
+    }
+
+    @Test
+    public void shouldBeAbleToSearchForFilesUsingPartialPathPubMedString()
+            throws Exception {
+
+        List<Experiment> experiments = dbac
+                .search("/var/www/data/Exp2/raw/file1.fast[PaTH]");
+
+        assertEquals(1, experiments.size());
+        assertEquals(1, experiments.get(0).getFiles().size());
+    }
+
+    @Test
+    public void shouldBeAbleToSearchForFilesUsingPartialPathPubMedString2()
+            throws Exception {
+
+        List<Experiment> experiments = dbac
+                .search("raw/file1.fastq[PaTH]");
+
+        assertEquals(3, experiments.size());
+    }
+
+    @Test
+    public void shouldBeAbleToSearchForFilesUsingPartialPathPubMedString3()
+            throws Exception {
+
+        List<Experiment> experiments = dbac
+                .search("/data/Exp2[PaTH]");
+
+        assertEquals(1, experiments.size());
+    }
+
+    @Test
+    public void shouldBeAbleToSearchForFilesUsingPartialPathPubMedString4()
+            throws Exception {
+
+        List<Experiment> experiments = dbac
+                .search("file1[PaTH]");
+
+        assertEquals(3, experiments.size());
+    }
+
+    @Test
+    public void shouldBeAbleToSearchForFilesUsingPartialNamePubMedString()
+            throws Exception {
+
+        List<Experiment> experiments = dbac
+                .search("file1[fiLeNaMe]");
+
+        assertEquals(5, getNumberOfFiles(experiments));
+    }
+
+    @Test
+    public void shouldBeAbleToSearchForFilesUsingPartialNamePubMedString2()
+            throws Exception {
+
+        List<Experiment> experiments = dbac
+                .search(".sam[fiLeNaMe]");
+
+        assertEquals(3, getNumberOfFiles(experiments));
+    }
+
+    @Test
+    public void shouldBeAbleToSearchForFilesUsingPartialTypePubMedString()
+            throws Exception {
+
+        List<Experiment> experiments = dbac
+                .search("Prof[filetype]");
+
+        assertEquals(12, getNumberOfFiles(experiments));
+    }
+
+    @Test
+    public void shouldBeAbleToSearchForFilesUsingPartialTypePubMedString2()
+            throws Exception {
+
+        List<Experiment> experiments = dbac
+                .search("egion[filetype]");
+
+        assertEquals(0, getNumberOfFiles(experiments));
+    }
+
+    @Test
+    public void shouldBeAbleToSearchForFilesUsingPartialInputPathPubMedString()
+            throws Exception {
+
+        List<Experiment> experiments = dbac
+                .search("file1_input[inputfilepath]");
+
+        assertEquals(6, getNumberOfFiles(experiments));
+    }
+
+    @Test
+    public void shouldBeAbleToSearchForFilesUsingPartialInputPathPubMedString2()
+            throws Exception {
+
+        List<Experiment> experiments = dbac
+                .search("www[inputfilepath]");
+
+        assertEquals(6, getNumberOfFiles(experiments));
+    }
+
+    @Test
+    public void shouldBeAbleToSearchForFilesUsingPartialMetaDataPathPubMedString()
+            throws Exception {
+
+        List<Experiment> experiments = dbac
+                .search("--best[metadata]");
+
+        assertEquals(12, getNumberOfFiles(experiments));
+    }
+
+    @Test
+    public void shouldBeAbleToSearchForFilesUsingPartialMetaDataPubMedString2()
+            throws Exception {
+
+        List<Experiment> experiments = dbac
+                .search("2[metadata]");
+
+        assertEquals(1, getNumberOfFiles(experiments));
+    }
+
+    @Test
+    public void shouldBeAbleToSearchForFilesUsingPartialAuthorPubMedString()
+            throws Exception {
+
+        List<Experiment> experiments = dbac
+                .search("UCS[author]");
+
+        assertEquals(6, getNumberOfFiles(experiments));
+    }
+
+    @Test
+    public void shouldBeAbleToSearchForFilesUsingPartialUploaderPubMedString()
+            throws Exception {
+
+        List<Experiment> experiments = dbac
+                .search("ser1[uploader]");
+
+        assertEquals(19, getNumberOfFiles(experiments));
+    }
+
+    @Test
+    public void shouldBeAbleToSearchForFilesUsingPartialGRVersionPubMedString2()
+            throws Exception {
+
+        List<Experiment> experiments = dbac
+                .search("hg[grversion]");
+
+        assertEquals(1, getNumberOfFiles(experiments));
+    }
+
+    @Test
+    public void shouldBeAbleToSearchForFilesUsingPartialStatusPubMedString2()
+            throws Exception {
+
+        List<Experiment> experiments = dbac
+                .search("Do[status]");
+
+        assertEquals(19, getNumberOfFiles(experiments));
+    }
+
+    private int getNumberOfFiles(List<Experiment> experiments) {
+        int nrOfFiles = 0;
+        for (Experiment exp : experiments) {
+            nrOfFiles += exp.getFiles().size();
+        }
+        return nrOfFiles;
+    }
+
+    @Test
+    public void shouldBeAbleToSearchForFileEndingUsingPartialPathPubMedString()
+            throws Exception {
+
+        List<Experiment> experiments = dbac
+                .search(".fastq[PaTH]");
+
+        assertEquals(5, experiments.size());
     }
 
     @Test
@@ -94,11 +283,11 @@ public class SearchDatabaseTests {
         assertEquals("Exp2", experiments.get(0).getID());
     }
 
-    @Test
+    @Ignore("encoding issues") @Test
     public void shouldBeAbleToSearchUsingPubMedString5() throws Exception {
 
         List<Experiment> experiments = dbac
-                .search("Human[SpeCies] AnD Umeå uni[author]");
+                .search("Human[SpeCies] AnD Umeï¿½ uni[author]");
 
         assertEquals(1, experiments.size());
         assertEquals(1, experiments.get(0).getFiles().size());
@@ -122,7 +311,7 @@ public class SearchDatabaseTests {
         List<Experiment> experiments = dbac
                 .search("not ChiLd[Development Stage]");
 
-        assertEquals(2, experiments.size());
+        assertEquals(4, experiments.size());
     }
 
     @Test
@@ -209,11 +398,24 @@ public class SearchDatabaseTests {
     }
 
     @Test
-    public void shouldGetAllExperimentsWhenSearchingAnEmptySring()
+    public void shouldGetAllExperimentsWhenSearchingAnEmptyString()
             throws Exception {
 
         List<Experiment> exps = dbac.search("");
-        assertEquals(4, exps.size());
+        assertEquals(6, exps.size());
+
+        Experiment e = getExp("Exp1", exps);
+
+        assertEquals(4, e.getAnnotations().size());
+        assertEquals(2, e.getFiles().size());
+    }
+
+    @Test
+    public void shouldGetAllExperimentsWhenSearchingANullString()
+            throws Exception {
+
+        List<Experiment> exps = dbac.search(null);
+        assertEquals(6, exps.size());
 
         Experiment e = getExp("Exp1", exps);
 

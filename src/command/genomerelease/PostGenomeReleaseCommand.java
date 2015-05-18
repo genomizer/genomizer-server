@@ -12,11 +12,12 @@ import command.ValidateException;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
 
-import database.subClasses.UserMethods.UserType;
+import database.subClasses.UserMethods;
 import response.AddGenomeReleaseResponse;
 import response.ErrorResponse;
 import response.HttpStatusCode;
 import response.Response;
+import server.Debug;
 
 /**
  * Class used to handle adding a genome release.
@@ -42,6 +43,7 @@ public class PostGenomeReleaseCommand extends Command {
 	public int getExpectedNumberOfURIFields() {
 		return 1;
 	}
+
 
 	@Override
 	public void validate() throws ValidateException {
@@ -72,13 +74,15 @@ public class PostGenomeReleaseCommand extends Command {
 				if (i < checkSumsMD5.size()) {
 					checkSumMD5 = checkSumsMD5.get(i);
 				}
-				 uploadURLs.add(db.addGenomeRelease(genomeVersion, specie,
+				 uploadURLs.add(db.addInProgressGenomeRelease(genomeVersion, specie,
 						 fileName, checkSumMD5));
 			}
 			return new AddGenomeReleaseResponse(HttpStatusCode.OK, uploadURLs);
 		} catch (SQLException | IOException e) {
-				return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
-						e.getMessage());
+			Debug.log("Error when adding genome release "+genomeVersion+". Temporary error with database: "
+					+ e.getMessage());
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+					"Error when adding genome release "+genomeVersion+" due to temporary database error.");
 		} finally {
 			if (db != null) {
 				db.close();

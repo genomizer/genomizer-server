@@ -19,6 +19,7 @@ import response.ErrorResponse;
 import response.HttpStatusCode;
 import response.Response;
 import response.SearchResponse;
+import server.Debug;
 
 /**
  * Class used to handle searching for an experiment.
@@ -34,6 +35,13 @@ public class SearchCommand extends Command {
 		return 1;
 	}
 
+
+	/**
+	 * Set the UserType Uri and Uuid. annotations also set from uri.
+	 * @param uri the URI from the http request.
+	 * @param uuid the uuid from the http request.
+	 * @param userType the userType
+	 */
 	@Override
 	public void setFields(String uri, String query, String uuid, UserType userType) {
 
@@ -58,24 +66,28 @@ public class SearchCommand extends Command {
 		try {
 			annotations = URLDecoder.decode(annotations, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Bad encoding " +
-					"on search query.");
+			Debug.log("Search with annotations: " + annotations + " failed due to bad encoding. " + e.getMessage());
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Search with annotations: "+annotations+
+					" failed due to bad encoding.");
 		}
 		try {
 			db = initDB();
 			searchResult = db.search(annotations);
 		} catch (SQLException | IOException e) {
-			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+			Debug.log("Search with annotations: " + annotations + " didn't work, reason: " +
 					e.getMessage());
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Search with annotations: "+annotations+
+					" didn't work because of temporary problems with database.");
 		} catch (ParseException e) {
-			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
+			Debug.log("Search with annotations: " + annotations + " didn't work. Incorrect date format. " +
+					e.getMessage());
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Search failed due to incorrect date format. " +
+					"Should be on form 20150314-20150422 for interval and 20150411 for single dates.");
 		} finally {
 			if (db != null)
 				db.close();
 		}
-		SearchResponse response = new SearchResponse(searchResult);
-		return response;
+		return new SearchResponse(searchResult);
 	}
 
 	/**
