@@ -48,7 +48,9 @@ public class RequestHandler implements HttpHandler {
 
 	@Override
 	public void handle(HttpExchange exchange) {
-		logRequest(exchange);
+        Debug.log("\n-----------------\nNEW EXCHANGE: "
+                + exchange.getRequestMethod() + " "
+                + exchange.getRequestURI().toString());
 
         /*Extract the request method and the context. Together they form a
         * key that is used to retrieve the appropriate command from a
@@ -62,20 +64,17 @@ public class RequestHandler implements HttpHandler {
         String uuid = Authenticate.AuthenticateAuthorization(exchange);
 
         if(uuid == null && !commandClass.equals(PostLoginCommand.class)){
-            Debug.log("User could not be authenticated!");
-            ErrorResponse errorResponse = new ErrorResponse(HttpStatusCode.
-                    INTERNAL_SERVER_ERROR, "Could not create command from " +
-                    "request");
-            respond(errorResponse, exchange);
+            Debug.log("User could not be authenticated");
+            respond(new ErrorResponse(HttpStatusCode.UNAUTHORIZED,
+                    "User could not be authenticated"), exchange);
         } else if (commandClass == null && !key.equals("GET /download") &&
                 !key.equals("GET /upload") && !key.equals("POST /upload")){
-            Debug.log("Unrecognized command: " +
-                    exchange.getRequestMethod() + " " + exchange.
-                    getRequestURI());
+            Debug.log("Unrecognized command: " + exchange.getRequestMethod()
+                    + " " + exchange.getRequestURI());
             respond(createBadRequestResponse(), exchange);
         }
 
-        logUser(Authenticate.getUsernameByID(uuid));
+        Debug.log("User " + Authenticate.getUsernameByID(uuid) + " authenticated successfully.");
 
         try {
             switch (key) {
@@ -94,21 +93,16 @@ public class RequestHandler implements HttpHandler {
             return;
         }
 
-
-        /*Retrieve the URI part of the request header.*/
-		String uri = removeTimeStamp(exchange.getRequestURI().toString());
-
-
-
 		String json = readBody(exchange);
         if (json.equals("") || json.isEmpty()) {
             json = "{}";
         }
-		logRequestBody(json);
+        Debug.log("Request body: \n" + json);
 
         Command command = gson.fromJson(json, commandClass);
 
-        /*Does the length of the URI match the needed length?*/
+        String uri = removeTimeStamp(exchange.getRequestURI().toString());
+
         if (command.getExpectedNumberOfURIFields() != (uri.split("/").length-1)) {
             Debug.log("Bad format on command: " + exchange.getRequestMethod()
                     + " " + exchange.getRequestURI());
@@ -124,14 +118,11 @@ public class RequestHandler implements HttpHandler {
 			Debug.log(e.getMessage());
 			ErrorLogger.log("ValidateException", e.getMessage());
 			respond(new ErrorResponse(e.getCode(), e.getMessage()), exchange);
-			return;
 		}
-
         if (commandClass.equals(PutProcessCommand.class)) {
             Doorman.getWorkPool().addWork((PutProcessCommand) command);
             respond(new ProcessResponse(HttpStatusCode.OK), exchange);
         } else {
-            /*Execute the command and respond.*/
             respond(command.execute(), exchange);
         }
 	}
@@ -143,7 +134,8 @@ public class RequestHandler implements HttpHandler {
                 exchange.sendResponseHeaders(response.getCode(), 0);
             } else {
                 String body = response.getBody();
-                logResponseBody(body);
+                Debug.log("Response body: \n" + body);
+
                 exchange.sendResponseHeaders(response.getCode(),
                         body.getBytes().length);
                 OutputStream os = exchange.getResponseBody();
@@ -172,41 +164,14 @@ public class RequestHandler implements HttpHandler {
         return body;
     }
 
-	/*Creates a bad request ErrorResponse.*/
-	private ErrorResponse createBadRequestResponse() {
-		return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Could not create a " +
-				"command from request. Bad format on request.");
-	}
-
-	/*Used to log a request.*/
-	private void logRequest(HttpExchange exchange) {
-		Debug.log("\n-----------------\nNEW EXCHANGE: " + exchange.
-				getRequestMethod() + " " + exchange.getRequestURI().
-                toString());
-	}
-
-    /*Used to log the body of a request.*/
-    private void logRequestBody(String body) {
-        Debug.log("Request body: ");
-        Debug.log(body);
+    /*Creates a bad request ErrorResponse.*/
+    private ErrorResponse createBadRequestResponse() {
+        return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Could not create a " +
+                "command from request. Bad format on request.");
     }
-
-    /*Used to log the body of a response.*/
-	private void logResponseBody(String body) {
-		Debug.log("Response body: ");
-		Debug.log(body);
-	}
-
-	/*Used to a log that a user was authenticated.*/
-	private void logUser(String username) {
-        Debug.log("User " + username + " authenticated successfully.");
-	}
 
     /* Finds the timestamp and removes it.*/
     private String removeTimeStamp(String uri){
-
-        String newUri;
-
         if (!uri.contains("_="))
             return uri;
 
@@ -214,11 +179,7 @@ public class RequestHandler implements HttpHandler {
         int length = uri.length();
         int end = pos +2;
 
-        if (length <= end ){
-            return uri;
-        }
-
-        if ('0' > uri.charAt(end) || '9' < uri.charAt(end)){
+        if (length <= end && '0' > uri.charAt(end) || '9' < uri.charAt(end)){
             return uri;
         }
 
@@ -230,8 +191,6 @@ public class RequestHandler implements HttpHandler {
             end++;
         }
 
-        newUri = uri.substring(0,pos) + uri.substring(end);
-
-        return newUri;
+        return uri.substring(0,pos) + uri.substring(end);
     }
 }
