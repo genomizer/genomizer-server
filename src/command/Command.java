@@ -35,6 +35,22 @@ public abstract class Command {
 	/*Keeps track of the user rights level for the command sender. */
 	protected UserType userType = UserType.UNKNOWN;
 
+	/*Contains the user id.*/
+	protected String uuid;
+
+	/**
+	 * Used to set the required fields of the command. Provided the URI
+	 * from the request as well as the UUID of the user the implementation
+	 * of this function should make sure the necessary information is set.
+	 * @param uri isn't used. Override it to use it.
+	 * @param uuid the UUID for the user who made the request.
+	 * @param userType the user type for the command caller.
+	 */
+	public void setFields(String uri, String uuid, UserType userType){
+		this.uuid = uuid;
+		this.userType = userType;
+	}
+
 	/**
 	 * Used to validate the object and its information. The validate method
 	 * should be called before the command is executed and should be unique
@@ -50,15 +66,6 @@ public abstract class Command {
 	 * @return an appropriate Response depending on the command.
 	 */
 	public abstract Response execute();
-
-	/**
-	 * Used to set the required fields of the command. Provided the URI
-	 * from the request as well as the UUID of the user the implementation
-	 * of this function should make sure the necessary information is set.
-	 * @param uri the URI from the http request.
-	 * @param username the UUID for the user who made the request.
-	 */
-	public abstract void setFields(String uri, String username, UserType userType);
 
 	/**
 	 * Method used to connect to the database.

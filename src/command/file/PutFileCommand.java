@@ -17,13 +17,6 @@ import response.Response;
 public class PutFileCommand extends Command {
 	//TODO Implement this class
 
-	@Override
-	public void setFields(String uri, String uuid, UserType userType) {
-
-		/*No fields from the URI is needed, neither is the UUID. Dummy
-		implementation*/
-		this.userType = userType;
-	}
 
 	@Override
 	public void validate() throws ValidateException {
@@ -32,6 +25,6 @@ public class PutFileCommand extends Command {
 
 	@Override
 	public Response execute() {
-		return 	new MinimalResponse(HttpStatusCode.NO_CONTENT);
+		return 	new MinimalResponse(HttpStatusCode.METHOD_NOT_YET_IMPLEMENTED);
 	}
 }

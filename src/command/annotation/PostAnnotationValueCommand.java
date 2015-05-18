@@ -30,13 +30,6 @@ public class PostAnnotationValueCommand extends Command {
 	@Expose
 	private String value = null;
 
-	@Override
-	public void setFields(String uri, String username, UserType userType) {
-		this.userType = userType;
-
-		/*No fields from the URI is needed, neither is the UUID. Dummy
-		implementation*/
-	}
 
 	@Override
 	public void validate() throws ValidateException {
@@ -63,7 +56,7 @@ public class PostAnnotationValueCommand extends Command {
 			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
 		} catch (IOException e) {
 			e.printStackTrace();
-			return new ErrorResponse(HttpStatusCode.SERVICE_UNAVAILABLE,
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
 					e.getMessage());
 		} finally {
 			if (db != null) {
@@ -71,6 +64,6 @@ public class PostAnnotationValueCommand extends Command {
 			}
  		}
 
-		return new MinimalResponse(HttpStatusCode.CREATED);
+		return new MinimalResponse(HttpStatusCode.OK);
 	}
 }

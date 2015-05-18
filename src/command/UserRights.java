@@ -1,6 +1,8 @@
 package command;
 
+import command.admin.PutUserAdminCommand;
 import command.annotation.*;
+import command.convertfile.PutConvertFileCommand;
 import command.experiment.DeleteExperimentCommand;
 import command.experiment.GetExperimentCommand;
 import command.experiment.PostExperimentCommand;
@@ -16,9 +18,10 @@ import command.genomerelease.PostGenomeReleaseCommand;
 import command.process.GetProcessStatusCommand;
 import command.process.PutProcessCommand;
 import command.search.SearchCommand;
+import command.user.PutUserCommand;
 import command.user.PutUserPasswordCommand;
-import command.user.DeleteUserCommand;
-import command.user.PostUserCommand;
+import command.admin.DeleteUserCommand;
+import command.admin.PostUserCommand;
 import database.subClasses.UserMethods.UserType;
 
 import java.util.HashMap;
@@ -28,6 +31,7 @@ import java.util.HashMap;
  *
  * Created by ens11afk on 2015-04-29.
  */
+@SuppressWarnings("deprecation")
 public class UserRights {
 
     private static final HashMap<Class<? extends Command>,UserType> userRights;
@@ -61,6 +65,9 @@ public class UserRights {
         userRights.put(PutAnnotationPrivilegesCommand.class, UserType.USER);
         userRights.put(PutExperimentCommand.class, UserType.USER);
         userRights.put(PutFileCommand.class, UserType.USER);
+        userRights.put(PutUserCommand.class, UserType.USER);
+        userRights.put(PutUserAdminCommand.class, UserType.ADMIN);
+        userRights.put(PutConvertFileCommand.class, UserType.USER);
     }
 
 

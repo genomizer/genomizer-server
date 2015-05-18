@@ -4,7 +4,7 @@ import java.util.*;
 
 import command.*;
 import command.Process;
-import command.annotation.GetAnnotationPrivilegesCommand;
+import command.annotation.*;
 import command.process.PutProcessCommand;
 import database.subClasses.UserMethods.UserType;
 import org.junit.Before;
@@ -31,6 +31,7 @@ import static org.junit.Assert.fail;
  * @version 1.0
  */
 
+@SuppressWarnings("deprecation")
 public class GetProcessCommandInformationTest {
 
 	private static WorkHandler workHandler;

@@ -54,7 +54,7 @@ public class ConversionHandler {
 	 * @throws SQLException
 	 * @throws IOException
 	 */
-	public String convertProfileData(String newFormat, int id) throws SQLException, IOException {
+	public FileTuple convertProfileData(String newFormat, int id) throws SQLException, IOException {
 		db = initDB();
 		FileTuple file = db.getFileTuple(id);
 		fileInDB = file.path;
@@ -81,10 +81,9 @@ public class ConversionHandler {
 		FileTuple ft = db.addNewFile(file.expId, FileTuple.PROFILE, fileName,
 				inputFileName, null, file.author,
 				"ConversionHandler", file.isPrivate, file.grVersion, md5Hex(new FileInputStream(new File(outputFile))));
-		db.markReadyForDownload(ft);
 		db.close();
 
-		return outputFile;
+		return ft;
 	}
 
 	/**

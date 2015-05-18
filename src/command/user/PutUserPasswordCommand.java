@@ -31,14 +31,6 @@ public class PutUserPasswordCommand extends Command {
     @Expose
     private String password = null;
 
-    @Override
-    public void setFields(String uri, String uuid, UserType userType) {
-        this.userType = userType;
-
-        /*No fields from the URI is needed, neither is the UUID. Dummy
-		implementation*/
-    }
-
     /**
      * Used to validate the PutUserPasswordCommand.
      */
@@ -74,6 +66,6 @@ public class PutUserPasswordCommand extends Command {
             return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Database error " + e.getMessage());
         }
 
-        return new MinimalResponse(HttpStatusCode.CREATED);
+        return new MinimalResponse(HttpStatusCode.OK);
     }
 }

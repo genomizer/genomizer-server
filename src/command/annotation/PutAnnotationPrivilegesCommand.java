@@ -18,14 +18,6 @@ import response.Response;
 public class PutAnnotationPrivilegesCommand extends Command {
 	//TODO Implement this class
 
-	@Override
-	public void setFields(String uri, String uuid, UserType userType) {
-		this.userType = userType;
-
-		/*No fields from the URI is needed, neither is the UUID. Dummy
-		implementation*/
-	}
-
 	/**
 	 * Used to validate the information needed to execute
 	 * the command.
@@ -38,7 +30,7 @@ public class PutAnnotationPrivilegesCommand extends Command {
 
 	@Override
 	public Response execute() {
-		return 	new MinimalResponse(HttpStatusCode.NO_CONTENT);
+		return 	new MinimalResponse(HttpStatusCode.OK);
 	}
 
 }

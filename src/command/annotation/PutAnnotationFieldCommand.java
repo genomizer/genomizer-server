@@ -33,13 +33,6 @@ public class PutAnnotationFieldCommand extends Command {
 	@Expose
 	private String newName = null;
 
-	@Override
-	public void setFields(String uri, String uuid, UserType userType) {
-		this.userType = userType;
-
-		/*No fields from the URI is needed, neither is the UUID. Dummy
-		implementation*/
-	}
 
 	@Override
 	public void validate() throws ValidateException {

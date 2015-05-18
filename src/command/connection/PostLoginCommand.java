@@ -3,7 +3,6 @@ import command.Command;
 import command.ValidateException;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
-import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.HttpStatusCode;
 import response.LoginResponse;
@@ -30,13 +29,6 @@ public class PostLoginCommand extends Command {
 	@Expose
 	private String password = null;
 
-	@Override
-	public void setFields(String uri, String uuid, UserType userType) {
-		this.userType = userType;
-
-		/*No fields from the URI is needed, neither is the UUID. Dummy
-		implementation*/
-	}
 
 	@Override
 	public void validate() throws ValidateException {
@@ -54,25 +46,25 @@ public class PostLoginCommand extends Command {
 		} catch (SQLException | IOException e) {
 			Debug.log("LOGIN WAS UNSUCCESSFUL FOR: " + username + ". REASON: " +
 					e.getMessage());
-			return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
-					"LOGIN WAS UNSUCCESSFUL FOR: " + username + ". REASON: " + e.getMessage());
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+					"could not verify username and password");
 		}
 
 		if(dbHash == null || dbHash.isEmpty()){
-			return new ErrorResponse(HttpStatusCode.UNAUTHORIZED, "Incorrect user name");
+			return new ErrorResponse(HttpStatusCode.UNAUTHORIZED, "Invalid username");
 		}
 
 		LoginAttempt login = Authenticate.login(username, password, dbHash);
 
-		if(login.wasSuccessful()) {
-			Debug.log("LOGIN WAS SUCCESSFUL FOR: "+ username + ". GAVE UUID: " +
-					Authenticate.getID(username));
-			return new LoginResponse(200, login.getUUID());
+		if(!login.wasSuccessful()) {
+			Debug.log("LOGIN WAS UNSUCCESSFUL FOR: " + username + ". REASON: " +
+					login.getErrorMessage());
+			return new ErrorResponse(HttpStatusCode.UNAUTHORIZED,
+					login.getErrorMessage());
 		}
 
-		Debug.log("LOGIN WAS UNSUCCESSFUL FOR: " + username + ". REASON: " +
-				login.getErrorMessage());
-		return new ErrorResponse(HttpStatusCode.UNAUTHORIZED,
-				login.getErrorMessage());
+		Debug.log("LOGIN WAS SUCCESSFUL FOR: "+ username + ". GAVE UUID: " +
+				Authenticate.getID(username));
+		return new LoginResponse(200, login.getUUID());
 	}
 }

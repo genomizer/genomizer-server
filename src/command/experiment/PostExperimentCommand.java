@@ -30,13 +30,6 @@ public class PostExperimentCommand extends Command {
 	@Expose
 	private ArrayList<Annotation> annotations = new ArrayList<>();
 
-	@Override
-	public void setFields(String uri, String uuid, UserType userType) {
-		this.userType = userType;
-
-		/*No fields from the URI is needed, neither is the UUID. Dummy
-		implementation*/
-	}
 
 	@Override
 	public void validate() throws ValidateException {
@@ -72,7 +65,7 @@ public class PostExperimentCommand extends Command {
 				db.annotateExperiment(name, annotation.getName(),
 						annotation.getValue());
 			}
-			return new MinimalResponse(HttpStatusCode.CREATED);
+			return new MinimalResponse(HttpStatusCode.OK);
 		} catch (IOException | SQLException e) {
 			e.printStackTrace();
 			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());

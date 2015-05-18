@@ -13,8 +13,6 @@ public class Util {
     public static String parseURI(URI uri, HashMap<String, String> outParams) {
         String reqPath  = uri.getPath();
         String reqQuery = uri.getQuery();
-        Debug.log("Request URI path: " + reqPath);
-        Debug.log("Request URI query: " + reqQuery);
 
         if (reqQuery != null) {
             for (String paramPair : reqQuery.split("&")) {

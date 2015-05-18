@@ -26,7 +26,8 @@ public class DeleteAnnotationFieldCommand extends Command {
 
 	@Override
 	public void setFields(String uri, String uuid, UserType userType) {
-		this.userType = userType;
+
+		super.setFields(uri, uuid, userType);
 		name = uri.split("/")[3];
 	}
 
@@ -56,7 +57,7 @@ public class DeleteAnnotationFieldCommand extends Command {
 			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
 		} catch (IOException e) {
 			e.printStackTrace();
-			return new ErrorResponse(HttpStatusCode.SERVICE_UNAVAILABLE,
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
 					e.getMessage());
 		} finally {
 			if (db != null) {

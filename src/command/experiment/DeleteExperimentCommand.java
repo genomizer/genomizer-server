@@ -26,7 +26,8 @@ public class DeleteExperimentCommand extends Command {
 
 	@Override
 	public void setFields(String uri, String uuid, UserType userType) {
-		this.userType = userType;
+
+		super.setFields(uri, uuid, userType);
 		expID = uri.split("/")[2];
 	}
 
