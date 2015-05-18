@@ -24,8 +24,6 @@ public class ProcessRawToProfileTests {
     private static DatabaseAccessor dbac;
     private static FilePathGenerator fpg;
     private static TestInitializer ti;
-    private static String testFolderName =
-    		"Genomizer Test Folder - Dont be afraid to delete me";
     private static String testFolderPath;
 
     @BeforeClass
@@ -34,8 +32,7 @@ public class ProcessRawToProfileTests {
         ti = new TestInitializer();
         dbac = ti.setupWithoutAddingTuples();
 
-        testFolderPath = System.getProperty("user.home")
-                + File.separator + testFolderName + File.separator;
+        testFolderPath = ti.createScratchDir();
 
         fpg = dbac.getFilePathGenerator();
         fpg.setRootDirectory(testFolderPath);

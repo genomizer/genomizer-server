@@ -26,7 +26,6 @@ public class GenomeReleaseTableTests {
     public static DatabaseAccessor dbac;
     public static FilePathGenerator fpg;
 
-    private static String testFolderName = "Genomizer Test Folder - Dont be afraid to delete me";
     private static File testFolder;
     private static String testFolderPath;
 
@@ -36,17 +35,9 @@ public class GenomeReleaseTableTests {
         dbac = ti.setupWithoutAddingTuples();
         fpg = dbac.getFilePathGenerator();
 
-        testFolderPath = System.getProperty("user.home") + File.separator
-                + testFolderName + File.separator;
-
+        testFolderPath = ti.createScratchDir();
         testFolder = new File(testFolderPath);
-
-        if (!testFolder.exists()) {
-            testFolder.mkdirs();
-        }
-
         fpg.setRootDirectory(testFolderPath);
-
     }
 
     @AfterClass

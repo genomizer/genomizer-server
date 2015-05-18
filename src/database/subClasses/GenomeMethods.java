@@ -359,15 +359,12 @@ public class GenomeMethods {
 			recursiveDelete(genomeReleaseFolder);
 		}
 
-        String query = "DELETE FROM Genome_Release " + "WHERE Version ~~* ?";
-
-		PreparedStatement stmt;
-
-		stmt = conn.prepareStatement(query);
-		stmt.setString(1, genomeVersion);
-		int res = stmt.executeUpdate();
-		stmt.close();
-		return res > 0;
+		try (PreparedStatement stmt = conn.prepareStatement(
+				"DELETE FROM Genome_Release "
+						+ "WHERE Version ~~* ?")) {
+			stmt.setString(1, genomeVersion);
+			return (stmt.executeUpdate() > 0);
+		}
 	}
 
     private boolean isGenomeVersionUsed(String genomeVersion)
