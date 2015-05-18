@@ -1,7 +1,7 @@
 package command.test;
 
 import command.Command;
-import command.DeleteAnnotationValueCommand;
+import command.annotation.DeleteAnnotationValueCommand;
 import command.ValidateException;
 import database.subClasses.UserMethods.UserType;
 import org.junit.Test;
@@ -23,7 +23,7 @@ public class DeleteAnnotationValueCommandTest {
     public void testHavingRights() throws ValidateException {
 
         Command c = new DeleteAnnotationValueCommand();
-        c.setFields("/test/uri/name/value", null, UserType.USER);
+        c.setFields("/test/uri/name/value", "", null, UserType.USER);
         c.validate();
     }
 
@@ -37,7 +37,7 @@ public class DeleteAnnotationValueCommandTest {
     public void testNotHavingRights() throws ValidateException {
 
         Command c = new DeleteAnnotationValueCommand();
-        c.setFields("/test/uri/name/value", null, UserType.GUEST);
+        c.setFields("/test/uri/name/value", "", null, UserType.GUEST);
         c.validate();
         fail();
     }

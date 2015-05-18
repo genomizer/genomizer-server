@@ -6,7 +6,7 @@ import database.constants.MaxLength;
 import database.subClasses.UserMethods.UserType;
 import org.junit.Test;
 import command.Command;
-import command.DeleteGenomeReleaseCommand;
+import command.genomerelease.DeleteGenomeReleaseCommand;
 import command.ValidateException;
 
 /**
@@ -93,7 +93,7 @@ public class DeleteGenomeReleaseCommandTest {
 			uri = uri + i;
 		}
 		Command c = new DeleteGenomeReleaseCommand();
-		c.setFields(uri, null, UserType.ADMIN);
+		c.setFields(uri, "", null, UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException.");
@@ -116,7 +116,7 @@ public class DeleteGenomeReleaseCommandTest {
 
 		uri += "/GRelease";
 		Command c = new DeleteGenomeReleaseCommand();
-		c.setFields(uri, null, UserType.ADMIN);
+		c.setFields(uri, "", null, UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException.");
@@ -132,7 +132,7 @@ public class DeleteGenomeReleaseCommandTest {
 	@Test
 	public void testValidateProperFormatted() throws ValidateException {
 		Command c = new DeleteGenomeReleaseCommand();
-		c.setFields("/genomeRelease/Specie/GRelease", null, UserType.ADMIN);
+		c.setFields("/genomeRelease/Specie/GRelease", "", null, UserType.ADMIN);
 		c.validate();
 
 		assertTrue(true);
@@ -149,7 +149,7 @@ public class DeleteGenomeReleaseCommandTest {
 	public void testHavingRights() throws ValidateException {
 
 		Command c = new DeleteGenomeReleaseCommand();
-		c.setFields("/genomeRelease/Specie/GRelease", null, UserType.USER);
+		c.setFields("/genomeRelease/Specie/GRelease", "", null, UserType.USER);
 		c.validate();
 	}
 
@@ -163,7 +163,7 @@ public class DeleteGenomeReleaseCommandTest {
 	public void testNotHavingRights() throws ValidateException {
 
 		Command c = new DeleteGenomeReleaseCommand();
-		c.setFields("/genomeRelease/Specie/GRelease", null, UserType.GUEST);
+		c.setFields("/genomeRelease/Specie/GRelease", "", null, UserType.GUEST);
 		c.validate();
 		fail();
 	}

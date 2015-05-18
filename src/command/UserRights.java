@@ -1,5 +1,27 @@
 package command;
 
+import command.admin.PutUserAdminCommand;
+import command.annotation.*;
+import command.convertfile.PutConvertFileCommand;
+import command.experiment.DeleteExperimentCommand;
+import command.experiment.GetExperimentCommand;
+import command.experiment.PostExperimentCommand;
+import command.experiment.PutExperimentCommand;
+import command.file.DeleteFileCommand;
+import command.file.GetFileCommand;
+import command.file.PostFileCommand;
+import command.file.PutFileCommand;
+import command.genomerelease.DeleteGenomeReleaseCommand;
+import command.genomerelease.GetGenomeReleaseCommand;
+import command.genomerelease.GetGenomeReleaseSpeciesCommand;
+import command.genomerelease.PostGenomeReleaseCommand;
+import command.process.GetProcessStatusCommand;
+import command.process.PutProcessCommand;
+import command.search.SearchCommand;
+import command.user.PutUserCommand;
+import command.user.PutUserPasswordCommand;
+import command.admin.DeleteUserCommand;
+import command.admin.PostUserCommand;
 import database.subClasses.UserMethods.UserType;
 
 import java.util.HashMap;
@@ -9,39 +31,43 @@ import java.util.HashMap;
  *
  * Created by ens11afk on 2015-04-29.
  */
+@SuppressWarnings("deprecation")
 public class UserRights {
 
     private static final HashMap<Class<? extends Command>,UserType> userRights;
 
     static {
         userRights = new HashMap<>();
-        userRights.put(AddAnnotationFieldCommand.class, UserType.USER);
-        userRights.put(AddAnnotationValueCommand.class, UserType.USER);
-        userRights.put(AddExperimentCommand.class, UserType.USER);
-        userRights.put(AddFileToExperimentCommand.class, UserType.USER);
-        userRights.put(AddGenomeReleaseCommand.class, UserType.USER);
-        userRights.put(ChangeUserPasswordCommand.class, UserType.GUEST);
-        userRights.put(CreateUserCommand.class, UserType.ADMIN);
+        userRights.put(PostAnnotationFieldCommand.class, UserType.USER);
+        userRights.put(PostAnnotationValueCommand.class, UserType.USER);
+        userRights.put(PostExperimentCommand.class, UserType.USER);
+        userRights.put(PostFileCommand.class, UserType.USER);
+        userRights.put(PostGenomeReleaseCommand.class, UserType.USER);
+        userRights.put(PutUserPasswordCommand.class, UserType.GUEST);
+        userRights.put(PostUserCommand.class, UserType.ADMIN);
         userRights.put(DeleteAnnotationFieldCommand.class, UserType.USER);
         userRights.put(DeleteAnnotationValueCommand.class, UserType.USER);
         userRights.put(DeleteExperimentCommand.class, UserType.USER);
-        userRights.put(DeleteFileFromExperimentCommand.class, UserType.USER);
+        userRights.put(DeleteFileCommand.class, UserType.USER);
         userRights.put(DeleteGenomeReleaseCommand.class, UserType.USER);
         userRights.put(DeleteUserCommand.class, UserType.ADMIN);
-        userRights.put(EditAnnotationFieldCommand.class, UserType.USER);
-        userRights.put(EditAnnotationValueCommand.class, UserType.USER);
-        userRights.put(GetAnnotationInformationCommand.class, UserType.GUEST);
+        userRights.put(PutAnnotationFieldCommand.class, UserType.USER);
+        userRights.put(PutAnnotationValueCommand.class, UserType.USER);
+        userRights.put(GetAnnotationCommand.class, UserType.GUEST);
         userRights.put(GetAnnotationPrivilegesCommand.class, UserType.GUEST);
         userRights.put(GetExperimentCommand.class, UserType.GUEST);
-        userRights.put(GetFileFromExperimentCommand.class, UserType.USER);
+        userRights.put(GetFileCommand.class, UserType.USER);
         userRights.put(GetGenomeReleaseCommand.class, UserType.GUEST);
         userRights.put(GetGenomeReleaseSpeciesCommand.class, UserType.GUEST);
         userRights.put(GetProcessStatusCommand.class, UserType.GUEST);
-        userRights.put(ProcessCommand.class, UserType.USER);
-        userRights.put(SearchForExperimentsCommand.class, UserType.GUEST);
-        userRights.put(UpdateAnnotationPrivilegesCommand.class, UserType.USER);
-        userRights.put(UpdateExperimentCommand.class, UserType.USER);
-        userRights.put(UpdateFileInExperimentCommand.class, UserType.USER);
+        userRights.put(PutProcessCommand.class, UserType.USER);
+        userRights.put(SearchCommand.class, UserType.GUEST);
+        userRights.put(PutAnnotationPrivilegesCommand.class, UserType.USER);
+        userRights.put(PutExperimentCommand.class, UserType.USER);
+        userRights.put(PutFileCommand.class, UserType.USER);
+        userRights.put(PutUserCommand.class, UserType.USER);
+        userRights.put(PutUserAdminCommand.class, UserType.ADMIN);
+        userRights.put(PutConvertFileCommand.class, UserType.USER);
     }
 
 
@@ -52,9 +78,7 @@ public class UserRights {
      */
     public static UserType getRights(Class<? extends Command> command){
 
-        if (userRights.get(command) == null)
-            return UserType.UNKNOWN;
-        else
-            return userRights.get(command);
+        UserType userType = userRights.get(command);
+        return userType != null ? userType : UserType.UNKNOWN;
     }
 }

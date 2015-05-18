@@ -54,8 +54,6 @@ public class ExperimentTests {
     private static FilePathGenerator fpg;
     private static String testFolderPath;
     private static File testFolder;
-    private static String testFolderName =
-    		"Genomizer Test Folder - Dont be afraid to delete me";
 
     private static TestInitializer ti;
 
@@ -70,14 +68,8 @@ public class ExperimentTests {
         testChoices.add(testChoice);
         testChoices.add(testChoice + "2");
 
-        testFolderPath = System.getProperty("user.home") + File.separator
-                + testFolderName + File.separator;
-
+        testFolderPath = TestInitializer.createScratchDir();
         testFolder = new File(testFolderPath);
-
-        if (!testFolder.exists()) {
-            testFolder.mkdirs();
-        }
 
         fpg = dbac.getFilePathGenerator();
         fpg.setRootDirectory(testFolderPath);

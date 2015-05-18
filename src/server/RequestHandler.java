@@ -5,7 +5,11 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import command.*;
+import command.Command;
+import command.CommandClasses;
+import command.ValidateException;
+import command.connection.PostLoginCommand;
+import command.process.PutProcessCommand;
 import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.HttpStatusCode;
@@ -107,9 +111,8 @@ public class RequestHandler implements HttpHandler {
 				respond(createBadRequestResponse(), exchange);
 				return;
 			}
-		} else if (uuid == null && !commandClass.equals(LoginCommand.
+		} else if (uuid == null && !commandClass.equals(PostLoginCommand.
                 class)) {
-			Debug.log("User could not be authenticated!");
             respondWithAuthenticationFailure(exchange);
 			return;
 		}
@@ -118,15 +121,9 @@ public class RequestHandler implements HttpHandler {
         logUser(Authenticate.getUsernameByID(uuid));
 
         /*Retrieve the URI part of the request header.*/
-		String uri = exchange.getRequestURI().toString();
-
-		/*Does the length of the URI match the needed length?*/
-		if (URILength.get(commandClass) != calculateURILength(uri)) {
-			Debug.log("Bad format on command: " + exchange.getRequestMethod()
-                    + " " + exchange.getRequestURI());
-			respond(createBadRequestResponse(), exchange);
-			return;
-		}
+		String uri = exchange.getRequestURI().toString().split("\\?")[0];
+        String query = exchange.getRequestURI().getQuery();
+        uri = removeTimeStamp(uri);
 
 		/*TODO: Get the current user's user right level*/
 		UserType userType = UserType.ADMIN;
@@ -145,7 +142,15 @@ public class RequestHandler implements HttpHandler {
             return;
         }
 
-		command.setFields(uri, Authenticate.getUsernameByID(uuid), userType);
+        /*Does the length of the URI match the needed length?*/
+        if (command.getExpectedNumberOfURIFields() != calculateURILength(uri)) {
+            Debug.log("Bad format on command: " + exchange.getRequestMethod()
+                    + " " + exchange.getRequestURI());
+            respond(createBadRequestResponse(), exchange);
+            return;
+        }
+
+		command.setFields(uri, query, Authenticate.getUsernameByID(uuid), userType);
 
 		/*Attempt to validate the command.*/
 		try {
@@ -157,8 +162,8 @@ public class RequestHandler implements HttpHandler {
 			return;
 		}
 
-        if (commandClass.equals(ProcessCommand.class)) {
-            Doorman.getWorkPool().addWork((ProcessCommand) command);
+        if (commandClass.equals(PutProcessCommand.class)) {
+            Doorman.getProcessPool().addProcess((PutProcessCommand) command);
             respond(new ProcessResponse(HttpStatusCode.OK), exchange);
             return;
         } else {
@@ -296,5 +301,38 @@ public class RequestHandler implements HttpHandler {
                 INTERNAL_SERVER_ERROR, "Could not create command from " +
                 "request");
         respond(errorResponse, exchange);
+    }
+
+    /* Finds the timestamp and removes it.*/
+    private String removeTimeStamp(String uri){
+
+        String newUri;
+
+        if (!uri.contains("_="))
+            return uri;
+
+        int pos = uri.lastIndexOf("_=");
+        int length = uri.length();
+        int end = pos +2;
+
+        if (length <= end ){
+            return uri;
+        }
+
+        if ('0' > uri.charAt(end) || '9' < uri.charAt(end)){
+            return uri;
+        }
+
+        if (pos > 0 && uri.charAt(pos-1) == '&') {
+            pos -= 1;
+        }
+
+        while(length > end && '0' <= uri.charAt(end) && '9' >= uri.charAt(end)){
+            end++;
+        }
+
+        newUri = uri.substring(0,pos) + uri.substring(end);
+
+        return newUri;
     }
 }

@@ -1,0 +1,9 @@
+
+#generate documents
+make html
+
+#The Main files
+scp -r _build/html/* archimedes:/usr/local/rg_testing/wsgi/static/media/pyicoteo_docs
+
+#The CSS
+scp -r _build/html/_static/*css archimedes:/usr/local/rg_testing/wsgi/static/styles/

@@ -311,7 +311,7 @@ public class SearchDatabaseTests {
         List<Experiment> experiments = dbac
                 .search("not ChiLd[Development Stage]");
 
-        assertEquals(2, experiments.size());
+        assertEquals(4, experiments.size());
     }
 
     @Test
@@ -402,7 +402,7 @@ public class SearchDatabaseTests {
             throws Exception {
 
         List<Experiment> exps = dbac.search("");
-        assertEquals(4, exps.size());
+        assertEquals(6, exps.size());
 
         Experiment e = getExp("Exp1", exps);
 

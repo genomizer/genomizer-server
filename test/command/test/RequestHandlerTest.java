@@ -1,11 +1,8 @@
 package command.test;
 
-import static org.junit.Assert.*;
 
 import org.junit.Ignore;
-import org.junit.Test;
 
-import server.WorkPool;
 
 /**
 * Testclass used to test the CommandHandler class.
@@ -13,7 +10,7 @@ import server.WorkPool;
 * @author Kommunikation/kontroll 2014.
 * @version 1.0
 */
-
+@Deprecated
 @Ignore
 public class RequestHandlerTest {
 //
