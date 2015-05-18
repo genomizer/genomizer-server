@@ -91,6 +91,37 @@ public class RequestHandler implements HttpHandler {
             return;
         }
 
+		/*Authenticate the user and send the appropriate response if needed.*/
+		String uuid = performAuthorization(exchange);
+		if (commandClass == null) {
+			if (uuid == null) {
+                respondWithAuthenticationFailure(exchange);
+				return;
+			} else {
+				Debug.log("Unrecognized command: " +
+                        exchange.getRequestMethod() + " " + exchange.
+                        getRequestURI());
+				respond(createBadRequestResponse(), exchange);
+				return;
+			}
+		} else if (uuid == null && !commandClass.equals(PostLoginCommand.
+                class)) {
+            respondWithAuthenticationFailure(exchange);
+			return;
+		}
+
+        /*Log the user.*/
+        logUser(Authenticate.getUsernameByID(uuid));
+
+        /*Retrieve the URI part of the request header.*/
+		String uri = exchange.getRequestURI().toString().split("\\?")[0];
+        String query = exchange.getRequestURI().getQuery();
+        uri = removeTimeStamp(uri);
+
+		/*TODO: Get the current user's user right level*/
+		UserType userType = UserType.ADMIN;
+
+		/*Read the json body and create the command.*/
 		String json = readBody(exchange);
         if (json.equals("") || json.isEmpty()) {
             json = "{}";
@@ -109,7 +140,7 @@ public class RequestHandler implements HttpHandler {
             return;
         }
 
-		command.setFields(uri, uuid, UserType.ADMIN);
+		command.setFields(uri, query, uuid, userType);
 
 		try {
 			command.validate();
@@ -120,7 +151,7 @@ public class RequestHandler implements HttpHandler {
             return;
 		}
         if (commandClass.equals(PutProcessCommand.class)) {
-            Doorman.getWorkPool().addWork((PutProcessCommand) command);
+            Doorman.getProcessPool().addProcess((PutProcessCommand) command);
             respond(new ProcessResponse(HttpStatusCode.OK), exchange);
         } else {
             respond(command.execute(), exchange);

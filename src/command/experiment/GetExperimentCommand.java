@@ -14,6 +14,7 @@ import response.GetExperimentResponse;
 import database.DatabaseAccessor;
 import database.containers.Experiment;
 import database.subClasses.UserMethods.UserType;
+import server.Debug;
 
 /**
  * Class used to retrieve an experiment from the database.
@@ -26,21 +27,22 @@ public class GetExperimentCommand extends Command {
 	private String expID;
 
 
-	/**
-	 * Overrides the original command in order to use the uri.
-	 * @param uri Contains the experiment id to fetch.
-	 * @param uuid the UUID for the user who made the request.
-	 * @param userType the user type for the command caller.
-	 */
 	@Override
 	public int getExpectedNumberOfURIFields() {
 		return 2;
 	}
 
+	/**
+	 * Overrides the original command in order to use the uri.
+	 * @param uri Contains the experiment id to fetch.
+	 * @param query the query of the command
+	 * @param uuid the UUID for the user who made the request.
+	 * @param userType the user type for the command caller.
+	 */
 	@Override
-	public void setFields(String uri, String uuid, UserType userType) {
+	public void setFields(String uri, String query, String uuid, UserType userType) {
 
-		super.setFields(uri, uuid, userType);
+		super.setFields(uri, query, uuid, userType);
 		expID = uri.split("/")[2];
 	}
 
@@ -58,16 +60,21 @@ public class GetExperimentCommand extends Command {
 			db = initDB();
 		}
 		catch(SQLException | IOException e){
-			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Could not " +
-					"initialize db: " + e.getMessage());
+			Debug.log("Retrieval of experiment " + expID + " didn't work, reason: " +
+					e.getMessage());
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Temporarily could not " +
+					"initialize db.");
 		}
 		try{
 			exp = db.getExperiment(expID);
 		}catch(SQLException e){
-			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Could not get " +
-					"experiment: " + e.getMessage());
+			Debug.log("Retrieval of experiment " + expID + " didn't work, reason: " +
+					e.getMessage());
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Could not get " +
+					"experiment: " + expID+ ". The reason was temporary problems with the database.");
+		}finally {
+				db.close();
 		}
-		db.close();
 		if(exp == null) {
 			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Experiment " +
 					"requested from database is null, not found or does not " +

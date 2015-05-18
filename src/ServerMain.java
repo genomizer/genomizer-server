@@ -27,20 +27,18 @@ public class ServerMain {
 		CommandLine com = loadSettingsFile(args);
 
 		/* We delete possible fragments from previous runs. */
-		StartUpCleaner.removeOldTempDirectories("resources/");
+		StartUpCleaner.removeOldTempDirectories("/tmp/");
 
 		/* The database settings should be written upon startup. */
 		printDatabaseInformation();
 
-		/* Create a work pool */
-		WorkPool workPool = new WorkPool();
-
-		/* Create process handlers */
-		createWorkHandlers(workPool);
+		/* Create work and thread pools */
+		ProcessPool processPool = new ProcessPool(
+				ServerSettings.nrOfProcessThreads);
 
 		/* We attempt to start the doorman. */
 		try {
-			new Doorman(workPool,
+			new Doorman(processPool,
 					ServerSettings.genomizerPort).start();
 		} catch (IOException e) {
 			System.err.println("Error when starting server");
@@ -68,11 +66,6 @@ public class ServerMain {
 		ErrorLogger.log("SYSTEM", info);
 	}
 
-	private static void createWorkHandlers(WorkPool workPool) {
-		for (int i=0; i<ServerSettings.nrOfProcessThreads; i++) {
-			new Thread(new WorkHandler(workPool)).start();
-		}
-	}
 
 	/**
 	 * This method attempts to read the settings file. It is defined to read

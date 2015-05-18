@@ -26,7 +26,6 @@ public class GenomeReleaseTableTests {
     public static DatabaseAccessor dbac;
     public static FilePathGenerator fpg;
 
-    private static String testFolderName = "Genomizer Test Folder - Dont be afraid to delete me";
     private static File testFolder;
     private static String testFolderPath;
 
@@ -36,17 +35,9 @@ public class GenomeReleaseTableTests {
         dbac = ti.setupWithoutAddingTuples();
         fpg = dbac.getFilePathGenerator();
 
-        testFolderPath = System.getProperty("user.home") + File.separator
-                + testFolderName + File.separator;
-
+        testFolderPath = TestInitializer.createScratchDir();
         testFolder = new File(testFolderPath);
-
-        if (!testFolder.exists()) {
-            testFolder.mkdirs();
-        }
-
         fpg.setRootDirectory(testFolderPath);
-
     }
 
     @AfterClass
@@ -200,13 +191,13 @@ public class GenomeReleaseTableTests {
     @Test
     public void shouldBeAbleToGetAllSpeciesThatHaveAGenomeRelease() throws Exception {
         List<String> species = dbac.getAllGenomeReleaseSpecies();
-        assertEquals(2, species.size());
+        assertEquals(3, species.size());
     }
 
     @Test
     public void shouldBeAbleToGetAllGenomeReleases() throws Exception {
         List<Genome> genomes = dbac.getAllGenomeReleases();
-        assertEquals(6, genomes.size());
+        assertEquals(7, genomes.size());
     }
 
     @Test

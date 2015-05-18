@@ -51,7 +51,7 @@ public class PutAnnotationPrivilegesCommandTest {
 	public void testHavingRights() throws ValidateException {
 
 		PutAnnotationPrivilegesCommand com = new PutAnnotationPrivilegesCommand();
-		com.setFields("json", "string", UserType.USER);
+		com.setFields("json", "", "string", UserType.USER);
 		com.validate();
 	}
 
@@ -65,7 +65,7 @@ public class PutAnnotationPrivilegesCommandTest {
 	public void testNotHavingRights() throws ValidateException {
 
 		PutAnnotationPrivilegesCommand com = new PutAnnotationPrivilegesCommand();
-		com.setFields("name", "string", UserType.GUEST);
+		com.setFields("name", "", "string", UserType.GUEST);
 		com.validate();
 		fail();
 	}

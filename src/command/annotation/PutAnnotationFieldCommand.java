@@ -12,11 +12,12 @@ import command.ValidateException;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
 
-import database.subClasses.UserMethods.UserType;
+import database.subClasses.UserMethods;
 import response.ErrorResponse;
 import response.HttpStatusCode;
 import response.MinimalResponse;
 import response.Response;
+import server.Debug;
 
 /**
  * Edits the label of an annotation. The object is generated directly from
@@ -37,6 +38,7 @@ public class PutAnnotationFieldCommand extends Command {
 	public int getExpectedNumberOfURIFields() {
 		return 2;
 	}
+
 
 	@Override
 	public void validate() throws ValidateException {
@@ -62,8 +64,10 @@ public class PutAnnotationFieldCommand extends Command {
 		try {
 			db = initDB();
 		} catch(SQLException | IOException e) {
-			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Could not " +
-					"initialize db: " + e.getMessage());
+			Debug.log("Error editing annotation label "+oldName+". Database error. Reason: " +
+					e.getMessage());
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Error editing annotation label " +
+					oldName+ ". Database error.");
 		}
 		try {
 			Map<String,Integer> anno = db.getAnnotations();
@@ -79,17 +83,19 @@ public class PutAnnotationFieldCommand extends Command {
 			try {
 				db.changeAnnotationLabel(oldName, newName);
 			} catch (IOException | SQLException e) {
-				return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Could not " +
-						"change annotation label: " + e.getMessage());
+				Debug.log("Error editing annotation label "+oldName+". Database error. Reason: " +
+						e.getMessage());
+				return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Error editing annotation label " +
+						oldName+ ". Database error.");
 			}
 
 		} catch(SQLException e) {
-			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Could not " +
-					"get annotations: " + e.getMessage());
+			Debug.log("Could not get annotations. Reason: " +
+					e.getMessage());
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Could not get annotations.");
 		} finally {
-			if (db != null) {
-				db.close();
-			}
+			db.close();
+
 		}
 		return new MinimalResponse(HttpStatusCode.OK);
 	}

@@ -15,6 +15,7 @@ import response.DeleteGenomeReleaseResponse;
 import response.ErrorResponse;
 import response.Response;
 import response.HttpStatusCode;
+import server.Debug;
 
 /**
  * Class used to delete a genome release.
@@ -32,9 +33,9 @@ public class DeleteGenomeReleaseCommand extends Command {
 	}
 
 	@Override
-	public void setFields(String uri, String uuid, UserType userType) {
+	public void setFields(String uri, String query, String uuid, UserType userType) {
 
-		super.setFields(uri, uuid, userType);
+		super.setFields(uri, query, uuid, userType);
 		String[] splitFields = uri.split("/");
 		species = splitFields[2];
 		genomeVersion = splitFields[3];
@@ -73,9 +74,12 @@ public class DeleteGenomeReleaseCommand extends Command {
 					genomeVersion + " or species " + species +
 					" does not exist.");
 		} catch (SQLException | IOException e) {
-			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
+			Debug.log("Error when deleting genome release " + genomeVersion + " for specie "+species+
+							". Database error: " + e.getMessage());
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Error when deleting genome release "
+					+ genomeVersion + " for specie "+species+ ". Database error.");
 		} finally {
-			if(db != null && db.isConnected()) {
+			if(db != null) {
 				db.close();
 			}
 		}

@@ -17,6 +17,7 @@ import command.genomerelease.DeleteGenomeReleaseCommand;
 import command.genomerelease.GetGenomeReleaseCommand;
 import command.genomerelease.GetGenomeReleaseSpeciesCommand;
 import command.genomerelease.PostGenomeReleaseCommand;
+import command.process.CancelProcessCommand;
 import command.process.GetProcessStatusCommand;
 import command.process.PutProcessCommand;
 import command.search.SearchCommand;
@@ -59,6 +60,7 @@ public class CommandClasses {
         classes.put("GET /genomeRelease/", GetGenomeReleaseSpeciesCommand.
                 class);
         classes.put("GET /process", GetProcessStatusCommand.class);
+        classes.put("DELETE /process", CancelProcessCommand.class);
         classes.put("GET /token", IsTokenValidCommand.class);
         classes.put("POST /login", PostLoginCommand.class);
         classes.put("DELETE /login", DeleteLoginCommand.class);

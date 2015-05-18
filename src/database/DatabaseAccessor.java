@@ -1057,7 +1057,16 @@ public class DatabaseAccessor implements AutoCloseable {
      */
     public String addGenomeRelease(String genomeVersion, String species,
             String filename, String checkSumMD5) throws SQLException, IOException {
-        return genMethods.addGenomeRelease(genomeVersion, species, filename, checkSumMD5);
+        return genMethods.addGenomeReleaseWithStatus(genomeVersion, species, filename, checkSumMD5, "Done");
+    }
+
+    // Like 'addGenomeRelease', but sets the status to 'In Progress'.
+    // A call to 'markReadyForDownload' is needed to finalise the upload.
+    public String addInProgressGenomeRelease(String genomeVersion, String species,
+                                             String filename, String checkSumMD5)
+            throws SQLException, IOException {
+        return genMethods.addGenomeReleaseWithStatus(genomeVersion, species,
+                filename, checkSumMD5, "In Progress");
     }
 
     /**
@@ -1210,7 +1219,17 @@ public class DatabaseAccessor implements AutoCloseable {
      */
     public String addChainFile(String fromVersion, String toVersion,
             String fileName, String checkSumMD5) throws SQLException, IOException {
-        return genMethods.addChainFile(fromVersion, toVersion, fileName, checkSumMD5);
+        return genMethods.addChainFileWithStatus(fromVersion, toVersion, fileName,
+                checkSumMD5, "Done");
+    }
+
+    // Like addChainFile, but sets the status to 'In Progress'.
+    // A call to 'markReadyForDownload' is needed to finalise the upload.
+    public String addInProgressChainFile(String fromVersion, String toVersion,
+                                         String fileName, String checkSumMD5)
+            throws SQLException, IOException {
+        return genMethods.addChainFileWithStatus(fromVersion, toVersion, fileName,
+                checkSumMD5, "In Progress");
     }
 
     /**

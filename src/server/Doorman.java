@@ -35,15 +35,15 @@ import java.util.concurrent.Executor;
  */
 public class Doorman {
 	private HttpServer httpServer;
-	private static WorkPool workPool;
+	private static ProcessPool processPool;
 
 	/**
 	 * Constructs a HTTP server (but doesn't start it) which listens on the
      * given port.
 	 * @throws IOException
 	 */
-	public Doorman(WorkPool pool, int port) throws IOException {
-		Doorman.workPool = pool;
+	public Doorman(ProcessPool processPool, int port) throws IOException {
+		Doorman.processPool = processPool;
 
 		httpServer = HttpServer.create(
 				new InetSocketAddress(ServerSettings.genomizerPort),0);
@@ -63,6 +63,7 @@ public class Doorman {
 		server.createContext("/user", requestHandler);
 		server.createContext("/process", requestHandler);
 		server.createContext("/process/rawtoprofile", requestHandler);
+		server.createContext("/process", requestHandler);
 		server.createContext("/sysadm", requestHandler);
 	    server.createContext("/sysadm/annpriv", requestHandler);
 		server.createContext("/genomeRelease", requestHandler);
@@ -95,7 +96,7 @@ public class Doorman {
 				ServerSettings.genomizerPort);
 	}
 
-	public static WorkPool getWorkPool(){
-		return workPool;
+	public static ProcessPool getProcessPool(){
+		return processPool;
 	}
 }

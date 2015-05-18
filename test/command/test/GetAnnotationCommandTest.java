@@ -40,7 +40,7 @@ public class GetAnnotationCommandTest {
 	public void testHavingRights() throws ValidateException {
 
 		Command c = new GetAnnotationCommand();
-		c.setFields("uri", null, UserType.GUEST);
+		c.setFields("uri", "", null, UserType.GUEST);
 		c.validate();
 	}
 
@@ -54,7 +54,7 @@ public class GetAnnotationCommandTest {
 	public void testNotHavingRights() throws ValidateException {
 
 		Command c = new GetAnnotationCommand();
-		c.setFields("uri", null, UserType.UNKNOWN);
+		c.setFields("uri", "", null, UserType.UNKNOWN);
 		c.validate();
 		fail();
 	}
