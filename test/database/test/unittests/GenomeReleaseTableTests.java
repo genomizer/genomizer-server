@@ -200,13 +200,13 @@ public class GenomeReleaseTableTests {
     @Test
     public void shouldBeAbleToGetAllSpeciesThatHaveAGenomeRelease() throws Exception {
         List<String> species = dbac.getAllGenomeReleaseSpecies();
-        assertEquals(2, species.size());
+        assertEquals(3, species.size());
     }
 
     @Test
     public void shouldBeAbleToGetAllGenomeReleases() throws Exception {
         List<Genome> genomes = dbac.getAllGenomeReleases();
-        assertEquals(6, genomes.size());
+        assertEquals(7, genomes.size());
     }
 
     @Test
