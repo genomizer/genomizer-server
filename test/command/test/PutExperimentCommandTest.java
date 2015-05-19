@@ -353,7 +353,7 @@ public class PutExperimentCommandTest {
 	public void testValidateProperlyFormatted() throws ValidateException {
 
 		PutExperimentCommand c = gson.fromJson(json, PutExperimentCommand.class);
-		c.setFields("/uri/expId", "uuid", UserType.USER);
+		c.setFields("/uri/expId", "", "uuid", UserType.USER);
 
 		c.validate();
 	}
