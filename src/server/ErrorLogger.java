@@ -16,11 +16,12 @@ public class ErrorLogger {
 	private static HashMap<String, ArrayList<Response>> usermap = new HashMap<String,ArrayList<Response>>();
 
 
-	public ErrorLogger(){
+	// Utilities tool
+	private ErrorLogger(){
 
 	}
 
-	public static void log(String tag, String logText){
+	public synchronized static void log(String tag, String logText){
 
 		File file = new File(logFile);
 		String timeString = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date(System.currentTimeMillis()));
@@ -38,7 +39,7 @@ public class ErrorLogger {
 		}
 	}
 
-	public static void log(String username, Throwable exc) {
+	public synchronized static void log(String username, Throwable exc) {
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
 		exc.printStackTrace(pw);

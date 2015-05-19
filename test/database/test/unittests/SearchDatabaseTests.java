@@ -1,6 +1,11 @@
 package database.test.unittests;
 
-import static org.junit.Assert.assertEquals;
+import database.DatabaseAccessor;
+import database.containers.Experiment;
+import database.test.TestInitializer;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -17,6 +22,7 @@ import org.junit.Test;
 import database.DatabaseAccessor;
 import database.containers.Experiment;
 import database.test.TestInitializer;
+import static org.junit.Assert.assertEquals;
 
 public class SearchDatabaseTests {
 
