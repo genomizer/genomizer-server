@@ -8,9 +8,9 @@ import command.ValidateException;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
 import response.ErrorResponse;
+import response.HttpStatusCode;
 import response.MinimalResponse;
 import response.Response;
-import response.HttpStatusCode;
 import server.Debug;
 
 import java.io.IOException;
@@ -22,6 +22,7 @@ import java.sql.SQLException;
  * @author dv13jen
  * @version 1.0
  */
+@Deprecated
 public class PutUserPasswordCommand extends Command {
     
     @Expose
