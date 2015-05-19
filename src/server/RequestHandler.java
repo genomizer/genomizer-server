@@ -10,7 +10,6 @@ import command.CommandClasses;
 import command.ValidateException;
 import command.connection.PostLoginCommand;
 import command.process.PutProcessCommand;
-import database.DatabaseAccessor;
 import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.HttpStatusCode;
@@ -22,8 +21,6 @@ import transfer.Util;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
@@ -159,33 +156,7 @@ public class RequestHandler implements HttpHandler {
         }
 
 		/*Get the user's role.*/
-        UserType userType = UserType.UNKNOWN;
-        DatabaseAccessor db = null;
-
-        try {
-            db = new DatabaseAccessor(
-                    ServerSettings.databaseUsername,
-                    ServerSettings.databasePassword,
-                    ServerSettings.databaseHost,
-                    ServerSettings.databaseName);
-            userType = db.getRole(Authenticate.getUsernameByID(uuid));
-        } catch (SQLException e) {
-            Debug.log(e.toString());
-            ErrorResponse errorResponse = new ErrorResponse(HttpStatusCode.
-                    INTERNAL_SERVER_ERROR, "Could not retrieve the user " +
-                    "information.");
-            respond(errorResponse, exchange);
-        } catch (IOException e) {
-            Debug.log(e.toString());
-            ErrorResponse errorResponse = new ErrorResponse(HttpStatusCode.
-                    INTERNAL_SERVER_ERROR, "Could not retrieve the user " +
-                    "information.");
-            respond(errorResponse, exchange);
-        }
-        finally {
-            if (db != null)
-                db.close();
-        }
+        UserType userType = UserType.ADMIN;
         
         command.setFields(uri, query, Authenticate.getUsernameByID(uuid), userType);
 
