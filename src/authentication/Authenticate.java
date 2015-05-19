@@ -136,6 +136,23 @@ public class Authenticate {
 		if (authHeader != null)
 			uuid = authHeader.get(0);
 
+		// Get the value of the 'token' parameter.
+		String uuid2;
+		HashMap<String, String> reqParams = new HashMap<>();
+		Util.parseURI(exchange.getRequestURI(), reqParams);
+		if (reqParams.containsKey("token")) {
+			uuid2 = reqParams.get("token");
+			if (uuid2 != null) {
+				if (uuid == null || uuid.equals(uuid2)) {
+					uuid = uuid2;
+				} else {
+					Debug.log("Authorization header and token parameter "
+							+ "values differ!");
+					return null;
+				}
+			}
+		}
+
 		// Actual authentication.
 		Debug.log("Trying to authenticate token " + uuid + "...");
 		if (uuid != null && Authenticate.idExists(uuid)) {
