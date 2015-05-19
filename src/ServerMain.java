@@ -1,4 +1,6 @@
 import authentication.InactiveUuidsRemover;
+import command.Command;
+import database.DatabaseAccessor;
 import org.apache.commons.cli.*;
 import process.StartUpCleaner;
 import server.*;
@@ -6,8 +8,7 @@ import server.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-
-// import java.util.Scanner;
+import java.sql.SQLException;
 
 
 public class ServerMain {
@@ -25,6 +26,7 @@ public class ServerMain {
 
 		/* First we need to read and validate the settings file. */
 		CommandLine com = loadSettingsFile(args);
+
 
 		/* We delete possible fragments from previous runs. */
 		StartUpCleaner.removeOldTempDirectories("/tmp/");
@@ -49,6 +51,22 @@ public class ServerMain {
 		/* By default we run a UID remover. */
 		if (!com.hasOption("nri")) {
 			(new Thread(new InactiveUuidsRemover())).start();
+		}
+
+		/* Check whether a connection to the database can be made */
+		DatabaseAccessor db = null;
+		try {
+			db = Command.initDB();
+		} catch (IOException | SQLException ex) {
+			String msg = "Warning: a connection to the database could not be " +
+					"made.";
+			Debug.log(msg);
+			ErrorLogger.log("SYSTEM", msg);
+
+		} finally {
+			if (db != null && db.isConnected()) {
+				db.close();
+			}
 		}
 
 	}
