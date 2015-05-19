@@ -17,7 +17,7 @@ import database.containers.Genome;
  */
 public class GetGenomeReleaseResponse extends Response {
 
-	private ArrayList<Genome> genomeReleases;
+	ArrayList<Genome> genomeReleases;
 	private JsonArray arr;
 
 

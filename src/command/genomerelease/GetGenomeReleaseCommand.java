@@ -9,7 +9,6 @@ import command.UserRights;
 import command.ValidateException;
 import database.DatabaseAccessor;
 import database.containers.Genome;
-import database.subClasses.UserMethods;
 import response.ErrorResponse;
 import response.GetGenomeReleaseResponse;
 import response.HttpStatusCode;

@@ -33,6 +33,7 @@ public class FileTuple implements HasCheckSumMD5 {
     public final String grVersion;
     public final String status;
     public final String checkSumMD5;
+    public final String fileSize;
 
     /**
      * Constructs a FileTuple object. Parameter: ResultSet
@@ -56,6 +57,7 @@ public class FileTuple implements HasCheckSumMD5 {
         grVersion = resSet.getString("GRVersion");
         status = resSet.getString("Status");
         checkSumMD5 = resSet.getString("MD5");
+        fileSize = resSet.getString("FileSize");
     }
 
     /**
@@ -115,6 +117,15 @@ public class FileTuple implements HasCheckSumMD5 {
 
     public void setCheckSumMD5(DatabaseAccessor db, String checkSumMD5) throws SQLException {
         db.setFileCheckSumMD5(this, checkSumMD5);
+    }
+
+    /**
+     * Gets the file size,
+     *
+     * @return
+     */
+    public String getFileSize() {
+        return fileSize;
     }
 
     /**

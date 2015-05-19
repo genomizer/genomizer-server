@@ -17,7 +17,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
-import server.ProcessHandler;
 import server.ProcessPool;
 import server.test.dummies.PutProcessCommandMock;
 
@@ -34,7 +33,6 @@ import static org.junit.Assert.fail;
 @SuppressWarnings("deprecation")
 public class GetProcessCommandInformationTest {
 
-	private static ProcessHandler processHandler;
 	private ProcessPool processPool;
 
 	private PutProcessCommand makeCmd(String author, String metadata, String genomeVersion, String expId) {
@@ -58,10 +56,7 @@ public class GetProcessCommandInformationTest {
 	public void setUp() throws Exception {
 
 		processPool = new ProcessPool(5);
-		PutProcessCommand processCommand = new PutProcessCommand();
-		processHandler = new ProcessHandler(processCommand,
-				new Process(processCommand));
-
+		
 		processPool.addProcess(makeCmd("yuri", "meta", "v123", "Exp1"));
 		processPool.addProcess(makeCmd("janne", "mea", "v1523", "Exp2"));
 		processPool.addProcess(makeCmd("philge", "meta", "v22", "Exp43"));

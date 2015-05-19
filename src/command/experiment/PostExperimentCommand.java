@@ -8,7 +8,6 @@ import command.Annotation;
 import command.Command;
 import command.UserRights;
 import command.ValidateException;
-import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.HttpStatusCode;
 import response.MinimalResponse;
@@ -61,11 +60,33 @@ public class PostExperimentCommand extends Command {
 		}
 	}
 
+	private boolean annotationsContains(database.containers.Annotation anno) {
+		for(Annotation ann: this.annotations){
+			if(ann.getName().equals(anno.label)){
+				return true;
+			}
+		}
+		return false;
+	}
+
 	@Override
 	public Response execute() {
 		DatabaseAccessor db = null;
 		try {
 			db = initDB();
+
+			ArrayList<String> anns = db.getAllAnnotationLabels();
+			for(String ann:anns){
+				database.containers.Annotation anno = db.getAnnotationObject(ann);
+				if(anno.isRequired){
+					if(!annotationsContains(anno)){
+						return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
+								"Not all forced values are present. Missing " +
+										"atleast " + anno.label);
+					}
+				}
+			}
+
 			db.addExperiment(name);
 			for(Annotation annotation: annotations) {
 				db.annotateExperiment(name, annotation.getName(),

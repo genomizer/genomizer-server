@@ -56,29 +56,29 @@ public class GetExperimentCommand extends Command {
 	public Response execute() {
 		Experiment exp;
 		DatabaseAccessor db;
+
 		try {
 			db = initDB();
 		}
-		catch(SQLException | IOException e){
+		catch (SQLException | IOException e){
 			Debug.log("Retrieval of experiment " + expID + " didn't work, reason: " +
 					e.getMessage());
 			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Temporarily could not " +
 					"initialize db.");
 		}
-		try{
+		try {
 			exp = db.getExperiment(expID);
-		}catch(SQLException e){
+		} catch (SQLException e){
 			Debug.log("Retrieval of experiment " + expID + " didn't work, reason: " +
 					e.getMessage());
 			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Could not get " +
 					"experiment: " + expID+ ". The reason was temporary problems with the database.");
-		}finally {
+		} finally {
 				db.close();
 		}
-		if(exp == null) {
-			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Experiment " +
-					"requested from database is null, not found or does not " +
-					"exist.");
+		if (exp == null) {
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Experiment "
+					+ "with id " + expID + " could not be found.");
 		}
 		return new GetExperimentResponse(HttpStatusCode.OK, exp.getID(),
 				exp.getAnnotations(), exp.getFiles());

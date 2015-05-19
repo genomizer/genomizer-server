@@ -11,7 +11,6 @@ import command.UserRights;
 import command.ValidateException;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
-import database.subClasses.UserMethods;
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
@@ -47,6 +46,10 @@ public class PutAnnotationValueCommand extends Command {
 				"Old annotation value");
 		validateName(newValue, MaxLength.ANNOTATION_LABEL,
 				"New annotation value");
+		if(newValue.equals("freetext")){
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Can not" +
+					"rename a value to \"freetext\"");
+		}
 	}
 
 	@Override

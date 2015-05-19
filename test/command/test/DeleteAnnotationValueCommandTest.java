@@ -10,9 +10,6 @@ import static org.junit.Assert.*;
 
 public class DeleteAnnotationValueCommandTest {
 
-    private DeleteAnnotationValueCommand com;
-
-
     /**
      * Test used to check that ValidateException is not thrown
      * when the user have the required rights.
