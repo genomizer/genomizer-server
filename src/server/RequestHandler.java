@@ -10,6 +10,7 @@ import command.CommandClasses;
 import command.ValidateException;
 import command.connection.PostLoginCommand;
 import command.process.PutProcessCommand;
+import database.DatabaseAccessor;
 import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.HttpStatusCode;
@@ -21,6 +22,7 @@ import transfer.Util;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -134,9 +136,6 @@ public class RequestHandler implements HttpHandler {
         }
 
 
-		/*TODO: Get the current user's user right level*/
-		UserType userType = UserType.ADMIN;
-
 		/*Read the json body and create the command.*/
 		String json = readBody(exchange);
 		logRequestBody(json);
@@ -159,7 +158,36 @@ public class RequestHandler implements HttpHandler {
             return;
         }
 
-		command.setFields(uri, query, Authenticate.getUsernameByID(uuid), userType);
+		/*Get the user's role.*/
+        UserType userType = UserType.UNKNOWN;
+        DatabaseAccessor db = null;
+
+        try {
+            db = new DatabaseAccessor(
+                    ServerSettings.databaseUsername,
+                    ServerSettings.databasePassword,
+                    ServerSettings.databaseHost,
+                    ServerSettings.databaseName);
+            userType = db.getRole(Authenticate.getUsernameByID(uuid));
+        } catch (SQLException e) {
+            Debug.log(e.toString());
+            ErrorResponse errorResponse = new ErrorResponse(HttpStatusCode.
+                    INTERNAL_SERVER_ERROR, "Could not retrieve the user " +
+                    "information.");
+            respond(errorResponse, exchange);
+        } catch (IOException e) {
+            Debug.log(e.toString());
+            ErrorResponse errorResponse = new ErrorResponse(HttpStatusCode.
+                    INTERNAL_SERVER_ERROR, "Could not retrieve the user " +
+                    "information.");
+            respond(errorResponse, exchange);
+        }
+        finally {
+            if (db != null)
+                db.close();
+        }
+        
+        command.setFields(uri, query, Authenticate.getUsernameByID(uuid), userType);
 
 		/*Attempt to validate the command.*/
 		try {
