@@ -97,8 +97,9 @@ public class PostExperimentCommand extends Command {
 			e.printStackTrace();
 			Debug.log("Adding of experiment " + name + " didn't work, reason: " +
 					e.getMessage());
-			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Adding of experiment "+ name+
-					" didn't work due to temporary problems with the database.");
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+					"Adding of experiment " + name + " didn't work due to ." +
+							e.getMessage());
 		} finally {
 			if (db != null) {
 				db.close();
