@@ -15,12 +15,9 @@ import response.ProcessResponse;
 import response.Response;
 import transfer.DownloadHandler;
 import transfer.UploadHandler;
-import transfer.Util;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -65,14 +62,16 @@ public class RequestHandler implements HttpHandler {
             Debug.log("User could not be authenticated");
             respond(new ErrorResponse(HttpStatusCode.UNAUTHORIZED,
                     "User could not be authenticated"), exchange);
+            return;
         } else if (commandClass == null && !key.equals("GET /download") &&
                 !key.equals("GET /upload") && !key.equals("POST /upload")){
             Debug.log("Unrecognized command: " + exchange.getRequestMethod()
                     + " " + exchange.getRequestURI());
-            respond(new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Could not create a " +
-                    "command from request. Bad format on request."), exchange);
+            respond(new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Could not create a "
+                    + "command from request. Bad format on request."), exchange);
+            return;
         }
-        Debug.log("User " + Authenticate.getUsernameByID(uuid) + " authenticated successfully.");
+
         try {
             switch (key) {
                 case ("GET /download"):
@@ -91,9 +90,8 @@ public class RequestHandler implements HttpHandler {
         }
 
 		String json = readBody(exchange);
-        if (json.equals("") || json.isEmpty()) {
+        if (json.isEmpty())
             json = "{}";
-        }
         Debug.log("Request body: \n" + json);
 
         Command command = gson.fromJson(json, commandClass);
@@ -103,8 +101,8 @@ public class RequestHandler implements HttpHandler {
         if (command.getExpectedNumberOfURIFields() != (uri.split("/").length-1)) {
             Debug.log("Bad format on command: " + exchange.getRequestMethod()
                     + " " + exchange.getRequestURI());
-            respond(new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Could not create a " +
-                    "command from request. Bad format on request."), exchange);
+            respond(new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Could not create a "
+                    + "command from request. Bad format on request."), exchange);
             return;
         }
 
@@ -147,7 +145,6 @@ public class RequestHandler implements HttpHandler {
                     e.getMessage());
             ErrorLogger.log("SYSTEM", e);
         }
-
         Debug.log("END OF EXCHANGE\n------------------");
     }
 
@@ -165,25 +162,25 @@ public class RequestHandler implements HttpHandler {
 
     /* Finds the timestamp and removes it.*/
     private String removeTimeStamp(String uri){
+        String newUri;
         if (!uri.contains("_="))
             return uri;
-
         int pos = uri.lastIndexOf("_=");
         int length = uri.length();
         int end = pos +2;
-
-        if (length <= end && '0' > uri.charAt(end) || '9' < uri.charAt(end)){
+        if (length <= end ){
             return uri;
         }
-
+        if ('0' > uri.charAt(end) || '9' < uri.charAt(end)){
+            return uri;
+        }
         if (pos > 0 && uri.charAt(pos-1) == '&') {
             pos -= 1;
         }
-
         while(length > end && '0' <= uri.charAt(end) && '9' >= uri.charAt(end)){
             end++;
         }
-
-        return uri.substring(0,pos) + uri.substring(end);
+        newUri = uri.substring(0,pos) + uri.substring(end);
+        return newUri;
     }
 }

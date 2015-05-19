@@ -146,8 +146,8 @@ public class Authenticate {
 				if (uuid == null || uuid.equals(uuid2)) {
 					uuid = uuid2;
 				} else {
-					Debug.log("Authorization header and token parameter " +
-							"values differ!");
+					Debug.log("Authorization header and token parameter "
+							+ "values differ!");
 					return null;
 				}
 			}
@@ -156,9 +156,12 @@ public class Authenticate {
 		// Actual authentication.
 		Debug.log("Trying to authenticate token " + uuid + "...");
 		if (uuid != null && Authenticate.idExists(uuid)) {
+			Debug.log("User " + Authenticate.getUsernameByID(uuid)
+					+ " authenticated successfully.");
 			Authenticate.updateLatestRequest(uuid);
 			return uuid;
 		} else {
+			Debug.log("User could not be authenticated");
 			return null;
 		}
 	}
