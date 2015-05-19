@@ -75,6 +75,15 @@ public class ProcessHandler implements Callable<Response> {
 				process.status = Process.STATUS_CRASHED;
 			}
 
+			ErrorLogger.log("PROCESS", "Process is sleeping for 30 seconds.");
+			Debug.log("Process is sleeping for 30 seconds.");
+			try {
+				Thread.sleep(30000);
+			} catch (InterruptedException ex) {
+				Debug.log("Sleep interrupted");
+			}
+
+
 			process.timeFinished = System.currentTimeMillis();
 
 			String timeMsg = "Elapsed time: " +
