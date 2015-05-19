@@ -52,6 +52,9 @@ public class SearchCommand extends Command {
 				annotations = splitKeyVal[1];
 			}
 		}
+
+		if (annotations == null)
+			annotations = ("[expID]");
 	}
 
 	@Override
