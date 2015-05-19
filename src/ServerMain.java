@@ -40,8 +40,7 @@ public class ServerMain {
 
 		/* We attempt to start the doorman. */
 		try {
-			new Doorman(processPool,
-					ServerSettings.genomizerPort).start();
+			new Doorman(processPool).start();
 		} catch (IOException e) {
 			System.err.println("Error when starting server");
 			Debug.log(e.getMessage());
