@@ -18,6 +18,7 @@ public class ServerSettings {
 	public static String fileLocation = "/var/www/data/";
 	public static String bowtieLocation = "bowtie";
 	public static String picardLocation = "picard";
+	public static String pyicosLocation = "pyicos";
 	public static int nrOfProcessThreads = 5;
 
 	private static String downloadURL = "/download?path=";
@@ -38,7 +39,8 @@ public class ServerSettings {
 					+ "fileLocation = " + fileLocation + "\n"
 					+ "nrOfProcessThreads = " + nrOfProcessThreads + "\n"
 					+ "bowtieLocation = " + bowtieLocation + "\n"
-					+ "picardLocation = " + picardLocation + "\n";
+					+ "picardLocation = " + picardLocation + "\n"
+					+ "pyicosLocation = " + pyicosLocation + "\n";
 
 			out.write(dataInfo);
 			out.close();
@@ -67,6 +69,7 @@ public class ServerSettings {
 		nullCheck(nrOfProcessThreads, "nrOfProcessThreads");
 		nullCheck(bowtieLocation, "bowtieLocation");
 		nullCheck(picardLocation, "picardLocation");
+		nullCheck(pyicosLocation, "pyicosLocation");
 	}
 
 	private static void nullCheck(int parameter, String name) {
@@ -145,6 +148,9 @@ public class ServerSettings {
 				case "picardlocation":
 					picardLocation = value;
 					break;
+				case "pyicoslocation":
+					pyicosLocation = value;
+					break;
 				default:
 					String msg = "Unrecognized setting: " + key;
 					Debug.log(msg);
@@ -170,6 +176,8 @@ public class ServerSettings {
 							+ "\tfileLocation = " + fileLocation + "\n"
 							+ "\tnrOfProcessThreads = " + nrOfProcessThreads + "\n"
 							+ "\tbowtieLocation = " + bowtieLocation
+							+ "\tpicardLocation = " + picardLocation
+							+ "\tpyicosLocation = " + pyicosLocation
 							+ "\n";
 
 			Debug.log("Imported the following settings:\n" + dataInfo);

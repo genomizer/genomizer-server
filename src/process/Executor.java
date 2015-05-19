@@ -111,7 +111,7 @@ public abstract class Executor {
 	 * @throws InterruptedException
 	 * @throws IOException
 	 */
-	private String executeCommand(String[] command)
+	protected String executeCommand(String[] command)
 			throws InterruptedException, IOException {
 		ProcessBuilder builder = new ProcessBuilder(command);
 
