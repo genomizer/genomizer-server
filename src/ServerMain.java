@@ -32,7 +32,7 @@ public class ServerMain {
 		/* The database settings should be written upon startup. */
 		printDatabaseInformation();
 
-		/* Create work and thread pools */
+		/* Create a process pool */
 		ProcessPool processPool = new ProcessPool(
 				ServerSettings.nrOfProcessThreads);
 
