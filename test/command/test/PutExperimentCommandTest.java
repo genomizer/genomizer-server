@@ -381,7 +381,7 @@ public class PutExperimentCommandTest {
 	public void testHavingRights() throws ValidateException {
 
 		Command c = gson.fromJson(json,PutExperimentCommand.class);
-		c.setFields("/exp/uri", "uuid", UserType.USER);
+		c.setFields("/exp/uri", "", "uuid", UserType.USER);
 		c.validate();
 	}
 
@@ -395,7 +395,7 @@ public class PutExperimentCommandTest {
 	public void testNotHavingRights() throws ValidateException {
 
 		Command c = gson.fromJson(json,PutExperimentCommand.class);
-		c.setFields("/exp/uri", "uuid", UserType.GUEST);
+		c.setFields("/exp/uri", "", "uuid", UserType.GUEST);
 		c.validate();
 		fail();
 	}
