@@ -6,7 +6,7 @@ import command.Command;
 import database.constants.MaxLength;
 import database.subClasses.UserMethods.UserType;
 import org.junit.Test;
-import command.DeleteUserCommand;
+import command.admin.DeleteUserCommand;
 import command.ValidateException;
 
 /**
@@ -76,7 +76,7 @@ public class DeleteUserCommandTest {
 			uri += "a";
 		}
 		Command c = new DeleteUserCommand();
-		c.setFields(uri, null, UserType.ADMIN);
+		c.setFields(uri, "", null, UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException.");
@@ -93,7 +93,7 @@ public class DeleteUserCommandTest {
 	public void testValidateProperlyFormatted() throws ValidateException {
 
 		Command c = new DeleteUserCommand();
-		c.setFields("/test/username", null, UserType.ADMIN);
+		c.setFields("/test/username", "", null, UserType.ADMIN);
 		c.validate();
 
 		assertTrue(true);
@@ -110,7 +110,7 @@ public class DeleteUserCommandTest {
 	public void testHavingRights() throws ValidateException {
 
 		Command c = new DeleteUserCommand();
-		c.setFields("/test/username", null, UserType.ADMIN);
+		c.setFields("/test/username", "", null, UserType.ADMIN);
 		c.validate();
 	}
 
@@ -124,7 +124,7 @@ public class DeleteUserCommandTest {
 	public void testNotHavingRights() throws ValidateException {
 
 		Command c = new DeleteUserCommand();
-		c.setFields("/test/username", null, UserType.USER);
+		c.setFields("/test/username", "", null, UserType.USER);
 		c.validate();
 		fail();
 	}

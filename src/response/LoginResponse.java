@@ -13,6 +13,9 @@ public class LoginResponse extends Response {
 	@Expose
 	private String token;
 
+	@Expose
+	String role;
+
 
 	/**
 	 * Creator for the response.
@@ -23,6 +26,7 @@ public class LoginResponse extends Response {
 
 		this.code = code;
 		this.token = token;
+		this.role = "role";
 	}
 
 	/**

@@ -1,20 +1,12 @@
 package server.test;
 
-import static org.junit.Assert.*;
-
-import database.subClasses.UserMethods;
-import database.test.*;
 import org.junit.*;
-
-import response.Response;
-
-import command.ProcessCommand;
 
 @Ignore
 public class CreateProcessCommandTest {
 //
 //	CommandFactory cmdf;
-//	ProcessCommand processCommand;
+//	PutProcessCommand processCommand;
 //	String uuid;
 //
 //	String username = "splutt";
@@ -48,7 +40,7 @@ public class CreateProcessCommandTest {
 //							"\"genomeRelease\": \"" + genomeRelease + "\"," +
 //							"\"author\": \"" + author + "\"}";
 //
-//		processCommand = (ProcessCommand)cmdf.createProcessCommand(json, username, json);
+//		processCommand = (PutProcessCommand)cmdf.createProcessCommand(json, username, json);
 //	}
 //
 //	@Test

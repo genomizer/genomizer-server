@@ -1,0 +1,7 @@
+[Pyicotrocol]
+experiment=sin_region/hog_6b.bed
+experiment_format=bed
+control=sin_region/no_tag.bed
+control_format=bed
+output=sin_region/6bVSnotag.pk
+operations=strcorr, extend, normalize, subtract

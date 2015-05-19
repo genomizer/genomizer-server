@@ -5,9 +5,8 @@ import static org.junit.Assert.*;
 import command.Command;
 import command.ValidateException;
 import database.subClasses.UserMethods.UserType;
-import org.junit.Ignore;
 import org.junit.Test;
-import command.UpdateFileInExperimentCommand;
+import command.file.PutFileCommand;
 
 /**
  * Class used to test that UpdateFileInExperiment works
@@ -24,7 +23,7 @@ public class UpdateFileInExperimentTest {
 //	 */
 //	@Test
 //	public void testCreateNotNull() {
-//		UpdateFileInExperimentCommand c = new UpdateFileInExperimentCommand("","");
+//		PutFileCommand c = new PutFileCommand("","");
 //		assertNotNull(c);
 //
 //	}
@@ -34,7 +33,7 @@ public class UpdateFileInExperimentTest {
 //	 */
 //	@Test
 //	public void testValidateAlwaysTrue() {
-//		UpdateFileInExperimentCommand c = new UpdateFileInExperimentCommand("","");
+//		PutFileCommand c = new PutFileCommand("","");
 //		c.validate();
 //	}
 
@@ -47,8 +46,8 @@ public class UpdateFileInExperimentTest {
 	@Test
 	public void testHavingRights() throws ValidateException {
 
-		Command c = new UpdateFileInExperimentCommand();
-		c.setFields("uri", null, UserType.USER);
+		Command c = new PutFileCommand();
+		c.setFields("uri", "", null, UserType.USER);
 		c.validate();
 	}
 
@@ -61,8 +60,8 @@ public class UpdateFileInExperimentTest {
 	@Test(expected = ValidateException.class)
 	public void testNotHavingRights() throws ValidateException {
 
-		Command c = new UpdateFileInExperimentCommand();
-		c.setFields("uri", null, UserType.GUEST);
+		Command c = new PutFileCommand();
+		c.setFields("uri", "", null, UserType.GUEST);
 		c.validate();
 		fail();
 	}

@@ -39,8 +39,6 @@ public class FileTableTests {
     private String testMD5       = null;
     private static FileTuple ft;
 
-    private static String testFolderName =
-    		"Genomizer Test Folder - Dont be afraid to delete me";
     private static File testFolder;
     private static String testFolderPath;
     private static FilePathGenerator fpg;
@@ -55,14 +53,8 @@ public class FileTableTests {
                 TestInitializer.password, TestInitializer.host,
                 TestInitializer.database);
 
-        testFolderPath = System.getProperty("user.home") + File.separator
-                + testFolderName + File.separator;
-
+        testFolderPath = TestInitializer.createScratchDir();
         testFolder = new File(testFolderPath);
-
-        if (!testFolder.exists()) {
-            testFolder.mkdirs();
-        }
 
         fpg = dbac.getFilePathGenerator();
         fpg.setRootDirectory(testFolderPath);
@@ -91,7 +83,6 @@ public class FileTableTests {
         ft = dbac.addNewFile(testExpId, testFileType, testName, testInputFile,
                 testMetaData, testAuthor, testUploader, testIsPrivate,
                 testGRVersion, testMD5);
-        dbac.markReadyForDownload(ft);
         addMockFile(ft.getParentFolder(), ft.filename);
     }
 
@@ -114,10 +105,9 @@ public class FileTableTests {
         e = dbac.getExperiment(testExpId);
         assertEquals(0, e.getFiles().size());
 
-        FileTuple ft = dbac.addNewFile(testExpId, testFileType, testName,
+        ft = dbac.addNewFile(testExpId, testFileType, testName,
                 testInputFile, testMetaData, testAuthor, testUploader,
                 testIsPrivate, testGRVersion, testMD5);
-        dbac.markReadyForDownload(ft);
         e = dbac.getExperiment(testExpId);
         assertEquals(1, e.getFiles().size());
 
@@ -160,7 +150,6 @@ public class FileTableTests {
         ft = dbac.addNewFile(testExpId, testFileType, testName,
                 testInputFile, testMetaData, testAuthor, testUploader,
                 testIsPrivate, testGRVersion, testMD5);
-        dbac.markReadyForDownload(ft);
     }
 
 
@@ -184,7 +173,6 @@ public class FileTableTests {
         ft = dbac.addNewFile(testExpId, testFileType, testName, testInputFile,
         		testMetaData, testAuthor, testUploader, testIsPrivate,
         		testGRVersion, testMD5);
-        dbac.markReadyForDownload(ft);
     }
 
     private void addMockFile(String folderPath, String filename1)
@@ -197,7 +185,7 @@ public class FileTableTests {
 
     @Test
     public void shouldBeInProgressAfterAddition() throws Exception {
-        FileTuple ft2 = dbac.addNewFile(testExpId, testFileType, testName2, testInputFile,
+        FileTuple ft2 = dbac.addNewInProgressFile(testExpId, testFileType, testName2, testInputFile,
                 testMetaData, testAuthor, testUploader, testIsPrivate,
                 testGRVersion, testMD5);
         assertEquals("In Progress", ft2.status);
@@ -216,7 +204,6 @@ public class FileTableTests {
         dbac.addExperiment("expert1");
         FileTuple fileStore = dbac.addNewFile("expert1", 1, "temp1.txt", "temp2.txt",
                 "-a -g", "Claes", "Claes", false, "te34", null);
-        dbac.markReadyForDownload(fileStore);
         File temp1 = new File(fileStore.path);
         temp1.createNewFile();
         assertTrue(temp1.exists());

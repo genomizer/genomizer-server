@@ -1,14 +1,14 @@
 package database;
 
+import database.containers.*;
+import database.subClasses.*;
+import org.apache.commons.codec.digest.DigestUtils;
+import server.ServerSettings;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.sql.Connection;
-
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.text.ParseException;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
@@ -16,12 +16,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
-
-import database.containers.*;
-import database.containers.Genome;
-import org.apache.commons.codec.digest.DigestUtils;
-import server.ServerSettings;
-import database.subClasses.*;
 
 /**
  * PREREQUISITES: The construction parameters must reference a postgresql
@@ -704,6 +698,8 @@ public class DatabaseAccessor implements AutoCloseable {
     }
 
     /**
+     * Add a new file to the File table and mark it as 'Done'.
+     *
      * @param expID
      *            String The unique name of the experiment. OBS! If not null,
      *            this must reference an experiment that has been previously
@@ -744,8 +740,18 @@ public class DatabaseAccessor implements AutoCloseable {
             String uploader, boolean isPrivate, String genomeRelease,
             String checkSumMD5)
             throws SQLException, IOException {
-        return fileMethods.addNewFile(expID, fileType, fileName, inputFileName,
-                metaData, author, uploader, isPrivate, genomeRelease, checkSumMD5);
+        return fileMethods.addNewFileWithStatus(expID, fileType, fileName, inputFileName,
+                metaData, author, uploader, isPrivate, genomeRelease, checkSumMD5, "Done");
+    }
+
+    /* Like addNewFile, but marks the file as 'In Progress'. */
+    public FileTuple addNewInProgressFile(String expID, int fileType, String fileName,
+                                          String inputFileName, String metaData, String author,
+                                          String uploader, boolean isPrivate, String genomeRelease,
+                                          String checkSumMD5)
+            throws SQLException, IOException {
+        return fileMethods.addNewFileWithStatus(expID, fileType, fileName, inputFileName,
+                metaData, author, uploader, isPrivate, genomeRelease, checkSumMD5, "In Progress");
     }
 
     /**
@@ -756,6 +762,21 @@ public class DatabaseAccessor implements AutoCloseable {
      */
     public int markReadyForDownload(FileTuple ft) throws SQLException {
         return fileMethods.markReadyForDownload(ft.id);
+    }
+
+    /**
+     * Updates the file size to actual size
+     *
+     * @param   ft the file to update size for
+     * @return  the number of tuples updated (either 0 or 1)
+     */
+    public int updateFileSize(FileTuple ft) throws  SQLException {
+
+        File f = new File(ft.path);
+        Long size = f.length();
+
+        return fileMethods.updateFileSize(ft.id, size);
+
     }
 
     /**
@@ -1045,7 +1066,16 @@ public class DatabaseAccessor implements AutoCloseable {
      */
     public String addGenomeRelease(String genomeVersion, String species,
             String filename, String checkSumMD5) throws SQLException, IOException {
-        return genMethods.addGenomeRelease(genomeVersion, species, filename, checkSumMD5);
+        return genMethods.addGenomeReleaseWithStatus(genomeVersion, species, filename, checkSumMD5, "Done");
+    }
+
+    // Like 'addGenomeRelease', but sets the status to 'In Progress'.
+    // A call to 'markReadyForDownload' is needed to finalise the upload.
+    public String addInProgressGenomeRelease(String genomeVersion, String species,
+                                             String filename, String checkSumMD5)
+            throws SQLException, IOException {
+        return genMethods.addGenomeReleaseWithStatus(genomeVersion, species,
+                filename, checkSumMD5, "In Progress");
     }
 
     /**
@@ -1198,7 +1228,17 @@ public class DatabaseAccessor implements AutoCloseable {
      */
     public String addChainFile(String fromVersion, String toVersion,
             String fileName, String checkSumMD5) throws SQLException, IOException {
-        return genMethods.addChainFile(fromVersion, toVersion, fileName, checkSumMD5);
+        return genMethods.addChainFileWithStatus(fromVersion, toVersion, fileName,
+                checkSumMD5, "Done");
+    }
+
+    // Like addChainFile, but sets the status to 'In Progress'.
+    // A call to 'markReadyForDownload' is needed to finalise the upload.
+    public String addInProgressChainFile(String fromVersion, String toVersion,
+                                         String fileName, String checkSumMD5)
+            throws SQLException, IOException {
+        return genMethods.addChainFileWithStatus(fromVersion, toVersion, fileName,
+                checkSumMD5, "In Progress");
     }
 
     /**

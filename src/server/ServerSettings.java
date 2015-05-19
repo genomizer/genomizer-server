@@ -14,10 +14,10 @@ public class ServerSettings {
 	public static String wwwTunnelHost = null;
 	public static String wwwTunnelPath = null;
 	public static int wwwTunnelPort = -1;
-	public static int genomizerHttpPort  = -1;
-	public static int genomizerHttpsPort = -1;
+	public static int genomizerPort = -1;
 	public static String fileLocation = "/var/www/data/";
 	public static String bowtieLocation = "bowtie";
+	public static String picardLocation = "picard";
 	public static int nrOfProcessThreads = 5;
 
 	private static String downloadURL = "/download?path=";
@@ -34,11 +34,11 @@ public class ServerSettings {
 					+ "wwwTunnelHost = " + wwwTunnelHost + "\n"
 					+ "wwwTunnelPort = " + wwwTunnelPort + "\n"
 					+ "wwwTunnelPath = " + wwwTunnelPath + "\n"
-					+ "genomizerHttpPort  = " + genomizerHttpPort + "\n"
-					+ "genomizerHttpsPort = " + genomizerHttpsPort + "\n"
+					+ "genomizerPort  = " + genomizerPort + "\n"
 					+ "fileLocation = " + fileLocation + "\n"
 					+ "nrOfProcessThreads = " + nrOfProcessThreads + "\n"
-					+ "bowtieLocation = " + bowtieLocation + "\n";
+					+ "bowtieLocation = " + bowtieLocation + "\n"
+					+ "picardLocation = " + picardLocation + "\n";
 
 			out.write(dataInfo);
 			out.close();
@@ -62,17 +62,11 @@ public class ServerSettings {
 		nullCheck(wwwTunnelHost, "wwwTunnelHost");
 		nullCheck(wwwTunnelPort, "wwwTunnelPort");
 		nullCheck(wwwTunnelPath, "wwwTunnelPath");
-
-		// Either 'genomizerHttpsPort' or 'genomizerHttpPort' can be null,
-		// but not both at the same time.
-		if (genomizerHttpsPort < 0)
-			nullCheck(genomizerHttpPort, "genomizerHttpPort");
-		if (genomizerHttpPort < 0)
-			nullCheck(genomizerHttpsPort, "genomizerHttpsPort");
-
+		nullCheck(genomizerPort, "genomizerPort");
 		nullCheck(fileLocation, "fileLocation");
 		nullCheck(nrOfProcessThreads, "nrOfProcessThreads");
 		nullCheck(bowtieLocation, "bowtieLocation");
+		nullCheck(picardLocation, "picardLocation");
 	}
 
 	private static void nullCheck(int parameter, String name) {
@@ -137,10 +131,7 @@ public class ServerSettings {
 					break;
 				case "genomizerhttpport":
 				case "genomizerport":
-					genomizerHttpPort = Integer.parseInt(value);
-					break;
-				case "genomizerhttpsport":
-					genomizerHttpsPort = Integer.parseInt(value);
+					genomizerPort = Integer.parseInt(value);
 					break;
 				case "filelocation":
 					fileLocation = value;
@@ -150,6 +141,9 @@ public class ServerSettings {
 					break;
 				case "bowtielocation":
 					bowtieLocation = value;
+					break;
+				case "picardlocation":
+					picardLocation = value;
 					break;
 				default:
 					String msg = "Unrecognized setting: " + key;
@@ -172,8 +166,7 @@ public class ServerSettings {
 							+ "\twwwTunnelHost = " + wwwTunnelHost + "\n"
 							+ "\twwwTunnelPort = " + wwwTunnelPort + "\n"
 							+ "\twwwTunnelPath = " + wwwTunnelPath + "\n"
-							+ "\tgenomizerHttpPort = " + genomizerHttpPort + "\n"
-							+ "\tgenomizerHttpsPort = " + genomizerHttpsPort + "\n"
+							+ "\tgenomizerPort = " + genomizerPort + "\n"
 							+ "\tfileLocation = " + fileLocation + "\n"
 							+ "\tnrOfProcessThreads = " + nrOfProcessThreads + "\n"
 							+ "\tbowtieLocation = " + bowtieLocation

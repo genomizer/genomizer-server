@@ -7,7 +7,6 @@ bin/
 .idea
 junit/
 *.jar
-*.orig
 .classpath
 .project
 *~
@@ -17,3 +16,4 @@ out
 psqllogin
 .metadata/
 *.cfg
+*.swp

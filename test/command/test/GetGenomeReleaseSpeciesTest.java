@@ -2,13 +2,12 @@ package command.test;
 
 import static org.junit.Assert.*;
 
-import command.GetGenomeReleaseCommand;
+import command.genomerelease.GetGenomeReleaseCommand;
 import command.Command;
 import database.constants.MaxLength;
 import database.subClasses.UserMethods.UserType;
 import org.junit.Ignore;
 import org.junit.Test;
-import command.GetGenomeReleaseSpeciesCommand;
 import command.ValidateException;
 
 /**
@@ -80,7 +79,7 @@ public class GetGenomeReleaseSpeciesTest {
 			uri = uri + "a";
 		}
 		Command c = new GetGenomeReleaseCommand();
-		c.setFields(uri, null, UserType.ADMIN);
+		c.setFields(uri, "", null, UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -97,7 +96,7 @@ public class GetGenomeReleaseSpeciesTest {
 	public void testValidateProperlyFormatted() throws ValidateException {
 
 		Command c = new GetGenomeReleaseCommand();
-		c.setFields("/genomeRelease/properly", null, UserType.ADMIN);
+		c.setFields("/genomeRelease/properly", "", null, UserType.ADMIN);
 		c.validate();
 
 		assertTrue(true);
@@ -114,7 +113,7 @@ public class GetGenomeReleaseSpeciesTest {
 	public void testHavingRights() throws ValidateException {
 
 		Command c = new GetGenomeReleaseCommand();
-		c.setFields("/genomeRelease/properly", null, UserType.GUEST);
+		c.setFields("/genomeRelease/properly", "", null, UserType.GUEST);
 		c.validate();
 	}
 
@@ -128,7 +127,7 @@ public class GetGenomeReleaseSpeciesTest {
 	public void testNotHavingRights() throws ValidateException {
 
 		Command c = new GetGenomeReleaseCommand();
-		c.setFields("/genomeRelease/properly", null, UserType.UNKNOWN);
+		c.setFields("/genomeRelease/properly", "", null, UserType.UNKNOWN);
 		c.validate();
 		fail();
 	}

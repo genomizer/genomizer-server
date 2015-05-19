@@ -10,7 +10,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
-import static conversion.ProfileDataConverter.*;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -21,7 +20,6 @@ import static org.junit.Assert.assertTrue;
  * @author Martin Larsson <dv13mln@cs.umu.se>
  */
 public class GffToWigTest {
-    private final String outputPath = "resources/conversionTestData/output/";
     private final String expectedResultPath = "resources/conversionTestData/" +
             "expectedResults/";
     private File outputFile;

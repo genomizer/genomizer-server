@@ -20,9 +20,6 @@ import static org.junit.Assert.assertTrue;
  * @author Martin Larsson <dv13mln@cs.umu.se>
  */
 public class wigBedToSgrTest {
-    private final String outputPath = "resources/conversionTestData/output/";
-    private final String expectedResultPath = "resources/conversionTestData/" +
-            "expectedResults/";
     private File outputFile;
     private ConversionResultCompare cmp = new ConversionResultCompare();
     private ProfileDataConverter pdc;

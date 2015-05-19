@@ -2,12 +2,11 @@ package command.test;
 
 import static org.junit.Assert.*;
 
-import command.AddFileToExperimentCommand;
 import command.Command;
 import database.constants.MaxLength;
 import database.subClasses.UserMethods.UserType;
 import org.junit.Test;
-import command.DeleteAnnotationFieldCommand;
+import command.annotation.DeleteAnnotationFieldCommand;
 import command.ValidateException;
 
 /**
@@ -65,7 +64,7 @@ public class DeleteAnnotationFieldCommandTest {
 		}
 
 		Command c = new DeleteAnnotationFieldCommand();
-		c.setFields(uri, null, UserType.ADMIN);
+		c.setFields(uri, "", null, UserType.ADMIN);
 		c.validate();
 		fail("Expected ValidateException.");
 	}
@@ -81,7 +80,7 @@ public class DeleteAnnotationFieldCommandTest {
 
 		String uri = "/annotation/field/great";
 		Command c = new DeleteAnnotationFieldCommand();
-		c.setFields(uri, null, UserType.ADMIN);
+		c.setFields(uri, "", null, UserType.ADMIN);
 
 		c.validate();
 	}
@@ -97,7 +96,7 @@ public class DeleteAnnotationFieldCommandTest {
 
 		String uri = "/annotation/field/great";
 		Command c = new DeleteAnnotationFieldCommand();
-		c.setFields(uri, null, UserType.USER);
+		c.setFields(uri, "", null, UserType.USER);
 
 		c.validate();
 	}
@@ -113,7 +112,7 @@ public class DeleteAnnotationFieldCommandTest {
 
 		String uri = "/annotation/field/great";
 		Command c = new DeleteAnnotationFieldCommand();
-		c.setFields(uri, null, UserType.GUEST);
+		c.setFields(uri, "", null, UserType.GUEST);
 
 		c.validate();
 		fail();

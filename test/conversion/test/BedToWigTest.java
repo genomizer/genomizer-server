@@ -20,7 +20,6 @@ import static org.junit.Assert.assertTrue;
  * @author Martin Larsson <dv13mln>
  */
 public class BedToWigTest {
-    private final String outputPath = "resources/conversionTestData/output/";
     private final String expectedResultPath = "resources/conversionTestData/" +
             "expectedResults/";
     private File outputFile;

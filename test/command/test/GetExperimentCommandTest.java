@@ -1,13 +1,10 @@
 package command.test;
 
-import static org.junit.Assert.*;
-
 import command.Command;
 import database.constants.MaxLength;
 import database.subClasses.UserMethods.UserType;
-import org.junit.Ignore;
 import org.junit.Test;
-import command.GetExperimentCommand;
+import command.experiment.GetExperimentCommand;
 import command.ValidateException;
 
 /**
@@ -21,7 +18,7 @@ public class GetExperimentCommandTest {
 
 	/**
 	 * Test used to check that ValidateException is thrown
-	 * when experiment-id length is to long.
+	 * when experiment-id length is too long.
 	 *
 	 * @throws ValidateException
 	 */
@@ -33,7 +30,7 @@ public class GetExperimentCommandTest {
 			uri += "a";
 		}
 		Command c = new GetExperimentCommand();
-		c.setFields(uri, null, UserType.ADMIN);
+		c.setFields(uri, "", null, UserType.ADMIN);
 		c.validate();
 	}
 
@@ -49,7 +46,7 @@ public class GetExperimentCommandTest {
 		String uri = "/experiment/��!?,:;/[]{}";
 
 		Command c = new GetExperimentCommand();
-		c.setFields(uri, null, UserType.ADMIN);
+		c.setFields(uri, "", null, UserType.ADMIN);
 		c.validate();
 	}
 
@@ -63,7 +60,7 @@ public class GetExperimentCommandTest {
 	public void testValidateProperlyFormatted() throws ValidateException {
 
 		Command c = new GetExperimentCommand();
-		c.setFields("/experiment/properly", null, UserType.ADMIN);
+		c.setFields("/experiment/properly", "", null, UserType.ADMIN);
 		c.validate();
 
 	}
@@ -78,7 +75,7 @@ public class GetExperimentCommandTest {
 	public void testHavingRights() throws ValidateException {
 
 		Command c = new GetExperimentCommand();
-		c.setFields("/experiment/properly", null, UserType.GUEST);
+		c.setFields("/experiment/properly", "", null, UserType.GUEST);
 		c.validate();
 	}
 
@@ -92,7 +89,7 @@ public class GetExperimentCommandTest {
 	public void testNotHavingRights() throws ValidateException {
 
 		Command c = new GetExperimentCommand();
-		c.setFields("/experiment/properly", null, UserType.UNKNOWN);
+		c.setFields("/experiment/properly", "", null, UserType.UNKNOWN);
 		c.validate();
 
 	}

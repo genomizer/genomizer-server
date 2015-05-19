@@ -79,7 +79,7 @@ INSERT INTO File VALUES(DEFAULT, '/var/www/data/Exp3/profile/0/file1.sam', 'Prof
 INSERT INTO File VALUES(DEFAULT, '/var/www/data/Exp3/profile/1/file2.sam', 'Profile', 'file2.sam', CURRENT_TIMESTAMP, '-n 2 --best', '/var/www/data/Exp3/profile/1/file1_input.sam', 'Genomizer', 'user1', 'false', 'Exp3', 'rn5', 'Done', NULL);
 
 
-INSERT INTO File VALUES(DEFAULT, 'resources/conversionTestData/BED-testdata.bed', 'Profile', 'BED-testdata.bed', CURRENT_TIMESTAMP, '-n --best', 'resources/conversionTestData/BED-testdata.bed', 'Genomizer', 'user1', 'false', 'Exp3', 'rn5', 'Done', NULL);
+INSERT INTO File VALUES(DEFAULT, 'resources/conversionTestData/BED-testdata.bed', 'Profile', 'BED-testdata.bed', CURRENT_TIMESTAMP, '-n --best', 'resources/conversionTestData/BED-testdata.bed', 'Genomizer', 'user1', 'false', 'Exp3', 'rn5', 'Done', NULL, '2');
 INSERT INTO File VALUES(DEFAULT, 'resources/conversionTestData/GFF-testdata.gff', 'Profile', 'GFF-testdata.gff', CURRENT_TIMESTAMP, '-n --best', 'resources/conversionTestData/GFF-testdata.gff', 'Genomizer', 'user1', 'false', 'Exp3', 'rn5', 'Done', NULL);
 INSERT INTO File VALUES(DEFAULT, 'resources/conversionTestData/SGR-testdata.sgr', 'Profile', 'SGR-testdata.sgr', CURRENT_TIMESTAMP, '-n --best', 'resources/conversionTestData/SGR-testdata.sgr', 'Genomizer', 'user1', 'false', 'Exp3', 'rn5', 'Done', NULL);
 INSERT INTO File VALUES(DEFAULT, 'resources/conversionTestData/SGR-testdata-2.sgr', 'Profile', 'SGR-testdata-2.sgr', CURRENT_TIMESTAMP, '-n --best', 'resources/conversionTestData/SGR-testdata-2.sgr', 'Genomizer', 'user1', 'false', 'Exp3', 'rn5', 'Done', NULL);
@@ -87,4 +87,29 @@ INSERT INTO File VALUES(DEFAULT, 'resources/conversionTestData/SGR-testdata-3.sg
 INSERT INTO File VALUES(DEFAULT, 'resources/conversionTestData/SGR-testdata-4.sgr', 'Profile', 'SGR-testdata-4.sgr', CURRENT_TIMESTAMP, '-n --best', 'resources/conversionTestData/SGR-testdata-4.sgr', 'Genomizer', 'user1', 'false', 'Exp3', 'rn5', 'Done', NULL);
 INSERT INTO File VALUES(DEFAULT, 'resources/conversionTestData/WIG-from-SGR-testdata.wig', 'Profile', 'WIG-from-SGR-testdata.wig', CURRENT_TIMESTAMP, '-n --best', 'resources/conversionTestData/WIG-from-SGR-testdata.sgr', 'Genomizer', 'user1', 'false', 'Exp3', 'rn5', 'Done', NULL);
 INSERT INTO File VALUES(DEFAULT, 'resources/conversionTestData/WIG-testdata.wig', 'Profile', 'WIG-testdata.wig', CURRENT_TIMESTAMP, '-n --best', 'resources/conversionTestData/WIG-testdata.wig', 'Genomizer', 'user1', 'false', 'Exp3', 'rn5', 'Done', NULL);
-INSERT INTO File VALUES(DEFAULT, 'resources/conversionTestData/WIG-varstep-testdata.wig', 'Profile', 'WIG-varstep-testdata.wig', CURRENT_TIMESTAMP, '-n --best', 'resources/conversionTestData/WIG-varstep-testdata.wig', 'Genomizer', 'user1', 'false', 'Exp3', 'rn5', 'Done', NULL);
+INSERT INTO File VALUES(DEFAULT, 'resources/conversionTestData/WIG-varstep-testdata.wig', 'Profile', 'wigVarStepTest.wig', CURRENT_TIMESTAMP, '-n --best', 'resources/conversionTestData/WIG-varstep-testdata.wig', 'Genomizer', 'user1', 'false', 'Exp3', 'rn5', 'Done', NULL);
+
+
+INSERT INTO Experiment VALUES('ExpSmall');
+INSERT INTO Experiment VALUES('ExpBig');
+
+
+INSERT INTO Genome_Release VALUES('GenomV1', 'Insect', '/data/pvtfiles/genome/');
+
+
+INSERT INTO Genome_Release_Files VALUES('GenomV1', 'd_melanogaster_fb5_22.1.ebwt', NULL, 'Done');
+INSERT INTO Genome_Release_Files VALUES('GenomV1', 'd_melanogaster_fb5_22.2.ebwt', NULL, 'Done');
+INSERT INTO Genome_Release_Files VALUES('GenomV1', 'd_melanogaster_fb5_22.3.ebwt', NULL, 'Done');
+INSERT INTO Genome_Release_Files VALUES('GenomV1', 'd_melanogaster_fb5_22.4.ebwt', NULL, 'Done');
+INSERT INTO Genome_Release_Files VALUES('GenomV1', 'd_melanogaster_fb5_22.rev.1.ebwt', NULL, 'Done');
+INSERT INTO Genome_Release_Files VALUES('GenomV1', 'd_melanogaster_fb5_22.rev.2.ebwt', NULL, 'Done');
+
+INSERT INTO File VALUES(DEFAULT, '/data/pvtfiles/raw/smalltest1.fastq', 'Raw', 'smalltest1.fastq', CURRENT_TIMESTAMP, NULL, NULL, 'UCSC', 'user1', 'false', 'ExpSmall', 'GenomV1', 'Done', NULL);
+INSERT INTO File VALUES(DEFAULT, '/data/pvtfiles/raw/smalltest2.fastq', 'Raw', 'smalltest2.fastq', CURRENT_TIMESTAMP, NULL, NULL, 'UCSC', 'user1', 'false', 'ExpSmall', 'GenomV1', 'Done', NULL);
+INSERT INTO File VALUES(DEFAULT, '/data/pvtfiles/raw/bigtest1.fastq', 'Raw', 'bigtest1.fastq', CURRENT_TIMESTAMP, NULL, NULL, 'UCSC', 'user1', 'false', 'ExpBig', 'GenomV1', 'Done', NULL);
+INSERT INTO File VALUES(DEFAULT, '/data/pvtfiles/raw/bigtest2.fastq', 'Raw', 'bigtest2.fastq', CURRENT_TIMESTAMP, NULL, NULL, 'UCSC', 'user1', 'false', 'ExpBig', 'GenomV1', 'Done', NULL);
+
+
+
+INSERT INTO Annotated_With  VALUES('ExpSmall', 'Species', 'Insect');
+INSERT INTO Annotated_With  VALUES('ExpBig', 'Species', 'Insect');

@@ -1,19 +1,14 @@
+import authentication.InactiveUuidsRemover;
+import command.Command;
+import database.DatabaseAccessor;
+import org.apache.commons.cli.*;
+import process.StartUpCleaner;
+import server.*;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-// import java.util.Scanner;
-
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.BasicParser;
-import org.apache.commons.cli.ParseException;
-
-import process.StartUpCleaner;
-
-import authentication.InactiveUuidsRemover;
-
-import server.*;
+import java.sql.SQLException;
 
 
 public class ServerMain {
@@ -32,22 +27,20 @@ public class ServerMain {
 		/* First we need to read and validate the settings file. */
 		CommandLine com = loadSettingsFile(args);
 
+
 		/* We delete possible fragments from previous runs. */
-		StartUpCleaner.removeOldTempDirectories("resources/");
+		StartUpCleaner.removeOldTempDirectories("/tmp/");
 
 		/* The database settings should be written upon startup. */
 		printDatabaseInformation();
 
-		/* Create a work pool */
-		WorkPool workPool = new WorkPool();
-
-		/* Create process handlers */
-		createWorkHandlers(workPool);
+		/* Create a process pool */
+		ProcessPool processPool = new ProcessPool(
+				ServerSettings.nrOfProcessThreads);
 
 		/* We attempt to start the doorman. */
 		try {
-			new Doorman(workPool,
-					ServerSettings.genomizerHttpPort).start();
+			new Doorman(processPool).start();
 		} catch (IOException e) {
 			System.err.println("Error when starting server");
 			Debug.log(e.getMessage());
@@ -57,6 +50,22 @@ public class ServerMain {
 		/* By default we run a UID remover. */
 		if (!com.hasOption("nri")) {
 			(new Thread(new InactiveUuidsRemover())).start();
+		}
+
+		/* Check whether a connection to the database can be made */
+		DatabaseAccessor db = null;
+		try {
+			db = Command.initDB();
+		} catch (IOException | SQLException ex) {
+			String msg = "Warning: a connection to the database could not be " +
+					"made.";
+			Debug.log(msg);
+			ErrorLogger.log("SYSTEM", msg);
+
+		} finally {
+			if (db != null && db.isConnected()) {
+				db.close();
+			}
 		}
 
 	}
@@ -74,11 +83,6 @@ public class ServerMain {
 		ErrorLogger.log("SYSTEM", info);
 	}
 
-	private static void createWorkHandlers(WorkPool workPool) {
-		for (int i=0; i<ServerSettings.nrOfProcessThreads; i++) {
-			new Thread(new WorkHandler(workPool)).start();
-		}
-	}
 
 	/**
 	 * This method attempts to read the settings file. It is defined to read
@@ -130,7 +134,7 @@ public class ServerMain {
 			throws FileNotFoundException {
 		// Port flag
 		if (com.hasOption('p')) {
-			ServerSettings.genomizerHttpPort =
+			ServerSettings.genomizerPort =
 					Integer.parseInt(com.getOptionValue('p'));
 		}
 		// Debug flag

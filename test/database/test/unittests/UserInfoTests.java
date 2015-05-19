@@ -26,7 +26,6 @@ public class UserInfoTests {
     private static String testEmail = "test@cs.umu.se";
 
     private static String otherHash = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-    private static String otherSalt = "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
 
     @BeforeClass
     public static void setupTestCase() throws Exception {
@@ -105,6 +104,12 @@ public class UserInfoTests {
     @Test
     public void shouldBeAbleToGetHash() throws SQLException, IOException {
         assertEquals(testHash,dbac.getPasswordHash(testUser2));
+    }
+
+    @Test
+    public void shouldBeAbleToChangeHash() throws SQLException, IOException {
+        dbac.resetPassword(testUser2, otherHash);
+        assertEquals(otherHash,dbac.getPasswordHash(testUser2));
     }
 
     @Test
