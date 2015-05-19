@@ -54,7 +54,8 @@ public class ProcessHandler implements Callable<Response> {
 				/* Execute the process command */
 				response = processCommand.execute();
 
-				if (response.getCode() == HttpStatusCode.CREATED) {
+				if (response.getCode() == HttpStatusCode.CREATED ||
+					response.getCode() == HttpStatusCode.OK) {
 					process.status = Process.STATUS_FINISHED;
 					Debug.log("Process execution in experiment " +
 							processCommand.getExpId() + " has finished!");
