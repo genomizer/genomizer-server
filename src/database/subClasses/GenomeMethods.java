@@ -1,15 +1,5 @@
 package database.subClasses;
 
-import java.io.File;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
-
 import database.FilePathGenerator;
 import database.FileValidator;
 import database.constants.ServerDependentValues;
@@ -17,6 +7,12 @@ import database.containers.ChainFile;
 import database.containers.ChainFiles;
 import database.containers.Genome;
 import database.containers.GenomeFile;
+
+import java.io.File;
+import java.io.IOException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class that contains all the methods for adding,changing, getting and removing
@@ -56,7 +52,7 @@ public class GenomeMethods {
         String query = "SELECT * FROM Genome_Release AS R "
                 + "JOIN Genome_Release_Files AS F "
                 + "ON (R.Version = F.Version) "
-                + "WHERE (R.Version ~~* ? AND F.Status = 'Done')";
+                + "WHERE (R.Version ~~* ?)";
 
 		PreparedStatement stmt = conn.prepareStatement(query);
 		stmt.setString(1, genomeVersion);
