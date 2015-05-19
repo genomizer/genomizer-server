@@ -1,6 +1,11 @@
 package database.test.unittests;
 
-import static org.junit.Assert.assertEquals;
+import database.DatabaseAccessor;
+import database.containers.Experiment;
+import database.test.TestInitializer;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -17,6 +22,7 @@ import org.junit.Test;
 import database.DatabaseAccessor;
 import database.containers.Experiment;
 import database.test.TestInitializer;
+import static org.junit.Assert.assertEquals;
 
 public class SearchDatabaseTests {
 
@@ -287,7 +293,7 @@ public class SearchDatabaseTests {
     public void shouldBeAbleToSearchUsingPubMedString5() throws Exception {
 
         List<Experiment> experiments = dbac
-                .search("Human[SpeCies] AnD Ume� uni[author]");
+                .search("Human[SpeCies] AnD Ume? uni[author]");
 
         assertEquals(1, experiments.size());
         assertEquals(1, experiments.get(0).getFiles().size());
