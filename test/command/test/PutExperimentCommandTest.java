@@ -395,7 +395,7 @@ public class PutExperimentCommandTest {
 	public void testNotHavingRights() throws ValidateException {
 
 		Command c = gson.fromJson(json,PutExperimentCommand.class);
-		c.setFields("/exp/uri", null, UserType.GUEST);
+		c.setFields("/exp/uri", "uuid", UserType.GUEST);
 		c.validate();
 		fail();
 	}

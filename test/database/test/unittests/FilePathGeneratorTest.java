@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.io.File;
 import java.io.IOException;
 
+import database.test.TestInitializer;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -16,9 +17,6 @@ import database.containers.FileTuple;
 
 public class FilePathGeneratorTest {
 
-    private static String testFolderName =
-    		"Genomizer Test Folder - Dont be afraid to delete me";
-
     private static FilePathGenerator fpg;
     private static File testFolder;
 
@@ -26,15 +24,8 @@ public class FilePathGeneratorTest {
 
     @BeforeClass
     public static void setupClass() throws IOException {
-
-        testFolderPath = System.getProperty("user.home") + File.separator
-                + testFolderName + File.separator;
-
+        testFolderPath = TestInitializer.createScratchDir();
         testFolder = new File(testFolderPath);
-
-        if (!testFolder.exists()) {
-            testFolder.mkdirs();
-        }
 
         fpg = new FilePathGenerator(testFolder.toString() + File.separator);
     }

@@ -4,7 +4,6 @@ import authentication.Authenticate;
 import command.Command;
 import command.ValidateException;
 import database.constants.MaxLength;
-import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;

@@ -64,7 +64,7 @@ public class DeleteAnnotationFieldCommandTest {
 		}
 
 		Command c = new DeleteAnnotationFieldCommand();
-		c.setFields(uri, null, UserType.ADMIN);
+		c.setFields(uri, "", null, UserType.ADMIN);
 		c.validate();
 		fail("Expected ValidateException.");
 	}
@@ -80,7 +80,7 @@ public class DeleteAnnotationFieldCommandTest {
 
 		String uri = "/annotation/field/great";
 		Command c = new DeleteAnnotationFieldCommand();
-		c.setFields(uri, null, UserType.ADMIN);
+		c.setFields(uri, "", null, UserType.ADMIN);
 
 		c.validate();
 	}
@@ -96,7 +96,7 @@ public class DeleteAnnotationFieldCommandTest {
 
 		String uri = "/annotation/field/great";
 		Command c = new DeleteAnnotationFieldCommand();
-		c.setFields(uri, null, UserType.USER);
+		c.setFields(uri, "", null, UserType.USER);
 
 		c.validate();
 	}
@@ -112,7 +112,7 @@ public class DeleteAnnotationFieldCommandTest {
 
 		String uri = "/annotation/field/great";
 		Command c = new DeleteAnnotationFieldCommand();
-		c.setFields(uri, null, UserType.GUEST);
+		c.setFields(uri, "", null, UserType.GUEST);
 
 		c.validate();
 		fail();

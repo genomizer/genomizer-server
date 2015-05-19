@@ -39,10 +39,9 @@ public class GetProcessStatusResponse extends Response {
 	@Override
 	public String getBody() {
 
-		if (getProcessStatuses.size() > 0) {
-			ErrorLogger.log("SYSTEM", "GetProcessStatusResponse.getBody(): " +
-					"Error getting process status");
-			return "";
+		if (getProcessStatuses.size() == 0) {
+			ErrorLogger.log("SYSTEM", "There are no processes to retrieve.");
+			return "[]";
 		}
 
 		Collections.sort(getProcessStatuses);

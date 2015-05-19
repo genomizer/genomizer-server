@@ -1,7 +1,5 @@
 package command.test;
 
-import static org.junit.Assert.*;
-
 import command.Command;
 import command.file.GetFileCommand;
 import database.constants.MaxLength;
@@ -31,7 +29,7 @@ public class GetFileCommandTest {
 			uri += "a";
 		}
 		Command c = new GetFileCommand();
-		c.setFields(uri, null, UserType.ADMIN);
+		c.setFields(uri, "", null, UserType.ADMIN);
 		c.validate();
 	}
 
@@ -44,7 +42,7 @@ public class GetFileCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateFileExpIdInvalidCharacters() throws ValidateException {
 		Command c = new GetFileCommand();
-		c.setFields( "/file/��!?,:;[]{}", null, UserType.ADMIN);
+		c.setFields( "/file/��!?,:;[]{}", "", null, UserType.ADMIN);
 		c.validate();
 	}
 
@@ -56,13 +54,9 @@ public class GetFileCommandTest {
 	 */
 	@Test
 	public void testValidateProperlyFormatted() throws ValidateException {
-
 		Command c = new GetFileCommand();
-		c.setFields("/file/properly", null, UserType.ADMIN);
+		c.setFields("/file/properly", "", null, UserType.ADMIN);
 		c.validate();
-
-		assertTrue(true);
-
 	}
 	/**
 	 * Test used to check that ValidateException is not thrown
@@ -72,9 +66,8 @@ public class GetFileCommandTest {
 	 */
 	@Test
 	public void testHavingRights() throws ValidateException {
-
 		Command c = new GetFileCommand();
-		c.setFields("/file/properly", null, UserType.USER);
+		c.setFields("/file/properly", "", null, UserType.USER);
 		c.validate();
 	}
 
@@ -88,9 +81,8 @@ public class GetFileCommandTest {
 	public void testNotHavingRights() throws ValidateException {
 
 		Command c = new GetFileCommand();
-		c.setFields("/file/properly", null, UserType.GUEST);
+		c.setFields("/file/properly", "", null, UserType.GUEST);
 		c.validate();
-		fail();
 	}
 
 }

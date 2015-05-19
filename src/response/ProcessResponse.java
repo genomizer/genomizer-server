@@ -13,9 +13,9 @@ import com.google.gson.annotations.Expose;
 public class ProcessResponse extends Response {
 
 	@Expose
-	private String message;
+	String message;
 	@Expose
-	private Date date;
+	Date date;
 
 
 	/**

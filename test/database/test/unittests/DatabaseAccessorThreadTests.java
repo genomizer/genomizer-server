@@ -67,7 +67,7 @@ public class DatabaseAccessorThreadTests {
 	}
 
 	@Test
-	public void shouldaddNRemoveOneFileFromCurrentThread()
+	public void shouldAddNRemoveOneFileFromCurrentThread()
 			throws SQLException, IOException, ParseException {
 
 		DatabaseAccessor dbac = new DatabaseAccessor(username, password,

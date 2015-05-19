@@ -121,7 +121,8 @@ public class RequestHandler implements HttpHandler {
         logUser(Authenticate.getUsernameByID(uuid));
 
         /*Retrieve the URI part of the request header.*/
-		String uri = exchange.getRequestURI().toString();
+		String uri = exchange.getRequestURI().toString().split("\\?")[0];
+        String query = exchange.getRequestURI().getQuery();
         uri = removeTimeStamp(uri);
 
 		/*TODO: Get the current user's user right level*/
@@ -149,7 +150,7 @@ public class RequestHandler implements HttpHandler {
             return;
         }
 
-		command.setFields(uri, Authenticate.getUsernameByID(uuid), userType);
+		command.setFields(uri, query, Authenticate.getUsernameByID(uuid), userType);
 
 		/*Attempt to validate the command.*/
 		try {
@@ -162,7 +163,7 @@ public class RequestHandler implements HttpHandler {
 		}
 
         if (commandClass.equals(PutProcessCommand.class)) {
-            Doorman.getWorkPool().addWork((PutProcessCommand) command);
+            Doorman.getProcessPool().addProcess((PutProcessCommand) command);
             respond(new ProcessResponse(HttpStatusCode.OK), exchange);
             return;
         } else {
@@ -267,6 +268,7 @@ public class RequestHandler implements HttpHandler {
 	private ErrorResponse createBadRequestResponse() {
 		return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Could not create a " +
 				"command from request. Bad format on request.");
+
 	}
 
 	/*Used to log a request.*/

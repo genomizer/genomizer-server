@@ -34,7 +34,7 @@ public class PutProcessCommandMock extends PutProcessCommand {
 	}
 
 	@Override
-	public String[] getFilepaths() {
+	public String[] getFilePaths() {
 		return new String[] {"file1", "file2"};
 	}
 

@@ -26,7 +26,6 @@ public class UserInfoTests {
     private static String testEmail = "test@cs.umu.se";
 
     private static String otherHash = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-    private static String otherSalt = "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
 
     @BeforeClass
     public static void setupTestCase() throws Exception {

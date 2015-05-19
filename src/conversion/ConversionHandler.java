@@ -2,11 +2,8 @@ package conversion;
 
 import database.DatabaseAccessor;
 import database.containers.FileTuple;
-import response.ErrorResponse;
-import response.HttpStatusCode;
 import server.ServerSettings;
 
-import javax.naming.ConfigurationException;
 import java.io.*;
 import java.sql.SQLException;
 

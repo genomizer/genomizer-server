@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<tool id="pyicoteo_discard" name="Discard" version="2.0">
+  <description>Discards artifacts from a file.</description>
+  <command interpreter="python">
+          pyicos discard $experiment $output
+                -f $experiment_format_cond.experiment_format
+                -F $output_format_cond.output_format
+                $is_experiment_open
+                $is_output_open
+                --galaxy-workarounds
+  </command>
+  <inputs>
+    <!--<param format="tabular" name="experiment" type="data" label="Experiment file" />-->
+    <param name="experiment" type="data" label="Experiment file" />
+
+    <!-- Experiment arguments -->
+    <conditional name="experiment_format_cond">
+      <param name="experiment_format" type="select" label="Experiment format" format="text">
+        <option value="bed" selected="true">Bed</option>
+        <option value="sam">Sam</option>
+        <option value="eland">Eland</option>
+        <option value="bed_wig">Wiggle (Bed)</option>
+        <option value="bed_pk">Bed pk</option>
+        <option value="custom">Custom</option>
+      </param>
+  
+      <when value="custom">
+        <param name="f_custom_in" type="text" size="10" label="Custom experiment format fields" />
+        <param name="custom_in_sep" type="text" label="Custom experiment format separator" />
+      </when>
+    </conditional>
+    <param name="is_experiment_open" type="boolean" label="Is the experiment half-open?" truevalue="--open-experiment" falsevalue="" />
+
+    <!-- Output arguments -->
+    <conditional name="output_format_cond">
+      <param name="output_format" type="select" label="Output format">
+        <option value="bed_wig">Wiggle (Bed)</option>
+        <option value="variable_wig">Wiggle (Variable)</option>
+        <option value="bed_pk">Bed pk</option>
+      </param>
+    </conditional>
+    <param name="is_output_open" type="boolean" label="Is the output half-open?" truevalue="--open-output" falsevalue="" />
+
+  </inputs>
+  <outputs>
+    <data format="tabular" name="output" />
+  </outputs>
+  <stdio>
+    <exit_code range="1:" level="error" />
+  </stdio>
+  <help>
+        More information at: http://regulatorygenomics.upf.edu/pyicos
+  </help>
+</tool>

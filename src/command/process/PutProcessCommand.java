@@ -8,6 +8,10 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Map.Entry;
 
+import com.google.gson.annotations.Expose;
+import database.DatabaseAccessor;
+import database.constants.MaxLength;
+import database.containers.Genome;
 import command.Command;
 import command.UserRights;
 import command.ValidateException;
@@ -18,19 +22,18 @@ import response.ErrorResponse;
 import response.HttpStatusCode;
 import response.ProcessResponse;
 import response.Response;
+import response.MinimalResponse;
 import server.Debug;
 import server.ErrorLogger;
 
-import com.google.gson.annotations.Expose;
 
-import database.DatabaseAccessor;
-import database.containers.Genome;
-import database.constants.MaxLength;
+import java.util.UUID;
 
 public class PutProcessCommand extends Command {
 
 	public static final String CMD_RAW_TO_PROFILE = "rawtoprofile";
 	public static final String CMD_PROFILE_TO_REGION = "profiletoregion";
+	public static final String CMD_CANCEL_PROCESS = "cancelprocess";
 
 	private String username;
 
@@ -53,17 +56,21 @@ public class PutProcessCommand extends Command {
 	@Expose
 	private String genomeVersion;
 
+	@Expose
+	private UUID PID;
+
 	@Override
 	public int getExpectedNumberOfURIFields() {
 		return 2;
 	}
 
 	@Override
-	public void setFields(String uri, String uuid, UserType userType) {
+	public void setFields(String uri, String query, String uuid, UserType userType) {
 
-		super.setFields(uri, uuid, userType);
+		super.setFields(uri, query, uuid, userType);
 		setTimestamp(System.currentTimeMillis());
 		processtype = uri.split("/")[2];
+		username = uuid;
 	}
 
 	/**
@@ -97,6 +104,9 @@ public class PutProcessCommand extends Command {
 				break;
 			case CMD_PROFILE_TO_REGION:
 				//TODO Implement parameter size
+				break;
+			case CMD_CANCEL_PROCESS:
+				//TODO validate PID
 				break;
 			default:
 				throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Invalid " +
@@ -144,7 +154,7 @@ public class PutProcessCommand extends Command {
 						}
 
 						//Set parameter on index 1 to the path to the
-						// genomefolder + the name of the genome files.
+						// genome folder + the name of the genome files.
 						parameters[1] = genomeFolderPath + genomeFilePrefix;
 
 					}
@@ -160,6 +170,17 @@ public class PutProcessCommand extends Command {
 								"exception when processing");
 					}
 					break;
+
+				//TODO check everything
+				case PutProcessCommand.CMD_CANCEL_PROCESS:
+					try {
+						//Parameter = PID
+						processHandler.executeProcess(CMD_CANCEL_PROCESS, parameters, null, null);
+						return new MinimalResponse(HttpStatusCode.OK);
+					} catch (ProcessException e) {
+						return processError(db, e.getMessage(), "Process " + "exception when processing");
+					}
+
 				default:
 					return processError(db, "", "ERROR: Unknown process " +
 							"type when processing");
@@ -194,16 +215,32 @@ public class PutProcessCommand extends Command {
 		Debug.log(username + "Raw to profile processing completed " +
 				"running " + processtype + " on experiment" + expid + "\n" +
 				"metadata: " + metadata + "\n" +
-				"parameters: " + parameters + "\n" +
-				"genomeVersion: " + genomeVersion + "\n");
+				"parameters: "
+					+ arrayToString(parameters, parameters.length) + "\n" +
+				"genomeVersion: " + genomeVersion + "\n" +
+		        "PID: " + PID + "\n");
 		return new ProcessResponse(HttpStatusCode.OK, "Raw to profile " +
 				"processing completed running " + processtype +
 				" on experiment" + expid + "\n"+
 				"metadata: " + metadata + "\n"+
-				"parameters: " + parameters + "\n" +
-				"genomeVersion: " + genomeVersion + "\n");
+				"parameters: "
+					+ arrayToString(parameters, parameters.length) + "\n" +
+				"genomeVersion: " + genomeVersion + "\n" +
+		        "PID: " + PID + "\n");
 
 
+	}
+
+
+	private String arrayToString(String[] arr, int length) {
+
+		StringBuilder stringBuilder = new StringBuilder();
+
+		for (int i=0; i<length; i++) {
+			stringBuilder.append(arr[i]);
+		}
+
+		return stringBuilder.toString();
 	}
 
 	/**
@@ -217,10 +254,12 @@ public class PutProcessCommand extends Command {
 	private Response processError(DatabaseAccessor db, String error, String headerError){
 		ErrorLogger.log(username, headerError +
 				" " + processtype +
-				" on experiment" + expid + "\n"+
-				"metadata: " + metadata + "\n"+
-				"parameters: " + parameters + "\n" +
+				" on experiment" + expid + "\n" +
+				"metadata: " + metadata + "\n" +
+				"parameters: "
+					+ arrayToString(parameters, parameters.length) + "\n" +
 				"genomeVersion: " + genomeVersion + "\n" +
+				"PID: " + PID + "\n" +
 				error + "\n");
 		db.close();
 		return new ProcessResponse(HttpStatusCode.
@@ -228,8 +267,10 @@ public class PutProcessCommand extends Command {
 				" when processing " + processtype +
 				" on experiment" + expid + "\n"+
 				"metadata: " + metadata + "\n"+
-				"parameters: " + parameters + "\n" +
+				"parameters: "
+					+ arrayToString(parameters, parameters.length) + "\n" +
 				"genomeVersion: " + genomeVersion + "\n" +
+				"PID: " + PID + "\n" +
 				error + "\n");
 	}
 
@@ -253,7 +294,8 @@ public class PutProcessCommand extends Command {
 				"metadata:" + metadata + "\n" +
 				"username: " + username + "\n" +
 				"expId: " + expid + "\n" +
-				"genomeRelease: " + genomeVersion + "\n";
+				"genomeRelease: " + genomeVersion + "\n" +
+				"PID: " + PID + "\n";
 	}
 
 	public void setTimestamp(long currentTimeMillis) {
@@ -272,6 +314,14 @@ public class PutProcessCommand extends Command {
 		return expid;
 	}
 
+	public UUID getPID() {
+		return PID;
+	}
+
+	public void setPID(UUID PID) {
+		this.PID = PID;
+	}
+
 	public void setFilePaths() throws SQLException, IOException {
 		DatabaseAccessor db;
 
@@ -280,16 +330,18 @@ public class PutProcessCommand extends Command {
 
 		if(db.isConnected()){
 			db.close();
+
 		}
 
 	}
 
-	public String[] getFilepaths() {
+	public String[] getFilePaths() {
 		return new String[] {filepaths.getKey(), filepaths.getValue()};
 	}
 
 	public String getUsername() {
 		return this.username;
 	}
+
 
 }
