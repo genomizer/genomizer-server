@@ -6,11 +6,10 @@ import command.Command;
 import command.Process;
 import command.UserRights;
 import command.ValidateException;
-import database.subClasses.UserMethods.UserType;
 import response.GetProcessStatusResponse;
 import response.Response;
 import server.Doorman;
-import server.WorkPool;
+import server.ProcessPool;
 
 /**
  * Fetches status of all processes that have been added to the server. Will be
@@ -21,7 +20,10 @@ import server.WorkPool;
  * @version 1.1
  */
 public class GetProcessStatusCommand extends Command {
-
+	@Override
+	public int getExpectedNumberOfURIFields() {
+		return 1;
+	}
 
 	/**
 	 * Method that validates the class information.
@@ -36,12 +38,12 @@ public class GetProcessStatusCommand extends Command {
 	@Override
 	public Response execute() {
 
-		WorkPool workPool = Doorman.getWorkPool();
-		LinkedList<PutProcessCommand> processesList = workPool.getProcesses();
+		ProcessPool processPool = Doorman.getProcessPool();
+		LinkedList<PutProcessCommand> processesList = processPool.getProcesses();
 		LinkedList<Process> getProcessStatuses = new LinkedList<>();
         
 		for (PutProcessCommand proc : processesList) {
-			getProcessStatuses.add(workPool.getProcessStatus(proc));
+			getProcessStatuses.add(processPool.getProcessStatus(proc.getPID()));
 		}
 		return new GetProcessStatusResponse(getProcessStatuses);
 	}

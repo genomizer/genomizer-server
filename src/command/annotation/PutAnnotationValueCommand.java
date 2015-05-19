@@ -11,11 +11,11 @@ import command.UserRights;
 import command.ValidateException;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
-import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
 import response.HttpStatusCode;
+import server.Debug;
 
 /**
  * This class is used to handle changes to annotation values.
@@ -33,6 +33,10 @@ public class PutAnnotationValueCommand extends Command {
 	@Expose
 	private String newValue = null;
 
+	@Override
+	public int getExpectedNumberOfURIFields() {
+		return 2;
+	}
 
 	@Override
 	public void validate() throws ValidateException {
@@ -42,6 +46,10 @@ public class PutAnnotationValueCommand extends Command {
 				"Old annotation value");
 		validateName(newValue, MaxLength.ANNOTATION_LABEL,
 				"New annotation value");
+		if(newValue.equals("freetext")){
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Can not" +
+					"rename a value to \"freetext\"");
+		}
 	}
 
 	@Override
@@ -57,16 +65,18 @@ public class PutAnnotationValueCommand extends Command {
 					return new MinimalResponse(HttpStatusCode.OK);
 				} else {
 					return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
-							"The value" + oldValue + " does not exist");
+							"The value" + oldValue + " does not exist.");
 				}
 			} else {
 				return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
-						"The annotation " + name + " does not");
+						"The annotation " + name + " does not exist.");
 			}
 
-		} catch (SQLException | IOException e) {
-			e.printStackTrace();
-			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
+		}catch (IOException | SQLException e) {
+			Debug.log("Editing annotation value " + oldValue + " on annotation "+name+
+					" failed due to database error. Reason: " + e.getMessage());
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Editing annotation value " + oldValue +
+					" on annotation "+name + " failed due to database error.");
 		} finally {
 			if (db != null) {
 				db.close();

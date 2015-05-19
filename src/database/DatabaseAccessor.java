@@ -1,15 +1,15 @@
 package database;
 
 import database.subClasses.UserMethods.UserType;
+import database.containers.*;
+import database.subClasses.*;
+import org.apache.commons.codec.digest.DigestUtils;
+import server.ServerSettings;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.sql.Connection;
-
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.text.ParseException;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
@@ -17,12 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
-
-import database.containers.*;
-import database.containers.Genome;
-import org.apache.commons.codec.digest.DigestUtils;
-import server.ServerSettings;
-import database.subClasses.*;
 
 /**
  * PREREQUISITES: The construction parameters must reference a postgresql
@@ -55,7 +49,6 @@ public class DatabaseAccessor implements AutoCloseable {
     private AnnotationMethods annoMethods;
     private FileMethods fileMethods;
     private GenomeMethods genMethods;
-
 
     /**
      * Creates a databaseAccessor that opens a connection to a database.
@@ -139,7 +132,7 @@ public class DatabaseAccessor implements AutoCloseable {
     public List<Experiment> search(String pubMedString) throws IOException,
             SQLException, ParseException {
 
-        if (pubMedString.isEmpty()) {
+        if (pubMedString == null || pubMedString.isEmpty()) {
             return getAllExperiments();
         }
 
@@ -773,6 +766,21 @@ public class DatabaseAccessor implements AutoCloseable {
     }
 
     /**
+     * Updates the file size to actual size
+     *
+     * @param   ft the file to update size for
+     * @return  the number of tuples updated (either 0 or 1)
+     */
+    public int updateFileSize(FileTuple ft) throws  SQLException {
+
+        File f = new File(ft.path);
+        Long size = f.length();
+
+        return fileMethods.updateFileSize(ft.id, size);
+
+    }
+
+    /**
      * Returns the FileTuple object associated with the given filePath.
      *
      * @param filePath the path of the file
@@ -1059,7 +1067,16 @@ public class DatabaseAccessor implements AutoCloseable {
      */
     public String addGenomeRelease(String genomeVersion, String species,
             String filename, String checkSumMD5) throws SQLException, IOException {
-        return genMethods.addGenomeRelease(genomeVersion, species, filename, checkSumMD5);
+        return genMethods.addGenomeReleaseWithStatus(genomeVersion, species, filename, checkSumMD5, "Done");
+    }
+
+    // Like 'addGenomeRelease', but sets the status to 'In Progress'.
+    // A call to 'markReadyForDownload' is needed to finalise the upload.
+    public String addInProgressGenomeRelease(String genomeVersion, String species,
+                                             String filename, String checkSumMD5)
+            throws SQLException, IOException {
+        return genMethods.addGenomeReleaseWithStatus(genomeVersion, species,
+                filename, checkSumMD5, "In Progress");
     }
 
     /**
@@ -1212,7 +1229,17 @@ public class DatabaseAccessor implements AutoCloseable {
      */
     public String addChainFile(String fromVersion, String toVersion,
             String fileName, String checkSumMD5) throws SQLException, IOException {
-        return genMethods.addChainFile(fromVersion, toVersion, fileName, checkSumMD5);
+        return genMethods.addChainFileWithStatus(fromVersion, toVersion, fileName,
+                checkSumMD5, "Done");
+    }
+
+    // Like addChainFile, but sets the status to 'In Progress'.
+    // A call to 'markReadyForDownload' is needed to finalise the upload.
+    public String addInProgressChainFile(String fromVersion, String toVersion,
+                                         String fileName, String checkSumMD5)
+            throws SQLException, IOException {
+        return genMethods.addChainFileWithStatus(fromVersion, toVersion, fileName,
+                checkSumMD5, "In Progress");
     }
 
     /**

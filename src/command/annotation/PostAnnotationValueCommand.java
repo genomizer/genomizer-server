@@ -10,11 +10,11 @@ import command.UserRights;
 import command.ValidateException;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
-import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.HttpStatusCode;
 import response.MinimalResponse;
 import response.Response;
+import server.Debug;
 
 /**
  * Class used to handle the process of adding annotation
@@ -30,12 +30,21 @@ public class PostAnnotationValueCommand extends Command {
 	@Expose
 	private String value = null;
 
+	@Override
+	public int getExpectedNumberOfURIFields() {
+		return 2;
+	}
+
 
 	@Override
 	public void validate() throws ValidateException {
 		hasRights(UserRights.getRights(this.getClass()));
 		validateName(name, MaxLength.ANNOTATION_LABEL, "Annotation label");
 		validateName(value, MaxLength.ANNOTATION_VALUE, "Annotation value");
+		if(value.equals("freetext")){
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Can not" +
+					"name a value \"freetext\"");
+		}
 	}
 
 	@Override
@@ -51,13 +60,11 @@ public class PostAnnotationValueCommand extends Command {
 						value);
 			}
 			db.addDropDownAnnotationValue(name, value);
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
-		} catch (IOException e) {
-			e.printStackTrace();
-			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+		} catch(SQLException | IOException e) {
+			Debug.log("Adding of annotation value: " + value + " on annotation " + name + " failed. Reason: " +
 					e.getMessage());
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Could not add annotation value: "
+					+value+ " on annotation "+name+" because of temporary problems with database.");
 		} finally {
 			if (db != null) {
 				db.close();

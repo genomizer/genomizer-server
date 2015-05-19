@@ -16,6 +16,8 @@ import response.HttpStatusCode;
 import response.Response;
 import database.DatabaseAccessor;
 import database.containers.Genome;
+import server.Debug;
+
 /**
  * A command which is used to get all the genome versions
  * for a specific species.
@@ -27,9 +29,20 @@ public class GetGenomeReleaseSpeciesCommand extends Command {
 	private String species;
 
 	@Override
-	public void setFields(String uri, String uuid, UserType userType) {
+	public int getExpectedNumberOfURIFields() {
+		return 2;
+	}
 
-		super.setFields(uri, uuid, userType);
+	/**
+	 * Overrides the original command in order to use the uri.
+	 * @param uri Contains the experiment id to fetch.
+	 * @param uuid the UUID for the user who made the request.
+	 * @param userType the user type for the command caller.
+	 */
+	@Override
+	public void setFields(String uri, String query, String uuid, UserType userType) {
+
+		super.setFields(uri, query, uuid, userType);
 		species = uri.split("/")[2];
 	}
 
@@ -54,10 +67,14 @@ public class GetGenomeReleaseSpeciesCommand extends Command {
 					db.getAllGenomeReleasesForSpecies(species);
 			return new GetGenomeReleaseResponse(HttpStatusCode.OK, genomeReleases);
 		} catch (SQLException e) {
+			Debug.log("Error when fetching all genome versions for species "+species+". Temporary error with database: "
+					+ e.getMessage());
 			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
-					"DatabaseAccessor could not be created: " + e.getMessage());
+					"Error when fetching all genome versions for species "+species+". Temporary error with database.");
 		} catch (IOException e) {
-			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, species +
+			Debug.log("Error when fetching all genome versions for species "+species+". The specie has no released " +
+					"genome versions: " + e.getMessage());
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, species +
 					" has no genome version released");
 		} finally {
 			if (db != null) {

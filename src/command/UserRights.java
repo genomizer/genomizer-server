@@ -78,9 +78,7 @@ public class UserRights {
      */
     public static UserType getRights(Class<? extends Command> command){
 
-        if (userRights.get(command) == null)
-            return UserType.UNKNOWN;
-        else
-            return userRights.get(command);
+        UserType userType = userRights.get(command);
+        return userType != null ? userType : UserType.UNKNOWN;
     }
 }

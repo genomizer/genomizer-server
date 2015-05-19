@@ -14,6 +14,7 @@ import response.ErrorResponse;
 import response.HttpStatusCode;
 import response.MinimalResponse;
 import response.Response;
+import server.Debug;
 
 /**
  * Class used to handle removal on an existing annotation-field.
@@ -25,9 +26,14 @@ public class DeleteAnnotationFieldCommand extends Command {
 	private String name;
 
 	@Override
-	public void setFields(String uri, String uuid, UserType userType) {
+	public int getExpectedNumberOfURIFields() {
+		return 3;
+	}
 
-		super.setFields(uri, uuid, userType);
+	@Override
+	public void setFields(String uri, String query, String uuid, UserType userType) {
+
+		super.setFields(uri, query, uuid, userType);
 		name = uri.split("/")[3];
 	}
 
@@ -52,13 +58,11 @@ public class DeleteAnnotationFieldCommand extends Command {
 						"The annotation " + name + " does not exist and " +
 								"can not be deleted");
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
-		} catch (IOException e) {
-			e.printStackTrace();
-			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+		} catch (SQLException | IOException e) {
+			Debug.log("Removal of annotation field: "+name+" didn't work, reason: " +
 					e.getMessage());
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Removal of annotation field:"+name+
+					" didn't work because of temporary problems with database.");
 		} finally {
 			if (db != null) {
 				db.close();

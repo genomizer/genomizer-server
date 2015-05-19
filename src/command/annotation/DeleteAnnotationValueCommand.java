@@ -16,6 +16,7 @@ import response.ErrorResponse;
 import response.MinimalResponse;
 
 import response.HttpStatusCode;
+import server.Debug;
 
 /**
  * Class used to handle removal of annotation values.
@@ -28,9 +29,14 @@ public class DeleteAnnotationValueCommand extends Command {
 	private String value;
 
 	@Override
-	public void setFields(String uri, String uuid, UserType userType) {
+	public int getExpectedNumberOfURIFields() {
+		return 4;
+	}
 
-		super.setFields(uri, uuid, userType);
+	@Override
+	public void setFields(String uri, String query, String uuid, UserType userType) {
+
+		super.setFields(uri, query, uuid, userType);
 
 		String[] splitFields = uri.split("/");
 		name = splitFields[3];
@@ -57,13 +63,11 @@ public class DeleteAnnotationValueCommand extends Command {
 						value + " does not exist in " + name + " and can not " +
 						"be deleted");
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, e.getMessage());
-		} catch (IOException e) {
-			e.printStackTrace();
-			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
-					e.getMessage());
+		} catch (IOException | SQLException e) {
+			Debug.log("Deleting annotation value " + value + " on annotation " + name +
+					" failed due to database error. Reason: " + e.getMessage());
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Deleting annotation value " + value +
+					" on annotation "+name + " failed due to database error.");
 		} finally {
 			if (db != null) {
 				db.close();

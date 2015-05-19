@@ -12,11 +12,11 @@ import database.DatabaseAccessor;
 import database.constants.MaxLength;
 import database.containers.FileTuple;
 
-import database.subClasses.UserMethods.UserType;
 import response.UrlUploadResponse;
 import response.ErrorResponse;
 import response.HttpStatusCode;
 import response.Response;
+import server.Debug;
 
 /**
  * Adds a file to an experiment.
@@ -48,6 +48,10 @@ public class PostFileCommand extends Command {
 	@Expose
 	private String checkSumMD5 = null;
 
+	@Override
+	public int getExpectedNumberOfURIFields() {
+		return 1;
+	}
 
 	@Override
 	public void validate() throws ValidateException {
@@ -93,13 +97,11 @@ public class PostFileCommand extends Command {
 					metaData, author, uploader, false, grVersion, checkSumMD5);
 			return new UrlUploadResponse(HttpStatusCode.OK,
 					ft.getUploadURL());
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
-		} catch (IOException e) {
-			e.printStackTrace();
-			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+		} catch (SQLException | IOException e) {
+			Debug.log("Adding of file " + fileName + " to experiment "+experimentID+" didn't work, reason: " +
 					e.getMessage());
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Adding of file " + fileName +
+					" to experiment "+experimentID+" didn't work because of temporary problems with database.");
 		} finally {
 			if (db != null) {
 				db.close();

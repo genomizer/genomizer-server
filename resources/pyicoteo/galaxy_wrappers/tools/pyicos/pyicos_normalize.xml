@@ -1,0 +1,49 @@
+<tool id="pyicos_normalize" name="Normalize">
+  <description>Normalize a file to a control.</description>
+  <command interpreter="python">
+      pyicos normalize $input $control $output -f $input_format -F $output_format --control-format $control_format $is_input_open $is_output_open $is_control_open
+  </command>
+  <inputs>
+
+    <param format="tabular" name="input" type="data" label="Experiment file"/>
+    <param  name="input_format" type="select" label="Experiment format" format="text">
+        <option value="bed" selected="true">Bed</option>
+        <option value="bed_wig">Wiggle(Bed)</option>
+        <option value="sam">Sam</option>
+        <option value="eland">Eland</option>
+        <option value="bed_pk">Bed pk</option>
+    </param>
+    <param  name="is_input_open" type="boolean" label="Is the Experiment half-open?" truevalue="--open-input" falsevalue=""/>
+
+    <param format="tabular" name="control" type="data" label="Control file"/>
+    <param  name="control_format" type="select" label="Control format" format="text">
+        <option value="bed" selected="true">Bed</option>
+        <option value="bed_wig">Wiggle(Bed)</option>
+        <option value="sam">Sam</option>
+        <option value="eland">Eland</option>
+        <option value="bed_pk">Bed pk</option>
+    </param>
+    <param  name="is_control_open" type="boolean" label="Is control half-open?" truevalue="--open-control" falsevalue=""/>
+
+    <param  name="output_format" type="select" label="Output format">
+        <option value="bed">Bed</option>
+        <option value="bed_wig">Wiggle(Bed)</option>
+        <option value="sam">Sam</option>
+        <option value="eland">Eland</option>
+        <option value="bed_pk" selected="true">Pk(Bed)</option>
+    </param>
+    <param  name="is_output_open" type="boolean" label="Is output half-open?" truevalue="--open-output" falsevalue=""/>
+  </inputs>
+
+  <outputs>
+    <data format="tabular" name="output" />
+  </outputs>
+  <help>
+        Normalize a file to a control.
+        More information at: http://regulatorygenomics.upf.edu/pyicos
+
+  </help>
+</tool>
+
+
+

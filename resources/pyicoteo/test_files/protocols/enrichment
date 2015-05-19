@@ -1,0 +1,20 @@
+[Pyicotrocol]
+experiment=test_files/p300.bed
+experiment_format=bed
+experiment_b=test_files/control.bed
+output=test_files/test_result
+
+; output_format not neccesary here, the enrichment test always outputs a BED like counts file
+
+; if replica_a_path is not provided, a theoretical background model will be calculated
+; replica_a_path=replica.bed
+
+; if the region is not provided, regions of interest will be infered from the data. Required BED format.
+; region=test_files/region_file.bed
+
+; debug = true
+
+operations= push, enrichment, zscore, plot
+
+
+

@@ -3,7 +3,7 @@ package command.test;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-import command.user.PutUserPasswordCommand;
+import command.user.*;
 import command.ValidateException;
 import database.constants.MaxLength;
 import junit.framework.TestCase;
@@ -14,6 +14,7 @@ import org.junit.Test;
  * Test to see if PutUserPasswordCommand class works correctly
  * @author dv13jen
  */
+@SuppressWarnings("deprecation")
 public class PutUserPasswordCommandTest extends TestCase {
 
     private Gson gson = null;

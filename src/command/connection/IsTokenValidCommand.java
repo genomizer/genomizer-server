@@ -2,7 +2,6 @@ package command.connection;
 
 import authentication.Authenticate;
 import command.Command;
-import database.subClasses.UserMethods.UserType;
 import response.MinimalResponse;
 import response.Response;
 import response.HttpStatusCode;
@@ -15,6 +14,11 @@ import response.HttpStatusCode;
 */
 @Deprecated
 public class IsTokenValidCommand extends Command {
+
+	@Override
+	public int getExpectedNumberOfURIFields() {
+		return 1;
+	}
 
 	/**
 	 * Constructs a new instance of IsTokenValidCommand using the supplied

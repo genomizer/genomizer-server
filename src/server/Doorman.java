@@ -35,15 +35,15 @@ import java.util.concurrent.Executor;
  */
 public class Doorman {
 	private HttpServer httpServer;
-	private static WorkPool workPool;
+	private static ProcessPool processPool;
 
 	/**
 	 * Constructs a HTTP server (but doesn't start it) which listens on the
      * given port.
 	 * @throws IOException
 	 */
-	public Doorman(WorkPool pool, int port) throws IOException {
-		Doorman.workPool = pool;
+	public Doorman(ProcessPool processPool) throws IOException {
+		Doorman.processPool = processPool;
 
 		httpServer = HttpServer.create(
 				new InetSocketAddress(ServerSettings.genomizerPort),0);
@@ -54,20 +54,29 @@ public class Doorman {
 		RequestHandler requestHandler = new RequestHandler();
 
 		server.createContext("/login", requestHandler);
+		server.createContext("/token", requestHandler);
 		server.createContext("/experiment", requestHandler);
-		server.createContext("/annotation", requestHandler);
-		server.createContext("/annotation/field", requestHandler);
-		server.createContext("/annotation/value", requestHandler);
+		server.createContext("/experiment/", requestHandler);
 		server.createContext("/file", requestHandler);
+		server.createContext("/file/", requestHandler);
+		server.createContext("/convertfile", requestHandler);
 		server.createContext("/search/", requestHandler);
 		server.createContext("/user", requestHandler);
+		server.createContext("/admin/user", requestHandler);
+		server.createContext("/admin/user/", requestHandler);
 		server.createContext("/process", requestHandler);
+		server.createContext("/process/dummy", requestHandler);
 		server.createContext("/process/rawtoprofile", requestHandler);
-		server.createContext("/sysadm", requestHandler);
-	    server.createContext("/sysadm/annpriv", requestHandler);
+		server.createContext("/process/cancelprocess", requestHandler);
+		server.createContext("/annotation", requestHandler);
+		server.createContext("/annotation/field", requestHandler);
+		server.createContext("/annotation/field/", requestHandler);
+		server.createContext("/annotation/value", requestHandler);
+		server.createContext("/annotation/value/", requestHandler);
 		server.createContext("/genomeRelease", requestHandler);
 		server.createContext("/genomeRelease/", requestHandler);
-		server.createContext("/token", requestHandler);
+		server.createContext("/geo", requestHandler);
+		server.createContext("/geo/", requestHandler);
 		server.createContext("/upload", requestHandler);
 		server.createContext("/download", requestHandler);
 
@@ -95,7 +104,7 @@ public class Doorman {
 				ServerSettings.genomizerPort);
 	}
 
-	public static WorkPool getWorkPool(){
-		return workPool;
+	public static ProcessPool getProcessPool(){
+		return processPool;
 	}
 }

@@ -7,11 +7,10 @@ import command.UserRights;
 import command.ValidateException;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
-import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
+import response.HttpStatusCode;
 import response.MinimalResponse;
 import response.Response;
-import response.HttpStatusCode;
 import server.Debug;
 
 import java.io.IOException;
@@ -23,6 +22,7 @@ import java.sql.SQLException;
  * @author dv13jen
  * @version 1.0
  */
+@Deprecated
 public class PutUserPasswordCommand extends Command {
     
     @Expose
@@ -30,6 +30,11 @@ public class PutUserPasswordCommand extends Command {
 
     @Expose
     private String password = null;
+
+    @Override
+    public int getExpectedNumberOfURIFields() {
+        return 1;
+    }
 
     /**
      * Used to validate the PutUserPasswordCommand.
@@ -47,15 +52,15 @@ public class PutUserPasswordCommand extends Command {
     @Override
     public Response execute() {
 
-        DatabaseAccessor db = null;
+        DatabaseAccessor db;
 
         try {
             db = initDB();
         } catch (SQLException | IOException e) {
             Debug.log("CHANGE OF PASSWORD FAILED FOR: " + username + ". REASON: " +
                     e.getMessage());
-            return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
-                    "CHANGE OF PASSWORD FAILED FOR: " + username + ". REASON: " + e.getMessage());
+            return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+                    "Change of password failed for user: "+username+". Temporary problems with database.");
         }
 
 		String hash = BCrypt.hashpw(password,BCrypt.gensalt());
@@ -63,7 +68,12 @@ public class PutUserPasswordCommand extends Command {
         try {
             db.resetPassword(username, hash);
         } catch (SQLException | IOException e) {
-            return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Database error " + e.getMessage());
+            Debug.log("CHANGE OF PASSWORD FAILED FOR: " + username + ". REASON: " +
+                    e.getMessage());
+            return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+                    "Change of password failed for user: "+username+". Temporary problems with database.");
+        }finally {
+            db.close();
         }
 
         return new MinimalResponse(HttpStatusCode.OK);

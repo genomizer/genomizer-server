@@ -3,7 +3,6 @@ package command.annotation;
 import command.Command;
 import command.UserRights;
 import command.ValidateException;
-import database.subClasses.UserMethods.UserType;
 import response.HttpStatusCode;
 import response.MinimalResponse;
 import response.Response;
@@ -17,6 +16,12 @@ import response.Response;
 @Deprecated
 public class PutAnnotationPrivilegesCommand extends Command {
 	//TODO Implement this class
+
+
+	@Override
+	public int getExpectedNumberOfURIFields() {
+		return 3;
+	}
 
 	/**
 	 * Used to validate the information needed to execute

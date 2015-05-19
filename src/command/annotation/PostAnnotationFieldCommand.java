@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import command.Command;
 import command.UserRights;
 import command.ValidateException;
-import database.subClasses.UserMethods.UserType;
 import response.AddAnnotationFieldResponse;
 import response.ErrorResponse;
 import response.HttpStatusCode;
@@ -16,6 +15,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
+import server.Debug;
 
 /**
  * This class is created to handle the process of adding a new
@@ -32,13 +32,17 @@ public class PostAnnotationFieldCommand extends Command {
 	@Expose
 	private ArrayList<String> type = new ArrayList<>();
 
-	@SerializedName("default")
 	@Expose
+	@SerializedName("default")
 	private String defaults = null;
 
 	@Expose
 	private Boolean forced = null;
 
+	@Override
+	public int getExpectedNumberOfURIFields() {
+		return 2;
+	}
 
 	@Override
 	public void validate() throws ValidateException {
@@ -47,10 +51,7 @@ public class PostAnnotationFieldCommand extends Command {
 
 		validateName(name, MaxLength.ANNOTATION_LABEL, "Annotation label");
 		
-		if(defaults != null) {
-			validateName(defaults, MaxLength.ANNOTATION_DEFAULTVALUE,
-					"Default value");
-		}
+		defaults = "";
 
 		if(forced == null) {
 			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Specify if " +
@@ -64,7 +65,14 @@ public class PostAnnotationFieldCommand extends Command {
 
 		for(int i = 0; i < type.size(); i++) {
 			validateName(type.get(i), MaxLength.ANNOTATION_VALUE, "Annotation type");
+			if(type.get(i).equals("")){
+				type.remove(i);
+				i--;
+			}
 		}
+
+		type.add(0, "");
+
 	}
 
 	@Override
@@ -85,29 +93,39 @@ public class PostAnnotationFieldCommand extends Command {
 				addedAnnotations = db.addFreeTextAnnotation(name, defaults,
 						forced);
 			} else {
+				if(type.contains("freetext")){
+					return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Can not " +
+							"add a dropdown option called \"freetext\"");
+				}
 				addedAnnotations = db.addDropDownAnnotation(name, type,
 						defaultValueIndex, forced);
 			}
 			if(addedAnnotations != 0) {
 				return new AddAnnotationFieldResponse(HttpStatusCode.OK);
 			} else {
-				return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Annotation " +
-						"could not be added, database error.");
+				return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Annotation " + name+
+						" could not be added, database error.");
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
 			if(e.getErrorCode() == 0) {
+				Debug.log("Adding of new annotation field "+name+" failed. Reason: " +
+						e.getMessage());
 				return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "The " +
 						"annotation " + name + " already exists.");
 			} else {
-				return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+				Debug.log("Adding of new annotation field "+name+" failed. Reason: " +
 						e.getMessage());
+				return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+						"Could not create new annotation field "+name+
+								" due to temporary database problems.");
 			}
 
 		} catch (IOException e) {
-			e.printStackTrace();
-			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
+			Debug.log("Adding of new annotation field "+name+" failed. Reason: " +
+					e.getMessage());
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Could not create new " +
+					"annotation field "+name+" due to temporary database problems.");
 		} finally {
 			if (db != null) {
 				db.close();

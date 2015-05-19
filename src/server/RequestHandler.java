@@ -7,7 +7,6 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import command.Command;
 import command.CommandClasses;
-import command.URILength;
 import command.ValidateException;
 import command.connection.PostLoginCommand;
 import command.process.PutProcessCommand;
@@ -22,6 +21,7 @@ import transfer.Util;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
@@ -122,16 +122,17 @@ public class RequestHandler implements HttpHandler {
         logUser(Authenticate.getUsernameByID(uuid));
 
         /*Retrieve the URI part of the request header.*/
-		String uri = exchange.getRequestURI().toString();
-        uri = removeTimeStamp(uri);
+		String uri = removeTimeStamp(exchange.getRequestURI().toString());
+        String [] splitURI = uri.split("\\?");
+        String query;
+        uri = splitURI[0];
+        if (splitURI.length > 1) {
+            query = splitURI[1];
+        }
+        else {
+            query = "";
+        }
 
-		/*Does the length of the URI match the needed length?*/
-		if (URILength.get(commandClass) != calculateURILength(uri)) {
-			Debug.log("Bad format on command: " + exchange.getRequestMethod()
-                    + " " + exchange.getRequestURI());
-			respond(createBadRequestResponse(), exchange);
-			return;
-		}
 
 		/*TODO: Get the current user's user right level*/
 		UserType userType = UserType.ADMIN;
@@ -150,7 +151,15 @@ public class RequestHandler implements HttpHandler {
             return;
         }
 
-		command.setFields(uri, Authenticate.getUsernameByID(uuid), userType);
+        /*Does the length of the URI match the needed length?*/
+        if (command.getExpectedNumberOfURIFields() != calculateURILength(uri)) {
+            Debug.log("Bad format on command: " + exchange.getRequestMethod()
+                    + " " + exchange.getRequestURI());
+            respond(createBadRequestResponse(), exchange);
+            return;
+        }
+
+		command.setFields(uri, query, Authenticate.getUsernameByID(uuid), userType);
 
 		/*Attempt to validate the command.*/
 		try {
@@ -163,7 +172,7 @@ public class RequestHandler implements HttpHandler {
 		}
 
         if (commandClass.equals(PutProcessCommand.class)) {
-            Doorman.getWorkPool().addWork((PutProcessCommand) command);
+            Doorman.getProcessPool().addProcess((PutProcessCommand) command);
             respond(new ProcessResponse(HttpStatusCode.OK), exchange);
             return;
         } else {
@@ -268,6 +277,7 @@ public class RequestHandler implements HttpHandler {
 	private ErrorResponse createBadRequestResponse() {
 		return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Could not create a " +
 				"command from request. Bad format on request.");
+
 	}
 
 	/*Used to log a request.*/

@@ -5,6 +5,7 @@ import authentication.BCrypt;
 import authentication.LoginAttempt;
 import com.google.gson.annotations.Expose;
 import command.Command;
+import command.UserRights;
 import command.ValidateException;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
@@ -35,14 +36,20 @@ public class PutUserCommand extends Command {
     @Expose
     private String email = null;
 
+    @Override
+    public int getExpectedNumberOfURIFields() {
+        return 1;
+    }
+
     /**
      * Set username using uuid along with the usertype
      * @param uri the URI from the http request.
-     * @param uuid
-     * @param userType
+     * @param query the query of the request
+     * @param uuid the uuid from the http request.
+     * @param userType the userType
      */
     @Override
-    public void setFields(String uri, String uuid, UserMethods.UserType userType) {
+    public void setFields(String uri, String query, String uuid, UserMethods.UserType userType) {
         username = Authenticate.getUsernameByID(uuid);
         this.userType = userType;
     }
@@ -53,6 +60,7 @@ public class PutUserCommand extends Command {
      */
     @Override
     public void validate() throws ValidateException {
+        hasRights(UserRights.getRights(this.getClass()));
 
         validateName(oldPassword, MaxLength.PASSWORD, "oldPassword");
         validateName(newPassword, MaxLength.PASSWORD, "newPassword");
@@ -75,10 +83,10 @@ public class PutUserCommand extends Command {
             dbHash = db.getPasswordHash(username);
 
         } catch (SQLException | IOException e) {
-            Debug.log("UPDATE WAS UNSUCCESSFUL FOR: " + username + ". REASON: " +
+            Debug.log("Update was unsuccessful for user: " + username + ". Reason: " +
                     e.getMessage());
-            return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
-                    "UPDATE WAS UNSUCCESSFUL FOR: " + username + ". REASON: " + e.getMessage());
+            return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Update of user information" +
+                    " didn't work because of temporary problems with database.");
         }
 
         if(dbHash == null || dbHash.isEmpty()){
@@ -92,18 +100,18 @@ public class PutUserCommand extends Command {
             try {
                 String hash = BCrypt.hashpw(newPassword, BCrypt.gensalt());
                 db.updateUser(username, hash, name, email);
-
             } catch (SQLException | IOException e) {
-                Debug.log("UPDATE WAS UNSUCCESSFUL FOR: " + username + ". REASON: " +
+                Debug.log("Update was unsuccessful for user: " + username + ". Reason: " +
                         e.getMessage());
-                return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Error when " +
-                        "editing user "+username+" in database, user probably don't exist. " +
-                        e.getMessage());
+                return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Update of user information" +
+                        " didn't work because of temporary problems with database.");
+            }finally {
+                db.close();
             }
             return new MinimalResponse(HttpStatusCode.OK);
         }
-        Debug.log("UPDATE WAS UNSUCCESSFUL FOR: " + username + ". REASON: INCORRECT OLD PASSWORD");
-        return new ErrorResponse(HttpStatusCode.UNAUTHORIZED, "Error with update of user " +username+
-                ". Incorrect old password"+ login.getErrorMessage());
+        Debug.log("Update was unsuccessful for user: " + username + ". Reason: Incorrect old password");
+        return new ErrorResponse(HttpStatusCode.UNAUTHORIZED, "Error with update of user information. " +
+                "Incorrect old password");
     }
 }

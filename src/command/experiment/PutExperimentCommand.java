@@ -3,7 +3,6 @@ package command.experiment;
 import command.Command;
 import command.UserRights;
 import command.ValidateException;
-import database.subClasses.UserMethods.UserType;
 import response.HttpStatusCode;
 import response.MinimalResponse;
 import response.Response;
@@ -17,6 +16,11 @@ import response.Response;
 public class PutExperimentCommand extends Command {
 	//TODO Implement this class
 
+
+	@Override
+	public int getExpectedNumberOfURIFields() {
+		return 2;
+	}
 
 	/**
 	 * Used to validate the information that is needed
