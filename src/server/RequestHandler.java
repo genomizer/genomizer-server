@@ -21,6 +21,7 @@ import transfer.Util;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
@@ -121,9 +122,17 @@ public class RequestHandler implements HttpHandler {
         logUser(Authenticate.getUsernameByID(uuid));
 
         /*Retrieve the URI part of the request header.*/
-		String uri = exchange.getRequestURI().toString().split("\\?")[0];
-        String query = exchange.getRequestURI().getQuery();
-        uri = removeTimeStamp(uri);
+		String uri = removeTimeStamp(exchange.getRequestURI().toString());
+        String [] splitURI = uri.split("\\?");
+        String query;
+        uri = splitURI[0];
+        if (splitURI.length > 1) {
+            query = splitURI[1];
+        }
+        else {
+            query = "";
+        }
+
 
 		/*TODO: Get the current user's user right level*/
 		UserType userType = UserType.ADMIN;
