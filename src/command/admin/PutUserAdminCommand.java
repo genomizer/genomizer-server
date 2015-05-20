@@ -59,33 +59,30 @@ public class PutUserAdminCommand extends Command {
 
     @Override
     public Response execute() {
-        DatabaseAccessor db;
-        try {
-            db = initDB();
-        } catch (SQLException | IOException e) {
-            Debug.log("Editing of user: " + username + " was unsuccessful, " +
-                    "reason: " + e.getMessage());
-            return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
-                    "Editing of user: " + username + " was unsuccessful due " +
-                            "to temporary problems with database.");
-        }
+        Response response;
 
         try {
-            String hash = BCrypt.hashpw(password, BCrypt.gensalt());
-            db.updateUser(username, hash, UserType.valueOf(privileges), name,
-                    email);
-        } catch (SQLException | IOException e) {
-            Debug.log("Editing of user: " + username + " was unsuccessful, " +
-                    "reason: " + e.getMessage());
-            return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Editing of " +
-                    "user " + username + " was unsuccessful, user may not " +
-                    "exist.");
-        } finally {
-            if (db != null) {
-                db.close();
+            DatabaseAccessor db = initDB();
+            if (db.getUsers().contains(username)) {
+                String hash = BCrypt.hashpw(password, BCrypt.gensalt());
+                db.updateUser(username, hash, UserType.valueOf(privileges),
+                        name, email);
+                response = new MinimalResponse(HttpStatusCode.OK);
+            } else {
+                response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
+                        "Editing of user " + username + " was unsuccessful, " +
+                                "user does not exist.");
             }
+
+            db.close();
+        } catch (SQLException | IOException e) {
+            Debug.log("Editing of user: " + username + " was unsuccessful, " +
+                    "reason: " + e.getMessage());
+            response = new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+                    "Editing of user: " + username + " was unsuccessful due " +
+                            "to temporary problems with the database.");
         }
 
-        return new MinimalResponse(HttpStatusCode.OK);
+        return response;
     }
 }
