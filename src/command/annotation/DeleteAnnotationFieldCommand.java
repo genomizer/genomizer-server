@@ -40,7 +40,7 @@ public class DeleteAnnotationFieldCommand extends Command {
 	@Override
 	public void validate() throws ValidateException {
 		hasRights(UserRights.getRights(this.getClass()));
-		validateName(label, MaxLength.ANNOTATION_LABEL, "annotation label");
+		validateName(label, MaxLength.ANNOTATION_LABEL, "Annotation label");
 	}
 
 	@Override
