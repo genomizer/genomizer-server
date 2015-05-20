@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Stack;
 
+import com.sun.corba.se.spi.activation.Server;
 import server.ErrorLogger;
 import server.ServerSettings;
 
@@ -108,11 +109,18 @@ public class RawToProfileConverter extends Executor {
 				toBeRemoved.push(filesToBeMoved);
 			}
 
+			if(checker.shouldRunSortSam()) {
+				runSortSam(dir+rawFile_1_Name+".sam",
+						rawFile_1_Name+"_sorted.sam");
+			}
+
 			if(checker.shouldRunRemoveDuplicates()) {
 				runRemoveDuplicates(
-						rawFile_1_Name,
-						rawFile_1_Name + "_without_duplicates", null);
+						rawFile_1_Name+"_sorted.sam",
+						rawFile_1_Name + "_sorted_without_duplicates.sam",
+						null);
 			}
+
 
 			// Runs SamToGff script on files
 			if (checker.shouldRunSamToGff()) {
@@ -568,7 +576,9 @@ public class RawToProfileConverter extends Executor {
 			throws ProcessException {
 		String bowTieParams = checkBowTieProcessors(parameters[0]);
 
-		System.err.println(bowTieParams);
+		System.err.println(ServerSettings.bowtieLocation +
+						   " " + bowTieParams + " " + parameters[1] + " " +
+						   inFolder + "/" + fileOne + " " + dir + fileOneName + ".sam");
 		String[] bowTieParameters = parse(ServerSettings.bowtieLocation +
 				" " + bowTieParams + " " + parameters[1] + " " +
 				inFolder + "/" + fileOne + " " + dir + fileOneName + ".sam");
@@ -712,6 +722,11 @@ public class RawToProfileConverter extends Executor {
 		return dir.exists();
 	}
 
+	private String runPicard(String command, String arguments) {
+		/* TODO Refactor to use this? */
+		return null;
+	}
+
 	/**
 	 * Makes external call to Picard that removes duplicates in input .sam file.
 	 *
@@ -724,7 +739,7 @@ public class RawToProfileConverter extends Executor {
 	 * @throws IllegalArgumentException If input or output file was
 	 * not .sam format
 	 */
-	public String runRemoveDuplicates(String inputFile, String outputFile,
+	private String runRemoveDuplicates(String inputFile, String outputFile,
 									   String metrics) throws ProcessException {
 		/* Check if input is .sam format */
 		if(!inputFile.endsWith(".sam")) {
@@ -752,7 +767,7 @@ public class RawToProfileConverter extends Executor {
 										   "/picard.jar MarkDuplicates " +
 										   " INPUT=" + inputFile +
 										   " OUTPUT=" + outputFile +
-										   "REMOVE_DUPLICATES=true"+"" +
+										   " REMOVE_DUPLICATES=true"+"" +
 										   " METRICS_FILE=metrics.txt");
 		try {
 			return executeProgram(picardParameters);
@@ -762,10 +777,54 @@ public class RawToProfileConverter extends Executor {
 					+ inputFile);
 		} catch (IOException e) {
 			e.printStackTrace();
-			throw new ProcessException("Could not run picard on file: "
-									   + inputFile + ", please check your input and permissions");
+			throw new ProcessException("Could not run picard on file: " +
+									   inputFile +
+									   ", please check your input and " +
+									   "permissions");
 		}
 
 	}
 
-}
+	private String runSortSam(String inputFile, String outputFile)
+			throws ProcessException {
+		/* Check if input is .sam format */
+		if (!inputFile.endsWith(".sam")) {
+			throw new IllegalArgumentException(
+					"Could not run Picard on file: "
+					+ inputFile +
+					", as it was not in .sam format");
+		}
+
+		/* Check if output is .sam format */
+		if (!outputFile.endsWith(".sam")) {
+			throw new IllegalArgumentException(
+					"Could not run Picard to file: "
+					+ outputFile +
+					", as it was not in .sam format");
+		}
+
+		String[] picardParameters = parse(
+				"java -jar " +
+				ServerSettings.picardLocation +
+				"/picard.jar SortSam " +
+				" I=" + inputFile +
+				" O=" + outputFile +
+				" SO=coordinate");
+		try {
+			return executeProgram(picardParameters);
+		} catch (InterruptedException e) {
+			throw new ProcessException(
+					"Process interrupted while running picard on file: "
+					+ inputFile);
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new ProcessException(
+					"Could not run picard on file: " +
+					inputFile +
+					", please check your input and " +
+					"permissions");
+		}
+	}
+
+
+	}
