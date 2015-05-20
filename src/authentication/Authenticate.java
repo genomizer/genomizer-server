@@ -127,7 +127,7 @@ public class Authenticate {
 	 * Performs authorization, returns null if the user could not be authorized,
 	 * else it returns the uuid.
 	 */
- 	public static String AuthenticateAuthorization(HttpExchange exchange) {
+ 	public static String performAuthentication(HttpExchange exchange) {
 		String uuid = null;
 
 		// Get the value of the 'Authorization' header.
