@@ -289,11 +289,11 @@ public class SearchDatabaseTests {
         assertEquals("Exp2", experiments.get(0).getID());
     }
 
-    @Ignore("encoding issues") @Test
+    @Test
     public void shouldBeAbleToSearchUsingPubMedString5() throws Exception {
 
         List<Experiment> experiments = dbac
-                .search("Human[SpeCies] AnD Ume? uni[author]");
+                .search("Human[SpeCies] AnD Umeå uni[author]");
 
         assertEquals(1, experiments.size());
         assertEquals(1, experiments.get(0).getFiles().size());

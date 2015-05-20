@@ -151,6 +151,9 @@ public class RequestHandler implements HttpHandler {
         if (command.getExpectedNumberOfURIFields() != calculateURILength(uri)) {
             Debug.log("Bad format on command: " + exchange.getRequestMethod()
                     + " " + exchange.getRequestURI());
+            Debug.log("URI fields mismatch. Expected: "
+                    + command.getExpectedNumberOfURIFields()
+                    + ", Received: " + calculateURILength(uri));
             respond(createBadRequestResponse(), exchange);
             return;
         }
@@ -221,22 +224,25 @@ public class RequestHandler implements HttpHandler {
 		if (authHeader != null)
 			uuid = authHeader.get(0);
 
-		// Get the value of the 'token' parameter.
-		String uuid2;
-		HashMap<String, String> reqParams = new HashMap<>();
-		Util.parseURI(exchange.getRequestURI(), reqParams);
-		if (reqParams.containsKey("token")) {
-			uuid2 = reqParams.get("token");
-			if (uuid2 != null) {
-				if (uuid == null || uuid.equals(uuid2)) {
-					uuid = uuid2;
-				} else {
-					Debug.log("Authorization header and token parameter " +
-                            "values differ!");
-					return null;
-				}
-			}
-		}
+        //If the uuid could not be retrieved from the header, do this.
+        if (uuid == null) {
+            // Get the value of the 'token' parameter.
+            String uuid2;
+            HashMap<String, String> reqParams = new HashMap<>();
+            Util.parseURI(exchange.getRequestURI(), reqParams);
+            if (reqParams.containsKey("token")) {
+                uuid2 = reqParams.get("token");
+                if (uuid2 != null) {
+                    if (uuid == null || uuid.equals(uuid2)) {
+                        uuid = uuid2;
+                    } else {
+                        Debug.log("Authorization header and token parameter " +
+                                "values differ!");
+                        return null;
+                    }
+                }
+            }
+        }
 
 		// Actual authentication.
 		Debug.log("Trying to authenticate token " + uuid + "...");

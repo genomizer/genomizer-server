@@ -1,6 +1,10 @@
 package process;
 
+import database.DatabaseAccessor;
+import database.containers.FileTuple;
+import server.Debug;
 import server.ErrorLogger;
+import command.Command;
 
 import java.io.*;
 import java.nio.file.FileSystems;
@@ -8,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.security.AccessControlException;
+import java.sql.SQLException;
 import java.util.Scanner;
 import java.util.Stack;
 import java.util.StringTokenizer;
@@ -21,6 +26,7 @@ import java.util.StringTokenizer;
 public abstract class Executor {
 
 	private final String FILEPATH = "resources/";
+	private DatabaseAccessor db;
 
 	/**
 	 * Used to execute a program like bowtie
@@ -111,7 +117,7 @@ public abstract class Executor {
 	 * @throws InterruptedException
 	 * @throws IOException
 	 */
-	private String executeCommand(String[] command)
+	protected String executeCommand(String[] command)
 			throws InterruptedException, IOException {
 		ProcessBuilder builder = new ProcessBuilder(command);
 
@@ -195,30 +201,49 @@ public abstract class Executor {
 	 * @throws ProcessException
 	 */
 	protected boolean cleanUp(Stack<String> files) {
-		boolean isOk = true;
+
 		/* TODO should this be replaced with FileUtils.deleteDirectory?*/
-		while (!files.isEmpty()) {
 
-			File file = new File(files.pop());
+		boolean isOk = true;
 
-			// If it is a directory, delete contents first
-			if (file.isDirectory()) {
+		try {
+			db = Command.initDB();
 
-				// Save file references into an array
-				File[] fileList = file.listFiles();
+			while (!files.isEmpty()) {
 
-				// Delete each file with a reference in the array
-				isOk = deleteFiles(fileList);
+				File file = new File(files.pop());
+
+				// If it is a directory, delete contents first
+				if (file.isDirectory()) {
+
+					// Save file references into an array
+					File[] fileList = file.listFiles();
+
+					// Delete each file with a reference in the array
+					isOk = deleteFiles(fileList);
+				}
+
+				// Delete the file/directory
+				if (file.delete()) {
+					ErrorLogger.log("SYSTEM", "Deleting " + file.toString());
+				} else {
+					isOk = false;
+					ErrorLogger.log("SYSTEM", "Failed to delete directory " + file);
+				}
 			}
 
-			// Delete the file/directory
-			if (file.delete()) {
-				ErrorLogger.log("SYSTEM", "Deleting " + file.toString());
-			} else {
-				isOk = false;
-				ErrorLogger.log("SYSTEM", "Failed to delete directory " + file);
+		} catch (SQLException | IOException ex) {
+			ErrorLogger.log("SYSTEM", "Executor::cleanUp: could not connect " +
+					"to the database");
+			Debug.log("Executor::cleanUp: could not connect " +
+				"to the database");
+			return false;
+		} finally {
+			if (db != null && db.isConnected()) {
+				db.close();
 			}
 		}
+
 
 		return isOk;
 	}
@@ -229,12 +254,15 @@ public abstract class Executor {
 	 * @param fileList List of files to delete
 	 * @return False if one or more files wasn't deleted, true otherwise.
 	 */
-	private boolean deleteFiles(File[] fileList) {
+	private boolean deleteFiles(File[] fileList) throws SQLException, IOException{
 		boolean isOk = true;
 		if (fileList != null){
 			for (File fileToDelete : fileList) {
 				if (fileToDelete.isFile()) {
 					if (fileToDelete.delete()) {
+						FileTuple fileTuple = db.getFileTuple(fileToDelete
+								.getAbsolutePath());
+						db.deleteFile(fileTuple.path);
 						ErrorLogger.log("SYSTEM", "Deleting "
 										  + fileToDelete.toString());
 					} else {
