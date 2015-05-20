@@ -70,4 +70,6 @@ public class RawToProfileProcessChecker {
 	}
 
 	public boolean shouldRunRemoveDuplicates() { return shouldRunBowTie; }
+
+	public boolean shouldRunSortSam() {return shouldRunBowTie; }
 }
