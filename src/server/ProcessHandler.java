@@ -64,6 +64,7 @@ public class ProcessHandler implements Callable<Response> {
 					Debug.log(successMsg);
 					ErrorLogger.log("PROCESS", successMsg);
 				} else {
+					System.out.println("Process status: " + response.getCode());
 					process.status = Process.STATUS_CRASHED;
 					String crashedMsg = "FAILURE! Execution of process with id "
 							+ processCommand.getPID() + " in experiment "

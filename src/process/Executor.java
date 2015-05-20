@@ -4,6 +4,7 @@ import database.DatabaseAccessor;
 import server.Debug;
 import server.ErrorLogger;
 import command.Command;
+import java.util.Arrays;
 
 import java.io.*;
 import java.nio.file.FileSystems;
@@ -63,9 +64,12 @@ public abstract class Executor {
 		File pathToExecutable = new File(FILEPATH + command[1]);
 
 		/* Checks if script can be executed, does not execute, throws excp.*/
+		System.out.println(pathToExecutable.toString());
+		System.out.println("TEST");
 		isExecutable(pathToExecutable);
 
 		command[1] = pathToExecutable.getAbsolutePath();
+		System.out.println(Arrays.toString(command));
 		return executeCommand(command);
 
 	}
