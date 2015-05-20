@@ -47,10 +47,11 @@ public class DeleteAnnotationFieldCommand extends Command {
 
 	@Override
 	public Response execute() {
+		DatabaseAccessor db = null;
 		Response response;
 
 		try {
-			DatabaseAccessor db = initDB();
+			db = initDB();
 			if (db.getAllAnnotationLabels().contains(label)) {
 				db.deleteAnnotation(label);
 				response = new MinimalResponse(HttpStatusCode.OK);
@@ -60,15 +61,16 @@ public class DeleteAnnotationFieldCommand extends Command {
 								" was unsuccessful, annotation label does " +
 								"not exist");
 			}
-
-			db.close();
 		} catch (SQLException | IOException e) {
 			Debug.log("Deletion of annotation label: " + label +
 					" was unsuccessful, reason: " + e.getMessage());
-			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+			response = new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
 					"Deletion of annotation label: " + label +
 							" was unsuccessful due to temporary problems with" +
 							" the database.");
+		} finally {
+			if (db != null)
+				db.close();
 		}
 
 		return response;

@@ -59,10 +59,11 @@ public class PutUserAdminCommand extends Command {
 
     @Override
     public Response execute() {
+        DatabaseAccessor db = null;
         Response response;
 
         try {
-            DatabaseAccessor db = initDB();
+            db = initDB();
             if (db.getUsers().contains(username)) {
                 String hash = BCrypt.hashpw(password, BCrypt.gensalt());
                 db.updateUser(username, hash, UserType.valueOf(privileges),
@@ -73,14 +74,15 @@ public class PutUserAdminCommand extends Command {
                         "Editing of user " + username + " was unsuccessful, " +
                                 "user does not exist.");
             }
-
-            db.close();
         } catch (SQLException | IOException e) {
             Debug.log("Editing of user: " + username + " was unsuccessful, " +
                     "reason: " + e.getMessage());
             response = new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
                     "Editing of user: " + username + " was unsuccessful due " +
                             "to temporary problems with the database.");
+        } finally {
+            if (db != null)
+                db.close();
         }
 
         return response;
