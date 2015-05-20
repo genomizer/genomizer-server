@@ -20,8 +20,8 @@ import command.process.PutProcessCommand;
 import command.search.SearchCommand;
 import command.user.PutUserCommand;
 import command.user.PutUserPasswordCommand;
-import command.admin.DeleteUserCommand;
-import command.admin.PostUserCommand;
+import command.admin.DeleteAdminUserCommand;
+import command.admin.PostAdminUserCommand;
 import database.subClasses.UserMethods.UserType;
 
 import java.util.HashMap;
@@ -44,13 +44,13 @@ public class UserRights {
         userRights.put(PostFileCommand.class, UserType.USER);
         userRights.put(PostGenomeReleaseCommand.class, UserType.USER);
         userRights.put(PutUserPasswordCommand.class, UserType.GUEST);
-        userRights.put(PostUserCommand.class, UserType.ADMIN);
+        userRights.put(PostAdminUserCommand.class, UserType.ADMIN);
         userRights.put(DeleteAnnotationFieldCommand.class, UserType.USER);
         userRights.put(DeleteAnnotationValueCommand.class, UserType.USER);
         userRights.put(DeleteExperimentCommand.class, UserType.USER);
         userRights.put(DeleteFileCommand.class, UserType.USER);
         userRights.put(DeleteGenomeReleaseCommand.class, UserType.USER);
-        userRights.put(DeleteUserCommand.class, UserType.ADMIN);
+        userRights.put(DeleteAdminUserCommand.class, UserType.ADMIN);
         userRights.put(PutAnnotationFieldCommand.class, UserType.USER);
         userRights.put(PutAnnotationValueCommand.class, UserType.USER);
         userRights.put(GetAnnotationCommand.class, UserType.GUEST);

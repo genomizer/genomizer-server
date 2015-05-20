@@ -17,13 +17,13 @@ import response.Response;
 import server.Debug;
 
 /**
- * Class used to handle removal on an existing annotation-field.
+ * Command used to handle removal of an existing annotation field.
  *
- * @author Business Logic 2015.
+ * @author Business Logic 2015
  * @version 1.1
  */
 public class DeleteAnnotationFieldCommand extends Command {
-	private String name;
+	private String label;
 
 	@Override
 	public int getExpectedNumberOfURIFields() {
@@ -31,37 +31,46 @@ public class DeleteAnnotationFieldCommand extends Command {
 	}
 
 	@Override
-	public void setFields(String uri, String query, String uuid, UserType userType) {
-
+	public void setFields(String uri, String query, String uuid,
+						  UserType userType) {
 		super.setFields(uri, query, uuid, userType);
-		name = uri.split("/")[3];
+		label = uri.split("/")[3];
 	}
 
 	@Override
 	public void validate() throws ValidateException {
 		hasRights(UserRights.getRights(this.getClass()));
-		validateName(name, MaxLength.ANNOTATION_LABEL, "Annotation label");
+		validateName(label, MaxLength.ANNOTATION_LABEL, "annotation label");
 	}
 
 	@Override
 	public Response execute() {
-		DatabaseAccessor db = null;
+		DatabaseAccessor db;
 		try {
 			db = initDB();
-			ArrayList<String> annotations = db.getAllAnnotationLabels();
+		} catch (SQLException | IOException e) {
+			Debug.log("Deletion of annotation field: " + label +
+					" was unsuccessful, reason: " + e.getMessage());
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+					"Deletion of annotation field: " + label + " was " +
+							"unsuccessful due to temporary problems with the " +
+							"database.");
+		}
 
-			if(annotations.contains(name)) {
-				db.deleteAnnotation(name);
-				return new MinimalResponse(200);
+		try {
+			ArrayList<String> annotations = db.getAllAnnotationLabels();
+			if (annotations.contains(label)) {
+				db.deleteAnnotation(label);
+				return new MinimalResponse(HttpStatusCode.OK);
 			} else {
 				return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
-						"The annotation " + name + " does not exist and " +
+						"The annotation " + label + " does not exist and " +
 								"can not be deleted");
 			}
 		} catch (SQLException | IOException e) {
-			Debug.log("Removal of annotation field: "+name+" didn't work, reason: " +
+			Debug.log("Removal of annotation field: "+ label +" didn't work, reason: " +
 					e.getMessage());
-			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Removal of annotation field:"+name+
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Removal of annotation field:"+ label +
 					" didn't work because of temporary problems with database.");
 		} finally {
 			if (db != null) {
@@ -69,5 +78,4 @@ public class DeleteAnnotationFieldCommand extends Command {
 			}
 		}
 	}
-
 }
