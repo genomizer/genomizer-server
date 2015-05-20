@@ -17,6 +17,7 @@ public class ServerSettings {
 	public static int genomizerPort = -1;
 	public static String fileLocation = "/var/www/data/";
 	public static String bowtieLocation = "bowtie";
+	public static String bowtie2Location = "bowtie2";
 	public static String picardLocation = "picard";
 	public static String pyicosLocation = "pyicos";
 	public static int nrOfProcessThreads = 5;
@@ -39,6 +40,7 @@ public class ServerSettings {
 					+ "fileLocation = " + fileLocation + "\n"
 					+ "nrOfProcessThreads = " + nrOfProcessThreads + "\n"
 					+ "bowtieLocation = " + bowtieLocation + "\n"
+					+ "bowtie2Location = " + bowtie2Location + "\n"
 					+ "picardLocation = " + picardLocation + "\n"
 					+ "pyicosLocation = " + pyicosLocation + "\n";
 
@@ -68,6 +70,7 @@ public class ServerSettings {
 		nullCheck(fileLocation, "fileLocation");
 		nullCheck(nrOfProcessThreads, "nrOfProcessThreads");
 		nullCheck(bowtieLocation, "bowtieLocation");
+		nullCheck(bowtie2Location, "bowtie2Location");
 		nullCheck(picardLocation, "picardLocation");
 		nullCheck(pyicosLocation, "pyicosLocation");
 	}
@@ -145,6 +148,9 @@ public class ServerSettings {
 				case "bowtielocation":
 					bowtieLocation = value;
 					break;
+				case "bowtie2location":
+					bowtie2Location = value;
+					break;
 				case "picardlocation":
 					picardLocation = value;
 					break;
@@ -176,6 +182,7 @@ public class ServerSettings {
 							+ "\tfileLocation = " + fileLocation + "\n"
 							+ "\tnrOfProcessThreads = " + nrOfProcessThreads + "\n"
 							+ "\tbowtieLocation = " + bowtieLocation + "\n"
+							+ "\tbowtie2Location = " + bowtie2Location + "\n"
 							+ "\tpicardLocation = " + picardLocation + "\n"
 							+ "\tpyicosLocation = " + pyicosLocation + "\n"
 							+ "\n";

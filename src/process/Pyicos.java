@@ -3,6 +3,7 @@ package process;
 import command.ValidateException;
 import response.HttpStatusCode;
 import server.ServerSettings;
+import transfer.Util;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,7 +32,7 @@ public class Pyicos extends Executor {
     // Output file format.
     private String outFormat;
 
-    // Additional params.
+    // Additional parameters.
     private String [] params;
 
     // Supported input formats.
@@ -74,15 +75,15 @@ public class Pyicos extends Executor {
             validateException("Unsupported 'pyicos' subcommand!");
         }
         if (!new File(inFile).exists()) {
-            validateException("The input file '" + inFile + "' doesn't exist!");
+            validateException("Pyicos input file '" + inFile + "' doesn't exist!");
         }
         if (!supportedInputFormats.get(command).contains(inFormat)) {
             validateException("Input format '" + inFormat
-                    + "' not supported for command '" + command + "'!");
+                    + "' not supported for 'pyicos' command '" + command + "'!");
         }
         if (!supportedOutputFormats.get(command).contains(outFormat)) {
             validateException("Output format '" + outFormat
-                    + "' not supported for command '" + command + "'!");
+                    + "' not supported for 'pyicos' command '" + command + "'!");
         }
     }
 
@@ -91,6 +92,7 @@ public class Pyicos extends Executor {
     }
 
     // Execute the command represented by this Pyicos object.
+    // Returns output produced by the program.
     public String execute() throws InterruptedException, IOException {
         ArrayList<String> args = new ArrayList<>();
         args.add("python");
@@ -104,12 +106,6 @@ public class Pyicos extends Executor {
         }
 
         return executeCommand(args.toArray(new String[]{}));
-    }
-
-    // Replace a given file's extension.
-    // Example: replaceExtension("foo/bar.baz", ".quux") -> "foo/bar.quux",
-    public static String replaceExtension(String file, String newExt) {
-        return file.replaceAll("\\.[^\\.]+$", newExt);
     }
 
     public void cleanupTempFiles() {
@@ -128,7 +124,7 @@ public class Pyicos extends Executor {
     public static int runStrcorr(String samFile)
             throws ValidateException, InterruptedException, IOException {
         // Run 'strcorr'.
-        Pyicos strcorr = new Pyicos("strcorr", samFile, replaceExtension(samFile, ".pk"),
+        Pyicos strcorr = new Pyicos("strcorr", samFile, Util.replaceExtension(samFile, ".pk"),
                 "sam", "bed_pk", new String[] {});
         strcorr.validate();
         String haystack = strcorr.execute();
@@ -152,7 +148,7 @@ public class Pyicos extends Executor {
             throws ValidateException, InterruptedException, IOException {
         // Get the extension length from strcorr.
         int extensionLength = runStrcorr(samFile);
-        String wigFile = replaceExtension(samFile, ".wig");
+        String wigFile = Util.replaceExtension(samFile, ".wig");
 
         // Run 'convert'.
         Pyicos convert = new Pyicos("convert", samFile, wigFile,
