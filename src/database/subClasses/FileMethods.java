@@ -1,16 +1,17 @@
 package database.subClasses;
 
+import database.FilePathGenerator;
+import database.FileValidator;
+import database.containers.Experiment;
+import database.containers.FileTuple;
+import server.Debug;
+
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import database.FilePathGenerator;
-import database.FileValidator;
-import database.containers.Experiment;
-import database.containers.FileTuple;
 
 /**
  * Class that contains all the methods for adding,changing, getting and removing
@@ -279,7 +280,8 @@ public class FileMethods {
 		FileTuple ft = getFileTuple(path);
 
 		if (ft == null) {
-			throw new IOException("Could not find file at path " + path);
+			Debug.log("FileMethods.deleteFile: Could not find file at path " + path);
+			return 0;
 		}
 
 		File fileToDelete = new File(path);
@@ -318,7 +320,8 @@ public class FileMethods {
 		FileTuple ft = getFileTuple(fileID);
 
 		if (ft == null) {
-			throw new IOException("Could not find file with ID " + fileID);
+			Debug.log("FileMethods.deleteFile: Could not find file with ID " + fileID);
+			return 0;
 		}
 
 		File fileToDelete = new File(ft.path);
@@ -554,4 +557,19 @@ public class FileMethods {
 		}
 	}
 
+	public int updateFileSize(int fileID, Long size) throws  SQLException{
+
+		int res;
+
+		try(PreparedStatement stmt = conn.prepareStatement(
+				"UPDATE File "
+				+"SET FileSize = ? "
+				+"WHERE FileID = ?")) {
+			stmt.setString(1, size.toString());
+			stmt.setInt(2, fileID);
+			res = stmt.executeUpdate();
+		}
+
+		return res;
+	}
 }

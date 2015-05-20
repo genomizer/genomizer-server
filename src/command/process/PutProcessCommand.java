@@ -65,12 +65,12 @@ public class PutProcessCommand extends Command {
 	}
 
 	@Override
-	public void setFields(String uri, String query, String uuid, UserType userType) {
+	public void setFields(String uri, String query, String username, UserType userType) {
 
-		super.setFields(uri, query, uuid, userType);
+		super.setFields(uri, query, username, userType);
 		setTimestamp(System.currentTimeMillis());
 		processtype = uri.split("/")[2];
-		username = uuid;
+		this.username = username;
 	}
 
 	/**
@@ -215,18 +215,32 @@ public class PutProcessCommand extends Command {
 		Debug.log(username + "Raw to profile processing completed " +
 				"running " + processtype + " on experiment" + expid + "\n" +
 				"metadata: " + metadata + "\n" +
-				"parameters: " + parameters + "\n" +
+				"parameters: "
+					+ arrayToString(parameters, parameters.length) + "\n" +
 				"genomeVersion: " + genomeVersion + "\n" +
 		        "PID: " + PID + "\n");
 		return new ProcessResponse(HttpStatusCode.OK, "Raw to profile " +
 				"processing completed running " + processtype +
 				" on experiment" + expid + "\n"+
 				"metadata: " + metadata + "\n"+
-				"parameters: " + parameters + "\n" +
+				"parameters: "
+					+ arrayToString(parameters, parameters.length) + "\n" +
 				"genomeVersion: " + genomeVersion + "\n" +
 		        "PID: " + PID + "\n");
 
 
+	}
+
+
+	private String arrayToString(String[] arr, int length) {
+
+		StringBuilder stringBuilder = new StringBuilder();
+
+		for (int i=0; i<length; i++) {
+			stringBuilder.append(arr[i]);
+		}
+
+		return stringBuilder.toString();
 	}
 
 	/**
@@ -242,7 +256,8 @@ public class PutProcessCommand extends Command {
 				" " + processtype +
 				" on experiment" + expid + "\n" +
 				"metadata: " + metadata + "\n" +
-				"parameters: " + parameters + "\n" +
+				"parameters: "
+					+ arrayToString(parameters, parameters.length) + "\n" +
 				"genomeVersion: " + genomeVersion + "\n" +
 				"PID: " + PID + "\n" +
 				error + "\n");
@@ -252,7 +267,8 @@ public class PutProcessCommand extends Command {
 				" when processing " + processtype +
 				" on experiment" + expid + "\n"+
 				"metadata: " + metadata + "\n"+
-				"parameters: " + parameters + "\n" +
+				"parameters: "
+					+ arrayToString(parameters, parameters.length) + "\n" +
 				"genomeVersion: " + genomeVersion + "\n" +
 				"PID: " + PID + "\n" +
 				error + "\n");

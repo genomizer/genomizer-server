@@ -1,12 +1,13 @@
 package command.admin;
 
+import database.subClasses.UserMethods.UserType;
 import authentication.BCrypt;
 import com.google.gson.annotations.Expose;
 import command.Command;
+import command.UserRights;
 import command.ValidateException;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
-import database.subClasses.UserMethods;
 import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
@@ -46,11 +47,11 @@ public class PutUserAdminCommand extends Command {
      * Set the UserType. Uri and Uuid not used in this command.
      * @param uri the URI from the http request.
      * @param query
-     * @param uuid
+     * @param username
      * @param userType
      */
     @Override
-    public void setFields(String uri, String query, String uuid, UserMethods.UserType userType) {
+    public void setFields(String uri, String query, String username, UserType userType) {
         this.userType = userType;
 		/*No fields from the URI is needed, neither is the UUID. Dummy
 		implementation*/
@@ -62,6 +63,8 @@ public class PutUserAdminCommand extends Command {
      */
     @Override
     public void validate() throws ValidateException {
+
+        hasRights(UserRights.getRights(this.getClass()));
 
         validateName(username, MaxLength.USERNAME, "User");
         validateName(password, MaxLength.PASSWORD, "Password");
@@ -84,22 +87,23 @@ public class PutUserAdminCommand extends Command {
         try {
             db = initDB();
         } catch (SQLException | IOException e) {
-            Debug.log("UPDATE WAS UNSUCCESSFUL FOR: " + username + ". REASON: " +
+            Debug.log("Editing of user: " + username + " didn't work, reason: " +
                     e.getMessage());
-            return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Error when " +
-                    "initiating databaseAccessor. " + e.getMessage());
+            return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Editing of user: " + username +
+                    " didn't work because of temporary problems with database.");
         }
-
         try {
             String hash = BCrypt.hashpw(password, BCrypt.gensalt());
-            db.updateUser(username, hash, privileges, name, email);
-
+            db.updateUser(username, hash, UserType.valueOf(privileges), name, email);
         } catch (SQLException | IOException e) {
-            Debug.log("UPDATE WAS UNSUCCESSFUL FOR: " + username + ". REASON: " +
+            Debug.log("Editing of user: " + username + " didn't work, reason: " +
                     e.getMessage());
-            return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Error when " +
+            return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Error when " +
                     "editing user "+username+" in database, "+"" +
-                    "user probably don't exist. " + e.getMessage());
+                    "user probably don't exist. ");
+        }finally {
+            db.close();
+
         }
         return new MinimalResponse(HttpStatusCode.OK);
 

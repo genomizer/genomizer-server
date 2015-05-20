@@ -44,7 +44,7 @@ public class RawToProfileConverter extends Executor {
 	 */
 	public RawToProfileConverter() {
 		toBeRemoved = new Stack<String>();
-		checker = RawToProfileProcessChecker.rawToProfileCheckerFactory();
+		checker = new RawToProfileProcessChecker();
 		validator = new ParameterValidator();
 	}
 
@@ -339,7 +339,7 @@ public class RawToProfileConverter extends Executor {
 	 * @return
 	 * @throws ProcessException
 	 */
-	private boolean ValidateParameters(String[] parameters)
+	private boolean validateParameters(String[] parameters)
 			throws ProcessException {
 		boolean isOk = true;
 		if (checker.shouldRunSmoothing()
@@ -594,9 +594,6 @@ public class RawToProfileConverter extends Executor {
 			throws ProcessException {
 		String bowTieParams = checkBowTieProcessors(parameters[0]);
 
-		System.err.println(ServerSettings.bowtieLocation +
-						   " " + bowTieParams + " " + parameters[1] + " " +
-						   inFolder + "/" + fileOne + " " + dir + fileOneName + ".sam");
 		String[] bowTieParameters = parse(ServerSettings.bowtieLocation +
 				" " + bowTieParams + " " + parameters[1] + " " +
 				inFolder + "/" + fileOne + " " + dir + fileOneName + ".sam");
@@ -608,7 +605,6 @@ public class RawToProfileConverter extends Executor {
 					"Process interrupted while running bowtie on file: "
 							+ fileOneName);
 		} catch (IOException e) {
-			e.printStackTrace();
 			throw new ProcessException("Could not run bowTie on file: "
 					+ fileOneName + ", please check your input and permissions");
 		}
@@ -794,11 +790,8 @@ public class RawToProfileConverter extends Executor {
 					"Process interrupted while running picard on file: "
 					+ inputFile);
 		} catch (IOException e) {
-			e.printStackTrace();
-			throw new ProcessException("Could not run picard on file: " +
-									   inputFile +
-									   ", please check your input and " +
-									   "permissions");
+			throw new ProcessException("Could not run picard on file: "
+									   + inputFile + ", please check your input and permissions");
 		}
 
 	}

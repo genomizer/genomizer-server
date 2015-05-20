@@ -1,7 +1,5 @@
 package command.test;
 
-import static org.junit.Assert.*;
-
 import command.Command;
 import command.file.GetFileCommand;
 import database.constants.MaxLength;
@@ -56,13 +54,9 @@ public class GetFileCommandTest {
 	 */
 	@Test
 	public void testValidateProperlyFormatted() throws ValidateException {
-
 		Command c = new GetFileCommand();
 		c.setFields("/file/properly", "", null, UserType.ADMIN);
 		c.validate();
-
-		assertTrue(true);
-
 	}
 	/**
 	 * Test used to check that ValidateException is not thrown
@@ -72,7 +66,6 @@ public class GetFileCommandTest {
 	 */
 	@Test
 	public void testHavingRights() throws ValidateException {
-
 		Command c = new GetFileCommand();
 		c.setFields("/file/properly", "", null, UserType.USER);
 		c.validate();
@@ -90,7 +83,6 @@ public class GetFileCommandTest {
 		Command c = new GetFileCommand();
 		c.setFields("/file/properly", "", null, UserType.GUEST);
 		c.validate();
-		fail();
 	}
 
 }

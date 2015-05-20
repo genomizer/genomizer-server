@@ -11,7 +11,6 @@ import org.junit.Test;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import command.ValidateException;
-import response.MinimalResponse;
 
 import java.util.UUID;
 

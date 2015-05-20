@@ -1,15 +1,5 @@
 package database.subClasses;
 
-import java.io.File;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
-
 import database.FilePathGenerator;
 import database.FileValidator;
 import database.constants.ServerDependentValues;
@@ -17,6 +7,12 @@ import database.containers.ChainFile;
 import database.containers.ChainFiles;
 import database.containers.Genome;
 import database.containers.GenomeFile;
+
+import java.io.File;
+import java.io.IOException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class that contains all the methods for adding,changing, getting and removing
@@ -56,7 +52,7 @@ public class GenomeMethods {
         String query = "SELECT * FROM Genome_Release AS R "
                 + "JOIN Genome_Release_Files AS F "
                 + "ON (R.Version = F.Version) "
-                + "WHERE (R.Version ~~* ? AND F.Status = 'Done')";
+                + "WHERE (R.Version ~~* ?)";
 
 		PreparedStatement stmt = conn.prepareStatement(query);
 		stmt.setString(1, genomeVersion);
@@ -83,8 +79,8 @@ public class GenomeMethods {
      *             if adding query failed.
      * @throws IOException
      */
-    public String addGenomeRelease(String genomeVersion, String species,
-            String filename, String checkSumMD5) throws SQLException, IOException {
+    public String addGenomeReleaseWithStatus(String genomeVersion, String species,
+            String filename, String checkSumMD5, String status) throws SQLException, IOException {
 
     	if(!FileValidator.fileNameCheck(filename)){
     		throw new IOException("Invalid file name");
@@ -97,19 +93,17 @@ public class GenomeMethods {
 		StringBuilder filePathBuilder = new StringBuilder(folderPath);
 		filePathBuilder.append(filename);
 
-		PreparedStatement stmt;
-
 		if (getGenomeRelease(genomeVersion) == null) {
-			String query = "INSERT INTO Genome_Release "
-					+ "(Version, Species, FolderPath) " + "VALUES (?, ?, ?)";
+			try (PreparedStatement stmt =
+						 conn.prepareStatement("INSERT INTO Genome_Release "
+								 + "(Version, Species, FolderPath) " + "VALUES (?, ?, ?)")) {
 
-			stmt = conn.prepareStatement(query);
-			stmt.setString(1, genomeVersion);
-			stmt.setString(2, species);
-			stmt.setString(3, folderPath);
+				stmt.setString(1, genomeVersion);
+				stmt.setString(2, species);
+				stmt.setString(3, folderPath);
 
-			stmt.executeUpdate();
-			stmt.close();
+				stmt.executeUpdate();
+			}
 		}
 
         if (genomeReleaseFileExists(genomeVersion, filename)) {
@@ -117,18 +111,18 @@ public class GenomeMethods {
                     + " already exists for this genome release!");
         }
 
-        String query2 = "INSERT INTO Genome_Release_Files "
-                + "(Version, FileName, MD5) VALUES (?, ?, ?)";
-
-		stmt = conn.prepareStatement(query2);
-		stmt.setString(1, genomeVersion);
-		stmt.setString(2, filename);
-		stmt.setString(3, checkSumMD5);
-		stmt.executeUpdate();
-		stmt.close();
+		try (PreparedStatement stmt = conn.prepareStatement(
+				"INSERT INTO Genome_Release_Files "
+						+ "(Version, FileName, MD5, Status) VALUES (?, ?, ?, ?)")) {
+			stmt.setString(1, genomeVersion);
+			stmt.setString(2, filename);
+			stmt.setString(3, checkSumMD5);
+			stmt.setString(4, status);
+			stmt.executeUpdate();
+		}
 
 		filePathBuilder.insert(0, ServerDependentValues.UploadURL);
-		stmt.close();
+
 		return filePathBuilder.toString();
 	}
 
@@ -160,7 +154,6 @@ public class GenomeMethods {
 			fileDir += File.separator;
 
 		// Given a directory and a file name, get genome release version...
-		String genomeReleaseVersion = null;
 		try (PreparedStatement stmt = conn.prepareStatement(
 				"SELECT * FROM Genome_Release_Files "
 				+ "NATURAL JOIN Genome_Release "
@@ -219,8 +212,6 @@ public class GenomeMethods {
 		if (!fileDir.endsWith(File.separator))
 			fileDir += File.separator;
 
-		String chainFileFromVersion = null;
-		String chainFileToVersion = null;
 		try (PreparedStatement stmt = conn.prepareStatement(
 				"SELECT * FROM Chain_File_Files "
 				+ "NATURAL JOIN Chain_File "
@@ -359,15 +350,12 @@ public class GenomeMethods {
 			recursiveDelete(genomeReleaseFolder);
 		}
 
-        String query = "DELETE FROM Genome_Release " + "WHERE Version ~~* ?";
-
-		PreparedStatement stmt;
-
-		stmt = conn.prepareStatement(query);
-		stmt.setString(1, genomeVersion);
-		int res = stmt.executeUpdate();
-		stmt.close();
-		return res > 0;
+		try (PreparedStatement stmt = conn.prepareStatement(
+				"DELETE FROM Genome_Release "
+						+ "WHERE Version ~~* ?")) {
+			stmt.setString(1, genomeVersion);
+			return (stmt.executeUpdate() > 0);
+		}
 	}
 
     private boolean isGenomeVersionUsed(String genomeVersion)
@@ -465,8 +453,8 @@ public class GenomeMethods {
 	 * @throws SQLException
 	 * @throws IOException
 	 */
-	public String addChainFile(String fromVersion, String toVersion,
-			String fileName, String checkSumMD5) throws SQLException, IOException {
+	public String addChainFileWithStatus(String fromVersion, String toVersion,
+			String fileName, String checkSumMD5, String status) throws SQLException, IOException {
 
     	if(!FileValidator.fileNameCheck(fileName)){
     		throw new IOException("Invalid file name");
@@ -489,29 +477,29 @@ public class GenomeMethods {
 		String filePath = fpg.generateChainFolder(species, fromVersion,
 				toVersion);
 
-		String insertQuery = "INSERT INTO Chain_File "
-				+ "(FromVersion, ToVersion, FolderPath) VALUES (?, ?, ?)";
-
-        String insertQuery2 = "INSERT INTO Chain_File_Files "
-                + "(FromVersion, ToVersion, FileName, MD5) " + "VALUES (?, ?, ?, ?)";
-
         ChainFiles cf = getChainFiles(fromVersion, toVersion);
         if (cf == null) {
-            PreparedStatement insertStat = conn.prepareStatement(insertQuery);
-            insertStat.setString(1, fromVersion);
-            insertStat.setString(2, toVersion);
-            insertStat.setString(3, filePath);
-            insertStat.executeUpdate();
-            insertStat.close();
+            try (PreparedStatement stmt =
+						 conn.prepareStatement("INSERT INTO Chain_File "
+								 + "(FromVersion, ToVersion, FolderPath) VALUES (?, ?, ?)")) {
+				stmt.setString(1, fromVersion);
+				stmt.setString(2, toVersion);
+				stmt.setString(3, filePath);
+				stmt.executeUpdate();
+			}
         }
 
-		PreparedStatement stmt = conn.prepareStatement(insertQuery2);
-		stmt.setString(1, fromVersion);
-		stmt.setString(2, toVersion);
-		stmt.setString(3, fileName);
-		stmt.setString(4, checkSumMD5);
-		stmt.executeUpdate();
-		stmt.close();
+		try (PreparedStatement stmt =
+					 conn.prepareStatement("INSERT INTO Chain_File_Files "
+							 + "(FromVersion, ToVersion, FileName, MD5, Status) "
+							 + "VALUES (?, ?, ?, ?, ?)")) {
+			stmt.setString(1, fromVersion);
+			stmt.setString(2, toVersion);
+			stmt.setString(3, fileName);
+			stmt.setString(4, checkSumMD5);
+			stmt.setString(5, status);
+			stmt.executeUpdate();
+		}
 
 		String URL = ServerDependentValues.UploadURL;
 

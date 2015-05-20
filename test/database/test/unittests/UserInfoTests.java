@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
+import database.subClasses.UserMethods;
 import org.junit.*;
 
 
@@ -21,12 +22,11 @@ public class UserInfoTests {
 
     private static String testHash = "66e863ca7262669e5bd71d21d3eab0356136bd8569c6984430209deb50c55a23";
     private static String testSalt = "5goh146chpisv949ehjjdepparq3a9vga4p114ovedf66k5c78e39vnhvfpbvi43";
-    private static String testRole = "testRole1";
+    private static String testRole = "ADMIN";
     private static String testFullName = "Testis Test";
     private static String testEmail = "test@cs.umu.se";
 
     private static String otherHash = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-    private static String otherSalt = "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
 
     @BeforeClass
     public static void setupTestCase() throws Exception {
@@ -83,9 +83,9 @@ public class UserInfoTests {
     @Test
     public void shouldBeAbleToSetUserPermissions() throws Exception {
 
-        assertEquals(testRole, dbac.getRole(testUser));
+        assertEquals(testRole, dbac.getRole(testUser).name());
 
-        String newRole = testRole + "_new";
+        UserMethods.UserType newRole = UserMethods.UserType.USER;
         dbac.setRole(testUser, newRole);
         assertEquals(newRole, dbac.getRole(testUser));
 

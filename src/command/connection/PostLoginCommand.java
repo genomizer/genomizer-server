@@ -36,13 +36,33 @@ public class PostLoginCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-		validateName(username, MaxLength.USERNAME, "Username/Password");
-		validateName(password, MaxLength.PASSWORD, "Username/Password");
+		validateUserAndPassword(username, MaxLength.USERNAME, "Username/Password");
+		validateUserAndPassword(password, MaxLength.PASSWORD, "Username/Password");
 	}
-
+	public void validateUserAndPassword(String string, int maxLength, String field)
+			throws ValidateException {
+		if(string == null) {
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Specify " +
+					"an " + field.toLowerCase() + ".");
+		}
+		if(string.equals("null")){
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Invalid "
+					+ field.toLowerCase() + ".");
+		}
+		if(string.length() > maxLength || string.length() < 1) {
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST, field +
+					" has to be between 1 and " + maxLength +
+					" characters long.");
+		}
+		if(hasInvalidCharacters(string)) {
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Invalid" +
+					" characters in " + field.toLowerCase() +
+					". Valid characters are: " + validCharacters);
+		}
+	}
 	@Override
 	public Response execute() {
-		DatabaseAccessor db;
+		DatabaseAccessor db = null;
 		String dbHash;
 		try {
 			db = initDB();
@@ -51,11 +71,16 @@ public class PostLoginCommand extends Command {
 			Debug.log("LOGIN WAS UNSUCCESSFUL FOR: " + username + ". REASON: " +
 					e.getMessage());
 			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
-					"could not verify username and password");
+					"Login was unsuccessful for user: " + username +
+							". The reason is temporary problems with database.");
+		}finally {
+			if (db != null) {
+				db.close();
+			}
 		}
 
 		if(dbHash == null || dbHash.isEmpty()){
-			return new ErrorResponse(HttpStatusCode.UNAUTHORIZED, "Invalid username");
+			return new ErrorResponse(HttpStatusCode.UNAUTHORIZED, "Login failed, invalid username");
 		}
 
 		LoginAttempt login = Authenticate.login(username, password, dbHash);
@@ -64,7 +89,7 @@ public class PostLoginCommand extends Command {
 			Debug.log("LOGIN WAS UNSUCCESSFUL FOR: " + username + ". REASON: " +
 					login.getErrorMessage());
 			return new ErrorResponse(HttpStatusCode.UNAUTHORIZED,
-					login.getErrorMessage());
+					"Login failed, incorrect password");
 		}
 
 		Debug.log("LOGIN WAS SUCCESSFUL FOR: "+ username + ". GAVE UUID: " +

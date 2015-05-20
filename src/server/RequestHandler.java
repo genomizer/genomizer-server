@@ -121,12 +121,17 @@ public class RequestHandler implements HttpHandler {
         logUser(Authenticate.getUsernameByID(uuid));
 
         /*Retrieve the URI part of the request header.*/
-		String uri = exchange.getRequestURI().toString().split("\\?")[0];
-        String query = exchange.getRequestURI().getQuery();
-        uri = removeTimeStamp(uri);
+		String uri = removeTimeStamp(exchange.getRequestURI().toString());
+        String [] splitURI = uri.split("\\?");
+        String query;
+        uri = splitURI[0];
+        if (splitURI.length > 1) {
+            query = splitURI[1];
+        }
+        else {
+            query = "";
+        }
 
-		/*TODO: Get the current user's user right level*/
-		UserType userType = UserType.ADMIN;
 
 		/*Read the json body and create the command.*/
 		String json = readBody(exchange);
@@ -146,11 +151,17 @@ public class RequestHandler implements HttpHandler {
         if (command.getExpectedNumberOfURIFields() != calculateURILength(uri)) {
             Debug.log("Bad format on command: " + exchange.getRequestMethod()
                     + " " + exchange.getRequestURI());
+            Debug.log("URI fields mismatch. Expected: "
+                    + command.getExpectedNumberOfURIFields()
+                    + ", Received: " + calculateURILength(uri));
             respond(createBadRequestResponse(), exchange);
             return;
         }
 
-		command.setFields(uri, query, Authenticate.getUsernameByID(uuid), userType);
+		/*Get the user's role.*/
+        UserType userType = UserType.ADMIN;
+        
+        command.setFields(uri, query, Authenticate.getUsernameByID(uuid), userType);
 
 		/*Attempt to validate the command.*/
 		try {
@@ -213,22 +224,25 @@ public class RequestHandler implements HttpHandler {
 		if (authHeader != null)
 			uuid = authHeader.get(0);
 
-		// Get the value of the 'token' parameter.
-		String uuid2;
-		HashMap<String, String> reqParams = new HashMap<>();
-		Util.parseURI(exchange.getRequestURI(), reqParams);
-		if (reqParams.containsKey("token")) {
-			uuid2 = reqParams.get("token");
-			if (uuid2 != null) {
-				if (uuid == null || uuid.equals(uuid2)) {
-					uuid = uuid2;
-				} else {
-					Debug.log("Authorization header and token parameter " +
-                            "values differ!");
-					return null;
-				}
-			}
-		}
+        //If the uuid could not be retrieved from the header, do this.
+        if (uuid == null) {
+            // Get the value of the 'token' parameter.
+            String uuid2;
+            HashMap<String, String> reqParams = new HashMap<>();
+            Util.parseURI(exchange.getRequestURI(), reqParams);
+            if (reqParams.containsKey("token")) {
+                uuid2 = reqParams.get("token");
+                if (uuid2 != null) {
+                    if (uuid == null || uuid.equals(uuid2)) {
+                        uuid = uuid2;
+                    } else {
+                        Debug.log("Authorization header and token parameter " +
+                                "values differ!");
+                        return null;
+                    }
+                }
+            }
+        }
 
 		// Actual authentication.
 		Debug.log("Trying to authenticate token " + uuid + "...");
@@ -268,6 +282,7 @@ public class RequestHandler implements HttpHandler {
 	private ErrorResponse createBadRequestResponse() {
 		return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Could not create a " +
 				"command from request. Bad format on request.");
+
 	}
 
 	/*Used to log a request.*/

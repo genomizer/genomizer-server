@@ -128,7 +128,7 @@ public class PubMedToSQLConverterTests {
 
         String query = pm2sql.convertFileSearch(fileConstraintPmStr);
 
-        String expected = sqlFragmentForFileAttr + "Author ~~* ?"
+        String expected = sqlFragmentForFileAttr + "Author ~* ?"
                 + orderBySqlFragment;
 
         assertEquals(expected, query);
@@ -145,7 +145,7 @@ public class PubMedToSQLConverterTests {
 
         // (Ruaridh Watt[Author] OR (Human[Species] AND Arm[Tissue]))
 
-        String expected = "(" + sqlFragmentForFileAttr + "Author ~~* ?"
+        String expected = "(" + sqlFragmentForFileAttr + "Author ~* ?"
                 + "\nUNION\n" + "(" + sqlFragmentForExpAttrInFileSearch
                 + "\nINTERSECT\n" + sqlFragmentForExpAttrInFileSearch + "))"
                 + orderBySqlFragment;

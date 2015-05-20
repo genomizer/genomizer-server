@@ -16,3 +16,4 @@ out
 psqllogin
 .metadata/
 *.cfg
+*.swp

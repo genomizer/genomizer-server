@@ -13,6 +13,7 @@ import response.ErrorResponse;
 import response.MinimalResponse;
 import response.Response;
 import response.HttpStatusCode;
+import server.Debug;
 
 /**
  * Class used to represent a command that is used to
@@ -30,9 +31,9 @@ public class DeleteFileCommand extends Command {
 	}
 
 	@Override
-	public void setFields(String uri, String query, String uuid, UserType userType) {
+	public void setFields(String uri, String query, String username, UserType userType) {
 
-		super.setFields(uri, query, uuid, userType);
+		super.setFields(uri, query, username, userType);
 		fileID = uri.split("/")[2];
 	}
 
@@ -51,7 +52,7 @@ public class DeleteFileCommand extends Command {
 				if(db.deleteFile(Integer.parseInt(fileID))==1) {
 					return new MinimalResponse(HttpStatusCode.OK);
 				} else {
-					return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
+					return new ErrorResponse(HttpStatusCode.NOT_FOUND,
 							"The file " + fileID + " does not exist and can " +
 									"not be deleted");
 				}
@@ -59,17 +60,16 @@ public class DeleteFileCommand extends Command {
 				if (db.deleteFile(fileID) > 0) {
 					return new MinimalResponse(HttpStatusCode.OK);
 				} else {
-					return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
+					return new ErrorResponse(HttpStatusCode.NOT_FOUND,
 							"The file " + fileID + " does not exist and can " +
 									"not be deleted");
 				}
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+		} catch (SQLException | IOException e) {
+			Debug.log("Deletion of file " + fileID + " didn't work, reason: " +
 					e.getMessage());
-		} catch (IOException e) {
-			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Deletion of file " + fileID +
+					" didn't work because of temporary problems with database.");
 		} finally {
 			if (db != null) {
 				db.close();

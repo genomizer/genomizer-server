@@ -147,6 +147,7 @@ public class UploadHandler {
                 verifyOrUpdateMD5(ft, actualMD5, db);
                 int count = db.markReadyForDownload(ft);
                 checkMarkReadyForDownloadSucceeded(count, ft.filename);
+                db.updateFileSize(ft);
                 return;
             }
 

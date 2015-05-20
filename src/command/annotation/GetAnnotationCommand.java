@@ -10,8 +10,8 @@ import command.Command;
 import command.UserRights;
 import command.ValidateException;
 import database.DatabaseAccessor;
-import database.subClasses.UserMethods.UserType;
 import response.*;
+import server.Debug;
 
 /**
  * Class used to get information about annotations.
@@ -25,6 +25,7 @@ public class GetAnnotationCommand extends Command {
 		return 1;
 	}
 
+
 	@Override
 	public void validate() throws ValidateException {
 		/*Validation of the information will always succeed,
@@ -34,16 +35,16 @@ public class GetAnnotationCommand extends Command {
 
 	@Override
 	public Response execute() {
-		ArrayList<AnnotationInformation> annotations = new ArrayList<AnnotationInformation>();
+		ArrayList<AnnotationInformation> annotations = new ArrayList<>();
 		DatabaseAccessor db = null;
 		Map<String, Integer> a;
 		try {
 			db = initDB();
 			a = db.getAnnotations();
-			List<String> list = new ArrayList<String>(a.keySet());
+			List<String> list = new ArrayList<>(a.keySet());
 			for(String label: list) {
 				database.containers.Annotation annotationObject;
-				ArrayList<String> values = new ArrayList<String>();
+				ArrayList<String> values = new ArrayList<>();
 				annotationObject = db.getAnnotationObject(label);
 
 				if(annotationObject.dataType ==
@@ -62,8 +63,10 @@ public class GetAnnotationCommand extends Command {
 			return new GetAnnotationInformationResponse(HttpStatusCode.OK,
 					annotations);
 		} catch(SQLException | IOException e) {
-			return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
-					"Could not initialize db: " + e.getMessage());
+			Debug.log("Retrieval of annotation information failed. Reason: " +
+					e.getMessage());
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Could not retrieve annotation " +
+					"information because of temporary problems with database.");
 		} finally {
 			if (db != null) {
 				db.close();
