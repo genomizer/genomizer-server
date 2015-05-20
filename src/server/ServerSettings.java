@@ -175,9 +175,9 @@ public class ServerSettings {
 							+ "\tgenomizerPort = " + genomizerPort + "\n"
 							+ "\tfileLocation = " + fileLocation + "\n"
 							+ "\tnrOfProcessThreads = " + nrOfProcessThreads + "\n"
-							+ "\tbowtieLocation = " + bowtieLocation
-							+ "\tpicardLocation = " + picardLocation
-							+ "\tpyicosLocation = " + pyicosLocation
+							+ "\tbowtieLocation = " + bowtieLocation + "\n"
+							+ "\tpicardLocation = " + picardLocation + "\n"
+							+ "\tpyicosLocation = " + pyicosLocation + "\n"
 							+ "\n";
 
 			Debug.log("Imported the following settings:\n" + dataInfo);
