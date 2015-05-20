@@ -10,6 +10,7 @@ import command.CommandClasses;
 import command.ValidateException;
 import command.connection.PostLoginCommand;
 import command.process.PutProcessCommand;
+import command.process.PutProcessCommands;
 import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.HttpStatusCode;

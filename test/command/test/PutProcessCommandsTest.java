@@ -3,6 +3,7 @@ package command.test;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import command.ValidateException;
+import command.process.PutProcessCommand;
 import command.process.PutProcessCommands;
 import database.constants.MaxLength;
 import database.subClasses.UserMethods;
@@ -168,4 +169,15 @@ public class PutProcessCommandsTest {
         c.setFields(null, null, null, UserMethods.UserType.USER);
         c.validate();
     }
+
+
+    @Test
+    public void testCorrect() throws ValidateException {
+        String json = "{\"expId\":\"not_an_expid\",\"processCommands\":[{\"type\":\"bowtie\",\"files\":[{\"infile\":\"bigtest1.fastq\",\"outfile\":\"htrshtrshtrshtrshtr\",\"genomeVersion\":\"hg38\",\"params\":\"-a -m 1 --best -p 10 -v 2 -q -S\",\"keepSam\":\"on\"}]}]}";
+
+        PutProcessCommands c = gson.fromJson(json, PutProcessCommands.class);
+        c.setFields(null, null, null, UserMethods.UserType.USER);
+        c.validate();
+    }
+
 }

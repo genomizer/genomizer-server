@@ -2,6 +2,9 @@ package command.process;
 
 import com.google.gson.annotations.Expose;
 import command.ValidateException;
+
+import java.util.ArrayList;
+
 import static command.Command.initDB;
 
 /**
@@ -13,27 +16,12 @@ public abstract class Process {
     protected String type = null;
 
     @Expose
-    protected String infile = null;
+    protected ArrayList<BowTieProcess> files = new ArrayList<>();
 
-    @Expose
-    protected String outfile = null;
 
-    @Expose
-    protected String params = null;
-
-    @Expose
-    protected String keepSam = null;
-
-    @Expose
-    protected String genomeVersion = null;
-
-    public Process(String type, String infile, String outfile, String params, String keepSam, String genomeVersion) {
+    public Process(String type, ArrayList<BowTieProcess> files) {
         this.type = type;
-        this.infile= infile;
-        this.outfile = outfile;
-        this.params = params;
-        this.keepSam = keepSam;
-        this.genomeVersion = genomeVersion;
+        this.files = files;
     }
 
     public abstract void runProcess();

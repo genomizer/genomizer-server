@@ -6,9 +6,7 @@ import command.UserRights;
 import command.ValidateException;
 import database.constants.MaxLength;
 import database.subClasses.UserMethods;
-import response.ErrorResponse;
 import response.HttpStatusCode;
-import response.ProcessResponse;
 import response.Response;
 
 import java.util.ArrayList;
@@ -17,7 +15,7 @@ import java.util.ArrayList;
  * Command to handle a list of processes to execute sequentially on an experiment.
  * Created by dv13jen on 2015-05-19.
  */
-public class PutProcessCommands extends Command{
+public class PutProcessCommands extends PutProcessCommand{
 
     @Expose
     private String expId = null;
@@ -50,18 +48,23 @@ public class PutProcessCommands extends Command{
         hasRights(UserRights.getRights(this.getClass()));
         validateName(expId, MaxLength.EXPID, "Experiment ID");
 
+        System.out.println("processCommands = " + processCommands);
+
         if(processCommands == null || processCommands.size() < 1) {
             throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Specify " +
                     "processes for the experiment.");
         }
 
-        for(int i =0;i<processCommands.size();i++){
-            validateName(processCommands.get(i).getInfile(),
-                    MaxLength.FILE_EXPID, "Infile");
-            validateName(processCommands.get(i).getOutfile(),
-                    MaxLength.FILE_EXPID, "Outfile");
-            validateName(processCommands.get(i).getGenomeVersion(),
-                    MaxLength.GENOME_VERSION, "Genome version");
+        for (ProcessCommands processCommand : processCommands) {
+            for (BowTieProcess bowTieProcess: processCommand.getFiles()) {
+
+                validateName(bowTieProcess.getInfile(),
+                        MaxLength.FILE_EXPID, "Infile");
+                validateName(bowTieProcess.getOutfile(),
+                        MaxLength.FILE_EXPID, "Outfile");
+                validateName(bowTieProcess.getGenomeVersion(),
+                        MaxLength.GENOME_VERSION, "Genome version");
+            }
         }
     }
 
@@ -69,9 +72,10 @@ public class PutProcessCommands extends Command{
 
         for(ProcessCommands pC : processCommands){
             if(pC.getType().equals("bowtie")){
-                Process p = new RawToProfileProcess(pC.getType(), pC.getInfile(), pC.getOutfile(), pC.getParams(),
-                        pC.getKeepSam(), pC.getGenomeVersion());
-                processes.add(p);
+                System.out.println("PutProcessCommands.PutProcessCommands");
+//                Process p = new RawToProfileProcess(pC.getType(), pC.getInfile(), pC.getOutfile(), pC.getParams(),
+//                        pC.getKeepSam(), pC.getGenomeVersion());
+//                processes.add(p);
             }
         }
     }
@@ -81,7 +85,7 @@ public class PutProcessCommands extends Command{
 
         for (Process pC: processes) {
             try{
-                pC.runProcess();
+//                pC.runProcess();
             } catch(UnsupportedOperationException e){
                 //return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
             }
