@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Stack;
 
 import com.sun.corba.se.spi.activation.Server;
+import command.ValidateException;
 import server.ErrorLogger;
 import server.ServerSettings;
 
@@ -92,7 +93,7 @@ public class RawToProfileConverter extends Executor {
 						+ ".sam", rawFile_1_Name);
 
 				ErrorLogger.log("SYSTEM","Running SortSam");
-				sortSamFile(rawFile_1_Name);
+				//sortSamFile(rawFile_1_Name);
 
 				if (inFiles.length == 2) {
 					logString = logString + "\n"
@@ -110,15 +111,32 @@ public class RawToProfileConverter extends Executor {
 			}
 
 			if(checker.shouldRunSortSam()) {
-				runSortSam(dir+rawFile_1_Name+".sam",
-						rawFile_1_Name+"_sorted.sam");
+				try {
+					Picard.runSortSam(
+							dir + rawFile_1_Name + ".sam",
+							dir+rawFile_1_Name + "_sorted.sam");
+				} catch (ValidateException e) {
+					e.printStackTrace();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 
 			if(checker.shouldRunRemoveDuplicates()) {
-				runRemoveDuplicates(
-						rawFile_1_Name+"_sorted.sam",
-						rawFile_1_Name + "_sorted_without_duplicates.sam",
-						null);
+				try {
+					Picard.runRemoveDuplicates(
+                            dir+rawFile_1_Name+"_sorted.sam",
+                            rawFile_1_Name + "_sorted_without_duplicates.sam"
+                            );
+				} catch (ValidateException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 
 
