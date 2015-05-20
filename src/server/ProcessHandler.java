@@ -3,6 +3,7 @@ package server;
 
 import command.process.PutProcessCommand;
 import command.Process;
+import response.ProcessResponse;
 import response.Response;
 import response.HttpStatusCode;
 
@@ -97,6 +98,10 @@ public class ProcessHandler implements Callable<Response> {
 			ErrorLogger.log("PROCESS", timeMsg);
 
 		}
+
+		Debug.log("PID " + processCommand.getPID());
+		Debug.log("Process response: " +
+				((ProcessResponse) response).getMessage());
 
 		return response;
 
