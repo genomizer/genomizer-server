@@ -77,9 +77,9 @@ public class PutUserAdminCommand extends Command {
         } catch (SQLException | IOException e) {
             Debug.log("Editing of user: " + username + " was unsuccessful, " +
                     "reason: " + e.getMessage());
-            return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
-                    "Error when editing user " + username + " in database, " +
-                    "user may not exist. ");
+            return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Editing of " +
+                    "user " + username + " was unsuccessful, user may not " +
+                    "exist.");
         } finally {
             if (db != null) {
                 db.close();
