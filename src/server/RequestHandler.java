@@ -21,8 +21,9 @@ import transfer.UploadHandler;
 import transfer.Util;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.sql.SQLException;
+import java.io.OutputStream;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
@@ -123,17 +124,8 @@ public class RequestHandler implements HttpHandler {
         logUser(Authenticate.getUsernameByID(uuid));
 
         /*Retrieve the URI part of the request header.*/
-		String uri = removeTimeStamp(exchange.getRequestURI().toString());
-        String [] splitURI = uri.split("\\?");
-        String query;
-        uri = splitURI[0];
-        if (splitURI.length > 1) {
-            query = splitURI[1];
-        }
-        else {
-            query = "";
-        }
-
+        HashMap<String, String> query = new HashMap<>();
+        String uri = Util.parseURI(exchange.getRequestURI(), query);
 
 		/*Read the json body and create the command.*/
 		String json = readBody(exchange);
@@ -333,38 +325,5 @@ public class RequestHandler implements HttpHandler {
                 INTERNAL_SERVER_ERROR, "Could not create command from " +
                 "request");
         respond(errorResponse, exchange);
-    }
-
-    /* Finds the timestamp and removes it.*/
-    private String removeTimeStamp(String uri){
-
-        String newUri;
-
-        if (!uri.contains("_="))
-            return uri;
-
-        int pos = uri.lastIndexOf("_=");
-        int length = uri.length();
-        int end = pos +2;
-
-        if (length <= end ){
-            return uri;
-        }
-
-        if ('0' > uri.charAt(end) || '9' < uri.charAt(end)){
-            return uri;
-        }
-
-        if (pos > 0 && uri.charAt(pos-1) == '&') {
-            pos -= 1;
-        }
-
-        while(length > end && '0' <= uri.charAt(end) && '9' >= uri.charAt(end)){
-            end++;
-        }
-
-        newUri = uri.substring(0,pos) + uri.substring(end);
-
-        return newUri;
     }
 }

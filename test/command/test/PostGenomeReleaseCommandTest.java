@@ -74,7 +74,7 @@ public class PostGenomeReleaseCommandTest {
 
 		String json = "{\"version\":\"hx16\",\"species\":\"human\",\"files\":[\"\",\"nameOfFile2\",\"nameOfFile3\"]}";
 		PostGenomeReleaseCommand cmd = gson.fromJson(json, PostGenomeReleaseCommand.class);
-		cmd.setFields("hello", "", null, UserType.ADMIN);
+		cmd.setFields("hello", null, null, UserType.ADMIN);
 		cmd.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -92,7 +92,7 @@ public class PostGenomeReleaseCommandTest {
 
 		String json = "{\"version\":\"hx16\",\"species\":\"human\",\"files\":[]}";
 		PostGenomeReleaseCommand cmd = gson.fromJson(json, PostGenomeReleaseCommand.class);
-		cmd.setFields("hello", "", null, UserType.ADMIN);
+		cmd.setFields("hello", null, null, UserType.ADMIN);
 		cmd.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -110,7 +110,7 @@ public class PostGenomeReleaseCommandTest {
 
 		String json = "{\"version\":\"hx16\",\"species\":\"human\"}";
 		PostGenomeReleaseCommand cmd = gson.fromJson(json, PostGenomeReleaseCommand.class);
-		cmd.setFields("hello", "", null, UserType.ADMIN);
+		cmd.setFields("hello", null, null, UserType.ADMIN);
 		cmd.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -128,7 +128,7 @@ public class PostGenomeReleaseCommandTest {
 
 		String json = "{\"version\":\"hx16\",\"species\":\"\",\"files\":[\"nameOfFile1\"]}";
 		PostGenomeReleaseCommand cmd = gson.fromJson(json, PostGenomeReleaseCommand.class);
-		cmd.setFields("hello", "", null, UserType.ADMIN);
+		cmd.setFields("hello", null, null, UserType.ADMIN);
 		cmd.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -146,7 +146,7 @@ public class PostGenomeReleaseCommandTest {
 
 		String json = "{\"version\":\"hx16\",\"species\":\"not/valid\",\"files\":[\"nameOfFile1\"]}";
 		PostGenomeReleaseCommand cmd = gson.fromJson(json, PostGenomeReleaseCommand.class);
-		cmd.setFields("hello", "", null, UserType.ADMIN);
+		cmd.setFields("hello", null, null, UserType.ADMIN);
 		cmd.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -164,7 +164,7 @@ public class PostGenomeReleaseCommandTest {
 
 		String json = "{\"version\":\"hx/16\",\"species\":\"valid\",\"files\":[\"nameOfFile1\"]}";
 		PostGenomeReleaseCommand cmd = gson.fromJson(json, PostGenomeReleaseCommand.class);
-		cmd.setFields("hello", "", null, UserType.ADMIN);
+		cmd.setFields("hello", null, null, UserType.ADMIN);
 		cmd.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -182,7 +182,7 @@ public class PostGenomeReleaseCommandTest {
 
 		String json = "{\"version\":\"hx16\",\"species\":null,\"files\":[\"nameOfFile1\"]}";
 		PostGenomeReleaseCommand cmd = gson.fromJson(json, PostGenomeReleaseCommand.class);
-		cmd.setFields("hello", "", null, UserType.ADMIN);
+		cmd.setFields("hello", null, null, UserType.ADMIN);
 		cmd.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -200,7 +200,7 @@ public class PostGenomeReleaseCommandTest {
 
 		String json = "{\"version\":\"\",\"species\":\"human\",\"files\":[\"nameOfFile1\"]}";
 		PostGenomeReleaseCommand cmd = gson.fromJson(json, PostGenomeReleaseCommand.class);
-		cmd.setFields("hello", "", null, UserType.ADMIN);
+		cmd.setFields("hello", null, null, UserType.ADMIN);
 		cmd.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -217,7 +217,7 @@ public class PostGenomeReleaseCommandTest {
 
 		String json = "{\"version\":null,\"species\":\"human\",\"files\":[\"nameOfFile1\"]}";
 		PostGenomeReleaseCommand cmd = gson.fromJson(json, PostGenomeReleaseCommand.class);
-		cmd.setFields("hello", "", null, UserType.ADMIN);
+		cmd.setFields("hello", null, null, UserType.ADMIN);
 		cmd.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -240,7 +240,7 @@ public class PostGenomeReleaseCommandTest {
 		String json = "{\"version\":\"hx16\",\"species\":\"human\",\"files\":[\"" + big_filename +
 				"\"]}";
 		PostGenomeReleaseCommand cmd = gson.fromJson(json, PostGenomeReleaseCommand.class);
-		cmd.setFields("hello", "", null, UserType.ADMIN);
+		cmd.setFields("hello", null, null, UserType.ADMIN);
 		cmd.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -263,7 +263,7 @@ public class PostGenomeReleaseCommandTest {
 		String json = "{\"version\":\"hx16\",\"species\":\"" + big_species +
 				"\",\"files\":[\"nameOfFile1\",\"nameOfFile2\",\"nameOfFile3\"]}";
 		PostGenomeReleaseCommand cmd = gson.fromJson(json, PostGenomeReleaseCommand.class);
-		cmd.setFields("hello", "", null, UserType.ADMIN);
+		cmd.setFields("hello", null, null, UserType.ADMIN);
 		cmd.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -286,7 +286,7 @@ public class PostGenomeReleaseCommandTest {
 		String json = "{\"version\":\"" + big_gv +
 				"hx16\",\"species\":\"human\",\"files\":[\"nameOfFile1\"]}";
 		PostGenomeReleaseCommand cmd = gson.fromJson(json, PostGenomeReleaseCommand.class);
-		cmd.setFields("hello", "", null, UserType.ADMIN);
+		cmd.setFields("hello", null, null, UserType.ADMIN);
 		cmd.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -304,7 +304,7 @@ public class PostGenomeReleaseCommandTest {
 		String json = "{\"genomeVersion\":\"hx16\",\"specie\":\"human\"," +
 				"\"files\":[\"nameOfFile1\",\"nameOfFile2\",\"nameOfFile3\"]}";
 		PostGenomeReleaseCommand cmd = gson.fromJson(json, PostGenomeReleaseCommand.class);
-		cmd.setFields("hello", "", null, UserType.ADMIN);
+		cmd.setFields("hello", null, null, UserType.ADMIN);
 		cmd.validate();
 
 		assertTrue(true);
@@ -323,7 +323,7 @@ public class PostGenomeReleaseCommandTest {
 		String json = "{\"genomeVersion\":\"hx16\",\"specie\":\"human\"," +
 				"\"files\":[\"nameOfFile1\",\"nameOfFile2\",\"nameOfFile3\"]}";
 		PostGenomeReleaseCommand c = gson.fromJson(json, PostGenomeReleaseCommand.class);
-		c.setFields("hello", "", null, UserType.USER);
+		c.setFields("hello", null, null, UserType.USER);
 
 		c.validate();
 	}
@@ -340,7 +340,7 @@ public class PostGenomeReleaseCommandTest {
 		String json = "{\"genomeVersion\":\"hx16\",\"specie\":\"human\"," +
 				"\"files\":[\"nameOfFile1\",\"nameOfFile2\",\"nameOfFile3\"]}";
 		PostGenomeReleaseCommand c = gson.fromJson(json, PostGenomeReleaseCommand.class);
-		c.setFields("hello", "", null, UserType.GUEST);
+		c.setFields("hello", null, null, UserType.GUEST);
 
 		c.validate();
 		fail();
