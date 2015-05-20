@@ -2,6 +2,7 @@ package command;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.regex.Pattern;
 
 import response.HttpStatusCode;
@@ -57,7 +58,8 @@ public abstract class Command {
 	 * @param username the UUID for the user who made the request.
 	 * @param userType the user type for the command caller.
 	 */
-	public void setFields(String uri, String query, String username, UserType userType){
+	public void setFields(String uri, HashMap<String, String> query,
+						  String username, UserType userType){
 		this.uuid = username;
 		this.userType = userType;
 	}

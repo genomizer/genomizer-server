@@ -57,7 +57,7 @@ public class PutAnnotationFieldCommandTest {
 	public void testValidateOldNameNotNull() throws ValidateException {
 
 		PutAnnotationFieldCommand c = gson.fromJson(jsonBuilder(null,"Two"), PutAnnotationFieldCommand.class);
-		c.setFields("hello", "", null, UserType.ADMIN);
+		c.setFields("hello", null, null, UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -74,7 +74,7 @@ public class PutAnnotationFieldCommandTest {
 	public void testValidateOldNameEmptyString() throws ValidateException {
 
 		PutAnnotationFieldCommand c = gson.fromJson(jsonBuilder("","Two"), PutAnnotationFieldCommand.class);
-		c.setFields("hello", "", null, UserType.ADMIN);
+		c.setFields("hello", null, null, UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -91,7 +91,7 @@ public class PutAnnotationFieldCommandTest {
 	public void testValidateOldNameInvalidCharacters() throws ValidateException {
 
 		PutAnnotationFieldCommand c = gson.fromJson(jsonBuilder("O/*ne","Two"), PutAnnotationFieldCommand.class);
-		c.setFields("hello", "", null, UserType.ADMIN);
+		c.setFields("hello", null, null, UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -112,7 +112,7 @@ public class PutAnnotationFieldCommandTest {
 			big = big + "a";
 		}
 		PutAnnotationFieldCommand c = gson.fromJson(jsonBuilder(big,"Two"), PutAnnotationFieldCommand.class);
-		c.setFields("hello", "", null, UserType.ADMIN);
+		c.setFields("hello", null, null, UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -129,7 +129,7 @@ public class PutAnnotationFieldCommandTest {
 	public void testValidateNewNameNotNull() throws ValidateException {
 
 		PutAnnotationFieldCommand c = gson.fromJson(jsonBuilder("One",null), PutAnnotationFieldCommand.class);
-		c.setFields("hello", "", null, UserType.ADMIN);
+		c.setFields("hello", null, null, UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -146,7 +146,7 @@ public class PutAnnotationFieldCommandTest {
 	public void testValidateNewNameEmptyString() throws ValidateException {
 
 		PutAnnotationFieldCommand c = gson.fromJson(jsonBuilder("One",""), PutAnnotationFieldCommand.class);
-		c.setFields("hello", "", null, UserType.ADMIN);
+		c.setFields("hello", null, null, UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -163,7 +163,7 @@ public class PutAnnotationFieldCommandTest {
 	public void testValidateNewNameInvalidCharacters() throws ValidateException {
 
 		PutAnnotationFieldCommand c = gson.fromJson(jsonBuilder("One","Tw/*o"), PutAnnotationFieldCommand.class);
-		c.setFields("hello", "", null, UserType.ADMIN);
+		c.setFields("hello", null, null, UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -184,7 +184,7 @@ public class PutAnnotationFieldCommandTest {
 			big = big + "a";
 		}
 		PutAnnotationFieldCommand c = gson.fromJson(jsonBuilder("One",big), PutAnnotationFieldCommand.class);
-		c.setFields("hello", "", null, UserType.ADMIN);
+		c.setFields("hello", null, null, UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -201,7 +201,7 @@ public class PutAnnotationFieldCommandTest {
 	public void testValidateProperlyFormatted() throws ValidateException {
 
 		PutAnnotationFieldCommand c = gson.fromJson(jsonBuilder("Species","Mouse"), PutAnnotationFieldCommand.class);
-		c.setFields("hello", "", null, UserType.ADMIN);
+		c.setFields("hello", null, null, UserType.ADMIN);
 		c.validate();
 
 		assertTrue(true);
@@ -234,7 +234,7 @@ public class PutAnnotationFieldCommandTest {
 
 		String json = jsonBuilder("Species","Mouse");
 		PutAnnotationFieldCommand c = gson.fromJson(json, PutAnnotationFieldCommand.class);
-		c.setFields("hello", "", null, UserType.USER);
+		c.setFields("hello", null, null, UserType.USER);
 
 		c.validate();
 	}
@@ -250,7 +250,7 @@ public class PutAnnotationFieldCommandTest {
 
 		String json = jsonBuilder("Species","Mouse");
 		PutAnnotationFieldCommand c = gson.fromJson(json, PutAnnotationFieldCommand.class);
-		c.setFields("hello", "", null, UserType.GUEST);
+		c.setFields("hello", null, null, UserType.GUEST);
 
 		c.validate();
 		fail();

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.HashMap;
 import java.util.List;
 
 import java.net.URLDecoder;
@@ -43,18 +44,16 @@ public class SearchCommand extends Command {
 	 * @param userType the userType
 	 */
 	@Override
-	public void setFields(String uri, String query, String username, UserType userType) {
+	public void setFields(String uri, HashMap<String, String> query,
+						  String username, UserType userType) {
 
 		super.setFields(uri, query, username, userType);
-		for (String keyVal : query.split("&")) {
-			String[] splitKeyVal = keyVal.split("=");
-			if (splitKeyVal[0].equals("annotations") && splitKeyVal.length == 2) {
-				annotations = splitKeyVal[1];
-			}
+		if(query.containsKey("annotations")) {
+			annotations = query.get("annotations");
 		}
-
-		if (annotations == null)
+		else {
 			annotations = ("[expID]");
+		}
 	}
 
 	@Override

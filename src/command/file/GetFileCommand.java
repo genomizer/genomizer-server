@@ -11,6 +11,7 @@ import response.*;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.HashMap;
 
 /**
  * retrieves a file linked to an experiment.
@@ -28,7 +29,8 @@ public class GetFileCommand extends Command {
 	}
 
 	@Override
-	public void setFields(String uri, String query, String username, UserType userType) {
+	public void setFields(String uri, HashMap<String, String> query,
+						  String username, UserType userType) {
 
 		super.setFields(uri, query, username, userType);
 		fileID = uri.split("/")[2];

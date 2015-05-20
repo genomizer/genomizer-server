@@ -16,6 +16,7 @@ import server.Debug;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.HashMap;
 
 /**
  * Admin command to change user information
@@ -51,7 +52,8 @@ public class PutUserAdminCommand extends Command {
      * @param userType
      */
     @Override
-    public void setFields(String uri, String query, String username, UserType userType) {
+    public void setFields(String uri, HashMap<String, String> query,
+                          String username, UserType userType) {
         this.userType = userType;
 		/*No fields from the URI is needed, neither is the UUID. Dummy
 		implementation*/

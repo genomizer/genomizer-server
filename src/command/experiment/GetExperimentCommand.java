@@ -2,6 +2,7 @@ package command.experiment;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.HashMap;
 
 import command.Command;
 import command.UserRights;
@@ -40,7 +41,8 @@ public class GetExperimentCommand extends Command {
 	 * @param userType the user type for the command caller.
 	 */
 	@Override
-	public void setFields(String uri, String query, String username, UserType userType) {
+	public void setFields(String uri, HashMap<String, String> query,
+						  String username, UserType userType) {
 
 		super.setFields(uri, query, username, userType);
 		expID = uri.split("/")[2];
