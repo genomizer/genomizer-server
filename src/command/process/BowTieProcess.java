@@ -45,19 +45,6 @@ public class BowTieProcess {
         return genomeVersion;
     }
 
-    public String getInfile() {
+    public String getInfile() {return infile;}
 
-        return infile;
-    }
-
-    @Override
-    public String toString() {
-        return "BowTieProcess{" +
-                "infile='" + infile + '\'' +
-                ", outfile='" + outfile + '\'' +
-                ", params='" + params + '\'' +
-                ", keepSam='" + keepSam + '\'' +
-                ", genomeVersion='" + genomeVersion + '\'' +
-                '}';
-    }
 }

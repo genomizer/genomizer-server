@@ -163,6 +163,15 @@ public class RequestHandler implements HttpHandler {
 			return;
 		}
 
+        // Dummy response for the new processing. Simply give OK response.
+        // TODO Handle the new processing command
+
+        if (commandClass.equals(PutProcessCommands.class)) {
+            //Doorman.getProcessPool().addProcess((PutProcessCommand) command);
+            respond(new ProcessResponse(HttpStatusCode.OK), exchange);
+            return;
+        }
+
         if (commandClass.equals(PutProcessCommand.class)) {
             Doorman.getProcessPool().addProcess((PutProcessCommand) command);
             respond(new ProcessResponse(HttpStatusCode.OK), exchange);

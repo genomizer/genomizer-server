@@ -13,19 +13,7 @@ public class ProcessCommands {
 
     @Expose
     protected ArrayList<BowTieProcess> files = new ArrayList<>();
-//    protected String infile = null;
-//
-//    @Expose
-//    protected String outfile = null;
-//
-//    @Expose
-//    protected String params = null;
-//
-//    @Expose
-//    protected String keepSam = null;
-//
-//    @Expose
-//    protected String genomeVersion = null;
+
 
     public String getType() {
         return type;
@@ -33,31 +21,5 @@ public class ProcessCommands {
 
     public ArrayList<BowTieProcess> getFiles() {
         return files;
-    }
-
-    //    public String getInfile() {
-//        return infile;
-//    }
-//
-//    public String getOutfile() {
-//        return outfile;
-//    }
-//
-//    public String getParams() {return params;}
-//
-//    public String getKeepSam() {
-//        return keepSam;
-//    }
-//
-//    public String getGenomeVersion() {
-//        return genomeVersion;
-//    }
-
-    @Override
-    public String toString() {
-        return "ProcessCommands{" +
-                "type='" + type + '\'' +
-                ", files=" + files +
-                '}';
     }
 }

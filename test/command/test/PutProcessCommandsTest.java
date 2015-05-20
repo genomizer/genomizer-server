@@ -27,32 +27,22 @@ public class PutProcessCommandsTest {
      */
     @Test
     public void testOneProcessCommand() throws ValidateException {
-        String json = "{\"expId\":\"exp43\",\"processCommands\":[{\"type\":\"bowtie\",\"infile\":\"something\"," +
-                "\"outfile\":\"another\",\"params\":\"stuffIsHere\",\"keepSam\":\"on\",\"genomeVersion\":\"hy17\"}]}";
+        String json = "{\"expId\":\"not_an_expid\",\"processCommands\":[{\"type\":\"bowtie\",\"files\":[{\"infile\":" +
+                "\"bigtest1.fastq\",\"outfile\":\"dbfd\",\"genomeVersion\":\"hg38\",\"params\":\"" +
+                "-a -m 1 --best -p 10 -v 2 -q -S\",\"keepSam\":\"on\"}]}]}";
 
         PutProcessCommands c = gson.fromJson(json, PutProcessCommands.class);
     }
-    /**
-     * Test that command can be created with two processes
-     * @throws ValidateException
-     */
-    @Test
-    public void testTwoProcessCommand() throws ValidateException {
-        String json = "{\"expId\":\"exp43\",\"processCommands\":[{\"type\":\"bowtie\",\"infile\":\"something\"," +
-                "\"outfile\":\"another\",\"params\":\"stuffIsHere\",\"keepSam\":\"true\",\"genomeVersion\":\"hy17\"}" +
-                ",{\"type\":\"bowtie\",\"infile\":\"asd\",\"outfile\":\"dsds\",\"params\":\"qqqs\",\"keepSam\":\"off\""+
-                ",\"genomeVersion\":\"hy18\"}]}";
 
-        PutProcessCommands c = gson.fromJson(json, PutProcessCommands.class);
-    }
     /**
      * Test can get a ValidateException with incorrect expId name
      * @throws ValidateException
      */
     @Test (expected = ValidateException.class)
     public void testValidateExpIDIncorrectName() throws ValidateException {
-        String json = "{\"expId\":\"exp$\",\"processCommands\":[{\"type\":\"bowtie\",\"infile\":\"something\"," +
-                "\"outfile\":\"another\",\"params\":\"stuffIsHere\",\"keepSam\":\"on\",\"genomeVersion\":\"hy17\"}]}";
+        String json = "{\"expId\":\"not_an_£\",\"processCommands\":[{\"type\":\"bowtie\",\"files\":[{\"infile\":" +
+                "\"bigtest1.fastq\",\"outfile\":\"dbfd\",\"genomeVersion\":\"hg38\",\"params\":\"" +
+                "-a -m 1 --best -p 10 -v 2 -q -S\",\"keepSam\":\"on\"}]}]}";
 
         PutProcessCommands c = gson.fromJson(json, PutProcessCommands.class);
         c.setFields(null, null, null, UserMethods.UserType.USER);
@@ -69,8 +59,9 @@ public class PutProcessCommandsTest {
         for(int i = 0 ; i <MaxLength.EXPID+1; i++){
             s = s+"A";
         }
-        String json = "{\"expId\":\""+s+"\",\"processCommands\":[{\"type\":\"bowtie\",\"infile\":\"something\"," +
-                "\"outfile\":\"another\",\"params\":\"stuffIsHere\",\"keepSam\":\"on\",\"genomeVersion\":\"hy17\"}]}";
+        String json = "{\"expId\":\""+s+"\",\"processCommands\":[{\"type\":\"bowtie\",\"files\":[{\"infile\":" +
+                "\"bigtest1.fastq\",\"outfile\":\"dbfd\",\"genomeVersion\":\"hg38\",\"params\":\"" +
+                "-a -m 1 --best -p 10 -v 2 -q -S\",\"keepSam\":\"on\"}]}]}";
 
         PutProcessCommands c = gson.fromJson(json, PutProcessCommands.class);
         c.setFields(null, null, null, UserMethods.UserType.USER);
@@ -82,8 +73,9 @@ public class PutProcessCommandsTest {
      */
     @Test (expected = ValidateException.class)
     public void testValidateInfileIncorrectName() throws ValidateException {
-        String json = "{\"expId\":\"exp2\",\"processCommands\":[{\"type\":\"bowtie\",\"infile\":\"something$\"," +
-                "\"outfile\":\"another\",\"params\":\"stuffIsHere\",\"keepSam\":\"on\",\"genomeVersion\":\"hy17\"}]}";
+        String json = "{\"expId\":\"not_an_expid\",\"processCommands\":[{\"type\":\"bowtie\",\"files\":[{\"infile\":" +
+                "\"bigtest€1.fastq\",\"outfile\":\"dbfd\",\"genomeVersion\":\"hg38\",\"params\":\"" +
+                "-a -m 1 --best -p 10 -v 2 -q -S\",\"keepSam\":\"on\"}]}]}";
 
         PutProcessCommands c = gson.fromJson(json, PutProcessCommands.class);
         c.setFields(null, null, null, UserMethods.UserType.USER);
@@ -100,8 +92,10 @@ public class PutProcessCommandsTest {
         for(int i = 0 ; i <MaxLength.FILE_EXPID+1; i++){
             s = s+"A";
         }
-        String json = "{\"expId\":\"sasd\",\"processCommands\":[{\"type\":\"bowtie\",\"infile\":\""+s+"\"," +
-                "\"outfile\":\"another\",\"params\":\"stuffIsHere\",\"keepSam\":\"on\",\"genomeVersion\":\"hy17\"}]}";
+        String json = "{\"expId\":\"not_an_expid\",\"processCommands\":[{\"type\":\"bowtie\",\"files\":[{\"infile\":" +
+                "\""+s+"\",\"outfile\":\"dbfd\",\"genomeVersion\":\"hg38\",\"params\":\"" +
+                "-a -m 1 --best -p 10 -v 2 -q -S\",\"keepSam\":\"on\"}]}]}";
+
 
         PutProcessCommands c = gson.fromJson(json, PutProcessCommands.class);
         c.setFields(null, null, null, UserMethods.UserType.USER);
@@ -113,8 +107,9 @@ public class PutProcessCommandsTest {
      */
     @Test (expected = ValidateException.class)
     public void testValidateOutfileIncorrectName() throws ValidateException {
-        String json = "{\"expId\":\"exp2\",\"processCommands\":[{\"type\":\"bowtie\",\"infile\":\"something\"," +
-                "\"outfile\":\"another@\",\"params\":\"stuffIsHere\",\"keepSam\":\"on\",\"genomeVersion\":\"hy17\"}]}";
+        String json = "{\"expId\":\"not_an_expid\",\"processCommands\":[{\"type\":\"bowtie\",\"files\":[{\"infile\":" +
+                "\"bigtest1.fastq\",\"outfile\":\"dbf£d\",\"genomeVersion\":\"hg38\",\"params\":\"" +
+                "-a -m 1 --best -p 10 -v 2 -q -S\",\"keepSam\":\"on\"}]}]}";
 
         PutProcessCommands c = gson.fromJson(json, PutProcessCommands.class);
         c.setFields(null, null, null, UserMethods.UserType.USER);
@@ -131,28 +126,30 @@ public class PutProcessCommandsTest {
         for(int i = 0 ; i <MaxLength.FILE_EXPID+1; i++){
             s = s+"A";
         }
-        String json = "{\"expId\":\"sasd\",\"processCommands\":[{\"type\":\"bowtie\",\"infile\":\"asds\"," +
-                "\"outfile\":\""+s+"\",\"params\":\"stuffIsHere\",\"keepSam\":\"on\",\"genomeVersion\":\"hy17\"}]}";
+        String json = "{\"expId\":\"not_an_expid\",\"processCommands\":[{\"type\":\"bowtie\",\"files\":[{\"infile\":" +
+                "\"bigtest1.fastq\",\"outfile\":\""+s+"\",\"genomeVersion\":\"hg38\",\"params\":\"" +
+                "-a -m 1 --best -p 10 -v 2 -q -S\",\"keepSam\":\"on\"}]}]}";
 
         PutProcessCommands c = gson.fromJson(json, PutProcessCommands.class);
         c.setFields(null, null, null, UserMethods.UserType.USER);
         c.validate();
     }
     /**
-     * Test can get a ValidateException with incorrect outfile name
+     * Test can get a ValidateException with incorrect genomeVersion name
      * @throws ValidateException
      */
     @Test (expected = ValidateException.class)
     public void testValidateGenomeVersionIncorrectName() throws ValidateException {
-        String json = "{\"expId\":\"exp2\",\"processCommands\":[{\"type\":\"bowtie\",\"infile\":\"something\"," +
-                "\"outfile\":\"another\",\"params\":\"stuffIsHere\",\"keepSam\":\"on\",\"genomeVersion\":\"hy1£\"}]}";
+        String json = "{\"expId\":\"not_an_expid\",\"processCommands\":[{\"type\":\"bowtie\",\"files\":[{\"infile\":" +
+                "\"bigtest1.fastq\",\"outfile\":\"dbfd\",\"genomeVersion\":\"hg$38\",\"params\":\"" +
+                "-a -m 1 --best -p 10 -v 2 -q -S\",\"keepSam\":\"on\"}]}]}";
 
         PutProcessCommands c = gson.fromJson(json, PutProcessCommands.class);
         c.setFields(null, null, null, UserMethods.UserType.USER);
         c.validate();
     }
     /**
-     * Test can get a ValidateException with incorrect outfile length
+     * Test can get a ValidateException with incorrect genomeVersion length
      * @throws ValidateException
      */
     @Test (expected = ValidateException.class)
@@ -162,8 +159,9 @@ public class PutProcessCommandsTest {
         for(int i = 0 ; i <MaxLength.FILE_EXPID+1; i++){
             s = s+"A";
         }
-        String json = "{\"expId\":\"sasd\",\"processCommands\":[{\"type\":\"bowtie\",\"infile\":\"asds\"," +
-                "\"outfile\":\"asdw\",\"params\":\"stuffIsHere\",\"keepSam\":\"on\",\"genomeVersion\":\""+s+"\"}]}";
+        String json = "{\"expId\":\"not_an_expid\",\"processCommands\":[{\"type\":\"bowtie\",\"files\":[{\"infile\":" +
+                "\"bigtest1.fastq\",\"outfile\":\"awsd\",\"genomeVersion\":\""+s+"\",\"params\":\"" +
+                "-a -m 1 --best -p 10 -v 2 -q -S\",\"keepSam\":\"on\"}]}]}";
 
         PutProcessCommands c = gson.fromJson(json, PutProcessCommands.class);
         c.setFields(null, null, null, UserMethods.UserType.USER);
@@ -173,8 +171,9 @@ public class PutProcessCommandsTest {
 
     @Test
     public void testCorrect() throws ValidateException {
-        String json = "{\"expId\":\"not_an_expid\",\"processCommands\":[{\"type\":\"bowtie\",\"files\":[{\"infile\":\"bigtest1.fastq\",\"outfile\":\"htrshtrshtrshtrshtr\",\"genomeVersion\":\"hg38\",\"params\":\"-a -m 1 --best -p 10 -v 2 -q -S\",\"keepSam\":\"on\"}]}]}";
-
+        String json = "{\"expId\":\"not_an_expid\",\"processCommands\":[{\"type\":\"bowtie\",\"files\":[{\"infile\":" +
+                "\"bigtest1.fastq\",\"outfile\":\"dbfd\",\"genomeVersion\":\"hg38\",\"params\":\"" +
+                "-a -m 1 --best -p 10 -v 2 -q -S\",\"keepSam\":\"on\"}]}]}";
         PutProcessCommands c = gson.fromJson(json, PutProcessCommands.class);
         c.setFields(null, null, null, UserMethods.UserType.USER);
         c.validate();
