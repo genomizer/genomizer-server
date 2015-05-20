@@ -79,12 +79,15 @@ public class PutProcessCommands extends Command{
             db.close();
 
         }
-
     }
     public String[] getFilePaths() {
         return new String[] {filepaths.getKey(), filepaths.getValue()};
     }
 
+    /**
+     * Handle the validation of the user input. Only handles bowtie processes atm
+     * @throws ValidateException
+     */
     @Override
     public void validate() throws ValidateException {
         hasRights(UserRights.getRights(this.getClass()));
@@ -96,13 +99,13 @@ public class PutProcessCommands extends Command{
         }
 
         for (ProcessCommands processCommand : processCommands) {
-            for (BowTieProcess bowTieProcess: processCommand.getFiles()) {
+            for (RawToProfileFiles rawToProfileFiles : processCommand.getFiles()) {
 
-                validateName(bowTieProcess.getInfile(),
+                validateName(rawToProfileFiles.getInfile(),
                         MaxLength.FILE_EXPID, "Infile");
-                validateName(bowTieProcess.getOutfile(),
+                validateName(rawToProfileFiles.getOutfile(),
                         MaxLength.FILE_EXPID, "Outfile");
-                validateName(bowTieProcess.getGenomeVersion(),
+                validateName(rawToProfileFiles.getGenomeVersion(),
                         MaxLength.GENOME_VERSION, "Genome version");
             }
         }

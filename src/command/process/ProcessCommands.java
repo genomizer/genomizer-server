@@ -12,14 +12,14 @@ public class ProcessCommands {
     protected String type = null;
 
     @Expose
-    protected ArrayList<BowTieProcess> files = new ArrayList<>();
+    protected ArrayList<RawToProfileFiles> files = new ArrayList<>();
 
 
     public String getType() {
         return type;
     }
 
-    public ArrayList<BowTieProcess> getFiles() {
+    public ArrayList<RawToProfileFiles> getFiles() {
         return files;
     }
 }

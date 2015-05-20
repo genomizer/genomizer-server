@@ -5,7 +5,7 @@ import com.google.gson.annotations.Expose;
 /**
  * Created by dv13jen on 2015-05-20.
  */
-public class BowTieProcess {
+public class RawToProfileFiles {
     @Expose
     protected String infile = null;
 
@@ -21,7 +21,7 @@ public class BowTieProcess {
     @Expose
     protected String genomeVersion = null;
 
-    public BowTieProcess(String infile, String outfile, String params, String keepSam, String genomeVersion) {
+    public RawToProfileFiles(String infile, String outfile, String params, String keepSam, String genomeVersion) {
         this.infile = infile;
         this.outfile = outfile;
         this.params = params;
