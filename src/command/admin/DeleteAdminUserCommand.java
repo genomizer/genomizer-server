@@ -21,7 +21,7 @@ import server.Debug;
  * @author Business Logic 2015.
  * @version 1.1
  */
-public class DeleteUserCommand extends Command {
+public class DeleteAdminUserCommand extends Command {
 	private String username;
 
 	@Override

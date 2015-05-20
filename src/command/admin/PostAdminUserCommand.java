@@ -24,7 +24,7 @@ import server.Debug;
  * @author Business Logic 2015.
  * @version 1.1
  */
-public class PostUserCommand extends Command {
+public class PostAdminUserCommand extends Command {
 	@Expose
 	private String username = null;
 	@Expose
