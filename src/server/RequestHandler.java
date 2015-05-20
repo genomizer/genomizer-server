@@ -56,7 +56,7 @@ public class RequestHandler implements HttpHandler {
                 + exchange.getHttpContext().getPath();
         Class<? extends Command> commandClass = CommandClasses.get(key);
 
-        String uuid = Authenticate.AuthenticateAuthorization(exchange);
+        String uuid = Authenticate.performAuthentication(exchange);
 
         if(uuid == null && !commandClass.equals(PostLoginCommand.class)){
             Debug.log("User could not be authenticated");
@@ -67,8 +67,9 @@ public class RequestHandler implements HttpHandler {
                 !key.equals("GET /upload") && !key.equals("POST /upload")){
             Debug.log("Unrecognized command: " + exchange.getRequestMethod()
                     + " " + exchange.getRequestURI());
-            respond(new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Could not create a "
-                    + "command from request. Bad format on request."), exchange);
+            respond(new ErrorResponse(HttpStatusCode.BAD_REQUEST,
+                    "Could not create a command from request. Bad format on " +
+                            "request."), exchange);
             return;
         }
 
