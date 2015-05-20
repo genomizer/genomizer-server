@@ -24,12 +24,12 @@ public class SRADownloadCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
+
 		if (!(runID.startsWith("SRR") || runID.startsWith("DRR") || runID.startsWith("ERR")))
 			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Invalid run file prefix.");
 
 		if (!runID.substring(3).matches("^[0-9]{1,}$"))
 			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Invalid run file.");
-
 
 	}
 
@@ -38,6 +38,7 @@ public class SRADownloadCommand extends Command {
 
 		SRADownloader sh = new SRADownloader();
 		String paths[] = null;
+
 		try {
 			paths = sh.downloadFromSRA(runID);
 
