@@ -16,6 +16,8 @@ import response.MinimalResponse;
 import response.Response;
 import server.Debug;
 
+import javax.xml.crypto.Data;
+
 /**
  * Command used to handle removal of an existing annotation field.
  *
@@ -45,37 +47,30 @@ public class DeleteAnnotationFieldCommand extends Command {
 
 	@Override
 	public Response execute() {
-		DatabaseAccessor db;
-		try {
-			db = initDB();
-		} catch (SQLException | IOException e) {
-			Debug.log("Deletion of annotation field: " + label +
-					" was unsuccessful, reason: " + e.getMessage());
-			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
-					"Deletion of annotation field: " + label + " was " +
-							"unsuccessful due to temporary problems with the " +
-							"database.");
-		}
+		Response response;
 
 		try {
-			ArrayList<String> annotations = db.getAllAnnotationLabels();
-			if (annotations.contains(label)) {
+			DatabaseAccessor db = initDB();
+			if (db.getAllAnnotationLabels().contains(label)) {
 				db.deleteAnnotation(label);
-				return new MinimalResponse(HttpStatusCode.OK);
+				response = new MinimalResponse(HttpStatusCode.OK);
 			} else {
-				return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
-						"The annotation " + label + " does not exist and " +
-								"can not be deleted");
+				response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
+						"The deletion of annotation label " + label +
+								" was unsuccessful, annotation label does " +
+								"not exist");
 			}
+
+			db.close();
 		} catch (SQLException | IOException e) {
-			Debug.log("Removal of annotation field: "+ label +" didn't work, reason: " +
-					e.getMessage());
-			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Removal of annotation field:"+ label +
-					" didn't work because of temporary problems with database.");
-		} finally {
-			if (db != null) {
-				db.close();
-			}
+			Debug.log("Deletion of annotation label: " + label +
+					" was unsuccessful, reason: " + e.getMessage());
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+					"Deletion of annotation label: " + label +
+							" was unsuccessful due to temporary problems with" +
+							" the database.");
 		}
+
+		return response;
 	}
 }
