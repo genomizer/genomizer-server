@@ -151,6 +151,9 @@ public class RequestHandler implements HttpHandler {
         if (command.getExpectedNumberOfURIFields() != calculateURILength(uri)) {
             Debug.log("Bad format on command: " + exchange.getRequestMethod()
                     + " " + exchange.getRequestURI());
+            Debug.log("URI fields mismatch. Expected: "
+                    + command.getExpectedNumberOfURIFields()
+                    + ", Received: " + calculateURILength(uri));
             respond(createBadRequestResponse(), exchange);
             return;
         }
