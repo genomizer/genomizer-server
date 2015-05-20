@@ -3,7 +3,7 @@ package process.test;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 import process.ProcessException;
 import process.RawToProfileConverter;
@@ -11,9 +11,9 @@ import process.RawToProfileConverter;
 public class RawToProfileTest {
 	RawToProfileConverter rtp = null;
 	String path = "test/male.sam";
-	String bowTie = "-a -m 1 --best -p 10 -v 2 resources/bowtie/indexes/e_coli.1.ebwt";
+	String bowTie = "-a -v 2 -S";
 	//"d_melanogaster_fb5_22 -q reads/MOF_male_wt_reads_sample.fastq -S " +path;
-	String[] parameters = new String[]{bowTie, "y", "", "","","","",""};
+	String[] parameters = new String[]{bowTie, "/scratch/d_melanogaster_fb5_22", "", "","","","",""};
 
 	@Before
 	public void setup() {
@@ -88,10 +88,12 @@ public class RawToProfileTest {
 
 	@Test
 	public void shouldProduceNewSamFile() throws ProcessException{
-		String inFolder = "resources/processTest";
+		String inFolder = "/Home/staff/dali/edu/5DV151/project/genomizer-server/resources/processTest";
 		String outFilePath = "resources/processTest";
-		rtp.runRemoveDuplicates(
-				"resources/processTest/test.sam",
-				"resources/processTest/test_without_duplicates.sam", null);
+/*		rtp.runRemoveDuplicates(
+				"processTest/sorted.sam",
+				"processTest/test_without_duplicates.sam", null);
+*/
+		rtp.procedure(parameters, inFolder, outFilePath);
 	}
 }
