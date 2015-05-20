@@ -17,7 +17,9 @@ public class ServerSettings {
 	public static int genomizerPort = -1;
 	public static String fileLocation = "/var/www/data/";
 	public static String bowtieLocation = "bowtie";
+	public static String bowtie2Location = "bowtie2";
 	public static String picardLocation = "picard";
+	public static String pyicosLocation = "pyicos";
 	public static int nrOfProcessThreads = 5;
 
 	private static String downloadURL = "/download?path=";
@@ -38,7 +40,9 @@ public class ServerSettings {
 					+ "fileLocation = " + fileLocation + "\n"
 					+ "nrOfProcessThreads = " + nrOfProcessThreads + "\n"
 					+ "bowtieLocation = " + bowtieLocation + "\n"
-					+ "picardLocation = " + picardLocation + "\n";
+					+ "bowtie2Location = " + bowtie2Location + "\n"
+					+ "picardLocation = " + picardLocation + "\n"
+					+ "pyicosLocation = " + pyicosLocation + "\n";
 
 			out.write(dataInfo);
 			out.close();
@@ -66,7 +70,9 @@ public class ServerSettings {
 		nullCheck(fileLocation, "fileLocation");
 		nullCheck(nrOfProcessThreads, "nrOfProcessThreads");
 		nullCheck(bowtieLocation, "bowtieLocation");
+		nullCheck(bowtie2Location, "bowtie2Location");
 		nullCheck(picardLocation, "picardLocation");
+		nullCheck(pyicosLocation, "pyicosLocation");
 	}
 
 	private static void nullCheck(int parameter, String name) {
@@ -142,8 +148,14 @@ public class ServerSettings {
 				case "bowtielocation":
 					bowtieLocation = value;
 					break;
+				case "bowtie2location":
+					bowtie2Location = value;
+					break;
 				case "picardlocation":
 					picardLocation = value;
+					break;
+				case "pyicoslocation":
+					pyicosLocation = value;
 					break;
 				default:
 					String msg = "Unrecognized setting: " + key;
@@ -169,7 +181,10 @@ public class ServerSettings {
 							+ "\tgenomizerPort = " + genomizerPort + "\n"
 							+ "\tfileLocation = " + fileLocation + "\n"
 							+ "\tnrOfProcessThreads = " + nrOfProcessThreads + "\n"
-							+ "\tbowtieLocation = " + bowtieLocation
+							+ "\tbowtieLocation = " + bowtieLocation + "\n"
+							+ "\tbowtie2Location = " + bowtie2Location + "\n"
+							+ "\tpicardLocation = " + picardLocation + "\n"
+							+ "\tpyicosLocation = " + pyicosLocation + "\n"
 							+ "\n";
 
 			Debug.log("Imported the following settings:\n" + dataInfo);

@@ -2,6 +2,7 @@ package response.test;
 
 import static org.junit.Assert.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import command.annotation.GetAnnotationCommand;
 import database.subClasses.UserMethods.UserType;
@@ -51,7 +52,9 @@ public class GetAnnotationInformationResponseTest {
 	@Test
 	public void testDatabaseConnection() {
 		GetAnnotationCommand cmd = new GetAnnotationCommand();
-		cmd.setFields("uri", "key=val", null, UserType.ADMIN);
+		HashMap<String, String> query = new HashMap<>();
+		query.put("key", "val");
+		cmd.setFields("uri", query, null, UserType.ADMIN);
 		Response rsp = cmd.execute();
 		rsp.getBody();
 	}

@@ -2,6 +2,7 @@ package command.experiment;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.HashMap;
 
 import command.Command;
 import command.UserRights;
@@ -34,13 +35,14 @@ public class DeleteExperimentCommand extends Command {
 	/**
 	 * Set the UserType Uri and Uuid. expID also set from uri.
 	 * @param uri the URI from the http request.
-	 * @param uuid the uuid from the http request.
+	 * @param username the uuid from the http request.
 	 * @param userType the userType
 	 */
 	@Override
-	public void setFields(String uri, String query, String uuid, UserType userType) {
+	public void setFields(String uri, HashMap<String, String> query,
+						  String username, UserType userType) {
 
-		super.setFields(uri, query, uuid, userType);
+		super.setFields(uri, query, username, userType);
 		expID = uri.split("/")[2];
 	}
 

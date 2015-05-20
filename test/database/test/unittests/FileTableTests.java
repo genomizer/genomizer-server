@@ -153,11 +153,10 @@ public class FileTableTests {
     }
 
 
-    @Test (expected = IOException.class)
     public void shouldReturnZeroIfFileToBeDeletedDoesNotExistInDatabase()
             throws Exception {
 
-        dbac.deleteFile(212313);
+        assertEquals(0, dbac.deleteFile(212313));
     }
 
 

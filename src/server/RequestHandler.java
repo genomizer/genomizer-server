@@ -8,6 +8,7 @@ import com.sun.net.httpserver.HttpHandler;
 import command.*;
 import command.connection.PostLoginCommand;
 import command.process.PutProcessCommand;
+import database.DatabaseAccessor;
 import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.HttpStatusCode;
@@ -17,7 +18,11 @@ import transfer.DownloadHandler;
 import transfer.UploadHandler;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.io.OutputStream;
+import java.net.URI;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -97,17 +102,55 @@ public class RequestHandler implements HttpHandler {
 
         Command command = gson.fromJson(json, commandClass);
 
-        String uri = removeTimeStamp(exchange.getRequestURI().toString().split("\\?")[0]);
+        /*Retrieve the URI part of the request header.*/
+        HashMap<String, String> query = new HashMap<>();
+        String uri = Util.parseURI(exchange.getRequestURI(), query);
 
-        if (command.getExpectedNumberOfURIFields() != (uri.split("/").length-1)) {
+		/*Read the json body and create the command.*/
+		String json = readBody(exchange);
+		logRequestBody(json);
+        Command command;
+        try {
+            command = fetchCommand(commandClass, json);
+        } catch (InstantiationException | IllegalAccessException e) {
+            ErrorResponse errorResponse = new ErrorResponse(HttpStatusCode.
+                    INTERNAL_SERVER_ERROR, "Could not create command from " +
+                    "request");
+            respond(errorResponse, exchange);
+            return;
+        }
+
+        /*Does the length of the URI match the needed length?*/
+        if (command.getExpectedNumberOfURIFields() != calculateURILength(uri)) {
             Debug.log("Bad format on command: " + exchange.getRequestMethod()
                     + " " + exchange.getRequestURI());
+            Debug.log("URI fields mismatch. Expected: "
+                    + command.getExpectedNumberOfURIFields()
+                    + ", Received: " + calculateURILength(uri));
             respond(new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Could not create a "
                     + "command from request. Bad format on request."), exchange);
             return;
         }
 
-		command.setFields(uri, exchange.getRequestURI().getQuery(), uuid, UserType.ADMIN);
+		/*Get the user's role from the databaseAccessor.*/
+        UserType userType = UserType.UNKNOWN;
+        try (DatabaseAccessor db = Command.initDB()) {
+            userType = db.getRole(Authenticate.getUsernameByID(uuid));
+        } catch (SQLException e) {
+            Debug.log(e.toString());
+            ErrorResponse errorResponse = new ErrorResponse(HttpStatusCode.
+                    INTERNAL_SERVER_ERROR, "Could not retrieve the user " +
+                    "information.");
+            respond(errorResponse, exchange);
+        } catch (IOException e) {
+            Debug.log(e.toString());
+            ErrorResponse errorResponse = new ErrorResponse(HttpStatusCode.
+                    INTERNAL_SERVER_ERROR, "Could not retrieve the user " +
+                    "information.");
+            respond(errorResponse, exchange);
+        }
+
+        command.setFields(uri, query, uuid, userType);
 
 		try {
 			command.validate();
@@ -115,7 +158,7 @@ public class RequestHandler implements HttpHandler {
 			Debug.log(e.getMessage());
 			ErrorLogger.log("ValidateException", e.getMessage());
 			respond(new ErrorResponse(e.getCode(), e.getMessage()), exchange);
-            return;
+			return;
 		}
         if (commandClass.equals(PutProcessCommand.class)) {
             Doorman.getProcessPool().addProcess((PutProcessCommand) command);
@@ -149,6 +192,52 @@ public class RequestHandler implements HttpHandler {
         Debug.log("END OF EXCHANGE\n------------------");
     }
 
+    /*Used to calculate the "length" of an URI.*/
+    private int calculateURILength(String requestURI) {
+        return requestURI.split("/").length-1;
+    }
+
+    /*Performs authorization, returns null if the user could not be authorized,
+    * else it returns the uuid.*/
+	private String performAuthorization(HttpExchange exchange) {
+		String uuid = null;
+
+		// Get the value of the 'Authorization' header.
+		List<String> authHeader = exchange.getRequestHeaders().
+				get("Authorization");
+		if (authHeader != null)
+			uuid = authHeader.get(0);
+
+        //If the uuid could not be retrieved from the header, do this.
+        if (uuid == null) {
+            // Get the value of the 'token' parameter.
+            String uuid2;
+            HashMap<String, String> reqParams = new HashMap<>();
+            Util.parseURI(exchange.getRequestURI(), reqParams);
+            if (reqParams.containsKey("token")) {
+                uuid2 = reqParams.get("token");
+                if (uuid2 != null) {
+                    if (uuid == null || uuid.equals(uuid2)) {
+                        uuid = uuid2;
+                    } else {
+                        Debug.log("Authorization header and token parameter " +
+                                "values differ!");
+                        return null;
+                    }
+                }
+            }
+        }
+
+		// Actual authentication.
+		Debug.log("Trying to authenticate token " + uuid + "...");
+		if (uuid != null && Authenticate.idExists(uuid)) {
+			Authenticate.updateLatestRequest(uuid);
+            return uuid;
+		} else {
+			return null;
+		}
+	}
+
     /*Returns the body of the request (a json).*/
     private String readBody(HttpExchange exchange) {
         Scanner scanner = new Scanner(exchange.getRequestBody());
@@ -161,27 +250,55 @@ public class RequestHandler implements HttpHandler {
         return body;
     }
 
-    /* Finds the timestamp and removes it.*/
-    private String removeTimeStamp(String uri){
-        String newUri;
-        if (!uri.contains("_="))
-            return uri;
-        int pos = uri.lastIndexOf("_=");
-        int length = uri.length();
-        int end = pos +2;
-        if (length <= end ){
-            return uri;
+    /*Attempts to create a command given a class object and a json string.*/
+    private Command fetchCommand(Class<? extends Command> commandClass,
+                                 String json) throws InstantiationException,
+            IllegalAccessException {
+        Command command = gson.fromJson(json, commandClass);
+        if (command == null) {
+            return commandClass.newInstance();
+        } else {
+            return command;
         }
-        if ('0' > uri.charAt(end) || '9' < uri.charAt(end)){
-            return uri;
-        }
-        if (pos > 0 && uri.charAt(pos-1) == '&') {
-            pos -= 1;
-        }
-        while(length > end && '0' <= uri.charAt(end) && '9' >= uri.charAt(end)){
-            end++;
-        }
-        newUri = uri.substring(0,pos) + uri.substring(end);
-        return newUri;
+    }
+
+	/*Creates a bad request ErrorResponse.*/
+	private ErrorResponse createBadRequestResponse() {
+		return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Could not create a " +
+				"command from request. Bad format on request.");
+
+	}
+
+	/*Used to log a request.*/
+	private void logRequest(HttpExchange exchange) {
+		Debug.log("\n-----------------\nNEW EXCHANGE: " + exchange.
+				getRequestMethod() + " " + exchange.getRequestURI().
+                toString());
+	}
+
+    /*Used to log the body of a request.*/
+    private void logRequestBody(String body) {
+        Debug.log("Request body: ");
+        Debug.log(body);
+    }
+
+    /*Used to log the body of a response.*/
+	private void logResponseBody(String body) {
+		Debug.log("Response body: ");
+		Debug.log(body);
+	}
+
+	/*Used to a log that a user was authenticated.*/
+	private void logUser(String username) {
+        Debug.log("User " + username + " authenticated successfully.");
+	}
+
+    /*Sends a authentication failure response. Logs the event.*/
+    private void respondWithAuthenticationFailure(HttpExchange exchange) {
+        Debug.log("User could not be authenticated!");
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatusCode.
+                INTERNAL_SERVER_ERROR, "Could not create command from " +
+                "request");
+        respond(errorResponse, exchange);
     }
 }

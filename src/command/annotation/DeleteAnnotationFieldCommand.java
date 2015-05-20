@@ -3,6 +3,7 @@ package command.annotation;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import command.Command;
 import command.UserRights;
@@ -31,9 +32,10 @@ public class DeleteAnnotationFieldCommand extends Command {
 	}
 
 	@Override
-	public void setFields(String uri, String query, String uuid, UserType userType) {
+	public void setFields(String uri, HashMap<String, String> query,
+						  String username, UserType userType) {
 
-		super.setFields(uri, query, uuid, userType);
+		super.setFields(uri, query, username, userType);
 		name = uri.split("/")[3];
 	}
 

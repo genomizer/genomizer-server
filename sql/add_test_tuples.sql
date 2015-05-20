@@ -33,38 +33,44 @@ INSERT INTO Chain_File_Files VALUES('hg38', 'hg18', 'hg38ToHg18.over.chain', NUL
 INSERT INTO Chain_File_Files VALUES('hg38', 'hg18', 'hg38ToHg18.over(2).chain', NULL, 'Done');
 
 INSERT INTO Annotation VALUES ('Species', 'DropDown', NULL, TRUE);
+INSERT INTO Annotation_Choices VALUES('Species', '');
 INSERT INTO Annotation_Choices VALUES('Species', 'Human');
 INSERT INTO Annotation_Choices VALUES('Species', 'Fly');
 INSERT INTO Annotation_Choices VALUES('Species', 'Rat');
 
 
 INSERT INTO Annotation VALUES('Sex', 'DropDown', 'Unknown', FALSE);
+INSERT INTO Annotation_Choices  VALUES('Sex', '');
 INSERT INTO Annotation_Choices VALUES('Sex', 'Female');
 INSERT INTO Annotation_Choices VALUES('Sex', 'Male');
 INSERT INTO Annotation_Choices VALUES('Sex', 'Unknown');
-INSERT INTO Annotation_Choices  VALUES('Sex', 'Does not matter');
+INSERT INTO Annotation_Choices  VALUES('Sex', 'Does_not_matter');
 
 
 INSERT INTO Annotation VALUES('Tissue', 'FreeText', NULL, TRUE);
 
-INSERT INTO Annotation VALUES('Development Stage', 'FreeText', NULL, FALSE);
+INSERT INTO Annotation VALUES('Development_Stage', 'FreeText', NULL, FALSE);
 
 
 INSERT INTO Annotated_With  VALUES('Exp1', 'Species', 'Human');
 INSERT INTO Annotated_With  VALUES('Exp1', 'Sex', 'Unknown');
 INSERT INTO Annotated_With  VALUES('Exp1', 'Tissue', 'Arm');
-INSERT INTO Annotated_With  VALUES('Exp1', 'Development Stage', 'Adult');
+INSERT INTO Annotated_With  VALUES('Exp1', 'Development_Stage', 'Adult');
 
 INSERT INTO Annotated_With  VALUES('Exp2', 'Species', 'Human');
-INSERT INTO Annotated_With  VALUES('Exp2', 'Sex', 'Does not matter');
+INSERT INTO Annotated_With  VALUES('Exp2', 'Sex', 'Does_not_matter');
 INSERT INTO Annotated_With  VALUES('Exp2', 'Tissue', 'Arm');
-INSERT INTO Annotated_With  VALUES('Exp2', 'Development Stage', 'Child');
+INSERT INTO Annotated_With  VALUES('Exp2', 'Development_Stage', 'Child');
 
 INSERT INTO Annotated_With  VALUES('Exp3', 'Species', 'Rat');
-INSERT INTO Annotated_With  VALUES('Exp3', 'Development Stage', 'Child');
+INSERT INTO Annotated_With  VALUES('Exp3', 'Development_Stage', 'Child');
 
 -- This creates a user called "testuser" with the obvious password
-INSERT INTO User_Info VALUES('testuser', '$2a$10$i31YyxPjtntIVvslbM.esOKv4TaWzssP.MkHw5DpOCs3NhJp4goKq', '$2a$10$i31YyxPjtntIVvslbM.esOKv4TaWzssP.MkHw5DpOCs3NhJp4goKq', 'admin','Test User','test.user.pvt@cs.umu.se');
+INSERT INTO User_Info VALUES('testadmin', '$2a$10$i31YyxPjtntIVvslbM.esOKv4TaWzssP.MkHw5DpOCs3NhJp4goKq', '$2a$10$i31YyxPjtntIVvslbM.esOKv4TaWzssP.MkHw5DpOCs3NhJp4goKq', 'ADMIN','Test Admin','test.admin.pvt@cs.umu.se');
+
+INSERT INTO User_Info VALUES('testuser', '$2a$10$i31YyxPjtntIVvslbM.esOKv4TaWzssP.MkHw5DpOCs3NhJp4goKq', '$2a$10$i31YyxPjtntIVvslbM.esOKv4TaWzssP.MkHw5DpOCs3NhJp4goKq', 'USER','Test User','test.user.pvt@cs.umu.se');
+
+INSERT INTO User_Info VALUES('testguest', '$2a$10$i31YyxPjtntIVvslbM.esOKv4TaWzssP.MkHw5DpOCs3NhJp4goKq', '$2a$10$i31YyxPjtntIVvslbM.esOKv4TaWzssP.MkHw5DpOCs3NhJp4goKq', 'GUEST','Test Guest','test.guest.pvt@cs.umu.se');
 
 INSERT INTO File VALUES(DEFAULT, '/var/www/data/Exp1/raw/file1.fastq', 'Raw', 'file1.fastq', CURRENT_TIMESTAMP, NULL, '/var/www/data/Exp1/raw/file1_input.fastq', 'Umeå Uni', 'user1', 'True', 'Exp1', NULL, 'Done', NULL);
 

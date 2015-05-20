@@ -39,7 +39,7 @@ public class Doorman {
 
 	/**
 	 * Constructs a HTTP server (but doesn't start it) which listens on the
-     * given port.
+	 * given port.
 	 * @throws IOException
 	 */
 	public Doorman(ProcessPool processPool) throws IOException {
@@ -84,7 +84,7 @@ public class Doorman {
 			@Override
 			public void execute(Runnable command) {
 				try {
-				    new Thread(command).start();
+					new Thread(command).start();
 				} catch(Exception e) {
 					System.err.println("ERROR when creating new Executor." +
 							e.getMessage());

@@ -20,6 +20,10 @@ import server.ProcessPool;
  * @version 1.1
  */
 public class GetProcessStatusCommand extends Command {
+
+	// Number of days in the past to retrieve processes
+	private int days = 30;
+
 	@Override
 	public int getExpectedNumberOfURIFields() {
 		return 1;
@@ -41,9 +45,15 @@ public class GetProcessStatusCommand extends Command {
 		ProcessPool processPool = Doorman.getProcessPool();
 		LinkedList<PutProcessCommand> processesList = processPool.getProcesses();
 		LinkedList<Process> getProcessStatuses = new LinkedList<>();
+
+		long currentTime = System.currentTimeMillis();
+		long timeWeekAgo = currentTime - 60*60*24*days*1000;
         
 		for (PutProcessCommand proc : processesList) {
-			getProcessStatuses.add(processPool.getProcessStatus(proc.getPID()));
+			Process process = processPool.getProcessStatus(proc.getPID());
+			if (process.timeFinished >= timeWeekAgo) {
+				getProcessStatuses.add(process);
+			}
 		}
 		return new GetProcessStatusResponse(getProcessStatuses);
 	}

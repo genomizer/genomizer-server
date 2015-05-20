@@ -75,10 +75,10 @@ public class ServerMain {
 	 */
 	private static void printDatabaseInformation() {
 		String info = "Database information:" + "\n"
-				+ "  username " + ServerSettings.databaseUsername + "\n"
-				+ "  password " + ServerSettings.databasePassword + "\n"
-				+ "  name     " + ServerSettings.databaseName + "\n"
-				+ "  host     " + ServerSettings.databaseHost + "\n";
+				+ "\tusername " + ServerSettings.databaseUsername + "\n"
+				+ "\tpassword " + ServerSettings.databasePassword + "\n"
+				+ "\tname     " + ServerSettings.databaseName + "\n"
+				+ "\thost     " + ServerSettings.databaseHost + "\n";
 		System.out.print(info);
 		ErrorLogger.log("SYSTEM", info);
 	}

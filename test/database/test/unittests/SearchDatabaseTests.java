@@ -264,7 +264,7 @@ public class SearchDatabaseTests {
     public void shouldBeAbleToSearchUsingPubMedString2() throws Exception {
 
         List<Experiment> experiments = dbac
-                .search("HumaN[Species] and Does not matter[SEx]");
+                .search("HumaN[Species] and Does_not_matter[SEx]");
 
         assertEquals(1, experiments.size());
         assertEquals("Exp2", experiments.get(0).getID());
@@ -283,17 +283,17 @@ public class SearchDatabaseTests {
     public void shouldBeAbleToSearchUsingPubMedString4() throws Exception {
 
         List<Experiment> experiments = dbac
-                .search("Human[Species] AND Child[DeveLopmeNt Stage]");
+                .search("Human[Species] AND Child[Development_Stage]");
 
         assertEquals(1, experiments.size());
         assertEquals("Exp2", experiments.get(0).getID());
     }
 
-    @Ignore("encoding issues") @Test
+    @Test
     public void shouldBeAbleToSearchUsingPubMedString5() throws Exception {
 
         List<Experiment> experiments = dbac
-                .search("Human[SpeCies] AnD Ume? uni[author]");
+                .search("Human[SpeCies] AnD Umeå uni[author]");
 
         assertEquals(1, experiments.size());
         assertEquals(1, experiments.get(0).getFiles().size());
@@ -304,18 +304,18 @@ public class SearchDatabaseTests {
     @Test
     public void shouldBeAbleToSearchUsingPubMedString6() throws Exception {
         List<Experiment> experiments = dbac
-                .search("Human[SpEcies] NoT ChiLd[DeveLopment Stage]");
+                .search("Human[SpEcies] NoT ChiLd[Development_Stage]");
 
         assertEquals(1, experiments.size());
         assertEquals("Adult",
-                experiments.get(0).getAnnotations().get("Development Stage"));
+                experiments.get(0).getAnnotations().get("Development_Stage"));
     }
 
     @Test
     public void shouldBeAbleToSearchStartingWithNot() throws Exception {
 
         List<Experiment> experiments = dbac
-                .search("not ChiLd[Development Stage]");
+                .search("not ChiLd[Development_Stage]");
 
         assertEquals(4, experiments.size());
     }
@@ -324,7 +324,7 @@ public class SearchDatabaseTests {
     public void shouldBeAbleToSearchUsingNOT() throws Exception {
 
         List<Experiment> experiments = dbac
-                .search("CHild[Development Stage] NOT HumAn[Species]");
+                .search("CHild[Development_Stage] NOT HumAn[Species]");
 
         assertEquals(1, experiments.size());
         assertEquals("Rat", experiments.get(0).getAnnotations().get("Species"));

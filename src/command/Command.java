@@ -2,6 +2,7 @@ package command;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.regex.Pattern;
 
 import response.HttpStatusCode;
@@ -54,11 +55,12 @@ public abstract class Command {
 	 * of this function should make sure the necessary information is set.
 	 * @param uri isn't used. Override it to use it.
 	 * @param query
-	 * @param uuid the UUID for the user who made the request.
+	 * @param username the UUID for the user who made the request.
 	 * @param userType the user type for the command caller.
 	 */
-	public void setFields(String uri, String query, String uuid, UserType userType){
-		this.uuid = uuid;
+	public void setFields(String uri, HashMap<String, String> query,
+						  String username, UserType userType){
+		this.uuid = username;
 		this.userType = userType;
 	}
 
