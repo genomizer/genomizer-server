@@ -46,4 +46,9 @@ public class Util {
         return reqPath;
     }
 
+    // Replace a given file's extension.
+    // Example: replaceExtension("foo/bar.baz", ".quux") -> "foo/bar.quux",
+    public static String replaceExtension(String file, String newExt) {
+        return file.replaceAll("\\.[^\\.]+$", newExt);
+    }
 }

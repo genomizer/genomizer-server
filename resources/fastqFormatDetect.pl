@@ -115,9 +115,11 @@ if(!$adv){
 
 				# check if it is sanger or illumina/solexa, based on the ASCII image at http://en.wikipedia.org/wiki/FASTQ_format#Encoding
 				if($number > 74){ # if solexa/illumina
-						die "This file is Solexa/Illumina1.3+/Illumina1.5+ format.\n"; # print result to terminal and die
+						print "This file is Solexa/Illumina1.3+/Illumina1.5+ format.\n"; # print result to terminal and die
+						exit;
 				}elsif($number < 59){ # if sanger
-					die "This file is Sanger/Illumina 1.8+ format.\n"; # print result to terminal and die
+					print "This file is Sanger/Illumina 1.8+ format.\n"; # print result to terminal and die
+					exit;
 				}
 			}
 		}
@@ -189,7 +191,8 @@ if($adv){
 	}
 
 	# reached the end of the file without finding a definite answer, without running out of time
-	die "Reached end of file, observed qualities in range [$min,$max].\nPossible matches:\n".join(';', check($min, $max, %systems))."\n";
+	print "Reached end of file, observed qualities in range [$min,$max].\nPossible matches:\n".join(';', check($min, $max, %systems))."\n";
+	exit;
 
 }
 

@@ -8,6 +8,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import process.Pyicos;
 import server.ServerSettings;
+import transfer.Util;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,7 +25,7 @@ public class PyicosTest {
     @BeforeClass
     public static void setupBeforeClass() throws IOException {
         inSamFile = new File(resourcesDir + "test.sam");
-        outWigFile = new File(Pyicos.replaceExtension(inSamFile.toString(), ".wig"));
+        outWigFile = new File(Util.replaceExtension(inSamFile.toString(), ".wig"));
 
         ServerSettings.pyicosLocation = new File("resources/pyicoteo/pyicos").getCanonicalPath();
     }
