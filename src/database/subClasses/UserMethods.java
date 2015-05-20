@@ -201,17 +201,17 @@ public class UserMethods {
 	 * @param email    - The user's email.
 	 * @return the number of tuples updated in the database.
 	 */
-	public int updateUser(String username, String role, String fullName,
+	public int updateUser(String username, UserType role, String fullName,
 						  String email) throws SQLException, IOException {
 		isValidArgument(username);
-		isValidArgument(role);
+		isValidArgument(role.name());
 		isValidArgument(fullName);
 		isValidArgument(email);
 		String query = "UPDATE User_Info" +
 				"SET Role = ?, FullName = ?, Email = ?" +
 				"WHERE UserName = ?";
 		PreparedStatement stmt = conn.prepareStatement(query);
-		stmt.setString(1, role);
+		stmt.setString(1, role.name());
 		stmt.setString(2, fullName);
 		stmt.setString(3, email);
 		stmt.setString(4, username);
@@ -229,8 +229,8 @@ public class UserMethods {
 	 * @throws SQLException
 	 *             if the query does not succeed
 	 */
-	public String getRole(String username) throws SQLException {
-
+	public UserType getRole(String username) throws SQLException {
+		UserType roleType = UserType.UNKNOWN;
 		String query = "SELECT Role FROM User_Info " + "WHERE (Username = ?)";
 
 		PreparedStatement stmt = conn.prepareStatement(query);
@@ -241,10 +241,11 @@ public class UserMethods {
 		if (rs.next()) {
 			role = rs.getString("Role");
 		}
+		roleType = UserType.valueOf(role);
 
 		stmt.close();
 
-		return role;
+		return roleType;
 	}
 
 	/**
@@ -258,13 +259,13 @@ public class UserMethods {
 	 * @throws SQLException
 	 *             if the query does not succeed
 	 */
-	public int setRole(String username, String role) throws SQLException {
+	public int setRole(String username, UserType role) throws SQLException {
 
 		String query = "UPDATE User_Info SET Role = ? "
 				+ "WHERE (Username = ?)";
 
 		PreparedStatement stmt = conn.prepareStatement(query);
-		stmt.setString(1, role);
+		stmt.setString(1, role.name());
 		stmt.setString(2, username);
 
 		int resCount = stmt.executeUpdate();

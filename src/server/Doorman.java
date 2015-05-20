@@ -42,7 +42,7 @@ public class Doorman {
      * given port.
 	 * @throws IOException
 	 */
-	public Doorman(ProcessPool processPool, int port) throws IOException {
+	public Doorman(ProcessPool processPool) throws IOException {
 		Doorman.processPool = processPool;
 
 		httpServer = HttpServer.create(
@@ -54,22 +54,29 @@ public class Doorman {
 		RequestHandler requestHandler = new RequestHandler();
 
 		server.createContext("/login", requestHandler);
+		server.createContext("/token", requestHandler);
 		server.createContext("/experiment", requestHandler);
-		server.createContext("/annotation", requestHandler);
-		server.createContext("/annotation/field", requestHandler);
-		server.createContext("/annotation/value", requestHandler);
+		server.createContext("/experiment/", requestHandler);
 		server.createContext("/file", requestHandler);
+		server.createContext("/file/", requestHandler);
+		server.createContext("/convertfile", requestHandler);
 		server.createContext("/search/", requestHandler);
 		server.createContext("/user", requestHandler);
+		server.createContext("/admin/user", requestHandler);
+		server.createContext("/admin/user/", requestHandler);
 		server.createContext("/process", requestHandler);
 		server.createContext("/process/dummy", requestHandler);
 		server.createContext("/process/rawtoprofile", requestHandler);
-		server.createContext("/process", requestHandler);
-		server.createContext("/sysadm", requestHandler);
-	    server.createContext("/sysadm/annpriv", requestHandler);
+		server.createContext("/process/cancelprocess", requestHandler);
+		server.createContext("/annotation", requestHandler);
+		server.createContext("/annotation/field", requestHandler);
+		server.createContext("/annotation/field/", requestHandler);
+		server.createContext("/annotation/value", requestHandler);
+		server.createContext("/annotation/value/", requestHandler);
 		server.createContext("/genomeRelease", requestHandler);
 		server.createContext("/genomeRelease/", requestHandler);
-		server.createContext("/token", requestHandler);
+		server.createContext("/geo", requestHandler);
+		server.createContext("/geo/", requestHandler);
 		server.createContext("/upload", requestHandler);
 		server.createContext("/download", requestHandler);
 

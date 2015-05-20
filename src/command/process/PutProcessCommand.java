@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Map.Entry;
 
+import authentication.Authenticate;
 import com.google.gson.annotations.Expose;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
@@ -70,7 +71,7 @@ public class PutProcessCommand extends Command {
 		super.setFields(uri, query, uuid, userType);
 		setTimestamp(System.currentTimeMillis());
 		processtype = uri.split("/")[2];
-		username = uuid;
+		username = Authenticate.getUsernameByID(uuid);
 	}
 
 	/**

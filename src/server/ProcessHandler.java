@@ -55,7 +55,8 @@ public class ProcessHandler implements Callable<Response> {
 				/* Execute the process command */
 				response = processCommand.execute();
 
-				if (response.getCode() == HttpStatusCode.CREATED) {
+				if (response.getCode() == HttpStatusCode.CREATED ||
+					response.getCode() == HttpStatusCode.OK) {
 					process.status = Process.STATUS_FINISHED;
 					String successMsg = "Execution of process with id " + processCommand.getPID()
 							+ " in experiment "
@@ -75,9 +76,22 @@ public class ProcessHandler implements Callable<Response> {
 				process.status = Process.STATUS_CRASHED;
 			}
 
+			// TODO: for simulation only, should be removed for production
+			/* Long time process execution simulation */
+			ErrorLogger.log("PROCESS", "Process is sleeping for 30 seconds.");
+			Debug.log("Process is sleeping for 30 seconds. PID " +
+					processCommand.getPID());
+			try {
+				Thread.sleep(30000);
+			} catch (InterruptedException ex) {
+				Debug.log("Sleep interrupted");
+			}
+			Debug.log("End of sleep. PID " + processCommand.getPID());
+
+
 			process.timeFinished = System.currentTimeMillis();
 
-			String timeMsg = "Elapsed time: " +
+			String timeMsg = "PID: " + processCommand.getPID() + "\nElapsed time: " +
 					formatTimeDifference((process.timeFinished - process.timeStarted) / 1000) ;
 			Debug.log(timeMsg);
 			ErrorLogger.log("PROCESS", timeMsg);
