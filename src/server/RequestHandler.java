@@ -335,6 +335,7 @@ public class RequestHandler implements HttpHandler {
         respond(errorResponse, exchange);
     }
 
+
     /* Finds the timestamp and removes it.*/
     private String removeTimeStamp(String uri){
 
@@ -351,20 +352,28 @@ public class RequestHandler implements HttpHandler {
             return uri;
         }
 
-        if ('0' > uri.charAt(end) || '9' < uri.charAt(end)){
+        if (!isDigit(uri.charAt(end))){
             return uri;
         }
 
-        if (pos > 0 && uri.charAt(pos-1) == '&') {
-            pos -= 1;
+        while(length > end && isDigit(uri.charAt(end))){
+            end++;
         }
 
-        while(length > end && '0' <= uri.charAt(end) && '9' >= uri.charAt(end)){
-            end++;
+        if (length > end && uri.charAt(end) == '&'){
+            end ++;
+        }
+        else if (pos > 0 && uri.charAt(pos-1) == '&' || uri.charAt(pos-1) == '?') {
+            pos -= 1;
         }
 
         newUri = uri.substring(0,pos) + uri.substring(end);
 
         return newUri;
+    }
+
+    //Used to simplify the code when checking for digits
+    private boolean isDigit(char c){
+        return ('0' <= c && c <= '9');
     }
 }
