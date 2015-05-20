@@ -13,7 +13,7 @@ import response.MinimalResponse;
 import response.Response;
 import response.HttpStatusCode;
 import server.Debug;
-import database.subClasses.UserMethods;
+
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -47,11 +47,11 @@ public class PutUserAdminCommand extends Command {
      * Set the UserType. Uri and Uuid not used in this command.
      * @param uri the URI from the http request.
      * @param query
-     * @param uuid
+     * @param username
      * @param userType
      */
     @Override
-    public void setFields(String uri, String query, String uuid, UserMethods.UserType userType) {
+    public void setFields(String uri, String query, String username, UserType userType) {
         this.userType = userType;
 		/*No fields from the URI is needed, neither is the UUID. Dummy
 		implementation*/
