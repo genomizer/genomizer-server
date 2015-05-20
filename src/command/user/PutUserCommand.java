@@ -50,7 +50,7 @@ public class PutUserCommand extends Command {
      */
     @Override
     public void setFields(String uri, String query, String username, UserMethods.UserType userType) {
-        this.username = Authenticate.getUsernameByID(username);
+        this.username = username;
         this.userType = userType;
     }
 
