@@ -3,13 +3,19 @@ package server.test;
 import static org.junit.Assert.*;
 
 import command.ValidateException;
+import org.junit.Before;
 import org.junit.Test;
+import server.RequestHandler;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 
 public class RemoveTimestampTest {
 
     String uri;
     String uri2;
+    Method method;
 
     @Test
     public void testRemoveNormalTimestamp() throws ValidateException {
@@ -100,45 +106,29 @@ public class RemoveTimestampTest {
     }
 
 
-    /* Finds the timestamp and removes it.*/
+    /* Finds the remove timestamp method in RequestHandler and invokes it.*/
     private String removeTimeStamp(String uri){
 
-        String newUri;
-
-        if (!uri.contains("_="))
-            return uri;
-
-        int pos = uri.lastIndexOf("_=");
-        int length = uri.length();
-        int end = pos +2;
-
-        if (length <= end ){
-            return uri;
+        try {
+            Class param[] = new Class[1];
+            param[0] = String.class;
+            method = RequestHandler.class.getDeclaredMethod(
+                    "removeTimeStamp", param);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
         }
 
-        if (!isDigit(uri.charAt(end))){
-            return uri;
+        method.setAccessible(true);
+
+        try {
+            return (String) method.invoke(new RequestHandler(),uri);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
         }
 
-        while(length > end && isDigit(uri.charAt(end))){
-            end++;
-        }
-
-        if (length > end && uri.charAt(end) == '&'){
-            end ++;
-        }
-        else if (pos > 0 && uri.charAt(pos-1) == '&' || uri.charAt(pos-1) == '?') {
-            pos -= 1;
-        }
-
-        newUri = uri.substring(0,pos) + uri.substring(end);
-
-        return newUri;
-    }
-
-    //Used to simplify the code when checking for digits
-    private boolean isDigit(char c){
-            return ('0' <= c && c <= '9');
+        return "";
     }
 
 }
