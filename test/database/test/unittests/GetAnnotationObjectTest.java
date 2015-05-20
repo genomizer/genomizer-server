@@ -46,7 +46,7 @@ public class GetAnnotationObjectTest {
     	assertTrue(choices.contains("Female"));
     	assertTrue(choices.contains("Male"));
     	assertTrue(choices.contains("Unknown"));
-    	assertTrue(choices.contains("Does not matter"));
+    	assertTrue(choices.contains("Does_not_matter"));
 	}
 
     @Test
