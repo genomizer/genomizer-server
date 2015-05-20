@@ -33,12 +33,14 @@ INSERT INTO Chain_File_Files VALUES('hg38', 'hg18', 'hg38ToHg18.over.chain', NUL
 INSERT INTO Chain_File_Files VALUES('hg38', 'hg18', 'hg38ToHg18.over(2).chain', NULL, 'Done');
 
 INSERT INTO Annotation VALUES ('Species', 'DropDown', NULL, TRUE);
+INSERT INTO Annotation_Choices VALUES('Species', '');
 INSERT INTO Annotation_Choices VALUES('Species', 'Human');
 INSERT INTO Annotation_Choices VALUES('Species', 'Fly');
 INSERT INTO Annotation_Choices VALUES('Species', 'Rat');
 
 
 INSERT INTO Annotation VALUES('Sex', 'DropDown', 'Unknown', FALSE);
+INSERT INTO Annotation_Choices  VALUES('Sex', '');
 INSERT INTO Annotation_Choices VALUES('Sex', 'Female');
 INSERT INTO Annotation_Choices VALUES('Sex', 'Male');
 INSERT INTO Annotation_Choices VALUES('Sex', 'Unknown');
