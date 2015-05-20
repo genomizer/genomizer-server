@@ -259,7 +259,7 @@ public abstract class Executor {
 			for (File fileToDelete : fileList) {
 				if (fileToDelete.isFile()) {
 					if (fileToDelete.delete()) {
-						db.deleteFile(fileToDelete.getPath());
+						db.deleteFile(fileToDelete.getAbsolutePath());
 						ErrorLogger.log("SYSTEM", "Deleting "
 										  + fileToDelete.toString());
 					} else {
