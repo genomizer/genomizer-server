@@ -47,21 +47,21 @@ INSERT INTO Annotation_Choices  VALUES('Sex', 'Does not matter');
 
 INSERT INTO Annotation VALUES('Tissue', 'FreeText', NULL, TRUE);
 
-INSERT INTO Annotation VALUES('Development Stage', 'FreeText', NULL, FALSE);
+INSERT INTO Annotation VALUES('Development_Stage', 'FreeText', NULL, FALSE);
 
 
 INSERT INTO Annotated_With  VALUES('Exp1', 'Species', 'Human');
 INSERT INTO Annotated_With  VALUES('Exp1', 'Sex', 'Unknown');
 INSERT INTO Annotated_With  VALUES('Exp1', 'Tissue', 'Arm');
-INSERT INTO Annotated_With  VALUES('Exp1', 'Development Stage', 'Adult');
+INSERT INTO Annotated_With  VALUES('Exp1', 'Development_Stage', 'Adult');
 
 INSERT INTO Annotated_With  VALUES('Exp2', 'Species', 'Human');
 INSERT INTO Annotated_With  VALUES('Exp2', 'Sex', 'Does not matter');
 INSERT INTO Annotated_With  VALUES('Exp2', 'Tissue', 'Arm');
-INSERT INTO Annotated_With  VALUES('Exp2', 'Development Stage', 'Child');
+INSERT INTO Annotated_With  VALUES('Exp2', 'Development_Stage', 'Child');
 
 INSERT INTO Annotated_With  VALUES('Exp3', 'Species', 'Rat');
-INSERT INTO Annotated_With  VALUES('Exp3', 'Development Stage', 'Child');
+INSERT INTO Annotated_With  VALUES('Exp3', 'Development_Stage', 'Child');
 
 -- This creates a user called "testuser" with the obvious password
 INSERT INTO User_Info VALUES('testadmin', '$2a$10$i31YyxPjtntIVvslbM.esOKv4TaWzssP.MkHw5DpOCs3NhJp4goKq', '$2a$10$i31YyxPjtntIVvslbM.esOKv4TaWzssP.MkHw5DpOCs3NhJp4goKq', 'ADMIN','Test Admin','test.admin.pvt@cs.umu.se');

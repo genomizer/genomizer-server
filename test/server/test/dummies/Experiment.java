@@ -40,7 +40,7 @@ public class Experiment {
 		JsonArray annotations = new JsonArray();
 		JsonObject ann1=new JsonObject();
 		ann1.addProperty("id", 1);
-		ann1.addProperty("name", "Development Stage");
+		ann1.addProperty("name", "Development_Stage");
 		ann1.addProperty("value", "aster");
 		annotations.add(ann1);
 		ja.add("annotations", annotations);
