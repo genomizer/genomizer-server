@@ -264,7 +264,7 @@ public class SearchDatabaseTests {
     public void shouldBeAbleToSearchUsingPubMedString2() throws Exception {
 
         List<Experiment> experiments = dbac
-                .search("HumaN[Species] and Does not matter[SEx]");
+                .search("HumaN[Species] and Does_not_matter[SEx]");
 
         assertEquals(1, experiments.size());
         assertEquals("Exp2", experiments.get(0).getID());

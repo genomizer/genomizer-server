@@ -42,7 +42,7 @@ INSERT INTO Annotation VALUES('Sex', 'DropDown', 'Unknown', FALSE);
 INSERT INTO Annotation_Choices VALUES('Sex', 'Female');
 INSERT INTO Annotation_Choices VALUES('Sex', 'Male');
 INSERT INTO Annotation_Choices VALUES('Sex', 'Unknown');
-INSERT INTO Annotation_Choices  VALUES('Sex', 'Does not matter');
+INSERT INTO Annotation_Choices  VALUES('Sex', 'Does_not_matter');
 
 
 INSERT INTO Annotation VALUES('Tissue', 'FreeText', NULL, TRUE);
@@ -56,7 +56,7 @@ INSERT INTO Annotated_With  VALUES('Exp1', 'Tissue', 'Arm');
 INSERT INTO Annotated_With  VALUES('Exp1', 'Development_Stage', 'Adult');
 
 INSERT INTO Annotated_With  VALUES('Exp2', 'Species', 'Human');
-INSERT INTO Annotated_With  VALUES('Exp2', 'Sex', 'Does not matter');
+INSERT INTO Annotated_With  VALUES('Exp2', 'Sex', 'Does_not_matter');
 INSERT INTO Annotated_With  VALUES('Exp2', 'Tissue', 'Arm');
 INSERT INTO Annotated_With  VALUES('Exp2', 'Development_Stage', 'Child');
 
