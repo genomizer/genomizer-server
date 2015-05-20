@@ -27,16 +27,12 @@ import server.Debug;
 public class PostUserCommand extends Command {
 	@Expose
 	private String username = null;
-
 	@Expose
 	private String password = null;
-
 	@Expose
 	private String privileges = null;
-
 	@Expose
 	private String name = null;
-
 	@Expose
 	private String email = null;
 
