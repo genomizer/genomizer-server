@@ -45,12 +45,12 @@ public class PutUserCommand extends Command {
      * Set username using uuid along with the usertype
      * @param uri the URI from the http request.
      * @param query the query of the request
-     * @param uuid the uuid from the http request.
+     * @param username the uuid from the http request.
      * @param userType the userType
      */
     @Override
-    public void setFields(String uri, String query, String uuid, UserMethods.UserType userType) {
-        username = Authenticate.getUsernameByID(uuid);
+    public void setFields(String uri, String query, String username, UserMethods.UserType userType) {
+        this.username = username;
         this.userType = userType;
     }
 

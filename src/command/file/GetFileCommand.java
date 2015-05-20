@@ -28,9 +28,9 @@ public class GetFileCommand extends Command {
 	}
 
 	@Override
-	public void setFields(String uri, String query, String uuid, UserType userType) {
+	public void setFields(String uri, String query, String username, UserType userType) {
 
-		super.setFields(uri, query, uuid, userType);
+		super.setFields(uri, query, username, userType);
 		fileID = uri.split("/")[2];
 	}
 

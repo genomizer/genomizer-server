@@ -39,13 +39,13 @@ public class SearchCommand extends Command {
 	/**
 	 * Set the UserType Uri and Uuid. annotations also set from uri.
 	 * @param uri the URI from the http request.
-	 * @param uuid the uuid from the http request.
+	 * @param username the uuid from the http request.
 	 * @param userType the userType
 	 */
 	@Override
-	public void setFields(String uri, String query, String uuid, UserType userType) {
+	public void setFields(String uri, String query, String username, UserType userType) {
 
-		super.setFields(uri, query, uuid, userType);
+		super.setFields(uri, query, username, userType);
 		for (String keyVal : query.split("&")) {
 			String[] splitKeyVal = keyVal.split("=");
 			if (splitKeyVal[0].equals("annotations") && splitKeyVal.length == 2) {
