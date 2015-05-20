@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import command.Command;
 import command.UserRights;
@@ -45,57 +44,36 @@ public class GetAnnotationCommand extends Command {
 
 		try {
 			db = initDB();
-			List<String> list = new ArrayList<>(db.getAnnotations().keySet());
-			for (String label : list) {
+			ArrayList<AnnotationInformation> annotations = new ArrayList<>();
+			List<String> possibleAnnotations = new ArrayList<>(db.
+					getAnnotations().keySet());
+			for (String label : possibleAnnotations) {
 				ArrayList<String> values;
 				Annotation annotation = db.getAnnotationObject(label);
-				if (annotation.dataType == Annotation.FREETEXT) {
+				if (annotation.dataType == Annotation.DROPDOWN) {
+					values = (ArrayList<String>) annotation.getPossibleValues();
+				} else {
 					values = new ArrayList<>();
 					values.add("freetext");
-				} else if  {
-
 				}
-			}
-		} catch (IOException | SQLException e) {
 
+				annotations.add(new AnnotationInformation(annotation.label,
+						values, annotation.isRequired));
+			}
+
+			response = new GetAnnotationInformationResponse(HttpStatusCode.OK,
+					annotations);
+		} catch (IOException | SQLException e) {
+			Debug.log("Retrieval of annotation information was unsuccessful, " +
+					"reason: " + e.getMessage());
+			response = new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+					"Retrieval of annotation information unsuccessful due to " +
+							"temporary problems with the database");
+		} finally {
+			if (db != null)
+				db.close();
 		}
 
-//		ArrayList<AnnotationInformation> annotations = new ArrayList<>();
-//		DatabaseAccessor db = null;
-//		Map<String, Integer> a;
-//		try {
-//			db = initDB();
-//			a = db.getAnnotations();
-//			List<String> list = new ArrayList<>(a.keySet());
-//			for(String label: list) {
-//				database.containers.Annotation annotationObject;
-//				ArrayList<String> values = new ArrayList<>();
-//				annotationObject = db.getAnnotationObject(label);
-//
-//				if(annotationObject.dataType ==
-//						database.containers.Annotation.FREETEXT) {
-//					values.add("freetext");
-//				} else if(annotationObject.dataType ==
-//						database.containers.Annotation.DROPDOWN) {
-//					values = (ArrayList<String>)
-//							annotationObject.getPossibleValues();
-//				}
-//				AnnotationInformation annotation =
-//						new AnnotationInformation(annotationObject.label,
-//								values, annotationObject.isRequired);
-//				annotations.add(annotation);
-//			}
-//			return new GetAnnotationInformationResponse(HttpStatusCode.OK,
-//					annotations);
-//		} catch(SQLException | IOException e) {
-//			Debug.log("Retrieval of annotation information failed. Reason: " +
-//					e.getMessage());
-//			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Could not retrieve annotation " +
-//					"information because of temporary problems with database.");
-//		} finally {
-//			if (db != null) {
-//				db.close();
-//			}
-//		}
+		return response;
 	}
 }
