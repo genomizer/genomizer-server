@@ -17,10 +17,7 @@ import command.genomerelease.DeleteGenomeReleaseCommand;
 import command.genomerelease.GetGenomeReleaseCommand;
 import command.genomerelease.GetGenomeReleaseSpeciesCommand;
 import command.genomerelease.PostGenomeReleaseCommand;
-import command.process.CancelProcessCommand;
-import command.process.GetProcessDummyCommand;
-import command.process.GetProcessStatusCommand;
-import command.process.PutProcessCommand;
+import command.process.*;
 import command.search.SearchCommand;
 import command.user.PutUserCommand;
 import command.user.PutUserPasswordCommand;
@@ -77,6 +74,7 @@ public class CommandClasses {
         classes.put("PUT /admin/user", PutUserAdminCommand.class);
         classes.put("PUT /user", PutUserPasswordCommand.class);
         classes.put("PUT /user", PutUserCommand.class);
+        classes.put("PUT /processCommand", PutProcessCommands.class);
     }
 
     /**
