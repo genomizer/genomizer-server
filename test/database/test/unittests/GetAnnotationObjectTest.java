@@ -42,8 +42,9 @@ public class GetAnnotationObjectTest {
     	ArrayList<String> choices = (ArrayList<String>)
     			annotation.getPossibleValues();
 
-    	assertEquals(4, choices.size());
-    	assertTrue(choices.contains("Female"));
+    	assertEquals(5, choices.size());
+		assertTrue(choices.contains(""));
+		assertTrue(choices.contains("Female"));
     	assertTrue(choices.contains("Male"));
     	assertTrue(choices.contains("Unknown"));
     	assertTrue(choices.contains("Does_not_matter"));
