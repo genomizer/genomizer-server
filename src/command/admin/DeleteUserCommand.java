@@ -16,14 +16,13 @@ import response.HttpStatusCode;
 import server.Debug;
 
 /**
- * Class used to represent a delete user command.
+ * Command used to delete a user.
  *
  * @author Business Logic 2015.
  * @version 1.1
  */
 public class DeleteUserCommand extends Command {
-	public String username;
-
+	private String username;
 
 	@Override
 	public int getExpectedNumberOfURIFields() {
@@ -32,7 +31,6 @@ public class DeleteUserCommand extends Command {
 
 	@Override
 	public void setFields(String uri, String query, String uuid, UserType userType) {
-
 		super.setFields(uri, query, uuid, userType);
 		username = uri.split("/")[2];
 	}
@@ -40,15 +38,7 @@ public class DeleteUserCommand extends Command {
 	@Override
 	public void validate() throws ValidateException {
 		hasRights(UserRights.getRights(this.getClass()));
-		if(username == null) {
-			throw new ValidateException(HttpStatusCode.BAD_REQUEST,
-					"Username was missing.");
-		} else if(username.length() < 1 || username.length() >
-				MaxLength.USERNAME) {
-			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Username " +
-					"has to be between 1 and " +
-					MaxLength.USERNAME + " characters long.");
-		}
+		validateName(username, MaxLength.USERNAME, "username");
 	}
 
 	@Override
@@ -57,22 +47,26 @@ public class DeleteUserCommand extends Command {
 		try {
 			db = initDB();
 		} catch (SQLException | IOException e) {
-			Debug.log("Deletion of user: " + username + " didn't work, reason: " +
-					e.getMessage());
-			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Deletion of user: " + username +
-					" didn't work because of temporary problems with database.");
+			Debug.log("Deletion of user: " + username + " was unsuccessful, " +
+					"reason: " + e.getMessage());
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+					"Deletion of user: " + username +
+					" didn't work because of temporary problems with " +
+							"the database.");
 		}
+
 		try {
 			db.deleteUser(username);
 		} catch (SQLException e) {
-			Debug.log("Deletion of user: " + username + " didn't work, reason: " +
-					e.getMessage());
+			Debug.log("Deletion of user: " + username + " was unsuccessful, " +
+					"reason: " + e.getMessage());
 			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Error when " +
-					"removing user from database, user probably don't exists. ");
-		}finally {
-			db.close();
-
+					"removing user from database, user may not exist. ");
+		} finally {
+			if (db != null)
+				db.close();
 		}
+
 		return new MinimalResponse(HttpStatusCode.OK);
 	}
 }
