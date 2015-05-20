@@ -44,12 +44,15 @@ public class DeleteAdminUserCommand extends Command {
 
 	@Override
 	public Response execute() {
+		Response response;
+
 		try {
 			DatabaseAccessor db = initDB();
 			if (db.getUsers().contains(username)) {
 				db.deleteUser(username);
+				response = new MinimalResponse(HttpStatusCode.OK);
 			} else {
-				return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
+				response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
 						"Deletion of user unsuccessful, user does not exist.");
 			}
 
@@ -57,11 +60,11 @@ public class DeleteAdminUserCommand extends Command {
 		} catch (SQLException | IOException e) {
 			Debug.log("Deletion of user: " + username + " was unsuccessful, " +
 					"reason: " + e.getMessage());
-			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+			response = new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
 					"Deletion of user: " + username + " was unsuccessful due " +
 							"to temporary problems with the database.");
 		}
 
-		return new MinimalResponse(HttpStatusCode.OK);
+		return response;
 	}
 }
