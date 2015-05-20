@@ -59,7 +59,7 @@ public class DeleteAnnotationFieldCommand extends Command {
 				response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
 						"The deletion of annotation label " + label +
 								" was unsuccessful, annotation label does " +
-								"not exist");
+								"not exist.");
 			}
 		} catch (SQLException | IOException e) {
 			Debug.log("Deletion of annotation label: " + label +

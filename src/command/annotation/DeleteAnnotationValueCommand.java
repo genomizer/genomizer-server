@@ -60,32 +60,25 @@ public class DeleteAnnotationValueCommand extends Command {
 			db = initDB();
 			if (db.getChoices(name).contains(value)) {
 				db.removeDropDownAnnotationValue(name, value);
+				response = new MinimalResponse(HttpStatusCode.OK);
+			} else {
+				response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
+						"Deletion of annotation value " + value +
+								" unsuccessful, value " + value +
+								"does not exist in " + name + ".");
 			}
 		} catch (IOException | SQLException e) {
-
+			Debug.log("Deletion of annotation value: " + value +
+					" was unsuccessful, reason: " + e.getMessage());
+			response = new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+					"Deletion of annotation value: " + value +
+							" was unsuccessful due to temporary problems with" +
+							" the database.");
+		} finally {
+			if (db != null)
+				db.close();
 		}
 
-//		DatabaseAccessor db = null;
-//		try {
-//			db = initDB();
-//			List<String> values = db.getChoices(name);
-//			if(values.contains(value)) {
-//				db.removeDropDownAnnotationValue(name, value);
-//			} else {
-//				return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "The value " +
-//						value + " does not exist in " + name + " and can not " +
-//						"be deleted");
-//			}
-//		} catch (IOException | SQLException e) {
-//			Debug.log("Deleting annotation value " + value + " on annotation " + name +
-//					" failed due to database error. Reason: " + e.getMessage());
-//			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Deleting annotation value " + value +
-//					" on annotation "+name + " failed due to database error.");
-//		} finally {
-//			if (db != null) {
-//				db.close();
-//			}
-//		}
-//		return new MinimalResponse(HttpStatusCode.OK);
+		return response;
 	}
 }
