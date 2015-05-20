@@ -18,8 +18,10 @@ import response.MinimalResponse;
 import response.HttpStatusCode;
 import server.Debug;
 
+import javax.xml.crypto.Data;
+
 /**
- * Class used to handle removal of annotation values.
+ * Command used to remove an annotation value.
  *
  * @author Business Logic 2015.
  * @version 1.1
@@ -34,10 +36,9 @@ public class DeleteAnnotationValueCommand extends Command {
 	}
 
 	@Override
-	public void setFields(String uri, String query, String uuid, UserType userType) {
-
+	public void setFields(String uri, String query, String uuid,
+						  UserType userType) {
 		super.setFields(uri, query, uuid, userType);
-
 		String[] splitFields = uri.split("/");
 		name = splitFields[3];
 		value = splitFields[4];
@@ -53,26 +54,38 @@ public class DeleteAnnotationValueCommand extends Command {
 	@Override
 	public Response execute() {
 		DatabaseAccessor db = null;
+		Response response;
+
 		try {
 			db = initDB();
-			List<String> values = db.getChoices(name);
-			if(values.contains(value)) {
+			if (db.getChoices(name).contains(value)) {
 				db.removeDropDownAnnotationValue(name, value);
-			} else {
-				return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "The value " +
-						value + " does not exist in " + name + " and can not " +
-						"be deleted");
 			}
 		} catch (IOException | SQLException e) {
-			Debug.log("Deleting annotation value " + value + " on annotation " + name +
-					" failed due to database error. Reason: " + e.getMessage());
-			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Deleting annotation value " + value +
-					" on annotation "+name + " failed due to database error.");
-		} finally {
-			if (db != null) {
-				db.close();
-			}
+
 		}
-		return new MinimalResponse(HttpStatusCode.OK);
+
+//		DatabaseAccessor db = null;
+//		try {
+//			db = initDB();
+//			List<String> values = db.getChoices(name);
+//			if(values.contains(value)) {
+//				db.removeDropDownAnnotationValue(name, value);
+//			} else {
+//				return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "The value " +
+//						value + " does not exist in " + name + " and can not " +
+//						"be deleted");
+//			}
+//		} catch (IOException | SQLException e) {
+//			Debug.log("Deleting annotation value " + value + " on annotation " + name +
+//					" failed due to database error. Reason: " + e.getMessage());
+//			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Deleting annotation value " + value +
+//					" on annotation "+name + " failed due to database error.");
+//		} finally {
+//			if (db != null) {
+//				db.close();
+//			}
+//		}
+//		return new MinimalResponse(HttpStatusCode.OK);
 	}
 }
