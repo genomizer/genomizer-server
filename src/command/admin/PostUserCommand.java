@@ -43,7 +43,6 @@ public class PostUserCommand extends Command {
 	@Override
 	public int getExpectedNumberOfURIFields() {
 		return 2;
-
 	}
 
 	@Override
