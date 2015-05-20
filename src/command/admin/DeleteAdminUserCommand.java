@@ -51,9 +51,8 @@ public class DeleteAdminUserCommand extends Command {
 			Debug.log("Deletion of user: " + username + " was unsuccessful, " +
 					"reason: " + e.getMessage());
 			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
-					"Deletion of user: " + username +
-					" didn't work because of temporary problems with " +
-							"the database.");
+					"Deletion of user: " + username + " was unsuccessful due " +
+							"to temporary problems with the database.");
 		}
 
 		try {
@@ -61,8 +60,8 @@ public class DeleteAdminUserCommand extends Command {
 		} catch (SQLException e) {
 			Debug.log("Deletion of user: " + username + " was unsuccessful, " +
 					"reason: " + e.getMessage());
-			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Removal of " +
-					"user unsuccessful, user may not exist. ");
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Deletion of "
+					+ "user unsuccessful, user may not exist.");
 		} finally {
 			if (db != null)
 				db.close();
