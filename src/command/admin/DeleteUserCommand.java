@@ -60,8 +60,8 @@ public class DeleteUserCommand extends Command {
 		} catch (SQLException e) {
 			Debug.log("Deletion of user: " + username + " was unsuccessful, " +
 					"reason: " + e.getMessage());
-			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Error when " +
-					"removing user from database, user may not exist. ");
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Removal of " +
+					"user unsuccessful, user may not exist. ");
 		} finally {
 			if (db != null)
 				db.close();

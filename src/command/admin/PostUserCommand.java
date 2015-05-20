@@ -70,9 +70,9 @@ public class PostUserCommand extends Command {
 		} catch (SQLException | IOException e) {
 			Debug.log("Creation of user: " + username + " was unsuccessful, " +
 					"reason: " +  e.getMessage());
-			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
-					"Creation of user: " + username + "was unsuccessful due " +
-							"to temporary problems with the database.");
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Creation of" +
+					" user: " + username + " was unsuccessful, user may " +
+					"already exist.");
 		} finally {
 			if (db != null)
 				db.close();
