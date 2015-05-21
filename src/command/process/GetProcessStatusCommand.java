@@ -51,9 +51,9 @@ public class GetProcessStatusCommand extends Command {
         
 		for (PutProcessCommand proc : processesList) {
 			Process process = processPool.getProcessStatus(proc.getPID());
-			if (process.timeFinished >= timeWeekAgo) {
+			//if (process.timeFinished >= timeWeekAgo) {
 				getProcessStatuses.add(process);
-			}
+			//}
 		}
 		return new GetProcessStatusResponse(getProcessStatuses);
 	}
