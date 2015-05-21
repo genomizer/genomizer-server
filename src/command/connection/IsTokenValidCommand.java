@@ -15,6 +15,8 @@ import response.HttpStatusCode;
 @Deprecated
 public class IsTokenValidCommand extends Command {
 
+	public IsTokenValidCommand() {}
+
 	@Override
 	public int getExpectedNumberOfURIFields() {
 		return 1;
