@@ -28,6 +28,6 @@ public class PutFileCommand extends Command {
 
 	@Override
 	public Response execute() {
-		return 	new MinimalResponse(HttpStatusCode.METHOD_NOT_YET_IMPLEMENTED);
+		return 	new MinimalResponse(HttpStatusCode.NOT_IMPLEMENTED);
 	}
 }
