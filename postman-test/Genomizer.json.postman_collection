@@ -5,6 +5,8 @@
 	"order": [
 		"6f14b4cd-7ba5-ceee-8ca7-d5f949900b39",
 		"98ce38e1-1edc-c538-4ad2-ce8f020b0cc3",
+		"f31eaaef-5158-6a01-880f-d43d7c0c8fb9",
+		"d6c7a5c5-ae87-c05f-6da8-5a4b21fe6c6b",
 		"5fd59891-20a9-6993-cece-9b7dcf0646a0",
 		"2626075d-9fe0-b5ed-d660-0d19213f1586"
 	],
@@ -62,7 +64,7 @@
 		{
 			"id": "6f14b4cd-7ba5-ceee-8ca7-d5f949900b39",
 			"headers": "Content-Type: application/json\n",
-			"url": "http://localhost:7000/login?Content-Type",
+			"url": "http://localhost:7000/login",
 			"preRequestScript": "",
 			"pathVariables": {},
 			"method": "POST",
@@ -72,7 +74,7 @@
 			"tests": "data = JSON.parse(responseBody);\ntests[\"Token is present\"] = \"token\" in data;\npostman.setEnvironmentVariable(\"EnvVarToken\", data.token);\ntests[\"Response code\"] = responseCode.code === 200;\ntests[\"Role is present\"] = \"role\" in data;\ntests[\"Correct role is returned\"] = data.role === \"user\";",
 			"currentHelper": "normal",
 			"helperAttributes": {},
-			"time": 1432195791351,
+			"time": 1432197806073,
 			"name": "Login",
 			"description": "Login and set the token environment variable.",
 			"collectionId": "28286ab2-d6a4-ede3-53db-c54fc3506853",
@@ -100,6 +102,46 @@
 			"responses": [],
 			"synced": false,
 			"owner": "46819"
+		},
+		{
+			"id": "d6c7a5c5-ae87-c05f-6da8-5a4b21fe6c6b",
+			"headers": "Authorization: {{EnvVarToken}}\n",
+			"url": "http://localhost:7000/experiment/ExpSmall?_=1432106084555",
+			"preRequestScript": "",
+			"pathVariables": {},
+			"method": "GET",
+			"data": [],
+			"dataMode": "params",
+			"version": 2,
+			"tests": "tests[\"Correct response\"] = responseCode.code === 200;\ndata = JSON.parse(responseBody);\ntests[\"Correct name\"] = data.name === 'ExpSmall';",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1432198286705,
+			"name": "Experiment: get with timestamp.",
+			"description": "Get an experiment by id, also send a timestamp.",
+			"collectionId": "28286ab2-d6a4-ede3-53db-c54fc3506853",
+			"responses": [],
+			"synced": false
+		},
+		{
+			"id": "f31eaaef-5158-6a01-880f-d43d7c0c8fb9",
+			"headers": "Authorization: {{EnvVarToken}}\n",
+			"url": "http://localhost:7000/experiment/ExpSmall",
+			"preRequestScript": "",
+			"pathVariables": {},
+			"method": "GET",
+			"data": [],
+			"dataMode": "params",
+			"version": 2,
+			"tests": "tests[\"Correct response\"] = responseCode.code === 200;\ndata = JSON.parse(responseBody);\ntests[\"Correct name\"] = data.name === 'ExpSmall';",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1432198183140,
+			"name": "Experiment: get",
+			"description": "Get an experiment by id.",
+			"collectionId": "28286ab2-d6a4-ede3-53db-c54fc3506853",
+			"responses": [],
+			"synced": false
 		}
 	]
 }
