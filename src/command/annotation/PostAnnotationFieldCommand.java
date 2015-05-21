@@ -74,7 +74,7 @@ public class PostAnnotationFieldCommand extends Command {
 
 		try {
 			db = initDB();
-			if (db.getAnnotations().keySet().contains(name)) {
+			if (db.getAnnotations().containsKey(name)) {
 				response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
 						"Adding annotation field was unsuccessful, an " +
 								"annotation field with that name already " +
