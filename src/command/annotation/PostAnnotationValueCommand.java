@@ -43,7 +43,7 @@ public class PostAnnotationValueCommand extends Command {
 		validateName(value, MaxLength.ANNOTATION_VALUE, "Annotation value");
 		if(value.equals("freetext")){
 			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Can not" +
-					"name a value \"freetext\"");
+					" name a value \"freetext\"");
 		}
 	}
 

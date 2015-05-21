@@ -11,6 +11,7 @@ import response.Response;
 import server.Doorman;
 import server.ProcessPool;
 
+import java.util.HashMap;
 import java.util.UUID;
 
 /**
@@ -46,7 +47,8 @@ public class CancelProcessCommand extends Command {
     }
 
     @Override
-    public void setFields(String uri, String query, String username, UserMethods.UserType userType) {
+    public void setFields(String uri, HashMap<String, String> query,
+                          String username, UserMethods.UserType userType) {
         super.setFields(uri, query, username, userType);
         this.userType = userType;
     }

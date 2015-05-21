@@ -2,6 +2,7 @@ package command.annotation;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 
 import command.Command;
@@ -34,7 +35,8 @@ public class DeleteAnnotationValueCommand extends Command {
 	}
 
 	@Override
-	public void setFields(String uri, String query, String username, UserType userType) {
+	public void setFields(String uri, HashMap<String, String> query,
+						  String username, UserType userType) {
 
 		super.setFields(uri, query, username, userType);
 

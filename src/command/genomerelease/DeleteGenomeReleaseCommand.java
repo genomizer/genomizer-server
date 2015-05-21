@@ -3,6 +3,7 @@ package command.genomerelease;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import command.Command;
 import command.UserRights;
@@ -33,7 +34,8 @@ public class DeleteGenomeReleaseCommand extends Command {
 	}
 
 	@Override
-	public void setFields(String uri, String query, String username, UserType userType) {
+	public void setFields(String uri, HashMap<String, String> query,
+						  String username, UserType userType) {
 
 		super.setFields(uri, query, username, userType);
 		String[] splitFields = uri.split("/");

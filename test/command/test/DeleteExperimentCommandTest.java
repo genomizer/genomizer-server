@@ -31,7 +31,7 @@ public class DeleteExperimentCommandTest {
 			uri += "a";
 		}
 		Command c = new DeleteExperimentCommand();
-		c.setFields(uri, "", null, UserType.ADMIN);
+		c.setFields(uri, null, null, UserType.ADMIN);
 		c.validate();
 		fail("Expected ValidateException.");
 	}
@@ -45,7 +45,7 @@ public class DeleteExperimentCommandTest {
 	@Test
 	public void testValidateProperlyFormatted() throws ValidateException {
 		Command c = new DeleteExperimentCommand();
-		c.setFields("/experiment/properly", "", null, UserType.ADMIN);
+		c.setFields("/experiment/properly", null, null, UserType.ADMIN);
 		c.validate();
 		assertTrue(true);
 
@@ -61,7 +61,7 @@ public class DeleteExperimentCommandTest {
 	public void testValidateIncorrectlyFormatted() throws ValidateException {
 
 		Command c = new DeleteExperimentCommand();
-		c.setFields("/experiment/��", "", null, UserType.ADMIN);
+		c.setFields("/experiment/��", null, null, UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -77,7 +77,7 @@ public class DeleteExperimentCommandTest {
 	public void testHavingRights() throws ValidateException {
 
 		Command c = new DeleteExperimentCommand();
-		c.setFields("/experiment/properly", "", null, UserType.USER);
+		c.setFields("/experiment/properly", null, null, UserType.USER);
 		c.validate();
 	}
 
@@ -91,7 +91,7 @@ public class DeleteExperimentCommandTest {
 	public void testNotHavingRights() throws ValidateException {
 
 		Command c = new DeleteExperimentCommand();
-		c.setFields("/experiment/properly", "", null, UserType.GUEST);
+		c.setFields("/experiment/properly", null, null, UserType.GUEST);
 		c.validate();
 		fail();
 	}
