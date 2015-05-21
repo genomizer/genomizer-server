@@ -4,9 +4,7 @@ import command.admin.DeleteAdminUserCommand;
 import command.admin.PostAdminUserCommand;
 import command.admin.PutUserAdminCommand;
 import command.annotation.*;
-import command.connection.DeleteLoginCommand;
-import command.connection.IsTokenValidCommand;
-import command.connection.PostLoginCommand;
+import command.connection.*;
 import command.convertfile.PutConvertFileCommand;
 import command.experiment.DeleteExperimentCommand;
 import command.experiment.GetExperimentCommand;
@@ -46,16 +44,16 @@ public class CommandClasses {
         classes.put("DELETE /login", DeleteLoginCommand.class);
 
         // Experiment Commands
-        classes.put("DELETE /experiment", DeleteExperimentCommand.class);
+        classes.put("DELETE /experiment/", DeleteExperimentCommand.class);
         classes.put("POST /experiment", PostExperimentCommand.class);
-        classes.put("GET /experiment", GetExperimentCommand.class);
-        classes.put("PUT /experiment", PutExperimentCommand.class);
+        classes.put("GET /experiment/", GetExperimentCommand.class);
+        classes.put("PUT /experiment/", PutExperimentCommand.class);
 
         //File commands
         classes.put("POST /file", PostFileCommand.class);
-        classes.put("DELETE /file", DeleteFileCommand.class);
-        classes.put("GET /file", GetFileCommand.class);
-        classes.put("PUT /file", PutFileCommand.class);
+        classes.put("DELETE /file/", DeleteFileCommand.class);
+        classes.put("GET /file/", GetFileCommand.class);
+        classes.put("PUT /file/", PutFileCommand.class);
 
         //File Conversion commands
         classes.put("PUT /convertfile", PutConvertFileCommand.class);
@@ -81,9 +79,9 @@ public class CommandClasses {
         //Annotation handling commands
         classes.put("POST /annotation/field", PostAnnotationFieldCommand.class);
         classes.put("POST /annotation/value", PostAnnotationValueCommand.class);
-        classes.put("DELETE /annotation/field", DeleteAnnotationFieldCommand.
+        classes.put("DELETE /annotation/field/", DeleteAnnotationFieldCommand.
                 class);
-        classes.put("DELETE /annotation/value", DeleteAnnotationValueCommand.
+        classes.put("DELETE /annotation/value/", DeleteAnnotationValueCommand.
                 class);
         classes.put("PUT /annotation/field", PutAnnotationFieldCommand.class);
         classes.put("PUT /annotation/value", PutAnnotationValueCommand.class);

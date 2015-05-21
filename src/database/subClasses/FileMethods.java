@@ -4,6 +4,7 @@ import database.FilePathGenerator;
 import database.FileValidator;
 import database.containers.Experiment;
 import database.containers.FileTuple;
+import server.Debug;
 
 import java.io.File;
 import java.io.IOException;
@@ -279,7 +280,8 @@ public class FileMethods {
 		FileTuple ft = getFileTuple(path);
 
 		if (ft == null) {
-			throw new IOException("Could not find file at path " + path);
+			Debug.log("FileMethods.deleteFile: Could not find file at path " + path);
+			return 0;
 		}
 
 		File fileToDelete = new File(path);
@@ -318,7 +320,8 @@ public class FileMethods {
 		FileTuple ft = getFileTuple(fileID);
 
 		if (ft == null) {
-			throw new IOException("Could not find file with ID " + fileID);
+			Debug.log("FileMethods.deleteFile: Could not find file with ID " + fileID);
+			return 0;
 		}
 
 		File fileToDelete = new File(ft.path);

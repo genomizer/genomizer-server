@@ -52,7 +52,7 @@ public class AnnotationRequiredDefaultTest {
 
 		try {
 			assertFalse(dbac.isAnnotationRequiered("Sex"));
-			assertFalse(dbac.isAnnotationRequiered("Development Stage"));
+			assertFalse(dbac.isAnnotationRequiered("Development_Stage"));
 
 		} catch (SQLException e) {
 			e.printStackTrace();

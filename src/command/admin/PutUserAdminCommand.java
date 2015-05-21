@@ -13,8 +13,10 @@ import response.MinimalResponse;
 import response.Response;
 import response.HttpStatusCode;
 import server.Debug;
+
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.HashMap;
 
 /**
  * Command used to alter user information.
@@ -38,11 +40,10 @@ public class PutUserAdminCommand extends Command {
     public int getExpectedNumberOfURIFields() {
         return 2;
     }
-
+    
     @Override
-    public void setFields(String uri, String query, String uuid,
-                          UserType userType) {
-        super.setFields(uri, query, uuid, userType);
+    public void setFields(String uri, HashMap<String, String> query,
+                          String username, UserType userType) {
         this.userType = userType;
     }
 

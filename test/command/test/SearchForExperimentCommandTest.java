@@ -10,6 +10,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 import command.search.SearchCommand;
 
+import java.util.HashMap;
+
 /**
  * Test class used to check that the SearchForExperimentCommand class
  * works properly.
@@ -34,7 +36,7 @@ public class SearchForExperimentCommandTest {
 		}
 
 		Command c = new SearchCommand();
-		c.setFields(uri, "", null, UserType.ADMIN);
+		c.setFields(uri, new HashMap<String, String>(), null, UserType.ADMIN);
 		c.validate();
 		fail("Expected ValidateException.");
 	}
@@ -48,7 +50,7 @@ public class SearchForExperimentCommandTest {
 	@Test
 	public void textValidateProperlyFormatted() throws ValidateException {
 		Command c = new SearchCommand();
-		c.setFields("Hello", "", null, UserType.ADMIN);
+		c.setFields("Hello", new HashMap<String, String>(), null, UserType.ADMIN);
 		c.validate();
 		assertTrue(true);
 	}
@@ -66,7 +68,7 @@ public class SearchForExperimentCommandTest {
 	public void testValidateIncorrectlyFormatted() throws ValidateException {
 
 		Command c = new SearchCommand();
-		c.setFields("uri��", "", null, UserType.ADMIN);
+		c.setFields("uri��", new HashMap<String, String>(), null, UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -82,7 +84,7 @@ public class SearchForExperimentCommandTest {
 	public void testHavingRights() throws ValidateException {
 
 		Command c = new SearchCommand();
-		c.setFields("uri", "", null, UserType.GUEST);
+		c.setFields("uri", new HashMap<String, String>(), null, UserType.GUEST);
 		c.validate();
 	}
 
@@ -96,7 +98,7 @@ public class SearchForExperimentCommandTest {
 	public void testNotHavingRights() throws ValidateException {
 
 		Command c = new SearchCommand();
-		c.setFields("uri", "", null, UserType.UNKNOWN);
+		c.setFields("uri", new HashMap<String, String>(), null, UserType.UNKNOWN);
 		c.validate();
 		fail();
 	}

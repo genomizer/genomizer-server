@@ -3,6 +3,7 @@ package server;
 
 import command.process.PutProcessCommand;
 import command.Process;
+import response.ProcessResponse;
 import response.Response;
 import response.HttpStatusCode;
 
@@ -15,12 +16,14 @@ public class ProcessHandler implements Callable<Response> {
 
 	private PutProcessCommand processCommand;
 	private Process process;
+	private boolean simulateLongProcess;
 
 
 	public ProcessHandler(PutProcessCommand processCommand,
 						  Process process) {
 		this.processCommand = processCommand;
 		this.process = process;
+		simulateLongProcess = false;
 	}
 
 
@@ -64,6 +67,7 @@ public class ProcessHandler implements Callable<Response> {
 					Debug.log(successMsg);
 					ErrorLogger.log("PROCESS", successMsg);
 				} else {
+					System.out.println("Process status: " + response.getCode());
 					process.status = Process.STATUS_CRASHED;
 					String crashedMsg = "FAILURE! Execution of process with id "
 							+ processCommand.getPID() + " in experiment "
@@ -76,17 +80,20 @@ public class ProcessHandler implements Callable<Response> {
 				process.status = Process.STATUS_CRASHED;
 			}
 
-			// TODO: for simulation only, should be removed for production
-			/* Long time process execution simulation */
-			ErrorLogger.log("PROCESS", "Process is sleeping for 30 seconds.");
-			Debug.log("Process is sleeping for 30 seconds. PID " +
-					processCommand.getPID());
-			try {
-				Thread.sleep(30000);
-			} catch (InterruptedException ex) {
-				Debug.log("Sleep interrupted");
+			// A simulation of a long executing process
+			if (simulateLongProcess) {
+				/* Long time process execution simulation */
+				ErrorLogger.log("PROCESS", "Process is sleeping for 30 seconds.");
+				Debug.log("Process is sleeping for 30 seconds. PID " +
+						processCommand.getPID());
+				try {
+					Thread.sleep(30000);
+				} catch (InterruptedException ex) {
+					Debug.log("Sleep interrupted");
+				}
+				Debug.log("End of sleep. PID " + processCommand.getPID());
 			}
-			Debug.log("End of sleep. PID " + processCommand.getPID());
+
 
 
 			process.timeFinished = System.currentTimeMillis();
@@ -98,11 +105,19 @@ public class ProcessHandler implements Callable<Response> {
 
 		}
 
+		Debug.log("PID: " + processCommand.getPID());
+		Debug.log("Process response: " +
+				((ProcessResponse) response).getMessage());
+
 		return response;
 
 	}
 
-	String formatTimeDifference(long diffMillis) {
+	public void setSimulation(boolean flag) {
+		simulateLongProcess = flag;
+	}
+
+	private String formatTimeDifference(long diffMillis) {
 		long seconds = diffMillis / 1000;
 		long minutes = seconds / 60;
 		long hours   = minutes / 60;

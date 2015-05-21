@@ -15,6 +15,7 @@ import server.Debug;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.HashMap;
 
 /**
  * Command for user to update his/her information
@@ -42,15 +43,16 @@ public class PutUserCommand extends Command {
     }
 
     /**
-     * Set username using uuid along with the usertype
+     * Set username using userName along with the usertype
      * @param uri the URI from the http request.
      * @param query the query of the request
-     * @param uuid the uuid from the http request.
+     * @param username the userName from the http request.
      * @param userType the userType
      */
     @Override
-    public void setFields(String uri, String query, String uuid, UserMethods.UserType userType) {
-        username = Authenticate.getUsernameByID(uuid);
+    public void setFields(String uri, HashMap<String, String> query,
+                          String username, UserMethods.UserType userType) {
+        this.username = username;
         this.userType = userType;
     }
 

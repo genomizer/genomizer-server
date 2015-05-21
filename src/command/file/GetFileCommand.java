@@ -11,6 +11,7 @@ import response.*;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.HashMap;
 
 /**
  * retrieves a file linked to an experiment.
@@ -28,9 +29,10 @@ public class GetFileCommand extends Command {
 	}
 
 	@Override
-	public void setFields(String uri, String query, String uuid, UserType userType) {
+	public void setFields(String uri, HashMap<String, String> query,
+						  String username, UserType userType) {
 
-		super.setFields(uri, query, uuid, userType);
+		super.setFields(uri, query, username, userType);
 		fileID = uri.split("/")[2];
 	}
 
@@ -48,8 +50,8 @@ public class GetFileCommand extends Command {
 
 		try {
 			db = initDB();
-			fileTuple = db.getFileTuple(fileID);
-		} catch (SQLException | IOException e) {
+			fileTuple = db.getFileTuple(Integer.parseInt(fileID));
+		} catch (SQLException | IOException | NumberFormatException e) {
 			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 

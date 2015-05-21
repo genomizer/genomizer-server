@@ -3,6 +3,7 @@ package command.annotation;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import command.Command;
 import command.UserRights;
@@ -15,8 +16,6 @@ import response.HttpStatusCode;
 import response.MinimalResponse;
 import response.Response;
 import server.Debug;
-
-import javax.xml.crypto.Data;
 
 /**
  * Command used to handle removal of an existing annotation field.
@@ -33,9 +32,9 @@ public class DeleteAnnotationFieldCommand extends Command {
 	}
 
 	@Override
-	public void setFields(String uri, String query, String uuid,
-						  UserType userType) {
-		super.setFields(uri, query, uuid, userType);
+	public void setFields(String uri, HashMap<String, String> query,
+						  String username, UserType userType) {
+		super.setFields(uri, query, username, userType);
 		label = uri.split("/")[3];
 	}
 

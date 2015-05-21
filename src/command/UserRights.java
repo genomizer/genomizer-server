@@ -22,6 +22,9 @@ import command.user.PutUserCommand;
 import command.user.PutUserPasswordCommand;
 import command.admin.DeleteAdminUserCommand;
 import command.admin.PostAdminUserCommand;
+import command.user.*;
+import command.admin.DeleteUserCommand;
+import command.admin.PostUserCommand;
 import database.subClasses.UserMethods.UserType;
 
 import java.util.HashMap;

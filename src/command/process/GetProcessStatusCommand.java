@@ -1,6 +1,7 @@
 package command.process;
 
 import java.util.LinkedList;
+import java.util.Calendar;
 
 import command.Command;
 import command.Process;
@@ -20,6 +21,10 @@ import server.ProcessPool;
  * @version 1.1
  */
 public class GetProcessStatusCommand extends Command {
+
+	// Number of days in the past to retrieve processes
+	private int days = 30;
+
 	@Override
 	public int getExpectedNumberOfURIFields() {
 		return 1;
@@ -41,9 +46,20 @@ public class GetProcessStatusCommand extends Command {
 		ProcessPool processPool = Doorman.getProcessPool();
 		LinkedList<PutProcessCommand> processesList = processPool.getProcesses();
 		LinkedList<Process> getProcessStatuses = new LinkedList<>();
-        
+
+		Calendar pastCal = Calendar.getInstance();
+		pastCal.setTimeInMillis(System.currentTimeMillis());
+		pastCal.add(Calendar.DAY_OF_MONTH, -days);
+        	
+		Calendar finishedCal = Calendar.getInstance();
+
 		for (PutProcessCommand proc : processesList) {
-			getProcessStatuses.add(processPool.getProcessStatus(proc.getPID()));
+			Process process = processPool.getProcessStatus(proc.getPID());
+			finishedCal.setTimeInMillis(process.timeFinished);
+
+			if (finishedCal.after(pastCal)) {
+				getProcessStatuses.add(process);
+			}
 		}
 		return new GetProcessStatusResponse(getProcessStatuses);
 	}
