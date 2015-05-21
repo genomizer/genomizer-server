@@ -72,15 +72,15 @@ public class PutUserAdminCommand extends Command {
                 response = new MinimalResponse(HttpStatusCode.OK);
             } else {
                 response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
-                        "Editing of user " + username + " was unsuccessful, " +
-                                "user does not exist.");
+                        "Editing of user \"" + username + "\" was " +
+                                "unsuccessful, user does not exist.");
             }
         } catch (SQLException | IOException e) {
-            Debug.log("Editing of user: " + username + " was unsuccessful, " +
-                    "reason: " + e.getMessage());
+            Debug.log("Editing of user \"" + username + "\" was " +
+                    "unsuccessful, reason: " + e.getMessage());
             response = new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
-                    "Editing of user: " + username + " was unsuccessful due " +
-                            "to temporary problems with the database.");
+                    "Editing of user \"" + username + "\" was unsuccessful " +
+                            "due to temporary problems with the database.");
         } finally {
             if (db != null)
                 db.close();

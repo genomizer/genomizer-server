@@ -58,11 +58,11 @@ public class DeleteAdminUserCommand extends Command {
 						"Deletion of user unsuccessful, user does not exist.");
 			}
 		} catch (SQLException | IOException e) {
-			Debug.log("Deletion of user: " + username + " was unsuccessful, " +
-					"reason: " + e.getMessage());
+			Debug.log("Deletion of user \"" + username + "\" was " +
+					"unsuccessful, reason: " + e.getMessage());
 			response = new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
-					"Deletion of user: " + username + " was unsuccessful due " +
-							"to temporary problems with the database.");
+					"Deletion of user: \"" + username + "\" was unsuccessful " +
+							"due to temporary problems with the database.");
 		} finally {
 			if (db != null)
 				db.close();

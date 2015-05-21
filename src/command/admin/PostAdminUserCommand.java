@@ -64,15 +64,15 @@ public class PostAdminUserCommand extends Command {
 				response = new MinimalResponse(HttpStatusCode.OK);
 			} else {
 				response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
-						"Creation of user: " + username + " was unsuccessful," +
-								" user already exists.");
+						"Creation of user \"" + username + "\" was " +
+								"unsuccessful, user already exists.");
 			}
 		} catch (SQLException | IOException e) {
-			Debug.log("Creation of user: " + username + " was unsuccessful, " +
-					"reason: " + e.getMessage());
+			Debug.log("Creation of user \"" + username + "\" was " +
+					"unsuccessful, reason: " + e.getMessage());
 			response = new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
-					"Creation of user: " + username + " was unsuccessful due " +
-							"to temporary problems with the database.");
+					"Creation of user \"" + username + "\" was unsuccessful " +
+							"due to temporary problems with the database.");
 		} finally {
 			if (db != null)
 				db.close();
