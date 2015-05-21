@@ -84,7 +84,7 @@ public class Authenticate {
 	}
 
 	static public boolean isUserLoggedIn(String username) {
-		return (getID(username) == null ? false : true);
+		return (getID(username) != null);
 	}
 
 	/**
@@ -128,18 +128,20 @@ public class Authenticate {
 	}
 
 	/**
-	 * Performs authorization, returns null if the user could not be authorized,
+	 * Performs an authentication of the token
+	 * returns null if the user could not be authorized,
 	 * else it returns the uuid.
 	 */
  	public static String performAuthentication(HttpExchange exchange) {
 		String uuid = null;
 
-		// Get the value of the 'Authorization' header.
+		/** Get the value of the 'Authorization' header. */
 		List<String> authHeader = exchange.getRequestHeaders().
 				get("Authorization");
 		if (authHeader != null)
 			uuid = authHeader.get(0);
 
+		/** used for commands that send token in header */
 		if(uuid == null){
 			// Get the value of the 'token' parameter.
 			String uuid2;
@@ -157,8 +159,6 @@ public class Authenticate {
 			}
 		}
 
-
-		// Actual authentication.
 		Debug.log("Trying to authenticate token " + uuid + "...");
 		if (uuid != null && Authenticate.idExists(uuid)) {
 			Debug.log("User " + Authenticate.getUsernameByID(uuid)
