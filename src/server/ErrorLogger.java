@@ -4,30 +4,36 @@ import response.Response;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
+import java.util.*;
 
 public class ErrorLogger {
 
 
-	private static String logFile = System.getProperty("user.dir") + "/errorLog.txt";
+	private static String logFile = System.getProperty("user.dir")
+			+ "/errorLog.txt";
 
-	private static HashMap<String, ArrayList<Response>> usermap = new HashMap<String,ArrayList<Response>>();
+	private static HashMap<String, ArrayList<Response>> usermap
+			= new HashMap<String,ArrayList<Response>>();
 
 
 	// Utilities tool
-	private ErrorLogger(){
+	private ErrorLogger() {
 
 	}
 
 	public synchronized static void log(String tag, String logText){
 
 		File file = new File(logFile);
-		String timeString = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date(System.currentTimeMillis()));
-		String text = timeString + " : " + tag + " | " + logText;
-		try{
 
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeZone(TimeZone.getDefault());
+		cal.setTimeInMillis(System.currentTimeMillis());
+		Date date = cal.getTime();
+
+		String timeString = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(date);
+		String text = timeString + " : " + tag + " | " + logText;
+		
+		try {
 			file.createNewFile();
 
 			BufferedWriter out = new BufferedWriter(new FileWriter(logFile, true));

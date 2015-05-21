@@ -43,6 +43,6 @@ public class FileInformation {
     	uploader = src.uploader;
     	expId = src.expId;
     	grVersion = src.grVersion;
-        fileSize = "1000";
+        fileSize = src.fileSize;
     }
 }
