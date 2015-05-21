@@ -13,9 +13,9 @@ import com.google.gson.annotations.Expose;
 public class ProcessResponse extends Response {
 
 	@Expose
-	private String message;
+	String message;
 	@Expose
-	private Date date;
+	Date date;
 
 
 	/**
@@ -41,4 +41,12 @@ public class ProcessResponse extends Response {
 		date = new Date(System.currentTimeMillis());
 	}
 
+
+	public String getMessage() {
+		return message;
+	}
+
+	public Date getDate() {
+		return date;
+	}
 }

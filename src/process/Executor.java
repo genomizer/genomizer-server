@@ -1,6 +1,11 @@
 package process;
 
+import database.DatabaseAccessor;
+import database.containers.FileTuple;
+import server.Debug;
 import server.ErrorLogger;
+import command.Command;
+import java.util.Arrays;
 
 import java.io.*;
 import java.nio.file.FileSystems;
@@ -8,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.security.AccessControlException;
+import java.sql.SQLException;
 import java.util.Scanner;
 import java.util.Stack;
 import java.util.StringTokenizer;
@@ -21,6 +27,7 @@ import java.util.StringTokenizer;
 public abstract class Executor {
 
 	private final String FILEPATH = "resources/";
+	private DatabaseAccessor db;
 
 	/**
 	 * Used to execute a program like bowtie
@@ -58,9 +65,13 @@ public abstract class Executor {
 		File pathToExecutable = new File(FILEPATH + command[1]);
 
 		/* Checks if script can be executed, does not execute, throws excp.*/
+		Debug.log("[Executor.executeScript] Path to executable: "
+				+ pathToExecutable.toString());
 		isExecutable(pathToExecutable);
 
 		command[1] = pathToExecutable.getAbsolutePath();
+		Debug.log("[Executor.executeScript] Executing the command: "
+				+ Arrays.toString(command));
 		return executeCommand(command);
 
 	}
@@ -83,7 +94,6 @@ public abstract class Executor {
 			throw new AccessControlException(
 					"No permission to execute "+executable);
 		}
-
 	}
 
 	/**
@@ -112,7 +122,7 @@ public abstract class Executor {
 	 * @throws InterruptedException
 	 * @throws IOException
 	 */
-	private String executeCommand(String[] command)
+	protected String executeCommand(String[] command)
 			throws InterruptedException, IOException {
 		ProcessBuilder builder = new ProcessBuilder(command);
 
@@ -130,7 +140,6 @@ public abstract class Executor {
 		}
 		processOutput.close();
 
-
 		process.waitFor();
 
 		/* Check if command finished successfully */
@@ -138,8 +147,6 @@ public abstract class Executor {
 			throw new RuntimeException(results.toString());
 		}
 
-		// System.out.printf( "Process exited with result %d and output %s%n",
-		// result, text );
 		return results.toString();
 	}
 
@@ -188,8 +195,6 @@ public abstract class Executor {
 		// Wait for the process to finish
 		process.waitFor();
 
-		// System.out.printf( "Process exited with result %d and output %s%n",
-		// result, text );
 		return text.toString();
 	}
 
@@ -200,46 +205,79 @@ public abstract class Executor {
 	 * @return
 	 * @throws ProcessException
 	 */
-	protected boolean cleanUp(Stack<String> files) throws ProcessException {
+	protected boolean cleanUp(Stack<String> files) {
+
+		/* TODO should this be replaced with FileUtils.deleteDirectory?*/
+
 		boolean isOk = true;
 
-		while (!files.isEmpty()) {
+		try {
+			db = Command.initDB();
 
-			File file = new File(files.pop());
+			while (!files.isEmpty()) {
 
-			// If it is a directory, delete contents first
-			if (file.isDirectory()) {
+				File file = new File(files.pop());
 
-				// Save file references into an array
-				File[] fileList = file.listFiles();
+				// If it is a directory, delete contents first
+				if (file.isDirectory()) {
 
-				// Delete each file with a reference in the array
-				for (int i = 0; i < fileList.length; i++) {
-					if (fileList[i].isFile()) {
+					// Save file references into an array
+					File[] fileList = file.listFiles();
 
-						if (fileList[i].delete()) {
-							ErrorLogger.log("SYSTEM", "Deleting "
-									+ fileList[i].toString());
-							//throw new ProcessException("Failed to delete file "+fileList[i].toString());
-						} else {
-							isOk = false;
-							ErrorLogger.log("SYSTEM", "Deletion of " +
-									fileList[i] +	" failed.");
-						}
-					}
+					// Delete each file with a reference in the array
+					isOk = deleteFiles(fileList);
+				}
+
+				// Delete the file/directory
+				if (file.delete()) {
+					ErrorLogger.log("SYSTEM", "Deleting " + file.toString());
+				} else {
+					isOk = false;
+					ErrorLogger.log("SYSTEM", "Failed to delete directory " + file);
 				}
 			}
 
-			// Delete the file/directory
-			if (file.delete()) {
-				ErrorLogger.log("SYSTEM", "Deleting " + file.toString());
-				//throw new ProcessException("Failed to delete directory "+file.toString());
-			} else {
-				isOk = false;
-				ErrorLogger.log("SYSTEM", "Failed to delete directory " + file);
+		} catch (SQLException | IOException ex) {
+			ErrorLogger.log("SYSTEM", "Executor::cleanUp: could not connect " +
+					"to the database");
+			Debug.log("Executor::cleanUp: could not connect " +
+				"to the database");
+			return false;
+		} finally {
+			if (db != null && db.isConnected()) {
+				db.close();
 			}
 		}
 
+
+		return isOk;
+	}
+
+	/**
+	 * Helper method that deletes given files. Doesn't delete directory files.
+	 *
+	 * @param fileList List of files to delete
+	 * @return False if one or more files wasn't deleted, true otherwise.
+	 */
+	private boolean deleteFiles(File[] fileList) throws SQLException, IOException{
+		boolean isOk = true;
+		if (fileList != null){
+			for (File fileToDelete : fileList) {
+				if (fileToDelete.isFile()) {
+					if (fileToDelete.delete()) {
+						FileTuple fileTuple = db.getFileTuple(fileToDelete
+								.getAbsolutePath());
+						db.deleteFile(fileTuple.path);
+						ErrorLogger.log("SYSTEM", "Deleting "
+										  + fileToDelete.toString());
+					} else {
+						isOk = false;
+						ErrorLogger.log("SYSTEM", "Deletion of " +
+										  fileToDelete + " failed.");
+					}
+				}
+			}
+		}
 		return isOk;
 	}
 
@@ -265,37 +303,35 @@ public abstract class Executor {
 						"If you are running ratio calculation, " +
 						"make sure the name is correct");
 			} else {
-				for (int i = 0; i < filesInDir.length; i++) {
-
+				for (File endFile : filesInDir) {
 
 					// Path to source file
 					Path sourcePath = FileSystems.getDefault().getPath
-							(orgDir, filesInDir[i].getName());
+							(orgDir, endFile.getName());
 
 					// Path to target file
 					Path targetPath = FileSystems.getDefault().getPath
-							(destDir, filesInDir[i].getName());
+							(destDir, endFile.getName());
 
 					// Move file if it is not a directory
-					if (!filesInDir[i].isDirectory()) {
+					if (!endFile.isDirectory()) {
 						try {
 							Files.move(sourcePath, targetPath,
 									StandardCopyOption.REPLACE_EXISTING);
 						} catch (IOException e) {
 							ErrorLogger.log("SYSTEM", "Could not move file "
-									+ filesInDir[i].getName() + " from " +
+									+ endFile.getName() + " from " +
 									sourcePath.toString() + " to " +
 									targetPath.toString());
 						}
 					}
 				}
-
 			}
 		}
 	}
 
 	/**
-	 * Checks if a a analysis step is executed correctly and made a file.
+	 * Checks if an analysis step has executed correctly and produced a file.
 	 *
 	 * @param dirToCheck
 	 * @return
@@ -312,14 +348,13 @@ public abstract class Executor {
 		} else if (filesInDir.length == 1 && filesInDir[0].isDirectory()) {
 			return false;
 		} else if (filesInDir.length >= 1) {
-			for (int i = 0; i < filesInDir.length; i++) {
-				if (!filesInDir[i].isDirectory()) {
-					if (filesInDir[i].length() == 0) {
+			for (File file : filesInDir) {
+				if (!file.isDirectory()) {
+					if (file.length() == 0) {
 						return false;
 					}
 				}
 			}
-
 		}
 		return true;
 	}

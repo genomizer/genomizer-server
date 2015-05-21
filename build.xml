@@ -69,17 +69,22 @@
             <fileset dir="bin/" id="fileset.class">
                 <include name ="**/*.class" />
                 <exclude name="**/test/**/*" />
+                <exclude name="smoothing/*" />
             </fileset>
-            <zipgroupfileset refid="fileset.jars"/>
+            <zipgroupfileset refid="fileset.jars" />
             <manifest>
                 <attribute name="Main-Class" value="ServerMain" />
             </manifest>
         </jar>
-        <jar destfile="secure-server.jar">
-            <fileset refid="fileset.class"/>
-            <zipgroupfileset refid="fileset.jars"/>
+        <jar destfile="resources/smoothing.jar">
+            <fileset dir="bin/" id="fileset.smoothing.class">
+                <include name ="smoothing/SmoothingAndStep.class" />
+                <include name ="process/ProcessException.class" />
+                <include name ="process/Tuple.class" />
+            </fileset>
             <manifest>
-                <attribute name="Main-Class" value="SecureServerMain" />
+                <attribute name="Main-Class"
+                           value="smoothing.SmoothingAndStep" />
             </manifest>
         </jar>
     </target>
@@ -88,14 +93,13 @@
         <delete dir="bin"/>
         <delete dir="${junit.output.dir}"/>
         <delete file="server.jar"/>
-        <delete file="sequreserver.jar"/>
     </target>
 
-	<target name="run" depends="jar">
-		<java jar="server.jar" fork="true">
-			<arg value="-debug"/>
-		</java>
-	</target>
+    <target name="run" depends="jar">
+      <java jar="server.jar" fork="true">
+	<arg value="-debug"/>
+      </java>
+    </target>
 
     <target name="test" depends="build">
       <junit printsummary="withOutAndErr">

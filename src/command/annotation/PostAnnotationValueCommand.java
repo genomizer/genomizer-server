@@ -1,0 +1,76 @@
+package command.annotation;
+
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
+
+import com.google.gson.annotations.Expose;
+import command.Command;
+import command.UserRights;
+import command.ValidateException;
+import database.DatabaseAccessor;
+import database.constants.MaxLength;
+import response.ErrorResponse;
+import response.HttpStatusCode;
+import response.MinimalResponse;
+import response.Response;
+import server.Debug;
+
+/**
+ * Class used to handle the process of adding annotation
+ * values.
+ *
+ * @author Business Logic 2015.
+ * @version 1.1
+ */
+public class PostAnnotationValueCommand extends Command {
+	@Expose
+	private String name = null;
+
+	@Expose
+	private String value = null;
+
+	@Override
+	public int getExpectedNumberOfURIFields() {
+		return 2;
+	}
+
+
+	@Override
+	public void validate() throws ValidateException {
+		hasRights(UserRights.getRights(this.getClass()));
+		validateName(name, MaxLength.ANNOTATION_LABEL, "Annotation label");
+		validateName(value, MaxLength.ANNOTATION_VALUE, "Annotation value");
+		if(value.equals("freetext")){
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Can not" +
+					" name a value \"freetext\"");
+		}
+	}
+
+	@Override
+	public Response execute() {
+		DatabaseAccessor db = null;
+		try {
+			db = initDB();
+			List<String> values = db.getChoices(name);
+			if(values.contains(value)) {
+				db.close();
+				return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "The " +
+						"annotation " + name + " already contains the value " +
+						value);
+			}
+			db.addDropDownAnnotationValue(name, value);
+		} catch(SQLException | IOException e) {
+			Debug.log("Adding of annotation value: " + value + " on annotation " + name + " failed. Reason: " +
+					e.getMessage());
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Could not add annotation value: "
+					+value+ " on annotation "+name+" because of temporary problems with database.");
+		} finally {
+			if (db != null) {
+				db.close();
+			}
+ 		}
+
+		return new MinimalResponse(HttpStatusCode.OK);
+	}
+}

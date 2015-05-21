@@ -46,14 +46,14 @@ public class PubMedToSQLConverterTests {
     private String sqlFragmentForExpAttrInFileSearch =
     		"SELECT * FROM File AS F "
             + "WHERE EXISTS (SELECT * FROM Annotated_With AS A "
-            + "WHERE F.ExpID = A.ExpID AND A.Label ~~* ? AND A.Value ~* ?)";
+            + "WHERE F.ExpID = A.ExpID AND A.Label ~~* ? AND A.Value ~* ?) AND F.Status = 'Done'";
 
     private String sqlFragmentForExpAttrInFileSearchNegated =
     		"SELECT * FROM File AS F "
             + "WHERE NOT EXISTS (SELECT * FROM Annotated_With AS A "
-            + "WHERE F.ExpID = A.ExpID AND A.Label ~~* ? AND A.Value ~* ?)";
+            + "WHERE F.ExpID = A.ExpID AND A.Label ~~* ? AND A.Value ~* ?) AND F.Status = 'Done'";
 
-    private String sqlFragmentForFileAttr = "SELECT * FROM File " + "WHERE ";
+    private String sqlFragmentForFileAttr = "SELECT * FROM File " + "WHERE Status='Done' AND ";
 
     private String orderBySqlFragment = "\nORDER BY ExpID";
 
@@ -128,7 +128,7 @@ public class PubMedToSQLConverterTests {
 
         String query = pm2sql.convertFileSearch(fileConstraintPmStr);
 
-        String expected = sqlFragmentForFileAttr + "Author ~~* ?"
+        String expected = sqlFragmentForFileAttr + "Author ~* ?"
                 + orderBySqlFragment;
 
         assertEquals(expected, query);
@@ -145,7 +145,7 @@ public class PubMedToSQLConverterTests {
 
         // (Ruaridh Watt[Author] OR (Human[Species] AND Arm[Tissue]))
 
-        String expected = "(" + sqlFragmentForFileAttr + "Author ~~* ?"
+        String expected = "(" + sqlFragmentForFileAttr + "Author ~* ?"
                 + "\nUNION\n" + "(" + sqlFragmentForExpAttrInFileSearch
                 + "\nINTERSECT\n" + sqlFragmentForExpAttrInFileSearch + "))"
                 + orderBySqlFragment;

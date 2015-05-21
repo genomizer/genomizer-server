@@ -27,6 +27,7 @@ public class FileTableTests {
     private static DatabaseAccessor dbac;
 
     private String testName = "testFileName1.txt";
+    private String testName2 = "testFileName2.txt";
     private String testInputFile = "testInputFile.fata";
     private int testFileType = FileTuple.RAW;
     private String testAuthor = "testFileAuthor1";
@@ -38,8 +39,6 @@ public class FileTableTests {
     private String testMD5       = null;
     private static FileTuple ft;
 
-    private static String testFolderName =
-    		"Genomizer Test Folder - Dont be afraid to delete me";
     private static File testFolder;
     private static String testFolderPath;
     private static FilePathGenerator fpg;
@@ -54,14 +53,8 @@ public class FileTableTests {
                 TestInitializer.password, TestInitializer.host,
                 TestInitializer.database);
 
-        testFolderPath = System.getProperty("user.home") + File.separator
-                + testFolderName + File.separator;
-
+        testFolderPath = TestInitializer.createScratchDir();
         testFolder = new File(testFolderPath);
-
-        if (!testFolder.exists()) {
-            testFolder.mkdirs();
-        }
 
         fpg = dbac.getFilePathGenerator();
         fpg.setRootDirectory(testFolderPath);
@@ -112,7 +105,7 @@ public class FileTableTests {
         e = dbac.getExperiment(testExpId);
         assertEquals(0, e.getFiles().size());
 
-        FileTuple ft = dbac.addNewFile(testExpId, testFileType, testName,
+        ft = dbac.addNewFile(testExpId, testFileType, testName,
                 testInputFile, testMetaData, testAuthor, testUploader,
                 testIsPrivate, testGRVersion, testMD5);
         e = dbac.getExperiment(testExpId);
@@ -154,17 +147,16 @@ public class FileTableTests {
         assertEquals(1, dbac.deleteFile(fileID));
         assertFalse(dbac.hasFile(fileID));
 
-        dbac.addNewFile(testExpId, testFileType, testName,
+        ft = dbac.addNewFile(testExpId, testFileType, testName,
                 testInputFile, testMetaData, testAuthor, testUploader,
                 testIsPrivate, testGRVersion, testMD5);
     }
 
 
-    @Test (expected = IOException.class)
     public void shouldReturnZeroIfFileToBeDeletedDoesNotExistInDatabase()
             throws Exception {
 
-        dbac.deleteFile(212313);
+        assertEquals(0, dbac.deleteFile(212313));
     }
 
 
@@ -177,7 +169,7 @@ public class FileTableTests {
         assertEquals(1, dbac.deleteFile(ft.path));
         assertFalse(fileToDelete.exists());
 
-        dbac.addNewFile(testExpId, testFileType, testName, testInputFile,
+        ft = dbac.addNewFile(testExpId, testFileType, testName, testInputFile,
         		testMetaData, testAuthor, testUploader, testIsPrivate,
         		testGRVersion, testMD5);
     }
@@ -192,24 +184,16 @@ public class FileTableTests {
 
     @Test
     public void shouldBeInProgressAfterAddition() throws Exception {
-
+        FileTuple ft2 = dbac.addNewInProgressFile(testExpId, testFileType, testName2, testInputFile,
+                testMetaData, testAuthor, testUploader, testIsPrivate,
+                testGRVersion, testMD5);
+        assertEquals("In Progress", ft2.status);
+        dbac.markReadyForDownload(ft2);
         Experiment e = dbac.getExperiment(testExpId);
-        ft = e.getFiles().get(0);
-
-        assertEquals("In Progress", ft.status);
+        ft2 = e.getFiles().get(1);
+        assertEquals("Done", ft2.status);
+        dbac.deleteFile(ft2.id);
     }
-
-
-    @Test
-    public void shouldBeDoneAfterCallingReadyForDownload() throws Exception {
-
-        dbac.fileReadyForDownload(ft.id);
-        Experiment e = dbac.getExperiment(testExpId);
-        ft = e.getFiles().get(0);
-
-        assertEquals("Done", ft.status);
-    }
-
 
     @Test
     public void changeFileNameTest() throws SQLException, IOException,

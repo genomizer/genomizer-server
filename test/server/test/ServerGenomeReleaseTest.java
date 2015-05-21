@@ -42,9 +42,9 @@ public class ServerGenomeReleaseTest extends ServerAbstractTestClass {
 
 		sendLogout();
 
-		assertTrue(HttpStatusCode.CREATED == firstAdd);
+		assertTrue(HttpStatusCode.OK == firstAdd);
 		assertTrue(HttpStatusCode.OK == firstRemove);
-		assertTrue(HttpStatusCode.CREATED == secondAdd);
+		assertTrue(HttpStatusCode.OK == secondAdd);
 		assertTrue(HttpStatusCode.OK == secondDelete);
 
 	}

@@ -12,7 +12,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import command.Command;
-import command.GetGenomeReleaseSpeciesCommand;
+import command.genomerelease.GetGenomeReleaseSpeciesCommand;
 
 import database.DatabaseAccessor;
 //import database.Genome;
@@ -22,6 +22,7 @@ import response.HttpStatusCode;
 import response.Response;
 import server.ServerSettings;
 
+@Ignore
 public class GetGenomeReleaseResponseTest {
 
 	@Before
@@ -38,8 +39,8 @@ public class GetGenomeReleaseResponseTest {
 		try {
 
 			new DatabaseAccessor(ServerSettings.databaseUsername, ServerSettings.databasePassword, ServerSettings.databaseHost, ServerSettings.databaseName);
-			//genomeList = db.getAllGenomeReleases();
-			Command cmd=new GetGenomeReleaseSpeciesCommand("mouseTEST");
+			//genomeList = db.getAllGenomReleases();
+			Command cmd=new GetGenomeReleaseSpeciesCommand();
 			Response rsp=cmd.execute();
 			assertEquals(HttpStatusCode.OK, rsp.getCode());
 
@@ -64,8 +65,8 @@ public class GetGenomeReleaseResponseTest {
 		try {
 
 			new DatabaseAccessor(ServerSettings.databaseUsername, ServerSettings.databasePassword, ServerSettings.databaseHost, ServerSettings.databaseName);
-			//genomeList = db.getAllGenomeReleases();
-			Command cmd=new GetGenomeReleaseSpeciesCommand("hej");
+			//genomeList = db.getAllGenomReleases();
+			Command cmd=new GetGenomeReleaseSpeciesCommand();
 			Response rsp=cmd.execute();
 			assertEquals(HttpStatusCode.BAD_REQUEST, rsp.getCode());
 
@@ -84,7 +85,7 @@ public class GetGenomeReleaseResponseTest {
 		ArrayList<database.containers.Genome> genomeList;
 		try {
 			DatabaseAccessor db=new DatabaseAccessor(ServerSettings.databaseUsername, ServerSettings.databasePassword, ServerSettings.databaseHost, ServerSettings.databaseName);
-			genomeList = (ArrayList<database.containers.Genome>) db.getAllGenomReleases();
+			genomeList = (ArrayList<database.containers.Genome>) db.getAllGenomeReleases();
 
 		/*	for(int i=0; i<db.getAllAnnotationLabels().size();i++){
 				System.out.println(db.getAllAnnotationLabels().get(i));
