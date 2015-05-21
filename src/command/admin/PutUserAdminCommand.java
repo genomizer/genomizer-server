@@ -1,6 +1,5 @@
 package command.admin;
 
-import database.subClasses.UserMethods.UserType;
 import authentication.BCrypt;
 import com.google.gson.annotations.Expose;
 import command.Command;
@@ -8,10 +7,11 @@ import command.UserRights;
 import command.ValidateException;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
+import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
+import response.HttpStatusCode;
 import response.MinimalResponse;
 import response.Response;
-import response.HttpStatusCode;
 import server.Debug;
 
 import java.io.IOException;

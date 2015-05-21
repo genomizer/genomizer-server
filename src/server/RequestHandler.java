@@ -21,9 +21,8 @@ import transfer.UploadHandler;
 import transfer.Util;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.io.OutputStream;
-import java.net.URI;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;

@@ -1,14 +1,14 @@
 package process;
 
+import command.ValidateException;
+import server.ErrorLogger;
+import server.ServerSettings;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Stack;
-
-import command.ValidateException;
-import server.ErrorLogger;
-import server.ServerSettings;
 
 /**
  * Class used to create profile data from .fastq format.

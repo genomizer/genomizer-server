@@ -1,21 +1,21 @@
 package command.annotation;
 
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.ArrayList;
-
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import command.Command;
 import command.UserRights;
 import command.ValidateException;
+import database.DatabaseAccessor;
+import database.constants.MaxLength;
 import response.AddAnnotationFieldResponse;
 import response.ErrorResponse;
 import response.HttpStatusCode;
 import response.Response;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-import database.DatabaseAccessor;
-import database.constants.MaxLength;
 import server.Debug;
+
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  * This class is created to handle the process of adding a new
