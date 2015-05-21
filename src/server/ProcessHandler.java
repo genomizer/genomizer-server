@@ -125,20 +125,20 @@ public class ProcessHandler implements Callable<Response> {
 
 
 		if (days > 0) {
-			return new String(days + " days, " + hours + " hours, "
+			return (days + " days, " + hours + " hours, "
 					+ minutes + " minutes, " + seconds + " seconds");
 		}
 
 		if (hours > 0) {
-			return new String(hours + " hours, "
+			return (hours + " hours, "
 					+ minutes + " minutes, " + seconds + " seconds");
 		}
 
 		if (minutes > 0) {
-			return new String(minutes + " minutes, " + seconds + " seconds");
+			return (minutes + " minutes, " + seconds + " seconds");
 		}
 
-		return new String(seconds + " seconds");
+		return (seconds + " seconds");
 	}
 
 
