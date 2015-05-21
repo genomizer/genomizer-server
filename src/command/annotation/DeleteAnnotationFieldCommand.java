@@ -64,9 +64,10 @@ public class DeleteAnnotationFieldCommand extends Command {
 			Debug.log("Deletion of annotation label: " + label +
 					" was unsuccessful, reason: " + e.getMessage());
 			response = new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
-					"Deletion of annotation label: " + label +
+					"Deletion of annotation label " + label +
 							" was unsuccessful due to temporary problems with" +
-							" the database.");
+							" the database. The annotation may also be in" +
+							" use.");
 		} finally {
 			if (db != null)
 				db.close();
