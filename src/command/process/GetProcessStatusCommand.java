@@ -47,11 +47,11 @@ public class GetProcessStatusCommand extends Command {
 		LinkedList<Process> getProcessStatuses = new LinkedList<>();
 
 		long currentTime = System.currentTimeMillis();
-		long timeWeekAgo = currentTime - 60*60*24*days*1000;
+		long pastTime = currentTime - 60*60*24*days*1000;
         
 		for (PutProcessCommand proc : processesList) {
 			Process process = processPool.getProcessStatus(proc.getPID());
-			//if (process.timeFinished >= timeWeekAgo) {
+			//if (process.timeFinished >= pastTime) {
 				getProcessStatuses.add(process);
 			//}
 		}
