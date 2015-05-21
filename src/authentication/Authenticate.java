@@ -67,7 +67,7 @@ public class Authenticate {
 
 
 	/**
-	 * Method used to get the id for a user.
+	 * Method used to get the id for an active user.
 	 *
 	 * @param username to get the id for.
 	 * @return the id representing the user.
@@ -79,6 +79,10 @@ public class Authenticate {
 			}
 		}
 		return null;
+	}
+
+	static public boolean isUserLoggedIn(String username) {
+		return (getID(username) == null ? false : true);
 	}
 
 	/**
