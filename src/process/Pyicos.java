@@ -74,7 +74,8 @@ public class Pyicos extends Executor {
             validateException("Unsupported 'pyicos' subcommand!");
         }
         if (!new File(inFile).exists()) {
-            validateException("The input file '" + inFile + "' doesn't exist!");
+            validateException("The input file '" +
+                              (new File(inFile).getAbsolutePath()) + "' doesn't exist!");
         }
         if (!supportedInputFormats.get(command).contains(inFormat)) {
             validateException("Input format '" + inFormat
@@ -133,6 +134,7 @@ public class Pyicos extends Executor {
         strcorr.validate();
         String haystack = strcorr.execute();
         strcorr.cleanupTempFiles();
+
 
         // Get the extension length from its output.
         String needle = "Correlation test RESULT: You should extend this dataset to ";

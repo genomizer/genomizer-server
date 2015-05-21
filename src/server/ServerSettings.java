@@ -16,7 +16,7 @@ public class ServerSettings {
 	public static int wwwTunnelPort = -1;
 	public static int genomizerPort = -1;
 	public static String fileLocation = "/var/www/data/";
-	public static String pyicosLocation = "pyicos";
+	public static String pyicosLocation = "pyicoteo/pyicos";
 	public static String bowtieLocation = "bowtie/bowtie";
 	public static String picardLocation = "picard-tools";
 	public static int nrOfProcessThreads = 5;

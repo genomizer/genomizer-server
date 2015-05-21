@@ -114,7 +114,7 @@ public class RawToProfileConverter extends Executor {
 				try {
 					Picard.runSortSam(
 							dir + rawFile_1_Name + ".sam",
-							dir+rawFile_1_Name + "_sorted.sam");
+							dir + rawFile_1_Name + "_sorted.sam");
 				} catch (ValidateException e) {
 					e.printStackTrace();
 				} catch (InterruptedException e) {
@@ -128,7 +128,7 @@ public class RawToProfileConverter extends Executor {
 				try {
 					Picard.runRemoveDuplicates(
                             dir+rawFile_1_Name+"_sorted.sam",
-                            rawFile_1_Name + "_sorted_without_duplicates.sam"
+                            dir+rawFile_1_Name + "_sorted_without_duplicates.sam"
                             );
 				} catch (ValidateException e) {
 					e.printStackTrace();
@@ -137,6 +137,24 @@ public class RawToProfileConverter extends Executor {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
+			}
+
+			if(checker.shouldRunConvert()) {
+				try {
+					System.out.println("dir = " + dir);
+					Pyicos.runConvert(
+							dir + rawFile_1_Name +
+							"_sorted_without_duplicates.sam");
+					filesToBeMoved = sortedDirForFile;
+					toBeRemoved.push(filesToBeMoved);
+				} catch (ValidateException e) {
+					e.printStackTrace();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
 			}
 
 
@@ -230,7 +248,7 @@ public class RawToProfileConverter extends Executor {
 		makeConversionDirectories(remoteExecution + "resources/" + dir
 				+ "/sorted");
 		checker.calculateWhichProcessesToRun(parameters);
-		if(!ValidateParameters(parameters)) {
+		if(!validateParameters(parameters)) {
 			throw new ProcessException("Parameters are incorrect");
 		}
 		/* Updates attribute raw files. */

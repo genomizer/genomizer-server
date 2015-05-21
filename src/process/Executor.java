@@ -123,6 +123,7 @@ public abstract class Executor {
 
 		builder.directory(new File(FILEPATH).getAbsoluteFile());
 		builder.redirectErrorStream(true);
+		System.out.println("BUILDER: "+builder.directory().getAbsolutePath());
 		Process process;
 		process = builder.start();
 
@@ -139,6 +140,7 @@ public abstract class Executor {
 
 		/* Check if command finished successfully */
 		if(process.exitValue() != 0) {
+			System.out.println(System.getProperty("user.dir"));
 			throw new RuntimeException(results.toString());
 		}
 
