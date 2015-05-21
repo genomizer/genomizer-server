@@ -3,6 +3,7 @@ package process;
 import command.ValidateException;
 import response.HttpStatusCode;
 import server.ServerSettings;
+import server.ErrorLogger;
 import transfer.Util;
 
 import java.io.File;
@@ -74,10 +75,11 @@ public class Pyicos extends Executor {
         if (!(command.equals("convert") || command.equals("strcorr"))) {
             validateException("Unsupported 'pyicos' subcommand!");
         }
-        if (!new File(inFile).exists()) {
-            validateException("Pyicos input file '" + inFile + "' doesn't exist!");
+ /*       if (!new File(inFile).exists()) {
+            validateException("The input file '" +
+                              (new File(inFile).getAbsolutePath()) + "' doesn't exist!");
         }
-        if (!supportedInputFormats.get(command).contains(inFormat)) {
+   */     if (!supportedInputFormats.get(command).contains(inFormat)) {
             validateException("Input format '" + inFormat
                     + "' not supported for 'pyicos' command '" + command + "'!");
         }
@@ -105,7 +107,7 @@ public class Pyicos extends Executor {
             args.add(additionalParam);
         }
 
-        return executeCommand(args.toArray(new String[]{}));
+        return executeProgram(args.toArray(new String[]{}));
     }
 
     public void cleanupTempFiles() {
@@ -127,13 +129,18 @@ public class Pyicos extends Executor {
         Pyicos strcorr = new Pyicos("strcorr", samFile, Util.replaceExtension(samFile, ".pk"),
                 "sam", "bed_pk", new String[] {});
         strcorr.validate();
+	ErrorLogger.log("SYSTEM", "Validated strcorr");
         String haystack = strcorr.execute();
+	ErrorLogger.log("SYSTEM", "Executed strcorr");
         strcorr.cleanupTempFiles();
+
 
         // Get the extension length from its output.
         String needle = "Correlation test RESULT: You should extend this dataset to ";
         if (haystack.indexOf(needle) < 0) {
-            throw new RuntimeException("'pyicos strcorr' invocation failed!");
+ 		ErrorLogger.log("SYSTEM", "Pyicos error, correlation result invalid");
+		return 303;
+	   	
         }
         Pattern p = Pattern.compile(needle + "([0-9]+(\\.[0-9]+)?)");
         Matcher m = p.matcher(haystack);
@@ -148,13 +155,16 @@ public class Pyicos extends Executor {
             throws ValidateException, InterruptedException, IOException {
         // Get the extension length from strcorr.
         int extensionLength = runStrcorr(samFile);
+	ErrorLogger.log("SYSTEM", "Done with strcorr");
         String wigFile = Util.replaceExtension(samFile, ".wig");
 
         // Run 'convert'.
         Pyicos convert = new Pyicos("convert", samFile, wigFile,
                 "sam", "bed_wig", new String[] {"-O", "-x", String.valueOf(extensionLength)});
         convert.validate();
+	ErrorLogger.log("SYSTEM", "Validated conversion");
         convert.execute();
+	ErrorLogger.log("SYSTEM", "Executed conversion");
         convert.cleanupTempFiles();
 
         return wigFile;

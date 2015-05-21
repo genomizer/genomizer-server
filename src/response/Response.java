@@ -42,4 +42,12 @@ public abstract class Response {
 		return code + getBody();
 	}
 
+	/**
+	 * Returns the message associated with this response.
+	 * @return
+	 */
+	public String getMessage() {
+		return HttpStatusCode.getMessage(code);
+	}
+
 }

@@ -3,8 +3,11 @@ package process;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Stack;
 
+import com.sun.corba.se.spi.activation.Server;
+import command.ValidateException;
 import server.ErrorLogger;
 import server.ServerSettings;
 
@@ -72,42 +75,11 @@ public class RawToProfileConverter extends Executor {
 	public String procedure(String[] parameters, String inFolder,
 			String outFilePath) throws ProcessException {
 
-		/*If you want to run several processes simultaneously, this would need to be changed*/
-		StartUpCleaner.removeOldTempDirectories("resources/");
-		File[] inFiles = null;
+		/* Will initiate files, directories et c. needed to run procedure,
+		 * can cast exceptions */
+		File[] inFiles = initiateProcedure(parameters, inFolder, outFilePath);
 
-		// Error handling
-		if (inFolder == null) {
-			throw new ProcessException("Fatal error: This should never happen");
-		}
-		inFolder = validateInFolder(inFolder);
-		inFiles = getRawFiles(inFolder);
-
-		// Check if there are any raw files
-		if (inFiles == null || inFiles.length == 0) {
-			throw new ProcessException("Folder does not contain raw files");
-		}
-
-		this.parameters = parameters;
-		this.inFolder = inFolder;
-
-		// Checks all parameters that they are correct before proceeding
-		if (!verifyInData(parameters, inFolder, outFilePath)
-				|| !correctInfiles(inFiles)) {
-			throw new ProcessException("Wrong format of input data");
-		}
-		// Runs the procedure.
-
-		initiateConversionStrings(parameters, outFilePath);
-		makeConversionDirectories(remoteExecution + "resources/" + dir
-				+ "/sorted");
-		checker.calculateWhichProcessesToRun(parameters);
-		if(!validateParameters(parameters)) {
-			throw new ProcessException("Parameters are incorrect");
-		}
-		/* Updates attribute raw files. */
-		parseRawFiles(inFiles);
-		initiateConversionStrings(parameters, outFilePath);
+		ErrorLogger.log("SYSTEM", Arrays.toString(parameters));
 
 		// printTrace(parameters, inFolder, outFilePath);
 		if (fileDir.exists()) {
@@ -115,15 +87,16 @@ public class RawToProfileConverter extends Executor {
 			if (checker.shouldRunBowTie()) {
 				ErrorLogger.log("SYSTEM", "Running Bowtie");
 				logString = runBowTie(rawFile1, rawFile_1_Name);
+				ErrorLogger.log("SYSTEM", "Finished Bowtie");
 
 				checkBowTieFile(
 						"resources/" + dir + rawFile_1_Name
 						+ ".sam", rawFile_1_Name);
 
-				ErrorLogger.log("SYSTEM","Running SortSam");
-				sortSamFile(rawFile_1_Name);
+				//ErrorLogger.log("SYSTEM","Running SortSam");
+				//sortSamFile(rawFile_1_Name);
 
-				if (inFiles.length == 2) {
+				/*if (inFiles.length == 2) {
 					logString = logString + "\n"
 							+ runBowTie(rawFile2, rawFile_2_Name);
 
@@ -132,11 +105,64 @@ public class RawToProfileConverter extends Executor {
 
 					sortSamFile(rawFile_2_Name);
 				}// Sets parameters for sorting first sam file
+				*/
 
 				toBeRemoved.push(remoteExecution + "resources/" + dir);
-				filesToBeMoved = sortedDirForFile;
+				filesToBeMoved = dir;
 				toBeRemoved.push(filesToBeMoved);
 			}
+
+			if(checker.shouldRunSortSam()) {
+				ErrorLogger.log("SYSTEM","Running SortSam");
+				try {
+					Picard.runSortSam(
+							dir + rawFile_1_Name + ".sam",
+							dir + rawFile_1_Name + "_sorted.sam");
+				} catch (ValidateException e) {
+					ErrorLogger.log("SYSTEM",
+							"Error validating picard sortSam");
+				} catch (InterruptedException | IOException e) {
+					ErrorLogger.log("SYSTEM", "Error executing picard sortSam");
+					ErrorLogger.log("SYSTEM", e.getMessage());
+				}
+			}
+
+			if(checker.shouldRunRemoveDuplicates()) {
+				ErrorLogger.log("SYSTEM","Running RemoveDuplicates");
+				try {
+					Picard.runRemoveDuplicates(
+                            dir+rawFile_1_Name+"_sorted.sam",
+                            dir+rawFile_1_Name + "_sorted_without_duplicates.sam"
+                            );
+				} catch (ValidateException e) {
+					ErrorLogger.log("SYSTEM",
+							"Error validating picard markDuplicates" );
+				} catch (IOException | InterruptedException e) {
+					ErrorLogger.log("SYSTEM",
+							"Error executing picard markDuplicates");
+					ErrorLogger.log("SYSTEM", e.getMessage());
+				}
+			}
+
+			if(checker.shouldRunConvert()) {
+				ErrorLogger.log("SYSTEM","Running .wig conversion");
+				try {
+					Pyicos.runConvert(
+							dir + rawFile_1_Name +
+							"_sorted_without_duplicates.sam");
+					filesToBeMoved = dir;
+					toBeRemoved.push(filesToBeMoved);
+				} catch (ValidateException e) {
+					ErrorLogger.log("SYSTEM",
+							"Error validating pyicos conversion to .wig");
+					ErrorLogger.log("SYSTEM", e.getMessage());
+				} catch (InterruptedException | IOException e) {
+					ErrorLogger.log("SYSTEM",
+							"Error executing pyicos conversion to .wig");
+				}
+
+			}
+
 
 			// Runs SamToGff script on files
 			if (checker.shouldRunSamToGff()) {
@@ -178,7 +204,9 @@ public class RawToProfileConverter extends Executor {
 			}
 
 			try {
-				moveEndFiles(filesToBeMoved, outFilePath);
+				ErrorLogger.log("SYSTEM", "Files to be moved are: ["+filesToBeMoved+"]");
+				ErrorLogger.log("SYSTEM", "The path to move these files is: ["+outFilePath+"]");
+				moveEndFiles("resources/"+filesToBeMoved, outFilePath);
 			} catch (ProcessException e) {
 				cleanUp(toBeRemoved);
 				throw e;
@@ -192,6 +220,49 @@ public class RawToProfileConverter extends Executor {
 		}
 
 		return logString;
+	}
+
+	private File[] initiateProcedure(
+			String[] parameters,
+			String inFolder,
+			String outFilePath) throws ProcessException {
+    /*If you want to run several processes simultaneously, this would need to be changed*/
+		StartUpCleaner.removeOldTempDirectories("resources/");
+		File[] inFiles = null;
+
+		// Error handling
+		if (inFolder == null) {
+			throw new ProcessException("Fatal error: This should never happen");
+		}
+		inFolder = validateInFolder(inFolder);
+		inFiles = getRawFiles(inFolder);
+
+		// Check if there are any raw files
+		if (inFiles == null || inFiles.length == 0) {
+			throw new ProcessException("Folder does not contain raw files");
+		}
+
+		this.parameters = parameters;
+		this.inFolder = inFolder;
+
+		// Checks all parameters that they are correct before proceeding
+		if (!verifyInData(parameters, inFolder, outFilePath)
+				|| !correctInfiles(inFiles)) {
+			throw new ProcessException("Wrong format of input data");
+		}
+		// Runs the procedure.
+
+		initiateConversionStrings(parameters, outFilePath);
+		makeConversionDirectories(remoteExecution + "resources/" + dir
+				+ "/sorted");
+		checker.calculateWhichProcessesToRun(parameters);
+		if(!validateParameters(parameters)) {
+			throw new ProcessException("Parameters are incorrect");
+		}
+		/* Updates attribute raw files. */
+		parseRawFiles(inFiles);
+		initiateConversionStrings(parameters, outFilePath);
+		return inFiles;
 	}
 
 	/**
@@ -691,7 +762,24 @@ public class RawToProfileConverter extends Executor {
 		return dir.exists();
 	}
 
-	public String runRemoveDuplicates(String inputFile, String outputFile,
+	private String runPicard(String command, String arguments) {
+		/* TODO Refactor to use this? */
+		return null;
+	}
+
+	/**
+	 * Makes external call to Picard that removes duplicates in input .sam file.
+	 *
+	 * @param inputFile An input .sam file
+	 * @param outputFile .sam file without duplicates
+	 * @param metrics File to save data on removal of duplicates in
+	 * @return Process finish status
+	 * @throws ProcessException cast if execution of picard MarkDuplicates
+	 * was erroneous.
+	 * @throws IllegalArgumentException If input or output file was
+	 * not .sam format
+	 */
+	private String runRemoveDuplicates(String inputFile, String outputFile,
 									   String metrics) throws ProcessException {
 		/* Check if input is .sam format */
 		if(!inputFile.endsWith(".sam")) {
@@ -716,10 +804,11 @@ public class RawToProfileConverter extends Executor {
 		*/
 		String [] picardParameters = parse("java -jar " +
 										   ServerSettings.picardLocation +
-										   " MarkDuplicates " +
+										   "/picard.jar MarkDuplicates " +
 										   " INPUT=" + inputFile +
 										   " OUTPUT=" + outputFile +
-										   "REMOVE_DUPLICATES=true");
+										   " REMOVE_DUPLICATES=true"+"" +
+										   " METRICS_FILE=metrics.txt");
 		try {
 			return executeProgram(picardParameters);
 		} catch (InterruptedException e) {
@@ -733,4 +822,46 @@ public class RawToProfileConverter extends Executor {
 
 	}
 
-}
+	private String runSortSam(String inputFile, String outputFile)
+			throws ProcessException {
+		/* Check if input is .sam format */
+		if (!inputFile.endsWith(".sam")) {
+			throw new IllegalArgumentException(
+					"Could not run Picard on file: "
+					+ inputFile +
+					", as it was not in .sam format");
+		}
+
+		/* Check if output is .sam format */
+		if (!outputFile.endsWith(".sam")) {
+			throw new IllegalArgumentException(
+					"Could not run Picard to file: "
+					+ outputFile +
+					", as it was not in .sam format");
+		}
+
+		String[] picardParameters = parse(
+				"java -jar " +
+				ServerSettings.picardLocation +
+				"/picard.jar SortSam " +
+				" I=" + inputFile +
+				" O=" + outputFile +
+				" SO=coordinate");
+		try {
+			return executeProgram(picardParameters);
+		} catch (InterruptedException e) {
+			throw new ProcessException(
+					"Process interrupted while running picard on file: "
+					+ inputFile);
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new ProcessException(
+					"Could not run picard on file: " +
+					inputFile +
+					", please check your input and " +
+					"permissions");
+		}
+	}
+
+
+	}

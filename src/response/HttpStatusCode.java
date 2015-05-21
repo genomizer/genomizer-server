@@ -16,6 +16,28 @@ public class HttpStatusCode {
 	public static final int FORBIDDEN = 403;
 	public static final int NOT_FOUND = 404;
 	public static final int INTERNAL_SERVER_ERROR = 500;
-	public static final int METHOD_NOT_YET_IMPLEMENTED = 501;
+	public static final int NOT_IMPLEMENTED = 501;
 
+	public static String getMessage(int code) {
+		switch (code) {
+			case OK:
+				return "OK";
+			case CREATED:
+				return "Created";
+			case BAD_REQUEST:
+				return "Bad Request";
+			case UNAUTHORIZED:
+				return "Unauthorized";
+			case FORBIDDEN:
+				return "Forbidden";
+			case NOT_FOUND:
+				return "Not Found";
+			case INTERNAL_SERVER_ERROR:
+				return "Internal Server Error";
+			case NOT_IMPLEMENTED:
+				return "Not Implemented";
+			default:
+				return "Unknown";
+		}
+	}
 }
