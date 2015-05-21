@@ -60,7 +60,7 @@ public class PostFileCommandTest {
 
 		String json = jsonBuilder(null,"name","raw","metameta","name","releaseNr");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
-		c.setFields("uri", null, "uuid", UserType.ADMIN);
+		c.setFields("uri", null, "userName", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -78,7 +78,7 @@ public class PostFileCommandTest {
 
 		String json = jsonBuilder("","name","raw","metameta","name","releaseNr");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
-		c.setFields("uri", null, "uuid", UserType.ADMIN);
+		c.setFields("uri", null, "userName", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -100,7 +100,7 @@ public class PostFileCommandTest {
 		}
 		String json = jsonBuilder(big,"name","raw","metameta","name","releaseNr");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
-		c.setFields("uri", null, "uuid", UserType.ADMIN);
+		c.setFields("uri", null, "userName", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -118,7 +118,7 @@ public class PostFileCommandTest {
 
 		String json = jsonBuilder("i/d","name","raw","metameta","name","releaseNr");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
-		c.setFields("uri", null, "uuid", UserType.ADMIN);
+		c.setFields("uri", null, "userName", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -136,7 +136,7 @@ public class PostFileCommandTest {
 
 		String json = jsonBuilder("id",null,"raw","metameta","name","releaseNr");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
-		c.setFields("uri", null, "uuid", UserType.ADMIN);
+		c.setFields("uri", null, "userName", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -154,7 +154,7 @@ public class PostFileCommandTest {
 
 		String json = jsonBuilder("id","","raw","metameta","name","releaseNr");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
-		c.setFields("uri", null, "uuid", UserType.ADMIN);
+		c.setFields("uri", null, "userName", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -176,7 +176,7 @@ public class PostFileCommandTest {
 		}
 		String json = jsonBuilder("id",big,"raw","metameta","name","releaseNr");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
-		c.setFields("uri", null, "uuid", UserType.ADMIN);
+		c.setFields("uri", null, "userName", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -194,7 +194,7 @@ public class PostFileCommandTest {
 
 		String json = jsonBuilder("id","nam/e","raw","metameta","name","releaseNr");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
-		c.setFields("uri", null, "uuid", UserType.ADMIN);
+		c.setFields("uri", null, "userName", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -212,7 +212,7 @@ public class PostFileCommandTest {
 
 		String json = jsonBuilder("id","name",null,"metameta","name","releaseNr");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
-		c.setFields("uri", null, "uuid", UserType.ADMIN);
+		c.setFields("uri", null, "userName", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -230,7 +230,7 @@ public class PostFileCommandTest {
 
 		String json = jsonBuilder("id","name","","metameta","name","releaseNr");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
-		c.setFields("uri", null, "uuid", UserType.ADMIN);
+		c.setFields("uri", null, "userName", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -252,7 +252,7 @@ public class PostFileCommandTest {
 		}
 		String json = jsonBuilder("id","name",big,"metameta","name","releaseNr");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
-		c.setFields("uri", null, "uuid", UserType.ADMIN);
+		c.setFields("uri", null, "userName", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -270,7 +270,7 @@ public class PostFileCommandTest {
 
 		String json = jsonBuilder("id","name","ra/w","metameta","name","releaseNr");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
-		c.setFields("uri", null, "uuid", UserType.ADMIN);
+		c.setFields("uri", null, "userName", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -288,7 +288,7 @@ public class PostFileCommandTest {
 
 		String json = jsonBuilder("id","name","raw",null,"name","releaseNr");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
-		c.setFields("uri", null, "uuid", UserType.ADMIN);
+		c.setFields("uri", null, "userName", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -306,7 +306,7 @@ public class PostFileCommandTest {
 
 		String json = jsonBuilder("id","name","raw","","name","releaseNr");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
-		c.setFields("uri", null, "uuid", UserType.ADMIN);
+		c.setFields("uri", null, "userName", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -328,7 +328,7 @@ public class PostFileCommandTest {
 		}
 		String json = jsonBuilder("id","name","raw",big,"name","releaseNr");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
-		c.setFields("uri", null, "uuid", UserType.ADMIN);
+		c.setFields("uri", null, "userName", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -347,7 +347,7 @@ public class PostFileCommandTest {
 
 		String json = jsonBuilder("id","name","raw","metam/eta","name","releaseNr");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
-		c.setFields("uri", null, "uuid", UserType.ADMIN);
+		c.setFields("uri", null, "userName", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -365,7 +365,7 @@ public class PostFileCommandTest {
 
 		String json = jsonBuilder("id","name","raw","metameta",null,"releaseNr");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
-		c.setFields("uri", null, "uuid", UserType.ADMIN);
+		c.setFields("uri", null, "userName", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -383,7 +383,7 @@ public class PostFileCommandTest {
 
 		String json = jsonBuilder("id","name","raw","metameta","","releaseNr");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
-		c.setFields("uri", null, "uuid", UserType.ADMIN);
+		c.setFields("uri", null, "userName", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -405,7 +405,7 @@ public class PostFileCommandTest {
 		}
 		String json = jsonBuilder("id","name","raw","metameta",big,"releaseNr");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
-		c.setFields("uri", null, "uuid", UserType.ADMIN);
+		c.setFields("uri", null, "userName", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -423,7 +423,7 @@ public class PostFileCommandTest {
 
 		String json = jsonBuilder("id","name","raw","metameta","na/me","releaseNr");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
-		c.setFields("uri", null, "uuid", UserType.ADMIN);
+		c.setFields("uri", null, "userName", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -441,7 +441,7 @@ public class PostFileCommandTest {
 
 		String json = jsonBuilder("id","name","raw","metameta","name",null);
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
-		c.setFields("uri", null, "uuid", UserType.ADMIN);
+		c.setFields("uri", null, "userName", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -459,7 +459,7 @@ public class PostFileCommandTest {
 
 		String json = jsonBuilder("id","name","raw","metameta","name","");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
-		c.setFields("uri", null, "uuid", UserType.ADMIN);
+		c.setFields("uri", null, "userName", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -481,7 +481,7 @@ public class PostFileCommandTest {
 		}
 		String json = jsonBuilder("id","name","raw","metameta","name",big);
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
-		c.setFields("uri", null, "uuid", UserType.ADMIN);
+		c.setFields("uri", null, "userName", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -499,7 +499,7 @@ public class PostFileCommandTest {
 
 		String json = jsonBuilder("id","name","raw","metameta","name","relea/seNr");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
-		c.setFields("uri", null, "uuid", UserType.ADMIN);
+		c.setFields("uri", null, "userName", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -517,7 +517,7 @@ public class PostFileCommandTest {
 
 		String json = jsonBuilder("id","name.txt","raw","metameta","name","releaseNr");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
-		c.setFields("uri", null, "uuid", UserType.ADMIN);
+		c.setFields("uri", null, "userName", UserType.ADMIN);
 		c.validate();
 
 		assertTrue(true);
@@ -550,7 +550,7 @@ public class PostFileCommandTest {
 
 		String json = jsonBuilder("id","name","raw","metameta","name","releaseNr");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
-		c.setFields("uri", null, "uuid", UserType.USER);
+		c.setFields("uri", null, "userName", UserType.USER);
 
 		c.validate();
 	}
@@ -566,7 +566,7 @@ public class PostFileCommandTest {
 
 		String json = jsonBuilder("id","name","raw","metameta","name","releaseNr");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
-		c.setFields("uri", null, "uuid", UserType.GUEST);
+		c.setFields("uri", null, "userName", UserType.GUEST);
 
 		c.validate();
 		fail();

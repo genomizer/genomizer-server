@@ -527,8 +527,8 @@ public class RawToProfileConverter extends Executor {
 		dir = "results_" + Thread.currentThread().getId() + "/";
 		sortedDirForCommands = remoteExecution + dir + "sorted/";
 		sortedDirForFile = remoteExecution + "resources/" + dir + "sorted/";
-		samToGff = "perl sam_to_readsgff_v1.pl " + sortedDirForCommands;
-		gffToAllnusgr = "perl readsgff_to_allnucsgr_v1.pl "
+		samToGff = "expect sam_to_readsgff_v1.sh " + sortedDirForCommands;
+		gffToAllnusgr = "expect readsgff_to_allnucsgr_v1.sh "
 				+ sortedDirForCommands + "reads_gff/";
 	}
 
