@@ -123,7 +123,12 @@ public abstract class Executor {
 
 		builder.directory(new File(FILEPATH).getAbsoluteFile());
 		builder.redirectErrorStream(true);
-		System.out.println("BUILDER: "+builder.directory().getAbsolutePath());
+		
+		String commandString = "";
+		for ( String arg : command) {
+			commandString += arg + " ";
+		}
+		ErrorLogger.log("SYSTEM", "Command ["+commandString+"]: "+builder.directory().getAbsolutePath());
 		Process process;
 		process = builder.start();
 
@@ -140,7 +145,7 @@ public abstract class Executor {
 
 		/* Check if command finished successfully */
 		if(process.exitValue() != 0) {
-			System.out.println(System.getProperty("user.dir"));
+			ErrorLogger.log("SYSTEM", "CWD: "+(System.getProperty("user.dir")));
 			throw new RuntimeException(results.toString());
 		}
 
@@ -293,6 +298,7 @@ public abstract class Executor {
 
 		// Save references to files in original directory into an array
 		File[] filesInDir = new File(orgDir).getAbsoluteFile().listFiles();
+		ErrorLogger.log("SYSTEM", new File(orgDir).getAbsolutePath());
 
 		if (filesInDir != null) {
 			if (filesInDir.length == 0) {
@@ -301,6 +307,7 @@ public abstract class Executor {
 						"make sure the name is correct");
 			} else {
 				for (File endFile : filesInDir) {
+					ErrorLogger.log("SYSTEM", "Moving file: ["+endFile.getAbsolutePath()+"]");
 
 					// Path to source file
 					Path sourcePath = FileSystems.getDefault().getPath

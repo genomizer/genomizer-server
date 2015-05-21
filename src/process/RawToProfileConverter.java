@@ -87,6 +87,7 @@ public class RawToProfileConverter extends Executor {
 			if (checker.shouldRunBowTie()) {
 				ErrorLogger.log("SYSTEM", "Running Bowtie");
 				logString = runBowTie(rawFile1, rawFile_1_Name);
+				ErrorLogger.log("SYSTEM", "Finished Bowtie");
 
 				checkBowTieFile(
 						"resources/" + dir + rawFile_1_Name
@@ -107,7 +108,7 @@ public class RawToProfileConverter extends Executor {
 				*/
 
 				toBeRemoved.push(remoteExecution + "resources/" + dir);
-				filesToBeMoved = sortedDirForFile;
+				filesToBeMoved = dir;
 				toBeRemoved.push(filesToBeMoved);
 			}
 
@@ -122,6 +123,7 @@ public class RawToProfileConverter extends Executor {
 							"Error validating picard sortSam");
 				} catch (InterruptedException | IOException e) {
 					ErrorLogger.log("SYSTEM", "Error executing picard sortSam");
+					ErrorLogger.log("SYSTEM", e.getMessage());
 				}
 			}
 
@@ -138,6 +140,7 @@ public class RawToProfileConverter extends Executor {
 				} catch (IOException | InterruptedException e) {
 					ErrorLogger.log("SYSTEM",
 							"Error executing picard markDuplicates");
+					ErrorLogger.log("SYSTEM", e.getMessage());
 				}
 			}
 
@@ -147,11 +150,12 @@ public class RawToProfileConverter extends Executor {
 					Pyicos.runConvert(
 							dir + rawFile_1_Name +
 							"_sorted_without_duplicates.sam");
-					filesToBeMoved = sortedDirForFile;
+					filesToBeMoved = dir;
 					toBeRemoved.push(filesToBeMoved);
 				} catch (ValidateException e) {
 					ErrorLogger.log("SYSTEM",
 							"Error validating pyicos conversion to .wig");
+					ErrorLogger.log("SYSTEM", e.getMessage());
 				} catch (InterruptedException | IOException e) {
 					ErrorLogger.log("SYSTEM",
 							"Error executing pyicos conversion to .wig");
@@ -200,7 +204,9 @@ public class RawToProfileConverter extends Executor {
 			}
 
 			try {
-				moveEndFiles(filesToBeMoved, outFilePath);
+				ErrorLogger.log("SYSTEM", "Files to be moved are: ["+filesToBeMoved+"]");
+				ErrorLogger.log("SYSTEM", "The path to move these files is: ["+outFilePath+"]");
+				moveEndFiles("resources/"+filesToBeMoved, outFilePath);
 			} catch (ProcessException e) {
 				cleanUp(toBeRemoved);
 				throw e;

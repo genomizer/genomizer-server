@@ -9,10 +9,12 @@ package process;
 import com.sun.corba.se.spi.activation.Server;
 import command.ValidateException;
 import server.ServerSettings;
+import server.ErrorLogger;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+
 
 /**
  * TODO class description goes here...
@@ -53,13 +55,21 @@ public class Picard extends Executor{
         ArrayList<String>args = new ArrayList<>();
         args.add("java");
         args.add("-jar");
-        args.add(ServerSettings.picardLocation +"/picard.jar");
+        args.add(ServerSettings.picardLocation);
         args.add(command);
         args.add("I="+inFile);
         args.add("O="+outFile);
         for (String param : params) {
             args.add(param);
         }
+
+	String commandString = "";
+
+	for (String arg : args) {
+		commandString += arg + " ";
+	}
+
+	ErrorLogger.log("SYSTEM", "Picard command: "+commandString);
 
         return executeProgram(args.toArray(new String []{}));
     }
@@ -82,7 +92,9 @@ public class Picard extends Executor{
         Picard sortSam = new Picard("SortSam", inFile, outFile,".sam", ".sam",
                 new String[]{"SO=coordinate"});
         sortSam.validate();
+	ErrorLogger.log("SYSTEM", "Validated SortSam");
         sortSam.execute();
+	ErrorLogger.log("SYSTEM", "Executed SortSam");
 
        return outFile;
     }
