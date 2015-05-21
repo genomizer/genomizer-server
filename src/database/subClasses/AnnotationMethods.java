@@ -1,24 +1,16 @@
 package database.subClasses;
 
+import database.PubMedToSQLConverter;
+import database.containers.Annotation;
+
 import java.io.IOException;
-import java.sql.Connection;
+import java.sql.*;
 import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-
-import database.PubMedToSQLConverter;
-import database.containers.Annotation;
 
 /**
  * Class that contains all the methods for adding,changing, getting and removing

@@ -1,9 +1,9 @@
 package database;
 
+import database.containers.FileTuple;
+
 import java.io.File;
 import java.io.IOException;
-
-import database.containers.FileTuple;
 
 /**
  * Generates paths and directories for files.

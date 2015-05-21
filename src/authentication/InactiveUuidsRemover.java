@@ -1,12 +1,12 @@
 package authentication;
 
+import server.Debug;
+import server.ErrorLogger;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
-
-import server.Debug;
-import server.ErrorLogger;
 /**
  * Class used to remove inactive uuids. The object is a string that
  * runs continuously. It makes a check and removes inactive uuids
