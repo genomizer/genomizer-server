@@ -21,9 +21,7 @@ import transfer.Util;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.io.OutputStream;
-import java.net.URI;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -105,7 +103,15 @@ public class RequestHandler implements HttpHandler {
 
         /*Retrieve the URI part of the request header.*/
         HashMap<String, String> query = new HashMap<>();
-        String uri = Util.parseURI(exchange.getRequestURI(), query);
+        String uri;
+        try {
+            uri = Util.parseURI(exchange.getRequestURI(), query);
+        } catch (Exception e){
+            Debug.log("Could not parse query");
+            respond(new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+                    "ERROR : Could not parse query"), exchange);
+            return;
+        }
 
         /*Does the length of the URI match the needed length?*/
         if (command.getExpectedNumberOfURIFields() != calculateURILength(uri)) {
