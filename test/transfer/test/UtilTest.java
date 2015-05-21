@@ -45,7 +45,7 @@ public class UtilTest {
 
     @Test
     public void someSeeminglyInvalidCharactersAreAllowed() throws IOException {
-        validatePath("a/path/with/some/seemingly/invalid/ÅÄÖ AWE90a/characters/in/it");
+        validatePath("a/path/with/some/seemingly/invalid/ÅÄÖAWE90a/characters/in/it");
     }
 
 }
