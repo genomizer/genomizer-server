@@ -325,9 +325,8 @@ public class RequestHandler implements HttpHandler {
     /*Sends a authentication failure response. Logs the event.*/
     private void respondWithAuthenticationFailure(HttpExchange exchange) {
         Debug.log("User could not be authenticated!");
-        ErrorResponse errorResponse = new ErrorResponse(HttpStatusCode.
-                INTERNAL_SERVER_ERROR, "Could not create command from " +
-                "request");
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatusCode.UNAUTHORIZED,
+                "Unauthorized");
         respond(errorResponse, exchange);
     }
 }
