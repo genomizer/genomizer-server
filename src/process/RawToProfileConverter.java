@@ -79,7 +79,7 @@ public class RawToProfileConverter extends Executor {
 		 * can cast exceptions */
 		File[] inFiles = initiateProcedure(parameters, inFolder, outFilePath);
 
-		System.out.println(Arrays.toString(parameters));
+		ErrorLogger.log("SYSTEM", Arrays.toString(parameters));
 
 		// printTrace(parameters, inFolder, outFilePath);
 		if (fileDir.exists()) {
@@ -92,10 +92,10 @@ public class RawToProfileConverter extends Executor {
 						"resources/" + dir + rawFile_1_Name
 						+ ".sam", rawFile_1_Name);
 
-				ErrorLogger.log("SYSTEM","Running SortSam");
+				//ErrorLogger.log("SYSTEM","Running SortSam");
 				//sortSamFile(rawFile_1_Name);
 
-				if (inFiles.length == 2) {
+				/*if (inFiles.length == 2) {
 					logString = logString + "\n"
 							+ runBowTie(rawFile2, rawFile_2_Name);
 
@@ -104,6 +104,7 @@ public class RawToProfileConverter extends Executor {
 
 					sortSamFile(rawFile_2_Name);
 				}// Sets parameters for sorting first sam file
+				*/
 
 				toBeRemoved.push(remoteExecution + "resources/" + dir);
 				filesToBeMoved = sortedDirForFile;
@@ -111,48 +112,49 @@ public class RawToProfileConverter extends Executor {
 			}
 
 			if(checker.shouldRunSortSam()) {
+				ErrorLogger.log("SYSTEM","Running SortSam");
 				try {
 					Picard.runSortSam(
 							dir + rawFile_1_Name + ".sam",
 							dir + rawFile_1_Name + "_sorted.sam");
 				} catch (ValidateException e) {
-					e.printStackTrace();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
+					ErrorLogger.log("SYSTEM",
+							"Error validating picard sortSam");
+				} catch (InterruptedException | IOException e) {
+					ErrorLogger.log("SYSTEM", "Error executing picard sortSam");
 				}
 			}
 
 			if(checker.shouldRunRemoveDuplicates()) {
+				ErrorLogger.log("SYSTEM","Running RemoveDuplicates");
 				try {
 					Picard.runRemoveDuplicates(
                             dir+rawFile_1_Name+"_sorted.sam",
                             dir+rawFile_1_Name + "_sorted_without_duplicates.sam"
                             );
 				} catch (ValidateException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
+					ErrorLogger.log("SYSTEM",
+							"Error validating picard markDuplicates" );
+				} catch (IOException | InterruptedException e) {
+					ErrorLogger.log("SYSTEM",
+							"Error executing picard markDuplicates");
 				}
 			}
 
 			if(checker.shouldRunConvert()) {
+				ErrorLogger.log("SYSTEM","Running .wig conversion");
 				try {
-					System.out.println("dir = " + dir);
 					Pyicos.runConvert(
 							dir + rawFile_1_Name +
 							"_sorted_without_duplicates.sam");
 					filesToBeMoved = sortedDirForFile;
 					toBeRemoved.push(filesToBeMoved);
 				} catch (ValidateException e) {
-					e.printStackTrace();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
+					ErrorLogger.log("SYSTEM",
+							"Error validating pyicos conversion to .wig");
+				} catch (InterruptedException | IOException e) {
+					ErrorLogger.log("SYSTEM",
+							"Error executing pyicos conversion to .wig");
 				}
 
 			}
