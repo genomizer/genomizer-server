@@ -48,12 +48,11 @@ public class SearchCommand extends Command {
 						  String username, UserType userType) {
 
 		super.setFields(uri, query, username, userType);
-		if(query.containsKey("annotations")) {
+		if(query.containsKey("annotations"))
 			annotations = query.get("annotations");
-		}
-		else {
+
+		if(annotations == null || annotations.isEmpty())
 			annotations = ("[expID]");
-		}
 	}
 
 	@Override
