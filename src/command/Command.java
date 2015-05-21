@@ -122,9 +122,8 @@ public abstract class Command {
 					+ field.toLowerCase() + ".");
 		}
 		if(string.length() > maxLength || string.length() < 1) {
-			throw new ValidateException(HttpStatusCode.BAD_REQUEST, field + ": " +
-					string + " has to be between 1 and " + maxLength +
-					" characters long.");
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST, field +
+					" has to be between 1 and " + maxLength + " characters long.");
 		}
 		if(hasInvalidCharacters(string)) {
 			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Invalid" +
@@ -169,9 +168,8 @@ public abstract class Command {
 					+ field.toLowerCase() + ".");
 		}
 		if(string.length() > maxLength || string.length() < 1) {
-			throw new ValidateException(HttpStatusCode.BAD_REQUEST, field + ": " +
-					string + " has to be between 1 and " + maxLength +
-					" characters long.");
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST, field +
+					" has to be between 1 and " + maxLength + " characters long.");
 		}
 	}
 
