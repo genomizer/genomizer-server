@@ -2,7 +2,6 @@ package command.annotation;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Map;
 
 import com.google.gson.annotations.Expose;
 
@@ -27,7 +26,6 @@ import server.Debug;
 public class PutAnnotationFieldCommand extends Command {
 	@Expose
 	private String oldName = null;
-
 	@Expose
 	private String newName = null;
 
@@ -35,7 +33,6 @@ public class PutAnnotationFieldCommand extends Command {
 	public int getExpectedNumberOfURIFields() {
 		return 2;
 	}
-
 
 	@Override
 	public void validate() throws ValidateException {
