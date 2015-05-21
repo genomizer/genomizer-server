@@ -124,13 +124,7 @@ public class RequestHandler implements HttpHandler {
         
         try (DatabaseAccessor db = Command.initDB()) {
             userType = db.getRole(Authenticate.getUsernameByID(uuid));
-        } catch (SQLException e) {
-            Debug.log(e.toString());
-            ErrorResponse errorResponse = new ErrorResponse(HttpStatusCode.
-                    INTERNAL_SERVER_ERROR, "Could not retrieve the user " +
-                    "information.");
-            respond(errorResponse, exchange);
-        } catch (IOException e) {
+        } catch (SQLException | IOException e) {
             Debug.log(e.toString());
             ErrorResponse errorResponse = new ErrorResponse(HttpStatusCode.
                     INTERNAL_SERVER_ERROR, "Could not retrieve the user " +
