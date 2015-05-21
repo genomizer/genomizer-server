@@ -2,9 +2,11 @@ package command.test;
 
 import static org.junit.Assert.*;
 
-import org.junit.Ignore;
+import command.Command;
+import command.ValidateException;
+import database.subClasses.UserMethods.UserType;
 import org.junit.Test;
-import command.GetAnnotationPrivilegesCommand;
+import command.annotation.*;
 
 /**
  * Class used to test that GetAnnotationPrivileges works
@@ -13,32 +15,38 @@ import command.GetAnnotationPrivilegesCommand;
  * @author Kommunikation/kontroll 2014.
  * @version 1.0
  */
+@SuppressWarnings("deprecation")
 public class GetAnnotationPrivilegesCommandTest {
-	//TODO Implement tests later
+	//TODO Implement tests when implementing the class
+
 
 	/**
-	 * Test creation and that it is not null.
+	 * Test used to check that ValidateException is not thrown
+	 * when the user have the required rights.
+	 *
+	 * @throws ValidateException
 	 */
 	@Test
-	public void testCreationNotNull() {
+	public void testHavingRights() throws ValidateException {
 
-		GetAnnotationPrivilegesCommand c = new GetAnnotationPrivilegesCommand("");
-
-		assertNotNull(c);
-
-	}
-	/**
-	 * Test used to check that ValidateException is not
-	 * thrown when calling validate.
-	 */
-	@Test
-	public void testvalidationAlwaysTrue() {
-
-		GetAnnotationPrivilegesCommand c = new GetAnnotationPrivilegesCommand("");
+		Command c = new GetAnnotationPrivilegesCommand();
+		c.setFields("uri", null, null, UserType.GUEST);
 		c.validate();
+	}
 
-		assertTrue(true);
+	/**
+	 * Test used to check that ValidateException is thrown
+	 * when the user doesn't have the required rights.
+	 *
+	 * @throws ValidateException
+	 */
+	@Test(expected = ValidateException.class)
+	public void testNotHavingRights() throws ValidateException {
 
+		Command c = new GetAnnotationPrivilegesCommand();
+		c.setFields("uri", null, null, UserType.UNKNOWN);
+		c.validate();
+		fail();
 	}
 
 }

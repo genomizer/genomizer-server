@@ -1,8 +1,7 @@
 package process;
 
 /**
- * Class used to validate incoming parameters to RawToProfile so all parameters
- * are correct format. 
+ * Class used to validate incoming parameters to RawToProfile.
  * v 1.0
  */
 public class ParameterValidator extends Executor {
@@ -71,7 +70,7 @@ public class ParameterValidator extends Executor {
 	}
 
 	/**
-	 * Validates step parameters
+	 * Validates step parameters.
 	 * 
 	 * @param string
 	 * @return
@@ -104,7 +103,7 @@ public class ParameterValidator extends Executor {
 
 	/**
 	 * Validates Ratio Calculation parameters, Also validates the smoothing 
-	 * parameters that is used on the Ratio calculated files cause they should
+	 * parameters that is used on the Ratio calculated files because they should
 	 * always be done together.
 	 * 
 	 * @param RatioParam

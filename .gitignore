@@ -1,3 +1,4 @@
+resources/genome_releases
 .settings/
 bin/
 .idea/*
@@ -5,9 +6,7 @@ bin/
 .idea/
 .idea
 junit/
-secure-server.jar
-server.jar
-*.orig
+*.jar
 .classpath
 .project
 *~
@@ -17,3 +16,4 @@ out
 psqllogin
 .metadata/
 *.cfg
+*.swp

@@ -7,15 +7,8 @@ public class RawToProfileProcessChecker {
 	private boolean shouldRunSmoothing;
 	private boolean shouldRunStep10;
 	private boolean shouldRunRatioCalculation;
-//	private boolean isCorrect;
 
-	private RawToProfileProcessChecker() {
-
-	}
-
-	public static RawToProfileProcessChecker rawToProfileCheckerFactory() {
-		return new RawToProfileProcessChecker();
-	}
+	public RawToProfileProcessChecker() {}
 
 	public void calculateWhichProcessesToRun(String[] parameters) {
 		if ((!parameters[0].equals("")) && (!parameters[1].equals(""))) {

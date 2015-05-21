@@ -1,16 +1,17 @@
 package database.subClasses;
 
+import database.FilePathGenerator;
+import database.FileValidator;
+import database.containers.Experiment;
+import database.containers.FileTuple;
+import server.Debug;
+
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import database.FilePathGenerator;
-import database.FileValidator;
-import database.containers.Experiment;
-import database.containers.FileTuple;
 
 /**
  * Class that contains all the methods for adding,changing, getting and removing
@@ -73,10 +74,10 @@ public class FileMethods {
 	 * @throws IOException
 	 *             If the experiment does not exist.
 	 */
-	public FileTuple addNewFile(String expID, int fileType, String fileName,
-			String inputFileName, String metaData, String author,
-			String uploader, boolean isPrivate, String genomeRelease,
-			String checkSumMD5)
+	public FileTuple addNewFileWithStatus(String expID, int fileType, String fileName,
+										  String inputFileName, String metaData, String author,
+										  String uploader, boolean isPrivate, String genomeRelease,
+										  String checkSumMD5, String status)
 			throws SQLException, IOException {
 
 		if (!FileValidator.fileNameCheck(fileName)) {
@@ -115,6 +116,10 @@ public class FileMethods {
 			}
 		}
 
+		if (!status.equals("Done") && !status.equals("In Progress")) {
+			throw new IOException("Invalid status type!");
+		}
+
 		String inputFilePath = null;
 		if (inputFileName != null) {
 			inputFilePath = getParentFolder(path) + inputFileName;
@@ -122,8 +127,8 @@ public class FileMethods {
 
 		String query = "INSERT INTO File "
 				+ "(Path, FileType, FileName, Date, MetaData, InputFilePath, "
-				+ "Author, Uploader, IsPrivate, ExpID, GRVersion, MD5) "
-				+ "VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?, ?, ?, ?, ?, ?, ?)";
+				+ "Author, Uploader, IsPrivate, ExpID, GRVersion, Status, MD5) "
+				+ "VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		PreparedStatement stmt = conn.prepareStatement(query);
 		stmt.setString(1, path);
 
@@ -151,12 +156,13 @@ public class FileMethods {
 		stmt.setBoolean(8, isPrivate);
 		stmt.setString(9, expID);
 		stmt.setString(10, genomeRelease);
-		stmt.setString(11, checkSumMD5);
+		stmt.setString(11, status);
+		stmt.setString(12, checkSumMD5);
 
 		stmt.executeUpdate();
 		stmt.close();
 
-		return getFileTuple(path);
+		return getFileTupleWithStatus(path, status);
 	}
 
 	private FileTuple getProfile(Experiment e, String metaData) {
@@ -196,26 +202,41 @@ public class FileMethods {
 	/**
 	 * Returns the FileTuple object associated with the given filePath.
 	 *
-	 * @param filePath
-	 *            String
-	 * @return FileTuple - The corresponding FileTuple or null if no such file
-	 *         exists
+	 * @param filePath  file name.
+	 * @return          The corresponding FileTuple or null if no such file exists.
 	 * @throws SQLException
 	 *             If the query could not be executed.
 	 */
 	public FileTuple getFileTuple(String filePath) throws SQLException {
+		return getFileTupleWithStatus(filePath, "Done");
+	}
 
-		String query = "SELECT * FROM File WHERE Path = ?";
-		PreparedStatement stmt = conn.prepareStatement(query);
-		stmt.setString(1, filePath);
-		ResultSet rs = stmt.executeQuery();
-		if (rs.next()) {
-			FileTuple fileTuple = new FileTuple(rs);
-			stmt.close();
-			return fileTuple;
+	/**
+	 * Returns the FileTuple object associated with the given filePath
+	 * and having the given status.
+	 *
+	 * @param filePath  file name.
+	 * @param status    file status.
+	 * @return          The corresponding FileTuple or null if no such file exists.
+	 * @throws SQLException
+	 *             If the query could not be executed.
+	 */
+	public FileTuple getFileTupleWithStatus(String filePath, String status) throws SQLException {
+
+		String query = "SELECT * FROM File WHERE Path = ? AND Status = ?";
+
+		try (PreparedStatement stmt = conn.prepareStatement(query)) {
+			stmt.setString(1, filePath);
+			stmt.setString(2, status);
+
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				return new FileTuple(rs);
+			}
+			else {
+				return null;
+			}
 		}
-		stmt.close();
-		return null;
 	}
 
 	/**
@@ -230,7 +251,7 @@ public class FileMethods {
 	 */
 	public FileTuple getFileTuple(int fileID) throws SQLException {
 
-		String query = "SELECT * FROM File WHERE FileID = ?";
+		String query = "SELECT * FROM File WHERE Status = 'Done' AND FileID = ?";
 		PreparedStatement stmt = conn.prepareStatement(query);
 		stmt.setInt(1, fileID);
 		ResultSet rs = stmt.executeQuery();
@@ -259,7 +280,8 @@ public class FileMethods {
 		FileTuple ft = getFileTuple(path);
 
 		if (ft == null) {
-			throw new IOException("Could not find file at path " + path);
+			Debug.log("FileMethods.deleteFile: Could not find file at path " + path);
+			return 0;
 		}
 
 		File fileToDelete = new File(path);
@@ -298,7 +320,8 @@ public class FileMethods {
 		FileTuple ft = getFileTuple(fileID);
 
 		if (ft == null) {
-			throw new IOException("Could not find file with ID " + fileID);
+			Debug.log("FileMethods.deleteFile: Could not find file with ID " + fileID);
+			return 0;
 		}
 
 		File fileToDelete = new File(ft.path);
@@ -360,7 +383,8 @@ public class FileMethods {
 	 */
 	public boolean hasFile(int fileID) throws SQLException {
 
-		String query = "SELECT fileID FROM File " + "WHERE fileID = ?";
+		String query = "SELECT fileID FROM File "
+				+ "WHERE Status = 'Done' AND fileID = ?";
 		PreparedStatement stmt = conn.prepareStatement(query);
 		stmt.setInt(1, fileID);
 
@@ -385,19 +409,17 @@ public class FileMethods {
 	 * @throws SQLException
 	 */
 
-	public int fileReadyForDownload(int fileID) throws SQLException {
+	public int markReadyForDownload(int fileID) throws SQLException {
 
 		String statusUpdateString = "UPDATE File SET Status = 'Done' "
 				+ "WHERE FileID = ?";
 
-		PreparedStatement statusUpdate = conn
-				.prepareStatement(statusUpdateString);
-		statusUpdate.setInt(1, fileID);
+		try (PreparedStatement statusUpdate = conn
+				.prepareStatement(statusUpdateString)) {
+			statusUpdate.setInt(1, fileID);
 
-		int resCount = statusUpdate.executeUpdate();
-		statusUpdate.close();
-
-		return resCount;
+			return statusUpdate.executeUpdate();
+		}
 	}
 
 	/**
@@ -417,7 +439,7 @@ public class FileMethods {
 		String oldFilePath = "";
 
 		// search for current filepath.
-		String searchPathQuery = "SELECT Path FROM File WHERE fileID = ?";
+		String searchPathQuery = "SELECT Path FROM File WHERE Status = 'Done' AND fileID = ?";
 		PreparedStatement pathFind = conn.prepareStatement(searchPathQuery);
 		pathFind.setInt(1, fileID);
 		ResultSet res = pathFind.executeQuery();
@@ -522,5 +544,32 @@ public class FileMethods {
 		stmt.close();
 
 		return getFileTuple(filePath);
+	}
+
+	public void setFileCheckSumMD5(FileTuple file, String checkSumMD5) throws SQLException {
+		try(PreparedStatement stmt = conn.prepareStatement(
+				"UPDATE File "
+				+ "SET MD5 = ? "
+				+ "WHERE FileID = ?")) {
+			stmt.setString(1, checkSumMD5);
+			stmt.setInt(2, file.id);
+			stmt.executeUpdate();
+		}
+	}
+
+	public int updateFileSize(int fileID, Long size) throws  SQLException{
+
+		int res;
+
+		try(PreparedStatement stmt = conn.prepareStatement(
+				"UPDATE File "
+				+"SET FileSize = ? "
+				+"WHERE FileID = ?")) {
+			stmt.setString(1, size.toString());
+			stmt.setInt(2, fileID);
+			res = stmt.executeUpdate();
+		}
+
+		return res;
 	}
 }

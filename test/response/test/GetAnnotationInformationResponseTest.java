@@ -2,14 +2,16 @@ package response.test;
 
 import static org.junit.Assert.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import command.annotation.GetAnnotationCommand;
+import database.subClasses.UserMethods.UserType;
 import database.test.TestInitializer;
 import org.junit.Before;
 import org.junit.Test;
 import response.AnnotationInformation;
 import response.GetAnnotationInformationResponse;
 import response.Response;
-import command.GetAnnotationInformationCommand;
 
 /**
  * Test used to check that GetAnnotationInformationResponse
@@ -49,7 +51,10 @@ public class GetAnnotationInformationResponseTest {
 
 	@Test
 	public void testDatabaseConnection() {
-		GetAnnotationInformationCommand cmd = new GetAnnotationInformationCommand();
+		GetAnnotationCommand cmd = new GetAnnotationCommand();
+		HashMap<String, String> query = new HashMap<>();
+		query.put("key", "val");
+		cmd.setFields("uri", query, null, UserType.ADMIN);
 		Response rsp = cmd.execute();
 		rsp.getBody();
 	}

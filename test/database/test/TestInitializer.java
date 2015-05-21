@@ -53,10 +53,8 @@ public class TestInitializer {
         }
     }
 
-//    public static String username = "genomizer";
-//    public static String password = "genomizer";
-//    public static String host = "85.226.111.95";
-//    public static String database = "genomizer_testdb";
+    private static final String testFolderName =
+            "Genomizer Test Folder - Dont be afraid to delete me";
 
     private String addTestTuplesPath = "sql/add_test_tuples.sql";
     private String clearTablesPath = "sql/clear_tables.sql";
@@ -119,6 +117,22 @@ public class TestInitializer {
         clearTablesSqlStrings = buildSqlStringsFromFile(clearTablesPath);
 
         return dbac;
+    }
+
+    // Create a scratch directory for temporary files.
+    public static String createScratchDir() throws IOException {
+        String testFolderPath = "resources" + File.separator
+                + "unittests-scratch" + File.separator
+                + testFolderName + File.separator;
+
+        File testFolder = new File(testFolderPath);
+        testFolderPath = testFolder.getCanonicalPath() + File.separator;
+
+        if (!testFolder.exists()) {
+            testFolder.mkdirs();
+        }
+
+        return testFolderPath;
     }
 
     /**

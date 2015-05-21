@@ -31,27 +31,19 @@ public class MockUserTests {
     static DatabaseAccessor dbac;
 
     private static FilePathGenerator fpg;
-    private static String testFolderName =
-    		"Genomizer Test Folder - Dont be afraid to delete me";
     private static String testFolderPath;
 
     @BeforeClass
-    public static void setUpBeforeClass() {
+    public static void setUpBeforeClass() throws Exception {
 
         ti = new TestInitializer();
 
-        try {
-            dbac = ti.setupWithoutAddingTuples();
+        dbac = ti.setupWithoutAddingTuples();
 
-            testFolderPath = System.getProperty("user.home")
-                    + File.separator + testFolderName
-                    + File.separator;
+        testFolderPath = TestInitializer.createScratchDir();
 
-            fpg = dbac.getFilePathGenerator();
-            fpg.setRootDirectory(testFolderPath);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        fpg = dbac.getFilePathGenerator();
+        fpg.setRootDirectory(testFolderPath);
     }
 
     @AfterClass
@@ -299,7 +291,7 @@ public class MockUserTests {
                 FileTuple.RAW, "rawFile.fastq", "rawInput.fasta",
                 null, "Umu", "Ruaridh", false, null, null);
 
-    	dbac.fileReadyForDownload(ft.id);
+    	dbac.markReadyForDownload(ft);
         ft = dbac.getFileTuple(ft.id);
 
         assertEquals("Done", ft.status);
@@ -311,6 +303,7 @@ public class MockUserTests {
 
     	String uploadURL = dbac.addGenomeRelease("hg38", "Human",
                 "hg38.fasta", null);
+        dbac.markReadyForDownload("hg38", "hg38.fasta");
 
         String expectedUploadURL = ServerDependentValues.UploadURL
                 + testFolderPath + "genome_releases" + File.separator
@@ -388,6 +381,7 @@ public class MockUserTests {
 
         String uploadURL = dbac.addGenomeRelease("hg38", "Human",
                 "hg38.2.fasta", null);
+        dbac.markReadyForDownload("hg38", "hg38.2.fasta");
 
         String expectedUploadURL = ServerDependentValues.UploadURL
                 + testFolderPath + "genome_releases" + File.separator

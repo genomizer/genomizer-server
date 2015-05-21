@@ -2,12 +2,14 @@ package command;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.regex.Pattern;
 
 import response.HttpStatusCode;
 import response.Response;
 import server.ServerSettings;
 import database.DatabaseAccessor;
+import database.subClasses.UserMethods.UserType;
 
 /**
  * This class contains common methods and attributes that are needed
@@ -29,10 +31,38 @@ public abstract class Command {
 	 */
 
 	/*These are valid characters that are used with the validation method.*/
-	final protected String validCharacters = "^, A-Z, a-z, 0-9, space, _ and .";
+	final protected String validCharacters = "A-Z, a-z, 0-9, -, _ and .";
 
-	/*This is used to store a RESTful-header.*/
-	protected String header;
+	/*Keeps track of the user rights level for the command sender. */
+	protected UserType userType = UserType.UNKNOWN;
+
+	/*Contains the user name.*/
+	protected String userName;
+
+	/**
+	 * Returns the number of expected fields in the URI of the request that
+	 * corresponds to this command. For example, number of URI fields in a
+	 * "remove annotation value" request is 4 as the URI has 4 fields
+	 * (/annotation/value/<field-name>/<value-name>).
+	 * @return the expected number of fields in the URI of the request that
+	 * corresponds to this command.
+	 */
+	public abstract int getExpectedNumberOfURIFields();
+
+	/**
+	 * Used to set the required fields of the command. Provided the URI
+	 * from the request as well as the UUID of the user the implementation
+	 * of this function should make sure the necessary information is set.
+	 * @param uri isn't used. Override it to use it.
+	 * @param query
+	 * @param username the UUID for the user who made the request.
+	 * @param userType the user type for the command caller.
+	 */
+	public void setFields(String uri, HashMap<String, String> query,
+						  String username, UserType userType){
+		this.userName = username;
+		this.userType = userType;
+	}
 
 	/**
 	 * Used to validate the object and its information. The validate method
@@ -49,22 +79,6 @@ public abstract class Command {
 	 * @return an appropriate Response depending on the command.
 	 */
 	public abstract Response execute();
-
-	/**
-	 * Method used to get the RESTful-header.
-	 * @return the header that is set.
-	 */
-	public String getHeader() {
-		return header;
-	}
-
-	/**
-	 * Method used to set the RESTful-header.
-	 * @param header the header as a string.
-	 */
-	public void setHeader(String header) {
-		this.header = header;
-	}
 
 	/**
 	 * Method used to connect to the database.
@@ -85,7 +99,7 @@ public abstract class Command {
 	 * @return boolean depending on validation result.
 	 */
 	public boolean hasInvalidCharacters(String string) {
-		Pattern p = Pattern.compile("[^A-Za-z0-9_\\.\\^ ]");
+		Pattern p = Pattern.compile("[^A-Za-z0-9-_.]");
 		return p.matcher(string).find();
 	}
 
@@ -108,9 +122,8 @@ public abstract class Command {
 					+ field.toLowerCase() + ".");
 		}
 		if(string.length() > maxLength || string.length() < 1) {
-			throw new ValidateException(HttpStatusCode.BAD_REQUEST, field + ": " +
-					string + " has to be between 1 and " + maxLength +
-					" characters long.");
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST, field +
+					" has to be between 1 and " + maxLength + " characters long.");
 		}
 		if(hasInvalidCharacters(string)) {
 			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Invalid" +
@@ -155,9 +168,33 @@ public abstract class Command {
 					+ field.toLowerCase() + ".");
 		}
 		if(string.length() > maxLength || string.length() < 1) {
-			throw new ValidateException(HttpStatusCode.BAD_REQUEST, field + ": " +
-					string + " has to be between 1 and " + maxLength +
-					" characters long.");
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST, field +
+					" has to be between 1 and " + maxLength + " characters long.");
 		}
 	}
+
+
+	/**
+	 * Methods which verifies if the user has the requested user rights.
+	 * @param required The user rights level required
+	 * @throws ValidateException If the user rights level wasn't high enough
+	 */
+	public void hasRights(UserType required) throws ValidateException {
+
+		if (userType == UserType.UNKNOWN)
+			throw new ValidateException(HttpStatusCode.FORBIDDEN, "You don't have permission.");
+
+		if (required == userType)
+			return;
+
+		else if (required == UserType.ADMIN)
+			throw new ValidateException(HttpStatusCode.FORBIDDEN, "You don't have permission.");
+
+		else if (required == UserType.USER && userType != UserType.ADMIN)
+			throw new ValidateException(HttpStatusCode.FORBIDDEN, "You don't have permission.");
+
+		else if (required == UserType.UNKNOWN && !(userType == UserType.ADMIN))
+			throw new ValidateException(HttpStatusCode.FORBIDDEN, "You don't have permission.");
+	}
+
 }

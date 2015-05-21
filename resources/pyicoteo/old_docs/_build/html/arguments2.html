@@ -1,0 +1,2934 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Optional arguments (2) &mdash; pyicos 1.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="pyicos 1.2 documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="index.html">pyicos 1.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Optional arguments (2)</a><ul>
+<li><a class="reference internal" href="#trim">trim</a></li>
+<li><a class="reference internal" href="#plot">plot</a></li>
+<li><a class="reference internal" href="#convert">convert</a></li>
+<li><a class="reference internal" href="#remduplicates">remduplicates</a></li>
+<li><a class="reference internal" href="#protocol">protocol</a></li>
+<li><a class="reference internal" href="#enrichma">enrichma</a></li>
+<li><a class="reference internal" href="#extend">extend</a></li>
+<li><a class="reference internal" href="#all">all</a></li>
+<li><a class="reference internal" href="#remregions">remregions</a></li>
+<li><a class="reference internal" href="#modfdr">modfdr</a></li>
+<li><a class="reference internal" href="#filter">filter</a></li>
+<li><a class="reference internal" href="#strcorr">strcorr</a></li>
+<li><a class="reference internal" href="#split">split</a></li>
+<li><a class="reference internal" href="#poisson">poisson</a></li>
+<li><a class="reference internal" href="#discard">discard</a></li>
+<li><a class="reference internal" href="#push">push</a></li>
+<li><a class="reference internal" href="#callpeaks">callpeaks</a></li>
+<li><a class="reference internal" href="#checkrepcount">checkrepcount</a></li>
+<li><a class="reference internal" href="#subtract">subtract</a></li>
+<li><a class="reference internal" href="#enrichment">enrichment</a></li>
+<li><a class="reference internal" href="#enrichcount">enrichcount</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/arguments2.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="optional-arguments-2">
+<h1>Optional arguments (2)<a class="headerlink" href="#optional-arguments-2" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="trim">
+<h2>trim<a class="headerlink" href="#trim" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text"><div class="highlight"><pre>usage: pyicos [-h] [-v] [-o] [-f EXPERIMENT_FORMAT] [--debug] [--no-sort]
+              [--force-sort] [--silent] [--disable-cache] [--keep-temp]
+              [--postscript] [--showplots] [--label1 LABEL1] [--label2 LABEL2]
+              [--tempdir TEMPDIR] [--samtools] [--skip-header]
+              [--control CONTROL] [--control-format CONTROL_FORMAT]
+              [--open-control] [--blacklist BLACKLIST] [-O] [-F OUTPUT_FORMAT]
+              [-x FRAG_SIZE] [--round] [--wig-label WIG_LABEL] [--span SPAN]
+              [--no-subtract] [--remlabels REMLABELS] [--p-value P_VALUE]
+              [--k-limit K_LIMIT] [--correction CORRECTION]
+              [--trim-proportion TRIM_PROPORTION] [-p SPECIES]
+              [--duplicates DUPLICATES] [--poisson-test POISSON_TEST]
+              experiment output
+
+Pyicoller, part of the Pyicoteo suite, is a peak caller for the analysis of
+punctuated ChIP-Seq data.
+
+positional arguments:
+  experiment            The experiment file or directory
+  output                The output file or directory
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -v, --version         show program&#39;s version number and exit
+  -o, --open-experiment
+                        Defines if the experiment is half-open or closed
+                        notation. [Default False]
+  -f EXPERIMENT_FORMAT, --experiment-format EXPERIMENT_FORMAT
+                        The format the experiment file is written as. The
+                        options are (&#39;eland&#39;, &#39;bed&#39;, &#39;bed_wig&#39;, &#39;bed_pk&#39;,
+                        &#39;bed_spk&#39;, &#39;sam&#39;, &#39;bam&#39;, &#39;counts&#39;). [Default pk]
+  --debug
+  --no-sort             Force skip the sorting step. WARNING: Use only if you
+                        know what you are doing. Processing unsorted files
+                        assuming they are will outcome in erroneous results
+  --force-sort          Force the sorting step
+  --silent              Run without printing in screen
+  --disable-cache       Disable internal reading cache. When Clustering low
+                        coverage files, it will increase speed and improve
+                        memory usage. With very read dense files, the speed
+                        will decrease.
+  --keep-temp           Keep the temporary files
+  --postscript          get the output graphs in postscript format instead of
+                        .png
+  --showplots           Show the plots as they are being calculated by
+                        matplotlib. Note that the execution will be stopped
+                        until you close the window pop up that will arise
+  --label1 LABEL1       Manually define the first label of the graphs.
+  --label2 LABEL2       Manually define the second label of the graphs.
+  --tempdir TEMPDIR     Manually define the temporary directory where Pyicoteo
+                        will write. By default Pyicoteo will use the temporary
+                        directory the system provides (For example, /tmp in
+                        unix systems)
+  --samtools            Use samtools for reading BAM files [Default: Pyicoteo
+                        uses its own library] (reading BAM works without
+                        samtools for convert, extend, and other operations,
+                        but not for enrichment yet)]
+  --skip-header         Skip writing the header for the output file. [Default
+                        False]
+  --control CONTROL     The control file or directory
+  --control-format CONTROL_FORMAT
+                        The format the control file is written as. [default:
+                        The same as experiment format]
+  --open-control        Define if the region file is half-open or closed
+                        notation. [Default closed]
+  --blacklist BLACKLIST
+                        Reads a bed file with coordinates that you want to
+                        exclude from the analysis. Useful for discarding
+                        &quot;noisy&quot; probable artifactual regions like centromeres
+                        and repeat regions. [Default None]
+  -O, --open-output     Define if the output is half-open or closed notation.
+                        [Default closed]
+  -F OUTPUT_FORMAT, --output-format OUTPUT_FORMAT
+                        Format desired for the output. You can choose between
+                        (&#39;eland&#39;, &#39;bed&#39;, &#39;bed_wig&#39;, &#39;bed_pk&#39;, &#39;bed_spk&#39;,
+                        &#39;sam&#39;, &#39;bam&#39;, &#39;counts&#39;). WARNING, for some operations,
+                        some outputs are not valid. See operation help for
+                        more info. [default pk]
+  -x FRAG_SIZE, --frag-size FRAG_SIZE
+                        The estimated inmmunoprecipitated fragment size. This
+                        is used by Pyicoteo to reconstruct the original signal
+                        in the original wet lab experiment.
+  --round               Round the final results to an integer
+  --wig-label WIG_LABEL
+                        The label that will identify the experiment in the WIG
+                        tracks.
+  --span SPAN           The span of the variable and fixed wig formats
+                        [Default 40]
+  --no-subtract         Don&#39;t subtract the control to the output, only
+                        normalize.
+  --remlabels REMLABELS
+                        Discard the reads that have this particular label.
+                        Example: --discard chr1 will discard all reads with
+                        chr1 as tag. You can specify multiple tags to discard
+                        using the following notation --discard chr1 chr2 tagN
+  --p-value P_VALUE     The threshold p-value that will make a cluster
+                        significant. [Default 0.01]
+  --k-limit K_LIMIT     The k limit Pyicoteo will analize to when performing a
+                        poisson test. Every cluster that goes over the
+                        threshold will have a p-value of 0, therefore
+                        considered significant. For performance purposes,
+                        raising it will give more precision when defining low
+                        p-values, but will take longer to execute. [Default
+                        400]
+  --correction CORRECTION
+                        This value will correct the size of the genome you are
+                        analyzing. This way you can take into consideration
+                        the real mappable genome [Default 1.0]
+  --trim-proportion TRIM_PROPORTION
+                        Fraction of the cluster height below which the peak is
+                        trimmed. Example: For a cluster of height 40, if the
+                        flag is 0.05, 40*0.05=2. Every cluster will be trimmed
+                        to that height. A position of height 1 is always
+                        considered insignificant, no matter what the cluster
+                        height is. [Default 0.3]
+  -p SPECIES, --species SPECIES
+                        The species that you are analyzing. This will read the
+                        length of the chromosomes of this species from the
+                        files inside the folder &quot;chrdesc&quot;. If the species
+                        information is not known, the filtering step will
+                        assume that the chromosomes are as long as the
+                        position of the furthest read. [Default hg19]
+  --duplicates DUPLICATES
+                        The number of duplicated reads accept will be counted.
+                        Any duplicated read after this threshold will be
+                        discarded. [Default 0]
+  --poisson-test POISSON_TEST
+                        Decide what property of the cluster will be used for
+                        the poisson analysis. Choices are (&#39;height&#39;,
+                        &#39;numtags&#39;, &#39;length&#39;) [Default height]
+</pre></div>
+</div>
+</div>
+<div class="section" id="plot">
+<h2>plot<a class="headerlink" href="#plot" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text"><div class="highlight"><pre>usage: pyicos [-h] [-v] [-o] [-f EXPERIMENT_FORMAT] [--debug] [--no-sort]
+              [--force-sort] [--silent] [--disable-cache] [--keep-temp]
+              [--postscript] [--showplots] [--label1 LABEL1] [--label2 LABEL2]
+              [--tempdir TEMPDIR] [--samtools] [--skip-header]
+              [--control CONTROL] [--control-format CONTROL_FORMAT]
+              [--open-control] [--blacklist BLACKLIST] [-O] [-F OUTPUT_FORMAT]
+              [-x FRAG_SIZE] [--round] [--wig-label WIG_LABEL] [--span SPAN]
+              [--no-subtract] [--remlabels REMLABELS] [--p-value P_VALUE]
+              [--k-limit K_LIMIT] [--correction CORRECTION]
+              [--trim-proportion TRIM_PROPORTION] [-p SPECIES]
+              [--duplicates DUPLICATES] [--poisson-test POISSON_TEST]
+              experiment output
+
+Pyicoller, part of the Pyicoteo suite, is a peak caller for the analysis of
+punctuated ChIP-Seq data.
+
+positional arguments:
+  experiment            The experiment file or directory
+  output                The output file or directory
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -v, --version         show program&#39;s version number and exit
+  -o, --open-experiment
+                        Defines if the experiment is half-open or closed
+                        notation. [Default False]
+  -f EXPERIMENT_FORMAT, --experiment-format EXPERIMENT_FORMAT
+                        The format the experiment file is written as. The
+                        options are (&#39;eland&#39;, &#39;bed&#39;, &#39;bed_wig&#39;, &#39;bed_pk&#39;,
+                        &#39;bed_spk&#39;, &#39;sam&#39;, &#39;bam&#39;, &#39;counts&#39;). [Default pk]
+  --debug
+  --no-sort             Force skip the sorting step. WARNING: Use only if you
+                        know what you are doing. Processing unsorted files
+                        assuming they are will outcome in erroneous results
+  --force-sort          Force the sorting step
+  --silent              Run without printing in screen
+  --disable-cache       Disable internal reading cache. When Clustering low
+                        coverage files, it will increase speed and improve
+                        memory usage. With very read dense files, the speed
+                        will decrease.
+  --keep-temp           Keep the temporary files
+  --postscript          get the output graphs in postscript format instead of
+                        .png
+  --showplots           Show the plots as they are being calculated by
+                        matplotlib. Note that the execution will be stopped
+                        until you close the window pop up that will arise
+  --label1 LABEL1       Manually define the first label of the graphs.
+  --label2 LABEL2       Manually define the second label of the graphs.
+  --tempdir TEMPDIR     Manually define the temporary directory where Pyicoteo
+                        will write. By default Pyicoteo will use the temporary
+                        directory the system provides (For example, /tmp in
+                        unix systems)
+  --samtools            Use samtools for reading BAM files [Default: Pyicoteo
+                        uses its own library] (reading BAM works without
+                        samtools for convert, extend, and other operations,
+                        but not for enrichment yet)]
+  --skip-header         Skip writing the header for the output file. [Default
+                        False]
+  --control CONTROL     The control file or directory
+  --control-format CONTROL_FORMAT
+                        The format the control file is written as. [default:
+                        The same as experiment format]
+  --open-control        Define if the region file is half-open or closed
+                        notation. [Default closed]
+  --blacklist BLACKLIST
+                        Reads a bed file with coordinates that you want to
+                        exclude from the analysis. Useful for discarding
+                        &quot;noisy&quot; probable artifactual regions like centromeres
+                        and repeat regions. [Default None]
+  -O, --open-output     Define if the output is half-open or closed notation.
+                        [Default closed]
+  -F OUTPUT_FORMAT, --output-format OUTPUT_FORMAT
+                        Format desired for the output. You can choose between
+                        (&#39;eland&#39;, &#39;bed&#39;, &#39;bed_wig&#39;, &#39;bed_pk&#39;, &#39;bed_spk&#39;,
+                        &#39;sam&#39;, &#39;bam&#39;, &#39;counts&#39;). WARNING, for some operations,
+                        some outputs are not valid. See operation help for
+                        more info. [default pk]
+  -x FRAG_SIZE, --frag-size FRAG_SIZE
+                        The estimated inmmunoprecipitated fragment size. This
+                        is used by Pyicoteo to reconstruct the original signal
+                        in the original wet lab experiment.
+  --round               Round the final results to an integer
+  --wig-label WIG_LABEL
+                        The label that will identify the experiment in the WIG
+                        tracks.
+  --span SPAN           The span of the variable and fixed wig formats
+                        [Default 40]
+  --no-subtract         Don&#39;t subtract the control to the output, only
+                        normalize.
+  --remlabels REMLABELS
+                        Discard the reads that have this particular label.
+                        Example: --discard chr1 will discard all reads with
+                        chr1 as tag. You can specify multiple tags to discard
+                        using the following notation --discard chr1 chr2 tagN
+  --p-value P_VALUE     The threshold p-value that will make a cluster
+                        significant. [Default 0.01]
+  --k-limit K_LIMIT     The k limit Pyicoteo will analize to when performing a
+                        poisson test. Every cluster that goes over the
+                        threshold will have a p-value of 0, therefore
+                        considered significant. For performance purposes,
+                        raising it will give more precision when defining low
+                        p-values, but will take longer to execute. [Default
+                        400]
+  --correction CORRECTION
+                        This value will correct the size of the genome you are
+                        analyzing. This way you can take into consideration
+                        the real mappable genome [Default 1.0]
+  --trim-proportion TRIM_PROPORTION
+                        Fraction of the cluster height below which the peak is
+                        trimmed. Example: For a cluster of height 40, if the
+                        flag is 0.05, 40*0.05=2. Every cluster will be trimmed
+                        to that height. A position of height 1 is always
+                        considered insignificant, no matter what the cluster
+                        height is. [Default 0.3]
+  -p SPECIES, --species SPECIES
+                        The species that you are analyzing. This will read the
+                        length of the chromosomes of this species from the
+                        files inside the folder &quot;chrdesc&quot;. If the species
+                        information is not known, the filtering step will
+                        assume that the chromosomes are as long as the
+                        position of the furthest read. [Default hg19]
+  --duplicates DUPLICATES
+                        The number of duplicated reads accept will be counted.
+                        Any duplicated read after this threshold will be
+                        discarded. [Default 0]
+  --poisson-test POISSON_TEST
+                        Decide what property of the cluster will be used for
+                        the poisson analysis. Choices are (&#39;height&#39;,
+                        &#39;numtags&#39;, &#39;length&#39;) [Default height]
+</pre></div>
+</div>
+</div>
+<div class="section" id="convert">
+<h2>convert<a class="headerlink" href="#convert" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text"><div class="highlight"><pre>usage: pyicos [-h] [-v] [-o] [-f EXPERIMENT_FORMAT] [--debug] [--no-sort]
+              [--force-sort] [--silent] [--disable-cache] [--keep-temp]
+              [--postscript] [--showplots] [--label1 LABEL1] [--label2 LABEL2]
+              [--tempdir TEMPDIR] [--samtools] [--skip-header]
+              [--control CONTROL] [--control-format CONTROL_FORMAT]
+              [--open-control] [--blacklist BLACKLIST] [-O] [-F OUTPUT_FORMAT]
+              [-x FRAG_SIZE] [--round] [--wig-label WIG_LABEL] [--span SPAN]
+              [--no-subtract] [--remlabels REMLABELS] [--p-value P_VALUE]
+              [--k-limit K_LIMIT] [--correction CORRECTION]
+              [--trim-proportion TRIM_PROPORTION] [-p SPECIES]
+              [--duplicates DUPLICATES] [--poisson-test POISSON_TEST]
+              experiment output
+
+Pyicoller, part of the Pyicoteo suite, is a peak caller for the analysis of
+punctuated ChIP-Seq data.
+
+positional arguments:
+  experiment            The experiment file or directory
+  output                The output file or directory
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -v, --version         show program&#39;s version number and exit
+  -o, --open-experiment
+                        Defines if the experiment is half-open or closed
+                        notation. [Default False]
+  -f EXPERIMENT_FORMAT, --experiment-format EXPERIMENT_FORMAT
+                        The format the experiment file is written as. The
+                        options are (&#39;eland&#39;, &#39;bed&#39;, &#39;bed_wig&#39;, &#39;bed_pk&#39;,
+                        &#39;bed_spk&#39;, &#39;sam&#39;, &#39;bam&#39;, &#39;counts&#39;). [Default pk]
+  --debug
+  --no-sort             Force skip the sorting step. WARNING: Use only if you
+                        know what you are doing. Processing unsorted files
+                        assuming they are will outcome in erroneous results
+  --force-sort          Force the sorting step
+  --silent              Run without printing in screen
+  --disable-cache       Disable internal reading cache. When Clustering low
+                        coverage files, it will increase speed and improve
+                        memory usage. With very read dense files, the speed
+                        will decrease.
+  --keep-temp           Keep the temporary files
+  --postscript          get the output graphs in postscript format instead of
+                        .png
+  --showplots           Show the plots as they are being calculated by
+                        matplotlib. Note that the execution will be stopped
+                        until you close the window pop up that will arise
+  --label1 LABEL1       Manually define the first label of the graphs.
+  --label2 LABEL2       Manually define the second label of the graphs.
+  --tempdir TEMPDIR     Manually define the temporary directory where Pyicoteo
+                        will write. By default Pyicoteo will use the temporary
+                        directory the system provides (For example, /tmp in
+                        unix systems)
+  --samtools            Use samtools for reading BAM files [Default: Pyicoteo
+                        uses its own library] (reading BAM works without
+                        samtools for convert, extend, and other operations,
+                        but not for enrichment yet)]
+  --skip-header         Skip writing the header for the output file. [Default
+                        False]
+  --control CONTROL     The control file or directory
+  --control-format CONTROL_FORMAT
+                        The format the control file is written as. [default:
+                        The same as experiment format]
+  --open-control        Define if the region file is half-open or closed
+                        notation. [Default closed]
+  --blacklist BLACKLIST
+                        Reads a bed file with coordinates that you want to
+                        exclude from the analysis. Useful for discarding
+                        &quot;noisy&quot; probable artifactual regions like centromeres
+                        and repeat regions. [Default None]
+  -O, --open-output     Define if the output is half-open or closed notation.
+                        [Default closed]
+  -F OUTPUT_FORMAT, --output-format OUTPUT_FORMAT
+                        Format desired for the output. You can choose between
+                        (&#39;eland&#39;, &#39;bed&#39;, &#39;bed_wig&#39;, &#39;bed_pk&#39;, &#39;bed_spk&#39;,
+                        &#39;sam&#39;, &#39;bam&#39;, &#39;counts&#39;). WARNING, for some operations,
+                        some outputs are not valid. See operation help for
+                        more info. [default pk]
+  -x FRAG_SIZE, --frag-size FRAG_SIZE
+                        The estimated inmmunoprecipitated fragment size. This
+                        is used by Pyicoteo to reconstruct the original signal
+                        in the original wet lab experiment.
+  --round               Round the final results to an integer
+  --wig-label WIG_LABEL
+                        The label that will identify the experiment in the WIG
+                        tracks.
+  --span SPAN           The span of the variable and fixed wig formats
+                        [Default 40]
+  --no-subtract         Don&#39;t subtract the control to the output, only
+                        normalize.
+  --remlabels REMLABELS
+                        Discard the reads that have this particular label.
+                        Example: --discard chr1 will discard all reads with
+                        chr1 as tag. You can specify multiple tags to discard
+                        using the following notation --discard chr1 chr2 tagN
+  --p-value P_VALUE     The threshold p-value that will make a cluster
+                        significant. [Default 0.01]
+  --k-limit K_LIMIT     The k limit Pyicoteo will analize to when performing a
+                        poisson test. Every cluster that goes over the
+                        threshold will have a p-value of 0, therefore
+                        considered significant. For performance purposes,
+                        raising it will give more precision when defining low
+                        p-values, but will take longer to execute. [Default
+                        400]
+  --correction CORRECTION
+                        This value will correct the size of the genome you are
+                        analyzing. This way you can take into consideration
+                        the real mappable genome [Default 1.0]
+  --trim-proportion TRIM_PROPORTION
+                        Fraction of the cluster height below which the peak is
+                        trimmed. Example: For a cluster of height 40, if the
+                        flag is 0.05, 40*0.05=2. Every cluster will be trimmed
+                        to that height. A position of height 1 is always
+                        considered insignificant, no matter what the cluster
+                        height is. [Default 0.3]
+  -p SPECIES, --species SPECIES
+                        The species that you are analyzing. This will read the
+                        length of the chromosomes of this species from the
+                        files inside the folder &quot;chrdesc&quot;. If the species
+                        information is not known, the filtering step will
+                        assume that the chromosomes are as long as the
+                        position of the furthest read. [Default hg19]
+  --duplicates DUPLICATES
+                        The number of duplicated reads accept will be counted.
+                        Any duplicated read after this threshold will be
+                        discarded. [Default 0]
+  --poisson-test POISSON_TEST
+                        Decide what property of the cluster will be used for
+                        the poisson analysis. Choices are (&#39;height&#39;,
+                        &#39;numtags&#39;, &#39;length&#39;) [Default height]
+</pre></div>
+</div>
+</div>
+<div class="section" id="remduplicates">
+<h2>remduplicates<a class="headerlink" href="#remduplicates" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text"><div class="highlight"><pre>usage: pyicos [-h] [-v] [-o] [-f EXPERIMENT_FORMAT] [--debug] [--no-sort]
+              [--force-sort] [--silent] [--disable-cache] [--keep-temp]
+              [--postscript] [--showplots] [--label1 LABEL1] [--label2 LABEL2]
+              [--tempdir TEMPDIR] [--samtools] [--skip-header]
+              [--control CONTROL] [--control-format CONTROL_FORMAT]
+              [--open-control] [--blacklist BLACKLIST] [-O] [-F OUTPUT_FORMAT]
+              [-x FRAG_SIZE] [--round] [--wig-label WIG_LABEL] [--span SPAN]
+              [--no-subtract] [--remlabels REMLABELS] [--p-value P_VALUE]
+              [--k-limit K_LIMIT] [--correction CORRECTION]
+              [--trim-proportion TRIM_PROPORTION] [-p SPECIES]
+              [--duplicates DUPLICATES] [--poisson-test POISSON_TEST]
+              experiment output
+
+Pyicoller, part of the Pyicoteo suite, is a peak caller for the analysis of
+punctuated ChIP-Seq data.
+
+positional arguments:
+  experiment            The experiment file or directory
+  output                The output file or directory
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -v, --version         show program&#39;s version number and exit
+  -o, --open-experiment
+                        Defines if the experiment is half-open or closed
+                        notation. [Default False]
+  -f EXPERIMENT_FORMAT, --experiment-format EXPERIMENT_FORMAT
+                        The format the experiment file is written as. The
+                        options are (&#39;eland&#39;, &#39;bed&#39;, &#39;bed_wig&#39;, &#39;bed_pk&#39;,
+                        &#39;bed_spk&#39;, &#39;sam&#39;, &#39;bam&#39;, &#39;counts&#39;). [Default pk]
+  --debug
+  --no-sort             Force skip the sorting step. WARNING: Use only if you
+                        know what you are doing. Processing unsorted files
+                        assuming they are will outcome in erroneous results
+  --force-sort          Force the sorting step
+  --silent              Run without printing in screen
+  --disable-cache       Disable internal reading cache. When Clustering low
+                        coverage files, it will increase speed and improve
+                        memory usage. With very read dense files, the speed
+                        will decrease.
+  --keep-temp           Keep the temporary files
+  --postscript          get the output graphs in postscript format instead of
+                        .png
+  --showplots           Show the plots as they are being calculated by
+                        matplotlib. Note that the execution will be stopped
+                        until you close the window pop up that will arise
+  --label1 LABEL1       Manually define the first label of the graphs.
+  --label2 LABEL2       Manually define the second label of the graphs.
+  --tempdir TEMPDIR     Manually define the temporary directory where Pyicoteo
+                        will write. By default Pyicoteo will use the temporary
+                        directory the system provides (For example, /tmp in
+                        unix systems)
+  --samtools            Use samtools for reading BAM files [Default: Pyicoteo
+                        uses its own library] (reading BAM works without
+                        samtools for convert, extend, and other operations,
+                        but not for enrichment yet)]
+  --skip-header         Skip writing the header for the output file. [Default
+                        False]
+  --control CONTROL     The control file or directory
+  --control-format CONTROL_FORMAT
+                        The format the control file is written as. [default:
+                        The same as experiment format]
+  --open-control        Define if the region file is half-open or closed
+                        notation. [Default closed]
+  --blacklist BLACKLIST
+                        Reads a bed file with coordinates that you want to
+                        exclude from the analysis. Useful for discarding
+                        &quot;noisy&quot; probable artifactual regions like centromeres
+                        and repeat regions. [Default None]
+  -O, --open-output     Define if the output is half-open or closed notation.
+                        [Default closed]
+  -F OUTPUT_FORMAT, --output-format OUTPUT_FORMAT
+                        Format desired for the output. You can choose between
+                        (&#39;eland&#39;, &#39;bed&#39;, &#39;bed_wig&#39;, &#39;bed_pk&#39;, &#39;bed_spk&#39;,
+                        &#39;sam&#39;, &#39;bam&#39;, &#39;counts&#39;). WARNING, for some operations,
+                        some outputs are not valid. See operation help for
+                        more info. [default pk]
+  -x FRAG_SIZE, --frag-size FRAG_SIZE
+                        The estimated inmmunoprecipitated fragment size. This
+                        is used by Pyicoteo to reconstruct the original signal
+                        in the original wet lab experiment.
+  --round               Round the final results to an integer
+  --wig-label WIG_LABEL
+                        The label that will identify the experiment in the WIG
+                        tracks.
+  --span SPAN           The span of the variable and fixed wig formats
+                        [Default 40]
+  --no-subtract         Don&#39;t subtract the control to the output, only
+                        normalize.
+  --remlabels REMLABELS
+                        Discard the reads that have this particular label.
+                        Example: --discard chr1 will discard all reads with
+                        chr1 as tag. You can specify multiple tags to discard
+                        using the following notation --discard chr1 chr2 tagN
+  --p-value P_VALUE     The threshold p-value that will make a cluster
+                        significant. [Default 0.01]
+  --k-limit K_LIMIT     The k limit Pyicoteo will analize to when performing a
+                        poisson test. Every cluster that goes over the
+                        threshold will have a p-value of 0, therefore
+                        considered significant. For performance purposes,
+                        raising it will give more precision when defining low
+                        p-values, but will take longer to execute. [Default
+                        400]
+  --correction CORRECTION
+                        This value will correct the size of the genome you are
+                        analyzing. This way you can take into consideration
+                        the real mappable genome [Default 1.0]
+  --trim-proportion TRIM_PROPORTION
+                        Fraction of the cluster height below which the peak is
+                        trimmed. Example: For a cluster of height 40, if the
+                        flag is 0.05, 40*0.05=2. Every cluster will be trimmed
+                        to that height. A position of height 1 is always
+                        considered insignificant, no matter what the cluster
+                        height is. [Default 0.3]
+  -p SPECIES, --species SPECIES
+                        The species that you are analyzing. This will read the
+                        length of the chromosomes of this species from the
+                        files inside the folder &quot;chrdesc&quot;. If the species
+                        information is not known, the filtering step will
+                        assume that the chromosomes are as long as the
+                        position of the furthest read. [Default hg19]
+  --duplicates DUPLICATES
+                        The number of duplicated reads accept will be counted.
+                        Any duplicated read after this threshold will be
+                        discarded. [Default 0]
+  --poisson-test POISSON_TEST
+                        Decide what property of the cluster will be used for
+                        the poisson analysis. Choices are (&#39;height&#39;,
+                        &#39;numtags&#39;, &#39;length&#39;) [Default height]
+</pre></div>
+</div>
+</div>
+<div class="section" id="protocol">
+<h2>protocol<a class="headerlink" href="#protocol" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text"><div class="highlight"><pre>usage: pyicos [-h] [-v] [-o] [-f EXPERIMENT_FORMAT] [--debug] [--no-sort]
+              [--force-sort] [--silent] [--disable-cache] [--keep-temp]
+              [--postscript] [--showplots] [--label1 LABEL1] [--label2 LABEL2]
+              [--tempdir TEMPDIR] [--samtools] [--skip-header]
+              [--control CONTROL] [--control-format CONTROL_FORMAT]
+              [--open-control] [--blacklist BLACKLIST] [-O] [-F OUTPUT_FORMAT]
+              [-x FRAG_SIZE] [--round] [--wig-label WIG_LABEL] [--span SPAN]
+              [--no-subtract] [--remlabels REMLABELS] [--p-value P_VALUE]
+              [--k-limit K_LIMIT] [--correction CORRECTION]
+              [--trim-proportion TRIM_PROPORTION] [-p SPECIES]
+              [--duplicates DUPLICATES] [--poisson-test POISSON_TEST]
+              experiment output
+
+Pyicoller, part of the Pyicoteo suite, is a peak caller for the analysis of
+punctuated ChIP-Seq data.
+
+positional arguments:
+  experiment            The experiment file or directory
+  output                The output file or directory
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -v, --version         show program&#39;s version number and exit
+  -o, --open-experiment
+                        Defines if the experiment is half-open or closed
+                        notation. [Default False]
+  -f EXPERIMENT_FORMAT, --experiment-format EXPERIMENT_FORMAT
+                        The format the experiment file is written as. The
+                        options are (&#39;eland&#39;, &#39;bed&#39;, &#39;bed_wig&#39;, &#39;bed_pk&#39;,
+                        &#39;bed_spk&#39;, &#39;sam&#39;, &#39;bam&#39;, &#39;counts&#39;). [Default pk]
+  --debug
+  --no-sort             Force skip the sorting step. WARNING: Use only if you
+                        know what you are doing. Processing unsorted files
+                        assuming they are will outcome in erroneous results
+  --force-sort          Force the sorting step
+  --silent              Run without printing in screen
+  --disable-cache       Disable internal reading cache. When Clustering low
+                        coverage files, it will increase speed and improve
+                        memory usage. With very read dense files, the speed
+                        will decrease.
+  --keep-temp           Keep the temporary files
+  --postscript          get the output graphs in postscript format instead of
+                        .png
+  --showplots           Show the plots as they are being calculated by
+                        matplotlib. Note that the execution will be stopped
+                        until you close the window pop up that will arise
+  --label1 LABEL1       Manually define the first label of the graphs.
+  --label2 LABEL2       Manually define the second label of the graphs.
+  --tempdir TEMPDIR     Manually define the temporary directory where Pyicoteo
+                        will write. By default Pyicoteo will use the temporary
+                        directory the system provides (For example, /tmp in
+                        unix systems)
+  --samtools            Use samtools for reading BAM files [Default: Pyicoteo
+                        uses its own library] (reading BAM works without
+                        samtools for convert, extend, and other operations,
+                        but not for enrichment yet)]
+  --skip-header         Skip writing the header for the output file. [Default
+                        False]
+  --control CONTROL     The control file or directory
+  --control-format CONTROL_FORMAT
+                        The format the control file is written as. [default:
+                        The same as experiment format]
+  --open-control        Define if the region file is half-open or closed
+                        notation. [Default closed]
+  --blacklist BLACKLIST
+                        Reads a bed file with coordinates that you want to
+                        exclude from the analysis. Useful for discarding
+                        &quot;noisy&quot; probable artifactual regions like centromeres
+                        and repeat regions. [Default None]
+  -O, --open-output     Define if the output is half-open or closed notation.
+                        [Default closed]
+  -F OUTPUT_FORMAT, --output-format OUTPUT_FORMAT
+                        Format desired for the output. You can choose between
+                        (&#39;eland&#39;, &#39;bed&#39;, &#39;bed_wig&#39;, &#39;bed_pk&#39;, &#39;bed_spk&#39;,
+                        &#39;sam&#39;, &#39;bam&#39;, &#39;counts&#39;). WARNING, for some operations,
+                        some outputs are not valid. See operation help for
+                        more info. [default pk]
+  -x FRAG_SIZE, --frag-size FRAG_SIZE
+                        The estimated inmmunoprecipitated fragment size. This
+                        is used by Pyicoteo to reconstruct the original signal
+                        in the original wet lab experiment.
+  --round               Round the final results to an integer
+  --wig-label WIG_LABEL
+                        The label that will identify the experiment in the WIG
+                        tracks.
+  --span SPAN           The span of the variable and fixed wig formats
+                        [Default 40]
+  --no-subtract         Don&#39;t subtract the control to the output, only
+                        normalize.
+  --remlabels REMLABELS
+                        Discard the reads that have this particular label.
+                        Example: --discard chr1 will discard all reads with
+                        chr1 as tag. You can specify multiple tags to discard
+                        using the following notation --discard chr1 chr2 tagN
+  --p-value P_VALUE     The threshold p-value that will make a cluster
+                        significant. [Default 0.01]
+  --k-limit K_LIMIT     The k limit Pyicoteo will analize to when performing a
+                        poisson test. Every cluster that goes over the
+                        threshold will have a p-value of 0, therefore
+                        considered significant. For performance purposes,
+                        raising it will give more precision when defining low
+                        p-values, but will take longer to execute. [Default
+                        400]
+  --correction CORRECTION
+                        This value will correct the size of the genome you are
+                        analyzing. This way you can take into consideration
+                        the real mappable genome [Default 1.0]
+  --trim-proportion TRIM_PROPORTION
+                        Fraction of the cluster height below which the peak is
+                        trimmed. Example: For a cluster of height 40, if the
+                        flag is 0.05, 40*0.05=2. Every cluster will be trimmed
+                        to that height. A position of height 1 is always
+                        considered insignificant, no matter what the cluster
+                        height is. [Default 0.3]
+  -p SPECIES, --species SPECIES
+                        The species that you are analyzing. This will read the
+                        length of the chromosomes of this species from the
+                        files inside the folder &quot;chrdesc&quot;. If the species
+                        information is not known, the filtering step will
+                        assume that the chromosomes are as long as the
+                        position of the furthest read. [Default hg19]
+  --duplicates DUPLICATES
+                        The number of duplicated reads accept will be counted.
+                        Any duplicated read after this threshold will be
+                        discarded. [Default 0]
+  --poisson-test POISSON_TEST
+                        Decide what property of the cluster will be used for
+                        the poisson analysis. Choices are (&#39;height&#39;,
+                        &#39;numtags&#39;, &#39;length&#39;) [Default height]
+</pre></div>
+</div>
+</div>
+<div class="section" id="enrichma">
+<h2>enrichma<a class="headerlink" href="#enrichma" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text"><div class="highlight"><pre>usage: pyicos [-h] [-v] [-o] [-f EXPERIMENT_FORMAT] [--debug] [--no-sort]
+              [--force-sort] [--silent] [--disable-cache] [--keep-temp]
+              [--postscript] [--showplots] [--label1 LABEL1] [--label2 LABEL2]
+              [--tempdir TEMPDIR] [--samtools] [--skip-header]
+              [--control CONTROL] [--control-format CONTROL_FORMAT]
+              [--open-control] [--blacklist BLACKLIST] [-O] [-F OUTPUT_FORMAT]
+              [-x FRAG_SIZE] [--round] [--wig-label WIG_LABEL] [--span SPAN]
+              [--no-subtract] [--remlabels REMLABELS] [--p-value P_VALUE]
+              [--k-limit K_LIMIT] [--correction CORRECTION]
+              [--trim-proportion TRIM_PROPORTION] [-p SPECIES]
+              [--duplicates DUPLICATES] [--poisson-test POISSON_TEST]
+              experiment output
+
+Pyicoller, part of the Pyicoteo suite, is a peak caller for the analysis of
+punctuated ChIP-Seq data.
+
+positional arguments:
+  experiment            The experiment file or directory
+  output                The output file or directory
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -v, --version         show program&#39;s version number and exit
+  -o, --open-experiment
+                        Defines if the experiment is half-open or closed
+                        notation. [Default False]
+  -f EXPERIMENT_FORMAT, --experiment-format EXPERIMENT_FORMAT
+                        The format the experiment file is written as. The
+                        options are (&#39;eland&#39;, &#39;bed&#39;, &#39;bed_wig&#39;, &#39;bed_pk&#39;,
+                        &#39;bed_spk&#39;, &#39;sam&#39;, &#39;bam&#39;, &#39;counts&#39;). [Default pk]
+  --debug
+  --no-sort             Force skip the sorting step. WARNING: Use only if you
+                        know what you are doing. Processing unsorted files
+                        assuming they are will outcome in erroneous results
+  --force-sort          Force the sorting step
+  --silent              Run without printing in screen
+  --disable-cache       Disable internal reading cache. When Clustering low
+                        coverage files, it will increase speed and improve
+                        memory usage. With very read dense files, the speed
+                        will decrease.
+  --keep-temp           Keep the temporary files
+  --postscript          get the output graphs in postscript format instead of
+                        .png
+  --showplots           Show the plots as they are being calculated by
+                        matplotlib. Note that the execution will be stopped
+                        until you close the window pop up that will arise
+  --label1 LABEL1       Manually define the first label of the graphs.
+  --label2 LABEL2       Manually define the second label of the graphs.
+  --tempdir TEMPDIR     Manually define the temporary directory where Pyicoteo
+                        will write. By default Pyicoteo will use the temporary
+                        directory the system provides (For example, /tmp in
+                        unix systems)
+  --samtools            Use samtools for reading BAM files [Default: Pyicoteo
+                        uses its own library] (reading BAM works without
+                        samtools for convert, extend, and other operations,
+                        but not for enrichment yet)]
+  --skip-header         Skip writing the header for the output file. [Default
+                        False]
+  --control CONTROL     The control file or directory
+  --control-format CONTROL_FORMAT
+                        The format the control file is written as. [default:
+                        The same as experiment format]
+  --open-control        Define if the region file is half-open or closed
+                        notation. [Default closed]
+  --blacklist BLACKLIST
+                        Reads a bed file with coordinates that you want to
+                        exclude from the analysis. Useful for discarding
+                        &quot;noisy&quot; probable artifactual regions like centromeres
+                        and repeat regions. [Default None]
+  -O, --open-output     Define if the output is half-open or closed notation.
+                        [Default closed]
+  -F OUTPUT_FORMAT, --output-format OUTPUT_FORMAT
+                        Format desired for the output. You can choose between
+                        (&#39;eland&#39;, &#39;bed&#39;, &#39;bed_wig&#39;, &#39;bed_pk&#39;, &#39;bed_spk&#39;,
+                        &#39;sam&#39;, &#39;bam&#39;, &#39;counts&#39;). WARNING, for some operations,
+                        some outputs are not valid. See operation help for
+                        more info. [default pk]
+  -x FRAG_SIZE, --frag-size FRAG_SIZE
+                        The estimated inmmunoprecipitated fragment size. This
+                        is used by Pyicoteo to reconstruct the original signal
+                        in the original wet lab experiment.
+  --round               Round the final results to an integer
+  --wig-label WIG_LABEL
+                        The label that will identify the experiment in the WIG
+                        tracks.
+  --span SPAN           The span of the variable and fixed wig formats
+                        [Default 40]
+  --no-subtract         Don&#39;t subtract the control to the output, only
+                        normalize.
+  --remlabels REMLABELS
+                        Discard the reads that have this particular label.
+                        Example: --discard chr1 will discard all reads with
+                        chr1 as tag. You can specify multiple tags to discard
+                        using the following notation --discard chr1 chr2 tagN
+  --p-value P_VALUE     The threshold p-value that will make a cluster
+                        significant. [Default 0.01]
+  --k-limit K_LIMIT     The k limit Pyicoteo will analize to when performing a
+                        poisson test. Every cluster that goes over the
+                        threshold will have a p-value of 0, therefore
+                        considered significant. For performance purposes,
+                        raising it will give more precision when defining low
+                        p-values, but will take longer to execute. [Default
+                        400]
+  --correction CORRECTION
+                        This value will correct the size of the genome you are
+                        analyzing. This way you can take into consideration
+                        the real mappable genome [Default 1.0]
+  --trim-proportion TRIM_PROPORTION
+                        Fraction of the cluster height below which the peak is
+                        trimmed. Example: For a cluster of height 40, if the
+                        flag is 0.05, 40*0.05=2. Every cluster will be trimmed
+                        to that height. A position of height 1 is always
+                        considered insignificant, no matter what the cluster
+                        height is. [Default 0.3]
+  -p SPECIES, --species SPECIES
+                        The species that you are analyzing. This will read the
+                        length of the chromosomes of this species from the
+                        files inside the folder &quot;chrdesc&quot;. If the species
+                        information is not known, the filtering step will
+                        assume that the chromosomes are as long as the
+                        position of the furthest read. [Default hg19]
+  --duplicates DUPLICATES
+                        The number of duplicated reads accept will be counted.
+                        Any duplicated read after this threshold will be
+                        discarded. [Default 0]
+  --poisson-test POISSON_TEST
+                        Decide what property of the cluster will be used for
+                        the poisson analysis. Choices are (&#39;height&#39;,
+                        &#39;numtags&#39;, &#39;length&#39;) [Default height]
+</pre></div>
+</div>
+</div>
+<div class="section" id="extend">
+<h2>extend<a class="headerlink" href="#extend" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text"><div class="highlight"><pre>usage: pyicos [-h] [-v] [-o] [-f EXPERIMENT_FORMAT] [--debug] [--no-sort]
+              [--force-sort] [--silent] [--disable-cache] [--keep-temp]
+              [--postscript] [--showplots] [--label1 LABEL1] [--label2 LABEL2]
+              [--tempdir TEMPDIR] [--samtools] [--skip-header]
+              [--control CONTROL] [--control-format CONTROL_FORMAT]
+              [--open-control] [--blacklist BLACKLIST] [-O] [-F OUTPUT_FORMAT]
+              [-x FRAG_SIZE] [--round] [--wig-label WIG_LABEL] [--span SPAN]
+              [--no-subtract] [--remlabels REMLABELS] [--p-value P_VALUE]
+              [--k-limit K_LIMIT] [--correction CORRECTION]
+              [--trim-proportion TRIM_PROPORTION] [-p SPECIES]
+              [--duplicates DUPLICATES] [--poisson-test POISSON_TEST]
+              experiment output
+
+Pyicoller, part of the Pyicoteo suite, is a peak caller for the analysis of
+punctuated ChIP-Seq data.
+
+positional arguments:
+  experiment            The experiment file or directory
+  output                The output file or directory
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -v, --version         show program&#39;s version number and exit
+  -o, --open-experiment
+                        Defines if the experiment is half-open or closed
+                        notation. [Default False]
+  -f EXPERIMENT_FORMAT, --experiment-format EXPERIMENT_FORMAT
+                        The format the experiment file is written as. The
+                        options are (&#39;eland&#39;, &#39;bed&#39;, &#39;bed_wig&#39;, &#39;bed_pk&#39;,
+                        &#39;bed_spk&#39;, &#39;sam&#39;, &#39;bam&#39;, &#39;counts&#39;). [Default pk]
+  --debug
+  --no-sort             Force skip the sorting step. WARNING: Use only if you
+                        know what you are doing. Processing unsorted files
+                        assuming they are will outcome in erroneous results
+  --force-sort          Force the sorting step
+  --silent              Run without printing in screen
+  --disable-cache       Disable internal reading cache. When Clustering low
+                        coverage files, it will increase speed and improve
+                        memory usage. With very read dense files, the speed
+                        will decrease.
+  --keep-temp           Keep the temporary files
+  --postscript          get the output graphs in postscript format instead of
+                        .png
+  --showplots           Show the plots as they are being calculated by
+                        matplotlib. Note that the execution will be stopped
+                        until you close the window pop up that will arise
+  --label1 LABEL1       Manually define the first label of the graphs.
+  --label2 LABEL2       Manually define the second label of the graphs.
+  --tempdir TEMPDIR     Manually define the temporary directory where Pyicoteo
+                        will write. By default Pyicoteo will use the temporary
+                        directory the system provides (For example, /tmp in
+                        unix systems)
+  --samtools            Use samtools for reading BAM files [Default: Pyicoteo
+                        uses its own library] (reading BAM works without
+                        samtools for convert, extend, and other operations,
+                        but not for enrichment yet)]
+  --skip-header         Skip writing the header for the output file. [Default
+                        False]
+  --control CONTROL     The control file or directory
+  --control-format CONTROL_FORMAT
+                        The format the control file is written as. [default:
+                        The same as experiment format]
+  --open-control        Define if the region file is half-open or closed
+                        notation. [Default closed]
+  --blacklist BLACKLIST
+                        Reads a bed file with coordinates that you want to
+                        exclude from the analysis. Useful for discarding
+                        &quot;noisy&quot; probable artifactual regions like centromeres
+                        and repeat regions. [Default None]
+  -O, --open-output     Define if the output is half-open or closed notation.
+                        [Default closed]
+  -F OUTPUT_FORMAT, --output-format OUTPUT_FORMAT
+                        Format desired for the output. You can choose between
+                        (&#39;eland&#39;, &#39;bed&#39;, &#39;bed_wig&#39;, &#39;bed_pk&#39;, &#39;bed_spk&#39;,
+                        &#39;sam&#39;, &#39;bam&#39;, &#39;counts&#39;). WARNING, for some operations,
+                        some outputs are not valid. See operation help for
+                        more info. [default pk]
+  -x FRAG_SIZE, --frag-size FRAG_SIZE
+                        The estimated inmmunoprecipitated fragment size. This
+                        is used by Pyicoteo to reconstruct the original signal
+                        in the original wet lab experiment.
+  --round               Round the final results to an integer
+  --wig-label WIG_LABEL
+                        The label that will identify the experiment in the WIG
+                        tracks.
+  --span SPAN           The span of the variable and fixed wig formats
+                        [Default 40]
+  --no-subtract         Don&#39;t subtract the control to the output, only
+                        normalize.
+  --remlabels REMLABELS
+                        Discard the reads that have this particular label.
+                        Example: --discard chr1 will discard all reads with
+                        chr1 as tag. You can specify multiple tags to discard
+                        using the following notation --discard chr1 chr2 tagN
+  --p-value P_VALUE     The threshold p-value that will make a cluster
+                        significant. [Default 0.01]
+  --k-limit K_LIMIT     The k limit Pyicoteo will analize to when performing a
+                        poisson test. Every cluster that goes over the
+                        threshold will have a p-value of 0, therefore
+                        considered significant. For performance purposes,
+                        raising it will give more precision when defining low
+                        p-values, but will take longer to execute. [Default
+                        400]
+  --correction CORRECTION
+                        This value will correct the size of the genome you are
+                        analyzing. This way you can take into consideration
+                        the real mappable genome [Default 1.0]
+  --trim-proportion TRIM_PROPORTION
+                        Fraction of the cluster height below which the peak is
+                        trimmed. Example: For a cluster of height 40, if the
+                        flag is 0.05, 40*0.05=2. Every cluster will be trimmed
+                        to that height. A position of height 1 is always
+                        considered insignificant, no matter what the cluster
+                        height is. [Default 0.3]
+  -p SPECIES, --species SPECIES
+                        The species that you are analyzing. This will read the
+                        length of the chromosomes of this species from the
+                        files inside the folder &quot;chrdesc&quot;. If the species
+                        information is not known, the filtering step will
+                        assume that the chromosomes are as long as the
+                        position of the furthest read. [Default hg19]
+  --duplicates DUPLICATES
+                        The number of duplicated reads accept will be counted.
+                        Any duplicated read after this threshold will be
+                        discarded. [Default 0]
+  --poisson-test POISSON_TEST
+                        Decide what property of the cluster will be used for
+                        the poisson analysis. Choices are (&#39;height&#39;,
+                        &#39;numtags&#39;, &#39;length&#39;) [Default height]
+</pre></div>
+</div>
+</div>
+<div class="section" id="all">
+<h2>all<a class="headerlink" href="#all" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text"><div class="highlight"><pre>usage: pyicos [-h] [-v] [-o] [-f EXPERIMENT_FORMAT] [--debug] [--no-sort]
+              [--force-sort] [--silent] [--disable-cache] [--keep-temp]
+              [--postscript] [--showplots] [--label1 LABEL1] [--label2 LABEL2]
+              [--tempdir TEMPDIR] [--samtools] [--skip-header]
+              [--control CONTROL] [--control-format CONTROL_FORMAT]
+              [--open-control] [--blacklist BLACKLIST] [-O] [-F OUTPUT_FORMAT]
+              [-x FRAG_SIZE] [--round] [--wig-label WIG_LABEL] [--span SPAN]
+              [--no-subtract] [--remlabels REMLABELS] [--p-value P_VALUE]
+              [--k-limit K_LIMIT] [--correction CORRECTION]
+              [--trim-proportion TRIM_PROPORTION] [-p SPECIES]
+              [--duplicates DUPLICATES] [--poisson-test POISSON_TEST]
+              experiment output
+
+Pyicoller, part of the Pyicoteo suite, is a peak caller for the analysis of
+punctuated ChIP-Seq data.
+
+positional arguments:
+  experiment            The experiment file or directory
+  output                The output file or directory
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -v, --version         show program&#39;s version number and exit
+  -o, --open-experiment
+                        Defines if the experiment is half-open or closed
+                        notation. [Default False]
+  -f EXPERIMENT_FORMAT, --experiment-format EXPERIMENT_FORMAT
+                        The format the experiment file is written as. The
+                        options are (&#39;eland&#39;, &#39;bed&#39;, &#39;bed_wig&#39;, &#39;bed_pk&#39;,
+                        &#39;bed_spk&#39;, &#39;sam&#39;, &#39;bam&#39;, &#39;counts&#39;). [Default pk]
+  --debug
+  --no-sort             Force skip the sorting step. WARNING: Use only if you
+                        know what you are doing. Processing unsorted files
+                        assuming they are will outcome in erroneous results
+  --force-sort          Force the sorting step
+  --silent              Run without printing in screen
+  --disable-cache       Disable internal reading cache. When Clustering low
+                        coverage files, it will increase speed and improve
+                        memory usage. With very read dense files, the speed
+                        will decrease.
+  --keep-temp           Keep the temporary files
+  --postscript          get the output graphs in postscript format instead of
+                        .png
+  --showplots           Show the plots as they are being calculated by
+                        matplotlib. Note that the execution will be stopped
+                        until you close the window pop up that will arise
+  --label1 LABEL1       Manually define the first label of the graphs.
+  --label2 LABEL2       Manually define the second label of the graphs.
+  --tempdir TEMPDIR     Manually define the temporary directory where Pyicoteo
+                        will write. By default Pyicoteo will use the temporary
+                        directory the system provides (For example, /tmp in
+                        unix systems)
+  --samtools            Use samtools for reading BAM files [Default: Pyicoteo
+                        uses its own library] (reading BAM works without
+                        samtools for convert, extend, and other operations,
+                        but not for enrichment yet)]
+  --skip-header         Skip writing the header for the output file. [Default
+                        False]
+  --control CONTROL     The control file or directory
+  --control-format CONTROL_FORMAT
+                        The format the control file is written as. [default:
+                        The same as experiment format]
+  --open-control        Define if the region file is half-open or closed
+                        notation. [Default closed]
+  --blacklist BLACKLIST
+                        Reads a bed file with coordinates that you want to
+                        exclude from the analysis. Useful for discarding
+                        &quot;noisy&quot; probable artifactual regions like centromeres
+                        and repeat regions. [Default None]
+  -O, --open-output     Define if the output is half-open or closed notation.
+                        [Default closed]
+  -F OUTPUT_FORMAT, --output-format OUTPUT_FORMAT
+                        Format desired for the output. You can choose between
+                        (&#39;eland&#39;, &#39;bed&#39;, &#39;bed_wig&#39;, &#39;bed_pk&#39;, &#39;bed_spk&#39;,
+                        &#39;sam&#39;, &#39;bam&#39;, &#39;counts&#39;). WARNING, for some operations,
+                        some outputs are not valid. See operation help for
+                        more info. [default pk]
+  -x FRAG_SIZE, --frag-size FRAG_SIZE
+                        The estimated inmmunoprecipitated fragment size. This
+                        is used by Pyicoteo to reconstruct the original signal
+                        in the original wet lab experiment.
+  --round               Round the final results to an integer
+  --wig-label WIG_LABEL
+                        The label that will identify the experiment in the WIG
+                        tracks.
+  --span SPAN           The span of the variable and fixed wig formats
+                        [Default 40]
+  --no-subtract         Don&#39;t subtract the control to the output, only
+                        normalize.
+  --remlabels REMLABELS
+                        Discard the reads that have this particular label.
+                        Example: --discard chr1 will discard all reads with
+                        chr1 as tag. You can specify multiple tags to discard
+                        using the following notation --discard chr1 chr2 tagN
+  --p-value P_VALUE     The threshold p-value that will make a cluster
+                        significant. [Default 0.01]
+  --k-limit K_LIMIT     The k limit Pyicoteo will analize to when performing a
+                        poisson test. Every cluster that goes over the
+                        threshold will have a p-value of 0, therefore
+                        considered significant. For performance purposes,
+                        raising it will give more precision when defining low
+                        p-values, but will take longer to execute. [Default
+                        400]
+  --correction CORRECTION
+                        This value will correct the size of the genome you are
+                        analyzing. This way you can take into consideration
+                        the real mappable genome [Default 1.0]
+  --trim-proportion TRIM_PROPORTION
+                        Fraction of the cluster height below which the peak is
+                        trimmed. Example: For a cluster of height 40, if the
+                        flag is 0.05, 40*0.05=2. Every cluster will be trimmed
+                        to that height. A position of height 1 is always
+                        considered insignificant, no matter what the cluster
+                        height is. [Default 0.3]
+  -p SPECIES, --species SPECIES
+                        The species that you are analyzing. This will read the
+                        length of the chromosomes of this species from the
+                        files inside the folder &quot;chrdesc&quot;. If the species
+                        information is not known, the filtering step will
+                        assume that the chromosomes are as long as the
+                        position of the furthest read. [Default hg19]
+  --duplicates DUPLICATES
+                        The number of duplicated reads accept will be counted.
+                        Any duplicated read after this threshold will be
+                        discarded. [Default 0]
+  --poisson-test POISSON_TEST
+                        Decide what property of the cluster will be used for
+                        the poisson analysis. Choices are (&#39;height&#39;,
+                        &#39;numtags&#39;, &#39;length&#39;) [Default height]
+</pre></div>
+</div>
+</div>
+<div class="section" id="remregions">
+<h2>remregions<a class="headerlink" href="#remregions" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text"><div class="highlight"><pre>usage: pyicos [-h] [-v] [-o] [-f EXPERIMENT_FORMAT] [--debug] [--no-sort]
+              [--force-sort] [--silent] [--disable-cache] [--keep-temp]
+              [--postscript] [--showplots] [--label1 LABEL1] [--label2 LABEL2]
+              [--tempdir TEMPDIR] [--samtools] [--skip-header]
+              [--control CONTROL] [--control-format CONTROL_FORMAT]
+              [--open-control] [--blacklist BLACKLIST] [-O] [-F OUTPUT_FORMAT]
+              [-x FRAG_SIZE] [--round] [--wig-label WIG_LABEL] [--span SPAN]
+              [--no-subtract] [--remlabels REMLABELS] [--p-value P_VALUE]
+              [--k-limit K_LIMIT] [--correction CORRECTION]
+              [--trim-proportion TRIM_PROPORTION] [-p SPECIES]
+              [--duplicates DUPLICATES] [--poisson-test POISSON_TEST]
+              experiment output
+
+Pyicoller, part of the Pyicoteo suite, is a peak caller for the analysis of
+punctuated ChIP-Seq data.
+
+positional arguments:
+  experiment            The experiment file or directory
+  output                The output file or directory
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -v, --version         show program&#39;s version number and exit
+  -o, --open-experiment
+                        Defines if the experiment is half-open or closed
+                        notation. [Default False]
+  -f EXPERIMENT_FORMAT, --experiment-format EXPERIMENT_FORMAT
+                        The format the experiment file is written as. The
+                        options are (&#39;eland&#39;, &#39;bed&#39;, &#39;bed_wig&#39;, &#39;bed_pk&#39;,
+                        &#39;bed_spk&#39;, &#39;sam&#39;, &#39;bam&#39;, &#39;counts&#39;). [Default pk]
+  --debug
+  --no-sort             Force skip the sorting step. WARNING: Use only if you
+                        know what you are doing. Processing unsorted files
+                        assuming they are will outcome in erroneous results
+  --force-sort          Force the sorting step
+  --silent              Run without printing in screen
+  --disable-cache       Disable internal reading cache. When Clustering low
+                        coverage files, it will increase speed and improve
+                        memory usage. With very read dense files, the speed
+                        will decrease.
+  --keep-temp           Keep the temporary files
+  --postscript          get the output graphs in postscript format instead of
+                        .png
+  --showplots           Show the plots as they are being calculated by
+                        matplotlib. Note that the execution will be stopped
+                        until you close the window pop up that will arise
+  --label1 LABEL1       Manually define the first label of the graphs.
+  --label2 LABEL2       Manually define the second label of the graphs.
+  --tempdir TEMPDIR     Manually define the temporary directory where Pyicoteo
+                        will write. By default Pyicoteo will use the temporary
+                        directory the system provides (For example, /tmp in
+                        unix systems)
+  --samtools            Use samtools for reading BAM files [Default: Pyicoteo
+                        uses its own library] (reading BAM works without
+                        samtools for convert, extend, and other operations,
+                        but not for enrichment yet)]
+  --skip-header         Skip writing the header for the output file. [Default
+                        False]
+  --control CONTROL     The control file or directory
+  --control-format CONTROL_FORMAT
+                        The format the control file is written as. [default:
+                        The same as experiment format]
+  --open-control        Define if the region file is half-open or closed
+                        notation. [Default closed]
+  --blacklist BLACKLIST
+                        Reads a bed file with coordinates that you want to
+                        exclude from the analysis. Useful for discarding
+                        &quot;noisy&quot; probable artifactual regions like centromeres
+                        and repeat regions. [Default None]
+  -O, --open-output     Define if the output is half-open or closed notation.
+                        [Default closed]
+  -F OUTPUT_FORMAT, --output-format OUTPUT_FORMAT
+                        Format desired for the output. You can choose between
+                        (&#39;eland&#39;, &#39;bed&#39;, &#39;bed_wig&#39;, &#39;bed_pk&#39;, &#39;bed_spk&#39;,
+                        &#39;sam&#39;, &#39;bam&#39;, &#39;counts&#39;). WARNING, for some operations,
+                        some outputs are not valid. See operation help for
+                        more info. [default pk]
+  -x FRAG_SIZE, --frag-size FRAG_SIZE
+                        The estimated inmmunoprecipitated fragment size. This
+                        is used by Pyicoteo to reconstruct the original signal
+                        in the original wet lab experiment.
+  --round               Round the final results to an integer
+  --wig-label WIG_LABEL
+                        The label that will identify the experiment in the WIG
+                        tracks.
+  --span SPAN           The span of the variable and fixed wig formats
+                        [Default 40]
+  --no-subtract         Don&#39;t subtract the control to the output, only
+                        normalize.
+  --remlabels REMLABELS
+                        Discard the reads that have this particular label.
+                        Example: --discard chr1 will discard all reads with
+                        chr1 as tag. You can specify multiple tags to discard
+                        using the following notation --discard chr1 chr2 tagN
+  --p-value P_VALUE     The threshold p-value that will make a cluster
+                        significant. [Default 0.01]
+  --k-limit K_LIMIT     The k limit Pyicoteo will analize to when performing a
+                        poisson test. Every cluster that goes over the
+                        threshold will have a p-value of 0, therefore
+                        considered significant. For performance purposes,
+                        raising it will give more precision when defining low
+                        p-values, but will take longer to execute. [Default
+                        400]
+  --correction CORRECTION
+                        This value will correct the size of the genome you are
+                        analyzing. This way you can take into consideration
+                        the real mappable genome [Default 1.0]
+  --trim-proportion TRIM_PROPORTION
+                        Fraction of the cluster height below which the peak is
+                        trimmed. Example: For a cluster of height 40, if the
+                        flag is 0.05, 40*0.05=2. Every cluster will be trimmed
+                        to that height. A position of height 1 is always
+                        considered insignificant, no matter what the cluster
+                        height is. [Default 0.3]
+  -p SPECIES, --species SPECIES
+                        The species that you are analyzing. This will read the
+                        length of the chromosomes of this species from the
+                        files inside the folder &quot;chrdesc&quot;. If the species
+                        information is not known, the filtering step will
+                        assume that the chromosomes are as long as the
+                        position of the furthest read. [Default hg19]
+  --duplicates DUPLICATES
+                        The number of duplicated reads accept will be counted.
+                        Any duplicated read after this threshold will be
+                        discarded. [Default 0]
+  --poisson-test POISSON_TEST
+                        Decide what property of the cluster will be used for
+                        the poisson analysis. Choices are (&#39;height&#39;,
+                        &#39;numtags&#39;, &#39;length&#39;) [Default height]
+</pre></div>
+</div>
+</div>
+<div class="section" id="modfdr">
+<h2>modfdr<a class="headerlink" href="#modfdr" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text"><div class="highlight"><pre>usage: pyicos [-h] [-v] [-o] [-f EXPERIMENT_FORMAT] [--debug] [--no-sort]
+              [--force-sort] [--silent] [--disable-cache] [--keep-temp]
+              [--postscript] [--showplots] [--label1 LABEL1] [--label2 LABEL2]
+              [--tempdir TEMPDIR] [--samtools] [--skip-header]
+              [--control CONTROL] [--control-format CONTROL_FORMAT]
+              [--open-control] [--blacklist BLACKLIST] [-O] [-F OUTPUT_FORMAT]
+              [-x FRAG_SIZE] [--round] [--wig-label WIG_LABEL] [--span SPAN]
+              [--no-subtract] [--remlabels REMLABELS] [--p-value P_VALUE]
+              [--k-limit K_LIMIT] [--correction CORRECTION]
+              [--trim-proportion TRIM_PROPORTION] [-p SPECIES]
+              [--duplicates DUPLICATES] [--poisson-test POISSON_TEST]
+              experiment output
+
+Pyicoller, part of the Pyicoteo suite, is a peak caller for the analysis of
+punctuated ChIP-Seq data.
+
+positional arguments:
+  experiment            The experiment file or directory
+  output                The output file or directory
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -v, --version         show program&#39;s version number and exit
+  -o, --open-experiment
+                        Defines if the experiment is half-open or closed
+                        notation. [Default False]
+  -f EXPERIMENT_FORMAT, --experiment-format EXPERIMENT_FORMAT
+                        The format the experiment file is written as. The
+                        options are (&#39;eland&#39;, &#39;bed&#39;, &#39;bed_wig&#39;, &#39;bed_pk&#39;,
+                        &#39;bed_spk&#39;, &#39;sam&#39;, &#39;bam&#39;, &#39;counts&#39;). [Default pk]
+  --debug
+  --no-sort             Force skip the sorting step. WARNING: Use only if you
+                        know what you are doing. Processing unsorted files
+                        assuming they are will outcome in erroneous results
+  --force-sort          Force the sorting step
+  --silent              Run without printing in screen
+  --disable-cache       Disable internal reading cache. When Clustering low
+                        coverage files, it will increase speed and improve
+                        memory usage. With very read dense files, the speed
+                        will decrease.
+  --keep-temp           Keep the temporary files
+  --postscript          get the output graphs in postscript format instead of
+                        .png
+  --showplots           Show the plots as they are being calculated by
+                        matplotlib. Note that the execution will be stopped
+                        until you close the window pop up that will arise
+  --label1 LABEL1       Manually define the first label of the graphs.
+  --label2 LABEL2       Manually define the second label of the graphs.
+  --tempdir TEMPDIR     Manually define the temporary directory where Pyicoteo
+                        will write. By default Pyicoteo will use the temporary
+                        directory the system provides (For example, /tmp in
+                        unix systems)
+  --samtools            Use samtools for reading BAM files [Default: Pyicoteo
+                        uses its own library] (reading BAM works without
+                        samtools for convert, extend, and other operations,
+                        but not for enrichment yet)]
+  --skip-header         Skip writing the header for the output file. [Default
+                        False]
+  --control CONTROL     The control file or directory
+  --control-format CONTROL_FORMAT
+                        The format the control file is written as. [default:
+                        The same as experiment format]
+  --open-control        Define if the region file is half-open or closed
+                        notation. [Default closed]
+  --blacklist BLACKLIST
+                        Reads a bed file with coordinates that you want to
+                        exclude from the analysis. Useful for discarding
+                        &quot;noisy&quot; probable artifactual regions like centromeres
+                        and repeat regions. [Default None]
+  -O, --open-output     Define if the output is half-open or closed notation.
+                        [Default closed]
+  -F OUTPUT_FORMAT, --output-format OUTPUT_FORMAT
+                        Format desired for the output. You can choose between
+                        (&#39;eland&#39;, &#39;bed&#39;, &#39;bed_wig&#39;, &#39;bed_pk&#39;, &#39;bed_spk&#39;,
+                        &#39;sam&#39;, &#39;bam&#39;, &#39;counts&#39;). WARNING, for some operations,
+                        some outputs are not valid. See operation help for
+                        more info. [default pk]
+  -x FRAG_SIZE, --frag-size FRAG_SIZE
+                        The estimated inmmunoprecipitated fragment size. This
+                        is used by Pyicoteo to reconstruct the original signal
+                        in the original wet lab experiment.
+  --round               Round the final results to an integer
+  --wig-label WIG_LABEL
+                        The label that will identify the experiment in the WIG
+                        tracks.
+  --span SPAN           The span of the variable and fixed wig formats
+                        [Default 40]
+  --no-subtract         Don&#39;t subtract the control to the output, only
+                        normalize.
+  --remlabels REMLABELS
+                        Discard the reads that have this particular label.
+                        Example: --discard chr1 will discard all reads with
+                        chr1 as tag. You can specify multiple tags to discard
+                        using the following notation --discard chr1 chr2 tagN
+  --p-value P_VALUE     The threshold p-value that will make a cluster
+                        significant. [Default 0.01]
+  --k-limit K_LIMIT     The k limit Pyicoteo will analize to when performing a
+                        poisson test. Every cluster that goes over the
+                        threshold will have a p-value of 0, therefore
+                        considered significant. For performance purposes,
+                        raising it will give more precision when defining low
+                        p-values, but will take longer to execute. [Default
+                        400]
+  --correction CORRECTION
+                        This value will correct the size of the genome you are
+                        analyzing. This way you can take into consideration
+                        the real mappable genome [Default 1.0]
+  --trim-proportion TRIM_PROPORTION
+                        Fraction of the cluster height below which the peak is
+                        trimmed. Example: For a cluster of height 40, if the
+                        flag is 0.05, 40*0.05=2. Every cluster will be trimmed
+                        to that height. A position of height 1 is always
+                        considered insignificant, no matter what the cluster
+                        height is. [Default 0.3]
+  -p SPECIES, --species SPECIES
+                        The species that you are analyzing. This will read the
+                        length of the chromosomes of this species from the
+                        files inside the folder &quot;chrdesc&quot;. If the species
+                        information is not known, the filtering step will
+                        assume that the chromosomes are as long as the
+                        position of the furthest read. [Default hg19]
+  --duplicates DUPLICATES
+                        The number of duplicated reads accept will be counted.
+                        Any duplicated read after this threshold will be
+                        discarded. [Default 0]
+  --poisson-test POISSON_TEST
+                        Decide what property of the cluster will be used for
+                        the poisson analysis. Choices are (&#39;height&#39;,
+                        &#39;numtags&#39;, &#39;length&#39;) [Default height]
+</pre></div>
+</div>
+</div>
+<div class="section" id="filter">
+<h2>filter<a class="headerlink" href="#filter" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text"><div class="highlight"><pre>usage: pyicos [-h] [-v] [-o] [-f EXPERIMENT_FORMAT] [--debug] [--no-sort]
+              [--force-sort] [--silent] [--disable-cache] [--keep-temp]
+              [--postscript] [--showplots] [--label1 LABEL1] [--label2 LABEL2]
+              [--tempdir TEMPDIR] [--samtools] [--skip-header]
+              [--control CONTROL] [--control-format CONTROL_FORMAT]
+              [--open-control] [--blacklist BLACKLIST] [-O] [-F OUTPUT_FORMAT]
+              [-x FRAG_SIZE] [--round] [--wig-label WIG_LABEL] [--span SPAN]
+              [--no-subtract] [--remlabels REMLABELS] [--p-value P_VALUE]
+              [--k-limit K_LIMIT] [--correction CORRECTION]
+              [--trim-proportion TRIM_PROPORTION] [-p SPECIES]
+              [--duplicates DUPLICATES] [--poisson-test POISSON_TEST]
+              experiment output
+
+Pyicoller, part of the Pyicoteo suite, is a peak caller for the analysis of
+punctuated ChIP-Seq data.
+
+positional arguments:
+  experiment            The experiment file or directory
+  output                The output file or directory
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -v, --version         show program&#39;s version number and exit
+  -o, --open-experiment
+                        Defines if the experiment is half-open or closed
+                        notation. [Default False]
+  -f EXPERIMENT_FORMAT, --experiment-format EXPERIMENT_FORMAT
+                        The format the experiment file is written as. The
+                        options are (&#39;eland&#39;, &#39;bed&#39;, &#39;bed_wig&#39;, &#39;bed_pk&#39;,
+                        &#39;bed_spk&#39;, &#39;sam&#39;, &#39;bam&#39;, &#39;counts&#39;). [Default pk]
+  --debug
+  --no-sort             Force skip the sorting step. WARNING: Use only if you
+                        know what you are doing. Processing unsorted files
+                        assuming they are will outcome in erroneous results
+  --force-sort          Force the sorting step
+  --silent              Run without printing in screen
+  --disable-cache       Disable internal reading cache. When Clustering low
+                        coverage files, it will increase speed and improve
+                        memory usage. With very read dense files, the speed
+                        will decrease.
+  --keep-temp           Keep the temporary files
+  --postscript          get the output graphs in postscript format instead of
+                        .png
+  --showplots           Show the plots as they are being calculated by
+                        matplotlib. Note that the execution will be stopped
+                        until you close the window pop up that will arise
+  --label1 LABEL1       Manually define the first label of the graphs.
+  --label2 LABEL2       Manually define the second label of the graphs.
+  --tempdir TEMPDIR     Manually define the temporary directory where Pyicoteo
+                        will write. By default Pyicoteo will use the temporary
+                        directory the system provides (For example, /tmp in
+                        unix systems)
+  --samtools            Use samtools for reading BAM files [Default: Pyicoteo
+                        uses its own library] (reading BAM works without
+                        samtools for convert, extend, and other operations,
+                        but not for enrichment yet)]
+  --skip-header         Skip writing the header for the output file. [Default
+                        False]
+  --control CONTROL     The control file or directory
+  --control-format CONTROL_FORMAT
+                        The format the control file is written as. [default:
+                        The same as experiment format]
+  --open-control        Define if the region file is half-open or closed
+                        notation. [Default closed]
+  --blacklist BLACKLIST
+                        Reads a bed file with coordinates that you want to
+                        exclude from the analysis. Useful for discarding
+                        &quot;noisy&quot; probable artifactual regions like centromeres
+                        and repeat regions. [Default None]
+  -O, --open-output     Define if the output is half-open or closed notation.
+                        [Default closed]
+  -F OUTPUT_FORMAT, --output-format OUTPUT_FORMAT
+                        Format desired for the output. You can choose between
+                        (&#39;eland&#39;, &#39;bed&#39;, &#39;bed_wig&#39;, &#39;bed_pk&#39;, &#39;bed_spk&#39;,
+                        &#39;sam&#39;, &#39;bam&#39;, &#39;counts&#39;). WARNING, for some operations,
+                        some outputs are not valid. See operation help for
+                        more info. [default pk]
+  -x FRAG_SIZE, --frag-size FRAG_SIZE
+                        The estimated inmmunoprecipitated fragment size. This
+                        is used by Pyicoteo to reconstruct the original signal
+                        in the original wet lab experiment.
+  --round               Round the final results to an integer
+  --wig-label WIG_LABEL
+                        The label that will identify the experiment in the WIG
+                        tracks.
+  --span SPAN           The span of the variable and fixed wig formats
+                        [Default 40]
+  --no-subtract         Don&#39;t subtract the control to the output, only
+                        normalize.
+  --remlabels REMLABELS
+                        Discard the reads that have this particular label.
+                        Example: --discard chr1 will discard all reads with
+                        chr1 as tag. You can specify multiple tags to discard
+                        using the following notation --discard chr1 chr2 tagN
+  --p-value P_VALUE     The threshold p-value that will make a cluster
+                        significant. [Default 0.01]
+  --k-limit K_LIMIT     The k limit Pyicoteo will analize to when performing a
+                        poisson test. Every cluster that goes over the
+                        threshold will have a p-value of 0, therefore
+                        considered significant. For performance purposes,
+                        raising it will give more precision when defining low
+                        p-values, but will take longer to execute. [Default
+                        400]
+  --correction CORRECTION
+                        This value will correct the size of the genome you are
+                        analyzing. This way you can take into consideration
+                        the real mappable genome [Default 1.0]
+  --trim-proportion TRIM_PROPORTION
+                        Fraction of the cluster height below which the peak is
+                        trimmed. Example: For a cluster of height 40, if the
+                        flag is 0.05, 40*0.05=2. Every cluster will be trimmed
+                        to that height. A position of height 1 is always
+                        considered insignificant, no matter what the cluster
+                        height is. [Default 0.3]
+  -p SPECIES, --species SPECIES
+                        The species that you are analyzing. This will read the
+                        length of the chromosomes of this species from the
+                        files inside the folder &quot;chrdesc&quot;. If the species
+                        information is not known, the filtering step will
+                        assume that the chromosomes are as long as the
+                        position of the furthest read. [Default hg19]
+  --duplicates DUPLICATES
+                        The number of duplicated reads accept will be counted.
+                        Any duplicated read after this threshold will be
+                        discarded. [Default 0]
+  --poisson-test POISSON_TEST
+                        Decide what property of the cluster will be used for
+                        the poisson analysis. Choices are (&#39;height&#39;,
+                        &#39;numtags&#39;, &#39;length&#39;) [Default height]
+</pre></div>
+</div>
+</div>
+<div class="section" id="strcorr">
+<h2>strcorr<a class="headerlink" href="#strcorr" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text"><div class="highlight"><pre>usage: pyicos [-h] [-v] [-o] [-f EXPERIMENT_FORMAT] [--debug] [--no-sort]
+              [--force-sort] [--silent] [--disable-cache] [--keep-temp]
+              [--postscript] [--showplots] [--label1 LABEL1] [--label2 LABEL2]
+              [--tempdir TEMPDIR] [--samtools] [--skip-header]
+              [--control CONTROL] [--control-format CONTROL_FORMAT]
+              [--open-control] [--blacklist BLACKLIST] [-O] [-F OUTPUT_FORMAT]
+              [-x FRAG_SIZE] [--round] [--wig-label WIG_LABEL] [--span SPAN]
+              [--no-subtract] [--remlabels REMLABELS] [--p-value P_VALUE]
+              [--k-limit K_LIMIT] [--correction CORRECTION]
+              [--trim-proportion TRIM_PROPORTION] [-p SPECIES]
+              [--duplicates DUPLICATES] [--poisson-test POISSON_TEST]
+              experiment output
+
+Pyicoller, part of the Pyicoteo suite, is a peak caller for the analysis of
+punctuated ChIP-Seq data.
+
+positional arguments:
+  experiment            The experiment file or directory
+  output                The output file or directory
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -v, --version         show program&#39;s version number and exit
+  -o, --open-experiment
+                        Defines if the experiment is half-open or closed
+                        notation. [Default False]
+  -f EXPERIMENT_FORMAT, --experiment-format EXPERIMENT_FORMAT
+                        The format the experiment file is written as. The
+                        options are (&#39;eland&#39;, &#39;bed&#39;, &#39;bed_wig&#39;, &#39;bed_pk&#39;,
+                        &#39;bed_spk&#39;, &#39;sam&#39;, &#39;bam&#39;, &#39;counts&#39;). [Default pk]
+  --debug
+  --no-sort             Force skip the sorting step. WARNING: Use only if you
+                        know what you are doing. Processing unsorted files
+                        assuming they are will outcome in erroneous results
+  --force-sort          Force the sorting step
+  --silent              Run without printing in screen
+  --disable-cache       Disable internal reading cache. When Clustering low
+                        coverage files, it will increase speed and improve
+                        memory usage. With very read dense files, the speed
+                        will decrease.
+  --keep-temp           Keep the temporary files
+  --postscript          get the output graphs in postscript format instead of
+                        .png
+  --showplots           Show the plots as they are being calculated by
+                        matplotlib. Note that the execution will be stopped
+                        until you close the window pop up that will arise
+  --label1 LABEL1       Manually define the first label of the graphs.
+  --label2 LABEL2       Manually define the second label of the graphs.
+  --tempdir TEMPDIR     Manually define the temporary directory where Pyicoteo
+                        will write. By default Pyicoteo will use the temporary
+                        directory the system provides (For example, /tmp in
+                        unix systems)
+  --samtools            Use samtools for reading BAM files [Default: Pyicoteo
+                        uses its own library] (reading BAM works without
+                        samtools for convert, extend, and other operations,
+                        but not for enrichment yet)]
+  --skip-header         Skip writing the header for the output file. [Default
+                        False]
+  --control CONTROL     The control file or directory
+  --control-format CONTROL_FORMAT
+                        The format the control file is written as. [default:
+                        The same as experiment format]
+  --open-control        Define if the region file is half-open or closed
+                        notation. [Default closed]
+  --blacklist BLACKLIST
+                        Reads a bed file with coordinates that you want to
+                        exclude from the analysis. Useful for discarding
+                        &quot;noisy&quot; probable artifactual regions like centromeres
+                        and repeat regions. [Default None]
+  -O, --open-output     Define if the output is half-open or closed notation.
+                        [Default closed]
+  -F OUTPUT_FORMAT, --output-format OUTPUT_FORMAT
+                        Format desired for the output. You can choose between
+                        (&#39;eland&#39;, &#39;bed&#39;, &#39;bed_wig&#39;, &#39;bed_pk&#39;, &#39;bed_spk&#39;,
+                        &#39;sam&#39;, &#39;bam&#39;, &#39;counts&#39;). WARNING, for some operations,
+                        some outputs are not valid. See operation help for
+                        more info. [default pk]
+  -x FRAG_SIZE, --frag-size FRAG_SIZE
+                        The estimated inmmunoprecipitated fragment size. This
+                        is used by Pyicoteo to reconstruct the original signal
+                        in the original wet lab experiment.
+  --round               Round the final results to an integer
+  --wig-label WIG_LABEL
+                        The label that will identify the experiment in the WIG
+                        tracks.
+  --span SPAN           The span of the variable and fixed wig formats
+                        [Default 40]
+  --no-subtract         Don&#39;t subtract the control to the output, only
+                        normalize.
+  --remlabels REMLABELS
+                        Discard the reads that have this particular label.
+                        Example: --discard chr1 will discard all reads with
+                        chr1 as tag. You can specify multiple tags to discard
+                        using the following notation --discard chr1 chr2 tagN
+  --p-value P_VALUE     The threshold p-value that will make a cluster
+                        significant. [Default 0.01]
+  --k-limit K_LIMIT     The k limit Pyicoteo will analize to when performing a
+                        poisson test. Every cluster that goes over the
+                        threshold will have a p-value of 0, therefore
+                        considered significant. For performance purposes,
+                        raising it will give more precision when defining low
+                        p-values, but will take longer to execute. [Default
+                        400]
+  --correction CORRECTION
+                        This value will correct the size of the genome you are
+                        analyzing. This way you can take into consideration
+                        the real mappable genome [Default 1.0]
+  --trim-proportion TRIM_PROPORTION
+                        Fraction of the cluster height below which the peak is
+                        trimmed. Example: For a cluster of height 40, if the
+                        flag is 0.05, 40*0.05=2. Every cluster will be trimmed
+                        to that height. A position of height 1 is always
+                        considered insignificant, no matter what the cluster
+                        height is. [Default 0.3]
+  -p SPECIES, --species SPECIES
+                        The species that you are analyzing. This will read the
+                        length of the chromosomes of this species from the
+                        files inside the folder &quot;chrdesc&quot;. If the species
+                        information is not known, the filtering step will
+                        assume that the chromosomes are as long as the
+                        position of the furthest read. [Default hg19]
+  --duplicates DUPLICATES
+                        The number of duplicated reads accept will be counted.
+                        Any duplicated read after this threshold will be
+                        discarded. [Default 0]
+  --poisson-test POISSON_TEST
+                        Decide what property of the cluster will be used for
+                        the poisson analysis. Choices are (&#39;height&#39;,
+                        &#39;numtags&#39;, &#39;length&#39;) [Default height]
+</pre></div>
+</div>
+</div>
+<div class="section" id="split">
+<h2>split<a class="headerlink" href="#split" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text"><div class="highlight"><pre>usage: pyicos [-h] [-v] [-o] [-f EXPERIMENT_FORMAT] [--debug] [--no-sort]
+              [--force-sort] [--silent] [--disable-cache] [--keep-temp]
+              [--postscript] [--showplots] [--label1 LABEL1] [--label2 LABEL2]
+              [--tempdir TEMPDIR] [--samtools] [--skip-header]
+              [--control CONTROL] [--control-format CONTROL_FORMAT]
+              [--open-control] [--blacklist BLACKLIST] [-O] [-F OUTPUT_FORMAT]
+              [-x FRAG_SIZE] [--round] [--wig-label WIG_LABEL] [--span SPAN]
+              [--no-subtract] [--remlabels REMLABELS] [--p-value P_VALUE]
+              [--k-limit K_LIMIT] [--correction CORRECTION]
+              [--trim-proportion TRIM_PROPORTION] [-p SPECIES]
+              [--duplicates DUPLICATES] [--poisson-test POISSON_TEST]
+              experiment output
+
+Pyicoller, part of the Pyicoteo suite, is a peak caller for the analysis of
+punctuated ChIP-Seq data.
+
+positional arguments:
+  experiment            The experiment file or directory
+  output                The output file or directory
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -v, --version         show program&#39;s version number and exit
+  -o, --open-experiment
+                        Defines if the experiment is half-open or closed
+                        notation. [Default False]
+  -f EXPERIMENT_FORMAT, --experiment-format EXPERIMENT_FORMAT
+                        The format the experiment file is written as. The
+                        options are (&#39;eland&#39;, &#39;bed&#39;, &#39;bed_wig&#39;, &#39;bed_pk&#39;,
+                        &#39;bed_spk&#39;, &#39;sam&#39;, &#39;bam&#39;, &#39;counts&#39;). [Default pk]
+  --debug
+  --no-sort             Force skip the sorting step. WARNING: Use only if you
+                        know what you are doing. Processing unsorted files
+                        assuming they are will outcome in erroneous results
+  --force-sort          Force the sorting step
+  --silent              Run without printing in screen
+  --disable-cache       Disable internal reading cache. When Clustering low
+                        coverage files, it will increase speed and improve
+                        memory usage. With very read dense files, the speed
+                        will decrease.
+  --keep-temp           Keep the temporary files
+  --postscript          get the output graphs in postscript format instead of
+                        .png
+  --showplots           Show the plots as they are being calculated by
+                        matplotlib. Note that the execution will be stopped
+                        until you close the window pop up that will arise
+  --label1 LABEL1       Manually define the first label of the graphs.
+  --label2 LABEL2       Manually define the second label of the graphs.
+  --tempdir TEMPDIR     Manually define the temporary directory where Pyicoteo
+                        will write. By default Pyicoteo will use the temporary
+                        directory the system provides (For example, /tmp in
+                        unix systems)
+  --samtools            Use samtools for reading BAM files [Default: Pyicoteo
+                        uses its own library] (reading BAM works without
+                        samtools for convert, extend, and other operations,
+                        but not for enrichment yet)]
+  --skip-header         Skip writing the header for the output file. [Default
+                        False]
+  --control CONTROL     The control file or directory
+  --control-format CONTROL_FORMAT
+                        The format the control file is written as. [default:
+                        The same as experiment format]
+  --open-control        Define if the region file is half-open or closed
+                        notation. [Default closed]
+  --blacklist BLACKLIST
+                        Reads a bed file with coordinates that you want to
+                        exclude from the analysis. Useful for discarding
+                        &quot;noisy&quot; probable artifactual regions like centromeres
+                        and repeat regions. [Default None]
+  -O, --open-output     Define if the output is half-open or closed notation.
+                        [Default closed]
+  -F OUTPUT_FORMAT, --output-format OUTPUT_FORMAT
+                        Format desired for the output. You can choose between
+                        (&#39;eland&#39;, &#39;bed&#39;, &#39;bed_wig&#39;, &#39;bed_pk&#39;, &#39;bed_spk&#39;,
+                        &#39;sam&#39;, &#39;bam&#39;, &#39;counts&#39;). WARNING, for some operations,
+                        some outputs are not valid. See operation help for
+                        more info. [default pk]
+  -x FRAG_SIZE, --frag-size FRAG_SIZE
+                        The estimated inmmunoprecipitated fragment size. This
+                        is used by Pyicoteo to reconstruct the original signal
+                        in the original wet lab experiment.
+  --round               Round the final results to an integer
+  --wig-label WIG_LABEL
+                        The label that will identify the experiment in the WIG
+                        tracks.
+  --span SPAN           The span of the variable and fixed wig formats
+                        [Default 40]
+  --no-subtract         Don&#39;t subtract the control to the output, only
+                        normalize.
+  --remlabels REMLABELS
+                        Discard the reads that have this particular label.
+                        Example: --discard chr1 will discard all reads with
+                        chr1 as tag. You can specify multiple tags to discard
+                        using the following notation --discard chr1 chr2 tagN
+  --p-value P_VALUE     The threshold p-value that will make a cluster
+                        significant. [Default 0.01]
+  --k-limit K_LIMIT     The k limit Pyicoteo will analize to when performing a
+                        poisson test. Every cluster that goes over the
+                        threshold will have a p-value of 0, therefore
+                        considered significant. For performance purposes,
+                        raising it will give more precision when defining low
+                        p-values, but will take longer to execute. [Default
+                        400]
+  --correction CORRECTION
+                        This value will correct the size of the genome you are
+                        analyzing. This way you can take into consideration
+                        the real mappable genome [Default 1.0]
+  --trim-proportion TRIM_PROPORTION
+                        Fraction of the cluster height below which the peak is
+                        trimmed. Example: For a cluster of height 40, if the
+                        flag is 0.05, 40*0.05=2. Every cluster will be trimmed
+                        to that height. A position of height 1 is always
+                        considered insignificant, no matter what the cluster
+                        height is. [Default 0.3]
+  -p SPECIES, --species SPECIES
+                        The species that you are analyzing. This will read the
+                        length of the chromosomes of this species from the
+                        files inside the folder &quot;chrdesc&quot;. If the species
+                        information is not known, the filtering step will
+                        assume that the chromosomes are as long as the
+                        position of the furthest read. [Default hg19]
+  --duplicates DUPLICATES
+                        The number of duplicated reads accept will be counted.
+                        Any duplicated read after this threshold will be
+                        discarded. [Default 0]
+  --poisson-test POISSON_TEST
+                        Decide what property of the cluster will be used for
+                        the poisson analysis. Choices are (&#39;height&#39;,
+                        &#39;numtags&#39;, &#39;length&#39;) [Default height]
+</pre></div>
+</div>
+</div>
+<div class="section" id="poisson">
+<h2>poisson<a class="headerlink" href="#poisson" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text"><div class="highlight"><pre>usage: pyicos [-h] [-v] [-o] [-f EXPERIMENT_FORMAT] [--debug] [--no-sort]
+              [--force-sort] [--silent] [--disable-cache] [--keep-temp]
+              [--postscript] [--showplots] [--label1 LABEL1] [--label2 LABEL2]
+              [--tempdir TEMPDIR] [--samtools] [--skip-header]
+              [--control CONTROL] [--control-format CONTROL_FORMAT]
+              [--open-control] [--blacklist BLACKLIST] [-O] [-F OUTPUT_FORMAT]
+              [-x FRAG_SIZE] [--round] [--wig-label WIG_LABEL] [--span SPAN]
+              [--no-subtract] [--remlabels REMLABELS] [--p-value P_VALUE]
+              [--k-limit K_LIMIT] [--correction CORRECTION]
+              [--trim-proportion TRIM_PROPORTION] [-p SPECIES]
+              [--duplicates DUPLICATES] [--poisson-test POISSON_TEST]
+              experiment output
+
+Pyicoller, part of the Pyicoteo suite, is a peak caller for the analysis of
+punctuated ChIP-Seq data.
+
+positional arguments:
+  experiment            The experiment file or directory
+  output                The output file or directory
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -v, --version         show program&#39;s version number and exit
+  -o, --open-experiment
+                        Defines if the experiment is half-open or closed
+                        notation. [Default False]
+  -f EXPERIMENT_FORMAT, --experiment-format EXPERIMENT_FORMAT
+                        The format the experiment file is written as. The
+                        options are (&#39;eland&#39;, &#39;bed&#39;, &#39;bed_wig&#39;, &#39;bed_pk&#39;,
+                        &#39;bed_spk&#39;, &#39;sam&#39;, &#39;bam&#39;, &#39;counts&#39;). [Default pk]
+  --debug
+  --no-sort             Force skip the sorting step. WARNING: Use only if you
+                        know what you are doing. Processing unsorted files
+                        assuming they are will outcome in erroneous results
+  --force-sort          Force the sorting step
+  --silent              Run without printing in screen
+  --disable-cache       Disable internal reading cache. When Clustering low
+                        coverage files, it will increase speed and improve
+                        memory usage. With very read dense files, the speed
+                        will decrease.
+  --keep-temp           Keep the temporary files
+  --postscript          get the output graphs in postscript format instead of
+                        .png
+  --showplots           Show the plots as they are being calculated by
+                        matplotlib. Note that the execution will be stopped
+                        until you close the window pop up that will arise
+  --label1 LABEL1       Manually define the first label of the graphs.
+  --label2 LABEL2       Manually define the second label of the graphs.
+  --tempdir TEMPDIR     Manually define the temporary directory where Pyicoteo
+                        will write. By default Pyicoteo will use the temporary
+                        directory the system provides (For example, /tmp in
+                        unix systems)
+  --samtools            Use samtools for reading BAM files [Default: Pyicoteo
+                        uses its own library] (reading BAM works without
+                        samtools for convert, extend, and other operations,
+                        but not for enrichment yet)]
+  --skip-header         Skip writing the header for the output file. [Default
+                        False]
+  --control CONTROL     The control file or directory
+  --control-format CONTROL_FORMAT
+                        The format the control file is written as. [default:
+                        The same as experiment format]
+  --open-control        Define if the region file is half-open or closed
+                        notation. [Default closed]
+  --blacklist BLACKLIST
+                        Reads a bed file with coordinates that you want to
+                        exclude from the analysis. Useful for discarding
+                        &quot;noisy&quot; probable artifactual regions like centromeres
+                        and repeat regions. [Default None]
+  -O, --open-output     Define if the output is half-open or closed notation.
+                        [Default closed]
+  -F OUTPUT_FORMAT, --output-format OUTPUT_FORMAT
+                        Format desired for the output. You can choose between
+                        (&#39;eland&#39;, &#39;bed&#39;, &#39;bed_wig&#39;, &#39;bed_pk&#39;, &#39;bed_spk&#39;,
+                        &#39;sam&#39;, &#39;bam&#39;, &#39;counts&#39;). WARNING, for some operations,
+                        some outputs are not valid. See operation help for
+                        more info. [default pk]
+  -x FRAG_SIZE, --frag-size FRAG_SIZE
+                        The estimated inmmunoprecipitated fragment size. This
+                        is used by Pyicoteo to reconstruct the original signal
+                        in the original wet lab experiment.
+  --round               Round the final results to an integer
+  --wig-label WIG_LABEL
+                        The label that will identify the experiment in the WIG
+                        tracks.
+  --span SPAN           The span of the variable and fixed wig formats
+                        [Default 40]
+  --no-subtract         Don&#39;t subtract the control to the output, only
+                        normalize.
+  --remlabels REMLABELS
+                        Discard the reads that have this particular label.
+                        Example: --discard chr1 will discard all reads with
+                        chr1 as tag. You can specify multiple tags to discard
+                        using the following notation --discard chr1 chr2 tagN
+  --p-value P_VALUE     The threshold p-value that will make a cluster
+                        significant. [Default 0.01]
+  --k-limit K_LIMIT     The k limit Pyicoteo will analize to when performing a
+                        poisson test. Every cluster that goes over the
+                        threshold will have a p-value of 0, therefore
+                        considered significant. For performance purposes,
+                        raising it will give more precision when defining low
+                        p-values, but will take longer to execute. [Default
+                        400]
+  --correction CORRECTION
+                        This value will correct the size of the genome you are
+                        analyzing. This way you can take into consideration
+                        the real mappable genome [Default 1.0]
+  --trim-proportion TRIM_PROPORTION
+                        Fraction of the cluster height below which the peak is
+                        trimmed. Example: For a cluster of height 40, if the
+                        flag is 0.05, 40*0.05=2. Every cluster will be trimmed
+                        to that height. A position of height 1 is always
+                        considered insignificant, no matter what the cluster
+                        height is. [Default 0.3]
+  -p SPECIES, --species SPECIES
+                        The species that you are analyzing. This will read the
+                        length of the chromosomes of this species from the
+                        files inside the folder &quot;chrdesc&quot;. If the species
+                        information is not known, the filtering step will
+                        assume that the chromosomes are as long as the
+                        position of the furthest read. [Default hg19]
+  --duplicates DUPLICATES
+                        The number of duplicated reads accept will be counted.
+                        Any duplicated read after this threshold will be
+                        discarded. [Default 0]
+  --poisson-test POISSON_TEST
+                        Decide what property of the cluster will be used for
+                        the poisson analysis. Choices are (&#39;height&#39;,
+                        &#39;numtags&#39;, &#39;length&#39;) [Default height]
+</pre></div>
+</div>
+</div>
+<div class="section" id="discard">
+<h2>discard<a class="headerlink" href="#discard" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text"><div class="highlight"><pre>usage: pyicos [-h] [-v] [-o] [-f EXPERIMENT_FORMAT] [--debug] [--no-sort]
+              [--force-sort] [--silent] [--disable-cache] [--keep-temp]
+              [--postscript] [--showplots] [--label1 LABEL1] [--label2 LABEL2]
+              [--tempdir TEMPDIR] [--samtools] [--skip-header]
+              [--control CONTROL] [--control-format CONTROL_FORMAT]
+              [--open-control] [--blacklist BLACKLIST] [-O] [-F OUTPUT_FORMAT]
+              [-x FRAG_SIZE] [--round] [--wig-label WIG_LABEL] [--span SPAN]
+              [--no-subtract] [--remlabels REMLABELS] [--p-value P_VALUE]
+              [--k-limit K_LIMIT] [--correction CORRECTION]
+              [--trim-proportion TRIM_PROPORTION] [-p SPECIES]
+              [--duplicates DUPLICATES] [--poisson-test POISSON_TEST]
+              experiment output
+
+Pyicoller, part of the Pyicoteo suite, is a peak caller for the analysis of
+punctuated ChIP-Seq data.
+
+positional arguments:
+  experiment            The experiment file or directory
+  output                The output file or directory
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -v, --version         show program&#39;s version number and exit
+  -o, --open-experiment
+                        Defines if the experiment is half-open or closed
+                        notation. [Default False]
+  -f EXPERIMENT_FORMAT, --experiment-format EXPERIMENT_FORMAT
+                        The format the experiment file is written as. The
+                        options are (&#39;eland&#39;, &#39;bed&#39;, &#39;bed_wig&#39;, &#39;bed_pk&#39;,
+                        &#39;bed_spk&#39;, &#39;sam&#39;, &#39;bam&#39;, &#39;counts&#39;). [Default pk]
+  --debug
+  --no-sort             Force skip the sorting step. WARNING: Use only if you
+                        know what you are doing. Processing unsorted files
+                        assuming they are will outcome in erroneous results
+  --force-sort          Force the sorting step
+  --silent              Run without printing in screen
+  --disable-cache       Disable internal reading cache. When Clustering low
+                        coverage files, it will increase speed and improve
+                        memory usage. With very read dense files, the speed
+                        will decrease.
+  --keep-temp           Keep the temporary files
+  --postscript          get the output graphs in postscript format instead of
+                        .png
+  --showplots           Show the plots as they are being calculated by
+                        matplotlib. Note that the execution will be stopped
+                        until you close the window pop up that will arise
+  --label1 LABEL1       Manually define the first label of the graphs.
+  --label2 LABEL2       Manually define the second label of the graphs.
+  --tempdir TEMPDIR     Manually define the temporary directory where Pyicoteo
+                        will write. By default Pyicoteo will use the temporary
+                        directory the system provides (For example, /tmp in
+                        unix systems)
+  --samtools            Use samtools for reading BAM files [Default: Pyicoteo
+                        uses its own library] (reading BAM works without
+                        samtools for convert, extend, and other operations,
+                        but not for enrichment yet)]
+  --skip-header         Skip writing the header for the output file. [Default
+                        False]
+  --control CONTROL     The control file or directory
+  --control-format CONTROL_FORMAT
+                        The format the control file is written as. [default:
+                        The same as experiment format]
+  --open-control        Define if the region file is half-open or closed
+                        notation. [Default closed]
+  --blacklist BLACKLIST
+                        Reads a bed file with coordinates that you want to
+                        exclude from the analysis. Useful for discarding
+                        &quot;noisy&quot; probable artifactual regions like centromeres
+                        and repeat regions. [Default None]
+  -O, --open-output     Define if the output is half-open or closed notation.
+                        [Default closed]
+  -F OUTPUT_FORMAT, --output-format OUTPUT_FORMAT
+                        Format desired for the output. You can choose between
+                        (&#39;eland&#39;, &#39;bed&#39;, &#39;bed_wig&#39;, &#39;bed_pk&#39;, &#39;bed_spk&#39;,
+                        &#39;sam&#39;, &#39;bam&#39;, &#39;counts&#39;). WARNING, for some operations,
+                        some outputs are not valid. See operation help for
+                        more info. [default pk]
+  -x FRAG_SIZE, --frag-size FRAG_SIZE
+                        The estimated inmmunoprecipitated fragment size. This
+                        is used by Pyicoteo to reconstruct the original signal
+                        in the original wet lab experiment.
+  --round               Round the final results to an integer
+  --wig-label WIG_LABEL
+                        The label that will identify the experiment in the WIG
+                        tracks.
+  --span SPAN           The span of the variable and fixed wig formats
+                        [Default 40]
+  --no-subtract         Don&#39;t subtract the control to the output, only
+                        normalize.
+  --remlabels REMLABELS
+                        Discard the reads that have this particular label.
+                        Example: --discard chr1 will discard all reads with
+                        chr1 as tag. You can specify multiple tags to discard
+                        using the following notation --discard chr1 chr2 tagN
+  --p-value P_VALUE     The threshold p-value that will make a cluster
+                        significant. [Default 0.01]
+  --k-limit K_LIMIT     The k limit Pyicoteo will analize to when performing a
+                        poisson test. Every cluster that goes over the
+                        threshold will have a p-value of 0, therefore
+                        considered significant. For performance purposes,
+                        raising it will give more precision when defining low
+                        p-values, but will take longer to execute. [Default
+                        400]
+  --correction CORRECTION
+                        This value will correct the size of the genome you are
+                        analyzing. This way you can take into consideration
+                        the real mappable genome [Default 1.0]
+  --trim-proportion TRIM_PROPORTION
+                        Fraction of the cluster height below which the peak is
+                        trimmed. Example: For a cluster of height 40, if the
+                        flag is 0.05, 40*0.05=2. Every cluster will be trimmed
+                        to that height. A position of height 1 is always
+                        considered insignificant, no matter what the cluster
+                        height is. [Default 0.3]
+  -p SPECIES, --species SPECIES
+                        The species that you are analyzing. This will read the
+                        length of the chromosomes of this species from the
+                        files inside the folder &quot;chrdesc&quot;. If the species
+                        information is not known, the filtering step will
+                        assume that the chromosomes are as long as the
+                        position of the furthest read. [Default hg19]
+  --duplicates DUPLICATES
+                        The number of duplicated reads accept will be counted.
+                        Any duplicated read after this threshold will be
+                        discarded. [Default 0]
+  --poisson-test POISSON_TEST
+                        Decide what property of the cluster will be used for
+                        the poisson analysis. Choices are (&#39;height&#39;,
+                        &#39;numtags&#39;, &#39;length&#39;) [Default height]
+</pre></div>
+</div>
+</div>
+<div class="section" id="push">
+<h2>push<a class="headerlink" href="#push" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text"><div class="highlight"><pre>usage: pyicos [-h] [-v] [-o] [-f EXPERIMENT_FORMAT] [--debug] [--no-sort]
+              [--force-sort] [--silent] [--disable-cache] [--keep-temp]
+              [--postscript] [--showplots] [--label1 LABEL1] [--label2 LABEL2]
+              [--tempdir TEMPDIR] [--samtools] [--skip-header]
+              [--control CONTROL] [--control-format CONTROL_FORMAT]
+              [--open-control] [--blacklist BLACKLIST] [-O] [-F OUTPUT_FORMAT]
+              [-x FRAG_SIZE] [--round] [--wig-label WIG_LABEL] [--span SPAN]
+              [--no-subtract] [--remlabels REMLABELS] [--p-value P_VALUE]
+              [--k-limit K_LIMIT] [--correction CORRECTION]
+              [--trim-proportion TRIM_PROPORTION] [-p SPECIES]
+              [--duplicates DUPLICATES] [--poisson-test POISSON_TEST]
+              experiment output
+
+Pyicoller, part of the Pyicoteo suite, is a peak caller for the analysis of
+punctuated ChIP-Seq data.
+
+positional arguments:
+  experiment            The experiment file or directory
+  output                The output file or directory
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -v, --version         show program&#39;s version number and exit
+  -o, --open-experiment
+                        Defines if the experiment is half-open or closed
+                        notation. [Default False]
+  -f EXPERIMENT_FORMAT, --experiment-format EXPERIMENT_FORMAT
+                        The format the experiment file is written as. The
+                        options are (&#39;eland&#39;, &#39;bed&#39;, &#39;bed_wig&#39;, &#39;bed_pk&#39;,
+                        &#39;bed_spk&#39;, &#39;sam&#39;, &#39;bam&#39;, &#39;counts&#39;). [Default pk]
+  --debug
+  --no-sort             Force skip the sorting step. WARNING: Use only if you
+                        know what you are doing. Processing unsorted files
+                        assuming they are will outcome in erroneous results
+  --force-sort          Force the sorting step
+  --silent              Run without printing in screen
+  --disable-cache       Disable internal reading cache. When Clustering low
+                        coverage files, it will increase speed and improve
+                        memory usage. With very read dense files, the speed
+                        will decrease.
+  --keep-temp           Keep the temporary files
+  --postscript          get the output graphs in postscript format instead of
+                        .png
+  --showplots           Show the plots as they are being calculated by
+                        matplotlib. Note that the execution will be stopped
+                        until you close the window pop up that will arise
+  --label1 LABEL1       Manually define the first label of the graphs.
+  --label2 LABEL2       Manually define the second label of the graphs.
+  --tempdir TEMPDIR     Manually define the temporary directory where Pyicoteo
+                        will write. By default Pyicoteo will use the temporary
+                        directory the system provides (For example, /tmp in
+                        unix systems)
+  --samtools            Use samtools for reading BAM files [Default: Pyicoteo
+                        uses its own library] (reading BAM works without
+                        samtools for convert, extend, and other operations,
+                        but not for enrichment yet)]
+  --skip-header         Skip writing the header for the output file. [Default
+                        False]
+  --control CONTROL     The control file or directory
+  --control-format CONTROL_FORMAT
+                        The format the control file is written as. [default:
+                        The same as experiment format]
+  --open-control        Define if the region file is half-open or closed
+                        notation. [Default closed]
+  --blacklist BLACKLIST
+                        Reads a bed file with coordinates that you want to
+                        exclude from the analysis. Useful for discarding
+                        &quot;noisy&quot; probable artifactual regions like centromeres
+                        and repeat regions. [Default None]
+  -O, --open-output     Define if the output is half-open or closed notation.
+                        [Default closed]
+  -F OUTPUT_FORMAT, --output-format OUTPUT_FORMAT
+                        Format desired for the output. You can choose between
+                        (&#39;eland&#39;, &#39;bed&#39;, &#39;bed_wig&#39;, &#39;bed_pk&#39;, &#39;bed_spk&#39;,
+                        &#39;sam&#39;, &#39;bam&#39;, &#39;counts&#39;). WARNING, for some operations,
+                        some outputs are not valid. See operation help for
+                        more info. [default pk]
+  -x FRAG_SIZE, --frag-size FRAG_SIZE
+                        The estimated inmmunoprecipitated fragment size. This
+                        is used by Pyicoteo to reconstruct the original signal
+                        in the original wet lab experiment.
+  --round               Round the final results to an integer
+  --wig-label WIG_LABEL
+                        The label that will identify the experiment in the WIG
+                        tracks.
+  --span SPAN           The span of the variable and fixed wig formats
+                        [Default 40]
+  --no-subtract         Don&#39;t subtract the control to the output, only
+                        normalize.
+  --remlabels REMLABELS
+                        Discard the reads that have this particular label.
+                        Example: --discard chr1 will discard all reads with
+                        chr1 as tag. You can specify multiple tags to discard
+                        using the following notation --discard chr1 chr2 tagN
+  --p-value P_VALUE     The threshold p-value that will make a cluster
+                        significant. [Default 0.01]
+  --k-limit K_LIMIT     The k limit Pyicoteo will analize to when performing a
+                        poisson test. Every cluster that goes over the
+                        threshold will have a p-value of 0, therefore
+                        considered significant. For performance purposes,
+                        raising it will give more precision when defining low
+                        p-values, but will take longer to execute. [Default
+                        400]
+  --correction CORRECTION
+                        This value will correct the size of the genome you are
+                        analyzing. This way you can take into consideration
+                        the real mappable genome [Default 1.0]
+  --trim-proportion TRIM_PROPORTION
+                        Fraction of the cluster height below which the peak is
+                        trimmed. Example: For a cluster of height 40, if the
+                        flag is 0.05, 40*0.05=2. Every cluster will be trimmed
+                        to that height. A position of height 1 is always
+                        considered insignificant, no matter what the cluster
+                        height is. [Default 0.3]
+  -p SPECIES, --species SPECIES
+                        The species that you are analyzing. This will read the
+                        length of the chromosomes of this species from the
+                        files inside the folder &quot;chrdesc&quot;. If the species
+                        information is not known, the filtering step will
+                        assume that the chromosomes are as long as the
+                        position of the furthest read. [Default hg19]
+  --duplicates DUPLICATES
+                        The number of duplicated reads accept will be counted.
+                        Any duplicated read after this threshold will be
+                        discarded. [Default 0]
+  --poisson-test POISSON_TEST
+                        Decide what property of the cluster will be used for
+                        the poisson analysis. Choices are (&#39;height&#39;,
+                        &#39;numtags&#39;, &#39;length&#39;) [Default height]
+</pre></div>
+</div>
+</div>
+<div class="section" id="callpeaks">
+<h2>callpeaks<a class="headerlink" href="#callpeaks" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text"><div class="highlight"><pre>usage: pyicos [-h] [-v] [-o] [-f EXPERIMENT_FORMAT] [--debug] [--no-sort]
+              [--force-sort] [--silent] [--disable-cache] [--keep-temp]
+              [--postscript] [--showplots] [--label1 LABEL1] [--label2 LABEL2]
+              [--tempdir TEMPDIR] [--samtools] [--skip-header]
+              [--control CONTROL] [--control-format CONTROL_FORMAT]
+              [--open-control] [--blacklist BLACKLIST] [-O] [-F OUTPUT_FORMAT]
+              [-x FRAG_SIZE] [--round] [--wig-label WIG_LABEL] [--span SPAN]
+              [--no-subtract] [--remlabels REMLABELS] [--p-value P_VALUE]
+              [--k-limit K_LIMIT] [--correction CORRECTION]
+              [--trim-proportion TRIM_PROPORTION] [-p SPECIES]
+              [--duplicates DUPLICATES] [--poisson-test POISSON_TEST]
+              experiment output
+
+Pyicoller, part of the Pyicoteo suite, is a peak caller for the analysis of
+punctuated ChIP-Seq data.
+
+positional arguments:
+  experiment            The experiment file or directory
+  output                The output file or directory
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -v, --version         show program&#39;s version number and exit
+  -o, --open-experiment
+                        Defines if the experiment is half-open or closed
+                        notation. [Default False]
+  -f EXPERIMENT_FORMAT, --experiment-format EXPERIMENT_FORMAT
+                        The format the experiment file is written as. The
+                        options are (&#39;eland&#39;, &#39;bed&#39;, &#39;bed_wig&#39;, &#39;bed_pk&#39;,
+                        &#39;bed_spk&#39;, &#39;sam&#39;, &#39;bam&#39;, &#39;counts&#39;). [Default pk]
+  --debug
+  --no-sort             Force skip the sorting step. WARNING: Use only if you
+                        know what you are doing. Processing unsorted files
+                        assuming they are will outcome in erroneous results
+  --force-sort          Force the sorting step
+  --silent              Run without printing in screen
+  --disable-cache       Disable internal reading cache. When Clustering low
+                        coverage files, it will increase speed and improve
+                        memory usage. With very read dense files, the speed
+                        will decrease.
+  --keep-temp           Keep the temporary files
+  --postscript          get the output graphs in postscript format instead of
+                        .png
+  --showplots           Show the plots as they are being calculated by
+                        matplotlib. Note that the execution will be stopped
+                        until you close the window pop up that will arise
+  --label1 LABEL1       Manually define the first label of the graphs.
+  --label2 LABEL2       Manually define the second label of the graphs.
+  --tempdir TEMPDIR     Manually define the temporary directory where Pyicoteo
+                        will write. By default Pyicoteo will use the temporary
+                        directory the system provides (For example, /tmp in
+                        unix systems)
+  --samtools            Use samtools for reading BAM files [Default: Pyicoteo
+                        uses its own library] (reading BAM works without
+                        samtools for convert, extend, and other operations,
+                        but not for enrichment yet)]
+  --skip-header         Skip writing the header for the output file. [Default
+                        False]
+  --control CONTROL     The control file or directory
+  --control-format CONTROL_FORMAT
+                        The format the control file is written as. [default:
+                        The same as experiment format]
+  --open-control        Define if the region file is half-open or closed
+                        notation. [Default closed]
+  --blacklist BLACKLIST
+                        Reads a bed file with coordinates that you want to
+                        exclude from the analysis. Useful for discarding
+                        &quot;noisy&quot; probable artifactual regions like centromeres
+                        and repeat regions. [Default None]
+  -O, --open-output     Define if the output is half-open or closed notation.
+                        [Default closed]
+  -F OUTPUT_FORMAT, --output-format OUTPUT_FORMAT
+                        Format desired for the output. You can choose between
+                        (&#39;eland&#39;, &#39;bed&#39;, &#39;bed_wig&#39;, &#39;bed_pk&#39;, &#39;bed_spk&#39;,
+                        &#39;sam&#39;, &#39;bam&#39;, &#39;counts&#39;). WARNING, for some operations,
+                        some outputs are not valid. See operation help for
+                        more info. [default pk]
+  -x FRAG_SIZE, --frag-size FRAG_SIZE
+                        The estimated inmmunoprecipitated fragment size. This
+                        is used by Pyicoteo to reconstruct the original signal
+                        in the original wet lab experiment.
+  --round               Round the final results to an integer
+  --wig-label WIG_LABEL
+                        The label that will identify the experiment in the WIG
+                        tracks.
+  --span SPAN           The span of the variable and fixed wig formats
+                        [Default 40]
+  --no-subtract         Don&#39;t subtract the control to the output, only
+                        normalize.
+  --remlabels REMLABELS
+                        Discard the reads that have this particular label.
+                        Example: --discard chr1 will discard all reads with
+                        chr1 as tag. You can specify multiple tags to discard
+                        using the following notation --discard chr1 chr2 tagN
+  --p-value P_VALUE     The threshold p-value that will make a cluster
+                        significant. [Default 0.01]
+  --k-limit K_LIMIT     The k limit Pyicoteo will analize to when performing a
+                        poisson test. Every cluster that goes over the
+                        threshold will have a p-value of 0, therefore
+                        considered significant. For performance purposes,
+                        raising it will give more precision when defining low
+                        p-values, but will take longer to execute. [Default
+                        400]
+  --correction CORRECTION
+                        This value will correct the size of the genome you are
+                        analyzing. This way you can take into consideration
+                        the real mappable genome [Default 1.0]
+  --trim-proportion TRIM_PROPORTION
+                        Fraction of the cluster height below which the peak is
+                        trimmed. Example: For a cluster of height 40, if the
+                        flag is 0.05, 40*0.05=2. Every cluster will be trimmed
+                        to that height. A position of height 1 is always
+                        considered insignificant, no matter what the cluster
+                        height is. [Default 0.3]
+  -p SPECIES, --species SPECIES
+                        The species that you are analyzing. This will read the
+                        length of the chromosomes of this species from the
+                        files inside the folder &quot;chrdesc&quot;. If the species
+                        information is not known, the filtering step will
+                        assume that the chromosomes are as long as the
+                        position of the furthest read. [Default hg19]
+  --duplicates DUPLICATES
+                        The number of duplicated reads accept will be counted.
+                        Any duplicated read after this threshold will be
+                        discarded. [Default 0]
+  --poisson-test POISSON_TEST
+                        Decide what property of the cluster will be used for
+                        the poisson analysis. Choices are (&#39;height&#39;,
+                        &#39;numtags&#39;, &#39;length&#39;) [Default height]
+</pre></div>
+</div>
+</div>
+<div class="section" id="checkrepcount">
+<h2>checkrepcount<a class="headerlink" href="#checkrepcount" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text"><div class="highlight"><pre>usage: pyicos [-h] [-v] [-o] [-f EXPERIMENT_FORMAT] [--debug] [--no-sort]
+              [--force-sort] [--silent] [--disable-cache] [--keep-temp]
+              [--postscript] [--showplots] [--label1 LABEL1] [--label2 LABEL2]
+              [--tempdir TEMPDIR] [--samtools] [--skip-header]
+              [--control CONTROL] [--control-format CONTROL_FORMAT]
+              [--open-control] [--blacklist BLACKLIST] [-O] [-F OUTPUT_FORMAT]
+              [-x FRAG_SIZE] [--round] [--wig-label WIG_LABEL] [--span SPAN]
+              [--no-subtract] [--remlabels REMLABELS] [--p-value P_VALUE]
+              [--k-limit K_LIMIT] [--correction CORRECTION]
+              [--trim-proportion TRIM_PROPORTION] [-p SPECIES]
+              [--duplicates DUPLICATES] [--poisson-test POISSON_TEST]
+              experiment output
+
+Pyicoller, part of the Pyicoteo suite, is a peak caller for the analysis of
+punctuated ChIP-Seq data.
+
+positional arguments:
+  experiment            The experiment file or directory
+  output                The output file or directory
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -v, --version         show program&#39;s version number and exit
+  -o, --open-experiment
+                        Defines if the experiment is half-open or closed
+                        notation. [Default False]
+  -f EXPERIMENT_FORMAT, --experiment-format EXPERIMENT_FORMAT
+                        The format the experiment file is written as. The
+                        options are (&#39;eland&#39;, &#39;bed&#39;, &#39;bed_wig&#39;, &#39;bed_pk&#39;,
+                        &#39;bed_spk&#39;, &#39;sam&#39;, &#39;bam&#39;, &#39;counts&#39;). [Default pk]
+  --debug
+  --no-sort             Force skip the sorting step. WARNING: Use only if you
+                        know what you are doing. Processing unsorted files
+                        assuming they are will outcome in erroneous results
+  --force-sort          Force the sorting step
+  --silent              Run without printing in screen
+  --disable-cache       Disable internal reading cache. When Clustering low
+                        coverage files, it will increase speed and improve
+                        memory usage. With very read dense files, the speed
+                        will decrease.
+  --keep-temp           Keep the temporary files
+  --postscript          get the output graphs in postscript format instead of
+                        .png
+  --showplots           Show the plots as they are being calculated by
+                        matplotlib. Note that the execution will be stopped
+                        until you close the window pop up that will arise
+  --label1 LABEL1       Manually define the first label of the graphs.
+  --label2 LABEL2       Manually define the second label of the graphs.
+  --tempdir TEMPDIR     Manually define the temporary directory where Pyicoteo
+                        will write. By default Pyicoteo will use the temporary
+                        directory the system provides (For example, /tmp in
+                        unix systems)
+  --samtools            Use samtools for reading BAM files [Default: Pyicoteo
+                        uses its own library] (reading BAM works without
+                        samtools for convert, extend, and other operations,
+                        but not for enrichment yet)]
+  --skip-header         Skip writing the header for the output file. [Default
+                        False]
+  --control CONTROL     The control file or directory
+  --control-format CONTROL_FORMAT
+                        The format the control file is written as. [default:
+                        The same as experiment format]
+  --open-control        Define if the region file is half-open or closed
+                        notation. [Default closed]
+  --blacklist BLACKLIST
+                        Reads a bed file with coordinates that you want to
+                        exclude from the analysis. Useful for discarding
+                        &quot;noisy&quot; probable artifactual regions like centromeres
+                        and repeat regions. [Default None]
+  -O, --open-output     Define if the output is half-open or closed notation.
+                        [Default closed]
+  -F OUTPUT_FORMAT, --output-format OUTPUT_FORMAT
+                        Format desired for the output. You can choose between
+                        (&#39;eland&#39;, &#39;bed&#39;, &#39;bed_wig&#39;, &#39;bed_pk&#39;, &#39;bed_spk&#39;,
+                        &#39;sam&#39;, &#39;bam&#39;, &#39;counts&#39;). WARNING, for some operations,
+                        some outputs are not valid. See operation help for
+                        more info. [default pk]
+  -x FRAG_SIZE, --frag-size FRAG_SIZE
+                        The estimated inmmunoprecipitated fragment size. This
+                        is used by Pyicoteo to reconstruct the original signal
+                        in the original wet lab experiment.
+  --round               Round the final results to an integer
+  --wig-label WIG_LABEL
+                        The label that will identify the experiment in the WIG
+                        tracks.
+  --span SPAN           The span of the variable and fixed wig formats
+                        [Default 40]
+  --no-subtract         Don&#39;t subtract the control to the output, only
+                        normalize.
+  --remlabels REMLABELS
+                        Discard the reads that have this particular label.
+                        Example: --discard chr1 will discard all reads with
+                        chr1 as tag. You can specify multiple tags to discard
+                        using the following notation --discard chr1 chr2 tagN
+  --p-value P_VALUE     The threshold p-value that will make a cluster
+                        significant. [Default 0.01]
+  --k-limit K_LIMIT     The k limit Pyicoteo will analize to when performing a
+                        poisson test. Every cluster that goes over the
+                        threshold will have a p-value of 0, therefore
+                        considered significant. For performance purposes,
+                        raising it will give more precision when defining low
+                        p-values, but will take longer to execute. [Default
+                        400]
+  --correction CORRECTION
+                        This value will correct the size of the genome you are
+                        analyzing. This way you can take into consideration
+                        the real mappable genome [Default 1.0]
+  --trim-proportion TRIM_PROPORTION
+                        Fraction of the cluster height below which the peak is
+                        trimmed. Example: For a cluster of height 40, if the
+                        flag is 0.05, 40*0.05=2. Every cluster will be trimmed
+                        to that height. A position of height 1 is always
+                        considered insignificant, no matter what the cluster
+                        height is. [Default 0.3]
+  -p SPECIES, --species SPECIES
+                        The species that you are analyzing. This will read the
+                        length of the chromosomes of this species from the
+                        files inside the folder &quot;chrdesc&quot;. If the species
+                        information is not known, the filtering step will
+                        assume that the chromosomes are as long as the
+                        position of the furthest read. [Default hg19]
+  --duplicates DUPLICATES
+                        The number of duplicated reads accept will be counted.
+                        Any duplicated read after this threshold will be
+                        discarded. [Default 0]
+  --poisson-test POISSON_TEST
+                        Decide what property of the cluster will be used for
+                        the poisson analysis. Choices are (&#39;height&#39;,
+                        &#39;numtags&#39;, &#39;length&#39;) [Default height]
+</pre></div>
+</div>
+</div>
+<div class="section" id="subtract">
+<h2>subtract<a class="headerlink" href="#subtract" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text"><div class="highlight"><pre>usage: pyicos [-h] [-v] [-o] [-f EXPERIMENT_FORMAT] [--debug] [--no-sort]
+              [--force-sort] [--silent] [--disable-cache] [--keep-temp]
+              [--postscript] [--showplots] [--label1 LABEL1] [--label2 LABEL2]
+              [--tempdir TEMPDIR] [--samtools] [--skip-header]
+              [--control CONTROL] [--control-format CONTROL_FORMAT]
+              [--open-control] [--blacklist BLACKLIST] [-O] [-F OUTPUT_FORMAT]
+              [-x FRAG_SIZE] [--round] [--wig-label WIG_LABEL] [--span SPAN]
+              [--no-subtract] [--remlabels REMLABELS] [--p-value P_VALUE]
+              [--k-limit K_LIMIT] [--correction CORRECTION]
+              [--trim-proportion TRIM_PROPORTION] [-p SPECIES]
+              [--duplicates DUPLICATES] [--poisson-test POISSON_TEST]
+              experiment output
+
+Pyicoller, part of the Pyicoteo suite, is a peak caller for the analysis of
+punctuated ChIP-Seq data.
+
+positional arguments:
+  experiment            The experiment file or directory
+  output                The output file or directory
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -v, --version         show program&#39;s version number and exit
+  -o, --open-experiment
+                        Defines if the experiment is half-open or closed
+                        notation. [Default False]
+  -f EXPERIMENT_FORMAT, --experiment-format EXPERIMENT_FORMAT
+                        The format the experiment file is written as. The
+                        options are (&#39;eland&#39;, &#39;bed&#39;, &#39;bed_wig&#39;, &#39;bed_pk&#39;,
+                        &#39;bed_spk&#39;, &#39;sam&#39;, &#39;bam&#39;, &#39;counts&#39;). [Default pk]
+  --debug
+  --no-sort             Force skip the sorting step. WARNING: Use only if you
+                        know what you are doing. Processing unsorted files
+                        assuming they are will outcome in erroneous results
+  --force-sort          Force the sorting step
+  --silent              Run without printing in screen
+  --disable-cache       Disable internal reading cache. When Clustering low
+                        coverage files, it will increase speed and improve
+                        memory usage. With very read dense files, the speed
+                        will decrease.
+  --keep-temp           Keep the temporary files
+  --postscript          get the output graphs in postscript format instead of
+                        .png
+  --showplots           Show the plots as they are being calculated by
+                        matplotlib. Note that the execution will be stopped
+                        until you close the window pop up that will arise
+  --label1 LABEL1       Manually define the first label of the graphs.
+  --label2 LABEL2       Manually define the second label of the graphs.
+  --tempdir TEMPDIR     Manually define the temporary directory where Pyicoteo
+                        will write. By default Pyicoteo will use the temporary
+                        directory the system provides (For example, /tmp in
+                        unix systems)
+  --samtools            Use samtools for reading BAM files [Default: Pyicoteo
+                        uses its own library] (reading BAM works without
+                        samtools for convert, extend, and other operations,
+                        but not for enrichment yet)]
+  --skip-header         Skip writing the header for the output file. [Default
+                        False]
+  --control CONTROL     The control file or directory
+  --control-format CONTROL_FORMAT
+                        The format the control file is written as. [default:
+                        The same as experiment format]
+  --open-control        Define if the region file is half-open or closed
+                        notation. [Default closed]
+  --blacklist BLACKLIST
+                        Reads a bed file with coordinates that you want to
+                        exclude from the analysis. Useful for discarding
+                        &quot;noisy&quot; probable artifactual regions like centromeres
+                        and repeat regions. [Default None]
+  -O, --open-output     Define if the output is half-open or closed notation.
+                        [Default closed]
+  -F OUTPUT_FORMAT, --output-format OUTPUT_FORMAT
+                        Format desired for the output. You can choose between
+                        (&#39;eland&#39;, &#39;bed&#39;, &#39;bed_wig&#39;, &#39;bed_pk&#39;, &#39;bed_spk&#39;,
+                        &#39;sam&#39;, &#39;bam&#39;, &#39;counts&#39;). WARNING, for some operations,
+                        some outputs are not valid. See operation help for
+                        more info. [default pk]
+  -x FRAG_SIZE, --frag-size FRAG_SIZE
+                        The estimated inmmunoprecipitated fragment size. This
+                        is used by Pyicoteo to reconstruct the original signal
+                        in the original wet lab experiment.
+  --round               Round the final results to an integer
+  --wig-label WIG_LABEL
+                        The label that will identify the experiment in the WIG
+                        tracks.
+  --span SPAN           The span of the variable and fixed wig formats
+                        [Default 40]
+  --no-subtract         Don&#39;t subtract the control to the output, only
+                        normalize.
+  --remlabels REMLABELS
+                        Discard the reads that have this particular label.
+                        Example: --discard chr1 will discard all reads with
+                        chr1 as tag. You can specify multiple tags to discard
+                        using the following notation --discard chr1 chr2 tagN
+  --p-value P_VALUE     The threshold p-value that will make a cluster
+                        significant. [Default 0.01]
+  --k-limit K_LIMIT     The k limit Pyicoteo will analize to when performing a
+                        poisson test. Every cluster that goes over the
+                        threshold will have a p-value of 0, therefore
+                        considered significant. For performance purposes,
+                        raising it will give more precision when defining low
+                        p-values, but will take longer to execute. [Default
+                        400]
+  --correction CORRECTION
+                        This value will correct the size of the genome you are
+                        analyzing. This way you can take into consideration
+                        the real mappable genome [Default 1.0]
+  --trim-proportion TRIM_PROPORTION
+                        Fraction of the cluster height below which the peak is
+                        trimmed. Example: For a cluster of height 40, if the
+                        flag is 0.05, 40*0.05=2. Every cluster will be trimmed
+                        to that height. A position of height 1 is always
+                        considered insignificant, no matter what the cluster
+                        height is. [Default 0.3]
+  -p SPECIES, --species SPECIES
+                        The species that you are analyzing. This will read the
+                        length of the chromosomes of this species from the
+                        files inside the folder &quot;chrdesc&quot;. If the species
+                        information is not known, the filtering step will
+                        assume that the chromosomes are as long as the
+                        position of the furthest read. [Default hg19]
+  --duplicates DUPLICATES
+                        The number of duplicated reads accept will be counted.
+                        Any duplicated read after this threshold will be
+                        discarded. [Default 0]
+  --poisson-test POISSON_TEST
+                        Decide what property of the cluster will be used for
+                        the poisson analysis. Choices are (&#39;height&#39;,
+                        &#39;numtags&#39;, &#39;length&#39;) [Default height]
+</pre></div>
+</div>
+</div>
+<div class="section" id="enrichment">
+<h2>enrichment<a class="headerlink" href="#enrichment" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text"><div class="highlight"><pre>usage: pyicos [-h] [-v] [-o] [-f EXPERIMENT_FORMAT] [--debug] [--no-sort]
+              [--force-sort] [--silent] [--disable-cache] [--keep-temp]
+              [--postscript] [--showplots] [--label1 LABEL1] [--label2 LABEL2]
+              [--tempdir TEMPDIR] [--samtools] [--skip-header]
+              [--control CONTROL] [--control-format CONTROL_FORMAT]
+              [--open-control] [--blacklist BLACKLIST] [-O] [-F OUTPUT_FORMAT]
+              [-x FRAG_SIZE] [--round] [--wig-label WIG_LABEL] [--span SPAN]
+              [--no-subtract] [--remlabels REMLABELS] [--p-value P_VALUE]
+              [--k-limit K_LIMIT] [--correction CORRECTION]
+              [--trim-proportion TRIM_PROPORTION] [-p SPECIES]
+              [--duplicates DUPLICATES] [--poisson-test POISSON_TEST]
+              experiment output
+
+Pyicoller, part of the Pyicoteo suite, is a peak caller for the analysis of
+punctuated ChIP-Seq data.
+
+positional arguments:
+  experiment            The experiment file or directory
+  output                The output file or directory
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -v, --version         show program&#39;s version number and exit
+  -o, --open-experiment
+                        Defines if the experiment is half-open or closed
+                        notation. [Default False]
+  -f EXPERIMENT_FORMAT, --experiment-format EXPERIMENT_FORMAT
+                        The format the experiment file is written as. The
+                        options are (&#39;eland&#39;, &#39;bed&#39;, &#39;bed_wig&#39;, &#39;bed_pk&#39;,
+                        &#39;bed_spk&#39;, &#39;sam&#39;, &#39;bam&#39;, &#39;counts&#39;). [Default pk]
+  --debug
+  --no-sort             Force skip the sorting step. WARNING: Use only if you
+                        know what you are doing. Processing unsorted files
+                        assuming they are will outcome in erroneous results
+  --force-sort          Force the sorting step
+  --silent              Run without printing in screen
+  --disable-cache       Disable internal reading cache. When Clustering low
+                        coverage files, it will increase speed and improve
+                        memory usage. With very read dense files, the speed
+                        will decrease.
+  --keep-temp           Keep the temporary files
+  --postscript          get the output graphs in postscript format instead of
+                        .png
+  --showplots           Show the plots as they are being calculated by
+                        matplotlib. Note that the execution will be stopped
+                        until you close the window pop up that will arise
+  --label1 LABEL1       Manually define the first label of the graphs.
+  --label2 LABEL2       Manually define the second label of the graphs.
+  --tempdir TEMPDIR     Manually define the temporary directory where Pyicoteo
+                        will write. By default Pyicoteo will use the temporary
+                        directory the system provides (For example, /tmp in
+                        unix systems)
+  --samtools            Use samtools for reading BAM files [Default: Pyicoteo
+                        uses its own library] (reading BAM works without
+                        samtools for convert, extend, and other operations,
+                        but not for enrichment yet)]
+  --skip-header         Skip writing the header for the output file. [Default
+                        False]
+  --control CONTROL     The control file or directory
+  --control-format CONTROL_FORMAT
+                        The format the control file is written as. [default:
+                        The same as experiment format]
+  --open-control        Define if the region file is half-open or closed
+                        notation. [Default closed]
+  --blacklist BLACKLIST
+                        Reads a bed file with coordinates that you want to
+                        exclude from the analysis. Useful for discarding
+                        &quot;noisy&quot; probable artifactual regions like centromeres
+                        and repeat regions. [Default None]
+  -O, --open-output     Define if the output is half-open or closed notation.
+                        [Default closed]
+  -F OUTPUT_FORMAT, --output-format OUTPUT_FORMAT
+                        Format desired for the output. You can choose between
+                        (&#39;eland&#39;, &#39;bed&#39;, &#39;bed_wig&#39;, &#39;bed_pk&#39;, &#39;bed_spk&#39;,
+                        &#39;sam&#39;, &#39;bam&#39;, &#39;counts&#39;). WARNING, for some operations,
+                        some outputs are not valid. See operation help for
+                        more info. [default pk]
+  -x FRAG_SIZE, --frag-size FRAG_SIZE
+                        The estimated inmmunoprecipitated fragment size. This
+                        is used by Pyicoteo to reconstruct the original signal
+                        in the original wet lab experiment.
+  --round               Round the final results to an integer
+  --wig-label WIG_LABEL
+                        The label that will identify the experiment in the WIG
+                        tracks.
+  --span SPAN           The span of the variable and fixed wig formats
+                        [Default 40]
+  --no-subtract         Don&#39;t subtract the control to the output, only
+                        normalize.
+  --remlabels REMLABELS
+                        Discard the reads that have this particular label.
+                        Example: --discard chr1 will discard all reads with
+                        chr1 as tag. You can specify multiple tags to discard
+                        using the following notation --discard chr1 chr2 tagN
+  --p-value P_VALUE     The threshold p-value that will make a cluster
+                        significant. [Default 0.01]
+  --k-limit K_LIMIT     The k limit Pyicoteo will analize to when performing a
+                        poisson test. Every cluster that goes over the
+                        threshold will have a p-value of 0, therefore
+                        considered significant. For performance purposes,
+                        raising it will give more precision when defining low
+                        p-values, but will take longer to execute. [Default
+                        400]
+  --correction CORRECTION
+                        This value will correct the size of the genome you are
+                        analyzing. This way you can take into consideration
+                        the real mappable genome [Default 1.0]
+  --trim-proportion TRIM_PROPORTION
+                        Fraction of the cluster height below which the peak is
+                        trimmed. Example: For a cluster of height 40, if the
+                        flag is 0.05, 40*0.05=2. Every cluster will be trimmed
+                        to that height. A position of height 1 is always
+                        considered insignificant, no matter what the cluster
+                        height is. [Default 0.3]
+  -p SPECIES, --species SPECIES
+                        The species that you are analyzing. This will read the
+                        length of the chromosomes of this species from the
+                        files inside the folder &quot;chrdesc&quot;. If the species
+                        information is not known, the filtering step will
+                        assume that the chromosomes are as long as the
+                        position of the furthest read. [Default hg19]
+  --duplicates DUPLICATES
+                        The number of duplicated reads accept will be counted.
+                        Any duplicated read after this threshold will be
+                        discarded. [Default 0]
+  --poisson-test POISSON_TEST
+                        Decide what property of the cluster will be used for
+                        the poisson analysis. Choices are (&#39;height&#39;,
+                        &#39;numtags&#39;, &#39;length&#39;) [Default height]
+</pre></div>
+</div>
+</div>
+<div class="section" id="enrichcount">
+<h2>enrichcount<a class="headerlink" href="#enrichcount" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text"><div class="highlight"><pre>usage: pyicos [-h] [-v] [-o] [-f EXPERIMENT_FORMAT] [--debug] [--no-sort]
+              [--force-sort] [--silent] [--disable-cache] [--keep-temp]
+              [--postscript] [--showplots] [--label1 LABEL1] [--label2 LABEL2]
+              [--tempdir TEMPDIR] [--samtools] [--skip-header]
+              [--control CONTROL] [--control-format CONTROL_FORMAT]
+              [--open-control] [--blacklist BLACKLIST] [-O] [-F OUTPUT_FORMAT]
+              [-x FRAG_SIZE] [--round] [--wig-label WIG_LABEL] [--span SPAN]
+              [--no-subtract] [--remlabels REMLABELS] [--p-value P_VALUE]
+              [--k-limit K_LIMIT] [--correction CORRECTION]
+              [--trim-proportion TRIM_PROPORTION] [-p SPECIES]
+              [--duplicates DUPLICATES] [--poisson-test POISSON_TEST]
+              experiment output
+
+Pyicoller, part of the Pyicoteo suite, is a peak caller for the analysis of
+punctuated ChIP-Seq data.
+
+positional arguments:
+  experiment            The experiment file or directory
+  output                The output file or directory
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -v, --version         show program&#39;s version number and exit
+  -o, --open-experiment
+                        Defines if the experiment is half-open or closed
+                        notation. [Default False]
+  -f EXPERIMENT_FORMAT, --experiment-format EXPERIMENT_FORMAT
+                        The format the experiment file is written as. The
+                        options are (&#39;eland&#39;, &#39;bed&#39;, &#39;bed_wig&#39;, &#39;bed_pk&#39;,
+                        &#39;bed_spk&#39;, &#39;sam&#39;, &#39;bam&#39;, &#39;counts&#39;). [Default pk]
+  --debug
+  --no-sort             Force skip the sorting step. WARNING: Use only if you
+                        know what you are doing. Processing unsorted files
+                        assuming they are will outcome in erroneous results
+  --force-sort          Force the sorting step
+  --silent              Run without printing in screen
+  --disable-cache       Disable internal reading cache. When Clustering low
+                        coverage files, it will increase speed and improve
+                        memory usage. With very read dense files, the speed
+                        will decrease.
+  --keep-temp           Keep the temporary files
+  --postscript          get the output graphs in postscript format instead of
+                        .png
+  --showplots           Show the plots as they are being calculated by
+                        matplotlib. Note that the execution will be stopped
+                        until you close the window pop up that will arise
+  --label1 LABEL1       Manually define the first label of the graphs.
+  --label2 LABEL2       Manually define the second label of the graphs.
+  --tempdir TEMPDIR     Manually define the temporary directory where Pyicoteo
+                        will write. By default Pyicoteo will use the temporary
+                        directory the system provides (For example, /tmp in
+                        unix systems)
+  --samtools            Use samtools for reading BAM files [Default: Pyicoteo
+                        uses its own library] (reading BAM works without
+                        samtools for convert, extend, and other operations,
+                        but not for enrichment yet)]
+  --skip-header         Skip writing the header for the output file. [Default
+                        False]
+  --control CONTROL     The control file or directory
+  --control-format CONTROL_FORMAT
+                        The format the control file is written as. [default:
+                        The same as experiment format]
+  --open-control        Define if the region file is half-open or closed
+                        notation. [Default closed]
+  --blacklist BLACKLIST
+                        Reads a bed file with coordinates that you want to
+                        exclude from the analysis. Useful for discarding
+                        &quot;noisy&quot; probable artifactual regions like centromeres
+                        and repeat regions. [Default None]
+  -O, --open-output     Define if the output is half-open or closed notation.
+                        [Default closed]
+  -F OUTPUT_FORMAT, --output-format OUTPUT_FORMAT
+                        Format desired for the output. You can choose between
+                        (&#39;eland&#39;, &#39;bed&#39;, &#39;bed_wig&#39;, &#39;bed_pk&#39;, &#39;bed_spk&#39;,
+                        &#39;sam&#39;, &#39;bam&#39;, &#39;counts&#39;). WARNING, for some operations,
+                        some outputs are not valid. See operation help for
+                        more info. [default pk]
+  -x FRAG_SIZE, --frag-size FRAG_SIZE
+                        The estimated inmmunoprecipitated fragment size. This
+                        is used by Pyicoteo to reconstruct the original signal
+                        in the original wet lab experiment.
+  --round               Round the final results to an integer
+  --wig-label WIG_LABEL
+                        The label that will identify the experiment in the WIG
+                        tracks.
+  --span SPAN           The span of the variable and fixed wig formats
+                        [Default 40]
+  --no-subtract         Don&#39;t subtract the control to the output, only
+                        normalize.
+  --remlabels REMLABELS
+                        Discard the reads that have this particular label.
+                        Example: --discard chr1 will discard all reads with
+                        chr1 as tag. You can specify multiple tags to discard
+                        using the following notation --discard chr1 chr2 tagN
+  --p-value P_VALUE     The threshold p-value that will make a cluster
+                        significant. [Default 0.01]
+  --k-limit K_LIMIT     The k limit Pyicoteo will analize to when performing a
+                        poisson test. Every cluster that goes over the
+                        threshold will have a p-value of 0, therefore
+                        considered significant. For performance purposes,
+                        raising it will give more precision when defining low
+                        p-values, but will take longer to execute. [Default
+                        400]
+  --correction CORRECTION
+                        This value will correct the size of the genome you are
+                        analyzing. This way you can take into consideration
+                        the real mappable genome [Default 1.0]
+  --trim-proportion TRIM_PROPORTION
+                        Fraction of the cluster height below which the peak is
+                        trimmed. Example: For a cluster of height 40, if the
+                        flag is 0.05, 40*0.05=2. Every cluster will be trimmed
+                        to that height. A position of height 1 is always
+                        considered insignificant, no matter what the cluster
+                        height is. [Default 0.3]
+  -p SPECIES, --species SPECIES
+                        The species that you are analyzing. This will read the
+                        length of the chromosomes of this species from the
+                        files inside the folder &quot;chrdesc&quot;. If the species
+                        information is not known, the filtering step will
+                        assume that the chromosomes are as long as the
+                        position of the furthest read. [Default hg19]
+  --duplicates DUPLICATES
+                        The number of duplicated reads accept will be counted.
+                        Any duplicated read after this threshold will be
+                        discarded. [Default 0]
+  --poisson-test POISSON_TEST
+                        Decide what property of the cluster will be used for
+                        the poisson analysis. Choices are (&#39;height&#39;,
+                        &#39;numtags&#39;, &#39;length&#39;) [Default height]
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="index.html">pyicos 1.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Juan González-Vallinas.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

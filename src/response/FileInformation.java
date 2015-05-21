@@ -21,9 +21,9 @@ public class FileInformation {
     public final String metaData;
     public final String author;
     public final String uploader;
-//    public final Boolean isPrivate;
     public final String expId;
     public final String grVersion;
+    public final String fileSize;
 
 
     /**
@@ -41,8 +41,8 @@ public class FileInformation {
     	metaData = src.metaData;
     	author = src.author;
     	uploader = src.uploader;
-//    	isPrivate = src.isPrivate;
     	expId = src.expId;
     	grVersion = src.grVersion;
+        fileSize = src.fileSize;
     }
 }

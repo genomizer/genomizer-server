@@ -67,7 +67,7 @@ public class ServerChainTestClass extends ServerAbstractTestClass {
 		int logoutResponseCode = sendLogout();
 
 		assertTrue(loginResponseCode == HttpStatusCode.OK);
-		assertTrue(addAnnotationResponseCode == HttpStatusCode.CREATED);
+		assertTrue(addAnnotationResponseCode == HttpStatusCode.OK);
 		assertTrue(getAnnotationResponseCode == HttpStatusCode.OK);
 		assertTrue(logoutResponseCode == HttpStatusCode.OK);
 
@@ -113,7 +113,7 @@ public class ServerChainTestClass extends ServerAbstractTestClass {
 		int logoutResponseCode = sendLogout();
 
 		assertTrue(loginResponseCode == HttpStatusCode.OK);
-		assertTrue(addAnnotationResponseCode == HttpStatusCode.CREATED);
+		assertTrue(addAnnotationResponseCode == HttpStatusCode.OK);
 		assertTrue(getAnnotationResponseCode == HttpStatusCode.OK);
 		assertTrue(logoutResponseCode == HttpStatusCode.OK);
 

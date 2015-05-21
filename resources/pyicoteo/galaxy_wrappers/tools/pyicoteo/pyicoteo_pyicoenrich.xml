@@ -1,0 +1,178 @@
+<?xml version="1.0"?>
+<tool id="pyicoteo_pyicoenrich" name="Pyicoenrich" version="2.0">
+  <description>Pyicoteo enrichment operations.</description>
+  <command interpreter="python">
+          pyicoenrich -reads $experiment_a $experiment_b
+                -f $experiment_format_cond.experiment_format
+                $is_experiment_open
+                $is_output_open
+                --galaxy-workarounds
+
+                --proximity $proximity
+                $length_norm
+                $number_reg_norm
+                --binsize $bin_size
+                $pseudocounts
+                --zscore $z_threshold
+         
+          #if $replica_file
+                --replica $replica_file
+          #end if
+
+          #if $tmm_values.tmm_norm
+                $tmm_values.tmm_norm
+                --a-trim $tmm_values.tmm_trim_a
+                --b-trim $tmm_values.tmm_trim_b
+          #end if
+
+          #if $interesting_regions
+                --interesting-regions $interesting_regions
+          #end if
+
+          #if $experiment_format_cond.experiment_format == "custom"
+                --f-custom-in $experiment_format_cond.f_custom_in
+                --custom-in-sep $experiment_format_cond.custom_in_sep
+          #end if
+
+          #if $region_file_cond.region_file_select == "region_file_option"
+                --region-file $region_file_cond.region_file
+                --region-format $region_file_cond.region_file_format
+                $region_file_cond.region_file_open
+          #elif $region_file_cond.region_file_select == "gff_file_option"
+                --gff-file $region_file_cond.gff_file
+                --region-magic $region_file_cond.region_magic_cond.region_magic
+                #if $region_file_cond.region_magic_cond.region_magic == "slide"
+                    $region_file_cond.region_magic_cond.window_size $region_file_cond.region_magic_cond.window_step $region_file_cond.region_magic_cond.region_slide_cond.slide_type
+                    #if $region_file_cond.region_magic_cond.region_slide_cond.slide_type == "inter" and $region_file_cond.region_magic_cond.region_slide_cond.chromlen_file
+                        $region_file_cond.region_magic_cond.region_slide_cond.chromlen_file
+                    #end if
+                #elif $region_file_cond.region_magic_cond.region_magic == "tss"
+                    $region_file_cond.region_magic_cond.tss_add_start $region_file_cond.region_magic_cond.tss_add_end
+                #end if
+          #end if
+
+          #if $html_output
+              -output $html_file.files_path/enrich_output.bed
+              --html-output $html_file
+          #else
+              -output $output
+          #end if
+
+  </command>
+  <inputs>
+
+    <param name="html_output" type="boolean" label="HTML output" help="Output the results as HTML (with plot). WARNING: if enabled, the resulting output can not be used as input to another tool (the BED file must be downloaded from 'View data' and uploaded again)" />
+
+    <!--<param format="tabular" name="experiment" type="data" label="Experiment file" />-->
+    <param name="experiment_a" type="data" label="Experiment A file" />
+    <param name="experiment_b" type="data" label="Experiment B file" />
+
+    <conditional name="experiment_format_cond">
+      <param name="experiment_format" type="select" label="Experiment files format" format="text">
+        <option value="bed" selected="true">Bed</option>
+        <option value="sam">Sam</option>
+        <option value="eland">Eland</option>
+        <option value="bed_wig">Wiggle (Bed)</option>
+        <option value="bed_pk">Bed pk</option>
+        <option value="custom">Custom</option>
+      </param>
+  
+      <when value="custom">
+        <param name="f_custom_in" type="text" size="10" label="Custom experiment format fields" />
+        <param name="custom_in_sep" type="text" label="Custom experiment format separator" />
+      </when>
+   </conditional>
+
+    <param name="is_experiment_open" type="boolean" label="Are the experiments half-open?" truevalue="--open-experiment" falsevalue="" />
+    <param name="is_output_open" type="boolean" label="Is the output half-open?" truevalue="--open-output" falsevalue="" />
+
+
+    <!-- Region files -->
+    <conditional name="region_file_cond">
+      <param name="region_file_select" type="select" label="Region file type">
+        <option value="autogenerate">Auto-generate</option>
+        <option value="region_file_option">Region file</option>
+        <option value="gff_file_option">GFF file</option>
+      </param>
+
+      <when value="region_file_option">
+        <param name="region_file" type="data" label="Region file" />
+        <param name="region_file_format" type="select" label="Region file format">
+          <option value="bed">Bed</option>
+          <option value="sam">Sam</option>
+          <option value="eland">Eland</option>
+          <option value="bed_wig" selected="true">Wiggle (Bed)</option>
+          <option value="variable_wig">Wiggle (Variable)</option>
+          <option value="bed_pk">Bed pk</option>
+        </param>
+        <param name="region_file_open" type="boolean" label="Is the region file half-open?" truevalue="--open-region" falsevalue="" />
+      </when>
+
+      <when value="gff_file_option">
+          <param name="gff_file" type="data" label="GFF file with regions" />
+          <conditional name="region_magic_cond">
+            <param name="region_magic" type="select" label="Region magic">
+              <option value="exons">Exons</option>
+              <option value="introns">Introns</option>
+              <option value="slide">Sliding window</option>
+              <option value="tss">TSS</option>
+            </param>
+
+            <when value="slide">
+              <param name="window_size" type="integer" label="Window size" size="6" value="" />
+              <param name="window_step" type="integer" label="Window step" size="6" value="" />
+              <conditional name="region_slide_cond">
+                <param name="slide_type" type="select" label="Sliding window type">
+                  <option value="inter">Intergenic</option>
+                  <option value="intra">Intragenic</option>
+                </param>
+                <when value="inter">
+                  <param name="chromlen_file" type="data" label="Chromlen file" optional="true" help="If not specified, hg19 chromlen will be used by default." />
+                </when>
+              </conditional>
+            </when>
+
+            <when value="tss">
+              <param name="tss_add_start" type="integer" label="Add to start" size="6" value="0" />
+              <param name="tss_add_end" type="integer" label="Add to end" size="6" value="0" />
+            </when>
+          </conditional>
+      </when>
+    </conditional>
+
+
+    <param name="replica_file" type="data" label="Experiment A replica file" optional="true" />
+    <param name="proximity" type="integer" label="Proximity" size="6" value="50" />
+    <param name="length_norm" type="boolean" label="Region length normalization" truevalue="--len-norm" falsevalue="" />
+    <param name="number_reg_norm" type="boolean" label="Number of regions normalization" truevalue="--n-norm" falsevalue="" />
+
+    <conditional name="tmm_values">
+      <param name="tmm_norm" type="boolean" label="TMM normalization" truevalue="--tmm-norm" falsevalue="" />
+      <when value="--tmm-norm">
+        <param name="tmm_trim_a" type="float" label="Trimming of the A values (for the TMM normalization)" size="6" value="0.05" />
+        <param name="tmm_trim_b" type="float" label="Trimming of the B values (for the TMM normalization)" size="6" value="0.25" />
+      </when>
+    </conditional>
+
+    <param name="bin_size" type="float" label="Bin size" size="6" value="0.3" />
+    <param name="pseudocounts" type="boolean" label="Use pseudocounts to include in the analysis regions with 0 reads in one of the samples" truevalue="--pseudocount" falsevalue="" />
+    <param name="z_threshold" type="float" label="z-score threshold for calling significant regions" value="2.0" />
+
+    <param name="interesting_regions" type="data" label="Interesting regions file" optional="true" />
+
+  </inputs>
+  <outputs>
+    <data format="tabular" name="output">
+      <filter>not html_output</filter>
+    </data>
+    <data format="html" name="html_file">
+      <filter>html_output</filter>
+    </data>
+  </outputs>
+  <stdio>
+    <exit_code range="1:" level="error" />
+  </stdio>
+  <help>
+        More information at: http://regulatorygenomics.upf.edu/pyicos
+  </help>
+</tool>

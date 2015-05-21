@@ -1,21 +1,14 @@
+import authentication.InactiveUuidsRemover;
+import command.Command;
+import database.DatabaseAccessor;
+import org.apache.commons.cli.*;
+import process.StartUpCleaner;
+import server.*;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-// import java.util.Scanner;
-
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.BasicParser;
-import org.apache.commons.cli.ParseException;
-
-import process.StartUpCleaner;
-
-import authentication.InactiveUuidsRemover;
-
-import command.CommandHandler;
-
-import server.*;
+import java.sql.SQLException;
 
 
 public class ServerMain {
@@ -34,22 +27,20 @@ public class ServerMain {
 		/* First we need to read and validate the settings file. */
 		CommandLine com = loadSettingsFile(args);
 
+
 		/* We delete possible fragments from previous runs. */
-		StartUpCleaner.removeOldTempDirectories("resources/");
+		StartUpCleaner.removeOldTempDirectories("/tmp/");
 
 		/* The database settings should be written upon startup. */
 		printDatabaseInformation();
 
-		/* Create a work pool */
-		WorkPool workPool = new WorkPool();
-
-		/* Create process handlers */
-		createWorkHandlers(workPool);
+		/* Create a process pool */
+		ProcessPool processPool = new ProcessPool(
+				ServerSettings.nrOfProcessThreads);
 
 		/* We attempt to start the doorman. */
 		try {
-			new Doorman(new CommandHandler(workPool),
-					ServerSettings.genomizerPort).start();
+			new Doorman(processPool).start();
 		} catch (IOException e) {
 			System.err.println("Error when starting server");
 			Debug.log(e.getMessage());
@@ -61,6 +52,22 @@ public class ServerMain {
 			(new Thread(new InactiveUuidsRemover())).start();
 		}
 
+		/* Check whether a connection to the database can be made */
+		DatabaseAccessor db = null;
+		try {
+			db = Command.initDB();
+		} catch (IOException | SQLException ex) {
+			String msg = "Warning: a connection to the database could not be " +
+					"made.";
+			Debug.log(msg);
+			ErrorLogger.log("SYSTEM", msg);
+
+		} finally {
+			if (db != null && db.isConnected()) {
+				db.close();
+			}
+		}
+
 	}
 
 	/**
@@ -68,19 +75,14 @@ public class ServerMain {
 	 */
 	private static void printDatabaseInformation() {
 		String info = "Database information:" + "\n"
-				+ "  username " + ServerSettings.databaseUsername + "\n"
-				+ "  password " + ServerSettings.databasePassword + "\n"
-				+ "  name     " + ServerSettings.databaseName + "\n"
-				+ "  host     " + ServerSettings.databaseHost + "\n";
+				+ "\tusername " + ServerSettings.databaseUsername + "\n"
+				+ "\tpassword " + ServerSettings.databasePassword + "\n"
+				+ "\tname     " + ServerSettings.databaseName + "\n"
+				+ "\thost     " + ServerSettings.databaseHost + "\n";
 		System.out.print(info);
 		ErrorLogger.log("SYSTEM", info);
 	}
 
-	private static void createWorkHandlers(WorkPool workPool) {
-		for (int i=0; i<ServerSettings.nrOfProcessThreads; i++) {
-			new Thread(new WorkHandler(workPool)).start();
-		}
-	}
 
 	/**
 	 * This method attempts to read the settings file. It is defined to read
@@ -166,32 +168,5 @@ public class ServerMain {
  							 "the server.");
 		return comOptions;
 	}
-
-	/**
-	 * This method reads a 'database' file. This method is never called
-	 * anywhere.
-	 *
-	 * TODO: Remove this piece of dead code. (When safe)
-	 * @param path Path of database file
-	 * @throws FileNotFoundException If database file could not be
-	 * 		   found/opened.
-	 */
-//	private static void readDatabaseFile(String path)
-//			throws FileNotFoundException {
-//		File dbFile = new File(path);
-//		if (dbFile.exists()) {
-//			Scanner scan = new Scanner(dbFile);
-//			String username = scan.next();
-//			String password = scan.next();
-//			String database = scan.next();
-//			String host = scan.next();
-//			scan.close();
-//
-//			ServerSettings.databaseUsername = username;
-//			ServerSettings.databasePassword = password;
-//			ServerSettings.databaseName = database;
-//			ServerSettings.databaseHost = host;
-//		}
-//	}
 
 }

@@ -55,4 +55,26 @@ public class GetFileTupleTest {
     	assertEquals(elist.get(0).getFiles().get(0).id, tuple.id);
     	assertEquals(elist.get(0).getFiles().get(0).author, tuple.author);
     }
+
+	/**
+	 * Test update file size
+	 *
+	 * @throws SQLException
+	 *
+	 * Test written 2015-0513
+	 */
+	@Test
+	public void testSetFileSize() throws SQLException {
+
+		String before;
+		FileTuple ft = dbac.getFileTuple("resources/conversionTestData/BED-testdata.bed");
+
+		before = ft.getFileSize();
+
+		dbac.updateFileSize(ft);
+
+		ft = dbac.getFileTuple("resources/conversionTestData/BED-testdata.bed");
+
+		assertTrue(ft.getFileSize() != before);
+	}
 }

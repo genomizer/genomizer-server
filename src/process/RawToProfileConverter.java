@@ -41,7 +41,7 @@ public class RawToProfileConverter extends Executor {
 	 */
 	public RawToProfileConverter() {
 		toBeRemoved = new Stack<String>();
-		checker = RawToProfileProcessChecker.rawToProfileCheckerFactory();
+		checker = new RawToProfileProcessChecker();
 		validator = new ParameterValidator();
 	}
 
@@ -77,13 +77,13 @@ public class RawToProfileConverter extends Executor {
 		File[] inFiles = null;
 
 		// Error handling
-		if (inFolder != null) {
-			inFolder = validateInFolder(inFolder);
-			inFiles = getRawFiles(inFolder);
-		} else {
+		if (inFolder == null) {
 			throw new ProcessException("Fatal error: This should never happen");
 		}
+		inFolder = validateInFolder(inFolder);
+		inFiles = getRawFiles(inFolder);
 
+		// Check if there are any raw files
 		if (inFiles == null || inFiles.length == 0) {
 			throw new ProcessException("Folder does not contain raw files");
 		}
@@ -93,136 +93,161 @@ public class RawToProfileConverter extends Executor {
 
 		// Checks all parameters that they are correct before proceeding
 		if (!verifyInData(parameters, inFolder, outFilePath)
-				|| !CorrectInfiles(inFiles)) {
+				|| !correctInfiles(inFiles)) {
 			throw new ProcessException("Wrong format of input data");
 		}
 		// Runs the procedure.
-		else {
-			initiateConversionStrings(parameters, outFilePath);
-			makeConversionDirectories(remoteExecution + "resources/" + dir
-					+ "/sorted");
-			checker.calculateWhichProcessesToRun(parameters);
 
-			if(!ValidateParameters(parameters)) {
-				throw new ProcessException("Parameters are incorrect");
-			}
-			rawFile1 = inFiles[0].getName();
-			rawFile_1_Name = rawFile1.substring(0, rawFile1.length() - 6);
-			if (inFiles.length == 2) {
-				rawFile2 = inFiles[1].getName();
-				rawFile_2_Name = rawFile2.substring(0, rawFile2.length() - 6);
-			}
+		initiateConversionStrings(parameters, outFilePath);
+		makeConversionDirectories(remoteExecution + "resources/" + dir
+				+ "/sorted");
+		checker.calculateWhichProcessesToRun(parameters);
+		if(!validateParameters(parameters)) {
+			throw new ProcessException("Parameters are incorrect");
+		}
+		/* Updates attribute raw files. */
+		parseRawFiles(inFiles);
+		initiateConversionStrings(parameters, outFilePath);
 
-			initiateConversionStrings(parameters, outFilePath);
+		// printTrace(parameters, inFolder, outFilePath);
+		if (fileDir.exists()) {
+			//Runs bowtie on files. and sorts them.
+			if (checker.shouldRunBowTie()) {
+				ErrorLogger.log("SYSTEM", "Running Bowtie");
+				logString = runBowTie(rawFile1, rawFile_1_Name);
 
-			// printTrace(parameters, inFolder, outFilePath);
-			if (fileDir.exists()) {
-				//Runs bowtie on files. and sorts them.
-				if (checker.shouldRunBowTie()) {
-					ErrorLogger.log("SYSTEM", "Running Bowtie");
-					logString = runBowTie(rawFile1, rawFile_1_Name);
+				checkBowTieFile(
+						"resources/" + dir + rawFile_1_Name
+						+ ".sam", rawFile_1_Name);
 
-					checkBowTieFile(
-							"resources/" + dir + rawFile_1_Name
-							+ ".sam", rawFile_1_Name);
+				ErrorLogger.log("SYSTEM","Running SortSam");
+				sortSamFile(rawFile_1_Name);
 
-					ErrorLogger.log("SYSTEM","Running SortSam");
-					sortSamFile(rawFile_1_Name);
+				if (inFiles.length == 2) {
+					logString = logString + "\n"
+							+ runBowTie(rawFile2, rawFile_2_Name);
 
-					if (inFiles.length == 2) {
-						logString = logString + "\n"
-								+ runBowTie(rawFile2, rawFile_2_Name);
-
-						checkBowTieFile(remoteExecution + "resources/" + dir
+					checkBowTieFile(remoteExecution + "resources/" + dir
 								+ rawFile_2_Name + ".sam", rawFile_2_Name);
 
-						sortSamFile(rawFile_2_Name);
-					}// Sets parameters for sorting first sam file
+					sortSamFile(rawFile_2_Name);
+				}// Sets parameters for sorting first sam file
 
-					toBeRemoved.push(remoteExecution + "resources/" + dir);
-					filesToBeMoved = sortedDirForFile;
-					toBeRemoved.push(filesToBeMoved);
-				}
-
-				// Runs SamToGff script on files
-				if (checker.shouldRunSamToGff()) {
-					ErrorLogger.log("SYSTEM","Running SamToGff");
-					try {
-						logString = logString + "\n"
-								+ executeScript(parse(samToGff));
-
-					} catch (InterruptedException e) {
-						throw new ProcessException(
-								"Process interrupted while creating GFF file");
-					} catch (IOException e) {
-						throw new ProcessException(
-								"Could not run gff conversion, please check your input and permissions");
-					}
-					filesToBeMoved = sortedDirForFile + "reads_gff/";
-					toBeRemoved.push(filesToBeMoved);
-				}
-
-				// Runs GffToAllnucsgr on files.
-				if (checker.shouldRunGffToAllnusgr()) {
-					ErrorLogger.log("SYSTEM","Running gffToAllnucsgr");
-					try {
-						logString = logString + "\n"
-								+ executeScript(parse(gffToAllnusgr));
-					} catch (InterruptedException e) {
-						throw new ProcessException(
-								"Process interrupted while converting to SGR format");
-					} catch (IOException e) {
-						throw new ProcessException(
-								"Could not run SGR conversion, please check your input and permissions");
-					}
-					filesToBeMoved = sortedDirForFile
-							+ "reads_gff/allnucs_sgr/";
-					toBeRemoved.push(filesToBeMoved);
-				}
-
-				// Runs smoothing on files.
-				if (checker.shouldRunSmoothing()) {
-					ErrorLogger.log("SYSTEM","Running Smoothing");
-
-					// Second parameter should be false when ratio
-					// calculation should not run.
-					runSmoothing(parameters, false);
-
-					filesToBeMoved = sortedDirForFile
-							+ "reads_gff/allnucs_sgr/smoothed/";
-					toBeRemoved.push(filesToBeMoved);
-				}
-
-				// Runs Ratio calculation on files.
-				if (checker.shouldRunRatioCalc()) {
-					ErrorLogger.log("SYSTEM", "Running ratio calculation");
-
-					doRatioCalculation(sortedDirForCommands
-							+ "reads_gff/allnucs_sgr/smoothed/", parameters);
-
-					runSmoothing(parameters, true);
-
-					toBeRemoved.push(sortedDirForFile
-							+ "reads_gff/allnucs_sgr/smoothed/ratios/");
-					filesToBeMoved = sortedDirForFile
-							+ "reads_gff/allnucs_sgr/smoothed/ratios/smoothed/";
-					toBeRemoved.push(filesToBeMoved);
-				}
-				try {
-					moveEndFiles(filesToBeMoved, outFilePath);
-				} catch (ProcessException e) {
-					cleanUp(toBeRemoved);
-					throw e;
-				}
-				cleanUp(toBeRemoved);
-
-			} else {
-
-				logString = logString + " " + "Failed to create directory "
-						+ fileDir.toString();
+				toBeRemoved.push(remoteExecution + "resources/" + dir);
+				filesToBeMoved = sortedDirForFile;
+				toBeRemoved.push(filesToBeMoved);
 			}
+
+			// Runs SamToGff script on files
+			if (checker.shouldRunSamToGff()) {
+				runSamToGff();
+			}
+
+			// Runs GffToAllnucsgr on files.
+			if (checker.shouldRunGffToAllnusgr()) {
+				runGffToAllnusgr();
+			}
+
+			// Runs smoothing on files.
+			if (checker.shouldRunSmoothing()) {
+				ErrorLogger.log("SYSTEM","Running Smoothing");
+
+				// Second parameter should be false when ratio
+				// calculation should not run.
+				runSmoothing(parameters, false);
+
+				filesToBeMoved = sortedDirForFile
+						+ "reads_gff/allnucs_sgr/smoothed/";
+				toBeRemoved.push(filesToBeMoved);
+			}
+
+			// Runs Ratio calculation on files.
+			if (checker.shouldRunRatioCalc()) {
+				ErrorLogger.log("SYSTEM", "Running ratio calculation");
+
+				doRatioCalculation(sortedDirForCommands
+						+ "reads_gff/allnucs_sgr/smoothed/", parameters);
+
+				runSmoothing(parameters, true);
+
+				toBeRemoved.push(sortedDirForFile
+						+ "reads_gff/allnucs_sgr/smoothed/ratios/");
+				filesToBeMoved = sortedDirForFile
+						+ "reads_gff/allnucs_sgr/smoothed/ratios/smoothed/";
+				toBeRemoved.push(filesToBeMoved);
+			}
+
+			try {
+				moveEndFiles(filesToBeMoved, outFilePath);
+			} catch (ProcessException e) {
+				cleanUp(toBeRemoved);
+				throw e;
+			}
+			cleanUp(toBeRemoved);
+
+		} else {
+
+			logString = logString + " " + "Failed to create directory "
+					+ fileDir.toString();
 		}
+
 		return logString;
+	}
+
+	/**
+	 * Parses raw files from input files
+	 * @param inFiles
+	 */
+	private void parseRawFiles(File[] inFiles) {
+		rawFile1 = inFiles[0].getName();
+		rawFile_1_Name = rawFile1.substring(0, rawFile1.length() - 6);
+		if (inFiles.length == 2) {
+            rawFile2 = inFiles[1].getName();
+            rawFile_2_Name = rawFile2.substring(0, rawFile2.length() - 6);
+        }
+	}
+
+	/**
+	 * Runs Gff to Allnusgr, calls and executes script.
+	 *
+	 * @throws ProcessException
+	 */
+	private void runGffToAllnusgr() throws ProcessException {
+		ErrorLogger.log("SYSTEM", "Running gffToAllnucsgr");
+		try {
+            logString = logString + "\n"
+                    + executeScript(parse(gffToAllnusgr));
+        } catch (InterruptedException e) {
+            throw new ProcessException(
+                    "Process interrupted while converting to SGR format");
+        } catch (IOException e) {
+            throw new ProcessException(
+                    "Could not run SGR conversion, please check your input and permissions");
+        }
+		filesToBeMoved = sortedDirForFile
+                + "reads_gff/allnucs_sgr/";
+		toBeRemoved.push(filesToBeMoved);
+	}
+
+	/**
+	 * Runs Sam to GFF conversion, calls and executes script.
+	 * @throws ProcessException
+	 */
+	private void runSamToGff() throws ProcessException {
+		ErrorLogger.log("SYSTEM", "Running SamToGff");
+		try {
+            logString = logString + "\n"
+                    + executeScript(parse(samToGff));
+
+        } catch (InterruptedException e) {
+            throw new ProcessException(
+                    "Process interrupted while creating GFF file");
+        } catch (IOException e) {
+            throw new ProcessException(
+                    "Could not run gff conversion, please check your input and permissions");
+        }
+		filesToBeMoved = sortedDirForFile + "reads_gff/";
+		toBeRemoved.push(filesToBeMoved);
 	}
 
 	/**
@@ -237,26 +262,27 @@ public class RawToProfileConverter extends Executor {
 
 		File[] rawDirFiles = new File(inFolder).listFiles();
 		File[] rawFilesIsFile = null;
-		if (rawDirFiles != null && !(rawDirFiles.length == 0)) {
-			ArrayList<File> files = new ArrayList<File>();
-
-			for (File rawDirFile: rawDirFiles) {
-				if (rawDirFile.isFile()) {
-					files.add(rawDirFile);
-				}
-			}
-
-			rawFilesIsFile = new File[files.size()];
-			for (int i = 0; i < rawFilesIsFile.length; i++) {
-				rawFilesIsFile[i] = files.get(i);
-			}
-			if (rawFilesIsFile.length == 0) {
-				throw new ProcessException("No files found in directory "
-						+ inFolder);
-			}
-		} else {
-			throw new ProcessException("No files found in directory "
+		if (rawDirFiles == null || (rawDirFiles.length == 0)) {
+			throw new ProcessException(
+					"No files found in directory "
 					+ inFolder);
+		}
+
+		ArrayList<File> files = new ArrayList<File>();
+
+		for (File rawDirFile: rawDirFiles) {
+			if (rawDirFile.isFile()) {
+				files.add(rawDirFile);
+			}
+		}
+
+		rawFilesIsFile = new File[files.size()];
+		for (int i = 0; i < rawFilesIsFile.length; i++) {
+			rawFilesIsFile[i] = files.get(i);
+		}
+		if (rawFilesIsFile.length == 0) {
+			throw new ProcessException("No files found in directory "
+									   + inFolder);
 		}
 		return rawFilesIsFile;
 	}
@@ -268,7 +294,7 @@ public class RawToProfileConverter extends Executor {
 	 * @return
 	 * @throws ProcessException
 	 */
-	private boolean ValidateParameters(String[] parameters)
+	private boolean validateParameters(String[] parameters)
 			throws ProcessException {
 		boolean isOk = true;
 		if (checker.shouldRunSmoothing()
@@ -320,16 +346,17 @@ public class RawToProfileConverter extends Executor {
 		if (folderString != null) {
 			if (folderString.endsWith("/")) {
 				return folderString.substring(0, folderString.length() - 1);
-			} else
+			} else {
 				return folderString;
+			}
 		}
 		return null;
 	}
 
 	/**
 	 * Runs the smoothing and step procedures. Checks if its smoothing after
-	 * ratio calculation or (parameters[5])[1])just normal smoothing. Changes
-	 * some parameters depending on ratio calculation or not. runs smoothing
+	 * ratio calculation or (parameters[5])[1]) just normal smoothing. Changes
+	 * some parameters depending on ratio calculation or not. Runs smoothing
 	 * with the incoming parameters and runs stepping if it should.
 	 *
 	 * @param parameters
@@ -346,6 +373,7 @@ public class RawToProfileConverter extends Executor {
 
 		File[] filesToSmooth;
 		File dirToFiles;
+
 		if (isRatioCalc) {
 			parameterArray = parse(parameters[7]);
 			stepSize = 1;
@@ -372,21 +400,11 @@ public class RawToProfileConverter extends Executor {
 			parameterArray = parse(parameters[4]);
 		}
 
-		int[] intParams = new int[parameterArray.length];
-		for (int i = 0; i < parameterArray.length; i++) {
-			try {
-				intParams[i] = Integer.parseInt(parameterArray[i]);
-			} catch (NumberFormatException e) {
-				throw new ProcessException(
-						"Smoothing parameters are wrong format");
-			}
-		}
 
 		if (!dirToFiles.exists()) {
 			dirToFiles.mkdirs();
 		}
 
-		SmoothingAndStep smooth = new SmoothingAndStep();
 		if (filesToSmooth != null) {
 			for (File fileToSmooth : filesToSmooth) {
 				if (fileToSmooth.isFile()
@@ -409,7 +427,21 @@ public class RawToProfileConverter extends Executor {
 					}
 					outFile = dirToFiles.toString() + "/" + outFile;
 
-					smooth.smoothing(intParams, inFile, outFile, stepSize);
+
+					// TODO: Don't hardcode path to smoothing.jar.
+					ProcessBuilder pb = new ProcessBuilder("java", "-jar",
+							"resources/smoothing.jar",
+							parameterArray[0],
+							parameterArray[1], parameterArray[2],
+							parameterArray[3], parameterArray[4],
+							inFile, outFile, String.valueOf(stepSize));
+					try {
+						Process p = pb.start();
+						p.waitFor();
+					} catch (IOException | InterruptedException ex) {
+						throw new ProcessException(ex.getMessage());
+					}
+
 				}
 			}
 		}
@@ -433,7 +465,7 @@ public class RawToProfileConverter extends Executor {
 	 * @throws ProcessException
 	 */
 
-	private boolean CorrectInfiles(File[] inFiles) throws ProcessException {
+	private boolean correctInfiles(File[] inFiles) throws ProcessException {
 
 		if (inFiles == null) {
 			throw new ProcessException("Filepath to raw file is null");
@@ -481,16 +513,7 @@ public class RawToProfileConverter extends Executor {
 	 * @param inFolder
 	 * @param outFile
 	 */
-//	private void printTrace(String[] parameters, String inFolder, String outFile) {
-//		System.out.println("dir " + fileDir.toString());
-//		System.out.println("INFOLDER = " + inFolder);
-//		System.out.println("OUTFILE = " + outFile);
-//		System.out.println("DIR = " + dir);
-//		System.out.println("SORTEDDIR = " + sortedDirForCommands);
-//		System.out.println("BOWTIE = "
-//				+ parse(parameters[0] + " " + inFolder + "/" + rawFile1 + " "
-//						+ dir + rawFile_1_Name + ".sam"));
-//	}
+
 
 	/**
 	 * Initiates strings that is used to run programs and scripts and also
@@ -504,8 +527,8 @@ public class RawToProfileConverter extends Executor {
 		dir = "results_" + Thread.currentThread().getId() + "/";
 		sortedDirForCommands = remoteExecution + dir + "sorted/";
 		sortedDirForFile = remoteExecution + "resources/" + dir + "sorted/";
-		samToGff = "perl sam_to_readsgff_v1.pl " + sortedDirForCommands;
-		gffToAllnusgr = "perl readsgff_to_allnucsgr_v1.pl "
+		samToGff = "expect sam_to_readsgff_v1.sh " + sortedDirForCommands;
+		gffToAllnusgr = "expect readsgff_to_allnucsgr_v1.sh "
 				+ sortedDirForCommands + "reads_gff/";
 	}
 
@@ -667,4 +690,47 @@ public class RawToProfileConverter extends Executor {
 		File dir = new File(folder);
 		return dir.exists();
 	}
+
+	public String runRemoveDuplicates(String inputFile, String outputFile,
+									   String metrics) throws ProcessException {
+		/* Check if input is .sam format */
+		if(!inputFile.endsWith(".sam")) {
+			throw new IllegalArgumentException("Could not run Picard on file: "
+											   +inputFile +
+											   ", as it was not in .sam format");
+		}
+
+		/* Check if output is .sam format */
+		if(!outputFile.endsWith(".sam")) {
+			throw new IllegalArgumentException("Could not run Picard to file: "
+											   +outputFile +
+											   ", as it was not in .sam format");
+		}
+
+		/* TODO Should metric file be returned/stored/used? */
+		/* Set command parameters  */
+		/* 	java -jar picard.jar MarkDuplicates INPUT=inputFile
+			OUTPUT=outputFile REMOVE_DUPLICATES=true
+			This needs to be called from the same directory as picard.jar
+			or include that in the path
+		*/
+		String [] picardParameters = parse("java -jar " +
+										   ServerSettings.picardLocation +
+										   " MarkDuplicates " +
+										   " INPUT=" + inputFile +
+										   " OUTPUT=" + outputFile +
+										   "REMOVE_DUPLICATES=true");
+		try {
+			return executeProgram(picardParameters);
+		} catch (InterruptedException e) {
+			throw new ProcessException(
+					"Process interrupted while running picard on file: "
+					+ inputFile);
+		} catch (IOException e) {
+			throw new ProcessException("Could not run picard on file: "
+									   + inputFile + ", please check your input and permissions");
+		}
+
+	}
+
 }
