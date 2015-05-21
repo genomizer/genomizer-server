@@ -31,7 +31,7 @@ public class PutExperimentCommandTest {
 				"{\"name\":\"specie\",\"value\":\"human\"}," +
 				"{\"name\":\"genome release\",\"value\":\"v.123\"}," +
 				"{\"name\":\"cell line\",\"value\":\"yes\"}," +
-				"{\"name\":\"development stage\",\"value\":\"larva\"}," +
+				"{\"name\":\"Development_Stage\",\"value\":\"larva\"}," +
 				"{\"name\":\"sex\",\"value\":\"male\"}," +
 				"{\"name\":\"tissue\",\"value\":\"eye\"}" +
 			"]}";
@@ -76,7 +76,7 @@ public class PutExperimentCommandTest {
 				"{ \"name\": \"specie\", \"value\": \"human\"}," +
 				"{ \"name\": \"genome release\", \"value\": \"v.123\"}," +
 				"{ \"name\": \"cell line\", \"value\": \"yes\"}," +
-				"{ \"name\": \"development stage\", \"value\": \"larva\"}," +
+				"{ \"name\": \"Development_Stage\", \"value\": \"larva\"}," +
 				"{ \"name\": \"sex\", \"value\": \"male\"}," +
 				"{ \"name\": \"tissue\", \"value\": \"eye\"} " +
 				"]}";
@@ -106,7 +106,7 @@ public class PutExperimentCommandTest {
 				"{ \"name\": \"specie\", \"value\": \"human\"}," +
 				"{ \"name\": \"genome release\", \"value\": \"v.123\"}," +
 				"{ \"name\": \"cell line\", \"value\": \"yes\"}," +
-				"{ \"name\": \"development stage\", \"value\": \"larva\"}," +
+				"{ \"name\": \"Development_Stage\", \"value\": \"larva\"}," +
 				"{ \"name\": \"sex\", \"value\": \"male\"}," +
 				"{ \"name\": \"tissue\", \"value\": \"eye\"} " +
 				"]}";
@@ -132,7 +132,7 @@ public class PutExperimentCommandTest {
 				"{ \"name\": \"specie\", \"value\": \"human\"}," +
 				"{ \"name\": \"genome release\", \"value\": \"v.123\"}," +
 				"{ \"name\": \"cell line\", \"value\": \"yes\"}," +
-				"{ \"name\": \"development stage\", \"value\": \"larva\"}," +
+				"{ \"name\": \"Development_Stage\", \"value\": \"larva\"}," +
 				"{ \"name\": \"sex\", \"value\": \"male\"}," +
 				"{ \"name\": \"tissue\", \"value\": \"eye\"} " +
 				"]}";
@@ -158,7 +158,7 @@ public class PutExperimentCommandTest {
 				"{ \"name\": \"specie\", \"value\": \"human\"}," +
 				"{ \"name\": \"genome release\", \"value\": \"v.123\"}," +
 				"{ \"name\": \"cell line\", \"value\": \"yes\"}," +
-				"{ \"name\": \"development stage\", \"value\": \"larva\"}," +
+				"{ \"name\": \"Development_Stage\", \"value\": \"larva\"}," +
 				"{ \"name\": \"sex\", \"value\": \"male\"}," +
 				"{ \"name\": \"tissue\", \"value\": \"eye\"} " +
 				"]}";
@@ -188,7 +188,7 @@ public class PutExperimentCommandTest {
 				"{ \"name\": \"specie\", \"value\": \"human\"}," +
 				"{ \"name\": \"genome release\", \"value\": \"v.123\"}," +
 				"{ \"name\": \"cell line\", \"value\": \"yes\"}," +
-				"{ \"name\": \"development stage\", \"value\": \"larva\"}," +
+				"{ \"name\": \"Development_Stage\", \"value\": \"larva\"}," +
 				"{ \"name\": \"sex\", \"value\": \"male\"}," +
 				"{ \"name\": \"tissue\", \"value\": \"eye\"} " +
 				"]}";
@@ -214,7 +214,7 @@ public class PutExperimentCommandTest {
 				"{ \"name\": \"specie\", \"value\": \"human\"}," +
 				"{ \"name\": \"genome release\", \"value\": \"v.123\"}," +
 				"{ \"name\": \"cell line\", \"value\": \"yes\"}," +
-				"{ \"name\": \"development stage\", \"value\": \"larva\"}," +
+				"{ \"name\": \"Development_Stage\", \"value\": \"larva\"}," +
 				"{ \"name\": \"sex\", \"value\": \"male\"}," +
 				"{ \"name\": \"tissue\", \"value\": \"eye\"} " +
 				"]}";
@@ -240,7 +240,7 @@ public class PutExperimentCommandTest {
 				"{ \"name\": \"specie\", \"value\": \"human\"}," +
 				"{ \"name\": \"genome release\", \"value\": \"v.123\"}," +
 				"{ \"name\": \"cell line\", \"value\": \"yes\"}," +
-				"{ \"name\": \"development stage\", \"value\": \"larva\"}," +
+				"{ \"name\": \"Development_Stage\", \"value\": \"larva\"}," +
 				"{ \"name\": \"sex\", \"value\": \"male\"}," +
 				"{ \"name\": \"tissue\", \"value\": \"eye\"} " +
 				"]}";
@@ -270,7 +270,7 @@ public class PutExperimentCommandTest {
 				"{ \"name\": \"specie\", \"value\": \"human\"}," +
 				"{ \"name\": \"genome release\", \"value\": \"v.123\"}," +
 				"{ \"name\": \"cell line\", \"value\": \"yes\"}," +
-				"{ \"name\": \"development stage\", \"value\": \"larva\"}," +
+				"{ \"name\": \"Development_Stage\", \"value\": \"larva\"}," +
 				"{ \"name\": \"sex\", \"value\": \"male\"}," +
 				"{ \"name\": \"tissue\", \"value\": \"eye\"} " +
 				"]}";
@@ -296,7 +296,7 @@ public class PutExperimentCommandTest {
 				"{ \"name\": \"specie\", \"value\": \"human\"}," +
 				"{ \"name\": \"genome release\", \"value\": \"v.123\"}," +
 				"{ \"name\": \"cell line\", \"value\": \"yes\"}," +
-				"{ \"name\": \"development stage\", \"value\": \"larva\"}," +
+				"{ \"name\": \"Development_Stage\", \"value\": \"larva\"}," +
 				"{ \"name\": \"sex\", \"value\": \"male\"}," +
 				"{ \"name\": \"tissue\", \"value\": \"eye\"} " +
 				"]}";
@@ -353,7 +353,7 @@ public class PutExperimentCommandTest {
 	public void testValidateProperlyFormatted() throws ValidateException {
 
 		PutExperimentCommand c = gson.fromJson(json, PutExperimentCommand.class);
-		c.setFields("/uri/expId", "", "uuid", UserType.USER);
+		c.setFields("/uri/expId", null, "uuid", UserType.USER);
 
 		c.validate();
 	}
@@ -381,7 +381,7 @@ public class PutExperimentCommandTest {
 	public void testHavingRights() throws ValidateException {
 
 		Command c = gson.fromJson(json,PutExperimentCommand.class);
-		c.setFields("/exp/uri", "", "uuid", UserType.USER);
+		c.setFields("/exp/uri", null, "uuid", UserType.USER);
 		c.validate();
 	}
 
@@ -395,7 +395,7 @@ public class PutExperimentCommandTest {
 	public void testNotHavingRights() throws ValidateException {
 
 		Command c = gson.fromJson(json,PutExperimentCommand.class);
-		c.setFields("/exp/uri", "", "uuid", UserType.GUEST);
+		c.setFields("/exp/uri", null, "uuid", UserType.GUEST);
 		c.validate();
 		fail();
 	}

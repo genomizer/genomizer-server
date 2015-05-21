@@ -6,6 +6,7 @@ package command.process;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Map.Entry;
 
 import com.google.gson.annotations.Expose;
@@ -65,7 +66,8 @@ public class PutProcessCommand extends Command {
 	}
 
 	@Override
-	public void setFields(String uri, String query, String username, UserType userType) {
+	public void setFields(String uri, HashMap<String, String> query,
+						  String username, UserType userType) {
 
 		super.setFields(uri, query, username, userType);
 		setTimestamp(System.currentTimeMillis());

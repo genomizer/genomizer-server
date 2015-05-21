@@ -62,7 +62,7 @@ public class PutAnnotationValueCommandTest {
 
 		String j = jsonBuilder(null, "dog","cat");
 		PutAnnotationValueCommand c = gson.fromJson(j, PutAnnotationValueCommand.class);
-		c.setFields("hello", "", null, UserType.ADMIN);
+		c.setFields("hello", null, null, UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -80,7 +80,7 @@ public class PutAnnotationValueCommandTest {
 
 		String j = jsonBuilder("", "dog","cat");
 		PutAnnotationValueCommand c = gson.fromJson(j, PutAnnotationValueCommand.class);
-		c.setFields("hello", "", null, UserType.ADMIN);
+		c.setFields("hello", null, null, UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -102,7 +102,7 @@ public class PutAnnotationValueCommandTest {
 		}
 		String j = jsonBuilder(big, "dog","cat");
 		PutAnnotationValueCommand c = gson.fromJson(j, PutAnnotationValueCommand.class);
-		c.setFields("hello", "", null, UserType.ADMIN);
+		c.setFields("hello", null, null, UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -120,7 +120,7 @@ public class PutAnnotationValueCommandTest {
 
 		String j = jsonBuilder("Joh/n", "dog","cat");
 		PutAnnotationValueCommand c = gson.fromJson(j, PutAnnotationValueCommand.class);
-		c.setFields("hello", "", null, UserType.ADMIN);
+		c.setFields("hello", null, null, UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -138,7 +138,7 @@ public class PutAnnotationValueCommandTest {
 
 		String j = jsonBuilder("John", null,"cat");
 		PutAnnotationValueCommand c = gson.fromJson(j, PutAnnotationValueCommand.class);
-		c.setFields("hello", "", null, UserType.ADMIN);
+		c.setFields("hello", null, null, UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -156,7 +156,7 @@ public class PutAnnotationValueCommandTest {
 
 		String j = jsonBuilder("John", "","cat");
 		PutAnnotationValueCommand c = gson.fromJson(j, PutAnnotationValueCommand.class);
-		c.setFields("hello", "", null, UserType.ADMIN);
+		c.setFields("hello", null, null, UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -178,7 +178,7 @@ public class PutAnnotationValueCommandTest {
 		}
 		String j = jsonBuilder("John", big,"cat");
 		PutAnnotationValueCommand c = gson.fromJson(j, PutAnnotationValueCommand.class);
-		c.setFields("hello", "", null, UserType.ADMIN);
+		c.setFields("hello", null, null, UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -196,7 +196,7 @@ public class PutAnnotationValueCommandTest {
 
 		String j = jsonBuilder("John", "do/g","cat");
 		PutAnnotationValueCommand c = gson.fromJson(j, PutAnnotationValueCommand.class);
-		c.setFields("hello", "", null, UserType.ADMIN);
+		c.setFields("hello", null, null, UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -213,7 +213,7 @@ public class PutAnnotationValueCommandTest {
 
 		String j = jsonBuilder("John", "dog", null);
 		PutAnnotationValueCommand c = gson.fromJson(j, PutAnnotationValueCommand.class);
-		c.setFields("hello", "", null, UserType.ADMIN);
+		c.setFields("hello", null, null, UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -231,7 +231,7 @@ public class PutAnnotationValueCommandTest {
 
 		String j = jsonBuilder("John", "dog","");
 		PutAnnotationValueCommand c = gson.fromJson(j, PutAnnotationValueCommand.class);
-		c.setFields("hello", "", null, UserType.ADMIN);
+		c.setFields("hello", null, null, UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -253,7 +253,7 @@ public class PutAnnotationValueCommandTest {
 		}
 		String j = jsonBuilder("John", "dog", big);
 		PutAnnotationValueCommand c = gson.fromJson(j, PutAnnotationValueCommand.class);
-		c.setFields("hello", "", null, UserType.ADMIN);
+		c.setFields("hello", null, null, UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -271,7 +271,7 @@ public class PutAnnotationValueCommandTest {
 
 		String j = jsonBuilder("John", "dog","ca/t");
 		PutAnnotationValueCommand c = gson.fromJson(j, PutAnnotationValueCommand.class);
-		c.setFields("hello", "", null, UserType.ADMIN);
+		c.setFields("hello", null, null, UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -289,7 +289,7 @@ public class PutAnnotationValueCommandTest {
 
 		String j = jsonBuilder("John", "dog","cat");
 		PutAnnotationValueCommand c = gson.fromJson(j, PutAnnotationValueCommand.class);
-		c.setFields("hello", "", null, UserType.ADMIN);
+		c.setFields("hello", null, null, UserType.ADMIN);
 		c.validate();
 
 		assertTrue(true);
@@ -307,7 +307,7 @@ public class PutAnnotationValueCommandTest {
 
 		String json = jsonBuilder("John", "dog","cat");
 		PutAnnotationValueCommand c = gson.fromJson(json, PutAnnotationValueCommand.class);
-		c.setFields("hello", "", null, UserType.USER);
+		c.setFields("hello", null, null, UserType.USER);
 
 		c.validate();
 	}
@@ -323,7 +323,7 @@ public class PutAnnotationValueCommandTest {
 
 		String json = jsonBuilder("John", "dog","cat");
 		PutAnnotationValueCommand c = gson.fromJson(json, PutAnnotationValueCommand.class);
-		c.setFields("hello", "", null, UserType.GUEST);
+		c.setFields("hello", null, null, UserType.GUEST);
 
 		c.validate();
 		fail();

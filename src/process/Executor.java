@@ -1,6 +1,7 @@
 package process;
 
 import database.DatabaseAccessor;
+import database.containers.FileTuple;
 import server.Debug;
 import server.ErrorLogger;
 import command.Command;
@@ -259,7 +260,9 @@ public abstract class Executor {
 			for (File fileToDelete : fileList) {
 				if (fileToDelete.isFile()) {
 					if (fileToDelete.delete()) {
-						db.deleteFile(fileToDelete.getPath());
+						FileTuple fileTuple = db.getFileTuple(fileToDelete
+								.getAbsolutePath());
+						db.deleteFile(fileTuple.path);
 						ErrorLogger.log("SYSTEM", "Deleting "
 										  + fileToDelete.toString());
 					} else {

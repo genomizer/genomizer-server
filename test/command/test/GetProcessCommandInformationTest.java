@@ -117,7 +117,7 @@ public class GetProcessCommandInformationTest {
 	public void testHavingRights() throws ValidateException {
 
 		Command c = new GetAnnotationPrivilegesCommand();
-		c.setFields("uri", "", null, UserType.GUEST);
+		c.setFields("uri", null, null, UserType.GUEST);
 		c.validate();
 	}
 
@@ -131,7 +131,7 @@ public class GetProcessCommandInformationTest {
 	public void testNotHavingRights() throws ValidateException {
 
 		Command c = new GetAnnotationPrivilegesCommand();
-		c.setFields("uri", "", null, UserType.UNKNOWN);
+		c.setFields("uri", null, null, UserType.UNKNOWN);
 		c.validate();
 		fail();
 	}

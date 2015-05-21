@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.HashMap;
 import java.util.List;
 
 import java.net.URLDecoder;
@@ -43,18 +44,16 @@ public class SearchCommand extends Command {
 	 * @param userType the userType
 	 */
 	@Override
-	public void setFields(String uri, String query, String username, UserType userType) {
+	public void setFields(String uri, HashMap<String, String> query,
+						  String username, UserType userType) {
 
 		super.setFields(uri, query, username, userType);
-		for (String keyVal : query.split("&")) {
-			String[] splitKeyVal = keyVal.split("=");
-			if (splitKeyVal[0].equals("annotations") && splitKeyVal.length == 2) {
-				annotations = splitKeyVal[1];
-			}
+		if(query.containsKey("annotations")) {
+			annotations = query.get("annotations");
 		}
-
-		if (annotations == null)
+		else {
 			annotations = ("[expID]");
+		}
 	}
 
 	@Override
@@ -76,12 +75,17 @@ public class SearchCommand extends Command {
 		try {
 			db = initDB();
 			searchResult = db.search(annotations);
-		} catch (SQLException | IOException e) {
+		} catch (SQLException e) {
 			Debug.log("Search with annotations: " + annotations + " didn't work, reason: " +
 					e.getMessage());
 			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Search with annotations: "+annotations+
 					" didn't work because of temporary problems with database.");
-		} catch (ParseException e) {
+		}catch (IOException e){
+			Debug.log("Search with annotations: " + annotations + " didn't work, reason: " +
+					e.getMessage());
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Search failed due to query having incorrect format.");
+
+		}catch (ParseException e) {
 			Debug.log("Search with annotations: " + annotations + " didn't work. Incorrect date format. " +
 					e.getMessage());
 			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Search failed due to incorrect date format. " +

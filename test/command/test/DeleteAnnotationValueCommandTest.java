@@ -20,7 +20,7 @@ public class DeleteAnnotationValueCommandTest {
     public void testHavingRights() throws ValidateException {
 
         Command c = new DeleteAnnotationValueCommand();
-        c.setFields("/test/uri/name/value", "", null, UserType.USER);
+        c.setFields("/test/uri/name/value", null, null, UserType.USER);
         c.validate();
     }
 
@@ -34,7 +34,7 @@ public class DeleteAnnotationValueCommandTest {
     public void testNotHavingRights() throws ValidateException {
 
         Command c = new DeleteAnnotationValueCommand();
-        c.setFields("/test/uri/name/value", "", null, UserType.GUEST);
+        c.setFields("/test/uri/name/value", null, null, UserType.GUEST);
         c.validate();
         fail();
     }

@@ -16,6 +16,7 @@ import response.Response;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Class used when updating the experiments.
@@ -39,8 +40,9 @@ public class PutExperimentCommand extends Command {
 	}
 
 	@Override
-	public void setFields(String uri, String query, String username, UserType userType) {
-		super.setFields(uri,query, username,userType);
+	public void setFields(String uri, HashMap<String, String> query,
+                          String username, UserType userType) {
+		super.setFields(uri, query, username, userType);
 		expID = uri.split("/")[2];
 	}
 

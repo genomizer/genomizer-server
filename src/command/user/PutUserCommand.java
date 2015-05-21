@@ -15,6 +15,7 @@ import server.Debug;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.HashMap;
 
 /**
  * Command for user to update his/her information
@@ -49,7 +50,8 @@ public class PutUserCommand extends Command {
      * @param userType the userType
      */
     @Override
-    public void setFields(String uri, String query, String username, UserMethods.UserType userType) {
+    public void setFields(String uri, HashMap<String, String> query,
+                          String username, UserMethods.UserType userType) {
         this.username = username;
         this.userType = userType;
     }
