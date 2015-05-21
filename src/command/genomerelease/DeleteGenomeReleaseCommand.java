@@ -76,10 +76,10 @@ public class DeleteGenomeReleaseCommand extends Command {
 					genomeVersion + " or species " + species +
 					" does not exist.");
 		} catch (SQLException | IOException e) {
-			Debug.log("Error when deleting genome release " + genomeVersion + " for specie "+species+
+			Debug.log("Error when deleting genome release " + genomeVersion + " for species " + species +
 							". Database error: " + e.getMessage());
 			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Error when deleting genome release "
-					+ genomeVersion + " for specie "+species+ ". Database error.");
+					+ genomeVersion + " for species "+ species + ". Database error.");
 		} finally {
 			if(db != null) {
 				db.close();
