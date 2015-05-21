@@ -57,7 +57,7 @@ public class Authenticate {
 
 	/**
 	 * updates the date for which the user did the most recent request
-	 * @param uuid the uuid of the user
+	 * @param uuid the userName of the user
 	 */
 	static public void updateLatestRequest(String uuid) {
 		if(latestRequests.containsKey(uuid)) {

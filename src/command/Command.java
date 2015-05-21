@@ -36,8 +36,8 @@ public abstract class Command {
 	/*Keeps track of the user rights level for the command sender. */
 	protected UserType userType = UserType.UNKNOWN;
 
-	/*Contains the user id.*/
-	protected String uuid;
+	/*Contains the user name.*/
+	protected String userName;
 
 	/**
 	 * Returns the number of expected fields in the URI of the request that
@@ -60,7 +60,7 @@ public abstract class Command {
 	 */
 	public void setFields(String uri, HashMap<String, String> query,
 						  String username, UserType userType){
-		this.uuid = username;
+		this.userName = username;
 		this.userType = userType;
 	}
 
