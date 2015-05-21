@@ -27,7 +27,7 @@ public class DeleteLoginCommandTest {
 	@Test
 	public void ShouldValidateCorrectUuid() throws ValidateException {
 		Command c = new DeleteLoginCommand();
-		c.setFields(null, null, "uuid", UserType.ADMIN);
+		c.setFields(null, null, "userName", UserType.ADMIN);
 		c.validate();
 
 		assertTrue(true);

@@ -21,9 +21,8 @@ import transfer.UploadHandler;
 import transfer.Util;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.io.OutputStream;
-import java.net.URI;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
@@ -135,8 +134,9 @@ public class RequestHandler implements HttpHandler {
             command = fetchCommand(commandClass, json);
         } catch (InstantiationException | IllegalAccessException e) {
             ErrorResponse errorResponse = new ErrorResponse(HttpStatusCode.
-                    INTERNAL_SERVER_ERROR, "Could not create command from " +
+                    INTERNAL_SERVER_ERROR, "Could not create a command from " +
                     "request");
+            Debug.log("Could not create a command from request. The exception was: " + e.getMessage());
             respond(errorResponse, exchange);
             return;
         }
@@ -226,7 +226,7 @@ public class RequestHandler implements HttpHandler {
     }
 
     /*Performs authorization, returns null if the user could not be authorized,
-    * else it returns the uuid.*/
+    * else it returns the userName.*/
 	private String performAuthorization(HttpExchange exchange) {
 		String uuid = null;
 
@@ -236,7 +236,7 @@ public class RequestHandler implements HttpHandler {
 		if (authHeader != null)
 			uuid = authHeader.get(0);
 
-        //If the uuid could not be retrieved from the header, do this.
+        //If the userName could not be retrieved from the header, do this.
         if (uuid == null) {
             // Get the value of the 'token' parameter.
             String uuid2;
@@ -324,9 +324,8 @@ public class RequestHandler implements HttpHandler {
     /*Sends a authentication failure response. Logs the event.*/
     private void respondWithAuthenticationFailure(HttpExchange exchange) {
         Debug.log("User could not be authenticated!");
-        ErrorResponse errorResponse = new ErrorResponse(HttpStatusCode.
-                INTERNAL_SERVER_ERROR, "Could not create command from " +
-                "request");
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatusCode.UNAUTHORIZED,
+                "Unauthorized");
         respond(errorResponse, exchange);
     }
 }

@@ -1,26 +1,24 @@
 package command.search;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.sql.SQLException;
-import java.text.ParseException;
-import java.util.HashMap;
-import java.util.List;
-
-import java.net.URLDecoder;
-
 import command.Command;
 import command.UserRights;
 import command.ValidateException;
 import database.DatabaseAccessor;
 import database.containers.Experiment;
-
 import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.HttpStatusCode;
 import response.Response;
 import response.SearchResponse;
 import server.Debug;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Class used to handle searching for an experiment.
@@ -40,7 +38,7 @@ public class SearchCommand extends Command {
 	/**
 	 * Set the UserType Uri and Uuid. annotations also set from uri.
 	 * @param uri the URI from the http request.
-	 * @param username the uuid from the http request.
+	 * @param username the userName from the http request.
 	 * @param userType the userType
 	 */
 	@Override

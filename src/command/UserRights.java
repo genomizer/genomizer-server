@@ -1,5 +1,7 @@
 package command;
 
+import command.admin.DeleteUserCommand;
+import command.admin.PostUserCommand;
 import command.admin.PutUserAdminCommand;
 import command.annotation.*;
 import command.convertfile.PutConvertFileCommand;
@@ -18,9 +20,8 @@ import command.genomerelease.PostGenomeReleaseCommand;
 import command.process.GetProcessStatusCommand;
 import command.process.PutProcessCommand;
 import command.search.SearchCommand;
-import command.user.*;
-import command.admin.DeleteUserCommand;
-import command.admin.PostUserCommand;
+import command.user.PutUserCommand;
+import command.user.PutUserPasswordCommand;
 import database.subClasses.UserMethods.UserType;
 
 import java.util.HashMap;

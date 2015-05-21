@@ -1,15 +1,14 @@
 package server;
 
 
-import command.process.PutProcessCommand;
 import command.Process;
-import response.ProcessResponse;
-import response.Response;
+import command.process.PutProcessCommand;
 import response.HttpStatusCode;
+import response.Response;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.concurrent.*;
+import java.util.concurrent.Callable;
 
 
 public class ProcessHandler implements Callable<Response> {
@@ -67,6 +66,7 @@ public class ProcessHandler implements Callable<Response> {
 					Debug.log(successMsg);
 					ErrorLogger.log("PROCESS", successMsg);
 				} else {
+					System.out.println("Process status: " + response.getCode());
 					process.status = Process.STATUS_CRASHED;
 					String crashedMsg = "FAILURE! Execution of process with id "
 							+ processCommand.getPID() + " in experiment "
@@ -104,9 +104,8 @@ public class ProcessHandler implements Callable<Response> {
 
 		}
 
-		Debug.log("PID " + processCommand.getPID());
-		Debug.log("Process response: " +
-				((ProcessResponse) response).getMessage());
+		Debug.log("PID: " + processCommand.getPID());
+		Debug.log("Process response: " + response.getMessage());
 
 		return response;
 
@@ -124,20 +123,20 @@ public class ProcessHandler implements Callable<Response> {
 
 
 		if (days > 0) {
-			return new String(days + " days, " + hours + " hours, "
+			return (days + " days, " + hours + " hours, "
 					+ minutes + " minutes, " + seconds + " seconds");
 		}
 
 		if (hours > 0) {
-			return new String(hours + " hours, "
+			return (hours + " hours, "
 					+ minutes + " minutes, " + seconds + " seconds");
 		}
 
 		if (minutes > 0) {
-			return new String(minutes + " minutes, " + seconds + " seconds");
+			return (minutes + " minutes, " + seconds + " seconds");
 		}
 
-		return new String(seconds + " seconds");
+		return (seconds + " seconds");
 	}
 
 

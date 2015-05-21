@@ -7,7 +7,7 @@ public class CreateProcessCommandTest {
 //
 //	CommandFactory cmdf;
 //	PutProcessCommand processCommand;
-//	String uuid;
+//	String userName;
 //
 //	String username = "splutt";
 //	String filename = "filename1234";

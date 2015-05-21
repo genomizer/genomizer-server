@@ -1,12 +1,8 @@
 package response;
 
-import java.util.ArrayList;
+import com.google.gson.*;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import java.util.ArrayList;
 
 /**
  * Class that represents the response when adding a genome release.

@@ -1,8 +1,8 @@
 package response;
 
-import java.util.ArrayList;
-
 import com.google.gson.annotations.Expose;
+
+import java.util.ArrayList;
 
 /**
  * Class that represents the download response.

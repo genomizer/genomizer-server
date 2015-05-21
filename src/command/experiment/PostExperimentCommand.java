@@ -1,21 +1,21 @@
 package command.experiment;
 
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.ArrayList;
-
+import com.google.gson.annotations.Expose;
 import command.Annotation;
 import command.Command;
 import command.UserRights;
 import command.ValidateException;
+import database.DatabaseAccessor;
+import database.constants.MaxLength;
 import response.ErrorResponse;
 import response.HttpStatusCode;
 import response.MinimalResponse;
 import response.Response;
-import com.google.gson.annotations.Expose;
-import database.DatabaseAccessor;
-import database.constants.MaxLength;
 import server.Debug;
+
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  * Class used to add an experiment represented as a command.

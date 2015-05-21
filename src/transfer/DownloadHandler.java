@@ -3,7 +3,7 @@ package transfer;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import response.HttpStatusCode;
-import server.*;
+import server.Debug;
 
 import java.io.*;
 import java.nio.file.FileVisitResult;
