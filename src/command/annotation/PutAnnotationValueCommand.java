@@ -58,13 +58,13 @@ public class PutAnnotationValueCommand extends Command {
 			if (db.getAllAnnotationLabels().contains(name)) {
 				if (db.getChoices(name).contains(oldValue)) {
 					if (db.getChoices(name).contains(newValue)) {
-						db.changeAnnotationValue(name, oldValue, newValue);
-						response = new MinimalResponse(HttpStatusCode.OK);
-					} else {
 						response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
 								"Editing annotation value was unsuccessful, " +
 										"the annotation value " + newValue +
-										" does not exist");
+										" already exists");
+					} else {
+						db.changeAnnotationValue(name, oldValue, newValue);
+						response = new MinimalResponse(HttpStatusCode.OK);
 					}
 				} else {
 					response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
