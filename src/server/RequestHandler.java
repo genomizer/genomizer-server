@@ -135,8 +135,9 @@ public class RequestHandler implements HttpHandler {
             command = fetchCommand(commandClass, json);
         } catch (InstantiationException | IllegalAccessException e) {
             ErrorResponse errorResponse = new ErrorResponse(HttpStatusCode.
-                    INTERNAL_SERVER_ERROR, "Could not create command from " +
+                    INTERNAL_SERVER_ERROR, "Could not create a command from " +
                     "request");
+            Debug.log("Could not create a command from request. The exception was: " + e.getMessage());
             respond(errorResponse, exchange);
             return;
         }
