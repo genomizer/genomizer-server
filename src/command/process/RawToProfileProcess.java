@@ -16,21 +16,21 @@ import static command.Command.initDB;
  * Created by dv13jen on 2015-05-19.
  */
 public class RawToProfileProcess extends Process {
-    @Expose
-    protected ArrayList<RawToProfileFiles> files = new ArrayList<>();
 
-    public RawToProfileProcess(String type, ArrayList<RawToProfileFiles> files) {
+    @Expose
+    protected ArrayList<FileToProcess> files = new ArrayList<>();
+
+    public RawToProfileProcess(String type, ArrayList<FileToProcess> files) {
         super(type);
         this.files = files;
     }
 
     @Override
     public void runProcess() throws UnsupportedOperationException{
-        System.out.println("RawToProfileProcess.runProcess");
         DatabaseAccessor db = null;
         ProcessHandler processHandler;
 
-        for(RawToProfileFiles f: files){
+        for(FileToProcess f: files){
             try {
                 db = initDB();
 

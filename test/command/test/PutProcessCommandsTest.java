@@ -107,9 +107,9 @@ public class PutProcessCommandsTest {
      */
     @Test (expected = ValidateException.class)
     public void testValidateOutfileIncorrectName() throws ValidateException {
-        String json = "{\"expId\":\"not_an_expid\",\"processCommands\":[{\"type\":\"bowtie\",\"files\":[{\"infile\":" +
-                "\"bigtest1.fastq\",\"outfile\":\"dbf£d\",\"genomeVersion\":\"hg38\",\"params\":\"" +
-                "-a -m 1 --best -p 10 -v 2 -q -S\",\"keepSam\":\"on\"}]}]}";
+        //String json = "{\"expId\":\"not_an_expid\",\"files\":[{\"infile\":\"asd\",\"outfile\":\"wdas\",\"genomeVersion\":\"hy17\",\"processes\":[{\"
+
+        String json = null;
 
         PutProcessCommands c = gson.fromJson(json, PutProcessCommands.class);
         c.setFields(null, null, null, UserMethods.UserType.USER);

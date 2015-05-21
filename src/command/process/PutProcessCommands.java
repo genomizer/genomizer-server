@@ -34,7 +34,7 @@ public class PutProcessCommands extends Command{
     private UUID PID;
 
     @Expose
-    private ArrayList<ProcessCommands> processCommands = new ArrayList<>();
+    private ArrayList<FileToProcess> files = new ArrayList<>();
 
     private ArrayList<Process> processes = new ArrayList<>();
 
@@ -93,31 +93,26 @@ public class PutProcessCommands extends Command{
         hasRights(UserRights.getRights(this.getClass()));
         validateName(expId, MaxLength.EXPID, "Experiment ID");
 
-        if(processCommands == null || processCommands.size() < 1) {
+        if(files == null || files.size() < 1) {
             throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Specify " +
-                    "processes for the experiment.");
+                    "files for the experiment.");
         }
 
-        for (ProcessCommands processCommand : processCommands) {
-            for (RawToProfileFiles rawToProfileFiles : processCommand.getFiles()) {
-
-                validateName(rawToProfileFiles.getInfile(),
+        for (FileToProcess file : files) {
+                validateName(file.getInfile(),
                         MaxLength.FILE_EXPID, "Infile");
-                validateName(rawToProfileFiles.getOutfile(),
+                validateName(file.getOutfile(),
                         MaxLength.FILE_EXPID, "Outfile");
-                validateName(rawToProfileFiles.getGenomeVersion(),
+                validateName(file.getGenomeVersion(),
                         MaxLength.GENOME_VERSION, "Genome version");
-            }
+
         }
     }
 
     public PutProcessCommands(){
 
-        for(ProcessCommands pC : processCommands){
-            if(pC.getType().equals("bowtie")){
-                Process p = new RawToProfileProcess(pC.getType(), pC.getFiles());
-                processes.add(p);
-            }
+        for(FileToProcess file : files){
+
         }
     }
 
