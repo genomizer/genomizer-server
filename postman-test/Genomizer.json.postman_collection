@@ -20,7 +20,7 @@
 	"requests": [
 		{
 			"id": "2626075d-9fe0-b5ed-d660-0d19213f1586",
-			"headers": "Authorization: {{EnvVarAuthorization}}\n",
+			"headers": "Authorization: {{EnvVarToken}}\n",
 			"url": "http://localhost:7000/token",
 			"preRequestScript": "",
 			"pathVariables": {},
@@ -31,7 +31,7 @@
 			"tests": "tests[\"Response code\"] = responseCode.code === 401;",
 			"currentHelper": "normal",
 			"helperAttributes": {},
-			"time": 1432136508755,
+			"time": 1432195614757,
 			"name": "Token: invalid.",
 			"description": "Check that the token is no longer \nvalid once we've logged out.",
 			"collectionId": "28286ab2-d6a4-ede3-53db-c54fc3506853",
@@ -56,22 +56,23 @@
 			"description": "Log out.",
 			"collectionId": "28286ab2-d6a4-ede3-53db-c54fc3506853",
 			"responses": [],
-			"synced": false
+			"synced": false,
+			"owner": "46819"
 		},
 		{
 			"id": "6f14b4cd-7ba5-ceee-8ca7-d5f949900b39",
 			"headers": "Content-Type: application/json\n",
-			"url": "http://localhost:7000/login",
+			"url": "http://localhost:7000/login?Content-Type",
 			"preRequestScript": "",
 			"pathVariables": {},
 			"method": "POST",
 			"data": [],
 			"dataMode": "raw",
 			"version": 2,
-			"tests": "data = JSON.parse(responseBody);\ntests[\"Token is present\"] = \"token\" in data;\npostman.setEnvironmentVariable(\"EnvVarToken\", data.token);\ntests[\"Response code\"] = responseCode.code === 200;",
+			"tests": "data = JSON.parse(responseBody);\ntests[\"Token is present\"] = \"token\" in data;\npostman.setEnvironmentVariable(\"EnvVarToken\", data.token);\ntests[\"Response code\"] = responseCode.code === 200;\ntests[\"Role is present\"] = \"role\" in data;\ntests[\"Correct role is returned\"] = data.role === \"user\";",
 			"currentHelper": "normal",
 			"helperAttributes": {},
-			"time": 1432135900066,
+			"time": 1432195791351,
 			"name": "Login",
 			"description": "Login and set the token environment variable.",
 			"collectionId": "28286ab2-d6a4-ede3-53db-c54fc3506853",
@@ -97,7 +98,8 @@
 			"description": "Check that the token is valid.",
 			"collectionId": "28286ab2-d6a4-ede3-53db-c54fc3506853",
 			"responses": [],
-			"synced": false
+			"synced": false,
+			"owner": "46819"
 		}
 	]
 }
