@@ -134,7 +134,7 @@ public class RequestHandler implements HttpHandler {
             }
         }
 
-        command.setFields(uri, query, uuid, userType);
+        command.setFields(uri, query, Authenticate.getUsernameByID(uuid), userType);
 
 		try {
 			command.validate();

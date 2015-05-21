@@ -32,7 +32,7 @@ public class ErrorLogger {
 
 		String timeString = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(date);
 		String text = timeString + " : " + tag + " | " + logText;
-		
+
 		try {
 			file.createNewFile();
 
@@ -48,9 +48,11 @@ public class ErrorLogger {
 	public synchronized static void log(String username, Throwable exc) {
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
+		
 		exc.printStackTrace(pw);
 		String excString = sw.toString();
 		String[] excLines = excString.split("\n");
+
 		for (String line : excLines) {
 			log(username, line);
 			username = "      ";

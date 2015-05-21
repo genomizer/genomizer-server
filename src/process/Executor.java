@@ -5,6 +5,7 @@ import database.containers.FileTuple;
 import server.Debug;
 import server.ErrorLogger;
 import command.Command;
+import java.util.Arrays;
 
 import java.io.*;
 import java.nio.file.FileSystems;
@@ -64,9 +65,13 @@ public abstract class Executor {
 		File pathToExecutable = new File(FILEPATH + command[1]);
 
 		/* Checks if script can be executed, does not execute, throws excp.*/
+		Debug.log("[Executor.executeScript] Path to executable: "
+				+ pathToExecutable.toString());
 		isExecutable(pathToExecutable);
 
 		command[1] = pathToExecutable.getAbsolutePath();
+		Debug.log("[Executor.executeScript] Executing the command: "
+				+ Arrays.toString(command));
 		return executeCommand(command);
 
 	}

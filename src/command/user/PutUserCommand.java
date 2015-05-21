@@ -43,10 +43,10 @@ public class PutUserCommand extends Command {
     }
 
     /**
-     * Set username using uuid along with the usertype
+     * Set username using userName along with the usertype
      * @param uri the URI from the http request.
      * @param query the query of the request
-     * @param username the uuid from the http request.
+     * @param username the userName from the http request.
      * @param userType the userType
      */
     @Override

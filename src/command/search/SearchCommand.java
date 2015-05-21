@@ -40,7 +40,7 @@ public class SearchCommand extends Command {
 	/**
 	 * Set the UserType Uri and Uuid. annotations also set from uri.
 	 * @param uri the URI from the http request.
-	 * @param username the uuid from the http request.
+	 * @param username the userName from the http request.
 	 * @param userType the userType
 	 */
 	@Override

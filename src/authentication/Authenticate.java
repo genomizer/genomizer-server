@@ -59,7 +59,7 @@ public class Authenticate {
 
 	/**
 	 * updates the date for which the user did the most recent request
-	 * @param uuid the uuid of the user
+	 * @param uuid the userName of the user
 	 */
 	static public void updateLatestRequest(String uuid) {
 		if(latestRequests.containsKey(uuid)) {
@@ -69,7 +69,7 @@ public class Authenticate {
 
 
 	/**
-	 * Method used to get the id for a user.
+	 * Method used to get the id for an active user.
 	 *
 	 * @param username to get the id for.
 	 * @return the id representing the user.
@@ -81,6 +81,10 @@ public class Authenticate {
 			}
 		}
 		return null;
+	}
+
+	static public boolean isUserLoggedIn(String username) {
+		return (getID(username) == null ? false : true);
 	}
 
 	/**
