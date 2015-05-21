@@ -21,7 +21,9 @@ import transfer.Util;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.io.OutputStream;
+import java.net.URI;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -119,9 +121,16 @@ public class RequestHandler implements HttpHandler {
 
 		/*Get the user's role from the databaseAccessor.*/
         UserType userType = UserType.UNKNOWN;
+        
         try (DatabaseAccessor db = Command.initDB()) {
             userType = db.getRole(Authenticate.getUsernameByID(uuid));
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
+            Debug.log(e.toString());
+            ErrorResponse errorResponse = new ErrorResponse(HttpStatusCode.
+                    INTERNAL_SERVER_ERROR, "Could not retrieve the user " +
+                    "information.");
+            respond(errorResponse, exchange);
+        } catch (IOException e) {
             Debug.log(e.toString());
             ErrorResponse errorResponse = new ErrorResponse(HttpStatusCode.
                     INTERNAL_SERVER_ERROR, "Could not retrieve the user " +
