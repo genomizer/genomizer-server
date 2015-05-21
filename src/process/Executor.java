@@ -64,12 +64,13 @@ public abstract class Executor {
 		File pathToExecutable = new File(FILEPATH + command[1]);
 
 		/* Checks if script can be executed, does not execute, throws excp.*/
-		System.out.println(pathToExecutable.toString());
-		System.out.println("TEST");
+		Debug.log("[Executor.executeScript] Path to executable: "
+				+ pathToExecutable.toString());
 		isExecutable(pathToExecutable);
 
 		command[1] = pathToExecutable.getAbsolutePath();
-		System.out.println(Arrays.toString(command));
+		Debug.log("[Executor.executeScript] Executing the command: "
+				+ Arrays.toString(command));
 		return executeCommand(command);
 
 	}
