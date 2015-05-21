@@ -121,15 +121,17 @@ public class RequestHandler implements HttpHandler {
 
 		/*Get the user's role from the databaseAccessor.*/
         UserType userType = UserType.UNKNOWN;
-        
-        try (DatabaseAccessor db = Command.initDB()) {
-            userType = db.getRole(Authenticate.getUsernameByID(uuid));
-        } catch (SQLException | IOException e) {
-            Debug.log(e.toString());
-            ErrorResponse errorResponse = new ErrorResponse(HttpStatusCode.
-                    INTERNAL_SERVER_ERROR, "Could not retrieve the user " +
-                    "information.");
-            respond(errorResponse, exchange);
+
+        if (!commandClass.equals(PostLoginCommand.class)) {
+            try (DatabaseAccessor db = Command.initDB()) {
+                userType = db.getRole(Authenticate.getUsernameByID(uuid));
+            } catch (SQLException | IOException e) {
+                Debug.log(e.toString());
+                ErrorResponse errorResponse = new ErrorResponse(HttpStatusCode.
+                        INTERNAL_SERVER_ERROR, "Could not retrieve the user " +
+                        "information.");
+                respond(errorResponse, exchange);
+            }
         }
 
         command.setFields(uri, query, uuid, userType);
