@@ -106,8 +106,7 @@ public class ProcessHandler implements Callable<Response> {
 		}
 
 		Debug.log("PID: " + processCommand.getPID());
-		Debug.log("Process response: " +
-				((ProcessResponse) response).getMessage());
+		Debug.log("Process response: " + response.getMessage());
 
 		return response;
 
