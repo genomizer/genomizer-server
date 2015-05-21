@@ -3,6 +3,7 @@ package command.annotation;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import command.Command;
@@ -27,8 +28,8 @@ public class GetAnnotationCommand extends Command {
 	}
 
 	@Override
-	public void setFields(String uri, String query, String uuid,
-						  UserType userType) {
+	public void setFields(String uri, HashMap<String, String> query,
+						  String uuid, UserType userType) {
 		super.setFields(uri, query, uuid, userType);
 	}
 
