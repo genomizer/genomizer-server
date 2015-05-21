@@ -41,7 +41,6 @@ public class ProcessResponse extends Response {
 		date = new Date(System.currentTimeMillis());
 	}
 
-
 	public String getMessage() {
 		return message;
 	}
