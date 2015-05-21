@@ -3,7 +3,6 @@ package command.annotation;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
 import command.Command;
 import command.UserRights;
