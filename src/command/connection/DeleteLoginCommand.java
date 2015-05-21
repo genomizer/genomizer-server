@@ -23,12 +23,12 @@ public class DeleteLoginCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-		validateName(uuid, MaxLength.USERNAME, "Username");
+		validateName(userName, MaxLength.USERNAME, "Username");
 	}
 
 	@Override
 	public Response execute() {
-		String id = Authenticate.getID(uuid);
+		String id = Authenticate.getID(userName);
 		if(Authenticate.idExists(id)) {
 			Authenticate.deleteActiveUser(id);
 			return new MinimalResponse(HttpStatusCode.OK);

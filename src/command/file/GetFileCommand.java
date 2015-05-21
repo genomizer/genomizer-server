@@ -50,8 +50,8 @@ public class GetFileCommand extends Command {
 
 		try {
 			db = initDB();
-			fileTuple = db.getFileTuple(fileID);
-		} catch (SQLException | IOException e) {
+			fileTuple = db.getFileTuple(Integer.parseInt(fileID));
+		} catch (SQLException | IOException | NumberFormatException e) {
 			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 

@@ -46,7 +46,7 @@ public class PostAnnotationValueCommandTest {
 		PostAnnotationValueCommand c = gson.fromJson(json, PostAnnotationValueCommand.class);
 		HashMap<String, String> query = new HashMap<>();
 		query.put("key", "val");
-		c.setFields("uri", query, "uuid", UserType.ADMIN);
+		c.setFields("uri", query, "userName", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -71,7 +71,7 @@ public class PostAnnotationValueCommandTest {
 		PostAnnotationValueCommand c = gson.fromJson(json, PostAnnotationValueCommand.class);
 		HashMap<String, String> query = new HashMap<>();
 		query.put("key", "val");
-		c.setFields("uri", query, "uuid", UserType.ADMIN);
+		c.setFields("uri", query, "userName", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -91,7 +91,7 @@ public class PostAnnotationValueCommandTest {
 		PostAnnotationValueCommand c = gson.fromJson(json, PostAnnotationValueCommand.class);
 		HashMap<String, String> query = new HashMap<>();
 		query.put("key", "val");
-		c.setFields("uri", query, "uuid", UserType.ADMIN);
+		c.setFields("uri", query, "userName", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -111,7 +111,7 @@ public class PostAnnotationValueCommandTest {
 		PostAnnotationValueCommand c = gson.fromJson(json, PostAnnotationValueCommand.class);
 		HashMap<String, String> query = new HashMap<>();
 		query.put("key", "val");
-		c.setFields("uri", query, "uuid", UserType.ADMIN);
+		c.setFields("uri", query, "userName", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -136,7 +136,7 @@ public class PostAnnotationValueCommandTest {
 		PostAnnotationValueCommand c = gson.fromJson(json, PostAnnotationValueCommand.class);
 		HashMap<String, String> query = new HashMap<>();
 		query.put("key", "val");
-		c.setFields("uri", query, "uuid", UserType.ADMIN);
+		c.setFields("uri", query, "userName", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -156,7 +156,7 @@ public class PostAnnotationValueCommandTest {
 		PostAnnotationValueCommand c = gson.fromJson(json, PostAnnotationValueCommand.class);
 		HashMap<String, String> query = new HashMap<>();
 		query.put("key", "val");
-		c.setFields("uri", query, "uuid", UserType.ADMIN);
+		c.setFields("uri", query, "userName", UserType.ADMIN);
 		c.validate();
 
 		fail("Expected ValidateException to be thrown.");
@@ -176,7 +176,7 @@ public class PostAnnotationValueCommandTest {
 		PostAnnotationValueCommand c = gson.fromJson(json, PostAnnotationValueCommand.class);
 		HashMap<String, String> query = new HashMap<>();
 		query.put("key", "val");
-		c.setFields("uri", query, "uuid", UserType.ADMIN);
+		c.setFields("uri", query, "userName", UserType.ADMIN);
 		c.validate();
 
 		assertTrue(true);
@@ -196,7 +196,7 @@ public class PostAnnotationValueCommandTest {
 		PostAnnotationValueCommand c = gson.fromJson(json, PostAnnotationValueCommand.class);
 		HashMap<String, String> query = new HashMap<>();
 		query.put("key", "val");
-		c.setFields("uri", query, "uuid", UserType.USER);
+		c.setFields("uri", query, "userName", UserType.USER);
 
 		c.validate();
 	}
@@ -214,7 +214,7 @@ public class PostAnnotationValueCommandTest {
 		PostAnnotationValueCommand c = gson.fromJson(json, PostAnnotationValueCommand.class);
 		HashMap<String, String> query = new HashMap<>();
 		query.put("key", "val");
-		c.setFields("uri", query, "uuid", UserType.GUEST);
+		c.setFields("uri", query, "userName", UserType.GUEST);
 
 		c.validate();
 		fail();

@@ -31,13 +31,13 @@ public abstract class Command {
 	 */
 
 	/*These are valid characters that are used with the validation method.*/
-	final protected String validCharacters = "^, A-Z, a-z, 0-9, space, _ and .";
+	final protected String validCharacters = "A-Z, a-z, 0-9, -, _ and .";
 
 	/*Keeps track of the user rights level for the command sender. */
 	protected UserType userType = UserType.UNKNOWN;
 
-	/*Contains the user id.*/
-	protected String uuid;
+	/*Contains the user name.*/
+	protected String userName;
 
 	/**
 	 * Returns the number of expected fields in the URI of the request that
@@ -60,7 +60,7 @@ public abstract class Command {
 	 */
 	public void setFields(String uri, HashMap<String, String> query,
 						  String username, UserType userType){
-		this.uuid = username;
+		this.userName = username;
 		this.userType = userType;
 	}
 
@@ -99,7 +99,7 @@ public abstract class Command {
 	 * @return boolean depending on validation result.
 	 */
 	public boolean hasInvalidCharacters(String string) {
-		Pattern p = Pattern.compile("[^A-Za-z0-9_\\.\\^ ]");
+		Pattern p = Pattern.compile("[^A-Za-z0-9-_.]");
 		return p.matcher(string).find();
 	}
 
@@ -122,9 +122,8 @@ public abstract class Command {
 					+ field.toLowerCase() + ".");
 		}
 		if(string.length() > maxLength || string.length() < 1) {
-			throw new ValidateException(HttpStatusCode.BAD_REQUEST, field + ": " +
-					string + " has to be between 1 and " + maxLength +
-					" characters long.");
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST, field +
+					" has to be between 1 and " + maxLength + " characters long.");
 		}
 		if(hasInvalidCharacters(string)) {
 			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Invalid" +
@@ -169,9 +168,8 @@ public abstract class Command {
 					+ field.toLowerCase() + ".");
 		}
 		if(string.length() > maxLength || string.length() < 1) {
-			throw new ValidateException(HttpStatusCode.BAD_REQUEST, field + ": " +
-					string + " has to be between 1 and " + maxLength +
-					" characters long.");
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST, field +
+					" has to be between 1 and " + maxLength + " characters long.");
 		}
 	}
 
