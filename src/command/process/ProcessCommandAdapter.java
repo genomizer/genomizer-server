@@ -19,6 +19,7 @@ public class ProcessCommandAdapter implements JsonDeserializer<ProcessCommand> {
 
     static {
         CLASS_MAP.put("bowtie", BowtieProcessCommand.class);
+        CLASS_MAP.put("ratio", RatioProcessCommand.class);
     }
 
     @Override

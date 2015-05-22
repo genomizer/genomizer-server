@@ -1,4 +1,4 @@
-package command.test.processCommand;
+package command.test.processCommands;
 /**
  * File:        ProcessCommandAdapterTest.java
  * Author:      Niklas Fries
@@ -34,8 +34,10 @@ public class ProcessCommandAdapterTest {
         ProcessCommand command = gson.fromJson(json, ProcessCommand.class);
         assertEquals(BowtieProcessCommand.class, command.getClass());
 
-        BowtieProcessCommand bowtieProcessCommand = (BowtieProcessCommand) command;
-        BowtieProcessCommand.BowtieProcessFile file = bowtieProcessCommand.getFiles().get(0);
+        BowtieProcessCommand bowtieProcessCommand =
+                (BowtieProcessCommand) command;
+        BowtieProcessCommand.BowtieProcessFile file =
+                bowtieProcessCommand.getFiles().get(0);
 
         assertEquals("infileName", file.getInfile());
         assertEquals("outfileName", file.getOutfile());
