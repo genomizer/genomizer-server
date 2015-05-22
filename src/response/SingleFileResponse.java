@@ -14,8 +14,9 @@ public class SingleFileResponse extends Response {
 
     private JsonObject jsonObj = new JsonObject();
 
-    public SingleFileResponse(FileTuple fileTuple){
+    public SingleFileResponse(int code, FileTuple fileTuple){
 
+        this.code = code;
         GsonBuilder gsonBuilder = new GsonBuilder();
         Gson gson = gsonBuilder.setPrettyPrinting().create();
         FileInformation fileInfo = new FileInformation(fileTuple);
