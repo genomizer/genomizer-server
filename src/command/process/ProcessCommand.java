@@ -6,9 +6,6 @@ package command.process;
  * Date:        2015-05-22
  */
 
-/**
- * TODO class description goes here...
- */
 public abstract class ProcessCommand {
 
 }

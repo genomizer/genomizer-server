@@ -14,24 +14,21 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-/**
- * TODO class description goes here...
- */
 public class ProcessCommandAdapterTest {
 
     @Test
     public void shouldParseBowtieCommand() throws Exception {
         String json = "{\"type\": \"bowtie\", " +
-                            "\"files\": [" +
-                                "{" +
-                                    "\"infile\": \"infileName\"," +
-                                    "\"outfile\": \"outfileName\"," +
-                                    "\"genomeVersion\": \"theGR\"," +
-                                    "\"params\": \"theParams\"," +
-                                    "\"keepSam\": true" +
-                                "}" +
-                            "]" +
-                        "}";
+                      "\"files\": [" +
+                      "{" +
+                      "\"infile\": \"infileName\"," +
+                      "\"outfile\": \"outfileName\"," +
+                      "\"genomeVersion\": \"theGR\"," +
+                      "\"params\": \"theParams\"," +
+                      "\"keepSam\": true" +
+                      "}" +
+                      "]" +
+                      "}";
 
         Gson gson = ProcessCommandAdapter.getProcessCommandGson();
         ProcessCommand command = gson.fromJson(json, ProcessCommand.class);

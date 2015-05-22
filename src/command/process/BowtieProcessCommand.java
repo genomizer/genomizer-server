@@ -10,30 +10,27 @@ import com.google.gson.annotations.Expose;
 
 import java.util.ArrayList;
 
-/**
- * TODO class description goes here...
- */
 public class BowtieProcessCommand extends ProcessCommand {
 
     @Expose
-    protected ArrayList<BowtieProcessFile> files;
+    private ArrayList<BowtieProcessFile> files;
 
     public class BowtieProcessFile {
 
         @Expose
-        protected String infile;
+        private String infile;
 
         @Expose
-        protected String outfile;
+        private String outfile;
 
         @Expose
-        protected String params;
+        private String params;
 
         @Expose
-        protected String genomeVersion;
+        private String genomeVersion;
 
         @Expose
-        protected boolean keepSam;
+        private boolean keepSam;
 
         public String getInfile() {
             return infile;
