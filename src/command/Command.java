@@ -1,15 +1,15 @@
 package command;
 
+import database.DatabaseAccessor;
+import database.subClasses.UserMethods.UserType;
+import response.HttpStatusCode;
+import response.Response;
+import server.ServerSettings;
+
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.regex.Pattern;
-
-import response.HttpStatusCode;
-import response.Response;
-import server.ServerSettings;
-import database.DatabaseAccessor;
-import database.subClasses.UserMethods.UserType;
 
 /**
  * This class contains common methods and attributes that are needed
@@ -31,7 +31,7 @@ public abstract class Command {
 	 */
 
 	/*These are valid characters that are used with the validation method.*/
-	final protected String validCharacters = "^, A-Z, a-z, 0-9, space, _ and .";
+	final protected String validCharacters = "A-Z, a-z, 0-9, -, _ and .";
 
 	/*Keeps track of the user rights level for the command sender. */
 	protected UserType userType = UserType.UNKNOWN;
@@ -99,7 +99,7 @@ public abstract class Command {
 	 * @return boolean depending on validation result.
 	 */
 	public boolean hasInvalidCharacters(String string) {
-		Pattern p = Pattern.compile("[^A-Za-z0-9_\\.\\^ ]");
+		Pattern p = Pattern.compile("[^A-Za-z0-9-_.]");
 		return p.matcher(string).find();
 	}
 

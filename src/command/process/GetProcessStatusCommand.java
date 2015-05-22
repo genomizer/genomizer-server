@@ -1,8 +1,5 @@
 package command.process;
 
-import java.util.LinkedList;
-import java.util.Calendar;
-
 import command.Command;
 import command.Process;
 import command.UserRights;
@@ -11,6 +8,9 @@ import response.GetProcessStatusResponse;
 import response.Response;
 import server.Doorman;
 import server.ProcessPool;
+
+import java.util.Calendar;
+import java.util.LinkedList;
 
 /**
  * Fetches status of all processes that have been added to the server. Will be

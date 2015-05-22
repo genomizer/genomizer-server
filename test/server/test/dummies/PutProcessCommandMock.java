@@ -20,7 +20,7 @@ public class PutProcessCommandMock extends PutProcessCommand {
 		try {
 			Thread.sleep(1000);
 			if (this.getUsername().equals("philge")) {
-				return new ErrorResponse(HttpStatusCode.METHOD_NOT_YET_IMPLEMENTED, "Something bad happened");
+				return new ErrorResponse(HttpStatusCode.NOT_IMPLEMENTED, "Something bad happened");
 			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();

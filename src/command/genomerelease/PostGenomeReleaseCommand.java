@@ -1,22 +1,20 @@
 package command.genomerelease;
 
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.ArrayList;
-
 import com.google.gson.annotations.Expose;
-
 import command.Command;
 import command.UserRights;
 import command.ValidateException;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
-
 import response.AddGenomeReleaseResponse;
 import response.ErrorResponse;
 import response.HttpStatusCode;
 import response.Response;
 import server.Debug;
+
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  * Class used to handle adding a genome release.
