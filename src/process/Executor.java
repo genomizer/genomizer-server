@@ -268,20 +268,30 @@ public abstract class Executor {
 	 */
 	private boolean deleteFiles(File[] fileList) throws SQLException, IOException{
 		boolean isOk = true;
+
 		if (fileList != null){
 			for (File fileToDelete : fileList) {
-				if (fileToDelete.isFile()) {
-					if (fileToDelete.delete()) {
-						FileTuple fileTuple = db.getFileTuple(fileToDelete
-								.getAbsolutePath());
-						db.deleteFile(fileTuple.path);
-						ErrorLogger.log("SYSTEM", "Deleting "
-										  + fileToDelete.toString());
-					} else {
-						isOk = false;
-						ErrorLogger.log("SYSTEM", "Deletion of " +
-										  fileToDelete + " failed.");
+
+				// If it is a directory and has files, delete contents first
+				if (fileToDelete.isDirectory()) {
+					File[] filesArr = fileToDelete.listFiles();
+
+					if (filesArr.length > 0) {
+						deleteFiles(filesArr);
 					}
+				}
+
+				// Delete file/folder(empty)
+				if (fileToDelete.delete()) {
+					FileTuple fileTuple = db.getFileTuple(fileToDelete
+							.getAbsolutePath());
+					db.deleteFile(fileTuple.path);
+					ErrorLogger.log("SYSTEM", "Deleting "
+							+ fileToDelete.toString());
+				} else {
+					isOk = false;
+					ErrorLogger.log("SYSTEM", "Deletion of " +
+							fileToDelete + " failed.");
 				}
 			}
 		}
