@@ -136,7 +136,11 @@ public class ProcessHandler implements Callable<Response> {
 			return (minutes + " minutes, " + seconds + " seconds");
 		}
 
-		return (seconds + " seconds");
+		if (seconds > 0) {
+			return (seconds + " seconds");
+		}
+
+		return (diffMillis + " ms");
 	}
 
 
