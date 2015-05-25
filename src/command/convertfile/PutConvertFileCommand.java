@@ -63,8 +63,8 @@ public class PutConvertFileCommand extends Command {
         FileTuple filetuple;
 
         try {
-            filetuple = convHandler.convertProfileData(toformat,Integer.getInteger(fileid));
-        } catch (SQLException | IOException e) {
+            filetuple = convHandler.convertProfileData(toformat,Integer.parseInt(fileid));
+        } catch (SQLException | IOException | NumberFormatException e) {
             return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Could not " +
                     "convert file : " + e.getMessage());
 
