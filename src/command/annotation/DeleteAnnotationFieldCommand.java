@@ -61,8 +61,8 @@ public class DeleteAnnotationFieldCommand extends Command {
 		} catch (SQLException e) {
 			response = new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
 					"Deletion of annotation label '" + label +
-							"' unsuccessful due to temporary problems with " +
-							"the database.");
+							"' unsuccessful due to temporary database " +
+							"problems.");
 			Debug.log("Reason: " + e.getMessage());
 		} catch (IOException e) {
 			response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
