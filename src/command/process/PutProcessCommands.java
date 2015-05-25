@@ -3,6 +3,7 @@ import com.google.gson.annotations.Expose;
 import command.Command;
 import command.UserRights;
 import command.ValidateException;
+import database.DatabaseAccessor;
 import database.constants.MaxLength;
 import database.subClasses.UserMethods;
 import response.ErrorResponse;
@@ -11,6 +12,7 @@ import response.ProcessResponse;
 import response.Response;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.UUID;
 
 /**
  + * Command to handle a list of processes to execute sequentially on an experiment.
@@ -20,6 +22,10 @@ public class PutProcessCommands extends Command{
 
     @Expose
     private String expId = null;
+
+    private long timestamp;
+
+    private UUID PID;
 
     @Expose
     private ArrayList<ProcessFiles> processCommands = new ArrayList<>();
@@ -86,4 +92,28 @@ public class PutProcessCommands extends Command{
         //return new ProcessResponse(HttpStatusCode.OK, "Processing of experiment: "+expId+" has completed.");
                 return null;
         }
+
+    public void setTimestamp(long currentTimeMillis) {
+        this.timestamp = currentTimeMillis;
+    }
+    public long getTimestamp(){
+        return this.timestamp;
+    }
+
+
+    public String getExpId() {
+        return expId;
+    }
+
+    public UUID getPID() {
+        return PID;
+    }
+
+    public void setPID(UUID PID) {
+        this.PID = PID;
+    }
+
+    public String getUsername() {
+        return userName;
+    }
     }
