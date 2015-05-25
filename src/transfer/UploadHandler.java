@@ -144,7 +144,8 @@ public class UploadHandler {
                                 throws SQLException, IOException {
 
         try( DatabaseAccessor db = Command.initDB() ) {
-            FileTuple  ft = db.getFileTupleInProgress(absUploadPath);
+
+            FileTuple  ft = db.getFileTuple(absUploadPath);
             db.updateFileSize(ft);
         }
     }
