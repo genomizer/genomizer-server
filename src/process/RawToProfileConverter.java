@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Stack;
 
 /**
@@ -47,6 +48,13 @@ public class RawToProfileConverter extends Executor {
 		validator = new ParameterValidator();
 	}
 
+
+	public String procedureRaw(String params, String infile, String outfile, String keepSam, String
+			genomeVersion, String referenceGenome, Map.Entry<String,String> filepaths) throws ProcessException{
+		return null;
+	}
+
+
 	/**
 	 * 1. runs the bowtie program to get a .sam file.
 	 * 2. runs a linux shell command to sort the sam file.
@@ -71,6 +79,7 @@ public class RawToProfileConverter extends Executor {
 	 *            Filepath to where the .wig file should be placed.
 	 * @throws ProcessException
 	 */
+
 	public String procedure(String[] parameters, String inFolder,
 			String outFilePath) throws ProcessException {
 

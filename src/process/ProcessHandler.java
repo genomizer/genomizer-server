@@ -2,6 +2,9 @@ package process;
 
 import command.process.PutProcessCommand;
 import server.ErrorLogger;
+
+import java.util.Map;
+
 /**
  * Class that acts as a handler for the procedure and calculation part of the
  * program. the rest of the serverside should always go through this class when
@@ -49,4 +52,14 @@ public class ProcessHandler {
 			}
 			return logString;
 	}
+	public void executeRawToProfileProcess(String params, String infile, String outfile, String keepSam, String
+			genomeVersion, String referenceGenome, Map.Entry<String,String> filepaths) throws ProcessException{
+		String logString = "";
+		RawToProfileConverter rawToProfileConverter =
+				new RawToProfileConverter();
+		logString = rawToProfileConverter.procedureRaw(params, infile, outfile, keepSam, genomeVersion, referenceGenome, filepaths);
+
+		ErrorLogger.log("SYSTEM","Process: "+logString);
+	}
+
 }

@@ -3,6 +3,7 @@ package command.process;
 import com.google.gson.annotations.Expose;
 import database.DatabaseAccessor;
 import database.containers.Genome;
+import process.ProcessException;
 import process.ProcessHandler;
 import server.Debug;
 import java.io.IOException;
@@ -27,17 +28,17 @@ public RawToProfileProcess(String type, ProcessFiles files, Map.Entry<String,Str
 @Override
     public void runProcess() throws UnsupportedOperationException{
         DatabaseAccessor db = null;
-        ProcessHandler processHandler;
         try {
             db = initDB();
-            processHandler = new ProcessHandler();
+            ProcessHandler processHandler = new ProcessHandler();
             //Get the genome information from the database.
             Genome g = db.getGenomeRelease(files.getGenomeVersion());
 
             if (g == null) {
                 throw new UnsupportedOperationException("Could not find genome version: " +
                         files.getGenomeVersion());
-                } else {
+                }
+            else {
                 //Get the path of the genome.
                 String genomeFolderPath = g.folderPath;
                 //Get the prefix of the genome files.
@@ -58,31 +59,24 @@ public RawToProfileProcess(String type, ProcessFiles files, Map.Entry<String,Str
                 }
 
                 String referenceGenome = genomeFolderPath + genomeFilePrefix;
-                /*
-	+ try {
-	+ processHandler.rawToProfile(params, infile, outfile, keepSam, genomeVersion, referenceGenome, filepaths);
-	+
-	+ } catch (ProcessException e) {
-	+ Debug.log("Error when processing. Could not execute raw to profile process. "+e.getMessage());
-	+ throw new UnsupportedOperationException("Error when processing. Could not execute " +
-	+ "raw to profile process");
-	+ } catch (SQLException | IOException e) {
-	+ Debug.log("Error when processing. Could not execute raw to profile process due to temporary " +
-	+ "problems with database "+e.getMessage());
-	+ throw new UnsupportedOperationException("Error when processing. Could not " +
-	+ "execute raw to profile process due to temporary problems with database.");
-	+ }
-	+ */}
-            } catch (SQLException | IOException e) {
+
+	            try {
+                    processHandler.executeRawToProfileProcess(files.getParams(), files.getInfile(), files.getOutfile(),
+                            files.getKeepSam(), files.getGenomeVersion(), referenceGenome, filepaths);
+                }catch (ProcessException e){
+                        Debug.log("Error when processing. Could not execute raw to profile process. " + e.getMessage());
+                        throw new UnsupportedOperationException("Error when processing. Could not execute " + "raw to profile process");
+	            }
+            }
+        } catch (SQLException | IOException e) {
             Debug.log("Error when processing. Could not execute raw to profile process due to temporary " +
                     "problems with database "+e.getMessage());
-
-                    throw new UnsupportedOperationException("Error when processing. Could not execute raw to " +
+            throw new UnsupportedOperationException("Error when processing. Could not execute raw to " +
                     "profile process due to temporary problems with database.");
             } finally{
             if (db != null) {
                 db.close();
                 }
             }
-        }
     }
+}
