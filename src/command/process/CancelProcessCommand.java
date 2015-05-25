@@ -48,8 +48,8 @@ public class CancelProcessCommand extends Command {
 
     @Override
     public void setFields(String uri, HashMap<String, String> query,
-                          String username, UserMethods.UserType userType) {
-        super.setFields(uri, query, username, userType);
+                          String uuid, UserMethods.UserType userType) {
+        super.setFields(uri, query, uuid, userType);
         this.userType = userType;
     }
 }

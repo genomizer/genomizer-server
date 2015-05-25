@@ -254,7 +254,7 @@ public class PostAnnotationFieldCommandTest {
 
 		String json = "{\"name\":\"species\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
 		PostAnnotationFieldCommand c = gson.fromJson(json, PostAnnotationFieldCommand.class);
-		c.setFields("uri", null, "userName", UserType.USER);
+		c.setFields("uri", null, "uuid", UserType.USER);
 
 		c.validate();
 	}
@@ -270,7 +270,7 @@ public class PostAnnotationFieldCommandTest {
 
 		String json = "{\"name\":\"species\",\"type\":[\"fly\",\"rat\",\"human\"],\"default\":\"human\",\"forced\":true}";
 		PostAnnotationFieldCommand c = gson.fromJson(json, PostAnnotationFieldCommand.class);
-		c.setFields("uri", null, "userName", UserType.GUEST);
+		c.setFields("uri", null, "uuid", UserType.GUEST);
 
 		c.validate();
 		fail();

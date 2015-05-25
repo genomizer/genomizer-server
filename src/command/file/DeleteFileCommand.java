@@ -33,9 +33,9 @@ public class DeleteFileCommand extends Command {
 
 	@Override
 	public void setFields(String uri, HashMap<String, String> query, 
-                          String username, UserType userType) {
+                          String uuid, UserType userType) {
 
-		super.setFields(uri, query, username, userType);
+		super.setFields(uri, query, uuid, userType);
 		fileID = uri.split("/")[2];
 	}
 

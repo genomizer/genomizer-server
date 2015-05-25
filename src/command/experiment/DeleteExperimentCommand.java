@@ -34,14 +34,14 @@ public class DeleteExperimentCommand extends Command {
 	/**
 	 * Set the UserType Uri and Uuid. expID also set from uri.
 	 * @param uri the URI from the http request.
-	 * @param username the userName from the http request.
+	 * @param uuid the uuid from the http request.
 	 * @param userType the userType
 	 */
 	@Override
 	public void setFields(String uri, HashMap<String, String> query,
-						  String username, UserType userType) {
+						  String uuid, UserType userType) {
 
-		super.setFields(uri, query, username, userType);
+		super.setFields(uri, query, uuid, userType);
 		expID = uri.split("/")[2];
 	}
 

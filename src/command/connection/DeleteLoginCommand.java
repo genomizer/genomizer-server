@@ -16,6 +16,8 @@ import response.Response;
  * @version 1.1
  */
 public class DeleteLoginCommand extends Command {
+
+
 	@Override
 	public int getExpectedNumberOfURIFields() {
 		return 1;
@@ -23,14 +25,14 @@ public class DeleteLoginCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-		validateName(userName, MaxLength.USERNAME, "Username");
+		validateName(Authenticate.getUsernameByID(uuid), MaxLength.USERNAME, "Username");
 	}
 
 	@Override
 	public Response execute() {
-		String id = Authenticate.getID(userName);
-		if(Authenticate.idExists(id)) {
-			Authenticate.deleteActiveUser(id);
+
+		if(Authenticate.idExists(uuid)) {
+			Authenticate.deleteActiveUser(uuid);
 			return new MinimalResponse(HttpStatusCode.OK);
 		} else {
 			return 	new ErrorResponse(HttpStatusCode.NOT_FOUND,

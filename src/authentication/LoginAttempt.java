@@ -39,9 +39,9 @@ public class LoginAttempt {
 	}
 
 	/**
-	 * Getter for attribute userName
+	 * Getter for attribute uuid
 	 *
-	 * @return string userName
+	 * @return string uuid
 	 */
 	public String getUUID() {
 		return username;

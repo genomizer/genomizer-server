@@ -23,12 +23,12 @@ public class IsTokenValidCommand extends Command {
 
 	/**
 	 * Constructs a new instance of IsTokenValidCommand using the supplied
-	 * userName.
+	 * uuid.
 	 * @param uuid the unique user identification.
 	 */
 	public IsTokenValidCommand(String uuid) {
 
-		this.userName = uuid;
+		this.uuid = uuid;
 	}
 
 	@Override
@@ -38,7 +38,7 @@ public class IsTokenValidCommand extends Command {
 
 	@Override
 	public Response execute() {
-		int code = Authenticate.idExists(userName) ? HttpStatusCode.OK :
+		int code = Authenticate.idExists(uuid) ? HttpStatusCode.OK :
 				HttpStatusCode.UNAUTHORIZED;
 		return new MinimalResponse(code);
 	}

@@ -85,7 +85,7 @@ public class PutUserCommand extends Command {
                     + username);
         }
 
-        LoginAttempt login = Authenticate.login(username, oldPassword, dbHash);
+        LoginAttempt login = Authenticate.login(uuid, username, oldPassword, dbHash);
 
         if(login.wasSuccessful()) {
             try {

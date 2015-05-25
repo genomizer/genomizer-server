@@ -85,7 +85,7 @@ public class PostLoginCommand extends Command {
 			return new ErrorResponse(HttpStatusCode.UNAUTHORIZED, "Login failed, invalid username");
 		}
 
-		LoginAttempt login = Authenticate.login(null, username, password, dbHash);
+		LoginAttempt login = Authenticate.login(uuid, username, password, dbHash);
 
 		if(!login.wasSuccessful()) {
 			Debug.log("LOGIN WAS UNSUCCESSFUL FOR: " + username + ". REASON: " +

@@ -36,8 +36,8 @@ public abstract class Command {
 	/*Keeps track of the user rights level for the command sender. */
 	protected UserType userType = UserType.UNKNOWN;
 
-	/*Contains the user name.*/
-	protected String userName;
+	/*Contains the user's uuid.*/
+	protected String uuid = null;
 
 	/**
 	 * Returns the number of expected fields in the URI of the request that
@@ -55,12 +55,12 @@ public abstract class Command {
 	 * of this function should make sure the necessary information is set.
 	 * @param uri isn't used. Override it to use it.
 	 * @param query
-	 * @param username the UUID for the user who made the request.
+	 * @param uuid the UUID for the user who made the request.
 	 * @param userType the user type for the command caller.
 	 */
 	public void setFields(String uri, HashMap<String, String> query,
-						  String username, UserType userType){
-		this.userName = username;
+						  String uuid, UserType userType){
+		this.uuid = uuid;
 		this.userType = userType;
 	}
 

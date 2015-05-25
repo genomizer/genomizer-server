@@ -27,15 +27,15 @@ public class AuthenticateTest {
      */
     @Test
     public void addUserTest() {
-        Authenticate.updateActiveUser("TEST");
-        assertNotNull(Authenticate.updateActiveUser("TEST"));
+        Authenticate.updateActiveUser("uuid", "username");
+        assertNotNull(Authenticate.updateActiveUser("uuid", "username"));
     }
     /**
      * @return If the assigned user excists or not.
      */
     @Test
     public void userExistsTest(){
-        String uuid = Authenticate.updateActiveUser("TEST");
+        String uuid = Authenticate.updateActiveUser("uuid", "username");
         assertTrue(Authenticate.idExists(uuid));
     }
     /**
@@ -43,23 +43,31 @@ public class AuthenticateTest {
      */
     @Test
     public void getID(){
-        Authenticate.updateActiveUser("TEST");
-        assertNotNull(Authenticate.getID("TEST"));
+        Authenticate.updateActiveUser("uuid", "username");
+        assertTrue(Authenticate.idExists("uuid"));
     }
     /**
      * @return If a ID exists.
      */
     @Test
     public void idExists(){
-        String uuid = Authenticate.updateActiveUser("TEST");
+        String uuid = Authenticate.updateActiveUser("uuid", "username");
         assertTrue(Authenticate.idExists(uuid));
     }
     /**
-     * @return If a user can get retrieved.
+     * @return If a user can get retrieved for null.
      */
     @Test
     public void getUsernameTest(){
-        String uuid = Authenticate.updateActiveUser("TEST");
+        String uuid = Authenticate.updateActiveUser(null, "username");
         assertNotNull(Authenticate.getUsernameByID(uuid));
+    }
+    /**
+     * @return If a user can get retrieved for a specific uuid.
+     */
+    @Test
+    public void getUsernameTest2(){
+        Authenticate.updateActiveUser("uuid", "username");
+        assertNotNull(Authenticate.getUsernameByID("uuid"));
     }
 }
