@@ -23,11 +23,13 @@ import java.sql.SQLException;
  * @version 1.1
  */
 public class PostLoginCommand extends Command {
+
 	@Expose
 	private String username = null;
 
 	@Expose
 	private String password = null;
+
 
 	@Override
 	public int getExpectedNumberOfURIFields() {
@@ -83,7 +85,7 @@ public class PostLoginCommand extends Command {
 			return new ErrorResponse(HttpStatusCode.UNAUTHORIZED, "Login failed, invalid username");
 		}
 
-		LoginAttempt login = Authenticate.login(username, password, dbHash);
+		LoginAttempt login = Authenticate.login(null, username, password, dbHash);
 
 		if(!login.wasSuccessful()) {
 			Debug.log("LOGIN WAS UNSUCCESSFUL FOR: " + username + ". REASON: " +
@@ -93,7 +95,7 @@ public class PostLoginCommand extends Command {
 		}
 
 		Debug.log("LOGIN WAS SUCCESSFUL FOR: "+ username + ". GAVE UUID: " +
-				Authenticate.getID(username));
+				login.getUUID());
 		return new LoginResponse(200, login.getUUID());
 	}
 }

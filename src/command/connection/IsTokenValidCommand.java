@@ -15,7 +15,6 @@ import response.Response;
 @Deprecated
 public class IsTokenValidCommand extends Command {
 
-	public IsTokenValidCommand() {}
 
 	@Override
 	public int getExpectedNumberOfURIFields() {
@@ -39,7 +38,7 @@ public class IsTokenValidCommand extends Command {
 
 	@Override
 	public Response execute() {
-		int code = Authenticate.isUserLoggedIn(userName) ? HttpStatusCode.OK :
+		int code = Authenticate.idExists(userName) ? HttpStatusCode.OK :
 				HttpStatusCode.UNAUTHORIZED;
 		return new MinimalResponse(code);
 	}

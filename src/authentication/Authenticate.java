@@ -9,7 +9,6 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 
-
 /**
  * Class used to authenticate users and privileges.
  *
@@ -17,125 +16,134 @@ import java.util.concurrent.ConcurrentHashMap;
  * @version 1.0
  */
 public class Authenticate {
-
-	// These can be modified from the InteractiveUuidsRemover thread.
+	// These can be modified from the InactiveUuidsRemover thread.
 	private static ConcurrentHashMap<String, String> activeUsersID = new ConcurrentHashMap<>();
+
 	private static ConcurrentHashMap<String, Date> latestRequests = new ConcurrentHashMap<>();
 
+	private static final int MAXIMUM_LOGINS = 10;
 
-	static public LoginAttempt login(String username, String password, String dbHash) {
+
+	/**
+	 * Creates a login attempt from the username and password and returns the
+	 * result as a LoginAttempt.
+	 * @param uuid The uuid for the user.
+	 * @param username The username for the user.
+	 * @param password The password for the user.
+	 * @param dbHash The hash used in encrypting the password.
+	 * @return A loginAttempt containing the information about the login.
+	 */
+	static public LoginAttempt login(String uuid, String username, String password, String dbHash) {
 
 		if(BCrypt.checkpw(password,dbHash))
-			return new LoginAttempt(true, updateActiveUser(username), null);
+			return new LoginAttempt(true, updateActiveUser(uuid, username), null);
 
 		else
 			return new LoginAttempt(false, null, "Incorrect username or password.");
 	}
-	
+
+
 	/**
-	 * Method used to update active users. The user is added to the list of
-	 * active users or the user is updated.
-	 *
-	 * @param username to add or update.
+	 * Method to update the active user. If the user isn't currently logged in,
+	 * the user is added to the active users list.
+	 * @param uuid The uuid of the requester.
+	 * @param username The username of the requester.
+	 * @return The correct uuid for the requester.
 	 */
-	static public String updateActiveUser(String username) {
+	static public String updateActiveUser(String uuid, String username) {
 
-		if(activeUsersID.containsValue(username)) {
+		if(!(uuid==null) && activeUsersID.containsValue(uuid)) {
 
-			Iterator<String> uuids = activeUsersID.keySet().iterator();
-			String next_uuid = uuids.next();
-			while(!activeUsersID.get(next_uuid).equals(username)) {
-				next_uuid = uuids.next();
-			}
-
-			updateLatestRequest(next_uuid);
-			return next_uuid;
+			updateLatestRequest(uuid);
+			return uuid;
 		}
 
-		String uuid = UUID.randomUUID().toString();
+		uuid = UUID.randomUUID().toString();
 
 		activeUsersID.put(uuid, username);
 		latestRequests.put(uuid, new Date());
 
+		cleanUpLogIns(username);
+
 		return uuid;
 	}
 
-	/**
-	 * Updates the date for which the user did the most recent request
-	 * @param username The username of the user
-	 */
-	static public void updateLatestRequest(String username) {
 
-		if(latestRequests.containsKey(username)) {
-			latestRequests.put(username, new Date());
-		}
-	}
+	/* Checks if there are too many logins for the username and removes the
+	oldest one.*/
+	static private void cleanUpLogIns(String username){
 
+		int currentLogIns = 0;
+		String uuid = null;
+		Date date = null;
 
-	/**
-	 * Method which returns the uuid for an active user.
-	 *
-	 * @param username Username to get the uuid for.
-	 * @return The uuid representing the user or null if that user could not be
-	 * 			found.
-	 */
-	static public String getID(String username) {
-
-		for (String key : activeUsersID.keySet()) {
-			if(username.equals(activeUsersID.get(key))) {
-				return key;
+		for(String s : activeUsersID.keySet()){
+			if (activeUsersID.get(s).equals(username)){
+				currentLogIns ++;
+				Date newDate = latestRequests.get(s);
+				if (date == null || date.compareTo(newDate) < 0){
+					date = newDate;
+					uuid = s;
+				}
 			}
 		}
-		return null;
+
+		if (currentLogIns > MAXIMUM_LOGINS){
+			deleteActiveUser(uuid);
+		}
+
 	}
 
+
 	/**
-	 * Returns whether the user is currently logged in.
-	 * @param username Username to check
-	 * @return true if the user is logged in, otherwise false.
+	 * Updates the date for which the user did the most recent request
+	 * @param uuid The uuid of the user
 	 */
-	static public boolean isUserLoggedIn(String username) {
+	static public void updateLatestRequest(String uuid) {
 
-		return (getID(username) != null);
+		if(latestRequests.containsKey(uuid)) {
+			latestRequests.put(uuid, new Date());
+		}
 	}
 
+
 	/**
-	 * Method used to delete a user from the
-	 * active list.
+	 * Method used to delete a user from the active list.
 	 *
-	 * @param id representing the user to remove.
+	 * @param uuid uuid for the user to remove.
 	 */
-	static public void deleteActiveUser(String id) {
+	static public void deleteActiveUser(String uuid) {
 
-		activeUsersID.remove(id);
-		latestRequests.remove(id);
+		activeUsersID.remove(uuid);
+		latestRequests.remove(uuid);
 	}
 
 	/**
-	 * Method used to check if a specific user id exist.
+	 * Method used to check if a specific user uuid exist.
 	 *
-	 * @param id to check for.
-	 * @return boolean depending on result.
+	 * @param uuid Uuid to check for.
+	 * @return true if the uuid exists, otherwise false.
 	 */
-	static public boolean idExists(String id) {
+	static public boolean idExists(String uuid) {
 
-		return activeUsersID.containsKey(id);
+		return activeUsersID.containsKey(uuid);
 	}
 
 	/**
 	 * Method used to get a user name with help from id.
 	 *
-	 * @param userID to match against an active user.
+	 * @param uuid to match against an active user.
 	 * @return the user name matching the id as a string.
 	 */
-	static public String getUsernameByID(String userID){
+	static public String getUsernameByID(String uuid){
 
-		return (userID == null ? "" : activeUsersID.get(userID));
+		String username = activeUsersID.get(uuid);
+		return (username == null ? "" : username);
 	}
 
 	/**
 	 * Getter for the map containing the latest request times
-	 * @return The latest request times as a concurrentHashMap
+	 * @return The latest request times of the users as a concurrentHashMap
 	 */
 	public static ConcurrentHashMap<String, Date> getLatestRequestsMap() {
 
