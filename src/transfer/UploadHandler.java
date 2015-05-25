@@ -123,7 +123,7 @@ public class UploadHandler {
                 commitFile(absUploadPath, fileItem);
                 outFile.getParentFile().mkdirs();
                 fileItem.write(outFile);
-                setFileSize(absUploadPath);
+                setFileSize(outFile.getPath());
 
                 Debug.log("Successfully saved the uploaded file to '"
                         + outFile.toString() + "'.");
