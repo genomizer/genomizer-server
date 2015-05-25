@@ -50,23 +50,17 @@ public class PostAnnotationValueCommand extends Command {
 
 		try {
 			db = initDB();
-			if (db.getChoices(name).contains(value)) {
-				response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
-						"Adding annotation value was unsuccessful, the value " +
-								value + " already exists for field " + name +
-								".");
-			} else {
-				db.addDropDownAnnotationValue(name, value);
-			}
-
+			db.addDropDownAnnotationValue(name, value);
 			response = new MinimalResponse(HttpStatusCode.OK);
-		} catch (SQLException| IOException e) {
-			Debug.log("Adding annotation value was unsuccessful, reason: " +
-					e.getMessage());
+		} catch (SQLException e) {
 			response = new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
-					"Adding annotation value " + value + " to field " + name +
-							" was unsuccessful due to temporary problems with" +
-							" the database");
+					"Adding annotation value '" + value + "' unsuccessful " +
+							"due to temporary database problems");
+			Debug.log("Reason: " + e.getMessage());
+		} catch (IOException e) {
+			response = new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Adding " +
+					"annotation value '" + value + "' unsuccessful. " +
+					e.getMessage());
 		} finally {
 			if (db != null)
 				db.close();
