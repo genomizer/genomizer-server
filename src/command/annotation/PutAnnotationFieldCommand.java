@@ -50,28 +50,17 @@ public class PutAnnotationFieldCommand extends Command {
 
 		try {
 			db = initDB();
-			if (db.getAnnotations().containsKey(oldName)) {
-				if (db.getAnnotations().containsKey(newName)) {
-					response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
-							"Editing name of annotation label " + oldName +
-									" was unsuccessful, a label with the name "
-									+ newName + " already exists");
-				} else {
-					db.changeAnnotationLabel(oldName, newName);
-					response = new MinimalResponse(HttpStatusCode.OK);
-				}
-			} else {
-				response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
-						"Editing name of annotation label " + oldName +
-								" was unsuccessful, label does not exist");
-			}
-		} catch (IOException | SQLException e) {
-			Debug.log("Editing of annotation label " + oldName +
-					" was unsuccessful, reason : " + e.getMessage());
+			db.changeAnnotationLabel(oldName, newName);
+			response = new MinimalResponse(HttpStatusCode.OK);
+		} catch (IOException e) {
+			response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
+					"Editing annotation label '" + oldName +
+							"' unsuccessful. " + e.getMessage());
+		} catch (SQLException e) {
 			response = new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
-					"Editing name of annotation label " + oldName +
-							" was unsuccessful due to temporary problems with" +
-							" the database");
+					"Editing annotation label '" + oldName + "' unsuccessful " +
+							"due to temporary database problems.");
+			Debug.log("Reason: " + e.getMessage());
 		} finally {
 			if (db != null)
 				db.close();
