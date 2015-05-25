@@ -56,22 +56,22 @@ public class DeleteAnnotationValueCommand extends Command {
 
 		try {
 			db = initDB();
-			if (db.getChoices(name).contains(value)) {
-				db.removeDropDownAnnotationValue(name, value);
+			if (db.removeDropDownAnnotationValue(name, value) != 0)
 				response = new MinimalResponse(HttpStatusCode.OK);
-			} else {
+			else
 				response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
-						"Deletion of annotation value " + value +
-								" unsuccessful, value " + value +
-								"does not exist in " + name + ".");
-			}
-		} catch (IOException | SQLException e) {
-			Debug.log("Deletion of annotation value: " + value +
-					" was unsuccessful, reason: " + e.getMessage());
+						"Deletion of annotation value unsuccessful, " +
+								"experiment label or value does not exist");
+		} catch (SQLException e) {
+			response = new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+					"Deletion of annotation value '" + value +
+							"' unsuccessful due to temporary problems with " +
+							"the database");
+			Debug.log("Reason: " + e.getMessage());
+		} catch (IOException e) {
 			response = new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
 					"Deletion of annotation value: " + value +
-							" was unsuccessful due to temporary problems with" +
-							" the database.");
+							" was unsuccessful. " + e.getMessage());
 		} finally {
 			if (db != null)
 				db.close();
