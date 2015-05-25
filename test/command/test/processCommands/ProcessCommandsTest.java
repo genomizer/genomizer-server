@@ -36,7 +36,7 @@ public class ProcessCommandsTest {
     }
 
     @Test
-    public void shouldContailOneBowtieAndOneRatio() throws Exception {
+    public void shouldContainOneBowtieAndOneRatio() throws Exception {
         String json =
                 "{\"expId\":\"not_an_expid\"," +
                 "\"processCommands\":[{\"type\":\"bowtie\"," +
@@ -54,5 +54,6 @@ public class ProcessCommandsTest {
         assertEquals(
                 RatioProcessCommand.class,
                 processCommands.getProcessCommands().get(1).getClass());
+        System.out.println("processCommands = " + processCommands);
     }
 }

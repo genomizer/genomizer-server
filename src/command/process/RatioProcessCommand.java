@@ -18,4 +18,12 @@ public class RatioProcessCommand extends ProcessCommand {
 
     @Expose
     private String infile2;
+
+    @Override
+    public String toString() {
+        return "RatioProcessCommand{" +
+               "infile1='" + infile1 + '\'' +
+               ", infile2='" + infile2 + '\'' +
+               '}';
+    }
 }
