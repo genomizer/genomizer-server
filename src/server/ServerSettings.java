@@ -19,7 +19,7 @@ public class ServerSettings {
 	public static String pyicosLocation = "pyicoteo/pyicos";
 	public static String bowtieLocation = "bowtie/bowtie";
 	public static String bowtie2Location = "bowtie2";
-	public static String picardLocation = "picard-tools";
+	public static String picardLocation = "picard-tools/picard.jar";
 	public static int nrOfProcessThreads = 5;
 
 	private static String downloadURL = "/download?path=";
