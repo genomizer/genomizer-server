@@ -1,8 +1,8 @@
 package response;
 
-import java.util.Date;
-
 import database.containers.FileTuple;
+
+import java.util.Date;
 
 /**
  * Class that contains the file information.

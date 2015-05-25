@@ -2,7 +2,6 @@ package response;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
 import database.containers.FileTuple;
 
 /**
@@ -12,15 +11,15 @@ import database.containers.FileTuple;
  */
 public class SingleFileResponse extends Response {
 
-    private JsonObject jsonObj = new JsonObject();
+    private String json;
 
-    public SingleFileResponse(int code, FileTuple fileTuple){
+    public SingleFileResponse(FileTuple fileTuple){
+        this.code = HttpStatusCode.OK;
 
-        this.code = code;
         GsonBuilder gsonBuilder = new GsonBuilder();
         Gson gson = gsonBuilder.setPrettyPrinting().create();
         FileInformation fileInfo = new FileInformation(fileTuple);
-        jsonObj.add("file", gson.toJsonTree(fileInfo));
+        json = gson.toJson(fileInfo);
     }
 
     /**
@@ -29,7 +28,6 @@ public class SingleFileResponse extends Response {
      */
     @Override
     public String getBody() {
-
-        return jsonObj.toString();
+        return json;
     }
 }

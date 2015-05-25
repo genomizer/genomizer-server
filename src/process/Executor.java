@@ -1,10 +1,10 @@
 package process;
 
+import command.Command;
 import database.DatabaseAccessor;
 import database.containers.FileTuple;
 import server.Debug;
 import server.ErrorLogger;
-import command.Command;
 
 import java.io.*;
 import java.nio.file.FileSystems;
@@ -13,6 +13,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.security.AccessControlException;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Scanner;
 import java.util.Stack;
 import java.util.StringTokenizer;
@@ -64,9 +65,13 @@ public abstract class Executor {
 		File pathToExecutable = new File(FILEPATH + command[1]);
 
 		/* Checks if script can be executed, does not execute, throws excp.*/
+		Debug.log("[Executor.executeScript] Path to executable: "
+				+ pathToExecutable.toString());
 		isExecutable(pathToExecutable);
 
 		command[1] = pathToExecutable.getAbsolutePath();
+		Debug.log("[Executor.executeScript] Executing the command: "
+				+ Arrays.toString(command));
 		return executeCommand(command);
 
 	}
@@ -123,6 +128,12 @@ public abstract class Executor {
 
 		builder.directory(new File(FILEPATH).getAbsoluteFile());
 		builder.redirectErrorStream(true);
+		
+		String commandString = "";
+		for ( String arg : command) {
+			commandString += arg + " ";
+		}
+		ErrorLogger.log("SYSTEM", "Command [" + commandString + "]: " + builder.directory().getAbsolutePath());
 		Process process;
 		process = builder.start();
 
@@ -139,6 +150,7 @@ public abstract class Executor {
 
 		/* Check if command finished successfully */
 		if(process.exitValue() != 0) {
+			ErrorLogger.log("SYSTEM", "CWD: "+(System.getProperty("user.dir")));
 			throw new RuntimeException(results.toString());
 		}
 
@@ -291,6 +303,7 @@ public abstract class Executor {
 
 		// Save references to files in original directory into an array
 		File[] filesInDir = new File(orgDir).getAbsoluteFile().listFiles();
+		ErrorLogger.log("SYSTEM", new File(orgDir).getAbsolutePath());
 
 		if (filesInDir != null) {
 			if (filesInDir.length == 0) {
@@ -299,6 +312,7 @@ public abstract class Executor {
 						"make sure the name is correct");
 			} else {
 				for (File endFile : filesInDir) {
+					ErrorLogger.log("SYSTEM", "Moving file: ["+endFile.getAbsolutePath()+"]");
 
 					// Path to source file
 					Path sourcePath = FileSystems.getDefault().getPath

@@ -1,12 +1,12 @@
 package authentication;
 
+import server.Debug;
+import server.ErrorLogger;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
-
-import server.Debug;
-import server.ErrorLogger;
 /**
  * Class used to remove inactive uuids. The object is a string that
  * runs continuously. It makes a check and removes inactive uuids
@@ -23,7 +23,7 @@ public class InactiveUuidsRemover implements Runnable {
 	/**
 	 * The method is the main loop. All uuids are checked
 	 * if they have been inactive for more than 24 hours. If they
-	 * have the uuid is removed.
+	 * have the userName is removed.
 	 */
 	@Override
 	public void run() {
@@ -67,9 +67,9 @@ public class InactiveUuidsRemover implements Runnable {
 
 	/**
 	 * Method to get the date difference from current date and
-	 * uuid date.
+	 * userName date.
 	 *
-	 * @param date1 uuid date
+	 * @param date1 userName date
 	 * @param date2 current date
 	 * @param timeUnit hours
 	 * @return time difference in hours

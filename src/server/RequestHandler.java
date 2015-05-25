@@ -5,9 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import command.Command;
-import command.CommandClasses;
-import command.ValidateException;
+import command.*;
 import command.connection.PostLoginCommand;
 import command.process.PutProcessCommand;
 import database.DatabaseAccessor;
@@ -23,9 +21,7 @@ import transfer.Util;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.io.OutputStream;
-import java.net.URI;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -53,47 +49,44 @@ public class RequestHandler implements HttpHandler {
 
 	@Override
 	public void handle(HttpExchange exchange) {
-
-        /*Log the fact that the request parsing has started.*/
-		logRequest(exchange);
+        Debug.log("\n-----------------\nNEW EXCHANGE: "
+                + exchange.getRequestMethod() + " "
+                + exchange.getRequestURI().toString());
 
         /*Extract the request method and the context. Together they form a
         * key that is used to retrieve the appropriate command from a
         * hash map of all existing commands.*/
-        String requestMethod = exchange.getRequestMethod();
-		String context = exchange.getHttpContext().getPath();
-        String key = requestMethod + " " + context;
+        String key = exchange.getRequestMethod() + " "
+                + exchange.getHttpContext().getPath();
         Class<? extends Command> commandClass = CommandClasses.get(key);
 
-        //TODO Temporary solution for the file up- and downloading?
+        String uuid = Authenticate.performAuthentication(exchange);
+
+        if(uuid == null && !commandClass.equals(PostLoginCommand.class)){
+            Debug.log("User could not be authenticated");
+            respond(new ErrorResponse(HttpStatusCode.UNAUTHORIZED,
+                    "User could not be authenticated"), exchange);
+            return;
+        } else if (commandClass == null && !key.equals("GET /download") &&
+                !key.equals("GET /upload") && !key.equals("POST /upload")){
+            Debug.log("Unrecognized command: " + exchange.getRequestMethod()
+                    + " " + exchange.getRequestURI());
+            respond(new ErrorResponse(HttpStatusCode.BAD_REQUEST,
+                    "Could not create a command from request. Bad format on " +
+                            "request."), exchange);
+            return;
+        }
+
         try {
             switch (key) {
                 case ("GET /download"):
-                    if (performAuthorization(exchange) != null) {
-                        downloadHandler.handleGET(exchange);
-                    } else {
-                        respondWithAuthenticationFailure(exchange);
-                    }
-
-                    Debug.log("END OF EXCHANGE\n------------------");
+                    downloadHandler.handleGET(exchange);
                     return;
                 case ("GET /upload"):
-                    if (performAuthorization(exchange) != null) {
-                        uploadHandler.handleGET(exchange);
-                    } else {
-                        respondWithAuthenticationFailure(exchange);
-                    }
-
-                    Debug.log("END OF EXCHANGE\n------------------");
+                    uploadHandler.handleGET(exchange);
                     return;
                 case ("POST /upload"):
-                    if (performAuthorization(exchange) != null)
-                        uploadHandler.handlePOST(exchange);
-                    else {
-                        respondWithAuthenticationFailure(exchange);
-                    }
-
-                    Debug.log("END OF EXCHANGE\n------------------");
+                    uploadHandler.handlePOST(exchange);
                     return;
             }
         } catch (Exception e) {
@@ -101,43 +94,22 @@ public class RequestHandler implements HttpHandler {
             return;
         }
 
-		/*Authenticate the user and send the appropriate response if needed.*/
-		String uuid = performAuthorization(exchange);
-		if (commandClass == null) {
-			if (uuid == null) {
-                respondWithAuthenticationFailure(exchange);
-				return;
-			} else {
-				Debug.log("Unrecognized command: " +
-                        exchange.getRequestMethod() + " " + exchange.
-                        getRequestURI());
-				respond(createBadRequestResponse(), exchange);
-				return;
-			}
-		} else if (uuid == null && !commandClass.equals(PostLoginCommand.
-                class)) {
-            respondWithAuthenticationFailure(exchange);
-			return;
-		}
+		String json = readBody(exchange);
+        if (json.isEmpty())
+            json = "{}";
+        Debug.log("Request body: \n" + json);
 
-        /*Log the user.*/
-        logUser(Authenticate.getUsernameByID(uuid));
+        Command command = gson.fromJson(json, commandClass);
 
         /*Retrieve the URI part of the request header.*/
         HashMap<String, String> query = new HashMap<>();
-        String uri = Util.parseURI(exchange.getRequestURI(), query);
-
-		/*Read the json body and create the command.*/
-		String json = readBody(exchange);
-		logRequestBody(json);
-        Command command;
+        String uri;
         try {
-            command = fetchCommand(commandClass, json);
-        } catch (InstantiationException | IllegalAccessException e) {
-            ErrorResponse errorResponse = new ErrorResponse(HttpStatusCode.
-                    INTERNAL_SERVER_ERROR, "Could not create command from " +
-                    "request");
-            respond(errorResponse, exchange);
+            uri = Util.parseURI(exchange.getRequestURI(), query);
+        } catch (Exception e){
+            Debug.log("Could not parse query");
+            respond(new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+                    "ERROR : Could not parse query"), exchange);
             return;
         }
 
@@ -148,7 +120,8 @@ public class RequestHandler implements HttpHandler {
             Debug.log("URI fields mismatch. Expected: "
                     + command.getExpectedNumberOfURIFields()
                     + ", Received: " + calculateURILength(uri));
-            respond(createBadRequestResponse(), exchange);
+            respond(new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Could not create a "
+                    + "command from request. Bad format on request."), exchange);
             return;
         }
 
@@ -158,13 +131,7 @@ public class RequestHandler implements HttpHandler {
         if (!commandClass.equals(PostLoginCommand.class)) {
             try (DatabaseAccessor db = Command.initDB()) {
                 userType = db.getRole(Authenticate.getUsernameByID(uuid));
-            } catch (SQLException e) {
-                Debug.log(e.toString());
-                ErrorResponse errorResponse = new ErrorResponse(HttpStatusCode.
-                        INTERNAL_SERVER_ERROR, "Could not retrieve the user " +
-                        "information.");
-                respond(errorResponse, exchange);
-            } catch (IOException e) {
+            } catch (SQLException | IOException e) {
                 Debug.log(e.toString());
                 ErrorResponse errorResponse = new ErrorResponse(HttpStatusCode.
                         INTERNAL_SERVER_ERROR, "Could not retrieve the user " +
@@ -175,7 +142,6 @@ public class RequestHandler implements HttpHandler {
 
         command.setFields(uri, query, Authenticate.getUsernameByID(uuid), userType);
 
-		/*Attempt to validate the command.*/
 		try {
 			command.validate();
 		} catch (ValidateException e) {
@@ -184,14 +150,10 @@ public class RequestHandler implements HttpHandler {
 			respond(new ErrorResponse(e.getCode(), e.getMessage()), exchange);
 			return;
 		}
-
         if (commandClass.equals(PutProcessCommand.class)) {
             Doorman.getProcessPool().addProcess((PutProcessCommand) command);
             respond(new ProcessResponse(HttpStatusCode.OK), exchange);
-            return;
         } else {
-
-            /*Execute the command and respond.*/
             respond(command.execute(), exchange);
         }
 	}
@@ -203,7 +165,8 @@ public class RequestHandler implements HttpHandler {
                 exchange.sendResponseHeaders(response.getCode(), 0);
             } else {
                 String body = response.getBody();
-                logResponseBody(body);
+                Debug.log("Response body: \n" + body);
+
                 exchange.sendResponseHeaders(response.getCode(),
                         body.getBytes().length);
                 OutputStream os = exchange.getResponseBody();
@@ -216,7 +179,6 @@ public class RequestHandler implements HttpHandler {
                     e.getMessage());
             ErrorLogger.log("SYSTEM", e);
         }
-
         Debug.log("END OF EXCHANGE\n------------------");
     }
 
@@ -224,47 +186,6 @@ public class RequestHandler implements HttpHandler {
     private int calculateURILength(String requestURI) {
         return requestURI.split("/").length-1;
     }
-
-    /*Performs authorization, returns null if the user could not be authorized,
-    * else it returns the uuid.*/
-	private String performAuthorization(HttpExchange exchange) {
-		String uuid = null;
-
-		// Get the value of the 'Authorization' header.
-		List<String> authHeader = exchange.getRequestHeaders().
-				get("Authorization");
-		if (authHeader != null)
-			uuid = authHeader.get(0);
-
-        //If the uuid could not be retrieved from the header, do this.
-        if (uuid == null) {
-            // Get the value of the 'token' parameter.
-            String uuid2;
-            HashMap<String, String> reqParams = new HashMap<>();
-            Util.parseURI(exchange.getRequestURI(), reqParams);
-            if (reqParams.containsKey("token")) {
-                uuid2 = reqParams.get("token");
-                if (uuid2 != null) {
-                    if (uuid == null || uuid.equals(uuid2)) {
-                        uuid = uuid2;
-                    } else {
-                        Debug.log("Authorization header and token parameter " +
-                                "values differ!");
-                        return null;
-                    }
-                }
-            }
-        }
-
-		// Actual authentication.
-		Debug.log("Trying to authenticate token " + uuid + "...");
-		if (uuid != null && Authenticate.idExists(uuid)) {
-			Authenticate.updateLatestRequest(uuid);
-            return uuid;
-		} else {
-			return null;
-		}
-	}
 
     /*Returns the body of the request (a json).*/
     private String readBody(HttpExchange exchange) {
@@ -276,57 +197,5 @@ public class RequestHandler implements HttpHandler {
 
         scanner.close();
         return body;
-    }
-
-    /*Attempts to create a command given a class object and a json string.*/
-    private Command fetchCommand(Class<? extends Command> commandClass,
-                                 String json) throws InstantiationException,
-            IllegalAccessException {
-        Command command = gson.fromJson(json, commandClass);
-        if (command == null) {
-            return commandClass.newInstance();
-        } else {
-            return command;
-        }
-    }
-
-	/*Creates a bad request ErrorResponse.*/
-	private ErrorResponse createBadRequestResponse() {
-		return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Could not create a " +
-				"command from request. Bad format on request.");
-
-	}
-
-	/*Used to log a request.*/
-	private void logRequest(HttpExchange exchange) {
-		Debug.log("\n-----------------\nNEW EXCHANGE: " + exchange.
-				getRequestMethod() + " " + exchange.getRequestURI().
-                toString());
-	}
-
-    /*Used to log the body of a request.*/
-    private void logRequestBody(String body) {
-        Debug.log("Request body: ");
-        Debug.log(body);
-    }
-
-    /*Used to log the body of a response.*/
-	private void logResponseBody(String body) {
-		Debug.log("Response body: ");
-		Debug.log(body);
-	}
-
-	/*Used to a log that a user was authenticated.*/
-	private void logUser(String username) {
-        Debug.log("User " + username + " authenticated successfully.");
-	}
-
-    /*Sends a authentication failure response. Logs the event.*/
-    private void respondWithAuthenticationFailure(HttpExchange exchange) {
-        Debug.log("User could not be authenticated!");
-        ErrorResponse errorResponse = new ErrorResponse(HttpStatusCode.
-                INTERNAL_SERVER_ERROR, "Could not create command from " +
-                "request");
-        respond(errorResponse, exchange);
     }
 }
