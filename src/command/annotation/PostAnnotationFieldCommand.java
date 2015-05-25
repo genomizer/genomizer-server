@@ -74,31 +74,26 @@ public class PostAnnotationFieldCommand extends Command {
 
 		try {
 			db = initDB();
-			if (db.getAnnotations().containsKey(name)) {
-				response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
-						"Adding annotation field was unsuccessful, an " +
-								"annotation field with that name already " +
-								"exists.");
+			if (type.size() == 1 && type.get(0).equals("freetext")) {
+				db.addFreeTextAnnotation(name, defaults, forced);
 			} else {
-				if (type.size() == 1 && type.get(0).equals("freetext")) {
-					db.addFreeTextAnnotation(name, defaults, forced);
-				} else {
-					int defaultValueIndex = type.indexOf(defaults);
-					if (defaultValueIndex == -1)
-						defaultValueIndex = 0;
-
-					db.addDropDownAnnotation(name, type, defaultValueIndex,
-							forced);
-				}
-
-				response = new MinimalResponse(HttpStatusCode.OK);
+				int defaultValueIndex = type.indexOf(defaults);
+				if (defaultValueIndex == -1)
+					defaultValueIndex = 0;
+				db.addDropDownAnnotation(name, type, defaultValueIndex,
+						forced);
 			}
-		} catch (SQLException | IOException e) {
-			Debug.log("Adding annotation field " + name +
-					" was unsuccessful, reason : " + e.getMessage());
+
+			response = new MinimalResponse(HttpStatusCode.OK);
+		} catch (SQLException e) {
 			response = new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
-					"Adding annotation field " + name + " was unsuccessful " +
-							"due to temporary problems with the database");
+					"Adding annotation field " + name + " unsuccessful due " +
+							"to temporary database problems");
+			Debug.log("Reason :" + e.getMessage());
+		} catch (IOException e) {
+			response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
+					"Adding annotation field '" + name + "' unsuccessful. " +
+							e.getMessage());
 		} finally {
 			if (db != null)
 				db.close();
