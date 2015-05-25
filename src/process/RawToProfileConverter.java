@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Stack;
 
-import com.sun.corba.se.spi.activation.Server;
 import command.ValidateException;
 import server.ErrorLogger;
 import server.ServerSettings;
@@ -87,6 +86,7 @@ public class RawToProfileConverter extends Executor {
 			if (checker.shouldRunBowTie()) {
 				ErrorLogger.log("SYSTEM", "Running Bowtie");
 				logString = runBowTie(rawFile1, rawFile_1_Name);
+				ErrorLogger.log("SYSTEM", "Bowtie error - " +logString);
 				ErrorLogger.log("SYSTEM", "Finished Bowtie");
 
 				checkBowTieFile(
@@ -211,7 +211,7 @@ public class RawToProfileConverter extends Executor {
 				cleanUp(toBeRemoved);
 				throw e;
 			}
-			cleanUp(toBeRemoved);
+//			cleanUp(toBeRemoved);
 
 		} else {
 
@@ -235,6 +235,8 @@ public class RawToProfileConverter extends Executor {
 			throw new ProcessException("Fatal error: This should never happen");
 		}
 		inFolder = validateInFolder(inFolder);
+		inFolder = System.getProperty("user.dir") + "/"+inFolder;
+		ErrorLogger.log("SYSTEM", "INFOLDER - "+inFolder);
 		inFiles = getRawFiles(inFolder);
 
 		// Check if there are any raw files
@@ -743,9 +745,14 @@ public class RawToProfileConverter extends Executor {
 			return false;
 		}
 
-		if (!checkIfFolderExists(outFilePath) || !checkIfFolderExists(inFolder)) {
-			System.out.println("Folders does not exist");
+		if (!checkIfFolderExists(inFolder)) {
+			System.out.println("Input folder does not exist");
 			return false;
+		}
+		if(!checkIfFolderExists(outFilePath)) {
+			new File(outFilePath).mkdir();
+			//return all.getCode().stavMix(KungensKurva.
+			// getAllTheThings()).try(code.digest());
 		}
 
 		return true;
@@ -758,8 +765,8 @@ public class RawToProfileConverter extends Executor {
 	 * @return
 	 */
 	private boolean checkIfFolderExists(String folder) {
-		File dir = new File(folder);
-		return dir.exists();
+
+		return (new File(folder)).isDirectory();
 	}
 
 	private String runPicard(String command, String arguments) {
