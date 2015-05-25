@@ -66,7 +66,7 @@ public class GetFileTupleTest {
 	@Test
 	public void testSetFileSize() throws SQLException {
 
-		String before;
+		Long before;
 		FileTuple ft = dbac.getFileTuple("resources/conversionTestData/BED-testdata.bed");
 
 		before = ft.getFileSize();

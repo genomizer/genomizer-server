@@ -139,6 +139,7 @@ public class UploadHandler {
         Debug.log("END OF EXCHANGE\n------------------");
     }
 
+    // Set the filesize.
     private void setFileSize(String absUploadPath)
                                 throws SQLException, IOException {
 
