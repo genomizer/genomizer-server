@@ -65,22 +65,19 @@ public class PutUserAdminCommand extends Command {
 
         try {
             db = initDB();
-            if (db.getUsers().contains(username)) {
-                String hash = BCrypt.hashpw(password, BCrypt.gensalt());
-                db.updateUser(username, hash, UserType.valueOf(privileges),
-                        name, email);
+            String hash = BCrypt.hashpw(password, BCrypt.gensalt());
+            if (db.updateUser(username, hash, UserType.valueOf(privileges),
+                    name, email) != 0)
                 response = new MinimalResponse(HttpStatusCode.OK);
-            } else {
+            else
                 response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
-                        "Editing of user \"" + username + "\" was " +
-                                "unsuccessful, user does not exist.");
-            }
+                        "Editing of user '" + username + "' unsuccessful, " +
+                                "user does not exist.");
         } catch (SQLException | IOException e) {
-            Debug.log("Editing of user \"" + username + "\" was " +
-                    "unsuccessful, reason: " + e.getMessage());
             response = new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
-                    "Editing of user \"" + username + "\" was unsuccessful " +
-                            "due to temporary problems with the database.");
+                    "Editing of user '" + username + "' unsuccessful due to " +
+                            "temporary problems with the database.");
+            Debug.log("Reason :" + e.getMessage());
         } finally {
             if (db != null)
                 db.close();
