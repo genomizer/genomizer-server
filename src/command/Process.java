@@ -45,6 +45,7 @@ public class Process implements Comparable<Process> {
 		experimentName = command.getExpId();
 		timeAdded = System.currentTimeMillis();
 		outputFiles = new String[0];
+		PID = command.getPID();
 	}
 
 	@Override
