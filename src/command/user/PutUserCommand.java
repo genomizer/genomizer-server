@@ -46,20 +46,6 @@ public class PutUserCommand extends Command {
     }
 
     /**
-     * Set username using userName along with the usertype
-     * @param uri the URI from the http request.
-     * @param query the query of the request
-     * @param username the userName from the http request.
-     * @param userType the userType
-     */
-    @Override
-    public void setFields(String uri, HashMap<String, String> query,
-                          String username, UserMethods.UserType userType) {
-        this.username = username;
-        this.userType = userType;
-    }
-
-    /**
      * Used to make sure the strings of the command are correct
      * @throws command.ValidateException
      */

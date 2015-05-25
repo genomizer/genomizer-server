@@ -11,21 +11,21 @@ import server.Debug;
 public class LoginAttempt {
 
 	private boolean successful;
-	private String uuid;
+	private String username;
 	private String error_message;
 
 	/**
-	 * Method sets the LoginAttempt specs
+	 * Method which sets the LoginAttempt specifications
 	 *
-	 * @param successful boolean if the attempt is successful
-	 * @param uuid of the attempted login
-	 * @param error_message of the login attempt
+	 * @param successful whether the attempt was successful or not.
+	 * @param username username of the attempted login.
+	 * @param error_message error message of the login attempt if any.
 	 */
-	public LoginAttempt(boolean successful, String uuid, String error_message) {
+	public LoginAttempt(boolean successful, String username, String error_message) {
 		Debug.log((successful ? "Successful" : "Unsuccessful") 
-				+ " login attempt, user ID: " + uuid);
+				+ " login attempt, username: " + username);
 		this.successful = successful;
-		this.uuid = uuid;
+		this.username = username;
 		this.error_message = error_message;
 	}
 
@@ -44,7 +44,7 @@ public class LoginAttempt {
 	 * @return string userName
 	 */
 	public String getUUID() {
-		return uuid;
+		return username;
 	}
 
 	/**

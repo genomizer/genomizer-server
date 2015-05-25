@@ -19,15 +19,17 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Authenticate {
 
 	// These can be modified from the InteractiveUuidsRemover thread.
-	private static ConcurrentHashMap<String, String> activeUsersID = new ConcurrentHashMap<String, String>();
-	private static ConcurrentHashMap<String, Date> latestRequests = new ConcurrentHashMap<String, Date>();
+	private static ConcurrentHashMap<String, String> activeUsersID = new ConcurrentHashMap<>();
+	private static ConcurrentHashMap<String, Date> latestRequests = new ConcurrentHashMap<>();
 
 
 	static public LoginAttempt login(String username, String password, String dbHash) {
+
 		if(BCrypt.checkpw(password,dbHash))
 			return new LoginAttempt(true, updateActiveUser(username), null);
 
-		return new LoginAttempt(false, null, "Wrong password.");
+		else
+			return new LoginAttempt(false, null, "Incorrect username or password.");
 	}
 	
 	/**
@@ -39,6 +41,7 @@ public class Authenticate {
 	static public String updateActiveUser(String username) {
 
 		if(activeUsersID.containsValue(username)) {
+
 			Iterator<String> uuids = activeUsersID.keySet().iterator();
 			String next_uuid = uuids.next();
 			while(!activeUsersID.get(next_uuid).equals(username)) {
@@ -58,23 +61,26 @@ public class Authenticate {
 	}
 
 	/**
-	 * updates the date for which the user did the most recent request
-	 * @param uuid the userName of the user
+	 * Updates the date for which the user did the most recent request
+	 * @param username The username of the user
 	 */
-	static public void updateLatestRequest(String uuid) {
-		if(latestRequests.containsKey(uuid)) {
-			latestRequests.put(uuid, new Date());
+	static public void updateLatestRequest(String username) {
+
+		if(latestRequests.containsKey(username)) {
+			latestRequests.put(username, new Date());
 		}
 	}
 
 
 	/**
-	 * Method used to get the id for an active user.
+	 * Method which returns the uuid for an active user.
 	 *
-	 * @param username to get the id for.
-	 * @return the id representing the user.
+	 * @param username Username to get the uuid for.
+	 * @return The uuid representing the user or null if that user could not be
+	 * 			found.
 	 */
 	static public String getID(String username) {
+
 		for (String key : activeUsersID.keySet()) {
 			if(username.equals(activeUsersID.get(key))) {
 				return key;
@@ -83,7 +89,13 @@ public class Authenticate {
 		return null;
 	}
 
+	/**
+	 * Returns whether the user is currently logged in.
+	 * @param username Username to check
+	 * @return true if the user is logged in, otherwise false.
+	 */
 	static public boolean isUserLoggedIn(String username) {
+
 		return (getID(username) != null);
 	}
 
@@ -108,7 +120,6 @@ public class Authenticate {
 	static public boolean idExists(String id) {
 
 		return activeUsersID.containsKey(id);
-
 	}
 
 	/**
@@ -120,39 +131,45 @@ public class Authenticate {
 	static public String getUsernameByID(String userID){
 
 		return (userID == null ? "" : activeUsersID.get(userID));
-
 	}
 
+	/**
+	 * Getter for the map containing the latest request times
+	 * @return The latest request times as a concurrentHashMap
+	 */
 	public static ConcurrentHashMap<String, Date> getLatestRequestsMap() {
+
 		return latestRequests;
 	}
 
 	/**
-	 * Performs an authentication of the token
-	 * returns null if the user could not be authorized,
-	 * else it returns the uuid.
+	 * Performs the authentication of the http request.
+	 * @param exchange The http request to authenticate.
+	 * @return The uuid of the caller or null if it could not be authenticated.
 	 */
  	public static String performAuthentication(HttpExchange exchange) {
 		String uuid = null;
 
-		/** Get the value of the 'Authorization' header. */
+		/* Get the value of the 'Authorization' header. */
 		List<String> authHeader = exchange.getRequestHeaders().
 				get("Authorization");
 		if (authHeader != null)
 			uuid = authHeader.get(0);
 
-		/** used for commands that send token in header */
+		/* Used for commands that send token in header instead*/
 		if(uuid == null){
+
 			// Get the value of the 'token' parameter.
 			String uuid2;
 			HashMap<String, String> reqParams = new HashMap<>();
 			Util.parseURI(exchange.getRequestURI(), reqParams);
+
 			if (reqParams.containsKey("token")) {
 				uuid2 = reqParams.get("token");
 				if (uuid2 != null) {
 						uuid = uuid2;
 				} else {
-					Debug.log("Authorization header and token parameter "
+					Debug.log("Authentication header and token parameter "
 							+ "values differ!");
 					return null;
 				}
@@ -165,7 +182,8 @@ public class Authenticate {
 					+ " authenticated successfully.");
 			Authenticate.updateLatestRequest(uuid);
 			return uuid;
-		} else {
+		}
+		else {
 			Debug.log("User could not be authenticated");
 			return null;
 		}
