@@ -51,23 +51,23 @@ public class DeleteAnnotationFieldCommand extends Command {
 
 		try {
 			db = initDB();
-			if (db.getAllAnnotationLabels().contains(label)) {
-				db.deleteAnnotation(label);
+			if (db.deleteAnnotation(label) != 0)
 				response = new MinimalResponse(HttpStatusCode.OK);
-			} else {
+			else
 				response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
-						"The deletion of annotation label " + label +
-								" was unsuccessful, annotation label does " +
-								"not exist.");
-			}
-		} catch (SQLException | IOException e) {
-			Debug.log("Deletion of annotation label: " + label +
-					" was unsuccessful, reason: " + e.getMessage());
+						"Deletion of annotation label '" + label +
+								"' unsuccessful, annotation label does not " +
+								"exist.");
+		} catch (SQLException e) {
 			response = new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
-					"Deletion of annotation label " + label +
-							" was unsuccessful due to temporary problems with" +
-							" the database. The annotation may also be in" +
-							" use.");
+					"Deletion of annotation label '" + label +
+							"' unsuccessful due to temporary problems with " +
+							"the database.");
+			Debug.log("Reason: " + e.getMessage());
+		} catch (IOException e) {
+			response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
+					"Deletion of annotation label '" + label +
+							"' unsuccessful, this label may not be removed." );
 		} finally {
 			if (db != null)
 				db.close();
