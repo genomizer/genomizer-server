@@ -123,6 +123,8 @@ public class UploadHandler {
                 commitFile(absUploadPath, fileItem);
                 outFile.getParentFile().mkdirs();
                 fileItem.write(outFile);
+                setFileSize(absUploadPath);
+
                 Debug.log("Successfully saved the uploaded file to '"
                         + outFile.toString() + "'.");
             }
@@ -137,6 +139,15 @@ public class UploadHandler {
         Debug.log("END OF EXCHANGE\n------------------");
     }
 
+    private void setFileSize(String absUploadPath)
+                                throws SQLException, IOException {
+
+        try( DatabaseAccessor db = Command.initDB() ) {
+            FileTuple  ft = db.getFileTupleInProgress(absUploadPath);
+            db.updateFileSize(ft);
+        }
+    }
+
     // Verify the file's integrity and mark it as available for downloading.
     private void commitFile(String absUploadPath, FileItem fileItem)
             throws SQLException, ValidateException, IOException {
@@ -149,7 +160,6 @@ public class UploadHandler {
                 verifyOrUpdateMD5(ft, actualMD5, db);
                 int count = db.markReadyForDownload(ft);
                 checkMarkReadyForDownloadSucceeded(count, ft.filename);
-                db.updateFileSize(ft);
                 return;
             }
 
