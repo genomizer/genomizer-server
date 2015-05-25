@@ -17,3 +17,5 @@ psqllogin
 .metadata/
 *.cfg
 *.swp
+resources/processTest/results
+
