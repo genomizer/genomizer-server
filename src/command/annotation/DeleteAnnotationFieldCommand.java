@@ -67,7 +67,7 @@ public class DeleteAnnotationFieldCommand extends Command {
 		} catch (IOException e) {
 			response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
 					"Deletion of annotation label '" + label +
-							"' unsuccessful, this label may not be removed." );
+							"' unsuccessful. " + e.getMessage());
 		} finally {
 			if (db != null)
 				db.close();
