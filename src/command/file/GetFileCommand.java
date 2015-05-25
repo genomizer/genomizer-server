@@ -62,6 +62,6 @@ public class GetFileCommand extends Command {
 			return new ErrorResponse(HttpStatusCode.BAD_REQUEST,"Could not find file");
 		}
 
-		return new SingleFileResponse(HttpStatusCode.OK, fileTuple);
+		return new SingleFileResponse(fileTuple);
 	}
 }
