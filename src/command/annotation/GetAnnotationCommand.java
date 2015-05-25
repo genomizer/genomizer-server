@@ -65,11 +65,10 @@ public class GetAnnotationCommand extends Command {
 			response = new GetAnnotationInformationResponse(HttpStatusCode.OK,
 					annotations);
 		} catch (IOException | SQLException e) {
-			Debug.log("Retrieval of annotation information was unsuccessful, " +
-					"reason: " + e.getMessage());
 			response = new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
-					"Retrieval of annotation information was unsuccessful due" +
-							" to temporary problems with the database");
+					"Retrieval of annotation information unsuccessful due " +
+							"to temporary database problems.");
+			Debug.log("Reason: " + e.getMessage());
 		} finally {
 			if (db != null)
 				db.close();
