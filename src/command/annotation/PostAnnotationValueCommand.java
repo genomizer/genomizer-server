@@ -1,9 +1,5 @@
 package command.annotation;
 
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.List;
-
 import com.google.gson.annotations.Expose;
 import command.Command;
 import command.UserRights;
@@ -15,6 +11,10 @@ import response.HttpStatusCode;
 import response.MinimalResponse;
 import response.Response;
 import server.Debug;
+
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
 
 /**
  * Class used to handle the process of adding annotation

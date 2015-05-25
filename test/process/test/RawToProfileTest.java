@@ -86,6 +86,7 @@ public class RawToProfileTest {
 //		rtp.specificParamProcedure(new String[]{""});
 //	}
 
+	@Ignore
 	@Test
 	public void shouldProduceNewSamFile() throws ProcessException{
 		String inFolder = "/Home/staff/dali/edu/5DV151/project/genomizer-server/resources/processTest";

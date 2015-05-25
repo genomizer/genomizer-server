@@ -1,15 +1,14 @@
 package server;
 
 
-import command.process.PutProcessCommand;
 import command.Process;
-import response.ProcessResponse;
-import response.Response;
+import command.process.PutProcessCommand;
 import response.HttpStatusCode;
+import response.Response;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.concurrent.*;
+import java.util.concurrent.Callable;
 
 
 public class ProcessHandler implements Callable<Response> {
@@ -137,7 +136,11 @@ public class ProcessHandler implements Callable<Response> {
 			return (minutes + " minutes, " + seconds + " seconds");
 		}
 
-		return (seconds + " seconds");
+		if (seconds > 0) {
+			return (seconds + " seconds");
+		}
+
+		return (diffMillis + " ms");
 	}
 
 

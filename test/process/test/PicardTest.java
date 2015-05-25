@@ -12,6 +12,7 @@ import static org.junit.Assert.assertNotNull;
 /**
  * TODO class description goes here...
  */
+@Ignore
 public class PicardTest {
 
     @Test(expected = NullPointerException.class)

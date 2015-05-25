@@ -1,8 +1,8 @@
 package response;
 
-import java.util.Date;
-
 import com.google.gson.annotations.Expose;
+
+import java.util.Date;
 
 /**
  * Class that represents the response when processing.

@@ -1,9 +1,5 @@
 package command.genomerelease;
 
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.ArrayList;
-
 import command.Command;
 import command.UserRights;
 import command.ValidateException;
@@ -14,6 +10,10 @@ import response.GetGenomeReleaseResponse;
 import response.HttpStatusCode;
 import response.Response;
 import server.Debug;
+
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  * A command which is used to get all the genome versions

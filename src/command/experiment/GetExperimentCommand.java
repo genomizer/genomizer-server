@@ -1,21 +1,21 @@
 package command.experiment;
 
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.HashMap;
-
 import command.Command;
 import command.UserRights;
 import command.ValidateException;
-import database.constants.MaxLength;
-import response.ErrorResponse;
-import response.HttpStatusCode;
-import response.Response;
-import response.GetExperimentResponse;
 import database.DatabaseAccessor;
+import database.constants.MaxLength;
 import database.containers.Experiment;
 import database.subClasses.UserMethods.UserType;
+import response.ErrorResponse;
+import response.GetExperimentResponse;
+import response.HttpStatusCode;
+import response.Response;
 import server.Debug;
+
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.HashMap;
 
 /**
  * Class used to retrieve an experiment from the database.
