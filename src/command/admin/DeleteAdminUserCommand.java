@@ -59,7 +59,7 @@ public class DeleteAdminUserCommand extends Command {
 		} catch (SQLException | IOException e) {
 			response = new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
 					"Deletion of user '" + username + "' unsuccessful due to " +
-							"temporary problems with the database.");
+							"temporary database problems.");
 			Debug.log("Reason: " + e.getMessage());
 		} finally {
 			if (db != null)
