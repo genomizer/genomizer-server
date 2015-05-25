@@ -1,8 +1,8 @@
 package response;
 
-import java.util.ArrayList;
-
 import com.google.gson.annotations.Expose;
+
+import java.util.ArrayList;
 
 /**
  * Response containing the annotation information

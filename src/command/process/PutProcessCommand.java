@@ -4,30 +4,24 @@ package command.process;
  * @author Robin Ödling - c11rog
  */
 
+import com.google.gson.annotations.Expose;
+import command.Command;
+import command.UserRights;
+import command.ValidateException;
+import database.DatabaseAccessor;
+import database.constants.MaxLength;
+import database.containers.Genome;
+import database.subClasses.UserMethods.UserType;
+import process.ProcessException;
+import process.ProcessHandler;
+import response.*;
+import server.Debug;
+import server.ErrorLogger;
+
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map.Entry;
-
-import com.google.gson.annotations.Expose;
-import database.DatabaseAccessor;
-import database.constants.MaxLength;
-import database.containers.Genome;
-import command.Command;
-import command.UserRights;
-import command.ValidateException;
-import database.subClasses.UserMethods.UserType;
-import process.ProcessException;
-import process.ProcessHandler;
-import response.ErrorResponse;
-import response.HttpStatusCode;
-import response.ProcessResponse;
-import response.Response;
-import response.MinimalResponse;
-import server.Debug;
-import server.ErrorLogger;
-
-
 import java.util.UUID;
 
 public class PutProcessCommand extends Command {

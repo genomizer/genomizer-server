@@ -1,8 +1,8 @@
 package database;
 
-import database.subClasses.UserMethods.UserType;
 import database.containers.*;
 import database.subClasses.*;
+import database.subClasses.UserMethods.UserType;
 import org.apache.commons.codec.digest.DigestUtils;
 import server.ServerSettings;
 

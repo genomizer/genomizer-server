@@ -1,22 +1,20 @@
 package command.file;
 
-import java.io.IOException;
-import java.sql.SQLException;
-
 import com.google.gson.annotations.Expose;
-
 import command.Command;
 import command.UserRights;
 import command.ValidateException;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
 import database.containers.FileTuple;
-
-import response.UrlUploadResponse;
 import response.ErrorResponse;
 import response.HttpStatusCode;
 import response.Response;
+import response.UrlUploadResponse;
 import server.Debug;
+
+import java.io.IOException;
+import java.sql.SQLException;
 
 /**
  * Adds a file to an experiment.

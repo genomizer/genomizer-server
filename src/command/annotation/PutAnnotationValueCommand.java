@@ -1,10 +1,5 @@
 package command.annotation;
 
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.gson.annotations.Expose;
 import command.Command;
 import command.UserRights;
@@ -12,10 +7,15 @@ import command.ValidateException;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
 import response.ErrorResponse;
+import response.HttpStatusCode;
 import response.MinimalResponse;
 import response.Response;
-import response.HttpStatusCode;
 import server.Debug;
+
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class is used to handle changes to annotation values.

@@ -3,7 +3,7 @@ package transfer;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import response.HttpStatusCode;
-import server.*;
+import server.Debug;
 
 import java.io.*;
 import java.nio.file.FileVisitResult;
@@ -129,5 +129,6 @@ public class DownloadHandler {
             String relPath = reqPath.substring(this.handlerRoot.length() + 1);
             serveFile(exchange, new File(this.downloadDir + relPath));
         }
+        Debug.log("END OF EXCHANGE\n------------------");
     }
 }

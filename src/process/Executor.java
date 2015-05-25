@@ -1,11 +1,10 @@
 package process;
 
+import command.Command;
 import database.DatabaseAccessor;
 import database.containers.FileTuple;
 import server.Debug;
 import server.ErrorLogger;
-import command.Command;
-import java.util.Arrays;
 
 import java.io.*;
 import java.nio.file.FileSystems;
@@ -14,6 +13,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.security.AccessControlException;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Scanner;
 import java.util.Stack;
 import java.util.StringTokenizer;
@@ -133,7 +133,7 @@ public abstract class Executor {
 		for ( String arg : command) {
 			commandString += arg + " ";
 		}
-		ErrorLogger.log("SYSTEM", "Command ["+commandString+"]: "+builder.directory().getAbsolutePath());
+		ErrorLogger.log("SYSTEM", "Command [" + commandString + "]: " + builder.directory().getAbsolutePath());
 		Process process;
 		process = builder.start();
 

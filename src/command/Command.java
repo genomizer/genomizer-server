@@ -1,15 +1,15 @@
 package command;
 
+import database.DatabaseAccessor;
+import database.subClasses.UserMethods.UserType;
+import response.HttpStatusCode;
+import response.Response;
+import server.ServerSettings;
+
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.regex.Pattern;
-
-import response.HttpStatusCode;
-import response.Response;
-import server.ServerSettings;
-import database.DatabaseAccessor;
-import database.subClasses.UserMethods.UserType;
 
 /**
  * This class contains common methods and attributes that are needed
