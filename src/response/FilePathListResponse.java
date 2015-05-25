@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * @author tfy09jnn
  * @version 1.0
  */
-public class AddGenomeReleaseResponse extends Response {
+public class FilePathListResponse extends Response {
 
 	private JsonArray jsonArray = null;
 
@@ -21,7 +21,7 @@ public class AddGenomeReleaseResponse extends Response {
 	 * @param filePaths An ArrayList containing the paths to where the files
 	 *                     should be saved
 	 */
-	public AddGenomeReleaseResponse(int code, ArrayList<String> filePaths) {
+	public FilePathListResponse(int code, ArrayList<String> filePaths) {
 
 		this.code = code;
 		Gson gson = new GsonBuilder().create();

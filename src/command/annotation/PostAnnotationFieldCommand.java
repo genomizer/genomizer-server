@@ -7,9 +7,9 @@ import command.UserRights;
 import command.ValidateException;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
-import response.AddAnnotationFieldResponse;
 import response.ErrorResponse;
 import response.HttpStatusCode;
+import response.MinimalResponse;
 import response.Response;
 import server.Debug;
 
@@ -100,7 +100,7 @@ public class PostAnnotationFieldCommand extends Command {
 						defaultValueIndex, forced);
 			}
 			if(addedAnnotations != 0) {
-				return new AddAnnotationFieldResponse(HttpStatusCode.OK);
+				return new MinimalResponse(HttpStatusCode.OK);
 			} else {
 				return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Annotation " + name+
 						" could not be added, database error.");

@@ -4,7 +4,7 @@ import command.Command;
 import command.Process;
 import command.UserRights;
 import command.ValidateException;
-import response.GetProcessStatusResponse;
+import response.ProcessStatusResponse;
 import response.Response;
 import server.Doorman;
 import server.ProcessPool;
@@ -61,6 +61,6 @@ public class GetProcessStatusCommand extends Command {
 				getProcessStatuses.add(process);
 			}
 		}
-		return new GetProcessStatusResponse(getProcessStatuses);
+		return new ProcessStatusResponse(getProcessStatuses);
 	}
 }

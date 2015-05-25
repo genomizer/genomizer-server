@@ -11,10 +11,10 @@ import java.util.ArrayList;
 /**
  * Class which represents the response for get genome release.
  *
- * @author
+ * @author Business Logic
  * @version 1.0
  */
-public class GetGenomeReleaseResponse extends Response {
+public class GenomeListResponse extends Response {
 
 	ArrayList<Genome> genomeReleases;
 	private JsonArray arr;
@@ -26,7 +26,7 @@ public class GetGenomeReleaseResponse extends Response {
 	 * @param genomeReleases A list containing the genome releases which
 	 *                       are returned.
 	 */
-	public GetGenomeReleaseResponse(int code, ArrayList<Genome> genomeReleases) {
+	public GenomeListResponse(int code, ArrayList<Genome> genomeReleases) {
 
 		this.code=code;
 		this.genomeReleases=genomeReleases;

@@ -10,7 +10,7 @@ import database.test.TestInitializer;
 import org.junit.Before;
 import org.junit.Test;
 import response.AnnotationInformation;
-import response.GetAnnotationInformationResponse;
+import response.AnnotationListResponse;
 import response.Response;
 
 /**
@@ -20,26 +20,27 @@ import response.Response;
  * @author Kommunikation/kontroll 2014.
  * @version 1.0
  */
-public class GetAnnotationInformationResponseTest {
+public class AnnotationListResponseTest {
 
+	@Test
 	public void testAnnotation() {
 		//Create the builder.
 
-		ArrayList<AnnotationInformation> arraylist = new ArrayList<AnnotationInformation>();
-		ArrayList<String> gender = new ArrayList<String>();
+		ArrayList<AnnotationInformation> arraylist = new ArrayList<>();
+		ArrayList<String> gender = new ArrayList<>();
 		gender.add("male");
 		gender.add("female");
 		gender.add("unknown");
 		AnnotationInformation ai = new AnnotationInformation("Gender", gender, true);
 		arraylist.add(ai);
-		ArrayList<String> cellLine = new ArrayList<String>();
+		ArrayList<String> cellLine = new ArrayList<>();
 		cellLine.add("true");
 		cellLine.add("false");
 		cellLine.add("unknown");
 		AnnotationInformation ai2 = new AnnotationInformation("Cell Line", cellLine, true);
 		arraylist.add(ai2);
 
-		GetAnnotationInformationResponse air = new GetAnnotationInformationResponse(200, arraylist);
+		AnnotationListResponse air = new AnnotationListResponse(200, arraylist);
 		System.out.println(air.getBody());
 		assertEquals(air.getBody(), "{\"annotations\":[{\"id\":1,\"name\":\"Gender\",\"type\":1,\"values\":[\"male\",\"female\",\"unknown\"],\"forced\":true},{\"id\":2,\"name\":\"Cell Line\",\"type\":1,\"values\":[\"true\",\"false\",\"unknown\"],\"forced\":true}]}");
 	}

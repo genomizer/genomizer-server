@@ -10,10 +10,10 @@ import java.util.LinkedList;
 /**
  * Class that represents the response for the get process status.
  *
- * @author
+ * @author Business Logic
  * @version 1.0
  */
-public class GetProcessStatusResponse extends Response {
+public class ProcessStatusResponse extends Response {
 
 	private LinkedList<command.Process> getProcessStatuses;
 
@@ -22,7 +22,7 @@ public class GetProcessStatusResponse extends Response {
 	 * Creator for the response. Always returns 200 as return code.
 	 * @param getProcessStatus The process status to return.
 	 */
-	public GetProcessStatusResponse(LinkedList<Process> getProcessStatus) {
+	public ProcessStatusResponse(LinkedList<Process> getProcessStatus) {
 
 		this.getProcessStatuses = getProcessStatus;
 		code = 200;

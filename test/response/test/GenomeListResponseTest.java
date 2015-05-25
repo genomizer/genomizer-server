@@ -17,13 +17,13 @@ import command.genomerelease.GetGenomeReleaseSpeciesCommand;
 import database.DatabaseAccessor;
 //import database.Genome;
 
-import response.GetGenomeReleaseResponse;
+import response.GenomeListResponse;
 import response.HttpStatusCode;
 import response.Response;
 import server.ServerSettings;
 
 @Ignore
-public class GetGenomeReleaseResponseTest {
+public class GenomeListResponseTest {
 
 	@Before
 	public void setup() {
@@ -44,10 +44,7 @@ public class GetGenomeReleaseResponseTest {
 			Response rsp=cmd.execute();
 			assertEquals(HttpStatusCode.OK, rsp.getCode());
 
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (SQLException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -70,9 +67,7 @@ public class GetGenomeReleaseResponseTest {
 			Response rsp=cmd.execute();
 			assertEquals(HttpStatusCode.BAD_REQUEST, rsp.getCode());
 
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (SQLException | IOException e) {
 			e.printStackTrace();
 		}
 
@@ -97,13 +92,10 @@ public class GetGenomeReleaseResponseTest {
 			}*/
 
 			//genomeList =db.getAllGenomeReleasesForSpecies("Human");
-			GetGenomeReleaseResponse gResp=new GetGenomeReleaseResponse(HttpStatusCode.OK,genomeList);
+			GenomeListResponse gResp=new GenomeListResponse(HttpStatusCode.OK,genomeList);
 			System.out.println(gResp.getBody());
 
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (SQLException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

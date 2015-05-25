@@ -11,10 +11,10 @@ import java.util.ArrayList;
 /**
  * Class that represents the response when getting the annotation information.
  *
- * @author
+ * @author Business Logic
  * @version 1.0
  */
-public class GetAnnotationInformationResponse extends Response {
+public class AnnotationListResponse extends Response {
 
 	@Expose
 	ArrayList<AnnotationInformation> annotations;
@@ -26,8 +26,8 @@ public class GetAnnotationInformationResponse extends Response {
 	 * @param code The return code of the response.
 	 * @param annotations An ArrayList containing the annotations to return.
 	 */
-	public GetAnnotationInformationResponse(int code,
-			ArrayList<AnnotationInformation> annotations) {
+	public AnnotationListResponse(int code,
+								  ArrayList<AnnotationInformation> annotations) {
 
 		this.code = code;
 	    annotationsArray = new JsonArray();

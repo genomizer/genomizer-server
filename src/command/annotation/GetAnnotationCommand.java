@@ -60,7 +60,7 @@ public class GetAnnotationCommand extends Command {
 								values, annotationObject.isRequired);
 				annotations.add(annotation);
 			}
-			return new GetAnnotationInformationResponse(HttpStatusCode.OK,
+			return new AnnotationListResponse(HttpStatusCode.OK,
 					annotations);
 		} catch(SQLException | IOException e) {
 			Debug.log("Retrieval of annotation information failed. Reason: " +

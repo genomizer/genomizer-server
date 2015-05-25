@@ -12,7 +12,7 @@ import java.util.Map;
  * @author Business Logic 2015
  * @version 1.1
  */
-public class GetExperimentResponse extends Response {
+public class ExperimentResponse extends Response {
 
 	private JsonObject jsonObj;
 
@@ -25,7 +25,7 @@ public class GetExperimentResponse extends Response {
 	 * @param annotations A Map containing the annotations for the experiment .
 	 * @param list A list containing the files associated with the experiment.
 	 */
-	public GetExperimentResponse(int code, String name, Map<String, String> annotations, List<FileTuple> list) {
+	public ExperimentResponse(int code, String name, Map<String, String> annotations, List<FileTuple> list) {
 
 		this.code = code;
 

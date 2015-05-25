@@ -6,7 +6,7 @@ import command.UserRights;
 import command.ValidateException;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
-import response.AddGenomeReleaseResponse;
+import response.FilePathListResponse;
 import response.ErrorResponse;
 import response.HttpStatusCode;
 import response.Response;
@@ -74,7 +74,7 @@ public class PostGenomeReleaseCommand extends Command {
 				 uploadURLs.add(db.addInProgressGenomeRelease(genomeVersion, specie,
 						 fileName, checkSumMD5));
 			}
-			return new AddGenomeReleaseResponse(HttpStatusCode.OK, uploadURLs);
+			return new FilePathListResponse(HttpStatusCode.OK, uploadURLs);
 		} catch (SQLException | IOException e) {
 			Debug.log("Error when adding genome release "+genomeVersion+". Temporary error with database: "
 					+ e.getMessage());

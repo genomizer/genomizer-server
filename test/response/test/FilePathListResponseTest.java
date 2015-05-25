@@ -11,7 +11,7 @@ import org.junit.Test;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import response.AddGenomeReleaseResponse;
+import response.FilePathListResponse;
 import response.HttpStatusCode;
 
 /**
@@ -20,7 +20,7 @@ import response.HttpStatusCode;
  * @author tfy09jnn
  * @version 1.0
  */
-public class AddGenomeReleaseResponseTest {
+public class FilePathListResponseTest {
 
 	public Gson gson = null;
 
@@ -41,10 +41,10 @@ public class AddGenomeReleaseResponseTest {
 	@Test
 	public void testGetBody() {
 
-		ArrayList<String> array = new ArrayList<String>();
+		ArrayList<String> array = new ArrayList<>();
 		array.add("FIRST");
 		array.add("SECOND");
-		AddGenomeReleaseResponse rsp = new AddGenomeReleaseResponse(HttpStatusCode.OK, array);
+		FilePathListResponse rsp = new FilePathListResponse(HttpStatusCode.OK, array);
 		String checker = rsp.getBody();
 		assertEquals("[\"FIRST\",\"SECOND\"]", checker);
 
