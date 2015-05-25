@@ -69,7 +69,7 @@ public class DeleteAnnotationValueCommand extends Command {
 							"problems.");
 			Debug.log("Reason: " + e.getMessage());
 		} catch (IOException e) {
-			response = new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+			response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
 					"Deletion of annotation value: " + value +
 							"' unsuccessful. " + e.getMessage());
 		} finally {

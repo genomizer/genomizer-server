@@ -62,7 +62,7 @@ public class PostAdminUserCommand extends Command {
 			db.addUser(username, hash, "SALT", privileges, name, email);
 			response = new MinimalResponse(HttpStatusCode.OK);
 		} catch (SQLException e) {
-			response = new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+			response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
 					"Creation of user '" + username + "' unsuccessful, user " +
 							"already exists.");
 			Debug.log("Reason: " + e.getMessage());
