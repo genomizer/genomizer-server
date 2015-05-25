@@ -7,7 +7,10 @@ import database.DatabaseAccessor;
 import database.constants.MaxLength;
 import database.containers.FileTuple;
 import database.subClasses.UserMethods.UserType;
-import response.*;
+import response.ErrorResponse;
+import response.HttpStatusCode;
+import response.Response;
+import response.SingleFileResponse;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -50,8 +53,8 @@ public class GetFileCommand extends Command {
 
 		try {
 			db = initDB();
-			fileTuple = db.getFileTuple(fileID);
-		} catch (SQLException | IOException e) {
+			fileTuple = db.getFileTuple(Integer.parseInt(fileID));
+		} catch (SQLException | IOException | NumberFormatException e) {
 			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 

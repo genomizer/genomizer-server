@@ -1,23 +1,22 @@
 package command.genomerelease;
 
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-
-
 import command.Command;
 import command.UserRights;
 import command.ValidateException;
+import database.DatabaseAccessor;
 import database.constants.MaxLength;
+import database.containers.Genome;
 import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.GetGenomeReleaseResponse;
 import response.HttpStatusCode;
 import response.Response;
-import database.DatabaseAccessor;
-import database.containers.Genome;
 import server.Debug;
+
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * A command which is used to get all the genome versions

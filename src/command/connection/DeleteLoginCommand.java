@@ -5,9 +5,9 @@ import command.Command;
 import command.ValidateException;
 import database.constants.MaxLength;
 import response.ErrorResponse;
+import response.HttpStatusCode;
 import response.MinimalResponse;
 import response.Response;
-import response.HttpStatusCode;
 
 /**
  * Class used to represent a logout command.
@@ -23,12 +23,12 @@ public class DeleteLoginCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-		validateName(uuid, MaxLength.USERNAME, "Username");
+		validateName(userName, MaxLength.USERNAME, "Username");
 	}
 
 	@Override
 	public Response execute() {
-		String id = Authenticate.getID(uuid);
+		String id = Authenticate.getID(userName);
 		if(Authenticate.idExists(id)) {
 			Authenticate.deleteActiveUser(id);
 			return new MinimalResponse(HttpStatusCode.OK);

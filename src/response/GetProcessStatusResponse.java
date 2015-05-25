@@ -1,15 +1,11 @@
 package response;
 
-import java.util.*;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
-
+import com.google.gson.*;
 import command.Process;
 import server.ErrorLogger;
+
+import java.util.Collections;
+import java.util.LinkedList;
 
 /**
  * Class that represents the response for the get process status.
