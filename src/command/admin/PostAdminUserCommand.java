@@ -58,21 +58,18 @@ public class PostAdminUserCommand extends Command {
 
 		try {
 			db = initDB();
-			if (!db.getUsers().contains(username)) {
-				String hash = BCrypt.hashpw(password,BCrypt.gensalt());
-				db.addUser(username, hash, "SALT", privileges, name, email);
-				response = new MinimalResponse(HttpStatusCode.OK);
-			} else {
-				response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
-						"Creation of user \"" + username + "\" was " +
-								"unsuccessful, user already exists.");
-			}
-		} catch (SQLException | IOException e) {
-			Debug.log("Creation of user \"" + username + "\" was " +
-					"unsuccessful, reason: " + e.getMessage());
+			String hash = BCrypt.hashpw(password,BCrypt.gensalt());
+			db.addUser(username, hash, "SALT", privileges, name, email);
+			response = new MinimalResponse(HttpStatusCode.OK);
+		} catch (SQLException e) {
 			response = new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
-					"Creation of user \"" + username + "\" was unsuccessful " +
-							"due to temporary problems with the database.");
+					"Creation of user '" + username + "' unsuccessful, user " +
+							"already exists.");
+			Debug.log("Reason: " + e.getMessage());
+		} catch (IOException e) {
+			response = new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+					"Creation of user '" + username + "' unsuccessful due to " +
+							"temporary problems with the database.");
 		} finally {
 			if (db != null)
 				db.close();
