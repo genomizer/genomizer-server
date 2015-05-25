@@ -4,6 +4,7 @@ package command.process;
  * @author Robin Ödling - c11rog
  */
 
+import authentication.Authenticate;
 import com.google.gson.annotations.Expose;
 import command.Command;
 import command.UserRights;
@@ -66,7 +67,7 @@ public class PutProcessCommand extends Command {
 		super.setFields(uri, query, uuid, userType);
 		setTimestamp(System.currentTimeMillis());
 		processtype = uri.split("/")[2];
-		this.username = uuid;
+		this.username = Authenticate.getUsernameByID(uuid);
 	}
 
 	/**
