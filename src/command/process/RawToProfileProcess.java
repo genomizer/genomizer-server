@@ -7,29 +7,22 @@ import process.ProcessHandler;
 import server.Debug;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Map;
+
 import static command.Command.initDB;
 /**
  + * Created by dv13jen on 2015-05-19.
  + */
 public class RawToProfileProcess extends Process {
 
-    protected String infile = null;
+    private ProcessFiles files;
+    private Map.Entry<String,String> filepaths;
 
-    protected String outfile = null;
-
-    protected String params = null;
-
-    protected String keepSam = null;
-
-    protected String genomeVersion = null;
-
-public RawToProfileProcess(String type, String infile, String outfile, String params, String keepSam, String genomeVersion) {
+public RawToProfileProcess(String type, ProcessFiles files, Map.Entry<String,String> filepaths) {
     super(type);
-    this.infile= infile;
-    this.outfile = outfile;
-    this.params = params;
-    this.keepSam = keepSam;
-    this.genomeVersion = genomeVersion;
+    this.files = files;
+    this.filepaths = filepaths;
 }
 @Override
     public void runProcess() throws UnsupportedOperationException{
@@ -39,11 +32,11 @@ public RawToProfileProcess(String type, String infile, String outfile, String pa
             db = initDB();
             processHandler = new ProcessHandler();
             //Get the genome information from the database.
-            Genome g = db.getGenomeRelease(genomeVersion);
+            Genome g = db.getGenomeRelease(files.getGenomeVersion());
 
             if (g == null) {
                 throw new UnsupportedOperationException("Could not find genome version: " +
-                        genomeVersion);
+                        files.getGenomeVersion());
                 } else {
                 //Get the path of the genome.
                 String genomeFolderPath = g.folderPath;
@@ -67,7 +60,7 @@ public RawToProfileProcess(String type, String infile, String outfile, String pa
                 String referenceGenome = genomeFolderPath + genomeFilePrefix;
                 /*
 	+ try {
-	+ processHandler.rawToProfile(params, infile, outfile, keepSam, genomeVersion, referenceGenome);
+	+ processHandler.rawToProfile(params, infile, outfile, keepSam, genomeVersion, referenceGenome, filepaths);
 	+
 	+ } catch (ProcessException e) {
 	+ Debug.log("Error when processing. Could not execute raw to profile process. "+e.getMessage());

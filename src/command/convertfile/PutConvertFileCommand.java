@@ -72,6 +72,6 @@ public class PutConvertFileCommand extends Command {
         if(filetuple == null){
             return new MinimalResponse(HttpStatusCode.NOT_FOUND);
         }
-        return new SingleFileResponse(HttpStatusCode.OK, filetuple);
+        return new SingleFileResponse(filetuple);
     }
 }

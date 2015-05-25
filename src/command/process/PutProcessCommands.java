@@ -10,8 +10,12 @@ import response.ErrorResponse;
 import response.HttpStatusCode;
 import response.ProcessResponse;
 import response.Response;
+
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -22,6 +26,8 @@ public class PutProcessCommands extends Command{
 
     @Expose
     private String expId = null;
+
+    private Map.Entry<String,String> filepaths;
 
     private long timestamp;
 
@@ -55,27 +61,30 @@ public class PutProcessCommands extends Command{
         hasRights(UserRights.getRights(this.getClass()));
         validateName(expId, MaxLength.EXPID, "Experiment ID");
 
-        if(processCommands == null || processCommands.size() < 1) {
+        if (processCommands == null || processCommands.size() < 1) {
             throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Specify " +
                     "processes for the experiment.");
-            }
+        }
 
-        for(int i =0;i<processCommands.size();i++){
+        for (int i = 0; i < processCommands.size(); i++) {
             validateName(processCommands.get(i).getInfile(),
                     MaxLength.FILE_EXPID, "Infile");
             validateName(processCommands.get(i).getOutfile(),
                     MaxLength.FILE_EXPID, "Outfile");
             validateName(processCommands.get(i).getGenomeVersion(),
                     MaxLength.GENOME_VERSION, "Genome version");
-            }
         }
+
+        setFilePaths();
+
+    }
 
     public PutProcessCommands(){
 
         for(ProcessFiles pC : processCommands){
-            if(pC.getType().equals("bowtie")){
-                Process p = new RawToProfileProcess(pC.getType(), pC.getInfile(), pC.getOutfile(), pC.getParams(),
-                        pC.getKeepSam(), pC.getGenomeVersion());processes.add(p);
+            if(pC.getType().equals("rawToProfile")){
+                Process p = new RawToProfileProcess(pC.getType(), pC, filepaths);
+                processes.add(p);
             }
         }
     }
@@ -92,7 +101,27 @@ public class PutProcessCommands extends Command{
         //return new ProcessResponse(HttpStatusCode.OK, "Processing of experiment: "+expId+" has completed.");
                 return null;
         }
+    public Response setFilePaths() {
+        DatabaseAccessor db = null;
 
+        try {
+            db = initDB();
+            filepaths = db.processRawToProfile(expId);
+        } catch (SQLException e) {
+            return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
+        } catch (IOException e) {
+            return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
+        } finally {
+            if (db != null) {
+                db.close();
+            }
+        }
+        return null;
+    }
+
+    public String[] getFilePaths() {
+        return new String[] {filepaths.getKey(), filepaths.getValue()};
+    }
     public void setTimestamp(long currentTimeMillis) {
         this.timestamp = currentTimeMillis;
     }
