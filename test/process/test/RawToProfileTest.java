@@ -13,7 +13,7 @@ public class RawToProfileTest {
 	String path = "test/male.sam";
 	String bowTie = "-a -v 2 -S";
 	//"d_melanogaster_fb5_22 -q reads/MOF_male_wt_reads_sample.fastq -S " +path;
-	String[] parameters = new String[]{bowTie, "/scratch/d_melanogaster_fb5_22", "", "","","","",""};
+	String[] parameters = new String[]{bowTie, "processTest/genomes/d_melanogaster_fb5_22", "", "","","","",""};
 
 	@Before
 	public void setup() {
@@ -88,8 +88,8 @@ public class RawToProfileTest {
 
 	@Test
 	public void shouldProduceNewSamFile() throws ProcessException{
-		String inFolder = "/Home/staff/dali/edu/5DV151/project/genomizer-server/resources/processTest";
-		String outFilePath = "resources/processTest";
+		String inFolder = "resources/processTest";
+		String outFilePath = "resources/processTest/results";
 /*		rtp.runRemoveDuplicates(
 				"processTest/sorted.sam",
 				"processTest/test_without_duplicates.sam", null);
