@@ -238,25 +238,13 @@ public class AnnotationMethods {
             throw new IOException("Can't remove annotation 'Sex'");
         }
 
-        /*
-        String query = "SELECT * FROM Annotated_With WHERE Label ~~* ? ";
+        PreparedStatement deleteAnnoStmt;
+        String deleteAnnoQuery = "DELETE FROM Annotation " + "WHERE (Label ~~* ?)";
+        deleteAnnoStmt = conn.prepareStatement(deleteAnnoQuery);
+        deleteAnnoStmt.setString(1, label);
 
-        PreparedStatement ps = conn.prepareStatement(query);
-        ps.setString(1, label);
-
-        ResultSet rs = ps.executeQuery();
-        if (rs.next()) {
-            throw new IOException(label
-                    + " is used by at least one experiment "
-                    + "and therefore cannot be removed");
-        }*/
-        PreparedStatement ps;
-        String query2 = "DELETE FROM Annotation " + "WHERE (Label ~~* ?)";
-        ps = conn.prepareStatement(query2);
-        ps.setString(1, label);
-
-        int res = ps.executeUpdate();
-        ps.close();
+        int res = deleteAnnoStmt.executeUpdate();
+        deleteAnnoStmt.close();
 
         return res;
     }
@@ -294,7 +282,7 @@ public class AnnotationMethods {
         }
 
         if (!isValidChoice(label)) {
-            throw new IOException("Lable contains invalid characters");
+            throw new IOException("Label contains invalid characters");
         }
 
         Annotation a = getAnnotationObject(label);
@@ -309,16 +297,17 @@ public class AnnotationMethods {
             }
         }
 
-        String query = "INSERT INTO Annotation "
-                + "VALUES (?, 'FreeText', ?, ?)";
+        String addFTAQuery =
+                "INSERT INTO Annotation " +
+                "VALUES (?, 'FreeText', ?, ?)";
 
-        PreparedStatement stmt = conn.prepareStatement(query);
-        stmt.setString(1, label);
-        stmt.setString(2, defaultValue);
-        stmt.setBoolean(3, required);
+        PreparedStatement addFTAStmt = conn.prepareStatement(addFTAQuery);
+        addFTAStmt.setString(1, label);
+        addFTAStmt.setString(2, defaultValue);
+        addFTAStmt.setBoolean(3, required);
 
-        int rs = stmt.executeUpdate();
-        stmt.close();
+        int rs = addFTAStmt.executeUpdate();
+        addFTAStmt.close();
 
         return rs;
     }
