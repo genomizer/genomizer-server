@@ -9,7 +9,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import response.LoginResponse;
-import response.Response;
 
 /**
  * Testclass used to test the login response class.
@@ -27,12 +26,9 @@ public class LoginResponseTest {
 	 */
 	@Before
 	public void setUp() {
-
-		//Create the builder.
 	    final GsonBuilder builder = new GsonBuilder();
 	    builder.excludeFieldsWithoutExposeAnnotation();
 	    gson = builder.create();
-
 	}
 
 	/**
@@ -40,10 +36,8 @@ public class LoginResponseTest {
 	 */
 	@Test
 	public void testCreateLoginResponseNotNull() {
-
-		LoginResponse rsp = new LoginResponse(200, "abcdefg123");
+		LoginResponse rsp = new LoginResponse("abcdefg123");
 		assertNotNull(rsp);
-
 	}
 
 	/**
@@ -52,14 +46,10 @@ public class LoginResponseTest {
 	 */
 	@Test
 	public void testLoginResponseJSON() {
-
 		String json = "{\"token\":\"user-id\"}";
-		LoginResponse rsp = new LoginResponse(200, "abcdefg123");
-		rsp = gson.fromJson(json, LoginResponse.class);
+		LoginResponse rsp = gson.fromJson(json, LoginResponse.class);
 		String json2 = gson.toJson(rsp);
-
 		assertEquals(json, json2);
-
 	}
 
 	/**
@@ -68,13 +58,9 @@ public class LoginResponseTest {
 	 */
 	@Test
 	public void testLoginResponseGetBody() {
-
-		Response rsp = new LoginResponse(200, "abcdefg123");
 		String json = "{\"token\":\"user-id\"}" + "\n";
-		rsp = gson.fromJson(json, LoginResponse.class);
-		String json2 = rsp.getBody();
-
-		assertEquals(json, json2);
+		LoginResponse rsp = gson.fromJson(json, LoginResponse.class);
+		assertEquals(json, rsp.getBody());
 
 	}
 

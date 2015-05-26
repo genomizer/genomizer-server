@@ -23,9 +23,8 @@ public class ProcessStatusResponse extends Response {
 	 * @param getProcessStatus The process status to return.
 	 */
 	public ProcessStatusResponse(LinkedList<Process> getProcessStatus) {
-
+		this.code = HttpStatusCode.OK;
 		this.getProcessStatuses = getProcessStatus;
-		code = 200;
 	}
 
 	/**

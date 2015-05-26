@@ -8,7 +8,7 @@ import database.constants.MaxLength;
 import database.containers.Experiment;
 import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
-import response.ExperimentResponse;
+import response.SingleExperimentResponse;
 import response.HttpStatusCode;
 import response.Response;
 import server.Debug;
@@ -82,7 +82,6 @@ public class GetExperimentCommand extends Command {
 			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Experiment "
 					+ "with id " + expID + " could not be found.");
 		}
-		return new ExperimentResponse(HttpStatusCode.OK, exp.getID(),
-				exp.getAnnotations(), exp.getFiles());
+		return new SingleExperimentResponse(exp);
 	}
 }

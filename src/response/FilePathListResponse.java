@@ -17,13 +17,11 @@ public class FilePathListResponse extends Response {
 	/**
 	 * Constructor for the response.
 	 *
-	 * @param code Code to send as a response code.
 	 * @param filePaths An ArrayList containing the paths to where the files
 	 *                     should be saved
 	 */
-	public FilePathListResponse(int code, ArrayList<String> filePaths) {
-
-		this.code = code;
+	public FilePathListResponse(ArrayList<String> filePaths) {
+		this.code = HttpStatusCode.OK;
 		Gson gson = new GsonBuilder().create();
 
 		jsonArray = new JsonArray();

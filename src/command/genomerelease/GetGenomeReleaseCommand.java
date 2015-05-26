@@ -6,7 +6,7 @@ import command.ValidateException;
 import database.DatabaseAccessor;
 import database.containers.Genome;
 import response.ErrorResponse;
-import response.GenomeListResponse;
+import response.GenomeReleaseListResponse;
 import response.HttpStatusCode;
 import response.Response;
 import server.Debug;
@@ -48,8 +48,7 @@ public class GetGenomeReleaseCommand extends Command {
 			try{
 				ArrayList<Genome> genomeReleases =
 						(ArrayList<Genome>)db.getAllGenomeReleases();
-				return new GenomeListResponse(HttpStatusCode.OK,
-						genomeReleases);
+				return new GenomeReleaseListResponse(genomeReleases);
 			}catch(SQLException e){
 				Debug.log("Error when fetching all genome releases. Temporary error with database: "
 						+ e.getMessage());

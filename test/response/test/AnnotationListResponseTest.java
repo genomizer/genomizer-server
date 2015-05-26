@@ -22,6 +22,11 @@ import response.Response;
  */
 public class AnnotationListResponseTest {
 
+	@Before
+	public void setup() {
+		TestInitializer.setupServerSettings();
+	}
+
 	@Test
 	public void testAnnotation() {
 		//Create the builder.
@@ -40,14 +45,8 @@ public class AnnotationListResponseTest {
 		AnnotationInformation ai2 = new AnnotationInformation("Cell Line", cellLine, true);
 		arraylist.add(ai2);
 
-		AnnotationListResponse air = new AnnotationListResponse(200, arraylist);
-		System.out.println(air.getBody());
-		assertEquals(air.getBody(), "{\"annotations\":[{\"id\":1,\"name\":\"Gender\",\"type\":1,\"values\":[\"male\",\"female\",\"unknown\"],\"forced\":true},{\"id\":2,\"name\":\"Cell Line\",\"type\":1,\"values\":[\"true\",\"false\",\"unknown\"],\"forced\":true}]}");
-	}
-
-	@Before
-	public void setup() {
-		TestInitializer.setupServerSettings();
+		AnnotationListResponse air = new AnnotationListResponse(arraylist);
+		assertEquals(air.getBody(), "[{\"name\":\"Gender\",\"values\":[\"male\",\"female\",\"unknown\"],\"forced\":true},{\"name\":\"Cell Line\",\"values\":[\"true\",\"false\",\"unknown\"],\"forced\":true}]");
 	}
 
 	@Test

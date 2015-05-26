@@ -5,7 +5,7 @@ import com.google.gson.annotations.Expose;
 /**
  * Class that represents the login response.
  *
- * @author
+ * @author Business Logic
  * @version 1.0
  */
 public class LoginResponse extends Response {
@@ -19,12 +19,10 @@ public class LoginResponse extends Response {
 
 	/**
 	 * Creator for the response.
-	 * @param code The return code for the response.
 	 * @param token The login token to be returned.
 	 */
-	public LoginResponse(int code, String token) {
-
-		this.code = code;
+	public LoginResponse(String token) {
+		this.code = HttpStatusCode.OK;
 		this.token = token;
 		this.role = "role";
 	}

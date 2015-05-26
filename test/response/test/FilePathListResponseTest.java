@@ -5,14 +5,12 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import response.FilePathListResponse;
-import response.HttpStatusCode;
 
 /**
  * Class used to test the AddGenomeReleaseResponse class.
@@ -36,18 +34,13 @@ public class FilePathListResponseTest {
 
 	}
 
-	// TODO: re-enable this test. Not sure if it's correct or not.
-	@Ignore
 	@Test
 	public void testGetBody() {
-
 		ArrayList<String> array = new ArrayList<>();
 		array.add("FIRST");
 		array.add("SECOND");
-		FilePathListResponse rsp = new FilePathListResponse(HttpStatusCode.OK, array);
+		FilePathListResponse rsp = new FilePathListResponse(array);
 		String checker = rsp.getBody();
-		assertEquals("[\"FIRST\",\"SECOND\"]", checker);
-
+		assertEquals("[{\"URLupload\":\"FIRST\"},{\"URLupload\":\"SECOND\"}]", checker);
 	}
-
 }

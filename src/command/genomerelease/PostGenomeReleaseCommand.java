@@ -74,7 +74,7 @@ public class PostGenomeReleaseCommand extends Command {
 				 uploadURLs.add(db.addInProgressGenomeRelease(genomeVersion, specie,
 						 fileName, checkSumMD5));
 			}
-			return new FilePathListResponse(HttpStatusCode.OK, uploadURLs);
+			return new FilePathListResponse(uploadURLs);
 		} catch (SQLException | IOException e) {
 			Debug.log("Error when adding genome release "+genomeVersion+". Temporary error with database: "
 					+ e.getMessage());

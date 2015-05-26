@@ -94,6 +94,6 @@ public class PostLoginCommand extends Command {
 
 		Debug.log("LOGIN WAS SUCCESSFUL FOR: "+ username + ". GAVE UUID: " +
 				Authenticate.getID(username));
-		return new LoginResponse(200, login.getUUID());
+		return new LoginResponse(login.getUUID());
 	}
 }
