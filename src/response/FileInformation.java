@@ -23,7 +23,7 @@ public class FileInformation {
     public final String uploader;
     public final String expId;
     public final String grVersion;
-    public final String fileSize;
+    public final Long fileSize;
 
 
     /**
