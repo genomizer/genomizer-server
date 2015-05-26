@@ -453,20 +453,17 @@ public class FileMethods {
 
 		int res = 0;
 		if (success) {
-			PreparedStatement updateFileName = null;
-			PreparedStatement updatePath = null;
-			try {
-				conn.setAutoCommit(false);
-				String updateFileNameString =
-                        "UPDATE File SET FileName = ?" +
-                        "WHERE FileID = ?";
-				String updatePathString =
-                        "UPDATE File SET Path = ?" +
-                        "WHERE FileID = ?";
 
-				updateFileName = conn.prepareStatement(updateFileNameString);
-				updatePath = conn.prepareStatement(updatePathString);
+			String updateFileNameString =
+					"UPDATE File SET FileName = ?" +
+							"WHERE FileID = ?";
+			String updatePathString =
+					"UPDATE File SET Path = ?" +
+							"WHERE FileID = ?";
 
+			conn.setAutoCommit(false);
+			try (PreparedStatement updateFileName = conn.prepareStatement(updateFileNameString);
+				 PreparedStatement updatePath = conn.prepareStatement(updatePathString);) {
 				updateFileName.setString(1, newFileName);
 				updateFileName.setInt(2, fileID);
 				res = Math.max(res, updateFileName.executeUpdate());
@@ -479,8 +476,6 @@ public class FileMethods {
 				conn.rollback();
 				throw e;
 			} finally {
-				if (updateFileName != null) {updateFileName.close();}
-				if (updatePath != null) {updatePath.close();}
 				conn.setAutoCommit(true);
 			}
 		}

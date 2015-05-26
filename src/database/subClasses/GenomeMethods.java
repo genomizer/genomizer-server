@@ -96,13 +96,12 @@ public class GenomeMethods {
 				"INSERT INTO Genome_Release_Files " +
 				"(Version, FileName, MD5, Status) VALUES (?, ?, ?, ?)";
 
-		PreparedStatement grStmt = null;
-		PreparedStatement grFilesStmt = null;
+
 		conn.setAutoCommit(false);
 
-		try {
+		try (PreparedStatement grStmt = conn.prepareStatement(grQuery);
+			 PreparedStatement grFilesStmt = conn.prepareStatement(grFilesQuery);) {
 			if (genomeRelease == null) {
-				grStmt = conn.prepareStatement(grQuery);
 				grStmt.setString(1, genomeVersion);
 				grStmt.setString(2, species);
 				grStmt.setString(3, folderPath);
@@ -114,7 +113,6 @@ public class GenomeMethods {
 						"genome release");
 			}
 
-			grFilesStmt = conn.prepareStatement(grFilesQuery);
 			grFilesStmt.setString(1, genomeVersion);
 			grFilesStmt.setString(2, filename);
 			grFilesStmt.setString(3, checkSumMD5);
@@ -127,8 +125,6 @@ public class GenomeMethods {
 			conn.rollback();
 			throw e;
 		} finally {
-			if (grFilesStmt != null) { grFilesStmt.close(); }
-			if (grStmt != null) { grStmt.close(); }
 			conn.setAutoCommit(true);
 		}
 
@@ -483,8 +479,6 @@ public class GenomeMethods {
 				"VALUES (?, ?, ?, ?, ?)";
 
 		PreparedStatement selectSpecies = null;
-		PreparedStatement insertChainFile = null;
-		PreparedStatement insertChainFileFiles = null;
 
 		// Query 1: Retrieve species
 		selectSpecies = conn.prepareStatement(speciesQuery);
@@ -495,16 +489,17 @@ public class GenomeMethods {
 		if (rs.next()) {
 			specie = rs.getString("Species");
 		}
+		selectSpecies.close();
 
 		// Query 2: Get ChainFiles
 		filePath = fpg.generateChainFolder(specie, fromVersion, toVersion);
 		ChainFiles cf = getChainFiles(fromVersion, toVersion);
 
 		conn.setAutoCommit(false);
-		try {
+		try (PreparedStatement insertChainFile = conn.prepareStatement(chainFileQuery);
+			 PreparedStatement insertChainFileFiles = conn.prepareStatement(chainFileFilesQuery);) {
 			// Query 3: Insert Chain File
 			if (cf == null) {
-				insertChainFile = conn.prepareStatement(chainFileQuery);
 				insertChainFile.setString(1, fromVersion);
 				insertChainFile.setString(2, toVersion);
 				insertChainFile.setString(3, filePath);
@@ -512,7 +507,6 @@ public class GenomeMethods {
 			}
 
 			// Query 4: Insert Chain file Files
-			insertChainFileFiles = conn.prepareStatement(chainFileFilesQuery);
 			insertChainFileFiles.setString(1, fromVersion);
 			insertChainFileFiles.setString(2, toVersion);
 			insertChainFileFiles.setString(3, fileName);
@@ -526,9 +520,6 @@ public class GenomeMethods {
 			conn.rollback();
 			throw e;
 		} finally {
-			if (selectSpecies != null) { selectSpecies.close();	}
-			if (insertChainFile != null) { insertChainFile.close();	}
-			if (insertChainFileFiles != null) { insertChainFileFiles.close();	}
 			conn.setAutoCommit(true);
 		}
 

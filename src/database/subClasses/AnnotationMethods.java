@@ -399,18 +399,16 @@ public class AnnotationMethods {
                 + "VALUES (?, 'DropDown', ?, ?)";
         String choicesQuery = "INSERT INTO Annotation_Choices "
                 + "(Label, Value) VALUES (?, ?)";
-        PreparedStatement annotationStmt = null;
-        PreparedStatement choicesStmt = null;
+
         conn.setAutoCommit(false);
 
-        try {
-            annotationStmt = conn.prepareStatement(annotationQuery);
+        try (PreparedStatement annotationStmt = conn.prepareStatement(annotationQuery);
+             PreparedStatement choicesStmt = conn.prepareStatement(choicesQuery);) {
             annotationStmt.setString(1, label);
             annotationStmt.setString(2, choices.get(defaultValueIndex));
             annotationStmt.setBoolean(3, required);
             tuplesInserted += annotationStmt.executeUpdate();
 
-            choicesStmt = conn.prepareStatement(choicesQuery);
             choicesStmt.setString(1, label);
             for (String choice : choices) {
                 choicesStmt.setString(2, choice);
@@ -421,8 +419,6 @@ public class AnnotationMethods {
             conn.rollback();
             throw e;
         } finally {
-            if(annotationStmt != null) { annotationStmt.close(); };
-            if(choicesStmt != null) { choicesStmt.close(); };
             conn.setAutoCommit(true);
         }
         return tuplesInserted;
@@ -714,33 +710,27 @@ public class AnnotationMethods {
         String query4 = "UPDATE Genome_Release " + "SET Species = ? "
                 + "WHERE Species ~~* ?";
 
-        PreparedStatement stmt = null;
-        PreparedStatement stmt2 = null;
-        PreparedStatement stmt3 = null;
-        PreparedStatement stmt4 = null;
-
         conn.setAutoCommit(false);
 
-        try {
+        try (PreparedStatement stmt = conn.prepareStatement(query);
+             PreparedStatement stmt2 = conn.prepareStatement(query2);
+             PreparedStatement stmt3 = conn.prepareStatement(query3);
+             PreparedStatement stmt4 = conn.prepareStatement(query4);) {
             ArrayList<String> paramList = new ArrayList<String>();
             paramList.add(newValue);
             paramList.add(label);
             paramList.add(oldValue);
 
-            stmt = conn.prepareStatement(query);
-            stmt = bindStrings(stmt, paramList);
+            bindStrings(stmt, paramList);
             stmt.executeUpdate();
 
-            stmt2 = conn.prepareStatement(query2);
-            stmt2 = bindStrings(stmt2, paramList);
+            bindStrings(stmt2, paramList);
             stmt2.executeUpdate();
 
-            stmt3 = conn.prepareStatement(query3);
-            stmt3 = bindStrings(stmt3, paramList);
+            bindStrings(stmt3, paramList);
             stmt3.executeUpdate();
 
             if (label.equalsIgnoreCase("species")) {
-                stmt4 = conn.prepareStatement(query4);
                 stmt4.setString(1, newValue);
                 stmt4.setString(2, oldValue);
                 stmt4.executeUpdate();
@@ -752,10 +742,6 @@ public class AnnotationMethods {
             conn.rollback();
             throw e;
         } finally {
-            if (stmt != null) { stmt.close(); }
-            if (stmt2 != null) { stmt2.close(); }
-            if (stmt3 != null) { stmt3.close(); }
-            if (stmt4 != null) { stmt4.close(); }
             conn.setAutoCommit(true);
         }
     }
@@ -827,15 +813,13 @@ public class AnnotationMethods {
         return resCount;
     }
 
-    private PreparedStatement bindStrings(PreparedStatement stmt,
-            ArrayList<String> parameterList) throws SQLException {
-
+    private void bindStrings(PreparedStatement stmt,
+                             ArrayList<String> parameterList) throws SQLException {
         int i = 1;
         for (String s : parameterList) {
             stmt.setString(i, s);
             i++;
-        }
-        return stmt;
+        };
     }
 
     /**
