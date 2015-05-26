@@ -28,12 +28,6 @@ public class GetAnnotationCommand extends Command {
 	}
 
 	@Override
-	public void setFields(String uri, HashMap<String, String> query,
-						  String uuid, UserType userType) {
-		super.setFields(uri, query, uuid, userType);
-	}
-
-	@Override
 	public void validate() throws ValidateException {
 		hasRights(UserRights.getRights(this.getClass()));
 	}

@@ -46,6 +46,11 @@ public class PutAnnotationValueCommand extends Command {
 			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Can not" +
 					"rename a value to \"freetext\"");
 		}
+
+		if (oldValue.equals("freetext")) {
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Can not" +
+					"rename a value from \"freetext\"");
+		}
 	}
 
 	@Override
