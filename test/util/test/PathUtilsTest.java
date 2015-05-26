@@ -14,9 +14,9 @@ public class PathUtilsTest {
         assertEquals("foo/bar", PathUtils.join("foo/", "bar"));
         assertEquals("foo/bar", PathUtils.join("foo/", "/bar"));
 
-        assertEquals("foo/bar/baz", PathUtils.join("foo", "bar/baz"));
-        assertEquals("foo/bar/baz", PathUtils.join("foo", "/bar/baz"));
-        assertEquals("foo/bar/baz", PathUtils.join("foo/", "bar/baz"));
-        assertEquals("foo/bar/baz", PathUtils.join("foo/", "/bar/baz"));
+        assertEquals("/foo/bar/baz", PathUtils.join("/foo", "bar/baz"));
+        assertEquals("/foo/bar/baz", PathUtils.join("/foo", "/bar/baz"));
+        assertEquals("/foo/bar/baz", PathUtils.join("/foo/", "bar/baz"));
+        assertEquals("/foo/bar/baz", PathUtils.join("/foo/", "/bar/baz"));
     }
 }
