@@ -16,7 +16,7 @@ import response.ProcessResponse;
 import response.Response;
 import transfer.DownloadHandler;
 import transfer.UploadHandler;
-import transfer.Util;
+import util.Util;
 
 import java.io.IOException;
 import java.sql.SQLException;
