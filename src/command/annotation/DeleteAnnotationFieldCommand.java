@@ -1,10 +1,5 @@
 package command.annotation;
 
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import command.Command;
 import command.UserRights;
 import command.ValidateException;
@@ -16,6 +11,11 @@ import response.HttpStatusCode;
 import response.MinimalResponse;
 import response.Response;
 import server.Debug;
+
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Command used to handle removal of an existing annotation field.

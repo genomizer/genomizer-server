@@ -2,9 +2,9 @@ package command.connection;
 
 import authentication.Authenticate;
 import command.Command;
+import response.HttpStatusCode;
 import response.MinimalResponse;
 import response.Response;
-import response.HttpStatusCode;
 
 /**
 * This class is used to check if a token is valid.

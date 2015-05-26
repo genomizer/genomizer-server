@@ -1,22 +1,20 @@
 package command.admin;
 
-import java.io.IOException;
-import java.sql.SQLException;
-
 import authentication.BCrypt;
 import com.google.gson.annotations.Expose;
-
 import command.Command;
 import command.UserRights;
 import command.ValidateException;
 import database.DatabaseAccessor;
-
 import database.constants.MaxLength;
 import response.ErrorResponse;
 import response.HttpStatusCode;
 import response.MinimalResponse;
 import response.Response;
 import server.Debug;
+
+import java.io.IOException;
+import java.sql.SQLException;
 
 /**
  * Command used to create a user.
