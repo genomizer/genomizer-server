@@ -6,7 +6,7 @@ import command.Command;
 import database.constants.MaxLength;
 import database.subClasses.UserMethods.UserType;
 import org.junit.Test;
-import command.admin.DeleteUserCommand;
+import command.admin.DeleteAdminUserCommand;
 import command.ValidateException;
 
 /**
@@ -16,7 +16,7 @@ import command.ValidateException;
  * @author Kommunikation/kontroll 2014.
  * @version 1.0
  */
-public class DeleteUserCommandTest {
+public class DeleteAdminUserCommandTest {
 
 //	/**
 //	 * Test used to check that creation is not null.
@@ -75,7 +75,7 @@ public class DeleteUserCommandTest {
 		for(int i = 0; i < MaxLength.USERNAME + 1; i++) {
 			uri += "a";
 		}
-		Command c = new DeleteUserCommand();
+		Command c = new DeleteAdminUserCommand();
 		c.setFields(uri, null, null, UserType.ADMIN);
 		c.validate();
 
@@ -92,7 +92,7 @@ public class DeleteUserCommandTest {
 	@Test
 	public void testValidateProperlyFormatted() throws ValidateException {
 
-		Command c = new DeleteUserCommand();
+		Command c = new DeleteAdminUserCommand();
 		c.setFields("/test/username", null, null, UserType.ADMIN);
 		c.validate();
 
@@ -109,7 +109,7 @@ public class DeleteUserCommandTest {
 	@Test
 	public void testHavingRights() throws ValidateException {
 
-		Command c = new DeleteUserCommand();
+		Command c = new DeleteAdminUserCommand();
 		c.setFields("/test/username", null, null, UserType.ADMIN);
 		c.validate();
 	}
@@ -123,7 +123,7 @@ public class DeleteUserCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testNotHavingRights() throws ValidateException {
 
-		Command c = new DeleteUserCommand();
+		Command c = new DeleteAdminUserCommand();
 		c.setFields("/test/username", null, null, UserType.USER);
 		c.validate();
 		fail();

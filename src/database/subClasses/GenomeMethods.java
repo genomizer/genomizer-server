@@ -81,30 +81,24 @@ public class GenomeMethods {
      */
     public String addGenomeReleaseWithStatus(String genomeVersion, String species,
             String filename, String checkSumMD5, String status) throws SQLException, IOException {
-
     	if(!FileValidator.fileNameCheck(filename)){
     		throw new IOException("Invalid file name");
     	}
-
 		String folderPath = fpg.generateGenomeReleaseFolder(genomeVersion,
 				species);
-
-		StringBuilder filePathBuilder = new StringBuilder(folderPath);
-		filePathBuilder.append(filename);
-
 		Genome genomeRelease = getGenomeRelease(genomeVersion);
 		boolean genomeRelaseFileExists = genomeReleaseFileExists(genomeVersion, filename);
 
-		conn.setAutoCommit(false);
-
-		String grQuery = "INSERT INTO" +
-				" Genome_Release (Version, Species, FolderPath)" +
-				" VALUES (?, ?, ?)";
-		PreparedStatement grStmt = null;
-
-		String grFilesQuery = "INSERT INTO Genome_Release_Files " +
+		String grQuery =
+				"INSERT INTO Genome_Release " +
+				"(Version, Species, FolderPath) VALUES (?, ?, ?)";
+		String grFilesQuery =
+				"INSERT INTO Genome_Release_Files " +
 				"(Version, FileName, MD5, Status) VALUES (?, ?, ?, ?)";
+
+		PreparedStatement grStmt = null;
 		PreparedStatement grFilesStmt = null;
+		conn.setAutoCommit(false);
 
 		try {
 			if (genomeRelease == null) {
@@ -138,38 +132,7 @@ public class GenomeMethods {
 			conn.setAutoCommit(true);
 		}
 
-		/* if (genomeRelease == null) {
-			try (PreparedStatement stmt =
-						 conn.prepareStatement("INSERT INTO Genome_Release "
-								 + "(Version, Species, FolderPath) " + "VALUES (?, ?, ?)")) {
-
-				stmt.setString(1, genomeVersion);
-				stmt.setString(2, species);
-				stmt.setString(3, folderPath);
-
-				stmt.executeUpdate();
-			}
-		}
-
-        if (genomeReleaseFileExists(genomeVersion, filename)) {
-            throw new IOException(filename
-                    + " already exists for this genome release!");
-        }
-
-		try (PreparedStatement stmt = conn.prepareStatement(
-
-				"INSERT INTO Genome_Release_Files "
-						+ "(Version, FileName, MD5, Status) VALUES (?, ?, ?, ?)")) {
-			stmt.setString(1, genomeVersion);
-			stmt.setString(2, filename);
-			stmt.setString(3, checkSumMD5);
-			stmt.setString(4, status);
-			stmt.executeUpdate();
-		} */
-
-		filePathBuilder.insert(0, ServerDependentValues.UploadURL);
-
-		return filePathBuilder.toString();
+		return ServerDependentValues.UploadURL + folderPath + filename;
 	}
 
 	/**
