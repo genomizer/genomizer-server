@@ -477,6 +477,7 @@ public class FileMethods {
 
 			} catch (SQLException e) {
 				conn.rollback();
+				throw e;
 			} finally {
 				if (updateFileName != null) {updateFileName.close();}
 				if (updatePath != null) {updatePath.close();}
