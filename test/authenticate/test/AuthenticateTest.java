@@ -43,8 +43,8 @@ public class AuthenticateTest {
      */
     @Test
     public void getID(){
-        Authenticate.updateActiveUser("uuid", "username");
-        assertTrue(Authenticate.idExists("uuid"));
+        String uuid = Authenticate.updateActiveUser("uuid", "username");
+        assertTrue(Authenticate.idExists(uuid));
     }
     /**
      * @return If a ID exists.
