@@ -1,5 +1,8 @@
 package command.annotation;
 
+import java.io.IOException;
+import java.sql.SQLException;
+
 import com.google.gson.annotations.Expose;
 import command.Command;
 import command.UserRights;
@@ -12,13 +15,8 @@ import response.MinimalResponse;
 import response.Response;
 import server.Debug;
 
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.List;
-
 /**
- * Class used to handle the process of adding annotation
- * values.
+ * Command used to add an annotation value.
  *
  * @author Business Logic 2015.
  * @version 1.1
@@ -26,7 +24,6 @@ import java.util.List;
 public class PostAnnotationValueCommand extends Command {
 	@Expose
 	private String name = null;
-
 	@Expose
 	private String value = null;
 
@@ -34,7 +31,6 @@ public class PostAnnotationValueCommand extends Command {
 	public int getExpectedNumberOfURIFields() {
 		return 2;
 	}
-
 
 	@Override
 	public void validate() throws ValidateException {
@@ -50,27 +46,26 @@ public class PostAnnotationValueCommand extends Command {
 	@Override
 	public Response execute() {
 		DatabaseAccessor db = null;
+		Response response;
+
 		try {
 			db = initDB();
-			List<String> values = db.getChoices(name);
-			if(values.contains(value)) {
-				db.close();
-				return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "The " +
-						"annotation " + name + " already contains the value " +
-						value);
-			}
 			db.addDropDownAnnotationValue(name, value);
-		} catch(SQLException | IOException e) {
-			Debug.log("Adding of annotation value: " + value + " on annotation " + name + " failed. Reason: " +
+			response = new MinimalResponse(HttpStatusCode.OK);
+		} catch (SQLException e) {
+			response = new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+					"Adding annotation value '" + value + "' unsuccessful " +
+							"due to temporary database problems");
+			Debug.log("Reason: " + e.getMessage());
+		} catch (IOException e) {
+			response = new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Adding " +
+					"annotation value '" + value + "' unsuccessful. " +
 					e.getMessage());
-			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Could not add annotation value: "
-					+value+ " on annotation "+name+" because of temporary problems with database.");
 		} finally {
-			if (db != null) {
+			if (db != null)
 				db.close();
-			}
- 		}
+		}
 
-		return new MinimalResponse(HttpStatusCode.OK);
+		return response;
 	}
 }

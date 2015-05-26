@@ -1,7 +1,7 @@
 package command;
 
-import command.admin.DeleteUserCommand;
-import command.admin.PostUserCommand;
+import command.admin.DeleteAdminUserCommand;
+import command.admin.PostAdminUserCommand;
 import command.admin.PutUserAdminCommand;
 import command.annotation.*;
 import command.connection.*;
@@ -66,8 +66,8 @@ public class CommandClasses {
         classes.put("PUT /user", PutUserCommand.class);
 
         //Admin commands
-        classes.put("POST /admin/user", PostUserCommand.class);
-        classes.put("DELETE /admin/user/", DeleteUserCommand.class);
+        classes.put("POST /admin/user", PostAdminUserCommand.class);
+        classes.put("DELETE /admin/user/", DeleteAdminUserCommand.class);
         classes.put("PUT /admin/user", PutUserAdminCommand.class);
 
         //Processing
