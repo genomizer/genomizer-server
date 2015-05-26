@@ -1,25 +1,24 @@
 package command.annotation;
 
+import java.io.IOException;
+import java.sql.SQLException;
+
 import com.google.gson.annotations.Expose;
+
 import command.Command;
 import command.UserRights;
 import command.ValidateException;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
+
 import response.ErrorResponse;
 import response.HttpStatusCode;
 import response.MinimalResponse;
 import response.Response;
 import server.Debug;
 
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.Map;
-
 /**
- * Edits the label of an annotation. The object is generated directly from
- * JSON with parameters oldName and newName. oldName must be an existing
- * annotation label and newName can't be the label of an existing annotation.
+ * Command used to change the name of an annotation field (label).
  *
  * @author Business Logic 2015.
  * @version 1.1
@@ -27,7 +26,6 @@ import java.util.Map;
 public class PutAnnotationFieldCommand extends Command {
 	@Expose
 	private String oldName = null;
-
 	@Expose
 	private String newName = null;
 
@@ -35,7 +33,6 @@ public class PutAnnotationFieldCommand extends Command {
 	public int getExpectedNumberOfURIFields() {
 		return 2;
 	}
-
 
 	@Override
 	public void validate() throws ValidateException {
@@ -46,54 +43,29 @@ public class PutAnnotationFieldCommand extends Command {
 				"New annotation label");
 	}
 
-	/**
-	 * Changes the label of annotation oldName to newName. All database entries
-	 * will be affected by the change. Will return a bad request response if
-	 * either parameter is invalid, and an OK response if the modification
-	 * succeeded.
-	 *
-	 * @return an appropriate minimal response signaling that the edit was
-	 * done successfully.
-	 */
 	@Override
 	public Response execute() {
-		DatabaseAccessor db;
+		DatabaseAccessor db = null;
+		Response response;
+
 		try {
 			db = initDB();
-		} catch(SQLException | IOException e) {
-			Debug.log("Error editing annotation label "+oldName+". Database error. Reason: " +
-					e.getMessage());
-			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Error editing annotation label " +
-					oldName+ ". Database error.");
-		}
-		try {
-			Map<String,Integer> anno = db.getAnnotations();
-			if (!anno.containsKey(oldName)) {
-				return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "The " +
-						"annotation field " + oldName + " does not exist in " +
-						"the database");
-			} else if (anno.containsKey(newName)) {
-				return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "The " +
-						"annotation field " + newName + " already exists in " +
-						"the database");
-			}
-			try {
-				db.changeAnnotationLabel(oldName, newName);
-			} catch (IOException | SQLException e) {
-				Debug.log("Error editing annotation label "+oldName+". Database error. Reason: " +
-						e.getMessage());
-				return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Error editing annotation label " +
-						oldName+ ". Database error.");
-			}
-
-		} catch(SQLException e) {
-			Debug.log("Could not get annotations. Reason: " +
-					e.getMessage());
-			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Could not get annotations.");
+			db.changeAnnotationLabel(oldName, newName);
+			response = new MinimalResponse(HttpStatusCode.OK);
+		} catch (IOException e) {
+			response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
+					"Editing annotation label '" + oldName +
+							"' unsuccessful. " + e.getMessage());
+		} catch (SQLException e) {
+			response = new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+					"Editing annotation label '" + oldName + "' unsuccessful " +
+							"due to temporary database problems.");
+			Debug.log("Reason: " + e.getMessage());
 		} finally {
-			db.close();
-
+			if (db != null)
+				db.close();
 		}
-		return new MinimalResponse(HttpStatusCode.OK);
+
+		return response;
 	}
 }
