@@ -25,7 +25,7 @@ public class LoginResponse extends Response {
 	public LoginResponse(String token, String userType) {
 		this.code = HttpStatusCode.OK;
 		this.token = token;
-		this.role = "role";
+		this.role = userType;
 	}
 
 	/**

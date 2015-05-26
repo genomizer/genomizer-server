@@ -1,4 +1,6 @@
 package command.connection;
+import authentication.Authenticate;
+import authentication.LoginAttempt;
 import command.Command;
 import command.ValidateException;
 import database.DatabaseAccessor;
