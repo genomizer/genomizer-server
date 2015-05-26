@@ -1,6 +1,7 @@
 package response;
 
 import com.google.gson.*;
+import com.google.gson.annotations.Expose;
 
 import java.util.ArrayList;
 
@@ -12,7 +13,8 @@ import java.util.ArrayList;
  */
 public class FilePathListResponse extends Response {
 
-	private JsonArray jsonArray = null;
+	@Expose
+	private JsonArray jsonArray;
 
 	/**
 	 * Constructor for the response.

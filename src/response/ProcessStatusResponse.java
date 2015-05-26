@@ -38,9 +38,8 @@ public class ProcessStatusResponse extends Response {
 			ErrorLogger.log("SYSTEM", "There are no processes to retrieve.");
 			return "[]";
 		}
-
 		Collections.sort(getProcessStatuses);
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 
 		JsonArray arr = new JsonArray();
 		for (Process p : getProcessStatuses) {
@@ -57,7 +56,7 @@ public class ProcessStatusResponse extends Response {
         JsonParser parser = new JsonParser();
         JsonArray json = parser.parse(jsonString).getAsJsonArray();
 
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 
 		return gson.toJson(json);
     }

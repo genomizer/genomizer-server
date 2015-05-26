@@ -2,6 +2,7 @@ package response.test;
 
 import static org.junit.Assert.*;
 
+import database.subClasses.UserMethods;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -36,7 +37,7 @@ public class LoginResponseTest {
 	 */
 	@Test
 	public void testCreateLoginResponseNotNull() {
-		LoginResponse rsp = new LoginResponse("abcdefg123");
+		LoginResponse rsp = new LoginResponse("abcdefg123", UserMethods.UserType.USER);
 		assertNotNull(rsp);
 	}
 

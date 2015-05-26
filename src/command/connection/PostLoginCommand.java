@@ -64,6 +64,7 @@ public class PostLoginCommand extends Command {
 	public Response execute() {
 		DatabaseAccessor db = null;
 		String dbHash;
+
 		try {
 			db = initDB();
 			dbHash = db.getPasswordHash(username);
@@ -92,8 +93,14 @@ public class PostLoginCommand extends Command {
 					"Login failed, incorrect password");
 		}
 
+		try {
+			userType = db.getRole(username);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
 		Debug.log("LOGIN WAS SUCCESSFUL FOR: "+ username + ". GAVE UUID: " +
 				Authenticate.getID(username));
-		return new LoginResponse(login.getUUID());
+		return new LoginResponse(login.getUUID(),userType);
 	}
 }

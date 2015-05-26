@@ -1,6 +1,7 @@
 package response;
 
 import com.google.gson.annotations.Expose;
+import database.subClasses.UserMethods.UserType;
 
 /**
  * Class that represents the login response.
@@ -14,17 +15,18 @@ public class LoginResponse extends Response {
 	private String token;
 
 	@Expose
-	String role;
+	private String role;
 
 
 	/**
 	 * Creator for the response.
 	 * @param token The login token to be returned.
+	 * @param userType the
 	 */
-	public LoginResponse(String token) {
+	public LoginResponse(String token, UserType userType) {
 		this.code = HttpStatusCode.OK;
 		this.token = token;
-		this.role = "role";
+		this.role = userType.name();
 	}
 
 	/**

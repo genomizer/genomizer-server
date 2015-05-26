@@ -2,16 +2,12 @@ package response.test;
 
 import static org.junit.Assert.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 
-import command.annotation.GetAnnotationCommand;
-import database.subClasses.UserMethods.UserType;
 import database.test.TestInitializer;
 import org.junit.Before;
 import org.junit.Test;
 import response.AnnotationInformation;
 import response.AnnotationListResponse;
-import response.Response;
 
 /**
  * Test used to check that GetAnnotationInformationResponse
@@ -48,15 +44,4 @@ public class AnnotationListResponseTest {
 		AnnotationListResponse air = new AnnotationListResponse(arraylist);
 		assertEquals(air.getBody(), "[{\"name\":\"Gender\",\"values\":[\"male\",\"female\",\"unknown\"],\"forced\":true},{\"name\":\"Cell Line\",\"values\":[\"true\",\"false\",\"unknown\"],\"forced\":true}]");
 	}
-
-	@Test
-	public void testDatabaseConnection() {
-		GetAnnotationCommand cmd = new GetAnnotationCommand();
-		HashMap<String, String> query = new HashMap<>();
-		query.put("key", "val");
-		cmd.setFields("uri", query, null, UserType.ADMIN);
-		Response rsp = cmd.execute();
-		rsp.getBody();
-	}
-
 }
