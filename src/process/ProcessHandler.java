@@ -38,9 +38,6 @@ public class ProcessHandler {
 			case PutProcessCommand.CMD_PROFILE_TO_REGION:
 				// TODO
 				break;
-			case PutProcessCommand.CMD_CANCEL_PROCESS:
-				// TODO cancel process in process pool.
-				break;
 
 			default:
 				throw new IllegalArgumentException("Command "+processName
