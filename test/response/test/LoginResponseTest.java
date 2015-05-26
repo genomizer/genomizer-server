@@ -41,7 +41,7 @@ public class LoginResponseTest {
 	@Test
 	public void testCreateLoginResponseNotNull() {
 
-		LoginResponse rsp = new LoginResponse(200, "abcdefg123", "ADMIN");
+		LoginResponse rsp = new LoginResponse(200, "abcdefg123","ADMIN");
 		assertNotNull(rsp);
 
 	}
