@@ -168,7 +168,6 @@ public class PutProcessCommand extends Command {
 					}
 					break;
 
-				//TODO check everything
 				case PutProcessCommand.CMD_CANCEL_PROCESS:
 					// Parameter = PID
 					Doorman.getProcessPool().cancelProcess(PID);
@@ -186,7 +185,7 @@ public class PutProcessCommand extends Command {
 					"when processing");
 		}
 
-		//The execute executed correctly
+		// Command executed correctly.
 		try {
 			if(!db.isConnected()){
 				db = initDB();
@@ -237,8 +236,8 @@ public class PutProcessCommand extends Command {
 	}
 
 	/**
-	 * Logs an error, closes the DB reference and returns a processresponse with
-	 * the errormessage.
+	 * Logs an error, closes the DB reference and returns a ProcessResponse with
+	 * the error message.
 	 *
 	 * @param db - the database reference.
 	 * @param error - the actual error
