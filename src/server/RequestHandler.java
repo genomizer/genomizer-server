@@ -9,6 +9,7 @@ import command.*;
 import command.connection.PostLoginCommand;
 import command.process.ProcessCommand;
 import command.process.ProcessCommandAdapter;
+import command.process.ProcessCommands;
 import command.process.PutProcessCommand;
 import database.DatabaseAccessor;
 import database.subClasses.UserMethods.UserType;
@@ -153,7 +154,11 @@ public class RequestHandler implements HttpHandler {
 			respond(new ErrorResponse(e.getCode(), e.getMessage()), exchange);
 			return;
 		}
-        if (commandClass.equals(PutProcessCommand.class)) {
+
+        if(commandClass.equals(ProcessCommands.class)) {
+            respond(new ProcessResponse(HttpStatusCode.NOT_IMPLEMENTED), exchange);
+//            respond(new ProcessResponse(HttpStatusCode.OK), exchange);
+        } else if (commandClass.equals(PutProcessCommand.class)) {
             Doorman.getProcessPool().addProcess((PutProcessCommand) command);
             respond(new ProcessResponse(HttpStatusCode.OK), exchange);
         } else {
