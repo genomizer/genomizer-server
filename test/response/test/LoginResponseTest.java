@@ -37,7 +37,7 @@ public class LoginResponseTest {
 	 */
 	@Test
 	public void testCreateLoginResponseNotNull() {
-		LoginResponse rsp = new LoginResponse("abcdefg123", UserMethods.UserType.USER.name());
+		LoginResponse rsp = new LoginResponse("abcdefg123", UserMethods.UserType.ADMIN.name());
 		assertNotNull(rsp);
 	}
 
@@ -59,6 +59,7 @@ public class LoginResponseTest {
 	 */
 	@Test
 	public void testLoginResponseGetBody() {
+
 		String json = "{\"token\":\"user-id\"}" + "\n";
 		LoginResponse rsp = gson.fromJson(json, LoginResponse.class);
 		assertEquals(json, rsp.getBody());

@@ -18,13 +18,14 @@ public class LoginResponse extends Response {
 
 
 	/**
-	 * Creator for the response.	 * @param token The login token to be returned.
+	 * Creator for the response.	
+	 * @param token The login token to be returned.
 	 * @param userType the user rights
 	 */
 	public LoginResponse(String token, String userType) {
 		this.code = HttpStatusCode.OK;
 		this.token = token;
-		this.role = userType;
+		this.role = "role";
 	}
 
 	/**

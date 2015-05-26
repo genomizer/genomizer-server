@@ -9,8 +9,6 @@ import response.HttpStatusCode;
 import response.LoginResponse;
 import response.Response;
 import server.Debug;
-import authentication.Authenticate;
-import authentication.LoginAttempt;
 
 import com.google.gson.annotations.Expose;
 
