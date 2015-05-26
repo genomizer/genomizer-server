@@ -5,6 +5,7 @@ import command.ValidateException;
 import command.process.*;
 import database.subClasses.UserMethods;
 import org.junit.Test;
+import server.RequestHandler;
 
 import static org.junit.Assert.*;
 
@@ -17,7 +18,7 @@ import static org.junit.Assert.*;
 
 public class ProcessCommandsTest {
 
-    private final Gson gson = ProcessCommandAdapter.getProcessCommandGson();
+    private final Gson gson = new RequestHandler().getGson();
 
     @Test
     public void shouldReturnListWithOneCommand() throws Exception {

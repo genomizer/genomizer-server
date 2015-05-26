@@ -11,10 +11,13 @@ import command.process.RawToProfProcessCommand;
 import command.process.ProcessCommand;
 import command.process.ProcessCommandAdapter;
 import org.junit.Test;
+import server.RequestHandler;
 
 import static org.junit.Assert.*;
 
 public class ProcessCommandAdapterTest {
+
+    private final Gson gson = new RequestHandler().getGson();
 
     @Test
     public void shouldParseBowtieCommand() throws Exception {
@@ -30,7 +33,6 @@ public class ProcessCommandAdapterTest {
                       "]" +
                       "}";
 
-        Gson gson = ProcessCommandAdapter.getProcessCommandGson();
         ProcessCommand command = gson.fromJson(json, ProcessCommand.class);
         assertEquals(RawToProfProcessCommand.class, command.getClass());
 
