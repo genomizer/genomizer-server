@@ -1,16 +1,12 @@
 package command.process;
 
 import command.Command;
-import command.Process;
 import command.UserRights;
 import command.ValidateException;
 import response.ProcessStatusResponse;
 import response.Response;
 import server.Doorman;
 import server.ProcessPool;
-
-import java.util.Calendar;
-import java.util.LinkedList;
 
 /**
  * Fetches status of all processes that have been added to the server. Will be
@@ -21,9 +17,6 @@ import java.util.LinkedList;
  * @version 1.1
  */
 public class GetProcessStatusCommand extends Command {
-
-	// Number of days in the past to retrieve processes
-	private int days = 30;
 
 	@Override
 	public int getExpectedNumberOfURIFields() {
@@ -44,23 +37,6 @@ public class GetProcessStatusCommand extends Command {
 	public Response execute() {
 
 		ProcessPool processPool = Doorman.getProcessPool();
-		LinkedList<PutProcessCommand> processesList = processPool.getProcesses();
-		LinkedList<Process> getProcessStatuses = new LinkedList<>();
-
-		Calendar pastCal = Calendar.getInstance();
-		pastCal.setTimeInMillis(System.currentTimeMillis());
-		pastCal.add(Calendar.DAY_OF_MONTH, -days);
-        	
-		Calendar startedCal = Calendar.getInstance();
-
-		for (PutProcessCommand proc : processesList) {
-			Process process = processPool.getProcessStatus(proc.getPID());
-			startedCal.setTimeInMillis(process.timeStarted);
-
-			if (startedCal.after(pastCal)) {
-				getProcessStatuses.add(process);
-			}
-		}
-		return new ProcessStatusResponse(getProcessStatuses);
+		return new ProcessStatusResponse(processPool.getProcesses());
 	}
 }

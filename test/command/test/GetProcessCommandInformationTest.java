@@ -82,21 +82,16 @@ public class GetProcessCommandInformationTest {
 			e.printStackTrace();
 		}
 
-		LinkedList<PutProcessCommand> processesList = processPool.getProcesses();
-		LinkedList<Process> getProcessStatuses = new LinkedList<>();
-
-		for (PutProcessCommand proc : processesList) {
-			getProcessStatuses.add(processPool.getProcessStatus(proc.getPID()));
-		}
+		List<Process> processesList = processPool.getProcesses();
 
 
-		if (getProcessStatuses.size() > 0) {
+		if (processesList.size() > 0) {
 
-			Collections.sort(getProcessStatuses);
+			Collections.sort(processesList);
 			Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
 			JsonArray arr = new JsonArray();
-			for (Process p : getProcessStatuses) {
+			for (Process p : processesList) {
 				JsonElement elem = gson.toJsonTree(p, Process.class);
 				arr.add(elem);
 			}
