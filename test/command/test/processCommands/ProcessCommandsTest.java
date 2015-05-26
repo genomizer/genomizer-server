@@ -49,11 +49,12 @@ public class ProcessCommandsTest {
         ProcessCommands_new processCommands =
                 gson.fromJson(json, ProcessCommands_new.class);
         assertEquals(
-                BowtieProcessCommand.class,
+                RawToProfProcessCommand.class,
                 processCommands.getProcessCommands().get(0).getClass());
         assertEquals(
                 RatioProcessCommand.class,
                 processCommands.getProcessCommands().get(1).getClass());
         System.out.println("processCommands = " + processCommands);
+
     }
 }

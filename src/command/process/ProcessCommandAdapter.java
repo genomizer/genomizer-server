@@ -18,7 +18,7 @@ public class ProcessCommandAdapter implements JsonDeserializer<ProcessCommand> {
     private static final Map<String, Class<?>> CLASS_MAP = new HashMap<>();
 
     static {
-        CLASS_MAP.put("bowtie", BowtieProcessCommand.class);
+        CLASS_MAP.put("rawToProfile", RawToProfProcessCommand.class);
         CLASS_MAP.put("ratio", RatioProcessCommand.class);
     }
 

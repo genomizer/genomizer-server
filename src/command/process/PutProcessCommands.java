@@ -33,14 +33,12 @@ public class PutProcessCommands extends Command{
 
     private UUID PID;
 
-    @Expose
-    private ArrayList<ProcessFiles> processCommands = new ArrayList<>();
 
     private ArrayList<Process> processes = new ArrayList<>();
 
     @Override
     public int getExpectedNumberOfURIFields() {
-        return 1;
+        return 2;
     }
 
     /**
@@ -58,48 +56,24 @@ public class PutProcessCommands extends Command{
 
     @Override
     public void validate() throws ValidateException {
-        hasRights(UserRights.getRights(this.getClass()));
-        validateName(expId, MaxLength.EXPID, "Experiment ID");
-
-        if (processCommands == null || processCommands.size() < 1) {
-            throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Specify " +
-                    "processes for the experiment.");
-        }
-
-        for (int i = 0; i < processCommands.size(); i++) {
-            validateName(processCommands.get(i).getInfile(),
-                    MaxLength.FILE_EXPID, "Infile");
-            validateName(processCommands.get(i).getOutfile(),
-                    MaxLength.FILE_EXPID, "Outfile");
-            validateName(processCommands.get(i).getGenomeVersion(),
-                    MaxLength.GENOME_VERSION, "Genome version");
-        }
-
-        setFilePaths();
-
     }
 
-    public PutProcessCommands(){
 
-        for(ProcessFiles pC : processCommands){
-            if(pC.getType().equals("rawToProfile")){
-                Process p = new RawToProfileProcess(pC.getType(), pC, filepaths);
-                processes.add(p);
-            }
-        }
-    }
 
     @Override
     public Response execute() {
+
+        setFilePaths();
+
         for (Process pC: processes) {
             try{
                 pC.runProcess();
                 } catch(UnsupportedOperationException e){
-                //return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
-                        }
+                return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
             }
-        //return new ProcessResponse(HttpStatusCode.OK, "Processing of experiment: "+expId+" has completed.");
-                return null;
+        }
+        return new ProcessResponse(HttpStatusCode.OK, "Processing of experiment: "+expId+" has completed.");
+
         }
     public Response setFilePaths() {
         DatabaseAccessor db = null;

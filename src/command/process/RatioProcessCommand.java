@@ -7,11 +7,19 @@ package command.process;
  */
 
 import com.google.gson.annotations.Expose;
+import command.ValidateException;
+import response.Response;
+
+import java.util.Map;
 
 /**
  * TODO class description goes here...
  */
 public class RatioProcessCommand extends ProcessCommand {
+    @Override
+    public void validate() throws ValidateException {
+
+    }
 
     @Expose
     private String infile1;
@@ -25,5 +33,10 @@ public class RatioProcessCommand extends ProcessCommand {
                "infile1='" + infile1 + '\'' +
                ", infile2='" + infile2 + '\'' +
                '}';
+    }
+
+    @Override
+    public void doProcess(Map.Entry<String, String> filePath) throws UnsupportedOperationException{
+
     }
 }

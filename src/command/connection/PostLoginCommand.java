@@ -57,7 +57,7 @@ public class PostLoginCommand extends Command {
 		if(hasInvalidCharacters(string)) {
 			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Invalid" +
 					" characters in " + field.toLowerCase() +
-					". Valid characters are: " + validCharacters);
+					". Valid characters are: " + VALID_CHARACTERS);
 		}
 	}
 	@Override

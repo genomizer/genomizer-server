@@ -7,7 +7,7 @@ package command.test.processCommands;
  */
 
 import com.google.gson.Gson;
-import command.process.BowtieProcessCommand;
+import command.process.RawToProfProcessCommand;
 import command.process.ProcessCommand;
 import command.process.ProcessCommandAdapter;
 import org.junit.Test;
@@ -32,12 +32,12 @@ public class ProcessCommandAdapterTest {
 
         Gson gson = ProcessCommandAdapter.getProcessCommandGson();
         ProcessCommand command = gson.fromJson(json, ProcessCommand.class);
-        assertEquals(BowtieProcessCommand.class, command.getClass());
+        assertEquals(RawToProfProcessCommand.class, command.getClass());
 
-        BowtieProcessCommand bowtieProcessCommand =
-                (BowtieProcessCommand) command;
-        BowtieProcessCommand.BowtieProcessFile file =
-                bowtieProcessCommand.getFiles().get(0);
+        RawToProfProcessCommand rawToProfProcessCommand =
+                (RawToProfProcessCommand) command;
+        RawToProfProcessCommand.RawToProfProcessFile file =
+                rawToProfProcessCommand.getFiles().get(0);
 
         assertEquals("infileName", file.getInfile());
         assertEquals("outfileName", file.getOutfile());
@@ -45,6 +45,6 @@ public class ProcessCommandAdapterTest {
         assertEquals("theParams", file.getParams());
         assertEquals(true, file.shouldKeepSam());
 
-        System.out.println("bowtieProcessCommand = " + bowtieProcessCommand);
+        System.out.println("bowtieProcessCommand = " + rawToProfProcessCommand);
     }
 }

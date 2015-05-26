@@ -49,7 +49,7 @@ public class RawToProfileConverter extends Executor {
 	}
 
 
-	public String procedureRaw(String params, String infile, String outfile, String keepSam, String
+	public String procedureRaw(String params, String infile, String outfile, boolean keepSam, String
 			genomeVersion, String referenceGenome, Map.Entry<String,String> filepaths) throws ProcessException{
 		return null;
 	}

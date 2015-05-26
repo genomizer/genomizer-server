@@ -52,7 +52,7 @@ public class ProcessHandler {
 			}
 			return logString;
 	}
-	public void executeRawToProfileProcess(String params, String infile, String outfile, String keepSam, String
+	public void executeRawToProfileProcess(String params, String infile, String outfile, boolean keepSam, String
 			genomeVersion, String referenceGenome, Map.Entry<String,String> filepaths) throws ProcessException{
 		String logString = "";
 		RawToProfileConverter rawToProfileConverter =

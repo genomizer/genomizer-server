@@ -7,6 +7,8 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import command.*;
 import command.connection.PostLoginCommand;
+import command.process.ProcessCommand;
+import command.process.ProcessCommandAdapter;
 import command.process.PutProcessCommand;
 import database.DatabaseAccessor;
 import database.subClasses.UserMethods.UserType;
@@ -40,6 +42,7 @@ public class RequestHandler implements HttpHandler {
 	public RequestHandler() {
 		GsonBuilder builder = new GsonBuilder();
 		builder.excludeFieldsWithoutExposeAnnotation();
+        builder.registerTypeAdapter(ProcessCommand.class, new ProcessCommandAdapter());
 		gson = builder.create();
         uploadHandler = new UploadHandler("/upload", ServerSettings.
                 fileLocation, System.getProperty("java.io.tmpdir"));
