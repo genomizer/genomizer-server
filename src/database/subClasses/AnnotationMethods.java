@@ -402,6 +402,44 @@ public class AnnotationMethods {
             int defaultValueIndex, boolean required) throws SQLException,
             IOException {
 
+        verifyDropDownParams(label, choices, defaultValueIndex);
+
+        int tuplesInserted = 0;
+
+        String annotationQuery = "INSERT INTO Annotation "
+                + "VALUES (?, 'DropDown', ?, ?)";
+        String choicesQuery = "INSERT INTO Annotation_Choices "
+                + "(Label, Value) VALUES (?, ?)";
+        PreparedStatement annotationStmt = null;
+        PreparedStatement choicesStmt = null;
+        conn.setAutoCommit(false);
+
+        try {
+            annotationStmt = conn.prepareStatement(annotationQuery);
+            annotationStmt.setString(1, label);
+            annotationStmt.setString(2, choices.get(defaultValueIndex));
+            annotationStmt.setBoolean(3, required);
+            tuplesInserted += annotationStmt.executeUpdate();
+
+            choicesStmt = conn.prepareStatement(choicesQuery);
+            choicesStmt.setString(1, label);
+            for (String choice : choices) {
+                choicesStmt.setString(2, choice);
+                tuplesInserted += choicesStmt.executeUpdate();
+            }
+
+        } catch (SQLException e) {
+            conn.rollback();
+            throw e;
+        } finally {
+            if(annotationStmt != null) { annotationStmt.close(); };
+            if(choicesStmt != null) { choicesStmt.close(); };
+            conn.setAutoCommit(true);
+        }
+        return tuplesInserted;
+    }
+
+    private void verifyDropDownParams(String label, List<String> choices, int defaultValueIndex) throws IOException, SQLException {
         if (label == null || label.isEmpty()) {
             throw new IOException("Invalid Label. (Empty or null)");
         }
@@ -411,7 +449,7 @@ public class AnnotationMethods {
         }
 
         if (!isValidChoice(label)) {
-            throw new IOException("Lable contains invalid characters");
+            throw new IOException("Label contains invalid characters");
         }
 
         Annotation a = getAnnotationObject(label);
@@ -433,43 +471,6 @@ public class AnnotationMethods {
         if (defaultValueIndex < 0 || defaultValueIndex >= choices.size()) {
             throw new IOException("Invalid default value index");
         }
-
-        int tuplesInserted = 0;
-
-        String annotationQuery = "INSERT INTO Annotation "
-                + "VALUES (?, 'DropDown', ?, ?)";
-
-        String choicesQuery = "INSERT INTO Annotation_Choices "
-                + "(Label, Value) VALUES (?, ?)";
-
-        PreparedStatement addAnnoStatement = conn
-                .prepareStatement(annotationQuery);
-
-        addAnnoStatement.setString(1, label);
-        addAnnoStatement.setString(2, choices.get(defaultValueIndex));
-        addAnnoStatement.setBoolean(3, required);
-        tuplesInserted += addAnnoStatement.executeUpdate();
-        addAnnoStatement.close();
-
-        PreparedStatement addChoicesStatement = conn
-                .prepareStatement(choicesQuery);
-        addChoicesStatement.setString(1, label);
-
-        for (String choice : choices) {
-            addChoicesStatement.setString(2, choice);
-            try {
-                tuplesInserted += addChoicesStatement.executeUpdate();
-            } catch (SQLException e) {
-                /*
-                 * Ignore and try adding next choice. This is probably due to
-                 * the list of choices containing a duplicate.
-                 */
-            }
-        }
-
-        addChoicesStatement.close();
-
-        return tuplesInserted;
     }
 
     /**
@@ -555,67 +556,71 @@ public class AnnotationMethods {
     public int removeDropDownAnnotationValue(String label, String value)
             throws SQLException, IOException {
 
-        // Check if value is a dropdown choice and used on any experiments
-        String dependFileQuery = "SELECT * FROM Annotated_With "
-                + "WHERE (label ~~* ? AND value ~~* ?)";
+        try {
+            verifyValidRemoval(label, value);
+        } catch (SQLException e) {
+            throw e;
+        } catch (IOException e) {
+            throw e;
+        }
 
-        PreparedStatement dependencyStatement = conn
-                .prepareStatement(dependFileQuery);
-        dependencyStatement.setString(1, label);
-        dependencyStatement.setString(2, value);
-        ResultSet res = dependencyStatement.executeQuery();
+        String query =
+                "DELETE FROM Annotation_Choices " +
+                "WHERE (label ~~* ? AND value ~~* ?)";
+        PreparedStatement deleteTagStatement = conn.prepareStatement(query);
+        deleteTagStatement.setString(1, label);
+        deleteTagStatement.setString(2, value);
 
-        String dependGenomeQuery = "SELECT * FROM Genome_Release "
-                + "WHERE (Species ~~* ?)";
-        PreparedStatement dependency2Statement = conn
-                .prepareStatement(dependGenomeQuery);
-        dependency2Statement.setString(1, value);
-        ResultSet res2 = dependency2Statement.executeQuery();
+        int resCount = deleteTagStatement.executeUpdate();
+        deleteTagStatement.close();
+        return resCount;
+    }
 
-        boolean hasDependency = res.next();
-        dependencyStatement.close();
+    private void verifyValidRemoval(String label, String value) throws SQLException, IOException {
+        String selectAnnotatedWithQuery =
+                "SELECT * FROM Annotated_With " +
+                "WHERE (label ~~* ? AND value ~~* ?)";
+        String selectGenomeReleaseQuery =
+                "SELECT * FROM Genome_Release " +
+                "WHERE (Species ~~* ?)";
+        String checkTagQuery =
+                "SELECT * FROM Annotation WHERE " +
+                "(label ~~* ? AND defaultvalue ~~* ?)";
 
-        boolean hasDependency2 = res2.next();
-        dependency2Statement.close();
-        if (hasDependency) {
+        PreparedStatement annoStmt;
+        PreparedStatement grStmt;
+        PreparedStatement checkTagStmt;
+        annoStmt = conn.prepareStatement(selectAnnotatedWithQuery);
+        annoStmt.setString(1, label);
+        annoStmt.setString(2, value);
+        grStmt = conn.prepareStatement(selectGenomeReleaseQuery);
+        grStmt.setString(1, value);
+        ResultSet annoRes = annoStmt.executeQuery();
+        ResultSet grRes = grStmt.executeQuery();
+        checkTagStmt = conn.prepareStatement(checkTagQuery);
+        checkTagStmt.setString(1, label);
+        checkTagStmt.setString(2, value);
+        ResultSet rs = checkTagStmt.executeQuery();
+
+        if (annoRes.next()) {
             throw new IOException(value
                     + " is used in other experiments under label " + label
                     + " and can therefore not be removed.");
         }
-        if (hasDependency2) {
+        if (grRes.next()) {
             throw new IOException(value
                     + "is used in a stored genome_release and"
                     + " therefore cannot be removed.");
-
         }
-
-        String query = "SELECT * FROM Annotation WHERE "
-                + "(label ~~* ? AND defaultvalue ~~* ?)";
-
-        PreparedStatement checkTagStatement = conn.prepareStatement(query);
-        checkTagStatement.setString(1, label);
-        checkTagStatement.setString(2, value);
-        ResultSet rs = checkTagStatement.executeQuery();
-
-        boolean hasResult = rs.next();
-        checkTagStatement.close();
-
-        if (hasResult) {
+        if (rs.next()) {
             throw new IOException(value + " is the default setting for "
                     + label + " and can therefore not be removed.\n"
                     + "A new default value must first be set.");
-        } else {
-            query = "DELETE FROM Annotation_Choices "
-                    + "WHERE (label ~~* ? AND value ~~* ?)";
-
-            PreparedStatement deleteTagStatement = conn.prepareStatement(query);
-            deleteTagStatement.setString(1, label);
-            deleteTagStatement.setString(2, value);
-
-            int resCount = deleteTagStatement.executeUpdate();
-            deleteTagStatement.close();
-            return resCount;
         }
+
+        annoStmt.close();
+        grStmt.close();
+        checkTagStmt.close();
     }
 
     /**
@@ -706,6 +711,67 @@ public class AnnotationMethods {
     public void changeAnnotationValue(String label, String oldValue,
             String newValue) throws SQLException, IOException {
 
+        verifyAnnoValueParams(label, oldValue, newValue);
+
+        String query = "UPDATE Annotation_Choices " + "SET Value = ? "
+                + "WHERE Label ~~* ? and Value ~~* ?";
+
+        String query2 = "UPDATE Annotated_With " + "SET Value = ? "
+                + "WHERE Label ~~* ? and Value ~~* ?";
+
+        String query3 = "UPDATE Annotation " + "SET DefaultValue = ? "
+                + "WHERE Label ~~* ? and DefaultValue ~~* ?";
+
+        String query4 = "UPDATE Genome_Release " + "SET Species = ? "
+                + "WHERE Species ~~* ?";
+
+        PreparedStatement stmt = null;
+        PreparedStatement stmt2 = null;
+        PreparedStatement stmt3 = null;
+        PreparedStatement stmt4 = null;
+
+        conn.setAutoCommit(false);
+
+        try {
+            ArrayList<String> paramList = new ArrayList<String>();
+            paramList.add(newValue);
+            paramList.add(label);
+            paramList.add(oldValue);
+
+            stmt = conn.prepareStatement(query);
+            stmt = bindStrings(stmt, paramList);
+            stmt.executeUpdate();
+
+            stmt2 = conn.prepareStatement(query2);
+            stmt2 = bindStrings(stmt2, paramList);
+            stmt2.executeUpdate();
+
+            stmt3 = conn.prepareStatement(query3);
+            stmt3 = bindStrings(stmt3, paramList);
+            stmt3.executeUpdate();
+
+            if (label.equalsIgnoreCase("species")) {
+                stmt4 = conn.prepareStatement(query4);
+                stmt4.setString(1, newValue);
+                stmt4.setString(2, oldValue);
+                stmt4.executeUpdate();
+            }
+
+            conn.commit();
+
+        } catch (SQLException e) {
+            conn.rollback();
+            throw e;
+        } finally {
+            if (stmt != null) { stmt.close(); }
+            if (stmt2 != null) { stmt2.close(); }
+            if (stmt3 != null) { stmt3.close(); }
+            if (stmt4 != null) { stmt4.close(); }
+            conn.setAutoCommit(true);
+        }
+    }
+
+    private void verifyAnnoValueParams(String label, String oldValue, String newValue) throws IOException, SQLException {
         if (!isValidChoice(newValue)) {
             throw new IOException(newValue + " contains invalid characters.\n"
                     + "Brackets cannot be used in annotations.");
@@ -732,45 +798,6 @@ public class AnnotationMethods {
                 throw new IOException(newValue
                         + " is already a choice for this annotation.");
             }
-        }
-
-        String query = "UPDATE Annotation_Choices " + "SET Value = ? "
-                + "WHERE Label ~~* ? and Value ~~* ?";
-
-        String query2 = "UPDATE Annotated_With " + "SET Value = ? "
-                + "WHERE Label ~~* ? and Value ~~* ?";
-
-        String query3 = "UPDATE Annotation " + "SET DefaultValue = ? "
-                + "WHERE Label ~~* ? and DefaultValue ~~* ?";
-
-        String query4 = "UPDATE Genome_Release " + "SET Species = ? "
-                + "WHERE Species ~~* ?";
-
-        PreparedStatement stmt = conn.prepareStatement(query);
-        ArrayList<String> parameterList = new ArrayList<String>();
-        parameterList.add(newValue);
-        parameterList.add(label);
-        parameterList.add(oldValue);
-        stmt = bindStrings(stmt, parameterList);
-        stmt.executeUpdate();
-        stmt.close();
-
-        stmt = conn.prepareStatement(query2);
-        stmt = bindStrings(stmt, parameterList);
-        stmt.executeUpdate();
-        stmt.close();
-
-        stmt = conn.prepareStatement(query3);
-        stmt = bindStrings(stmt, parameterList);
-        stmt.executeUpdate();
-        stmt.close();
-
-        if (label.equalsIgnoreCase("species")) {
-            stmt = conn.prepareStatement(query4);
-            stmt.setString(1, newValue);
-            stmt.setString(2, oldValue);
-            stmt.executeUpdate();
-            stmt.close();
         }
     }
 
