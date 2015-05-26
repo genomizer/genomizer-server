@@ -58,8 +58,8 @@ public class ProcessCommands_new extends Command {
         validateName(expId, MaxLength.EXPID, "Experiment ID");
 
         if (processCommands == null || processCommands.size() < 1) {
-            throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Specify " +
-                    "processes for the experiment.");
+            throw new ValidateException(HttpStatusCode.BAD_REQUEST,
+                    "Specify processes for the experiment.");
         }
 
         for (ProcessCommand processCommand : processCommands) {

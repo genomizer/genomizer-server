@@ -79,7 +79,7 @@ public class Doorman {
 		server.createContext("/geo/", requestHandler);
 		server.createContext("/upload", requestHandler);
 		server.createContext("/download", requestHandler);
-		server.createContext("/process/processCommands");
+		server.createContext("/process/processCommands", requestHandler);
 
 		server.setExecutor(new Executor() {
 			@Override
