@@ -22,7 +22,7 @@ public class ProcessCommandsTest {
 
         String json =
                 "{\"expId\":\"not_an_expid\"," +
-                "\"processCommands\":[{\"type\":\"bowtie\"," +
+                "\"processCommands\":[{\"type\":\"rawToProfile\"," +
                 "\"files\":[{\"infile\":" +
                 "\"bigtest1.fastq\",\"outfile\":\"awsd\"," +
                 "\"genomeVersion\":\"theGR\",\"params\":\"" +
@@ -36,10 +36,10 @@ public class ProcessCommandsTest {
     }
 
     @Test
-    public void shouldContainOneBowtieAndOneRatio() throws Exception {
+    public void shouldContainOneRawToProfileAndOneRatio() throws Exception {
         String json =
                 "{\"expId\":\"not_an_expid\"," +
-                "\"processCommands\":[{\"type\":\"bowtie\"," +
+                "\"processCommands\":[{\"type\":\"rawToProfile\"," +
                 "\"files\":[{\"infile\":\"bigtest1.fastq\"," +
                 "\"outfile\":\"awsd\",\"genomeVersion\":\"theGR\"," +
                 "\"params\":\"-a -m 1 --best -p 10 -v 2 -q -S\"," +

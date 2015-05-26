@@ -18,7 +18,7 @@ public class ProcessCommandAdapterTest {
 
     @Test
     public void shouldParseBowtieCommand() throws Exception {
-        String json = "{\"type\": \"bowtie\", " +
+        String json = "{\"type\": \"rawToProfile\", " +
                       "\"files\": [" +
                       "{" +
                       "\"infile\": \"infileName\"," +
