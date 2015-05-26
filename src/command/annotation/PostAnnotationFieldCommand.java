@@ -41,7 +41,7 @@ public class PostAnnotationFieldCommand extends Command {
 	public void validate() throws ValidateException {
 		hasRights(UserRights.getRights(this.getClass()));
 		validateName(name, MaxLength.ANNOTATION_LABEL, "Annotation label");
-		defaults = "";
+
 		if (forced == null) {
 			throw new ValidateException(HttpStatusCode.BAD_REQUEST,
 					"Adding annotation field was unsuccessful, specify if " +
@@ -63,8 +63,6 @@ public class PostAnnotationFieldCommand extends Command {
 					"Adding annotation field was unsuccessful, can not add a " +
 							"dropdown option called \"freetext\"");
 		}
-
-		type.add(0, "");
 	}
 
 	@Override
@@ -77,6 +75,7 @@ public class PostAnnotationFieldCommand extends Command {
 			if (type.size() == 1 && type.get(0).equals("freetext")) {
 				db.addFreeTextAnnotation(name, defaults, forced);
 			} else {
+				type.add(0, "");
 				int defaultValueIndex = type.indexOf(defaults);
 				if (defaultValueIndex == -1)
 					defaultValueIndex = 0;
