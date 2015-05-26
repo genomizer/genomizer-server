@@ -55,36 +55,18 @@ public class PutAnnotationValueCommand extends Command {
 
 		try {
 			db = initDB();
-			if (db.getAllAnnotationLabels().contains(name)) {
-				if (db.getChoices(name).contains(oldValue)) {
-					if (db.getChoices(name).contains(newValue)) {
-						response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
-								"Editing annotation value was unsuccessful, " +
-										"the annotation value " + newValue +
-										" already exists");
-					} else {
-						db.changeAnnotationValue(name, oldValue, newValue);
-						response = new MinimalResponse(HttpStatusCode.OK);
-					}
-				} else {
-					response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
-							"Editing annotation value was unsuccessful, the " +
-									"annotation value " + oldValue +
-									" does not exist");
-				}
-			} else {
-				response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
-						"Editing annotation value was unsuccessful, the " +
-								"annotation field " + name +
-								" does not exist.");
-			}
-		} catch (IOException | SQLException e) {
-			Debug.log("Editing of annotation value " + oldValue +
-					" was unsuccessful, reason : " + e.getMessage());
+			db.changeAnnotationValue(name, oldValue, newValue);
+			response = new MinimalResponse(HttpStatusCode.OK);
+		} catch (IOException e) {
+			response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
+					"Editing of annotation value '" + oldValue +
+							"' unsuccessful. " +e.getMessage());
+		} catch (SQLException e) {
 			response = new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
-					"Editing of annotation value " + oldValue +
-							" was unsuccessful due to temporary problems with" +
-							" the database");
+					"Editing annotation value '" + oldValue +
+							"' unsuccessful due to temporary database " +
+							"problems.");
+			Debug.log("Reason: " + e.getMessage());
 		} finally {
 			if (db != null)
 				db.close();
