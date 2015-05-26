@@ -4,15 +4,11 @@ import command.process.PutProcessCommand;
 import server.ErrorLogger;
 /**
  * Class that acts as a handler for the procedure and calculation part of the
- * program. the rest of the serverside should always go through this class when
+ * program. the rest of the server side should always go through this class when
  * using Process classes.
  * 
  */
 public class ProcessHandler {
-
-	public ProcessHandler createProcessHandler() {
-		return new ProcessHandler();
-	}
 
 	/**
 	 * Executes a process depending of which type it is.
