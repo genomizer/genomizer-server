@@ -13,9 +13,10 @@ import database.constants.MaxLength;
 import database.containers.Genome;
 import database.subClasses.UserMethods.UserType;
 import process.ProcessException;
-import process.ProcessHandler;
+import process.RawToProfileConverter;
 import response.*;
 import server.Debug;
+import server.Doorman;
 import server.ErrorLogger;
 
 import java.io.IOException;
@@ -114,12 +115,10 @@ public class PutProcessCommand extends Command {
 	public Response execute() {
 
 		DatabaseAccessor db = null;
-		ProcessHandler processHandler;
 
 		try {
 
 			db = initDB();
-			processHandler = new ProcessHandler();
 
 			switch(processtype){
 				case PutProcessCommand.CMD_RAW_TO_PROFILE:
@@ -156,12 +155,14 @@ public class PutProcessCommand extends Command {
 					}
 
 					try {
-						processHandler.executeProcess(
-								PutProcessCommand.CMD_RAW_TO_PROFILE,
-								parameters, filepaths.getKey(),
-								filepaths.getValue());
+						RawToProfileConverter rawToProfileConverter =
+								new RawToProfileConverter();
+						String logString = rawToProfileConverter.procedure(parameters,
+								filepaths.getKey(), filepaths.getValue());
 
-					} catch (ProcessException e) {
+						ErrorLogger.log("SYSTEM","Process: "+logString);
+					}
+					catch (ProcessException e) {
 						return processError(db, e.getMessage(), "Process " +
 								"exception when processing");
 					}
@@ -169,13 +170,9 @@ public class PutProcessCommand extends Command {
 
 				//TODO check everything
 				case PutProcessCommand.CMD_CANCEL_PROCESS:
-					try {
-						//Parameter = PID
-						processHandler.executeProcess(CMD_CANCEL_PROCESS, parameters, null, null);
-						return new MinimalResponse(HttpStatusCode.OK);
-					} catch (ProcessException e) {
-						return processError(db, e.getMessage(), "Process " + "exception when processing");
-					}
+					// Parameter = PID
+					Doorman.getProcessPool().cancelProcess(PID);
+					return new MinimalResponse(HttpStatusCode.OK);
 
 				default:
 					return processError(db, "", "ERROR: Unknown process " +
