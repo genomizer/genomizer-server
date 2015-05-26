@@ -74,9 +74,11 @@ public class Picard extends Executor{
 
     public static String runRemoveDuplicates(String inFile, String outFile)
             throws ValidateException, IOException, InterruptedException {
-        Picard markDuplicates = new Picard("MarkDuplicates", inFile, outFile,
-                ".sam", ".sam",
-                new String[]{"REMOVE_DUPLICATES=true", "METRICS_FILE=/dev/null"});
+        Picard markDuplicates =
+            new Picard("MarkDuplicates", inFile, outFile,
+                       ".sam", ".sam",
+                       new String[]{"REMOVE_DUPLICATES=true",
+                                    "METRICS_FILE=/dev/null"});
 
         markDuplicates.validate();
         markDuplicates.execute();

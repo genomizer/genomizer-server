@@ -563,7 +563,7 @@ public class FileMethods {
 				"UPDATE File "
 				+"SET FileSize = ? "
 				+"WHERE FileID = ?")) {
-			stmt.setString(1, size.toString());
+			stmt.setLong(1, size);
 			stmt.setInt(2, fileID);
 			res = stmt.executeUpdate();
 		}
