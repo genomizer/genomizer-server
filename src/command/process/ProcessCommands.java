@@ -64,11 +64,6 @@ public class ProcessCommands extends Command {
 
         for (ProcessCommand processCommand : processCommands) {
             processCommand.validate();
-//                    MaxLength.FILE_EXPID, "Infile");
-//            validateName(processCommands.get(i).getFiles().get(i).getOutfile(),
-//                    MaxLength.FILE_EXPID, "Outfile");
-//            validateName(processCommands.get(i).getFiles().get(i).getGenomeVersion(),
-//                    MaxLength.GENOME_VERSION, "Genome version");
         }
 
     }

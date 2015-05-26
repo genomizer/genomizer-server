@@ -38,7 +38,6 @@ public class RawToProfProcessCommand extends ProcessCommand {
 
     @Override
     public void doProcess(Map.Entry<String,String> filePath) {
-        System.out.println("doing raw to profile");
         for(RawToProfProcessFile file: files) {
             file.ProcessFile(filePath);
         }
@@ -99,8 +98,6 @@ public class RawToProfProcessCommand extends ProcessCommand {
         public void ProcessFile(Map.Entry<String,String> filePaths) {
             DatabaseAccessor db = null;
 
-            throw new UnsupportedOperationException("not yet implemented");
-            /*
             try {
                 db = initDB();
                 ProcessHandler processHandler = new ProcessHandler();
@@ -151,7 +148,7 @@ public class RawToProfProcessCommand extends ProcessCommand {
                     db.close();
                 }
             }
-            */
+
         }
 
     }
