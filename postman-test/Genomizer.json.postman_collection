@@ -8,6 +8,7 @@
 		"f31eaaef-5158-6a01-880f-d43d7c0c8fb9",
 		"d6c7a5c5-ae87-c05f-6da8-5a4b21fe6c6b",
 		"5c84e4d6-28e1-240f-de15-0302efae13c4",
+		"ac0071fd-8bd2-585a-9716-71f8211851df",
 		"5fd59891-20a9-6993-cece-9b7dcf0646a0",
 		"2626075d-9fe0-b5ed-d660-0d19213f1586"
 	],
@@ -20,7 +21,6 @@
 	"remoteLink": "",
 	"public": false,
 	"write": true,
-	"hasRequests": true,
 	"requests": [
 		{
 			"id": "2626075d-9fe0-b5ed-d660-0d19213f1586",
@@ -35,7 +35,7 @@
 			"tests": "tests[\"Response code\"] = responseCode.code === 401;",
 			"currentHelper": "normal",
 			"helperAttributes": {},
-			"time": 1432560773992,
+			"time": 1432561850447,
 			"name": "Token: invalid.",
 			"description": "Check that the token is no longer \nvalid once we've logged out.",
 			"collectionId": "28286ab2-d6a4-ede3-53db-c54fc3506853",
@@ -55,7 +55,7 @@
 			"tests": "tests[\"Response code\"] = responseCode.code === 200;\ndata = JSON.parse(responseBody);\ntests[\"List of processes is empty\"] = data.length === 0;",
 			"currentHelper": "normal",
 			"helperAttributes": {},
-			"time": 1432560760368,
+			"time": 1432562078181,
 			"name": "Process: get.",
 			"description": "Get a list of processes.",
 			"collectionId": "28286ab2-d6a4-ede3-53db-c54fc3506853",
@@ -121,6 +121,28 @@
 			"description": "Check that the token is valid.",
 			"collectionId": "28286ab2-d6a4-ede3-53db-c54fc3506853",
 			"responses": [],
+			"synced": false
+		},
+		{
+			"id": "ac0071fd-8bd2-585a-9716-71f8211851df",
+			"headers": "Authorization: {{EnvVarToken}}\n",
+			"url": "{{EnvVarServer}}/annotation",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "GET",
+			"collectionId": "28286ab2-d6a4-ede3-53db-c54fc3506853",
+			"data": [],
+			"dataMode": "params",
+			"name": "Annotation: get",
+			"description": "Get all annotations and check the result.",
+			"descriptionFormat": "html",
+			"time": 1432564971356,
+			"version": 2,
+			"responses": [],
+			"tests": "var data = JSON.parse(responseBody)\n\nvar developmentStage = {\"name\":\"Development_Stage\",\"values\":[\"freetext\"],\"forced\":false}\nvar tissue = {\"name\":\"Tissue\",\"values\":[\"freetext\"],\"forced\":true}\nvar species = {\"name\":\"Species\",\"values\":[\"\",\"Human\",\"Fly\",\"Rat\"],\"forced\":true}\nvar sex = {\"name\":\"Sex\",\"values\":[\"\",\"Female\",\"Male\",\"Unknown\",\"Does_not_matter\"],\"forced\":false}\n\ntests[\"Contains development stage\"] = $.inArray(developmentStage, data)\ntests[\"Contains tissue\"] = $.inArray(developmentStage, data)\ntests[\"Contains species\"] = $.inArray(developmentStage, data)\ntests[\"Contains sex\"] = $.inArray(developmentStage, data)\n",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"collectionOwner": 0,
 			"synced": false
 		},
 		{
