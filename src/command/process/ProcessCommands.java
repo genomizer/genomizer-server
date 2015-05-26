@@ -19,12 +19,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * The class handles processing a list of processing commands. The list of commands each have a list of files to
+ * process.
+ */
 public class ProcessCommands extends Command {
 
     @Expose
     private String expId = null;
 
-    private Map.Entry<String,String> filepaths;
+    private Map.Entry<String,String> filePaths;
 
     private long timestamp;
 
@@ -52,6 +56,11 @@ public class ProcessCommands extends Command {
         super.setFields(uri, query, username, userType);
     }
 
+    /**
+     * Validate that the user has correct rights to use the command and that the json information is in
+     * correct format.
+     * @throws ValidateException
+     */
     @Override
     public void validate() throws ValidateException {
         hasRights(UserRights.getRights(this.getClass()));
@@ -68,13 +77,18 @@ public class ProcessCommands extends Command {
 
     }
 
+    /**
+     * Run processing on all commands.
+     * @return a response of the total processing. A problem during any part of the process of even a single file
+     * will result in a ErrorResponse.
+     */
     @Override
     public Response execute() {
         setFilePaths(expId);
 
         for (ProcessCommand pC: processCommands) {
             try{
-                pC.doProcess(filepaths);
+                pC.doProcess(filePaths);
             } catch(UnsupportedOperationException e){
                 return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
             }
@@ -82,12 +96,17 @@ public class ProcessCommands extends Command {
         return new ProcessResponse(HttpStatusCode.OK, "Processing of experiment: "+expId+" has completed.");
     }
 
+    /**
+     * Set filePaths using expId by connecting to the database.
+     * @param expId the experiment Id of the processing.
+     * @return a response if something went wrong, otherwise null
+     */
     public Response setFilePaths(String expId) {
         DatabaseAccessor db = null;
 
         try {
             db = initDB();
-            filepaths = db.processRawToProfile(expId);
+            filePaths = db.processRawToProfile(expId);
         } catch (SQLException e) {
             return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
         } catch (IOException e) {
@@ -101,7 +120,7 @@ public class ProcessCommands extends Command {
     }
 
     public String[] getFilePaths() {
-        return new String[] {filepaths.getKey(), filepaths.getValue()};
+        return new String[] {filePaths.getKey(), filePaths.getValue()};
     }
 
     public void setTimestamp(long currentTimeMillis) {

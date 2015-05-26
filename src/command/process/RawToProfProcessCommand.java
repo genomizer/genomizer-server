@@ -1,10 +1,4 @@
 package command.process;
-/**
- * File:        BowtieProcessCommand.java
- * Author:      Niklas Fries
- * Contact:     niklasf@cs.umu.se
- * Date:        2015-05-22
- */
 
 import com.google.gson.annotations.Expose;
 import command.Command;
@@ -25,8 +19,17 @@ import java.util.regex.Pattern;
 
 import static command.Command.initDB;
 
+/**
+ * The class is a processing command that holds a list of RawToProfProcessFile (also implemented here).
+ * A RawToProfProcessFile is used to call upon the actual raw to profile processing with the correct parameters.
+ */
 public class RawToProfProcessCommand extends ProcessCommand {
 
+    /**
+     * Validate the infile, outfile and genomeVersion on each RawToProfProcessFile to make sure they have valid
+     * characters and are a correct length.
+     * @throws ValidateException
+     */
     @Override
     public void validate() throws ValidateException {
         for(RawToProfProcessFile file: files) {
@@ -36,6 +39,10 @@ public class RawToProfProcessCommand extends ProcessCommand {
         }
     }
 
+    /**
+     * Run through the list of RawToProfProcessFiles and run processing on each with filePath as parameter.
+     * @param filePath associated with expId
+     */
     @Override
     public void doProcess(Map.Entry<String,String> filePath) {
         for(RawToProfProcessFile file: files) {
@@ -43,10 +50,24 @@ public class RawToProfProcessCommand extends ProcessCommand {
         }
     }
 
+    public ArrayList<RawToProfProcessFile> getFiles() {
+        return files;
+    }
+
+    @Override
+    public String toString() {
+        return "RawToProfileCommand{" +
+                "files=" + files +
+                '}';
+    }
     @Expose
     private ArrayList<RawToProfProcessFile> files;
 
     public class RawToProfProcessFile {
+
+        /**
+         * Class is used to start a single raw to profile processing with correct parameters.
+         */
 
         @Expose
         private String infile;
@@ -86,7 +107,7 @@ public class RawToProfProcessCommand extends ProcessCommand {
 
         @Override
         public String toString() {
-            return "BowtieProcessFile{" +
+            return "RawToProfProcessFile{" +
                    "infile='" + infile + '\'' +
                    ", outfile='" + outfile + '\'' +
                    ", params='" + params + '\'' +
@@ -95,6 +116,10 @@ public class RawToProfProcessCommand extends ProcessCommand {
                    '}';
         }
 
+        /**
+         * Call upon a single raw to profile processing with correct parameters.
+         * @param filePaths
+         */
         public void ProcessFile(Map.Entry<String,String> filePaths) {
             DatabaseAccessor db = null;
 
@@ -151,16 +176,5 @@ public class RawToProfProcessCommand extends ProcessCommand {
 
         }
 
-    }
-
-    public ArrayList<RawToProfProcessFile> getFiles() {
-        return files;
-    }
-
-    @Override
-    public String toString() {
-        return "BowtieProcessCommand{" +
-               "files=" + files +
-               '}';
     }
 }

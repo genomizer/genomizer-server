@@ -1,10 +1,4 @@
 package command.process;
-/**
- * File:        RatioProcessCommand.java
- * Author:      Niklas Fries
- * Contact:     niklasf@cs.umu.se
- * Date:        2015-05-22
- */
 
 import com.google.gson.annotations.Expose;
 import command.ValidateException;
@@ -13,8 +7,9 @@ import response.Response;
 import java.util.Map;
 
 /**
- * TODO class description goes here...
+ * Dummy class that needs to be implemented. Should handle a ratio processing command.
  */
+
 public class RatioProcessCommand extends ProcessCommand {
     @Override
     public void validate() throws ValidateException {
