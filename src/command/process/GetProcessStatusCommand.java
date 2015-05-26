@@ -1,7 +1,5 @@
 package command.process;
 
-import java.util.LinkedList;
-
 import command.Command;
 import command.Process;
 import command.UserRights;
@@ -10,6 +8,9 @@ import response.GetProcessStatusResponse;
 import response.Response;
 import server.Doorman;
 import server.ProcessPool;
+
+import java.util.Calendar;
+import java.util.LinkedList;
 
 /**
  * Fetches status of all processes that have been added to the server. Will be
@@ -46,14 +47,19 @@ public class GetProcessStatusCommand extends Command {
 		LinkedList<PutProcessCommand> processesList = processPool.getProcesses();
 		LinkedList<Process> getProcessStatuses = new LinkedList<>();
 
-		long currentTime = System.currentTimeMillis();
-		long timeWeekAgo = currentTime - 60*60*24*days*1000;
-        
+		Calendar pastCal = Calendar.getInstance();
+		pastCal.setTimeInMillis(System.currentTimeMillis());
+		pastCal.add(Calendar.DAY_OF_MONTH, -days);
+        	
+		Calendar finishedCal = Calendar.getInstance();
+
 		for (PutProcessCommand proc : processesList) {
 			Process process = processPool.getProcessStatus(proc.getPID());
-			//if (process.timeFinished >= timeWeekAgo) {
+			finishedCal.setTimeInMillis(process.timeFinished);
+
+			if (finishedCal.after(pastCal)) {
 				getProcessStatuses.add(process);
-			//}
+			}
 		}
 		return new GetProcessStatusResponse(getProcessStatuses);
 	}

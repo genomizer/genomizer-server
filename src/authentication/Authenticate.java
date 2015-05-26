@@ -1,9 +1,11 @@
 package authentication;
 
 
-import java.util.Date;
-import java.util.Iterator;
-import java.util.UUID;
+import com.sun.net.httpserver.HttpExchange;
+import server.Debug;
+import transfer.Util;
+
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 
@@ -57,7 +59,7 @@ public class Authenticate {
 
 	/**
 	 * updates the date for which the user did the most recent request
-	 * @param uuid the uuid of the user
+	 * @param uuid the userName of the user
 	 */
 	static public void updateLatestRequest(String uuid) {
 		if(latestRequests.containsKey(uuid)) {
@@ -67,7 +69,7 @@ public class Authenticate {
 
 
 	/**
-	 * Method used to get the id for a user.
+	 * Method used to get the id for an active user.
 	 *
 	 * @param username to get the id for.
 	 * @return the id representing the user.
@@ -79,6 +81,10 @@ public class Authenticate {
 			}
 		}
 		return null;
+	}
+
+	static public boolean isUserLoggedIn(String username) {
+		return (getID(username) != null);
 	}
 
 	/**
@@ -119,6 +125,50 @@ public class Authenticate {
 
 	public static ConcurrentHashMap<String, Date> getLatestRequestsMap() {
 		return latestRequests;
+	}
+
+	/**
+	 * Performs an authentication of the token
+	 * returns null if the user could not be authorized,
+	 * else it returns the uuid.
+	 */
+ 	public static String performAuthentication(HttpExchange exchange) {
+		String uuid = null;
+
+		/** Get the value of the 'Authorization' header. */
+		List<String> authHeader = exchange.getRequestHeaders().
+				get("Authorization");
+		if (authHeader != null)
+			uuid = authHeader.get(0);
+
+		/** used for commands that send token in header */
+		if(uuid == null){
+			// Get the value of the 'token' parameter.
+			String uuid2;
+			HashMap<String, String> reqParams = new HashMap<>();
+			Util.parseURI(exchange.getRequestURI(), reqParams);
+			if (reqParams.containsKey("token")) {
+				uuid2 = reqParams.get("token");
+				if (uuid2 != null) {
+						uuid = uuid2;
+				} else {
+					Debug.log("Authorization header and token parameter "
+							+ "values differ!");
+					return null;
+				}
+			}
+		}
+
+		Debug.log("Trying to authenticate token " + uuid + "...");
+		if (uuid != null && Authenticate.idExists(uuid)) {
+			Debug.log("User " + Authenticate.getUsernameByID(uuid)
+					+ " authenticated successfully.");
+			Authenticate.updateLatestRequest(uuid);
+			return uuid;
+		} else {
+			Debug.log("User could not be authenticated");
+			return null;
+		}
 	}
 
 }

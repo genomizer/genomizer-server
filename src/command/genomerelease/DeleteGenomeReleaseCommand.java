@@ -1,10 +1,5 @@
 package command.genomerelease;
 
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import command.Command;
 import command.UserRights;
 import command.ValidateException;
@@ -14,9 +9,14 @@ import database.containers.Genome;
 import database.subClasses.UserMethods.UserType;
 import response.DeleteGenomeReleaseResponse;
 import response.ErrorResponse;
-import response.Response;
 import response.HttpStatusCode;
+import response.Response;
 import server.Debug;
+
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Class used to delete a genome release.
@@ -76,10 +76,10 @@ public class DeleteGenomeReleaseCommand extends Command {
 					genomeVersion + " or species " + species +
 					" does not exist.");
 		} catch (SQLException | IOException e) {
-			Debug.log("Error when deleting genome release " + genomeVersion + " for specie "+species+
+			Debug.log("Error when deleting genome release " + genomeVersion + " for species " + species +
 							". Database error: " + e.getMessage());
 			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Error when deleting genome release "
-					+ genomeVersion + " for specie "+species+ ". Database error.");
+					+ genomeVersion + " for species "+ species + ". Database error.");
 		} finally {
 			if(db != null) {
 				db.close();

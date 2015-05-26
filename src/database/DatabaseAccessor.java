@@ -1,8 +1,8 @@
 package database;
 
-import database.subClasses.UserMethods.UserType;
 import database.containers.*;
 import database.subClasses.*;
+import database.subClasses.UserMethods.UserType;
 import org.apache.commons.codec.digest.DigestUtils;
 import server.ServerSettings;
 
@@ -771,13 +771,8 @@ public class DatabaseAccessor implements AutoCloseable {
      * @param   ft the file to update size for
      * @return  the number of tuples updated (either 0 or 1)
      */
-    public int updateFileSize(FileTuple ft) throws  SQLException {
-
-        File f = new File(ft.path);
-        Long size = f.length();
-
+    public int updateFileSize(FileTuple ft, long size) throws  SQLException {
         return fileMethods.updateFileSize(ft.id, size);
-
     }
 
     /**

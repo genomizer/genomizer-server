@@ -1,13 +1,12 @@
 package response;
 
-import java.util.ArrayList;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-
 import database.containers.Genome;
+
+import java.util.ArrayList;
 
 /**
  * Class which represents the response for get genome release.

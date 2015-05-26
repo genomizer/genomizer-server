@@ -3,9 +3,9 @@ package command.annotation;
 import command.Command;
 import command.UserRights;
 import command.ValidateException;
+import response.HttpStatusCode;
 import response.MinimalResponse;
 import response.Response;
-import response.HttpStatusCode;
 
 /**
  * Class used to handle retrieving annotation privileges.

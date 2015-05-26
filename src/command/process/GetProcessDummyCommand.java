@@ -1,7 +1,9 @@
 package command.process;
 
-import command.*;
+import command.Command;
 import command.Process;
+import command.UserRights;
+import command.ValidateException;
 import response.GetProcessStatusResponse;
 import response.Response;
 

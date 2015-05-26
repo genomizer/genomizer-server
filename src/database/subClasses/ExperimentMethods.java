@@ -1,5 +1,10 @@
 package database.subClasses;
 
+import database.FilePathGenerator;
+import database.containers.Annotation;
+import database.containers.Experiment;
+import database.containers.FileTuple;
+
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
@@ -7,11 +12,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-
-import database.FilePathGenerator;
-import database.containers.Annotation;
-import database.containers.Experiment;
-import database.containers.FileTuple;
 
 /**
  * Class that contains all the methods for adding,changing, getting and removing
