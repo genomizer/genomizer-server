@@ -29,7 +29,6 @@ public class PutProcessCommand extends Command {
 
 	public static final String CMD_RAW_TO_PROFILE = "rawtoprofile";
 	public static final String CMD_PROFILE_TO_REGION = "profiletoregion";
-	public static final String CMD_CANCEL_PROCESS = "cancelprocess";
 
 	private String username;
 
@@ -102,9 +101,6 @@ public class PutProcessCommand extends Command {
 			case CMD_PROFILE_TO_REGION:
 				//TODO Implement parameter size
 				break;
-			case CMD_CANCEL_PROCESS:
-				//TODO validate PID
-				break;
 			default:
 				throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Invalid " +
 						"process type");
@@ -167,11 +163,6 @@ public class PutProcessCommand extends Command {
 								"exception when processing");
 					}
 					break;
-
-				case PutProcessCommand.CMD_CANCEL_PROCESS:
-					// Parameter = PID
-					Doorman.getProcessPool().cancelProcess(PID);
-					return new MinimalResponse(HttpStatusCode.OK);
 
 				default:
 					return processError(db, "", "ERROR: Unknown process " +
