@@ -86,14 +86,59 @@ public class GenomeMethods {
     		throw new IOException("Invalid file name");
     	}
 
-
 		String folderPath = fpg.generateGenomeReleaseFolder(genomeVersion,
 				species);
 
 		StringBuilder filePathBuilder = new StringBuilder(folderPath);
 		filePathBuilder.append(filename);
 
-		if (getGenomeRelease(genomeVersion) == null) {
+		Genome genomeRelease = getGenomeRelease(genomeVersion);
+		boolean genomeRelaseFileExists = genomeReleaseFileExists(genomeVersion, filename);
+
+		conn.setAutoCommit(false);
+
+		String grQuery = "INSERT INTO" +
+				" Genome_Release (Version, Species, FolderPath)" +
+				" VALUES (?, ?, ?)";
+		PreparedStatement grStmt = null;
+
+		String grFilesQuery = "INSERT INTO Genome_Release_Files " +
+				"(Version, FileName, MD5, Status) VALUES (?, ?, ?, ?)";
+		PreparedStatement grFilesStmt = null;
+
+		try {
+			if (genomeRelease == null) {
+				grStmt = conn.prepareStatement(grQuery);
+				grStmt.setString(1, genomeVersion);
+				grStmt.setString(2, species);
+				grStmt.setString(3, folderPath);
+				grStmt.executeUpdate();
+			}
+
+			if (genomeRelaseFileExists) {
+				throw new IOException(filename + " already exists for this " +
+						"genome release");
+			}
+
+			grFilesStmt = conn.prepareStatement(grFilesQuery);
+			grFilesStmt.setString(1, genomeVersion);
+			grFilesStmt.setString(2, filename);
+			grFilesStmt.setString(3, checkSumMD5);
+			grFilesStmt.setString(4, status);
+			grFilesStmt.executeUpdate();
+
+			conn.commit();
+
+		} catch (SQLException e) {
+			conn.rollback();
+			throw e;
+		} finally {
+			if (grFilesStmt != null) { grFilesStmt.close(); }
+			if (grStmt != null) { grStmt.close(); }
+			conn.setAutoCommit(true);
+		}
+
+		/* if (genomeRelease == null) {
 			try (PreparedStatement stmt =
 						 conn.prepareStatement("INSERT INTO Genome_Release "
 								 + "(Version, Species, FolderPath) " + "VALUES (?, ?, ?)")) {
@@ -112,6 +157,7 @@ public class GenomeMethods {
         }
 
 		try (PreparedStatement stmt = conn.prepareStatement(
+
 				"INSERT INTO Genome_Release_Files "
 						+ "(Version, FileName, MD5, Status) VALUES (?, ?, ?, ?)")) {
 			stmt.setString(1, genomeVersion);
@@ -119,7 +165,7 @@ public class GenomeMethods {
 			stmt.setString(3, checkSumMD5);
 			stmt.setString(4, status);
 			stmt.executeUpdate();
-		}
+		} */
 
 		filePathBuilder.insert(0, ServerDependentValues.UploadURL);
 
@@ -454,56 +500,76 @@ public class GenomeMethods {
 	 * @throws IOException
 	 */
 	public String addChainFileWithStatus(String fromVersion, String toVersion,
-			String fileName, String checkSumMD5, String status) throws SQLException, IOException {
+										 String fileName, String checkSumMD5, String status) throws SQLException, IOException {
 
-    	if(!FileValidator.fileNameCheck(fileName)){
-    		throw new IOException("Invalid file name");
-    	}
+		if(!FileValidator.fileNameCheck(fileName)) {
+			throw new IOException("Invalid file name");
+		}
 
-		String species = "";
-		String speciesQuery = "SELECT Species From Genome_Release"
-				+ " WHERE (version ~~* ?)";
+		String filePath = null;
+		String speciesQuery =
+				"SELECT Species FROM Genome_Release " +
+				"WHERE (version ~~* ?)";
+		String chainFileQuery =
+				"INSERT INTO Chain_File " +
+				"(FromVersion, ToVersion, FolderPath) " +
+				"VALUES (?, ?, ?)";
+		String chainFileFilesQuery =
+				"INSERT INTO Chain_File_Files " +
+				"(FromVersion, ToVersion, FileName, MD5, Status) " +
+				"VALUES (?, ?, ?, ?, ?)";
 
-		PreparedStatement speciesStat = conn.prepareStatement(speciesQuery);
-		speciesStat.setString(1, fromVersion);
+		PreparedStatement selectSpecies = null;
+		PreparedStatement insertChainFile = null;
+		PreparedStatement insertChainFileFiles = null;
 
-		ResultSet rs = speciesStat.executeQuery();
-
+		// Query 1: Retrieve species
+		selectSpecies = conn.prepareStatement(speciesQuery);
+		selectSpecies.setString(1, fromVersion);
+		selectSpecies.addBatch();
+		ResultSet rs = selectSpecies.executeQuery();
+		String specie = "";
 		if (rs.next()) {
-			species = rs.getString("Species");
+			specie = rs.getString("Species");
 		}
-		speciesStat.close();
 
-		String filePath = fpg.generateChainFolder(species, fromVersion,
-				toVersion);
+		// Query 2: Get ChainFiles
+		filePath = fpg.generateChainFolder(specie, fromVersion, toVersion);
+		ChainFiles cf = getChainFiles(fromVersion, toVersion);
 
-        ChainFiles cf = getChainFiles(fromVersion, toVersion);
-        if (cf == null) {
-            try (PreparedStatement stmt =
-						 conn.prepareStatement("INSERT INTO Chain_File "
-								 + "(FromVersion, ToVersion, FolderPath) VALUES (?, ?, ?)")) {
-				stmt.setString(1, fromVersion);
-				stmt.setString(2, toVersion);
-				stmt.setString(3, filePath);
-				stmt.executeUpdate();
+		conn.setAutoCommit(false);
+		try {
+			// Query 3: Insert Chain File
+			if (cf == null) {
+				insertChainFile = conn.prepareStatement(chainFileQuery);
+				insertChainFile.setString(1, fromVersion);
+				insertChainFile.setString(2, toVersion);
+				insertChainFile.setString(3, filePath);
+				insertChainFile.executeUpdate();
 			}
-        }
 
-		try (PreparedStatement stmt =
-					 conn.prepareStatement("INSERT INTO Chain_File_Files "
-							 + "(FromVersion, ToVersion, FileName, MD5, Status) "
-							 + "VALUES (?, ?, ?, ?, ?)")) {
-			stmt.setString(1, fromVersion);
-			stmt.setString(2, toVersion);
-			stmt.setString(3, fileName);
-			stmt.setString(4, checkSumMD5);
-			stmt.setString(5, status);
-			stmt.executeUpdate();
+			// Query 4: Insert Chain file Files
+			insertChainFileFiles = conn.prepareStatement(chainFileFilesQuery);
+			insertChainFileFiles.setString(1, fromVersion);
+			insertChainFileFiles.setString(2, toVersion);
+			insertChainFileFiles.setString(3, fileName);
+			insertChainFileFiles.setString(4, checkSumMD5);
+			insertChainFileFiles.setString(5, status);
+			insertChainFileFiles.executeUpdate();
+
+			conn.commit();
+
+		} catch (SQLException e) {
+			conn.rollback();
+			throw e;
+		} finally {
+			if (selectSpecies != null) { selectSpecies.close();	}
+			if (insertChainFile != null) { insertChainFile.close();	}
+			if (insertChainFileFiles != null) { insertChainFileFiles.close();	}
+			conn.setAutoCommit(true);
 		}
 
-		String URL = ServerDependentValues.UploadURL;
-
-		return URL + filePath;
+		return ServerDependentValues.UploadURL + filePath;
 	}
 
 	/**
