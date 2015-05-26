@@ -67,7 +67,7 @@ public class CommandClasses {
 
         //Admin commands
         classes.put("POST /admin/user", PostAdminUserCommand.class);
-        classes.put("DELETE /admin/user", DeleteAdminUserCommand.class);
+        classes.put("DELETE /admin/user/", DeleteAdminUserCommand.class);
         classes.put("PUT /admin/user", PutUserAdminCommand.class);
 
         //Processing
