@@ -30,8 +30,8 @@ public class ProcessCommandsTest {
                 "\"genomeVersion\":\"theGR\",\"params\":\"" +
                 "-a -m 1 --best -p 10 -v 2 -q -S\",\"keepSam\":\"on\"}]}]}";
 
-        ProcessCommands_new processCommands =
-                gson.fromJson(json, ProcessCommands_new.class);
+        ProcessCommands processCommands =
+                gson.fromJson(json, ProcessCommands.class);
 
         assertEquals(1, processCommands.getProcessCommands().size());
         System.out.println("processCommands = " + processCommands);
@@ -48,8 +48,8 @@ public class ProcessCommandsTest {
                 "\"keepSam\":\"on\"}]}, {\"type\":\"ratio\", \"infile1\": " +
                 "\"infile1Name\", \"infile2\": \"infile2Name\"}]}";
 
-        ProcessCommands_new processCommands =
-                gson.fromJson(json, ProcessCommands_new.class);
+        ProcessCommands processCommands =
+                gson.fromJson(json, ProcessCommands.class);
         assertEquals(
                 RawToProfProcessCommand.class,
                 processCommands.getProcessCommands().get(0).getClass());
@@ -70,8 +70,8 @@ public class ProcessCommandsTest {
                         "\"params\":\"-a -m 1 --best -p 10 -v 2 -q -S\"," +
                         "\"keepSam\":\"on\"}]}, {\"type\":\"ratio\", \"infile1\": " +
                         "\"infile1Name\", \"infile2\": \"infile2Name\"}]}";
-        ProcessCommands_new processCommands =
-                gson.fromJson(json, ProcessCommands_new.class);
+        ProcessCommands processCommands =
+                gson.fromJson(json, ProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }

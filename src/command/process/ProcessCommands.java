@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class ProcessCommands_new extends Command {
+public class ProcessCommands extends Command {
 
     @Expose
     private String expId = null;

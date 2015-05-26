@@ -18,8 +18,7 @@ import command.genomerelease.GetGenomeReleaseCommand;
 import command.genomerelease.GetGenomeReleaseSpeciesCommand;
 import command.genomerelease.PostGenomeReleaseCommand;
 import command.process.GetProcessStatusCommand;
-import command.process.ProcessCommands_new;
-import command.process.PutProcessCommand;
+import command.process.ProcessCommands;
 import command.process.PutProcessCommands;
 import command.search.SearchCommand;
 import command.user.PutUserCommand;
@@ -70,7 +69,7 @@ public class UserRights {
         userRights.put(PutUserAdminCommand.class, UserType.ADMIN);
         userRights.put(PutConvertFileCommand.class, UserType.USER);
         userRights.put(PutProcessCommands.class, UserType.USER);
-        userRights.put(ProcessCommands_new.class, UserType.USER);
+        userRights.put(ProcessCommands.class, UserType.USER);
     }
 
 
