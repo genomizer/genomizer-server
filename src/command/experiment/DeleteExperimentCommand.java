@@ -58,6 +58,7 @@ public class DeleteExperimentCommand extends Command {
 						INTERNAL_SERVER_ERROR, "Deletion of experiment'" +
 						expID + "' unsuccessful due to temporary database " +
 						"problems.");
+			Debug.log("Reason: " + e.getMessage());
 		} catch (IOException e) {
 				response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
 						"Deletion of experiment '" + expID +
