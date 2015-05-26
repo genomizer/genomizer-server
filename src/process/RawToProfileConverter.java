@@ -235,7 +235,9 @@ public class RawToProfileConverter extends Executor {
 			throw new ProcessException("Fatal error: This should never happen");
 		}
 		inFolder = validateInFolder(inFolder);
-		inFolder = System.getProperty("user.dir") + "/"+inFolder;
+		if (!inFolder.startsWith("/")) {
+			inFolder = System.getProperty("user.dir") + "/" + inFolder;
+		}
 		ErrorLogger.log("SYSTEM", "INFOLDER - "+inFolder);
 		inFiles = getRawFiles(inFolder);
 
