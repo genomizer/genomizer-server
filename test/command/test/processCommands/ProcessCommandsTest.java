@@ -61,7 +61,7 @@ public class ProcessCommandsTest {
     }
 
     @Test
-    public void shouldNotGiveVaölodateException() throws ValidateException {
+    public void shouldNotGiveValidateException() throws ValidateException {
         String json =
                 "{\"expId\":\"not_an_expid\"," +
                         "\"processCommands\":[{\"type\":\"rawToProfile\"," +
