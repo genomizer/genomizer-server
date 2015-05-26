@@ -22,11 +22,11 @@ public class LoginResponse extends Response {
 	 * @param code The return code for the response.
 	 * @param token The login token to be returned.
 	 */
-	public LoginResponse(int code, String token) {
+	public LoginResponse(int code, String token, String userType) {
 
 		this.code = code;
 		this.token = token;
-		this.role = "role";
+		this.role = userType;
 	}
 
 	/**
