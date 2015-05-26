@@ -1,8 +1,6 @@
 package command.connection;
-
 import authentication.Authenticate;
 import authentication.LoginAttempt;
-import com.google.gson.annotations.Expose;
 import command.Command;
 import command.ValidateException;
 import database.DatabaseAccessor;
@@ -13,6 +11,8 @@ import response.HttpStatusCode;
 import response.LoginResponse;
 import response.Response;
 import server.Debug;
+
+import com.google.gson.annotations.Expose;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -97,6 +97,6 @@ public class PostLoginCommand extends Command {
 
 		Debug.log("LOGIN WAS SUCCESSFUL FOR: "+ username + ". GAVE UUID: " +
 				Authenticate.getID(username));
-		return new LoginResponse(200, login.getUUID(), userType.name());
+		return new LoginResponse(login.getUUID(),userType.name());
 	}
 }

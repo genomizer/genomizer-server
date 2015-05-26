@@ -1,6 +1,7 @@
 package response;
 
 import com.google.gson.*;
+import com.google.gson.annotations.Expose;
 
 import java.util.ArrayList;
 
@@ -10,20 +11,19 @@ import java.util.ArrayList;
  * @author tfy09jnn
  * @version 1.0
  */
-public class AddGenomeReleaseResponse extends Response {
+public class FilePathListResponse extends Response {
 
-	private JsonArray jsonArray = null;
+	@Expose
+	private JsonArray jsonArray;
 
 	/**
 	 * Constructor for the response.
 	 *
-	 * @param code Code to send as a response code.
 	 * @param filePaths An ArrayList containing the paths to where the files
 	 *                     should be saved
 	 */
-	public AddGenomeReleaseResponse(int code, ArrayList<String> filePaths) {
-
-		this.code = code;
+	public FilePathListResponse(ArrayList<String> filePaths) {
+		this.code = HttpStatusCode.OK;
 		Gson gson = new GsonBuilder().create();
 
 		jsonArray = new JsonArray();
