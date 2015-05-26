@@ -1,7 +1,9 @@
 package command.test.processCommands;
 
 import com.google.gson.Gson;
+import command.ValidateException;
 import command.process.*;
+import database.subClasses.UserMethods;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -56,5 +58,21 @@ public class ProcessCommandsTest {
                 processCommands.getProcessCommands().get(1).getClass());
         System.out.println("processCommands = " + processCommands);
 
+    }
+
+    @Test
+    public void shouldNotGiveVaölodateException() throws ValidateException {
+        String json =
+                "{\"expId\":\"not_an_expid\"," +
+                        "\"processCommands\":[{\"type\":\"rawToProfile\"," +
+                        "\"files\":[{\"infile\":\"bigtest1.fastq\"," +
+                        "\"outfile\":\"awsd\",\"genomeVersion\":\"theGR\"," +
+                        "\"params\":\"-a -m 1 --best -p 10 -v 2 -q -S\"," +
+                        "\"keepSam\":\"on\"}]}, {\"type\":\"ratio\", \"infile1\": " +
+                        "\"infile1Name\", \"infile2\": \"infile2Name\"}]}";
+        ProcessCommands_new processCommands =
+                gson.fromJson(json, ProcessCommands_new.class);
+        processCommands.setFields(null, null, null, UserMethods.UserType.USER);
+        processCommands.validate();
     }
 }
