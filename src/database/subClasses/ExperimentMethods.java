@@ -91,11 +91,14 @@ public class ExperimentMethods {
         fpg.generateExperimentFolders(expID);
         String query = "INSERT INTO Experiment "
                 + "(ExpID) VALUES (?)";
-        PreparedStatement stmt= conn.prepareStatement(query);
-        stmt.setString(1, expID);
-        int rs = stmt.executeUpdate();
-        stmt.close();
-
+        int rs = 0;
+        try (PreparedStatement stmt= conn.prepareStatement(query);) {
+            stmt.setString(1, expID);
+            rs = stmt.executeUpdate();
+        } catch (SQLException ex) {
+            conn.rollback();
+            throw ex;
+        }
         return rs;
     }
 
