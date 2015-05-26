@@ -1,4 +1,4 @@
-package transfer;
+package util;
 
 import database.FileValidator;
 
@@ -39,7 +39,12 @@ public class Util {
         if (reqQuery != null) {
             for (String paramPair : reqQuery.split("&")) {
                 String[] splitPair = paramPair.split("=");
-                outParams.put(splitPair[0], splitPair[1]);
+                if (splitPair.length==1) {
+                    outParams.put(splitPair[0], "");
+                } else {
+                    outParams.put(splitPair[0], splitPair[1]);
+                }
+
             }
         }
 

@@ -3,7 +3,7 @@ package authentication;
 
 import com.sun.net.httpserver.HttpExchange;
 import server.Debug;
-import transfer.Util;
+import util.Util;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
