@@ -37,7 +37,7 @@ public class LoginResponseTest {
 	 */
 	@Test
 	public void testCreateLoginResponseNotNull() {
-		LoginResponse rsp = new LoginResponse("abcdefg123", UserMethods.UserType.USER);
+		LoginResponse rsp = new LoginResponse("abcdefg123", UserMethods.UserType.USER.name());
 		assertNotNull(rsp);
 	}
 
