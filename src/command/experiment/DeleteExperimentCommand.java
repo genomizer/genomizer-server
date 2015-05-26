@@ -17,7 +17,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 
 /**
- * Class used to represent a remove experiment command.
+ * Command used to remove an experiment.
  *
  * @author Business Logic 2015.
  * @version 1.1
@@ -25,18 +25,11 @@ import java.util.HashMap;
 public class DeleteExperimentCommand extends Command {
 	private String expID;
 
-
 	@Override
 	public int getExpectedNumberOfURIFields() {
 		return 2;
 	}
 
-	/**
-	 * Set the UserType Uri and Uuid. expID also set from uri.
-	 * @param uri the URI from the http request.
-	 * @param username the userName from the http request.
-	 * @param userType the userType
-	 */
 	@Override
 	public void setFields(String uri, HashMap<String, String> query,
 						  String username, UserType userType) {
@@ -51,25 +44,26 @@ public class DeleteExperimentCommand extends Command {
 	}
 
 	public Response execute() {
-		DatabaseAccessor db = null;
-		try {
-			db = initDB();
-			int tuples = db.deleteExperiment(expID);
-			if(tuples == 0) {
-				return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
-						"The experiment " + expID + " does not exist and " +
-								"can not be deleted");
-			}
-		} catch (SQLException | IOException e) {
-			Debug.log("Deletion of experiment " + expID + " didn't work, reason: " +
-					e.getMessage());
-			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Deletion of experiment " + expID +
-					" didn't work due to temporary problems with the database.");
-		} finally {
-			if (db != null) {
-				db.close();
-			}
+		Response response;
+
+		try (DatabaseAccessor db = initDB()) {
+			if (db.deleteExperiment(expID) != 0)
+				response = new MinimalResponse(HttpStatusCode.OK);
+			else
+				response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
+						"Deletion of experiment unsuccessful, experiment '" +
+								expID + "' does not exist");
+		} catch (SQLException e) {
+				response = new ErrorResponse(HttpStatusCode.
+						INTERNAL_SERVER_ERROR, "Deletion of experiment'" +
+						expID + "' unsuccessful due to temporary database " +
+						"problems.");
+		} catch (IOException e) {
+				response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
+						"Deletion of experiment '" + expID +
+								"' unsuccessful. " + e.getMessage());
 		}
-		return new MinimalResponse(HttpStatusCode.OK);
+
+		return response;
 	}
 }
