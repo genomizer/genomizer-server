@@ -64,7 +64,6 @@ public class PostLoginCommand extends Command {
 	public Response execute() {
 		DatabaseAccessor db = null;
 		String dbHash;
-
 		try {
 			db = initDB();
 			dbHash = db.getPasswordHash(username);
@@ -91,12 +90,6 @@ public class PostLoginCommand extends Command {
 					login.getErrorMessage());
 			return new ErrorResponse(HttpStatusCode.UNAUTHORIZED,
 					"Login failed, incorrect password");
-		}
-
-		try {
-			userType = db.getRole(username);
-		} catch (SQLException e) {
-			e.printStackTrace();
 		}
 
 		Debug.log("LOGIN WAS SUCCESSFUL FOR: "+ username + ". GAVE UUID: " +
