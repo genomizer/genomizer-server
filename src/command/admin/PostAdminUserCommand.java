@@ -60,12 +60,12 @@ public class PostAdminUserCommand extends Command {
 			db.addUser(username, hash, "SALT", privileges, name, email);
 			response = new MinimalResponse(HttpStatusCode.OK);
 		} catch (SQLException e) {
-			response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
-					"Creation of user '" + username + "' unsuccessful, user " +
-							"already exists.");
+			response = new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+					"Creation of user '" + username + "' unsuccessful due " +
+							"to temporary database problems.");
 			Debug.log("Reason: " + e.getMessage());
 		} catch (IOException e) {
-			response = new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+			response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
 					"Creation of user '" + username + "' unsuccessful. " +
 							e.getMessage());
 		} finally {
