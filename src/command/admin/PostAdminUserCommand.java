@@ -66,8 +66,8 @@ public class PostAdminUserCommand extends Command {
 			Debug.log("Reason: " + e.getMessage());
 		} catch (IOException e) {
 			response = new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
-					"Creation of user '" + username + "' unsuccessful due to " +
-							"temporary database problems.");
+					"Creation of user '" + username + "' unsuccessful. " +
+							e.getMessage());
 		} finally {
 			if (db != null)
 				db.close();
