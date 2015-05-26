@@ -7,6 +7,7 @@ import command.Command;
 import command.ValidateException;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
+import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.HttpStatusCode;
 import response.LoginResponse;
@@ -62,11 +63,13 @@ public class PostLoginCommand extends Command {
 	}
 	@Override
 	public Response execute() {
+		UserType userType = UserType.UNKNOWN;
 		DatabaseAccessor db = null;
 		String dbHash;
 		try {
 			db = initDB();
 			dbHash = db.getPasswordHash(username);
+			userType = db.getRole(username);
 		} catch (SQLException | IOException e) {
 			Debug.log("LOGIN WAS UNSUCCESSFUL FOR: " + username + ". REASON: " +
 					e.getMessage());
@@ -94,6 +97,6 @@ public class PostLoginCommand extends Command {
 
 		Debug.log("LOGIN WAS SUCCESSFUL FOR: "+ username + ". GAVE UUID: " +
 				Authenticate.getID(username));
-		return new LoginResponse(200, login.getUUID());
+		return new LoginResponse(200, login.getUUID(), userType.name());
 	}
 }
