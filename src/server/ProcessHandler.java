@@ -5,6 +5,7 @@ import command.Process;
 import command.process.PutProcessCommand;
 import response.HttpStatusCode;
 import response.Response;
+import util.Util;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -98,7 +99,7 @@ public class ProcessHandler implements Callable<Response> {
 			process.timeFinished = System.currentTimeMillis();
 
 			String timeMsg = "PID: " + processCommand.getPID() + "\nElapsed time: " +
-					formatTimeDifference((process.timeFinished - process.timeStarted) / 1000) ;
+					Util.formatTimeDifference((process.timeFinished - process.timeStarted) / 1000) ;
 			Debug.log(timeMsg);
 			ErrorLogger.log("PROCESS", timeMsg);
 
@@ -113,34 +114,6 @@ public class ProcessHandler implements Callable<Response> {
 
 	public void setSimulation(boolean flag) {
 		simulateLongProcess = flag;
-	}
-
-	private String formatTimeDifference(long diffMillis) {
-		long seconds = diffMillis / 1000;
-		long minutes = seconds / 60;
-		long hours   = minutes / 60;
-		long days    = hours   / 24;
-
-
-		if (days > 0) {
-			return (days + " days, " + hours + " hours, "
-					+ minutes + " minutes, " + seconds + " seconds");
-		}
-
-		if (hours > 0) {
-			return (hours + " hours, "
-					+ minutes + " minutes, " + seconds + " seconds");
-		}
-
-		if (minutes > 0) {
-			return (minutes + " minutes, " + seconds + " seconds");
-		}
-
-		if (seconds > 0) {
-			return (seconds + " seconds");
-		}
-
-		return (diffMillis + " ms");
 	}
 
 
