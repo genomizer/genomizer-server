@@ -51,13 +51,13 @@ public class GetProcessStatusCommand extends Command {
 		pastCal.setTimeInMillis(System.currentTimeMillis());
 		pastCal.add(Calendar.DAY_OF_MONTH, -days);
         	
-		Calendar finishedCal = Calendar.getInstance();
+		Calendar startedCal = Calendar.getInstance();
 
 		for (PutProcessCommand proc : processesList) {
 			Process process = processPool.getProcessStatus(proc.getPID());
-			finishedCal.setTimeInMillis(process.timeFinished);
+			startedCal.setTimeInMillis(process.timeStarted);
 
-			if (finishedCal.after(pastCal)) {
+			if (startedCal.after(pastCal)) {
 				getProcessStatuses.add(process);
 			}
 		}
