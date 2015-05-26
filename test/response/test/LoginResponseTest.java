@@ -41,7 +41,7 @@ public class LoginResponseTest {
 	@Test
 	public void testCreateLoginResponseNotNull() {
 
-		LoginResponse rsp = new LoginResponse(200, "abcdefg123");
+		LoginResponse rsp = new LoginResponse(200, "abcdefg123", "ADMIN");
 		assertNotNull(rsp);
 
 	}
@@ -54,8 +54,7 @@ public class LoginResponseTest {
 	public void testLoginResponseJSON() {
 
 		String json = "{\"token\":\"user-id\"}";
-		LoginResponse rsp = new LoginResponse(200, "abcdefg123");
-		rsp = gson.fromJson(json, LoginResponse.class);
+		LoginResponse rsp = gson.fromJson(json, LoginResponse.class);
 		String json2 = gson.toJson(rsp);
 
 		assertEquals(json, json2);
@@ -69,9 +68,8 @@ public class LoginResponseTest {
 	@Test
 	public void testLoginResponseGetBody() {
 
-		Response rsp = new LoginResponse(200, "abcdefg123");
 		String json = "{\"token\":\"user-id\"}" + "\n";
-		rsp = gson.fromJson(json, LoginResponse.class);
+		Response rsp = gson.fromJson(json, LoginResponse.class);
 		String json2 = rsp.getBody();
 
 		assertEquals(json, json2);
