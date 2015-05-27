@@ -18,7 +18,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
- * Class used to add an experiment represented as a command.
+ * Command used to add an experiment.
  *
  * @author Business Logic 2015.
  * @version 1.1
@@ -26,10 +26,8 @@ import java.util.ArrayList;
 public class PostExperimentCommand extends Command {
 	@Expose
 	private String name = null;
-
 	@Expose
-	private ArrayList<Annotation> annotations = new ArrayList<>();
-
+	private ArrayList<Annotation> annotations = null;
 
 	@Override
 	public int getExpectedNumberOfURIFields() {
@@ -38,21 +36,21 @@ public class PostExperimentCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-
 		hasRights(UserRights.getRights(this.getClass()));
 		validateName(name, MaxLength.EXPID, "Experiment name");
 
-		if(annotations == null || annotations.size() < 1) {
+		if (annotations == null || annotations.size() < 1) {
 			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Specify " +
 					"annotations for the experiment.");
 		}
 
-		for(int i =0;i<annotations.size();i++){
-			if(annotations.get(i) == null){
-				throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Found " +
-						"an empty annotation or annotation value, please " +
-						"specify annotations.");
+		for (int i =0;i<annotations.size();i++) {
+			if (annotations.get(i) == null) {
+				throw new ValidateException(HttpStatusCode.BAD_REQUEST,
+						"Found an empty annotation or annotation value, " +
+								"please specify annotations.");
 			}
+
 			validateName(annotations.get(i).getName(),
 					MaxLength.ANNOTATION_LABEL, "Annotation label");
 			validateName(annotations.get(i).getValue(),
@@ -60,51 +58,49 @@ public class PostExperimentCommand extends Command {
 		}
 	}
 
-	private boolean annotationsContains(database.containers.Annotation anno) {
-		for(Annotation ann: this.annotations){
-			if(ann.getName().equals(anno.label)){
-				return true;
-			}
-		}
-		return false;
-	}
-
 	@Override
 	public Response execute() {
-		DatabaseAccessor db = null;
-		try {
-			db = initDB();
+		Response response;
 
-			ArrayList<String> anns = db.getAllAnnotationLabels();
-			for(String ann:anns){
-				database.containers.Annotation anno = db.getAnnotationObject(ann);
-				if(anno.isRequired){
-					if(!annotationsContains(anno)){
-						return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
-								"Not all forced values are present. Missing " +
-										"atleast " + anno.label);
-					}
-				}
+		try (DatabaseAccessor db = initDB()) {
+			for (String ann : db.getAllAnnotationLabels()) {
+				database.containers.Annotation anno =
+						db.getAnnotationObject(ann);
+				if (anno.isRequired && !annotationsContains(anno))
+					return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
+							"Adding experiment '" + name + "' unsuccessful, " +
+									"not all forced values are present. " +
+									"Missing at least '" + anno.label + "'.");
 			}
 
 			db.addExperiment(name);
-			for(Annotation annotation: annotations) {
+			for (Annotation annotation : annotations) {
 				db.annotateExperiment(name, annotation.getName(),
 						annotation.getValue());
 			}
-			return new MinimalResponse(HttpStatusCode.OK);
-		} catch (IOException | SQLException e) {
-			e.printStackTrace();
-			Debug.log("Adding of experiment " + name + " didn't work, reason: " +
-					e.getMessage());
-			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
-					"Adding of experiment " + name + " didn't work due to ." +
+
+			response = new MinimalResponse(HttpStatusCode.OK);
+		} catch (SQLException e) {
+			response = new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+					"Adding experiment '" + name + "' unsuccessful due to " +
+							"temporary database problems");
+			Debug.log("Reason: " + e.getMessage());
+		} catch (IOException e) {
+			response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
+					"Adding experiment '" + name + "' unsuccessful. " +
 							e.getMessage());
-		} finally {
-			if (db != null) {
-				db.close();
-			}
 		}
+
+		return response;
 	}
 
+	private boolean annotationsContains(database.containers.Annotation anno) {
+		for(Annotation ann: this.annotations) {
+			if (ann.getName().equals(anno.label)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
 }

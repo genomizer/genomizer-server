@@ -121,6 +121,8 @@ public class ExperimentMethods {
         if (e == null) {
             throw new IOException("No experiment with ID " + expId);
         }
+
+        removeHiddenFilesFromExperiment(expId);
         if (!e.getFiles().isEmpty()) {
             throw new IOException("This experiment contains files and therefore cannot be removed.");
         }
@@ -141,6 +143,32 @@ public class ExperimentMethods {
             stmt.close();
         }
 
+        return rs;
+    }
+
+    /**
+     * Help method to remove 'invisible' in progress marked files.
+     * @param expId
+     * @return
+     * @throws IOException
+     * @throws SQLException
+     */
+    private int removeHiddenFilesFromExperiment(String expId)
+            throws IOException, SQLException {
+
+        Experiment e = getExperiment(expId);
+
+        if (e == null) {
+            throw new IOException("No experiment with ID " + expId);
+        }
+
+        String query = "DELETE FROM File "
+                + "WHERE ExpID ~~* ? AND status='In Progress'";
+
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setString(1, expId);
+        int rs = stmt.executeUpdate();
+        stmt.close();
         return rs;
     }
 
