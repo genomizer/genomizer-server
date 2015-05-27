@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.concurrent.Callable;
 
+@Deprecated
 public class PutProcessCommand extends Command {
 
 	public static final String CMD_RAW_TO_PROFILE = "rawtoprofile";
