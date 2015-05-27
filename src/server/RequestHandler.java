@@ -114,8 +114,6 @@ public class RequestHandler implements HttpHandler {
             return;
         }
 
-        Debug.log(command.getClass().getName());
-
         /*Retrieve the URI part of the request header.*/
         HashMap<String, String> query = new HashMap<>();
         String uri;
