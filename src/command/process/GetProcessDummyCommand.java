@@ -4,7 +4,7 @@ import command.Command;
 import command.Process;
 import command.UserRights;
 import command.ValidateException;
-import response.GetProcessStatusResponse;
+import response.ProcessStatusResponse;
 import response.Response;
 
 import java.util.LinkedList;
@@ -73,7 +73,7 @@ public class GetProcessDummyCommand extends Command {
         getProcessStatuses.add(p2);
         getProcessStatuses.add(p3);
         getProcessStatuses.add(p4);
-        return new GetProcessStatusResponse(getProcessStatuses);
+        return new ProcessStatusResponse(getProcessStatuses);
     }
 }
 

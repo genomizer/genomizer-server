@@ -5,27 +5,26 @@ import command.Process;
 import server.ErrorLogger;
 
 import java.util.Collections;
-import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Class that represents the response for the get process status.
  *
- * @author
+ * @author Business Logic
  * @version 1.0
  */
-public class GetProcessStatusResponse extends Response {
+public class ProcessStatusResponse extends Response {
 
-	private LinkedList<command.Process> getProcessStatuses;
+	private List<command.Process> getProcessStatuses;
 
 
 	/**
 	 * Creator for the response. Always returns 200 as return code.
 	 * @param getProcessStatus The process status to return.
 	 */
-	public GetProcessStatusResponse(LinkedList<Process> getProcessStatus) {
-
+	public ProcessStatusResponse(List<Process> getProcessStatus) {
+		this.code = HttpStatusCode.OK;
 		this.getProcessStatuses = getProcessStatus;
-		code = 200;
 	}
 
 	/**
@@ -39,9 +38,8 @@ public class GetProcessStatusResponse extends Response {
 			ErrorLogger.log("SYSTEM", "There are no processes to retrieve.");
 			return "[]";
 		}
-
 		Collections.sort(getProcessStatuses);
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 
 		JsonArray arr = new JsonArray();
 		for (Process p : getProcessStatuses) {
@@ -58,7 +56,7 @@ public class GetProcessStatusResponse extends Response {
         JsonParser parser = new JsonParser();
         JsonArray json = parser.parse(jsonString).getAsJsonArray();
 
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 
 		return gson.toJson(json);
     }

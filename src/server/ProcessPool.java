@@ -4,9 +4,7 @@ import command.Process;
 import command.process.PutProcessCommand;
 import response.Response;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -57,17 +55,37 @@ public class ProcessPool {
         }).start();*/
     }
 
+    // Number of days in the past to retrieve processes
+    private static final int days = 30;
+
     /**
      * Gets a list of all submitted process commands
+     * except those that are considered stale
+     * (submitted more than $days days ago).
      *
-     * @return a linked list with elements of type {@link command
-     * .PutProcessCommand}
+     * @return a linked list with elements of type {@link command.Process}
      */
-    public LinkedList<PutProcessCommand> getProcesses() {
+    public List<Process> getProcesses() {
         lock.lock();
 
         try {
-            return new LinkedList<>(processesList);
+            List<Process> processStatusesList = new LinkedList<>();
+
+            Calendar pastCal = Calendar.getInstance();
+            pastCal.setTimeInMillis(System.currentTimeMillis());
+            pastCal.add(Calendar.DAY_OF_MONTH, -days);
+
+            Calendar startedCal = Calendar.getInstance();
+
+            for (PutProcessCommand proc : processesList) {
+                Process process = getProcessStatus(proc.getPID());
+                startedCal.setTimeInMillis(process.timeStarted);
+
+                if (startedCal.after(pastCal)) {
+                    processStatusesList.add(process);
+                }
+            }
+            return processStatusesList;
 
         }  finally {
             lock.unlock();
