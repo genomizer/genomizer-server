@@ -14,14 +14,14 @@ public class ProcessPool {
 
     private static final long statusTimeToLive = 2*1000*60*60*24;
 
-    // Process to status and response maps
+    // PID to metadata and Future<Response> maps.
     private HashMap<UUID, Process> processStatusMap;
     private HashMap<UUID, Future<Response>> processFutureMap;
 
-    // Synchronization objects
+    // Synchronization object,
     private final Lock lock;
 
-    // Thread pool
+    // Thread pool.
     private ExecutorService executor;
 
 
@@ -31,26 +31,9 @@ public class ProcessPool {
         lock = new ReentrantLock();
 
         executor = Executors.newFixedThreadPool(threads);
-
-        // Start a cleanup thread that will remove stale processes every 10 mins
-        /*new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    removeOldProcesses();
-                    try {
-                        Thread.sleep(600000);
-                    } catch (InterruptedException ex) {
-                        Debug.log("Process purging thread was unexpectedly " +
-                                "interrupted");
-                    }
-
-                }
-            }
-        }).start();*/
     }
 
-    // Number of days in the past to retrieve processes
+    // Number of days in the past after which processes are considered stale.
     private static final int days = 30;
 
     /**
@@ -89,10 +72,10 @@ public class ProcessPool {
 
 
     /**
-     * Adds a process command to the process pool
+     * Adds a new process to the process pool.
      *
-     * @param process  - process metada.
-     * @param callabel - the function that executes the process.
+     * @param process  - process metadata.
+     * @param callable - function to execute.
      */
     public void addProcess(Process process, Callable<Response> callable) {
         lock.lock();
@@ -162,6 +145,7 @@ public class ProcessPool {
 
     /**
      * Retrieves the process response for the specified process id.
+     * NB: can return null.
      *
      * @param processID
      * @return processresponse - the response if the process has finished
@@ -187,7 +171,7 @@ public class ProcessPool {
 
 
     /**
-     * Used internally to cleanup old processes that had either finished
+     * Used internally to clean up old processes that had either finished
      * gracefully, crashed or were cancelled.
      */
     public void removeOldProcesses() {
