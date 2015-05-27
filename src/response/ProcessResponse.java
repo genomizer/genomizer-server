@@ -7,7 +7,7 @@ import java.util.Date;
 /**
  * Class that represents the response when processing.
  *
- * @author
+ * @author Business Logic
  * @version 1.0
  */
 public class ProcessResponse extends Response {
@@ -23,7 +23,6 @@ public class ProcessResponse extends Response {
 	 * @param code The return code for the response.
 	 */
 	public ProcessResponse (int code) {
-
 		this.code = code;
 		message = null;
 		date = new Date(System.currentTimeMillis());

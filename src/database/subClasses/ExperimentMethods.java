@@ -50,17 +50,21 @@ public class ExperimentMethods {
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setString(1, expID);
         ResultSet rs = stmt.executeQuery();
-        Experiment e = null;
 
+        String expid = null;
         if (rs.next()) {
-            e = new Experiment(rs.getString("ExpID"));
-            e = fillAnnotations(e);
-            e = fillFiles(e);
+            expid = rs.getString("ExpID");
         }
-
         stmt.close();
 
-        return e;
+        if (expid != null) {
+            Experiment e = new Experiment(expid);
+            e = fillAnnotations(e);
+            e = fillFiles(e);
+            return e;
+        }
+
+        return null;
     }
 
     /**
@@ -72,30 +76,29 @@ public class ExperimentMethods {
      * @throws SQLException
      *             if the query does not succeed
      * @throws IOException
-     * @throws DuplicatePrimaryKeyException
      *             If the experiment already exists.
      */
     public int addExperiment(String expID) throws SQLException, IOException {
+        if (expID == null || expID.isEmpty()) {
+            throw new IOException("Invalid experiment ID.");
+        }
 
-    	if (expID == null || expID.isEmpty()) {
-    		throw new IOException("Invalid experiment ID.");
-    	}
-
-    	Experiment e = getExperiment(expID);
-    	if (e != null) {
-    		throw new IOException(expID + " already exists");
-    	}
-
-        String query = "INSERT INTO Experiment "
-                + "(ExpID) VALUES (?)";
-        PreparedStatement stmt = conn.prepareStatement(query);
-        stmt.setString(1, expID);
-
-        int rs = stmt.executeUpdate();
-        stmt.close();
+        Experiment e = getExperiment(expID);
+        if (e != null) {
+            throw new IOException(expID + " already exists");
+        }
 
         fpg.generateExperimentFolders(expID);
-
+        String query = "INSERT INTO Experiment "
+                + "(ExpID) VALUES (?)";
+        int rs = 0;
+        try (PreparedStatement stmt= conn.prepareStatement(query);) {
+            stmt.setString(1, expID);
+            rs = stmt.executeUpdate();
+        } catch (SQLException ex) {
+            conn.rollback();
+            throw ex;
+        }
         return rs;
     }
 
@@ -114,30 +117,28 @@ public class ExperimentMethods {
      */
     public int deleteExperiment(String expId)
             throws SQLException, IOException {
-
         Experiment e = getExperiment(expId);
-
         if (e == null) {
             throw new IOException("No experiment with ID " + expId);
         }
-
         if (!e.getFiles().isEmpty()) {
             throw new IOException("This experiment contains files and therefore cannot be removed.");
         }
 
-        String query = "DELETE FROM Experiment "
-                + "WHERE ExpID ~~* ?";
-
-        PreparedStatement stmt = conn.prepareStatement(query);
-        stmt.setString(1, expId);
-
-        int rs = stmt.executeUpdate();
-        stmt.close();
-
-
         File experimentFolder = new File(fpg.getRootDirectory() + e.getID());
+        boolean success = true;
         if (experimentFolder.exists()) {
-            recursiveDelete(experimentFolder);
+            if (!recursiveDelete(experimentFolder)) success = false;
+        }
+
+        int rs = 0;
+        if (success) {
+            String query = "DELETE FROM Experiment "
+                    + "WHERE ExpID ~~* ?";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setString(1, expId);
+            rs = stmt.executeUpdate();
+            stmt.close();
         }
 
         return rs;
@@ -353,18 +354,18 @@ public class ExperimentMethods {
      * @param folder
      *            the folder to delete.
      */
-    private static void recursiveDelete(File folder) {
+    private static boolean recursiveDelete(File folder) {
 
         File[] contents = folder.listFiles();
 
         if (contents == null || contents.length == 0) {
-            folder.delete();
+            return folder.delete();
         } else {
             for (File f : contents) {
                 recursiveDelete(f);
             }
         }
 
-        folder.delete();
+        return folder.delete();
     }
 }

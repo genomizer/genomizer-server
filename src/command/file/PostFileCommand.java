@@ -93,8 +93,7 @@ public class PostFileCommand extends Command {
 			db = initDB();
 			FileTuple ft = db.addNewInProgressFile(experimentID, fileType, fileName, null,
 					metaData, author, uploader, false, grVersion, checkSumMD5);
-			return new UrlUploadResponse(HttpStatusCode.OK,
-					ft.getUploadURL());
+			return new UrlUploadResponse(ft.getUploadURL());
 		} catch (SQLException | IOException e) {
 			Debug.log("Adding of file " + fileName + " to experiment "+experimentID+" didn't work, reason: " +
 					e.getMessage());
