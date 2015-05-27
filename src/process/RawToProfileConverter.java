@@ -49,6 +49,18 @@ public class RawToProfileConverter extends Executor {
 	}
 
 
+	/**
+	 * This method might be deleted or edited to be the new procedure. Work in progress atm with Adam
+	 * @param params
+	 * @param infile
+	 * @param outfile
+	 * @param keepSam
+	 * @param genomeVersion
+	 * @param referenceGenome
+	 * @param filepaths
+	 * @return
+	 * @throws ProcessException
+	 */
 	public String procedureRaw(String params, String infile, String outfile, boolean keepSam, String
 			genomeVersion, String referenceGenome, Map.Entry<String,String> filepaths) throws ProcessException{
 		return null;

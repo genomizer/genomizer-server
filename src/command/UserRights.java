@@ -55,6 +55,7 @@ public class UserRights {
         userRights.put(PutUserAdminCommand.class, UserType.ADMIN);
         userRights.put(PutConvertFileCommand.class, UserType.USER);
         userRights.put(ProcessCommands.class, UserType.USER);
+        userRights.put(PutProcessCommand.class, UserType.USER);
     }
 
 
