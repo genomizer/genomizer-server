@@ -118,6 +118,23 @@ public class Authenticate {
 		latestRequests.remove(uuid);
 	}
 
+
+	/**
+	 * Method used to delete a user from the active list.
+	 *
+	 * @param username username for the user to remove.
+	 */
+	static public void deleteUsername(String username) {
+
+		for(String uuid : activeUsersID.keySet()){
+			if (activeUsersID.get(uuid).equals(username)){
+				activeUsersID.remove(uuid);
+				latestRequests.remove(uuid);
+			}
+		}
+
+	}
+
 	/**
 	 * Method used to check if a specific user uuid exist.
 	 *

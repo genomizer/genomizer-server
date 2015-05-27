@@ -77,7 +77,7 @@ public class PostLoginCommand extends Command {
 			db = initDB();
 			String dbHash;
 			if ((dbHash = db.getPasswordHash(username)) != null) {
-				LoginAttempt login = Authenticate.login(username, password,
+				LoginAttempt login = Authenticate.login(uuid, username, password,
 						dbHash);
 				if (login.wasSuccessful())
 					response = new LoginResponse(login.getUUID(),

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
 
+import authentication.Authenticate;
 import command.Command;
 import command.UserRights;
 import command.ValidateException;
@@ -23,6 +24,7 @@ import server.Debug;
  * @version 1.1
  */
 public class DeleteAdminUserCommand extends Command {
+	
 	private String username;
 
 	@Override
@@ -50,8 +52,10 @@ public class DeleteAdminUserCommand extends Command {
 
 		try {
 			db = initDB();
-			if (db.deleteUser(username) != 0)
+			if (db.deleteUser(username) != 0) {
 				response = new MinimalResponse(HttpStatusCode.OK);
+				Authenticate.deleteUsername(username);
+			}
 			else
 				response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
 						"Deletion of user '" + username + "' unsuccessful, " +

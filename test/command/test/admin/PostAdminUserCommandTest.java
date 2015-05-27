@@ -13,13 +13,13 @@ import com.google.gson.JsonObject;
 import database.constants.MaxLength;
 
 /**
- * Class used to test that PostUserCommand class works
+ * Class used to test that PostAdminUserCommand class works
  * properly.
  *
  * @author Kommunikation/kontroll 2014.
  * @version 1.0
  */
-public class PostUserCommandTest {
+public class PostAdminUserCommandTest {
 
 	private Gson gson = null;
 	private String json = null;
@@ -43,7 +43,7 @@ public class PostUserCommandTest {
 	public void testCreationNotNull() {
 
 		json = createJSON("a","b","c","d","e");
-		PostUserCommand cmd = gson.fromJson(json, PostUserCommand.class);
+		PostAdminUserCommand cmd = gson.fromJson(json, PostAdminUserCommand.class);
 		cmd.setFields("uri", null, "uuid", UserType.ADMIN);
 		assertNotNull(cmd);
 
@@ -57,7 +57,7 @@ public class PostUserCommandTest {
 	public void testConvertJSON() {
 
 		json = createJSON("a","b","c","d","e");
-		PostUserCommand cmd = gson.fromJson(json, PostUserCommand.class);
+		PostAdminUserCommand cmd = gson.fromJson(json, PostAdminUserCommand.class);
 		String compare = gson.toJson(cmd);
 		assertEquals(compare, json);
 
@@ -71,7 +71,7 @@ public class PostUserCommandTest {
 	public void testValidateInvalidUsernameMinLength() throws ValidateException {
 
 		json = createJSON("","b","c","d","e");
-		PostUserCommand cmd2 = gson.fromJson(json, PostUserCommand.class);
+		PostAdminUserCommand cmd2 = gson.fromJson(json, PostAdminUserCommand.class);
 		cmd2.setFields("uri", null, "uuid", UserType.ADMIN);
 
 		cmd2.validate();
@@ -89,7 +89,7 @@ public class PostUserCommandTest {
 			username = username + "a";
 		}
 		json = createJSON(username, "b", "c", "d", "e");
-		PostUserCommand cmd = gson.fromJson(json, PostUserCommand.class);
+		PostAdminUserCommand cmd = gson.fromJson(json, PostAdminUserCommand.class);
 		cmd.setFields("uri", null, "uuid", UserType.ADMIN);
 
 		cmd.validate();
@@ -107,7 +107,7 @@ public class PostUserCommandTest {
 			password = password + "a";
 		}
 		json = createJSON("a", password, "c", "d", "e");
-		PostUserCommand cmd = gson.fromJson(json, PostUserCommand.class);
+		PostAdminUserCommand cmd = gson.fromJson(json, PostAdminUserCommand.class);
 		cmd.setFields("uri", null, "uuid", UserType.ADMIN);
 
 		cmd.validate();
@@ -121,7 +121,7 @@ public class PostUserCommandTest {
 	public void testValidateInvalidPasswordMinLength() throws ValidateException {
 
 		json = createJSON("a","","c","d","e");
-		PostUserCommand cmd2 = gson.fromJson(json, PostUserCommand.class);
+		PostAdminUserCommand cmd2 = gson.fromJson(json, PostAdminUserCommand.class);
 		cmd2.setFields("uri", null, "uuid", UserType.ADMIN);
 
 		cmd2.validate();
@@ -133,7 +133,7 @@ public class PostUserCommandTest {
 	@Test (expected = ValidateException.class)
 	public void testValidatePrivilegesLength() throws ValidateException {
 		json = createJSON("a","b","","d","e");
-		PostUserCommand cmd2 = gson.fromJson(json, PostUserCommand.class);
+		PostAdminUserCommand cmd2 = gson.fromJson(json, PostAdminUserCommand.class);
 		cmd2.setFields("uri", null, "uuid", UserType.ADMIN);
 		cmd2.validate();
 	}
@@ -147,7 +147,7 @@ public class PostUserCommandTest {
 			privilege = privilege + "a";
 		}
 		json = createJSON("a","b",privilege,"d","e");
-		PostUserCommand cmd = gson.fromJson(json, PostUserCommand.class);
+		PostAdminUserCommand cmd = gson.fromJson(json, PostAdminUserCommand.class);
 		cmd.setFields("uri", null, "uuid", UserType.ADMIN);
 		cmd.validate();
 	}
@@ -160,7 +160,7 @@ public class PostUserCommandTest {
 	public void testValidateInvalidUsernameCharacters() throws ValidateException {
 
 		json = createJSON("��!?,:;/[]{}", "b", "c", "d", "e");
-		PostUserCommand cmd = gson.fromJson(json, PostUserCommand.class);
+		PostAdminUserCommand cmd = gson.fromJson(json, PostAdminUserCommand.class);
 		cmd.setFields("uri", null, "uuid", UserType.ADMIN);
 
 		cmd.validate();
@@ -174,7 +174,7 @@ public class PostUserCommandTest {
 	public void testValidateInvalidPasswordCharacters() throws ValidateException {
 
 		json = createJSON("a","��!?,:;/[]{}","c","d","e");
-		PostUserCommand cmd2 = gson.fromJson(json, PostUserCommand.class);
+		PostAdminUserCommand cmd2 = gson.fromJson(json, PostAdminUserCommand.class);
 		cmd2.setFields("uri", null, "uuid", UserType.ADMIN);
 		cmd2.validate();
 	}
@@ -185,7 +185,7 @@ public class PostUserCommandTest {
 	@Test
 	public void testValidationProperlyFormatted() throws ValidateException {
 		json = createJSON("a","b","c","d","e");
-		PostUserCommand cmd = gson.fromJson(json, PostUserCommand.class);
+		PostAdminUserCommand cmd = gson.fromJson(json, PostAdminUserCommand.class);
 		cmd.setFields("uri", null, "uuid", UserType.ADMIN);
 
 		cmd.validate();
@@ -201,7 +201,7 @@ public class PostUserCommandTest {
 	public void testHavingRights() throws ValidateException {
 
 		json = createJSON("a","b","c","d","e");
-		PostUserCommand c = gson.fromJson(json, PostUserCommand.class);
+		PostAdminUserCommand c = gson.fromJson(json, PostAdminUserCommand.class);
 		c.setFields("uri", null, "uuid", UserType.ADMIN);
 
 		c.validate();
@@ -217,7 +217,7 @@ public class PostUserCommandTest {
 	public void testNotHavingRights() throws ValidateException {
 
 		json = createJSON("a","b","c","d","e");
-		PostUserCommand c = gson.fromJson(json, PostUserCommand.class);
+		PostAdminUserCommand c = gson.fromJson(json, PostAdminUserCommand.class);
 		c.setFields("uri", null, "uuid", UserType.USER);
 
 		c.validate();
