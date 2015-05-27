@@ -1,10 +1,8 @@
 package response;
 
 import com.google.gson.*;
+import database.containers.Experiment;
 import database.containers.FileTuple;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * Class that represents the response when returning the experiment information.
@@ -12,33 +10,28 @@ import java.util.Map;
  * @author Business Logic 2015
  * @version 1.1
  */
-public class GetExperimentResponse extends Response {
+public class SingleExperimentResponse extends Response {
 
 	private JsonObject jsonObj;
-
 
 	/**
 	 * Creator for the response which contains the experiment and all the
 	 * associated information and files.
-	 * @param code The return code for the response.
-	 * @param name A String containing the name of the experiment.
-	 * @param annotations A Map containing the annotations for the experiment .
-	 * @param list A list containing the files associated with the experiment.
+	 * @param experiment containing files and annotations
 	 */
-	public GetExperimentResponse(int code, String name, Map<String, String> annotations, List<FileTuple> list) {
-
-		this.code = code;
+	public SingleExperimentResponse(Experiment experiment) {
+		this.code = HttpStatusCode.OK;
 
 		//Creates a JsonObject and adds the information as jsonArrays
 		jsonObj = new JsonObject();
-		jsonObj.addProperty("name", name);
+		jsonObj.addProperty("name", experiment.getID());
 
 		//Creates a jsonArray from the FileTuple list with FileInformation
 		// objects
 		JsonArray fileArray = new JsonArray();
-		for (FileTuple ft: list) {
+		for (FileTuple ft: experiment.getFiles()) {
 			GsonBuilder gsonBuilder = new GsonBuilder();
-			Gson gson = gsonBuilder.setPrettyPrinting().create();
+			Gson gson = gsonBuilder.setPrettyPrinting().disableHtmlEscaping().create();
 			FileInformation fileInfo = new FileInformation(ft);
 			JsonElement fileJson = gson.toJsonTree(fileInfo);
 			fileArray.add(fileJson);
@@ -47,14 +40,13 @@ public class GetExperimentResponse extends Response {
 
 		//Creates an jsonArray from the annotations map with name and value
 		JsonArray annotationArray = new JsonArray();
-		for (String key: annotations.keySet()) {
+		for (String key: experiment.getAnnotations().keySet()) {
 			JsonObject annotation = new JsonObject();
 			annotation.addProperty("name", key);
-			annotation.addProperty("value", annotations.get(key));
+			annotation.addProperty("value", experiment.getAnnotations().get(key));
 			annotationArray.add(annotation);
 		}
 		jsonObj.add("annotations", annotationArray);
-
 	}
 
 	/**
