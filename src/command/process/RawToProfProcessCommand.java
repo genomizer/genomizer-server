@@ -8,6 +8,7 @@ import database.constants.MaxLength;
 import database.containers.Genome;
 import process.ProcessException;
 import process.ProcessHandler;
+import process.RawToProfileConverter;
 import response.HttpStatusCode;
 import server.Debug;
 
@@ -125,7 +126,7 @@ public class RawToProfProcessCommand extends ProcessCommand {
 
             try {
                 db = initDB();
-                ProcessHandler processHandler = new ProcessHandler();
+
                 //Get the genome information from the database.
                 Genome g = db.getGenomeRelease(getGenomeVersion());
 
@@ -156,7 +157,8 @@ public class RawToProfProcessCommand extends ProcessCommand {
                     String referenceGenome = genomeFolderPath + genomeFilePrefix;
 
                     try {
-                        processHandler.executeRawToProfileProcess(getParams(), getInfile(), getOutfile(),
+                        RawToProfileConverter rawToProfileConverter = new RawToProfileConverter();
+                        rawToProfileConverter.procedureRaw(getParams(), getInfile(), getOutfile(),
                                 shouldKeepSam(), getGenomeVersion(), referenceGenome, filePaths);
                     }catch (ProcessException e){
                         Debug.log("Error when processing. Could not execute raw to profile process. " + e.getMessage());
