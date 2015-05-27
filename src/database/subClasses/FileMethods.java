@@ -110,7 +110,7 @@ public class FileMethods {
 		} else {
 			path = ft.getParentFolder() + fileName;
 			File profileToAdd = new File(path);
-			if (profileToAdd.exists()) {
+			if (profileToAdd.exists() && hasFile(ft.id)) {
 				throw new IOException(fileName + " with the parameters "
 						+ metaData + " already exists!");
 			}
