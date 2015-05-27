@@ -79,7 +79,7 @@ public class ExperimentListResponse extends Response {
         JsonParser parser = new JsonParser();
         JsonArray json = parser.parse(jsonString).getAsJsonArray();
 
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 
 		return gson.toJson(json);
     }

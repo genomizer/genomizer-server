@@ -31,7 +31,7 @@ public class SingleExperimentResponse extends Response {
 		JsonArray fileArray = new JsonArray();
 		for (FileTuple ft: experiment.getFiles()) {
 			GsonBuilder gsonBuilder = new GsonBuilder();
-			Gson gson = gsonBuilder.setPrettyPrinting().create();
+			Gson gson = gsonBuilder.setPrettyPrinting().disableHtmlEscaping().create();
 			FileInformation fileInfo = new FileInformation(ft);
 			JsonElement fileJson = gson.toJsonTree(fileInfo);
 			fileArray.add(fileJson);
