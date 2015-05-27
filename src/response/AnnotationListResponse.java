@@ -31,7 +31,7 @@ public class AnnotationListResponse extends Response {
 
 	    for (AnnotationInformation annotation: annotations) {
 	    	GsonBuilder builder = new GsonBuilder();
-	    	Gson gson = builder.create();
+	    	Gson gson = builder.disableHtmlEscaping().create();
 	    	JsonElement annotationJson = gson.toJsonTree(annotation);
 	    	annotationsArray.add(annotationJson);
 	    }

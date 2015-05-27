@@ -1,27 +1,14 @@
 package command;
 
-import command.admin.PutUserAdminCommand;
+import command.admin.*;
 import command.annotation.*;
-import command.convertfile.PutConvertFileCommand;
-import command.experiment.DeleteExperimentCommand;
-import command.experiment.GetExperimentCommand;
-import command.experiment.PostExperimentCommand;
-import command.experiment.PutExperimentCommand;
-import command.file.DeleteFileCommand;
-import command.file.GetFileCommand;
-import command.file.PostFileCommand;
-import command.file.PutFileCommand;
-import command.genomerelease.DeleteGenomeReleaseCommand;
-import command.genomerelease.GetGenomeReleaseCommand;
-import command.genomerelease.GetGenomeReleaseSpeciesCommand;
-import command.genomerelease.PostGenomeReleaseCommand;
-import command.process.GetProcessStatusCommand;
-import command.process.ProcessCommands;
-import command.search.SearchCommand;
-import command.user.PutUserCommand;
-import command.user.PutUserPasswordCommand;
-import command.admin.DeleteAdminUserCommand;
-import command.admin.PostAdminUserCommand;
+import command.convertfile.*;
+import command.experiment.*;
+import command.file.*;
+import command.genomerelease.*;
+import command.process.*;
+import command.search.*;
+import command.user.*;
 import database.subClasses.UserMethods.UserType;
 
 import java.util.HashMap;
