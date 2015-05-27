@@ -13,16 +13,12 @@ public class ProcessHandler implements Callable<Response> {
 
 	private Callable<Response> callable;
 	private Process process;
-	private boolean simulateLongProcess;
-
 
 	public ProcessHandler(Callable<Response> callable,
 						  Process process) {
 		this.callable = callable;
 		this.process = process;
-		simulateLongProcess = false;
 	}
-
 
 	@Override
 	public Response call() {
@@ -64,22 +60,6 @@ public class ProcessHandler implements Callable<Response> {
 				process.status = Process.STATUS_CRASHED;
 			}
 
-			// A simulation of a long executing process
-			if (simulateLongProcess) {
-				/* Long time process execution simulation */
-				ErrorLogger.log("PROCESS", "Process is sleeping for 30 seconds.");
-				Debug.log("Process is sleeping for 30 seconds. PID " +
-						process.PID);
-				try {
-					Thread.sleep(30000);
-				} catch (InterruptedException ex) {
-					Debug.log("Sleep interrupted");
-				}
-				Debug.log("End of sleep. PID " + process.PID);
-			}
-
-
-
 			process.timeFinished = System.currentTimeMillis();
 
 			String timeMsg = "PID: " + process.PID + "\nElapsed time: " +
@@ -95,11 +75,6 @@ public class ProcessHandler implements Callable<Response> {
 		return response;
 
 	}
-
-	public void setSimulation(boolean flag) {
-		simulateLongProcess = flag;
-	}
-
 
 }
 
