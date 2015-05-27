@@ -64,6 +64,7 @@ public class DeleteFileCommand extends Command {
 		} catch (SQLException e) {
 			response = new DatabaseErrorResponse("Deletion of file '" + fileID +
 					"'");
+			Debug.log("Reason: " + e.getMessage());
 		} catch (IOException e) {
 			response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
 					"Deletion of file '" + fileID + "' unsuccessful. " +
