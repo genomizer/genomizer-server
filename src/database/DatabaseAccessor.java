@@ -517,6 +517,10 @@ public class DatabaseAccessor implements AutoCloseable {
         return annoMethods.getAllAnnotationLabels();
     }
 
+    public ArrayList<String> getAllForcedAnnotationLabels() {
+        return annoMethods.getAllForcedAnnotationLabels();
+    }
+
     /**
      * Gets the datatype of a given annotation.
      *
