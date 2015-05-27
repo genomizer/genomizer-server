@@ -135,7 +135,7 @@ public class RawToProfProcessCommand extends ProcessCommand {
                 }
                 else {
                     //Get the path of the genome.
-                    String genomeFolderPath = g.folderPath;
+                    String genomeFolderPath = g.getFolderPath();
                     //Get the prefix of the genome files.
                     String genomeFilePrefix = g.getFilePrefix();
 
