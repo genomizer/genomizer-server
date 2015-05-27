@@ -1,7 +1,9 @@
 package process.test;
 
 import command.ValidateException;
+import org.apache.commons.io.FileUtils;
 import org.junit.After;
+import org.junit.Ignore;
 import org.junit.Test;
 import process.Step;
 
@@ -22,9 +24,12 @@ public class StepTest {
             "resources/stepTestData/stepTestInfile.sgr";
     public static final String OUTFILE =
             "resources/stepTestData/out/stepTestOutfile.sgr";
+    public static final String CORRECT_FILE =
+            "resources/stepTestData/correct/correctStep20.sgr";
     public static final String NO_SUCH_FILE =
             "resources/stepTestData/noSuchFile.sgr";
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @After
     public void tearDown() throws Exception {
         new File(OUTFILE).delete();
@@ -62,8 +67,19 @@ public class StepTest {
     }
 
     @Test
+    @Ignore
     public void shouldProduceOutfile() throws Exception {
         new Step(INFILE, OUTFILE, 20).validate().execute();
         assertTrue(new File(OUTFILE).exists());
+    }
+
+    @Test
+    @Ignore
+    public void shouldProduceCorrectFile() throws Exception {
+        new Step(INFILE, OUTFILE, 20).validate().execute();
+        assertTrue(
+                FileUtils.contentEquals(
+                        new File(OUTFILE),
+                        new File(CORRECT_FILE)));
     }
 }
