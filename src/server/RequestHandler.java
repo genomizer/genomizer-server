@@ -63,7 +63,7 @@ public class RequestHandler implements HttpHandler {
                 + exchange.getHttpContext().getPath();
         Class<? extends Command> commandClass = CommandClasses.get(key);
 
-        Debug.log("" + commandClass);
+        Debug.log(commandClass.getName());
 
         String uuid = Authenticate.performAuthentication(exchange);
 
@@ -114,7 +114,7 @@ public class RequestHandler implements HttpHandler {
             return;
         }
 
-        Debug.log("" + command);
+        Debug.log(command.getClass().getName());
 
         /*Retrieve the URI part of the request header.*/
         HashMap<String, String> query = new HashMap<>();
