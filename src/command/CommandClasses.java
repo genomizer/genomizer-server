@@ -2,7 +2,7 @@ package command;
 
 import command.admin.DeleteAdminUserCommand;
 import command.admin.PostAdminUserCommand;
-import command.admin.PutUserAdminCommand;
+import command.admin.PutAdminUserCommand;
 import command.annotation.*;
 import command.connection.*;
 import command.convertfile.PutConvertFileCommand;
@@ -65,7 +65,7 @@ public class CommandClasses {
         //Admin commands
         classes.put("POST /admin/user", PostAdminUserCommand.class);
         classes.put("DELETE /admin/user/", DeleteAdminUserCommand.class);
-        classes.put("PUT /admin/user", PutUserAdminCommand.class);
+        classes.put("PUT /admin/user", PutAdminUserCommand.class);
 
         //Processing
         classes.put("GET /process", GetProcessStatusCommand.class);
