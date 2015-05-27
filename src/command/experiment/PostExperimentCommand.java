@@ -60,58 +60,47 @@ public class PostExperimentCommand extends Command {
 
 	@Override
 	public Response execute() {
+		Response response;
+
 		try (DatabaseAccessor db = initDB()) {
+			for (String ann : db.getAllAnnotationLabels()) {
+				database.containers.Annotation anno =
+						db.getAnnotationObject(ann);
+				if (anno.isRequired && !annotationsContains(anno))
+					return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
+							"Adding experiment '" + name + "' unsuccessful, " +
+									"not all forced values are present. " +
+									"Missing at least '" + anno.label + "'.");
+			}
 
+			db.addExperiment(name);
+			for (Annotation annotation : annotations) {
+				db.annotateExperiment(name, annotation.getName(),
+						annotation.getValue());
+			}
+
+			response = new MinimalResponse(HttpStatusCode.OK);
 		} catch (SQLException e) {
-
+			response = new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+					"Adding experiment '" + name + "' unsuccessful due to " +
+							"temporary database problems");
+			Debug.log("Reason: " + e.getMessage());
 		} catch (IOException e) {
-
+			response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
+					"Adding experiment '" + name + "' unsuccessful. " +
+							e.getMessage());
 		}
 
-//		DatabaseAccessor db = null;
-//		try {
-//			db = initDB();
-//
-//			ArrayList<String> anns = db.getAllAnnotationLabels();
-//			for(String ann:anns){
-//				database.containers.Annotation anno = db.getAnnotationObject(ann);
-//				if(anno.isRequired){
-//					if(!annotationsContains(anno)){
-//						return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
-//								"Not all forced values are present. Missing " +
-//										"atleast " + anno.label);
-//					}
-//				}
-//			}
-//
-//			db.addExperiment(name);
-//			for(Annotation annotation: annotations) {
-//				db.annotateExperiment(name, annotation.getName(),
-//						annotation.getValue());
-//			}
-//			return new MinimalResponse(HttpStatusCode.OK);
-//		} catch (IOException | SQLException e) {
-//			e.printStackTrace();
-//			Debug.log("Adding of experiment " + name + " didn't work, reason: " +
-//					e.getMessage());
-//			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
-//					"Adding of experiment " + name + " didn't work due to ." +
-//							e.getMessage());
-//		} finally {
-//			if (db != null) {
-//				db.close();
-//			}
-//		}
-
-		return null;
+		return response;
 	}
 
 	private boolean annotationsContains(database.containers.Annotation anno) {
-		for(Annotation ann: this.annotations){
-			if(ann.getName().equals(anno.label)){
+		for(Annotation ann: this.annotations) {
+			if (ann.getName().equals(anno.label)) {
 				return true;
 			}
 		}
+
 		return false;
 	}
 }
