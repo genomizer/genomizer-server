@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 import command.Command;
 import command.ValidateException;
 import database.constants.MaxLength;
+import response.HttpStatusCode;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -19,6 +20,14 @@ public class SmoothingProcessCommand extends ProcessCommand {
         for (SmoothingFile file : files) {
             Command.validateName(file.getInfile(), MaxLength.FILE_FILENAME, "Infile");
             Command.validateName(file.getOutfile(), MaxLength.FILE_FILENAME, "Outfile");
+            if(!file.getMeanOrMedian().equals("mean")&&!file.getMeanOrMedian().equals("median")){
+                throw new ValidateException(HttpStatusCode.BAD_REQUEST,
+                        "Incorrect meanOrMedian, should be either 'mean' or 'median'.");
+            }
+            if(file.getMinSmooth()>=file.getWindowSize()){
+                throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Incorrect input: minSmooth: "+
+                        file.getMinSmooth()+" must be smaller than windowSize: "+file.getWindowSize()+".");
+            }
         }
     }
 
