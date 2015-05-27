@@ -1,24 +1,23 @@
 package command.connection;
+
 import authentication.Authenticate;
 import authentication.LoginAttempt;
+import com.google.gson.annotations.Expose;
 import command.Command;
 import command.ValidateException;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
-import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.HttpStatusCode;
 import response.LoginResponse;
 import response.Response;
 import server.Debug;
 
-import com.google.gson.annotations.Expose;
-
 import java.io.IOException;
 import java.sql.SQLException;
 
 /**
- * This class is used to handle user login.
+ * Command used to log in a user.
  *
  * @author Business Logic 2015.
  * @version 1.1
@@ -26,7 +25,6 @@ import java.sql.SQLException;
 public class PostLoginCommand extends Command {
 	@Expose
 	private String username = null;
-
 	@Expose
 	private String password = null;
 
@@ -37,66 +35,70 @@ public class PostLoginCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-		validateUserAndPassword(username, MaxLength.USERNAME, "Username/Password");
-		validateUserAndPassword(password, MaxLength.PASSWORD, "Username/Password");
+		validateUserAndPassword(username, MaxLength.USERNAME,
+				"Username/Password");
+		validateUserAndPassword(password, MaxLength.PASSWORD,
+				"Username/Password");
 	}
-	public void validateUserAndPassword(String string, int maxLength, String field)
-			throws ValidateException {
-		if(string == null) {
+
+	public void validateUserAndPassword(String string, int maxLength,
+										String field) throws ValidateException {
+		if (string == null) {
 			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Specify " +
 					"an " + field.toLowerCase() + ".");
 		}
-		if(string.equals("null")){
+
+		if (string.equals("null")) {
 			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Invalid "
 					+ field.toLowerCase() + ".");
 		}
-		if(string.length() > maxLength || string.length() < 1) {
+
+		if (string.length() > maxLength || string.length() < 1) {
 			throw new ValidateException(HttpStatusCode.BAD_REQUEST, field +
 					" has to be between 1 and " + maxLength +
 					" characters long.");
 		}
-		if(hasInvalidCharacters(string)) {
+		if (hasInvalidCharacters(string)) {
 			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Invalid" +
 					" characters in " + field.toLowerCase() +
 					". Valid characters are: " + validCharacters);
 		}
 	}
+
 	@Override
 	public Response execute() {
-		UserType userType = UserType.UNKNOWN;
 		DatabaseAccessor db = null;
-		String dbHash;
+		Response response;
+
 		try {
 			db = initDB();
-			dbHash = db.getPasswordHash(username);
-			userType = db.getRole(username);
-		} catch (SQLException | IOException e) {
-			Debug.log("LOGIN WAS UNSUCCESSFUL FOR: " + username + ". REASON: " +
-					e.getMessage());
-			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
-					"Login was unsuccessful for user: " + username +
-							". The reason is temporary problems with database.");
-		}finally {
-			if (db != null) {
-				db.close();
+			String dbHash;
+			if ((dbHash = db.getPasswordHash(username)) != null) {
+				LoginAttempt login = Authenticate.login(username, password,
+						dbHash);
+				if (login.wasSuccessful())
+					response = new LoginResponse(login.getUUID(),
+							db.getRole(username).name());
+				else
+					response = new ErrorResponse(HttpStatusCode.UNAUTHORIZED,
+							"Login attempt unsuccessful, incorrect password");
+			} else {
+				response = new ErrorResponse(HttpStatusCode.UNAUTHORIZED,
+						"Login attempt unsuccessful, invalid username");
 			}
+		} catch (IOException e) {
+			response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
+					"Login attempt unsuccessful. " + e.getMessage());
+		} catch (SQLException e) {
+			response = new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+					"Login attempt unsuccessful due to temporary database " +
+							"problems");
+			Debug.log("Reason: " + e.getMessage());
+		} finally {
+			if (db != null)
+				db.close();
 		}
 
-		if(dbHash == null || dbHash.isEmpty()){
-			return new ErrorResponse(HttpStatusCode.UNAUTHORIZED, "Login failed, invalid username");
-		}
-
-		LoginAttempt login = Authenticate.login(username, password, dbHash);
-
-		if(!login.wasSuccessful()) {
-			Debug.log("LOGIN WAS UNSUCCESSFUL FOR: " + username + ". REASON: " +
-					login.getErrorMessage());
-			return new ErrorResponse(HttpStatusCode.UNAUTHORIZED,
-					"Login failed, incorrect password");
-		}
-
-		Debug.log("LOGIN WAS SUCCESSFUL FOR: "+ username + ". GAVE UUID: " +
-				Authenticate.getID(username));
-		return new LoginResponse(login.getUUID(),userType.name());
+		return response;
 	}
 }
