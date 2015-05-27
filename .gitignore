@@ -17,5 +17,5 @@ psqllogin
 .metadata/
 *.cfg
 *.swp
-resources/processTest/results
-
+resources/processTest/test_sorted.sam
+resources/processTest/test_sorted_without_duplicates.sam
