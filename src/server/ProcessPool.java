@@ -11,7 +11,8 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class ProcessPool {
 
-    private static final long statusTimeToLive = 2*1000*60*60*24;
+    // Five days.
+    private static final long statusTimeToLive = 5*1000*60*60*24;
 
     // PID to metadata and Future<Response> maps.
     private HashMap<UUID, Process> processStatusMap;
@@ -46,7 +47,7 @@ public class ProcessPool {
         lock.lock();
 
         try {
-            List<Process> processStatusesList = new LinkedList<>();
+            List<Process> processStatusesList = new ArrayList<>();
 
             Calendar pastCal = Calendar.getInstance();
             pastCal.setTimeInMillis(System.currentTimeMillis());
@@ -101,8 +102,8 @@ public class ProcessPool {
     }
 
     /**
-     * Attempts to cancel the specified process if it is not completed or if
-     * it has not been cancelled already.
+     * Cancels a given process.
+     * Cancelling a crashed/finished process removes it from the process list.
      *
      * @param processID - the id of the process to be cancelled
      */
@@ -110,14 +111,12 @@ public class ProcessPool {
         lock.lock();
 
         try {
+            Future<Response> future = processFutureMap.get(processID);
 
-           Future<Response> response = processFutureMap.get(processID);
-
-            if (response != null) {
-                // Attempt to cancel if not done or cancelled already
-                if (!response.isDone() && !response.isCancelled()) {
-                    response.cancel(true);
-                }
+            if (future != null) {
+                future.cancel(true);
+                processStatusMap.remove(processID);
+                processFutureMap.remove(processID);
             }
 
         } finally {
@@ -206,8 +205,8 @@ public class ProcessPool {
             for (Process process : toBeRemoved) {
                 Debug.log("Removing old process status: "
                         + process.PID);
-                processStatusMap.remove(process.PID);
-                processFutureMap.remove(process.PID);
+                processStatusMap.remove(UUID.fromString(process.PID));
+                processFutureMap.remove(UUID.fromString(process.PID));
             }
         } finally {
             lock.unlock();
