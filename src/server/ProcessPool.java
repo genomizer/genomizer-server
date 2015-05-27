@@ -91,7 +91,7 @@ public class ProcessPool {
 
             // Submit the process with a new work handler for execution
             Future<Response> response = executor.submit(
-                    new ProcessHandler(callable, process));
+                    new ProcessWrapper(callable, process));
 
             if (response != null) {
                 // Create a process command to process response mapping
@@ -218,12 +218,14 @@ public class ProcessPool {
 
     }
 
-    private static class ProcessHandler implements Callable<Response> {
+    // A wrapper around a Callable that takes care of
+    // setting process metadata (status, timestamps) to right values.
+    private static class ProcessWrapper implements Callable<Response> {
 
         private Callable<Response> callable;
         private Process process;
 
-        public ProcessHandler(Callable<Response> callable,
+        public ProcessWrapper(Callable<Response> callable,
                               Process process) {
             this.callable = callable;
             this.process = process;
