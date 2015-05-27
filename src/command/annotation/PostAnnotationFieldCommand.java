@@ -7,11 +7,14 @@ import java.util.ArrayList;
 import command.Command;
 import command.UserRights;
 import command.ValidateException;
-import response.*;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
+import response.ErrorResponse;
+import response.HttpStatusCode;
+import response.MinimalResponse;
+import response.Response;
 import server.Debug;
 
 /**
@@ -41,7 +44,7 @@ public class PostAnnotationFieldCommand extends Command {
 	public void validate() throws ValidateException {
 		hasRights(UserRights.getRights(this.getClass()));
 		validateName(name, MaxLength.ANNOTATION_LABEL, "Annotation label");
-		defaults = "";
+
 		if (forced == null) {
 			throw new ValidateException(HttpStatusCode.BAD_REQUEST,
 					"Adding annotation field was unsuccessful, specify if " +
@@ -63,27 +66,24 @@ public class PostAnnotationFieldCommand extends Command {
 					"Adding annotation field was unsuccessful, can not add a " +
 							"dropdown option called \"freetext\"");
 		}
-
-		type.add(0, "");
 	}
 
 	@Override
 	public Response execute() {
 		DatabaseAccessor db = null;
 		Response response;
-
 		try {
 			db = initDB();
 			if (type.size() == 1 && type.get(0).equals("freetext")) {
 				db.addFreeTextAnnotation(name, defaults, forced);
 			} else {
+				type.add(0, "");
 				int defaultValueIndex = type.indexOf(defaults);
 				if (defaultValueIndex == -1)
 					defaultValueIndex = 0;
 				db.addDropDownAnnotation(name, type, defaultValueIndex,
 						forced);
 			}
-
 			response = new MinimalResponse(HttpStatusCode.OK);
 		} catch (SQLException e) {
 			response = new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
@@ -98,7 +98,6 @@ public class PostAnnotationFieldCommand extends Command {
 			if (db != null)
 				db.close();
 		}
-
 		return response;
 	}
 }

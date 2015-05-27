@@ -14,6 +14,12 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
 
+/**
+ * Command used to convert a file.
+ *
+ * @author Business Logic 2015
+ * @version 1.1
+ */
 public class PutConvertFileCommand extends Command {
     @Expose
     private String fileid = null;

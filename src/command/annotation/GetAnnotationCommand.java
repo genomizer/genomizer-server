@@ -3,7 +3,6 @@ package command.annotation;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import command.Command;
@@ -11,7 +10,6 @@ import command.UserRights;
 import command.ValidateException;
 import database.DatabaseAccessor;
 import database.containers.Annotation;
-import database.subClasses.UserMethods.UserType;
 import response.*;
 import server.Debug;
 
@@ -25,12 +23,6 @@ public class GetAnnotationCommand extends Command {
 	@Override
 	public int getExpectedNumberOfURIFields() {
 		return 1;
-	}
-
-	@Override
-	public void setFields(String uri, HashMap<String, String> query,
-						  String uuid, UserType userType) {
-		super.setFields(uri, query, uuid, userType);
 	}
 
 	@Override
@@ -62,8 +54,7 @@ public class GetAnnotationCommand extends Command {
 						values, annotation.isRequired));
 			}
 
-			response = new GetAnnotationInformationResponse(HttpStatusCode.OK,
-					annotations);
+			response = new AnnotationListResponse(annotations);
 		} catch (IOException | SQLException e) {
 			response = new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
 					"Retrieval of annotation information unsuccessful due " +

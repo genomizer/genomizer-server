@@ -8,7 +8,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import process.Bowtie2;
 import server.ServerSettings;
-import transfer.Util;
+import util.Util;
 
 import java.io.File;
 import java.io.IOException;
