@@ -38,6 +38,7 @@ public class GetGenomeReleaseCommand extends Command {
 		} catch (SQLException e) {
 			response = new DatabaseErrorResponse("Retrieval of genome " +
 					"releases");
+			Debug.log("Reason: " + e.getMessage());
 		} catch (IOException e) {
 			response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
 					"Retrieval of genome releases unsuccessful. " +
