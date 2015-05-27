@@ -223,4 +223,13 @@ public class FileTableTests {
         dbac.removeGenomeRelease("te34");
     }
 
+    @Test
+    public void shouldChangeFileType() throws SQLException {
+        dbac.changeFileType(ft.id, FileTuple.PROFILE);
+        ft = dbac.getFileTuple(ft.id);
+        assertTrue(ft.type.equals("Profile"));
+    }
+
+    
+
 }
