@@ -28,7 +28,15 @@ public class SmoothingProcessCommand extends ProcessCommand {
                 throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Incorrect input: minSmooth: "+
                         file.getMinSmooth()+" must be smaller than windowSize: "+file.getWindowSize()+".");
             }
-        }
+            if(file.getWindowSize()<0){
+                throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Incorrect input: windowSize can not be" +
+                        "less than 0");
+            }
+            if(file.getMinSmooth()<0){
+                throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Incorrect input: minSmooth can not be" +
+                        "less than 0");
+            }
+       }
     }
 
     /**
@@ -116,6 +124,7 @@ public class SmoothingProcessCommand extends ProcessCommand {
          * @param filePaths
          */
         public void ProcessFile(Map.Entry<String, String> filePaths) {
+            throw new UnsupportedOperationException("Error when processing. Smoothing not implemented.");
         }
     }
 }

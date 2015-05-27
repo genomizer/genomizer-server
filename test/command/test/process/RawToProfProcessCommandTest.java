@@ -1,4 +1,4 @@
-package command.test.processCommands;
+package command.test.process;
 
 import com.google.gson.Gson;
 import command.ValidateException;
@@ -8,7 +8,6 @@ import database.subClasses.UserMethods;
 import org.junit.Test;
 import server.RequestHandler;
 
-import static org.junit.Assert.*;
 
 public class RawToProfProcessCommandTest {
     private final Gson gson = new RequestHandler().getGson();
@@ -23,8 +22,7 @@ public class RawToProfProcessCommandTest {
                         "\"params\":\"-a -m 1 --best -p 10 -v 2 -q -S\"," +
                         "\"keepSam\":\"on\"}]}, {\"type\":\"ratio\", \"infile1\": " +
                         "\"infile1Name\", \"infile2\": \"infile2Name\"}]}";
-        ProcessCommands processCommands =
-                gson.fromJson(json, ProcessCommands.class);
+        ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }
@@ -44,8 +42,7 @@ public class RawToProfProcessCommandTest {
                         "\"params\":\"-a -m 1 --best -p 10 -v 2 -q -S\"," +
                         "\"keepSam\":\"on\"}]}, {\"type\":\"ratio\", \"infile1\": " +
                         "\"infile1Name\", \"infile2\": \"infile2Name\"}]}";
-        ProcessCommands processCommands =
-                gson.fromJson(json, ProcessCommands.class);
+        ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }
@@ -60,8 +57,7 @@ public class RawToProfProcessCommandTest {
                         "\"params\":\"-a -m 1 --best -p 10 -v 2 -q -S\"," +
                         "\"keepSam\":\"on\"}]}, {\"type\":\"ratio\", \"infile1\": " +
                         "\"infile1Name\", \"infile2\": \"infile2Name\"}]}";
-        ProcessCommands processCommands =
-                gson.fromJson(json, ProcessCommands.class);
+        ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }
@@ -80,8 +76,7 @@ public class RawToProfProcessCommandTest {
                         "\"params\":\"-a -m 1 --best -p 10 -v 2 -q -S\"," +
                         "\"keepSam\":\"on\"}]}, {\"type\":\"ratio\", \"infile1\": " +
                         "\"infile1Name\", \"infile2\": \"infile2Name\"}]}";
-        ProcessCommands processCommands =
-                gson.fromJson(json, ProcessCommands.class);
+        ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }
@@ -96,8 +91,7 @@ public class RawToProfProcessCommandTest {
                         "\"params\":\"-a -m 1 --best -p 10 -v 2 -q -S\"," +
                         "\"keepSam\":\"on\"}]}, {\"type\":\"ratio\", \"infile1\": " +
                         "\"infile1Name\", \"infile2\": \"infile2Name\"}]}";
-        ProcessCommands processCommands =
-                gson.fromJson(json, ProcessCommands.class);
+        ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }
@@ -116,8 +110,7 @@ public class RawToProfProcessCommandTest {
                         "\"params\":\"-a -m 1 --best -p 10 -v 2 -q -S\"," +
                         "\"keepSam\":\"on\"}]}, {\"type\":\"ratio\", \"infile1\": " +
                         "\"infile1Name\", \"infile2\": \"infile2Name\"}]}";
-        ProcessCommands processCommands =
-                gson.fromJson(json, ProcessCommands.class);
+        ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }

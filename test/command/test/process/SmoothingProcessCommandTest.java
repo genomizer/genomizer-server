@@ -1,4 +1,4 @@
-package command.test.processCommands;
+package command.test.process;
 
 import com.google.gson.Gson;
 import command.ValidateException;
@@ -8,7 +8,6 @@ import database.subClasses.UserMethods;
 import org.junit.Test;
 import server.RequestHandler;
 
-import static org.junit.Assert.*;
 
 public class SmoothingProcessCommandTest {
     private final Gson gson = new RequestHandler().getGson();
@@ -23,8 +22,7 @@ public class SmoothingProcessCommandTest {
                         "\"meanOrMedian\":\"mean\"," +
                         "\"minSmooth\":\"2\"}]}, {\"type\":\"ratio\", \"infile1\": " +
                         "\"infile1Name\", \"infile2\": \"infile2Name\"}]}";
-        ProcessCommands processCommands =
-                gson.fromJson(json, ProcessCommands.class);
+        ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }
@@ -39,8 +37,7 @@ public class SmoothingProcessCommandTest {
                         "\"meanOrMedian\":\"mean\"," +
                         "\"minSmooth\":\"2\"}]}, {\"type\":\"ratio\", \"infile1\": " +
                         "\"infile1Name\", \"infile2\": \"infile2Name\"}]}";
-        ProcessCommands processCommands =
-                gson.fromJson(json, ProcessCommands.class);
+        ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }
@@ -60,8 +57,7 @@ public class SmoothingProcessCommandTest {
                         "\"meanOrMedian\":\"median\"," +
                         "\"minSmooth\":\"2\"}]}, {\"type\":\"ratio\", \"infile1\": " +
                         "\"infile1Name\", \"infile2\": \"infile2Name\"}]}";
-        ProcessCommands processCommands =
-                gson.fromJson(json, ProcessCommands.class);
+        ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }
@@ -76,8 +72,7 @@ public class SmoothingProcessCommandTest {
                         "\"meanOrMedian\":\"mean\"," +
                         "\"minSmooth\":\"2\"}]}, {\"type\":\"ratio\", \"infile1\": " +
                         "\"infile1Name\", \"infile2\": \"infile2Name\"}]}";
-        ProcessCommands processCommands =
-                gson.fromJson(json, ProcessCommands.class);
+        ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }
@@ -96,8 +91,7 @@ public class SmoothingProcessCommandTest {
                         "\"meanOrMedian\":\"mean\"," +
                         "\"minSmooth\":\"2\"}]}, {\"type\":\"ratio\", \"infile1\": " +
                         "\"infile1Name\", \"infile2\": \"infile2Name\"}]}";
-        ProcessCommands processCommands =
-                gson.fromJson(json, ProcessCommands.class);
+        ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }
@@ -111,8 +105,7 @@ public class SmoothingProcessCommandTest {
                         "\"meanOrMedian\":\"meand\"," +
                         "\"minSmooth\":\"2\"}]}, {\"type\":\"ratio\", \"infile1\": " +
                         "\"infile1Name\", \"infile2\": \"infile2Name\"}]}";
-        ProcessCommands processCommands =
-                gson.fromJson(json, ProcessCommands.class);
+        ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }
@@ -126,8 +119,35 @@ public class SmoothingProcessCommandTest {
                         "\"meanOrMedian\":\"mean\"," +
                         "\"minSmooth\":\"2\"}]}, {\"type\":\"ratio\", \"infile1\": " +
                         "\"infile1Name\", \"infile2\": \"infile2Name\"}]}";
-        ProcessCommands processCommands =
-                gson.fromJson(json, ProcessCommands.class);
+        ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
+        processCommands.setFields(null, null, null, UserMethods.UserType.USER);
+        processCommands.validate();
+    }
+    @Test (expected = ValidateException.class)
+    public void shouldGiveValidateExceptionOnMinSmoothSmallerThan0() throws ValidateException {
+        String json =
+                "{\"expId\":\"asd\"," +
+                        "\"processCommands\":[{\"type\":\"smoothing\"," +
+                        "\"files\":[{\"infile\":\"bigtest1.fastq\"," +
+                        "\"outfile\":\"awe\",\"windowSize\":\"2\"," +
+                        "\"meanOrMedian\":\"mean\"," +
+                        "\"minSmooth\":\"-1\"}]}, {\"type\":\"ratio\", \"infile1\": " +
+                        "\"infile1Name\", \"infile2\": \"infile2Name\"}]}";
+        ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
+        processCommands.setFields(null, null, null, UserMethods.UserType.USER);
+        processCommands.validate();
+    }
+    @Test (expected = ValidateException.class)
+    public void shouldGiveValidateExceptionOnWindowSizeSmallerThan0() throws ValidateException {
+        String json =
+                "{\"expId\":\"asd\"," +
+                        "\"processCommands\":[{\"type\":\"smoothing\"," +
+                        "\"files\":[{\"infile\":\"bigtest1.fastq\"," +
+                        "\"outfile\":\"awe\",\"windowSize\":\"-1\"," +
+                        "\"meanOrMedian\":\"mean\"," +
+                        "\"minSmooth\":\"-2\"}]}, {\"type\":\"ratio\", \"infile1\": " +
+                        "\"infile1Name\", \"infile2\": \"infile2Name\"}]}";
+        ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }
