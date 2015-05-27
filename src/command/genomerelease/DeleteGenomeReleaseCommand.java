@@ -58,8 +58,8 @@ public class DeleteGenomeReleaseCommand extends Command {
 								"' unsuccessful, genome release does not " +
 								"exist");
 		} catch (SQLException e) {
-			response = new DatabaseErrorResponse("Deletion of genome release '" +
-					genomeVersion + "'");
+			response = new DatabaseErrorResponse("Deletion of genome " +
+					"release '" + genomeVersion + "'");
 			Debug.log("Reason: " + e.getMessage());
 		} catch (IOException e) {
 			response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
