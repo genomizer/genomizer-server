@@ -5,10 +5,7 @@ import command.process.PutProcessCommand;
 import response.Response;
 
 import java.util.*;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -20,7 +17,6 @@ public class ProcessPool {
     // Process to status and response maps
     private HashMap<UUID, Process> processStatusMap;
     private HashMap<UUID, Future<Response>> processFutureMap;
-    private LinkedList<PutProcessCommand> processesList;
 
     // Synchronization objects
     private final Lock lock;
@@ -32,7 +28,6 @@ public class ProcessPool {
     public ProcessPool(int threads) {
         processStatusMap = new HashMap<>();
         processFutureMap = new HashMap<>();
-        processesList = new LinkedList<>();
         lock = new ReentrantLock();
 
         executor = Executors.newFixedThreadPool(threads);
@@ -77,8 +72,7 @@ public class ProcessPool {
 
             Calendar addedCal = Calendar.getInstance();
 
-            for (PutProcessCommand proc : processesList) {
-                Process process = getProcessStatus(proc.getPID());
+            for (Process process: processStatusMap.values()) {
                 addedCal.setTimeInMillis(process.timeAdded);
 
                 if (addedCal.after(pastCal)) {
@@ -97,28 +91,26 @@ public class ProcessPool {
     /**
      * Adds a process command to the process pool
      *
-     * @param processCommand - the process command to be added
+     * @param process  - process metada.
+     * @param callabel - the function that executes the process.
      */
-    public void addProcess(PutProcessCommand processCommand) {
+    public void addProcess(Process process, Callable<Response> callable) {
         lock.lock();
 
         try {
-            Process process = new Process(processCommand);
-
-            processCommand.setPID(UUID.randomUUID());
-
-            processesList.add(processCommand);
+            UUID uuid = UUID.randomUUID();
+            process.PID = uuid.toString();
 
             // Create a process command to process status mapping
-            processStatusMap.put(processCommand.getPID(), process);
+            processStatusMap.put(uuid, process);
 
             // Submit the process with a new work handler for execution
             Future<Response> response = executor.submit(
-                    new ProcessHandler(processCommand, process));
+                    new ProcessHandler(callable, process));
 
             if (response != null) {
                 // Create a process command to process response mapping
-                processFutureMap.put(processCommand.getPID(), response);
+                processFutureMap.put(uuid, response);
             }
 
         } finally {
@@ -162,7 +154,6 @@ public class ProcessPool {
         lock.lock();
 
         try {
-
             return processStatusMap.get(processID);
         } finally {
             lock.unlock();
@@ -201,41 +192,39 @@ public class ProcessPool {
      */
     public void removeOldProcesses() {
 
-        // Get current time
-        long currentTime = System.currentTimeMillis();
-
-        // List to store processes to be removed
-        LinkedList<PutProcessCommand> toBeRemoved = new LinkedList<>();
-
         lock.lock();
 
         try {
 
-		/* Loop through all processes and check statuses */
-            for (PutProcessCommand processCommand : processesList) {
+            // Get current time
+            long currentTime = System.currentTimeMillis();
 
-                Process processStatus = processStatusMap.get(processCommand);
-                String statusString = processStatus.status;
+            // List to store processes to be removed
+            ArrayList<Process> toBeRemoved = new ArrayList<>();
 
-                // Check if it has finished or crashed
+            // Loop through all processes and check statuses.
+            for (Process process : processStatusMap.values()) {
+
+                String statusString = process.status;
+
+                // Check if a process has finished or crashed.
                 if (statusString.equals(Process.STATUS_FINISHED)
                         || statusString.equals(Process.STATUS_CRASHED)) {
 
-                    long processTimeAdded = processStatus.timeAdded;
+                    long processTimeAdded = process.timeAdded;
                     long timeDifference = currentTime - processTimeAdded;
 
                     if (timeDifference > statusTimeToLive) {
-                        toBeRemoved.add(processCommand);
+                        toBeRemoved.add(process);
                     }
                 }
             }
 
-            for (PutProcessCommand processCommand : toBeRemoved) {
+            for (Process process : toBeRemoved) {
                 Debug.log("Removing old process status: "
-                        + processCommand.getExpId());
-                processStatusMap.remove(processCommand);
-                processFutureMap.remove(processCommand);
-                processesList.remove(processCommand);
+                        + process.PID);
+                processStatusMap.remove(process.PID);
+                processFutureMap.remove(process.PID);
             }
         } finally {
             lock.unlock();

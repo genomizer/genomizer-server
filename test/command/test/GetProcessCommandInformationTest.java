@@ -57,12 +57,12 @@ public class GetProcessCommandInformationTest {
 	public void setUp() throws Exception {
 
 		processPool = new ProcessPool(5);
-		
-		processPool.addProcess(makeCmd("yuri", "meta", "v123", "Exp1"));
-		processPool.addProcess(makeCmd("janne", "mea", "v1523", "Exp2"));
-		processPool.addProcess(makeCmd("philge", "meta", "v22", "Exp43"));
-		processPool.addProcess(makeCmd("per", "meta", "v12", "Exp234"));
-		processPool.addProcess(makeCmd("yuri", "meta", "v1", "Exp6"));
+
+		makeCmd("yuri", "meta", "v123", "Exp1").addToProcessPool(processPool);
+		makeCmd("janne", "mea", "v1523", "Exp2").addToProcessPool(processPool);
+		makeCmd("philge", "meta", "v22", "Exp43").addToProcessPool(processPool);
+		makeCmd("per", "meta", "v12", "Exp234").addToProcessPool(processPool);
+		makeCmd("yuri", "meta", "v1", "Exp6").addToProcessPool(processPool);
 
 		//stat = new Process(com);
 		//stat.outputFiles = com.getFilePaths();

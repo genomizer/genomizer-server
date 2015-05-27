@@ -47,7 +47,6 @@ public class UserRights {
         userRights.put(GetGenomeReleaseCommand.class, UserType.GUEST);
         userRights.put(GetGenomeReleaseSpeciesCommand.class, UserType.GUEST);
         userRights.put(GetProcessStatusCommand.class, UserType.GUEST);
-        userRights.put(PutProcessCommand.class, UserType.USER);
         userRights.put(SearchCommand.class, UserType.GUEST);
         userRights.put(PutAnnotationPrivilegesCommand.class, UserType.USER);
         userRights.put(PutExperimentCommand.class, UserType.USER);
@@ -55,6 +54,8 @@ public class UserRights {
         userRights.put(PutUserCommand.class, UserType.USER);
         userRights.put(PutUserAdminCommand.class, UserType.ADMIN);
         userRights.put(PutConvertFileCommand.class, UserType.USER);
+        userRights.put(ProcessCommands.class, UserType.USER);
+        userRights.put(PutProcessCommand.class, UserType.USER);
     }
 
 

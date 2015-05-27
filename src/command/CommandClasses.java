@@ -18,10 +18,7 @@ import command.genomerelease.DeleteGenomeReleaseCommand;
 import command.genomerelease.GetGenomeReleaseCommand;
 import command.genomerelease.GetGenomeReleaseSpeciesCommand;
 import command.genomerelease.PostGenomeReleaseCommand;
-import command.process.CancelProcessCommand;
-import command.process.GetProcessDummyCommand;
-import command.process.GetProcessStatusCommand;
-import command.process.PutProcessCommand;
+import command.process.*;
 import command.search.SearchCommand;
 import command.user.PutUserCommand;
 
@@ -94,6 +91,7 @@ public class CommandClasses {
         classes.put("GET /genomeRelease", GetGenomeReleaseCommand.class);
         classes.put("GET /genomeRelease/", GetGenomeReleaseSpeciesCommand.
                 class);
+        classes.put("PUT /process/processCommands", ProcessCommands.class);
 
         //Geo commands
 

@@ -52,6 +52,10 @@ public class Genome {
         return fileName.substring(0, indexOfFirstDot);
     }
 
+    public String getFolderPath() {
+        return folderPath;
+    }
+
     @Override
     public String toString() {
         return "Genome [genomeVersion=" + genomeVersion + ", species="
