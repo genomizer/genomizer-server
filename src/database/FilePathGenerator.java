@@ -129,7 +129,7 @@ public class FilePathGenerator {
             break;
         case FileTuple.PROFILE:
             folderPath = getProfileFolderPath(expID);
-            folderPath = generateNewProfileSubFolder(folderPath);
+            //folderPath = generateNewProfileSubFolder(folderPath);
             break;
         case FileTuple.REGION:
             folderPath = getRegionFolderPath(expID);
