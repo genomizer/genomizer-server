@@ -56,4 +56,30 @@ public class Util {
     public static String replaceExtension(String file, String newExt) {
         return file.replaceAll("\\.[^\\.]+$", newExt);
     }
+
+    // Format a millisecond-resolution time difference as a string of form
+    // "A day(s), B hour(s), C minute(s), D second(s), E ms".
+    public static String formatTimeDifference(long diffMillis) {
+        long seconds = diffMillis / 1000; diffMillis = diffMillis % 1000;
+        long minutes = seconds / 60; seconds = seconds % 60;
+        long hours   = minutes / 60; minutes = minutes % 60;
+        long days    = hours   / 24; hours = hours % 24;
+
+        StringBuilder ret = new StringBuilder();
+        if (days > 0)
+            ret.append(days + " " + pluralize(days, "day") + ", ");
+        if (hours > 0)
+            ret.append(hours + " " + pluralize(hours, "hour") + ", ");
+        if (minutes > 0)
+            ret.append(minutes + " " + pluralize(minutes, "minute") + ", ");
+        if (seconds > 0)
+            ret.append(seconds + " " + pluralize(seconds, "second") + ", ");
+        ret.append(diffMillis + " ms");
+
+        return ret.toString();
+    }
+
+    private static String pluralize(long num, String word) {
+        return (num > 1 ? word + "s" : word);
+    }
 }

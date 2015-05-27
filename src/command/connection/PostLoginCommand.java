@@ -77,8 +77,8 @@ public class PostLoginCommand extends Command {
 				LoginAttempt login = Authenticate.login(username, password,
 						dbHash);
 				if (login.wasSuccessful())
-					response = new LoginResponse(HttpStatusCode.OK,
-							login.getUUID());
+					response = new LoginResponse(login.getUUID(),
+							db.getRole(username).name());
 				else
 					response = new ErrorResponse(HttpStatusCode.UNAUTHORIZED,
 							"Login attempt unsuccessful, incorrect password");
