@@ -58,6 +58,13 @@ public class ConversionHandler {
 		fileInDB = file.path;
 		String currentFormat = getFileType(file.path);
 
+		String inputFileName = file.path.substring(file.path.lastIndexOf('/')+1);
+		String fileName = outputFile.substring(outputFile.lastIndexOf('/')+1);
+		File outFile = new File(outputFile);
+		FileTuple ft = db.addNewInProgressFile(file.expId, FileTuple.PROFILE, fileName,
+				inputFileName, null, file.author,
+				"ConversionHandler", file.isPrivate, file.grVersion, md5Hex(new FileInputStream(outFile)));
+
 		switch (currentFormat) {
 			case "bed":
 				convertFromBedTo(newFormat);
@@ -73,15 +80,11 @@ public class ConversionHandler {
 				break;
 		}
 
-		String inputFileName = file.path.substring(file.path.lastIndexOf('/')+1);
-		String fileName = outputFile.substring(outputFile.lastIndexOf('/')+1);
-		File outFile = new File(outputFile);
-		FileTuple ft = db.addNewFile(file.expId, FileTuple.PROFILE, fileName,
-				inputFileName, null, file.author,
-				"ConversionHandler", file.isPrivate, file.grVersion, md5Hex(new FileInputStream(outFile)));
-		db.close();
-
 		Files.move(outFile.toPath(), new File(ft.path).toPath());
+
+		db.markReadyForDownload(ft);
+		db.updateFileSize(ft, outFile.length());
+		db.close();
 
 		return ft;
 	}
