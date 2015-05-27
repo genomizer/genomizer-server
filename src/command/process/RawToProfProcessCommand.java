@@ -7,7 +7,6 @@ import database.DatabaseAccessor;
 import database.constants.MaxLength;
 import database.containers.Genome;
 import process.ProcessException;
-import process.ProcessHandler;
 import process.RawToProfileConverter;
 import response.HttpStatusCode;
 import server.Debug;
