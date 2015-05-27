@@ -13,7 +13,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
- * Command used to get all of the genome relases.
+ * Command used to get all of the genome releases.
  *
  * @author Business Logic 2015.
  * @version 1.1
