@@ -30,7 +30,7 @@ public class GenomeReleaseListResponse extends Response {
 		this.genomeReleases=genomeReleases;
 
 		arr = new JsonArray();
-		Gson gson = new GsonBuilder().create();
+		Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 
 		if(genomeReleases != null){
 			for (Genome genome : genomeReleases) {

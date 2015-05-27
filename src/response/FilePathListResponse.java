@@ -24,7 +24,7 @@ public class FilePathListResponse extends Response {
 	 */
 	public FilePathListResponse(ArrayList<String> filePaths) {
 		this.code = HttpStatusCode.OK;
-		Gson gson = new GsonBuilder().create();
+		Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 
 		jsonArray = new JsonArray();
 		for (String filePath : filePaths) {

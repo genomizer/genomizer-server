@@ -53,7 +53,8 @@ public class PostFileCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-		uploader = "TEMPORARY";
+
+		uploader = userName;
 
 		hasRights(UserRights.getRights(this.getClass()));
 		validateName(experimentID, MaxLength.EXPID, "Experiment name");
@@ -64,10 +65,6 @@ public class PostFileCommand extends Command {
 		validateName(fileName, MaxLength.FILE_FILENAME, "Filename");
 		validateExists(metaData, MaxLength.FILE_METADATA, "Metadata");
 		validateMD5(this.checkSumMD5);
-	}
-
-	public void setUploader(String uploader) {
-		this.uploader = uploader;
 	}
 
 	/**
