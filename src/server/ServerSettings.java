@@ -16,10 +16,10 @@ public class ServerSettings {
 	public static int wwwTunnelPort = -1;
 	public static int genomizerPort = -1;
 	public static String fileLocation = "/var/www/data/";
-	public static String pyicosLocation = "pyicoteo/pyicos";
-	public static String bowtieLocation = "bowtie/bowtie";
-	public static String bowtie2Location = "bowtie2";
-	public static String picardLocation = "picard-tools/picard.jar";
+	public static String pyicosLocation = "resources/pyicoteo/pyicos";
+	public static String bowtieLocation = "resources/bowtie/bowtie";
+	public static String bowtie2Location = "resources/bowtie2/bowtie2";
+	public static String picardLocation = "resources/picard-tools/picard.jar";
 	public static int nrOfProcessThreads = 5;
 
 	private static String downloadURL = "/download?path=";
