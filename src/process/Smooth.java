@@ -1,20 +1,22 @@
 package process;
-/**
- *
- *
- */
 
 import command.ValidateException;
+import server.Debug;
+import server.ServerSettings;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.*;
 import java.util.ArrayList;
 
+/**
+ * Class which is responsible for running smoothing.
+ */
 class Smooth extends Executor {
     private SmoothingParameters parameters;
-    private String smoothingScriptCmd   = "expect smooth_v4.sh";
-    private String smoothingScriptSh    = "smooth_v4.sh";
-    private String smoothingScriptPerl  = "smooth_v4.pl";
+    private static String smoothingScriptCmd   = "expect smooth_v4.sh";
+    private static String smoothingScriptSh    = "smooth_v4.sh";
+    private static String smoothingScriptPerl  = "smooth_v4.pl";
 
     public Smooth(String path,
                   int    windowSize,
@@ -62,17 +64,48 @@ class Smooth extends Executor {
     }
 
     public static void runSmoothing(String path, int windowSize, int meanType,
-                                    int minPos, int calcTotalMean, int printPos)
+                                    int minPos, int calcTotalMean, int printPos,
+                                    String outputPath)
             throws ValidateException,
                    IOException,
                    InterruptedException {
+        /* We calculate some expected values */
+        String expectedPath =
+            path.substring(0, path.lastIndexOf("/")) + "smoothed/";
+        String expectedFileName =
+            path.substring(path.lastIndexOf("/")+1, path.length()-4) + "_" +
+            meanType + "_winSiz-" + windowSize + "_minProbe-" + minPos + ".sgr";
 
         Smooth smooth = new Smooth(path, windowSize, meanType, minPos,
                 calcTotalMean, printPos);
+        Debug.log("Started smoothing on " + path);
+
         smooth.validate();
+        Debug.log("Validated smoothing on " + path);
+
+        /* Ensure the smoothing directory is created. */
+        if (!new File(expectedPath).exists())
+            new File(expectedPath).mkdir();
+
         smooth.execute();
+        Debug.log("Executed smoothing on " + path);
+
+        /* Time for cleanup and moving files */
+        /* Move files to their appropriate place */
+        Debug.log("Expected path is " + expectedPath);
+        Debug.log("Expected filename is " + expectedFileName);
+        Debug.log("Output filename is " + outputPath);
+        Path source         = Paths.get(expectedPath + expectedFileName);
+        Path destination    = Paths.get(outputPath);
+        Files.move(source, destination, StandardCopyOption.REPLACE_EXISTING);
+        /* This should no longer be needed. */
+        Files.delete(source);
+
     }
 
+    /**
+     * Simple wrapper around smoothing parameters.
+     */
     private class SmoothingParameters {
         private String path         = null;
         private int windowSize      = 10;
@@ -151,6 +184,13 @@ class Smooth extends Executor {
                 throw new ValidateException(404,
                         "Invalid option " + printPos +
                                 " for printPos. Allowed is (1) or (0).");
+            Debug.log("Validated with parameters: " + " " +
+                      "Path: " + path + " " +
+                      "MeanType:" + meanType + " " +
+                      "WindowSize:" + windowSize + " " +
+                      "MinPos:" + minPos + " " +
+                      "CalcTotalMean:" + calcTotalMean + " " +
+                      "PrintPos:" + printPos);
         }
 
     }
