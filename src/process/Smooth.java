@@ -164,33 +164,33 @@ class Smooth extends Executor {
 
         public void validateParameters() throws ValidateException {
             if (path == null)
-                throw new ValidateException(404,
+                throw new ValidateException(400,
                         "No path was supplied to script!");
             if (!(meanType == 0 || meanType == 1))
-                throw new ValidateException(404,
+                throw new ValidateException(400,
                         "Invalid option " + meanType +
                                 " for meanType. Allowed is (1) or (0).");
             if (windowSize < 0)
-                throw new ValidateException(404,
+                throw new ValidateException(400,
                         "Window size can not be negative.");
             if (minPos < 0)
-                throw new ValidateException(404,
+                throw new ValidateException(400,
                         "Minimum pos can not be negative.");
             if (!(calcTotalMean == 0 || calcTotalMean == 1))
-                throw new ValidateException(404,
+                throw new ValidateException(400,
                         "Invalid option " + calcTotalMean +
                                 " for calcTotalMean. Allowed is (1) or (0).");
             if (!(printPos == 0 || printPos == 1))
-                throw new ValidateException(404,
+                throw new ValidateException(400,
                         "Invalid option " + printPos +
                                 " for printPos. Allowed is (1) or (0).");
             Debug.log("Validated with parameters: " + " " +
                       "Path: " + path + " " +
-                      "MeanType:" + meanType + " " +
-                      "WindowSize:" + windowSize + " " +
-                      "MinPos:" + minPos + " " +
-                      "CalcTotalMean:" + calcTotalMean + " " +
-                      "PrintPos:" + printPos);
+                      "MeanType: " + meanType + " " +
+                      "WindowSize: " + windowSize + " " +
+                      "MinPos: " + minPos + " " +
+                      "CalcTotalMean: " + calcTotalMean + " " +
+                      "PrintPos: " + printPos);
         }
 
     }
