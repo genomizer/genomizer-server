@@ -32,7 +32,7 @@ public class Process implements Comparable<Process> {
 	@Expose
 	public long timeFinished;
 	@Expose
-	public UUID PID;
+	public String PID;
 
 	/**
 	 * Constructs a new instance of DeleteExperimentCommand using the supplied
@@ -45,7 +45,7 @@ public class Process implements Comparable<Process> {
 		experimentName = command.getExpId();
 		timeAdded = System.currentTimeMillis();
 		outputFiles = new String[0];
-		PID = command.getPID();
+		PID = command.getPID().toString();
 	}
 
 	@Override
