@@ -75,13 +75,13 @@ public class ProcessPool {
             pastCal.setTimeInMillis(System.currentTimeMillis());
             pastCal.add(Calendar.DAY_OF_MONTH, -days);
 
-            Calendar startedCal = Calendar.getInstance();
+            Calendar addedCal = Calendar.getInstance();
 
             for (PutProcessCommand proc : processesList) {
                 Process process = getProcessStatus(proc.getPID());
-                startedCal.setTimeInMillis(process.timeStarted);
+                addedCal.setTimeInMillis(process.timeAdded);
 
-                if (startedCal.after(pastCal)) {
+                if (addedCal.after(pastCal)) {
                     processStatusesList.add(process);
                 }
             }

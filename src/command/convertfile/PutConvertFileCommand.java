@@ -15,18 +15,16 @@ import java.sql.SQLException;
 import java.util.HashMap;
 
 /**
- * command that handles fileconversion.
+ * Command used to convert a file.
  *
- * @author dv13thg
- * @version 1.0
+ * @author Business Logic 2015
+ * @version 1.1
  */
 public class PutConvertFileCommand extends Command {
-
     @Expose
-    private String fileid;
-
+    private String fileid = null;
     @Expose
-    private String toformat;
+    private String toformat = null;
 
     @Override
     public int getExpectedNumberOfURIFields() {
@@ -34,44 +32,37 @@ public class PutConvertFileCommand extends Command {
     }
 
     @Override
-    public void setFields(String uri, HashMap<String, String> query,
-                          String username, UserMethods.UserType userType) {
-        this.userType = userType;
-
-		/*No fields from the URI is needed, neither is the UUID. Dummy
-		implementation*/
-    }
-
-    /**
-     * @see command.Command
-     * @throws command.ValidateException
-     */
-    @Override
     public void validate() throws ValidateException {
         hasRights(UserRights.getRights(this.getClass()));
         validateName(fileid, MaxLength.FILE_FILENAME,"file id");
         validateName(toformat, MaxLength.FILE_FILETYPE, "to format");
     }
 
-    /**
-     * @see command.Command
-     * @return response
-     */
     @Override
     public Response execute() {
         ConversionHandler convHandler = new ConversionHandler();
-        FileTuple filetuple;
+        Response response;
 
         try {
-            filetuple = convHandler.convertProfileData(toformat,Integer.parseInt(fileid));
-        } catch (SQLException | IOException | NumberFormatException e) {
-            return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Could not " +
-                    "convert file : " + e.getMessage());
+            FileTuple filetuple = convHandler.convertProfileData(toformat,
+                    Integer.parseInt(fileid));
+            if (filetuple != null)
+                response = new SingleFileResponse(filetuple);
+            else
+                response = new MinimalResponse(HttpStatusCode.NOT_FOUND);
+        } catch (NumberFormatException e) {
+            response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
+                    "File conversion unsuccessful, the file id may not " +
+                            "contain any characters except numbers.");
+        } catch (SQLException e) {
+            response = new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+                    "File conversion unsuccessful due to temporary database " +
+                            "problems");
+        } catch (IOException e) {
+            response = new ErrorResponse(HttpStatusCode.BAD_REQUEST, "File " +
+                    "conversion unsuccessful. " + e.getMessage());
+        }
 
-        }
-        if(filetuple == null){
-            return new MinimalResponse(HttpStatusCode.NOT_FOUND);
-        }
-        return new SingleFileResponse(HttpStatusCode.OK, filetuple);
+        return response;
     }
 }

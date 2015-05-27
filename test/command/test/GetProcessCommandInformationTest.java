@@ -38,6 +38,7 @@ public class GetProcessCommandInformationTest {
 	private PutProcessCommand makeCmd(String author, String metadata, String genomeVersion, String expId) {
 		JsonObject comInfo = new JsonObject();
 		comInfo.addProperty("expid", expId);
+		comInfo.addProperty("PID", UUID.randomUUID().toString());
 
 		JsonArray arr = new JsonArray();
 		for (int i = 0; i < 8; i++) {

@@ -6,6 +6,8 @@ import command.Process;
 import command.process.PutProcessCommand;
 import org.junit.Test;
 
+import java.util.UUID;
+
 /**
  * Class used to test that Process class works
  * properly.
@@ -23,9 +25,9 @@ public class ProcessTest {
 	public void testCreationNotNull() {
 
 		PutProcessCommand cmd = new PutProcessCommand();
-		Process c = new command.Process(cmd);
+		cmd.setPID(UUID.randomUUID());
+		Process c = new Process(cmd);
 		assertNotNull(c);
-
 	}
 
 }
