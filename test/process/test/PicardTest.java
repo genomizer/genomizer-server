@@ -5,9 +5,11 @@ import org.junit.*;
 import process.Picard;
 import server.ServerSettings;
 
+import java.io.File;
 import java.io.IOException;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * TODO class description goes here...
@@ -77,6 +79,27 @@ public class PicardTest {
                 "resources/processTest/res.sam", "/dev/null", ".sam",".sam",
                 new String[]{""});
         picard.validate();
+    }
+
+    @Test
+    public void shouldProduceFileFromStaticMarkDuplicates()
+            throws ValidateException, IOException, InterruptedException {
+        String markDupResultFile = "resources/processTest/" +
+                                   "test_sorted_without_duplicates.sam";
+        Picard.runRemoveDuplicates(
+                        "resources/processTest/sam/test_sorted.sam",
+                        markDupResultFile);
+        assertTrue((new File(markDupResultFile)).exists());
+    }
+
+    @Test
+    public void shouldProduceFileFromStaticSortSam()
+            throws ValidateException, IOException, InterruptedException {
+        String sortResultFile = "resources/processTest/test_sorted.sam";
+        Picard.runSortSam(
+                "resources/processTest/sam/test.sam", sortResultFile);
+        assertTrue((new File(sortResultFile)).exists());
+
     }
 
 }
