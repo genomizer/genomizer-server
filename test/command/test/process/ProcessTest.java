@@ -3,7 +3,7 @@ package command.test.process;
 import static org.junit.Assert.*;
 
 import command.Process;
-import command.process.PutProcessCommand;
+import command.process.*;
 import org.junit.Test;
 
 import java.util.UUID;
@@ -21,6 +21,7 @@ public class ProcessTest {
 	 * Test used to check that creation works and object
 	 * is not null.
 	 */
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testCreationNotNull() {
 

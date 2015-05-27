@@ -2,7 +2,7 @@ package command.test.process;
 
 import static org.junit.Assert.*;
 
-import command.process.PutProcessCommand;
+import command.process.*;
 import database.constants.MaxLength;
 import database.subClasses.UserMethods.UserType;
 import org.junit.Before;
@@ -21,6 +21,7 @@ import java.util.UUID;
  * @author Kommunikation/kontroll 2014.
  * @version 1.0
  */
+@SuppressWarnings("deprecation")
 public class PutProcessCommandTest {
 
 	UUID PID = UUID.randomUUID();
