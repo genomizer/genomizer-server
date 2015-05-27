@@ -11,12 +11,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.*;
 import java.text.ParseException;
+import java.util.*;
 import java.util.AbstractMap.SimpleEntry;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Properties;
 
 /**
  * PREREQUISITES: The construction parameters must reference a postgresql
@@ -430,6 +427,25 @@ public class DatabaseAccessor implements AutoCloseable {
     public int updateExperiment(String expID, String label, String value)
             throws SQLException, IOException {
         return expMethods.updateExperiment(expID, label, value);
+    }
+
+    /**
+     * Updates values of multiple annotations of a unique experiment.
+     *
+     * @param expID - the name of the experiment to annotate.
+     * @param annotations - the list of annotations to set.
+     *            Should consist of objects of type Entry<String1, String2> where
+     *            String1 is the label and key of the entry, and String2 is the
+     *            value to assign to that label as well as the value of the entry.
+     * @return the number of tuples updated in the database.
+     * @throws SQLException
+     *             - if the query does not succeed
+     * @throws IOException
+     *             - if the value is invalid for the annotation type.
+     */
+    public int updateExperiment(String expID, HashMap<String, String> annotations)
+            throws SQLException, IOException {
+        return expMethods.updateExperiment(expID, annotations);
     }
 
     /**
