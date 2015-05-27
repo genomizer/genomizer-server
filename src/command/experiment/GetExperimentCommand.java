@@ -7,13 +7,9 @@ import database.DatabaseAccessor;
 import database.constants.MaxLength;
 import database.containers.Experiment;
 import database.subClasses.UserMethods.UserType;
-import response.ErrorResponse;
-import response.GetExperimentResponse;
-import response.HttpStatusCode;
-import response.Response;
+import response.*;
 import server.Debug;
 
-import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -52,8 +48,7 @@ public class GetExperimentCommand extends Command {
 		try (DatabaseAccessor db = initDB()) {
 			Experiment exp;
 			if ((exp = db.getExperiment(expID)) != null)
-				response = new GetExperimentResponse(HttpStatusCode.OK,
-						exp.getID(), exp.getAnnotations(), exp.getFiles());
+				response = new SingleExperimentResponse(exp);
 			else
 				response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
 						"Retrieval of experiment '" + expID +

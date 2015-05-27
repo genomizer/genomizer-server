@@ -8,10 +8,7 @@ import command.ValidateException;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
 import database.subClasses.UserMethods.UserType;
-import response.ErrorResponse;
-import response.HttpStatusCode;
-import response.MinimalResponse;
-import response.Response;
+import response.*;
 import server.Debug;
 
 import java.io.IOException;
@@ -78,7 +75,7 @@ public class PutExperimentCommand extends Command {
 						annotation.getValue());
 			}
 
-			response = new MinimalResponse(HttpStatusCode.OK);
+			response = new SingleExperimentResponse(db.getExperiment(expID));
 		} catch (SQLException e) {
 			response = new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
 					"Editing of experiment '" + expID + "' unsuccessful due " +
