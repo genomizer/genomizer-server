@@ -26,7 +26,8 @@ import java.util.StringTokenizer;
  */
 public abstract class Executor {
 
-	private final String FILEPATH = "resources/";
+	/* Assumes execution is done from project root */
+	private final String FILEPATH = "";
 	private DatabaseAccessor db;
 
 	/**
@@ -41,7 +42,7 @@ public abstract class Executor {
 	protected String executeProgram(String[] command)
 			throws InterruptedException, IOException, RuntimeException {
 
-		File pathToExecutable = new File(command[0]);
+		File pathToExecutable = new File(FILEPATH+command[0]);
 
 		command[0] = pathToExecutable.getAbsolutePath();
 		return executeCommand(command);
