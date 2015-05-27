@@ -3,6 +3,7 @@ package process.test;
 import command.ValidateException;
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import process.Step;
@@ -22,12 +23,20 @@ public class StepTest {
 
     public static final String INFILE =
             "resources/stepTestData/stepTestInfile.sgr";
+    public static final String OUTFILE_PATH =
+            "resources/stepTestData/out/stepTestOutfile.sgr";
     public static final String OUTFILE =
             "resources/stepTestData/out/stepTestOutfile.sgr";
     public static final String CORRECT_FILE =
             "resources/stepTestData/correct/correctStep20.sgr";
     public static final String NO_SUCH_FILE =
             "resources/stepTestData/noSuchFile.sgr";
+
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    @Before
+    public void setUp() throws Exception {
+        new File(OUTFILE_PATH).mkdirs();
+    }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     @After
