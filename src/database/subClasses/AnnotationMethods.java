@@ -163,6 +163,34 @@ public class AnnotationMethods {
     }
 
     /**
+     * Finds and returns all forced annotations. Returns null if there is
+     * a problem with database conenction.
+     *
+     * @return labels ArrayList<String>
+     */
+    public ArrayList<String> getAllForcedAnnotationLabels() {
+        ArrayList<String> labels = new ArrayList<String>();
+
+        String query =
+                "SELECT Label FROM Annotation WHERE Required";
+        PreparedStatement stmt;
+
+        try {
+            stmt = conn.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                labels.add(rs.getString("Label"));
+            }
+            stmt.close();
+
+        } catch (SQLException e) {
+            return null;
+        }
+
+        return labels;
+    }
+
+    /**
      * Gets the datatype of a given annotation.
      *
      * @param label
