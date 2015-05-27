@@ -12,7 +12,7 @@ import static org.junit.Assert.assertNotNull;
 /**
  * TODO class description goes here...
  */
-@Ignore
+
 public class PicardTest {
 
     @Test(expected = NullPointerException.class)
@@ -31,8 +31,8 @@ public class PicardTest {
     public void shouldRunSortSamCorrectly()
             throws ValidateException, IOException, InterruptedException {
         Picard picard = new Picard("SortSam",
-                "/Home/staff/dali/edu/5DV151/project/genomizer-server/resources/processTest/res.sam",
-                "/Home/staff/dali/edu/5DV151/project/genomizer-server/resources/processTest/sorted.sam", ".sam", ".sam",
+                "resources/processTest/sam/test.sam",
+                "resources/processTest/results/test_sorted.sam", ".sam", ".sam",
                 new String[]{"SO=coordinate"});
 
         picard.validate();
@@ -44,9 +44,11 @@ public class PicardTest {
     public void shouldMarkDuplicatesCorrectly()
             throws ValidateException, IOException, InterruptedException {
         Picard picard = new Picard("MarkDuplicates",
-                "/Home/staff/dali/edu/5DV151/project/genomizer-server/resources/processTest/sorted.sam",
-                "/Home/staff/dali/edu/5DV151/project/genomizer-server/resources/processTest/marked.sam", ".sam", ".sam",
-                new String[]{"REMOVE_DUPLICATES=true", "METRICS_FILE=/dev/null"});
+                "resources/processTest/sam/test_sorted.sam",
+                "resources/processTest/results/" +
+                "test_sorted_without_duplicates.sam", ".sam", ".sam",
+                new String[]{"REMOVE_DUPLICATES=true",
+                             "METRICS_FILE=/dev/null"});
 
         picard.validate();
         assertNotNull(picard.execute());
@@ -57,8 +59,9 @@ public class PicardTest {
     public void shouldMarkDuplicatesFromStaticCall()
             throws ValidateException, IOException, InterruptedException {
         assertNotNull(Picard.runRemoveDuplicates(
-                "/Home/staff/dali/edu/5DV151/project/genomizer-server/resources/processTest/sorted.sam",
-                "/Home/staff/dali/edu/5DV151/project/genomizer-server/resources/processTest/marked.sam")
+                "resources/processTest/sam/test_sorted.sam",
+                "resources/processTest/results/" +
+                "test_sorted_without_duplicates.sam")
         );
     }
 
@@ -66,17 +69,16 @@ public class PicardTest {
     public void shouldSortSamFromStaticCall()
             throws ValidateException, IOException, InterruptedException {
         assertNotNull(
-                Picard.runSortSam(
-                        "/Home/staff/dali/edu/5DV151/project/genomizer-server" +
-                        "/resources/processTest/res.sam",
-                        "/Home/staff/dali/edu/5DV151/project/genomizer-server/resources/processTest/sorted.sam")
+                Picard.runSortSam("resources/processTest/sam/test.sam",
+                        "resources/processTest/results/sorted.sam")
         );
     }
 
     @Test(expected = ValidateException.class)
     public void shouldNotRunUnsupportedCommand() throws ValidateException {
-        Picard picard = new Picard("ViewSam", "/Home/staff/dali/edu/5DV151/project/genomizer-server/resources/processTest/res.sam",
-                "/Home/staff/dali/edu/5DV151/project/genomizer-server/resources/processTest/marked.sam",
+        Picard picard = new Picard("ViewSam",
+                "resources/processTest/res.sam",
+                "resources/processTest/marked.sam",
                 ".sam",".sam",
                 new String[]{""});
         picard.validate();
