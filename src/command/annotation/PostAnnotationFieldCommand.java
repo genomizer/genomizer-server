@@ -7,11 +7,14 @@ import java.util.ArrayList;
 import command.Command;
 import command.UserRights;
 import command.ValidateException;
-import response.*;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
+import response.ErrorResponse;
+import response.HttpStatusCode;
+import response.MinimalResponse;
+import response.Response;
 import server.Debug;
 
 /**
@@ -69,7 +72,6 @@ public class PostAnnotationFieldCommand extends Command {
 	public Response execute() {
 		DatabaseAccessor db = null;
 		Response response;
-
 		try {
 			db = initDB();
 			if (type.size() == 1 && type.get(0).equals("freetext")) {
@@ -82,7 +84,6 @@ public class PostAnnotationFieldCommand extends Command {
 				db.addDropDownAnnotation(name, type, defaultValueIndex,
 						forced);
 			}
-
 			response = new MinimalResponse(HttpStatusCode.OK);
 		} catch (SQLException e) {
 			response = new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
@@ -97,7 +98,6 @@ public class PostAnnotationFieldCommand extends Command {
 			if (db != null)
 				db.close();
 		}
-
 		return response;
 	}
 }
