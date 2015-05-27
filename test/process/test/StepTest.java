@@ -1,0 +1,69 @@
+package process.test;
+
+import command.ValidateException;
+import org.junit.After;
+import org.junit.Test;
+import process.Step;
+
+import java.io.File;
+
+import static org.junit.Assert.assertTrue;
+
+/**
+ * File:        StepTest.java
+ * Author:      Niklas Fries
+ * Contact:     niklasf@cs.umu.se
+ * Date:        2015-05-27
+ */
+
+public class StepTest {
+
+    public static final String INFILE =
+            "resources/stepTestData/stepTestInfile.sgr";
+    public static final String OUTFILE =
+            "resources/stepTestData/out/stepTestOutfile.sgr";
+    public static final String NO_SUCH_FILE =
+            "resources/stepTestData/noSuchFile.sgr";
+
+    @After
+    public void tearDown() throws Exception {
+        new File(OUTFILE).delete();
+    }
+
+    @Test
+    public void shouldNotThrowValidationException() throws Exception {
+        new Step(INFILE, OUTFILE, 20).validate();
+    }
+
+    @Test(expected = ValidateException.class)
+    public void shouldThrowValidationExceptionInfileNull() throws Exception {
+        new Step(null, OUTFILE, 20).validate();
+    }
+
+    @Test(expected = ValidateException.class)
+    public void shouldThrowValidationExceptionOutfileNull() throws Exception {
+        new Step(INFILE, null, 20).validate();
+    }
+
+    @Test(expected = ValidateException.class)
+    public void shouldThrowValidationExceptionNoInfile() throws Exception {
+        new Step(NO_SUCH_FILE, OUTFILE, 20).validate();
+    }
+
+    @Test(expected = ValidateException.class)
+    public void shouldThrowValidationExceptionOutfileExists() throws Exception {
+        new Step(INFILE, INFILE, 20).validate();
+    }
+
+    @Test(expected = ValidateException.class)
+    public void shouldThrowValidationExceptionInvalidStepSize()
+            throws Exception {
+        new Step(INFILE, OUTFILE, 0).validate();
+    }
+
+    @Test
+    public void shouldProduceOutfile() throws Exception {
+        new Step(INFILE, OUTFILE, 20).validate().execute();
+        assertTrue(new File(OUTFILE).exists());
+    }
+}
