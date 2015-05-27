@@ -4,7 +4,7 @@ import command.Command;
 import command.Process;
 import command.UserRights;
 import command.ValidateException;
-import response.GetProcessStatusResponse;
+import response.ProcessStatusResponse;
 import response.Response;
 import server.Doorman;
 import server.ProcessPool;
@@ -51,16 +51,16 @@ public class GetProcessStatusCommand extends Command {
 		pastCal.setTimeInMillis(System.currentTimeMillis());
 		pastCal.add(Calendar.DAY_OF_MONTH, -days);
         	
-		Calendar finishedCal = Calendar.getInstance();
+		Calendar startedCal = Calendar.getInstance();
 
 		for (PutProcessCommand proc : processesList) {
 			Process process = processPool.getProcessStatus(proc.getPID());
-			finishedCal.setTimeInMillis(process.timeFinished);
+			startedCal.setTimeInMillis(process.timeStarted);
 
-			if (finishedCal.after(pastCal)) {
+			if (startedCal.after(pastCal)) {
 				getProcessStatuses.add(process);
 			}
 		}
-		return new GetProcessStatusResponse(getProcessStatuses);
+		return new ProcessStatusResponse(getProcessStatuses);
 	}
 }

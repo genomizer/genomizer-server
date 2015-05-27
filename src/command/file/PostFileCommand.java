@@ -53,7 +53,8 @@ public class PostFileCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-		uploader = "TEMPORARY";
+
+		uploader = userName;
 
 		hasRights(UserRights.getRights(this.getClass()));
 		validateName(experimentID, MaxLength.EXPID, "Experiment name");
@@ -64,10 +65,6 @@ public class PostFileCommand extends Command {
 		validateName(fileName, MaxLength.FILE_FILENAME, "Filename");
 		validateExists(metaData, MaxLength.FILE_METADATA, "Metadata");
 		validateMD5(this.checkSumMD5);
-	}
-
-	public void setUploader(String uploader) {
-		this.uploader = uploader;
 	}
 
 	/**
@@ -93,8 +90,7 @@ public class PostFileCommand extends Command {
 			db = initDB();
 			FileTuple ft = db.addNewInProgressFile(experimentID, fileType, fileName, null,
 					metaData, author, uploader, false, grVersion, checkSumMD5);
-			return new UrlUploadResponse(HttpStatusCode.OK,
-					ft.getUploadURL());
+			return new UrlUploadResponse(ft.getUploadURL());
 		} catch (SQLException | IOException e) {
 			Debug.log("Adding of file " + fileName + " to experiment "+experimentID+" didn't work, reason: " +
 					e.getMessage());

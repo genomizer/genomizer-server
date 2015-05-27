@@ -1,10 +1,10 @@
-package transfer.test;
+package util.test;
+
+import static util.Util.*;
 
 import org.junit.Test;
-
+import static org.junit.Assert.*;
 import java.io.IOException;
-
-import static transfer.Util.validatePath;
 
 public class UtilTest {
 
@@ -46,6 +46,29 @@ public class UtilTest {
     @Test
     public void someSeeminglyInvalidCharactersAreAllowed() throws IOException {
         validatePath("a/path/with/some/seemingly/invalid/ÅÄÖAWE90a/characters/in/it");
+    }
+    @Test
+    public void formatTimeDifferenceTest() {
+        long oneDay = 24 * 60 * 60 * 1000;
+        assertEquals("1 day, 0 ms",
+                formatTimeDifference(oneDay));
+
+        long twoDays = oneDay*2;
+        assertEquals("2 days, 0 ms",
+                formatTimeDifference(twoDays));
+
+        long twoDays15Hours = twoDays + 15*60*60*1000;
+        assertEquals("2 days, 15 hours, 0 ms",
+                formatTimeDifference(twoDays15Hours));
+
+        long twoDays15Hours45Minutes = twoDays15Hours + 45*60*1000;
+        assertEquals("2 days, 15 hours, 45 minutes, 0 ms",
+                formatTimeDifference(twoDays15Hours45Minutes));
+
+        long twoDays15Hours45Minutes11Seconds = twoDays15Hours45Minutes + 11*1000;
+        assertEquals("2 days, 15 hours, 45 minutes, 11 seconds, 0 ms",
+                formatTimeDifference(twoDays15Hours45Minutes11Seconds));
+
     }
 
 }

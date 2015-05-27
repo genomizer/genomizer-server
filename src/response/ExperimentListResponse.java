@@ -10,10 +10,10 @@ import java.util.Map;
 /**
  * Class that represents the response for a search.
  *
- * @author
+ * @author Business Logic 2015
  * @version 1.0
  */
-public class SearchResponse extends Response {
+public class ExperimentListResponse extends Response {
 
 	private JsonArray experimentArray;
 
@@ -21,15 +21,14 @@ public class SearchResponse extends Response {
 	/**
 	 * Creator for the response.
 	 * Always has 200 as return code.
-	 * @param searchResult A List of experiments which are added to the
-	 *                     response.
+	 * @param experimentList A List of experiments
 	 */
-	public SearchResponse(List<Experiment> searchResult) {
-		code = 200;
+	public ExperimentListResponse(List<Experiment> experimentList) {
+		this.code = HttpStatusCode.OK;
 
 		//Adds each experiment to a json representation
 		experimentArray = new JsonArray();
-		for (Experiment exp : searchResult) {
+		for (Experiment exp : experimentList) {
 			JsonObject expJson = new JsonObject();
 			expJson.addProperty("name", exp.getID());
 
@@ -62,8 +61,6 @@ public class SearchResponse extends Response {
 
 			experimentArray.add(expJson);
 		}
-
-
 	}
 
 	/**
@@ -82,7 +79,7 @@ public class SearchResponse extends Response {
         JsonParser parser = new JsonParser();
         JsonArray json = parser.parse(jsonString).getAsJsonArray();
 
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 
 		return gson.toJson(json);
     }
