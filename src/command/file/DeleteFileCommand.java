@@ -44,7 +44,6 @@ public class DeleteFileCommand extends Command {
 	@Override
 	public Response execute() {
 		Response response;
-
 		try (DatabaseAccessor db = initDB()) {
 			if (isNumeric(fileID)) {
 				if (db.deleteFile(Integer.parseInt(fileID)) == 1)
