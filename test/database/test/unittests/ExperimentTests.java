@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import database.subClasses.FileMethods;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -276,6 +277,17 @@ public class ExperimentTests {
     public void shouldReturnNullIfExperimentDoesNotExist() throws Exception {
 
     	assertNull(dbac.getExperiment("pang"));
+    }
+
+    @Test
+    public void shouldBeAbleToRemoveAFileContainingInProgressFiles() throws IOException, SQLException {
+        dbac.addNewInProgressFile(testExpId, FileTuple.PROFILE, "TestFile.fgg", null, null, "test", "test", false, null, "34455");
+        try{
+            dbac.deleteExperiment(testExpId);
+        } catch (IOException e) {
+            e.printStackTrace();
+            fail("Should be able to remove");
+        }
     }
 
     private void addMockFile(String folderPath, String filename1)
