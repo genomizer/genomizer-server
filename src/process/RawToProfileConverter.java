@@ -90,7 +90,7 @@ public class RawToProfileConverter extends Executor {
 				ErrorLogger.log("SYSTEM", "Finished Bowtie");
 
 				checkBowTieFile(
-						"resources/" + dir + rawFile_1_Name
+						dir + rawFile_1_Name
 						+ ".sam", rawFile_1_Name);
 
 				//ErrorLogger.log("SYSTEM","Running SortSam");
@@ -206,7 +206,7 @@ public class RawToProfileConverter extends Executor {
 			try {
 				ErrorLogger.log("SYSTEM", "Files to be moved are: ["+filesToBeMoved+"]");
 				ErrorLogger.log("SYSTEM", "The path to move these files is: ["+outFilePath+"]");
-				moveEndFiles("resources/"+filesToBeMoved, outFilePath);
+				moveEndFiles(filesToBeMoved, outFilePath);
 			} catch (ProcessException e) {
 				cleanUp(toBeRemoved);
 				throw e;
@@ -405,7 +405,8 @@ public class RawToProfileConverter extends Executor {
 		File bowTie = new File(dir);
 		if (!bowTie.exists() || bowTie.length() == 0) {
 			throw new ProcessException("Bowtie failed to run on file : "
-					+ fileName + bowTie.exists() + bowTie.length());
+					+ fileName + bowTie.exists() + bowTie.length()
+					+ ", in directory : "+dir);
 		}
 	}
 
@@ -506,6 +507,7 @@ public class RawToProfileConverter extends Executor {
 
 
 					// TODO: Don't hardcode path to smoothing.jar.
+
 					ProcessBuilder pb = new ProcessBuilder("java", "-jar",
 							"resources/smoothing.jar",
 							parameterArray[0],
