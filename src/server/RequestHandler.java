@@ -7,10 +7,7 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import command.*;
 import command.connection.PostLoginCommand;
-import command.process.ProcessCommand;
-import command.process.ProcessCommandAdapter;
-import command.process.ProcessCommands;
-import command.process.PutProcessCommand;
+import command.process.*;
 import database.DatabaseAccessor;
 import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
@@ -174,9 +171,6 @@ public class RequestHandler implements HttpHandler {
                     new ProcessResponse(HttpStatusCode.NOT_IMPLEMENTED),
                     exchange);
 //            respond(new ProcessResponse(HttpStatusCode.OK), exchange);
-        } else if (commandClass.equals(PutProcessCommand.class)) {
-            Doorman.getProcessPool().addProcess((PutProcessCommand) command);
-            respond(new ProcessResponse(HttpStatusCode.OK), exchange);
         } else {
             respond(command.execute(), exchange);
         }

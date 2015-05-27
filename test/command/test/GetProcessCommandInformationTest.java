@@ -1,11 +1,12 @@
 package command.test;
 
 import java.util.*;
+import java.util.concurrent.Callable;
 
 import command.*;
 import command.Process;
 import command.annotation.*;
-import command.process.PutProcessCommand;
+import command.process.*;
 import database.subClasses.UserMethods.UserType;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -17,8 +18,10 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
+import response.HttpStatusCode;
+import response.ProcessResponse;
+import response.Response;
 import server.ProcessPool;
-import server.test.dummies.PutProcessCommandMock;
 
 import static org.junit.Assert.fail;
 
@@ -35,46 +38,34 @@ public class GetProcessCommandInformationTest {
 
 	private ProcessPool processPool;
 
-	private PutProcessCommand makeCmd(String author, String metadata, String genomeVersion, String expId) {
-		JsonObject comInfo = new JsonObject();
-		comInfo.addProperty("expid", expId);
-		comInfo.addProperty("PID", UUID.randomUUID().toString());
-
-		JsonArray arr = new JsonArray();
-		for (int i = 0; i < 8; i++) {
-			arr.add(new JsonPrimitive(""));
-		}
-
-		comInfo.add("parameters", arr);
-		comInfo.addProperty("metadata", metadata);
-		comInfo.addProperty("genomeVersion", genomeVersion);
-		comInfo.addProperty("author", author);
-
-		return new GsonBuilder().create().fromJson(comInfo.toString(), PutProcessCommandMock.class);
+	private Process makeProcess(String author, String expId) {
+		Process proc = new Process();
+		proc.author = author;
+		proc.experimentName = expId;
+		return proc;
 	}
 
 	@Before
 	public void setUp() throws Exception {
 
 		processPool = new ProcessPool(5);
-		
-		processPool.addProcess(makeCmd("yuri", "meta", "v123", "Exp1"));
-		processPool.addProcess(makeCmd("janne", "mea", "v1523", "Exp2"));
-		processPool.addProcess(makeCmd("philge", "meta", "v22", "Exp43"));
-		processPool.addProcess(makeCmd("per", "meta", "v12", "Exp234"));
-		processPool.addProcess(makeCmd("yuri", "meta", "v1", "Exp6"));
+		Callable<Response> callable = new Callable<Response>() {
+			@Override
+			public Response call() throws Exception {
+				return new ProcessResponse(HttpStatusCode.OK);
+			}
+		};
 
-		//stat = new Process(com);
-		//stat.outputFiles = com.getFilePaths();
-
+		processPool.addProcess(makeProcess("yuri", "Exp1"), callable);
+		processPool.addProcess(makeProcess("janne", "Exp2"), callable);
+		processPool.addProcess(makeProcess("philge", "Exp43"), callable);
+		processPool.addProcess(makeProcess("per", "Exp234"), callable);
+		processPool.addProcess(makeProcess("yuri", "Exp6"), callable);
 	}
 
 	@Test
 	@Ignore
 	public void shouldContainStuff() {
-
-		// TODO
-		//new Thread(workHandler).start();
 
 		try {
 			Thread.sleep(10000);
@@ -99,8 +90,6 @@ public class GetProcessCommandInformationTest {
 
 			System.out.println(toPrettyFormat(arr.toString()));
 		}
-
-//		workHandler.interrupt();
 	}
 
 	/**
