@@ -9,7 +9,7 @@ import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.HttpStatusCode;
 import response.Response;
-import response.SearchResponse;
+import response.ExperimentListResponse;
 import server.Debug;
 
 import java.io.IOException;
@@ -91,7 +91,7 @@ public class SearchCommand extends Command {
 			if (db != null)
 				db.close();
 		}
-		return new SearchResponse(searchResult);
+		return new ExperimentListResponse(searchResult);
 	}
 
 	/**

@@ -17,7 +17,7 @@ public class SingleFileResponse extends Response {
         this.code = HttpStatusCode.OK;
 
         GsonBuilder gsonBuilder = new GsonBuilder();
-        Gson gson = gsonBuilder.setPrettyPrinting().create();
+        Gson gson = gsonBuilder.setPrettyPrinting().disableHtmlEscaping().create();
         FileInformation fileInfo = new FileInformation(fileTuple);
         json = gson.toJson(fileInfo);
     }

@@ -1,8 +1,8 @@
 package command;
 
-import command.admin.DeleteUserCommand;
-import command.admin.PostUserCommand;
-import command.admin.PutUserAdminCommand;
+import command.admin.DeleteAdminUserCommand;
+import command.admin.PostAdminUserCommand;
+import command.admin.PutAdminUserCommand;
 import command.annotation.*;
 import command.connection.*;
 import command.convertfile.PutConvertFileCommand;
@@ -18,10 +18,7 @@ import command.genomerelease.DeleteGenomeReleaseCommand;
 import command.genomerelease.GetGenomeReleaseCommand;
 import command.genomerelease.GetGenomeReleaseSpeciesCommand;
 import command.genomerelease.PostGenomeReleaseCommand;
-import command.process.CancelProcessCommand;
-import command.process.GetProcessDummyCommand;
-import command.process.GetProcessStatusCommand;
-import command.process.PutProcessCommand;
+import command.process.*;
 import command.search.SearchCommand;
 import command.user.PutUserCommand;
 
@@ -66,9 +63,9 @@ public class CommandClasses {
         classes.put("PUT /user", PutUserCommand.class);
 
         //Admin commands
-        classes.put("POST /admin/user", PostUserCommand.class);
-        classes.put("DELETE /admin/user/", DeleteUserCommand.class);
-        classes.put("PUT /admin/user", PutUserAdminCommand.class);
+        classes.put("POST /admin/user", PostAdminUserCommand.class);
+        classes.put("DELETE /admin/user/", DeleteAdminUserCommand.class);
+        classes.put("PUT /admin/user", PutAdminUserCommand.class);
 
         //Processing
         classes.put("GET /process", GetProcessStatusCommand.class);
@@ -94,6 +91,7 @@ public class CommandClasses {
         classes.put("GET /genomeRelease", GetGenomeReleaseCommand.class);
         classes.put("GET /genomeRelease/", GetGenomeReleaseSpeciesCommand.
                 class);
+        classes.put("PUT /process/processCommands", ProcessCommands.class);
 
         //Geo commands
 

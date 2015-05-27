@@ -10,7 +10,7 @@ import response.MinimalResponse;
 import response.Response;
 
 /**
- * Class used to represent a logout command.
+ * Command used to log out a user.
  *
  * @author Business Logic 2015.
  * @version 1.1
@@ -30,13 +30,15 @@ public class DeleteLoginCommand extends Command {
 
 	@Override
 	public Response execute() {
-
+		Response response;
 		if(Authenticate.idExists(uuid)) {
 			Authenticate.deleteActiveUser(uuid);
 			return new MinimalResponse(HttpStatusCode.OK);
 		} else {
-			return 	new ErrorResponse(HttpStatusCode.NOT_FOUND,
+			response = new ErrorResponse(HttpStatusCode.NOT_FOUND,
 					"User not found");
 		}
+
+		return response;
 	}
 }

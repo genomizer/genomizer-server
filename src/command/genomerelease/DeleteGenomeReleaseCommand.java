@@ -7,9 +7,9 @@ import database.DatabaseAccessor;
 import database.constants.MaxLength;
 import database.containers.Genome;
 import database.subClasses.UserMethods.UserType;
-import response.DeleteGenomeReleaseResponse;
 import response.ErrorResponse;
 import response.HttpStatusCode;
+import response.MinimalResponse;
 import response.Response;
 import server.Debug;
 
@@ -64,7 +64,7 @@ public class DeleteGenomeReleaseCommand extends Command {
 						boolean result = db.removeGenomeRelease(genomeVersion);
 						if(result) {
 							return new
-									DeleteGenomeReleaseResponse(HttpStatusCode.OK);
+									MinimalResponse(HttpStatusCode.OK);
 						} else {
 							return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
 									"Could not delete genome release");

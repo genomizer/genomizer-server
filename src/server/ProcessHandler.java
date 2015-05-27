@@ -2,25 +2,23 @@ package server;
 
 
 import command.Process;
-import command.process.PutProcessCommand;
 import response.HttpStatusCode;
 import response.Response;
+import util.Util;
 
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.concurrent.Callable;
 
 
 public class ProcessHandler implements Callable<Response> {
 
-	private PutProcessCommand processCommand;
+	private Callable<Response> callable;
 	private Process process;
 	private boolean simulateLongProcess;
 
 
-	public ProcessHandler(PutProcessCommand processCommand,
+	public ProcessHandler(Callable<Response> callable,
 						  Process process) {
-		this.processCommand = processCommand;
+		this.callable = callable;
 		this.process = process;
 		simulateLongProcess = false;
 	}
@@ -31,51 +29,38 @@ public class ProcessHandler implements Callable<Response> {
 
 		Response response = null;
 
-		if (processCommand != null && process != null) {
-			Debug.log("Execution of process with id " + processCommand.getPID()
+		if (callable != null && process != null) {
+			Debug.log("Execution of process with id " + process.PID
 					+ " in experiment "
-					+ processCommand.getExpId() + " has begun.");
+					+ process.experimentName + " has begun.");
 
 			process.status = Process.STATUS_STARTED;
-
-			// Attempt to setup file paths
-			try {
-				processCommand.setFilePaths();
-			} catch (SQLException | IOException e) {
-				Debug.log(e.getMessage());
-				ErrorLogger.log(process.author,
-						"Could not run process command: " + e.getMessage());
-				process.status = Process.STATUS_CRASHED;
-				return null;
-			}
-
-			process.outputFiles = processCommand.getFilePaths();
 			process.timeStarted = System.currentTimeMillis();
 
 
 			try {
 				/* Execute the process command */
-				response = processCommand.execute();
+				response = callable.call();
 
 				if (response.getCode() == HttpStatusCode.CREATED ||
 					response.getCode() == HttpStatusCode.OK) {
 					process.status = Process.STATUS_FINISHED;
-					String successMsg = "Execution of process with id " + processCommand.getPID()
+					String successMsg = "Execution of process with id " + process.PID
 							+ " in experiment "
-							+ processCommand.getExpId() + " has finished.";
+							+ process.experimentName + " has finished.";
 					Debug.log(successMsg);
 					ErrorLogger.log("PROCESS", successMsg);
 				} else {
 					System.out.println("Process status: " + response.getCode());
 					process.status = Process.STATUS_CRASHED;
 					String crashedMsg = "FAILURE! Execution of process with id "
-							+ processCommand.getPID() + " in experiment "
-							+ processCommand.getExpId() + " has crashed.";
+							+ process.PID + " in experiment "
+							+ process.experimentName + " has crashed.";
 					Debug.log(crashedMsg);
 					ErrorLogger.log("PROCESS", crashedMsg);
 				}
 
-			} catch (NullPointerException e) {
+			} catch (Exception e) {
 				process.status = Process.STATUS_CRASHED;
 			}
 
@@ -84,27 +69,27 @@ public class ProcessHandler implements Callable<Response> {
 				/* Long time process execution simulation */
 				ErrorLogger.log("PROCESS", "Process is sleeping for 30 seconds.");
 				Debug.log("Process is sleeping for 30 seconds. PID " +
-						processCommand.getPID());
+						process.PID);
 				try {
 					Thread.sleep(30000);
 				} catch (InterruptedException ex) {
 					Debug.log("Sleep interrupted");
 				}
-				Debug.log("End of sleep. PID " + processCommand.getPID());
+				Debug.log("End of sleep. PID " + process.PID);
 			}
 
 
 
 			process.timeFinished = System.currentTimeMillis();
 
-			String timeMsg = "PID: " + processCommand.getPID() + "\nElapsed time: " +
-					formatTimeDifference((process.timeFinished - process.timeStarted) / 1000) ;
+			String timeMsg = "PID: " + process.PID + "\nElapsed time: " +
+					Util.formatTimeDifference((process.timeFinished - process.timeStarted) / 1000) ;
 			Debug.log(timeMsg);
 			ErrorLogger.log("PROCESS", timeMsg);
 
 		}
 
-		Debug.log("PID: " + processCommand.getPID());
+		Debug.log("PID: " + process.PID);
 		Debug.log("Process response: " + response.getMessage());
 
 		return response;
@@ -113,34 +98,6 @@ public class ProcessHandler implements Callable<Response> {
 
 	public void setSimulation(boolean flag) {
 		simulateLongProcess = flag;
-	}
-
-	private String formatTimeDifference(long diffMillis) {
-		long seconds = diffMillis / 1000;
-		long minutes = seconds / 60;
-		long hours   = minutes / 60;
-		long days    = hours   / 24;
-
-
-		if (days > 0) {
-			return (days + " days, " + hours + " hours, "
-					+ minutes + " minutes, " + seconds + " seconds");
-		}
-
-		if (hours > 0) {
-			return (hours + " hours, "
-					+ minutes + " minutes, " + seconds + " seconds");
-		}
-
-		if (minutes > 0) {
-			return (minutes + " minutes, " + seconds + " seconds");
-		}
-
-		if (seconds > 0) {
-			return (seconds + " seconds");
-		}
-
-		return (diffMillis + " ms");
 	}
 
 

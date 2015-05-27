@@ -17,6 +17,7 @@ import org.apache.commons.fileupload.RequestContext;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import response.HttpStatusCode;
 import server.Debug;
+import util.Util;
 
 import java.io.File;
 import java.io.IOException;
@@ -149,7 +150,7 @@ public class UploadHandler {
                 verifyOrUpdateMD5(ft, actualMD5, db);
                 int count = db.markReadyForDownload(ft);
                 checkMarkReadyForDownloadSucceeded(count, ft.filename);
-                db.updateFileSize(ft);
+                db.updateFileSize(ft, fileItem.getSize());
                 return;
             }
 

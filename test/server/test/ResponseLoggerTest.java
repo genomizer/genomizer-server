@@ -8,7 +8,6 @@ import authentication.Authenticate;
 
 import response.HttpStatusCode;
 import response.MinimalResponse;
-//import response.Response;
 import server.ErrorLogger;
 
 public class ResponseLoggerTest {

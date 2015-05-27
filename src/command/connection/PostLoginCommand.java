@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 /**
- * This class is used to handle user login.
+ * Command used to log in a user.
  *
  * @author Business Logic 2015.
  * @version 1.1
@@ -38,64 +38,70 @@ public class PostLoginCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-		validateUserAndPassword(username, MaxLength.USERNAME, "Username/Password");
-		validateUserAndPassword(password, MaxLength.PASSWORD, "Username/Password");
+		validateUserAndPassword(username, MaxLength.USERNAME,
+				"Username/Password");
+		validateUserAndPassword(password, MaxLength.PASSWORD,
+				"Username/Password");
 	}
-	public void validateUserAndPassword(String string, int maxLength, String field)
-			throws ValidateException {
-		if(string == null) {
+
+	public void validateUserAndPassword(String string, int maxLength,
+										String field) throws ValidateException {
+		if (string == null) {
 			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Specify " +
 					"an " + field.toLowerCase() + ".");
 		}
-		if(string.equals("null")){
+
+		if (string.equals("null")) {
 			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Invalid "
 					+ field.toLowerCase() + ".");
 		}
-		if(string.length() > maxLength || string.length() < 1) {
+
+		if (string.length() > maxLength || string.length() < 1) {
 			throw new ValidateException(HttpStatusCode.BAD_REQUEST, field +
 					" has to be between 1 and " + maxLength +
 					" characters long.");
 		}
-		if(hasInvalidCharacters(string)) {
+		if (hasInvalidCharacters(string)) {
 			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Invalid" +
 					" characters in " + field.toLowerCase() +
-					". Valid characters are: " + validCharacters);
+					". Valid characters are: " + VALID_CHARACTERS);
 		}
 	}
+
 	@Override
 	public Response execute() {
 		DatabaseAccessor db = null;
-		String dbHash;
+		Response response;
+
 		try {
 			db = initDB();
-			dbHash = db.getPasswordHash(username);
-		} catch (SQLException | IOException e) {
-			Debug.log("LOGIN WAS UNSUCCESSFUL FOR: " + username + ". REASON: " +
-					e.getMessage());
-			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
-					"Login was unsuccessful for user: " + username +
-							". The reason is temporary problems with database.");
-		}finally {
-			if (db != null) {
-				db.close();
+			String dbHash;
+			if ((dbHash = db.getPasswordHash(username)) != null) {
+				LoginAttempt login = Authenticate.login(username, password,
+						dbHash);
+				if (login.wasSuccessful())
+					response = new LoginResponse(login.getUUID(),
+							db.getRole(username).name());
+				else
+					response = new ErrorResponse(HttpStatusCode.UNAUTHORIZED,
+							"Login attempt unsuccessful, incorrect password");
+			} else {
+				response = new ErrorResponse(HttpStatusCode.UNAUTHORIZED,
+						"Login attempt unsuccessful, invalid username");
 			}
+		} catch (IOException e) {
+			response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
+					"Login attempt unsuccessful. " + e.getMessage());
+		} catch (SQLException e) {
+			response = new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+					"Login attempt unsuccessful due to temporary database " +
+							"problems");
+			Debug.log("Reason: " + e.getMessage());
+		} finally {
+			if (db != null)
+				db.close();
 		}
 
-		if(dbHash == null || dbHash.isEmpty()){
-			return new ErrorResponse(HttpStatusCode.UNAUTHORIZED, "Login failed, invalid username");
-		}
-
-		LoginAttempt login = Authenticate.login(uuid, username, password, dbHash);
-
-		if(!login.wasSuccessful()) {
-			Debug.log("LOGIN WAS UNSUCCESSFUL FOR: " + username + ". REASON: " +
-					login.getErrorMessage());
-			return new ErrorResponse(HttpStatusCode.UNAUTHORIZED,
-					"Login failed, incorrect password");
-		}
-
-		Debug.log("LOGIN WAS SUCCESSFUL FOR: "+ username + ". GAVE UUID: " +
-				login.getUUID());
-		return new LoginResponse(200, login.getUUID());
+		return response;
 	}
 }
