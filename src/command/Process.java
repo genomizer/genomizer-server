@@ -1,7 +1,7 @@
 package command;
 
 import com.google.gson.annotations.Expose;
-import command.process.PutProcessCommand;
+import command.process.*;
 
 import java.util.UUID;
 
@@ -52,6 +52,7 @@ public class Process implements Comparable<Process> {
 	 * PutProcessCommand.
 	 * @param command a PutProcessCommand.
 	 */
+	@SuppressWarnings("deprecation")
 	public Process(PutProcessCommand command) {
 		status = STATUS_WAITING;
 		author = command.getUsername();

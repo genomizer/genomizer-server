@@ -26,6 +26,7 @@ public class GetProcessDummyCommand extends Command {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public Response execute() {
         Process p1 = new Process(new PutProcessCommand());
         p1.experimentName = "Exp1";
