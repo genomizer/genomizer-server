@@ -24,7 +24,7 @@ import server.Debug;
  * @version 1.1
  */
 public class DeleteAdminUserCommand extends Command {
-	
+
 	private String username;
 
 	@Override
@@ -36,7 +36,7 @@ public class DeleteAdminUserCommand extends Command {
 	public void setFields(String uri, HashMap<String, String> query,
 						  String uuid, UserType userType) {
 		super.setFields(uri, query, uuid, userType);
-		username = uri.split("/")[2];
+		username = uri.split("/")[3];
 	}
 
 	@Override
