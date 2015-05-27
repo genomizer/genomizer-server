@@ -174,9 +174,6 @@ public class RequestHandler implements HttpHandler {
                     new ProcessResponse(HttpStatusCode.NOT_IMPLEMENTED),
                     exchange);
 //            respond(new ProcessResponse(HttpStatusCode.OK), exchange);
-        } else if (commandClass.equals(PutProcessCommand.class)) {
-            Doorman.getProcessPool().addProcess((PutProcessCommand) command);
-            respond(new ProcessResponse(HttpStatusCode.OK), exchange);
         } else {
             respond(command.execute(), exchange);
         }

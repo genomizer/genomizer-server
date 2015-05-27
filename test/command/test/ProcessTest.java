@@ -25,8 +25,8 @@ public class ProcessTest {
 	public void testCreationNotNull() {
 
 		PutProcessCommand cmd = new PutProcessCommand();
-		cmd.setPID(UUID.randomUUID());
 		Process c = new Process(cmd);
+		c.PID = UUID.randomUUID().toString();
 		assertNotNull(c);
 	}
 
