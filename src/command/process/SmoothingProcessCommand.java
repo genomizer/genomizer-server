@@ -5,7 +5,10 @@ import command.Command;
 import command.ValidateException;
 import database.constants.MaxLength;
 import response.HttpStatusCode;
+import process.Smooth;
+import server.Debug;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -127,7 +130,33 @@ public class SmoothingProcessCommand extends ProcessCommand {
          * @param filePaths
          */
         public void ProcessFile(Map.Entry<String, String> filePaths) {
-            throw new UnsupportedOperationException("Error when processing. Smoothing not implemented.");
+
+            String infileWithPath = filePaths.getValue() + infile;
+            String outfileWithPath = filePaths.getValue() + outfile;
+            Integer meanOrMedian = null;
+
+            if(getMeanOrMedian().equals("mean")){
+                meanOrMedian = 0;
+            }else if(getMeanOrMedian().equals("median")){
+                meanOrMedian = 1;
+            }else{
+                throw new UnsupportedOperationException("Error during smoothing processing. Incorrect mean/median. " +
+                        "Should be either 'mean' or 'median'.");
+            }
+
+            try {
+                Smooth.runSmoothing(infileWithPath, getWindowSize(), meanOrMedian,  getMinSmooth(), 0 ,0, outfileWithPath);
+
+            } catch (ValidateException e) {
+                Debug.log("Error during smoothing processing: "+e.getMessage());
+                throw new UnsupportedOperationException("Error during smoothing processing: "+e.getMessage());
+            } catch (IOException e) {
+                Debug.log("Error during smoothing processing: " + e.getMessage());
+                throw new UnsupportedOperationException("Error during smoothing processing: "+e.getMessage());
+            } catch (InterruptedException e) {
+                Debug.log("Error during smoothing processing: " + e.getMessage());
+                throw new UnsupportedOperationException("Error during smoothing processing: "+e.getMessage());
+            }
         }
     }
 }

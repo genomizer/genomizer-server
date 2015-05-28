@@ -12,7 +12,7 @@ import java.util.ArrayList;
 /**
  * Class which is responsible for running smoothing.
  */
-class Smooth extends Executor {
+public class Smooth extends Executor {
     private SmoothingParameters parameters;
     private static String smoothingScriptCmd   = "expect smooth_v4.sh";
     private static String smoothingScriptSh    = "smooth_v4.sh";
