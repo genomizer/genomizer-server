@@ -35,6 +35,8 @@ public class RatioProcessCommand extends ProcessCommand {
             Command.validateName(file.getPreChipFile(), MaxLength.FILE_FILENAME, "PreChipFile");
             Command.validateName(file.getPostChipFile(), MaxLength.FILE_FILENAME, "PostChipFile");
             Command.validateName(file.getOutfile(), MaxLength.FILE_FILENAME, "Outfile");
+            if(file.getChromosomes()==null)
+                throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Chromosomes may not be null.");
             if(!file.getMean().equals("single")&&!file.getMean().equals("double")){
                 throw new ValidateException(HttpStatusCode.BAD_REQUEST,
                         "Incorrect mean, should be 'single' or 'double'.");
@@ -86,7 +88,7 @@ public class RatioProcessCommand extends ProcessCommand {
         private int readsCutoff;
 
         @Expose
-        private String chromosome;
+        private String chromosomes;
 
         public String getPreChipFile() {return preChipFile;}
 
@@ -98,7 +100,7 @@ public class RatioProcessCommand extends ProcessCommand {
 
         public int getReadsCutoff() {return readsCutoff;}
 
-        public String getChromosome() {return chromosome;}
+        public String getChromosomes() {return chromosomes;}
 
 
         @Override
@@ -109,7 +111,7 @@ public class RatioProcessCommand extends ProcessCommand {
                     ", outfile='" + outfile + '\'' +
                     ", mean='" + mean + '\'' +
                     ", readsCutoff=" + readsCutoff + '\'' +
-                    ", chromosome=" + chromosome +
+                    ", chromosomes=" + chromosomes +
                     '}';
         }
 
