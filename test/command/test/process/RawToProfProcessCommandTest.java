@@ -108,4 +108,16 @@ public class RawToProfProcessCommandTest {
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }
+    @Test(expected = ValidateException.class)
+    public void canGiveValidateExceptionOnParamsNull() throws ValidateException {
+        String json =
+                "{\"expId\":\"asd\"," +
+                        "\"processCommands\":[{\"type\":\"rawToProfile\"," +
+                        "\"files\":[{\"infile\":\"bigtest1.fastq\"," +
+                        "\"outfile\":\"awsd\",\"genomeVersion\":\"theR\"," +
+                        "\"keepSam\":\"on\"}]}]}";
+        ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
+        processCommands.setFields(null, null, null, UserMethods.UserType.USER);
+        processCommands.validate();
+    }
 }
