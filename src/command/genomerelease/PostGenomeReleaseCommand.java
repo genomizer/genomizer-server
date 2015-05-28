@@ -6,10 +6,7 @@ import command.UserRights;
 import command.ValidateException;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
-import response.FilePathListResponse;
-import response.ErrorResponse;
-import response.HttpStatusCode;
-import response.Response;
+import response.*;
 import server.Debug;
 
 import java.io.IOException;
@@ -17,34 +14,28 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
- * Class used to handle adding a genome release.
+ * Command used to add a genome release.
  *
- * @author Business Logic 2015.
+ * @author Busines Logic 2015
  * @version 1.1
  */
 public class PostGenomeReleaseCommand extends Command {
 	@Expose
 	private String genomeVersion = null;
-
-	// TODO: rename to "species".
 	@Expose
 	private String specie = null;
-
 	@Expose
-	private ArrayList<String> files = new ArrayList<>();
-
+	private ArrayList<String> files = null;
 	@Expose
-	private ArrayList<String> checkSumsMD5 = new ArrayList<>();
+	private ArrayList<String> checkSumsMD5 = null;
 
 	@Override
 	public int getExpectedNumberOfURIFields() {
 		return 1;
 	}
 
-
 	@Override
 	public void validate() throws ValidateException {
-
 		hasRights(UserRights.getRights(this.getClass()));
 		validateName(specie, MaxLength.GENOME_SPECIES, "Species");
 		validateName(genomeVersion, MaxLength.GENOME_VERSION, "Genome version");
@@ -61,30 +52,31 @@ public class PostGenomeReleaseCommand extends Command {
 
 	@Override
 	public Response execute() {
-		DatabaseAccessor db = null;
-		ArrayList<String> uploadURLs = new ArrayList<>();
-		try {
-			db = initDB();
-			for(int i = 0; i < files.size(); ++i) {
+		Response response;
+		try (DatabaseAccessor db = initDB()) {
+			ArrayList<String> uploadURLs = new ArrayList<>();
+
+			for (int i = 0; i < files.size(); i++) {
 				String fileName = files.get(i);
 				String checkSumMD5 = null;
-				if (i < checkSumsMD5.size()) {
+				if (i < checkSumsMD5.size())
 					checkSumMD5 = checkSumsMD5.get(i);
-				}
-				 uploadURLs.add(db.addInProgressGenomeRelease(genomeVersion, specie,
-						 fileName, checkSumMD5));
+				uploadURLs.add(db.addInProgressGenomeRelease(genomeVersion,
+						specie, fileName, checkSumMD5));
 			}
-			return new FilePathListResponse(uploadURLs);
-		} catch (SQLException | IOException e) {
-			Debug.log("Error when adding genome release "+genomeVersion+". Temporary error with database: "
-					+ e.getMessage());
-			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
-					"Error when adding genome release "+genomeVersion+" due to temporary database error.");
-		} finally {
-			if (db != null) {
-				db.close();
-			}
+
+			response = new FilePathListResponse(uploadURLs);
+		} catch (SQLException e) {
+			response = new DatabaseErrorResponse("Adding genome release '" +
+					genomeVersion + "' for species '" + specie + "'");
+		} catch (IOException e) {
+			response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
+					"Adding genome release '" + genomeVersion +
+							"' for species '" + specie + "' unsuccessful. " +
+							e.getMessage());
 		}
+
+		return response;
 	}
 
 }
