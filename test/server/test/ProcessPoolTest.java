@@ -40,17 +40,9 @@ public class ProcessPoolTest {
 
     @Before
     public void setUp() {
-        processPool.addProcess(makeDummyProcess(), makeDummyCallable());
-        processPool.addProcess(makeDummyProcess(), makeDummyCallable());
-        processPool.addProcess(makeDummyProcess(), makeDummyCallable());
-
-        processPool.addProcess(makeDummyProcess(), makeDummyCallable());
-        processPool.addProcess(makeDummyProcess(), makeDummyCallable());
-        processPool.addProcess(makeDummyProcess(), makeDummyCallable());
-
-        processPool.addProcess(makeDummyProcess(), makeDummyCallable());
-        processPool.addProcess(makeDummyProcess(), makeDummyCallable());
-        processPool.addProcess(makeDummyProcess(), makeDummyCallable());
+        for (int i = 0; i < 9; ++i) {
+            processPool.addProcess(makeDummyProcess(), makeDummyCallable());
+        }
     }
 
     @After
@@ -91,24 +83,20 @@ public class ProcessPoolTest {
     public void testProcessStatus() throws InterruptedException {
         cancelAllProcesses();
 
-        processPool.addProcess(makeDummyProcess(), makeDummyCallable());
+        UUID pid = processPool.addProcess(makeDummyProcess(), makeDummyCallable());
         Thread.sleep(100);
-        List<Process> processList = processPool.getProcesses();
-        UUID pid = UUID.fromString(processList.get(0).PID);
 
         assertEquals(Process.STATUS_STARTED, processPool.getProcessStatus(pid).status);
         processPool.cancelProcess(pid);
         assertEquals(0, processPool.getProcesses().size());
 
-        processPool.addProcess(makeDummyProcess(), new Callable<Response>() {
+        pid = processPool.addProcess(makeDummyProcess(), new Callable<Response>() {
             @Override
             public Response call() throws Exception {
                 throw new NullPointerException();
             }
         });
         Thread.sleep(200);
-        processList = processPool.getProcesses();
-        pid = UUID.fromString(processList.get(0).PID);
         assertEquals(Process.STATUS_CRASHED, processPool.getProcessStatus(pid).status);
     }
 
