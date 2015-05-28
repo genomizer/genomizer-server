@@ -69,6 +69,7 @@ public class PostGenomeReleaseCommand extends Command {
 		} catch (SQLException e) {
 			response = new DatabaseErrorResponse("Adding genome release '" +
 					genomeVersion + "' for species '" + specie + "'");
+			Debug.log("Reason: " + e.getMessage());
 		} catch (IOException e) {
 			response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
 					"Adding genome release '" + genomeVersion +
