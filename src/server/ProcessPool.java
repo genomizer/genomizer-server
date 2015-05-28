@@ -75,11 +75,11 @@ public class ProcessPool {
 
     /**
      * Adds a new process to the process pool.
-     *
-     * @param process  - process metadata.
-     * @param callable - function to execute.
+     *  @param process  - process metadata.
+     *  @param callable - function to execute.
+     *  @return PID of the newly-created process.
      */
-    public void addProcess(Process process, Callable<Response> callable) {
+    public UUID addProcess(Process process, Callable<Response> callable) {
         lock.lock();
 
         try {
@@ -97,6 +97,8 @@ public class ProcessPool {
                 // Create a process command to process response mapping
                 processFutureMap.put(uuid, response);
             }
+
+            return uuid;
 
         } finally {
             lock.unlock();
