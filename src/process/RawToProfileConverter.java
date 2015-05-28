@@ -8,8 +8,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Map;
 import java.util.Stack;
+import java.util.Map;
 
 /**
  * Class used to create profile data from .fastq format.
@@ -91,7 +91,6 @@ public class RawToProfileConverter extends Executor {
 	 *            Filepath to where the .wig file should be placed.
 	 * @throws ProcessException
 	 */
-
 	public String procedure(String[] parameters, String inFolder,
 			String outFilePath) throws ProcessException {
 
@@ -107,10 +106,11 @@ public class RawToProfileConverter extends Executor {
 			if (checker.shouldRunBowTie()) {
 				ErrorLogger.log("SYSTEM", "Running Bowtie");
 				logString = runBowTie(rawFile1, rawFile_1_Name);
+				ErrorLogger.log("SYSTEM", "Bowtie return msg - " +logString);
 				ErrorLogger.log("SYSTEM", "Finished Bowtie");
 
 				checkBowTieFile(
-						"resources/" + dir + rawFile_1_Name
+						dir + rawFile_1_Name
 						+ ".sam", rawFile_1_Name);
 
 				//ErrorLogger.log("SYSTEM","Running SortSam");
@@ -127,7 +127,7 @@ public class RawToProfileConverter extends Executor {
 				}// Sets parameters for sorting first sam file
 				*/
 
-				toBeRemoved.push(remoteExecution + "resources/" + dir);
+				toBeRemoved.push(remoteExecution + dir);
 				filesToBeMoved = dir;
 				toBeRemoved.push(filesToBeMoved);
 			}
@@ -226,12 +226,12 @@ public class RawToProfileConverter extends Executor {
 			try {
 				ErrorLogger.log("SYSTEM", "Files to be moved are: ["+filesToBeMoved+"]");
 				ErrorLogger.log("SYSTEM", "The path to move these files is: ["+outFilePath+"]");
-				moveEndFiles("resources/"+filesToBeMoved, outFilePath);
+				moveEndFiles(filesToBeMoved, outFilePath);
 			} catch (ProcessException e) {
 				cleanUp(toBeRemoved);
 				throw e;
 			}
-			cleanUp(toBeRemoved);
+//			cleanUp(toBeRemoved);
 
 		} else {
 
@@ -255,6 +255,12 @@ public class RawToProfileConverter extends Executor {
 			throw new ProcessException("Fatal error: This should never happen");
 		}
 		inFolder = validateInFolder(inFolder);
+
+		if (!inFolder.startsWith("/")) {
+			inFolder = System.getProperty("user.dir") + "/" + inFolder;
+		}
+
+		ErrorLogger.log("SYSTEM", "Executing on infolder ["+inFolder+"]");
 		inFiles = getRawFiles(inFolder);
 
 		// Check if there are any raw files
@@ -273,7 +279,7 @@ public class RawToProfileConverter extends Executor {
 		// Runs the procedure.
 
 		initiateConversionStrings(parameters, outFilePath);
-		makeConversionDirectories(remoteExecution + "resources/" + dir
+		makeConversionDirectories(remoteExecution + dir
 				+ "/sorted");
 		checker.calculateWhichProcessesToRun(parameters);
 		if(!validateParameters(parameters)) {
@@ -419,7 +425,8 @@ public class RawToProfileConverter extends Executor {
 		File bowTie = new File(dir);
 		if (!bowTie.exists() || bowTie.length() == 0) {
 			throw new ProcessException("Bowtie failed to run on file : "
-					+ fileName + bowTie.exists() + bowTie.length());
+					+ fileName + bowTie.exists() + bowTie.length()
+					+ ", in directory : "+dir);
 		}
 	}
 
@@ -520,6 +527,7 @@ public class RawToProfileConverter extends Executor {
 
 
 					// TODO: Don't hardcode path to smoothing.jar.
+
 					ProcessBuilder pb = new ProcessBuilder("java", "-jar",
 							"resources/smoothing.jar",
 							parameterArray[0],
@@ -617,7 +625,7 @@ public class RawToProfileConverter extends Executor {
 		remoteExecution = "";
 		dir = "results_" + Thread.currentThread().getId() + "/";
 		sortedDirForCommands = remoteExecution + dir + "sorted/";
-		sortedDirForFile = remoteExecution + "resources/" + dir + "sorted/";
+		sortedDirForFile = remoteExecution + dir + "sorted/";
 		samToGff = "expect sam_to_readsgff_v1.sh " + sortedDirForCommands;
 		gffToAllnusgr = "expect readsgff_to_allnucsgr_v1.sh "
 				+ sortedDirForCommands + "reads_gff/";
@@ -763,9 +771,14 @@ public class RawToProfileConverter extends Executor {
 			return false;
 		}
 
-		if (!checkIfFolderExists(outFilePath) || !checkIfFolderExists(inFolder)) {
-			System.out.println("Folders does not exist");
+		if (!checkIfFolderExists(inFolder)) {
+			System.out.println("Input folder does not exist");
 			return false;
+		}
+		if(!checkIfFolderExists(outFilePath)) {
+			new File(outFilePath).mkdir();
+			//return all.getCode().stavMix(KungensKurva.
+			// getAllTheThings()).try(code.digest());
 		}
 
 		return true;
@@ -778,8 +791,8 @@ public class RawToProfileConverter extends Executor {
 	 * @return
 	 */
 	private boolean checkIfFolderExists(String folder) {
-		File dir = new File(folder);
-		return dir.exists();
+
+		return (new File(folder)).isDirectory();
 	}
 
 	private String runPicard(String command, String arguments) {
