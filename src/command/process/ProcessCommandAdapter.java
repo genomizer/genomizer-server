@@ -20,6 +20,7 @@ public class ProcessCommandAdapter implements JsonDeserializer<ProcessCommand> {
     static {
         CLASS_MAP.put("rawToProfile", RawToProfProcessCommand.class);
         CLASS_MAP.put("ratio", RatioProcessCommand.class);
+        CLASS_MAP.put("smoothing", SmoothingProcessCommand.class);
     }
 
     @Override

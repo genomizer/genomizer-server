@@ -47,13 +47,18 @@ public class ServerMain {
 			System.exit(1);
 		}
 
+		/* Print a warning if the DB is not accessible. */
+		checkDatabaseConnection();
+
+		/* End of server startup */
+		Debug.log("\n\n");
+
 		/* By default we run a UID remover. */
 		if (!com.hasOption("nri")) {
 			(new Thread(new InactiveUuidsRemover())).start();
 		}
 
-		/* Print a warning if the DB is not accessible. */
-		checkDatabaseConnection();
+
 	}
 
 	/**
