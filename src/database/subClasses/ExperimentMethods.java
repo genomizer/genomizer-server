@@ -161,7 +161,10 @@ public class ExperimentMethods {
      *             if the query does not succeed
      * @throws IOException
      *             if the value is invalid for the annotation type.
+     * @deprecated Use updateExperiment(String expID, HashMap<String, String>)
+     *             instead
      */
+    @Deprecated
     public int updateExperiment(String expID, String label,
             String value) throws SQLException, IOException {
 

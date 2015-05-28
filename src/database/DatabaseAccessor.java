@@ -71,6 +71,7 @@ public class DatabaseAccessor implements AutoCloseable {
         props.setProperty("password", password);
 
         conn = DriverManager.getConnection(url, props);
+        conn.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
 
         fpg = new FilePathGenerator(DATAFOLDER);
         pm2sql = new PubMedToSQLConverter();
@@ -423,7 +424,10 @@ public class DatabaseAccessor implements AutoCloseable {
      *             - if the query does not succeed
      * @throws IOException
      *             - if the value is invalid for the annotation type.
+     * @deprecated  Use updateExperiment(String expID,
+     *                      HashMap<String, String> annotations) instead.
      */
+    @Deprecated
     public int updateExperiment(String expID, String label, String value)
             throws SQLException, IOException {
         return expMethods.updateExperiment(expID, label, value);
