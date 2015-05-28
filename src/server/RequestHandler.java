@@ -119,7 +119,8 @@ public class RequestHandler implements HttpHandler {
         } catch (Exception e) {
             Debug.log("Could not parse query");
             respond(new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
-                            "ERROR : Could not parse query: " +e.getMessage() ), exchange);
+                            "ERROR : Could not parse query: "
+                                    + e.getMessage() ), exchange);
             return;
         }
 
@@ -159,6 +160,7 @@ public class RequestHandler implements HttpHandler {
                         INTERNAL_SERVER_ERROR, "Could not retrieve the user " +
                         "information.");
                 respond(errorResponse, exchange);
+                return;
             }
         }
 
@@ -173,9 +175,8 @@ public class RequestHandler implements HttpHandler {
 			return;
 		}
 
-        if(commandClass.equals(ProcessCommands.class)) {
-            respond(
-                    new ProcessResponse(HttpStatusCode.NOT_IMPLEMENTED),
+        if (commandClass.equals(ProcessCommands.class)) {
+            respond(new ProcessResponse(HttpStatusCode.NOT_IMPLEMENTED),
                     exchange);
 //            respond(new ProcessResponse(HttpStatusCode.OK), exchange);
         } else {
