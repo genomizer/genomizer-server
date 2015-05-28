@@ -91,12 +91,29 @@ public class UpdateExperimentTest {
     }
 
     @Test
+    public void shouldUpdateSingleAnnotation() throws Exception {
+
+        String exp1 = "Exp1";
+
+        HashMap<String, String> orig = dbac.getExperiment(exp1).getAnnotations();
+        HashMap<String, String> kv = new HashMap<>();
+
+        String rat = "Rat";
+        kv.put("Species", rat);
+        dbac.updateExperiment(exp1, kv);
+        Experiment e = dbac.getExperiment(exp1);
+        assertTrue(e.getAnnotations().get("Species").equals(rat));
+
+        dbac.updateExperiment(exp1, orig);
+    }
+
+    @Test
     public void shouldUpdateLotsOfAnnotations() throws Exception {
 
         String exp1 = "Exp1";
 
         HashMap<String, String> orig = dbac.getExperiment(exp1).getAnnotations();
-        HashMap<String, String> kv = new HashMap<String, String>();
+        HashMap<String, String> kv = new HashMap<>();
 
         String rat = "Rat";
         String male = "Male";
@@ -125,7 +142,7 @@ public class UpdateExperimentTest {
         String exp1 = "Exp1";
 
         HashMap<String, String> orig = dbac.getExperiment(exp1).getAnnotations();
-        HashMap<String, String> kv = new HashMap<String, String>();
+        HashMap<String, String> kv = new HashMap<>();
 
         String rat = "Rat";
         String male = "Male";
@@ -138,7 +155,7 @@ public class UpdateExperimentTest {
         kv.put("Species2", nonexistent);
         try {
             dbac.updateExperiment(exp1, kv);
-        } catch (IOException e) { }
+        } catch (IOException ignored) { }
 
         Experiment e = dbac.getExperiment(exp1);
 
@@ -153,17 +170,16 @@ public class UpdateExperimentTest {
     public void shouldThrowUpdateWhenInvalidAnnotationValue() throws Exception {
 
         String exp1 = "Exp1";
-        HashMap<String, String> kv = new HashMap<String, String>();
+        HashMap<String, String> kv = new HashMap<>();
 
         String rat = "Rat";
         String male = "Male";
         String hair = "Hair";
-        String empty = null;
 
         kv.put("Species", rat);
         kv.put("Sex", male);
         kv.put("Tissue", hair);
-        kv.put("Development_Stage", empty);
+        kv.put("Development_Stage", null);
 
         dbac.updateExperiment(exp1, kv);
     }
@@ -179,24 +195,21 @@ public class UpdateExperimentTest {
         String rat = "Rat";
         String male = "Male";
         String hair = "Hair";
-        String empty = null;
 
         kv.put("Species", rat);
         kv.put("Sex", male);
         kv.put("Tissue", hair);
-        kv.put("Development_Stage", empty);
+        kv.put("Development_Stage", null);
 
         try {
             dbac.updateExperiment(exp1, kv);
-        } catch (IOException e) {
-
-        }
+        } catch (IOException ignored) {}
         Experiment e = dbac.getExperiment(exp1);
 
         assertFalse(e.getAnnotations().get("Species").equals(rat));
         assertFalse(e.getAnnotations().get("Sex").equals(male));
         assertFalse(e.getAnnotations().get("Tissue").equals(hair));
-        assertFalse(e.getAnnotations().get("Development_Stage").equals(empty));
+        assertFalse(e.getAnnotations().get("Development_Stage").equals(null));
 
         dbac.updateExperiment(exp1, orig);
     }
@@ -207,7 +220,7 @@ public class UpdateExperimentTest {
         String exp1 = "Exp1";
 
         HashMap<String, String> orig = dbac.getExperiment(exp1).getAnnotations();
-        HashMap<String, String> kv = new HashMap<String, String>();
+        HashMap<String, String> kv = new HashMap<>();
 
         String alien = "Alien";
         String male = "Male";
@@ -220,7 +233,7 @@ public class UpdateExperimentTest {
         kv.put("Species2", nonexistent);
         try {
             dbac.updateExperiment(exp1, kv);
-        } catch (IOException e) { }
+        } catch (IOException ignored) { }
 
         Experiment e = dbac.getExperiment(exp1);
 
@@ -237,7 +250,7 @@ public class UpdateExperimentTest {
         String exp1 = "Exp1";
 
         HashMap<String, String> orig = dbac.getExperiment(exp1).getAnnotations();
-        HashMap<String, String> kv = new HashMap<String, String>();
+        HashMap<String, String> kv = new HashMap<>();
 
         String human = "Human";
         String male = "Male";
@@ -263,8 +276,7 @@ public class UpdateExperimentTest {
 
         Experiment e = dbac.getExperiment(expID);
         HashMap<String, String> hm = e.getAnnotations();
-        String res = hm.get(label);
 
-        return res;
+        return hm.get(label);
     }
 }
