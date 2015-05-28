@@ -1,5 +1,6 @@
 package command.file;
 
+import authentication.Authenticate;
 import com.google.gson.annotations.Expose;
 import command.Command;
 import command.UserRights;
@@ -23,17 +24,24 @@ import java.sql.SQLException;
 public class PostFileCommand extends Command {
 	@Expose
 	private String experimentID = null;
+
 	@Expose
 	private String fileName = null;
+
 	@Expose
 	private String type = null;
+
 	@Expose
 	private String metaData = null;
+
 	@Expose
 	private String author = null;
+
 	private String uploader;
+
 	@Expose
 	private String grVersion = null;
+
 	@Expose
 	private String checkSumMD5 = null;
 
@@ -44,12 +52,13 @@ public class PostFileCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-		uploader = userName;
+
+		uploader = Authenticate.getUsernameByID(uuid);
+
 		hasRights(UserRights.getRights(this.getClass()));
 		validateName(experimentID, MaxLength.EXPID, "Experiment name");
 		validateName(type, MaxLength.FILE_FILETYPE, "File type");
 		validateName(author, MaxLength.FILE_AUTHOR, "Author");
-		validateName(uploader, MaxLength.FILE_UPLOADER, "Uploader");
 		validateName(grVersion, MaxLength.FILE_GRVERSION, "Genome release");
 		validateName(fileName, MaxLength.FILE_FILENAME, "Filename");
 		validateExists(metaData, MaxLength.FILE_METADATA, "Metadata");
