@@ -24,6 +24,11 @@ import static command.Command.initDB;
  */
 
 public class RatioProcessCommand extends ProcessCommand {
+
+    /**
+     * Validate to make sure all input from clients is in correct format.
+     * @throws ValidateException
+     */
     @Override
     public void validate() throws ValidateException {
         for(RatioProcessFile file: files) {
@@ -32,7 +37,10 @@ public class RatioProcessCommand extends ProcessCommand {
             Command.validateName(file.getOutfile(), MaxLength.FILE_FILENAME, "Outfile");
             if(!file.getMean().equals("single")&&!file.getMean().equals("double")){
                 throw new ValidateException(HttpStatusCode.BAD_REQUEST,
-                        "Incorrect mean, should be 'single' or 'double'");
+                        "Incorrect mean, should be 'single' or 'double'.");
+            }
+            if(file.getReadsCutoff()<0){
+                throw new ValidateException(HttpStatusCode.BAD_REQUEST, "ReadsCutOff should not be less than 0.");
             }
         }
     }
@@ -44,9 +52,7 @@ public class RatioProcessCommand extends ProcessCommand {
         }
     }
 
-    public ArrayList<RatioProcessFile> getFiles() {
-        return files;
-    }
+    public ArrayList<RatioProcessFile> getFiles() {return files;}
 
     @Override
     public String toString() {
@@ -82,27 +88,17 @@ public class RatioProcessCommand extends ProcessCommand {
         @Expose
         private String chromosome;
 
-        public String getPreChipFile() {
-            return preChipFile;
-        }
+        public String getPreChipFile() {return preChipFile;}
 
-        public String getPostChipFile() {return postChipFile;        }
+        public String getPostChipFile() {return postChipFile;}
 
-        public String getOutfile() {
-            return outfile;
-        }
+        public String getOutfile() {return outfile;}
 
-        public String getMean() {
-            return mean;
-        }
+        public String getMean() {return mean;}
 
-        public int getReadsCutoff() {
-            return readsCutoff;
-        }
+        public int getReadsCutoff() {return readsCutoff;}
 
-        public String getChromosome() {
-            return chromosome;
-        }
+        public String getChromosome() {return chromosome;}
 
 
         @Override
@@ -118,12 +114,12 @@ public class RatioProcessCommand extends ProcessCommand {
         }
 
         /**
-         * Call upon a single raw to profile processing with correct parameters.
+         * Call upon a ratio processing with correct parameters.
          *
          * @param filePaths
          */
         public void ProcessFile(Map.Entry<String, String> filePaths) {
-
+            throw new UnsupportedOperationException("Error when processing. Ratio processing not yet implemented!");
         }
     }
 }
