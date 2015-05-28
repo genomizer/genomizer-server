@@ -24,6 +24,7 @@ import java.util.HashMap;
  * @version 1.1
  */
 public class DeleteAnnotationFieldCommand extends Command {
+
 	private String label;
 
 	@Override
@@ -33,8 +34,9 @@ public class DeleteAnnotationFieldCommand extends Command {
 
 	@Override
 	public void setFields(String uri, HashMap<String, String> query,
-						  String username, UserType userType) {
-		super.setFields(uri, query, username, userType);
+						  String uuid, UserType userType) {
+
+		super.setFields(uri, query, uuid, userType);
 		label = uri.split("/")[3];
 	}
 

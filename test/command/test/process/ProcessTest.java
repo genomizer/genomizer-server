@@ -17,18 +17,18 @@ import java.util.UUID;
  */
 public class ProcessTest {
 
-	/**
-	 * Test used to check that creation works and object
-	 * is not null.
-	 */
-	@SuppressWarnings("deprecation")
-	@Test
-	public void testCreationNotNull() {
+    /**
+     * Test used to check that creation works and object
+     * is not null.
+     */
+    @SuppressWarnings("deprecation")
+    @Test
+    public void testCreationNotNull() {
 
-		PutProcessCommand cmd = new PutProcessCommand();
-		Process c = new Process(cmd);
-		c.PID = UUID.randomUUID().toString();
-		assertNotNull(c);
-	}
+        PutProcessCommand cmd = new PutProcessCommand();
+        Process c = new Process(cmd);
+        c.PID = UUID.randomUUID().toString();
+        assertNotNull(c);
+    }
 
 }

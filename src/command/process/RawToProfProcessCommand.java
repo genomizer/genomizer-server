@@ -36,6 +36,10 @@ public class RawToProfProcessCommand extends ProcessCommand {
             Command.validateName(file.getInfile(), MaxLength.FILE_FILENAME, "Infile");
             Command.validateName(file.getOutfile(), MaxLength.FILE_FILENAME, "Outfile");
             Command.validateName(file.getGenomeVersion(), MaxLength.GENOME_VERSION, "Genome version");
+            Command.validateExists(file.getParams(), MaxLength.FILE_METADATA, "Parameters");
+            if(file.shouldKeepSam()==null) {
+                throw new ValidateException(HttpStatusCode.BAD_REQUEST, "KeepSam can not be null.");
+            }
         }
     }
 
@@ -82,7 +86,7 @@ public class RawToProfProcessCommand extends ProcessCommand {
         private String genomeVersion;
 
         @Expose
-        private boolean keepSam;
+        private Boolean keepSam;
 
 
         public String getInfile() {
@@ -101,7 +105,7 @@ public class RawToProfProcessCommand extends ProcessCommand {
             return genomeVersion;
         }
 
-        public boolean shouldKeepSam() {
+        public Boolean shouldKeepSam() {
             return keepSam;
         }
 

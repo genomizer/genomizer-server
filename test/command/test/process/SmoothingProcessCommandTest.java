@@ -20,8 +20,7 @@ public class SmoothingProcessCommandTest {
                         "\"files\":[{\"infile\":\"bigtest1.fastq\"," +
                         "\"outfile\":\"awe\",\"windowSize\":\"3\"," +
                         "\"meanOrMedian\":\"mean\"," +
-                        "\"minSmooth\":\"2\"}]}, {\"type\":\"ratio\", \"infile1\": " +
-                        "\"infile1Name\", \"infile2\": \"infile2Name\"}]}";
+                        "\"minSmooth\":\"2\"}]}]}";
         ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
@@ -35,8 +34,7 @@ public class SmoothingProcessCommandTest {
                         "\"files\":[{\"infile\":\"bigte€st1.fastq\"," +
                         "\"outfile\":\"awe\",\"windowSize\":\"3\"," +
                         "\"meanOrMedian\":\"mean\"," +
-                        "\"minSmooth\":\"2\"}]}, {\"type\":\"ratio\", \"infile1\": " +
-                        "\"infile1Name\", \"infile2\": \"infile2Name\"}]}";
+                        "\"minSmooth\":\"2\"}]}]}";
         ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
@@ -55,8 +53,7 @@ public class SmoothingProcessCommandTest {
                         "\"files\":[{\"infile\":\""+s+"\"," +
                         "\"outfile\":\"awe\",\"windowSize\":\"3\"," +
                         "\"meanOrMedian\":\"median\"," +
-                        "\"minSmooth\":\"2\"}]}, {\"type\":\"ratio\", \"infile1\": " +
-                        "\"infile1Name\", \"infile2\": \"infile2Name\"}]}";
+                        "\"minSmooth\":\"2\"}]}]}";
         ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
@@ -70,8 +67,7 @@ public class SmoothingProcessCommandTest {
                         "\"files\":[{\"infile\":\"bigtest1.fastq\"," +
                         "\"outfile\":\"awe¤\",\"windowSize\":\"3\"," +
                         "\"meanOrMedian\":\"mean\"," +
-                        "\"minSmooth\":\"2\"}]}, {\"type\":\"ratio\", \"infile1\": " +
-                        "\"infile1Name\", \"infile2\": \"infile2Name\"}]}";
+                        "\"minSmooth\":\"2\"}]}]}";
         ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
@@ -89,8 +85,7 @@ public class SmoothingProcessCommandTest {
                         "\"files\":[{\"infile\":\"asdwss\"," +
                         "\"outfile\":\""+s+"\",\"windowSize\":\"3\"," +
                         "\"meanOrMedian\":\"mean\"," +
-                        "\"minSmooth\":\"2\"}]}, {\"type\":\"ratio\", \"infile1\": " +
-                        "\"infile1Name\", \"infile2\": \"infile2Name\"}]}";
+                        "\"minSmooth\":\"2\"}]}]}";
         ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
@@ -103,8 +98,7 @@ public class SmoothingProcessCommandTest {
                         "\"files\":[{\"infile\":\"bigtest1.fastq\"," +
                         "\"outfile\":\"awe\",\"windowSize\":\"3\"," +
                         "\"meanOrMedian\":\"meand\"," +
-                        "\"minSmooth\":\"2\"}]}, {\"type\":\"ratio\", \"infile1\": " +
-                        "\"infile1Name\", \"infile2\": \"infile2Name\"}]}";
+                        "\"minSmooth\":\"2\"}]}]}";
         ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
@@ -117,8 +111,7 @@ public class SmoothingProcessCommandTest {
                         "\"files\":[{\"infile\":\"bigtest1.fastq\"," +
                         "\"outfile\":\"awe\",\"windowSize\":\"2\"," +
                         "\"meanOrMedian\":\"mean\"," +
-                        "\"minSmooth\":\"2\"}]}, {\"type\":\"ratio\", \"infile1\": " +
-                        "\"infile1Name\", \"infile2\": \"infile2Name\"}]}";
+                        "\"minSmooth\":\"2\"}]}]}";
         ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
@@ -131,8 +124,7 @@ public class SmoothingProcessCommandTest {
                         "\"files\":[{\"infile\":\"bigtest1.fastq\"," +
                         "\"outfile\":\"awe\",\"windowSize\":\"2\"," +
                         "\"meanOrMedian\":\"mean\"," +
-                        "\"minSmooth\":\"-1\"}]}, {\"type\":\"ratio\", \"infile1\": " +
-                        "\"infile1Name\", \"infile2\": \"infile2Name\"}]}";
+                        "\"minSmooth\":\"-1\"}]}]}";
         ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
@@ -145,8 +137,7 @@ public class SmoothingProcessCommandTest {
                         "\"files\":[{\"infile\":\"bigtest1.fastq\"," +
                         "\"outfile\":\"awe\",\"windowSize\":\"-1\"," +
                         "\"meanOrMedian\":\"mean\"," +
-                        "\"minSmooth\":\"-2\"}]}, {\"type\":\"ratio\", \"infile1\": " +
-                        "\"infile1Name\", \"infile2\": \"infile2Name\"}]}";
+                        "\"minSmooth\":\"-2\"}]}]}";
         ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
