@@ -200,7 +200,7 @@ public class UserMethods {
 	public int updateUser(String username, UserType role, String fullName,
 						  String email) throws SQLException, IOException {
 		isValidArgument(username);
-		isValidArgument(role.name());
+		isValidArgument(role.toString());
 		isValidArgument(fullName);
 		isValidArgument(email);
 		String query = "UPDATE User_Info" +
