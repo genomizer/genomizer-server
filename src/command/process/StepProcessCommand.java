@@ -8,6 +8,7 @@ import process.Step;
 import response.HttpStatusCode;
 import response.ProcessResponse;
 import response.Response;
+import server.Debug;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,7 +17,8 @@ import java.util.concurrent.Callable;
 
 
 /**
- * Class is used to handle step processing. The command can include multiple file packages to run one at a time.
+ * Class is used to handle step processing. The command can include multiple
+ * file packages to run one at a time.
  */
 public class StepProcessCommand extends ProcessCommand {
 
@@ -29,15 +31,25 @@ public class StepProcessCommand extends ProcessCommand {
      */
     @Override
     public void validate() throws ValidateException {
-        for(StepProcessFile file: files) {
-            Command.validateName(file.getInfile(), MaxLength.FILE_FILENAME, "Infile");
-            Command.validateName(file.getOutfile(), MaxLength.FILE_FILENAME, "Outfile");
-            if(file.getStepSize()==null) {
-                throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Error validating StepProcessCommand. " +
-                                                                        "StepSize can not be null.");
+        for (StepProcessFile file : files) {
+            Command.validateName(
+                    file.getInfile(),
+                    MaxLength.FILE_FILENAME,
+                    "Infile");
+            Command.validateName(
+                    file.getOutfile(),
+                    MaxLength.FILE_FILENAME,
+                    "Outfile");
+            if (file.getStepSize() == null) {
+                throw new ValidateException(
+                        HttpStatusCode.BAD_REQUEST,
+                        "Error validating StepProcessCommand. " +
+                        "StepSize can not be null.");
             }
-            if(file.getStepSize()<1) {
-                throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Error validating StepProcessCommand. " +
+            if (file.getStepSize() < 1) {
+                throw new ValidateException(
+                        HttpStatusCode.BAD_REQUEST,
+                        "Error validating StepProcessCommand. " +
                         "Step size must be a positive integer");
             }
         }
@@ -49,7 +61,7 @@ public class StepProcessCommand extends ProcessCommand {
             String rawFilesDir,
             String profileFilesDir) {
         Collection<Callable<Response>> callables = new ArrayList<>();
-        for (StepProcessFile file: files) {
+        for (StepProcessFile file : files) {
             callables.add(file.getCallable());
         }
         return callables;
@@ -78,28 +90,29 @@ public class StepProcessCommand extends ProcessCommand {
         @Override
         public String toString() {
             return "RawToProfProcessFile{" +
-                    "infile='" + infile + '\'' +
-                    ", outfile='" + outfile + '\'' +
-                    ", stepSize='" + stepSize + '\'' +
-                    '}';
+                   "infile='" + infile + '\'' +
+                   ", outfile='" + outfile + '\'' +
+                   ", stepSize='" + stepSize + '\'' +
+                   '}';
         }
 
         public Callable<Response> getCallable() {
             return new Callable<Response>() {
-                @SuppressWarnings("TryWithIdenticalCatches")
                 @Override
                 public Response call() throws Exception {
                     try {
                         Step.runStep(infile, outfile, stepSize);
                         return new ProcessResponse(HttpStatusCode.OK);
-                    } catch (ValidateException ve) {
-                        ve.printStackTrace();
-                    } catch (InterruptedException ie) {
-                        ie.printStackTrace();
-                    } catch (IOException ioe) {
-                        ioe.printStackTrace();
+                    } catch (ValidateException | InterruptedException |
+                            IOException e) {
+                        e.printStackTrace();
+                        Debug.log(
+                                "Unable to perform stepping: " +
+                                e.getMessage());
+                        return new ProcessResponse(
+                                HttpStatusCode.INTERNAL_SERVER_ERROR,
+                                e.getMessage());
                     }
-                    return new ProcessResponse(HttpStatusCode.INTERNAL_SERVER_ERROR);
                 }
             };
         }

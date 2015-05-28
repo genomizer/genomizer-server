@@ -2,7 +2,6 @@ package process;
 
 import command.ValidateException;
 import server.Debug;
-import server.ServerSettings;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,10 +12,11 @@ import java.util.ArrayList;
  * Class which is responsible for running smoothing.
  */
 public class Smooth extends Executor {
-    private SmoothingParameters parameters;
-    private static String smoothingScriptCmd   = "expect smooth_v4.sh";
-    private static String smoothingScriptSh    = "smooth_v4.sh";
-    private static String smoothingScriptPerl  = "smooth_v4.pl";
+
+    private final SmoothingParameters parameters;
+    private static final String smoothingScriptCmd   = "expect smooth_v4.sh";
+    private static final String smoothingScriptSh    = "smooth_v4.sh";
+    private static final String smoothingScriptPerl  = "smooth_v4.pl";
 
     public Smooth(String path,
                   int    windowSize,
@@ -50,7 +50,7 @@ public class Smooth extends Executor {
     }
 
     public String execute() throws IOException, InterruptedException {
-        ArrayList<String> args = new ArrayList<String>();
+        ArrayList<String> args = new ArrayList<>();
 
         /* Time to build our command */
         args.add(smoothingScriptCmd);
@@ -60,7 +60,7 @@ public class Smooth extends Executor {
         args.add(String.valueOf(parameters.getCalcTotalMean()));
         args.add(String.valueOf(parameters.getPrintPos()));
 
-        return executeCommand(args.toArray(new String []{}));
+        return executeCommand(args.toArray(new String[args.size()]));
     }
 
     public static void runSmoothing(String path, int windowSize, int meanType,
@@ -83,7 +83,7 @@ public class Smooth extends Executor {
 
         /* Ensure the smoothing directory is created. */
         if (!new File(expectedPath).exists())
-            new File(expectedPath).mkdir();
+            new File(expectedPath).mkdirs();
 
         smooth.execute();
         Debug.log("Executed smoothing on " + path);

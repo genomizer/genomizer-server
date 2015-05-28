@@ -17,7 +17,6 @@ import java.sql.SQLException;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Map;
 import java.util.concurrent.Callable;
 
 import static command.Command.initDB;
@@ -144,8 +143,8 @@ public class RawToProfProcessCommand extends ProcessCommand {
         /**
          * Call upon a single raw to profile processing with correct parameters.
          *
-         * @param rawFilesDir
-         * @param profileFilesDir
+         * @param rawFilesDir Location of raw files for experiment.
+         * @param profileFilesDir Location of profile files for experiment.
          * @throws IOException
          * @throws SQLException
          * @throws ProcessException
@@ -223,15 +222,18 @@ public class RawToProfProcessCommand extends ProcessCommand {
                                 "Error when processing. Could not execute raw" +
                                 " to profile process due to temporary " +
                                 "problems with database " + e.getMessage());
+                        return new ProcessResponse(
+                                HttpStatusCode
+                                        .INTERNAL_SERVER_ERROR, e.getMessage());
                     } catch (ProcessException e) {
                         Debug.log(
                                 "Error when processing. Could not execute raw" +
                                 " to profile process. " +
                                 e.getMessage());
+                        return new ProcessResponse(
+                                HttpStatusCode
+                                        .INTERNAL_SERVER_ERROR, e.getMessage());
                     }
-                    return new ProcessResponse(
-                            HttpStatusCode
-                                    .INTERNAL_SERVER_ERROR);
                 }
             };
         }

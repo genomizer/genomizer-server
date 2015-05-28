@@ -4,15 +4,14 @@ import com.google.gson.annotations.Expose;
 import command.Command;
 import command.ValidateException;
 import database.constants.MaxLength;
-import response.HttpStatusCode;
 import process.Smooth;
+import response.HttpStatusCode;
 import response.ProcessResponse;
 import response.Response;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Map;
 import java.util.concurrent.Callable;
 
 /**
