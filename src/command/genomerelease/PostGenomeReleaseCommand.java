@@ -40,12 +40,19 @@ public class PostGenomeReleaseCommand extends Command {
 		validateName(specie, MaxLength.GENOME_SPECIES, "Species");
 		validateName(genomeVersion, MaxLength.GENOME_VERSION, "Genome version");
 
+		if (files == null || files.isEmpty()) {
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST,
+					"Specify files for the genome");
+		}
+
 		for(String fileName : files) {
 			validateName(fileName, MaxLength.GENOME_FILEPATH, "File name");
 		}
 
-		for (String checkSumMD5 : checkSumsMD5) {
-			validateMD5(checkSumMD5);
+		if (checkSumsMD5 != null) {
+			for (String checkSumMD5 : checkSumsMD5) {
+				validateMD5(checkSumMD5);
+			}
 		}
 	}
 
