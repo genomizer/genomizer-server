@@ -479,7 +479,7 @@ public class FileMethods {
 	public FileTuple addGeneratedFile(String expId, int fileType,
 			String filePath, String inputFileName, String metaData,
 			String uploader, boolean isPrivate, String grVersion,
-			String checkSumMD5)
+			String checkSumMD5, long fileSize)
 			throws SQLException, IOException {
 
 		Experiment e = expMethods.getExperiment(expId);
@@ -498,9 +498,9 @@ public class FileMethods {
 
 		String query = "INSERT INTO File "
 				+ "(Path, FileType, FileName, Date, MetaData, InputFilePath, "
-				+ "Author, Uploader, IsPrivate, ExpID, GRVersion, Status, MD5) "
+				+ "Author, Uploader, IsPrivate, ExpID, GRVersion, Status, MD5, FileSize) "
 				+ "VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?, 'Genomizer',"
-				+ " ?, ?, ?, ?, 'Done', ?)";
+				+ " ?, ?, ?, ?, 'Done', ?, ?)";
 		PreparedStatement stmt = conn.prepareStatement(query);
 		stmt.setString(1, filePath);
 
@@ -527,7 +527,7 @@ public class FileMethods {
 		stmt.setString(8, expId);
 		stmt.setString(9, grVersion);
 		stmt.setString(10, checkSumMD5);
-
+		stmt.setLong(11, fileSize);
 		stmt.executeUpdate();
 		stmt.close();
 

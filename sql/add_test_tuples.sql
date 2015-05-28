@@ -100,8 +100,7 @@ INSERT INTO Experiment VALUES('ExpSmall');
 INSERT INTO Experiment VALUES('ExpBig');
 
 
-INSERT INTO Genome_Release VALUES('GenomV1', 'Insect', '/data/pvtfiles/genome/');
-
+INSERT INTO Genome_Release VALUES('GenomV1', 'Insect', '/data/genome_releases/Incect/GenomV1/');
 
 INSERT INTO Genome_Release_Files VALUES('GenomV1', 'd_melanogaster_fb5_22.1.ebwt', NULL, 'Done');
 INSERT INTO Genome_Release_Files VALUES('GenomV1', 'd_melanogaster_fb5_22.2.ebwt', NULL, 'Done');
@@ -110,10 +109,12 @@ INSERT INTO Genome_Release_Files VALUES('GenomV1', 'd_melanogaster_fb5_22.4.ebwt
 INSERT INTO Genome_Release_Files VALUES('GenomV1', 'd_melanogaster_fb5_22.rev.1.ebwt', NULL, 'Done');
 INSERT INTO Genome_Release_Files VALUES('GenomV1', 'd_melanogaster_fb5_22.rev.2.ebwt', NULL, 'Done');
 
-INSERT INTO File VALUES(DEFAULT, '/data/pvtfiles/raw/smalltest1.fastq', 'Raw', 'smalltest1.fastq', CURRENT_TIMESTAMP, NULL, NULL, 'UCSC', 'user1', 'false', 'ExpSmall', 'GenomV1', 'Done', NULL);
-INSERT INTO File VALUES(DEFAULT, '/data/pvtfiles/raw/smalltest2.fastq', 'Raw', 'smalltest2.fastq', CURRENT_TIMESTAMP, NULL, NULL, 'UCSC', 'user1', 'false', 'ExpSmall', 'GenomV1', 'Done', NULL);
-INSERT INTO File VALUES(DEFAULT, '/data/pvtfiles/raw/bigtest1.fastq', 'Raw', 'bigtest1.fastq', CURRENT_TIMESTAMP, NULL, NULL, 'UCSC', 'user1', 'false', 'ExpBig', 'GenomV1', 'Done', NULL);
-INSERT INTO File VALUES(DEFAULT, '/data/pvtfiles/raw/bigtest2.fastq', 'Raw', 'bigtest2.fastq', CURRENT_TIMESTAMP, NULL, NULL, 'UCSC', 'user1', 'false', 'ExpBig', 'GenomV1', 'Done', NULL);
+
+
+INSERT INTO File VALUES(DEFAULT, '/data/ExpSmall/raw/smalltest1.fastq', 'Raw', 'smalltest1.fastq', CURRENT_TIMESTAMP, NULL, NULL, 'UCSC', 'user1', 'false', 'ExpSmall', 'GenomV1', 'Done', NULL);
+INSERT INTO File VALUES(DEFAULT, '/data/ExpSmall/raw/smalltest2.fastq', 'Raw', 'smalltest2.fastq', CURRENT_TIMESTAMP, NULL, NULL, 'UCSC', 'user1', 'false', 'ExpSmall', 'GenomV1', 'Done', NULL);
+INSERT INTO File VALUES(DEFAULT, '/data/ExpBig/raw/bigtest1.fastq', 'Raw', 'bigtest1.fastq', CURRENT_TIMESTAMP, NULL, NULL, 'UCSC', 'user1', 'false', 'ExpBig', 'GenomV1', 'Done', NULL);
+INSERT INTO File VALUES(DEFAULT, '/data/ExpBig/raw/bigtest2.fastq', 'Raw', 'bigtest2.fastq', CURRENT_TIMESTAMP, NULL, NULL, 'UCSC', 'user1', 'false', 'ExpBig', 'GenomV1', 'Done', NULL);
 
 
 
