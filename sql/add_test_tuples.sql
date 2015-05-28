@@ -100,7 +100,7 @@ INSERT INTO Experiment VALUES('ExpSmall');
 INSERT INTO Experiment VALUES('ExpBig');
 
 
-INSERT INTO Genome_Release VALUES('GenomV1', 'Insect', '/data/pvtfiles/genome/');
+INSERT INTO Genome_Release VALUES('GenomV1', 'Insect', '/data/genome_releases/Insect/GenomV1/');
 
 
 INSERT INTO Genome_Release_Files VALUES('GenomV1', 'd_melanogaster_fb5_22.1.ebwt', NULL, 'Done');
