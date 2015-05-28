@@ -107,7 +107,7 @@ public class Pyicos extends Executor {
             args.add(additionalParam);
         }
 
-        return executeProgram(args.toArray(new String[]{}));
+        return executeCommand(args.toArray(new String[]{}));
     }
 
     public void cleanupTempFiles() {
