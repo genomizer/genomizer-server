@@ -102,7 +102,24 @@ public class UploadHandler {
         };
         List<FileItem> fileItems = fileUpload.parseRequest(ctx);
 
-        // Move uploaded files to uploadDir.
+        /* Send response to client */
+        OutputStream out = exchange.getResponseBody();
+        byte[] resp = null;
+        if (fileItems.size() > 0) {
+            // Report success to the client.
+            resp = "OK".getBytes();
+            exchange.sendResponseHeaders(HttpStatusCode.OK, resp.length);
+
+        } else {
+            resp = "ERROR".getBytes();
+            exchange.sendResponseHeaders(HttpStatusCode.BAD_REQUEST, resp.length);
+        }
+
+        out.write(resp);
+        out.close();
+        Debug.log("END OF EXCHANGE\n------------------");
+
+        /* Move uploaded files to uploadDir */
         URI requestURI = exchange.getRequestURI();
         HashMap<String,String> reqParams = new HashMap<>();
         String reqPath = Util.parseURI(requestURI, reqParams);
@@ -118,24 +135,21 @@ public class UploadHandler {
 
         for (FileItem fileItem : fileItems) {
             if (!fileItem.isFormField()) {
+
                 File outFile = new File(absUploadPath == null
                         ? this.uploadDir + fileItem.getName()
                         : absUploadPath);
-                commitFile(absUploadPath, fileItem);
+
                 outFile.getParentFile().mkdirs();
                 fileItem.write(outFile);
+                commitFile(absUploadPath, fileItem);
+
                 Debug.log("Successfully saved the uploaded file to '"
                         + outFile.toString() + "'.");
             }
         }
 
-        // Report success to the client.
-        byte [] resp = "OK".getBytes();
-        exchange.sendResponseHeaders(HttpStatusCode.OK, resp.length);
-        OutputStream out = exchange.getResponseBody();
-        out.write(resp);
-        out.close();
-        Debug.log("END OF EXCHANGE\n------------------");
+
     }
 
     // Verify the file's integrity and mark it as available for downloading.
@@ -143,11 +157,11 @@ public class UploadHandler {
             throws SQLException, ValidateException, IOException {
         try( DatabaseAccessor db = Command.initDB() )
         {
-            String actualMD5 = DigestUtils.md5Hex(fileItem.getInputStream());
+            //String actualMD5 = DigestUtils.md5Hex(fileItem.getInputStream());
 
             FileTuple  ft = db.getFileTupleInProgress(absUploadPath);
             if (ft != null) {
-                verifyOrUpdateMD5(ft, actualMD5, db);
+                //verifyOrUpdateMD5(ft, actualMD5, db);
                 int count = db.markReadyForDownload(ft);
                 checkMarkReadyForDownloadSucceeded(count, ft.filename);
                 db.updateFileSize(ft, fileItem.getSize());
@@ -156,7 +170,7 @@ public class UploadHandler {
 
             GenomeFile gf = db.getGenomeReleaseFileInProgress(absUploadPath);
             if (gf != null) {
-                verifyOrUpdateMD5(gf, actualMD5, db);
+                //verifyOrUpdateMD5(gf, actualMD5, db);
                 int count = db.markReadyForDownload(gf);
                 checkMarkReadyForDownloadSucceeded(count, gf.fileName);
                 return;
@@ -164,7 +178,7 @@ public class UploadHandler {
 
             ChainFile cf = db.getChainFileInProgress(absUploadPath);
             if (cf != null) {
-                verifyOrUpdateMD5(cf, actualMD5, db);
+                //verifyOrUpdateMD5(cf, actualMD5, db);
                 int count = db.markReadyForDownload(cf);
                 checkMarkReadyForDownloadSucceeded(count, cf.fileName);
                 return;
