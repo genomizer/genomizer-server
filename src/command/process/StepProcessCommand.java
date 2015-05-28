@@ -4,7 +4,6 @@ import com.google.gson.annotations.Expose;
 import command.Command;
 import command.ValidateException;
 import database.constants.MaxLength;
-import process.Ratio;
 import process.Step;
 import response.HttpStatusCode;
 import response.ProcessResponse;
@@ -13,7 +12,6 @@ import response.Response;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Map;
 import java.util.concurrent.Callable;
 
 
@@ -21,6 +19,9 @@ import java.util.concurrent.Callable;
  * Class is used to handle step processing. The command can include multiple file packages to run one at a time.
  */
 public class StepProcessCommand extends ProcessCommand {
+
+    @Expose
+    protected ArrayList<StepProcessFile> files;
 
     /**
      * Validate to make sure all input from clients is in correct format.
@@ -43,19 +44,10 @@ public class StepProcessCommand extends ProcessCommand {
 
     }
 
-    public ArrayList<StepProcessFile> getFiles() {return files;}
-
     @Override
-    public String toString() {
-        return "StepProcessingCommand{" +
-                "files=" + files +
-                '}';
-    }
-    @Expose
-    private ArrayList<StepProcessFile> files;
-
-    @Override
-    protected Collection<Callable<Response>> getCallables() {
+    protected Collection<Callable<Response>> getCallables(
+            String rawFilesDir,
+            String profileFilesDir) {
         Collection<Callable<Response>> callables = new ArrayList<>();
         for (StepProcessFile file: files) {
             callables.add(file.getCallable());
@@ -63,21 +55,19 @@ public class StepProcessCommand extends ProcessCommand {
         return callables;
     }
 
+    /**
+     * Class is used to start a single step processing with correct parameters.
+     */
     public class StepProcessFile {
 
-        /**
-         * Class is used to start a single step processing with correct parameters.
-         */
+        @Expose
+        protected String infile;
 
         @Expose
-        private String infile;
+        protected String outfile;
 
         @Expose
-        private String outfile;
-
-        @Expose
-        private Integer stepSize;
-
+        protected Integer stepSize;
 
         public String getInfile() {return infile;}
 
@@ -93,14 +83,6 @@ public class StepProcessCommand extends ProcessCommand {
                     ", stepSize='" + stepSize + '\'' +
                     '}';
         }
-
-//        /**
-//         * Call upon a single step processing with correct parameters.
-//         * @param filePaths
-//         */
-//        public void processFile(Map.Entry<String, String> filePaths) {
-//            throw new UnsupportedOperationException("Error when processing. Step processing not implemented.");
-//        }
 
         public Callable<Response> getCallable() {
             return new Callable<Response>() {
@@ -121,5 +103,14 @@ public class StepProcessCommand extends ProcessCommand {
                 }
             };
         }
+    }
+
+    public ArrayList<StepProcessFile> getFiles() {return files;}
+
+    @Override
+    public String toString() {
+        return "StepProcessingCommand{" +
+               "files=" + files +
+               '}';
     }
 }

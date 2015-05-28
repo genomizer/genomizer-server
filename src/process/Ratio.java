@@ -91,14 +91,14 @@ public class Ratio extends Executor {
         SINGLE,
         DOUBLE;
 
-        public static Mean getMean(String mean) {
+        public static Mean getMean(String mean) throws ValidateException {
             switch (mean) {
                 case "single":
                     return SINGLE;
                 case "double":
                     return DOUBLE;
                 default:
-                    throw new IllegalArgumentException(
+                    throw new ValidateException(0,
                             "Invalid mean setting: " + mean);
             }
         }

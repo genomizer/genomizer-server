@@ -8,23 +8,20 @@ import process.Ratio;
 import response.HttpStatusCode;
 import response.ProcessResponse;
 import response.Response;
-import server.Doorman;
-import server.ProcessPool;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 /**
  * Class handles a ratio processing command. The command can include multiple
  * file packages to run one at a time.
  */
 public class RatioProcessCommand extends ProcessCommand {
+
+    @Expose
+    protected ArrayList<RatioProcessFile> files;
 
     /**
      * Validate to make sure all input from clients is in correct format.
@@ -64,51 +61,40 @@ public class RatioProcessCommand extends ProcessCommand {
         }
     }
 
-    public ArrayList<RatioProcessFile> getFiles() {return files;}
-
     @Override
-    public String toString() {
-        return "RatioProcessCommand{" +
-               "files=" + files +
-               '}';
-    }
-
-    @Expose
-    private ArrayList<RatioProcessFile> files;
-
-    @Override
-    protected Collection<Callable<Response>> getCallables() {
+    protected Collection<Callable<Response>> getCallables(
+            String rawFilesDir,
+            String profileFilesDir) {
         Collection<Callable<Response>> callables = new ArrayList<>();
-        for (RatioProcessFile file: files) {
-            callables.add(file.getCallable());
+        for (RatioProcessFile file : files) {
+            callables.add(file.getCallable(profileFilesDir));
         }
         return callables;
     }
 
+    /**
+     * Class is used to start a single ratio processing with correct
+     * parameters.
+     */
     public class RatioProcessFile {
 
-        /**
-         * Class is used to start a single ratio processing with correct
-         * parameters.
-         */
+        @Expose
+        protected String preChipFile;
 
         @Expose
-        private String preChipFile;
+        protected String postChipFile;
 
         @Expose
-        private String postChipFile;
+        protected String outfile;
 
         @Expose
-        private String outfile;
+        protected String mean;
 
         @Expose
-        private String mean;
+        protected int readsCutoff;
 
         @Expose
-        private int readsCutoff;
-
-        @Expose
-        private String chromosomes;
+        protected String chromosomes;
 
         public String getPreChipFile() {return preChipFile;}
 
@@ -135,24 +121,19 @@ public class RatioProcessCommand extends ProcessCommand {
                    '}';
         }
 
-//        /**
-//         * Call upon a ratio processing with correct parameters.
-//         *
-//         * @param filePaths
-//         */
-//        public void processFile(Map.Entry<String, String> filePaths) {
-//            throw new UnsupportedOperationException(
-//                    "Error when processing. Ratio processing not yet implemented!");
-//        }
-
-        public Callable<Response> getCallable() {
+        public Callable<Response> getCallable(final String profileFilesDir) {
             return new Callable<Response>() {
                 @SuppressWarnings("TryWithIdenticalCatches")
                 @Override
                 public Response call() throws Exception {
                     try {
-                        Ratio.runRatio(preChipFile, postChipFile, outfile,
-                                Ratio.Mean.getMean(mean), readsCutoff, chromosomes);
+                        Ratio.runRatio(
+                                profileFilesDir + "/" + preChipFile,
+                                profileFilesDir + "/" + postChipFile,
+                                outfile,
+                                Ratio.Mean.getMean(mean),
+                                readsCutoff,
+                                chromosomes);
                         return new ProcessResponse(HttpStatusCode.OK);
                     } catch (ValidateException ve) {
                         ve.printStackTrace();
@@ -161,9 +142,19 @@ public class RatioProcessCommand extends ProcessCommand {
                     } catch (IOException ioe) {
                         ioe.printStackTrace();
                     }
-                    return new ProcessResponse(HttpStatusCode.INTERNAL_SERVER_ERROR);
+                    return new ProcessResponse(HttpStatusCode
+                            .INTERNAL_SERVER_ERROR);
                 }
             };
         }
+    }
+
+    public ArrayList<RatioProcessFile> getFiles() {return files;}
+
+    @Override
+    public String toString() {
+        return "RatioProcessCommand{" +
+               "files=" + files +
+               '}';
     }
 }

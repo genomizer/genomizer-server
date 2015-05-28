@@ -61,7 +61,6 @@ public class ProcessCommands extends Command {
         for (ProcessCommand processCommand : processCommands) {
             processCommand.validate();
         }
-
     }
 
     /**

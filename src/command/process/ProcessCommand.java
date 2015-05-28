@@ -26,7 +26,7 @@ public abstract class ProcessCommand {
 
         ProcessPool pool = Doorman.getProcessPool();
         Collection<Future<Response>> futures = new ArrayList<>();
-        for (Callable<Response> callable: getCallables()) {
+        for (Callable<Response> callable: getCallables(rawFilesDir, profileFilesDir)) {
             UUID uuid = pool.addProcess(callable);
             futures.add(pool.getFuture(uuid));
         }
@@ -35,8 +35,9 @@ public abstract class ProcessCommand {
         }
     }
 
-    protected abstract Collection<Callable<Response>> getCallables();
+    protected abstract Collection<Callable<Response>> getCallables(
+            String rawFilesDir,
+            String profileFilesDir);
 
     public abstract void validate() throws ValidateException;
-
 }
