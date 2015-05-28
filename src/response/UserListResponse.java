@@ -5,26 +5,30 @@ import com.google.gson.*;
 import java.util.List;
 
 /**
- * Created by dv13thg on 5/27/15.
+ * Response containing username info of all users.
+ *
+ * @author Business Logic 2015
+ * @version 1.0
  */
 public class UserListResponse extends Response {
 
     private JsonArray usernameArray;
-    JsonObject usernameListJson;
+
+    /**
+     * converts a list of username to a json object
+     *
+     * @param usernameList the list to be converted to json
+     */
     public UserListResponse(List<String> usernameList){
         this.code = HttpStatusCode.OK;
         usernameArray = new JsonArray();
-        JsonObject usernameListJson;
-        usernameListJson = new JsonObject();
+
+
         for (String username: usernameList) {
-
-            usernameListJson.addProperty("username", username);
+            JsonObject usernameJson = new JsonObject();
+            usernameJson.addProperty("username",username);
+            usernameArray.add(usernameJson);
         }
-
-//        GsonBuilder builder = new GsonBuilder();
-//        Gson gson = builder.disableHtmlEscaping().create();
-//        JsonElement annotationJson = gson.toJsonTree(username);
-//        usernameArray.add(usernameListJson);
     }
 
     /**
@@ -34,6 +38,6 @@ public class UserListResponse extends Response {
     @Override
     public String getBody() {
 
-        return usernameListJson.toString();
+        return usernameArray.toString();
     }
 }
