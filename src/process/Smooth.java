@@ -66,9 +66,7 @@ class Smooth extends Executor {
     public static void runSmoothing(String path, int windowSize, int meanType,
                                     int minPos, int calcTotalMean, int printPos,
                                     String outputPath)
-            throws ValidateException,
-                   IOException,
-                   InterruptedException {
+            throws ValidateException, IOException, InterruptedException {
         /* We calculate some expected values */
         String expectedPath =
             path.substring(0, path.lastIndexOf("/")) + "smoothed/";
