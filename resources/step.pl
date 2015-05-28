@@ -1,5 +1,14 @@
 #!/usr/bin/perl
 
+# AllSeqRegSGRtoPositionSGR_v1 – Use to convert seq-data into chip-type data
+# 
+# Philge Philip, philge.philip@molbiol.umu.se
+# Per Stenberg, per.stenberg@molbiol.umu.se
+# 
+# Modified by Niklas Fries, niklasf@cs.umu.se
+# 
+# Use: ./step.pl step_size infile outfile
+
 $step=$ARGV[0];
 $infile=$ARGV[1];
 $outfile=$ARGV[2];

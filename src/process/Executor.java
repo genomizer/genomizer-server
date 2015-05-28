@@ -26,7 +26,7 @@ import java.util.StringTokenizer;
  */
 public abstract class Executor {
 
-	private final String FILEPATH = "resources/";
+	private final String FILEPATH = "";
 	private DatabaseAccessor db;
 
 	/**

@@ -30,10 +30,10 @@ public class Step extends Executor {
         if (outfile == null) {
             throw new ValidateException(0, "Specify outfile.");
         }
-        if (!new File(infile).exists()) {
+        if (!new File(infile).isFile()) {
             throw new ValidateException(0, "Infile doesn't exist.");
         }
-        if (new File(outfile).exists()) {
+        if (new File(outfile).isFile()) {
             throw new ValidateException(0, "Outfile already exists.");
         }
         if (stepSize < 1) {
@@ -46,7 +46,7 @@ public class Step extends Executor {
 
     public String execute() throws IOException, InterruptedException {
 
-        return executeProgram(
+        return executeCommand(
                 new String[]{
                         "perl",
                         "resources/step.pl",

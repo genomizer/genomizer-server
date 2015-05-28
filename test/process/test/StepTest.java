@@ -24,7 +24,7 @@ public class StepTest {
     public static final String INFILE =
             "resources/stepTestData/stepTestInfile.sgr";
     public static final String OUTFILE_PATH =
-            "resources/stepTestData/out/stepTestOutfile.sgr";
+            "resources/stepTestData/out/";
     public static final String OUTFILE =
             "resources/stepTestData/out/stepTestOutfile.sgr";
     public static final String CORRECT_FILE =
@@ -76,14 +76,12 @@ public class StepTest {
     }
 
     @Test
-    @Ignore
     public void shouldProduceOutfile() throws Exception {
         new Step(INFILE, OUTFILE, 20).validate().execute();
         assertTrue(new File(OUTFILE).exists());
     }
 
     @Test
-    @Ignore
     public void shouldProduceCorrectFile() throws Exception {
         new Step(INFILE, OUTFILE, 20).validate().execute();
         assertTrue(
