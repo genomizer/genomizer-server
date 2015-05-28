@@ -107,7 +107,7 @@ public class RawToProfileConverter extends Executor {
 				}// Sets parameters for sorting first sam file
 				*/
 
-				toBeRemoved.push(remoteExecution + "resources/" + dir);
+				toBeRemoved.push(remoteExecution + dir);
 				filesToBeMoved = dir;
 				toBeRemoved.push(filesToBeMoved);
 			}
@@ -259,7 +259,7 @@ public class RawToProfileConverter extends Executor {
 		// Runs the procedure.
 
 		initiateConversionStrings(parameters, outFilePath);
-		makeConversionDirectories(remoteExecution + "resources/" + dir
+		makeConversionDirectories(remoteExecution + dir
 				+ "/sorted");
 		checker.calculateWhichProcessesToRun(parameters);
 		if(!validateParameters(parameters)) {
@@ -605,7 +605,7 @@ public class RawToProfileConverter extends Executor {
 		remoteExecution = "";
 		dir = "results_" + Thread.currentThread().getId() + "/";
 		sortedDirForCommands = remoteExecution + dir + "sorted/";
-		sortedDirForFile = remoteExecution + "resources/" + dir + "sorted/";
+		sortedDirForFile = remoteExecution + dir + "sorted/";
 		samToGff = "expect sam_to_readsgff_v1.sh " + sortedDirForCommands;
 		gffToAllnusgr = "expect readsgff_to_allnucsgr_v1.sh "
 				+ sortedDirForCommands + "reads_gff/";
