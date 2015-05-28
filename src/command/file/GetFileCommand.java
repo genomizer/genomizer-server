@@ -47,8 +47,14 @@ public class GetFileCommand extends Command {
 	public Response execute() {
 		Response response;
 		try (DatabaseAccessor db = initDB()) {
-			return new SingleFileResponse(db.getFileTuple(Integer.
-					parseInt(fileID)));
+			FileTuple ft = db.getFileTuple(Integer.parseInt(fileID));
+			if (ft != null)
+				response = new SingleFileResponse(db.getFileTuple(Integer.
+						parseInt(fileID)));
+			else
+				response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
+						"Retrieval of file with file id '" + fileID +
+								"' unsuccessful, file does not exist");
 		} catch (NumberFormatException e) {
 			response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
 					"Retrieval of file with file id '" + fileID +
