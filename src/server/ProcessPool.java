@@ -1,8 +1,9 @@
 package server;
 
 import command.Process;
-import command.process.PutProcessCommand;
+import response.HttpStatusCode;
 import response.Response;
+import util.Util;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -12,16 +13,17 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class ProcessPool {
 
-    private static final long statusTimeToLive = 2*1000*60*60*24;
+    // Five days.
+    private static final long statusTimeToLive = 5*1000*60*60*24;
 
-    // Process to status and response maps
+    // PID to metadata and Future<Response> maps.
     private HashMap<UUID, Process> processStatusMap;
     private HashMap<UUID, Future<Response>> processFutureMap;
 
-    // Synchronization objects
+    // Synchronization object,
     private final Lock lock;
 
-    // Thread pool
+    // Thread pool.
     private ExecutorService executor;
 
 
@@ -31,26 +33,9 @@ public class ProcessPool {
         lock = new ReentrantLock();
 
         executor = Executors.newFixedThreadPool(threads);
-
-        // Start a cleanup thread that will remove stale processes every 10 mins
-        /*new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    removeOldProcesses();
-                    try {
-                        Thread.sleep(600000);
-                    } catch (InterruptedException ex) {
-                        Debug.log("Process purging thread was unexpectedly " +
-                                "interrupted");
-                    }
-
-                }
-            }
-        }).start();*/
     }
 
-    // Number of days in the past to retrieve processes
+    // Number of days in the past after which processes are considered stale.
     private static final int days = 30;
 
     /**
@@ -64,7 +49,7 @@ public class ProcessPool {
         lock.lock();
 
         try {
-            List<Process> processStatusesList = new LinkedList<>();
+            List<Process> processStatusesList = new ArrayList<>();
 
             Calendar pastCal = Calendar.getInstance();
             pastCal.setTimeInMillis(System.currentTimeMillis());
@@ -89,12 +74,12 @@ public class ProcessPool {
 
 
     /**
-     * Adds a process command to the process pool
-     *
-     * @param process  - process metada.
-     * @param callabel - the function that executes the process.
+     * Adds a new process to the process pool.
+     *  @param process  - process metadata.
+     *  @param callable - function to execute.
+     *  @return PID of the newly-created process.
      */
-    public void addProcess(Process process, Callable<Response> callable) {
+    public UUID addProcess(Process process, Callable<Response> callable) {
         lock.lock();
 
         try {
@@ -106,12 +91,14 @@ public class ProcessPool {
 
             // Submit the process with a new work handler for execution
             Future<Response> response = executor.submit(
-                    new ProcessHandler(callable, process));
+                    new ProcessWrapper(callable, process));
 
             if (response != null) {
                 // Create a process command to process response mapping
                 processFutureMap.put(uuid, response);
             }
+
+            return uuid;
 
         } finally {
             lock.unlock();
@@ -119,8 +106,8 @@ public class ProcessPool {
     }
 
     /**
-     * Attempts to cancel the specified process if it is not completed or if
-     * it has not been cancelled already.
+     * Cancels a given process.
+     * Cancelling a crashed/finished process removes it from the process list.
      *
      * @param processID - the id of the process to be cancelled
      */
@@ -128,14 +115,12 @@ public class ProcessPool {
         lock.lock();
 
         try {
+            Future<Response> future = processFutureMap.get(processID);
 
-           Future<Response> response = processFutureMap.get(processID);
-
-            if (response != null) {
-                // Attempt to cancel if not done or cancelled already
-                if (!response.isDone() && !response.isCancelled()) {
-                    response.cancel(true);
-                }
+            if (future != null) {
+                future.cancel(true);
+                processStatusMap.remove(processID);
+                processFutureMap.remove(processID);
             }
 
         } finally {
@@ -162,6 +147,7 @@ public class ProcessPool {
 
     /**
      * Retrieves the process response for the specified process id.
+     * NB: can return null.
      *
      * @param processID
      * @return processresponse - the response if the process has finished
@@ -187,7 +173,7 @@ public class ProcessPool {
 
 
     /**
-     * Used internally to cleanup old processes that had either finished
+     * Used internally to clean up old processes that had either finished
      * gracefully, crashed or were cancelled.
      */
     public void removeOldProcesses() {
@@ -223,8 +209,8 @@ public class ProcessPool {
             for (Process process : toBeRemoved) {
                 Debug.log("Removing old process status: "
                         + process.PID);
-                processStatusMap.remove(process.PID);
-                processFutureMap.remove(process.PID);
+                processStatusMap.remove(UUID.fromString(process.PID));
+                processFutureMap.remove(UUID.fromString(process.PID));
             }
         } finally {
             lock.unlock();
@@ -234,4 +220,74 @@ public class ProcessPool {
 
     }
 
+    // A wrapper around a Callable that takes care of
+    // setting process metadata (status, timestamps) to right values.
+    private static class ProcessWrapper implements Callable<Response> {
+
+        private Callable<Response> callable;
+        private Process process;
+
+        public ProcessWrapper(Callable<Response> callable,
+                              Process process) {
+            this.callable = callable;
+            this.process = process;
+        }
+
+        @Override
+        public Response call() {
+
+            Response response = null;
+
+            if (callable != null && process != null) {
+                Debug.log("Execution of process with id " + process.PID
+                        + " in experiment "
+                        + process.experimentName + " has begun.");
+
+                process.status = Process.STATUS_STARTED;
+                process.timeStarted = System.currentTimeMillis();
+
+
+                try {
+                    /* Execute the process command */
+                    response = callable.call();
+
+                    if (response.getCode() == HttpStatusCode.CREATED ||
+                        response.getCode() == HttpStatusCode.OK) {
+                        process.status = Process.STATUS_FINISHED;
+                        String successMsg = "Execution of process with id " + process.PID
+                                + " in experiment "
+                                + process.experimentName + " has finished.";
+                        Debug.log(successMsg);
+                        ErrorLogger.log("PROCESS", successMsg);
+                    } else {
+                        System.out.println("Process status: " + response.getCode());
+                        process.status = Process.STATUS_CRASHED;
+                        String crashedMsg = "FAILURE! Execution of process with id "
+                                + process.PID + " in experiment "
+                                + process.experimentName + " has crashed.";
+                        Debug.log(crashedMsg);
+                        ErrorLogger.log("PROCESS", crashedMsg);
+                    }
+
+                } catch (Exception e) {
+                    process.status = Process.STATUS_CRASHED;
+                }
+
+                process.timeFinished = System.currentTimeMillis();
+
+                String timeMsg = "PID: " + process.PID + "\nElapsed time: " +
+                        Util.formatTimeDifference((process.timeFinished - process.timeStarted) / 1000) ;
+                Debug.log(timeMsg);
+                ErrorLogger.log("PROCESS", timeMsg);
+
+            }
+
+            Debug.log("PID: " + process.PID);
+            Debug.log("Process response: " + response.getMessage());
+
+            return response;
+
+        }
+
+    }
 }
