@@ -1,11 +1,11 @@
 package database.containers;
 
+import database.constants.ServerDependentValues;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import database.constants.ServerDependentValues;
 
 public class Genome {
 
@@ -50,6 +50,10 @@ public class Genome {
             return null;
         }
         return fileName.substring(0, indexOfFirstDot);
+    }
+
+    public String getFolderPath() {
+        return folderPath;
     }
 
     @Override

@@ -1,8 +1,8 @@
 package response;
 
-import java.util.Date;
-
 import database.containers.FileTuple;
+
+import java.util.Date;
 
 /**
  * Class that contains the file information.
@@ -23,7 +23,7 @@ public class FileInformation {
     public final String uploader;
     public final String expId;
     public final String grVersion;
-    public final String fileSize;
+    public final Long fileSize;
 
 
     /**

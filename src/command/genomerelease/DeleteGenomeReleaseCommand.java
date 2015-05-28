@@ -1,10 +1,5 @@
 package command.genomerelease;
 
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import command.Command;
 import command.UserRights;
 import command.ValidateException;
@@ -12,11 +7,16 @@ import database.DatabaseAccessor;
 import database.constants.MaxLength;
 import database.containers.Genome;
 import database.subClasses.UserMethods.UserType;
-import response.DeleteGenomeReleaseResponse;
 import response.ErrorResponse;
-import response.Response;
 import response.HttpStatusCode;
+import response.MinimalResponse;
+import response.Response;
 import server.Debug;
+
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Class used to delete a genome release.
@@ -64,7 +64,7 @@ public class DeleteGenomeReleaseCommand extends Command {
 						boolean result = db.removeGenomeRelease(genomeVersion);
 						if(result) {
 							return new
-									DeleteGenomeReleaseResponse(HttpStatusCode.OK);
+									MinimalResponse(HttpStatusCode.OK);
 						} else {
 							return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
 									"Could not delete genome release");

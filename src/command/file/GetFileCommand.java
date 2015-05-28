@@ -8,19 +8,20 @@ import database.constants.MaxLength;
 import database.containers.FileTuple;
 import database.subClasses.UserMethods.UserType;
 import response.*;
+import server.Debug;
 
+import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
 
 /**
- * retrieves a file linked to an experiment.
+ * Command used to retrieve a file.
  *
  * @author Business Logic 2015.
  * @version 1.1
  */
 public class GetFileCommand extends Command {
-
 	private String fileID;
 
 	@Override
@@ -44,21 +45,25 @@ public class GetFileCommand extends Command {
 
 	@Override
 	public Response execute() {
-
-		DatabaseAccessor db;
-		FileTuple fileTuple;
-
-		try {
-			db = initDB();
-			fileTuple = db.getFileTuple(Integer.parseInt(fileID));
-		} catch (SQLException | IOException | NumberFormatException e) {
-			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, e.getMessage());
+		Response response;
+		try (DatabaseAccessor db = initDB()) {
+			return new SingleFileResponse(db.getFileTuple(Integer.
+					parseInt(fileID)));
+		} catch (NumberFormatException e) {
+			response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
+					"Retrieval of file with file id '" + fileID +
+							"' unsuccessful, the file id may not contain any " +
+							"characters except numbers.");
+		} catch (SQLException e) {
+			response = new DatabaseErrorResponse("Retrieval of file with " +
+					"file id '" + fileID + "'");
+			Debug.log("Reason: " + e.getMessage());
+		} catch (IOException e) {
+			response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
+					"Retrieval of file with file id '" + fileID +
+							"' unsuccessful. " + e.getMessage());
 		}
 
-		if(fileTuple == null){
-			return new ErrorResponse(HttpStatusCode.BAD_REQUEST,"Could not find file");
-		}
-
-		return new SingleFileResponse(fileTuple);
+		return response;
 	}
 }

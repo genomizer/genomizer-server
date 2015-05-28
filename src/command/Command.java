@@ -1,15 +1,15 @@
 package command;
 
+import database.DatabaseAccessor;
+import database.subClasses.UserMethods.UserType;
+import response.HttpStatusCode;
+import response.Response;
+import server.ServerSettings;
+
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.regex.Pattern;
-
-import response.HttpStatusCode;
-import response.Response;
-import server.ServerSettings;
-import database.DatabaseAccessor;
-import database.subClasses.UserMethods.UserType;
 
 /**
  * This class contains common methods and attributes that are needed
@@ -31,7 +31,7 @@ public abstract class Command {
 	 */
 
 	/*These are valid characters that are used with the validation method.*/
-	final protected String validCharacters = "A-Z, a-z, 0-9, -, _ and .";
+	final static protected String VALID_CHARACTERS = "A-Z, a-z, 0-9, -, _ and .";
 
 	/*Keeps track of the user rights level for the command sender. */
 	protected UserType userType = UserType.UNKNOWN;
@@ -98,7 +98,7 @@ public abstract class Command {
 	 * @param string a string to validate.
 	 * @return boolean depending on validation result.
 	 */
-	public boolean hasInvalidCharacters(String string) {
+	public static boolean hasInvalidCharacters(String string) {
 		Pattern p = Pattern.compile("[^A-Za-z0-9-_.]");
 		return p.matcher(string).find();
 	}
@@ -111,7 +111,7 @@ public abstract class Command {
 	 * @param field the name of the field in question.
 	 * @throws ValidateException if the field does not conform.
 	 */
-	public void validateName(String string, int maxLength, String field)
+	public static void validateName(String string, int maxLength, String field)
 			throws ValidateException {
 		if(string == null) {
 			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Specify " +
@@ -128,7 +128,7 @@ public abstract class Command {
 		if(hasInvalidCharacters(string)) {
 			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Invalid" +
 					" characters in " + field.toLowerCase() +
-					". Valid characters are: " + validCharacters);
+					". Valid characters are: " + VALID_CHARACTERS);
 		}
 	}
 
@@ -137,7 +137,7 @@ public abstract class Command {
 	 * @param checkSumMD5 the field to be validated.
 	 * @throws ValidateException if the field does not conform.
 	 */
-	public void validateMD5(String checkSumMD5) throws ValidateException {
+	public static void validateMD5(String checkSumMD5) throws ValidateException {
 		if (checkSumMD5 != null) {
 			if (checkSumMD5.length() != 32)
 				throw new ValidateException(HttpStatusCode.BAD_REQUEST,
@@ -157,7 +157,7 @@ public abstract class Command {
 	 * @param field the name of the field in question.
 	 * @throws ValidateException if the field does not conform.
 	 */
-	public void validateExists(String string, int maxLength, String field)
+	public static void validateExists(String string, int maxLength, String field)
 			throws ValidateException {
 		if(string == null) {
 			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Specify " +

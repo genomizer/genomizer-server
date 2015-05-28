@@ -1,14 +1,15 @@
 package process;
 
+import command.ValidateException;
+import server.ErrorLogger;
+import server.ServerSettings;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Stack;
-
-import command.ValidateException;
-import server.ErrorLogger;
-import server.ServerSettings;
+import java.util.Map;
 
 /**
  * Class used to create profile data from .fastq format.
@@ -46,6 +47,25 @@ public class RawToProfileConverter extends Executor {
 		checker = new RawToProfileProcessChecker();
 		validator = new ParameterValidator();
 	}
+
+
+	/**
+	 * This method might be deleted or edited to be the new procedure. Work in progress atm with Adam
+	 * @param params
+	 * @param infile
+	 * @param outfile
+	 * @param keepSam
+	 * @param genomeVersion
+	 * @param referenceGenome
+	 * @param filepaths
+	 * @return
+	 * @throws ProcessException
+	 */
+	public String procedureRaw(String params, String infile, String outfile, boolean keepSam, String
+			genomeVersion, String referenceGenome, Map.Entry<String,String> filepaths) throws ProcessException{
+		return null;
+	}
+
 
 	/**
 	 * 1. runs the bowtie program to get a .sam file.
@@ -86,7 +106,7 @@ public class RawToProfileConverter extends Executor {
 			if (checker.shouldRunBowTie()) {
 				ErrorLogger.log("SYSTEM", "Running Bowtie");
 				logString = runBowTie(rawFile1, rawFile_1_Name);
-				ErrorLogger.log("SYSTEM", "Bowtie error - " +logString);
+				ErrorLogger.log("SYSTEM", "Bowtie return msg - " +logString);
 				ErrorLogger.log("SYSTEM", "Finished Bowtie");
 
 				checkBowTieFile(

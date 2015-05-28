@@ -2,9 +2,11 @@ package conversion.test;
 
 import conversion.ConversionHandler;
 import database.DatabaseAccessor;
+import database.containers.FileTuple;
 import database.test.TestInitializer;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import server.ServerSettings;
 
@@ -13,6 +15,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 
 /*
@@ -23,6 +26,7 @@ import static org.junit.Assert.assertNotNull;
  * @author Martin Larsson <dv13mln@cs.umu.se>
  *
  */
+@Ignore
 public class ConversionHandlerTest {
     private static TestInitializer ti;
     private static DatabaseAccessor db;
@@ -391,5 +395,19 @@ public class ConversionHandlerTest {
             throws IOException, SQLException {
         ch.convertProfileData("bed", wigVarStepFileID);
     }
-    
+
+
+
+ /*
+ * File should be exist at correct path after conversion
+ * after conversion from sgr to wig
+ * Test created: 2015-05-04
+ */
+    @Test
+    public void shouldExistFileAfterConversion()
+            throws IOException, SQLException {
+        FileTuple ft = ch.convertProfileData("wig", sgrFileID);
+
+        assertTrue(new File(ft.path).exists());
+    }
 }

@@ -1,22 +1,20 @@
 package command.genomerelease;
 
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.ArrayList;
-
 import com.google.gson.annotations.Expose;
-
 import command.Command;
 import command.UserRights;
 import command.ValidateException;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
-
-import response.AddGenomeReleaseResponse;
+import response.FilePathListResponse;
 import response.ErrorResponse;
 import response.HttpStatusCode;
 import response.Response;
 import server.Debug;
+
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  * Class used to handle adding a genome release.
@@ -76,7 +74,7 @@ public class PostGenomeReleaseCommand extends Command {
 				 uploadURLs.add(db.addInProgressGenomeRelease(genomeVersion, specie,
 						 fileName, checkSumMD5));
 			}
-			return new AddGenomeReleaseResponse(HttpStatusCode.OK, uploadURLs);
+			return new FilePathListResponse(uploadURLs);
 		} catch (SQLException | IOException e) {
 			Debug.log("Error when adding genome release "+genomeVersion+". Temporary error with database: "
 					+ e.getMessage());

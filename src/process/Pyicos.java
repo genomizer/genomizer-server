@@ -2,9 +2,9 @@ package process;
 
 import command.ValidateException;
 import response.HttpStatusCode;
-import server.ServerSettings;
 import server.ErrorLogger;
-import transfer.Util;
+import server.ServerSettings;
+import util.Util;
 
 import java.io.File;
 import java.io.IOException;

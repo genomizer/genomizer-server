@@ -16,7 +16,8 @@ import org.apache.commons.fileupload.FileUpload;
 import org.apache.commons.fileupload.RequestContext;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import response.HttpStatusCode;
-import server.*;
+import server.Debug;
+import util.Util;
 
 import java.io.File;
 import java.io.IOException;
@@ -61,6 +62,7 @@ public class UploadHandler {
         OutputStream out = exchange.getResponseBody();
         out.write(form);
         out.close();
+        Debug.log("END OF EXCHANGE\n------------------");
     }
 
     // Handle a 'multipart/form-data' upload.
@@ -133,6 +135,7 @@ public class UploadHandler {
         OutputStream out = exchange.getResponseBody();
         out.write(resp);
         out.close();
+        Debug.log("END OF EXCHANGE\n------------------");
     }
 
     // Verify the file's integrity and mark it as available for downloading.
@@ -147,7 +150,7 @@ public class UploadHandler {
                 verifyOrUpdateMD5(ft, actualMD5, db);
                 int count = db.markReadyForDownload(ft);
                 checkMarkReadyForDownloadSucceeded(count, ft.filename);
-                db.updateFileSize(ft);
+                db.updateFileSize(ft, fileItem.getSize());
                 return;
             }
 

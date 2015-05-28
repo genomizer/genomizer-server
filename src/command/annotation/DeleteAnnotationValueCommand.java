@@ -3,7 +3,6 @@ package command.annotation;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.List;
 
 import command.Command;
 import command.UserRights;
@@ -20,7 +19,7 @@ import response.HttpStatusCode;
 import server.Debug;
 
 /**
- * Class used to handle removal of annotation values.
+ * Command used to remove an annotation value.
  *
  * @author Business Logic 2015.
  * @version 1.1
@@ -37,9 +36,7 @@ public class DeleteAnnotationValueCommand extends Command {
 	@Override
 	public void setFields(String uri, HashMap<String, String> query,
 						  String username, UserType userType) {
-
 		super.setFields(uri, query, username, userType);
-
 		String[] splitFields = uri.split("/");
 		name = splitFields[3];
 		value = splitFields[4];
@@ -55,26 +52,31 @@ public class DeleteAnnotationValueCommand extends Command {
 	@Override
 	public Response execute() {
 		DatabaseAccessor db = null;
+		Response response;
+
 		try {
 			db = initDB();
-			List<String> values = db.getChoices(name);
-			if(values.contains(value)) {
-				db.removeDropDownAnnotationValue(name, value);
-			} else {
-				return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "The value " +
-						value + " does not exist in " + name + " and can not " +
-						"be deleted");
-			}
-		} catch (IOException | SQLException e) {
-			Debug.log("Deleting annotation value " + value + " on annotation " + name +
-					" failed due to database error. Reason: " + e.getMessage());
-			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Deleting annotation value " + value +
-					" on annotation "+name + " failed due to database error.");
+			if (db.removeDropDownAnnotationValue(name, value) != 0)
+				response = new MinimalResponse(HttpStatusCode.OK);
+			else
+				response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
+						"Deletion of annotation value unsuccessful, " +
+								"experiment label or value does not exist");
+		} catch (SQLException e) {
+			response = new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+					"Deletion of annotation value '" + value +
+							"' unsuccessful due to temporary database " +
+							"problems.");
+			Debug.log("Reason: " + e.getMessage());
+		} catch (IOException e) {
+			response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
+					"Deletion of annotation value: " + value +
+							"' unsuccessful. " + e.getMessage());
 		} finally {
-			if (db != null) {
+			if (db != null)
 				db.close();
-			}
 		}
-		return new MinimalResponse(HttpStatusCode.OK);
+
+		return response;
 	}
 }

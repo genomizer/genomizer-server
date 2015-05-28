@@ -5,6 +5,7 @@ import org.apache.commons.cli.*;
 import process.StartUpCleaner;
 import server.*;
 
+import javax.xml.crypto.Data;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -17,9 +18,8 @@ public class ServerMain {
 	public static String settingsFile = "settings.cfg";
 
 	/**
-	 * @param args
-	 * @throws ParseException
-	 * @throws FileNotFoundException
+	 * Program entry point.
+	 *
 	 */
 	public static void main(String[] args) throws ParseException,
 												  FileNotFoundException {
@@ -47,31 +47,41 @@ public class ServerMain {
 			System.exit(1);
 		}
 
+		/* Print a warning if the DB is not accessible. */
+		checkDatabaseConnection();
+
+		/* End of server startup */
+		Debug.log("\n\n");
+
 		/* By default we run a UID remover. */
 		if (!com.hasOption("nri")) {
 			(new Thread(new InactiveUuidsRemover())).start();
 		}
 
-		/* Check whether a connection to the database can be made */
-		DatabaseAccessor db = null;
-		try {
-			db = Command.initDB();
-		} catch (IOException | SQLException ex) {
-			String msg = "Warning: a connection to the database could not be " +
-					"made.";
-			Debug.log(msg);
-			ErrorLogger.log("SYSTEM", msg);
-
-		} finally {
-			if (db != null && db.isConnected()) {
-				db.close();
-			}
-		}
 
 	}
 
 	/**
+	 * Check whether a connection to the database can be made.
+	 *
+	 */
+	private static void checkDatabaseConnection() {
+		try (DatabaseAccessor db = Command.initDB()) {
+			if (db.isConnected()) {
+				Debug.log("Database connection successfully established.");
+			}
+		}
+		catch (IOException | SQLException ex) {
+			String msg = "Warning: a connection to the database could not be " +
+					"made.";
+			Debug.log(msg);
+			ErrorLogger.log("SYSTEM", msg);
+		}
+	}
+
+	/**
 	 * Print the database settings currently loaded into ServerSettings.
+	 *
 	 */
 	private static void printDatabaseInformation() {
 		String info = "Database information:" + "\n"

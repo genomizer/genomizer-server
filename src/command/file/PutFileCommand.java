@@ -8,7 +8,7 @@ import response.MinimalResponse;
 import response.Response;
 
 /**
- * Class used to handle updateing files in experiments.
+ * Class used to handle updating files in experiments.
  *
  * @author Business Logic 2015.
  * @version 1.1
@@ -28,6 +28,6 @@ public class PutFileCommand extends Command {
 
 	@Override
 	public Response execute() {
-		return 	new MinimalResponse(HttpStatusCode.METHOD_NOT_YET_IMPLEMENTED);
+		return 	new MinimalResponse(HttpStatusCode.NOT_IMPLEMENTED);
 	}
 }
