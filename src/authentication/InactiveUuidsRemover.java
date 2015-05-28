@@ -23,7 +23,7 @@ public class InactiveUuidsRemover implements Runnable {
 	/**
 	 * The method is the main loop. All uuids are checked
 	 * if they have been inactive for more than 24 hours. If they
-	 * have the userName is removed.
+	 * have the uuid is removed.
 	 */
 	@Override
 	public void run() {
@@ -67,9 +67,9 @@ public class InactiveUuidsRemover implements Runnable {
 
 	/**
 	 * Method to get the date difference from current date and
-	 * userName date.
+	 * uuid date.
 	 *
-	 * @param date1 userName date
+	 * @param date1 uuid date
 	 * @param date2 current date
 	 * @param timeUnit hours
 	 * @return time difference in hours

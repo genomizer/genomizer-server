@@ -1,5 +1,6 @@
 package command.process;
 
+import authentication.Authenticate;
 import com.google.gson.annotations.Expose;
 import command.Command;
 import command.UserRights;
@@ -48,12 +49,6 @@ public class ProcessCommands extends Command {
     @Override
     public int getExpectedNumberOfURIFields() {
         return 2;
-    }
-
-    @Override
-    public void setFields(String uri, HashMap<String, String> query,
-                          String username, UserMethods.UserType userType) {
-        super.setFields(uri, query, username, userType);
     }
 
     /**
@@ -148,7 +143,7 @@ public class ProcessCommands extends Command {
     }
 
     public String getUsername() {
-        return userName;
+        return Authenticate.getUsernameByID(uuid);
     }
 }
 
