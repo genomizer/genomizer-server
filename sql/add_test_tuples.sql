@@ -113,8 +113,8 @@ INSERT INTO Genome_Release_Files VALUES('GenomV1', 'd_melanogaster_fb5_22.rev.2.
 
 INSERT INTO File VALUES(DEFAULT, '/data/ExpSmall/raw/smalltest1.fastq', 'Raw', 'smalltest1.fastq', CURRENT_TIMESTAMP, NULL, NULL, 'UCSC', 'user1', 'false', 'ExpSmall', 'GenomV1', 'Done', NULL);
 INSERT INTO File VALUES(DEFAULT, '/data/ExpSmall/raw/smalltest2.fastq', 'Raw', 'smalltest2.fastq', CURRENT_TIMESTAMP, NULL, NULL, 'UCSC', 'user1', 'false', 'ExpSmall', 'GenomV1', 'Done', NULL);
-INSERT INTO File VALUES(DEFAULT, '/data/ExpBig/raw/bigtest1.fastq', 'Raw', 'bigtest1.fastq', CURRENT_TIMESTAMP, NULL, NULL, 'UCSC', 'user1', 'false', 'ExpBig', 'GenomV2', 'Done', NULL);
-INSERT INTO File VALUES(DEFAULT, '/data/ExpBig/raw/bigtest2.fastq', 'Raw', 'bigtest2.fastq', CURRENT_TIMESTAMP, NULL, NULL, 'UCSC', 'user1', 'false', 'ExpBig', 'GenomV2', 'Done', NULL);
+INSERT INTO File VALUES(DEFAULT, '/data/ExpBig/raw/bigtest1.fastq', 'Raw', 'bigtest1.fastq', CURRENT_TIMESTAMP, NULL, NULL, 'UCSC', 'user1', 'false', 'ExpBig', 'GenomV1', 'Done', NULL);
+INSERT INTO File VALUES(DEFAULT, '/data/ExpBig/raw/bigtest2.fastq', 'Raw', 'bigtest2.fastq', CURRENT_TIMESTAMP, NULL, NULL, 'UCSC', 'user1', 'false', 'ExpBig', 'GenomV1', 'Done', NULL);
 
 
 
