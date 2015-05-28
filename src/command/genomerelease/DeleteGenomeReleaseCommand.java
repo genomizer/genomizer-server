@@ -55,16 +55,19 @@ public class DeleteGenomeReleaseCommand extends Command {
 			else
 				response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
 						"Deletion of genome release '" + genomeVersion +
+								"' for species '" + species +
 								"' unsuccessful, genome release does not " +
 								"exist");
 		} catch (SQLException e) {
 			response = new DatabaseErrorResponse("Deletion of genome " +
-					"release '" + genomeVersion + "'");
+					"release '" + genomeVersion + "' for species '" + species +
+					"'");
 			Debug.log("Reason: " + e.getMessage());
 		} catch (IOException e) {
 			response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
 					"Deletion of genome release '" + genomeVersion +
-							"' unsuccessful. " + e.getMessage());
+							"' for species + '" + species + "' unsuccessful. " +
+							e.getMessage());
 		}
 
 		return response;
