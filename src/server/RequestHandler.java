@@ -68,8 +68,9 @@ public class RequestHandler implements HttpHandler {
 
         String uuid = Authenticate.performAuthentication(exchange);
 
-        if (commandClass == null && !key.equals("GET /download") &&
-                !key.equals("GET /upload") && !key.equals("POST /upload")){
+        if (commandClass == null
+                && !key.equals("GET /download") && !key.equals("GET /upload")
+                && !key.equals("POST /upload")) {
             Debug.log("Unrecognized command: " + exchange.getRequestMethod()
                     + " " + exchange.getRequestURI());
             respond(new ErrorResponse(HttpStatusCode.BAD_REQUEST,
@@ -80,7 +81,7 @@ public class RequestHandler implements HttpHandler {
 
         if(uuid == null
                 // commandClass can be null, so use != instead of equals().
-                && commandClass != PostLoginCommand.class){
+                && commandClass != PostLoginCommand.class) {
             Debug.log("User could not be authenticated");
             respond(new ErrorResponse(HttpStatusCode.UNAUTHORIZED,
                     "User could not be authenticated"), exchange);
