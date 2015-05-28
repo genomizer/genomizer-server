@@ -4,13 +4,18 @@ import com.google.gson.annotations.Expose;
 import command.Command;
 import command.ValidateException;
 import database.constants.MaxLength;
+import process.Ratio;
 import response.HttpStatusCode;
 import process.Smooth;
+import response.ProcessResponse;
+import response.Response;
 import server.Debug;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 /**
  * Class is used to handle smooth processing. The command can include multiple file packages to run one at a time.
@@ -45,16 +50,26 @@ public class SmoothingProcessCommand extends ProcessCommand {
        }
     }
 
-    /**
-     * Run through the list of SmoothingFiles and run processing on each with filePath as parameter.
-     *
-     * @param filePath associated with expId
-     */
+//    /**
+//     * Run through the list of SmoothingFiles and run processing on each with filePath as parameter.
+//     *
+//     * @param rawFilesDir
+//     * @param profileFilesDir
+//     */
+//    @Override
+//    public void doProcess(String rawFilesDir, String profileFilesDir) {
+//        for (SmoothingFile file : files) {
+//            file.processFile(filePath);
+//        }
+//    }
+
     @Override
-    public void doProcess(Map.Entry<String, String> filePath) {
-        for (SmoothingFile file : files) {
-            file.ProcessFile(filePath);
+    protected Collection<Callable<Response>> getCallables() {
+        Collection<Callable<Response>> callables = new ArrayList<>();
+        for (SmoothingFile file: files) {
+            callables.add(file.getCallable());
         }
+        return callables;
     }
 
     public ArrayList<SmoothingFile> getFiles() {
@@ -129,7 +144,7 @@ public class SmoothingProcessCommand extends ProcessCommand {
          *
          * @param filePaths
          */
-        public void ProcessFile(Map.Entry<String, String> filePaths) {
+        public void processFile(Map.Entry<String, String> filePaths) {
 
             String infileWithPath = filePaths.getValue() + infile;
             String outfileWithPath = filePaths.getValue() + outfile;
@@ -157,6 +172,26 @@ public class SmoothingProcessCommand extends ProcessCommand {
                 Debug.log("Error during smoothing processing: " + e.getMessage());
                 throw new UnsupportedOperationException("Error during smoothing processing: "+e.getMessage());
             }
+        }
+
+        public Callable<Response> getCallable() {
+            return new Callable<Response>() {
+                @SuppressWarnings("TryWithIdenticalCatches")
+                @Override
+                public Response call() throws Exception {
+//                    try {
+                        processFile(null);
+                        return new ProcessResponse(HttpStatusCode.OK);
+//                    } catch (ValidateException ve) {
+//                        ve.printStackTrace();
+//                    } catch (InterruptedException ie) {
+//                        ie.printStackTrace();
+//                    } catch (IOException ioe) {
+//                        ioe.printStackTrace();
+//                    }
+//                    return new ProcessResponse(HttpStatusCode.INTERNAL_SERVER_ERROR);
+                }
+            };
         }
     }
 }

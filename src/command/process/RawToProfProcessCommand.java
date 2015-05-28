@@ -9,13 +9,16 @@ import database.containers.Genome;
 import process.ProcessException;
 import process.RawToProfileConverter;
 import response.HttpStatusCode;
+import response.ProcessResponse;
+import response.Response;
 import server.Debug;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Map;
-import java.util.regex.Pattern;
+import java.util.concurrent.Callable;
 
 import static command.Command.initDB;
 
@@ -43,16 +46,18 @@ public class RawToProfProcessCommand extends ProcessCommand {
         }
     }
 
-    /**
-     * Run through the list of RawToProfProcessFiles and run processing on each with filePath as parameter.
-     * @param filePath associated with expId
-     */
-    @Override
-    public void doProcess(Map.Entry<String,String> filePath) {
-        for(RawToProfProcessFile file: files) {
-            file.ProcessFile(filePath);
-        }
-    }
+//    /**
+//     * Run through the list of RawToProfProcessFiles and run processing on each with filePath as parameter.
+//     *
+//     * @param rawFilesDir
+//     * @param profileFilesDir
+//     */
+//    @Override
+//    public void doProcess(String rawFilesDir, String profileFilesDir) {
+//        for(RawToProfProcessFile file: files) {
+//            file.processFile(filePath);
+//        }
+//    }
 
     public ArrayList<RawToProfProcessFile> getFiles() {
         return files;
@@ -65,7 +70,16 @@ public class RawToProfProcessCommand extends ProcessCommand {
                 '}';
     }
     @Expose
-    private ArrayList<RawToProfProcessFile> files;
+    protected ArrayList<RawToProfProcessFile> files;
+
+    @Override
+    protected Collection<Callable<Response>> getCallables() {
+        Collection<Callable<Response>> callables = new ArrayList<>();
+        for (RawToProfProcessFile file: files) {
+            callables.add(file.getCallable());
+        }
+        return callables;
+    }
 
     public class RawToProfProcessFile {
 
@@ -124,7 +138,7 @@ public class RawToProfProcessCommand extends ProcessCommand {
          * Call upon a single raw to profile processing with correct parameters.
          * @param filePaths
          */
-        public void ProcessFile(Map.Entry<String,String> filePaths) {
+        public void processFile(Map.Entry<String, String> filePaths) {
             DatabaseAccessor db = null;
 
             try {
@@ -181,5 +195,22 @@ public class RawToProfProcessCommand extends ProcessCommand {
 
         }
 
+        public Callable<Response> getCallable() {
+            return new Callable<Response>() {
+                @Override
+                public Response call() throws Exception {
+//                    try {
+                        processFile(null);
+//                    } catch (ValidateException ve) {
+//                        ve.printStackTrace();
+//                    } catch (InterruptedException ie) {
+//                        ie.printStackTrace();
+//                    } catch (IOException ioe) {
+//                        ioe.printStackTrace();
+//                    }
+                    return new ProcessResponse(HttpStatusCode.INTERNAL_SERVER_ERROR);
+                }
+            };
+        }
     }
 }

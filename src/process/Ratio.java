@@ -62,7 +62,8 @@ public class Ratio extends Executor {
     }
 
     public String execute() throws IOException, InterruptedException {
-        return executeProgram(new String[]{
+        return executeProgram(
+                new String[]{
 
                 });
     }
@@ -76,12 +77,30 @@ public class Ratio extends Executor {
             String chromosomes)
             throws IOException, InterruptedException, ValidateException {
 
-        return new Ratio(infile1, infile2, outfile, mean, readsCutOff, chromosomes)
+        return new Ratio(
+                infile1,
+                infile2,
+                outfile,
+                mean,
+                readsCutOff,
+                chromosomes)
                 .validate().execute();
     }
 
     public enum Mean {
         SINGLE,
-        DOUBLE
+        DOUBLE;
+
+        public static Mean getMean(String mean) {
+            switch (mean) {
+                case "single":
+                    return SINGLE;
+                case "double":
+                    return DOUBLE;
+                default:
+                    throw new IllegalArgumentException(
+                            "Invalid mean setting: " + mean);
+            }
+        }
     }
 }

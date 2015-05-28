@@ -1,14 +1,10 @@
 package command.process;
 
-import authentication.Authenticate;
 import com.google.gson.annotations.Expose;
 import command.Command;
 import command.UserRights;
 import command.ValidateException;
-import database.DatabaseAccessor;
 import database.constants.MaxLength;
-import database.subClasses.UserMethods;
-import response.ErrorResponse;
 import response.HttpStatusCode;
 import response.ProcessResponse;
 import response.Response;
@@ -16,9 +12,8 @@ import response.Response;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 /**
  * The class handles processing a list of processing commands. The list of commands each have a list of files to
@@ -27,16 +22,13 @@ import java.util.UUID;
 public class ProcessCommands extends Command {
 
     @Expose
-    private String expId = null;
-
-    private Map.Entry<String,String> filePaths;
-
-    private long timestamp;
-
-    private UUID PID;
+    protected String expId;
 
     @Expose
-    private ArrayList<ProcessCommand> processCommands;
+    protected ArrayList<ProcessCommand> processCommands;
+
+    private String rawFilesDir;
+    private String profileFilesDir;
 
     @Override
     public String toString() {
@@ -79,16 +71,36 @@ public class ProcessCommands extends Command {
      */
     @Override
     public Response execute() {
-        setFilePaths(expId);
+        try {
+            Map.Entry<String, String> filePaths = fetchFilePathsFromDB(expId);
+            rawFilesDir = filePaths.getKey();
+            profileFilesDir = filePaths.getValue();
 
-        for (ProcessCommand pC: processCommands) {
-            try{
-                pC.doProcess(filePaths);
-            } catch(UnsupportedOperationException e){
-                return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
-            }
+            startProcessing();
+
+            return new ProcessResponse(HttpStatusCode.OK, "Processing of experiment " + expId + " has begun.");
+
+        } catch (IOException | SQLException e) {
+            return new ProcessResponse(HttpStatusCode.NOT_FOUND, e.getMessage());
         }
-        return new ProcessResponse(HttpStatusCode.OK, "Processing of experiment: "+expId+" has completed.");
+    }
+
+    private void startProcessing() {
+        new Thread() {
+            @SuppressWarnings("TryWithIdenticalCatches")
+            @Override
+            public void run() {
+                for (ProcessCommand processCommand: processCommands) {
+                    try {
+                        processCommand.doProcess(rawFilesDir, profileFilesDir);
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }.start();
     }
 
     /**
@@ -96,35 +108,22 @@ public class ProcessCommands extends Command {
      * @param expId the experiment Id of the processing.
      * @return a response if something went wrong, otherwise null
      */
-    public Response setFilePaths(String expId) {
-        DatabaseAccessor db = null;
-
-        try {
-            db = initDB();
-            filePaths = db.processRawToProfile(expId);
-        } catch (SQLException e) {
-            return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
-        } catch (IOException e) {
-            return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
-        } finally {
-            if (db != null) {
-                db.close();
-            }
-        }
-        return null;
+    public Map.Entry<String, String> fetchFilePathsFromDB(String expId)
+            throws IOException, SQLException {
+        return initDB().processRawToProfile(expId);
     }
 
-    public String[] getFilePaths() {
-        return new String[] {filePaths.getKey(), filePaths.getValue()};
-    }
-
-    public void setTimestamp(long currentTimeMillis) {
-        this.timestamp = currentTimeMillis;
-    }
-
-    public long getTimestamp(){
-        return this.timestamp;
-    }
+//    public String[] getFilePaths() {
+//        return new String[] {filePaths.getKey(), filePaths.getValue()};
+//    }
+//
+//    public void setTimestamp(long currentTimeMillis) {
+//        this.timestamp = currentTimeMillis;
+//    }
+//
+//    public long getTimestamp(){
+//        return this.timestamp;
+//    }
 
     public ArrayList<ProcessCommand> getProcessCommands() {
         return processCommands;
@@ -134,16 +133,16 @@ public class ProcessCommands extends Command {
         return expId;
     }
 
-    public UUID getPID() {
-        return PID;
-    }
-
-    public void setPID(UUID PID) {
-        this.PID = PID;
-    }
-
-    public String getUsername() {
-        return Authenticate.getUsernameByID(uuid);
-    }
+//    public UUID getPID() {
+//        return PID;
+//    }
+//
+//    public void setPID(UUID PID) {
+//        this.PID = PID;
+//    }
+//
+//    public String getUsername() {
+//        return Authenticate.getUsernameByID(uuid);
+//    }
 }
 
