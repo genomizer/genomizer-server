@@ -30,6 +30,10 @@ public class StepProcessCommand extends ProcessCommand {
                 throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Error validating StepProcessCommand. " +
                         "StepSize can not be less than 0");
             }
+            if(file.getStepSize()==null) {
+                throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Error validating StepProcessCommand. " +
+                        "StepSize can not be null.");
+            }
         }
 
     }
@@ -58,14 +62,14 @@ public class StepProcessCommand extends ProcessCommand {
         private String outfile;
 
         @Expose
-        private int stepSize;
+        private Integer stepSize;
 
 
         public String getInfile() {return infile;}
 
         public String getOutfile() {return outfile;}
 
-        public int getStepSize() {return stepSize;}
+        public Integer getStepSize() {return stepSize;}
 
         @Override
         public String toString() {
