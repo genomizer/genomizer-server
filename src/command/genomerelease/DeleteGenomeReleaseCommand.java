@@ -66,7 +66,7 @@ public class DeleteGenomeReleaseCommand extends Command {
 		} catch (IOException e) {
 			response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
 					"Deletion of genome release '" + genomeVersion +
-							"' for species + '" + species + "' unsuccessful. " +
+							"' for species '" + species + "' unsuccessful. " +
 							e.getMessage());
 		}
 
