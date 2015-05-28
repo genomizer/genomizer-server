@@ -509,7 +509,7 @@ public class FileMethods {
 	 * @return
 	 * @throws SQLException
 	 */
-	public int changeFileAuhtor(int fileID, String newAuthor)
+	public int changeFileAuthor(int fileID, String newAuthor)
 			throws SQLException {
 		String query = "UPDATE File SET Author = ?" +
 				"WHERE FileID = ?";

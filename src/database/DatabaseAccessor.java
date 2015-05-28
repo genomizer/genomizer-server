@@ -902,7 +902,7 @@ public class DatabaseAccessor implements AutoCloseable {
      * @throws SQLException
      */
     public int changeFileAuthor(int fileID, String newAuthor) throws SQLException {
-        return fileMethods.changeFileAuhtor(fileID, newAuthor);
+        return fileMethods.changeFileAuthor(fileID, newAuthor);
     }
 
     /**
