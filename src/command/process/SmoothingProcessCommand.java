@@ -10,11 +10,14 @@ import java.util.ArrayList;
 import java.util.Map;
 
 /**
- * Created by dv13jen on 2015-05-27.
+ * Class is used to handle smooth processing. The command can include multiple file packages to run one at a time.
  */
 public class SmoothingProcessCommand extends ProcessCommand {
 
-
+    /**
+     * Validate to make sure all input from clients is in correct format.
+     * @throws ValidateException
+     */
     @Override
     public void validate() throws ValidateException {
         for (SmoothingFile file : files) {
@@ -78,13 +81,13 @@ public class SmoothingProcessCommand extends ProcessCommand {
         private String outfile;
 
         @Expose
-        private int windowSize;
+        private Integer windowSize;
 
         @Expose
         private String meanOrMedian;
 
         @Expose
-        private int minSmooth;
+        private Integer minSmooth;
 
 
         public String getInfile() {
@@ -95,7 +98,7 @@ public class SmoothingProcessCommand extends ProcessCommand {
             return outfile;
         }
 
-        public int getWindowSize() {
+        public Integer getWindowSize() {
             return windowSize;
         }
 
@@ -103,7 +106,7 @@ public class SmoothingProcessCommand extends ProcessCommand {
             return meanOrMedian;
         }
 
-        public int getMinSmooth() {
+        public Integer getMinSmooth() {
             return minSmooth;
         }
 

@@ -91,15 +91,4 @@ public class StepProcessCommandTest {
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }
-    @Test(expected = ValidateException.class)
-    public void canGiveValidateExceptionOnStepSizeNull() throws ValidateException {
-        String json =
-                "{\"expId\":\"asd\"," +
-                        "\"processCommands\":[{\"type\":\"step\"," +
-                        "\"files\":[{\"infile\":\"bigte1.wig\"," +
-                        "\"outfile\":\"awe\"}]}]}";
-        ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
-        processCommands.setFields(null, null, null, UserMethods.UserType.USER);
-        processCommands.validate();
-    }
 }

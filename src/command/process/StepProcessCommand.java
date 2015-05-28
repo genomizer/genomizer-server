@@ -11,7 +11,7 @@ import java.util.Map;
 
 
 /**
- * Created by dv13jen on 2015-05-28.
+ * Class is used to handle step processing. The command can include multiple file packages to run one at a time.
  */
 public class StepProcessCommand extends ProcessCommand {
     @Override
@@ -21,6 +21,10 @@ public class StepProcessCommand extends ProcessCommand {
         }
     }
 
+    /**
+     * Validate to make sure all input from clients is in correct format.
+     * @throws ValidateException
+     */
     @Override
     public void validate() throws ValidateException {
         for(StepProcessFile file: files) {

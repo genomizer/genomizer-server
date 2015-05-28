@@ -3,21 +3,12 @@ package command.process;
 import com.google.gson.annotations.Expose;
 import command.Command;
 import command.ValidateException;
-import database.DatabaseAccessor;
 import database.constants.MaxLength;
-import database.containers.Genome;
-import process.ProcessException;
-import process.RawToProfileConverter;
 import response.HttpStatusCode;
-import response.Response;
-import server.Debug;
-
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Map;
 
-import static command.Command.initDB;
+
 
 /**
  * Class handles a ratio processing command. The command can include multiple file packages to run one at a time.
