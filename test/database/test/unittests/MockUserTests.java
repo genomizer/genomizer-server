@@ -418,7 +418,7 @@ public class MockUserTests {
 
         String expectedProfileFolder = testFolderPath
                 + "My First Experiment" + File.separator + "profile"
-                + File.separator + "0" + File.separator;
+                + File.separator;
 
         assertEquals(expectedRawFolder, folders.getKey());
         assertEquals(expectedProfileFolder, folders.getValue());
@@ -436,7 +436,7 @@ public class MockUserTests {
         addMockFile(folders.getValue(), "Prof1.sam");
         addMockFile(folders.getValue(), "Prof2.sam");
 
-        dbac.addGeneratedProfiles("My First Experiment", folders.getValue(),
+         dbac.addGeneratedProfiles("My First Experiment", folders.getValue(),
         		null, "-n1", "hg38", "Ruaridh", true);
 
         List<Experiment> exps = dbac

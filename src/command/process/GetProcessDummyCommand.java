@@ -4,7 +4,7 @@ import command.Command;
 import command.Process;
 import command.UserRights;
 import command.ValidateException;
-import response.GetProcessStatusResponse;
+import response.ProcessStatusResponse;
 import response.Response;
 
 import java.util.LinkedList;
@@ -26,6 +26,7 @@ public class GetProcessDummyCommand extends Command {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public Response execute() {
         Process p1 = new Process(new PutProcessCommand());
         p1.experimentName = "Exp1";
@@ -35,7 +36,7 @@ public class GetProcessDummyCommand extends Command {
         p1.timeAdded = 1431944527592L;
         p1.timeStarted = p1.timeAdded + 3004300;
         p1.timeFinished = p1.timeStarted + 10012000;
-        p1.PID = UUID.randomUUID();
+        p1.PID = UUID.randomUUID().toString();
 
         Process p2 = new Process(new PutProcessCommand());
         p2.experimentName = "Exp2";
@@ -45,7 +46,7 @@ public class GetProcessDummyCommand extends Command {
         p2.timeAdded = 1431944527592L - 85971432;
         p2.timeStarted = 0;
         p2.timeFinished = 0;
-        p2.PID = UUID.randomUUID();
+        p2.PID = UUID.randomUUID().toString();
 
         Process p3 = new Process(new PutProcessCommand());
         p3.experimentName = "Exp3";
@@ -55,7 +56,7 @@ public class GetProcessDummyCommand extends Command {
         p3.timeAdded = 1431944527592L - 56198;
         p3.timeStarted = p3.timeAdded + 18297612;
         p3.timeFinished = p3.timeStarted + 76511243;
-        p3.PID = UUID.randomUUID();
+        p3.PID = UUID.randomUUID().toString();
 
         Process p4 = new Process(new PutProcessCommand());
         p4.experimentName = "Exp4";
@@ -65,7 +66,7 @@ public class GetProcessDummyCommand extends Command {
         p4.timeAdded = 1431944527592L - 6178231;
         p4.timeStarted = p1.timeAdded + 3004140;
         p4.timeFinished = p1.timeStarted + 112300000;
-        p4.PID = UUID.randomUUID();
+        p4.PID = UUID.randomUUID().toString();
 
         LinkedList<command.Process> getProcessStatuses = new LinkedList<>();
 
@@ -73,7 +74,7 @@ public class GetProcessDummyCommand extends Command {
         getProcessStatuses.add(p2);
         getProcessStatuses.add(p3);
         getProcessStatuses.add(p4);
-        return new GetProcessStatusResponse(getProcessStatuses);
+        return new ProcessStatusResponse(getProcessStatuses);
     }
 }
 

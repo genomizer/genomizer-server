@@ -4,7 +4,7 @@ import command.ValidateException;
 import response.HttpStatusCode;
 import server.ErrorLogger;
 import server.ServerSettings;
-import transfer.Util;
+import util.Util;
 
 import java.io.File;
 import java.io.IOException;
@@ -107,7 +107,7 @@ public class Pyicos extends Executor {
             args.add(additionalParam);
         }
 
-        return executeProgram(args.toArray(new String[]{}));
+        return executeCommand(args.toArray(new String[]{}));
     }
 
     public void cleanupTempFiles() {

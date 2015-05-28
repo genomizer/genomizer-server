@@ -1,5 +1,8 @@
 package command.annotation;
 
+import java.io.IOException;
+import java.sql.SQLException;
+
 import com.google.gson.annotations.Expose;
 import command.Command;
 import command.UserRights;
@@ -7,18 +10,13 @@ import command.ValidateException;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
 import response.ErrorResponse;
-import response.HttpStatusCode;
 import response.MinimalResponse;
 import response.Response;
+import response.HttpStatusCode;
 import server.Debug;
 
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
 /**
- * This class is used to handle changes to annotation values.
+ * Command used to change the value of an annotation field (label).
  *
  * @author Business Logic 2015.
  * @version 1.1
@@ -26,10 +24,8 @@ import java.util.List;
 public class PutAnnotationValueCommand extends Command {
 	@Expose
 	private String name = null;
-
 	@Expose
 	private String oldValue = null;
-
 	@Expose
 	private String newValue = null;
 
@@ -46,45 +42,41 @@ public class PutAnnotationValueCommand extends Command {
 				"Old annotation value");
 		validateName(newValue, MaxLength.ANNOTATION_LABEL,
 				"New annotation value");
-		if(oldValue.equals("freetext")){
+		if (newValue.equals("freetext")) {
 			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Can not" +
-					" rename a value from \"freetext\"");
+					"rename a value to \"freetext\"");
 		}
-		if(newValue.equals("freetext")){
+
+		if (oldValue.equals("freetext")) {
 			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Can not" +
-					" rename a value to \"freetext\"");
+					"rename a value from \"freetext\"");
 		}
 	}
 
 	@Override
 	public Response execute() {
 		DatabaseAccessor db = null;
+		Response response;
+
 		try {
 			db = initDB();
-			ArrayList<String> annotations = db.getAllAnnotationLabels();
-			if(annotations.contains(name)) {
-				List<String> values = db.getChoices(name);
-				if(values.contains(oldValue)) {
-					db.changeAnnotationValue(name, oldValue, newValue);
-					return new MinimalResponse(HttpStatusCode.OK);
-				} else {
-					return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
-							"The value" + oldValue + " does not exist.");
-				}
-			} else {
-				return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
-						"The annotation " + name + " does not exist.");
-			}
-
-		}catch (IOException | SQLException e) {
-			Debug.log("Editing annotation value " + oldValue + " on annotation " + name +
-					" failed due to database error. Reason: " + e.getMessage());
-			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Editing annotation value " + oldValue +
-					" on annotation "+name + " failed due to database error.");
+			db.changeAnnotationValue(name, oldValue, newValue);
+			response = new MinimalResponse(HttpStatusCode.OK);
+		} catch (IOException e) {
+			response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
+					"Editing of annotation value '" + oldValue +
+							"' unsuccessful. " +e.getMessage());
+		} catch (SQLException e) {
+			response = new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+					"Editing annotation value '" + oldValue +
+							"' unsuccessful due to temporary database " +
+							"problems.");
+			Debug.log("Reason: " + e.getMessage());
 		} finally {
-			if (db != null) {
+			if (db != null)
 				db.close();
-			}
 		}
+
+		return response;
 	}
 }

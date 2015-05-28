@@ -12,12 +12,10 @@ public class UrlUploadResponse extends Response {
 
 	/**
 	 * Constructor for the response
-	 * @param code The return code
 	 * @param UrlUpload URL for the experiment to upload
 	 */
-	public UrlUploadResponse(int code, String UrlUpload) {
-
-		this.code = code;
+	public UrlUploadResponse(String UrlUpload) {
+		this.code = HttpStatusCode.OK;
 		this.URLupload = UrlUpload;
 	}
 

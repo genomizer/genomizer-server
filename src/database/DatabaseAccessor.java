@@ -517,6 +517,10 @@ public class DatabaseAccessor implements AutoCloseable {
         return annoMethods.getAllAnnotationLabels();
     }
 
+    public ArrayList<String> getAllForcedAnnotationLabels() {
+        return annoMethods.getAllForcedAnnotationLabels();
+    }
+
     /**
      * Gets the datatype of a given annotation.
      *
@@ -909,9 +913,9 @@ public class DatabaseAccessor implements AutoCloseable {
      *             - If the database could not be accessed
      * @throws ParseException
      */
-    public Entry<String, String> processRawToProfile(String expId)
+    public Entry<String, String> processRawToProfile(String expID)
             throws IOException, SQLException {
-        Experiment e = expMethods.getExperiment(expId);
+        Experiment e = expMethods.getExperiment(expID);
         if (e == null) {
             throw new IOException("Invalid experiment ID");
         }
@@ -921,10 +925,9 @@ public class DatabaseAccessor implements AutoCloseable {
         List<FileTuple> fileTuples = e.getFiles();
         FileTuple rawFileTuple = getRawFileTuple(fileTuples);
         if (rawFileTuple == null) {
-            throw new IOException(expId + " has no raw files to process!");
+            throw new IOException(expID + " has no raw files to process!");
         }
-        String profileFolderPath = fpg.generateNewProfileSubFolder(fpg
-                .getProfileFolderPath(e.getID()));
+        String profileFolderPath = fpg.getProfileFolderPath(expID);
         return new SimpleEntry<String, String>(rawFileTuple.getParentFolder(),
                 profileFolderPath);
     }
@@ -980,12 +983,16 @@ public class DatabaseAccessor implements AutoCloseable {
             if (!f.getName().equals(inputFileName)) {
 
                 String checkSumMD5;
+                long fileSize;
                 try (FileInputStream is = new FileInputStream(f)) {
                     checkSumMD5 = DigestUtils.md5Hex(is);
                 }
+
+                fileSize = f.length();
+
                 fileMethods.addGeneratedFile(e.getID(), FileTuple.PROFILE,
                         f.getPath(), inputFileName, metaData, uploader,
-                        isPrivate, grVersion, checkSumMD5);
+                        isPrivate, grVersion, checkSumMD5, fileSize);
             }
         }
     }

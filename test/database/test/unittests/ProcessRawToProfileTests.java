@@ -68,7 +68,7 @@ public class ProcessRawToProfileTests {
 
         // From add_test_tuples.sql
         String expectedProfileFolderPath = testFolderPath
-                + "Exp1/profile/0/";
+                + "Exp1/profile/";
 
         assertEquals(expectedRawFolderPath, folderPaths.getKey());
         assertEquals(expectedProfileFolderPath,

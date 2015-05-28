@@ -17,6 +17,7 @@ import org.apache.commons.fileupload.RequestContext;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import response.HttpStatusCode;
 import server.Debug;
+import util.Util;
 
 import java.io.File;
 import java.io.IOException;
@@ -48,7 +49,7 @@ public class UploadHandler {
         byte [] form = ("<html><body>" +
                 "<form method=\"POST\" " +
                 "enctype=\"multipart/form-data\" action=\""
-                + this.handlerRoot + "\">" +
+                + this.handlerRoot + "/upload.test" + "\">" +
                 "File to upload: <input type=\"file\" " +
                 // "accept=\".wig,.fastq,.gff,.sgr\" "
                 "name=\"uploadfile\"/>" +
