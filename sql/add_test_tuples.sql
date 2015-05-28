@@ -37,7 +37,7 @@ INSERT INTO Annotation_Choices VALUES('Species', '');
 INSERT INTO Annotation_Choices VALUES('Species', 'Human');
 INSERT INTO Annotation_Choices VALUES('Species', 'Fly');
 INSERT INTO Annotation_Choices VALUES('Species', 'Rat');
-
+INSERT INTO Annotation_Choices VALUES('Species', 'Insect');
 
 INSERT INTO Annotation VALUES('Sex', 'DropDown', 'Unknown', FALSE);
 INSERT INTO Annotation_Choices  VALUES('Sex', '');
