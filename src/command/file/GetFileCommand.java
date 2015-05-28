@@ -5,12 +5,10 @@ import command.UserRights;
 import command.ValidateException;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
-import database.containers.FileTuple;
 import database.subClasses.UserMethods.UserType;
 import response.*;
 import server.Debug;
 
-import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
