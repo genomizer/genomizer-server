@@ -110,7 +110,7 @@ public class RequestHandler implements HttpHandler {
         } catch (Exception e) {
             Debug.log("Could not parse query");
             respond(new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
-                            "ERROR : Could not parse query"), exchange);
+                            "ERROR : Could not parse query: " +e.getMessage() ), exchange);
             return;
         }
 
