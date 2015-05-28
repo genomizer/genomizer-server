@@ -102,7 +102,24 @@ public class UploadHandler {
         };
         List<FileItem> fileItems = fileUpload.parseRequest(ctx);
 
-        // Move uploaded files to uploadDir.
+        /* Send response to client */
+        OutputStream out = exchange.getResponseBody();
+        byte[] resp = null;
+        if (fileItems.size() > 0) {
+            // Report success to the client.
+            resp = "OK".getBytes();
+            exchange.sendResponseHeaders(HttpStatusCode.OK, resp.length);
+
+        } else {
+            resp = "ERROR".getBytes();
+            exchange.sendResponseHeaders(HttpStatusCode.BAD_REQUEST, resp.length);
+        }
+
+        out.write(resp);
+        out.close();
+        Debug.log("END OF EXCHANGE\n------------------");
+
+        /* Move uploaded files to uploadDir */
         URI requestURI = exchange.getRequestURI();
         HashMap<String,String> reqParams = new HashMap<>();
         String reqPath = Util.parseURI(requestURI, reqParams);
@@ -129,13 +146,7 @@ public class UploadHandler {
             }
         }
 
-        // Report success to the client.
-        byte [] resp = "OK".getBytes();
-        exchange.sendResponseHeaders(HttpStatusCode.OK, resp.length);
-        OutputStream out = exchange.getResponseBody();
-        out.write(resp);
-        out.close();
-        Debug.log("END OF EXCHANGE\n------------------");
+
     }
 
     // Verify the file's integrity and mark it as available for downloading.
