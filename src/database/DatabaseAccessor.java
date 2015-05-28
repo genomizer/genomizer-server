@@ -980,12 +980,16 @@ public class DatabaseAccessor implements AutoCloseable {
             if (!f.getName().equals(inputFileName)) {
 
                 String checkSumMD5;
+                long fileSize;
                 try (FileInputStream is = new FileInputStream(f)) {
                     checkSumMD5 = DigestUtils.md5Hex(is);
                 }
+
+                fileSize = f.length();
+
                 fileMethods.addGeneratedFile(e.getID(), FileTuple.PROFILE,
                         f.getPath(), inputFileName, metaData, uploader,
-                        isPrivate, grVersion, checkSumMD5);
+                        isPrivate, grVersion, checkSumMD5, fileSize);
             }
         }
     }
