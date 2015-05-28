@@ -82,4 +82,44 @@ public class RatioProcessCommandTest {
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }
+
+    @Test(expected = ValidateException.class)
+    public void canGiveValidateExceptionOnIncorrectOutfileName() throws ValidateException {
+        String json =
+                "{\"expId\":\"not_an_expid\"," +
+                        "\"processCommands\":[{\"type\":\"ratio\", \"files\":[{\"preChipFile\": " +
+                        "\"infile1Name\", \"postChipFile\": \"infile2Name\", \"outfile\": \"in$\", " +
+                        "\"mean\": \"single\", \"readsCutoff\": \"2\", \"chromosomes\": \"chromosome\"}]}]}";
+        ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
+        processCommands.setFields(null, null, null, UserMethods.UserType.USER);
+        processCommands.validate();
+    }
+    @Test (expected = ValidateException.class)
+    public void shouldGiveValidateExceptionOnIncorrectOutfileLength() throws ValidateException {
+
+        String s = "";
+        for(int i = 0; i < MaxLength.FILE_FILENAME + 1; i++) {
+            s += "a";
+        }
+        String json =
+                "{\"expId\":\"not_an_expid\"," +
+                        "\"processCommands\":[{\"type\":\"ratio\", \"files\":[{\"preChipFile\": " +
+                        "\"awwdw\", \"postChipFile\": \"dwqdwqs\", \"outfile\": \""+s+"\", " +
+                        "\"mean\": \"single\", \"readsCutoff\": \"2\", \"chromosomes\": \"chromosome\"}]}]}";
+        ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
+        processCommands.setFields(null, null, null, UserMethods.UserType.USER);
+        processCommands.validate();
+    }
+    @Test(expected = ValidateException.class)
+    public void canGiveValidateExceptionOnChromosomesNull() throws ValidateException {
+        String json =
+                "{\"expId\":\"not_an_expid\"," +
+                        "\"processCommands\":[{\"type\":\"ratio\", \"files\":[{\"preChipFile\": " +
+                        "\"infile1Name\", \"postChipFile\": \"infile2Name\", \"outfile\": \"in\", " +
+                        "\"mean\": \"single\", \"readsCutoff\": \"2\"}]}]}";
+        ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
+        processCommands.setFields(null, null, null, UserMethods.UserType.USER);
+        processCommands.validate();
+    }
+
 }
