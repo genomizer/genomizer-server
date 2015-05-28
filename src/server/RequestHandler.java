@@ -63,16 +63,12 @@ public class RequestHandler implements HttpHandler {
                 + exchange.getHttpContext().getPath();
         Class<? extends Command> commandClass = CommandClasses.get(key);
 
-        Debug.log(commandClass.getName());
+        if (commandClass != null)
+            Debug.log(commandClass.getName());
 
         String uuid = Authenticate.performAuthentication(exchange);
 
-        if(uuid == null && !commandClass.equals(PostLoginCommand.class)){
-            Debug.log("User could not be authenticated");
-            respond(new ErrorResponse(HttpStatusCode.UNAUTHORIZED,
-                    "User could not be authenticated"), exchange);
-            return;
-        } else if (commandClass == null && !key.equals("GET /download") &&
+        if (commandClass == null && !key.equals("GET /download") &&
                 !key.equals("GET /upload") && !key.equals("POST /upload")){
             Debug.log("Unrecognized command: " + exchange.getRequestMethod()
                     + " " + exchange.getRequestURI());
@@ -81,6 +77,16 @@ public class RequestHandler implements HttpHandler {
                             "request."), exchange);
             return;
         }
+
+        if(uuid == null
+                // commandClass can be null, so use != instead of equals().
+                && commandClass != PostLoginCommand.class){
+            Debug.log("User could not be authenticated");
+            respond(new ErrorResponse(HttpStatusCode.UNAUTHORIZED,
+                    "User could not be authenticated"), exchange);
+            return;
+        }
+
 
         try {
             switch (key) {
@@ -96,6 +102,8 @@ public class RequestHandler implements HttpHandler {
             }
         } catch (Exception e) {
             Debug.log("Could not handle upload/download");
+            respond(new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+                    "ERROR: exception in upload/download code."), exchange);
             return;
         }
 
