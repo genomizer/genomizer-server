@@ -1,7 +1,11 @@
 package command.process;
 
 import com.google.gson.annotations.Expose;
+import command.Command;
 import command.ValidateException;
+import database.constants.MaxLength;
+import response.HttpStatusCode;
+
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -19,6 +23,14 @@ public class StepProcessCommand extends ProcessCommand {
 
     @Override
     public void validate() throws ValidateException {
+        for(StepProcessFile file: files) {
+            Command.validateName(file.getInfile(), MaxLength.FILE_FILENAME, "Infile");
+            Command.validateName(file.getOutfile(), MaxLength.FILE_FILENAME, "Outfile");
+            if(file.getStepSize()<0) {
+                throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Error validating StepProcessCommand. " +
+                        "StepSize can not be less than 0");
+            }
+        }
 
     }
 
@@ -69,7 +81,7 @@ public class StepProcessCommand extends ProcessCommand {
          * @param filePaths
          */
         public void ProcessFile(Map.Entry<String, String> filePaths) {
-            throw new UnsupportedOperationException("Error when processing. Step not implemented.");
+            throw new UnsupportedOperationException("Error when processing. Step processing not implemented.");
         }
 
     }
