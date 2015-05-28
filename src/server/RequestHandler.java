@@ -7,7 +7,7 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import command.*;
 import command.connection.PostLoginCommand;
-import command.process.PutProcessCommand;
+import command.process.*;
 import database.DatabaseAccessor;
 import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
@@ -40,6 +40,9 @@ public class RequestHandler implements HttpHandler {
 	public RequestHandler() {
 		GsonBuilder builder = new GsonBuilder();
 		builder.excludeFieldsWithoutExposeAnnotation();
+        builder.registerTypeAdapter(
+                ProcessCommand.class,
+                new ProcessCommandAdapter());
 		gson = builder.create();
         uploadHandler = new UploadHandler("/upload", ServerSettings.
                 fileLocation, System.getProperty("java.io.tmpdir"));
@@ -60,14 +63,12 @@ public class RequestHandler implements HttpHandler {
                 + exchange.getHttpContext().getPath();
         Class<? extends Command> commandClass = CommandClasses.get(key);
 
+        if (commandClass != null)
+            Debug.log(commandClass.getName());
+
         String uuid = Authenticate.performAuthentication(exchange);
 
-        if(uuid == null && !commandClass.equals(PostLoginCommand.class)){
-            Debug.log("User could not be authenticated");
-            respond(new ErrorResponse(HttpStatusCode.UNAUTHORIZED,
-                    "User could not be authenticated"), exchange);
-            return;
-        } else if (commandClass == null && !key.equals("GET /download") &&
+        if (commandClass == null && !key.equals("GET /download") &&
                 !key.equals("GET /upload") && !key.equals("POST /upload")){
             Debug.log("Unrecognized command: " + exchange.getRequestMethod()
                     + " " + exchange.getRequestURI());
@@ -76,6 +77,16 @@ public class RequestHandler implements HttpHandler {
                             "request."), exchange);
             return;
         }
+
+        if(uuid == null
+                // commandClass can be null, so use != instead of equals().
+                && commandClass != PostLoginCommand.class){
+            Debug.log("User could not be authenticated");
+            respond(new ErrorResponse(HttpStatusCode.UNAUTHORIZED,
+                    "User could not be authenticated"), exchange);
+            return;
+        }
+
 
         try {
             switch (key) {
@@ -91,6 +102,8 @@ public class RequestHandler implements HttpHandler {
             }
         } catch (Exception e) {
             Debug.log("Could not handle upload/download");
+            respond(new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+                    "ERROR: exception in upload/download code."), exchange);
             return;
         }
 
@@ -99,7 +112,15 @@ public class RequestHandler implements HttpHandler {
             json = "{}";
         Debug.log("Request body: \n" + json);
 
-        Command command = gson.fromJson(json, commandClass);
+        Command command = null;
+        try {
+            command = gson.fromJson(json, commandClass);
+        } catch (Exception e) {
+            Debug.log("Could not parse query");
+            respond(new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+                            "ERROR : Could not parse query"), exchange);
+            return;
+        }
 
         /*Retrieve the URI part of the request header.*/
         HashMap<String, String> query = new HashMap<>();
@@ -150,9 +171,12 @@ public class RequestHandler implements HttpHandler {
 			respond(new ErrorResponse(e.getCode(), e.getMessage()), exchange);
 			return;
 		}
-        if (commandClass.equals(PutProcessCommand.class)) {
-            Doorman.getProcessPool().addProcess((PutProcessCommand) command);
-            respond(new ProcessResponse(HttpStatusCode.OK), exchange);
+
+        if(commandClass.equals(ProcessCommands.class)) {
+            respond(
+                    new ProcessResponse(HttpStatusCode.NOT_IMPLEMENTED),
+                    exchange);
+//            respond(new ProcessResponse(HttpStatusCode.OK), exchange);
         } else {
             respond(command.execute(), exchange);
         }
@@ -197,5 +221,12 @@ public class RequestHandler implements HttpHandler {
 
         scanner.close();
         return body;
+    }
+
+    /**
+     * @return The Gson used for parsing request bodies.
+     */
+    public Gson getGson() {
+        return gson;
     }
 }

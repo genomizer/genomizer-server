@@ -3,6 +3,7 @@ package database.test.unittests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.lang.reflect.Array;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -131,5 +132,18 @@ public class GetAnnotationObjectTest {
     	assertTrue(annotations.size() == 2);
     	assertEquals("Sex", annotations.get(0).label);
     	assertEquals("Tissue", annotations.get(1).label);
+	}
+
+	@Test
+	public void shouldGetCorrectAmountOfForcedAnnotationLabels() throws Exception {
+		ArrayList<String> labels = dbac.getAllForcedAnnotationLabels();
+		assertEquals(labels.size(),2);
+	}
+
+	@Test
+	public void shouldGetCorrectForcedAnnotationLabels() throws Exception {
+		ArrayList<String> labels = dbac.getAllForcedAnnotationLabels();
+		assertTrue(labels.contains("Species"));
+		assertTrue(labels.contains("Tissue"));
 	}
 }

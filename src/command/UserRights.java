@@ -1,27 +1,14 @@
 package command;
 
-import command.admin.PutUserAdminCommand;
+import command.admin.*;
 import command.annotation.*;
-import command.convertfile.PutConvertFileCommand;
-import command.experiment.DeleteExperimentCommand;
-import command.experiment.GetExperimentCommand;
-import command.experiment.PostExperimentCommand;
-import command.experiment.PutExperimentCommand;
-import command.file.DeleteFileCommand;
-import command.file.GetFileCommand;
-import command.file.PostFileCommand;
-import command.file.PutFileCommand;
-import command.genomerelease.DeleteGenomeReleaseCommand;
-import command.genomerelease.GetGenomeReleaseCommand;
-import command.genomerelease.GetGenomeReleaseSpeciesCommand;
-import command.genomerelease.PostGenomeReleaseCommand;
-import command.process.GetProcessStatusCommand;
-import command.process.PutProcessCommand;
-import command.search.SearchCommand;
-import command.user.PutUserCommand;
-import command.user.PutUserPasswordCommand;
-import command.admin.DeleteAdminUserCommand;
-import command.admin.PostAdminUserCommand;
+import command.convertfile.*;
+import command.experiment.*;
+import command.file.*;
+import command.genomerelease.*;
+import command.process.*;
+import command.search.*;
+import command.user.*;
 import database.subClasses.UserMethods.UserType;
 
 import java.util.HashMap;
@@ -60,14 +47,15 @@ public class UserRights {
         userRights.put(GetGenomeReleaseCommand.class, UserType.GUEST);
         userRights.put(GetGenomeReleaseSpeciesCommand.class, UserType.GUEST);
         userRights.put(GetProcessStatusCommand.class, UserType.GUEST);
-        userRights.put(PutProcessCommand.class, UserType.USER);
         userRights.put(SearchCommand.class, UserType.GUEST);
         userRights.put(PutAnnotationPrivilegesCommand.class, UserType.USER);
         userRights.put(PutExperimentCommand.class, UserType.USER);
         userRights.put(PutFileCommand.class, UserType.USER);
         userRights.put(PutUserCommand.class, UserType.USER);
-        userRights.put(PutUserAdminCommand.class, UserType.ADMIN);
+        userRights.put(PutAdminUserCommand.class, UserType.ADMIN);
         userRights.put(PutConvertFileCommand.class, UserType.USER);
+        userRights.put(ProcessCommands.class, UserType.USER);
+        userRights.put(PutProcessCommand.class, UserType.USER);
     }
 
 
