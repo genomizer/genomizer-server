@@ -14,6 +14,8 @@ public class Genome {
     public final String folderPath;
     private final List<String> files;
 
+
+    //Depricated!
     public Genome(ResultSet resSet) throws SQLException {
         genomeVersion = resSet.getString("Version");
         species = resSet.getString("Species");
@@ -22,6 +24,21 @@ public class Genome {
         do {
             files.add(resSet.getString("FileName"));
         } while (resSet.next() && resSet.getString("Version").equals(genomeVersion));
+    }
+
+    /**
+     *  Construct a Genome.
+     *
+     * @param genomeVersion - the version
+     * @param species - the specie
+     * @param folderPath - the path where the genomeRelease files should be.
+     * @param files - The Files.
+     */
+    public Genome(String genomeVersion, String species, String folderPath, List<String> files) {
+        this.genomeVersion = genomeVersion;
+        this.species = species;
+        this.folderPath = folderPath;
+        this.files = files;
     }
 
     /**
