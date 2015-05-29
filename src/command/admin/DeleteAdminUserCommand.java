@@ -50,6 +50,11 @@ public class DeleteAdminUserCommand extends Command {
 		DatabaseAccessor db = null;
 		Response response;
 
+		if(Authenticate.getUsernameByID(uuid).equals(username)){
+			response = new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Deletion of user "+username+" is not allowed. " +
+					"Deletion of admins own account is not allowed. Use another admin user to delete this account.");
+		}
+
 		try {
 			db = initDB();
 			if (db.deleteUser(username) != 0) {
