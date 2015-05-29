@@ -1,12 +1,13 @@
 package command.test.user;
 
+import authentication.Authenticate;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import command.user.PutUserCommand;
 import command.ValidateException;
 import database.constants.MaxLength;
-import database.subClasses.UserMethods;
+import database.subClasses.UserMethods.UserType;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -16,6 +17,7 @@ public class PutUserCommandTest {
 
     private Gson gson = null;
     private String json = null;
+    private String uuid;
 
     /**
      * Setup method to initiate GSON builder.
@@ -26,7 +28,7 @@ public class PutUserCommandTest {
         final GsonBuilder builder = new GsonBuilder();
         builder.excludeFieldsWithoutExposeAnnotation();
         gson = builder.create();
-
+        uuid = Authenticate.updateActiveUser(null, "testuser");
     }
 
     /**
@@ -67,6 +69,7 @@ public class PutUserCommandTest {
         }
         json = createJSON(password,"b","c","d");
         PutUserCommand cmd = gson.fromJson(json, PutUserCommand.class);
+        cmd.setFields("uri", null, uuid, UserType.ADMIN);
 
         cmd.validate();
     }
@@ -79,6 +82,7 @@ public class PutUserCommandTest {
 
         json = createJSON("","b","c","d");
         PutUserCommand cmd = gson.fromJson(json, PutUserCommand.class);
+        cmd.setFields("uri", null, uuid, UserType.ADMIN);
 
         cmd.validate();
     }
@@ -90,6 +94,7 @@ public class PutUserCommandTest {
     public void testValidateOldPwdNotNull() throws ValidateException {
         json = createJSON(null,"b","c","d");
         PutUserCommand cmd = gson.fromJson(json, PutUserCommand.class);
+        cmd.setFields("uri", null, uuid, UserType.ADMIN);
 
         cmd.validate();
     }
@@ -107,6 +112,7 @@ public class PutUserCommandTest {
         }
         json = createJSON("a",password,"c","d");
         PutUserCommand cmd = gson.fromJson(json, PutUserCommand.class);
+        cmd.setFields("uri", null, uuid, UserType.ADMIN);
 
         cmd.validate();
     }
@@ -119,6 +125,7 @@ public class PutUserCommandTest {
 
         json = createJSON("a","","c","d");
         PutUserCommand cmd = gson.fromJson(json, PutUserCommand.class);
+        cmd.setFields("uri", null, uuid, UserType.ADMIN);
 
         cmd.validate();
     }
@@ -130,6 +137,7 @@ public class PutUserCommandTest {
     public void testValidateNewPwdNotNull() throws ValidateException {
         json = createJSON("",null,"c","d");
         PutUserCommand cmd = gson.fromJson(json, PutUserCommand.class);
+        cmd.setFields("uri", null, uuid, UserType.ADMIN);
 
         cmd.validate();
     }
@@ -147,6 +155,7 @@ public class PutUserCommandTest {
         }
         json = createJSON("a","b",name,"d");
         PutUserCommand cmd = gson.fromJson(json, PutUserCommand.class);
+        cmd.setFields("uri", null, uuid, UserType.ADMIN);
 
         cmd.validate();
     }
@@ -158,6 +167,7 @@ public class PutUserCommandTest {
 
         json = createJSON("a","b","","d");
         PutUserCommand cmd = gson.fromJson(json, PutUserCommand.class);
+        cmd.setFields("uri", null, uuid, UserType.ADMIN);
 
         cmd.validate();
     }
@@ -169,6 +179,7 @@ public class PutUserCommandTest {
     public void testValidateNameNotNull() throws ValidateException {
         json = createJSON("","b",null,"d");
         PutUserCommand cmd = gson.fromJson(json, PutUserCommand.class);
+        cmd.setFields("uri", null, uuid, UserType.ADMIN);
 
         cmd.validate();
     }
@@ -185,6 +196,7 @@ public class PutUserCommandTest {
         }
         json = createJSON("a","b",email,"d");
         PutUserCommand cmd = gson.fromJson(json, PutUserCommand.class);
+        cmd.setFields("uri", null, uuid, UserType.ADMIN);
 
         cmd.validate();
     }
@@ -196,6 +208,7 @@ public class PutUserCommandTest {
 
         json = createJSON("a","b","c","");
         PutUserCommand cmd = gson.fromJson(json, PutUserCommand.class);
+        cmd.setFields("uri", null, uuid, UserType.ADMIN);
 
         cmd.validate();
     }
@@ -207,6 +220,7 @@ public class PutUserCommandTest {
     public void testValidateEmailNotNull() throws ValidateException {
         json = createJSON("","b","c",null);
         PutUserCommand cmd = gson.fromJson(json, PutUserCommand.class);
+        cmd.setFields("uri", null, uuid, UserType.ADMIN);
 
         cmd.validate();
     }
@@ -219,6 +233,7 @@ public class PutUserCommandTest {
 
         json = createJSON("a/b/c","b","c","d");
         PutUserCommand cmd = gson.fromJson(json, PutUserCommand.class);
+        cmd.setFields("uri", null, uuid, UserType.ADMIN);
         cmd.validate();
 
     }
@@ -232,6 +247,7 @@ public class PutUserCommandTest {
 
         json = createJSON("a","a/b/c","c","d");
         PutUserCommand cmd = gson.fromJson(json, PutUserCommand.class);
+        cmd.setFields("uri", null, uuid, UserType.ADMIN);
         cmd.validate();
 
     }
@@ -242,9 +258,42 @@ public class PutUserCommandTest {
     public void testValidationProperlyFormatted() throws ValidateException {
         json = createJSON("a","b","c","d");
         PutUserCommand cmd = gson.fromJson(json, PutUserCommand.class);
-        cmd.setFields(null, null, null, UserMethods.UserType.ADMIN);
+        cmd.setFields("uri", null, uuid, UserType.ADMIN);
+        cmd.setUsername("");
         cmd.validate();
 
+    }
+
+    /**
+     * Test used to check that ValidateException is not thrown
+     * when the user have the required rights.
+     *
+     * @throws ValidateException
+     */
+    @Test
+    public void testHavingRights() throws ValidateException {
+
+        json = createJSON("a","b","c","d");
+        PutUserCommand c = gson.fromJson(json, PutUserCommand.class);
+        c.setFields("uri", null, "uuid", UserType.USER);
+
+        c.validate();
+    }
+
+    /**
+     * Test used to check that ValidateException is thrown
+     * when the user doesn't have the required rights.
+     *
+     * @throws ValidateException
+     */
+    @Test(expected = ValidateException.class)
+    public void testNotHavingRights() throws ValidateException {
+
+        json = createJSON("a","b","c","d");
+        PutUserCommand c = gson.fromJson(json, PutUserCommand.class);
+        c.setFields("uri", null, "uuid", UserType.GUEST);
+
+        c.validate();
     }
 
     /**
