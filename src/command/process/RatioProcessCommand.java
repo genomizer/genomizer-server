@@ -134,6 +134,7 @@ public class RatioProcessCommand extends ProcessCommand {
                                 Ratio.Mean.getMean(mean),
                                 readsCutoff,
                                 chromosomes);
+                        // TODO add file to DB here?
                         return new ProcessResponse(HttpStatusCode.OK);
                     } catch (ValidateException ve) {
                         ve.printStackTrace();

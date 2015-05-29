@@ -71,7 +71,9 @@ public class RawToProfileConverter extends Executor {
             String referenceGenome,
             String rawFilesDir,
             String profileFilesDir) throws ProcessException {
-        return null;
+//        return null;
+
+        return procedure(params.split(" "), rawFilesDir, profileFilesDir);
     }
 
 
@@ -296,8 +298,11 @@ public class RawToProfileConverter extends Executor {
         this.inFolder = inFolder;
 
         // Checks all parameters that they are correct before proceeding
-        if (!verifyInData(parameters, inFolder, outFilePath)
-            || !correctInfiles(inFiles)) {
+        if (!correctInfiles(inFiles)) {
+            throw new ProcessException("Bad in files");
+        }
+        System.out.println("parameters = " + Arrays.toString(parameters));
+        if (!verifyInData(parameters, inFolder, outFilePath)) {
             throw new ProcessException("Wrong format of input data");
         }
         // Runs the procedure.
@@ -546,7 +551,7 @@ public class RawToProfileConverter extends Executor {
                     SmoothingParameterChecker smoothChecker =
                             SmoothingParameterChecker
                                     .SmoothingParameterCheckerFactory
-											(parameters[4]);
+                                            (parameters[4]);
                     // +"_"+getSmoothType+"_winSiz-" + "_minProbe-" +
                     // getMinProbe
                     outFile = outFile.substring(0, outFile.length() - 4) + "_"
