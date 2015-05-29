@@ -13,6 +13,7 @@ import database.containers.HasCheckSumMD5;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUpload;
+import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.RequestContext;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import response.HttpStatusCode;
@@ -68,71 +69,14 @@ public class UploadHandler {
     // Handle a 'multipart/form-data' upload.
     // POST request entry point.
     public void handlePOST(final HttpExchange exchange) throws Exception {
-        Debug.log("Receiving a file from client...");
-
-        // Save uploaded files to memory or a temp directory.
-        FileUpload fileUpload = new FileUpload();
-        DiskFileItemFactory fileItemFactory = new DiskFileItemFactory(64*1024, new File(this.tmpDir));
-        fileUpload.setFileItemFactory(fileItemFactory);
-        final Headers headers = exchange.getRequestHeaders();
-        for (String header : headers.keySet()) {
-            System.out.println(header + ": " + headers.getFirst(header));
-        }
-        @SuppressWarnings("deprecation")
-        RequestContext ctx = new RequestContext() {
-            @Override
-            public String getCharacterEncoding() {
-                    return headers.getFirst("Content-encoding");
-                }
-
-            @Override
-            public String getContentType() {
-                    return headers.getFirst("Content-Type");
-                }
-
-            @Override
-            public int getContentLength() {
-                    return 0; 
-                }
-
-            @Override
-            public InputStream getInputStream() throws IOException {
-                return exchange.getRequestBody();
-            }
-        };
-        List<FileItem> fileItems = fileUpload.parseRequest(ctx);
-
-        /* Send response to client */
-        OutputStream out = exchange.getResponseBody();
-        byte[] resp = null;
-        if (fileItems.size() > 0) {
-            // Report success to the client.
-            resp = "OK".getBytes();
-            exchange.sendResponseHeaders(HttpStatusCode.OK, resp.length);
-
-        } else {
-            resp = "ERROR".getBytes();
-            exchange.sendResponseHeaders(HttpStatusCode.BAD_REQUEST, resp.length);
-        }
-
-        out.write(resp);
-        out.close();
-        Debug.log("END OF EXCHANGE\n------------------");
-
-        /* Move uploaded files to uploadDir */
+        // Retrieve the file path of the file being uploaded.
         URI requestURI = exchange.getRequestURI();
-        HashMap<String,String> reqParams = new HashMap<>();
-        String reqPath = Util.parseURI(requestURI, reqParams);
-        String absUploadPath = null;
-        if (reqParams.containsKey("path")) {
-            Debug.log("Using legacy upload method ('upload?path=/absolute/path').");
-            absUploadPath = reqParams.get("path");
-        }
-        else {
-            String relPath = reqPath.substring(this.handlerRoot.length() + 1);
-            absUploadPath = this.uploadDir + relPath;
-        }
+        String absUploadPath = extractAbsUploadPath(requestURI);
 
+        // Receive FileItems from the client.
+        List<FileItem> fileItems = receiveFileItems(exchange, absUploadPath);
+
+        // Move uploaded file to uploadDir.
         for (FileItem fileItem : fileItems) {
             if (!fileItem.isFormField()) {
 
@@ -148,8 +92,119 @@ public class UploadHandler {
                         + outFile.toString() + "'.");
             }
         }
+    }
+
+    // Receive file items from the client.
+    private List<FileItem> receiveFileItems(final HttpExchange exchange,
+                                            String absUploadPath)
+            throws SQLException, IOException, FileUploadException {
+        List<FileItem> fileItems;
+        try {
+            Debug.log("Receiving a file from client...");
+
+            // Save uploaded files to memory or a temp directory.
+            FileUpload fileUpload = new FileUpload();
+            DiskFileItemFactory fileItemFactory = new DiskFileItemFactory(64 * 1024, new File(this.tmpDir));
+            fileUpload.setFileItemFactory(fileItemFactory);
+            final Headers headers = exchange.getRequestHeaders();
+            for (String header : headers.keySet()) {
+                System.out.println(header + ": " + headers.getFirst(header));
+            }
+            @SuppressWarnings("deprecation")
+            RequestContext ctx = new RequestContext() {
+                @Override
+                public String getCharacterEncoding() {
+                    return headers.getFirst("Content-encoding");
+                }
+
+                @Override
+                public String getContentType() {
+                    return headers.getFirst("Content-Type");
+                }
+
+                @Override
+                public int getContentLength() {
+                    return 0;
+                }
+
+                @Override
+                public InputStream getInputStream() throws IOException {
+                    return exchange.getRequestBody();
+                }
+            };
+            fileItems = fileUpload.parseRequest(ctx);
+
+        /* Send response to client */
+            OutputStream out = exchange.getResponseBody();
+            byte[] resp = null;
+            if (fileItems.size() > 0) {
+                // Report success to the client.
+                resp = "OK".getBytes();
+                exchange.sendResponseHeaders(HttpStatusCode.OK, resp.length);
+
+            } else {
+                resp = "ERROR".getBytes();
+                exchange.sendResponseHeaders(HttpStatusCode.BAD_REQUEST, resp.length);
+            }
+
+            out.write(resp);
+            out.close();
+            Debug.log("END OF EXCHANGE\n------------------");
+        }
+        catch (Exception ex) {
+            // Upload was interrupted. We need to remove the stale
+            // 'In Progress' tuple from the DB.
+            rollbackFile(absUploadPath);
+            throw ex;
+        }
+        return fileItems;
+    }
+
+    private String extractAbsUploadPath(URI requestURI) {
+        HashMap<String,String> reqParams = new HashMap<>();
+        String reqPath = Util.parseURI(requestURI, reqParams);
+        String absUploadPath = null;
+        if (reqParams.containsKey("path")) {
+            Debug.log("Using legacy upload method ('upload?path=/absolute/path').");
+            absUploadPath = reqParams.get("path");
+        }
+        else {
+            String relPath = reqPath.substring(this.handlerRoot.length() + 1);
+            absUploadPath = this.uploadDir + relPath;
+        }
+        return absUploadPath;
+    }
+
+    // Remove the 'In Progress' tuple corresponding to a given file.
+    private void rollbackFile(String absUploadPath)
+        throws  SQLException, IOException {
+
+	Debug.log("Rolling back file, upload was not successful");
+
+        try ( DatabaseAccessor db = Command.initDB()) {
+            FileTuple ft = db.getFileTupleInProgress(absUploadPath);
+            if (ft != null) {
+		Debug.log("Removing file tuple " + ft.path);
+                db.deleteFile(ft.path);
+                return;
+            }
+
+            GenomeFile gf = db.getGenomeReleaseFileInProgress(absUploadPath);
+            if (gf != null) {
+		Debug.log("Removing genome release file " + gf.fileName);
+                db.removeGenomeReleaseFile(gf.genomeVersion, gf.fileName);
+                return;
+            }
+
+            ChainFile cf = db.getChainFileInProgress(absUploadPath);
+            if (cf != null) {
+		Debug.log("Removing chail file " + cf.fileName);
+                db.removeChainFiles(cf.fromVersion, cf.toVersion);
+                return;
+            }
 
 
+        }
     }
 
     // Verify the file's integrity and mark it as available for downloading.

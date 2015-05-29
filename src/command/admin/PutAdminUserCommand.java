@@ -1,5 +1,6 @@
 package command.admin;
 
+import authentication.Authenticate;
 import authentication.BCrypt;
 import com.google.gson.annotations.Expose;
 import command.Command;
@@ -43,8 +44,9 @@ public class PutAdminUserCommand extends Command {
     
     @Override
     public void setFields(String uri, HashMap<String, String> query,
-                          String username, UserType userType) {
-        this.userType = userType;
+                          String uuid, UserType userType) {
+        username = Authenticate.getUsernameByID(uuid);
+        super.setFields(uri, query, uuid, userType);
     }
 
     @Override

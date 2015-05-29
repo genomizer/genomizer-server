@@ -5,16 +5,22 @@ import command.Command;
 import command.ValidateException;
 import database.constants.MaxLength;
 import response.HttpStatusCode;
+import process.Smooth;
+import server.Debug;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
 /**
- * Created by dv13jen on 2015-05-27.
+ * Class is used to handle smooth processing. The command can include multiple file packages to run one at a time.
  */
 public class SmoothingProcessCommand extends ProcessCommand {
 
-
+    /**
+     * Validate to make sure all input from clients is in correct format.
+     * @throws ValidateException
+     */
     @Override
     public void validate() throws ValidateException {
         for (SmoothingFile file : files) {
@@ -78,13 +84,13 @@ public class SmoothingProcessCommand extends ProcessCommand {
         private String outfile;
 
         @Expose
-        private int windowSize;
+        private Integer windowSize;
 
         @Expose
         private String meanOrMedian;
 
         @Expose
-        private int minSmooth;
+        private Integer minSmooth;
 
 
         public String getInfile() {
@@ -95,7 +101,7 @@ public class SmoothingProcessCommand extends ProcessCommand {
             return outfile;
         }
 
-        public int getWindowSize() {
+        public Integer getWindowSize() {
             return windowSize;
         }
 
@@ -103,7 +109,7 @@ public class SmoothingProcessCommand extends ProcessCommand {
             return meanOrMedian;
         }
 
-        public int getMinSmooth() {
+        public Integer getMinSmooth() {
             return minSmooth;
         }
 
@@ -124,7 +130,33 @@ public class SmoothingProcessCommand extends ProcessCommand {
          * @param filePaths
          */
         public void ProcessFile(Map.Entry<String, String> filePaths) {
-            throw new UnsupportedOperationException("Error when processing. Smoothing not implemented.");
+
+            String infileWithPath = filePaths.getValue() + infile;
+            String outfileWithPath = filePaths.getValue() + outfile;
+            Integer meanOrMedian = null;
+
+            if(getMeanOrMedian().equals("mean")){
+                meanOrMedian = 0;
+            }else if(getMeanOrMedian().equals("median")){
+                meanOrMedian = 1;
+            }else{
+                throw new UnsupportedOperationException("Error during smoothing processing. Incorrect mean/median. " +
+                        "Should be either 'mean' or 'median'.");
+            }
+
+            try {
+                Smooth.runSmoothing(infileWithPath, getWindowSize(), meanOrMedian,  getMinSmooth(), 0 ,0, outfileWithPath);
+
+            } catch (ValidateException e) {
+                Debug.log("Error during smoothing processing: "+e.getMessage());
+                throw new UnsupportedOperationException("Error during smoothing processing: "+e.getMessage());
+            } catch (IOException e) {
+                Debug.log("Error during smoothing processing: " + e.getMessage());
+                throw new UnsupportedOperationException("Error during smoothing processing: "+e.getMessage());
+            } catch (InterruptedException e) {
+                Debug.log("Error during smoothing processing: " + e.getMessage());
+                throw new UnsupportedOperationException("Error during smoothing processing: "+e.getMessage());
+            }
         }
     }
 }

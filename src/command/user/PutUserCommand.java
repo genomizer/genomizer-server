@@ -9,7 +9,7 @@ import command.UserRights;
 import command.ValidateException;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
-import database.subClasses.UserMethods;
+import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.HttpStatusCode;
 import response.MinimalResponse;
@@ -43,6 +43,13 @@ public class PutUserCommand extends Command {
     @Override
     public int getExpectedNumberOfURIFields() {
         return 1;
+    }
+
+    @Override
+    public void setFields(String uri, HashMap<String, String> query,
+                          String uuid, UserType userType) {
+        username = Authenticate.getUsernameByID(uuid);
+        super.setFields(uri, query, uuid, userType);
     }
 
     /**
