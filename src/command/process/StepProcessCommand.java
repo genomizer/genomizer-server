@@ -4,18 +4,22 @@ import com.google.gson.annotations.Expose;
 import command.Command;
 import command.ValidateException;
 import database.constants.MaxLength;
+import process.Step;
 import response.HttpStatusCode;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
 
 /**
- * Class is used to handle step processing. The command can include multiple file packages to run one at a time.
+ * Class is used to handle step processing. The command can include multiple
+ * file packages to run one at a time.
  */
 public class StepProcessCommand extends ProcessCommand {
     @Override
-    public void doProcess(Map.Entry<String, String> filePath) {
+    public void doProcess(Map.Entry<String, String> filePath)
+            throws InterruptedException, ValidateException, IOException {
         for (StepProcessFile file : files) {
             file.ProcessFile(filePath);
         }
@@ -27,16 +31,26 @@ public class StepProcessCommand extends ProcessCommand {
      */
     @Override
     public void validate() throws ValidateException {
-        for(StepProcessFile file: files) {
-            Command.validateName(file.getInfile(), MaxLength.FILE_FILENAME, "Infile");
-            Command.validateName(file.getOutfile(), MaxLength.FILE_FILENAME, "Outfile");
-            if(file.getStepSize()<0) {
-                throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Error validating StepProcessCommand. " +
-                        "StepSize can not be less than 0");
-            }
-            if(file.getStepSize()==null) {
-                throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Error validating StepProcessCommand. " +
+        for (StepProcessFile file : files) {
+            Command.validateName(
+                    file.getInfile(),
+                    MaxLength.FILE_FILENAME,
+                    "Infile");
+            Command.validateName(
+                    file.getOutfile(),
+                    MaxLength.FILE_FILENAME,
+                    "Outfile");
+            if (file.getStepSize() == null) {
+                throw new ValidateException(
+                        HttpStatusCode.BAD_REQUEST,
+                        "Error validating StepProcessCommand. " +
                         "StepSize can not be null.");
+            }
+            if (file.getStepSize() < 1) {
+                throw new ValidateException(
+                        HttpStatusCode.BAD_REQUEST,
+                        "Error validating StepProcessCommand. " +
+                        "StepSize must be a positive integer");
             }
         }
 
@@ -47,27 +61,28 @@ public class StepProcessCommand extends ProcessCommand {
     @Override
     public String toString() {
         return "StepProcessingCommand{" +
-                "files=" + files +
-                '}';
+               "files=" + files +
+               '}';
     }
+
     @Expose
-    private ArrayList<StepProcessFile> files;
+    protected ArrayList<StepProcessFile> files;
 
     public class StepProcessFile {
 
         /**
-         * Class is used to start a single step processing with correct parameters.
+         * Class is used to start a single step processing with correct
+         * parameters.
          */
 
         @Expose
-        private String infile;
+        protected String infile;
 
         @Expose
-        private String outfile;
+        protected String outfile;
 
         @Expose
-        private Integer stepSize;
-
+        protected Integer stepSize;
 
         public String getInfile() {return infile;}
 
@@ -78,19 +93,22 @@ public class StepProcessCommand extends ProcessCommand {
         @Override
         public String toString() {
             return "RawToProfProcessFile{" +
-                    "infile='" + infile + '\'' +
-                    ", outfile='" + outfile + '\'' +
-                    ", stepSize='" + stepSize + '\'' +
-                    '}';
+                   "infile='" + infile + '\'' +
+                   ", outfile='" + outfile + '\'' +
+                   ", stepSize='" + stepSize + '\'' +
+                   '}';
         }
 
         /**
          * Call upon a single step processing with correct parameters.
-         * @param filePaths
+         * @param filePaths The paths to the infile and outfile.
          */
-        public void ProcessFile(Map.Entry<String, String> filePaths) {
-            throw new UnsupportedOperationException("Error when processing. Step processing not implemented.");
+        public void ProcessFile(Map.Entry<String, String> filePaths)
+                throws InterruptedException, ValidateException, IOException {
+            Step.runStep(
+                    filePaths.getKey() + "/" + infile,
+                    filePaths.getValue() + "/" + outfile,
+                    stepSize);
         }
-
     }
 }
