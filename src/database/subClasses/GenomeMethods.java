@@ -615,20 +615,18 @@ public class GenomeMethods {
 	 *             - if the query does not succeed
 	 */
 	public List<Genome> getAllGenomeReleases() throws SQLException {
-		String query = "SELECT * FROM Genome_Release "
-				+ "NATURAL JOIN Genome_Release_Files "
-				+ "WHERE Status = 'Done' ";
+		String query = "SELECT DISTINCT version FROM Genome_Release ";
 
 		PreparedStatement stmt = conn.prepareStatement(query);
 		ResultSet rs = stmt.executeQuery();
 
 		ArrayList<Genome> genomeList = new ArrayList<Genome>();
-
-		if (rs.next()) {
-			while (!rs.isAfterLast()) {
-				Genome g = new Genome(rs);
-				genomeList.add(g);
-			}
+		String version;
+		Genome tmpGenome;
+		while(rs.next()) {
+			version = rs.getString("version");
+			tmpGenome = getGenomeRelease(version);
+			genomeList.add(tmpGenome);
 		}
 
 		stmt.close();
