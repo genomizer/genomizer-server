@@ -8,12 +8,18 @@ import org.junit.*;
 import process.ProcessException;
 import process.RawToProfileConverter;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.AbstractMap;
+import java.util.Map;
+
 public class RawToProfileTest {
 	RawToProfileConverter rtp = null;
 	String path = "test/male.sam";
-	String bowTie = "-a -v 2 -S";
+	String bowTie = "-a";
 	//"d_melanogaster_fb5_22 -q reads/MOF_male_wt_reads_sample.fastq -S " +path;
-	String[] parameters = new String[]{bowTie, "resources/processTest/genomes/d_melanogaster_fb5_22", "", "","","","",""};
+	String genome = "resources/bowtie2/example/index/lambda_virus";
+	String[] parameters = new String[]{bowTie, genome, "", "","","","",""};
 
 	@Before
 	public void setup() {
@@ -94,4 +100,15 @@ public class RawToProfileTest {
 
 		rtp.procedure(parameters, inFolder, outFilePath);
 	}
+
+	@Test
+	public void shouldRunStaticCall() throws ProcessException, IOException {
+		String inFile = "fastq/test.fastq";
+		String outFile = "results/test.wig";
+		RawToProfileConverter.procedureRaw(
+				bowTie, inFile, outFile, true,"GENOMEVERSION",genome,
+				new AbstractMap.SimpleEntry<String,String>(
+						"resources/processTest/",""));
+	}
+
 }
