@@ -21,25 +21,6 @@ import java.util.HashMap;
  */
 public class SearchForExperimentCommandTest {
 
-	/**
-	 * Test used to check that ValidateException is thrown if the
-	 * file experiment id length is to long.
-	 * @throws ValidateException
-	 */
-	@Ignore
-	@Test(expected = ValidateException.class)
-	public void testValidateFileExpIdLength() throws ValidateException {
-
-		String uri = "zz";
-		for(int i = 0; i < MaxLength.FILE_EXPID + 1; i++) {
-			uri  += "a";
-		}
-
-		Command c = new SearchCommand();
-		c.setFields(uri, new HashMap<String, String>(), null, UserType.ADMIN);
-		c.validate();
-		fail("Expected ValidateException.");
-	}
 
 	/**
 	 * Test used to check that no validateException is thrown and
@@ -55,24 +36,8 @@ public class SearchForExperimentCommandTest {
 		assertTrue(true);
 	}
 
-	//TODO Add this test again after custom regex has beeen implemented.
+	//TODO Add this test again after custom regex has been implemented.
 
-	/**
-	 * Test used to check that ValidateException is thrown
-	 * when invalid characters are used
-	 *
-	 * @throws ValidateException
-	 */
-	@Ignore
-	@Test(expected = ValidateException.class)
-	public void testValidateIncorrectlyFormatted() throws ValidateException {
-
-		Command c = new SearchCommand();
-		c.setFields("uri��", new HashMap<String, String>(), null, UserType.ADMIN);
-		c.validate();
-
-		fail("Expected ValidateException to be thrown.");
-	}
 
 	/**
 	 * Test used to check that ValidateException is not thrown
