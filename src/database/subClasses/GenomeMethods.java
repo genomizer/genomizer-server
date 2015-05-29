@@ -565,7 +565,6 @@ public class GenomeMethods {
 		int resCount = 0;
 		ChainFiles cf = null;
 
-		//ChainFiles cf = getChainFiles(fromVersion, toVersion);
 		String getChainFiles =
 				"SELECT * FROM Chain_File NATURAL JOIN Chain_File_Files " +
 				"WHERE (FromVersion ~~* ?)" + " AND (ToVersion ~~* ?)";
