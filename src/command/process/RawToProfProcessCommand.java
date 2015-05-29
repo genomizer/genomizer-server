@@ -157,8 +157,9 @@ public class RawToProfProcessCommand extends ProcessCommand {
             //Get the genome information from the database.
             Genome g = initDB().getGenomeRelease(getGenomeVersion());
 
+
             if (g == null) {
-                throw new UnsupportedOperationException(
+                throw new IOException(
                         "Could not find genome version: " +
                         getGenomeVersion());
             } else {
@@ -172,7 +173,7 @@ public class RawToProfProcessCommand extends ProcessCommand {
                             "Error when processing. Could not get " +
                             "genomeFilePrefix: "
                             + genomeVersion);
-                    throw new UnsupportedOperationException(
+                    throw new IOException(
                             "Error when processing. Could not get " +
                             "genomeFilePrefix: "
                             + genomeVersion);
@@ -183,7 +184,7 @@ public class RawToProfProcessCommand extends ProcessCommand {
                             "Error when processing. Could not get " +
                             "genomeFolderPath: "
                             + genomeVersion);
-                    throw new UnsupportedOperationException(
+                    throw new IOException(
                             "Error when processing. Could not get " +
                             "genomeFolderPath: "
                             + genomeVersion);

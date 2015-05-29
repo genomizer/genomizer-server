@@ -14,9 +14,9 @@ import java.util.ArrayList;
 public class Smooth extends Executor {
 
     private final SmoothingParameters parameters;
-    private static final String smoothingScriptCmd   = "expect smooth_v4.sh";
-    private static final String smoothingScriptSh    = "smooth_v4.sh";
-    private static final String smoothingScriptPerl  = "smooth_v4.pl";
+    private static final String smoothingScriptCmd   = "expect resources/smooth_v4.sh";
+    private static final String smoothingScriptSh    = "resources/smooth_v4.sh";
+    private static final String smoothingScriptPerl  = "resources/smooth_v4.pl";
 
     public Smooth(String path,
                   int    windowSize,

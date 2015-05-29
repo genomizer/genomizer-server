@@ -46,7 +46,7 @@ public class ProcessPoolIntegrationTest {
 
     @Test
     @Ignore
-    public void shouldProcessOneFile() throws Exception {
+    public void shouldStepOneFile() throws Exception {
         String json = "{\"expId\":\"processpool_test\"," +
                       "\"processCommands\":[{\"type\":\"step\"," +
                       "\"files\":[{\"infile\":\"stepTestInfile.sgr\"," +
@@ -61,7 +61,7 @@ public class ProcessPoolIntegrationTest {
 
     @Test
     @Ignore
-    public void shouldProcessAllFilesSequentially() throws Exception {
+    public void shouldStepAllFilesSequentially() throws Exception {
         StringBuilder jsonBuilder = new StringBuilder(
                 "{\"expId\":\"processpool_test\",\"processCommands\": [");
         for (int i = 0; i < STEP_OUT_FILES.length - 1; i++) {
@@ -78,7 +78,6 @@ public class ProcessPoolIntegrationTest {
         String json = jsonBuilder.toString();
         System.out.println("json = " + json);
         ProcessCommands commands = gson.fromJson(json, ProcessCommands.class);
-//        commands.validate();
 
         commands.setPool(pool);
         commands.doProcesses();
@@ -88,14 +87,25 @@ public class ProcessPoolIntegrationTest {
             String stepInfile,
             String stepOutfile,
             int stepSize) {
-        StringBuilder commandBuilder =
-                new StringBuilder("{\"type\":\"step\",\"files\":[");
-        commandBuilder.append("{\"infile\":\"").append(stepInfile)
-                .append("\",");
-        commandBuilder.append("\"outfile\":\"").append(stepOutfile)
-                .append("\",");
-        commandBuilder.append("\"stepSize\":").append(stepSize).append("}]}");
-        return commandBuilder.toString();
+        return "{\"type\":\"step\",\"files\":[" + "{\"infile\":\"" +
+               stepInfile + "\"," + "\"outfile\":\"" + stepOutfile + "\"," +
+               "\"stepSize\":" + stepSize + "}]}";
     }
 
+    @Test
+    @Ignore
+    public void shouldRawToProfOneFile() throws Exception {
+        String json =
+                "{\"expId\":\"processpool_test\"," +
+                "\"processCommands\":[{\"type\":\"rawToProfile\"," +
+                "\"files\":[{\"infile\":\"stepTestInfile.sgr\"," +
+                "\"outfile\":\"shtrhtrshts\",\"genomeVersion\":\"hg38\"," +
+                "\"params\":\"-a -m 1 --best -p 10 -v 2 -q -S\"," +
+                "\"keepSam\":\"on\"}]}]}";
+
+        ProcessCommands commands = gson.fromJson(json, ProcessCommands.class);
+        commands.setPool(pool);
+
+        commands.doProcesses();
+    }
 }
