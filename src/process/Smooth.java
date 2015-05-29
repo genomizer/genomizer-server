@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class Smooth extends Executor {
 
     private final SmoothingParameters parameters;
-    private static final String smoothingScriptCmd   = "expect resources/smooth_v4.sh";
+    private static final String smoothingScriptCmd   = "expect";
     private static final String smoothingScriptSh    = "resources/smooth_v4.sh";
     private static final String smoothingScriptPerl  = "resources/smooth_v4.pl";
 
@@ -54,6 +54,8 @@ public class Smooth extends Executor {
 
         /* Time to build our command */
         args.add(smoothingScriptCmd);
+        args.add(smoothingScriptSh);
+        args.add(parameters.getPath());
         args.add(String.valueOf(parameters.getWindowSize()));
         args.add(String.valueOf(parameters.getMeanType()));
         args.add(String.valueOf(parameters.getMinPos()));
