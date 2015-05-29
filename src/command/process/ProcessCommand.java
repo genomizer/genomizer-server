@@ -1,6 +1,7 @@
 package command.process;
 
 import command.ValidateException;
+import response.HttpStatusCode;
 import response.Response;
 import server.Doorman;
 import server.ProcessPool;
@@ -26,12 +27,16 @@ public abstract class ProcessCommand {
 
         ProcessPool pool = Doorman.getProcessPool();
         Collection<Future<Response>> futures = new ArrayList<>();
-        for (Callable<Response> callable: getCallables(rawFilesDir, profileFilesDir)) {
+        for (Callable<Response> callable : getCallables(
+                rawFilesDir,
+                profileFilesDir)) {
             UUID uuid = pool.addProcess(callable);
             futures.add(pool.getFuture(uuid));
         }
-        for (Future<Response> future: futures) {
-            future.get();
+        for (Future<Response> future : futures) {
+            if (future.get().getCode() != HttpStatusCode.OK) {
+                throw new InterruptedException(future.get().getMessage());
+            }
         }
     }
 

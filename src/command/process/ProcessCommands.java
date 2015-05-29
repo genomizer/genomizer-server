@@ -16,7 +16,8 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 /**
- * The class handles processing a list of processing commands. The list of commands each have a list of files to
+ * The class handles processing a list of processing commands. The list of
+ * commands each have a list of files to
  * process.
  */
 public class ProcessCommands extends Command {
@@ -44,7 +45,8 @@ public class ProcessCommands extends Command {
     }
 
     /**
-     * Validate that the user has correct rights to use the command and that the json information is in
+     * Validate that the user has correct rights to use the command and that
+     * the json information is in
      * correct format.
      * @throws ValidateException
      */
@@ -54,7 +56,8 @@ public class ProcessCommands extends Command {
         validateName(expId, MaxLength.EXPID, "Experiment ID");
 
         if (processCommands == null || processCommands.size() < 1) {
-            throw new ValidateException(HttpStatusCode.BAD_REQUEST,
+            throw new ValidateException(
+                    HttpStatusCode.BAD_REQUEST,
                     "Specify processes for the experiment.");
         }
 
@@ -65,7 +68,8 @@ public class ProcessCommands extends Command {
 
     /**
      * Run processing on all commands.
-     * @return a response of the total processing. A problem during any part of the process of even a single file
+     * @return a response of the total processing. A problem during any part
+     * of the process of even a single file
      * will result in a ErrorResponse.
      */
     @Override
@@ -77,10 +81,14 @@ public class ProcessCommands extends Command {
 
             startProcessing();
 
-            return new ProcessResponse(HttpStatusCode.OK, "Processing of experiment " + expId + " has begun.");
+            return new ProcessResponse(
+                    HttpStatusCode.OK,
+                    "Processing of experiment " + expId + " has begun.");
 
         } catch (IOException | SQLException e) {
-            return new ProcessResponse(HttpStatusCode.NOT_FOUND, e.getMessage());
+            return new ProcessResponse(
+                    HttpStatusCode.NOT_FOUND,
+                    e.getMessage());
         }
     }
 
@@ -89,14 +97,15 @@ public class ProcessCommands extends Command {
             @SuppressWarnings("TryWithIdenticalCatches")
             @Override
             public void run() {
-                for (ProcessCommand processCommand: processCommands) {
-                    try {
-                        processCommand.doProcess(rawFilesDir, profileFilesDir);
-                    } catch (ExecutionException e) {
-                        e.printStackTrace();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                try {
+                    for (ProcessCommand processCommand : processCommands) {
+                        processCommand
+                                .doProcess(rawFilesDir, profileFilesDir);
                     }
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
         }.start();
