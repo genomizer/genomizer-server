@@ -1,5 +1,6 @@
 package command.admin;
 
+import authentication.Authenticate;
 import authentication.BCrypt;
 import com.google.gson.annotations.Expose;
 import command.Command;
@@ -40,11 +41,15 @@ public class PutAdminUserCommand extends Command {
     public int getExpectedNumberOfURIFields() {
         return 2;
     }
-    
-    @Override
-    public void setFields(String uri, HashMap<String, String> query,
-                          String username, UserType userType) {
-        this.userType = userType;
+
+
+    /**
+     * Set the username of the user to edit. Only used during testing
+     *
+     * @param username - the username of the user to edit.
+     */
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     @Override

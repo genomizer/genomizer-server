@@ -200,14 +200,14 @@ public class UserMethods {
 	public int updateUser(String username, UserType role, String fullName,
 						  String email) throws SQLException, IOException {
 		isValidArgument(username);
-		isValidArgument(role.name());
+		isValidArgument(role.toString());
 		isValidArgument(fullName);
 		isValidArgument(email);
-		String query = "UPDATE User_Info" +
-				"SET Role = ?, FullName = ?, Email = ?" +
+		String query = "UPDATE User_Info " +
+				"SET Role = ?, FullName = ?, Email = ? " +
 				"WHERE UserName = ?";
 		PreparedStatement stmt = conn.prepareStatement(query);
-		stmt.setString(1, role.name());
+		stmt.setString(1, role.toString());
 		stmt.setString(2, fullName);
 		stmt.setString(3, email);
 		stmt.setString(4, username);
