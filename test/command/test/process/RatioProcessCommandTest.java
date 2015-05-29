@@ -127,7 +127,7 @@ public class RatioProcessCommandTest {
                 "{\"expId\":\"not_an_expid\"," +
                         "\"processCommands\":[{\"type\":\"ratio\", \"files\":[{\"preChipFile\": " +
                         "\"infile1Name\", \"postChipFile\": \"infile2Name\", \"outfile\": \"in\", " +
-                        "\"mean\": \"single\", \"readsCutoff\": \"2\", \"chromosomes\": \"chromosome\"}]}]}";
+                        "\"mean\": \"asd\", \"readsCutoff\": \"2\", \"chromosomes\": \"chromosome\"}]}]}";
         ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
