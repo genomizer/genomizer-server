@@ -118,7 +118,9 @@ public class RatioProcessCommand extends ProcessCommand {
 
             String preChipPath = filePaths.getValue() + getPreChipFile();
             String postChipPath = filePaths.getValue() + getPostChipFile();
+            String outfilePath = filePaths.getValue() + getOutfile();
 
+            //TODO: Run ratio with preChipPath, postChipPath, outfilePath, getMean(), getReadsCutoff(), getChromosomes()
 
             throw new UnsupportedOperationException("Error when processing. Ratio processing not yet implemented!");
         }
