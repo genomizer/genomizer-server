@@ -239,7 +239,7 @@ public class ExperimentMethods {
         for (Entry<String, String> e : annotations.entrySet()) {
             String key = e.getKey();
             String value = e.getValue();
-            validateAnnotation(key, value);
+            e.setValue(validateAnnotation(key, value));
         }
 
         String query = "UPDATE Annotated_With SET Value = ?"
