@@ -4,7 +4,6 @@ import command.Command;
 import command.UserRights;
 import command.ValidateException;
 import database.DatabaseAccessor;
-import database.containers.Experiment;
 import database.subClasses.UserMethods.UserType;
 import response.*;
 import server.Debug;
@@ -15,7 +14,6 @@ import java.net.URLDecoder;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Command used to issue a search.
