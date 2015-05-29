@@ -46,29 +46,49 @@ public class GenomeMethods {
 	 * @return String path - a file path, NULL if it was not found.
 	 * @throws SQLException
 	 */
-
 	public Genome getGenomeRelease(String genomeVersion) throws SQLException {
 
-        String query = "SELECT * FROM Genome_Release AS R "
-                + "JOIN Genome_Release_Files AS F "
-                + "ON (R.Version = F.Version) "
-                + "WHERE (R.Version ~~* ?)";
+		String species;
+		String folderPath;
+		String file;
+		ArrayList<String> fileList = new ArrayList<String>();
+
+		String query = "SELECT * FROM Genome_Release AS R "
+				+ "JOIN Genome_Release_Files AS F "
+				+ "ON (R.Version = F.Version) "
+				+ "WHERE (R.Version ~~* ?)";
 
 		PreparedStatement stmt = conn.prepareStatement(query);
 		stmt.setString(1, genomeVersion);
 		ResultSet rs = stmt.executeQuery();
 
-		Genome genome = null;
-		if (rs.next()) {
-			genome = new Genome(rs);
+		//Get the initial info
+		if(rs.next()) {
+			species = rs.getString("Species");
+			folderPath = rs.getString("FolderPath");
+			file = rs.getString("FileName");
+			if(file != null) {
+				fileList.add(rs.getString("FileName"));
+			}
+		} else {
+			//The genome did not exist
+			return null;
+		}
+
+		//Loop through files.
+		while (rs.next()) {
+			file = rs.getString("FileName");
+			if(file != null) {
+				fileList.add(rs.getString("FileName"));
+			}
 		}
 
 		stmt.close();
 
-		return genome;
+		return new Genome(genomeVersion, species, folderPath, fileList);
 	}
 
-    /**
+	/**
      * Add one genome release to the database.
      *
      * @param genomeVersion the genome version

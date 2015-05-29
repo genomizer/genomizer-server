@@ -346,7 +346,7 @@ public class MockUserTests {
     public void getGenomeRelease() throws Exception {
 
     	addGenomeReleaseFile();
-        Genome g = dbac.getGenomeRelease("HG38");
+        Genome g = dbac.getGenomeRelease("hg38");
         assertEquals("hg38", g.genomeVersion);
 
         String expectedFolderPath = testFolderPath
