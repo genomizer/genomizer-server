@@ -127,7 +127,7 @@ public class RatioProcessCommandTest {
                 "{\"expId\":\"not_an_expid\"," +
                         "\"processCommands\":[{\"type\":\"ratio\", \"files\":[{\"preChipFile\": " +
                         "\"infile1Name\", \"postChipFile\": \"infile2Name\", \"outfile\": \"in\", " +
-                        "\"mean\": \"adw\", \"readsCutoff\": \"2\", \"chromosomes\": \"chromosome\"}]}]}";
+                        "\"mean\": \"single\", \"readsCutoff\": \"2\", \"chromosomes\": \"chromosome\"}]}]}";
         ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
@@ -139,6 +139,17 @@ public class RatioProcessCommandTest {
                         "\"processCommands\":[{\"type\":\"ratio\", \"files\":[{\"preChipFile\": " +
                         "\"infile1Name\", \"postChipFile\": \"infile2Name\", \"outfile\": \"in\", " +
                         "\"mean\": \"double\", \"readsCutoff\": \"-1\", \"chromosomes\": \"chromosome\"}]}]}";
+        ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
+        processCommands.setFields(null, null, null, UserMethods.UserType.USER);
+        processCommands.validate();
+    }
+    @Test(expected = ValidateException.class)
+    public void canGiveValidateExceptionOnNullReadsCutoff() throws ValidateException {
+        String json =
+                "{\"expId\":\"not_an_expid\"," +
+                        "\"processCommands\":[{\"type\":\"ratio\", \"files\":[{\"preChipFile\": " +
+                        "\"infile1Name\", \"postChipFile\": \"infile2Name\", \"outfile\": \"in\", " +
+                        "\"mean\": \"double\", \"chromosomes\": \"chromosome\"}]}]}";
         ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();

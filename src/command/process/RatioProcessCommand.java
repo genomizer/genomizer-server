@@ -32,6 +32,9 @@ public class RatioProcessCommand extends ProcessCommand {
                 throw new ValidateException(HttpStatusCode.BAD_REQUEST,
                         "Incorrect mean, should be 'single' or 'double'.");
             }
+            if(file.getReadsCutoff()==null){
+                throw new ValidateException(HttpStatusCode.BAD_REQUEST, "ReadsCutOff should not be null.");
+            }
             if(file.getReadsCutoff()<0){
                 throw new ValidateException(HttpStatusCode.BAD_REQUEST, "ReadsCutOff should not be less than 0.");
             }
