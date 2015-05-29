@@ -5,6 +5,7 @@ import command.UserRights;
 import command.ValidateException;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
+import database.containers.FileTuple;
 import database.subClasses.UserMethods.UserType;
 import response.*;
 import server.Debug;
