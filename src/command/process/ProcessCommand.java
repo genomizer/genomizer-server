@@ -22,6 +22,8 @@ import java.util.concurrent.Future;
 
 public abstract class ProcessCommand {
 
+    protected String expID;
+
     public void doProcess(ProcessPool pool, String rawFilesDir, String profileFilesDir)
             throws ExecutionException, InterruptedException {
 
@@ -37,6 +39,10 @@ public abstract class ProcessCommand {
                 throw new InterruptedException(future.get().getMessage());
             }
         }
+    }
+
+    public void setExpID(String expID) {
+        this.expID = expID;
     }
 
     protected abstract Collection<Callable<Response>> getCallables(
