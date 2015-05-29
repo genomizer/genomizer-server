@@ -364,13 +364,13 @@ public class GenomeMethods {
 	}
 
 	public boolean removeGenomeReleaseFile (String genomeVersion,
-											String filePath)
+											String fileName)
 		throws SQLException, IOException {
-		String fileName = new File(filePath).getName();
+
 
 		try (PreparedStatement stmt = conn.prepareStatement(
-				"DELETE FROM Genome_Release_Files"
-				+ "WHERE FileName ~~* ?"
+				"DELETE FROM Genome_Release_Files "
+				+ "WHERE FileName ~~* ? "
 				+ "AND Version ~~* ?")) {
 			stmt.setString(1, fileName);
 			stmt.setString(2, genomeVersion);

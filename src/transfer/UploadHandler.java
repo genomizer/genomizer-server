@@ -10,7 +10,6 @@ import database.containers.ChainFile;
 import database.containers.FileTuple;
 import database.containers.GenomeFile;
 import database.containers.HasCheckSumMD5;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUpload;
 import org.apache.commons.fileupload.FileUploadException;
@@ -198,7 +197,7 @@ public class UploadHandler {
 
             ChainFile cf = db.getChainFileInProgress(absUploadPath);
             if (cf != null) {
-		Debug.log("Removing chail file " + cf.fileName);
+		Debug.log("Removing chain file " + cf.fileName);
                 db.removeChainFiles(cf.fromVersion, cf.toVersion);
                 return;
             }
