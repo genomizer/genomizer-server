@@ -231,6 +231,9 @@ public class RawToProfProcessCommand extends ProcessCommand {
                         return new ProcessResponse(
                                 HttpStatusCode
                                         .INTERNAL_SERVER_ERROR, e.getMessage());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return null;
                     }
                 }
             };
