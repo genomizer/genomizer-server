@@ -53,6 +53,15 @@ public class PutUserCommand extends Command {
     }
 
     /**
+     * Set the username of the user to edit. Only used during testing
+     *
+     * @param username - the username of the user to edit.
+     */
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    /**
      * Used to make sure the strings of the command are correct
      * @throws command.ValidateException
      */
