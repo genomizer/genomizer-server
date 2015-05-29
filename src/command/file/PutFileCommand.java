@@ -53,7 +53,7 @@ public class PutFileCommand extends Command {
 		validateName(grVersion, MaxLength.FILE_GRVERSION, "Genome release");
 		validateName(fileName, MaxLength.FILE_FILENAME, "Filename");
 		validateExists(metaData, MaxLength.FILE_METADATA, "Metadata");
-		if(!isInteger(fileID) | !isInteger(type))
+		if(!isInteger(fileID) || !isInteger(type))
 			throw new ValidateException(HttpStatusCode.BAD_REQUEST,"FileID is not an int");
 
 	}
