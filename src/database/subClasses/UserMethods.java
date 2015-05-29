@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class UserMethods {
 
-	public enum UserType {USER, GUEST, UNKNOWN, ADMIN}
+	public enum UserType {USER, GUEST, UNKNOWN, UserType, ADMIN}
 
 	private Connection conn;
 

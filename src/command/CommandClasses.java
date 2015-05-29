@@ -21,6 +21,7 @@ import command.genomerelease.GetGenomeReleaseSpeciesCommand;
 import command.genomerelease.PostGenomeReleaseCommand;
 import command.process.*;
 import command.search.SearchCommand;
+import command.user.GetUserCommand;
 import command.user.PutUserCommand;
 
 import java.util.HashMap;
@@ -62,6 +63,7 @@ public class CommandClasses {
         //User commands
         //classes.put("PUT /user", PutUserPasswordCommand.class);
         classes.put("PUT /user", PutUserCommand.class);
+        classes.put("GET /user/", GetUserCommand.class);
 
         //Admin commands
         classes.put("POST /admin/user", PostAdminUserCommand.class);
