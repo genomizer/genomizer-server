@@ -173,8 +173,8 @@ public class FileTableTests {
 
     private void addMockFile(String filepath)
             throws IOException {
-
         File file = new File(filepath);
+        file.mkdirs();
         file.createNewFile();
     }
 

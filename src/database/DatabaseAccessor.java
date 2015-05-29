@@ -977,9 +977,9 @@ public class DatabaseAccessor implements AutoCloseable {
      *             - If the database could not be accessed
      * @throws ParseException
      */
-    public Entry<String, String> processRawToProfile(String expId)
+    public Entry<String, String> processRawToProfile(String expID)
             throws IOException, SQLException {
-        Experiment e = expMethods.getExperiment(expId);
+        Experiment e = expMethods.getExperiment(expID);
         if (e == null) {
             throw new IOException("Invalid experiment ID");
         }
@@ -989,10 +989,9 @@ public class DatabaseAccessor implements AutoCloseable {
         List<FileTuple> fileTuples = e.getFiles();
         FileTuple rawFileTuple = getRawFileTuple(fileTuples);
         if (rawFileTuple == null) {
-            throw new IOException(expId + " has no raw files to process!");
+            throw new IOException(expID + " has no raw files to process!");
         }
-        String profileFolderPath = fpg.generateNewProfileSubFolder(fpg
-                .getProfileFolderPath(e.getID()));
+        String profileFolderPath = fpg.getProfileFolderPath(expID);
         return new SimpleEntry<String, String>(rawFileTuple.getParentFolder(),
                 profileFolderPath);
     }

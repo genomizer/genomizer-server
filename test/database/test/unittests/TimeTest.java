@@ -36,7 +36,7 @@ public class TimeTest {
 
         dbac.close();
     }
-
+    @Ignore
     @Test
     public void ShouldStillBeConnectedAfter15Seconds() throws SQLException{
 

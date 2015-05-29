@@ -418,7 +418,7 @@ public class MockUserTests {
 
         String expectedProfileFolder = testFolderPath
                 + "My First Experiment" + File.separator + "profile"
-                + File.separator + "0" + File.separator;
+                + File.separator;
 
         assertEquals(expectedRawFolder, folders.getKey());
         assertEquals(expectedProfileFolder, folders.getValue());
