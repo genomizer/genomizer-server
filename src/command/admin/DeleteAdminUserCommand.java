@@ -62,17 +62,15 @@ public class DeleteAdminUserCommand extends Command {
 	 */
 	@Override
 	public Response execute() {
-		DatabaseAccessor db = null;
 		Response response;
 
 		// Do not allow deletion of admins own account. This make sure the existence of at least one admin account.
 		if(Authenticate.getUsernameByID(uuid).equals(username)){
 			response = new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Deletion of user "+username+" is not allowed. " +
-					"Deletion of admins own account is not allowed. Use another admin user to delete this account.");
+					"Deletion of admins own account is not allowed. Use another admin user to delete the account.");
 		}
 
-		try {
-			db = initDB();
+		try (DatabaseAccessor db = initDB()) {
 			if (db.deleteUser(username) != 0) {
 				response = new MinimalResponse(HttpStatusCode.OK);
 				Authenticate.deleteUsername(username);
@@ -90,9 +88,6 @@ public class DeleteAdminUserCommand extends Command {
 			response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
 					"Deletion of user '" + username + "' unsuccessful. " +
 							e.getMessage());
-		} finally {
-			if (db != null)
-				db.close();
 		}
 
 		return response;

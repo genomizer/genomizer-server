@@ -17,7 +17,6 @@ import server.Debug;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.HashMap;
 
 /**
  * Command used to alter user information.
@@ -67,20 +66,22 @@ public class PutAdminUserCommand extends Command {
 
     }
 
+    /**
+     * Try admin editing of inputed user. Return a response of the result.
+     * @return
+     */
     @Override
     public Response execute() {
-        DatabaseAccessor db = null;
         Response response;
 
         // Do not allow admin editing of admins own account. Instead PutUserCommand should be used.
         // This ensures admins can not self edit their privileges, potentially destroying the last admin account.
-        if(Authenticate.getUsernameByID(uuid).equals(username)){
-            response = new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Admin editing of user "+username+
-                    " is not allowed. Admin editing of admins own account is not allowed. For changing of privileges " +
-                    "use another admin account. For changing of password, full name and email use normal user editing.");
-        }
-        try {
-            db = initDB();
+        if(Authenticate.getUsernameByID(uuid).equals(username))
+            if(!privileges.equals(UserType.ADMIN.name()))
+                response = new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Changing of privileges on user "+username+
+                    " is not allowed. You may not lower your own privileges.");
+
+        try(DatabaseAccessor db = initDB()) {
             String hash = BCrypt.hashpw(password, BCrypt.gensalt());
             if (db.updateUser(username, hash, UserType.valueOf(privileges),
                     name, email) != 0)
@@ -98,9 +99,6 @@ public class PutAdminUserCommand extends Command {
             response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
                     "Editing of user '" + username + "' unsuccessful. " +
                             e.getMessage());
-        } finally {
-            if (db != null)
-                db.close();
         }
 
         return response;
