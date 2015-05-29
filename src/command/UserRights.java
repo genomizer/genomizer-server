@@ -58,6 +58,7 @@ public class UserRights {
         /** User */
         userRights.put(PutUserCommand.class, UserType.USER);
         userRights.put(PutUserPasswordCommand.class, UserType.USER);
+        userRights.put(GetUserCommand.class,UserType.USER);
 
         /** Admin */
         userRights.put(PutAdminUserCommand.class, UserType.ADMIN);
