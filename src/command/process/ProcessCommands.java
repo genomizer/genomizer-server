@@ -142,19 +142,16 @@ public class ProcessCommands extends Command {
      */
     @Override
     public Response execute() {
-//        try {
+        for (ProcessCommand processCommand : processCommands) {
+            processCommand.setExpID(expId);
+        }
 
-            startProcessingThread();
+        startProcessingThread();
 
-            return new ProcessResponse(
-                    HttpStatusCode.OK,
-                    "Processing of experiment " + expId + " has begun.");
+        return new ProcessResponse(
+                HttpStatusCode.OK,
+                "Processing of experiment " + expId + " has begun.");
 
-//        } catch (IOException | SQLException e) {
-//            return new ProcessResponse(
-//                    HttpStatusCode.NOT_FOUND,
-//                    e.getMessage());
-//        }
     }
 
     private void startProcessingThread() {
