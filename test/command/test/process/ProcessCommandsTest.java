@@ -126,4 +126,32 @@ public class ProcessCommandsTest {
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }
+
+    @Test (expected = ValidateException.class)
+    public void shouldThrowValidateExceptionOnIncorrectCommandOrder() throws ValidateException {
+        String json = "{ \"expId\": \"anExpId\",\n" +
+                "  \"processCommands\": [ \n" +
+                "  { \"type\": \"smoothing\",\n" +
+                "    \"files\": [ { \"infile\": \"infileName\",\n" +
+                "                 \"outfile\": \"outfileName\",\n" +
+                "                 \"windowSize\": 10,\n" +
+                "                 \"meanOrMedian\": \"mean\",\n" +
+                "                 \"minSmooth\": 5 }\n" +
+                "             ]\n" +
+                "  },\n" +
+                "  { \"type\": \"rawToProfile\",\n" +
+                "    \"files\": [ { \"infile\": \"in.fastq\",\n" +
+                "                 \"outfile\": \"out.fastq\",\n" +
+                "                 \"params\": \"-a -m 1\",\n" +
+                "                 \"genomeVersion\": \"aGR\",\n" +
+                "                 \"keepSam\": true,\n" +
+                "                 \"sortSamStringency\": \"STRICT\"\n" +
+                "             } ]   \n" +
+                "  }\n" +
+                "] }";
+        ProcessCommands processCommands =
+                gson.fromJson(json, ProcessCommands.class);
+        processCommands.setFields(null, null, null, UserMethods.UserType.USER);
+        processCommands.validate();
+    }
 }
