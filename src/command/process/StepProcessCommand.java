@@ -89,6 +89,8 @@ public class StepProcessCommand extends ProcessCommand {
          * @param filePaths
          */
         public void ProcessFile(Map.Entry<String, String> filePaths) {
+            // TODO: Run step with getInfile(), getOutfile(), getStepSize()
+
             throw new UnsupportedOperationException("Error when processing. Step processing not implemented.");
         }
 

@@ -15,8 +15,6 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.regex.Pattern;
-
 import static command.Command.initDB;
 
 /**
