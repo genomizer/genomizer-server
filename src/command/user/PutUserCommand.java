@@ -69,6 +69,7 @@ public class PutUserCommand extends Command {
     public Response execute() {
         DatabaseAccessor db;
         String dbHash;
+        username = Authenticate.getUsernameByID(uuid);
         try {
             db = initDB();
             dbHash = db.getPasswordHash(username);
