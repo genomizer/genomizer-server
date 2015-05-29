@@ -6,10 +6,13 @@ import command.UserRights;
 import command.ValidateException;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
+import database.subClasses.UserMethods;
 import response.*;
+import server.Debug;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.HashMap;
 
 /**
  * Class used to handle updating files in experiments.
@@ -33,6 +36,14 @@ public class PutFileCommand extends Command {
 	@Expose
 	private String grVersion = null;
 
+	private String fileID;
+
+	@Override
+	public void setFields(String uri, HashMap<String, String> query,
+						  String username, UserMethods.UserType userType) {
+		super.setFields(uri, query, username, userType);
+		fileID = uri.split("/")[2];
+	}
 
 	@Override
 	public void validate() throws ValidateException {
@@ -42,6 +53,9 @@ public class PutFileCommand extends Command {
 		validateName(grVersion, MaxLength.FILE_GRVERSION, "Genome release");
 		validateName(fileName, MaxLength.FILE_FILENAME, "Filename");
 		validateExists(metaData, MaxLength.FILE_METADATA, "Metadata");
+		if(!isInteger(fileID) | !isInteger(type))
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST,"FileID is not an int");
+
 	}
 
 	@Override
@@ -52,12 +66,27 @@ public class PutFileCommand extends Command {
 	@Override
 	public Response execute() {
 		try (DatabaseAccessor db = initDB()){
-			//TODO ADD db function here...
-
-		} catch (SQLException | IOException e) {
-			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, e.getMessage());
+			db.changeFileName(Integer.parseInt(fileID),fileName);
+			db.changeFileType(Integer.parseInt(fileID),Integer.parseInt(type));
+			db.changeFileMetaData(Integer.parseInt(fileID),metaData);
+			db.changeFileAuthor(Integer.parseInt(fileID),author);
+			db.changeFileGrVersion(Integer.parseInt(fileID),grVersion);
+		} catch (SQLException e) {
+			Debug.log("PutfileCommand SQLException :  " + e.getMessage());
+			return new DatabaseErrorResponse("Could not alter file");
+		} catch (IOException e) {
+			Debug.log("PutfileCommand IOException :  " + e.getMessage());
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
+					"Could not alter file");
 		}
-
 		return 	new MinimalResponse(HttpStatusCode.NOT_IMPLEMENTED);
+	}
+
+	public boolean isInteger(String s){
+		for(Character c : s.toCharArray()){
+			if(!Character.isDigit(c))
+				return false;
+		}
+		return true;
 	}
 }
