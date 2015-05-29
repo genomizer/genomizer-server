@@ -178,21 +178,27 @@ public class UploadHandler {
     // Remove the 'In Progress' tuple corresponding to a given file.
     private void rollbackFile(String absUploadPath)
         throws  SQLException, IOException {
+
+	Debug.log("Rolling back file, upload was not successful");
+
         try ( DatabaseAccessor db = Command.initDB()) {
             FileTuple ft = db.getFileTupleInProgress(absUploadPath);
             if (ft != null) {
+		Debug.log("Removing file tuple " + ft.path);
                 db.deleteFile(ft.path);
                 return;
             }
 
             GenomeFile gf = db.getGenomeReleaseFileInProgress(absUploadPath);
             if (gf != null) {
+		Debug.log("Removing genome release file " + gf.fileName);
                 db.removeGenomeReleaseFile(gf.genomeVersion, gf.fileName);
                 return;
             }
 
             ChainFile cf = db.getChainFileInProgress(absUploadPath);
             if (cf != null) {
+		Debug.log("Removing chail file " + cf.fileName);
                 db.removeChainFiles(cf.fromVersion, cf.toVersion);
                 return;
             }
