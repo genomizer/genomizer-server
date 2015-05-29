@@ -45,7 +45,7 @@ public class RequestHandler implements HttpHandler {
                 new ProcessCommandAdapter());
 		gson = builder.create();
         uploadHandler = new UploadHandler("/upload", ServerSettings.
-                fileLocation, System.getProperty("java.io.tmpdir"));
+                fileLocation, ServerSettings.uploadTempDir);
         downloadHandler = new DownloadHandler("/download", ServerSettings.
                 fileLocation);
 	}
