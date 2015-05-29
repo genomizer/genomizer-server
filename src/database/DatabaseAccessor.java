@@ -11,12 +11,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.*;
 import java.text.ParseException;
+import java.util.*;
 import java.util.AbstractMap.SimpleEntry;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Properties;
 
 /**
  * PREREQUISITES: The construction parameters must reference a postgresql
@@ -74,6 +71,7 @@ public class DatabaseAccessor implements AutoCloseable {
         props.setProperty("password", password);
 
         conn = DriverManager.getConnection(url, props);
+        conn.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
 
         fpg = new FilePathGenerator(DATAFOLDER);
         pm2sql = new PubMedToSQLConverter();
@@ -426,10 +424,32 @@ public class DatabaseAccessor implements AutoCloseable {
      *             - if the query does not succeed
      * @throws IOException
      *             - if the value is invalid for the annotation type.
+     * @deprecated  Use updateExperiment(String expID,
+     *                      HashMap<String, String> annotations) instead.
      */
+    @Deprecated
     public int updateExperiment(String expID, String label, String value)
             throws SQLException, IOException {
         return expMethods.updateExperiment(expID, label, value);
+    }
+
+    /**
+     * Updates values of multiple annotations of a unique experiment.
+     *
+     * @param expID - the name of the experiment to annotate.
+     * @param annotations - the list of annotations to set.
+     *            Should consist of objects of type Entry<String1, String2> where
+     *            String1 is the label and key of the entry, and String2 is the
+     *            value to assign to that label as well as the value of the entry.
+     * @return the number of tuples updated in the database.
+     * @throws SQLException
+     *             - if the query does not succeed
+     * @throws IOException
+     *             - if the value is invalid for the annotation type.
+     */
+    public int updateExperiment(String expID, HashMap<String, String> annotations)
+            throws SQLException, IOException {
+        return expMethods.updateExperiment(expID, annotations);
     }
 
     /**
@@ -872,6 +892,50 @@ public class DatabaseAccessor implements AutoCloseable {
         return fileMethods.changeFileName(fileID, newFileName);
     }
 
+    /**
+     * Changes the file type for a specific file with given fileID.
+     * @param fileID
+     * @param newType
+     * @return
+     * @throws SQLException
+     */
+    public int changeFileType(int fileID, int newType) throws SQLException {
+        return fileMethods.changeFileType(fileID, newType);
+    }
+
+    /**
+     * Changes the file meta data for a specific file with given fileID
+     * @param fileID
+     * @param newMetaData
+     * @return
+     * @throws SQLException
+     */
+    public int changeFileMetaData(int fileID, String newMetaData) throws SQLException {
+        return fileMethods.changeFileMetaData(fileID, newMetaData);
+    }
+
+    /**
+     * Changes the file author for a specific file with given fileID
+     * @param fileID
+     * @param newAuthor
+     * @return
+     * @throws SQLException
+     */
+    public int changeFileAuthor(int fileID, String newAuthor) throws SQLException {
+        return fileMethods.changeFileAuthor(fileID, newAuthor);
+    }
+
+    /**
+     * Changes the genome release version for specific file with given fileID
+     * @param fileID
+     * @param newGrVersion
+     * @return
+     * @throws SQLException
+     */
+    public int changeFileGrVersion(int fileID, String newGrVersion) throws SQLException {
+        return fileMethods.changeFileGrVersion(fileID, newGrVersion);
+    }
+
 
     //FIXME missing param annotation
     /**
@@ -1148,6 +1212,22 @@ public class DatabaseAccessor implements AutoCloseable {
     public boolean removeGenomeRelease(String genomeVersion)
             throws SQLException, IOException {
         return genMethods.removeGenomeRelease(genomeVersion);
+    }
+
+    /**
+     * Removes one specific genome release file stored in the database.
+     *
+     * @param genomeVersion - the genome version.
+     * @param filePath      - path on the file system.
+     *
+     * @return boolean - true if succeeded, false if failed.
+     * @throws SQLException
+     * @throws IOException
+     */
+    public boolean removeGenomeReleaseFile(String genomeVersion,
+                                           String filePath)
+        throws SQLException, IOException {
+        return genMethods.removeGenomeReleaseFile(genomeVersion, filePath);
     }
 
     /**

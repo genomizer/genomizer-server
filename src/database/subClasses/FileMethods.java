@@ -126,7 +126,7 @@ public class FileMethods {
 		PreparedStatement stmt = conn.prepareStatement(query);
 		stmt.setString(1, path);
 
-		switch (fileType) {
+		/*switch (fileType) {
 		case FileTuple.RAW:
 			stmt.setString(2, "Raw");
 			genomeRelease = null;
@@ -140,7 +140,12 @@ public class FileMethods {
 		default:
 			stmt.setString(2, "Other");
 			break;
-		}
+		}*/
+
+		String fileTypeString = fileTypeIntToString(fileType);
+		stmt.setString(2, fileTypeString);
+		if (fileType == FileTuple.RAW)
+			genomeRelease = null;
 
 		stmt.setString(3, fileName);
 		stmt.setString(4, metaData);
@@ -180,6 +185,25 @@ public class FileMethods {
         }
         return null;
     }
+
+	private String fileTypeIntToString(int fileType) {
+		String fileTypeString = null;
+		switch (fileType) {
+			case FileTuple.RAW:
+				fileTypeString = "Raw";
+				break;
+			case FileTuple.PROFILE:
+				fileTypeString = "Profile";
+				break;
+			case FileTuple.REGION:
+				fileTypeString = "Region";
+				break;
+			default:
+				fileTypeString = "Other";
+				break;
+		}
+		return fileTypeString;
+	}
 
 	private String getParentFolder(String filePath) {
 
@@ -275,17 +299,16 @@ public class FileMethods {
 
 		if (ft == null) {
 			Debug.log("FileMethods.deleteFile: Could not find file at path " + path);
-			return 0;
-		}
+		} else {
+			File fileToDelete = new File(path);
+			if (fileToDelete.exists()) {
+				fileToDelete.delete();
+			}
 
-		File fileToDelete = new File(path);
-		if (fileToDelete.exists()) {
-			fileToDelete.delete();
-		}
-
-		File parentFolder = new File(ft.getParentFolder());
-		if (ft.type.equalsIgnoreCase("profile") && isEmptyFolder(parentFolder)) {
-			parentFolder.delete();
+			File parentFolder = new File(ft.getParentFolder());
+			if (ft.type.equalsIgnoreCase("profile") && isEmptyFolder(parentFolder)) {
+				parentFolder.delete();
+			}
 		}
 
 		String statementStr = "DELETE FROM File " + "WHERE (Path ~~* ?)";
@@ -414,6 +437,118 @@ public class FileMethods {
 
 			return statusUpdate.executeUpdate();
 		}
+	}
+
+	/**
+	 * Sets file type to newType for the file in the database with ID = fileID
+	 * @param fileID
+	 * @param newType
+	 * @return
+	 * @throws SQLException
+	 */
+	public int changeFileType(int fileID, int newType)
+			throws SQLException {
+		String query = "UPDATE File SET FileType = ?" +
+				"WHERE FileID = ?";
+		int rs = 0;
+
+		conn.setAutoCommit(false);
+		try (PreparedStatement stmt = conn.prepareStatement(query)) {
+			stmt.setString(1, fileTypeIntToString(newType));
+			stmt.setInt(2, fileID);
+			rs = stmt.executeUpdate();
+		} catch (SQLException e) {
+			conn.rollback();
+			throw e;
+		} finally {
+			conn.setAutoCommit(true);
+		}
+
+		return rs;
+	}
+
+	/**
+	 * Sets new meta data for the file with ID = fileID
+	 * @param fileID
+	 * @param newMetaData
+	 * @return
+	 * @throws SQLException
+	 */
+	public int changeFileMetaData(int fileID, String newMetaData)
+		throws SQLException {
+		String query = "UPDATE File SET MetaData = ?" +
+				"WHERE FileID = ?";
+		int rs = 0;
+
+		conn.setAutoCommit(false);
+		try (PreparedStatement stmt = conn.prepareStatement(query)) {
+			stmt.setString(1, newMetaData);
+			stmt.setInt(2, fileID);
+			rs = stmt.executeUpdate();
+		} catch (SQLException e) {
+			conn.rollback();
+			throw e;
+		} finally {
+			conn.setAutoCommit(true);
+		}
+
+		return rs;
+	}
+
+	/**
+	 * Sets new author for the file with ID = fileID
+	 * @param fileID
+	 * @param newAuthor
+	 * @return
+	 * @throws SQLException
+	 */
+	public int changeFileAuthor(int fileID, String newAuthor)
+			throws SQLException {
+		String query = "UPDATE File SET Author = ?" +
+				"WHERE FileID = ?";
+		int rs = 0;
+
+		conn.setAutoCommit(false);
+		try (PreparedStatement stmt = conn.prepareStatement(query)) {
+			stmt.setString(1, newAuthor);
+			stmt.setInt(2, fileID);
+			rs = stmt.executeUpdate();
+		} catch (SQLException e) {
+			conn.rollback();
+			throw e;
+		} finally {
+			conn.setAutoCommit(true);
+		}
+
+		return rs;
+	}
+
+	/**
+	 * Sets new genome release version for the file with ID = fileID
+	 * @param fileID
+	 * @param newGrVersion
+	 * @return
+	 * @throws SQLException
+	 */
+	public int changeFileGrVersion(int fileID, String newGrVersion)
+			throws SQLException {
+		String query = "UPDATE File SET GRVersion = ?" +
+				"WHERE FileID = ?";
+		int rs = 0;
+
+		conn.setAutoCommit(false);
+		try (PreparedStatement stmt = conn.prepareStatement(query)) {
+			stmt.setString(1, newGrVersion);
+			stmt.setInt(2, fileID);
+			rs = stmt.executeUpdate();
+		} catch (SQLException e) {
+			conn.rollback();
+			throw e;
+		} finally {
+			conn.setAutoCommit(true);
+		}
+
+		return rs;
 	}
 
 	/**
