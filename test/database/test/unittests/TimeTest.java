@@ -13,6 +13,7 @@ import org.junit.Test;
 import database.DatabaseAccessor;
 import database.test.TestInitializer;
 
+@Ignore
 public class TimeTest {
 
     public static String username = "genomizer";
