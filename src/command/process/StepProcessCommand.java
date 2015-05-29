@@ -62,7 +62,7 @@ public class StepProcessCommand extends ProcessCommand {
             String profileFilesDir) {
         Collection<Callable<Response>> callables = new ArrayList<>();
         for (StepProcessFile file : files) {
-            callables.add(file.getCallable());
+            callables.add(file.getCallable(profileFilesDir));
         }
         return callables;
     }
@@ -96,12 +96,15 @@ public class StepProcessCommand extends ProcessCommand {
                    '}';
         }
 
-        public Callable<Response> getCallable() {
+        public Callable<Response> getCallable(final String profileFilesDir) {
             return new Callable<Response>() {
                 @Override
                 public Response call() throws Exception {
                     try {
-                        Step.runStep(infile, outfile, stepSize);
+                        Step.runStep(
+                                profileFilesDir + "/" + infile,
+                                profileFilesDir + "/" + outfile,
+                                stepSize);
                         return new ProcessResponse(HttpStatusCode.OK);
                     } catch (ValidateException | InterruptedException |
                             IOException e) {

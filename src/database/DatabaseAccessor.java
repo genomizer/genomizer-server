@@ -70,6 +70,7 @@ public class DatabaseAccessor implements AutoCloseable {
         String url = "jdbc:postgresql://" + host + "/" + database;
 
         Properties props = new Properties();
+        System.out.println("props = " + props);
         props.setProperty("user", username);
         props.setProperty("password", password);
 

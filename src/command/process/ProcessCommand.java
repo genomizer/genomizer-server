@@ -22,10 +22,9 @@ import java.util.concurrent.Future;
 
 public abstract class ProcessCommand {
 
-    public void doProcess(String rawFilesDir, String profileFilesDir)
+    public void doProcess(ProcessPool pool, String rawFilesDir, String profileFilesDir)
             throws ExecutionException, InterruptedException {
 
-        ProcessPool pool = Doorman.getProcessPool();
         Collection<Future<Response>> futures = new ArrayList<>();
         for (Callable<Response> callable : getCallables(
                 rawFilesDir,

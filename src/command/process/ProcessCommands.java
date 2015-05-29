@@ -8,6 +8,8 @@ import database.constants.MaxLength;
 import response.HttpStatusCode;
 import response.ProcessResponse;
 import response.Response;
+import server.Doorman;
+import server.ProcessPool;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -30,6 +32,7 @@ public class ProcessCommands extends Command {
 
     private String rawFilesDir;
     private String profileFilesDir;
+    private ProcessPool pool = Doorman.getProcessPool();
 
     @Override
     public String toString() {
@@ -74,41 +77,62 @@ public class ProcessCommands extends Command {
      */
     @Override
     public Response execute() {
-        try {
-            Map.Entry<String, String> filePaths = fetchFilePathsFromDB(expId);
-            rawFilesDir = filePaths.getKey();
-            profileFilesDir = filePaths.getValue();
+//        try {
 
-            startProcessing();
+            startProcessingThread();
 
             return new ProcessResponse(
                     HttpStatusCode.OK,
                     "Processing of experiment " + expId + " has begun.");
 
-        } catch (IOException | SQLException e) {
-            return new ProcessResponse(
-                    HttpStatusCode.NOT_FOUND,
-                    e.getMessage());
+//        } catch (IOException | SQLException e) {
+//            return new ProcessResponse(
+//                    HttpStatusCode.NOT_FOUND,
+//                    e.getMessage());
+//        }
+    }
+
+    private void startProcessingThread() {
+        new Thread() {
+            @Override
+            public void run() {
+                doProcesses();
+            }
+        }.start();
+    }
+
+    @SuppressWarnings("TryWithIdenticalCatches")
+    public void doProcesses() {
+        try {
+            rawFilesDir = fetchRawFilesDirFromDB(expId);
+            profileFilesDir = fetchProfileFilesDirFromDB(expId);
+            for (ProcessCommand processCommand : processCommands) {
+                processCommand
+                        .doProcess(pool, rawFilesDir, profileFilesDir);
+            }
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
-    private void startProcessing() {
-        new Thread() {
-            @SuppressWarnings("TryWithIdenticalCatches")
-            @Override
-            public void run() {
-                try {
-                    for (ProcessCommand processCommand : processCommands) {
-                        processCommand
-                                .doProcess(rawFilesDir, profileFilesDir);
-                    }
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }.start();
+    private String fetchProfileFilesDirFromDB(String expId)
+            throws IOException, SQLException {
+        return initDB().getFilePathGenerator().getProfileFolderPath(expId);
+    }
+
+    private String fetchRawFilesDirFromDB(String expId)
+            throws IOException, SQLException {
+        return initDB().getFilePathGenerator().getProfileFolderPath(expId);
+    }
+
+    public void setPool(ProcessPool pool) {
+        this.pool = pool;
     }
 
     /**
