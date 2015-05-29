@@ -31,3 +31,7 @@ pyicosLocation       = resources/pyicoteo/pyicos
 wwwTunnelHost       = https://localhost
 wwwTunnelPort       = 7000
 wwwTunnelPath       = /api
+
+# Directory used for storing temporary files during uploading.
+# Should be on the same partition as 'fileLocation'.
+uploadTempDir       = /data/tmp/
