@@ -27,6 +27,11 @@ public class Picard extends Executor{
 
     public Picard(String command, String inFile, String outFile,
                   String inFormat, String outFormat, String [] params) {
+        if (command == null | inFile == null | outFile == null |
+            inFormat == null | outFormat == null | params == null) {
+            throw new NullPointerException("Tried to create Picard object " +
+                                           "with null parameter");
+        }
         this.command    = command;
         this.inFile     = inFile;
         this.outFile    = outFile;
@@ -69,7 +74,7 @@ public class Picard extends Executor{
 
 	ErrorLogger.log("SYSTEM", "Picard command: "+commandString);
 
-        return executeProgram(args.toArray(new String []{}));
+        return executeCommand(args.toArray(new String[]{}));
     }
 
     public static String runRemoveDuplicates(String inFile, String outFile)
