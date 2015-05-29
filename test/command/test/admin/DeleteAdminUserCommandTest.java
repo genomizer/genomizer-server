@@ -47,7 +47,7 @@ public class DeleteAdminUserCommandTest {
 	 */
 	@Test(expected = ValidateException.class)
 	public void testValidateUsernameLength() throws ValidateException {
-		String uri = "/user/";
+		String uri = "/user/user/";
 		for(int i = 0; i < MaxLength.USERNAME + 1; i++) {
 			uri += "a";
 		}
@@ -65,7 +65,7 @@ public class DeleteAdminUserCommandTest {
 	@Test
 	public void testValidateProperlyFormatted() throws ValidateException {
 		Command c = new DeleteAdminUserCommand();
-		c.setFields("/test/username", null, null, UserType.ADMIN);
+		c.setFields("/test/user/username", null, null, UserType.ADMIN);
 		c.validate();
 	}
 
@@ -78,7 +78,7 @@ public class DeleteAdminUserCommandTest {
 	@Test
 	public void testHavingRights() throws ValidateException {
 		Command c = new DeleteAdminUserCommand();
-		c.setFields("/test/username", null, null, UserType.ADMIN);
+		c.setFields("/test/user/username", null, null, UserType.ADMIN);
 		c.validate();
 	}
 
@@ -91,7 +91,7 @@ public class DeleteAdminUserCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testNotHavingRights() throws ValidateException {
 		Command c = new DeleteAdminUserCommand();
-		c.setFields("/test/username", null, null, UserType.USER);
+		c.setFields("/test/user/username", null, null, UserType.USER);
 		c.validate();
 	}
 

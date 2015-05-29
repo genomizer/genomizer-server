@@ -25,9 +25,9 @@ public class ResponseLoggerTest {
 	}
 
 	@Test
-	public void shouldLogBADREQUESTandOKResponse(){
+	public void shouldLogBADREQUESTAndOKResponse(){
 		String username = "splutt";
-		Authenticate.updateActiveUser(username);
+		Authenticate.updateActiveUser(null, username);
 		new MinimalResponse(HttpStatusCode.BAD_REQUEST);
 		new MinimalResponse(HttpStatusCode.OK);
 //

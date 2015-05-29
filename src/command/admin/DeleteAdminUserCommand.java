@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
 
+import authentication.Authenticate;
 import command.Command;
 import command.UserRights;
 import command.ValidateException;
@@ -23,6 +24,7 @@ import server.Debug;
  * @version 1.1
  */
 public class DeleteAdminUserCommand extends Command {
+
 	private String username;
 
 	@Override
@@ -30,28 +32,49 @@ public class DeleteAdminUserCommand extends Command {
 		return 3;
 	}
 
+	/**
+	 * Get the username to be deleted from the uri
+	 * @param uri isn't used. Override it to use it.
+	 * @param query
+	 * @param uuid the UUID for the user who made the request.
+	 * @param userType the user type for the command caller.
+	 */
 	@Override
 	public void setFields(String uri, HashMap<String, String> query,
 						  String uuid, UserType userType) {
 		super.setFields(uri, query, uuid, userType);
-		username = uri.split("/")[2];
+		username = uri.split("/")[3];
 	}
 
+	/**
+	 * Make sure that an admin is using the command and check that username is properly formated.
+	 * @throws ValidateException
+	 */
 	@Override
 	public void validate() throws ValidateException {
 		hasRights(UserRights.getRights(this.getClass()));
 		validateName(username, MaxLength.USERNAME, "Username");
 	}
 
+	/**
+	 * Try deletion of the inputed user, return a response of the result.
+	 * @return
+	 */
 	@Override
 	public Response execute() {
-		DatabaseAccessor db = null;
 		Response response;
 
-		try {
-			db = initDB();
-			if (db.deleteUser(username) != 0)
+		// Do not allow deletion of admins own account. This make sure the existence of at least one admin account.
+		if(Authenticate.getUsernameByID(uuid).equals(username)){
+			response = new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Deletion of user "+username+" is not allowed. " +
+					"Deletion of admins own account is not allowed. Use another admin user to delete the account.");
+		}
+
+		try (DatabaseAccessor db = initDB()) {
+			if (db.deleteUser(username) != 0) {
 				response = new MinimalResponse(HttpStatusCode.OK);
+				Authenticate.deleteUsername(username);
+			}
 			else
 				response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
 						"Deletion of user '" + username + "' unsuccessful, " +
@@ -65,9 +88,6 @@ public class DeleteAdminUserCommand extends Command {
 			response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
 					"Deletion of user '" + username + "' unsuccessful. " +
 							e.getMessage());
-		} finally {
-			if (db != null)
-				db.close();
 		}
 
 		return response;
