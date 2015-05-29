@@ -12,7 +12,7 @@ how to use? perl smooth_v4.pl, arguments will be asked
 
 =head1 REQUIRES
 
-OS used for development (Linux CentOS 5.3), Perl version (Perl5.8.8) 
+OS used for development (Linux CentOS 5.3), Perl version (Perl5.8.8)
 
 =head1 DESCRIPTION
 
@@ -39,9 +39,12 @@ my $VERSION = 4;
 my $now = time;
 #print "Data in file processed while reading, please make sure you dont have empty lines at end of the file\n";
 print "Enter the path of sgr files\n";
-chomp(my $dir = <STDIN>);
+chomp(my $dirIn = <STDIN>);
+my ($dir,$files) = $dirIn =~ /(.*)\/(.*)/;
+print $files;
+print $dir;
 #my $dir = $ARGV[0];
-my @files = <$dir\/*.sgr>;
+my @files = $dir;
 my $file = '';
 print "Enter window size\n";
 chomp(my $window_size = <STDIN>);
@@ -269,21 +272,21 @@ sub calculate_trimmed_mean
     }
 }
 
-sub average { 
-my ($array_ref) = @_; 
-my $sum; 
-my $count = scalar @$array_ref; 
-foreach (@$array_ref) { $sum += $_; } 
-return $sum / $count; 
-} 
+sub average {
+my ($array_ref) = @_;
+my $sum;
+my $count = scalar @$array_ref;
+foreach (@$array_ref) { $sum += $_; }
+return $sum / $count;
+}
 
-sub median { 
-my ($array_ref) = @_; 
-my $count = scalar @$array_ref; 
-my @array = sort { $a <=> $b } @$array_ref; 
-if ($count % 2) { 
-return $array[int($count/2)]; 
-} else { 
-return ($array[$count/2] + $array[$count/2 - 1]) / 2; 
+sub median {
+my ($array_ref) = @_;
+my $count = scalar @$array_ref;
+my @array = sort { $a <=> $b } @$array_ref;
+if ($count % 2) {
+return $array[int($count/2)];
+} else {
+return ($array[$count/2] + $array[$count/2 - 1]) / 2;
 }
 }
