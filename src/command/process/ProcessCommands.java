@@ -166,7 +166,6 @@ public class ProcessCommands extends Command {
         }.start();
     }
 
-    @SuppressWarnings("TryWithIdenticalCatches")
     public void doProcesses() {
         try {
             rawFilesDir = fetchRawFilesDirFromDB(expId);
@@ -175,13 +174,8 @@ public class ProcessCommands extends Command {
                 processCommand
                         .doProcess(pool, rawFilesDir, profileFilesDir);
             }
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (ExecutionException | InterruptedException | SQLException |
+                IOException e) {
             e.printStackTrace();
         }
     }

@@ -3,6 +3,7 @@ package command.process;
 import com.google.gson.annotations.Expose;
 import command.Command;
 import command.ValidateException;
+import database.DatabaseAccessor;
 import database.constants.MaxLength;
 import process.Ratio;
 import response.HttpStatusCode;
@@ -10,9 +11,12 @@ import response.ProcessResponse;
 import response.Response;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.Callable;
+
+import static command.Command.initDB;
 
 /**
  * Class handles a ratio processing command. The command can include multiple
@@ -121,27 +125,30 @@ public class RatioProcessCommand extends ProcessCommand {
                    '}';
         }
 
+        public void processFile(final String profileFilesDir)
+                throws ValidateException, IOException,
+                InterruptedException, SQLException
+        {
+            Ratio.runRatio(
+                    profileFilesDir + "/" + preChipFile,
+                    profileFilesDir + "/" + postChipFile,
+                    outfile,
+                    Ratio.Mean.getMean(mean),
+                    readsCutoff,
+                    chromosomes);
+        }
+
         public Callable<Response> getCallable(final String profileFilesDir) {
             return new Callable<Response>() {
-                @SuppressWarnings("TryWithIdenticalCatches")
                 @Override
                 public Response call() throws Exception {
                     try {
-                        Ratio.runRatio(
-                                profileFilesDir + "/" + preChipFile,
-                                profileFilesDir + "/" + postChipFile,
-                                outfile,
-                                Ratio.Mean.getMean(mean),
-                                readsCutoff,
-                                chromosomes);
+                        processFile(profileFilesDir);
                         // TODO add file to DB here?
                         return new ProcessResponse(HttpStatusCode.OK);
-                    } catch (ValidateException ve) {
-                        ve.printStackTrace();
-                    } catch (InterruptedException ie) {
-                        ie.printStackTrace();
-                    } catch (IOException ioe) {
-                        ioe.printStackTrace();
+                    } catch (ValidateException | InterruptedException |
+                            IOException e) {
+                        e.printStackTrace();
                     }
                     return new ProcessResponse(HttpStatusCode
                             .INTERNAL_SERVER_ERROR);

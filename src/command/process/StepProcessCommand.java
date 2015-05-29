@@ -96,15 +96,20 @@ public class StepProcessCommand extends ProcessCommand {
                    '}';
         }
 
+        public void processFile (final String profileFilesDir)
+                throws IOException, InterruptedException, ValidateException {
+            Step.runStep(
+                    profileFilesDir + "/" + infile,
+                    profileFilesDir + "/" + outfile,
+                    stepSize);
+        }
+
         public Callable<Response> getCallable(final String profileFilesDir) {
             return new Callable<Response>() {
                 @Override
                 public Response call() throws Exception {
                     try {
-                        Step.runStep(
-                                profileFilesDir + "/" + infile,
-                                profileFilesDir + "/" + outfile,
-                                stepSize);
+                        processFile(profileFilesDir);
                         return new ProcessResponse(HttpStatusCode.OK);
                     } catch (ValidateException | InterruptedException |
                             IOException e) {
