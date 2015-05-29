@@ -72,7 +72,6 @@ public class ConversionHandlerTest {
         wigBedFileID = db.getFileTuple(wigBedFilePath).id;
         wigFixedStepFileID = db.getFileTuple(wigFixedStepFilePath).id;
 
-        new File(TESTFOLDER+OUTPUTFOLDER+PROFILEFOLDER).mkdirs();
     }
 
     /*
@@ -101,7 +100,6 @@ public class ConversionHandlerTest {
         new File(TESTFOLDER+OUTPUTFOLDER+PROFILEFOLDER+"WIG-testdata.sgr").delete();
         new File(TESTFOLDER+OUTPUTFOLDER+PROFILEFOLDER+"WIG-varstep-testdata.sgr").delete();
 
-        db.recursiveDelete(new File(TESTFOLDER+OUTPUTFOLDER+"Exp3"));
     }
 
     /*
