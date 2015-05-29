@@ -987,9 +987,10 @@ public class DatabaseAccessor implements AutoCloseable {
                 try (FileInputStream is = new FileInputStream(f)) {
                     checkSumMD5 = DigestUtils.md5Hex(is);
                 }
+
                 fileMethods.addGeneratedFile(e.getID(), FileTuple.PROFILE,
                         f.getPath(), inputFileName, metaData, uploader,
-                        isPrivate, grVersion, checkSumMD5);
+                        isPrivate, grVersion, checkSumMD5, f.length());
             }
         }
     }

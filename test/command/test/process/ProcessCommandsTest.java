@@ -41,13 +41,13 @@ public class ProcessCommandsTest {
     public void shouldContainOneRawToProfileAndOneRatio() throws Exception {
         String json =
                 "{\"expId\":\"not_an_expid\"," +
-                "\"processCommands\":[{\"type\":\"rawToProfile\"," +
-                "\"files\":[{\"infile\":\"bigtest1.fastq\"," +
-                "\"outfile\":\"awsd\",\"genomeVersion\":\"theGR\"," +
-                "\"params\":\"-a -m 1 --best -p 10 -v 2 -q -S\"," +
-                "\"keepSam\":\"on\"}]}, {\"type\":\"ratio\", \"infile1\": " +
-                "\"infile1Name\", \"infile2\": \"infile2Name\"}]}";
-
+                        "\"processCommands\":[{\"type\":\"rawToProfile\"," +
+                        "\"files\":[{\"infile\":\"bigtest1.fastq\"," +
+                        "\"outfile\":\"awsd\",\"genomeVersion\":\"theGR\"," +
+                        "\"params\":\"-a -m 1 --best -p 10 -v 2 -q -S\"," +
+                        "\"keepSam\":\"on\"}]}, {\"type\":\"ratio\", \"files\":[{\"preChipFile\": " +
+                        "\"infile1Name\", \"postChipFile\": \"infile2Name\", \"outfile\": \"outfile\", " +
+                        "\"mean\": \"single\", \"readsCutoff\": \"2\", \"chromosomes\": \"chromosome\"}]}]}";
         ProcessCommands processCommands =
                 gson.fromJson(json, ProcessCommands.class);
         assertEquals(
@@ -68,8 +68,9 @@ public class ProcessCommandsTest {
                         "\"files\":[{\"infile\":\"bigtest1.fastq\"," +
                         "\"outfile\":\"awsd\",\"genomeVersion\":\"theGR\"," +
                         "\"params\":\"-a -m 1 --best -p 10 -v 2 -q -S\"," +
-                        "\"keepSam\":\"on\"}]}, {\"type\":\"ratio\", \"infile1\": " +
-                        "\"infile1Name\", \"infile2\": \"infile2Name\"}]}";
+                        "\"keepSam\":\"on\"}]}, {\"type\":\"ratio\", \"files\":[{\"preChipFile\": " +
+                        "\"infile1Name\", \"postChipFile\": \"infile2Name\", \"outfile\": \"outfile\", " +
+                        "\"mean\": \"single\", \"readsCutoff\": \"2\", \"chromosomes\": \"chromosome\"}]}]}";
         ProcessCommands processCommands =
                 gson.fromJson(json, ProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
@@ -84,8 +85,7 @@ public class ProcessCommandsTest {
                         "\"files\":[{\"infile\":\"bigtest1.fastq\"," +
                         "\"outfile\":\"awsd\",\"genomeVersion\":\"theGR\"," +
                         "\"params\":\"-a -m 1 --best -p 10 -v 2 -q -S\"," +
-                        "\"keepSam\":\"on\"}]}, {\"type\":\"ratio\", \"infile1\": " +
-                        "\"infile1Name\", \"infile2\": \"infile2Name\"}]}";
+                        "\"keepSam\":\"on\"}]}]}";
         ProcessCommands processCommands =
                 gson.fromJson(json, ProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.GUEST);
@@ -100,8 +100,7 @@ public class ProcessCommandsTest {
                         "\"files\":[{\"infile\":\"bigtest1.fastq\"," +
                         "\"outfile\":\"awsd\",\"genomeVersion\":\"theGR\"," +
                         "\"params\":\"-a -m 1 --best -p 10 -v 2 -q -S\"," +
-                        "\"keepSam\":\"on\"}]}, {\"type\":\"ratio\", \"infile1\": " +
-                        "\"infile1Name\", \"infile2\": \"infile2Name\"}]}";
+                        "\"keepSam\":\"on\"}]}]}";
         ProcessCommands processCommands =
                 gson.fromJson(json, ProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
@@ -121,116 +120,7 @@ public class ProcessCommandsTest {
                         "\"files\":[{\"infile\":\"bigtest1.fastq\"," +
                         "\"outfile\":\"awsd\",\"genomeVersion\":\"theGR\"," +
                         "\"params\":\"-a -m 1 --best -p 10 -v 2 -q -S\"," +
-                        "\"keepSam\":\"on\"}]}, {\"type\":\"ratio\", \"infile1\": " +
-                        "\"infile1Name\", \"infile2\": \"infile2Name\"}]}";
-        ProcessCommands processCommands =
-                gson.fromJson(json, ProcessCommands.class);
-        processCommands.setFields(null, null, null, UserMethods.UserType.USER);
-        processCommands.validate();
-    }
-    @Test (expected = ValidateException.class)
-    public void canGiveValidateExceptionOnIncorrectInfileName() throws ValidateException {
-        String json =
-                "{\"expId\":\"asd\"," +
-                        "\"processCommands\":[{\"type\":\"rawToProfile\"," +
-                        "\"files\":[{\"infile\":\"bigtes&t1.fastq\"," +
-                        "\"outfile\":\"awsd\",\"genomeVersion\":\"theGR\"," +
-                        "\"params\":\"-a -m 1 --best -p 10 -v 2 -q -S\"," +
-                        "\"keepSam\":\"on\"}]}, {\"type\":\"ratio\", \"infile1\": " +
-                        "\"infile1Name\", \"infile2\": \"infile2Name\"}]}";
-        ProcessCommands processCommands =
-                gson.fromJson(json, ProcessCommands.class);
-        processCommands.setFields(null, null, null, UserMethods.UserType.USER);
-        processCommands.validate();
-    }
-
-    @Test (expected = ValidateException.class)
-    public void shouldGiveValidateExceptionOnIncorrectInfileLength() throws ValidateException {
-
-        String s = "";
-        for(int i = 0; i < MaxLength.FILE_FILENAME + 1; i++) {
-            s += "a";
-        }
-        String json =
-                "{\"expId\":\"asdws\"," +
-                        "\"processCommands\":[{\"type\":\"rawToProfile\"," +
-                        "\"files\":[{\"infile\":\""+s+"\"," +
-                        "\"outfile\":\"awsd\",\"genomeVersion\":\"theGR\"," +
-                        "\"params\":\"-a -m 1 --best -p 10 -v 2 -q -S\"," +
-                        "\"keepSam\":\"on\"}]}, {\"type\":\"ratio\", \"infile1\": " +
-                        "\"infile1Name\", \"infile2\": \"infile2Name\"}]}";
-        ProcessCommands processCommands =
-                gson.fromJson(json, ProcessCommands.class);
-        processCommands.setFields(null, null, null, UserMethods.UserType.USER);
-        processCommands.validate();
-    }
-
-    @Test (expected = ValidateException.class)
-    public void canGiveValidateExceptionOnIncorrectOutfileName() throws ValidateException {
-        String json =
-                "{\"expId\":\"asd\"," +
-                        "\"processCommands\":[{\"type\":\"rawToProfile\"," +
-                        "\"files\":[{\"infile\":\"bigtest1.fastq\"," +
-                        "\"outfile\":\"a%wsd\",\"genomeVersion\":\"theGR\"," +
-                        "\"params\":\"-a -m 1 --best -p 10 -v 2 -q -S\"," +
-                        "\"keepSam\":\"on\"}]}, {\"type\":\"ratio\", \"infile1\": " +
-                        "\"infile1Name\", \"infile2\": \"infile2Name\"}]}";
-        ProcessCommands processCommands =
-                gson.fromJson(json, ProcessCommands.class);
-        processCommands.setFields(null, null, null, UserMethods.UserType.USER);
-        processCommands.validate();
-    }
-    @Test (expected = ValidateException.class)
-    public void shouldGiveValidateExceptionOnIncorrectOutfileLength() throws ValidateException {
-
-        String s = "";
-        for(int i = 0; i < MaxLength.FILE_FILENAME + 1; i++) {
-            s += "a";
-        }
-        String json =
-                "{\"expId\":\"asdws\"," +
-                        "\"processCommands\":[{\"type\":\"rawToProfile\"," +
-                        "\"files\":[{\"infile\":\"2asd2\"," +
-                        "\"outfile\":\""+s+"\",\"genomeVersion\":\"theGR\"," +
-                        "\"params\":\"-a -m 1 --best -p 10 -v 2 -q -S\"," +
-                        "\"keepSam\":\"on\"}]}, {\"type\":\"ratio\", \"infile1\": " +
-                        "\"infile1Name\", \"infile2\": \"infile2Name\"}]}";
-        ProcessCommands processCommands =
-                gson.fromJson(json, ProcessCommands.class);
-        processCommands.setFields(null, null, null, UserMethods.UserType.USER);
-        processCommands.validate();
-    }
-
-    @Test (expected = ValidateException.class)
-    public void canGiveValidateExceptionOnIncorrectGenomeVersionName() throws ValidateException {
-        String json =
-                "{\"expId\":\"asd\"," +
-                        "\"processCommands\":[{\"type\":\"rawToProfile\"," +
-                        "\"files\":[{\"infile\":\"bigtest1.fastq\"," +
-                        "\"outfile\":\"awsd\",\"genomeVersion\":\"the+R\"," +
-                        "\"params\":\"-a -m 1 --best -p 10 -v 2 -q -S\"," +
-                        "\"keepSam\":\"on\"}]}, {\"type\":\"ratio\", \"infile1\": " +
-                        "\"infile1Name\", \"infile2\": \"infile2Name\"}]}";
-        ProcessCommands processCommands =
-                gson.fromJson(json, ProcessCommands.class);
-        processCommands.setFields(null, null, null, UserMethods.UserType.USER);
-        processCommands.validate();
-    }
-    @Test (expected = ValidateException.class)
-    public void shouldGiveValidateExceptionOnIncorrectGenomeVersionLength() throws ValidateException {
-
-        String s = "";
-        for(int i = 0; i < MaxLength.FILE_FILENAME + 1; i++) {
-            s += "a";
-        }
-        String json =
-                "{\"expId\":\"asdws\"," +
-                        "\"processCommands\":[{\"type\":\"rawToProfile\"," +
-                        "\"files\":[{\"infile\":\"2asd2\"," +
-                        "\"outfile\":\"asdwww\",\"genomeVersion\":\""+s+"\"," +
-                        "\"params\":\"-a -m 1 --best -p 10 -v 2 -q -S\"," +
-                        "\"keepSam\":\"on\"}]}, {\"type\":\"ratio\", \"infile1\": " +
-                        "\"infile1Name\", \"infile2\": \"infile2Name\"}]}";
+                        "\"keepSam\":\"on\"}]}]}";
         ProcessCommands processCommands =
                 gson.fromJson(json, ProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);

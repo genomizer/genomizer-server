@@ -63,17 +63,14 @@ public class RequestHandler implements HttpHandler {
                 + exchange.getHttpContext().getPath();
         Class<? extends Command> commandClass = CommandClasses.get(key);
 
-        Debug.log("" + commandClass);
+        if (commandClass != null)
+            Debug.log(commandClass.getName());
 
         String uuid = Authenticate.performAuthentication(exchange);
 
-        if(uuid == null && !commandClass.equals(PostLoginCommand.class)){
-            Debug.log("User could not be authenticated");
-            respond(new ErrorResponse(HttpStatusCode.UNAUTHORIZED,
-                    "User could not be authenticated"), exchange);
-            return;
-        } else if (commandClass == null && !key.equals("GET /download") &&
-                !key.equals("GET /upload") && !key.equals("POST /upload")){
+        if (commandClass == null
+                && !key.equals("GET /download") && !key.equals("GET /upload")
+                && !key.equals("POST /upload")) {
             Debug.log("Unrecognized command: " + exchange.getRequestMethod()
                     + " " + exchange.getRequestURI());
             respond(new ErrorResponse(HttpStatusCode.BAD_REQUEST,
@@ -81,6 +78,16 @@ public class RequestHandler implements HttpHandler {
                             "request."), exchange);
             return;
         }
+
+        if(uuid == null
+                // commandClass can be null, so use != instead of equals().
+                && commandClass != PostLoginCommand.class) {
+            Debug.log("User could not be authenticated");
+            respond(new ErrorResponse(HttpStatusCode.UNAUTHORIZED,
+                    "User could not be authenticated"), exchange);
+            return;
+        }
+
 
         try {
             switch (key) {
@@ -96,6 +103,8 @@ public class RequestHandler implements HttpHandler {
             }
         } catch (Exception e) {
             Debug.log("Could not handle upload/download");
+            respond(new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+                    "ERROR: exception in upload/download code."), exchange);
             return;
         }
 
@@ -110,11 +119,10 @@ public class RequestHandler implements HttpHandler {
         } catch (Exception e) {
             Debug.log("Could not parse query");
             respond(new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
-                            "ERROR : Could not parse query"), exchange);
+                            "ERROR : Could not parse query: "
+                                    + e.getMessage() ), exchange);
             return;
         }
-
-        Debug.log("" + command);
 
         /*Retrieve the URI part of the request header.*/
         HashMap<String, String> query = new HashMap<>();
@@ -152,10 +160,11 @@ public class RequestHandler implements HttpHandler {
                         INTERNAL_SERVER_ERROR, "Could not retrieve the user " +
                         "information.");
                 respond(errorResponse, exchange);
+                return;
             }
         }
 
-        command.setFields(uri, query, Authenticate.getUsernameByID(uuid), userType);
+        command.setFields(uri, query, uuid, userType);
 
 		try {
 			command.validate();
@@ -166,9 +175,8 @@ public class RequestHandler implements HttpHandler {
 			return;
 		}
 
-        if(commandClass.equals(ProcessCommands.class)) {
-            respond(
-                    new ProcessResponse(HttpStatusCode.NOT_IMPLEMENTED),
+        if (commandClass.equals(ProcessCommands.class)) {
+            respond(new ProcessResponse(HttpStatusCode.NOT_IMPLEMENTED),
                     exchange);
 //            respond(new ProcessResponse(HttpStatusCode.OK), exchange);
         } else {

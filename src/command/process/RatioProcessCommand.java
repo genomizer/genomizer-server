@@ -1,37 +1,118 @@
 package command.process;
 
 import com.google.gson.annotations.Expose;
+import command.Command;
 import command.ValidateException;
-import response.Response;
-
+import database.constants.MaxLength;
+import response.HttpStatusCode;
+import java.util.ArrayList;
 import java.util.Map;
 
+
+
 /**
- * Dummy class that needs to be implemented. Should handle a ratio processing command.
+ * Class handles a ratio processing command. The command can include multiple file packages to run one at a time.
  */
 
 public class RatioProcessCommand extends ProcessCommand {
+
+    /**
+     * Validate to make sure all input from clients is in correct format.
+     * @throws ValidateException
+     */
     @Override
     public void validate() throws ValidateException {
-
+        for(RatioProcessFile file: files) {
+            Command.validateName(file.getPreChipFile(), MaxLength.FILE_FILENAME, "PreChipFile");
+            Command.validateName(file.getPostChipFile(), MaxLength.FILE_FILENAME, "PostChipFile");
+            Command.validateName(file.getOutfile(), MaxLength.FILE_FILENAME, "Outfile");
+            if(file.getChromosomes()==null)
+                throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Chromosomes may not be null.");
+            if(!file.getMean().equals("single")&&!file.getMean().equals("double")){
+                throw new ValidateException(HttpStatusCode.BAD_REQUEST,
+                        "Incorrect mean, should be 'single' or 'double'.");
+            }
+            if(file.getReadsCutoff()<0){
+                throw new ValidateException(HttpStatusCode.BAD_REQUEST, "ReadsCutOff should not be less than 0.");
+            }
+        }
     }
 
-    @Expose
-    private String infile1;
+    @Override
+    public void doProcess(Map.Entry<String, String> filePath) {
+        for(RatioProcessFile file: files) {
+            file.ProcessFile(filePath);
+        }
+    }
 
-    @Expose
-    private String infile2;
+    public ArrayList<RatioProcessFile> getFiles() {return files;}
 
     @Override
     public String toString() {
         return "RatioProcessCommand{" +
-               "infile1='" + infile1 + '\'' +
-               ", infile2='" + infile2 + '\'' +
-               '}';
+                "files=" + files +
+                '}';
     }
 
-    @Override
-    public void doProcess(Map.Entry<String, String> filePath) throws UnsupportedOperationException{
+    @Expose
+    private ArrayList<RatioProcessFile> files;
 
+    public class RatioProcessFile {
+
+        /**
+         * Class is used to start a single ratio processing with correct parameters.
+         */
+
+        @Expose
+        private String preChipFile;
+
+        @Expose
+        private String postChipFile;
+
+        @Expose
+        private String outfile;
+
+        @Expose
+        private String mean;
+
+        @Expose
+        private int readsCutoff;
+
+        @Expose
+        private String chromosomes;
+
+        public String getPreChipFile() {return preChipFile;}
+
+        public String getPostChipFile() {return postChipFile;}
+
+        public String getOutfile() {return outfile;}
+
+        public String getMean() {return mean;}
+
+        public int getReadsCutoff() {return readsCutoff;}
+
+        public String getChromosomes() {return chromosomes;}
+
+
+        @Override
+        public String toString() {
+            return "RatioProcessFile{" +
+                    "preChipFile='" + preChipFile + '\'' +
+                    ", postChipFile='" + postChipFile + '\'' +
+                    ", outfile='" + outfile + '\'' +
+                    ", mean='" + mean + '\'' +
+                    ", readsCutoff=" + readsCutoff + '\'' +
+                    ", chromosomes=" + chromosomes +
+                    '}';
+        }
+
+        /**
+         * Call upon a ratio processing with correct parameters.
+         *
+         * @param filePaths
+         */
+        public void ProcessFile(Map.Entry<String, String> filePaths) {
+            throw new UnsupportedOperationException("Error when processing. Ratio processing not yet implemented!");
+        }
     }
 }
