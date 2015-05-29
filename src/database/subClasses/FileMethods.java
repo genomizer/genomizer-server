@@ -103,17 +103,11 @@ public class FileMethods {
 					"There are already two raw files for this experiment!");
 		}
 
-		FileTuple ft = getProfile(e, metaData);
-		String path;
-		if (ft == null) {
-			path = fpg.generateFilePath(expID, fileType, fileName);
-		} else {
-			path = ft.getParentFolder() + fileName;
-			File profileToAdd = new File(path);
-			if (profileToAdd.exists()) {
-				throw new IOException(fileName + " with the parameters "
-						+ metaData + " already exists!");
-			}
+		String path = fpg.generateFilePath(expID, fileType, fileName);
+		FileTuple ft = getFileTuple(path);
+
+		if (ft != null) {
+			throw new IOException(fileName + " already exists!");
 		}
 
 		if (!status.equals("Done") && !status.equals("In Progress")) {
