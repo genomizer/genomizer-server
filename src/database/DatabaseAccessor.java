@@ -872,6 +872,50 @@ public class DatabaseAccessor implements AutoCloseable {
         return fileMethods.changeFileName(fileID, newFileName);
     }
 
+    /**
+     * Changes the file type for a specific file with given fileID.
+     * @param fileID
+     * @param newType
+     * @return
+     * @throws SQLException
+     */
+    public int changeFileType(int fileID, int newType) throws SQLException {
+        return fileMethods.changeFileType(fileID, newType);
+    }
+
+    /**
+     * Changes the file meta data for a specific file with given fileID
+     * @param fileID
+     * @param newMetaData
+     * @return
+     * @throws SQLException
+     */
+    public int changeFileMetaData(int fileID, String newMetaData) throws SQLException {
+        return fileMethods.changeFileMetaData(fileID, newMetaData);
+    }
+
+    /**
+     * Changes the file author for a specific file with given fileID
+     * @param fileID
+     * @param newAuthor
+     * @return
+     * @throws SQLException
+     */
+    public int changeFileAuthor(int fileID, String newAuthor) throws SQLException {
+        return fileMethods.changeFileAuthor(fileID, newAuthor);
+    }
+
+    /**
+     * Changes the genome release version for specific file with given fileID
+     * @param fileID
+     * @param newGrVersion
+     * @return
+     * @throws SQLException
+     */
+    public int changeFileGrVersion(int fileID, String newGrVersion) throws SQLException {
+        return fileMethods.changeFileGrVersion(fileID, newGrVersion);
+    }
+
 
     //FIXME missing param annotation
     /**
@@ -1149,6 +1193,22 @@ public class DatabaseAccessor implements AutoCloseable {
     public boolean removeGenomeRelease(String genomeVersion)
             throws SQLException, IOException {
         return genMethods.removeGenomeRelease(genomeVersion);
+    }
+
+    /**
+     * Removes one specific genome release file stored in the database.
+     *
+     * @param genomeVersion - the genome version.
+     * @param filePath      - path on the file system.
+     *
+     * @return boolean - true if succeeded, false if failed.
+     * @throws SQLException
+     * @throws IOException
+     */
+    public boolean removeGenomeReleaseFile(String genomeVersion,
+                                           String filePath)
+        throws SQLException, IOException {
+        return genMethods.removeGenomeReleaseFile(genomeVersion, filePath);
     }
 
     /**

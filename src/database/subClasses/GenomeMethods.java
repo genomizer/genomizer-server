@@ -363,6 +363,22 @@ public class GenomeMethods {
 		}
 	}
 
+	public boolean removeGenomeReleaseFile (String genomeVersion,
+											String filePath)
+		throws SQLException, IOException {
+		String fileName = new File(filePath).getName();
+
+		try (PreparedStatement stmt = conn.prepareStatement(
+				"DELETE FROM Genome_Release_Files"
+				+ "WHERE FileName ~~* ?"
+				+ "AND Version ~~* ?")) {
+			stmt.setString(1, fileName);
+			stmt.setString(2, genomeVersion);
+
+			return (stmt.executeUpdate() > 0);
+		}
+	}
+
     private boolean isGenomeVersionUsed(String genomeVersion)
             throws SQLException {
         String query = "SELECT * FROM File WHERE GRVersion = ?";
