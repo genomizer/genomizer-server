@@ -58,7 +58,8 @@ public class RawToProfileConverter extends Executor {
      * @param keepSam
      * @param genomeVersion
      * @param referenceGenome
-     * @param filepaths
+     * @param rawFilesDir
+     * @param profileFilesDir
      * @return
      * @throws ProcessException
      */
@@ -71,9 +72,9 @@ public class RawToProfileConverter extends Executor {
             String referenceGenome,
             String rawFilesDir,
             String profileFilesDir) throws ProcessException {
-//        return null;
 
-        return procedure(params.split(" "), rawFilesDir, profileFilesDir);
+        return null;
+//        return procedure(new String[] {"-a", "-m 1", "--best", "-p 10", "-v 2", "-q", "-3"}, rawFilesDir, profileFilesDir);
     }
 
 

@@ -1,5 +1,6 @@
 package command.admin;
 
+import authentication.Authenticate;
 import authentication.BCrypt;
 import com.google.gson.annotations.Expose;
 import command.Command;
@@ -16,7 +17,6 @@ import server.Debug;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.HashMap;
 
 /**
  * Command used to alter user information.
@@ -40,13 +40,21 @@ public class PutAdminUserCommand extends Command {
     public int getExpectedNumberOfURIFields() {
         return 2;
     }
-    
-    @Override
-    public void setFields(String uri, HashMap<String, String> query,
-                          String username, UserType userType) {
-        this.userType = userType;
+
+
+    /**
+     * Set the username of the user to edit. Only used during testing
+     *
+     * @param username - the username of the user to edit.
+     */
+    public void setUsername(String username) {
+        this.username = username;
     }
 
+    /**
+     * Make sure rights is correct and input is properly formatted.
+     * @throws ValidateException
+     */
     @Override
     public void validate() throws ValidateException {
         hasRights(UserRights.getRights(this.getClass()));
@@ -58,13 +66,22 @@ public class PutAdminUserCommand extends Command {
 
     }
 
+    /**
+     * Try admin editing of inputed user. Return a response of the result.
+     * @return
+     */
     @Override
     public Response execute() {
-        DatabaseAccessor db = null;
         Response response;
 
-        try {
-            db = initDB();
+        // Do not allow admin editing of admins own account. Instead PutUserCommand should be used.
+        // This ensures admins can not self edit their privileges, potentially destroying the last admin account.
+        if(Authenticate.getUsernameByID(uuid).equals(username))
+            if(!privileges.equals(UserType.ADMIN.name()))
+                response = new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Changing of privileges on user "+username+
+                    " is not allowed. You may not lower your own privileges.");
+
+        try(DatabaseAccessor db = initDB()) {
             String hash = BCrypt.hashpw(password, BCrypt.gensalt());
             if (db.updateUser(username, hash, UserType.valueOf(privileges),
                     name, email) != 0)
@@ -82,9 +99,6 @@ public class PutAdminUserCommand extends Command {
             response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
                     "Editing of user '" + username + "' unsuccessful. " +
                             e.getMessage());
-        } finally {
-            if (db != null)
-                db.close();
         }
 
         return response;
