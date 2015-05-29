@@ -26,7 +26,8 @@ import java.util.StringTokenizer;
  */
 public abstract class Executor {
 
-	private final String FILEPATH = "resources/";
+	/* Assumes execution is done from project root */
+	private final String FILEPATH = "";
 	private DatabaseAccessor db;
 
 	/**
@@ -41,10 +42,7 @@ public abstract class Executor {
 	protected String executeProgram(String[] command)
 			throws InterruptedException, IOException, RuntimeException {
 
-		File pathToExecutable = new File(FILEPATH + command[0]);
-
-		/* Checks if program can be executed, does not execute, throws excp. */
-		isExecutable(pathToExecutable);
+		File pathToExecutable = new File(FILEPATH+command[0]);
 
 		command[0] = pathToExecutable.getAbsolutePath();
 		return executeCommand(command);
@@ -67,33 +65,13 @@ public abstract class Executor {
 		/* Checks if script can be executed, does not execute, throws excp.*/
 		Debug.log("[Executor.executeScript] Path to executable: "
 				+ pathToExecutable.toString());
-		isExecutable(pathToExecutable);
+
 
 		command[1] = pathToExecutable.getAbsolutePath();
 		Debug.log("[Executor.executeScript] Executing the command: "
 				+ Arrays.toString(command));
 		return executeCommand(command);
 
-	}
-
-	/**
-	 * Checks if given executable exists and that execution rights are correct.
-	 * Does NOT execute the given program.
-	 * @param executable Executable file
-	 * @throws IOException If the file does not exists
-	 * @throws AccessControlException If execute permissions are not present
-	 */
-	private void isExecutable(File executable)
-			throws IOException, AccessControlException{
-		if(!executable.exists()) {
-			throw new FileNotFoundException(
-					String.format("Runnable [%s] does not exist", executable));
-		}
-
-		if(!executable.canExecute()) {
-			throw new AccessControlException(
-					"No permission to execute "+executable);
-		}
 	}
 
 	/**
@@ -133,7 +111,9 @@ public abstract class Executor {
 		for ( String arg : command) {
 			commandString += arg + " ";
 		}
-		ErrorLogger.log("SYSTEM", "Command [" + commandString + "]: " + builder.directory().getAbsolutePath());
+		ErrorLogger.log("SYSTEM", "Command ["+commandString+"]: "+
+								  builder.directory().getAbsolutePath());
+
 		Process process;
 		process = builder.start();
 
