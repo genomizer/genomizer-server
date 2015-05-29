@@ -64,7 +64,7 @@ public class PutProcessCommand extends Command {
 		super.setFields(uri, query, uuid, userType);
 		setTimestamp(System.currentTimeMillis());
 		processtype = uri.split("/")[2];
-		this.username = Authenticate.getUsernameByID(uuid);
+		username = Authenticate.getUsernameByID(uuid);
 	}
 
 	/**
@@ -77,7 +77,7 @@ public class PutProcessCommand extends Command {
 	public void validate() throws ValidateException {
 
 		hasRights(UserRights.getRights(this.getClass()));
-		validateName(username, MaxLength.USERNAME, "Username");
+		validateName(username, MaxLength.USERNAME, "Username" + username);
 		validateName(expid, MaxLength.EXPID, "Experiment name");
 		validateExists(metadata, MaxLength.FILE_METADATA, "Metadata");
 		validateName(genomeVersion, MaxLength.GENOME_VERSION, "Genome version");
