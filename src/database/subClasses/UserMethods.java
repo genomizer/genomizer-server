@@ -207,7 +207,7 @@ public class UserMethods {
 				"SET Role = ?, FullName = ?, Email = ?" +
 				"WHERE UserName = ?";
 		PreparedStatement stmt = conn.prepareStatement(query);
-		stmt.setString(1, role.name());
+		stmt.setString(1, role.toString());
 		stmt.setString(2, fullName);
 		stmt.setString(3, email);
 		stmt.setString(4, username);
