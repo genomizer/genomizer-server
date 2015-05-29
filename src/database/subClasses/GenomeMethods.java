@@ -363,10 +363,13 @@ public class GenomeMethods {
 		}
 	}
 
-	public boolean removeGenomeReleaseFile (String genomeVersion,
-											String fileName)
-		throws SQLException, IOException {
-
+	public boolean removeGenomeReleaseFile(String genomeVersion,
+										   String fileName)
+			throws SQLException, IOException {
+		String folderPath = getGenomeRelease(genomeVersion).getFolderPath();
+		File file = new File(folderPath+fileName);
+		if (file.exists())
+			file.delete();
 
 		try (PreparedStatement stmt = conn.prepareStatement(
 				"DELETE FROM Genome_Release_Files "
@@ -560,8 +563,23 @@ public class GenomeMethods {
 			throws SQLException {
 
 		int resCount = 0;
+		ChainFiles cf = null;
 
-		ChainFiles cf = getChainFiles(fromVersion, toVersion);
+		//ChainFiles cf = getChainFiles(fromVersion, toVersion);
+		String getChainFiles =
+				"SELECT * FROM Chain_File NATURAL JOIN Chain_File_Files " +
+				"WHERE (FromVersion ~~* ?)" + " AND (ToVersion ~~* ?)";
+
+		PreparedStatement getChainFilesStmt = conn.prepareStatement(getChainFiles);
+		getChainFilesStmt.setString(1, fromVersion);
+		getChainFilesStmt.setString(2, toVersion);
+		ResultSet getChainFilesRs = getChainFilesStmt.executeQuery();
+
+		if (getChainFilesRs.next()) {
+			cf = new ChainFiles(getChainFilesRs);
+		}
+
+		getChainFilesStmt.close();
 
         if (cf == null) {
             return 0;
