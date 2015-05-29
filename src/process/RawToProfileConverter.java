@@ -67,10 +67,10 @@ public class RawToProfileConverter extends Executor {
             String infile,
             String outfile,
             boolean keepSam,
-            String
-                    genomeVersion,
+            String  genomeVersion,
             String referenceGenome,
-            Map.Entry<String, String> filepaths) throws ProcessException {
+            String rawFilesDir,
+            String profileFilesDir) throws ProcessException {
         return null;
     }
 

@@ -201,11 +201,8 @@ public class RawToProfProcessCommand extends ProcessCommand {
                         shouldKeepSam(),
                         getGenomeVersion(),
                         referenceGenome,
-
-                        // TODO change args
-                        new AbstractMap.SimpleEntry<>(
-                                rawFilesDir,
-                                profileFilesDir));
+                        rawFilesDir,
+                        profileFilesDir);
             }
         }
 
