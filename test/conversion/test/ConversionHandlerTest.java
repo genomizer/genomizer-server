@@ -12,6 +12,8 @@ import server.ServerSettings;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.SQLException;
 
 import static org.junit.Assert.assertNotNull;
@@ -69,6 +71,8 @@ public class ConversionHandlerTest {
         wigVarStepFileID = db.getFileTuple(wigVarStepFilePath).id;
         wigBedFileID = db.getFileTuple(wigBedFilePath).id;
         wigFixedStepFileID = db.getFileTuple(wigFixedStepFilePath).id;
+
+        new File(TESTFOLDER+OUTPUTFOLDER+PROFILEFOLDER).mkdirs();
     }
 
     /*
@@ -97,8 +101,7 @@ public class ConversionHandlerTest {
         new File(TESTFOLDER+OUTPUTFOLDER+PROFILEFOLDER+"WIG-testdata.sgr").delete();
         new File(TESTFOLDER+OUTPUTFOLDER+PROFILEFOLDER+"WIG-varstep-testdata.sgr").delete();
 
-        //new File(TESTFOLDER+OUTPUTFOLDER+"Exp3/profile").delete();
-        //new File(TESTFOLDER+OUTPUTFOLDER+"Exp3").delete();
+        db.recursiveDelete(new File(TESTFOLDER+OUTPUTFOLDER+"Exp3"));
     }
 
     /*
