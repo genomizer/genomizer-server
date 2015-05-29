@@ -77,7 +77,7 @@ public class PutProcessCommand extends Command {
 	public void validate() throws ValidateException {
 
 		hasRights(UserRights.getRights(this.getClass()));
-		validateName(username, MaxLength.USERNAME, "Username" + username);
+		validateName(username, MaxLength.USERNAME, "Username");
 		validateName(expid, MaxLength.EXPID, "Experiment name");
 		validateExists(metadata, MaxLength.FILE_METADATA, "Metadata");
 		validateName(genomeVersion, MaxLength.GENOME_VERSION, "Genome version");
