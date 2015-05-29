@@ -203,8 +203,8 @@ public class UserMethods {
 		isValidArgument(role.toString());
 		isValidArgument(fullName);
 		isValidArgument(email);
-		String query = "UPDATE User_Info" +
-				"SET Role = ?, FullName = ?, Email = ?" +
+		String query = "UPDATE User_Info " +
+				"SET Role = ?, FullName = ?, Email = ? " +
 				"WHERE UserName = ?";
 		PreparedStatement stmt = conn.prepareStatement(query);
 		stmt.setString(1, role.toString());
