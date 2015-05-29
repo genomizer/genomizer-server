@@ -3,6 +3,7 @@ package command.process;
 import com.google.gson.annotations.Expose;
 import command.Command;
 import command.ValidateException;
+import database.DatabaseAccessor;
 import database.constants.MaxLength;
 import database.containers.Genome;
 import process.ProcessException;
@@ -155,55 +156,52 @@ public class RawToProfProcessCommand extends ProcessCommand {
                 throws IOException, SQLException, ProcessException {
 
             //Get the genome information from the database.
-            Genome g = initDB().getGenomeRelease(getGenomeVersion());
+            Genome g;
+            try (DatabaseAccessor db = initDB()) {
+                g = db.getGenomeRelease(getGenomeVersion());
+            }
 
 
             if (g == null) {
                 throw new IOException(
                         "Could not find genome version: " +
-                        getGenomeVersion());
-            } else {
-                //Get the path of the genome.
-                String genomeFolderPath = g.getFolderPath();
-                //Get the prefix of the genome files.
-                String genomeFilePrefix = g.getFilePrefix();
-
-                if (genomeFilePrefix == null) {
-                    Debug.log(
-                            "Error when processing. Could not get " +
-                            "genomeFilePrefix: "
-                            + genomeVersion);
-                    throw new IOException(
-                            "Error when processing. Could not get " +
-                            "genomeFilePrefix: "
-                            + genomeVersion);
-                }
-
-                if (genomeFolderPath == null) {
-                    Debug.log(
-                            "Error when processing. Could not get " +
-                            "genomeFolderPath: "
-                            + genomeVersion);
-                    throw new IOException(
-                            "Error when processing. Could not get " +
-                            "genomeFolderPath: "
-                            + genomeVersion);
-                }
-
-                String referenceGenome = genomeFolderPath + genomeFilePrefix;
-
-                RawToProfileConverter rawToProfileConverter =
-                        new RawToProfileConverter();
-                rawToProfileConverter.procedureRaw(
-                        getParams(),
-                        getInfile(),
-                        getOutfile(),
-                        shouldKeepSam(),
-                        getGenomeVersion(),
-                        referenceGenome,
-                        rawFilesDir,
-                        profileFilesDir);
+                                getGenomeVersion());
             }
+
+            //Get the path of the genome.
+            String genomeFolderPath = g.getFolderPath();
+            //Get the prefix of the genome files.
+            String genomeFilePrefix = g.getFilePrefix();
+
+            if (genomeFilePrefix == null) {
+                String msg = "Error when processing. Could not get "
+                        + "genomeFilePrefix: "
+                        + genomeVersion;
+                Debug.log(msg);
+                throw new IOException(msg);
+            }
+
+            if (genomeFolderPath == null) {
+                String msg = "Error when processing. Could not get "
+                        + "genomeFolderPath: "
+                        + genomeVersion;
+                Debug.log(msg);
+                throw new IOException(msg);
+            }
+
+            String referenceGenome = genomeFolderPath + genomeFilePrefix;
+
+            RawToProfileConverter rawToProfileConverter =
+                    new RawToProfileConverter();
+            rawToProfileConverter.procedureRaw(
+                    getParams(),
+                    getInfile(),
+                    getOutfile(),
+                    shouldKeepSam(),
+                    getGenomeVersion(),
+                    referenceGenome,
+                    rawFilesDir,
+                    profileFilesDir);
         }
 
         public Callable<Response> getCallable(

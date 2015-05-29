@@ -236,10 +236,10 @@ public class ExperimentMethods {
             throws SQLException, IOException {
 
         // Validate all annotations
-        for (Entry e : annotations.entrySet()) {
-            String key = (String) e.getKey();
-            String value = (String) e.getValue();
-            validateAnnotation(key, value);
+        for (Entry<String, String> e : annotations.entrySet()) {
+            String key = e.getKey();
+            String value = e.getValue();
+            e.setValue(validateAnnotation(key, value));
         }
 
         String query = "UPDATE Annotated_With SET Value = ?"
@@ -249,9 +249,9 @@ public class ExperimentMethods {
         int rs = 0;
         try (PreparedStatement stmt = conn.prepareStatement(query);) {
             conn.setAutoCommit(false);
-            for (Entry e : annotations.entrySet()) {
-                String key = (String) e.getKey();
-                String value = (String) e.getValue();
+            for (Entry<String, String> e : annotations.entrySet()) {
+                String key = e.getKey();
+                String value = e.getValue();
                 stmt.setString(1, value);
                 stmt.setString(2, key);
                 stmt.setString(3, expID);

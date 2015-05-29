@@ -173,18 +173,14 @@ public class SmoothingProcessCommand extends ProcessCommand {
 
         public Callable<Response> getCallable(final String profileFilesDir) {
             return new Callable<Response>() {
-                @SuppressWarnings("TryWithIdenticalCatches")
                 @Override
                 public Response call() throws Exception {
                     try {
                         processFile(profileFilesDir);
                         return new ProcessResponse(HttpStatusCode.OK);
-                    } catch (ValidateException ve) {
-                        ve.printStackTrace();
-                    } catch (InterruptedException ie) {
-                        ie.printStackTrace();
-                    } catch (IOException ioe) {
-                        ioe.printStackTrace();
+                    } catch (ValidateException | InterruptedException |
+                            IOException e) {
+                        e.printStackTrace();
                     }
                     return new ProcessResponse(HttpStatusCode
                             .INTERNAL_SERVER_ERROR);

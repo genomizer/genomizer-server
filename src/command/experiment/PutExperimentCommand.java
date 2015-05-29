@@ -70,10 +70,12 @@ public class PutExperimentCommand extends Command {
 		Response response;
 
 		try (DatabaseAccessor db = initDB()) {
+			HashMap<String, String> annotationsMap
+					= new HashMap<>();
 			for (Annotation annotation : annotations) {
-				db.updateExperiment(name, annotation.getName(),
-						annotation.getValue());
+				annotationsMap.put(annotation.getName(), annotation.getValue());
 			}
+			db.updateExperiment(name, annotationsMap);
 
 			response = new SingleExperimentResponse(db.getExperiment(expID));
 		} catch (SQLException e) {

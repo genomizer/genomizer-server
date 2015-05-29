@@ -9,7 +9,7 @@ import database.DatabaseAccessor;
 import database.containers.Experiment;
 import database.containers.FileTuple;
 import database.test.TestInitializer;
-import junit.framework.Assert;
+import static org.junit.Assert.*;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
