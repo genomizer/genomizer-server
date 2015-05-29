@@ -305,17 +305,16 @@ public class FileMethods {
 
 		if (ft == null) {
 			Debug.log("FileMethods.deleteFile: Could not find file at path " + path);
-			return 0;
-		}
+		} else {
+			File fileToDelete = new File(path);
+			if (fileToDelete.exists()) {
+				fileToDelete.delete();
+			}
 
-		File fileToDelete = new File(path);
-		if (fileToDelete.exists()) {
-			fileToDelete.delete();
-		}
-
-		File parentFolder = new File(ft.getParentFolder());
-		if (ft.type.equalsIgnoreCase("profile") && isEmptyFolder(parentFolder)) {
-			parentFolder.delete();
+			File parentFolder = new File(ft.getParentFolder());
+			if (ft.type.equalsIgnoreCase("profile") && isEmptyFolder(parentFolder)) {
+				parentFolder.delete();
+			}
 		}
 
 		String statementStr = "DELETE FROM File " + "WHERE (Path ~~* ?)";

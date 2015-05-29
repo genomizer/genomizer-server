@@ -1196,6 +1196,22 @@ public class DatabaseAccessor implements AutoCloseable {
     }
 
     /**
+     * Removes one specific genome release file stored in the database.
+     *
+     * @param genomeVersion - the genome version.
+     * @param filePath      - path on the file system.
+     *
+     * @return boolean - true if succeeded, false if failed.
+     * @throws SQLException
+     * @throws IOException
+     */
+    public boolean removeGenomeReleaseFile(String genomeVersion,
+                                           String filePath)
+        throws SQLException, IOException {
+        return genMethods.removeGenomeReleaseFile(genomeVersion, filePath);
+    }
+
+    /**
      * Method for getting all the genome releases for a species currently stored
      * in the database.
      *
