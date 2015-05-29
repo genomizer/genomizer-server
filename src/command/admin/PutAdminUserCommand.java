@@ -49,6 +49,10 @@ public class PutAdminUserCommand extends Command {
         super.setFields(uri, query, uuid, userType);
     }
 
+    /**
+     * Make sure rights is correct and input is properly formatted.
+     * @throws ValidateException
+     */
     @Override
     public void validate() throws ValidateException {
         hasRights(UserRights.getRights(this.getClass()));
@@ -65,6 +69,13 @@ public class PutAdminUserCommand extends Command {
         DatabaseAccessor db = null;
         Response response;
 
+        // Do not allow admin editing of admins own account. Instead PutUserCommand should be used.
+        // This ensures admins can not self edit their privileges, potentially destroying the last admin account.
+        if(Authenticate.getUsernameByID(uuid).equals(username)){
+            response = new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Admin editing of user "+username+
+                    " is not allowed. Admin editing of admins own account is not allowed. For changing of privileges " +
+                    "use another admin account. For changing of password, full name and email use normal user editing.");
+        }
         try {
             db = initDB();
             String hash = BCrypt.hashpw(password, BCrypt.gensalt());
