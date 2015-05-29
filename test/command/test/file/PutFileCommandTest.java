@@ -60,9 +60,9 @@ public class PutFileCommandTest {
 	 */
 	@Test
 	public void testHavingRights() throws ValidateException {
-		String json = jsonBuilder("filename","type","metadata","author","version");
+		String json = jsonBuilder("1","2","metadata","author","version");
 		Command c = gson.fromJson(json, PutFileCommand.class);
-		c.setFields("uri", null, null, UserType.USER);
+		c.setFields("/file/123", null, null, UserType.USER);
 		c.validate();
 	}
 
@@ -74,9 +74,9 @@ public class PutFileCommandTest {
 	 */
 	@Test(expected = ValidateException.class)
 	public void testNotHavingRights() throws ValidateException {
-		String json = jsonBuilder("filename","type","metadata","author","version");
+		String json = jsonBuilder("1","2","metadata","author","version");
 		Command c = gson.fromJson(json, PutFileCommand.class);
-		c.setFields("uri", null, null, UserType.GUEST);
+		c.setFields("/file/123", null, null, UserType.GUEST);
 		c.validate();
 	}
 
