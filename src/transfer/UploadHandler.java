@@ -42,6 +42,8 @@ public class UploadHandler {
         this.uploadDir   = uploadDir;
         this.handlerRoot = handlerRoot;
         this.tmpDir      = tmpDir;
+        
+        new File(tmpDir).mkdirs();
     }
 
     // Serve a HTML form allowing to upload files via browser.

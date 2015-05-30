@@ -337,25 +337,6 @@ public class PostFileCommandTest {
 
 	/**
 	 * Test used to check that ValidateException is thrown when
-	 * MetaData contains invalid characters.
-	 *
-	 * @throws ValidateException
-	 */
-	@Ignore
-	@Test(expected = ValidateException.class)
-	public void testValidateMetaDataInvalidCharacters() throws ValidateException {
-
-		String json = jsonBuilder("id","name","raw","metam/eta","name","releaseNr");
-		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
-		c.setFields("uri", null, "uuid", UserType.ADMIN);
-		c.validate();
-
-		fail("Expected ValidateException to be thrown.");
-
-	}
-
-	/**
-	 * Test used to check that ValidateException is thrown when
 	 * Author is missing.
 	 *
 	 * @throws ValidateException
