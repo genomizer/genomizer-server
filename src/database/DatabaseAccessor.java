@@ -1511,4 +1511,8 @@ public class DatabaseAccessor implements AutoCloseable {
     public void setChainFileCheckSumMD5 (ChainFile file, String checkSumMD5) throws SQLException {
         genMethods.setChainFileCheckSumMD5(file, checkSumMD5);
     }
+
+    public FileMethods getFileMethods() {
+        return fileMethods;
+    }
 }
