@@ -12,6 +12,10 @@ import server.RequestHandler;
 public class RawToProfProcessCommandTest {
     private final Gson gson = new RequestHandler().getGson();
 
+    /**
+     * Test checks that exception can be thrown with an incorrect infile name.
+     * @throws ValidateException
+     */
     @Test(expected = ValidateException.class)
     public void canGiveValidateExceptionOnIncorrectInfileName() throws ValidateException {
         String json =
@@ -26,6 +30,10 @@ public class RawToProfProcessCommandTest {
         processCommands.validate();
     }
 
+    /**
+     * Test checks that exception can be thrown with an incorrect infile size.
+     * @throws ValidateException
+     */
     @Test (expected = ValidateException.class)
     public void shouldGiveValidateExceptionOnIncorrectInfileLength() throws ValidateException {
 
@@ -45,6 +53,10 @@ public class RawToProfProcessCommandTest {
         processCommands.validate();
     }
 
+    /**
+     * Test checks that exception can be thrown with an incorrect outfile name.
+     * @throws ValidateException
+     */
     @Test (expected = ValidateException.class)
     public void canGiveValidateExceptionOnIncorrectOutfileName() throws ValidateException {
         String json =
@@ -58,6 +70,11 @@ public class RawToProfProcessCommandTest {
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }
+
+    /**
+     * Test checks that exception can be thrown with an incorrect outfile size.
+     * @throws ValidateException
+     */
     @Test (expected = ValidateException.class)
     public void shouldGiveValidateExceptionOnIncorrectOutfileLength() throws ValidateException {
 
@@ -77,6 +94,11 @@ public class RawToProfProcessCommandTest {
         processCommands.validate();
     }
 
+
+    /**
+     * Test checks that exception can be thrown with an incorrect GenomeVersion name.
+     * @throws ValidateException
+     */
     @Test (expected = ValidateException.class)
     public void canGiveValidateExceptionOnIncorrectGenomeVersionName() throws ValidateException {
         String json =
@@ -90,6 +112,11 @@ public class RawToProfProcessCommandTest {
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }
+
+    /**
+     * Test checks that exception can be thrown with an incorrect GenomeVersion size.
+     * @throws ValidateException
+     */
     @Test (expected = ValidateException.class)
     public void shouldGiveValidateExceptionOnIncorrectGenomeVersionLength() throws ValidateException {
 
@@ -108,6 +135,11 @@ public class RawToProfProcessCommandTest {
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }
+
+    /**
+     * Test checks that exception can be thrown with params being null.
+     * @throws ValidateException
+     */
     @Test(expected = ValidateException.class)
     public void canGiveValidateExceptionOnParamsNull() throws ValidateException {
         String json =
