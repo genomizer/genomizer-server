@@ -9,10 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Stack;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Class used to create profile data from .fastq format.
@@ -67,12 +64,14 @@ public class RawToProfileConverter extends Executor {
 	public static String procedureRaw(String params, String fastqFile,
 									  String wigFile, boolean keepSam,
 									  String genomeVersion,
-									  String referenceGenome, Map.Entry<String,
-			String> filepaths) throws ProcessException, IOException {
+									  String referenceGenome,
+									  String filepathRaw,
+									  String filepathProfile)
+			throws ProcessException, IOException {
 
 
 		Stack<String> toBeRemoved = new Stack<>();
-		Stack<String> filesToSaveToExperiment = new Stack<>();
+		Stack<Map.Entry<String,String>> filesToSaveToExperiment = new Stack<>();
 
 
 		/*
@@ -81,19 +80,17 @@ public class RawToProfileConverter extends Executor {
 		*/
 		String tmpDirPath = tempFolder + "temp_" +
 							Thread.currentThread().getId()+"/";
+
+
 		File tmpDir = createDirectory(tmpDirPath);
 
 
-		/* The path to the experiment */
-		String experimentPath = filepaths.getKey()+filepaths.getValue();
+		/* Append end of paths with '/' if not present */
+		filepathRaw = fixEndOfPath(filepathRaw);
+		filepathProfile = fixEndOfPath(filepathProfile);
 
 
-		if (!experimentPath.endsWith("/")) {
-			experimentPath += "/";
-		}
-
-		fastqFile = experimentPath+fastqFile;
-
+		fastqFile = filepathRaw+fastqFile;
 
 		String samFile = tmpDirPath + FilenameUtils.getBaseName(fastqFile)+
 						 ".sam";
@@ -102,26 +99,53 @@ public class RawToProfileConverter extends Executor {
 		String sortedSamWithoutDups = FilenameUtils.removeExtension(samFile)
 									  +"_sorted_without_duplicates.sam";
 
+		if (ServerSettings.shouldUseBowtie2) {
 
+			ErrorLogger.log("SYSTEM", "Running Bowtie2");
+			Bowtie2 bowtieProcess = new Bowtie2(
+					referenceGenome, null, null,
+					fastqFile, samFile, params.split(" "));
 
-		ErrorLogger.log("SYSTEM", "Running Bowtie");
-		Bowtie2 bowtieProcess = new Bowtie2(referenceGenome, null,null,
-				fastqFile,samFile, params.split(" "));
+			try {
+				bowtieProcess.validate();
+			} catch (ValidateException e) {
+				ErrorLogger.log(
+						"SYSTEM", "Error validating Bowtie2 - " +
+								  "[" + bowtieProcess.toString() + "]");
+			}
 
-		try {
-			bowtieProcess.validate();
-		} catch (ValidateException e) {
-			ErrorLogger.log("SYSTEM", "Error validating Bowtie2 - " +
-					"["+bowtieProcess.toString()+"]");
-		}
+			String bowtieReturnMessage = "NO_RETURN";
+			try {
+				bowtieReturnMessage = bowtieProcess.execute();
+				ErrorLogger.log("SYSTEM", "Finished Bowtie2");
+			} catch (InterruptedException | IOException e) {
+				ErrorLogger.log(
+						"SYSTEM", "Error executing Bowtie2, exited with -"
+								  + " [" + bowtieReturnMessage + "]");
+			}
+		} else {
+			ErrorLogger.log("SYSTEM", "Running Bowtie");
+			Bowtie bowtieProcess = new Bowtie(
+					referenceGenome, null, null,
+					fastqFile, samFile, params.split(" "));
 
-		String bowtieReturnMessage = "NO_RETURN";
-		try {
-			bowtieReturnMessage = bowtieProcess.execute();
-			ErrorLogger.log("SYSTEM", "Finished Bowtie2");
-		} catch (InterruptedException | IOException e) {
-			ErrorLogger.log("SYSTEM", "Error executing Bowtie2, exited with -"
-			+" ["+bowtieReturnMessage+"]");
+			try {
+				bowtieProcess.validate();
+			} catch (ValidateException e) {
+				ErrorLogger.log(
+						"SYSTEM", "Error validating Bowtie - " +
+								  "[" + bowtieProcess.toString() + "]");
+			}
+
+			String bowtieReturnMessage = "NO_RETURN";
+			try {
+				bowtieReturnMessage = bowtieProcess.execute();
+				ErrorLogger.log("SYSTEM", "Finished Bowtie");
+			} catch (InterruptedException | IOException e) {
+				ErrorLogger.log(
+						"SYSTEM", "Error executing Bowtie, exited with -"
+								  + " [" + bowtieReturnMessage + "]");
+			}
 		}
 
 
@@ -158,9 +182,13 @@ public class RawToProfileConverter extends Executor {
 		/* Run conversion from .sam to .wig, final step */
 		try {
 			ErrorLogger.log("SYSTEM","Running .wig conversion");
-			Pyicos.runConvert(sortedSamWithoutDups, tmpDirPath+FilenameUtils.getName(wigFile));
+			Pyicos.runConvert(sortedSamWithoutDups,
+					tmpDirPath+FilenameUtils.getName(wigFile));
 			ErrorLogger.log("SYSTEM", "Finished .wig conversion");
-			filesToSaveToExperiment.push(tmpDirPath+wigFile);
+
+			filesToSaveToExperiment.push(new AbstractMap.SimpleEntry<>(
+					tmpDirPath+FilenameUtils.getName(wigFile),
+					filepathProfile+wigFile));
 		} catch (ValidateException e) {
 			ErrorLogger.log("SYSTEM",
 					"Error validating pyicos conversion to .wig");
@@ -173,7 +201,10 @@ public class RawToProfileConverter extends Executor {
 		/* Save .sam file to experiment if wanted */
 		if (keepSam) {
 			ErrorLogger.log("SYSTEM", "Saving .sam file");
-			filesToSaveToExperiment.push(sortedSamWithoutDups);
+			filesToSaveToExperiment.push(new AbstractMap.SimpleEntry<>(
+							sortedSamWithoutDups,
+							filepathProfile+
+							FilenameUtils.getName(sortedSamWithoutDups)));
 		} else {
 			toBeRemoved.push(sortedSamWithoutDups);
 		}
@@ -181,23 +212,34 @@ public class RawToProfileConverter extends Executor {
 		ErrorLogger.log("SYSTEM", "Moving files to experiment");
 		ErrorLogger.log(
 				"SYSTEM", "The path to move these files is: [" +
-						  experimentPath + "]");
-/*		for (String fileName: filesToSaveToExperiment) {
+						  filepathProfile + "]");
+		for (Map.Entry<String,String> filePair: filesToSaveToExperiment) {
 			try {
-				Files.move(Paths.get(fileName), Paths.get(experimentPath+wigFile));
+				System.out.println("Moving: "+filePair.getKey());
+				Files.move(Paths.get(filePair.getKey()),
+						Paths.get(filePair.getValue()));
+
 			} catch (IOException e) {
-				ErrorLogger.log("SYSTEM", "Error moving file "+ "["+fileName+"]"+
-				" to "+experimentPath);
+				ErrorLogger.log("SYSTEM", "Error moving file "+ "["+filePair+"]"+
+				" to "+filepathProfile);
+				throw e;
 			}
 		}
-*/
+
 		/* Remove temporary files */
-/*		for (String fileName: toBeRemoved) {
+		for (String fileName: toBeRemoved) {
 			File file = new File(fileName);
 			System.out.println("Removing: "+file.getCanonicalPath());
 			file.delete();
 		}
-*/		return null;
+		return null;
+	}
+
+	private static String fixEndOfPath(String filepathRaw) {
+		if (!filepathRaw.endsWith("/")) {
+			filepathRaw += "/";
+		}
+		return filepathRaw;
 	}
 
 
