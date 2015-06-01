@@ -20,16 +20,21 @@ public class SmoothTest {
         try {
             new File(outDir).mkdirs();
 
-            Smooth.runSmoothing("resources/smoothTestData/SGR-testdata-2.sgr", 10, 0, 5, 0, 0,
+            Smooth.runSmoothing("resources/smoothTestData/SGR-testdata-2.sgr", 1, 1, 1, 0, 0,
                     PathUtils.join(outDir, "SGR-testdata-2-smoothed.sgr"));
-            Smooth.runSmoothing("resources/smoothTestData/SGR-testdata-3.sgr", 10, 0, 5, 0, 0,
+            Smooth.runSmoothing("resources/smoothTestData/SGR-testdata-3.sgr", 2, 1, 1, 0, 0,
                     PathUtils.join(outDir, "SGR-testdata-3-smoothed.sgr"));
-            Smooth.runSmoothing("resources/smoothTestData/SGR-testdata-4.sgr", 10, 0, 5, 0, 0,
+            Smooth.runSmoothing("resources/smoothTestData/SGR-testdata-4.sgr", 2, 1, 1, 0, 0,
                     PathUtils.join(outDir, "SGR-testdata-4-smoothed.sgr"));
 
-            final int numFilesInOutDir = new File(outDir).listFiles().length;
+            File [] finalFiles = new File(outDir).listFiles();
+            final int numFilesInOutDir = finalFiles.length;
 
             assertEquals(3, numFilesInOutDir);
+
+            for (File file : finalFiles) {
+                assertTrue(file.length() > 0);
+            }
         }
         finally {
             FileUtils.deleteDirectory(new File("resources/smoothTestData/smoothed"));
