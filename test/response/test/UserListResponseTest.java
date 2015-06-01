@@ -36,6 +36,6 @@ public class UserListResponseTest {
         array.add("SECOND");
         UserListResponse rsp = new UserListResponse(array);
         String checker = rsp.getBody();
-        assertEquals("[{\"username\":\"FIRST\"},{\"username\":\"SECOND\"}]", checker);
+        assertEquals("{\"username\":[\"FIRST\",\"SECOND\"]}", checker);
     }
 }

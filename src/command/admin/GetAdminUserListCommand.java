@@ -17,7 +17,7 @@ import java.util.List;
  * @author Business Logic 2015
  * @version 1.0
  */
-public class GetAdminUserCommand extends Command{
+public class GetAdminUserListCommand extends Command{
     @Override
     public int getExpectedNumberOfURIFields() { return 2; }
 
