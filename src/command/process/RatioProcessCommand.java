@@ -39,11 +39,11 @@ public class RatioProcessCommand extends ProcessCommand {
     public void validate() throws ValidateException {
         for (RatioProcessFile file : files) {
             Command.validateName(
-                    file.getInfile1(),
+                    file.getPreChipFile(),
                     MaxLength.FILE_FILENAME,
                     "PreChipFile");
             Command.validateName(
-                    file.getInfile2(),
+                    file.getPostChipFile(),
                     MaxLength.FILE_FILENAME,
                     "PostChipFile");
             Command.validateName(
@@ -87,10 +87,10 @@ public class RatioProcessCommand extends ProcessCommand {
     public class RatioProcessFile {
 
         @Expose
-        protected String infile1;
+        protected String preChipFile;
 
         @Expose
-        protected String infile2;
+        protected String postChipFile;
 
         @Expose
         protected String outfile;
@@ -104,9 +104,9 @@ public class RatioProcessCommand extends ProcessCommand {
         @Expose
         protected String chromosomes;
 
-        public String getInfile1() {return infile1;}
+        public String getPreChipFile() {return preChipFile;}
 
-        public String getInfile2() {return infile2;}
+        public String getPostChipFile() {return postChipFile;}
 
         public String getOutfile() {return outfile;}
 
@@ -120,8 +120,8 @@ public class RatioProcessCommand extends ProcessCommand {
         @Override
         public String toString() {
             return "RatioProcessFile{" +
-                   "infile1='" + infile1 + '\'' +
-                   ", infile2='" + infile2 + '\'' +
+                   "preChipFile='" + preChipFile + '\'' +
+                   ", postChipFile='" + postChipFile + '\'' +
                    ", outfile='" + outfile + '\'' +
                    ", mean='" + mean + '\'' +
                    ", readsCutOff=" + readsCutOff + '\'' +
@@ -133,8 +133,8 @@ public class RatioProcessCommand extends ProcessCommand {
                 throws ValidateException, IOException,
                        InterruptedException, SQLException {
 
-            File infile1File = new File(profileFilesDir + "/" + infile1);
-            File infile2File = new File(profileFilesDir + "/" + infile2);
+            File infile1File = new File(profileFilesDir + "/" + preChipFile);
+            File infile2File = new File(profileFilesDir + "/" + postChipFile);
             File outfileFile = new File(profileFilesDir + "/" + outfile);
 
             Ratio.runRatio(
@@ -158,7 +158,7 @@ public class RatioProcessCommand extends ProcessCommand {
                         /* expId = */ expId,
                         /* fileType = */ FileTuple.PROFILE,
                         /* fileName = */ outfile,
-                        /* inputFilename = */ infile1 + "_" + infile2,
+                        /* inputFilename = */ preChipFile + "_" + postChipFile,
                         /* metaData = */
                         "mean: " + mean +
                         ", readsCutOff: " + readsCutOff +

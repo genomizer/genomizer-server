@@ -130,7 +130,7 @@ public class ProcessPoolIntegrationTest {
         String json =
                 "{\"expId\":\"processpool_test\"," +
                 "\"processCommands\":[{\"type\":\"ratio\"," +
-                "\"files\":[{\"infile1\":\"stepTestInfile.sgr\",\"infile2" +
+                "\"files\":[{\"preChipFile\":\"stepTestInfile.sgr\",\"postChipFile" +
                 "\":\"stepTestInfile.sgr\"," +
                 "\"outfile\":\"ratioOutFile.sgr\"," +
                 "\"mean\":\"single\"," +
