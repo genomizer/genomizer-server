@@ -63,10 +63,16 @@ public class ProcessPoolIntegrationTest {
     @Ignore
     public void shouldSmoothOneFile() throws Exception {
         String json = "{\"expId\":\"processpool_test\"," +
-                      "\"processCommands\":[{\"type\":\"smooth\"," +
-                      "\"files\":[{\"infile\":\"stepTestInfile.sgr\"," +
-                      "\"outfile\":\"stepTestOutfile.sgr\"," +
-                      "\"stepSize\":\"30\"}]}]}";
+                      "\"processCommands\":[{\"type\":\"smoothing\"," +
+                      "\"files\":[{" +
+                      "\"infile\":\"SGR-testdata-2.sgr\"," +
+                      "\"outfile\":\"smoothOutfile.sgr\"," +
+                      "\"windowSize\":\"10\"," +
+                      "\"meanOrMedian\":\"mean\"," +
+                      "\"minSmooth\":\"5\"" +
+                      "}]}]}";
+
+        System.out.println("json = " + json);
 
         ProcessCommands commands = gson.fromJson(json, ProcessCommands.class);
         commands.setPool(pool);

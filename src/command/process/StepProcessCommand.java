@@ -134,7 +134,7 @@ public class StepProcessCommand extends ProcessCommand {
                         /* genomeVersion =*/ inTuple.grVersion,
                         /* md5 = */ "",
                         /* status */ "Done");
-                Debug.log("Adding to DB: " + outTuple);
+                Debug.log("Add<ing to DB: " + outTuple);
                 fileMethods.updateFileSize(outTuple.id, fileSize);
             } catch (Exception e) {
                 e.printStackTrace();
