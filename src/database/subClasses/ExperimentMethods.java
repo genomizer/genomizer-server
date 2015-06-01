@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -247,11 +248,13 @@ public class ExperimentMethods {
 
         // Run all SQL queries as one transaction
         int rs = 0;
+        ArrayList<String> keys = new ArrayList<>();
         try (PreparedStatement stmt = conn.prepareStatement(query);) {
             conn.setAutoCommit(false);
             for (Entry<String, String> e : annotations.entrySet()) {
                 String key = e.getKey();
                 String value = e.getValue();
+                keys.add(key);
                 stmt.setString(1, value);
                 stmt.setString(2, key);
                 stmt.setString(3, expID);
@@ -260,12 +263,17 @@ public class ExperimentMethods {
 
             int arr[] = stmt.executeBatch();
             for (int i = 0; i < arr.length; i++) {
+                if (arr[i] == 0) {
+                    String label = keys.get(i);
+                    String value = annotations.get(label);
+                    arr[i] = annotateExperiment(expID, label, value);
+                }
                 rs += arr[i];
             }
 
             conn.commit();
 
-        } catch (SQLException e) {
+        } catch (SQLException | IOException e) {
             conn.rollback();
             throw e;
         } finally {
