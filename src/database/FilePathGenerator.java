@@ -150,7 +150,7 @@ public class FilePathGenerator {
      * @return String path to the subfolder
      * @deprecated
      */
-    @Deprecated 
+    @Deprecated
     public String generateNewProfileSubFolder(String folderPath) {
         File profileFolder = new File(folderPath);
 
