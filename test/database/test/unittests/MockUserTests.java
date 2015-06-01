@@ -346,7 +346,7 @@ public class MockUserTests {
     public void getGenomeRelease() throws Exception {
 
     	addGenomeReleaseFile();
-        Genome g = dbac.getGenomeRelease("HG38");
+        Genome g = dbac.getGenomeRelease("hg38");
         assertEquals("hg38", g.genomeVersion);
 
         String expectedFolderPath = testFolderPath
@@ -418,7 +418,7 @@ public class MockUserTests {
 
         String expectedProfileFolder = testFolderPath
                 + "My First Experiment" + File.separator + "profile"
-                + File.separator + "0" + File.separator;
+                + File.separator;
 
         assertEquals(expectedRawFolder, folders.getKey());
         assertEquals(expectedProfileFolder, folders.getValue());

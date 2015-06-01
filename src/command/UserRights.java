@@ -25,38 +25,58 @@ public class UserRights {
 
     static {
         userRights = new HashMap<>();
-        userRights.put(PostAnnotationFieldCommand.class, UserType.USER);
-        userRights.put(PostAnnotationValueCommand.class, UserType.USER);
-        userRights.put(PostExperimentCommand.class, UserType.USER);
-        userRights.put(PostFileCommand.class, UserType.USER);
-        userRights.put(PostGenomeReleaseCommand.class, UserType.USER);
-        userRights.put(PutUserPasswordCommand.class, UserType.GUEST);
-        userRights.put(PostAdminUserCommand.class, UserType.ADMIN);
-        userRights.put(DeleteAnnotationFieldCommand.class, UserType.USER);
-        userRights.put(DeleteAnnotationValueCommand.class, UserType.USER);
-        userRights.put(DeleteExperimentCommand.class, UserType.USER);
-        userRights.put(DeleteFileCommand.class, UserType.USER);
-        userRights.put(DeleteGenomeReleaseCommand.class, UserType.USER);
-        userRights.put(DeleteAdminUserCommand.class, UserType.ADMIN);
+
+        /** Annotation */
         userRights.put(PutAnnotationFieldCommand.class, UserType.USER);
         userRights.put(PutAnnotationValueCommand.class, UserType.USER);
+        userRights.put(PutAnnotationPrivilegesCommand.class, UserType.USER);
+        userRights.put(PostAnnotationFieldCommand.class, UserType.USER);
+        userRights.put(PostAnnotationValueCommand.class, UserType.USER);
         userRights.put(GetAnnotationCommand.class, UserType.GUEST);
         userRights.put(GetAnnotationPrivilegesCommand.class, UserType.GUEST);
+        userRights.put(DeleteAnnotationFieldCommand.class, UserType.USER);
+        userRights.put(DeleteAnnotationValueCommand.class, UserType.USER);
+
+        /** Experiment */
+        userRights.put(PutExperimentCommand.class, UserType.USER);
+        userRights.put(PostExperimentCommand.class, UserType.USER);
         userRights.put(GetExperimentCommand.class, UserType.GUEST);
+        userRights.put(DeleteExperimentCommand.class, UserType.USER);
+
+        /** File */
+        userRights.put(PutFileCommand.class, UserType.USER);
+        userRights.put(PostFileCommand.class, UserType.USER);
         userRights.put(GetFileCommand.class, UserType.USER);
+        userRights.put(DeleteFileCommand.class, UserType.USER);
+
+        /** GenomeRelease */
+        userRights.put(PostGenomeReleaseCommand.class, UserType.USER);
         userRights.put(GetGenomeReleaseCommand.class, UserType.GUEST);
         userRights.put(GetGenomeReleaseSpeciesCommand.class, UserType.GUEST);
-        userRights.put(GetProcessStatusCommand.class, UserType.GUEST);
-        userRights.put(SearchCommand.class, UserType.GUEST);
-        userRights.put(PutAnnotationPrivilegesCommand.class, UserType.USER);
-        userRights.put(PutExperimentCommand.class, UserType.USER);
-        userRights.put(PutFileCommand.class, UserType.USER);
+        userRights.put(DeleteGenomeReleaseCommand.class, UserType.USER);
+
+        /** User */
         userRights.put(PutUserCommand.class, UserType.USER);
+        userRights.put(PutUserPasswordCommand.class, UserType.USER);
+        userRights.put(GetUserCommand.class,UserType.USER);
+
+        /** Admin */
         userRights.put(PutAdminUserCommand.class, UserType.ADMIN);
-        userRights.put(PutConvertFileCommand.class, UserType.USER);
-        userRights.put(ProcessCommands.class, UserType.USER);
-        userRights.put(PutProcessCommand.class, UserType.USER);
+        userRights.put(PostAdminUserCommand.class, UserType.ADMIN);
         userRights.put(GetAdminUserCommand.class,UserType.ADMIN);
+        userRights.put(DeleteAdminUserCommand.class, UserType.ADMIN);
+
+        /** Process */
+        userRights.put(PutProcessCommand.class, UserType.USER);
+        userRights.put(ProcessCommands.class, UserType.USER);
+        userRights.put(GetProcessStatusCommand.class, UserType.USER);
+        userRights.put(GetProcessDummyCommand.class,UserType.GUEST);
+
+        /** Search */
+        userRights.put(SearchCommand.class, UserType.GUEST);
+
+        /** ConvertFile */
+        userRights.put(PutConvertFileCommand.class, UserType.USER);
     }
 
 

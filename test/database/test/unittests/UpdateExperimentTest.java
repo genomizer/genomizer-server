@@ -41,8 +41,10 @@ public class UpdateExperimentTest {
 
         String resBefore = localGetExperiment("Exp1", "Tissue");
 
+        HashMap<String, String> annotations = new HashMap<>();
+        annotations.put("Tissue", "Leg");
         assertEquals(1,
-                dbac.updateExperiment("Exp1", "Tissue", "Leg"));
+                dbac.updateExperiment("Exp1", annotations));
 
         String resAfter = localGetExperiment("Exp1", "Tissue");
         assertFalse(resBefore.equals(resAfter));
@@ -53,12 +55,15 @@ public class UpdateExperimentTest {
             IOException {
 
         String resBefore = localGetExperiment("Exp1", "Sex");
-        assertEquals(1, dbac.updateExperiment("Exp1", "Sex", "Male"));
+        HashMap<String, String> annotations = new HashMap<>();
+        annotations.put("Sex", "Male");
+        assertEquals(1, dbac.updateExperiment("Exp1", annotations));
 
         String resAfter = localGetExperiment("Exp1", "Sex");
         assertFalse(resBefore.equals(resAfter));
 
-        dbac.updateExperiment("Exp1", "Sex", "Unknown");
+        annotations.put("Sex", "Unknown");
+        dbac.updateExperiment("Exp1", annotations);
     }
 
     @Test
@@ -68,26 +73,32 @@ public class UpdateExperimentTest {
         String resBefore = localGetExperiment("Exp1", "Sex");
         assertEquals("Unknown", resBefore);
 
-        assertEquals(1, dbac.updateExperiment("EXP1", "SEX", "MALE"));
+        HashMap<String, String> annotations = new HashMap<>();
+        annotations.put("SEX", "MALE");
+        assertEquals(1, dbac.updateExperiment("EXP1", annotations));
 
         String resAfter = localGetExperiment("Exp1", "Sex");
         assertEquals("Male", resAfter);
 
-        dbac.updateExperiment("Exp1", "Sex", "Unknown");
+        annotations.put("Sex", "Unknown");
+        dbac.updateExperiment("Exp1", annotations);
     }
 
     @Test
     public void shouldUpdateFTAnnotationDespiteWrongCase()
             throws Exception {
 
-        dbac.updateExperiment("EXP1", "TISSUE", "UPPER CASE AND lowercase");
+        HashMap<String, String> annotations = new HashMap<>();
+        annotations.put("TISSUE", "UPPER CASE AND lowercase");
+        dbac.updateExperiment("EXP1", annotations);
 
         Experiment e = dbac.getExperiment("EXP1");
         Annotation a = dbac.getAnnotationObject("TISSUE");
         String value = e.getAnnotations().get(a.label);
 
         assertEquals("UPPER CASE AND lowercase", value);
-        dbac.updateExperiment("EXP1", "TISSUE", "Arm");
+        annotations.put("TISSUE", "Arm");
+        dbac.updateExperiment("EXP1", annotations);
     }
 
     @Test

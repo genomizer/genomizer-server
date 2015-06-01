@@ -1,6 +1,5 @@
 package command.process;
 
-import command.Command;
 import command.ValidateException;
 
 import java.util.Map;

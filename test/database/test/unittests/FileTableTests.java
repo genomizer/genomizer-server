@@ -9,7 +9,7 @@ import database.DatabaseAccessor;
 import database.containers.Experiment;
 import database.containers.FileTuple;
 import database.test.TestInitializer;
-import junit.framework.Assert;
+import static org.junit.Assert.*;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -173,8 +173,8 @@ public class FileTableTests {
 
     private void addMockFile(String filepath)
             throws IOException {
-
         File file = new File(filepath);
+        file.mkdirs();
         file.createNewFile();
     }
 

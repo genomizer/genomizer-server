@@ -7,11 +7,13 @@ import java.sql.SQLException;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import database.DatabaseAccessor;
 import database.test.TestInitializer;
 
+@Ignore
 public class TimeTest {
 
     public static String username = "genomizer";
@@ -34,7 +36,7 @@ public class TimeTest {
 
         dbac.close();
     }
-
+    @Ignore
     @Test
     public void ShouldStillBeConnectedAfter15Seconds() throws SQLException{
 
