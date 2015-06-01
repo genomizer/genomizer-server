@@ -9,6 +9,7 @@ import command.UserRights;
 import command.ValidateException;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
+import response.*;
 import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.HttpStatusCode;
@@ -21,22 +22,18 @@ import java.sql.SQLException;
 import java.util.HashMap;
 
 /**
- * Command for user to update his/her information
- * Created by dv13jen on 2015-05-04.
+ * Command used to alter user information.
+ * @author Business Logic 2015
+ * @version 1.1
  */
 public class PutUserCommand extends Command {
-
     private String username = null;
-
     @Expose
     private String oldPassword = null;
-
     @Expose
     private String newPassword = null;
-
     @Expose
     private String name = null;
-
     @Expose
     private String email = null;
 
@@ -61,10 +58,6 @@ public class PutUserCommand extends Command {
         this.username = username;
     }
 
-    /**
-     * Used to make sure the strings of the command are correct
-     * @throws command.ValidateException
-     */
     @Override
     public void validate() throws ValidateException {
         hasRights(UserRights.getRights(this.getClass()));
@@ -75,50 +68,38 @@ public class PutUserCommand extends Command {
         validateExists(email, MaxLength.EMAIL, "Email");
     }
 
-    /**
-     * Perform the action of the command and return a response.
-     * A connection to the database is established, authentication is performed
-     * and a response is return of the result.
-     * @return a response of the result of the command.
-     */
     @Override
     public Response execute() {
-        DatabaseAccessor db;
-        String dbHash;
-        try {
-            db = initDB();
-            dbHash = db.getPasswordHash(username);
-
-        } catch (SQLException | IOException e) {
-            Debug.log("Update was unsuccessful for user: " + username + ". Reason: " +
-                    e.getMessage());
-            return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Update of user information" +
-                    " didn't work because of temporary problems with database.");
-        }
-
-        if(dbHash == null || dbHash.isEmpty()){
-            return new ErrorResponse(HttpStatusCode.UNAUTHORIZED, "Incorrect user name for user "
-                    + username);
-        }
-
-        LoginAttempt login = Authenticate.login(uuid, username, oldPassword, dbHash);
-
-        if(login.wasSuccessful()) {
-            try {
-                String hash = BCrypt.hashpw(newPassword, BCrypt.gensalt());
-                db.updateUser(username, hash, name, email);
-            } catch (SQLException | IOException e) {
-                Debug.log("Update was unsuccessful for user: " + username + ". Reason: " +
-                        e.getMessage());
-                return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Update of user information" +
-                        " didn't work because of temporary problems with database.");
-            }finally {
-                db.close();
+        Response response;
+        try (DatabaseAccessor db = initDB()) {
+            String dbHash = db.getPasswordHash(username);
+            if (dbHash == null || dbHash.isEmpty()) {
+                response = new ErrorResponse(HttpStatusCode.UNAUTHORIZED,
+                        "Editing of '" + username + "' unsuccessful, " +
+                                "username incorrect.");
+            } else {
+                LoginAttempt login = Authenticate.login(uuid, username,
+                        oldPassword, dbHash);
+                if (login.wasSuccessful()) {
+                    db.updateUser(username, BCrypt.hashpw(newPassword,
+                            BCrypt.gensalt()), name, email);
+                    response = new MinimalResponse(HttpStatusCode.OK);
+                } else {
+                    response = new ErrorResponse(HttpStatusCode.UNAUTHORIZED,
+                            "Editing of user'" + username + "' unsuccessful, " +
+                                    "incorrect old password");
+                }
             }
-            return new MinimalResponse(HttpStatusCode.OK);
+        } catch (SQLException e) {
+            response = new DatabaseErrorResponse("Editing of user '" +
+                    username + "'");
+            Debug.log("Reason: " + e.getMessage());
+        } catch (IOException e) {
+            response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
+                    "Editing of user '" + username + "' unsuccessful. " +
+                            e.getMessage());
         }
-        Debug.log("Update was unsuccessful for user: " + username + ". Reason: Incorrect old password");
-        return new ErrorResponse(HttpStatusCode.UNAUTHORIZED, "Error with update of user information. " +
-                "Incorrect old password");
+
+        return response;
     }
 }
