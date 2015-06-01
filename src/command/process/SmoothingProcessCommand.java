@@ -147,15 +147,7 @@ public class SmoothingProcessCommand extends ProcessCommand {
             try {
                 Smooth.runSmoothing(infileWithPath, getWindowSize(), meanOrMedian,  getMinSmooth(), 0 ,0, outfileWithPath);
 
-            } catch (ValidateException e) {
-                Debug.log("Error during smoothing processing on infile: "+infile+ ". "+e.getMessage());
-                throw new UnsupportedOperationException("Error during smoothing processing on infile: "+infile+
-                        ". "+e.getMessage());
-            } catch (IOException e) {
-                Debug.log("Error during smoothing processing on infile: "+infile+ ". "+e.getMessage());
-                throw new UnsupportedOperationException("Error during smoothing processing on infile: "+infile+
-                        ". "+e.getMessage());
-            } catch (InterruptedException e) {
+            } catch (ValidateException | IOException | InterruptedException e) {
                 Debug.log("Error during smoothing processing on infile: "+infile+ ". "+e.getMessage());
                 throw new UnsupportedOperationException("Error during smoothing processing on infile: "+infile+
                         ". "+e.getMessage());
