@@ -33,18 +33,16 @@ You modify this program under the same terms as Perl itself
 
 use strict;
 use warnings;
+use File::Spec::Functions;
 
 my $VERSION = 4;
 # This variable holds the current time #
 my $now = time;
 #print "Data in file processed while reading, please make sure you dont have empty lines at end of the file\n";
 print "Enter the path of sgr files\n";
-chomp(my $dirIn = <STDIN>);
-my ($dir,$files) = $dirIn =~ /(.*)\/(.*)/;
-print $files;
-print $dir;
+chomp(my $dir = <STDIN>);
 #my $dir = $ARGV[0];
-my @files = $dir;
+my @files = <$dir\/*.sgr>;
 my $file = '';
 print "Enter window size\n";
 chomp(my $window_size = <STDIN>);
@@ -66,7 +64,8 @@ my ($prev_chr, $signals, $probes, $chr) = ('', '', '', '');
 my ($flag, $probe, $stop, $mean, $signal_value, $median, $start, $last_key, $i, $window_size_half) = (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 my $parentdir = $dir;  ## added by philge 13/04/18
 #$parentdir =~ s/sgr\/$//;  ## added by philge 13/04/18
-mkdir "$parentdir"."smoothed", unless -d "$parentdir"."smoothed";  ## added by philge 13/04/18
+my $smootheddir = File::Spec->catdir("$parentdir","smoothed");
+mkdir "$smootheddir", unless -d "$smootheddir";  ## added by philge 13/04/18
 foreach $file (@files){
     #print "$file\n$window_size\n$median_or_mean\n$minimum_probes\n";
     (@signals_sub, @signals, @probes, @probes_temp, @probes_new, @signals_temp, @signals_for_total_mean) = ();
@@ -80,13 +79,15 @@ foreach $file (@files){
     #    $total_line_count = $1;
     #}
     my $file1 = $file;
-    $file1 =~ s/$dir/$parentdir\/smoothed/;
+    $file1 =~ s/$dir/$smootheddir/;
     if($median_or_mean == 1) {
-        $file1=~s/\.sgr/_median_smooth/;
+        $file1 =~ s/\.sgr//;
+        $file1 .= '_median_smooth';
         $file1 .= '_winSiz-'.$window_size.'_minProbe-'.$minimum_probes.'.sgr';
     }
-    if($median_or_mean == 0) {
-        $file1=~s/\.sgr/_trimmed_mean_smooth/;
+    elsif($median_or_mean == 0) {
+        $file1 =~ s/\.sgr//;
+        $file1 .= '_trimmed_mean_smooth';
         $file1 .= '_winSiz-'.$window_size.'_minProbe-'.$minimum_probes.'.sgr';
     }
     print "\n$file1\n";
