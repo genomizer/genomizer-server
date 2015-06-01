@@ -81,7 +81,7 @@ public class Authenticate {
 			if (activeUsersID.get(s).equals(username)){
 				currentLogIns ++;
 				Date newDate = latestRequests.get(s);
-				if (date == null || date.compareTo(newDate) < 0){
+				if (date == null || newDate.before(date)){
 					date = newDate;
 					uuid = s;
 				}
