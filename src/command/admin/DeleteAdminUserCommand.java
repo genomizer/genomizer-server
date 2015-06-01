@@ -43,7 +43,7 @@ public class DeleteAdminUserCommand extends Command {
 		hasRights(UserRights.getRights(this.getClass()));
 		validateName(username, MaxLength.USERNAME, "Username");
 	}
-	
+
 	@Override
 	public Response execute() {
 		Response response;
