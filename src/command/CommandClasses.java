@@ -95,7 +95,7 @@ public class CommandClasses {
         classes.put("GET /genomeRelease", GetGenomeReleaseCommand.class);
         classes.put("GET /genomeRelease/", GetGenomeReleaseSpeciesCommand.
                 class);
-        classes.put("PUT /process/processCommands", ProcessCommands.class);
+        classes.put("PUT /process/processCommands", PutProcessCommands.class);
 
         //Geo commands
 

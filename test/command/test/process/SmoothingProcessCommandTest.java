@@ -2,7 +2,7 @@ package command.test.process;
 
 import com.google.gson.Gson;
 import command.ValidateException;
-import command.process.ProcessCommands;
+import command.process.PutProcessCommands;
 import database.constants.MaxLength;
 import database.subClasses.UserMethods;
 import org.junit.Test;
@@ -27,7 +27,7 @@ public class SmoothingProcessCommandTest {
                         "\"outfile\":\"awe\",\"windowSize\":\"3\"," +
                         "\"meanOrMedian\":\"mean\"," +
                         "\"minSmooth\":\"2\"}]}]}";
-        ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
+        PutProcessCommands processCommands = gson.fromJson(json, PutProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
         assertNotNull(processCommands);
@@ -46,7 +46,7 @@ public class SmoothingProcessCommandTest {
                         "\"outfile\":\"awe\",\"windowSize\":\"3\"," +
                         "\"meanOrMedian\":\"mean\"," +
                         "\"minSmooth\":\"2\"}]}]}";
-        ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
+        PutProcessCommands processCommands = gson.fromJson(json, PutProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }
@@ -69,7 +69,7 @@ public class SmoothingProcessCommandTest {
                         "\"outfile\":\"awe\",\"windowSize\":\"3\"," +
                         "\"meanOrMedian\":\"median\"," +
                         "\"minSmooth\":\"2\"}]}]}";
-        ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
+        PutProcessCommands processCommands = gson.fromJson(json, PutProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }
@@ -87,7 +87,7 @@ public class SmoothingProcessCommandTest {
                         "\"outfile\":\"awe¤\",\"windowSize\":\"3\"," +
                         "\"meanOrMedian\":\"mean\"," +
                         "\"minSmooth\":\"2\"}]}]}";
-        ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
+        PutProcessCommands processCommands = gson.fromJson(json, PutProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }
@@ -109,7 +109,7 @@ public class SmoothingProcessCommandTest {
                         "\"outfile\":\""+s+"\",\"windowSize\":\"3\"," +
                         "\"meanOrMedian\":\"mean\"," +
                         "\"minSmooth\":\"2\"}]}]}";
-        ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
+        PutProcessCommands processCommands = gson.fromJson(json, PutProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }
@@ -126,7 +126,7 @@ public class SmoothingProcessCommandTest {
                         "\"outfile\":\"awe\",\"windowSize\":\"3\"," +
                         "\"meanOrMedian\":\"meand\"," +
                         "\"minSmooth\":\"2\"}]}]}";
-        ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
+        PutProcessCommands processCommands = gson.fromJson(json, PutProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }
@@ -143,7 +143,7 @@ public class SmoothingProcessCommandTest {
                         "\"outfile\":\"awe\",\"windowSize\":\"2\"," +
                         "\"meanOrMedian\":\"mean\"," +
                         "\"minSmooth\":\"2\"}]}]}";
-        ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
+        PutProcessCommands processCommands = gson.fromJson(json, PutProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }
@@ -160,7 +160,7 @@ public class SmoothingProcessCommandTest {
                         "\"outfile\":\"awe\",\"windowSize\":\"2\"," +
                         "\"meanOrMedian\":\"mean\"," +
                         "\"minSmooth\":\"-1\"}]}]}";
-        ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
+        PutProcessCommands processCommands = gson.fromJson(json, PutProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }
@@ -177,7 +177,7 @@ public class SmoothingProcessCommandTest {
                         "\"outfile\":\"awe\",\"windowSize\":\"-1\"," +
                         "\"meanOrMedian\":\"mean\"," +
                         "\"minSmooth\":\"-2\"}]}]}";
-        ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
+        PutProcessCommands processCommands = gson.fromJson(json, PutProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }

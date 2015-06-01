@@ -23,7 +23,7 @@ import server.Debug;
  * The class handles processing a list of processing commands. The list of commands each have a list of files to
  * process.
  */
-public class ProcessCommands extends Command {
+public class PutProcessCommands extends Command {
 
     @Expose
     private String expId = null;
@@ -60,12 +60,11 @@ public class ProcessCommands extends Command {
         hasRights(UserRights.getRights(this.getClass()));
         validateName(expId, MaxLength.EXPID, "Experiment ID");
 
-        if (processCommands == null || processCommands.size() < 1) {
+        if (processCommands == null || processCommands.isEmpty()) {
             throw new ValidateException(HttpStatusCode.BAD_REQUEST,
                     "Specify processes for the experiment.");
         }
 
-        // Validate all of the processing commands individually
         for (ProcessCommand processCommand : processCommands) {
             processCommand.validate();
         }
