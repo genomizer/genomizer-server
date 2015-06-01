@@ -74,7 +74,8 @@ public class Smooth extends Executor {
             path.substring(0, path.lastIndexOf("/")) + "smoothed/";
         String expectedFileName =
             path.substring(path.lastIndexOf("/")+1, path.length()-4) + "_" +
-            meanType + "_winSiz-" + windowSize + "_minProbe-" + minPos + ".sgr";
+                    (meanType == 1 ?  "_median_smooth" : "_trimmed_mean_smooth")
+                    + "_winSiz-" + windowSize + "_minProbe-" + minPos + ".sgr";
 
         Smooth smooth = new Smooth(path, windowSize, meanType, minPos,
                 calcTotalMean, printPos);

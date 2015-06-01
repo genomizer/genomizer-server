@@ -82,11 +82,13 @@ foreach $file (@files){
     my $file1 = $file;
     $file1 =~ s/$dir/$parentdir\/smoothed/;
     if($median_or_mean == 1) {
-        $file1=~s/\.sgr/_median_smooth/;
+        $file1 =~ s/\.sgr//;
+        $file1 .= '_median_smooth';
         $file1 .= '_winSiz-'.$window_size.'_minProbe-'.$minimum_probes.'.sgr';
     }
-    if($median_or_mean == 0) {
-        $file1=~s/\.sgr/_trimmed_mean_smooth/;
+    elsif($median_or_mean == 0) {
+        $file1 =~ s/\.sgr//;
+        $file1 .= '_trimmed_mean_smooth';
         $file1 .= '_winSiz-'.$window_size.'_minProbe-'.$minimum_probes.'.sgr';
     }
     print "\n$file1\n";
