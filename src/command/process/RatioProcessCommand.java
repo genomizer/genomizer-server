@@ -61,6 +61,11 @@ public class RatioProcessCommand extends ProcessCommand {
                         HttpStatusCode.BAD_REQUEST,
                         "Incorrect mean, should be 'single' or 'double'.");
             }
+            if (file.getReadsCutOff() == null) {
+                throw new ValidateException(
+                        HttpStatusCode.BAD_REQUEST,
+                        "Specify readsCutOff.");
+            }
             if (file.getReadsCutOff() < 0) {
                 throw new ValidateException(
                         HttpStatusCode.BAD_REQUEST,
@@ -99,7 +104,7 @@ public class RatioProcessCommand extends ProcessCommand {
         protected String mean;
 
         @Expose
-        protected int readsCutOff;
+        protected Integer readsCutOff;
 
         @Expose
         protected String chromosomes;
@@ -112,7 +117,7 @@ public class RatioProcessCommand extends ProcessCommand {
 
         public String getMean() {return mean;}
 
-        public int getReadsCutOff() {return readsCutOff;}
+        public Integer getReadsCutOff() {return readsCutOff;}
 
         public String getChromosomes() {return chromosomes;}
 

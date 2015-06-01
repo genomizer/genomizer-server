@@ -178,6 +178,9 @@ public class RatioCalcTest {
         assertTrue(new File(OUTFILE).isFile());
     }
 
+    /**
+     * TODO determine expected content of ratio calculation output files
+     */
     @Test
     @Ignore
     public void shouldProduceCorrectFile() throws Exception {
