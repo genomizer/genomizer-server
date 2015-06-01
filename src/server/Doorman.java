@@ -65,6 +65,7 @@ public class Doorman {
 		server.createContext("/user/", requestHandler);
 		server.createContext("/admin/user", requestHandler);
 		server.createContext("/admin/user/", requestHandler);
+		server.createContext("/admin/userlist", requestHandler);
 		server.createContext("/process", requestHandler);
 		server.createContext("/process/dummy", requestHandler);
 		server.createContext("/process/rawtoprofile", requestHandler);
