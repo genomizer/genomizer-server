@@ -5,6 +5,7 @@
 	"order": [
 		"6f14b4cd-7ba5-ceee-8ca7-d5f949900b39",
 		"98ce38e1-1edc-c538-4ad2-ce8f020b0cc3",
+		"efda988e-72ae-e077-2e10-22a637bedaa7",
 		"f31eaaef-5158-6a01-880f-d43d7c0c8fb9",
 		"d6c7a5c5-ae87-c05f-6da8-5a4b21fe6c6b",
 		"5c84e4d6-28e1-240f-de15-0302efae13c4",
@@ -21,7 +22,6 @@
 	"remoteLink": "",
 	"public": false,
 	"write": true,
-	"hasRequests": true,
 	"requests": [
 		{
 			"id": "2626075d-9fe0-b5ed-d660-0d19213f1586",
@@ -171,6 +171,26 @@
 			"responses": [],
 			"synced": false,
 			"owner": 0
+		},
+		{
+			"id": "efda988e-72ae-e077-2e10-22a637bedaa7",
+			"headers": "Authorization: {{EnvVarToken}}\n",
+			"url": "{{EnvVarServer}}/search/?annotations=[expID]",
+			"preRequestScript": "",
+			"pathVariables": {},
+			"method": "GET",
+			"data": [],
+			"dataMode": "params",
+			"version": 2,
+			"tests": "tests[\"Correct response\"] = responseCode.code === 200;\ndata = JSON.parse(responseBody);\nvar expNames = [\"Exp1\", \"Exp2\", \"Exp3\", \"Exp4\", \"ExpBig\", \"ExpSmall\"];\nvar allPresent = true;\nfor (var expNo in data) {\n    if (!$.inArray(data[expNo], expNames)) {\n        allPresent = false;\n    }\n}\ntests[\"All experiments present\"] = allPresent;",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1433172898201,
+			"name": "Search: [expID].",
+			"description": "List all experiments.",
+			"collectionId": "28286ab2-d6a4-ede3-53db-c54fc3506853",
+			"responses": [],
+			"synced": false
 		},
 		{
 			"id": "f31eaaef-5158-6a01-880f-d43d7c0c8fb9",
