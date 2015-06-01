@@ -19,6 +19,10 @@ public class ProcessCommandsTest {
 
     private final Gson gson = new RequestHandler().getGson();
 
+    /**
+     * Test that the list of processCommands can be created and returned with size 1
+     * @throws Exception
+     */
     @Test
     public void shouldReturnListWithOneCommand() throws Exception {
 
@@ -34,9 +38,12 @@ public class ProcessCommandsTest {
                 gson.fromJson(json, ProcessCommands.class);
 
         assertEquals(1, processCommands.getProcessCommands().size());
-        System.out.println("processCommands = " + processCommands);
     }
 
+    /**
+     * Test that the list of processCommands can be created and returned with size 2. One ratio and one rawToProfile
+     * @throws Exception
+     */
     @Test
     public void shouldContainOneRawToProfileAndOneRatio() throws Exception {
         String json =
@@ -56,10 +63,13 @@ public class ProcessCommandsTest {
         assertEquals(
                 RatioProcessCommand.class,
                 processCommands.getProcessCommands().get(1).getClass());
-        System.out.println("processCommands = " + processCommands);
 
     }
 
+    /**
+     * Test that creation works with correct input.
+     * @throws ValidateException
+     */
     @Test
     public void shouldNotGiveValidateException() throws ValidateException {
         String json =
@@ -77,6 +87,10 @@ public class ProcessCommandsTest {
         processCommands.validate();
     }
 
+    /**
+     * Test that validateException is thrown when user rights is set incorrectly.
+     * @throws ValidateException
+     */
     @Test (expected = ValidateException.class)
     public void shouldGiveValidateExceptionOnIncorrectUserRights() throws ValidateException {
         String json =
@@ -92,6 +106,10 @@ public class ProcessCommandsTest {
         processCommands.validate();
     }
 
+    /**
+     * Test that validateException is thrown with incorrect ExpId name.
+     * @throws ValidateException
+     */
     @Test (expected = ValidateException.class)
     public void canGiveValidateExceptionOnIncorrectExpIdName() throws ValidateException {
         String json =
@@ -107,6 +125,10 @@ public class ProcessCommandsTest {
         processCommands.validate();
     }
 
+    /**
+     * Test that validateException is thrown with incorrect ExpId size.
+     * @throws ValidateException
+     */
     @Test (expected = ValidateException.class)
     public void shouldGiveValidateExceptionOnIncorrectExpIdLength() throws ValidateException {
 

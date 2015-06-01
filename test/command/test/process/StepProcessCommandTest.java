@@ -12,6 +12,10 @@ import server.RequestHandler;
 public class StepProcessCommandTest {
     private final Gson gson = new RequestHandler().getGson();
 
+    /**
+     * Test that command can be created.
+     * @throws ValidateException
+     */
     @Test
     public void canCreateWithCorrectInput() throws ValidateException {
         String json =
@@ -24,6 +28,10 @@ public class StepProcessCommandTest {
         processCommands.validate();
     }
 
+    /**
+     * Test checks that exception can be thrown with an incorrect infile name.
+     * @throws ValidateException
+     */
     @Test(expected = ValidateException.class)
     public void canGiveValidateExceptionOnIncorrectInfileName() throws ValidateException {
         String json =
@@ -35,6 +43,11 @@ public class StepProcessCommandTest {
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }
+
+    /**
+     * Test checks that exception can be thrown with an incorrect infile size.
+     * @throws ValidateException
+     */
     @Test (expected = ValidateException.class)
     public void shouldGiveValidateExceptionOnIncorrectInfileLength() throws ValidateException {
 
@@ -51,6 +64,11 @@ public class StepProcessCommandTest {
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }
+
+    /**
+     * Test checks that exception can be thrown with an incorrect outfile name.
+     * @throws ValidateException
+     */
     @Test(expected = ValidateException.class)
     public void canGiveValidateExceptionOnIncorrectOutfileName() throws ValidateException {
         String json =
@@ -63,6 +81,10 @@ public class StepProcessCommandTest {
         processCommands.validate();
     }
 
+    /**
+     * Test checks that exception can be thrown with an incorrect outfile size.
+     * @throws ValidateException
+     */
     @Test(expected = ValidateException.class)
     public void shouldGiveValidateExceptionOnIncorrectOutfileLength() throws ValidateException {
 
@@ -80,6 +102,10 @@ public class StepProcessCommandTest {
         processCommands.validate();
     }
 
+    /**
+     * Test checks that exception can be thrown with an incorrect stepSize.
+     * @throws ValidateException
+     */
     @Test(expected = ValidateException.class)
     public void canGiveValidateExceptionOnIncorrectStepSize() throws ValidateException {
         String json =
