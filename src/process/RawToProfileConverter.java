@@ -43,14 +43,14 @@ public class RawToProfileConverter extends Executor {
 	private Stack<String> toBeRemoved;
 	private String sortedDirForFile;
 
-	/**
-	 * Constructor that initializes some data structures used by the class.
-	 */
-	public RawToProfileConverter() {
-		toBeRemoved = new Stack<String>();
-		checker = new RawToProfileProcessChecker();
-		validator = new ParameterValidator();
-	}
+    /**
+     * Constructor that initializes some data structures used by the class.
+     */
+    public RawToProfileConverter() {
+        toBeRemoved = new Stack<String>();
+        checker = new RawToProfileProcessChecker();
+        validator = new ParameterValidator();
+    }
 
 
 	/**
@@ -282,22 +282,25 @@ public class RawToProfileConverter extends Executor {
 				}
 			}
 
-			if(checker.shouldRunRemoveDuplicates()) {
-				ErrorLogger.log("SYSTEM","Running RemoveDuplicates");
-				try {
-					Picard.runRemoveDuplicates(
-                            dir+rawFile_1_Name+"_sorted.sam",
-                            dir+rawFile_1_Name + "_sorted_without_duplicates.sam"
-                            );
-				} catch (ValidateException e) {
-					ErrorLogger.log("SYSTEM",
-							"Error validating picard markDuplicates" );
-				} catch (IOException | InterruptedException e) {
-					ErrorLogger.log("SYSTEM",
-							"Error executing picard markDuplicates");
-					ErrorLogger.log("SYSTEM", e.getMessage());
-				}
-			}
+            if (checker.shouldRunRemoveDuplicates()) {
+                ErrorLogger.log("SYSTEM", "Running RemoveDuplicates");
+                try {
+                    Picard.runRemoveDuplicates(
+                            dir + rawFile_1_Name + "_sorted.sam",
+                            dir + rawFile_1_Name +
+                            "_sorted_without_duplicates.sam"
+                    );
+                } catch (ValidateException e) {
+                    ErrorLogger.log(
+                            "SYSTEM",
+                            "Error validating picard markDuplicates");
+                } catch (IOException | InterruptedException e) {
+                    ErrorLogger.log(
+                            "SYSTEM",
+                            "Error executing picard markDuplicates");
+                    ErrorLogger.log("SYSTEM", e.getMessage());
+                }
+            }
 
 			if(checker.shouldRunConvert()) {
 				ErrorLogger.log("SYSTEM","Running .wig conversion");
@@ -456,7 +459,8 @@ public class RawToProfileConverter extends Executor {
                     "Process interrupted while converting to SGR format");
         } catch (IOException e) {
             throw new ProcessException(
-                    "Could not run SGR conversion, please check your input and permissions");
+                    "Could not run SGR conversion, please check your input " +
+					"and permissions");
         }
 		filesToBeMoved = sortedDirForFile
                 + "reads_gff/allnucs_sgr/";
@@ -478,7 +482,8 @@ public class RawToProfileConverter extends Executor {
                     "Process interrupted while creating GFF file");
         } catch (IOException e) {
             throw new ProcessException(
-                    "Could not run gff conversion, please check your input and permissions");
+                    "Could not run gff conversion, please check your input " +
+					"and permissions");
         }
 		filesToBeMoved = sortedDirForFile + "reads_gff/";
 		toBeRemoved.push(filesToBeMoved);
@@ -640,27 +645,29 @@ public class RawToProfileConverter extends Executor {
 			dirToFiles.mkdirs();
 		}
 
-		if (filesToSmooth != null) {
-			for (File fileToSmooth : filesToSmooth) {
-				if (fileToSmooth.isFile()
-						&& isSgr(fileToSmooth.getName())) {
-					String inFile = fileToSmooth.getAbsoluteFile()
-							.toString();
-					String outFile = fileToSmooth.getName();
-					SmoothingParameterChecker smoothChecker = SmoothingParameterChecker
-							.SmoothingParameterCheckerFactory(parameters[4]);
-					// +"_"+getSmoothType+"_winSiz-" + "_minProbe-" +
-					// getMinProbe
-					outFile = outFile.substring(0, outFile.length() - 4) + "_"
-							+ smoothChecker.getSmoothType() + "_winSiz-"
-							+ smoothChecker.getWindowSize() + "_minProbe-"
-							+ smoothChecker.getMinProbe();
-					if (stepSize != 1) {
-						outFile = outFile + "_step" + stepSize + ".sgr";
-					} else {
-						outFile = outFile + ".sgr";
-					}
-					outFile = dirToFiles.toString() + "/" + outFile;
+        if (filesToSmooth != null) {
+            for (File fileToSmooth : filesToSmooth) {
+                if (fileToSmooth.isFile()
+                    && isSgr(fileToSmooth.getName())) {
+                    String inFile = fileToSmooth.getAbsoluteFile()
+                            .toString();
+                    String outFile = fileToSmooth.getName();
+                    SmoothingParameterChecker smoothChecker =
+                            SmoothingParameterChecker
+                                    .SmoothingParameterCheckerFactory
+                                            (parameters[4]);
+                    // +"_"+getSmoothType+"_winSiz-" + "_minProbe-" +
+                    // getMinProbe
+                    outFile = outFile.substring(0, outFile.length() - 4) + "_"
+                              + smoothChecker.getSmoothType() + "_winSiz-"
+                              + smoothChecker.getWindowSize() + "_minProbe-"
+                              + smoothChecker.getMinProbe();
+                    if (stepSize != 1) {
+                        outFile = outFile + "_step" + stepSize + ".sgr";
+                    } else {
+                        outFile = outFile + ".sgr";
+                    }
+                    outFile = dirToFiles.toString() + "/" + outFile;
 
 
 					// TODO: Don't hardcode path to smoothing.jar.
@@ -703,11 +710,12 @@ public class RawToProfileConverter extends Executor {
 
 	private boolean correctInfiles(File[] inFiles) throws ProcessException {
 
-		if (inFiles == null) {
-			throw new ProcessException("Filepath to raw file is null");
-		} else if (inFiles.length > 2 && inFiles.length < 1) {
-			throw new ProcessException("Wrong quantity of raw file in Filepath");
-		}
+        if (inFiles == null) {
+            throw new ProcessException("Filepath to raw file is null");
+        } else if (inFiles.length > 2 && inFiles.length < 1) {
+            throw new ProcessException("Wrong quantity of raw file in " +
+									   "Filepath");
+        }
 
 		return true;
 	}
@@ -751,22 +759,24 @@ public class RawToProfileConverter extends Executor {
 	 */
 
 
-	/**
-	 * Initiates strings that is used to run programs and scripts and also
-	 * strings that specifies directories
-	 *
-	 * @param parameters
-	 * @param outFile
-	 */
-	private void initiateConversionStrings(String[] parameters, String outFile) {
-		remoteExecution = "";
-		dir = "results_" + Thread.currentThread().getId() + "/";
-		sortedDirForCommands = remoteExecution + dir + "sorted/";
-		sortedDirForFile = remoteExecution + dir + "sorted/";
-		samToGff = "expect sam_to_readsgff_v1.sh " + sortedDirForCommands;
-		gffToAllnusgr = "expect readsgff_to_allnucsgr_v1.sh "
-				+ sortedDirForCommands + "reads_gff/";
-	}
+    /**
+     * Initiates strings that is used to run programs and scripts and also
+     * strings that specifies directories
+     *
+     * @param parameters
+     * @param outFile
+     */
+    private void initiateConversionStrings(
+            String[] parameters,
+            String outFile) {
+        remoteExecution = "";
+        dir = "results_" + Thread.currentThread().getId() + "/";
+        sortedDirForCommands = remoteExecution + dir + "sorted/";
+        sortedDirForFile = remoteExecution + dir + "sorted/";
+        samToGff = "expect sam_to_readsgff_v1.sh " + sortedDirForCommands;
+        gffToAllnusgr = "expect readsgff_to_allnucsgr_v1.sh "
+                        + sortedDirForCommands + "reads_gff/";
+    }
 
 	/**
 	 * Constructs a string array with the values to run bowtie on the file that
@@ -938,20 +948,21 @@ public class RawToProfileConverter extends Executor {
 		return null;
 	}
 
-	/**
-	 * Makes external call to Picard that removes duplicates in input .sam file.
-	 *
-	 * @param inputFile An input .sam file
-	 * @param outputFile .sam file without duplicates
-	 * @param metrics File to save data on removal of duplicates in
-	 * @return Process finish status
-	 * @throws ProcessException cast if execution of picard MarkDuplicates
-	 * was erroneous.
-	 * @throws IllegalArgumentException If input or output file was
-	 * not .sam format
-	 */
-	private String runRemoveDuplicates(String inputFile, String outputFile,
-									   String metrics) throws ProcessException {
+    /**
+     * Makes external call to Picard that removes duplicates in input .sam file.
+     *
+     * @param inputFile An input .sam file
+     * @param outputFile .sam file without duplicates
+     * @param metrics File to save data on removal of duplicates in
+     * @return Process finish status
+     * @throws ProcessException cast if execution of picard MarkDuplicates
+     * was erroneous.
+     * @throws IllegalArgumentException If input or output file was
+     * not .sam format
+     */
+    private String runRemoveDuplicates(
+            String inputFile, String outputFile,
+            String metrics) throws ProcessException {
 		/* Check if input is .sam format */
 		if(!inputFile.endsWith(".sam")) {
 			throw new IllegalArgumentException("Could not run Picard on file: "

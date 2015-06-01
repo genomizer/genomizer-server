@@ -31,6 +31,10 @@ public class PutConvertFileCommand extends Command {
         return 1;
     }
 
+    /**
+     * @see command.Command
+     * @throws command.ValidateException
+     */
     @Override
     public void validate() throws ValidateException {
         hasRights(UserRights.getRights(this.getClass()));

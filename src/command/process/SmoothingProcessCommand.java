@@ -4,66 +4,81 @@ import com.google.gson.annotations.Expose;
 import command.Command;
 import command.ValidateException;
 import database.constants.MaxLength;
+import process.Smooth;
 import response.HttpStatusCode;
+import response.ProcessResponse;
+import response.Response;
 
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Map;
+import java.util.Collection;
+import java.util.concurrent.Callable;
 
 /**
- * Created by dv13jen on 2015-05-27.
+ * Class is used to handle smooth processing. The command can include
+ * multiple file packages to run one at a time.
  */
 public class SmoothingProcessCommand extends ProcessCommand {
 
+    @Expose
+    protected ArrayList<SmoothingFile> files;
 
+    /**
+     * Validate to make sure all input from clients is in correct format.
+     * @throws ValidateException
+     */
     @Override
     public void validate() throws ValidateException {
         for (SmoothingFile file : files) {
-            Command.validateName(file.getInfile(), MaxLength.FILE_FILENAME, "Infile");
-            Command.validateName(file.getOutfile(), MaxLength.FILE_FILENAME, "Outfile");
-            if(!file.getMeanOrMedian().equals("mean")&&!file.getMeanOrMedian().equals("median")){
-                throw new ValidateException(HttpStatusCode.BAD_REQUEST,
-                        "Incorrect meanOrMedian, should be either 'mean' or 'median'.");
+            Command.validateName(
+                    file.getInfile(),
+                    MaxLength.FILE_FILENAME,
+                    "Infile");
+            Command.validateName(
+                    file.getOutfile(),
+                    MaxLength.FILE_FILENAME,
+                    "Outfile");
+            if (!file.getMeanOrMedian().equals("mean") &&
+                !file.getMeanOrMedian().equals("median")) {
+                throw new ValidateException(
+                        HttpStatusCode.BAD_REQUEST,
+                        "Incorrect meanOrMedian, should be either 'mean' or " +
+                        "'median'.");
             }
-            if(file.getMinSmooth()>=file.getWindowSize()){
-                throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Incorrect input: minSmooth: "+
-                        file.getMinSmooth()+" must be smaller than windowSize: "+file.getWindowSize()+".");
+            if (file.getMinSmooth() >= file.getWindowSize()) {
+                throw new ValidateException(
+                        HttpStatusCode.BAD_REQUEST,
+                        "Incorrect input: minSmooth: " +
+                        file.getMinSmooth() +
+                        " must be smaller than windowSize: " +
+                        file.getWindowSize() + ".");
             }
-            if(file.getWindowSize()<0){
-                throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Incorrect input: windowSize can not be" +
+            if (file.getWindowSize() < 0) {
+                throw new ValidateException(
+                        HttpStatusCode.BAD_REQUEST,
+                        "Incorrect input: windowSize can not be" +
                         "less than 0");
             }
-            if(file.getMinSmooth()<0){
-                throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Incorrect input: minSmooth can not be" +
+            if (file.getMinSmooth() < 0) {
+                throw new ValidateException(
+                        HttpStatusCode.BAD_REQUEST,
+                        "Incorrect input: minSmooth can not be" +
                         "less than 0");
             }
-       }
-    }
-
-    /**
-     * Run through the list of SmoothingFiles and run processing on each with filePath as parameter.
-     *
-     * @param filePath associated with expId
-     */
-    @Override
-    public void doProcess(Map.Entry<String, String> filePath) {
-        for (SmoothingFile file : files) {
-            file.ProcessFile(filePath);
         }
     }
 
-    public ArrayList<SmoothingFile> getFiles() {
-        return files;
-    }
-
     @Override
-    public String toString() {
-        return "SmoothingCommand{" +
-                "files=" + files +
-                '}';
-    }
+    protected Collection<Callable<Response>> getCallables(
+            String rawFilesDir,
+            String profileFilesDir) {
 
-    @Expose
-    private ArrayList<SmoothingFile> files;
+        Collection<Callable<Response>> callables = new ArrayList<>();
+        for (SmoothingFile file : files) {
+            callables.add(file.getCallable(profileFilesDir));
+        }
+        return callables;
+    }
 
     public class SmoothingFile {
 
@@ -72,19 +87,19 @@ public class SmoothingProcessCommand extends ProcessCommand {
          */
 
         @Expose
-        private String infile;
+        protected String infile;
 
         @Expose
-        private String outfile;
+        protected String outfile;
 
         @Expose
-        private int windowSize;
+        protected Integer windowSize;
 
         @Expose
-        private String meanOrMedian;
+        protected String meanOrMedian;
 
         @Expose
-        private int minSmooth;
+        protected Integer minSmooth;
 
 
         public String getInfile() {
@@ -95,7 +110,7 @@ public class SmoothingProcessCommand extends ProcessCommand {
             return outfile;
         }
 
-        public int getWindowSize() {
+        public Integer getWindowSize() {
             return windowSize;
         }
 
@@ -103,28 +118,85 @@ public class SmoothingProcessCommand extends ProcessCommand {
             return meanOrMedian;
         }
 
-        public int getMinSmooth() {
+        public Integer getMinSmooth() {
             return minSmooth;
         }
 
         @Override
         public String toString() {
             return "SmoothingFile{" +
-                    "infile='" + infile + '\'' +
-                    ", outfile='" + outfile + '\'' +
-                    ", windowSize='" + windowSize + '\'' +
-                    ", meanOrMedian='" + meanOrMedian + '\'' +
-                    ", minSmooth=" + minSmooth +
-                    '}';
+                   "infile='" + infile + '\'' +
+                   ", outfile='" + outfile + '\'' +
+                   ", windowSize='" + windowSize + '\'' +
+                   ", meanOrMedian='" + meanOrMedian + '\'' +
+                   ", minSmooth=" + minSmooth +
+                   '}';
         }
 
         /**
          * Call upon a single smooth processing with correct parameters.
          *
-         * @param filePaths
+         * @param profileFilesDir The path to the profile files of the
+         *                        experiment.
          */
-        public void ProcessFile(Map.Entry<String, String> filePaths) {
-            throw new UnsupportedOperationException("Error when processing. Smoothing not implemented.");
+        public void processFile(String profileFilesDir)
+                throws ValidateException, InterruptedException, IOException {
+
+            String infileWithPath = profileFilesDir + "/" + infile;
+            String outfileWithPath = profileFilesDir + "/" + outfile;
+            Integer meanOrMedian;
+
+            switch (getMeanOrMedian()) {
+                case "mean":
+                    meanOrMedian = 0;
+                    break;
+                case "median":
+                    meanOrMedian = 1;
+                    break;
+                default:
+                    throw new ValidateException(
+                            0,
+                            "Error during smoothing processing. Incorrect " +
+                            "mean/median. " +
+                            "Should be either 'mean' or 'median'.");
+            }
+
+            Smooth.runSmoothing(
+                    infileWithPath,
+                    getWindowSize(),
+                    meanOrMedian,
+                    getMinSmooth(),
+                    0,
+                    0,
+                    outfileWithPath);
         }
+
+        public Callable<Response> getCallable(final String profileFilesDir) {
+            return new Callable<Response>() {
+                @Override
+                public Response call() throws Exception {
+                    try {
+                        processFile(profileFilesDir);
+                        return new ProcessResponse(HttpStatusCode.OK);
+                    } catch (ValidateException | InterruptedException |
+                            IOException e) {
+                        e.printStackTrace();
+                    }
+                    return new ProcessResponse(HttpStatusCode
+                            .INTERNAL_SERVER_ERROR);
+                }
+            };
+        }
+    }
+
+    public ArrayList<SmoothingFile> getFiles() {
+        return files;
+    }
+
+    @Override
+    public String toString() {
+        return "SmoothingCommand{" +
+               "files=" + files +
+               '}';
     }
 }

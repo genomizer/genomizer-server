@@ -41,7 +41,7 @@ public class ProcessPoolTest {
     @Before
     public void setUp() {
         for (int i = 0; i < 9; ++i) {
-            processPool.addProcess(makeDummyProcess(), makeDummyCallable());
+            processPool.addProcess(makeDummyCallable());
         }
     }
 
@@ -83,14 +83,14 @@ public class ProcessPoolTest {
     public void testProcessStatus() throws InterruptedException {
         cancelAllProcesses();
 
-        UUID pid = processPool.addProcess(makeDummyProcess(), makeDummyCallable());
+        UUID pid = processPool.addProcess(makeDummyCallable());
         Thread.sleep(100);
 
         assertEquals(Process.STATUS_STARTED, processPool.getProcessStatus(pid).status);
         processPool.cancelProcess(pid);
         assertEquals(0, processPool.getProcesses().size());
 
-        pid = processPool.addProcess(makeDummyProcess(), new Callable<Response>() {
+        pid = processPool.addProcess(new Callable<Response>() {
             @Override
             public Response call() throws Exception {
                 throw new NullPointerException();

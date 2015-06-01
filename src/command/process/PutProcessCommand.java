@@ -4,6 +4,7 @@ package command.process;
  * @author Robin Ödling - c11rog
  */
 
+import authentication.Authenticate;
 import com.google.gson.annotations.Expose;
 import command.*;
 import command.Process;
@@ -58,12 +59,12 @@ public class PutProcessCommand extends Command {
 
 	@Override
 	public void setFields(String uri, HashMap<String, String> query,
-						  String username, UserType userType) {
+						  String uuid, UserType userType) {
 
-		super.setFields(uri, query, username, userType);
+		super.setFields(uri, query, uuid, userType);
 		setTimestamp(System.currentTimeMillis());
 		processtype = uri.split("/")[2];
-		this.username = username;
+		this.username = Authenticate.getUsernameByID(uuid);
 	}
 
 	/**
@@ -106,6 +107,7 @@ public class PutProcessCommand extends Command {
 		return addToProcessPool(Doorman.getProcessPool());
 	}
 
+	@SuppressWarnings("deprecation")
 	public Response addToProcessPool(ProcessPool pool) {
 		Process process = new Process(this);
 

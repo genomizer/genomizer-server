@@ -68,8 +68,9 @@ public class RequestHandler implements HttpHandler {
 
         String uuid = Authenticate.performAuthentication(exchange);
 
-        if (commandClass == null && !key.equals("GET /download") &&
-                !key.equals("GET /upload") && !key.equals("POST /upload")){
+        if (commandClass == null
+                && !key.equals("GET /download") && !key.equals("GET /upload")
+                && !key.equals("POST /upload")) {
             Debug.log("Unrecognized command: " + exchange.getRequestMethod()
                     + " " + exchange.getRequestURI());
             respond(new ErrorResponse(HttpStatusCode.BAD_REQUEST,
@@ -80,7 +81,7 @@ public class RequestHandler implements HttpHandler {
 
         if(uuid == null
                 // commandClass can be null, so use != instead of equals().
-                && commandClass != PostLoginCommand.class){
+                && commandClass != PostLoginCommand.class) {
             Debug.log("User could not be authenticated");
             respond(new ErrorResponse(HttpStatusCode.UNAUTHORIZED,
                     "User could not be authenticated"), exchange);
@@ -118,7 +119,8 @@ public class RequestHandler implements HttpHandler {
         } catch (Exception e) {
             Debug.log("Could not parse query");
             respond(new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
-                            "ERROR : Could not parse query"), exchange);
+                            "ERROR : Could not parse query: "
+                                    + e.getMessage() ), exchange);
             return;
         }
 
@@ -158,10 +160,11 @@ public class RequestHandler implements HttpHandler {
                         INTERNAL_SERVER_ERROR, "Could not retrieve the user " +
                         "information.");
                 respond(errorResponse, exchange);
+                return;
             }
         }
 
-        command.setFields(uri, query, Authenticate.getUsernameByID(uuid), userType);
+        command.setFields(uri, query, uuid, userType);
 
 		try {
 			command.validate();
@@ -172,14 +175,7 @@ public class RequestHandler implements HttpHandler {
 			return;
 		}
 
-        if(commandClass.equals(ProcessCommands.class)) {
-            respond(
-                    new ProcessResponse(HttpStatusCode.NOT_IMPLEMENTED),
-                    exchange);
-//            respond(new ProcessResponse(HttpStatusCode.OK), exchange);
-        } else {
-            respond(command.execute(), exchange);
-        }
+        respond(command.execute(), exchange);
 	}
 
     /*Used to send a response back to the client*/

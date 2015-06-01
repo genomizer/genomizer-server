@@ -9,7 +9,7 @@ import command.UserRights;
 import command.ValidateException;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
-import database.subClasses.UserMethods;
+import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.HttpStatusCode;
 import response.MinimalResponse;
@@ -45,18 +45,20 @@ public class PutUserCommand extends Command {
         return 1;
     }
 
-    /**
-     * Set username using userName along with the usertype
-     * @param uri the URI from the http request.
-     * @param query the query of the request
-     * @param username the userName from the http request.
-     * @param userType the userType
-     */
     @Override
     public void setFields(String uri, HashMap<String, String> query,
-                          String username, UserMethods.UserType userType) {
+                          String uuid, UserType userType) {
+        username = Authenticate.getUsernameByID(uuid);
+        super.setFields(uri, query, uuid, userType);
+    }
+
+    /**
+     * Set the username of the user to edit. Only used during testing
+     *
+     * @param username - the username of the user to edit.
+     */
+    public void setUsername(String username) {
         this.username = username;
-        this.userType = userType;
     }
 
     /**
@@ -99,7 +101,7 @@ public class PutUserCommand extends Command {
                     + username);
         }
 
-        LoginAttempt login = Authenticate.login(username, oldPassword, dbHash);
+        LoginAttempt login = Authenticate.login(uuid, username, oldPassword, dbHash);
 
         if(login.wasSuccessful()) {
             try {

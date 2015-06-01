@@ -28,7 +28,7 @@ set location      [lindex $argv 6]
 system mkdir -p $path_intern/smoothed
 
 # We spawn the process to automate
-spawn perl smooth_v4.pl
+spawn perl resources/smooth_v4.pl
 
 # We are going to respond to a few questions, remain calm.
 expect "Enter the path of sgr files"
@@ -53,6 +53,6 @@ send -- $print_pos
 expect eof
 
 # We move the output to the correct location
-system mkdir -p $location
-system mv $path_intern/smoothed/* $location
-system rm -rf $path_intern/smoothed
+#system mkdir -p $location
+#system mv $path_intern/smoothed/* $location
+#system rm -rf $path_intern/smoothed

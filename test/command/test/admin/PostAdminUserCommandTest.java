@@ -13,7 +13,7 @@ import com.google.gson.JsonObject;
 import database.constants.MaxLength;
 
 /**
- * Class used to test that PostUserCommand class works
+ * Class used to test that PostAdminUserCommand class works
  * properly.
  *
  * @author Kommunikation/kontroll 2014.

@@ -9,44 +9,57 @@ import database.containers.Genome;
 import process.ProcessException;
 import process.RawToProfileConverter;
 import response.HttpStatusCode;
+import response.ProcessResponse;
+import response.Response;
 import server.Debug;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.regex.Pattern;
+import java.util.Collection;
+import java.util.concurrent.Callable;
 
 import static command.Command.initDB;
 
 /**
- * The class is a processing command that holds a list of RawToProfProcessFile (also implemented here).
- * A RawToProfProcessFile is used to call upon the actual raw to profile processing with the correct parameters.
+ * The class is a processing command that holds a list of
+ * RawToProfProcessFile (also implemented here).
+ * A RawToProfProcessFile is used to call upon the actual raw to profile
+ * processing with the correct parameters.
  */
 public class RawToProfProcessCommand extends ProcessCommand {
 
     /**
-     * Validate the infile, outfile and genomeVersion on each RawToProfProcessFile to make sure they have valid
+     * Validate the infile, outfile and genomeVersion on each
+     * RawToProfProcessFile to make sure they have valid
      * characters and are a correct length.
      * @throws ValidateException
      */
     @Override
     public void validate() throws ValidateException {
-        for(RawToProfProcessFile file: files) {
-            Command.validateName(file.getInfile(), MaxLength.FILE_FILENAME, "Infile");
-            Command.validateName(file.getOutfile(), MaxLength.FILE_FILENAME, "Outfile");
-            Command.validateName(file.getGenomeVersion(), MaxLength.GENOME_VERSION, "Genome version");
-        }
-    }
-
-    /**
-     * Run through the list of RawToProfProcessFiles and run processing on each with filePath as parameter.
-     * @param filePath associated with expId
-     */
-    @Override
-    public void doProcess(Map.Entry<String,String> filePath) {
-        for(RawToProfProcessFile file: files) {
-            file.ProcessFile(filePath);
+        for (RawToProfProcessFile file : files) {
+            Command.validateName(
+                    file.getInfile(),
+                    MaxLength.FILE_FILENAME,
+                    "Infile");
+            Command.validateName(
+                    file.getOutfile(),
+                    MaxLength.FILE_FILENAME,
+                    "Outfile");
+            Command.validateName(
+                    file.getGenomeVersion(),
+                    MaxLength.GENOME_VERSION,
+                    "Genome version");
+            Command.validateExists(
+                    file.getParams(),
+                    MaxLength.FILE_METADATA,
+                    "Parameters");
+            if (file.shouldKeepSam() == null) {
+                throw new ValidateException(
+                        HttpStatusCode.BAD_REQUEST,
+                        "KeepSam can not be null.");
+            }
         }
     }
 
@@ -57,32 +70,44 @@ public class RawToProfProcessCommand extends ProcessCommand {
     @Override
     public String toString() {
         return "RawToProfileCommand{" +
-                "files=" + files +
-                '}';
+               "files=" + files +
+               '}';
     }
-    @Expose
-    private ArrayList<RawToProfProcessFile> files;
 
+    @Expose
+    protected ArrayList<RawToProfProcessFile> files;
+
+    @Override
+    protected Collection<Callable<Response>> getCallables(
+            String rawFilesDir,
+            String profileFilesDir) {
+        Collection<Callable<Response>> callables = new ArrayList<>();
+        for (RawToProfProcessFile file : files) {
+            callables.add(file.getCallable(rawFilesDir, profileFilesDir));
+        }
+        return callables;
+    }
+
+    /**
+     * Class is used to start a single raw to profile processing with correct
+     * parameters.
+     */
     public class RawToProfProcessFile {
 
-        /**
-         * Class is used to start a single raw to profile processing with correct parameters.
-         */
+        @Expose
+        protected String infile;
 
         @Expose
-        private String infile;
+        protected String outfile;
 
         @Expose
-        private String outfile;
+        protected String params;
 
         @Expose
-        private String params;
+        protected String genomeVersion;
 
         @Expose
-        private String genomeVersion;
-
-        @Expose
-        private boolean keepSam;
+        protected Boolean keepSam;
 
 
         public String getInfile() {
@@ -101,7 +126,7 @@ public class RawToProfProcessCommand extends ProcessCommand {
             return genomeVersion;
         }
 
-        public boolean shouldKeepSam() {
+        public Boolean shouldKeepSam() {
             return keepSam;
         }
 
@@ -118,64 +143,98 @@ public class RawToProfProcessCommand extends ProcessCommand {
 
         /**
          * Call upon a single raw to profile processing with correct parameters.
-         * @param filePaths
+         *
+         * @param rawFilesDir Location of raw files for experiment.
+         * @param profileFilesDir Location of profile files for experiment.
+         * @throws IOException
+         * @throws SQLException
+         * @throws ProcessException
          */
-        public void ProcessFile(Map.Entry<String,String> filePaths) {
-            DatabaseAccessor db = null;
+        public void processFile(
+                String rawFilesDir,
+                String profileFilesDir)
+                throws IOException, SQLException, ProcessException {
 
-            try {
-                db = initDB();
-
-                //Get the genome information from the database.
-                Genome g = db.getGenomeRelease(getGenomeVersion());
-
-                if (g == null) {
-                    throw new UnsupportedOperationException("Could not find genome version: " +
-                            getGenomeVersion());
-                }
-                else {
-                    //Get the path of the genome.
-                    String genomeFolderPath = g.getFolderPath();
-                    //Get the prefix of the genome files.
-                    String genomeFilePrefix = g.getFilePrefix();
-
-                    if (genomeFilePrefix == null) {
-                        Debug.log("Error when processing. Could not get genomeFilePrefix: "
-                                + genomeFilePrefix);
-                        throw new UnsupportedOperationException("Error when processing. Could not get genomeFilePrefix: "
-                                + genomeFilePrefix);
-                    }
-
-                    if (genomeFolderPath == null) {
-                        Debug.log("Error when processing. Could not get genomeFolderPath: "
-                                + genomeFolderPath);
-                        throw new UnsupportedOperationException("Error when processing. Could not get genomeFolderPath: "
-                                + genomeFolderPath);
-                    }
-
-                    String referenceGenome = genomeFolderPath + genomeFilePrefix;
-
-                    try {
-                        RawToProfileConverter rawToProfileConverter = new RawToProfileConverter();
-                        rawToProfileConverter.procedureRaw(getParams(), getInfile(), getOutfile(),
-                                shouldKeepSam(), getGenomeVersion(), referenceGenome, filePaths);
-                    }catch (ProcessException e){
-                        Debug.log("Error when processing. Could not execute raw to profile process. " + e.getMessage());
-                        throw new UnsupportedOperationException("Error when processing. Could not execute " + "raw to profile process");
-                    }
-                }
-            } catch (SQLException | IOException e) {
-                Debug.log("Error when processing. Could not execute raw to profile process due to temporary " +
-                        "problems with database "+e.getMessage());
-                throw new UnsupportedOperationException("Error when processing. Could not execute raw to " +
-                        "profile process due to temporary problems with database.");
-            } finally{
-                if (db != null) {
-                    db.close();
-                }
+            //Get the genome information from the database.
+            Genome g;
+            try (DatabaseAccessor db = initDB()) {
+                g = db.getGenomeRelease(getGenomeVersion());
             }
 
+
+            if (g == null) {
+                throw new IOException(
+                        "Could not find genome version: " +
+                                getGenomeVersion());
+            }
+
+            //Get the path of the genome.
+            String genomeFolderPath = g.getFolderPath();
+            //Get the prefix of the genome files.
+            String genomeFilePrefix = g.getFilePrefix();
+
+            if (genomeFilePrefix == null) {
+                String msg = "Error when processing. Could not get "
+                        + "genomeFilePrefix: "
+                        + genomeVersion;
+                Debug.log(msg);
+                throw new IOException(msg);
+            }
+
+            if (genomeFolderPath == null) {
+                String msg = "Error when processing. Could not get "
+                        + "genomeFolderPath: "
+                        + genomeVersion;
+                Debug.log(msg);
+                throw new IOException(msg);
+            }
+
+            String referenceGenome = genomeFolderPath + genomeFilePrefix;
+
+            RawToProfileConverter rawToProfileConverter =
+                    new RawToProfileConverter();
+            rawToProfileConverter.procedureRaw(
+                    getParams(),
+                    getInfile(),
+                    getOutfile(),
+                    shouldKeepSam(),
+                    getGenomeVersion(),
+                    referenceGenome,
+                    rawFilesDir,
+                    profileFilesDir);
         }
 
+        public Callable<Response> getCallable(
+                final String rawFilesDir,
+                final String profileFilesDir) {
+            return new Callable<Response>() {
+                @Override
+                public Response call() throws Exception {
+                    try {
+                        processFile(rawFilesDir, profileFilesDir);
+                        return new ProcessResponse(HttpStatusCode.OK);
+                    } catch (SQLException | IOException e) {
+                        Debug.log(
+                                "Error when processing. Could not execute raw" +
+                                " to profile process due to temporary " +
+                                "problems with database " + e.getMessage());
+                        return new ProcessResponse(
+                                HttpStatusCode
+                                        .INTERNAL_SERVER_ERROR, e.getMessage());
+                    } catch (ProcessException e) {
+                        Debug.log(
+                                "Error when processing. Could not execute raw" +
+                                " to profile process. " +
+                                e.getMessage());
+                        return new ProcessResponse(
+                                HttpStatusCode
+                                        .INTERNAL_SERVER_ERROR, e.getMessage());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                }
+            };
+        }
     }
 }
