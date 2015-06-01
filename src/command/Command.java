@@ -181,7 +181,6 @@ public abstract class Command {
 		}
 	}
 
-
 	/**
 	 * Methods which verifies if the user has the requested user rights.
 	 * @param required The user rights level required
@@ -208,5 +207,4 @@ public abstract class Command {
 			throw new ValidateException(HttpStatusCode.FORBIDDEN,
 					"You don't have permission.");
 	}
-
 }
