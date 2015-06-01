@@ -69,6 +69,9 @@ public class RawToProfileConverter extends Executor {
 									  String filepathProfile)
 			throws ProcessException, IOException {
 
+		/* Make sure that the output directory exists. */
+		new File(filepathProfile).mkdirs();
+
 
 		Stack<String> toBeRemoved = new Stack<>();
 		Stack<Map.Entry<String,String>> filesToSaveToExperiment = new Stack<>();
