@@ -25,7 +25,7 @@ set print_pos     [lindex $argv 5]\r
 set location      [lindex $argv 6]
 
 # Make temporary smoothed dir
-system mkdir -p $path_intern/smoothed
+#system mkdir -p $path_intern/smoothed
 
 # We spawn the process to automate
 spawn perl resources/smooth_v4.pl

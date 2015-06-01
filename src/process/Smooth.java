@@ -15,7 +15,7 @@ public class Smooth extends Executor {
 
     private final SmoothingParameters parameters;
     private static final String smoothingScriptCmd   = "expect";
-    private static final String smoothingScriptSh    = "resources/smooth_v4.sh";
+    private static final String smoothingScriptSh    = "resources/smooth_v4.exp";
     private static final String smoothingScriptPerl  = "resources/smooth_v4.pl";
 
     public Smooth(String path,
