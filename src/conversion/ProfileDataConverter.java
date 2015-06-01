@@ -161,6 +161,9 @@ public class ProfileDataConverter {
             int tempStart, start=-1;
             String sig="0", tempSig;
 
+            //Track def. line needed for wig-format
+            fw.write("track type=wiggle_0\n");
+
             while ((line = fr.readLine()) != null && !line.equals("")) {
                 columns = line.split("\\s+");
                 tempChr = columns[0];
@@ -328,10 +331,15 @@ public class ProfileDataConverter {
             String line;
             String []columns;
 
-            while ((line = fr.readLine()) != null) {
+            line = fr.readLine();
+            columns = line.split("\\s+");
+            if (columns[0].equals("track") && columns[1].equals("type=wiggle_0"))
+                line = fr.readLine();
+
+            do {
                 columns = line.split("\\s+");
                 fw.write(columns[0]+"\t"+columns[1]+"\t"+columns[3]+"\n");
-            }
+            } while ((line = fr.readLine()) != null);
 
             fw.close();
             fr.close();

@@ -129,7 +129,7 @@ public class FilePathGenerator {
             break;
         case FileTuple.PROFILE:
             folderPath = getProfileFolderPath(expID);
-            folderPath = generateNewProfileSubFolder(folderPath);
+            //folderPath = generateNewProfileSubFolder(folderPath);
             break;
         case FileTuple.REGION:
             folderPath = getRegionFolderPath(expID);
@@ -148,7 +148,9 @@ public class FilePathGenerator {
      *
      * @param String folderPath
      * @return String path to the subfolder
+     * @deprecated
      */
+    @Deprecated
     public String generateNewProfileSubFolder(String folderPath) {
         File profileFolder = new File(folderPath);
 

@@ -61,8 +61,9 @@ public class ProcessPool {
 
     /**
      * Adds a new process to the process pool.
-     *  @param process  - process metadata.
-     *  @param callable - function to execute.
+     *
+     *  @param process  - Process metadata.
+     *  @param callable - Function to execute.
      *  @return PID of the newly-created process.
      */
     @Deprecated
@@ -211,7 +212,7 @@ public class ProcessPool {
                 throw new NullPointerException("Callable must not be null");
             }
             if (process == null) {
-                throw new NullPointerException("Callable must not be null");
+                throw new NullPointerException("Process must not be null");
             }
             this.callable = callable;
             this.process = process;

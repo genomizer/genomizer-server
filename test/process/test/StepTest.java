@@ -9,7 +9,7 @@ import process.Step;
 
 import java.io.File;
 
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -79,7 +79,7 @@ public class StepTest {
     public void shouldProduceOutfile() throws Exception {
         new Step(INFILE, OUTFILE, 20).validate().execute();
         assertTrue(new File(OUTFILE).exists());
-        assertNotEquals(0, FileUtils.sizeOf(new File(OUTFILE)));
+        assertFalse(0 == FileUtils.sizeOf(new File(OUTFILE)));
     }
 
     @Test

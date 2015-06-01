@@ -7,7 +7,6 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import process.Ratio;
-import process.Step;
 
 import java.io.File;
 
@@ -50,6 +49,7 @@ public class RatioCalcTest {
     @After
     public void tearDown() throws Exception {
         new File(OUTFILE).delete();
+        new File(OUTFILE_PATH).delete();
     }
 
     @Ignore
@@ -166,7 +166,6 @@ public class RatioCalcTest {
     }
 
     @Test
-    @Ignore
     public void shouldProduceOutfile() throws Exception {
         new Ratio(
                 INFILE_1,
@@ -174,10 +173,14 @@ public class RatioCalcTest {
                 OUTFILE,
                 MEAN,
                 READS_CUT_OFF,
-                CHROMOSOMES);
-        assertTrue(new File(OUTFILE).exists());
+                CHROMOSOMES).validate().execute();
+
+        assertTrue(new File(OUTFILE).isFile());
     }
 
+    /**
+     * TODO determine expected content of ratio calculation output files
+     */
     @Test
     @Ignore
     public void shouldProduceCorrectFile() throws Exception {

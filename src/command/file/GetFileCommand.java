@@ -10,7 +10,6 @@ import database.subClasses.UserMethods.UserType;
 import response.*;
 import server.Debug;
 
-import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -47,8 +46,13 @@ public class GetFileCommand extends Command {
 	public Response execute() {
 		Response response;
 		try (DatabaseAccessor db = initDB()) {
-			return new SingleFileResponse(db.getFileTuple(Integer.
-					parseInt(fileID)));
+			FileTuple ft = db.getFileTuple(Integer.parseInt(fileID));
+			if (ft != null)
+				response = new SingleFileResponse(ft);
+			else
+				response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
+						"Retrieval of file with file id '" + fileID +
+								"' unsuccessful, file does not exist");
 		} catch (NumberFormatException e) {
 			response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
 					"Retrieval of file with file id '" + fileID +

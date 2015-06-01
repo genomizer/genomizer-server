@@ -154,7 +154,7 @@ public class FilePathGeneratorTest {
         String profFolderPath = fpg.generateFilePath("Exp1", FileTuple.PROFILE,
         		"prof.sam");
 
-        assertEquals(testFolderPath + "Exp1/profile/0/prof.sam",
+        assertEquals(testFolderPath + "Exp1/profile/prof.sam",
         		profFolderPath);
     }
 

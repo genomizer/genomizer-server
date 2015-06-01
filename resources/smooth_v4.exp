@@ -2,13 +2,13 @@
 
 # The smoothing script is terrible. We make it _slighty_
 # easier to deal with.  This script wraps itself around
-# ratio_calculator_v2.pl, by answering the four questions asked by the
+# smooth_v4.pl, by answering the four questions asked by the
 # script, instead taking them as commandline arguments.
 #
 # The scripts takes the following parameters:
-# argv 0 - path 	- the path the .sgr files are located at.
+# argv 0 - path 	    - the path the .sgr files are located at.
 # argv 1 - window_size 	- the window size to send to script.
-# argv 2 - median 	- the median to send to script.
+# argv 2 - median 	    - the median to send to script.
 # argv 3 - min_step 	- the min_step to send to script.
 # argv 4 - calc_tot 	- the calc_tot to send to script.
 # argv 5 - print_pos 	- the print_pos to send to script.
@@ -25,13 +25,13 @@ set print_pos     [lindex $argv 5]\r
 set location      [lindex $argv 6]
 
 # Make temporary smoothed dir
-system mkdir -p $path_intern/smoothed
+# system mkdir -p $path_intern/smoothed
 
 # We spawn the process to automate
-spawn perl smooth_v4.pl
+spawn perl resources/smooth_v4.pl
 
 # We are going to respond to a few questions, remain calm.
-expect "Enter the path of sgr files"
+expect "Enter the path to the sgr file"
 send -- $path
 
 expect "Enter window size"
@@ -53,6 +53,6 @@ send -- $print_pos
 expect eof
 
 # We move the output to the correct location
-system mkdir -p $location
-system mv $path_intern/smoothed/* $location
-system rm -rf $path_intern/smoothed
+#system mkdir -p $location
+#system mv $path_intern/smoothed/* $location
+#system rm -rf $path_intern/smoothed

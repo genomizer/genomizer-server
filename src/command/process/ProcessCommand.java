@@ -22,10 +22,11 @@ import java.util.concurrent.Future;
 
 public abstract class ProcessCommand {
 
-    public void doProcess(String rawFilesDir, String profileFilesDir)
+    protected String expID;
+
+    public void doProcess(ProcessPool pool, String rawFilesDir, String profileFilesDir)
             throws ExecutionException, InterruptedException {
 
-        ProcessPool pool = Doorman.getProcessPool();
         Collection<Future<Response>> futures = new ArrayList<>();
         for (Callable<Response> callable : getCallables(
                 rawFilesDir,
@@ -38,6 +39,10 @@ public abstract class ProcessCommand {
                 throw new InterruptedException(future.get().getMessage());
             }
         }
+    }
+
+    public void setExpID(String expID) {
+        this.expID = expID;
     }
 
     protected abstract Collection<Callable<Response>> getCallables(

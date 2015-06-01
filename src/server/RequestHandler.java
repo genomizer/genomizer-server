@@ -45,7 +45,7 @@ public class RequestHandler implements HttpHandler {
                 new ProcessCommandAdapter());
 		gson = builder.create();
         uploadHandler = new UploadHandler("/upload", ServerSettings.
-                fileLocation, System.getProperty("java.io.tmpdir"));
+                fileLocation, ServerSettings.uploadTempDir);
         downloadHandler = new DownloadHandler("/download", ServerSettings.
                 fileLocation);
 	}
@@ -175,13 +175,7 @@ public class RequestHandler implements HttpHandler {
 			return;
 		}
 
-        if (commandClass.equals(ProcessCommands.class)) {
-            respond(new ProcessResponse(HttpStatusCode.NOT_IMPLEMENTED),
-                    exchange);
-//            respond(new ProcessResponse(HttpStatusCode.OK), exchange);
-        } else {
-            respond(command.execute(), exchange);
-        }
+        respond(command.execute(), exchange);
 	}
 
     /*Used to send a response back to the client*/

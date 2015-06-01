@@ -3,8 +3,12 @@ package command.process;
 import com.google.gson.annotations.Expose;
 import command.Command;
 import command.ValidateException;
+import database.DatabaseAccessor;
 import database.constants.MaxLength;
+import database.containers.FileTuple;
 import database.containers.Genome;
+import database.subClasses.FileMethods;
+import org.apache.commons.io.FileUtils;
 import process.ProcessException;
 import process.RawToProfileConverter;
 import response.HttpStatusCode;
@@ -12,9 +16,9 @@ import response.ProcessResponse;
 import response.Response;
 import server.Debug;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.Callable;
@@ -82,7 +86,7 @@ public class RawToProfProcessCommand extends ProcessCommand {
             String profileFilesDir) {
         Collection<Callable<Response>> callables = new ArrayList<>();
         for (RawToProfProcessFile file : files) {
-            callables.add(file.getCallable(rawFilesDir, profileFilesDir));
+            callables.add(file.getCallable(expID, rawFilesDir, profileFilesDir));
         }
         return callables;
     }
@@ -150,72 +154,114 @@ public class RawToProfProcessCommand extends ProcessCommand {
          * @throws ProcessException
          */
         public void processFile(
+                String expId,
                 String rawFilesDir,
                 String profileFilesDir)
                 throws IOException, SQLException, ProcessException {
 
             //Get the genome information from the database.
-            Genome g = initDB().getGenomeRelease(getGenomeVersion());
+            Genome g;
+            try (DatabaseAccessor db = initDB()) {
+                g = db.getGenomeRelease(getGenomeVersion());
+            }
+
 
             if (g == null) {
-                throw new UnsupportedOperationException(
+                throw new IOException(
                         "Could not find genome version: " +
-                        getGenomeVersion());
-            } else {
-                //Get the path of the genome.
-                String genomeFolderPath = g.getFolderPath();
-                //Get the prefix of the genome files.
-                String genomeFilePrefix = g.getFilePrefix();
+                                getGenomeVersion());
+            }
 
-                if (genomeFilePrefix == null) {
-                    Debug.log(
-                            "Error when processing. Could not get " +
-                            "genomeFilePrefix: "
-                            + genomeVersion);
-                    throw new UnsupportedOperationException(
-                            "Error when processing. Could not get " +
-                            "genomeFilePrefix: "
-                            + genomeVersion);
+            //Get the path of the genome.
+            String genomeFolderPath = g.getFolderPath();
+            //Get the prefix of the genome files.
+            String genomeFilePrefix = g.getFilePrefix();
+
+            if (genomeFilePrefix == null) {
+                String msg = "Error when processing. Could not get "
+                        + "genomeFilePrefix: "
+                        + genomeVersion;
+                Debug.log(msg);
+                throw new IOException(msg);
+            }
+
+            if (genomeFolderPath == null) {
+                String msg = "Error when processing. Could not get "
+                        + "genomeFolderPath: "
+                        + genomeVersion;
+                Debug.log(msg);
+                throw new IOException(msg);
+            }
+
+            String referenceGenome = genomeFolderPath + genomeFilePrefix;
+
+            RawToProfileConverter rawToProfileConverter =
+                    new RawToProfileConverter();
+            System.out.println("getParams(): " + getParams());
+            System.out.println("getInfile(): " + getInfile());
+            System.out.println("getOutfile(): " + getOutfile());
+            System.out.println("shouldKeepSam(): " + shouldKeepSam());
+            System.out.println("getGenomeVersion(): " + getGenomeVersion());
+            System.out.println("referenceGenome: " + referenceGenome);
+            System.out.println("rawFilesDir: " + rawFilesDir);
+            System.out.println("profileFilesDir: " + profileFilesDir);
+            RawToProfileConverter.procedureRaw(
+                    getParams(),
+                    getInfile(),
+                    getOutfile(),
+                    shouldKeepSam(),
+                    getGenomeVersion(),
+                    referenceGenome,
+                    rawFilesDir,
+                    profileFilesDir);
+
+
+            String inPath = new File(rawFilesDir + "/" + infile).getAbsolutePath();
+            String outPath = new File(profileFilesDir + "/" + outfile).getAbsolutePath();
+
+            // Add generated file to the database.
+            FileTuple outTuple = null;
+            try {
+                FileMethods fileMethods = initDB().getFileMethods();
+                FileTuple inTuple = fileMethods.getFileTuple(inPath);
+
+                long fileSize = FileUtils.sizeOf(new File(outPath));
+
+                outTuple = fileMethods.addNewFileWithStatus(
+                        /* expId = */ expId,
+                        /* fileType = */ FileTuple.PROFILE,
+                        /* fileName = */ outfile,
+                        /* inputFilename = */ infile,
+                        /* metaData = */ params,
+                        /* author = */ "Generated by Genomizer",
+                        /* uploader = */ "Generated by Genomizer",
+                        /* isPrivate = */ false,
+                        /* genomeVersion =*/ inTuple.grVersion,
+                        /* md5 = */ "",
+                        /* status */ "Done");
+                Debug.log("Add<ing to DB: " + outTuple);
+                fileMethods.updateFileSize(outTuple.id, fileSize);
+            } catch (Exception e) {
+                e.printStackTrace();
+                Debug.log("Unable to add " + getOutfile() + " to DB");
+                Debug.log("Removing out file");
+                new File(profileFilesDir + "/" + getOutfile()).delete();
+                if (outTuple != null) {
+                    initDB().deleteFile(outTuple.id);
                 }
-
-                if (genomeFolderPath == null) {
-                    Debug.log(
-                            "Error when processing. Could not get " +
-                            "genomeFolderPath: "
-                            + genomeVersion);
-                    throw new UnsupportedOperationException(
-                            "Error when processing. Could not get " +
-                            "genomeFolderPath: "
-                            + genomeVersion);
-                }
-
-                String referenceGenome = genomeFolderPath + genomeFilePrefix;
-
-                RawToProfileConverter rawToProfileConverter =
-                        new RawToProfileConverter();
-                rawToProfileConverter.procedureRaw(
-                        getParams(),
-                        getInfile(),
-                        getOutfile(),
-                        shouldKeepSam(),
-                        getGenomeVersion(),
-                        referenceGenome,
-
-                        // TODO change args
-                        new AbstractMap.SimpleEntry<>(
-                                rawFilesDir,
-                                profileFilesDir));
+                throw e;
             }
         }
 
         public Callable<Response> getCallable(
+                final String expId,
                 final String rawFilesDir,
                 final String profileFilesDir) {
             return new Callable<Response>() {
                 @Override
                 public Response call() throws Exception {
                     try {
-                        processFile(rawFilesDir, profileFilesDir);
+                        processFile(expId, rawFilesDir, profileFilesDir);
                         return new ProcessResponse(HttpStatusCode.OK);
                     } catch (SQLException | IOException e) {
                         Debug.log(
@@ -233,6 +279,10 @@ public class RawToProfProcessCommand extends ProcessCommand {
                         return new ProcessResponse(
                                 HttpStatusCode
                                         .INTERNAL_SERVER_ERROR, e.getMessage());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return new ProcessResponse(HttpStatusCode
+                                .INTERNAL_SERVER_ERROR, e.getMessage());
                     }
                 }
             };

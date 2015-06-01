@@ -64,7 +64,7 @@ public class PutProcessCommand extends Command {
 		super.setFields(uri, query, uuid, userType);
 		setTimestamp(System.currentTimeMillis());
 		processtype = uri.split("/")[2];
-		this.username = Authenticate.getUsernameByID(uuid);
+		username = Authenticate.getUsernameByID(uuid);
 	}
 
 	/**
@@ -107,6 +107,7 @@ public class PutProcessCommand extends Command {
 		return addToProcessPool(Doorman.getProcessPool());
 	}
 
+	@SuppressWarnings("deprecation")
 	public Response addToProcessPool(ProcessPool pool) {
 		Process process = new Process(this);
 
