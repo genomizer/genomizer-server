@@ -16,10 +16,11 @@ import java.util.Map;
 public class RawToProfileTest {
 	RawToProfileConverter rtp = null;
 	String path = "test/male.sam";
-	String bowTie = "-a";
+	String bowTie = "-a -v 2 -S";
 	//"d_melanogaster_fb5_22 -q reads/MOF_male_wt_reads_sample.fastq -S " +path;
-	String genome = "resources/bowtie2/example/index/lambda_virus";
-	String[] parameters = new String[]{bowTie, genome, "", "","","","",""};
+	String genomeBowtie2 = "resources/bowtie2/example/index/lambda_virus";
+	String genomeBowtie = "resources/processTest/genomes/d_melanogaster_fb5_22";
+	String[] parameters = new String[]{bowTie, genomeBowtie, "", "","","","",""};
 
 	@Before
 	public void setup() {
@@ -103,12 +104,12 @@ public class RawToProfileTest {
 
 	@Test
 	public void shouldRunStaticCall() throws ProcessException, IOException {
-		String inFile = "fastq/test.fastq";
-		String outFile = "results/test.wig";
+		String inFile = "test.fastq";
+		String outFile = "test.wig";
 		RawToProfileConverter.procedureRaw(
-				bowTie, inFile, outFile, true,"GENOMEVERSION",genome,
-				new AbstractMap.SimpleEntry<String,String>(
-						"resources/processTest/",""));
+				bowTie, inFile, outFile, true,"GENOMEVERSION",genomeBowtie,
+						"resources/processTest/fastq/",
+				"resources/processTest/results/");
 	}
 
 }
