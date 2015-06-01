@@ -97,11 +97,7 @@ public class FileMethods {
 					+ " does not exist!");
 		}
 		expID = e.getID(); // Correct expID for in case sensitivity
-
-		if (fileType == FileTuple.RAW && e.getNrRawFiles() >= 2) {
-			throw new IOException(
-					"There are already two raw files for this experiment!");
-		}
+		
 
 		String path = fpg.generateFilePath(expID, fileType, fileName);
 		FileTuple ft = getFileTuple(path);
