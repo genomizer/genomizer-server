@@ -185,7 +185,7 @@ public class ProcessCommands extends Command {
 
     private String fetchRawFilesDirFromDB(String expId)
             throws IOException, SQLException {
-        return initDB().getFilePathGenerator().getProfileFolderPath(expId);
+        return initDB().getFilePathGenerator().getRawFolderPath(expId);
     }
 
     public void setPool(ProcessPool pool) {
