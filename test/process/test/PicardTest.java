@@ -3,7 +3,6 @@ package process.test;
 import command.ValidateException;
 import org.junit.*;
 import process.Picard;
-import server.ServerSettings;
 
 import java.io.File;
 import java.io.IOException;
