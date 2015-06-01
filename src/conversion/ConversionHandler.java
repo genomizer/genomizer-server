@@ -55,32 +55,35 @@ public class ConversionHandler {
 		FileTuple file = db.getFileTuple(id);
 		fileInDB = file.path;
 		String currentFormat = getFileType(file.path);
-		String outputFile;
+		String outputFilePath;
 
 		switch (currentFormat) {
 			case "bed":
-				outputFile = convertFromBedTo(newFormat);
+				outputFilePath = convertFromBedTo(newFormat);
 				break;
 			case "gff":
-				outputFile = convertFromGffTo(newFormat);
+				outputFilePath = convertFromGffTo(newFormat);
 				break;
 			case "sgr":
-				outputFile = convertFromSgrTo(newFormat);
+				outputFilePath = convertFromSgrTo(newFormat);
 				break;
 			case "wig":
-				outputFile = convertFromWigTo(newFormat);
+				outputFilePath = convertFromWigTo(newFormat);
 				break;
 			default:
 				throw new IllegalArgumentException("Invalid File Format!");
 		}
 
 		String inputFileName = file.path.substring(file.path.lastIndexOf('/')+1);
-		String fileName = outputFile.substring(outputFile.lastIndexOf('/')+1);
+		String fileName = outputFilePath.substring(outputFilePath.lastIndexOf('/')+1);
 
-		File outFile = new File(outputFile);
+		File outFile = new File(outputFilePath);
 		FileTuple ft = db.addNewFile(file.expId, FileTuple.PROFILE, fileName,
 				inputFileName, null, file.author,
-				"ConversionHandler", file.isPrivate, file.grVersion, md5Hex(new FileInputStream(outFile)));
+				"ConversionHandler", file.isPrivate, file.grVersion, md5Hex(new FileInputStream(new File(outputFilePath))));
+
+		db.updateFileSize(ft, outFile.length());
+		
 		db.close();
 
 		Files.move(outFile.toPath(), new File(ft.path).toPath());
