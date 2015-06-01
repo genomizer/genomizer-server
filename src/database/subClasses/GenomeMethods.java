@@ -121,7 +121,10 @@ public class GenomeMethods {
 
 			conn.commit();
 
-		} catch (SQLException e) {
+		} catch (SQLException e ) {
+			conn.rollback();
+			throw e;
+		} catch(IOException e) {
 			conn.rollback();
 			throw e;
 		} finally {
