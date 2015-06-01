@@ -51,20 +51,20 @@ public class PostLoginCommand extends Command {
 	public void validateUserAndPassword(String string, int maxLength,
 										String field) throws ValidateException {
 		if (string == null) {
-			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Invalid "
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Incorrect "
 					+ field.toLowerCase() + ".");
 		}
 
 		if (string.equals("null")) {
-			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Invalid "
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Incorrect "
 					+ field.toLowerCase() + ".");
 		}
 		if(string.length() > maxLength || string.length() < 1) {
-			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Invalid "
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Incorrect "
 					+ field.toLowerCase() + ".");
 		}
 		if(hasInvalidCharacters(string)) {
-				throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Invalid "
+				throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Incorrect "
 						+ field.toLowerCase() + ".");
 		}
 	}
