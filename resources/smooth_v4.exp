@@ -31,7 +31,7 @@ set location      [lindex $argv 6]
 spawn perl resources/smooth_v4.pl
 
 # We are going to respond to a few questions, remain calm.
-expect "Enter the path of sgr files"
+expect "Enter the path to the sgr file"
 send -- $path
 
 expect "Enter window size"

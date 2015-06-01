@@ -2,6 +2,7 @@ package process;
 
 import command.ValidateException;
 import server.Debug;
+import util.PathUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -70,12 +71,14 @@ public class Smooth extends Executor {
                                     String outputPath)
             throws ValidateException, IOException, InterruptedException {
         /* We calculate some expected values */
-        String expectedPath =
-            path.substring(0, path.lastIndexOf("/")) + "smoothed/";
-        String expectedFileName =
-            path.substring(path.lastIndexOf("/")+1, path.length()-4) + "_" +
+        String inDir      = new File(path).getParent();
+        String inFileName = new File(path).getName();
+        String outDir     = PathUtils.join(inDir, "smoothed");
+
+        String expectedOutDir = outDir;
+        String expectedOutName = inFileName.replace(".sgr",
                     (meanType == 1 ?  "_median_smooth" : "_trimmed_mean_smooth")
-                    + "_winSiz-" + windowSize + "_minProbe-" + minPos + ".sgr";
+                    + "_winSiz-" + windowSize + "_minProbe-" + minPos + ".sgr");
 
         Smooth smooth = new Smooth(path, windowSize, meanType, minPos,
                 calcTotalMean, printPos);
@@ -84,24 +87,19 @@ public class Smooth extends Executor {
         smooth.validate();
         Debug.log("Validated smoothing on " + path);
 
-        /* Ensure the smoothing directory is created. */
-        if (!new File(expectedPath).exists())
-            new File(expectedPath).mkdirs();
-
         smooth.execute();
         Debug.log("Executed smoothing on " + path);
 
         /* Time for cleanup and moving files */
         /* Move files to their appropriate place */
-        Debug.log("Expected path is " + expectedPath);
-        Debug.log("Expected filename is " + expectedFileName);
+        Debug.log("Expected output dir is " + expectedOutDir);
+        Debug.log("Expected output filename is " + expectedOutName);
         Debug.log("Output filename is " + outputPath);
-        Path source         = Paths.get(expectedPath + expectedFileName);
+        String fullOutputPath = PathUtils.join(expectedOutDir,expectedOutName);
+        assert (new File(fullOutputPath).exists());
+        Path source         = Paths.get(fullOutputPath);
         Path destination    = Paths.get(outputPath);
         Files.move(source, destination, StandardCopyOption.REPLACE_EXISTING);
-        /* This should no longer be needed. */
-        Files.delete(source);
-
     }
 
     /**

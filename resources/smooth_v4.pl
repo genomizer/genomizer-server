@@ -34,16 +34,16 @@ You modify this program under the same terms as Perl itself
 use strict;
 use warnings;
 use File::Spec::Functions;
+use File::Basename;
 
 my $VERSION = 4;
 # This variable holds the current time #
 my $now = time;
 #print "Data in file processed while reading, please make sure you dont have empty lines at end of the file\n";
-print "Enter the path of sgr files\n";
-chomp(my $dir = <STDIN>);
-#my $dir = $ARGV[0];
-my @files = <$dir\/*.sgr>;
-my $file = '';
+print "Enter the path to the sgr file\n";
+chomp(my $file = <STDIN>);
+my @files = ($file);
+my $dir = dirname($file);
 print "Enter window size\n";
 chomp(my $window_size = <STDIN>);
 #my $window_size = $ARGV[1];
