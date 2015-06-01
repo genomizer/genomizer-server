@@ -221,8 +221,10 @@ public class GenomeReleaseTableTests {
     }
     @Test
     public void shouldRemoveChainFileInProgress() throws Exception {
-        dbac.addInProgressChainFile("fromVersion", "toVersion","testChain.file",null);
-        int removed = dbac.removeChainFiles("fromVersion", "toVersion");
+        dbac.addGenomeRelease("testFromVersion", "Ablibn", "from.test", null);
+        dbac.addGenomeRelease("testToVersion", "Ablibn", "to.test", null);
+        dbac.addInProgressChainFile("testFromVersion", "testToVersion","testChain.file",null);
+        int removed = dbac.removeChainFiles("testFromVersion", "testToVersion");
         assertTrue(removed == 1);
     }
 
