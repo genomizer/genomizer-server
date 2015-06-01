@@ -94,7 +94,6 @@ public class PostExperimentCommand extends Command {
 
 	private List<String> buildAnnotationList() {
 		ArrayList<String> nameList = new ArrayList<>();
-
 		for (Annotation annotation : annotations) {
 			nameList.add(annotation.getName());
 		}
