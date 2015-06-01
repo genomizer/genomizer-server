@@ -13,6 +13,10 @@ import static org.junit.Assert.*;
 public class RatioProcessCommandTest {
     private final Gson gson = new RequestHandler().getGson();
 
+    /**
+     * Test that command can be created.
+     * @throws ValidateException
+     */
     @Test
     public void canCreateWithCorrectInput() throws ValidateException {
         String json =
@@ -26,6 +30,10 @@ public class RatioProcessCommandTest {
         processCommands.validate();
     }
 
+    /**
+     * Test checks that exception can be thrown with an incorrect preChipFile name.
+     * @throws ValidateException
+     */
     @Test(expected = ValidateException.class)
     public void canGiveValidateExceptionOnIncorrectPreChipFileName() throws ValidateException {
         String json =
@@ -38,6 +46,10 @@ public class RatioProcessCommandTest {
         processCommands.validate();
     }
 
+    /**
+     * Test checks that exception can be thrown with an incorrect preChipFile size.
+     * @throws ValidateException
+     */
     @Test (expected = ValidateException.class)
     public void shouldGiveValidateExceptionOnIncorrectPreChipFileLength() throws ValidateException {
 
@@ -54,6 +66,11 @@ public class RatioProcessCommandTest {
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }
+
+    /**
+     * Test checks that exception can be thrown with an incorrect postChipFile name.
+     * @throws ValidateException
+     */
     @Test (expected = ValidateException.class)
     public void canGiveValidateExceptionOnIncorrectPostChipFileName() throws ValidateException {
         String json =
@@ -66,6 +83,10 @@ public class RatioProcessCommandTest {
         processCommands.validate();
     }
 
+    /**
+     * Test checks that exception can be thrown with an incorrect postChipFile size.
+     * @throws ValidateException
+     */
     @Test (expected = ValidateException.class)
     public void shouldGiveValidateExceptionOnIncorrectPostChipFileLength() throws ValidateException {
 
@@ -83,6 +104,10 @@ public class RatioProcessCommandTest {
         processCommands.validate();
     }
 
+    /**
+     * Test checks that exception can be thrown with an incorrect outfile name.
+     * @throws ValidateException
+     */
     @Test(expected = ValidateException.class)
     public void canGiveValidateExceptionOnIncorrectOutfileName() throws ValidateException {
         String json =
@@ -94,6 +119,11 @@ public class RatioProcessCommandTest {
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }
+
+    /**
+     * Test checks that exception can be thrown with an incorrect outfile size.
+     * @throws ValidateException
+     */
     @Test (expected = ValidateException.class)
     public void shouldGiveValidateExceptionOnIncorrectOutfileLength() throws ValidateException {
 
@@ -110,6 +140,11 @@ public class RatioProcessCommandTest {
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }
+
+    /**
+     * Test checks that exception can be thrown with null chromosomes.
+     * @throws ValidateException
+     */
     @Test(expected = ValidateException.class)
     public void canGiveValidateExceptionOnChromosomesNull() throws ValidateException {
         String json =
@@ -121,6 +156,11 @@ public class RatioProcessCommandTest {
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }
+
+    /**
+     * Test checks that exception can be thrown with an incorrect mean.
+     * @throws ValidateException
+     */
     @Test(expected = ValidateException.class)
     public void canGiveValidateExceptionOnIncorrectMean() throws ValidateException {
         String json =
@@ -132,6 +172,11 @@ public class RatioProcessCommandTest {
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }
+
+    /**
+     * Test checks that exception can be thrown with readsCutoff less than 0.
+     * @throws ValidateException
+     */
     @Test(expected = ValidateException.class)
     public void canGiveValidateExceptionOnIncorrectReadsCutoff() throws ValidateException {
         String json =
@@ -143,6 +188,11 @@ public class RatioProcessCommandTest {
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }
+
+    /**
+     * Test checks that exception can be thrown with null readsCutoff.
+     * @throws ValidateException
+     */
     @Test(expected = ValidateException.class)
     public void canGiveValidateExceptionOnNullReadsCutoff() throws ValidateException {
         String json =
