@@ -10,7 +10,6 @@ import database.containers.ChainFile;
 import database.containers.FileTuple;
 import database.containers.GenomeFile;
 import database.containers.HasCheckSumMD5;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUpload;
 import org.apache.commons.fileupload.FileUploadException;
