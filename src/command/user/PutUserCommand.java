@@ -78,8 +78,8 @@ public class PutUserCommand extends Command {
                         "Editing of '" + username + "' unsuccessful, " +
                                 "username incorrect.");
             } else {
-                LoginAttempt login = Authenticate.login(username, oldPassword,
-                        dbHash);
+                LoginAttempt login = Authenticate.login(uuid, username,
+                        oldPassword, dbHash);
                 if (login.wasSuccessful()) {
                     db.updateUser(username, BCrypt.hashpw(newPassword,
                             BCrypt.gensalt()), name, email);
