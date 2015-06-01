@@ -28,6 +28,8 @@ public class RatioProcessCommandTest {
         ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
+
+        assertNotNull(processCommands);
     }
 
     /**
