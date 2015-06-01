@@ -213,12 +213,24 @@ public class GenomeReleaseTableTests {
 
     	assertEquals(0, dbac.getAllGenomeReleases().size());
     }
+
+    /**
+     * Test if genome release file with in progress status can be removed
+     * @throws Exception
+     * Test written 2015-06-01
+     */
     @Test
     public void shouldRemoveGenomeReleaseFileInProgress() throws Exception{
         dbac.addInProgressGenomeRelease("testversion", "Testy", "testy.test", null);
         boolean removed = dbac.removeGenomeReleaseFile("testversion","testy.test");
         assertTrue(removed);
     }
+
+    /**
+     * Test if chain file with in progress status can be removed
+     * @throws Exception
+     * Test written 2015-06-01
+     */
     @Test
     public void shouldRemoveChainFileInProgress() throws Exception {
         dbac.addGenomeRelease("testFromVersion", "Ablibn", "from.test", null);
