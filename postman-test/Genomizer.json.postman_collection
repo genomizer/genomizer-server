@@ -21,6 +21,7 @@
 	"remoteLink": "",
 	"public": false,
 	"write": true,
+	"hasRequests": true,
 	"requests": [
 		{
 			"id": "2626075d-9fe0-b5ed-d660-0d19213f1586",
@@ -40,7 +41,8 @@
 			"description": "Check that the token is no longer \nvalid once we've logged out.",
 			"collectionId": "28286ab2-d6a4-ede3-53db-c54fc3506853",
 			"responses": [],
-			"synced": false
+			"synced": false,
+			"owner": 0
 		},
 		{
 			"id": "5c84e4d6-28e1-240f-de15-0302efae13c4",
@@ -60,7 +62,8 @@
 			"description": "Get a list of processes.",
 			"collectionId": "28286ab2-d6a4-ede3-53db-c54fc3506853",
 			"responses": [],
-			"synced": false
+			"synced": false,
+			"owner": 0
 		},
 		{
 			"id": "5fd59891-20a9-6993-cece-9b7dcf0646a0",
@@ -80,7 +83,8 @@
 			"description": "Log out.",
 			"collectionId": "28286ab2-d6a4-ede3-53db-c54fc3506853",
 			"responses": [],
-			"synced": false
+			"synced": false,
+			"owner": 0
 		},
 		{
 			"id": "6f14b4cd-7ba5-ceee-8ca7-d5f949900b39",
@@ -92,10 +96,10 @@
 			"data": [],
 			"dataMode": "raw",
 			"version": 2,
-			"tests": "data = JSON.parse(responseBody);\ntests[\"Token is present\"] = \"token\" in data;\npostman.setEnvironmentVariable(\"EnvVarToken\", data.token);\ntests[\"Response code\"] = responseCode.code === 200;\ntests[\"Role is present\"] = \"role\" in data;\ntests[\"Correct role is returned\"] = data.role === \"user\";",
+			"tests": "data = JSON.parse(responseBody);\ntests[\"Token is present\"] = \"token\" in data;\npostman.setEnvironmentVariable(\"EnvVarToken\", data.token);\ntests[\"Response code\"] = responseCode.code === 200;\ntests[\"Role is present\"] = \"role\" in data;\ntests[\"Correct role is returned\"] = data.role === \"USER\";",
 			"currentHelper": "normal",
 			"helperAttributes": {},
-			"time": 1432560737348,
+			"time": 1433168437737,
 			"name": "Login",
 			"description": "Login and set the token environment variable.",
 			"collectionId": "28286ab2-d6a4-ede3-53db-c54fc3506853",
@@ -121,7 +125,8 @@
 			"description": "Check that the token is valid.",
 			"collectionId": "28286ab2-d6a4-ede3-53db-c54fc3506853",
 			"responses": [],
-			"synced": false
+			"synced": false,
+			"owner": 0
 		},
 		{
 			"id": "ac0071fd-8bd2-585a-9716-71f8211851df",
@@ -143,7 +148,8 @@
 			"currentHelper": "normal",
 			"helperAttributes": {},
 			"collectionOwner": 0,
-			"synced": false
+			"synced": false,
+			"owner": 0
 		},
 		{
 			"id": "d6c7a5c5-ae87-c05f-6da8-5a4b21fe6c6b",
@@ -163,7 +169,8 @@
 			"description": "Get an experiment by id, also send a timestamp.",
 			"collectionId": "28286ab2-d6a4-ede3-53db-c54fc3506853",
 			"responses": [],
-			"synced": false
+			"synced": false,
+			"owner": 0
 		},
 		{
 			"id": "f31eaaef-5158-6a01-880f-d43d7c0c8fb9",
@@ -183,7 +190,8 @@
 			"description": "Get an experiment by id.",
 			"collectionId": "28286ab2-d6a4-ede3-53db-c54fc3506853",
 			"responses": [],
-			"synced": false
+			"synced": false,
+			"owner": 0
 		}
 	]
 }
