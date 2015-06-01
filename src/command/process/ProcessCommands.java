@@ -7,7 +7,6 @@ import command.UserRights;
 import command.ValidateException;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
-import database.subClasses.UserMethods;
 import response.ErrorResponse;
 import response.HttpStatusCode;
 import response.ProcessResponse;
@@ -16,9 +15,9 @@ import response.Response;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import server.Debug;
 
 /**
  * The class handles processing a list of processing commands. The list of commands each have a list of files to
@@ -66,6 +65,7 @@ public class ProcessCommands extends Command {
                     "Specify processes for the experiment.");
         }
 
+        // Validate all of the processing commands individually
         for (ProcessCommand processCommand : processCommands) {
             processCommand.validate();
         }
@@ -85,10 +85,11 @@ public class ProcessCommands extends Command {
             try{
                 pC.doProcess(filePaths);
             } catch(UnsupportedOperationException e){
+                Debug.log(e.getMessage());
                 return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
             }
         }
-        return new ProcessResponse(HttpStatusCode.OK, "Processing of experiment: "+expId+" has completed.");
+        return new ProcessResponse(HttpStatusCode.OK, "Processing of experiment: "+expId+" has completed successfully.");
     }
 
     /**
@@ -103,8 +104,10 @@ public class ProcessCommands extends Command {
             db = initDB();
             filePaths = db.processRawToProfile(expId);
         } catch (SQLException e) {
+            Debug.log(e.getMessage());
             return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
         } catch (IOException e) {
+            Debug.log(e.getMessage());
             return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
         } finally {
             if (db != null) {
