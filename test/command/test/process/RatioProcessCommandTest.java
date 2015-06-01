@@ -2,7 +2,7 @@ package command.test.process;
 
 import com.google.gson.Gson;
 import command.ValidateException;
-import command.process.ProcessCommands;
+import command.process.PutProcessCommands;
 import database.constants.MaxLength;
 import database.subClasses.UserMethods;
 import org.junit.Test;
@@ -25,7 +25,7 @@ public class RatioProcessCommandTest {
                         "\"infile1Name\", \"postChipFile\": \"infile2Name\", \"outfile\": \"outfile\", " +
                         "\"mean\": \"single\", \"readsCutoff\": \"2\", \"chromosomes\": \"chromosome\"}]}]}";
 
-        ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
+        PutProcessCommands processCommands = gson.fromJson(json, PutProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
 
@@ -43,7 +43,7 @@ public class RatioProcessCommandTest {
                         "\"processCommands\":[{\"type\":\"ratio\", \"files\":[{\"preChipFile\": " +
                         "\"&infile1Name\", \"postChipFile\": \"infile2Name\", \"outfile\": \"outfile\", " +
                         "\"mean\": \"single\", \"readsCutoff\": \"2\", \"chromosomes\": \"chromosome\"}]}]}";
-        ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
+        PutProcessCommands processCommands = gson.fromJson(json, PutProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }
@@ -64,7 +64,7 @@ public class RatioProcessCommandTest {
                         "\"processCommands\":[{\"type\":\"ratio\", \"files\":[{\"preChipFile\": " +
                         "\""+s+"\", \"postChipFile\": \"infile2Name\", \"outfile\": \"outfile\", " +
                         "\"mean\": \"single\", \"readsCutoff\": \"2\", \"chromosomes\": \"chromosome\"}]}]}";
-        ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
+        PutProcessCommands processCommands = gson.fromJson(json, PutProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }
@@ -80,7 +80,7 @@ public class RatioProcessCommandTest {
                         "\"processCommands\":[{\"type\":\"ratio\", \"files\":[{\"preChipFile\": " +
                         "\"infile1Name\", \"postChipFile\": \"infile€2Name\", \"outfile\": \"outfile\", " +
                         "\"mean\": \"single\", \"readsCutoff\": \"2\", \"chromosomes\": \"chromosome\"}]}]}";
-        ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
+        PutProcessCommands processCommands = gson.fromJson(json, PutProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }
@@ -101,7 +101,7 @@ public class RatioProcessCommandTest {
                         "\"processCommands\":[{\"type\":\"ratio\", \"files\":[{\"preChipFile\": " +
                         "\"awwdw\", \"postChipFile\": \""+s+"\", \"outfile\": \"outfile\", " +
                         "\"mean\": \"single\", \"readsCutoff\": \"2\", \"chromosomes\": \"chromosome\"}]}]}";
-        ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
+        PutProcessCommands processCommands = gson.fromJson(json, PutProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }
@@ -117,7 +117,7 @@ public class RatioProcessCommandTest {
                         "\"processCommands\":[{\"type\":\"ratio\", \"files\":[{\"preChipFile\": " +
                         "\"infile1Name\", \"postChipFile\": \"infile2Name\", \"outfile\": \"in$\", " +
                         "\"mean\": \"single\", \"readsCutoff\": \"2\", \"chromosomes\": \"chromosome\"}]}]}";
-        ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
+        PutProcessCommands processCommands = gson.fromJson(json, PutProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }
@@ -138,7 +138,7 @@ public class RatioProcessCommandTest {
                         "\"processCommands\":[{\"type\":\"ratio\", \"files\":[{\"preChipFile\": " +
                         "\"awwdw\", \"postChipFile\": \"dwqdwqs\", \"outfile\": \""+s+"\", " +
                         "\"mean\": \"single\", \"readsCutoff\": \"2\", \"chromosomes\": \"chromosome\"}]}]}";
-        ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
+        PutProcessCommands processCommands = gson.fromJson(json, PutProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }
@@ -154,7 +154,7 @@ public class RatioProcessCommandTest {
                         "\"processCommands\":[{\"type\":\"ratio\", \"files\":[{\"preChipFile\": " +
                         "\"infile1Name\", \"postChipFile\": \"infile2Name\", \"outfile\": \"in\", " +
                         "\"mean\": \"single\", \"readsCutoff\": \"2\"}]}]}";
-        ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
+        PutProcessCommands processCommands = gson.fromJson(json, PutProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }
@@ -170,7 +170,7 @@ public class RatioProcessCommandTest {
                         "\"processCommands\":[{\"type\":\"ratio\", \"files\":[{\"preChipFile\": " +
                         "\"infile1Name\", \"postChipFile\": \"infile2Name\", \"outfile\": \"in\", " +
                         "\"mean\": \"asd\", \"readsCutoff\": \"2\", \"chromosomes\": \"chromosome\"}]}]}";
-        ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
+        PutProcessCommands processCommands = gson.fromJson(json, PutProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }
@@ -186,7 +186,7 @@ public class RatioProcessCommandTest {
                         "\"processCommands\":[{\"type\":\"ratio\", \"files\":[{\"preChipFile\": " +
                         "\"infile1Name\", \"postChipFile\": \"infile2Name\", \"outfile\": \"in\", " +
                         "\"mean\": \"double\", \"readsCutoff\": \"-1\", \"chromosomes\": \"chromosome\"}]}]}";
-        ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
+        PutProcessCommands processCommands = gson.fromJson(json, PutProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }
@@ -202,7 +202,7 @@ public class RatioProcessCommandTest {
                         "\"processCommands\":[{\"type\":\"ratio\", \"files\":[{\"preChipFile\": " +
                         "\"infile1Name\", \"postChipFile\": \"infile2Name\", \"outfile\": \"in\", " +
                         "\"mean\": \"double\", \"chromosomes\": \"chromosome\"}]}]}";
-        ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
+        PutProcessCommands processCommands = gson.fromJson(json, PutProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }

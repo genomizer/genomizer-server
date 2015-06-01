@@ -175,7 +175,7 @@ public class RequestHandler implements HttpHandler {
 			return;
 		}
 
-        if (commandClass.equals(ProcessCommands.class)) {
+        if (commandClass.equals(PutProcessCommands.class)) {
             respond(new ProcessResponse(HttpStatusCode.NOT_IMPLEMENTED),
                     exchange);
 //            respond(new ProcessResponse(HttpStatusCode.OK), exchange);
