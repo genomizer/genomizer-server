@@ -42,30 +42,27 @@ public class PostLoginCommand extends Command {
 	 */
 	@Override
 	public void validate() throws ValidateException {
-		validateUserAndPassword(username, MaxLength.USERNAME,
-				"Username/Password");
-		validateUserAndPassword(password, MaxLength.PASSWORD,
-				"Username/Password");
+		validateUserAndPassword(username, MaxLength.USERNAME);
+		validateUserAndPassword(password, MaxLength.PASSWORD);
 	}
 
-	public void validateUserAndPassword(String string, int maxLength,
-										String field) throws ValidateException {
+	public void validateUserAndPassword(String string, int maxLength) throws ValidateException {
 		if (string == null) {
-			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Incorrect "
-					+ field.toLowerCase() + ".");
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Login attempt unsuccessful, " +
+					"incorrect Username/Password.");
 		}
 
 		if (string.equals("null")) {
-			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Incorrect "
-					+ field.toLowerCase() + ".");
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Login attempt unsuccessful, " +
+					"incorrect Username/Password.");
 		}
 		if(string.length() > maxLength || string.length() < 1) {
-			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Incorrect "
-					+ field.toLowerCase() + ".");
+			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Login attempt unsuccessful, " +
+					"incorrect Username/Password.");
 		}
 		if(hasInvalidCharacters(string)) {
-				throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Incorrect "
-						+ field.toLowerCase() + ".");
+				throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Login attempt unsuccessful, " +
+						"incorrect Username/Password.");
 		}
 	}
 
