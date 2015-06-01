@@ -566,7 +566,7 @@ public class GenomeMethods {
 		ChainFiles cf = null;
 
 		String getChainFiles =
-				"SELECT * FROM Chain_File " +
+				"SELECT * FROM Chain_File NATURAL JOIN Chain_File_Files " +
 				"WHERE (FromVersion ~~* ?)" + " AND (ToVersion ~~* ?)";
 
 		PreparedStatement getChainFilesStmt = conn.prepareStatement(getChainFiles);
@@ -583,6 +583,9 @@ public class GenomeMethods {
         if (cf == null) {
             return 0;
         }
+
+		removeChainFileFiles(fromVersion, toVersion);
+
         String filePath = cf.folderPath;
 
         String query = "DELETE FROM Chain_File WHERE (FromVersion ~~* ?)"
@@ -600,6 +603,29 @@ public class GenomeMethods {
 		deleteStatement.setString(2, toVersion);
 		resCount = deleteStatement.executeUpdate();
 		deleteStatement.close();
+
+		return resCount;
+	}
+
+	/**
+	 * Removes chain file files from database.
+	 * @param fromVersion
+	 * @param toVersion
+	 * @return number of removed rows
+	 * @throws SQLException
+	 */
+	private int removeChainFileFiles(String fromVersion, String toVersion)
+														throws SQLException{
+
+		String query = "DELETE FROM Chain_File_Files " +
+						"WHERE (FromVersion ~~* ?)" + " AND (ToVersion ~~* ?)";
+
+		PreparedStatement deleteChainFileFiles = conn.prepareStatement(query);
+		deleteChainFileFiles.setString(1, fromVersion);
+		deleteChainFileFiles.setString(2, toVersion);
+
+		int resCount = deleteChainFileFiles.executeUpdate();
+		deleteChainFileFiles.close();
 
 		return resCount;
 	}
