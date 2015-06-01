@@ -119,10 +119,15 @@ public class ProcessPoolIntegrationTest {
         String json =
                 "{\"expId\":\"processpool_test\"," +
                 "\"processCommands\":[{\"type\":\"rawToProfile\"," +
-                "\"files\":[{\"infile\":\"stepTestInfile.sgr\"," +
-                "\"outfile\":\"shtrhtrshts\",\"genomeVersion\":\"hg38\"," +
+                "\"files\":[{" +
+                "\"infile\":\"smalltest1.fastq\"," +
+                "\"outfile\":\"smalltest1.wig\"," +
+                "\"genomeVersion\":\"GenomV1\"," +
                 "\"params\":\"-a -m 1 --best -p 10 -v 2 -q -S\"," +
-                "\"keepSam\":\"on\"}]}]}";
+                "\"keepSam\":\"on\"" +
+                "}]}]}";
+
+        System.out.println("json = " + json);
 
         ProcessCommands commands = gson.fromJson(json, ProcessCommands.class);
         commands.setPool(pool);

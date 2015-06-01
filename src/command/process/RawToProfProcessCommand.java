@@ -197,6 +197,14 @@ public class RawToProfProcessCommand extends ProcessCommand {
 
             RawToProfileConverter rawToProfileConverter =
                     new RawToProfileConverter();
+            System.out.println("getParams(): " + getParams());
+            System.out.println("getInfile(): " + getInfile());
+            System.out.println("getOutfile(): " + getOutfile());
+            System.out.println("shouldKeepSam(): " + shouldKeepSam());
+            System.out.println("getGenomeVersion(): " + getGenomeVersion());
+            System.out.println("referenceGenome: " + referenceGenome);
+            System.out.println("rawFilesDir: " + rawFilesDir);
+            System.out.println("profileFilesDir: " + profileFilesDir);
             rawToProfileConverter.procedureRaw(
                     getParams(),
                     getInfile(),
