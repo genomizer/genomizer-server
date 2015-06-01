@@ -2,7 +2,7 @@
 
 =head1 NAME
 
-smooth – parse sgr file data, calculate median or trimed mean for a window size with step pos limit
+smooth – parse sgr file data, calculate median or trimmed mean for a window size with step pos limit
 
 =head1 HEADER
 
@@ -16,7 +16,7 @@ OS used for development (Linux CentOS 5.3), Perl version (Perl5.8.8)
 
 =head1 DESCRIPTION
 
-parse sgr file data, calculate median or trimed mean for a window size with step pos limit
+parse sgr file data, calculate median or trimmed mean for a window size with step pos limit
 create smoothed files in smooth folder
 
 ####### Modification Block #######
