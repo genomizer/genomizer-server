@@ -66,7 +66,7 @@ public class PostGenomeReleaseCommand extends Command {
 			for (int i = 0; i < files.size(); i++) {
 				String fileName = files.get(i);
 				String checkSumMD5 = null;
-				if (i < checkSumsMD5.size())
+				if (checkSumsMD5 != null && i < checkSumsMD5.size())
 					checkSumMD5 = checkSumsMD5.get(i);
 				uploadURLs.add(db.addInProgressGenomeRelease(genomeVersion,
 						specie, fileName, checkSumMD5));
