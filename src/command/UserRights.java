@@ -68,7 +68,7 @@ public class UserRights {
 
         /** Process */
         userRights.put(PutProcessCommand.class, UserType.USER);
-        userRights.put(ProcessCommands.class, UserType.USER);
+        userRights.put(PutProcessCommands.class, UserType.USER);
         userRights.put(GetProcessStatusCommand.class, UserType.USER);
         userRights.put(GetProcessDummyCommand.class,UserType.GUEST);
 

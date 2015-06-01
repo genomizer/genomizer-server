@@ -2,7 +2,7 @@ package command.test.process;
 
 import com.google.gson.Gson;
 import command.ValidateException;
-import command.process.ProcessCommands;
+import command.process.PutProcessCommands;
 import database.constants.MaxLength;
 import database.subClasses.UserMethods;
 import org.junit.Test;
@@ -23,7 +23,7 @@ public class StepProcessCommandTest {
                         "\"processCommands\":[{\"type\":\"step\"," +
                         "\"files\":[{\"infile\":\"bigte1.wig\"," +
                         "\"outfile\":\"awe\",\"stepSize\":\"3\"}]}]}";
-        ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
+        PutProcessCommands processCommands = gson.fromJson(json, PutProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }
@@ -39,7 +39,7 @@ public class StepProcessCommandTest {
                         "\"processCommands\":[{\"type\":\"step\"," +
                         "\"files\":[{\"in%file\":\"bigte1.wig\"," +
                         "\"outfile\":\"awe\",\"stepSize\":\"3\"}]}]}";
-        ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
+        PutProcessCommands processCommands = gson.fromJson(json, PutProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }
@@ -60,7 +60,7 @@ public class StepProcessCommandTest {
                         "\"processCommands\":[{\"type\":\"step\"," +
                         "\"files\":[{\""+s+"\":\"bigte1.wig\"," +
                         "\"outfile\":\"awe\",\"stepSize\":\"3\"}]}]}";
-        ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
+        PutProcessCommands processCommands = gson.fromJson(json, PutProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }
@@ -76,7 +76,7 @@ public class StepProcessCommandTest {
                         "\"processCommands\":[{\"type\":\"step\"," +
                         "\"files\":[{\"infile\":\"bigte1.wig\"," +
                         "\"outfile\":\"a&we\",\"stepSize\":\"3\"}]}]}";
-        ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
+        PutProcessCommands processCommands = gson.fromJson(json, PutProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }
@@ -97,7 +97,7 @@ public class StepProcessCommandTest {
                         "\"processCommands\":[{\"type\":\"step\"," +
                         "\"files\":[{\"infile\":\"bigte1.wig\"," +
                         "\"outfile\":\""+s+"\",\"stepSize\":\"3\"}]}]}";
-        ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
+        PutProcessCommands processCommands = gson.fromJson(json, PutProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }
@@ -113,7 +113,7 @@ public class StepProcessCommandTest {
                         "\"processCommands\":[{\"type\":\"step\"," +
                         "\"files\":[{\"infile\":\"bigte1.wig\"," +
                         "\"outfile\":\"awe\",\"stepSize\":\"-1\"}]}]}";
-        ProcessCommands processCommands = gson.fromJson(json, ProcessCommands.class);
+        PutProcessCommands processCommands = gson.fromJson(json, PutProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }

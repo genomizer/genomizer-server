@@ -52,8 +52,8 @@ public class RatioCalcTest {
         new File(OUTFILE).delete();
     }
 
-    @Ignore
     @Test
+    @Ignore
     public void shouldNotThrowValidationExceptionNoChroms() throws Exception {
         new Ratio(
                 INFILE_1,
@@ -64,8 +64,8 @@ public class RatioCalcTest {
                 NO_CHROMOSOMES).validate();
     }
 
-    @Ignore
     @Test
+    @Ignore
     public void shouldNotThrowValidationExceptionWithChroms() throws Exception {
         new Ratio(INFILE_1, INFILE_2, OUTFILE, MEAN, READS_CUT_OFF, CHROMOSOMES)
                 .validate();
@@ -143,7 +143,6 @@ public class RatioCalcTest {
      * TODO check constraints for chromosomes
      */
     @Test(expected = ValidateException.class)
-    @Ignore
     public void shouldThrowValidationExceptionInvalidChroms() throws Exception {
         new Ratio(
                 INFILE_1,
@@ -159,7 +158,6 @@ public class RatioCalcTest {
      * TODO check constraints for cutOff
      */
     @Test(expected = ValidateException.class)
-    @Ignore
     public void shouldThrowValidationExceptionInvalidCutOff() throws Exception {
         new Ratio(INFILE_1, INFILE_2, OUTFILE, MEAN, READS_CUT_OFF, CHROMOSOMES)
                 .validate();
@@ -179,7 +177,6 @@ public class RatioCalcTest {
     }
 
     @Test
-    @Ignore
     public void shouldProduceCorrectFile() throws Exception {
         new Ratio(
                 INFILE_1,

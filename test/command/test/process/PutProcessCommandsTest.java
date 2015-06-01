@@ -15,7 +15,7 @@ import static org.junit.Assert.*;
  * Author:      Niklas Fries, dv13jen
  */
 
-public class ProcessCommandsTest {
+public class PutProcessCommandsTest {
 
     private final Gson gson = new RequestHandler().getGson();
 
@@ -34,8 +34,8 @@ public class ProcessCommandsTest {
                 "\"genomeVersion\":\"theGR\",\"params\":\"" +
                 "-a -m 1 --best -p 10 -v 2 -q -S\",\"keepSam\":\"on\"}]}]}";
 
-        ProcessCommands processCommands =
-                gson.fromJson(json, ProcessCommands.class);
+        PutProcessCommands processCommands =
+                gson.fromJson(json, PutProcessCommands.class);
 
         assertEquals(1, processCommands.getProcessCommands().size());
     }
@@ -55,8 +55,8 @@ public class ProcessCommandsTest {
                         "\"keepSam\":\"on\"}]}, {\"type\":\"ratio\", \"files\":[{\"preChipFile\": " +
                         "\"infile1Name\", \"postChipFile\": \"infile2Name\", \"outfile\": \"outfile\", " +
                         "\"mean\": \"single\", \"readsCutoff\": \"2\", \"chromosomes\": \"chromosome\"}]}]}";
-        ProcessCommands processCommands =
-                gson.fromJson(json, ProcessCommands.class);
+        PutProcessCommands processCommands =
+                gson.fromJson(json, PutProcessCommands.class);
         assertEquals(
                 RawToProfProcessCommand.class,
                 processCommands.getProcessCommands().get(0).getClass());
@@ -81,8 +81,8 @@ public class ProcessCommandsTest {
                         "\"keepSam\":\"on\"}]}, {\"type\":\"ratio\", \"files\":[{\"preChipFile\": " +
                         "\"infile1Name\", \"postChipFile\": \"infile2Name\", \"outfile\": \"outfile\", " +
                         "\"mean\": \"single\", \"readsCutoff\": \"2\", \"chromosomes\": \"chromosome\"}]}]}";
-        ProcessCommands processCommands =
-                gson.fromJson(json, ProcessCommands.class);
+        PutProcessCommands processCommands =
+                gson.fromJson(json, PutProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }
@@ -100,8 +100,8 @@ public class ProcessCommandsTest {
                         "\"outfile\":\"awsd\",\"genomeVersion\":\"theGR\"," +
                         "\"params\":\"-a -m 1 --best -p 10 -v 2 -q -S\"," +
                         "\"keepSam\":\"on\"}]}]}";
-        ProcessCommands processCommands =
-                gson.fromJson(json, ProcessCommands.class);
+        PutProcessCommands processCommands =
+                gson.fromJson(json, PutProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.GUEST);
         processCommands.validate();
     }
@@ -119,8 +119,8 @@ public class ProcessCommandsTest {
                         "\"outfile\":\"awsd\",\"genomeVersion\":\"theGR\"," +
                         "\"params\":\"-a -m 1 --best -p 10 -v 2 -q -S\"," +
                         "\"keepSam\":\"on\"}]}]}";
-        ProcessCommands processCommands =
-                gson.fromJson(json, ProcessCommands.class);
+        PutProcessCommands processCommands =
+                gson.fromJson(json, PutProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }
@@ -143,8 +143,8 @@ public class ProcessCommandsTest {
                         "\"outfile\":\"awsd\",\"genomeVersion\":\"theGR\"," +
                         "\"params\":\"-a -m 1 --best -p 10 -v 2 -q -S\"," +
                         "\"keepSam\":\"on\"}]}]}";
-        ProcessCommands processCommands =
-                gson.fromJson(json, ProcessCommands.class);
+        PutProcessCommands processCommands =
+                gson.fromJson(json, PutProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
     }
