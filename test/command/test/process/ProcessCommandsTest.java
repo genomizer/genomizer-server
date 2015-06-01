@@ -46,9 +46,9 @@ public class ProcessCommandsTest {
                         "\"files\":[{\"infile\":\"bigtest1.fastq\"," +
                         "\"outfile\":\"awsd\",\"genomeVersion\":\"theGR\"," +
                         "\"params\":\"-a -m 1 --best -p 10 -v 2 -q -S\"," +
-                        "\"keepSam\":\"on\"}]}, {\"type\":\"ratio\", \"files\":[{\"preChipFile\": " +
-                        "\"infile1Name\", \"postChipFile\": \"infile2Name\", \"outfile\": \"outfile\", " +
-                        "\"mean\": \"single\", \"readsCutoff\": \"2\", \"chromosomes\": \"chromosome\"}]}]}";
+                        "\"keepSam\":\"on\"}]}, {\"type\":\"ratio\", \"files\":[{\"infile1\": " +
+                        "\"infile1Name\", \"infile2\": \"infile2Name\", \"outfile\": \"outfile\", " +
+                        "\"mean\": \"single\", \"readsCutOff\": \"2\", \"chromosomes\": \"chromosome\"}]}]}";
         ProcessCommands processCommands =
                 gson.fromJson(json, ProcessCommands.class);
         assertEquals(
@@ -69,9 +69,9 @@ public class ProcessCommandsTest {
                         "\"files\":[{\"infile\":\"bigtest1.fastq\"," +
                         "\"outfile\":\"awsd\",\"genomeVersion\":\"theGR\"," +
                         "\"params\":\"-a -m 1 --best -p 10 -v 2 -q -S\"," +
-                        "\"keepSam\":\"on\"}]}, {\"type\":\"ratio\", \"files\":[{\"preChipFile\": " +
-                        "\"infile1Name\", \"postChipFile\": \"infile2Name\", \"outfile\": \"outfile\", " +
-                        "\"mean\": \"single\", \"readsCutoff\": \"2\", \"chromosomes\": \"chromosome\"}]}]}";
+                        "\"keepSam\":\"on\"}]}, {\"type\":\"ratio\", \"files\":[{\"infile1\": " +
+                        "\"infile1Name\", \"infile2\": \"infile2Name\", \"outfile\": \"outfile\", " +
+                        "\"mean\": \"single\", \"readsCutOff\": \"2\", \"chromosomes\": \"chromosome\"}]}]}";
         ProcessCommands processCommands =
                 gson.fromJson(json, ProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);

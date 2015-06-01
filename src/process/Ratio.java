@@ -55,6 +55,7 @@ public class Ratio extends Executor {
             throw new ValidateException(0, "Infile 2 doesn't exist");
         }
         if (new File(outfileName).exists()) {
+            System.out.println("outfileName = " + outfileName);
             throw new ValidateException(0, "Outfile already exists");
         }
         if (mean == null) {
@@ -97,7 +98,6 @@ public class Ratio extends Executor {
         }
 
         for (File outFile : resultsDir.listFiles()) {
-            System.out.println("outFile = " + outFile.getAbsolutePath());
             if (outFile.getName().contains("smooth")) {
                 File movedFile = new File(outfileName);
                 System.out.println("Moving " + outFile.getAbsolutePath() + " to " + movedFile.getAbsolutePath());

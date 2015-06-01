@@ -123,4 +123,27 @@ public class ProcessPoolIntegrationTest {
 
         commands.doProcesses();
     }
+
+    @Test
+    @Ignore
+    public void shouldRatioOneFile() throws Exception {
+        String json =
+                "{\"expId\":\"processpool_test\"," +
+                "\"processCommands\":[{\"type\":\"ratio\"," +
+                "\"files\":[{\"infile1\":\"stepTestInfile.sgr\",\"infile2" +
+                "\":\"stepTestInfile.sgr\"," +
+                "\"outfile\":\"ratioOutFile.sgr\"," +
+                "\"mean\":\"single\"," +
+                "\"readsCutOff\":5," +
+                "\"chromosomes\":\"0\"" +
+                "}]}]}";
+
+        System.out.println("json = " + json);
+
+        ProcessCommands commands = gson.fromJson(json, ProcessCommands.class);
+
+        commands.setPool(pool);
+
+        commands.doProcesses();
+    }
 }

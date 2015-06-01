@@ -6,11 +6,14 @@ import command.ValidateException;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
 import database.containers.FileTuple;
+import org.apache.commons.io.FileUtils;
 import process.Ratio;
 import response.HttpStatusCode;
 import response.ProcessResponse;
 import response.Response;
+import server.Debug;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -36,11 +39,11 @@ public class RatioProcessCommand extends ProcessCommand {
     public void validate() throws ValidateException {
         for (RatioProcessFile file : files) {
             Command.validateName(
-                    file.getPreChipFile(),
+                    file.getInfile1(),
                     MaxLength.FILE_FILENAME,
                     "PreChipFile");
             Command.validateName(
-                    file.getPostChipFile(),
+                    file.getInfile2(),
                     MaxLength.FILE_FILENAME,
                     "PostChipFile");
             Command.validateName(
@@ -58,7 +61,7 @@ public class RatioProcessCommand extends ProcessCommand {
                         HttpStatusCode.BAD_REQUEST,
                         "Incorrect mean, should be 'single' or 'double'.");
             }
-            if (file.getReadsCutoff() < 0) {
+            if (file.getReadsCutOff() < 0) {
                 throw new ValidateException(
                         HttpStatusCode.BAD_REQUEST,
                         "ReadsCutOff should not be less than 0.");
@@ -72,7 +75,7 @@ public class RatioProcessCommand extends ProcessCommand {
             String profileFilesDir) {
         Collection<Callable<Response>> callables = new ArrayList<>();
         for (RatioProcessFile file : files) {
-            callables.add(file.getCallable(profileFilesDir));
+            callables.add(file.getCallable(expID, profileFilesDir));
         }
         return callables;
     }
@@ -84,10 +87,10 @@ public class RatioProcessCommand extends ProcessCommand {
     public class RatioProcessFile {
 
         @Expose
-        protected String preChipFile;
+        protected String infile1;
 
         @Expose
-        protected String postChipFile;
+        protected String infile2;
 
         @Expose
         protected String outfile;
@@ -96,20 +99,20 @@ public class RatioProcessCommand extends ProcessCommand {
         protected String mean;
 
         @Expose
-        protected int readsCutoff;
+        protected int readsCutOff;
 
         @Expose
         protected String chromosomes;
 
-        public String getPreChipFile() {return preChipFile;}
+        public String getInfile1() {return infile1;}
 
-        public String getPostChipFile() {return postChipFile;}
+        public String getInfile2() {return infile2;}
 
         public String getOutfile() {return outfile;}
 
         public String getMean() {return mean;}
 
-        public int getReadsCutoff() {return readsCutoff;}
+        public int getReadsCutOff() {return readsCutOff;}
 
         public String getChromosomes() {return chromosomes;}
 
@@ -117,56 +120,84 @@ public class RatioProcessCommand extends ProcessCommand {
         @Override
         public String toString() {
             return "RatioProcessFile{" +
-                   "preChipFile='" + preChipFile + '\'' +
-                   ", postChipFile='" + postChipFile + '\'' +
+                   "infile1='" + infile1 + '\'' +
+                   ", infile2='" + infile2 + '\'' +
                    ", outfile='" + outfile + '\'' +
                    ", mean='" + mean + '\'' +
-                   ", readsCutoff=" + readsCutoff + '\'' +
+                   ", readsCutOff=" + readsCutOff + '\'' +
                    ", chromosomes=" + chromosomes +
                    '}';
         }
 
-        public void processFile(final String profileFilesDir)
+        public void processFile(String expId, final String profileFilesDir)
                 throws ValidateException, IOException,
-                InterruptedException, SQLException
-        {
+                       InterruptedException, SQLException {
+
+            File infile1File = new File(profileFilesDir + "/" + infile1);
+            File infile2File = new File(profileFilesDir + "/" + infile2);
+            File outfileFile = new File(profileFilesDir + "/" + outfile);
+
             Ratio.runRatio(
-                    profileFilesDir + "/" + preChipFile,
-                    profileFilesDir + "/" + postChipFile,
-                    outfile,
+                    infile1File.getAbsolutePath(),
+                    infile2File.getAbsolutePath(),
+                    outfileFile.getAbsolutePath(),
                     Ratio.Mean.getMean(mean),
-                    readsCutoff,
+                    readsCutOff,
                     chromosomes);
 
             // Add generated file to the database.
+            FileTuple outTuple = null;
             try (DatabaseAccessor db = initDB()) {
-                db.addNewFile(expID,
-                        /* fileType = */ FileTuple.OTHER,
-                        /* fileName = */ getOutfile(),
-                        /* inputFilename = */ "",
-                        /* metaData = */ "",
+
+                FileTuple infile1Tuple = db.getFileMethods().getFileTuple(
+                        infile1File.getAbsolutePath());
+
+                long fileSize = FileUtils.sizeOf(outfileFile);
+
+                outTuple = db.getFileMethods().addNewFileWithStatus(
+                        /* expId = */ expId,
+                        /* fileType = */ FileTuple.PROFILE,
+                        /* fileName = */ outfile,
+                        /* inputFilename = */ infile1 + "_" + infile2,
+                        /* metaData = */
+                        "mean: " + mean +
+                        ", readsCutOff: " + readsCutOff +
+                        ", chroms: " + chromosomes,
                         /* author = */ "Generated by Genomizer",
                         /* uploader = */ "Generated by Genomizer",
                         /* isPrivate = */ false,
-                        /* genomeVersion =*/ "",
-                        /* md5 = */ "");
+                        /* genomeVersion =*/ infile1Tuple.grVersion,
+                        /* md5 = */ "",
+                        /* status = */ "Done");
+                db.getFileMethods().updateFileSize(outTuple.id, fileSize);
+            } catch (Exception e) {
+                e.printStackTrace();
+                Debug.log("Unable to add " + getOutfile() + " to DB");
+                Debug.log("Removing out file");
+                new File(profileFilesDir + "/" + getOutfile()).delete();
+                if (outTuple != null) {
+                    initDB().deleteFile(outTuple.id);
+                }
+                throw e;
             }
         }
 
-        public Callable<Response> getCallable(final String profileFilesDir) {
+        public Callable<Response> getCallable(
+                final String expId,
+                final String profileFilesDir) {
             return new Callable<Response>() {
                 @Override
                 public Response call() throws Exception {
                     try {
-                        processFile(profileFilesDir);
+                        processFile(expId, profileFilesDir);
 
                         return new ProcessResponse(HttpStatusCode.OK);
-                    } catch (ValidateException | InterruptedException |
-                            IOException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    return new ProcessResponse(HttpStatusCode
-                            .INTERNAL_SERVER_ERROR);
+                    return new ProcessResponse(
+                            HttpStatusCode
+                                    .INTERNAL_SERVER_ERROR);
                 }
             };
         }
