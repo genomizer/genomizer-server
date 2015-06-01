@@ -212,7 +212,7 @@ public class ProcessPool {
                 throw new NullPointerException("Callable must not be null");
             }
             if (process == null) {
-                throw new NullPointerException("Callable must not be null");
+                throw new NullPointerException("Process must not be null");
             }
             this.callable = callable;
             this.process = process;
