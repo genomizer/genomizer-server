@@ -45,7 +45,7 @@ public class RequestHandler implements HttpHandler {
                 new ProcessCommandAdapter());
 		gson = builder.create();
         uploadHandler = new UploadHandler("/upload", ServerSettings.
-                fileLocation, System.getProperty("java.io.tmpdir"));
+                fileLocation, ServerSettings.uploadTempDir);
         downloadHandler = new DownloadHandler("/download", ServerSettings.
                 fileLocation);
 	}
@@ -119,7 +119,8 @@ public class RequestHandler implements HttpHandler {
         } catch (Exception e) {
             Debug.log("Could not parse query");
             respond(new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
-                            "ERROR : Could not parse query"), exchange);
+                            "ERROR : Could not parse query: "
+                                    + e.getMessage() ), exchange);
             return;
         }
 
@@ -159,10 +160,11 @@ public class RequestHandler implements HttpHandler {
                         INTERNAL_SERVER_ERROR, "Could not retrieve the user " +
                         "information.");
                 respond(errorResponse, exchange);
+                return;
             }
         }
 
-        command.setFields(uri, query, Authenticate.getUsernameByID(uuid), userType);
+        command.setFields(uri, query, uuid, userType);
 
 		try {
 			command.validate();
@@ -173,9 +175,8 @@ public class RequestHandler implements HttpHandler {
 			return;
 		}
 
-        if(commandClass.equals(ProcessCommands.class)) {
-            respond(
-                    new ProcessResponse(HttpStatusCode.NOT_IMPLEMENTED),
+        if (commandClass.equals(ProcessCommands.class)) {
+            respond(new ProcessResponse(HttpStatusCode.NOT_IMPLEMENTED),
                     exchange);
 //            respond(new ProcessResponse(HttpStatusCode.OK), exchange);
         } else {

@@ -62,6 +62,7 @@ public class Doorman {
 		server.createContext("/convertfile", requestHandler);
 		server.createContext("/search/", requestHandler);
 		server.createContext("/user", requestHandler);
+		server.createContext("/user/", requestHandler);
 		server.createContext("/admin/user", requestHandler);
 		server.createContext("/admin/user/", requestHandler);
 		server.createContext("/process", requestHandler);

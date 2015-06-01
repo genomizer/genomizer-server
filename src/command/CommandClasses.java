@@ -1,6 +1,7 @@
 package command;
 
 import command.admin.DeleteAdminUserCommand;
+import command.admin.GetAdminUserCommand;
 import command.admin.PostAdminUserCommand;
 import command.admin.PutAdminUserCommand;
 import command.annotation.*;
@@ -20,6 +21,7 @@ import command.genomerelease.GetGenomeReleaseSpeciesCommand;
 import command.genomerelease.PostGenomeReleaseCommand;
 import command.process.*;
 import command.search.SearchCommand;
+import command.user.GetUserCommand;
 import command.user.PutUserCommand;
 
 import java.util.HashMap;
@@ -61,11 +63,13 @@ public class CommandClasses {
         //User commands
         //classes.put("PUT /user", PutUserPasswordCommand.class);
         classes.put("PUT /user", PutUserCommand.class);
+        classes.put("GET /user/", GetUserCommand.class);
 
         //Admin commands
         classes.put("POST /admin/user", PostAdminUserCommand.class);
         classes.put("DELETE /admin/user/", DeleteAdminUserCommand.class);
         classes.put("PUT /admin/user", PutAdminUserCommand.class);
+        classes.put("GET /admin/user", GetAdminUserCommand.class);
 
         //Processing
         classes.put("GET /process", GetProcessStatusCommand.class);

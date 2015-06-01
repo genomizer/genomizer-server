@@ -7,23 +7,17 @@ import database.DatabaseAccessor;
 import database.constants.MaxLength;
 import database.containers.Genome;
 import database.subClasses.UserMethods.UserType;
-import response.ErrorResponse;
-import response.GenomeReleaseListResponse;
-import response.HttpStatusCode;
-import response.Response;
+import response.*;
 import server.Debug;
 
+import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * A command which is used to get all the genome versions
- * for a specific species.
- *
- * @author Business Logic 2015.
- * @version 1.1
+ * Command used to get all of the genome releases for a specific species.
  */
 public class GetGenomeReleaseSpeciesCommand extends Command {
 	private String species;
@@ -33,17 +27,10 @@ public class GetGenomeReleaseSpeciesCommand extends Command {
 		return 2;
 	}
 
-	/**
-	 * Overrides the original command in order to use the uri.
-	 * @param uri Contains the experiment id to fetch.
-	 * @param username the UUID for the user who made the request.
-	 * @param userType the user type for the command caller.
-	 */
 	@Override
 	public void setFields(String uri, HashMap<String, String> query,
-						  String username, UserType userType) {
-
-		super.setFields(uri, query, username, userType);
+						  String uuid, UserType userType) {
+		super.setFields(uri, query, uuid, userType);
 		species = uri.split("/")[2];
 	}
 
@@ -53,36 +40,21 @@ public class GetGenomeReleaseSpeciesCommand extends Command {
 		validateName(species, MaxLength.GENOME_SPECIES, "Genome species");
 	}
 
-	/**
-	 * Connects to the database, retrieves all the genomeReleases for a
-	 * specific species from
-	 * the db and creates a response depending on the return value from the
-	 * database.
-	 */
 	@Override
 	public Response execute() {
-		DatabaseAccessor db = null;
-		try {
-			db = initDB();
-			ArrayList<Genome> genomeReleases =
-					db.getAllGenomeReleasesForSpecies(species);
-			return new GenomeReleaseListResponse(genomeReleases);
+		Response response;
+		try (DatabaseAccessor db = initDB()) {
+			response = new GenomeReleaseListResponse(db.
+					getAllGenomeReleasesForSpecies(species));
 		} catch (SQLException e) {
-			Debug.log("Error when fetching all genome versions for species "+species+". Temporary error with database: "
-					+ e.getMessage());
-			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
-					"Error when fetching all genome versions for species "+species+". Temporary error with database.");
+			response = new DatabaseErrorResponse("Retrieval of genome " +
+					"releases for species '" + species + "'");
 		} catch (IOException e) {
-			Debug.log("Error when fetching all genome versions for species "+species+". The specie has no released " +
-					"genome versions: " + e.getMessage());
-			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, species +
-					" has no genome version released");
-		} finally {
-			if (db != null) {
-				db.close();
-			}
+			response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
+					"Retrieval of genome releases for species '" + species +
+							"' unsuccessful. " + e.getMessage());
 		}
 
+		return response;
 	}
-
 }

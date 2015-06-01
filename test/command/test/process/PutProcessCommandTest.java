@@ -2,11 +2,11 @@ package command.test.process;
 
 import static org.junit.Assert.*;
 
+import authentication.Authenticate;
 import command.process.*;
 import database.constants.MaxLength;
 import database.subClasses.UserMethods.UserType;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -321,29 +321,6 @@ public class PutProcessCommandTest {
 
 	/**
 	 * Test used to check that ValidateException is thrown if
-	 * MetaData is empty string.
-	 *
-	 * TODO: This test is not working currently as metadata can be null.
-	 *
-	 * @throws ValidateException
-	 */
-	@Ignore
-	@Test(expected = ValidateException.class)
-	public void testValidationMetaDataEmptyString() throws ValidateException {
-
-		String[] p = {"a","b","c","d","e","f","g","h"};
-		String json = jsonAndInfoBuilder("experimentID",p,"","gen1", PID);
-		PutProcessCommand c = gson.fromJson(json, PutProcessCommand.class);
-		c.setUsername("hello");
-		c.setProcesstype(PutProcessCommand.CMD_RAW_TO_PROFILE);
-		c.validate();
-
-		fail("Expected ValidateException to be thrown.");
-
-	}
-
-	/**
-	 * Test used to check that ValidateException is thrown if
 	 * MetaData length is to long.
 	 *
 	 * @throws ValidateException
@@ -357,27 +334,6 @@ public class PutProcessCommandTest {
 		}
 		String[] p = {"a","b","c","d","e","f","g","h"};
 		String json = jsonAndInfoBuilder("experimentID",p,big,"gen1", PID);
-		PutProcessCommand c = gson.fromJson(json, PutProcessCommand.class);
-		c.setUsername("hello");
-		c.setProcesstype(PutProcessCommand.CMD_RAW_TO_PROFILE);
-		c.validate();
-
-		fail("Expected ValidateException to be thrown.");
-
-	}
-
-	/**
-	 * Test used to check that ValidateException is thrown if
-	 * MetaData contains invalid characters.
-	 *
-	 * @throws ValidateException
-	 */
-	@Ignore
-	@Test(expected = ValidateException.class)
-	public void testValidateMetaDataInvalidCharacters() throws ValidateException {
-
-		String[] p = {"a","b","c","d","e","f","g","h"};
-		String json = jsonAndInfoBuilder("experimentID",p,"metad/ata","gen1", PID);
 		PutProcessCommand c = gson.fromJson(json, PutProcessCommand.class);
 		c.setUsername("hello");
 		c.setProcesstype(PutProcessCommand.CMD_RAW_TO_PROFILE);
@@ -477,14 +433,15 @@ public class PutProcessCommandTest {
 	 *
 	 * @throws ValidateException
 	 */
-	@Ignore
+
 	@Test
 	public void testValidateProperlyFormatted() throws ValidateException {
 
 		String[] p = {"a","b","c","d","e","f","g","h"};
 		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1", PID);
 		PutProcessCommand c = gson.fromJson(json, PutProcessCommand.class);
-		c.setFields("/hello", null, null, UserType.ADMIN);
+		c.setFields("/hello/uri", null, "uuid", UserType.ADMIN);
+		c.setUsername("username");
 		c.setProcesstype(PutProcessCommand.CMD_RAW_TO_PROFILE);
 		c.validate();
 
@@ -502,7 +459,8 @@ public class PutProcessCommandTest {
 		String[] p = {"a","b","c","d","e","f","g","h"};
 		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1", PID);
 		PutProcessCommand c = gson.fromJson(json, PutProcessCommand.class);
-		c.setFields("/hello/hiho", null, null, UserType.ADMIN);
+		c.setFields("/hello/hiho", null, "uuid", UserType.ADMIN);
+		c.setUsername("username");
 		c.setProcesstype(PutProcessCommand.CMD_RAW_TO_PROFILE);
 		String compare = gson.toJson(c);
 
@@ -512,25 +470,6 @@ public class PutProcessCommandTest {
 
 	//TODO Test for CMD_CANCEL_PROCESS
 
-	/**
-	 * Test used to check that ValidateException is not thrown
-	 * when the user have the required rights.
-	 *
-	 * @throws ValidateException
-	 */
-	@Ignore
-	@Test
-	public void testHavingRights() throws ValidateException {
-
-		String[] p = {"a","b","c","d","e","f","g","h"};
-		String json = jsonAndInfoBuilder("experimentID",p,"metadata","gen1",
-				UUID.randomUUID());
-		PutProcessCommand c = gson.fromJson(json, PutProcessCommand.class);
-		c.setFields("/hello", null, "name", UserType.USER);
-		c.setProcesstype(PutProcessCommand.CMD_RAW_TO_PROFILE);
-
-		c.validate();
-	}
 
 	/**
 	 * Test used to check that ValidateException is thrown
@@ -543,7 +482,8 @@ public class PutProcessCommandTest {
 
 		String json = "{\"name\":\"experimentId\",\"annotations\":[{\"name\":\"pubmedId\",\"value\":\"abc123\"},{\"name\":\"type\",\"value\":\"raw\"}]}";
 		PutProcessCommand c = gson.fromJson(json, PutProcessCommand.class);
-		c.setFields("/hello/hiho", null, null, UserType.GUEST);
+		c.setFields("/hello/hiho", null, "", UserType.GUEST);
+		c.setUsername("username");
 		c.setProcesstype(PutProcessCommand.CMD_RAW_TO_PROFILE);
 
 		c.validate();

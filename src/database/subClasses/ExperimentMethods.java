@@ -11,7 +11,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * Class that contains all the methods for adding,changing, getting and removing
@@ -186,7 +189,10 @@ public class ExperimentMethods {
      *             if the query does not succeed
      * @throws IOException
      *             if the value is invalid for the annotation type.
+     * @deprecated Use updateExperiment(String expID, HashMap<String, String>)
+     *             instead
      */
+    @Deprecated
     public int updateExperiment(String expID, String label,
             String value) throws SQLException, IOException {
 
@@ -207,6 +213,65 @@ public class ExperimentMethods {
 
         int rs = stmt.executeUpdate();
         stmt.close();
+        return rs;
+    }
+
+    /**
+     * Updates values of multiple annotations of a unique experiment.
+     *
+     * @param expID
+     *            the name of the experiment to annotate.
+     * @param annotations
+     *            the list of annotations to set.
+     *            Should consist of objects of type Entry<String1, String2> where
+     *            String1 is the label and key of the entry, and String2 is the
+     *            value to assign to that label as well as the value of the entry.
+     * @return the number of tuples updated in the database.
+     * @throws SQLException
+     *             if the query does not succeed
+     * @throws IOException
+     *             if the value is invalid for the annotation type.
+     */
+    public int updateExperiment(String expID, HashMap<String, String> annotations)
+            throws SQLException, IOException {
+
+        // Validate all annotations
+        for (Entry<String, String> e : annotations.entrySet()) {
+            String key = e.getKey();
+            String value = e.getValue();
+            e.setValue(validateAnnotation(key, value));
+        }
+
+        String query = "UPDATE Annotated_With SET Value = ?"
+                + " WHERE (Label ~~* ?) AND (ExpID ~~* ?)";
+
+        // Run all SQL queries as one transaction
+        int rs = 0;
+        try (PreparedStatement stmt = conn.prepareStatement(query);) {
+            conn.setAutoCommit(false);
+            for (Entry<String, String> e : annotations.entrySet()) {
+                String key = e.getKey();
+                String value = e.getValue();
+                stmt.setString(1, value);
+                stmt.setString(2, key);
+                stmt.setString(3, expID);
+                stmt.addBatch();
+            }
+
+            int arr[] = stmt.executeBatch();
+            for (int i = 0; i < arr.length; i++) {
+                rs += arr[i];
+            }
+
+            conn.commit();
+
+        } catch (SQLException e) {
+            conn.rollback();
+            throw e;
+        } finally {
+            conn.setAutoCommit(true);
+        }
+
         return rs;
     }
 

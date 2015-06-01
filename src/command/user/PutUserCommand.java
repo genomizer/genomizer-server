@@ -9,8 +9,12 @@ import command.UserRights;
 import command.ValidateException;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
-import database.subClasses.UserMethods;
 import response.*;
+import database.subClasses.UserMethods.UserType;
+import response.ErrorResponse;
+import response.HttpStatusCode;
+import response.MinimalResponse;
+import response.Response;
 import server.Debug;
 
 import java.io.IOException;
@@ -40,9 +44,18 @@ public class PutUserCommand extends Command {
 
     @Override
     public void setFields(String uri, HashMap<String, String> query,
-                          String username, UserMethods.UserType userType) {
+                          String uuid, UserType userType) {
+        username = Authenticate.getUsernameByID(uuid);
+        super.setFields(uri, query, uuid, userType);
+    }
+
+    /**
+     * Set the username of the user to edit. Only used during testing
+     *
+     * @param username - the username of the user to edit.
+     */
+    public void setUsername(String username) {
         this.username = username;
-        this.userType = userType;
     }
 
     @Override

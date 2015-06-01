@@ -36,8 +36,8 @@ public class PutExperimentCommand extends Command {
 
 	@Override
 	public void setFields(String uri, HashMap<String, String> query,
-                          String username, UserType userType) {
-		super.setFields(uri, query, username, userType);
+                          String uuid, UserType userType) {
+		super.setFields(uri, query, uuid, userType);
 		expID = uri.split("/")[2];
 	}
 
@@ -70,10 +70,12 @@ public class PutExperimentCommand extends Command {
 		Response response;
 
 		try (DatabaseAccessor db = initDB()) {
+			HashMap<String, String> annotationsMap
+					= new HashMap<>();
 			for (Annotation annotation : annotations) {
-				db.updateExperiment(name, annotation.getName(),
-						annotation.getValue());
+				annotationsMap.put(annotation.getName(), annotation.getValue());
 			}
+			db.updateExperiment(name, annotationsMap);
 
 			response = new SingleExperimentResponse(db.getExperiment(expID));
 		} catch (SQLException e) {
