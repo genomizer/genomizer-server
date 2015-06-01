@@ -21,6 +21,7 @@ public class ServerSettings {
 	public static String bowtie2Location = "resources/bowtie2/bowtie2";
 	public static String picardLocation = "resources/picard-tools/picard.jar";
 	public static int nrOfProcessThreads = 5;
+	public static boolean shouldUseBowtie2 = false;
 
 	private static String downloadURL = "/download?path=";
 	private static String uploadURL = "/upload?path=";
@@ -73,6 +74,7 @@ public class ServerSettings {
 		nullCheck(bowtie2Location, "bowtie2Location");
 		nullCheck(picardLocation, "picardLocation");
 		nullCheck(pyicosLocation, "pyicosLocation");
+		nullCheck(shouldUseBowtie2, "shouldUseBowtie2");
 	}
 
 	private static void nullCheck(int parameter, String name) {
@@ -156,6 +158,9 @@ public class ServerSettings {
 					break;
 				case "pyicoslocation":
 					pyicosLocation = value;
+					break;
+				case "shouldUseBowtie2":
+					shouldUseBowtie2 = Boolean.parseBoolean(value);
 					break;
 				default:
 					String msg = "Unrecognized setting: " + key;
