@@ -132,8 +132,8 @@ public class RawToProfProcessCommand extends ProcessCommand {
                 Genome g = db.getGenomeRelease(getGenomeVersion());
 
                 if (g == null) {
-                    throw new UnsupportedOperationException("Could not find genome version: " +
-                            getGenomeVersion());
+                    throw new UnsupportedOperationException("Error during raw to profile processing on infile: "+infile
+                            +". Could not find genome version: " + getGenomeVersion());
                 }
                 else {
                     //Get the path of the genome.
@@ -142,17 +142,18 @@ public class RawToProfProcessCommand extends ProcessCommand {
                     String genomeFilePrefix = g.getFilePrefix();
 
                     if (genomeFilePrefix == null) {
-                        Debug.log("Error when processing. Could not get genomeFilePrefix: "
-                                + genomeFilePrefix);
-                        throw new UnsupportedOperationException("Error when processing. Could not get genomeFilePrefix: "
+                        Debug.log("Error during raw to profile processing on infile: "+infile+
+                                ". Could not get genomeFilePrefix: "+ genomeFilePrefix);
+                        throw new UnsupportedOperationException("Error during raw to profile processing. " +
+                                "Could not get genomeFilePrefix: "
                                 + genomeFilePrefix);
                     }
 
                     if (genomeFolderPath == null) {
-                        Debug.log("Error when processing. Could not get genomeFolderPath: "
-                                + genomeFolderPath);
-                        throw new UnsupportedOperationException("Error when processing. Could not get genomeFolderPath: "
-                                + genomeFolderPath);
+                        Debug.log("Error during raw to profile processing on infile: "+infile+". " +
+                                "Could not get genomeFolderPath: " + genomeFolderPath);
+                        throw new UnsupportedOperationException("Error during raw to profile processing on infile: "
+                                +infile+". Could not get genomeFolderPath: " + genomeFolderPath);
                     }
 
                     String referenceGenome = genomeFolderPath + genomeFilePrefix;
@@ -162,16 +163,20 @@ public class RawToProfProcessCommand extends ProcessCommand {
                         rawToProfileConverter.procedureRaw(getParams(), getInfile(), getOutfile(),
                                 shouldKeepSam(), getGenomeVersion(), referenceGenome, filePaths);
                     }catch (ProcessException e){
-                        Debug.log("Error when processing. Could not execute raw to profile process. " + e.getMessage());
-                        throw new UnsupportedOperationException("Error when processing. Could not execute " + "raw to profile process");
+                        Debug.log("Error during raw to profile processing on infile: "+infile+". "+e.getMessage());
+                        throw new UnsupportedOperationException("Error during raw to profile processing on infile: "
+                                +infile+". "+e.getMessage());
                     }
                 }
-            } catch (SQLException | IOException e) {
-                Debug.log("Error when processing. Could not execute raw to profile process due to temporary " +
-                        "problems with database "+e.getMessage());
-                throw new UnsupportedOperationException("Error when processing. Could not execute raw to " +
-                        "profile process due to temporary problems with database.");
-            } finally{
+            } catch (SQLException e) {
+                Debug.log("Error during raw to profile processing on infile: "+infile+". "+e.getMessage());
+                throw new UnsupportedOperationException("Error during raw to profile processing on infile: "
+                        +infile+". "+e.getMessage());
+            } catch (IOException e) {
+                Debug.log("Error during raw to profile processing on infile: "+infile+". "+e.getMessage());
+                throw new UnsupportedOperationException("Error during raw to profile processing on infile: "
+                        +infile+". "+e.getMessage());
+            }finally{
                 if (db != null) {
                     db.close();
                 }

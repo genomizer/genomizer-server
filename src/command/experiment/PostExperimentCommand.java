@@ -16,6 +16,7 @@ import server.Debug;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Command used to add an experiment.
@@ -63,23 +64,20 @@ public class PostExperimentCommand extends Command {
 		Response response;
 
 		try (DatabaseAccessor db = initDB()) {
-			for (String ann : db.getAllAnnotationLabels()) {
-				database.containers.Annotation anno =
-						db.getAnnotationObject(ann);
-				if (anno.isRequired && !annotationsContains(anno))
-					return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
-							"Adding experiment '" + name + "' unsuccessful, " +
-									"not all forced values are present. " +
-									"Missing at least '" + anno.label + "'.");
-			}
+			if (!buildAnnotationList().containsAll(db.
+					getAllForcedAnnotationLabels())) {
+				response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
+						"Adding experiment '" + name + "' unsuccessful, not " +
+								"all forced values are present.");
+			} else {
+				db.addExperiment(name);
+				for (Annotation annotation : annotations) {
+					db.annotateExperiment(name, annotation.getName(),
+							annotation.getValue());
+				}
 
-			db.addExperiment(name);
-			for (Annotation annotation : annotations) {
-				db.annotateExperiment(name, annotation.getName(),
-						annotation.getValue());
+				response = new MinimalResponse(HttpStatusCode.OK);
 			}
-
-			response = new MinimalResponse(HttpStatusCode.OK);
 		} catch (SQLException e) {
 			response = new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
 					"Adding experiment '" + name + "' unsuccessful due to " +
@@ -94,13 +92,12 @@ public class PostExperimentCommand extends Command {
 		return response;
 	}
 
-	private boolean annotationsContains(database.containers.Annotation anno) {
-		for(Annotation ann: this.annotations) {
-			if (ann.getName().equals(anno.label)) {
-				return true;
-			}
+	private List<String> buildAnnotationList() {
+		ArrayList<String> nameList = new ArrayList<>();
+		for (Annotation annotation : annotations) {
+			nameList.add(annotation.getName());
 		}
 
-		return false;
+		return nameList;
 	}
 }
