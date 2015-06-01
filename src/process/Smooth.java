@@ -15,7 +15,7 @@ public class Smooth extends Executor {
 
     private final SmoothingParameters parameters;
     private static final String smoothingScriptCmd   = "expect";
-    private static final String smoothingScriptSh    = "resources/smooth_v4.exp";
+    private static final String smoothingScriptExp   = "resources/smooth_v4.exp";
     private static final String smoothingScriptPerl  = "resources/smooth_v4.pl";
 
     public Smooth(String path,
@@ -40,11 +40,11 @@ public class Smooth extends Executor {
         this.parameters.validateParameters();
 
         /* Validate environment */
-        if (!new File(smoothingScriptSh).exists())
-            throw new ValidateException(404, "Shell script " +
-                    smoothingScriptSh + " is missing!");
+        if (!new File(smoothingScriptExp).exists())
+            throw new ValidateException(404, "Expect script " +
+                    smoothingScriptExp + " is missing!");
         if (!new File(smoothingScriptPerl).exists())
-            throw new ValidateException(404, "Shell script " +
+            throw new ValidateException(404, "Perl script " +
                     smoothingScriptPerl + " is missing!");
 
     }
@@ -54,7 +54,7 @@ public class Smooth extends Executor {
 
         /* Time to build our command */
         args.add(smoothingScriptCmd);
-        args.add(smoothingScriptSh);
+        args.add(smoothingScriptExp);
         args.add(parameters.getPath());
         args.add(String.valueOf(parameters.getWindowSize()));
         args.add(String.valueOf(parameters.getMeanType()));
@@ -74,7 +74,8 @@ public class Smooth extends Executor {
             path.substring(0, path.lastIndexOf("/")) + "smoothed/";
         String expectedFileName =
             path.substring(path.lastIndexOf("/")+1, path.length()-4) + "_" +
-            meanType + "_winSiz-" + windowSize + "_minProbe-" + minPos + ".sgr";
+                    (meanType == 1 ?  "_median_smooth" : "_trimmed_mean_smooth")
+                    + "_winSiz-" + windowSize + "_minProbe-" + minPos + ".sgr";
 
         Smooth smooth = new Smooth(path, windowSize, meanType, minPos,
                 calcTotalMean, printPos);
