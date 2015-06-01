@@ -273,7 +273,7 @@ public class ExperimentMethods {
 
             conn.commit();
 
-        } catch (SQLException e) {
+        } catch (SQLException | IOException e) {
             conn.rollback();
             throw e;
         } finally {
