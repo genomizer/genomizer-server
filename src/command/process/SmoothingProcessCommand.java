@@ -182,7 +182,7 @@ public class SmoothingProcessCommand extends ProcessCommand {
             // Add generated file to the database.
             FileTuple outTuple = null;
             try (DatabaseAccessor db = initDB()) {
-                FileMethods fileMethods = initDB().getFileMethods();
+                FileMethods fileMethods = db.getFileMethods();
                 FileTuple inTuple = fileMethods.getFileTuple(infileFile.getAbsolutePath());
 
                 long fileSize = FileUtils.sizeOf(new File(outfileFile.getAbsolutePath()));
