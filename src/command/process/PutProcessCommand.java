@@ -76,8 +76,6 @@ public class PutProcessCommand extends Command {
 	@Override
 	public void validate() throws ValidateException {
 
-		throw new ValidateException(HttpStatusCode.NOT_FOUND, "This command is deprecated. " +
-				"Use: PUT /process/processCommands");
 		/*
 		hasRights(UserRights.getRights(this.getClass()));
 		validateName(username, MaxLength.USERNAME, "Username");
