@@ -74,10 +74,6 @@ public class UploadHandler {
         URI requestURI = exchange.getRequestURI();
         String absUploadPath = extractAbsUploadPath(requestURI);
 
-        // Report success to the client.
-        // This is done before actually committing to avoid error 502.
-        // TODO: maybe fix this by changing Apache settings.
-        sendResponse(exchange, true);
         // Receive FileItems from the client.
         List<FileItem> fileItems = receiveFileItems(exchange, absUploadPath);
 
@@ -138,6 +134,23 @@ public class UploadHandler {
                 }
             };
             fileItems = fileUpload.parseRequest(ctx);
+
+        /* Send response to client */
+            OutputStream out = exchange.getResponseBody();
+            byte[] resp = null;
+            if (fileItems.size() > 0) {
+                // Report success to the client.
+                resp = "OK".getBytes();
+                exchange.sendResponseHeaders(HttpStatusCode.OK, resp.length);
+
+            } else {
+                resp = "ERROR".getBytes();
+                exchange.sendResponseHeaders(HttpStatusCode.BAD_REQUEST, resp.length);
+            }
+
+            out.write(resp);
+            out.close();
+            Debug.log("END OF EXCHANGE\n------------------");
         }
         catch (Exception ex) {
             // Upload was interrupted. We need to remove the stale
@@ -146,24 +159,6 @@ public class UploadHandler {
             throw ex;
         }
         return fileItems;
-    }
-
-    private void sendResponse(HttpExchange exchange, boolean hasSucceeded) throws IOException {
-        OutputStream out = exchange.getResponseBody();
-        byte[] resp = null;
-        if (hasSucceeded) {
-            // Report success to the client.
-            resp = "OK".getBytes();
-            exchange.sendResponseHeaders(HttpStatusCode.OK, resp.length);
-
-        } else {
-            resp = "ERROR".getBytes();
-            exchange.sendResponseHeaders(HttpStatusCode.BAD_REQUEST, resp.length);
-        }
-
-        out.write(resp);
-        out.close();
-        Debug.log("END OF EXCHANGE\n------------------");
     }
 
     private String extractAbsUploadPath(URI requestURI) {
