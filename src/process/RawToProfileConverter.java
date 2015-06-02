@@ -21,7 +21,7 @@ import java.util.*;
  */
 public class RawToProfileConverter extends Executor {
 
-	private static String tempFolder = "resources/";
+	private static String tempFolder = "/tmp/genomizer/resources/";
 	private String remoteExecution;
 	private String dir;
 	private String sortedDirForCommands;
