@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.AbstractMap;
 import java.util.Map;
 
+@SuppressWarnings("deprecation")
 public class RawToProfileTest {
 	RawToProfileConverter rtp = null;
 	String path = "test/male.sam";

@@ -164,6 +164,7 @@ public class ServerSettings {
 					break;
 				case "uploadtempdir":
 					uploadTempDir = value;
+					break;
 				case "shouldUseBowtie2":
 					shouldUseBowtie2 = Boolean.parseBoolean(value);
 					break;
