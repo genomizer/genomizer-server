@@ -67,11 +67,12 @@ public class DatabaseAccessor implements AutoCloseable {
         String url = "jdbc:postgresql://" + host + "/" + database;
 
         Properties props = new Properties();
+//        Debug.log("props = " + props);
         props.setProperty("user", username);
         props.setProperty("password", password);
 
         conn = DriverManager.getConnection(url, props);
-        conn.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+        conn.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
 
         fpg = new FilePathGenerator(DATAFOLDER);
         pm2sql = new PubMedToSQLConverter();
@@ -1509,5 +1510,9 @@ public class DatabaseAccessor implements AutoCloseable {
      */
     public void setChainFileCheckSumMD5 (ChainFile file, String checkSumMD5) throws SQLException {
         genMethods.setChainFileCheckSumMD5(file, checkSumMD5);
+    }
+
+    public FileMethods getFileMethods() {
+        return fileMethods;
     }
 }

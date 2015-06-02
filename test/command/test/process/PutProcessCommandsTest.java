@@ -5,6 +5,7 @@ import command.ValidateException;
 import command.process.*;
 import database.constants.MaxLength;
 import database.subClasses.UserMethods;
+import org.junit.Ignore;
 import org.junit.Test;
 import server.RequestHandler;
 
@@ -143,6 +144,35 @@ public class PutProcessCommandsTest {
                         "\"outfile\":\"awsd\",\"genomeVersion\":\"theGR\"," +
                         "\"params\":\"-a -m 1 --best -p 10 -v 2 -q -S\"," +
                         "\"keepSam\":\"on\"}]}]}";
+        PutProcessCommands processCommands =
+                gson.fromJson(json, PutProcessCommands.class);
+        processCommands.setFields(null, null, null, UserMethods.UserType.USER);
+        processCommands.validate();
+    }
+
+    @Test (expected = ValidateException.class)
+    @Ignore
+    public void shouldThrowValidateExceptionOnIncorrectCommandOrder() throws ValidateException {
+        String json = "{ \"expId\": \"anExpId\",\n" +
+                "  \"processCommands\": [ \n" +
+                "  { \"type\": \"smoothing\",\n" +
+                "    \"files\": [ { \"infile\": \"infileName\",\n" +
+                "                 \"outfile\": \"outfileName\",\n" +
+                "                 \"windowSize\": 10,\n" +
+                "                 \"meanOrMedian\": \"mean\",\n" +
+                "                 \"minSmooth\": 5 }\n" +
+                "             ]\n" +
+                "  },\n" +
+                "  { \"type\": \"rawToProfile\",\n" +
+                "    \"files\": [ { \"infile\": \"in.fastq\",\n" +
+                "                 \"outfile\": \"out.fastq\",\n" +
+                "                 \"params\": \"-a -m 1\",\n" +
+                "                 \"genomeVersion\": \"aGR\",\n" +
+                "                 \"keepSam\": true,\n" +
+                "                 \"sortSamStringency\": \"STRICT\"\n" +
+                "             } ]   \n" +
+                "  }\n" +
+                "] }";
         PutProcessCommands processCommands =
                 gson.fromJson(json, PutProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);

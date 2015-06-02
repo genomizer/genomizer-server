@@ -107,6 +107,7 @@ public class PutProcessCommand extends Command {
 		return addToProcessPool(Doorman.getProcessPool());
 	}
 
+	@SuppressWarnings("deprecation")
 	public Response addToProcessPool(ProcessPool pool) {
 		Process process = new Process(this);
 

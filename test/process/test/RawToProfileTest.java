@@ -8,12 +8,20 @@ import org.junit.*;
 import process.ProcessException;
 import process.RawToProfileConverter;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.AbstractMap;
+import java.util.Map;
+
+@SuppressWarnings("deprecation")
 public class RawToProfileTest {
 	RawToProfileConverter rtp = null;
 	String path = "test/male.sam";
-	String bowTie = "-a -v 2 -S";
+	String bowTie = "-a -S";
 	//"d_melanogaster_fb5_22 -q reads/MOF_male_wt_reads_sample.fastq -S " +path;
-	String[] parameters = new String[]{bowTie, "resources/processTest/genomes/d_melanogaster_fb5_22", "", "","","","",""};
+	String genomeBowtie2 = "resources/bowtie2/example/index/lambda_virus";
+	String genomeBowtie = "resources/processTest/genomes/d_melanogaster_fb5_22";
+	String[] parameters = new String[]{bowTie, genomeBowtie, "", "","","","",""};
 
 	@Before
 	public void setup() {
@@ -22,6 +30,8 @@ public class RawToProfileTest {
 
 	@After
 	public void tearDown() {
+		new File("resources/processTest/results/test_sorted_without_duplicates.sam").delete();
+		new File("resources/processTest/results/test.wig").delete();
 		rtp = null;
 	}
 
@@ -87,10 +97,22 @@ public class RawToProfileTest {
 //	}
 
 	@Test
+	@Ignore
 	public void shouldProduceNewSamFile() throws ProcessException {
 		String inFolder = "resources/processTest/fastq";
 		String outFilePath = "resources/processTest/results";
 
 		rtp.procedure(parameters, inFolder, outFilePath);
 	}
+
+	@Test
+	public void shouldRunStaticCall() throws ProcessException, IOException {
+		String inFile = "test.fastq";
+		String outFile = "test.wig";
+		RawToProfileConverter.procedureRaw(
+				bowTie, inFile, outFile, true,"GENOMEVERSION",genomeBowtie,
+						"resources/processTest/fastq/",
+				"resources/processTest/results/");
+	}
+
 }

@@ -50,7 +50,8 @@ public class PyicosTest {
     @Test
     public void convertShouldSucceed()
             throws ValidateException, InterruptedException, IOException {
-        String res = Pyicos.runConvert(inSamFile.getCanonicalPath());
+        String res = Pyicos.runConvert(inSamFile.getCanonicalPath(),
+                outWigFile.getCanonicalPath());
         assertTrue(outWigFile.exists());
         assertTrue(new File(res).exists());
     }

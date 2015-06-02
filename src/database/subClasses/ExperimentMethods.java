@@ -400,13 +400,13 @@ public class ExperimentMethods {
     }
 
     /**
-     * Checks so that the annotation value is valid.
+     * Checks that the annotation value is valid.
      *
      * @param label
      *            the annotation name.
      * @param value
      *            the value to be evaluated.
-     * @return true if the value is valid, else false.
+     * @return Cleaned-up version of the value.
      * @throws SQLException
      *             if the query does not succeed
      * @throws IOException

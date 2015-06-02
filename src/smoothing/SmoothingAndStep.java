@@ -2,6 +2,7 @@ package smoothing;
 
 
 import process.ProcessException;
+import server.Debug;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -136,7 +137,7 @@ public class SmoothingAndStep {
             throw new ProcessException("IOException when reading/writing in Smoothing: "+ e.getMessage());
         }
         if(params[3] == 1){
-            System.out.println("Total mean for file is: " + (readSumValue/noOfValues));
+            Debug.log("Total mean for file is: " + (readSumValue / noOfValues));
         }
         return readSumValue/noOfValues;
     }
