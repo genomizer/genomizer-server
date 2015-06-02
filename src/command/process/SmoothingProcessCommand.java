@@ -222,11 +222,15 @@ public class SmoothingProcessCommand extends ProcessCommand {
                 public Response call() throws Exception {
                     try {
                         processFile(expId, profileFilesDir);
-                        return new ProcessResponse(HttpStatusCode.OK);
+                        return new ProcessResponse(HttpStatusCode.OK,
+                                "Smoothing process for " + expId +
+                                " completed successfully, outfile: " + outfile);
                     } catch (Exception e) {
                         e.printStackTrace();
                         return new ProcessResponse(HttpStatusCode
-                                .INTERNAL_SERVER_ERROR);
+                                .INTERNAL_SERVER_ERROR,
+                                "Unable to perform stepping for " + expId +
+                                ": " + e.getMessage());
                     }
                 }
             };

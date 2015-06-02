@@ -265,26 +265,13 @@ public class RawToProfProcessCommand extends ProcessCommand {
                         return new ProcessResponse(HttpStatusCode.OK,
                                 "Raw to profile process for " + expId +
                                 " completed successfully, outfile: " + outfile);
-                    } catch (SQLException | IOException e) {
-                        Debug.log(
-                                "Error when processing. Could not execute raw" +
-                                " to profile process due to temporary " +
-                                "problems with database " + e.getMessage());
-                        return new ProcessResponse(
-                                HttpStatusCode
-                                        .INTERNAL_SERVER_ERROR, e.getMessage());
-                    } catch (ProcessException e) {
-                        Debug.log(
-                                "Error when processing. Could not execute raw" +
-                                " to profile process. " +
-                                e.getMessage());
-                        return new ProcessResponse(
-                                HttpStatusCode
-                                        .INTERNAL_SERVER_ERROR, e.getMessage());
                     } catch (Exception e) {
                         e.printStackTrace();
                         return new ProcessResponse(HttpStatusCode
-                                .INTERNAL_SERVER_ERROR, e.getMessage());
+                                .INTERNAL_SERVER_ERROR,
+                                "Error when processing. Could not execute raw" +
+                                " to profile process: " +
+                                e.getMessage());
                     }
                 }
             };

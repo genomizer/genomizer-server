@@ -23,7 +23,7 @@ public class RatioProcessCommandTest {
                 "{\"expId\":\"not_an_expid\"," +
                         "\"processCommands\":[{\"type\":\"ratio\", \"files\":[{\"preChipFile\": " +
                         "\"infile1Name\", \"postChipFile\": \"infile2Name\", \"outfile\": \"outfile\", " +
-                        "\"mean\": \"single\", \"readsCutOff\": \"2\", \"chromosomes\": \"chromosome\"}]}]}";
+                        "\"mean\": \"single\", \"readsCutoff\": \"2\", \"chromosomes\": \"chromosome\"}]}]}";
 
         PutProcessCommands processCommands = gson.fromJson(json, PutProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);

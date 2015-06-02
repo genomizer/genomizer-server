@@ -25,8 +25,6 @@ public class Step extends Executor {
 
     public Step validate() throws ValidateException {
 
-        System.out.println("this = " + this);
-
         if (infile == null) {
             throw new ValidateException(0, "Specify infile.");
         }
