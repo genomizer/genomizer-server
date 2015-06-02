@@ -88,7 +88,7 @@ public class PostAnnotationFieldCommand extends Command {
 		} catch (SQLException e) {
 			response = new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
 					"Adding annotation field " + name + " unsuccessful due " +
-							"to temporary database problems");
+							"to temporary database problems. Error code: "+ e.getErrorCode());
 			Debug.log("Reason :" + e.getMessage());
 		} catch (IOException e) {
 			response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
