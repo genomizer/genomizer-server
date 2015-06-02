@@ -194,16 +194,16 @@ public class RawToProfProcessCommand extends ProcessCommand {
 
             String referenceGenome = genomeFolderPath + genomeFilePrefix;
 
-            System.out.println("\nParameters for raw to profile:");
-            System.out.println("    - params: " + getParams());
-            System.out.println("    - infile: " + getInfile());
-            System.out.println("    - outfile: " + getOutfile());
-            System.out.println("    - should keep .SAM: " + shouldKeepSam());
-            System.out.println("    - Genome version: " + getGenomeVersion());
-            System.out.println("    - Genome version location: " + referenceGenome);
-            System.out.println("    - infile dir: " + rawFilesDir);
-            System.out.println("    - outfile dir: " + profileFilesDir);
-            System.out.println();
+            Debug.log("\nParameters for raw to profile:" +
+                      "    - params: " + getParams() +
+                      "    - infile: " + getInfile() +
+                      "    - outfile: " + getOutfile() +
+                      "    - should keep .SAM: " + shouldKeepSam() +
+                      "    - Genome version: " + getGenomeVersion() +
+                      "    - Genome version location: " + referenceGenome +
+                      "    - infile dir: " + rawFilesDir +
+                      "    - outfile dir: " + profileFilesDir +
+                      "\n" );
 
             File[] outFiles = RawToProfileConverter.procedureRaw(
                     getParams(),

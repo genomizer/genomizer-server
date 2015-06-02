@@ -246,7 +246,7 @@ public class ProcessPool {
                     Debug.log(successMsg);
                     ErrorLogger.log("PROCESS", successMsg);
                 } else {
-                    System.out.println(
+                    Debug.log(
                             "Process status: " + response.getCode());
                     process.status = Process.STATUS_CRASHED;
                     String crashedMsg =

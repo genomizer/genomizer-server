@@ -2,6 +2,7 @@ package process;
 
 import command.ValidateException;
 import org.apache.commons.io.FileUtils;
+import server.Debug;
 
 import java.io.File;
 import java.io.IOException;
@@ -55,7 +56,7 @@ public class Ratio extends Executor {
             throw new ValidateException(0, "Infile 2 doesn't exist");
         }
         if (new File(outfileName).exists()) {
-            System.out.println("outfileName = " + outfileName);
+            Debug.log("outfileName = " + outfileName);
             throw new ValidateException(0, "Outfile already exists");
         }
         if (mean == null) {
@@ -69,9 +70,9 @@ public class Ratio extends Executor {
 
     public String execute() throws IOException, InterruptedException {
 
-        System.out.println("outfileName = " + outfileName);
+        Debug.log("outfileName = " + outfileName);
         File profileFilesDir = new File(infile1).getParentFile();
-        System.out.println("profileFilesDir = " + profileFilesDir.getAbsolutePath());
+        Debug.log("profileFilesDir = " + profileFilesDir.getAbsolutePath());
         File workingDir = new File(
                 "resources/ratioCalcTestData/workingDir-ratio-" +
                 infile1.replaceAll("[_/]", ""));
@@ -100,12 +101,14 @@ public class Ratio extends Executor {
         for (File outFile : resultsDir.listFiles()) {
             if (outFile.getName().contains("smooth")) {
                 File movedFile = new File(outfileName);
-                System.out.println("Moving " + outFile.getAbsolutePath() + " to " + movedFile.getAbsolutePath());
+                Debug.log(
+                        "Moving " + outFile.getAbsolutePath() + " to " +
+                        movedFile.getAbsolutePath());
                 outFile.renameTo(movedFile);
             }
         }
 
-        System.out.println("deleting working dir: " + workingDir.getAbsolutePath());
+        Debug.log("deleting working dir: " + workingDir.getAbsolutePath());
         FileUtils.deleteDirectory(workingDir);
 
         return output;

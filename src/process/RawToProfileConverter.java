@@ -2,6 +2,7 @@ package process;
 
 import command.ValidateException;
 import org.apache.commons.io.FilenameUtils;
+import server.Debug;
 import server.ErrorLogger;
 import server.ServerSettings;
 
@@ -223,7 +224,7 @@ public class RawToProfileConverter extends Executor {
 						  filepathProfile + "]");
 		for (Map.Entry<String,String> filePair: filesToSaveToExperiment) {
 			try {
-				System.out.println("Moving: "+filePair.getKey());
+				Debug.log("Moving: " + filePair.getKey());
 				Files.move(
 						Paths.get(filePair.getKey()),
 						Paths.get(filePair.getValue()));
@@ -239,7 +240,7 @@ public class RawToProfileConverter extends Executor {
 		/* Remove temporary files */
 		for (String fileName: toBeRemoved) {
 			File file = new File(fileName);
-			System.out.println("Removing: "+file.getCanonicalPath());
+			Debug.log("Removing: " + file.getCanonicalPath());
 			file.delete();
 		}
 		return returnFiles.toArray(new File[returnFiles.size()]);
@@ -789,7 +790,7 @@ public class RawToProfileConverter extends Executor {
 
 		try {
 			logString = logString + executeScript(parse(ratioCalc));
-			System.out.println("RATIO LOGSTRING = " + logString);
+			Debug.log("RATIO LOGSTRING = " + logString);
 		} catch (InterruptedException e) {
 			throw new ProcessException(
 					"Process interrupted while running ratio calculation on files in folder "
@@ -954,25 +955,25 @@ public class RawToProfileConverter extends Executor {
 			String outFilePath) {
 		/* TODO Log these errors correctly */
 		if (parameters == null) {
-			System.out.println("Parameters are null");
+			Debug.log("Parameters are null");
 			return false;
 		}
 		if (parameters.length < 0) {
-			System.out.println("param < 0");
+			Debug.log("param < 0");
 			return false;
 
 		} else if (parameters.length > 8) {
-			System.out.println("param > 8");
+			Debug.log("param > 8");
 			return false;
 		}
 
 		if (inFolder == null || outFilePath == null) {
-			System.out.println("inFOlder || outFolder == null");
+			Debug.log("inFOlder || outFolder == null");
 			return false;
 		}
 
 		if (!checkIfFolderExists(inFolder)) {
-			System.out.println("Input folder does not exist");
+			Debug.log("Input folder does not exist");
 			return false;
 		}
 		if(!checkIfFolderExists(outFilePath)) {
