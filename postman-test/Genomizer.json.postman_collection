@@ -4,16 +4,174 @@
 	"description": "Functional tests for the Genomizer server.",
 	"order": [
 		"6f14b4cd-7ba5-ceee-8ca7-d5f949900b39",
-		"98ce38e1-1edc-c538-4ad2-ce8f020b0cc3",
-		"efda988e-72ae-e077-2e10-22a637bedaa7",
-		"f31eaaef-5158-6a01-880f-d43d7c0c8fb9",
-		"d6c7a5c5-ae87-c05f-6da8-5a4b21fe6c6b",
-		"5c84e4d6-28e1-240f-de15-0302efae13c4",
-		"ac0071fd-8bd2-585a-9716-71f8211851df",
-		"5fd59891-20a9-6993-cece-9b7dcf0646a0",
-		"2626075d-9fe0-b5ed-d660-0d19213f1586"
+		"727d1fe0-53cc-5d2f-6f2c-6da7fc461f18"
 	],
-	"folders": [],
+	"folders": [
+		{
+			"id": "64cd3e08-d523-888e-5b3b-146e591e1c10",
+			"name": "01. Logging in",
+			"description": "",
+			"write": true,
+			"order": [
+				"a41babd4-1515-ffde-8afe-639535363f3a",
+				"98ce38e1-1edc-c538-4ad2-ce8f020b0cc3"
+			],
+			"collection_name": "Genomizer",
+			"collection_owner": 0,
+			"collection_id": "28286ab2-d6a4-ede3-53db-c54fc3506853",
+			"collection": "28286ab2-d6a4-ede3-53db-c54fc3506853",
+			"owner": 0,
+			"collectionId": "28286ab2-d6a4-ede3-53db-c54fc3506853"
+		},
+		{
+			"id": "2ae9e91c-2392-3951-389c-c717e07f80a1",
+			"name": "02. Logging out",
+			"description": "",
+			"write": true,
+			"order": [
+				"2626075d-9fe0-b5ed-d660-0d19213f1586",
+				"5fd59891-20a9-6993-cece-9b7dcf0646a0"
+			],
+			"collection_name": "Genomizer",
+			"collection_owner": 0,
+			"collection_id": "28286ab2-d6a4-ede3-53db-c54fc3506853",
+			"collection": "28286ab2-d6a4-ede3-53db-c54fc3506853",
+			"owner": 0,
+			"collectionId": "28286ab2-d6a4-ede3-53db-c54fc3506853"
+		},
+		{
+			"id": "a2992ed6-466c-affb-5ebd-81ae7f58cc80",
+			"name": "03. Upload genome release",
+			"description": "",
+			"write": true,
+			"order": [],
+			"collection_name": "Genomizer",
+			"collection_owner": 0,
+			"collection_id": "28286ab2-d6a4-ede3-53db-c54fc3506853",
+			"collection": "28286ab2-d6a4-ede3-53db-c54fc3506853",
+			"owner": 0,
+			"collectionId": "28286ab2-d6a4-ede3-53db-c54fc3506853"
+		},
+		{
+			"id": "2001a066-1992-5b0b-934c-fd2ed97fe8b6",
+			"name": "04. Delete genome release",
+			"description": "",
+			"write": true,
+			"order": [],
+			"collection_name": "Genomizer",
+			"collection_owner": 0,
+			"collection_id": "28286ab2-d6a4-ede3-53db-c54fc3506853",
+			"collection": "28286ab2-d6a4-ede3-53db-c54fc3506853",
+			"owner": 0,
+			"collectionId": "28286ab2-d6a4-ede3-53db-c54fc3506853"
+		},
+		{
+			"id": "e39a343c-ae32-ed82-3cd3-d32c48a166e2",
+			"name": "05. Add annotation",
+			"description": "",
+			"write": true,
+			"order": [
+				"ac0071fd-8bd2-585a-9716-71f8211851df"
+			],
+			"collection_name": "Genomizer",
+			"collection_owner": 0,
+			"collection_id": "28286ab2-d6a4-ede3-53db-c54fc3506853",
+			"collection": "28286ab2-d6a4-ede3-53db-c54fc3506853",
+			"owner": 0
+		},
+		{
+			"id": "bde2bd51-67a2-672b-2130-fff4b0b42791",
+			"name": "06. Delete annotation",
+			"description": "",
+			"write": true,
+			"order": [],
+			"collection_name": "Genomizer",
+			"collection_owner": 0,
+			"collection_id": "28286ab2-d6a4-ede3-53db-c54fc3506853",
+			"collection": "28286ab2-d6a4-ede3-53db-c54fc3506853",
+			"owner": 0
+		},
+		{
+			"id": "6636bf7e-9d3d-b481-57b8-770c8801f092",
+			"name": "07. Update annotation",
+			"description": "",
+			"write": true,
+			"order": [],
+			"collection_name": "Genomizer",
+			"collection_owner": 0,
+			"collection_id": "28286ab2-d6a4-ede3-53db-c54fc3506853",
+			"collection": "28286ab2-d6a4-ede3-53db-c54fc3506853",
+			"owner": 0
+		},
+		{
+			"id": "cb3d3030-cadb-a76a-0db9-b0c7303a8d44",
+			"name": "08. Create experiment",
+			"description": "",
+			"write": true,
+			"order": [
+				"f31eaaef-5158-6a01-880f-d43d7c0c8fb9",
+				"d6c7a5c5-ae87-c05f-6da8-5a4b21fe6c6b"
+			],
+			"collection_name": "Genomizer",
+			"collection_owner": 0,
+			"collection_id": "28286ab2-d6a4-ede3-53db-c54fc3506853",
+			"collection": "28286ab2-d6a4-ede3-53db-c54fc3506853",
+			"owner": 0
+		},
+		{
+			"id": "7036a5d9-2582-7280-ecf5-dbc10d321b38",
+			"name": "09. Add files to experiment ",
+			"description": "",
+			"write": true,
+			"order": [],
+			"collection_name": "Genomizer",
+			"collection_owner": 0,
+			"collection_id": "28286ab2-d6a4-ede3-53db-c54fc3506853",
+			"collection": "28286ab2-d6a4-ede3-53db-c54fc3506853",
+			"owner": 0
+		},
+		{
+			"id": "dbe623bc-eb8c-1e02-2e6f-696d3a3fa844",
+			"name": "10. Delete experiment",
+			"description": "",
+			"write": true,
+			"order": [],
+			"collection_name": "Genomizer",
+			"collection_owner": 0,
+			"collection_id": "28286ab2-d6a4-ede3-53db-c54fc3506853",
+			"collection": "28286ab2-d6a4-ede3-53db-c54fc3506853",
+			"owner": 0
+		},
+		{
+			"id": "ae01644b-fdef-9c85-7832-949608590227",
+			"name": "11. Searching",
+			"description": "",
+			"write": true,
+			"order": [
+				"efda988e-72ae-e077-2e10-22a637bedaa7"
+			],
+			"collection_name": "Genomizer",
+			"collection_owner": 0,
+			"collection_id": "28286ab2-d6a4-ede3-53db-c54fc3506853",
+			"collection": "28286ab2-d6a4-ede3-53db-c54fc3506853",
+			"owner": 0,
+			"collectionId": "28286ab2-d6a4-ede3-53db-c54fc3506853"
+		},
+		{
+			"id": "f1ba6057-e55d-ce19-466c-dc630a255878",
+			"name": "12. Miscellaneous",
+			"description": "",
+			"write": true,
+			"order": [
+				"5c84e4d6-28e1-240f-de15-0302efae13c4"
+			],
+			"collection_name": "Genomizer",
+			"collection_owner": 0,
+			"collection_id": "28286ab2-d6a4-ede3-53db-c54fc3506853",
+			"collection": "28286ab2-d6a4-ede3-53db-c54fc3506853",
+			"owner": 0
+		}
+	],
 	"timestamp": 1432131009375,
 	"synced": false,
 	"owner": 0,
@@ -42,7 +200,9 @@
 			"collectionId": "28286ab2-d6a4-ede3-53db-c54fc3506853",
 			"responses": [],
 			"synced": false,
-			"owner": 0
+			"owner": 0,
+			"write": true,
+			"folder": "2ae9e91c-2392-3951-389c-c717e07f80a1"
 		},
 		{
 			"id": "5c84e4d6-28e1-240f-de15-0302efae13c4",
@@ -63,7 +223,9 @@
 			"collectionId": "28286ab2-d6a4-ede3-53db-c54fc3506853",
 			"responses": [],
 			"synced": false,
-			"owner": 0
+			"owner": 0,
+			"write": true,
+			"folder": "f1ba6057-e55d-ce19-466c-dc630a255878"
 		},
 		{
 			"id": "5fd59891-20a9-6993-cece-9b7dcf0646a0",
@@ -84,7 +246,9 @@
 			"collectionId": "28286ab2-d6a4-ede3-53db-c54fc3506853",
 			"responses": [],
 			"synced": false,
-			"owner": 0
+			"owner": 0,
+			"write": true,
+			"folder": "2ae9e91c-2392-3951-389c-c717e07f80a1"
 		},
 		{
 			"id": "6f14b4cd-7ba5-ceee-8ca7-d5f949900b39",
@@ -108,6 +272,28 @@
 			"rawModeData": "{ username : {{EnvVarUser}}, password: {{EnvVarPassword}}}"
 		},
 		{
+			"id": "727d1fe0-53cc-5d2f-6f2c-6da7fc461f18",
+			"headers": "",
+			"url": "{{EnvVarServer}}/login",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "DELETE",
+			"collectionId": "28286ab2-d6a4-ede3-53db-c54fc3506853",
+			"data": [],
+			"dataMode": "params",
+			"name": "Log out",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1433235596785,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"collectionOwner": 0,
+			"synced": false
+		},
+		{
 			"id": "98ce38e1-1edc-c538-4ad2-ce8f020b0cc3",
 			"headers": "Authorization: {{EnvVarToken}}\n",
 			"url": "{{EnvVarServer}}/token",
@@ -126,7 +312,33 @@
 			"collectionId": "28286ab2-d6a4-ede3-53db-c54fc3506853",
 			"responses": [],
 			"synced": false,
-			"owner": 0
+			"owner": 0,
+			"write": true,
+			"folder": "64cd3e08-d523-888e-5b3b-146e591e1c10"
+		},
+		{
+			"id": "a41babd4-1515-ffde-8afe-639535363f3a",
+			"headers": "Content-Type: application/json\n",
+			"url": "{{EnvVarServer}}/login",
+			"preRequestScript": "",
+			"pathVariables": {},
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"version": 2,
+			"tests": "data = JSON.parse(responseBody);\ntests[\"Token is present\"] = \"token\" in data;\npostman.setEnvironmentVariable(\"EnvVarToken\", data.token);\ntests[\"Response code\"] = responseCode.code === 200;\ntests[\"Role is present\"] = \"role\" in data;\ntests[\"Correct role is returned\"] = data.role === \"USER\";",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1433168437737,
+			"name": "Login",
+			"description": "Login and set the token environment variable.",
+			"collectionId": "28286ab2-d6a4-ede3-53db-c54fc3506853",
+			"responses": [],
+			"write": true,
+			"collectionOwner": 0,
+			"synced": false,
+			"folder": "64cd3e08-d523-888e-5b3b-146e591e1c10",
+			"rawModeData": "{ username : {{EnvVarUser}}, password: {{EnvVarPassword}}}"
 		},
 		{
 			"id": "ac0071fd-8bd2-585a-9716-71f8211851df",
@@ -149,7 +361,9 @@
 			"helperAttributes": {},
 			"collectionOwner": 0,
 			"synced": false,
-			"owner": 0
+			"owner": 0,
+			"write": true,
+			"folder": "e39a343c-ae32-ed82-3cd3-d32c48a166e2"
 		},
 		{
 			"id": "d6c7a5c5-ae87-c05f-6da8-5a4b21fe6c6b",
@@ -170,7 +384,9 @@
 			"collectionId": "28286ab2-d6a4-ede3-53db-c54fc3506853",
 			"responses": [],
 			"synced": false,
-			"owner": 0
+			"owner": 0,
+			"write": true,
+			"folder": "cb3d3030-cadb-a76a-0db9-b0c7303a8d44"
 		},
 		{
 			"id": "efda988e-72ae-e077-2e10-22a637bedaa7",
@@ -190,6 +406,8 @@
 			"description": "List all experiments.",
 			"collectionId": "28286ab2-d6a4-ede3-53db-c54fc3506853",
 			"responses": [],
+			"write": true,
+			"folder": "ae01644b-fdef-9c85-7832-949608590227",
 			"synced": false
 		},
 		{
@@ -211,7 +429,9 @@
 			"collectionId": "28286ab2-d6a4-ede3-53db-c54fc3506853",
 			"responses": [],
 			"synced": false,
-			"owner": 0
+			"owner": 0,
+			"write": true,
+			"folder": "cb3d3030-cadb-a76a-0db9-b0c7303a8d44"
 		}
 	]
 }
