@@ -72,7 +72,7 @@ public class RawToProfileConverter extends Executor {
 									  String filepathProfile)
 			throws ProcessException, IOException {
 
-		ArrayList<File> returnFilesToAddToDatabase = new ArrayList();
+		ArrayList<File> returnFiles = new ArrayList<>();
 
 		/* Make sure that the output directory exists. */
 		new File(filepathProfile).mkdirs();
@@ -224,9 +224,10 @@ public class RawToProfileConverter extends Executor {
 		for (Map.Entry<String,String> filePair: filesToSaveToExperiment) {
 			try {
 				System.out.println("Moving: "+filePair.getKey());
-				Files.move(Paths.get(filePair.getKey()),
+				Files.move(
+						Paths.get(filePair.getKey()),
 						Paths.get(filePair.getValue()));
-				returnFilesToAddToDatabase.add(new File(filePair.getValue()));
+				returnFiles.add(new File(filePair.getValue()));
 
 			} catch (IOException e) {
 				ErrorLogger.log("SYSTEM", "Error moving file "+ "["+
@@ -241,7 +242,7 @@ public class RawToProfileConverter extends Executor {
 			System.out.println("Removing: "+file.getCanonicalPath());
 			file.delete();
 		}
-		return (File []) returnFilesToAddToDatabase.toArray();
+		return returnFiles.toArray(new File[returnFiles.size()]);
 	}
 
 	private static String fixEndOfPath(String filepathRaw) {

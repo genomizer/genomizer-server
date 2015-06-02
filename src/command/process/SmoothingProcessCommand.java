@@ -230,7 +230,8 @@ public class SmoothingProcessCommand extends ProcessCommand {
                         return new ProcessResponse(HttpStatusCode
                                 .INTERNAL_SERVER_ERROR,
                                 "Unable to perform stepping for " + expId +
-                                ": " + e.getMessage());
+                                ": " +
+                                e.getClass().getName() + ": " + e.getMessage());
                     }
                 }
             };
