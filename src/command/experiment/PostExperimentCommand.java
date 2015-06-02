@@ -71,11 +71,15 @@ public class PostExperimentCommand extends Command {
 								"all forced values are present.");
 			} else {
 				db.addExperiment(name);
-				for (Annotation annotation : annotations) {
-					db.annotateExperiment(name, annotation.getName(),
-							annotation.getValue());
+				try {
+					for (Annotation annotation : annotations) {
+						db.annotateExperiment(name, annotation.getName(),
+								annotation.getValue());
+					}
+				}catch(IOException ie){
+					removeExperiment();
+					throw ie;
 				}
-
 				response = new MinimalResponse(HttpStatusCode.OK);
 			}
 		} catch (SQLException e) {
@@ -84,7 +88,6 @@ public class PostExperimentCommand extends Command {
 							"temporary database problems");
 			Debug.log("Reason: " + e.getMessage());
 		} catch (IOException e) {
-			removeExperiment();
 			response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
 					"Adding experiment '" + name + "' unsuccessful. " +
 							e.getMessage());
