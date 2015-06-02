@@ -3,19 +3,34 @@ package command.process;
 import com.google.gson.annotations.Expose;
 import command.Command;
 import command.ValidateException;
+import database.DatabaseAccessor;
 import database.constants.MaxLength;
-import response.HttpStatusCode;
+import database.containers.FileTuple;
+import database.subClasses.FileMethods;
+import org.apache.commons.io.FileUtils;
 import process.Smooth;
+import response.HttpStatusCode;
+import response.ProcessResponse;
+import response.Response;
 import server.Debug;
 
+import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Map;
+import java.util.Collection;
+import java.util.concurrent.Callable;
+
+import static command.Command.initDB;
 
 /**
- * Class is used to handle smooth processing. The command can include multiple file packages to run one at a time.
+ * Class is used to handle smooth processing. The command can include
+ * multiple file packages to run one at a time.
  */
 public class SmoothingProcessCommand extends ProcessCommand {
+
+    @Expose
+    protected ArrayList<SmoothingFile> files;
 
     /**
      * Validate to make sure all input from clients is in correct format.
@@ -24,52 +39,55 @@ public class SmoothingProcessCommand extends ProcessCommand {
     @Override
     public void validate() throws ValidateException {
         for (SmoothingFile file : files) {
-            Command.validateName(file.getInfile(), MaxLength.FILE_FILENAME, "Infile");
-            Command.validateName(file.getOutfile(), MaxLength.FILE_FILENAME, "Outfile");
-            if(!file.getMeanOrMedian().equals("mean")&&!file.getMeanOrMedian().equals("median")){
-                throw new ValidateException(HttpStatusCode.BAD_REQUEST,
-                        "Incorrect meanOrMedian, should be either 'mean' or 'median'.");
+            Command.validateName(
+                    file.getInfile(),
+                    MaxLength.FILE_FILENAME,
+                    "Infile");
+            Command.validateName(
+                    file.getOutfile(),
+                    MaxLength.FILE_FILENAME,
+                    "Outfile");
+            if (!file.getMeanOrMedian().equals("mean") &&
+                !file.getMeanOrMedian().equals("median")) {
+                throw new ValidateException(
+                        HttpStatusCode.BAD_REQUEST,
+                        "Incorrect meanOrMedian, should be either 'mean' or " +
+                        "'median'.");
             }
-            if(file.getMinSmooth()>=file.getWindowSize()){
-                throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Incorrect input: minSmooth: "+
-                        file.getMinSmooth()+" must be smaller than windowSize: "+file.getWindowSize()+".");
+            if (file.getMinSmooth() >= file.getWindowSize()) {
+                throw new ValidateException(
+                        HttpStatusCode.BAD_REQUEST,
+                        "Incorrect input: minSmooth: " +
+                        file.getMinSmooth() +
+                        " must be smaller than windowSize: " +
+                        file.getWindowSize() + ".");
             }
-            if(file.getWindowSize()<0){
-                throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Incorrect input: windowSize can not be" +
+            if (file.getWindowSize() < 0) {
+                throw new ValidateException(
+                        HttpStatusCode.BAD_REQUEST,
+                        "Incorrect input: windowSize can not be" +
                         "less than 0");
             }
-            if(file.getMinSmooth()<0){
-                throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Incorrect input: minSmooth can not be" +
+            if (file.getMinSmooth() < 0) {
+                throw new ValidateException(
+                        HttpStatusCode.BAD_REQUEST,
+                        "Incorrect input: minSmooth can not be" +
                         "less than 0");
             }
-       }
-    }
-
-    /**
-     * Run through the list of SmoothingFiles and run processing on each with filePath as parameter.
-     *
-     * @param filePath associated with expId
-     */
-    @Override
-    public void doProcess(Map.Entry<String, String> filePath) {
-        for (SmoothingFile file : files) {
-            file.ProcessFile(filePath);
         }
     }
 
-    public ArrayList<SmoothingFile> getFiles() {
-        return files;
-    }
-
     @Override
-    public String toString() {
-        return "SmoothingCommand{" +
-                "files=" + files +
-                '}';
-    }
+    protected Collection<Callable<Response>> getCallables(
+            String rawFilesDir,
+            String profileFilesDir) {
 
-    @Expose
-    private ArrayList<SmoothingFile> files;
+        Collection<Callable<Response>> callables = new ArrayList<>();
+        for (SmoothingFile file : files) {
+            callables.add(file.getCallable(expID, profileFilesDir));
+        }
+        return callables;
+    }
 
     public class SmoothingFile {
 
@@ -78,19 +96,19 @@ public class SmoothingProcessCommand extends ProcessCommand {
          */
 
         @Expose
-        private String infile;
+        protected String infile;
 
         @Expose
-        private String outfile;
+        protected String outfile;
 
         @Expose
-        private Integer windowSize;
+        protected Integer windowSize;
 
         @Expose
-        private String meanOrMedian;
+        protected String meanOrMedian;
 
         @Expose
-        private Integer minSmooth;
+        protected Integer minSmooth;
 
 
         public String getInfile() {
@@ -116,42 +134,118 @@ public class SmoothingProcessCommand extends ProcessCommand {
         @Override
         public String toString() {
             return "SmoothingFile{" +
-                    "infile='" + infile + '\'' +
-                    ", outfile='" + outfile + '\'' +
-                    ", windowSize='" + windowSize + '\'' +
-                    ", meanOrMedian='" + meanOrMedian + '\'' +
-                    ", minSmooth=" + minSmooth +
-                    '}';
+                   "infile='" + infile + '\'' +
+                   ", outfile='" + outfile + '\'' +
+                   ", windowSize='" + windowSize + '\'' +
+                   ", meanOrMedian='" + meanOrMedian + '\'' +
+                   ", minSmooth=" + minSmooth +
+                   '}';
         }
 
         /**
          * Call upon a single smooth processing with correct parameters.
          *
-         * @param filePaths
+         * @param profileFilesDir The path to the profile files of the
+         *                        experiment.
          */
-        public void ProcessFile(Map.Entry<String, String> filePaths) {
+        public void processFile(String expId, String profileFilesDir)
+                throws ValidateException, InterruptedException, IOException, SQLException {
 
-            String infileWithPath = filePaths.getValue() + infile;
-            String outfileWithPath = filePaths.getValue() + outfile;
-            Integer meanOrMedian = null;
+            File infileFile = new File(profileFilesDir + "/" + infile);
+            File outfileFile = new File(profileFilesDir + "/" + outfile);
+            Integer meanOrMedian;
 
-            if(getMeanOrMedian().equals("mean")){
-                meanOrMedian = 0;
-            }else if(getMeanOrMedian().equals("median")){
-                meanOrMedian = 1;
-            }else{
-                throw new UnsupportedOperationException("Error during smoothing processing on infile: "+infile+
-                        ". Incorrect mean/median. Should be either 'mean' or 'median'.");
+            switch (getMeanOrMedian()) {
+                case "mean":
+                    meanOrMedian = 0;
+                    break;
+                case "median":
+                    meanOrMedian = 1;
+                    break;
+                default:
+                    throw new ValidateException(
+                            0,
+                            "Error during smoothing processing. Incorrect " +
+                            "mean/median. " +
+                            "Should be either 'mean' or 'median'.");
             }
 
-            try {
-                Smooth.runSmoothing(infileWithPath, getWindowSize(), meanOrMedian,  getMinSmooth(), 0 ,0, outfileWithPath);
+            Smooth.runSmoothing(
+                    infileFile.getAbsolutePath(),
+                    getWindowSize(),
+                    meanOrMedian,
+                    getMinSmooth(),
+                    0,
+                    0,
+                    outfileFile.getAbsolutePath());
 
-            } catch (ValidateException | IOException | InterruptedException e) {
-                Debug.log("Error during smoothing processing on infile: "+infile+ ". "+e.getMessage());
-                throw new UnsupportedOperationException("Error during smoothing processing on infile: "+infile+
-                        ". "+e.getMessage());
+            // Add generated file to the database.
+            FileTuple outTuple = null;
+            try (DatabaseAccessor db = initDB()) {
+                FileMethods fileMethods = db.getFileMethods();
+                FileTuple inTuple = fileMethods.getFileTuple(infileFile.getAbsolutePath());
+
+                long fileSize = FileUtils.sizeOf(new File(outfileFile.getAbsolutePath()));
+
+                outTuple = fileMethods.addNewFileWithStatus(
+                        /* expId = */ expId,
+                        /* fileType = */ FileTuple.PROFILE,
+                        /* fileName = */ outfile,
+                        /* inputFilename = */ infile,
+                        /* metaData = */
+                        "window size: " + getWindowSize() +
+                        ", meanOrMedian: " + getMeanOrMedian() +
+                        ", minSmooth: " + getMinSmooth(),
+                        /* author = */ "Generated by Genomizer",
+                        /* uploader = */ "Generated by Genomizer",
+                        /* isPrivate = */ false,
+                        /* genomeVersion =*/ inTuple.grVersion,
+                        /* md5 = */ "",
+                        /* status */ "Done");
+                Debug.log("Adding to DB: " + outTuple);
+                fileMethods.updateFileSize(outTuple.id, fileSize);
+            } catch (Exception e) {
+                e.printStackTrace();
+                Debug.log("Unable to add " + getOutfile() + " to DB");
+                Debug.log("Removing out file");
+                new File(profileFilesDir + "/" + getOutfile()).delete();
+                if (outTuple != null) {
+                    initDB().deleteFile(outTuple.id);
+                }
+                throw e;
             }
         }
+
+        public Callable<Response> getCallable(final String expId, final String profileFilesDir) {
+            return new Callable<Response>() {
+                @Override
+                public Response call() throws Exception {
+                    try {
+                        processFile(expId, profileFilesDir);
+                        return new ProcessResponse(HttpStatusCode.OK,
+                                "Smoothing process for " + expId +
+                                " completed successfully, outfile: " + outfile);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return new ProcessResponse(HttpStatusCode
+                                .INTERNAL_SERVER_ERROR,
+                                "Unable to perform stepping for " + expId +
+                                ": " +
+                                e.getClass().getName() + ": " + e.getMessage());
+                    }
+                }
+            };
+        }
+    }
+
+    public ArrayList<SmoothingFile> getFiles() {
+        return files;
+    }
+
+    @Override
+    public String toString() {
+        return "SmoothingCommand{" +
+               "files=" + files +
+               '}';
     }
 }

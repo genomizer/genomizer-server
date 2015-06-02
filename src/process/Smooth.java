@@ -2,7 +2,7 @@ package process;
 
 import command.ValidateException;
 import server.Debug;
-import server.ServerSettings;
+import util.PathUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,10 +13,11 @@ import java.util.ArrayList;
  * Class which is responsible for running smoothing.
  */
 public class Smooth extends Executor {
-    private SmoothingParameters parameters;
-    private static String smoothingScriptCmd   = "expect smooth_v4.sh";
-    private static String smoothingScriptSh    = "smooth_v4.sh";
-    private static String smoothingScriptPerl  = "smooth_v4.pl";
+
+    private final SmoothingParameters parameters;
+    private static final String smoothingScriptCmd   = "expect";
+    private static final String smoothingScriptExp   = "resources/smooth_v4.exp";
+    private static final String smoothingScriptPerl  = "resources/smooth_v4.pl";
 
     public Smooth(String path,
                   int    windowSize,
@@ -40,27 +41,29 @@ public class Smooth extends Executor {
         this.parameters.validateParameters();
 
         /* Validate environment */
-        if (!new File(smoothingScriptSh).exists())
-            throw new ValidateException(404, "Shell script " +
-                    smoothingScriptSh + " is missing!");
+        if (!new File(smoothingScriptExp).exists())
+            throw new ValidateException(404, "Expect script " +
+                    smoothingScriptExp + " is missing!");
         if (!new File(smoothingScriptPerl).exists())
-            throw new ValidateException(404, "Shell script " +
+            throw new ValidateException(404, "Perl script " +
                     smoothingScriptPerl + " is missing!");
 
     }
 
     public String execute() throws IOException, InterruptedException {
-        ArrayList<String> args = new ArrayList<String>();
+        ArrayList<String> args = new ArrayList<>();
 
         /* Time to build our command */
         args.add(smoothingScriptCmd);
+        args.add(smoothingScriptExp);
+        args.add(parameters.getPath());
         args.add(String.valueOf(parameters.getWindowSize()));
         args.add(String.valueOf(parameters.getMeanType()));
         args.add(String.valueOf(parameters.getMinPos()));
         args.add(String.valueOf(parameters.getCalcTotalMean()));
         args.add(String.valueOf(parameters.getPrintPos()));
 
-        return executeCommand(args.toArray(new String []{}));
+        return executeCommand(args.toArray(new String[args.size()]));
     }
 
     public static void runSmoothing(String path, int windowSize, int meanType,
@@ -68,11 +71,14 @@ public class Smooth extends Executor {
                                     String outputPath)
             throws ValidateException, IOException, InterruptedException {
         /* We calculate some expected values */
-        String expectedPath =
-            path.substring(0, path.lastIndexOf("/")) + "smoothed/";
-        String expectedFileName =
-            path.substring(path.lastIndexOf("/")+1, path.length()-4) + "_" +
-            meanType + "_winSiz-" + windowSize + "_minProbe-" + minPos + ".sgr";
+        String inDir      = new File(path).getParent();
+        String inFileName = new File(path).getName();
+        String outDir     = PathUtils.join(inDir, "smoothed");
+
+        String expectedOutDir = outDir;
+        String expectedOutName = inFileName.replace(".sgr",
+                    (meanType == 1 ?  "_median_smooth" : "_trimmed_mean_smooth")
+                    + "_winSiz-" + windowSize + "_minProbe-" + minPos + ".sgr");
 
         Smooth smooth = new Smooth(path, windowSize, meanType, minPos,
                 calcTotalMean, printPos);
@@ -81,24 +87,19 @@ public class Smooth extends Executor {
         smooth.validate();
         Debug.log("Validated smoothing on " + path);
 
-        /* Ensure the smoothing directory is created. */
-        if (!new File(expectedPath).exists())
-            new File(expectedPath).mkdir();
-
         smooth.execute();
         Debug.log("Executed smoothing on " + path);
 
         /* Time for cleanup and moving files */
         /* Move files to their appropriate place */
-        Debug.log("Expected path is " + expectedPath);
-        Debug.log("Expected filename is " + expectedFileName);
+        Debug.log("Expected output dir is " + expectedOutDir);
+        Debug.log("Expected output filename is " + expectedOutName);
         Debug.log("Output filename is " + outputPath);
-        Path source         = Paths.get(expectedPath + expectedFileName);
+        String fullOutputPath = PathUtils.join(expectedOutDir,expectedOutName);
+        assert (new File(fullOutputPath).exists());
+        Path source         = Paths.get(fullOutputPath);
         Path destination    = Paths.get(outputPath);
         Files.move(source, destination, StandardCopyOption.REPLACE_EXISTING);
-        /* This should no longer be needed. */
-        Files.delete(source);
-
     }
 
     /**

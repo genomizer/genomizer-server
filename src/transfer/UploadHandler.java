@@ -109,7 +109,7 @@ public class UploadHandler {
             fileUpload.setFileItemFactory(fileItemFactory);
             final Headers headers = exchange.getRequestHeaders();
             for (String header : headers.keySet()) {
-                System.out.println(header + ": " + headers.getFirst(header));
+                Debug.log(header + ": " + headers.getFirst(header));
             }
             @SuppressWarnings("deprecation")
             RequestContext ctx = new RequestContext() {

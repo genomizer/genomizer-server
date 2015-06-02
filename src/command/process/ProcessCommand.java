@@ -1,8 +1,17 @@
 package command.process;
 
+import command.Process;
 import command.ValidateException;
+import response.HttpStatusCode;
+import response.Response;
+import server.ProcessPool;
 
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.UUID;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 /**
  * File:        ProcessCommand.java
@@ -13,8 +22,34 @@ import java.util.Map;
 
 public abstract class ProcessCommand {
 
-    public abstract void doProcess(Map.Entry<String,String> filePath);
+    protected String expID;
+
+    public void doProcess(ProcessPool pool, String rawFilesDir, String profileFilesDir)
+            throws ExecutionException, InterruptedException {
+
+        Collection<Future<Response>> futures = new ArrayList<>();
+        for (Callable<Response> callable : getCallables(
+                rawFilesDir,
+                profileFilesDir)) {
+            UUID uuid = pool.addProcess(
+                    new Process(expID, "UNKNOWN_AUTHOR"),
+                    callable);
+            futures.add(pool.getFuture(uuid));
+        }
+        for (Future<Response> future : futures) {
+            if (future.get().getCode() != HttpStatusCode.OK) {
+                throw new InterruptedException(future.get().getMessage());
+            }
+        }
+    }
+
+    public void setExpID(String expID) {
+        this.expID = expID;
+    }
+
+    protected abstract Collection<Callable<Response>> getCallables(
+            String rawFilesDir,
+            String profileFilesDir);
 
     public abstract void validate() throws ValidateException;
-
 }
