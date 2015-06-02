@@ -1,12 +1,12 @@
 package database.containers;
 
+import database.DatabaseAccessor;
+import database.constants.ServerDependentValues;
+
 import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
-
-import database.DatabaseAccessor;
-import database.constants.ServerDependentValues;
 
 /**
  * Container class for holding data on a file in the database. Public variables
@@ -33,7 +33,7 @@ public class FileTuple implements HasCheckSumMD5 {
     public final String grVersion;
     public final String status;
     public final String checkSumMD5;
-    public final String fileSize;
+    public final Long fileSize;
 
     /**
      * Constructs a FileTuple object. Parameter: ResultSet
@@ -57,7 +57,7 @@ public class FileTuple implements HasCheckSumMD5 {
         grVersion = resSet.getString("GRVersion");
         status = resSet.getString("Status");
         checkSumMD5 = resSet.getString("MD5");
-        fileSize = resSet.getString("FileSize");
+        fileSize = resSet.getLong("FileSize");
     }
 
     /**
@@ -124,7 +124,7 @@ public class FileTuple implements HasCheckSumMD5 {
      *
      * @return
      */
-    public String getFileSize() {
+    public long getFileSize() {
         return fileSize;
     }
 

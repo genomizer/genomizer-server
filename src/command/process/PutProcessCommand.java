@@ -4,37 +4,32 @@ package command.process;
  * @author Robin Ödling - c11rog
  */
 
+import authentication.Authenticate;
+import com.google.gson.annotations.Expose;
+import command.*;
+import command.Process;
+import database.DatabaseAccessor;
+import database.constants.MaxLength;
+import database.containers.Genome;
+import database.subClasses.UserMethods.UserType;
+import process.ProcessException;
+import process.RawToProfileConverter;
+import response.*;
+import server.Debug;
+import server.Doorman;
+import server.ErrorLogger;
+import server.ProcessPool;
+
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.concurrent.Callable;
 
-import com.google.gson.annotations.Expose;
-import database.DatabaseAccessor;
-import database.constants.MaxLength;
-import database.containers.Genome;
-import command.Command;
-import command.UserRights;
-import command.ValidateException;
-import database.subClasses.UserMethods.UserType;
-import process.ProcessException;
-import process.ProcessHandler;
-import response.ErrorResponse;
-import response.HttpStatusCode;
-import response.ProcessResponse;
-import response.Response;
-import response.MinimalResponse;
-import server.Debug;
-import server.ErrorLogger;
-
-
-import java.util.UUID;
-
+@Deprecated
 public class PutProcessCommand extends Command {
 
 	public static final String CMD_RAW_TO_PROFILE = "rawtoprofile";
-	public static final String CMD_PROFILE_TO_REGION = "profiletoregion";
-	public static final String CMD_CANCEL_PROCESS = "cancelprocess";
 
 	private String username;
 
@@ -46,19 +41,16 @@ public class PutProcessCommand extends Command {
 
 	//Following fields corresponds to the JSON body of a process command.
 	@Expose
-	private String expid;
+	String expid;
 
 	@Expose
-	private String[] parameters;
+	String[] parameters;
 
 	@Expose
-	private String metadata;
+	String metadata;
 
 	@Expose
-	private String genomeVersion;
-
-	@Expose
-	private UUID PID;
+	String genomeVersion;
 
 	@Override
 	public int getExpectedNumberOfURIFields() {
@@ -67,12 +59,12 @@ public class PutProcessCommand extends Command {
 
 	@Override
 	public void setFields(String uri, HashMap<String, String> query,
-						  String username, UserType userType) {
+						  String uuid, UserType userType) {
 
-		super.setFields(uri, query, username, userType);
+		super.setFields(uri, query, uuid, userType);
 		setTimestamp(System.currentTimeMillis());
 		processtype = uri.split("/")[2];
-		this.username = username;
+		username = Authenticate.getUsernameByID(uuid);
 	}
 
 	/**
@@ -89,7 +81,7 @@ public class PutProcessCommand extends Command {
 		validateName(expid, MaxLength.EXPID, "Experiment name");
 		validateExists(metadata, MaxLength.FILE_METADATA, "Metadata");
 		validateName(genomeVersion, MaxLength.GENOME_VERSION, "Genome version");
-		validateExists(processtype, Integer.MAX_VALUE, "Processtype");
+		validateExists(processtype, Integer.MAX_VALUE, "Process type");
 
 		if(parameters == null || parameters.length < 1) {
 			throw new ValidateException(HttpStatusCode.BAD_REQUEST,
@@ -104,12 +96,6 @@ public class PutProcessCommand extends Command {
 				}
 				validateExists(parameters[0], Integer.MAX_VALUE, "First parameter");
 				break;
-			case CMD_PROFILE_TO_REGION:
-				//TODO Implement parameter size
-				break;
-			case CMD_CANCEL_PROCESS:
-				//TODO validate PID
-				break;
 			default:
 				throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Invalid " +
 						"process type");
@@ -118,119 +104,113 @@ public class PutProcessCommand extends Command {
 
 	@Override
 	public Response execute() {
+		return new ErrorResponse(HttpStatusCode.NOT_FOUND,"Command deprecated, use PUT /process/processCommands/");
+		//return addToProcessPool(Doorman.getProcessPool());
+	}
 
-		DatabaseAccessor db = null;
-		ProcessHandler processHandler;
+	@SuppressWarnings("deprecation")
+	public Response addToProcessPool(ProcessPool pool) {
+		Process process = new Process(this);
 
+		// Attempt to setup file paths
 		try {
+			setFilePaths();
+		} catch (SQLException | IOException e) {
+			Debug.log(e.getMessage());
+			ErrorLogger.log(process.author,
+					"Could not run process command: " + e.getMessage());
+			process.status = Process.STATUS_CRASHED;
+			return new ProcessResponse(HttpStatusCode.INTERNAL_SERVER_ERROR);
+		}
+		process.outputFiles = getFilePaths();
 
-			db = initDB();
-			processHandler = new ProcessHandler();
+		pool.addProcess(process, new ProcessingJob());
 
-			switch(processtype){
-				case PutProcessCommand.CMD_RAW_TO_PROFILE:
-					//Get the genome information from the database.
-					Genome g = db.getGenomeRelease(genomeVersion);
+		return new ProcessResponse(HttpStatusCode.OK);
+	}
 
-					if(g == null){
-						return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
-								"Could not find genome version: " +
-										genomeVersion);
-					} else {
-						//Get the path of the genome.
-						String genomeFolderPath = g.folderPath;
-						//Get the prefix of the genome files.
-						String genomeFilePrefix = g.getFilePrefix();
+	private class ProcessingJob implements Callable<Response> {
 
-						if(genomeFilePrefix == null){
-							return processError(db,
-									"genomeFilePrefix: " + genomeFilePrefix,
-									"Could not get genome file prefix when " +
-											"processing");
+		public Response call() {
+			try (DatabaseAccessor db = initDB()) {
+
+				switch(processtype){
+					case PutProcessCommand.CMD_RAW_TO_PROFILE:
+						//Get the genome information from the database.
+						Genome g = db.getGenomeRelease(genomeVersion);
+
+						if(g == null){
+							return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
+									"Could not find genome version: " +
+											genomeVersion);
+						} else {
+							//Get the path of the genome.
+							String genomeFolderPath = g.folderPath;
+							//Get the prefix of the genome files.
+							String genomeFilePrefix = g.getFilePrefix();
+
+							if(genomeFilePrefix == null){
+								return processError("genomeFilePrefix: " + genomeFilePrefix,
+										"Could not get genome file prefix when " +
+												"processing");
+							}
+
+							if(genomeFolderPath == null){
+								return processError("genomeFolderPath: " +
+										genomeFolderPath, "Could not get genome " +
+										"folder path when processing");
+							}
+
+							//Set parameter on index 1 to the path to the
+							// genome folder + the name of the genome files.
+							parameters[1] = genomeFolderPath + genomeFilePrefix;
+
 						}
 
-						if(genomeFolderPath == null){
-							return processError(db, "genomeFolderPath: " +
-									genomeFolderPath, "Could not get genome " +
-									"folder path when processing");
+						try {
+							RawToProfileConverter rawToProfileConverter =
+									new RawToProfileConverter();
+							String logString = rawToProfileConverter.procedure(parameters,
+									filepaths.getKey(), filepaths.getValue());
+
+							ErrorLogger.log("SYSTEM", "Process: " + logString);
 						}
+						catch (ProcessException e) {
+							return processError(e.getMessage(), "Process " +
+									"exception when processing");
+						}
+						break;
 
-						//Set parameter on index 1 to the path to the
-						// genome folder + the name of the genome files.
-						parameters[1] = genomeFolderPath + genomeFilePrefix;
+					default:
+						return processError("", "ERROR: Unknown process " +
+								"type when processing");
+				}
 
-					}
-
-					try {
-						processHandler.executeProcess(
-								PutProcessCommand.CMD_RAW_TO_PROFILE,
-								parameters, filepaths.getKey(),
-								filepaths.getValue());
-
-					} catch (ProcessException e) {
-						return processError(db, e.getMessage(), "Process " +
-								"exception when processing");
-					}
-					break;
-
-				//TODO check everything
-				case PutProcessCommand.CMD_CANCEL_PROCESS:
-					try {
-						//Parameter = PID
-						processHandler.executeProcess(CMD_CANCEL_PROCESS, parameters, null, null);
-						return new MinimalResponse(HttpStatusCode.OK);
-					} catch (ProcessException e) {
-						return processError(db, e.getMessage(), "Process " + "exception when processing");
-					}
-
-				default:
-					return processError(db, "", "ERROR: Unknown process " +
-							"type when processing");
-			}
-		} catch (SQLException e) {
-			return processError(db, e.getMessage(), "SQL Exception  " +
-					"when processing");
-		} catch (IOException e1) {
-			return processError(db, e1.getMessage(), "IO Exception  " +
-					"when processing");
-		}
-
-		//The execute executed correctly
-		try {
-			if(!db.isConnected()){
-				db = initDB();
+				db.addGeneratedProfiles(expid, filepaths.getValue(),
+						filepaths.getKey(), metadata, genomeVersion, username,
+						false);
+			} catch (SQLException e) {
+				return processError(e.getMessage(), "SQL Exception  " +
+						"when processing");
+			} catch (IOException e1) {
+				return processError(e1.getMessage(), "IO Exception  " +
+						"when processing");
 			}
 
-			db.addGeneratedProfiles(expid, filepaths.getValue(),
-					filepaths.getKey(), metadata, genomeVersion, username,
-					false);
-
-		} catch (SQLException e) {
-			return processError(db, e.getMessage(), "SQL Exception after " +
-					"finished processing");
-		} catch (IOException e) {
-			return processError(db, e.getMessage(), "IO Exception after" +
-					"finished processing");
+			Debug.log(username + "Raw to profile processing completed " +
+					"running " + processtype + " on experiment" + expid + "\n" +
+					"metadata: " + metadata + "\n" +
+					"parameters: "
+					+ arrayToString(parameters, parameters.length) + "\n" +
+					"genomeVersion: " + genomeVersion + "\n");
+			return new ProcessResponse(HttpStatusCode.OK, "Raw to profile " +
+					"processing completed running " + processtype +
+					" on experiment" + expid + "\n"+
+					"metadata: " + metadata + "\n"+
+					"parameters: "
+					+ arrayToString(parameters, parameters.length) + "\n" +
+					"genomeVersion: " + genomeVersion + "\n");
 		}
-		
-		db.close();
-		Debug.log(username + "Raw to profile processing completed " +
-				"running " + processtype + " on experiment" + expid + "\n" +
-				"metadata: " + metadata + "\n" +
-				"parameters: "
-					+ arrayToString(parameters, parameters.length) + "\n" +
-				"genomeVersion: " + genomeVersion + "\n" +
-		        "PID: " + PID + "\n");
-		return new ProcessResponse(HttpStatusCode.OK, "Raw to profile " +
-				"processing completed running " + processtype +
-				" on experiment" + expid + "\n"+
-				"metadata: " + metadata + "\n"+
-				"parameters: "
-					+ arrayToString(parameters, parameters.length) + "\n" +
-				"genomeVersion: " + genomeVersion + "\n" +
-		        "PID: " + PID + "\n");
-
-
 	}
 
 
@@ -246,14 +226,13 @@ public class PutProcessCommand extends Command {
 	}
 
 	/**
-	 * Logs an error, closes the DB reference and returns a processresponse with
-	 * the errormessage.
+	 * Logs an error and returns a ProcessResponse with
+	 * the error message.
 	 *
-	 * @param db - the database reference.
 	 * @param error - the actual error
 	 * @param headerError - the string which starts the error message
 	 */
-	private Response processError(DatabaseAccessor db, String error, String headerError){
+	private Response processError(String error, String headerError){
 		ErrorLogger.log(username, headerError +
 				" " + processtype +
 				" on experiment" + expid + "\n" +
@@ -261,9 +240,7 @@ public class PutProcessCommand extends Command {
 				"parameters: "
 					+ arrayToString(parameters, parameters.length) + "\n" +
 				"genomeVersion: " + genomeVersion + "\n" +
-				"PID: " + PID + "\n" +
 				error + "\n");
-		db.close();
 		return new ProcessResponse(HttpStatusCode.
 				INTERNAL_SERVER_ERROR, headerError +
 				" when processing " + processtype +
@@ -272,7 +249,6 @@ public class PutProcessCommand extends Command {
 				"parameters: "
 					+ arrayToString(parameters, parameters.length) + "\n" +
 				"genomeVersion: " + genomeVersion + "\n" +
-				"PID: " + PID + "\n" +
 				error + "\n");
 	}
 
@@ -296,8 +272,7 @@ public class PutProcessCommand extends Command {
 				"metadata:" + metadata + "\n" +
 				"username: " + username + "\n" +
 				"expId: " + expid + "\n" +
-				"genomeRelease: " + genomeVersion + "\n" +
-				"PID: " + PID + "\n";
+				"genomeRelease: " + genomeVersion + "\n";
 	}
 
 	public void setTimestamp(long currentTimeMillis) {
@@ -316,25 +291,10 @@ public class PutProcessCommand extends Command {
 		return expid;
 	}
 
-	public UUID getPID() {
-		return PID;
-	}
-
-	public void setPID(UUID PID) {
-		this.PID = PID;
-	}
-
 	public void setFilePaths() throws SQLException, IOException {
-		DatabaseAccessor db;
-
-		db = initDB();
-		filepaths = db.processRawToProfile(expid);
-
-		if(db.isConnected()){
-			db.close();
-
+		try (DatabaseAccessor db = initDB()) {
+			filepaths = db.processRawToProfile(expid);
 		}
-
 	}
 
 	public String[] getFilePaths() {

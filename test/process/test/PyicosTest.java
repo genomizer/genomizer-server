@@ -8,7 +8,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import process.Pyicos;
 import server.ServerSettings;
-import transfer.Util;
+import util.Util;
 
 import java.io.File;
 import java.io.IOException;
@@ -50,7 +50,8 @@ public class PyicosTest {
     @Test
     public void convertShouldSucceed()
             throws ValidateException, InterruptedException, IOException {
-        String res = Pyicos.runConvert(inSamFile.getCanonicalPath());
+        String res = Pyicos.runConvert(inSamFile.getCanonicalPath(),
+                outWigFile.getCanonicalPath());
         assertTrue(outWigFile.exists());
         assertTrue(new File(res).exists());
     }

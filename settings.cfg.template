@@ -18,10 +18,10 @@ nrOfProcessThreads  = 5
 
 # Paths to various programs that we use. Currently only 'bowtie'.
 
-bowtieLocation      = resources/bowtie/bowtie
-bowtieLocation      = resources/bowtie2/bowtie2
-picardLocation      = resources/picard/picard.jar
-pyicosLocation      = resources/pyicoteo/pyicos
+bowtieLocation       = resources/bowtie/bowtie
+bowtie2Location      = resources/bowtie2/bowtie2
+picardLocation       = resources/picard/picard.jar
+pyicosLocation       = resources/pyicoteo/pyicos
 
 # Address and port of the publicly visible WWW server (if any)
 # that is tunnelling requests to the genomizer server.
@@ -31,3 +31,7 @@ pyicosLocation      = resources/pyicoteo/pyicos
 wwwTunnelHost       = https://localhost
 wwwTunnelPort       = 7000
 wwwTunnelPath       = /api
+
+# Directory used for storing temporary files during uploading.
+# Should be on the same partition as 'fileLocation'.
+uploadTempDir       = /data/tmp/

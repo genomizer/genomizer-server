@@ -1,29 +1,22 @@
 package command.search;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.sql.SQLException;
-import java.text.ParseException;
-import java.util.HashMap;
-import java.util.List;
-
-import java.net.URLDecoder;
-
 import command.Command;
 import command.UserRights;
 import command.ValidateException;
 import database.DatabaseAccessor;
-import database.containers.Experiment;
-
 import database.subClasses.UserMethods.UserType;
-import response.ErrorResponse;
-import response.HttpStatusCode;
-import response.Response;
-import response.SearchResponse;
+import response.*;
 import server.Debug;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.util.HashMap;
+
 /**
- * Class used to handle searching for an experiment.
+ * Command used to issue a search.
  *
  * @author Business Logic 2015.
  * @version 1.1
@@ -36,24 +29,15 @@ public class SearchCommand extends Command {
 		return 1;
 	}
 
-
-	/**
-	 * Set the UserType Uri and Uuid. annotations also set from uri.
-	 * @param uri the URI from the http request.
-	 * @param username the userName from the http request.
-	 * @param userType the userType
-	 */
 	@Override
 	public void setFields(String uri, HashMap<String, String> query,
-						  String username, UserType userType) {
-
-		super.setFields(uri, query, username, userType);
-		if(query.containsKey("annotations")) {
+						  String uuid, UserType userType) {
+		super.setFields(uri, query, uuid, userType);
+		if(query.containsKey("annotations"))
 			annotations = query.get("annotations");
-		}
-		else {
+
+		if(annotations == null || annotations.isEmpty())
 			annotations = ("[expID]");
-		}
 	}
 
 	@Override
@@ -63,38 +47,29 @@ public class SearchCommand extends Command {
 
 	@Override
 	public Response execute() {
-	    DatabaseAccessor db = null;
-	    List<Experiment> searchResult = null;
-		try {
+		Response response;
+		try (DatabaseAccessor db = initDB()) {
 			annotations = URLDecoder.decode(annotations, "UTF-8");
+			response = new ExperimentListResponse(db.search(annotations));
 		} catch (UnsupportedEncodingException e) {
-			Debug.log("Search with annotations: " + annotations + " failed due to bad encoding. " + e.getMessage());
-			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Search with annotations: "+annotations+
-					" failed due to bad encoding.");
-		}
-		try {
-			db = initDB();
-			searchResult = db.search(annotations);
+			response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
+					"Search for '" + annotations + "' unsuccessful, bad " +
+							"encoding");
+		} catch (ParseException e) {
+			response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
+					"Search for '" + annotations + "' unsuccessful, " +
+							"incorrect date format");
 		} catch (SQLException e) {
-			Debug.log("Search with annotations: " + annotations + " didn't work, reason: " +
-					e.getMessage());
-			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Search with annotations: "+annotations+
-					" didn't work because of temporary problems with database.");
-		}catch (IOException e){
-			Debug.log("Search with annotations: " + annotations + " didn't work, reason: " +
-					e.getMessage());
-			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Search failed due to query having incorrect format.");
-
-		}catch (ParseException e) {
-			Debug.log("Search with annotations: " + annotations + " didn't work. Incorrect date format. " +
-					e.getMessage());
-			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Search failed due to incorrect date format. " +
-					"Should be on form 20150314-20150422 for interval and 20150411 for single dates.");
-		} finally {
-			if (db != null)
-				db.close();
+			response = new DatabaseErrorResponse("Search for '" + annotations +
+					"'");
+		} catch (IOException e) {
+			response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
+					"Search for '" + annotations + "' unsuccessful. " +
+							e.getMessage());
+			Debug.log("Reason:" + e.getMessage());
 		}
-		return new SearchResponse(searchResult);
+
+		return response;
 	}
 
 	/**

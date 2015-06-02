@@ -6,10 +6,9 @@ package process;
  * Date:        2015-05-20
  */
 
-
 import command.ValidateException;
-import server.ServerSettings;
 import server.ErrorLogger;
+import server.ServerSettings;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,6 +27,11 @@ public class Picard extends Executor{
 
     public Picard(String command, String inFile, String outFile,
                   String inFormat, String outFormat, String [] params) {
+        if (command == null | inFile == null | outFile == null |
+            inFormat == null | outFormat == null | params == null) {
+            throw new NullPointerException("Tried to create Picard object " +
+                                           "with null parameter");
+        }
         this.command    = command;
         this.inFile     = inFile;
         this.outFile    = outFile;
@@ -70,14 +74,16 @@ public class Picard extends Executor{
 
 	ErrorLogger.log("SYSTEM", "Picard command: "+commandString);
 
-        return executeProgram(args.toArray(new String []{}));
+        return executeCommand(args.toArray(new String[]{}));
     }
 
     public static String runRemoveDuplicates(String inFile, String outFile)
             throws ValidateException, IOException, InterruptedException {
-        Picard markDuplicates = new Picard("MarkDuplicates", inFile, outFile,
-                ".sam", ".sam",
-                new String[]{"REMOVE_DUPLICATES=true", "METRICS_FILE=/dev/null"});
+        Picard markDuplicates =
+            new Picard("MarkDuplicates", inFile, outFile,
+                       ".sam", ".sam",
+                       new String[]{"REMOVE_DUPLICATES=true",
+                                    "METRICS_FILE=/dev/null"});
 
         markDuplicates.validate();
         markDuplicates.execute();

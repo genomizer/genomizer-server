@@ -80,12 +80,12 @@ public class FileMethods {
 										  String checkSumMD5, String status)
 			throws SQLException, IOException {
 
-		if (!FileValidator.fileNameCheck(fileName)) {
+		if (!FileValidator.checkIsValidFileName(fileName)) {
 			throw new IOException("Invalid filename");
 		}
 
 		if (inputFileName != null) {
-			if (!FileValidator.fileNameCheck(inputFileName)) {
+			if (!FileValidator.checkIsValidFileName(inputFileName)) {
 				throw new IOException("Invalid input filename");
 			}
 		}
@@ -98,22 +98,11 @@ public class FileMethods {
 		}
 		expID = e.getID(); // Correct expID for in case sensitivity
 
-		if (fileType == FileTuple.RAW && e.getNrRawFiles() >= 2) {
-			throw new IOException(
-					"There are already two raw files for this experiment!");
-		}
+		String path = fpg.generateFilePath(expID, fileType, fileName);
+		FileTuple ft = getFileTuple(path);
 
-		FileTuple ft = getProfile(e, metaData);
-		String path;
-		if (ft == null) {
-			path = fpg.generateFilePath(expID, fileType, fileName);
-		} else {
-			path = ft.getParentFolder() + fileName;
-			File profileToAdd = new File(path);
-			if (profileToAdd.exists()) {
-				throw new IOException(fileName + " with the parameters "
-						+ metaData + " already exists!");
-			}
+		if (ft != null) {
+			throw new IOException(fileName + " already exists!");
 		}
 
 		if (!status.equals("Done") && !status.equals("In Progress")) {
@@ -132,7 +121,7 @@ public class FileMethods {
 		PreparedStatement stmt = conn.prepareStatement(query);
 		stmt.setString(1, path);
 
-		switch (fileType) {
+		/*switch (fileType) {
 		case FileTuple.RAW:
 			stmt.setString(2, "Raw");
 			genomeRelease = null;
@@ -146,7 +135,12 @@ public class FileMethods {
 		default:
 			stmt.setString(2, "Other");
 			break;
-		}
+		}*/
+
+		String fileTypeString = fileTypeIntToString(fileType);
+		stmt.setString(2, fileTypeString);
+		if (fileType == FileTuple.RAW)
+			genomeRelease = null;
 
 		stmt.setString(3, fileName);
 		stmt.setString(4, metaData);
@@ -186,6 +180,25 @@ public class FileMethods {
         }
         return null;
     }
+
+	private String fileTypeIntToString(int fileType) {
+		String fileTypeString = null;
+		switch (fileType) {
+			case FileTuple.RAW:
+				fileTypeString = "Raw";
+				break;
+			case FileTuple.PROFILE:
+				fileTypeString = "Profile";
+				break;
+			case FileTuple.REGION:
+				fileTypeString = "Region";
+				break;
+			default:
+				fileTypeString = "Other";
+				break;
+		}
+		return fileTypeString;
+	}
 
 	private String getParentFolder(String filePath) {
 
@@ -281,17 +294,16 @@ public class FileMethods {
 
 		if (ft == null) {
 			Debug.log("FileMethods.deleteFile: Could not find file at path " + path);
-			return 0;
-		}
+		} else {
+			File fileToDelete = new File(path);
+			if (fileToDelete.exists()) {
+				fileToDelete.delete();
+			}
 
-		File fileToDelete = new File(path);
-		if (fileToDelete.exists()) {
-			fileToDelete.delete();
-		}
-
-		File parentFolder = new File(ft.getParentFolder());
-		if (ft.type.equalsIgnoreCase("profile") && isEmptyFolder(parentFolder)) {
-			parentFolder.delete();
+			File parentFolder = new File(ft.getParentFolder());
+			if (ft.type.equalsIgnoreCase("profile") && isEmptyFolder(parentFolder)) {
+				parentFolder.delete();
+			}
 		}
 
 		String statementStr = "DELETE FROM File " + "WHERE (Path ~~* ?)";
@@ -423,6 +435,118 @@ public class FileMethods {
 	}
 
 	/**
+	 * Sets file type to newType for the file in the database with ID = fileID
+	 * @param fileID
+	 * @param newType
+	 * @return
+	 * @throws SQLException
+	 */
+	public int changeFileType(int fileID, int newType)
+			throws SQLException {
+		String query = "UPDATE File SET FileType = ?" +
+				"WHERE FileID = ?";
+		int rs = 0;
+
+		conn.setAutoCommit(false);
+		try (PreparedStatement stmt = conn.prepareStatement(query)) {
+			stmt.setString(1, fileTypeIntToString(newType));
+			stmt.setInt(2, fileID);
+			rs = stmt.executeUpdate();
+		} catch (SQLException e) {
+			conn.rollback();
+			throw e;
+		} finally {
+			conn.setAutoCommit(true);
+		}
+
+		return rs;
+	}
+
+	/**
+	 * Sets new meta data for the file with ID = fileID
+	 * @param fileID
+	 * @param newMetaData
+	 * @return
+	 * @throws SQLException
+	 */
+	public int changeFileMetaData(int fileID, String newMetaData)
+		throws SQLException {
+		String query = "UPDATE File SET MetaData = ?" +
+				"WHERE FileID = ?";
+		int rs = 0;
+
+		conn.setAutoCommit(false);
+		try (PreparedStatement stmt = conn.prepareStatement(query)) {
+			stmt.setString(1, newMetaData);
+			stmt.setInt(2, fileID);
+			rs = stmt.executeUpdate();
+		} catch (SQLException e) {
+			conn.rollback();
+			throw e;
+		} finally {
+			conn.setAutoCommit(true);
+		}
+
+		return rs;
+	}
+
+	/**
+	 * Sets new author for the file with ID = fileID
+	 * @param fileID
+	 * @param newAuthor
+	 * @return
+	 * @throws SQLException
+	 */
+	public int changeFileAuthor(int fileID, String newAuthor)
+			throws SQLException {
+		String query = "UPDATE File SET Author = ?" +
+				"WHERE FileID = ?";
+		int rs = 0;
+
+		conn.setAutoCommit(false);
+		try (PreparedStatement stmt = conn.prepareStatement(query)) {
+			stmt.setString(1, newAuthor);
+			stmt.setInt(2, fileID);
+			rs = stmt.executeUpdate();
+		} catch (SQLException e) {
+			conn.rollback();
+			throw e;
+		} finally {
+			conn.setAutoCommit(true);
+		}
+
+		return rs;
+	}
+
+	/**
+	 * Sets new genome release version for the file with ID = fileID
+	 * @param fileID
+	 * @param newGrVersion
+	 * @return
+	 * @throws SQLException
+	 */
+	public int changeFileGrVersion(int fileID, String newGrVersion)
+			throws SQLException {
+		String query = "UPDATE File SET GRVersion = ?" +
+				"WHERE FileID = ?";
+		int rs = 0;
+
+		conn.setAutoCommit(false);
+		try (PreparedStatement stmt = conn.prepareStatement(query)) {
+			stmt.setString(1, newGrVersion);
+			stmt.setInt(2, fileID);
+			rs = stmt.executeUpdate();
+		} catch (SQLException e) {
+			conn.rollback();
+			throw e;
+		} finally {
+			conn.setAutoCommit(true);
+		}
+
+		return rs;
+	}
+
+	/**
 	 * Changes the Filename for a specific file with given fileID. This method
 	 * affects bothe the saved file name, but also the entries path and fileName
 	 * in database.
@@ -435,63 +559,57 @@ public class FileMethods {
 	 */
 	public int changeFileName(int fileID, String newFileName)
 			throws SQLException, IOException {
-
-		String oldFilePath = "";
-
-		// search for current filepath.
-		String searchPathQuery = "SELECT Path FROM File WHERE Status = 'Done' AND fileID = ?";
-		PreparedStatement pathFind = conn.prepareStatement(searchPathQuery);
-		pathFind.setInt(1, fileID);
-		ResultSet res = pathFind.executeQuery();
-
-		if (res.next()) {
-			oldFilePath = res.getString("Path");
-		} else {
-			throw new IOException("No file with ID " + fileID);
+		FileTuple ft = getFileTuple(fileID);
+		if (ft == null) {
+			return 0;
 		}
+		String oldFilePath = ft.path;
+		String parentFolder = getParentFolder(oldFilePath);
+		String newFilePath = parentFolder + newFileName;
 
-		String folderPath = getParentFolder(oldFilePath);
-		String newFilePath = folderPath + newFileName;
-
-		// change name on the actual stored file.
-		File oldfile = new File(oldFilePath);
+		// Change the filename
+		File oldFile = new File(oldFilePath);
 		File newFile = new File(newFilePath);
+		if (newFile.exists()) {
+			throw new java.io.IOException(newFileName + "already exists");
+		}
+		boolean success = oldFile.renameTo(newFile);
 
-		if (newFile.exists())
-			throw new java.io.IOException("New file exists");
+		int res = 0;
+		if (success) {
 
-		if (!oldfile.exists())
-			throw new java.io.IOException("Old file " + "does not exists");
+			String updateFileNameString =
+					"UPDATE File SET FileName = ?" +
+							"WHERE FileID = ?";
+			String updatePathString =
+					"UPDATE File SET Path = ?" +
+							"WHERE FileID = ?";
 
-		String chFileNameQuery = "UPDATE File SET FileName = ? "
-				+ "WHERE FileID = ?";
+			conn.setAutoCommit(false);
+			try (PreparedStatement updateFileName = conn.prepareStatement(updateFileNameString);
+				 PreparedStatement updatePath = conn.prepareStatement(updatePathString);) {
+				updateFileName.setString(1, newFileName);
+				updateFileName.setInt(2, fileID);
+				res = Math.max(res, updateFileName.executeUpdate());
+				updatePath.setString(1, newFilePath);
+				updatePath.setInt(2, fileID);
+				res = Math.max(res, updatePath.executeUpdate());
+				conn.commit();
 
-		PreparedStatement nameUpdate = conn.prepareStatement(chFileNameQuery);
-		nameUpdate.setString(1, newFileName);
-		nameUpdate.setInt(2, fileID);
-		int resCount = nameUpdate.executeUpdate();
-
-		oldfile.renameTo(newFile);
-
-		// change filepath entry in database.
-		String chFilePathQuery = "UPDATE File SET Path = ? "
-				+ "WHERE FileID = ?";
-
-		PreparedStatement pathUpdate = conn.prepareStatement(chFilePathQuery);
-		pathUpdate.setString(1, newFilePath);
-		pathUpdate.setInt(2, fileID);
-		pathUpdate.executeUpdate();
-
-		nameUpdate.close();
-		pathUpdate.close();
-
-		return resCount;
+			} catch (SQLException e) {
+				conn.rollback();
+				throw e;
+			} finally {
+				conn.setAutoCommit(true);
+			}
+		}
+		return res;
 	}
 
 	public FileTuple addGeneratedFile(String expId, int fileType,
 			String filePath, String inputFileName, String metaData,
 			String uploader, boolean isPrivate, String grVersion,
-			String checkSumMD5)
+			String checkSumMD5, long fileSize)
 			throws SQLException, IOException {
 
 		Experiment e = expMethods.getExperiment(expId);
@@ -510,9 +628,9 @@ public class FileMethods {
 
 		String query = "INSERT INTO File "
 				+ "(Path, FileType, FileName, Date, MetaData, InputFilePath, "
-				+ "Author, Uploader, IsPrivate, ExpID, GRVersion, Status, MD5) "
+				+ "Author, Uploader, IsPrivate, ExpID, GRVersion, Status, MD5, FileSize) "
 				+ "VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?, 'Genomizer',"
-				+ " ?, ?, ?, ?, 'Done', ?)";
+				+ " ?, ?, ?, ?, 'Done', ?, ?)";
 		PreparedStatement stmt = conn.prepareStatement(query);
 		stmt.setString(1, filePath);
 
@@ -539,7 +657,7 @@ public class FileMethods {
 		stmt.setString(8, expId);
 		stmt.setString(9, grVersion);
 		stmt.setString(10, checkSumMD5);
-
+		stmt.setLong(11, fileSize);
 		stmt.executeUpdate();
 		stmt.close();
 
@@ -565,7 +683,7 @@ public class FileMethods {
 				"UPDATE File "
 				+"SET FileSize = ? "
 				+"WHERE FileID = ?")) {
-			stmt.setString(1, size.toString());
+			stmt.setLong(1, size);
 			stmt.setInt(2, fileID);
 			res = stmt.executeUpdate();
 		}

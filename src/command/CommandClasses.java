@@ -1,8 +1,9 @@
 package command;
 
-import command.admin.DeleteUserCommand;
-import command.admin.PostUserCommand;
-import command.admin.PutUserAdminCommand;
+import command.admin.DeleteAdminUserCommand;
+import command.admin.GetAdminUserListCommand;
+import command.admin.PostAdminUserCommand;
+import command.admin.PutAdminUserCommand;
 import command.annotation.*;
 import command.connection.*;
 import command.convertfile.PutConvertFileCommand;
@@ -18,11 +19,9 @@ import command.genomerelease.DeleteGenomeReleaseCommand;
 import command.genomerelease.GetGenomeReleaseCommand;
 import command.genomerelease.GetGenomeReleaseSpeciesCommand;
 import command.genomerelease.PostGenomeReleaseCommand;
-import command.process.CancelProcessCommand;
-import command.process.GetProcessDummyCommand;
-import command.process.GetProcessStatusCommand;
-import command.process.PutProcessCommand;
+import command.process.*;
 import command.search.SearchCommand;
+import command.user.GetUserCommand;
 import command.user.PutUserCommand;
 
 import java.util.HashMap;
@@ -64,17 +63,20 @@ public class CommandClasses {
         //User commands
         //classes.put("PUT /user", PutUserPasswordCommand.class);
         classes.put("PUT /user", PutUserCommand.class);
+        classes.put("GET /user/", GetUserCommand.class);
 
         //Admin commands
-        classes.put("POST /admin/user", PostUserCommand.class);
-        classes.put("DELETE /admin/user/", DeleteUserCommand.class);
-        classes.put("PUT /admin/user", PutUserAdminCommand.class);
+        classes.put("POST /admin/user", PostAdminUserCommand.class);
+        classes.put("DELETE /admin/user/", DeleteAdminUserCommand.class);
+        classes.put("PUT /admin/user", PutAdminUserCommand.class);
+        classes.put("GET /admin/userlist", GetAdminUserListCommand.class);
 
         //Processing
         classes.put("GET /process", GetProcessStatusCommand.class);
-        classes.put("DELETE /process", CancelProcessCommand.class);
-        classes.put("PUT /process/rawtoprofile", PutProcessCommand.class);
         classes.put("GET /process/dummy", GetProcessDummyCommand.class);
+        classes.put("PUT /process/rawtoprofile", PutProcessCommand.class);
+        classes.put("PUT /process/processCommands", PutProcessCommands.class);
+        classes.put("DELETE /process", CancelProcessCommand.class);
 
         //Annotation handling commands
         classes.put("POST /annotation/field", PostAnnotationFieldCommand.class);

@@ -1,32 +1,27 @@
 package command.experiment;
 
+import command.Command;
+import command.UserRights;
+import command.ValidateException;
+import database.DatabaseAccessor;
+import database.constants.MaxLength;
+import database.containers.Experiment;
+import database.subClasses.UserMethods.UserType;
+import response.*;
+import server.Debug;
+
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
 
-import command.Command;
-import command.UserRights;
-import command.ValidateException;
-import database.constants.MaxLength;
-import response.ErrorResponse;
-import response.HttpStatusCode;
-import response.Response;
-import response.GetExperimentResponse;
-import database.DatabaseAccessor;
-import database.containers.Experiment;
-import database.subClasses.UserMethods.UserType;
-import server.Debug;
-
 /**
- * Class used to retrieve an experiment from the database.
+ * Command used to retrieve an experiment.
  *
  * @author Business Logic 2015.
  * @version 1.1
  */
 public class GetExperimentCommand extends Command {
-
 	private String expID;
-
 
 	@Override
 	public int getExpectedNumberOfURIFields() {
@@ -37,14 +32,14 @@ public class GetExperimentCommand extends Command {
 	 * Overrides the original command in order to use the uri.
 	 * @param uri Contains the experiment id to fetch.
 	 * @param query the query of the command
-	 * @param username the UUID for the user who made the request.
+	 * @param uuid the UUID for the user who made the request.
 	 * @param userType the user type for the command caller.
 	 */
 	@Override
 	public void setFields(String uri, HashMap<String, String> query,
-						  String username, UserType userType) {
+						  String uuid, UserType userType) {
 
-		super.setFields(uri, query, username, userType);
+		super.setFields(uri, query, uuid, userType);
 		expID = uri.split("/")[2];
 	}
 
@@ -56,33 +51,28 @@ public class GetExperimentCommand extends Command {
 
 	@Override
 	public Response execute() {
-		Experiment exp;
-		DatabaseAccessor db;
+		Response response;
 
-		try {
-			db = initDB();
+		try (DatabaseAccessor db = initDB()) {
+			Experiment exp;
+			if ((exp = db.getExperiment(expID)) != null)
+				response = new SingleExperimentResponse(exp);
+			else
+				response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
+						"Retrieval of experiment '" + expID +
+								"' unsuccessful, experiment does not exist.");
+		} catch (SQLException e) {
+			response = new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+					"Retrieval of experiment '" + expID +
+							"' unsuccessful due to temporary database " +
+							"problems");
+			Debug.log("Reason: " + e.getMessage());
+		} catch (IOException e) {
+			response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
+					"Retrieval of experiment '" + expID + "' unsuccessful. " +
+							e.getMessage());
 		}
-		catch (SQLException | IOException e){
-			Debug.log("Retrieval of experiment " + expID + " didn't work, reason: " +
-					e.getMessage());
-			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Temporarily could not " +
-					"initialize db.");
-		}
-		try {
-			exp = db.getExperiment(expID);
-		} catch (SQLException e){
-			Debug.log("Retrieval of experiment " + expID + " didn't work, reason: " +
-					e.getMessage());
-			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Could not get " +
-					"experiment: " + expID+ ". The reason was temporary problems with the database.");
-		} finally {
-				db.close();
-		}
-		if (exp == null) {
-			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Experiment "
-					+ "with id " + expID + " could not be found.");
-		}
-		return new GetExperimentResponse(HttpStatusCode.OK, exp.getID(),
-				exp.getAnnotations(), exp.getFiles());
+
+		return response;
 	}
 }

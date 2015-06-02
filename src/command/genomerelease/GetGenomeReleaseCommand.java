@@ -1,28 +1,23 @@
 package command.genomerelease;
 
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.ArrayList;
-
 import command.Command;
 import command.UserRights;
 import command.ValidateException;
 import database.DatabaseAccessor;
 import database.containers.Genome;
-import response.ErrorResponse;
-import response.GetGenomeReleaseResponse;
-import response.HttpStatusCode;
-import response.Response;
+import response.*;
 import server.Debug;
 
-/**
- * A command which is used to get all the genome versions
- * currently stored in the database. It takes no account of species.
- *
- * @author Kommunikation/kontroll 2014.
- * @version 1.0
- */
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
+/**
+ * Command used to get all of the genome releases.
+ *
+ * @author Business Logic 2015.
+ * @version 1.1
+ */
 public class GetGenomeReleaseCommand extends Command {
 	@Override
 	public int getExpectedNumberOfURIFields() {
@@ -31,39 +26,25 @@ public class GetGenomeReleaseCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-		/*Validation will always succeed, the command can not be corrupt.*/
 		hasRights(UserRights.getRights(this.getClass()));
 	}
 
-	/**
-	 * Connects to the database, retrieves all the genomeReleases and creates
-	 * a response depending on the database return value.
-	 * @return an appropriate Response.
-	 */
 	@Override
 	public Response execute() {
-		DatabaseAccessor db=null;
-		try {
-			db = initDB();
-			try{
-				ArrayList<Genome> genomeReleases =
-						(ArrayList<Genome>)db.getAllGenomeReleases();
-				return new GetGenomeReleaseResponse(HttpStatusCode.OK,
-						genomeReleases);
-			}catch(SQLException e){
-				Debug.log("Error when fetching all genome releases. Temporary error with database: "
-						+ e.getMessage());
-				return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
-						"Could not fetch all genome releases due to temporary database error.");
-			}
-		} catch (SQLException | IOException e) {
-			Debug.log("Error when fetching all genome releases. Temporary error with database: "
-					+ e.getMessage());
-			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
-					"Could not fetch all genome releases due to temporary database error.");
-		} finally {
-			if (db != null)
-				db.close();
+		Response response;
+		try (DatabaseAccessor db = initDB()) {
+			response = new GenomeReleaseListResponse((ArrayList<Genome>)
+					db.getAllGenomeReleases());
+		} catch (SQLException e) {
+			response = new DatabaseErrorResponse("Retrieval of genome " +
+					"releases");
+			Debug.log("Reason: " + e.getMessage());
+		} catch (IOException e) {
+			response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
+					"Retrieval of genome releases unsuccessful. " +
+							e.getMessage());
 		}
+
+		return response;
 	}
 }

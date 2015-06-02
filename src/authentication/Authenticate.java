@@ -1,11 +1,12 @@
 package authentication;
 
 
-import java.util.Date;
-import java.util.Iterator;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
+import com.sun.net.httpserver.HttpExchange;
+import server.Debug;
+import util.Util;
 
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -15,51 +16,91 @@ import java.util.concurrent.ConcurrentHashMap;
  * @version 1.0
  */
 public class Authenticate {
+	// These can be modified from the InactiveUuidsRemover thread.
+	private static ConcurrentHashMap<String, String> activeUsersID = new ConcurrentHashMap<>();
 
-	// These can be modified from the InteractiveUuidsRemover thread.
-	private static ConcurrentHashMap<String, String> activeUsersID = new ConcurrentHashMap<String, String>();
-	private static ConcurrentHashMap<String, Date> latestRequests = new ConcurrentHashMap<String, Date>();
+	private static ConcurrentHashMap<String, Date> latestRequests = new ConcurrentHashMap<>();
+
+	private static final int MAXIMUM_LOGINS = 10;
 
 
-	static public LoginAttempt login(String username, String password, String dbHash) {
-		if(BCrypt.checkpw(password,dbHash))
-			return new LoginAttempt(true, updateActiveUser(username), null);
-
-		return new LoginAttempt(false, null, "Wrong password.");
-	}
-	
 	/**
-	 * Method used to update active users. The user is added to the list of
-	 * active users or the user is updated.
-	 *
-	 * @param username to add or update.
+	 * Creates a login attempt from the username and password and returns the
+	 * result as a LoginAttempt.
+	 * @param uuid The uuid for the user.
+	 * @param username The username for the user.
+	 * @param password The password for the user.
+	 * @param dbHash The hash used in encrypting the password.
+	 * @return A loginAttempt containing the information about the login.
 	 */
-	static public String updateActiveUser(String username) {
+	static public LoginAttempt login(String uuid, String username, String password, String dbHash) {
 
-		if(activeUsersID.containsValue(username)) {
-			Iterator<String> uuids = activeUsersID.keySet().iterator();
-			String next_uuid = uuids.next();
-			while(!activeUsersID.get(next_uuid).equals(username)) {
-				next_uuid = uuids.next();
-			}
+		if(BCrypt.checkpw(password,dbHash))
+			return new LoginAttempt(true, updateActiveUser(uuid, username), null);
 
-			updateLatestRequest(next_uuid);
-			return next_uuid;
+		else
+			return new LoginAttempt(false, null, "Incorrect username or password.");
+	}
+
+
+	/**
+	 * Method to update the active user. If the user isn't currently logged in,
+	 * the user is added to the active users list.
+	 * @param uuid The uuid of the requester.
+	 * @param username The username of the requester.
+	 * @return The correct uuid for the requester.
+	 */
+	static public String updateActiveUser(String uuid, String username) {
+
+		if(!(uuid==null) && activeUsersID.containsValue(uuid)) {
+
+			updateLatestRequest(uuid);
+			return uuid;
 		}
 
-		String uuid = UUID.randomUUID().toString();
+		uuid = UUID.randomUUID().toString();
 
 		activeUsersID.put(uuid, username);
 		latestRequests.put(uuid, new Date());
 
+		cleanUpLogIns(username);
+
 		return uuid;
 	}
 
+
+	/* Checks if there are too many logins for the username and removes the
+	oldest one.*/
+	static private void cleanUpLogIns(String username){
+
+		int currentLogIns = 0;
+		String uuid = null;
+		Date date = null;
+
+		for(String s : activeUsersID.keySet()){
+			if (activeUsersID.get(s).equals(username)){
+				currentLogIns ++;
+				Date newDate = latestRequests.get(s);
+				if (date == null || newDate.before(date)){
+					date = newDate;
+					uuid = s;
+				}
+			}
+		}
+
+		if (currentLogIns > MAXIMUM_LOGINS){
+			deleteActiveUser(uuid);
+		}
+
+	}
+
+
 	/**
-	 * updates the date for which the user did the most recent request
-	 * @param uuid the userName of the user
+	 * Updates the date for which the user did the most recent request
+	 * @param uuid The uuid of the user
 	 */
 	static public void updateLatestRequest(String uuid) {
+
 		if(latestRequests.containsKey(uuid)) {
 			latestRequests.put(uuid, new Date());
 		}
@@ -67,62 +108,110 @@ public class Authenticate {
 
 
 	/**
-	 * Method used to get the id for an active user.
+	 * Method used to delete a user from the active list.
 	 *
-	 * @param username to get the id for.
-	 * @return the id representing the user.
+	 * @param uuid uuid for the user to remove.
 	 */
-	static public String getID(String username) {
-		for (String key : activeUsersID.keySet()) {
-			if(username.equals(activeUsersID.get(key))) {
-				return key;
+	static public void deleteActiveUser(String uuid) {
+
+		activeUsersID.remove(uuid);
+		latestRequests.remove(uuid);
+	}
+
+
+	/**
+	 * Method used to delete a user from the active list.
+	 *
+	 * @param username username for the user to remove.
+	 */
+	static public void deleteUsername(String username) {
+
+		for(String uuid : activeUsersID.keySet()){
+			if (activeUsersID.get(uuid).equals(username)){
+				activeUsersID.remove(uuid);
+				latestRequests.remove(uuid);
 			}
 		}
-		return null;
-	}
 
-	static public boolean isUserLoggedIn(String username) {
-		return (getID(username) == null ? false : true);
 	}
 
 	/**
-	 * Method used to delete a user from the
-	 * active list.
+	 * Method used to check if a specific user uuid exist.
 	 *
-	 * @param id representing the user to remove.
+	 * @param uuid Uuid to check for.
+	 * @return true if the uuid exists, otherwise false.
 	 */
-	static public void deleteActiveUser(String id) {
+	static public boolean idExists(String uuid) {
 
-		activeUsersID.remove(id);
-		latestRequests.remove(id);
-	}
-
-	/**
-	 * Method used to check if a specific user id exist.
-	 *
-	 * @param id to check for.
-	 * @return boolean depending on result.
-	 */
-	static public boolean idExists(String id) {
-
-		return activeUsersID.containsKey(id);
-
+		return activeUsersID.containsKey(uuid);
 	}
 
 	/**
 	 * Method used to get a user name with help from id.
 	 *
-	 * @param userID to match against an active user.
+	 * @param uuid to match against an active user.
 	 * @return the user name matching the id as a string.
 	 */
-	static public String getUsernameByID(String userID){
+	static public String getUsernameByID(String uuid){
 
-		return (userID == null ? "" : activeUsersID.get(userID));
-
+		String username = activeUsersID.get(uuid);
+		return (username == null ? "" : username);
 	}
 
+	/**
+	 * Getter for the map containing the latest request times
+	 * @return The latest request times of the users as a concurrentHashMap
+	 */
 	public static ConcurrentHashMap<String, Date> getLatestRequestsMap() {
+
 		return latestRequests;
+	}
+
+	/**
+	 * Performs the authentication of the http request.
+	 * @param exchange The http request to authenticate.
+	 * @return The uuid of the caller or null if it could not be authenticated.
+	 */
+ 	public static String performAuthentication(HttpExchange exchange) {
+		String uuid = null;
+
+		/* Get the value of the 'Authorization' header. */
+		List<String> authHeader = exchange.getRequestHeaders().
+				get("Authorization");
+		if (authHeader != null)
+			uuid = authHeader.get(0);
+
+		/* Used for commands that send token in header instead*/
+		if(uuid == null){
+
+			// Get the value of the 'token' parameter.
+			String uuid2;
+			HashMap<String, String> reqParams = new HashMap<>();
+			Util.parseURI(exchange.getRequestURI(), reqParams);
+
+			if (reqParams.containsKey("token")) {
+				uuid2 = reqParams.get("token");
+				if (uuid2 != null) {
+						uuid = uuid2;
+				} else {
+					Debug.log("Authentication header and token parameter "
+							+ "values differ!");
+					return null;
+				}
+			}
+		}
+
+		Debug.log("Trying to authenticate token " + uuid + "...");
+		if (uuid != null && Authenticate.idExists(uuid)) {
+			Debug.log("User " + Authenticate.getUsernameByID(uuid)
+					+ " authenticated successfully.");
+			Authenticate.updateLatestRequest(uuid);
+			return uuid;
+		}
+		else {
+			Debug.log("User could not be authenticated");
+			return null;
+		}
 	}
 
 }

@@ -5,6 +5,7 @@ import database.containers.FileTuple;
 import server.ServerSettings;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.sql.SQLException;
 
 import static org.apache.commons.codec.digest.DigestUtils.md5Hex;
@@ -21,7 +22,6 @@ import static org.apache.commons.codec.digest.DigestUtils.md5Hex;
 public class ConversionHandler {
 	private DatabaseAccessor db;
 	private ProfileDataConverter pdc;
-	private String outputFile;
 	private String fileInDB;
 
 	/**
@@ -29,7 +29,6 @@ public class ConversionHandler {
 	 */
 	public ConversionHandler() {
 		pdc = new ProfileDataConverter();
-		outputFile = null;
 	}
 
 	/**
@@ -56,29 +55,38 @@ public class ConversionHandler {
 		FileTuple file = db.getFileTuple(id);
 		fileInDB = file.path;
 		String currentFormat = getFileType(file.path);
+		String outputFilePath;
 
 		switch (currentFormat) {
 			case "bed":
-				convertFromBedTo(newFormat);
+				outputFilePath = convertFromBedTo(newFormat);
 				break;
 			case "gff":
-				convertFromGffTo(newFormat);
+				outputFilePath = convertFromGffTo(newFormat);
 				break;
 			case "sgr":
-				convertFromSgrTo(newFormat);
+				outputFilePath = convertFromSgrTo(newFormat);
 				break;
 			case "wig":
-				convertFromWigTo(newFormat);
+				outputFilePath = convertFromWigTo(newFormat);
 				break;
+			default:
+				throw new IllegalArgumentException("Invalid File Format!");
 		}
 
 		String inputFileName = file.path.substring(file.path.lastIndexOf('/')+1);
-		String fileName = outputFile.substring(outputFile.lastIndexOf('/')+1);
+		String fileName = outputFilePath.substring(outputFilePath.lastIndexOf('/')+1);
 
+		File outFile = new File(outputFilePath);
 		FileTuple ft = db.addNewFile(file.expId, FileTuple.PROFILE, fileName,
 				inputFileName, null, file.author,
-				"ConversionHandler", file.isPrivate, file.grVersion, md5Hex(new FileInputStream(new File(outputFile))));
+				"ConversionHandler", file.isPrivate, file.grVersion, md5Hex(new FileInputStream(new File(outputFilePath))));
+
+		db.updateFileSize(ft, outFile.length());
+		
 		db.close();
+
+		Files.move(outFile.toPath(), new File(ft.path).toPath());
 
 		return ft;
 	}
@@ -97,18 +105,16 @@ public class ConversionHandler {
 	 * @param format
 	 * @throws IOException
 	 */
-	private void convertFromBedTo(String format) throws IOException {
+	private String convertFromBedTo(String format) throws IOException {
 		switch (format) {
 			case "bed":
 				throw new IllegalArgumentException("Cannot convert from bed to bed.");
 			case "gff":
 				throw new IllegalArgumentException("Conversion from bed to gff not implemented.");
 			case "sgr":
-				outputFile = pdc.bedToSgr(fileInDB);
-				break;
+				 return pdc.bedToSgr(fileInDB);
 			case "wig":
-				outputFile = pdc.bedToWig(fileInDB);
-				break;
+				return pdc.bedToWig(fileInDB);
 			default:
 				throw new IllegalArgumentException("Unkown conversion.");
 		}
@@ -119,18 +125,16 @@ public class ConversionHandler {
 	 * @param format
 	 * @throws IOException
 	 */
-	private	void convertFromGffTo(String format) throws IOException {
+	private String convertFromGffTo(String format) throws IOException {
 		switch (format) {
 			case "bed":
 				throw new IllegalArgumentException("Conversion from gff to bed mot implemented.");
 			case "gff":
 				throw new IllegalArgumentException("Cannot convert from gff to gff");
 			case "sgr":
-				outputFile = pdc.gffToSgr(fileInDB);
-				break;
+				return pdc.gffToSgr(fileInDB);
 			case "wig":
-				outputFile = pdc.gffToWig(fileInDB);
-				break;
+				return pdc.gffToWig(fileInDB);
 			default:
 				throw new IllegalArgumentException("Unknown conversion.");
 		}
@@ -141,7 +145,7 @@ public class ConversionHandler {
 	 * @param format
 	 * @throws IOException
 	 */
-	private void convertFromSgrTo(String format) throws IOException {
+	private String convertFromSgrTo(String format) throws IOException {
 		switch (format) {
 			case "bed":
 				throw new IllegalArgumentException("Cannot convert from sgr to bed.");
@@ -150,8 +154,7 @@ public class ConversionHandler {
 			case "sgr":
 				throw new IllegalArgumentException("Cannot convert from sgr to sgr.");
 			case "wig":
-				outputFile = pdc.sgrToWig(fileInDB);
-				break;
+				return pdc.sgrToWig(fileInDB);
 			default:
 				throw new IllegalArgumentException("Unknown conversion.");
 		}
@@ -162,7 +165,7 @@ public class ConversionHandler {
 	 * @param format
 	 * @throws IOException
 	 */
-	private void convertFromWigTo(String format) throws IOException {
+	private String convertFromWigTo(String format) throws IOException {
 		String wigType = checkWigType(fileInDB);
 		switch (format) {
 			case "bed":
@@ -170,8 +173,7 @@ public class ConversionHandler {
 			case "gff":
 				throw new IllegalArgumentException("Cannot convert from wig to gff.");
 			case "sgr":
-				convertFromWigToSgr(fileInDB, wigType);
-				break;
+				return convertFromWigToSgr(fileInDB, wigType);
 			case "wig":
 				throw new IllegalArgumentException("Cannot convert from wig to wig.");
 			default:
@@ -206,20 +208,16 @@ public class ConversionHandler {
 	 * @param wigType
 	 * @throws IOException
 	 */
-	private void convertFromWigToSgr(String fileInDB, String wigType) throws IOException {
+	private String convertFromWigToSgr(String fileInDB, String wigType) throws IOException {
 		switch (wigType) {
 			case "variableStep":
-				outputFile = pdc.wigToSgr("variableStep", fileInDB);
-				break;
+				return pdc.wigToSgr("variableStep", fileInDB);
 			case "fixedStep":
-				outputFile = pdc.wigToSgr("fixedStep", fileInDB);
-				break;
+				return pdc.wigToSgr("fixedStep", fileInDB);
 			case "bed":
-				outputFile = pdc.wigToSgr("bed", fileInDB);
-				break;
+				return pdc.wigToSgr("bed", fileInDB);
 			default:
 				throw new IllegalArgumentException("Unknown conversion.");
 		}
 	}
-
 }

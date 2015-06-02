@@ -1,0 +1,11 @@
+(* = fixed)
+
+* Numberformatexception smooth: windowSize
+outfile exists: step
+readsCutoff: case? (TODO: check API against all cmds)
+bowtie options
+no status from smoothing
+Could not locate a Bowtie index
+* invalid file name (28437)
+* no output (RuntimeException?) (57506)
+* "temporary problems" (722)

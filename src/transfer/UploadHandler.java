@@ -10,13 +10,14 @@ import database.containers.ChainFile;
 import database.containers.FileTuple;
 import database.containers.GenomeFile;
 import database.containers.HasCheckSumMD5;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUpload;
+import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.RequestContext;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import response.HttpStatusCode;
-import server.*;
+import server.Debug;
+import util.Util;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,6 +41,8 @@ public class UploadHandler {
         this.uploadDir   = uploadDir;
         this.handlerRoot = handlerRoot;
         this.tmpDir      = tmpDir;
+        
+        new File(tmpDir).mkdirs();
     }
 
     // Serve a HTML form allowing to upload files via browser.
@@ -48,7 +51,7 @@ public class UploadHandler {
         byte [] form = ("<html><body>" +
                 "<form method=\"POST\" " +
                 "enctype=\"multipart/form-data\" action=\""
-                + this.handlerRoot + "\">" +
+                + this.handlerRoot + "/upload.test" + "\">" +
                 "File to upload: <input type=\"file\" " +
                 // "accept=\".wig,.fastq,.gff,.sgr\" "
                 "name=\"uploadfile\"/>" +
@@ -61,47 +64,104 @@ public class UploadHandler {
         OutputStream out = exchange.getResponseBody();
         out.write(form);
         out.close();
+        Debug.log("END OF EXCHANGE\n------------------");
     }
 
     // Handle a 'multipart/form-data' upload.
     // POST request entry point.
     public void handlePOST(final HttpExchange exchange) throws Exception {
-        Debug.log("Receiving a file from client...");
+        // Retrieve the file path of the file being uploaded.
+        URI requestURI = exchange.getRequestURI();
+        String absUploadPath = extractAbsUploadPath(requestURI);
 
-        // Save uploaded files to memory or a temp directory.
-        FileUpload fileUpload = new FileUpload();
-        DiskFileItemFactory fileItemFactory = new DiskFileItemFactory(64*1024, new File(this.tmpDir));
-        fileUpload.setFileItemFactory(fileItemFactory);
-        final Headers headers = exchange.getRequestHeaders();
-        for (String header : headers.keySet()) {
-            System.out.println(header + ": " + headers.getFirst(header));
+        // Receive FileItems from the client.
+        List<FileItem> fileItems = receiveFileItems(exchange, absUploadPath);
+
+        // Move uploaded file to uploadDir.
+        for (FileItem fileItem : fileItems) {
+            if (!fileItem.isFormField()) {
+
+                File outFile = new File(absUploadPath == null
+                        ? this.uploadDir + fileItem.getName()
+                        : absUploadPath);
+
+                outFile.getParentFile().mkdirs();
+                fileItem.write(outFile);
+                commitFile(absUploadPath, fileItem);
+
+                Debug.log("Successfully saved the uploaded file to '"
+                        + outFile.toString() + "'.");
+            }
         }
-        @SuppressWarnings("deprecation")
-        RequestContext ctx = new RequestContext() {
-            @Override
-            public String getCharacterEncoding() {
+    }
+
+    // Receive file items from the client.
+    private List<FileItem> receiveFileItems(final HttpExchange exchange,
+                                            String absUploadPath)
+            throws SQLException, IOException, FileUploadException {
+        List<FileItem> fileItems;
+        try {
+            Debug.log("Receiving a file from client...");
+
+            // Save uploaded files to memory or a temp directory.
+            FileUpload fileUpload = new FileUpload();
+            DiskFileItemFactory fileItemFactory = new DiskFileItemFactory(64 * 1024, new File(this.tmpDir));
+            fileUpload.setFileItemFactory(fileItemFactory);
+            final Headers headers = exchange.getRequestHeaders();
+            for (String header : headers.keySet()) {
+                Debug.log(header + ": " + headers.getFirst(header));
+            }
+            @SuppressWarnings("deprecation")
+            RequestContext ctx = new RequestContext() {
+                @Override
+                public String getCharacterEncoding() {
                     return headers.getFirst("Content-encoding");
                 }
 
-            @Override
-            public String getContentType() {
+                @Override
+                public String getContentType() {
                     return headers.getFirst("Content-Type");
                 }
 
-            @Override
-            public int getContentLength() {
-                    return 0; 
+                @Override
+                public int getContentLength() {
+                    return 0;
                 }
 
-            @Override
-            public InputStream getInputStream() throws IOException {
-                return exchange.getRequestBody();
-            }
-        };
-        List<FileItem> fileItems = fileUpload.parseRequest(ctx);
+                @Override
+                public InputStream getInputStream() throws IOException {
+                    return exchange.getRequestBody();
+                }
+            };
+            fileItems = fileUpload.parseRequest(ctx);
 
-        // Move uploaded files to uploadDir.
-        URI requestURI = exchange.getRequestURI();
+        /* Send response to client */
+            OutputStream out = exchange.getResponseBody();
+            byte[] resp = null;
+            if (fileItems.size() > 0) {
+                // Report success to the client.
+                resp = "OK".getBytes();
+                exchange.sendResponseHeaders(HttpStatusCode.OK, resp.length);
+
+            } else {
+                resp = "ERROR".getBytes();
+                exchange.sendResponseHeaders(HttpStatusCode.BAD_REQUEST, resp.length);
+            }
+
+            out.write(resp);
+            out.close();
+            Debug.log("END OF EXCHANGE\n------------------");
+        }
+        catch (Exception ex) {
+            // Upload was interrupted. We need to remove the stale
+            // 'In Progress' tuple from the DB.
+            rollbackFile(absUploadPath);
+            throw ex;
+        }
+        return fileItems;
+    }
+
+    private String extractAbsUploadPath(URI requestURI) {
         HashMap<String,String> reqParams = new HashMap<>();
         String reqPath = Util.parseURI(requestURI, reqParams);
         String absUploadPath = null;
@@ -113,26 +173,39 @@ public class UploadHandler {
             String relPath = reqPath.substring(this.handlerRoot.length() + 1);
             absUploadPath = this.uploadDir + relPath;
         }
+        return absUploadPath;
+    }
 
-        for (FileItem fileItem : fileItems) {
-            if (!fileItem.isFormField()) {
-                File outFile = new File(absUploadPath == null
-                        ? this.uploadDir + fileItem.getName()
-                        : absUploadPath);
-                commitFile(absUploadPath, fileItem);
-                outFile.getParentFile().mkdirs();
-                fileItem.write(outFile);
-                Debug.log("Successfully saved the uploaded file to '"
-                        + outFile.toString() + "'.");
+    // Remove the 'In Progress' tuple corresponding to a given file.
+    private void rollbackFile(String absUploadPath)
+        throws  SQLException, IOException {
+
+	Debug.log("Rolling back file, upload was not successful");
+
+        try ( DatabaseAccessor db = Command.initDB()) {
+            FileTuple ft = db.getFileTupleInProgress(absUploadPath);
+            if (ft != null) {
+		Debug.log("Removing file tuple " + ft.path);
+                db.deleteFile(ft.path);
+                return;
             }
-        }
 
-        // Report success to the client.
-        byte [] resp = "OK".getBytes();
-        exchange.sendResponseHeaders(HttpStatusCode.OK, resp.length);
-        OutputStream out = exchange.getResponseBody();
-        out.write(resp);
-        out.close();
+            GenomeFile gf = db.getGenomeReleaseFileInProgress(absUploadPath);
+            if (gf != null) {
+		Debug.log("Removing genome release file " + gf.fileName);
+                db.removeGenomeReleaseFile(gf.genomeVersion, gf.fileName);
+                return;
+            }
+
+            ChainFile cf = db.getChainFileInProgress(absUploadPath);
+            if (cf != null) {
+		Debug.log("Removing chain file " + cf.fileName);
+                db.removeChainFiles(cf.fromVersion, cf.toVersion);
+                return;
+            }
+
+
+        }
     }
 
     // Verify the file's integrity and mark it as available for downloading.
@@ -140,20 +213,20 @@ public class UploadHandler {
             throws SQLException, ValidateException, IOException {
         try( DatabaseAccessor db = Command.initDB() )
         {
-            String actualMD5 = DigestUtils.md5Hex(fileItem.getInputStream());
+            //String actualMD5 = DigestUtils.md5Hex(fileItem.getInputStream());
 
             FileTuple  ft = db.getFileTupleInProgress(absUploadPath);
             if (ft != null) {
-                verifyOrUpdateMD5(ft, actualMD5, db);
+                //verifyOrUpdateMD5(ft, actualMD5, db);
                 int count = db.markReadyForDownload(ft);
                 checkMarkReadyForDownloadSucceeded(count, ft.filename);
-                db.updateFileSize(ft);
+                db.updateFileSize(ft, fileItem.getSize());
                 return;
             }
 
             GenomeFile gf = db.getGenomeReleaseFileInProgress(absUploadPath);
             if (gf != null) {
-                verifyOrUpdateMD5(gf, actualMD5, db);
+                //verifyOrUpdateMD5(gf, actualMD5, db);
                 int count = db.markReadyForDownload(gf);
                 checkMarkReadyForDownloadSucceeded(count, gf.fileName);
                 return;
@@ -161,7 +234,7 @@ public class UploadHandler {
 
             ChainFile cf = db.getChainFileInProgress(absUploadPath);
             if (cf != null) {
-                verifyOrUpdateMD5(cf, actualMD5, db);
+                //verifyOrUpdateMD5(cf, actualMD5, db);
                 int count = db.markReadyForDownload(cf);
                 checkMarkReadyForDownloadSucceeded(count, cf.fileName);
                 return;

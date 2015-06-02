@@ -1,25 +1,17 @@
 package database.test.unittests;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
 import database.DatabaseAccessor;
 import database.FilePathGenerator;
 import database.constants.ServerDependentValues;
 import database.containers.Genome;
 import database.test.TestInitializer;
+import org.junit.*;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+
+import static org.junit.Assert.*;
 
 public class GenomeReleaseTableTests {
     public static TestInitializer ti;
@@ -220,6 +212,32 @@ public class GenomeReleaseTableTests {
     	tearDown();
 
     	assertEquals(0, dbac.getAllGenomeReleases().size());
+    }
+
+    /**
+     * Test if genome release file with in progress status can be removed
+     * @throws Exception
+     * Test written 2015-06-01
+     */
+    @Test
+    public void shouldRemoveGenomeReleaseFileInProgress() throws Exception{
+        dbac.addInProgressGenomeRelease("testversion", "Testy", "testy.test", null);
+        boolean removed = dbac.removeGenomeReleaseFile("testversion","testy.test");
+        assertTrue(removed);
+    }
+
+    /**
+     * Test if chain file with in progress status can be removed
+     * @throws Exception
+     * Test written 2015-06-01
+     */
+    @Test
+    public void shouldRemoveChainFileInProgress() throws Exception {
+        dbac.addGenomeRelease("testFromVersion", "Ablibn", "from.test", null);
+        dbac.addGenomeRelease("testToVersion", "Ablibn", "to.test", null);
+        dbac.addInProgressChainFile("testFromVersion", "testToVersion","testChain.file",null);
+        int removed = dbac.removeChainFiles("testFromVersion", "testToVersion");
+        assertTrue(removed == 1);
     }
 
 

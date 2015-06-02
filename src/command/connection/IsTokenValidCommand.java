@@ -2,9 +2,9 @@ package command.connection;
 
 import authentication.Authenticate;
 import command.Command;
+import response.HttpStatusCode;
 import response.MinimalResponse;
 import response.Response;
-import response.HttpStatusCode;
 
 /**
 * This class is used to check if a token is valid.
@@ -15,7 +15,6 @@ import response.HttpStatusCode;
 @Deprecated
 public class IsTokenValidCommand extends Command {
 
-	public IsTokenValidCommand() {}
 
 	@Override
 	public int getExpectedNumberOfURIFields() {
@@ -24,12 +23,12 @@ public class IsTokenValidCommand extends Command {
 
 	/**
 	 * Constructs a new instance of IsTokenValidCommand using the supplied
-	 * userName.
+	 * uuid.
 	 * @param uuid the unique user identification.
 	 */
 	public IsTokenValidCommand(String uuid) {
 
-		this.userName = uuid;
+		this.uuid = uuid;
 	}
 
 	@Override
@@ -39,7 +38,7 @@ public class IsTokenValidCommand extends Command {
 
 	@Override
 	public Response execute() {
-		int code = Authenticate.isUserLoggedIn(userName) ? HttpStatusCode.OK :
+		int code = Authenticate.idExists(uuid) ? HttpStatusCode.OK :
 				HttpStatusCode.UNAUTHORIZED;
 		return new MinimalResponse(code);
 	}

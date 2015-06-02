@@ -8,10 +8,8 @@ import command.ValidateException;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
 import database.subClasses.UserMethods.UserType;
-import response.ErrorResponse;
-import response.HttpStatusCode;
-import response.MinimalResponse;
-import response.Response;
+import response.*;
+import server.Debug;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -19,19 +17,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Class used when updating the experiments.
+ * Command used to update an experiment.
  *
  * @author Business Logic 2015.
  * @version 1.1
  */
 public class PutExperimentCommand extends Command {
-
 	@Expose
 	private String name = null;
-
 	@Expose
-	private ArrayList<Annotation> annotations = new ArrayList<>();
-
+	private ArrayList<Annotation> annotations = null;
 	private String expID;
 
 	@Override
@@ -41,15 +36,11 @@ public class PutExperimentCommand extends Command {
 
 	@Override
 	public void setFields(String uri, HashMap<String, String> query,
-                          String username, UserType userType) {
-		super.setFields(uri, query, username, userType);
+                          String uuid, UserType userType) {
+		super.setFields(uri, query, uuid, userType);
 		expID = uri.split("/")[2];
 	}
 
-	/**
-	 * Used to validate the information that is needed
-	 * to execute the actual command.
-	 */
 	@Override
 	public void validate() throws ValidateException {
 		hasRights(UserRights.getRights(this.getClass()));
@@ -61,11 +52,10 @@ public class PutExperimentCommand extends Command {
 		}
 
 		for(int i =0;i<annotations.size();i++){
-
 			if(annotations.get(i) == null){
-				throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Found " +
-						"an empty annotation or annotation value, please " +
-						"specify annotations.");
+				throw new ValidateException(HttpStatusCode.BAD_REQUEST,
+						"Found an empty annotation or annotation value, " +
+								"please specify annotations.");
 			}
 
 			validateName(annotations.get(i).getName(),
@@ -77,32 +67,28 @@ public class PutExperimentCommand extends Command {
 
 	@Override
 	public Response execute() {
-		DatabaseAccessor db = null;
-		try {
-			db = initDB();
+		Response response;
 
-			if (!db.hasExperiment(expID)){
-				return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
-						"That experiment does not exist.");
+		try (DatabaseAccessor db = initDB()) {
+			HashMap<String, String> annotationsMap
+					= new HashMap<>();
+			for (Annotation annotation : annotations) {
+				annotationsMap.put(annotation.getName(), annotation.getValue());
 			}
+			db.updateExperiment(name, annotationsMap);
 
-			for(Annotation annotation: annotations) {
-				db.updateExperiment(name, annotation.getName(),
-						annotation.getValue());
-			}
-
-			return new MinimalResponse(HttpStatusCode.OK);
-
-		} catch (IOException | SQLException e) {
-			e.printStackTrace();
-			return new ErrorResponse(HttpStatusCode.BAD_REQUEST, e.getMessage());
-
-		} finally {
-
-			if (db != null) {
-				db.close();
-			}
+			response = new SingleExperimentResponse(db.getExperiment(expID));
+		} catch (SQLException e) {
+			response = new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+					"Editing of experiment '" + expID + "' unsuccessful due " +
+							"to temporary database problems");
+			Debug.log("Reason: " + e.getMessage());
+		} catch (IOException e) {
+			response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
+					"Editing of experiment '" + expID + "' unsuccessful. " +
+							e.getMessage());
 		}
-	}
 
+		return response;
+	}
 }

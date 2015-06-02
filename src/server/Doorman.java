@@ -62,8 +62,10 @@ public class Doorman {
 		server.createContext("/convertfile", requestHandler);
 		server.createContext("/search/", requestHandler);
 		server.createContext("/user", requestHandler);
+		server.createContext("/user/", requestHandler);
 		server.createContext("/admin/user", requestHandler);
 		server.createContext("/admin/user/", requestHandler);
+		server.createContext("/admin/userlist", requestHandler);
 		server.createContext("/process", requestHandler);
 		server.createContext("/process/dummy", requestHandler);
 		server.createContext("/process/rawtoprofile", requestHandler);
@@ -79,6 +81,7 @@ public class Doorman {
 		server.createContext("/geo/", requestHandler);
 		server.createContext("/upload", requestHandler);
 		server.createContext("/download", requestHandler);
+		server.createContext("/process/processCommands", requestHandler);
 
 		server.setExecutor(new Executor() {
 			@Override
@@ -100,7 +103,7 @@ public class Doorman {
 	 */
 	public void start() {
 		httpServer.start();
-		System.out.println("Doorman started on port " +
+		Debug.log("Doorman started on port " +
 				ServerSettings.genomizerPort);
 	}
 

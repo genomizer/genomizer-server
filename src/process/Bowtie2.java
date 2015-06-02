@@ -141,13 +141,18 @@ public class Bowtie2 extends Executor {
         // and https://www.biostars.org/p/6656/ )
 
         String [] args = {"perl", new File(fastqFormatDetectPath).getCanonicalPath(), fastqFile};
-        String out = executeCommand(args);
-        Pattern p = Pattern.compile("This file is (.*) format.");
-        Matcher m = p.matcher(out);
         String found = "???";
-        if(m.find()) {
-            found = m.group(1);
+        try{
+            String out = executeCommand(args);
+            Pattern p = Pattern.compile("This file is (.*) format.");
+            Matcher m = p.matcher(out);
+            if(m.find()) {
+                found = m.group(1);
+            }
+        } catch(RuntimeException e) {
+            /* Ignore, result was probably inconclusive, default to Phred33 */
         }
+
 
         switch (found) {
             case "Sanger":

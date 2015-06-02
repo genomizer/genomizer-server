@@ -1,22 +1,19 @@
 package command.file;
 
-import java.io.IOException;
-import java.sql.SQLException;
-
+import authentication.Authenticate;
 import com.google.gson.annotations.Expose;
-
 import command.Command;
 import command.UserRights;
 import command.ValidateException;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
 import database.containers.FileTuple;
-
-import response.UrlUploadResponse;
-import response.ErrorResponse;
-import response.HttpStatusCode;
-import response.Response;
+import response.*;
 import server.Debug;
+
+import java.io.File;
+import java.io.IOException;
+import java.sql.SQLException;
 
 /**
  * Adds a file to an experiment.
@@ -55,57 +52,56 @@ public class PostFileCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-		uploader = "TEMPORARY";
+
+		uploader = Authenticate.getUsernameByID(uuid);
 
 		hasRights(UserRights.getRights(this.getClass()));
 		validateName(experimentID, MaxLength.EXPID, "Experiment name");
 		validateName(type, MaxLength.FILE_FILETYPE, "File type");
 		validateName(author, MaxLength.FILE_AUTHOR, "Author");
-		validateName(uploader, MaxLength.FILE_UPLOADER, "Uploader");
-		validateName(grVersion, MaxLength.FILE_GRVERSION, "Genome release");
+		if (!type.toLowerCase().equals("raw")) {
+			validateName(grVersion, MaxLength.FILE_GRVERSION, "Genome release");
+		} else {
+			grVersion = "";
+		}
 		validateName(fileName, MaxLength.FILE_FILENAME, "Filename");
 		validateExists(metaData, MaxLength.FILE_METADATA, "Metadata");
 		validateMD5(this.checkSumMD5);
 	}
 
-	public void setUploader(String uploader) {
-		this.uploader = uploader;
-	}
-
-	/**
-	 * Adds all attributes to an ArrayList and passes that and the experimentID
-	 * to the database. A file path is returned and sent to the client as an
-	 * URL.
-	 */
 	@Override
 	public Response execute() {
-
-		DatabaseAccessor db = null;
+		Response response;
 		int fileType;
-		if(type.equalsIgnoreCase("raw")) {
-			fileType = FileTuple.RAW;
-		} else if(type.equalsIgnoreCase("profile")) {
-			fileType = FileTuple.PROFILE;
-		} else if(type.equalsIgnoreCase("region")) {
-			fileType = FileTuple.REGION;
-		} else {
-			fileType = FileTuple.OTHER;
+		switch (type.toLowerCase()) {
+			case "raw":
+				fileType = FileTuple.RAW;
+				break;
+			case "profile":
+				fileType = FileTuple.PROFILE;
+				break;
+			case "region":
+				fileType = FileTuple.REGION;
+				break;
+			default:
+				fileType = FileTuple.OTHER;
 		}
-		try {
-			db = initDB();
-			FileTuple ft = db.addNewInProgressFile(experimentID, fileType, fileName, null,
-					metaData, author, uploader, false, grVersion, checkSumMD5);
-			return new UrlUploadResponse(HttpStatusCode.OK,
-					ft.getUploadURL());
-		} catch (SQLException | IOException e) {
-			Debug.log("Adding of file " + fileName + " to experiment "+experimentID+" didn't work, reason: " +
-					e.getMessage());
-			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, "Adding of file " + fileName +
-					" to experiment "+experimentID+" didn't work because of temporary problems with database.");
-		} finally {
-			if (db != null) {
-				db.close();
-			}
+
+		try (DatabaseAccessor db = initDB()) {
+			FileTuple ft = db.addNewInProgressFile(experimentID, fileType,
+					fileName, null, metaData, author, uploader, false,
+					grVersion, checkSumMD5);
+			response = new UrlUploadResponse(ft.getUploadURL());
+
+		} catch (SQLException e) {
+			response = new DatabaseErrorResponse("Adding file '" + fileName +
+					"'");
+		} catch (IOException e) {
+			response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
+					"Adding file '" + fileName + "' unsuccessful. " +
+							e.getMessage());
 		}
+
+		return response;
 	}
 }

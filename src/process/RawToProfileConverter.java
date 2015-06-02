@@ -1,14 +1,16 @@
 package process;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Stack;
-
 import command.ValidateException;
+import org.apache.commons.io.FilenameUtils;
+import server.Debug;
 import server.ErrorLogger;
 import server.ServerSettings;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.*;
 
 /**
  * Class used to create profile data from .fastq format.
@@ -19,6 +21,7 @@ import server.ServerSettings;
  */
 public class RawToProfileConverter extends Executor {
 
+	private static String tempFolder = "resources/";
 	private String remoteExecution;
 	private String dir;
 	private String sortedDirForCommands;
@@ -38,14 +41,218 @@ public class RawToProfileConverter extends Executor {
 	private Stack<String> toBeRemoved;
 	private String sortedDirForFile;
 
+    /**
+     * Constructor that initializes some data structures used by the class.
+     */
+    public RawToProfileConverter() {
+        toBeRemoved = new Stack<String>();
+        checker = new RawToProfileProcessChecker();
+        validator = new ParameterValidator();
+    }
+
+
 	/**
-	 * Constructor that initializes some data structures used by the class.
+	 * This method might be deleted or edited to be the new procedure. Work in progress atm with Adam
+	 * @param params Bowtie parameters
+	 * @param fastqFile The raw file which is to be processed.
+	 * @param wigFile The name of the output file produced
+	 *@param keepSam Boolean telling whether intermediate .sam file should be
+	 *               saved.
+	 * @param genomeVersion Version of genome, not used at the moment.
+	 * @param referenceGenome Path to reference genome.
+	 * @param filepathRaw File path to experiment raw file directory
+	 * @param filepathProfile File path to experiment profile file directory
+	 * @return Processed files to save to database.
+	 * @throws ProcessException
 	 */
-	public RawToProfileConverter() {
-		toBeRemoved = new Stack<String>();
-		checker = new RawToProfileProcessChecker();
-		validator = new ParameterValidator();
+	public static File [] procedureRaw(String params, String fastqFile,
+									  String wigFile, boolean keepSam,
+									  String genomeVersion,
+									  String referenceGenome,
+									  String filepathRaw,
+									  String filepathProfile)
+			throws ProcessException, IOException {
+
+		ArrayList<File> returnFiles = new ArrayList<>();
+
+		/* Make sure that the output directory exists. */
+		new File(filepathProfile).mkdirs();
+
+
+		Stack<String> toBeRemoved = new Stack<>();
+		Stack<Map.Entry<String,String>> filesToSaveToExperiment = new Stack<>();
+
+
+		/*
+			Create temporary directory for processing to save
+			intermediate files.
+		*/
+		String tmpDirPath = tempFolder + "temp_" +
+							Thread.currentThread().getId()+"/";
+
+
+		File tmpDir = createDirectory(tmpDirPath);
+
+
+		/* Append end of paths with '/' if not present */
+		filepathRaw = fixEndOfPath(filepathRaw);
+		filepathProfile = fixEndOfPath(filepathProfile);
+
+
+		fastqFile = filepathRaw+fastqFile;
+
+		String samFile = tmpDirPath + FilenameUtils.getBaseName(fastqFile)+
+						 ".sam";
+		String sortedSam = FilenameUtils.removeExtension(samFile)
+						   +"_sorted.sam";
+		String sortedSamWithoutDups = FilenameUtils.removeExtension(samFile)
+									  +"_sorted_without_duplicates.sam";
+
+		if (ServerSettings.shouldUseBowtie2) {
+
+			ErrorLogger.log("SYSTEM", "Running Bowtie2");
+			Bowtie2 bowtieProcess = new Bowtie2(
+					referenceGenome, null, null,
+					fastqFile, samFile, params.split(" "));
+
+			try {
+				bowtieProcess.validate();
+			} catch (ValidateException e) {
+				ErrorLogger.log(
+						"SYSTEM", "Error validating Bowtie2 - " +
+								  "[" + bowtieProcess.toString() + "]");
+			}
+
+			String bowtieReturnMessage = "NO_RETURN";
+			try {
+				bowtieReturnMessage = bowtieProcess.execute();
+				ErrorLogger.log("SYSTEM", "Finished Bowtie2");
+			} catch (InterruptedException | IOException e) {
+				ErrorLogger.log(
+						"SYSTEM", "Error executing Bowtie2, exited with -"
+								  + " [" + bowtieReturnMessage + "]");
+			}
+		} else {
+			ErrorLogger.log("SYSTEM", "Running Bowtie");
+			Bowtie bowtieProcess = new Bowtie(
+					referenceGenome, null, null,
+					fastqFile, samFile, params.split(" "));
+
+			try {
+				bowtieProcess.validate();
+			} catch (ValidateException e) {
+				ErrorLogger.log(
+						"SYSTEM", "Error validating Bowtie - " +
+								  "[" + bowtieProcess.toString() + "]");
+			}
+
+			String bowtieReturnMessage = "NO_RETURN";
+			try {
+				bowtieReturnMessage = bowtieProcess.execute();
+				ErrorLogger.log("SYSTEM", "Finished Bowtie");
+			} catch (InterruptedException | IOException e) {
+				ErrorLogger.log(
+						"SYSTEM", "Error executing Bowtie, exited with -"
+								  + " [" + bowtieReturnMessage + "]");
+			}
+		}
+
+
+
+		/* Run sort sam */
+		try {
+			ErrorLogger.log("SYSTEM","Running SortSam");
+			Picard.runSortSam(samFile, sortedSam);
+			toBeRemoved.push(samFile);
+			ErrorLogger.log("SYSTEM", "Finished SortSam");
+		} catch (ValidateException e) {
+			ErrorLogger.log("SYSTEM",
+					"Error validating picard sortSam");
+		} catch (InterruptedException | IOException e) {
+			ErrorLogger.log("SYSTEM",
+					"Error executing picard sortSam - " + e.getMessage());
+		}
+
+		/* Run remove duplicates */
+		try {
+			ErrorLogger.log("SYSTEM","Running RemoveDuplicates");
+			Picard.runRemoveDuplicates(sortedSam, sortedSamWithoutDups);
+			ErrorLogger.log("SYSTEM", "Finished RemoveDuplicates");
+			toBeRemoved.push(sortedSam);
+		} catch (ValidateException e) {
+			ErrorLogger.log("SYSTEM",
+					"Error validating picard markDuplicates" );
+		} catch (IOException | InterruptedException e) {
+			ErrorLogger.log("SYSTEM",
+					"Error executing picard markDuplicates");
+			ErrorLogger.log("SYSTEM", e.getMessage());
+		}
+
+		/* Run conversion from .sam to .wig, final step */
+		try {
+			ErrorLogger.log("SYSTEM","Running .wig conversion");
+			Pyicos.runConvert(sortedSamWithoutDups,
+					tmpDirPath+FilenameUtils.getName(wigFile));
+			ErrorLogger.log("SYSTEM", "Finished .wig conversion");
+
+			filesToSaveToExperiment.push(new AbstractMap.SimpleEntry<>(
+					tmpDirPath+FilenameUtils.getName(wigFile),
+					filepathProfile+wigFile));
+		} catch (ValidateException e) {
+			ErrorLogger.log("SYSTEM",
+					"Error validating pyicos conversion to .wig");
+			ErrorLogger.log("SYSTEM", e.getMessage());
+		} catch (InterruptedException | IOException e) {
+			ErrorLogger.log("SYSTEM",
+					"Error executing pyicos conversion to .wig");
+		}
+
+		/* Save .sam file to experiment if wanted */
+		if (keepSam) {
+			ErrorLogger.log("SYSTEM", "Saving .sam file");
+			filesToSaveToExperiment.push(new AbstractMap.SimpleEntry<>(
+							sortedSamWithoutDups,
+							filepathProfile+
+							FilenameUtils.getName(sortedSamWithoutDups)));
+		} else {
+			toBeRemoved.push(sortedSamWithoutDups);
+		}
+
+		ErrorLogger.log("SYSTEM", "Moving files to experiment");
+		ErrorLogger.log(
+				"SYSTEM", "The path to move these files is: [" +
+						  filepathProfile + "]");
+		for (Map.Entry<String,String> filePair: filesToSaveToExperiment) {
+			try {
+				Debug.log("Moving: " + filePair.getKey());
+				Files.move(
+						Paths.get(filePair.getKey()),
+						Paths.get(filePair.getValue()));
+				returnFiles.add(new File(filePair.getValue()));
+
+			} catch (IOException e) {
+				ErrorLogger.log("SYSTEM", "Error moving file "+ "["+
+										  filePair+"] to "+filepathProfile);
+				throw e;
+			}
+		}
+
+		/* Remove temporary files */
+		for (String fileName: toBeRemoved) {
+			File file = new File(fileName);
+			Debug.log("Removing: " + file.getCanonicalPath());
+			file.delete();
+		}
+		return returnFiles.toArray(new File[returnFiles.size()]);
 	}
+
+	private static String fixEndOfPath(String filepathRaw) {
+		if (!filepathRaw.endsWith("/")) {
+			filepathRaw += "/";
+		}
+		return filepathRaw;
+	}
+
 
 	/**
 	 * 1. runs the bowtie program to get a .sam file.
@@ -71,6 +278,7 @@ public class RawToProfileConverter extends Executor {
 	 *            Filepath to where the .wig file should be placed.
 	 * @throws ProcessException
 	 */
+	@Deprecated
 	public String procedure(String[] parameters, String inFolder,
 			String outFilePath) throws ProcessException {
 
@@ -86,10 +294,11 @@ public class RawToProfileConverter extends Executor {
 			if (checker.shouldRunBowTie()) {
 				ErrorLogger.log("SYSTEM", "Running Bowtie");
 				logString = runBowTie(rawFile1, rawFile_1_Name);
+				ErrorLogger.log("SYSTEM", "Bowtie return msg - " +logString);
 				ErrorLogger.log("SYSTEM", "Finished Bowtie");
 
 				checkBowTieFile(
-						"resources/" + dir + rawFile_1_Name
+						dir + rawFile_1_Name
 						+ ".sam", rawFile_1_Name);
 
 				//ErrorLogger.log("SYSTEM","Running SortSam");
@@ -106,7 +315,7 @@ public class RawToProfileConverter extends Executor {
 				}// Sets parameters for sorting first sam file
 				*/
 
-				toBeRemoved.push(remoteExecution + "resources/" + dir);
+				toBeRemoved.push(remoteExecution + dir);
 				filesToBeMoved = dir;
 				toBeRemoved.push(filesToBeMoved);
 			}
@@ -126,29 +335,33 @@ public class RawToProfileConverter extends Executor {
 				}
 			}
 
-			if(checker.shouldRunRemoveDuplicates()) {
-				ErrorLogger.log("SYSTEM","Running RemoveDuplicates");
-				try {
-					Picard.runRemoveDuplicates(
-                            dir+rawFile_1_Name+"_sorted.sam",
-                            dir+rawFile_1_Name + "_sorted_without_duplicates.sam"
-                            );
-				} catch (ValidateException e) {
-					ErrorLogger.log("SYSTEM",
-							"Error validating picard markDuplicates" );
-				} catch (IOException | InterruptedException e) {
-					ErrorLogger.log("SYSTEM",
-							"Error executing picard markDuplicates");
-					ErrorLogger.log("SYSTEM", e.getMessage());
-				}
-			}
+            if (checker.shouldRunRemoveDuplicates()) {
+                ErrorLogger.log("SYSTEM", "Running RemoveDuplicates");
+                try {
+                    Picard.runRemoveDuplicates(
+                            dir + rawFile_1_Name + "_sorted.sam",
+                            dir + rawFile_1_Name +
+                            "_sorted_without_duplicates.sam"
+                    );
+                } catch (ValidateException e) {
+                    ErrorLogger.log(
+                            "SYSTEM",
+                            "Error validating picard markDuplicates");
+                } catch (IOException | InterruptedException e) {
+                    ErrorLogger.log(
+                            "SYSTEM",
+                            "Error executing picard markDuplicates");
+                    ErrorLogger.log("SYSTEM", e.getMessage());
+                }
+            }
 
 			if(checker.shouldRunConvert()) {
 				ErrorLogger.log("SYSTEM","Running .wig conversion");
 				try {
 					Pyicos.runConvert(
 							dir + rawFile_1_Name +
-							"_sorted_without_duplicates.sam");
+							"_sorted_without_duplicates.sam",
+							dir + rawFile_1_Name +".wig");
 					filesToBeMoved = dir;
 					toBeRemoved.push(filesToBeMoved);
 				} catch (ValidateException e) {
@@ -205,12 +418,12 @@ public class RawToProfileConverter extends Executor {
 			try {
 				ErrorLogger.log("SYSTEM", "Files to be moved are: ["+filesToBeMoved+"]");
 				ErrorLogger.log("SYSTEM", "The path to move these files is: ["+outFilePath+"]");
-				moveEndFiles("resources/"+filesToBeMoved, outFilePath);
+				moveEndFiles(filesToBeMoved, outFilePath);
 			} catch (ProcessException e) {
 				cleanUp(toBeRemoved);
 				throw e;
 			}
-			cleanUp(toBeRemoved);
+//			cleanUp(toBeRemoved);
 
 		} else {
 
@@ -234,6 +447,12 @@ public class RawToProfileConverter extends Executor {
 			throw new ProcessException("Fatal error: This should never happen");
 		}
 		inFolder = validateInFolder(inFolder);
+
+		if (!inFolder.startsWith("/")) {
+			inFolder = System.getProperty("user.dir") + "/" + inFolder;
+		}
+
+		ErrorLogger.log("SYSTEM", "Executing on infolder ["+inFolder+"]");
 		inFiles = getRawFiles(inFolder);
 
 		// Check if there are any raw files
@@ -252,7 +471,8 @@ public class RawToProfileConverter extends Executor {
 		// Runs the procedure.
 
 		initiateConversionStrings(parameters, outFilePath);
-		makeConversionDirectories(remoteExecution + "resources/" + dir
+		createDirectory(
+				remoteExecution + dir
 				+ "/sorted");
 		checker.calculateWhichProcessesToRun(parameters);
 		if(!validateParameters(parameters)) {
@@ -292,7 +512,8 @@ public class RawToProfileConverter extends Executor {
                     "Process interrupted while converting to SGR format");
         } catch (IOException e) {
             throw new ProcessException(
-                    "Could not run SGR conversion, please check your input and permissions");
+                    "Could not run SGR conversion, please check your input " +
+					"and permissions");
         }
 		filesToBeMoved = sortedDirForFile
                 + "reads_gff/allnucs_sgr/";
@@ -314,7 +535,8 @@ public class RawToProfileConverter extends Executor {
                     "Process interrupted while creating GFF file");
         } catch (IOException e) {
             throw new ProcessException(
-                    "Could not run gff conversion, please check your input and permissions");
+                    "Could not run gff conversion, please check your input " +
+					"and permissions");
         }
 		filesToBeMoved = sortedDirForFile + "reads_gff/";
 		toBeRemoved.push(filesToBeMoved);
@@ -398,7 +620,8 @@ public class RawToProfileConverter extends Executor {
 		File bowTie = new File(dir);
 		if (!bowTie.exists() || bowTie.length() == 0) {
 			throw new ProcessException("Bowtie failed to run on file : "
-					+ fileName + bowTie.exists() + bowTie.length());
+					+ fileName + bowTie.exists() + bowTie.length()
+					+ ", in directory : "+dir);
 		}
 	}
 
@@ -475,30 +698,33 @@ public class RawToProfileConverter extends Executor {
 			dirToFiles.mkdirs();
 		}
 
-		if (filesToSmooth != null) {
-			for (File fileToSmooth : filesToSmooth) {
-				if (fileToSmooth.isFile()
-						&& isSgr(fileToSmooth.getName())) {
-					String inFile = fileToSmooth.getAbsoluteFile()
-							.toString();
-					String outFile = fileToSmooth.getName();
-					SmoothingParameterChecker smoothChecker = SmoothingParameterChecker
-							.SmoothingParameterCheckerFactory(parameters[4]);
-					// +"_"+getSmoothType+"_winSiz-" + "_minProbe-" +
-					// getMinProbe
-					outFile = outFile.substring(0, outFile.length() - 4) + "_"
-							+ smoothChecker.getSmoothType() + "_winSiz-"
-							+ smoothChecker.getWindowSize() + "_minProbe-"
-							+ smoothChecker.getMinProbe();
-					if (stepSize != 1) {
-						outFile = outFile + "_step" + stepSize + ".sgr";
-					} else {
-						outFile = outFile + ".sgr";
-					}
-					outFile = dirToFiles.toString() + "/" + outFile;
+        if (filesToSmooth != null) {
+            for (File fileToSmooth : filesToSmooth) {
+                if (fileToSmooth.isFile()
+                    && isSgr(fileToSmooth.getName())) {
+                    String inFile = fileToSmooth.getAbsoluteFile()
+                            .toString();
+                    String outFile = fileToSmooth.getName();
+                    SmoothingParameterChecker smoothChecker =
+                            SmoothingParameterChecker
+                                    .SmoothingParameterCheckerFactory
+                                            (parameters[4]);
+                    // +"_"+getSmoothType+"_winSiz-" + "_minProbe-" +
+                    // getMinProbe
+                    outFile = outFile.substring(0, outFile.length() - 4) + "_"
+                              + smoothChecker.getSmoothType() + "_winSiz-"
+                              + smoothChecker.getWindowSize() + "_minProbe-"
+                              + smoothChecker.getMinProbe();
+                    if (stepSize != 1) {
+                        outFile = outFile + "_step" + stepSize + ".sgr";
+                    } else {
+                        outFile = outFile + ".sgr";
+                    }
+                    outFile = dirToFiles.toString() + "/" + outFile;
 
 
 					// TODO: Don't hardcode path to smoothing.jar.
+
 					ProcessBuilder pb = new ProcessBuilder("java", "-jar",
 							"resources/smoothing.jar",
 							parameterArray[0],
@@ -537,11 +763,12 @@ public class RawToProfileConverter extends Executor {
 
 	private boolean correctInfiles(File[] inFiles) throws ProcessException {
 
-		if (inFiles == null) {
-			throw new ProcessException("Filepath to raw file is null");
-		} else if (inFiles.length > 2 && inFiles.length < 1) {
-			throw new ProcessException("Wrong quantity of raw file in Filepath");
-		}
+        if (inFiles == null) {
+            throw new ProcessException("Filepath to raw file is null");
+        } else if (inFiles.length > 2 && inFiles.length < 1) {
+            throw new ProcessException("Wrong quantity of raw file in " +
+									   "Filepath");
+        }
 
 		return true;
 	}
@@ -563,7 +790,7 @@ public class RawToProfileConverter extends Executor {
 
 		try {
 			logString = logString + executeScript(parse(ratioCalc));
-			System.out.println("RATIO LOGSTRING = " + logString);
+			Debug.log("RATIO LOGSTRING = " + logString);
 		} catch (InterruptedException e) {
 			throw new ProcessException(
 					"Process interrupted while running ratio calculation on files in folder "
@@ -585,53 +812,55 @@ public class RawToProfileConverter extends Executor {
 	 */
 
 
-	/**
-	 * Initiates strings that is used to run programs and scripts and also
-	 * strings that specifies directories
-	 *
-	 * @param parameters
-	 * @param outFile
-	 */
-	private void initiateConversionStrings(String[] parameters, String outFile) {
-		remoteExecution = "";
-		dir = "results_" + Thread.currentThread().getId() + "/";
-		sortedDirForCommands = remoteExecution + dir + "sorted/";
-		sortedDirForFile = remoteExecution + "resources/" + dir + "sorted/";
-		samToGff = "expect sam_to_readsgff_v1.sh " + sortedDirForCommands;
-		gffToAllnusgr = "expect readsgff_to_allnucsgr_v1.sh "
-				+ sortedDirForCommands + "reads_gff/";
-	}
+    /**
+     * Initiates strings that is used to run programs and scripts and also
+     * strings that specifies directories
+     *
+     * @param parameters
+     * @param outFile
+     */
+    private void initiateConversionStrings(
+            String[] parameters,
+            String outFile) {
+        remoteExecution = "";
+        dir = "results_" + Thread.currentThread().getId() + "/";
+        sortedDirForCommands = remoteExecution + dir + "sorted/";
+        sortedDirForFile = remoteExecution + dir + "sorted/";
+        samToGff = "expect sam_to_readsgff_v1.sh " + sortedDirForCommands;
+        gffToAllnusgr = "expect readsgff_to_allnucsgr_v1.sh "
+                        + sortedDirForCommands + "reads_gff/";
+    }
 
 	/**
 	 * Constructs a string array with the values to run bowtie on the file that
 	 * comes as parameter.
 	 *
-	 * @param fileOne
+	 * @param inputFile
 	 *            the name of the file with the file extension.
-	 * @param fileOneName
+	 * @param outputSamFile
 	 *            the name of the file without the file extension.
 	 * @return the value that bowtie returns.ckIfFolderExists(outFilePath)
 	 * @throws InterruptedException
 	 * @throws IOException
 	 * @throws ProcessException
 	 */
-	private String runBowTie(String fileOne, String fileOneName)
+	private String runBowTie(String inputFile, String outputSamFile)
 			throws ProcessException {
 		String bowTieParams = checkBowTieProcessors(parameters[0]);
 
 		String[] bowTieParameters = parse(ServerSettings.bowtieLocation +
 				" " + bowTieParams + " " + parameters[1] + " " +
-				inFolder + "/" + fileOne + " " + dir + fileOneName + ".sam");
+				inputFile + " " + dir + outputSamFile);
 
 		try {
 			return executeProgram(bowTieParameters);
 		} catch (InterruptedException e) {
 			throw new ProcessException(
 					"Process interrupted while running bowtie on file: "
-							+ fileOneName);
+							+ outputSamFile);
 		} catch (IOException e) {
 			throw new ProcessException("Could not run bowTie on file: "
-					+ fileOneName + ", please check your input and permissions");
+					+ outputSamFile + ", please check your input and permissions");
 		}
 	}
 
@@ -706,11 +935,12 @@ public class RawToProfileConverter extends Executor {
 	 * @param directoryPath
 	 *            the directory to create if it doesn't exist
 	 */
-	private void makeConversionDirectories(String directoryPath) {
-		fileDir = new File(directoryPath);
-		if (!fileDir.exists()) {
-			fileDir.mkdirs();
+	private static File createDirectory(String directoryPath) {
+		File directory = new File(directoryPath);
+		if (!directory.exists()) {
+			directory.mkdirs();
 		}
+		return directory;
 	}
 
 	/**
@@ -725,26 +955,31 @@ public class RawToProfileConverter extends Executor {
 			String outFilePath) {
 		/* TODO Log these errors correctly */
 		if (parameters == null) {
-			System.out.println("Parameters are null");
+			Debug.log("Parameters are null");
 			return false;
 		}
 		if (parameters.length < 0) {
-			System.out.println("param < 0");
+			Debug.log("param < 0");
 			return false;
 
 		} else if (parameters.length > 8) {
-			System.out.println("param > 8");
+			Debug.log("param > 8");
 			return false;
 		}
 
 		if (inFolder == null || outFilePath == null) {
-			System.out.println("inFOlder || outFolder == null");
+			Debug.log("inFOlder || outFolder == null");
 			return false;
 		}
 
-		if (!checkIfFolderExists(outFilePath) || !checkIfFolderExists(inFolder)) {
-			System.out.println("Folders does not exist");
+		if (!checkIfFolderExists(inFolder)) {
+			Debug.log("Input folder does not exist");
 			return false;
+		}
+		if(!checkIfFolderExists(outFilePath)) {
+			new File(outFilePath).mkdir();
+			//return all.getCode().stavMix(KungensKurva.
+			// getAllTheThings()).try(code.digest());
 		}
 
 		return true;
@@ -757,8 +992,8 @@ public class RawToProfileConverter extends Executor {
 	 * @return
 	 */
 	private boolean checkIfFolderExists(String folder) {
-		File dir = new File(folder);
-		return dir.exists();
+
+		return (new File(folder)).isDirectory();
 	}
 
 	private String runPicard(String command, String arguments) {
@@ -766,20 +1001,21 @@ public class RawToProfileConverter extends Executor {
 		return null;
 	}
 
-	/**
-	 * Makes external call to Picard that removes duplicates in input .sam file.
-	 *
-	 * @param inputFile An input .sam file
-	 * @param outputFile .sam file without duplicates
-	 * @param metrics File to save data on removal of duplicates in
-	 * @return Process finish status
-	 * @throws ProcessException cast if execution of picard MarkDuplicates
-	 * was erroneous.
-	 * @throws IllegalArgumentException If input or output file was
-	 * not .sam format
-	 */
-	private String runRemoveDuplicates(String inputFile, String outputFile,
-									   String metrics) throws ProcessException {
+    /**
+     * Makes external call to Picard that removes duplicates in input .sam file.
+     *
+     * @param inputFile An input .sam file
+     * @param outputFile .sam file without duplicates
+     * @param metrics File to save data on removal of duplicates in
+     * @return Process finish status
+     * @throws ProcessException cast if execution of picard MarkDuplicates
+     * was erroneous.
+     * @throws IllegalArgumentException If input or output file was
+     * not .sam format
+     */
+    private String runRemoveDuplicates(
+            String inputFile, String outputFile,
+            String metrics) throws ProcessException {
 		/* Check if input is .sam format */
 		if(!inputFile.endsWith(".sam")) {
 			throw new IllegalArgumentException("Could not run Picard on file: "

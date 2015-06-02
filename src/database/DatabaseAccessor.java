@@ -1,8 +1,8 @@
 package database;
 
-import database.subClasses.UserMethods.UserType;
 import database.containers.*;
 import database.subClasses.*;
+import database.subClasses.UserMethods.UserType;
 import org.apache.commons.codec.digest.DigestUtils;
 import server.ServerSettings;
 
@@ -11,12 +11,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.*;
 import java.text.ParseException;
+import java.util.*;
 import java.util.AbstractMap.SimpleEntry;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Properties;
 
 /**
  * PREREQUISITES: The construction parameters must reference a postgresql
@@ -70,10 +67,12 @@ public class DatabaseAccessor implements AutoCloseable {
         String url = "jdbc:postgresql://" + host + "/" + database;
 
         Properties props = new Properties();
+//        Debug.log("props = " + props);
         props.setProperty("user", username);
         props.setProperty("password", password);
 
         conn = DriverManager.getConnection(url, props);
+        conn.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
 
         fpg = new FilePathGenerator(DATAFOLDER);
         pm2sql = new PubMedToSQLConverter();
@@ -426,10 +425,32 @@ public class DatabaseAccessor implements AutoCloseable {
      *             - if the query does not succeed
      * @throws IOException
      *             - if the value is invalid for the annotation type.
+     * @deprecated  Use updateExperiment(String expID,
+     *                      HashMap<String, String> annotations) instead.
      */
+    @Deprecated
     public int updateExperiment(String expID, String label, String value)
             throws SQLException, IOException {
         return expMethods.updateExperiment(expID, label, value);
+    }
+
+    /**
+     * Updates values of multiple annotations of a unique experiment.
+     *
+     * @param expID - the name of the experiment to annotate.
+     * @param annotations - the list of annotations to set.
+     *            Should consist of objects of type Entry<String1, String2> where
+     *            String1 is the label and key of the entry, and String2 is the
+     *            value to assign to that label as well as the value of the entry.
+     * @return the number of tuples updated in the database.
+     * @throws SQLException
+     *             - if the query does not succeed
+     * @throws IOException
+     *             - if the value is invalid for the annotation type.
+     */
+    public int updateExperiment(String expID, HashMap<String, String> annotations)
+            throws SQLException, IOException {
+        return expMethods.updateExperiment(expID, annotations);
     }
 
     /**
@@ -515,6 +536,10 @@ public class DatabaseAccessor implements AutoCloseable {
 
     public ArrayList<String> getAllAnnotationLabels() {
         return annoMethods.getAllAnnotationLabels();
+    }
+
+    public ArrayList<String> getAllForcedAnnotationLabels() {
+        return annoMethods.getAllForcedAnnotationLabels();
     }
 
     /**
@@ -771,13 +796,8 @@ public class DatabaseAccessor implements AutoCloseable {
      * @param   ft the file to update size for
      * @return  the number of tuples updated (either 0 or 1)
      */
-    public int updateFileSize(FileTuple ft) throws  SQLException {
-
-        File f = new File(ft.path);
-        Long size = f.length();
-
+    public int updateFileSize(FileTuple ft, long size) throws  SQLException {
         return fileMethods.updateFileSize(ft.id, size);
-
     }
 
     /**
@@ -873,6 +893,50 @@ public class DatabaseAccessor implements AutoCloseable {
         return fileMethods.changeFileName(fileID, newFileName);
     }
 
+    /**
+     * Changes the file type for a specific file with given fileID.
+     * @param fileID
+     * @param newType
+     * @return
+     * @throws SQLException
+     */
+    public int changeFileType(int fileID, int newType) throws SQLException {
+        return fileMethods.changeFileType(fileID, newType);
+    }
+
+    /**
+     * Changes the file meta data for a specific file with given fileID
+     * @param fileID
+     * @param newMetaData
+     * @return
+     * @throws SQLException
+     */
+    public int changeFileMetaData(int fileID, String newMetaData) throws SQLException {
+        return fileMethods.changeFileMetaData(fileID, newMetaData);
+    }
+
+    /**
+     * Changes the file author for a specific file with given fileID
+     * @param fileID
+     * @param newAuthor
+     * @return
+     * @throws SQLException
+     */
+    public int changeFileAuthor(int fileID, String newAuthor) throws SQLException {
+        return fileMethods.changeFileAuthor(fileID, newAuthor);
+    }
+
+    /**
+     * Changes the genome release version for specific file with given fileID
+     * @param fileID
+     * @param newGrVersion
+     * @return
+     * @throws SQLException
+     */
+    public int changeFileGrVersion(int fileID, String newGrVersion) throws SQLException {
+        return fileMethods.changeFileGrVersion(fileID, newGrVersion);
+    }
+
 
     //FIXME missing param annotation
     /**
@@ -914,9 +978,9 @@ public class DatabaseAccessor implements AutoCloseable {
      *             - If the database could not be accessed
      * @throws ParseException
      */
-    public Entry<String, String> processRawToProfile(String expId)
+    public Entry<String, String> processRawToProfile(String expID)
             throws IOException, SQLException {
-        Experiment e = expMethods.getExperiment(expId);
+        Experiment e = expMethods.getExperiment(expID);
         if (e == null) {
             throw new IOException("Invalid experiment ID");
         }
@@ -926,10 +990,9 @@ public class DatabaseAccessor implements AutoCloseable {
         List<FileTuple> fileTuples = e.getFiles();
         FileTuple rawFileTuple = getRawFileTuple(fileTuples);
         if (rawFileTuple == null) {
-            throw new IOException(expId + " has no raw files to process!");
+            throw new IOException(expID + " has no raw files to process!");
         }
-        String profileFolderPath = fpg.generateNewProfileSubFolder(fpg
-                .getProfileFolderPath(e.getID()));
+        String profileFolderPath = fpg.getProfileFolderPath(expID);
         return new SimpleEntry<String, String>(rawFileTuple.getParentFolder(),
                 profileFolderPath);
     }
@@ -988,9 +1051,10 @@ public class DatabaseAccessor implements AutoCloseable {
                 try (FileInputStream is = new FileInputStream(f)) {
                     checkSumMD5 = DigestUtils.md5Hex(is);
                 }
+
                 fileMethods.addGeneratedFile(e.getID(), FileTuple.PROFILE,
                         f.getPath(), inputFileName, metaData, uploader,
-                        isPrivate, grVersion, checkSumMD5);
+                        isPrivate, grVersion, checkSumMD5, f.length());
             }
         }
     }
@@ -1149,6 +1213,22 @@ public class DatabaseAccessor implements AutoCloseable {
     public boolean removeGenomeRelease(String genomeVersion)
             throws SQLException, IOException {
         return genMethods.removeGenomeRelease(genomeVersion);
+    }
+
+    /**
+     * Removes one specific genome release file stored in the database.
+     *
+     * @param genomeVersion - the genome version.
+     * @param filePath      - path on the file system.
+     *
+     * @return boolean - true if succeeded, false if failed.
+     * @throws SQLException
+     * @throws IOException
+     */
+    public boolean removeGenomeReleaseFile(String genomeVersion,
+                                           String fileName)
+        throws SQLException, IOException {
+        return genMethods.removeGenomeReleaseFile(genomeVersion, fileName);
     }
 
     /**
@@ -1430,5 +1510,9 @@ public class DatabaseAccessor implements AutoCloseable {
      */
     public void setChainFileCheckSumMD5 (ChainFile file, String checkSumMD5) throws SQLException {
         genMethods.setChainFileCheckSumMD5(file, checkSumMD5);
+    }
+
+    public FileMethods getFileMethods() {
+        return fileMethods;
     }
 }

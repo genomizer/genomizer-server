@@ -2,9 +2,9 @@ package process;
 
 import command.ValidateException;
 import response.HttpStatusCode;
-import server.ServerSettings;
 import server.ErrorLogger;
-import transfer.Util;
+import server.ServerSettings;
+import util.Util;
 
 import java.io.File;
 import java.io.IOException;
@@ -107,7 +107,7 @@ public class Pyicos extends Executor {
             args.add(additionalParam);
         }
 
-        return executeProgram(args.toArray(new String[]{}));
+        return executeCommand(args.toArray(new String[]{}));
     }
 
     public void cleanupTempFiles() {
@@ -151,12 +151,11 @@ public class Pyicos extends Executor {
     }
 
     // Convert a sam file to a wig file. Returns the name of the newly-produced wig file.
-    public static String runConvert(String samFile)
+    public static String runConvert(String samFile, String wigFile)
             throws ValidateException, InterruptedException, IOException {
         // Get the extension length from strcorr.
         int extensionLength = runStrcorr(samFile);
 	ErrorLogger.log("SYSTEM", "Done with strcorr");
-        String wigFile = Util.replaceExtension(samFile, ".wig");
 
         // Run 'convert'.
         Pyicos convert = new Pyicos("convert", samFile, wigFile,
