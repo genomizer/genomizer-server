@@ -86,10 +86,19 @@ public class PostAnnotationFieldCommand extends Command {
 			}
 			response = new MinimalResponse(HttpStatusCode.OK);
 		} catch (SQLException e) {
-			response = new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
-					"Adding annotation field " + name + " unsuccessful due " +
-							"to temporary database problems");
-			Debug.log("Reason :" + e.getMessage());
+			if(e.getErrorCode()==0){
+				Debug.log("Adding annotation field " + name +
+						" unsuccessful. Not allowed to have identical items in a drop-down list.");
+				response = new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Adding annotation field " + name +
+						" unsuccessful. Not allowed to have identical items in a drop-down list.");
+			}else{
+				Debug.log("Adding annotation field " + name +
+						" unsuccessful to temporary database problems. Reason"+e.getMessage());
+				response = new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+						"Adding annotation field " + name + " unsuccessful due " +
+								"to temporary database problems.");
+			}
+
 		} catch (IOException e) {
 			response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
 					"Adding annotation field '" + name + "' unsuccessful. " +
