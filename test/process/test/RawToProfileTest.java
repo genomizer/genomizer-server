@@ -96,6 +96,7 @@ public class RawToProfileTest {
 //		rtp.specificParamProcedure(new String[]{""});
 //	}
 
+	@Ignore
 	@Test
 	@Ignore
 	public void shouldProduceNewSamFile() throws ProcessException {
