@@ -1225,9 +1225,9 @@ public class DatabaseAccessor implements AutoCloseable {
      * @throws IOException
      */
     public boolean removeGenomeReleaseFile(String genomeVersion,
-                                           String filePath)
+                                           String fileName)
         throws SQLException, IOException {
-        return genMethods.removeGenomeReleaseFile(genomeVersion, filePath);
+        return genMethods.removeGenomeReleaseFile(genomeVersion, fileName);
     }
 
     /**

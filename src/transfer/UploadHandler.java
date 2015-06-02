@@ -199,7 +199,7 @@ public class UploadHandler {
 
             ChainFile cf = db.getChainFileInProgress(absUploadPath);
             if (cf != null) {
-		Debug.log("Removing chail file " + cf.fileName);
+		Debug.log("Removing chain file " + cf.fileName);
                 db.removeChainFiles(cf.fromVersion, cf.toVersion);
                 return;
             }
