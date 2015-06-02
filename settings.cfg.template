@@ -18,10 +18,19 @@ nrOfProcessThreads  = 5
 
 # Paths to various programs that we use. Currently only 'bowtie'.
 
-bowtieLocation       = resources/bowtie/bowtie
-bowtie2Location      = resources/bowtie2/bowtie2
-picardLocation       = resources/picard/picard.jar
-pyicosLocation       = resources/pyicoteo/pyicos
+bowtieLocation		= resources/bowtie/bowtie
+picardLocation		= resources/picard-tools/picard.jar
+bowtie2Location		= resources/bowtie2/bowtie2
+pyicosLocation		= resources/pyicoteo/pyicos
+smoothingJarLocation	= resources/smoothing.jar
+
+# Which bowtie version to run.
+
+shouldUseBowtie2 = false
+
+# Should the Java implementation of smoothing be used?
+
+shouldUseJavaSmoothing = false;
 
 # Address and port of the publicly visible WWW server (if any)
 # that is tunnelling requests to the genomizer server.
