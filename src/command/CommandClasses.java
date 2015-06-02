@@ -97,6 +97,15 @@ public class CommandClasses {
         classes.put("POST /genomeRelease/", PostGenomeReleaseCommand.class);
         classes.put("DELETE /genomeRelease/", DeleteGenomeReleaseCommand.
                 class);
+
+        // NB: this is subtle. GET /genomeRelease lists all genome releases,
+        // while GET /genomeRelease/ lists a genome release named "".
+        //
+        // TODO: write a more sane routing function or switch to some web framework
+        // that provides routing functionality, e.g. Ninja:
+        // http://www.ninjaframework.org/documentation/basic_concepts/routing.html
+        classes.put("GET /genomeRelease", GetGenomeReleaseCommand.
+                class);
         classes.put("GET /genomeRelease/", GetGenomeReleaseSpeciesCommand.
                 class);
     }
@@ -108,9 +117,12 @@ public class CommandClasses {
      * @return the class object corresponding to the given context.
      */
     public static Class<? extends Command> get(String context) {
-        if (context.endsWith("/"))
-            return classes.get(context);
-        else
-            return classes.get(context + "/");
+      Class<? extends Command> ret = classes.get(context);
+      if (ret != null)
+        return ret;
+      else if (!context.endsWith("/"))
+        return classes.get(context + "/");
+      else
+        return ret;
     }
 }
