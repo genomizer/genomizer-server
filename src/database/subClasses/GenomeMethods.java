@@ -46,49 +46,29 @@ public class GenomeMethods {
 	 * @return String path - a file path, NULL if it was not found.
 	 * @throws SQLException
 	 */
+
 	public Genome getGenomeRelease(String genomeVersion) throws SQLException {
 
-		String species;
-		String folderPath;
-		String file;
-		ArrayList<String> fileList = new ArrayList<String>();
-
-		String query = "SELECT * FROM Genome_Release AS R "
-				+ "JOIN Genome_Release_Files AS F "
-				+ "ON (R.Version = F.Version) "
-				+ "WHERE (R.Version ~~* ?)";
+        String query = "SELECT * FROM Genome_Release AS R "
+                + "JOIN Genome_Release_Files AS F "
+                + "ON (R.Version = F.Version) "
+                + "WHERE (R.Version ~~* ?)";
 
 		PreparedStatement stmt = conn.prepareStatement(query);
 		stmt.setString(1, genomeVersion);
 		ResultSet rs = stmt.executeQuery();
 
-		//Get the initial info
-		if(rs.next()) {
-			species = rs.getString("Species");
-			folderPath = rs.getString("FolderPath");
-			file = rs.getString("FileName");
-			if(file != null) {
-				fileList.add(rs.getString("FileName"));
-			}
-		} else {
-			//The genome did not exist
-			return null;
-		}
-
-		//Loop through files.
-		while (rs.next()) {
-			file = rs.getString("FileName");
-			if(file != null) {
-				fileList.add(rs.getString("FileName"));
-			}
+		Genome genome = null;
+		if (rs.next()) {
+			genome = new Genome(rs);
 		}
 
 		stmt.close();
 
-		return new Genome(genomeVersion, species, folderPath, fileList);
+		return genome;
 	}
 
-	/**
+    /**
      * Add one genome release to the database.
      *
      * @param genomeVersion the genome version
@@ -141,7 +121,10 @@ public class GenomeMethods {
 
 			conn.commit();
 
-		} catch (SQLException e) {
+		} catch (SQLException e ) {
+			conn.rollback();
+			throw e;
+		} catch(IOException e) {
 			conn.rollback();
 			throw e;
 		} finally {
@@ -383,14 +366,17 @@ public class GenomeMethods {
 		}
 	}
 
-	public boolean removeGenomeReleaseFile (String genomeVersion,
-											String filePath)
-		throws SQLException, IOException {
-		String fileName = new File(filePath).getName();
+	public boolean removeGenomeReleaseFile(String genomeVersion,
+										   String fileName)
+			throws SQLException, IOException {
+		String folderPath = getGenomeRelease(genomeVersion).getFolderPath();
+		File file = new File(folderPath+fileName);
+		if (file.exists())
+			file.delete();
 
 		try (PreparedStatement stmt = conn.prepareStatement(
-				"DELETE FROM Genome_Release_Files"
-				+ "WHERE FileName ~~* ?"
+				"DELETE FROM Genome_Release_Files "
+				+ "WHERE FileName ~~* ? "
 				+ "AND Version ~~* ?")) {
 			stmt.setString(1, fileName);
 			stmt.setString(2, genomeVersion);
@@ -579,14 +565,31 @@ public class GenomeMethods {
 	public int removeChainFiles(String fromVersion, String toVersion)
 			throws SQLException {
 
-		int resCount = 0;
+		int resCount;
 
-		ChainFiles cf = getChainFiles(fromVersion, toVersion);
+		String getChainFiles =
+				"SELECT FolderPath FROM Chain_File NATURAL JOIN Chain_File_Files " +
+				"WHERE (FromVersion ~~* ?)" + " AND (ToVersion ~~* ?)";
 
-        if (cf == null) {
-            return 0;
-        }
-        String filePath = cf.folderPath;
+		PreparedStatement getChainFilesStmt = conn.prepareStatement(getChainFiles);
+		getChainFilesStmt.setString(1, fromVersion);
+		getChainFilesStmt.setString(2, toVersion);
+		ResultSet getChainFilesRs = getChainFilesStmt.executeQuery();
+
+		String filePath;
+
+		if (getChainFilesRs.next()) {
+
+			filePath = getChainFilesRs.getString("FolderPath");
+
+		} else {
+			getChainFilesStmt.close();
+			return 0;
+
+		}
+
+		getChainFilesStmt.close();
+		removeChainFileFiles(fromVersion, toVersion);
 
         String query = "DELETE FROM Chain_File WHERE (FromVersion ~~* ?)"
                 + " AND (ToVersion ~~* ?)";
@@ -603,6 +606,29 @@ public class GenomeMethods {
 		deleteStatement.setString(2, toVersion);
 		resCount = deleteStatement.executeUpdate();
 		deleteStatement.close();
+
+		return resCount;
+	}
+
+	/**
+	 * Removes chain file files from database.
+	 * @param fromVersion
+	 * @param toVersion
+	 * @return number of removed rows
+	 * @throws SQLException
+	 */
+	private int removeChainFileFiles(String fromVersion, String toVersion)
+														throws SQLException{
+
+		String query = "DELETE FROM Chain_File_Files " +
+						"WHERE (FromVersion ~~* ?)" + " AND (ToVersion ~~* ?)";
+
+		PreparedStatement deleteChainFileFiles = conn.prepareStatement(query);
+		deleteChainFileFiles.setString(1, fromVersion);
+		deleteChainFileFiles.setString(2, toVersion);
+
+		int resCount = deleteChainFileFiles.executeUpdate();
+		deleteChainFileFiles.close();
 
 		return resCount;
 	}
@@ -651,18 +677,20 @@ public class GenomeMethods {
 	 *             - if the query does not succeed
 	 */
 	public List<Genome> getAllGenomeReleases() throws SQLException {
-		String query = "SELECT DISTINCT version FROM Genome_Release ";
+		String query = "SELECT * FROM Genome_Release "
+				+ "NATURAL JOIN Genome_Release_Files "
+				+ "WHERE Status = 'Done' ORDER BY Version";
 
 		PreparedStatement stmt = conn.prepareStatement(query);
 		ResultSet rs = stmt.executeQuery();
 
 		ArrayList<Genome> genomeList = new ArrayList<Genome>();
-		String version;
-		Genome tmpGenome;
-		while(rs.next()) {
-			version = rs.getString("version");
-			tmpGenome = getGenomeRelease(version);
-			genomeList.add(tmpGenome);
+
+		if (rs.next()) {
+			while (!rs.isAfterLast()) {
+				Genome g = new Genome(rs);
+				genomeList.add(g);
+			}
 		}
 
 		stmt.close();
