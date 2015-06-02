@@ -21,6 +21,7 @@ public class ServerSettings {
 	public static String bowtie2Location = "resources/bowtie2/bowtie2";
 	public static String picardLocation = "resources/picard-tools/picard.jar";
 	public static int nrOfProcessThreads = 5;
+	public static String uploadTempDir = System.getProperty("java.io.tmpdir");
 	public static boolean shouldUseBowtie2 = false;
 
 	private static String downloadURL = "/download?path=";
@@ -43,7 +44,8 @@ public class ServerSettings {
 					+ "bowtieLocation = " + bowtieLocation + "\n"
 					+ "bowtie2Location = " + bowtie2Location + "\n"
 					+ "picardLocation = " + picardLocation + "\n"
-					+ "pyicosLocation = " + pyicosLocation + "\n";
+					+ "pyicosLocation = " + pyicosLocation + "\n"
+					+ "uploadTempDir = " + uploadTempDir + "\n";
 
 			out.write(dataInfo);
 			out.close();
@@ -74,6 +76,7 @@ public class ServerSettings {
 		nullCheck(bowtie2Location, "bowtie2Location");
 		nullCheck(picardLocation, "picardLocation");
 		nullCheck(pyicosLocation, "pyicosLocation");
+		nullCheck(uploadTempDir, "uploadTempDir");
 		nullCheck(shouldUseBowtie2, "shouldUseBowtie2");
 	}
 
@@ -159,6 +162,9 @@ public class ServerSettings {
 				case "pyicoslocation":
 					pyicosLocation = value;
 					break;
+				case "uploadtempdir":
+					uploadTempDir = value;
+					break;
 				case "shouldUseBowtie2":
 					shouldUseBowtie2 = Boolean.parseBoolean(value);
 					break;
@@ -190,6 +196,7 @@ public class ServerSettings {
 							+ "\tbowtie2Location = " + bowtie2Location + "\n"
 							+ "\tpicardLocation = " + picardLocation + "\n"
 							+ "\tpyicosLocation = " + pyicosLocation + "\n"
+							+ "\tuploadTempDir = " + uploadTempDir + "\n"
 							+ "\n";
 
 			Debug.log("Imported the following settings:\n" + dataInfo);

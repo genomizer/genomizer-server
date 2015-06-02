@@ -65,7 +65,7 @@ public class ProcessCommands extends Command {
             processCommand.validate();
         }
 
-        validateCommandOrder();
+//        validateCommandOrder();
     }
 
     // Validate that the list of ProcessCommands is in the correct order.
@@ -142,19 +142,16 @@ public class ProcessCommands extends Command {
      */
     @Override
     public Response execute() {
-//        try {
+        for (ProcessCommand processCommand : processCommands) {
+            processCommand.setExpID(expId);
+        }
 
-            startProcessingThread();
+        startProcessingThread();
 
-            return new ProcessResponse(
-                    HttpStatusCode.OK,
-                    "Processing of experiment " + expId + " has begun.");
+        return new ProcessResponse(
+                HttpStatusCode.OK,
+                "Processing of experiment " + expId + " has begun.");
 
-//        } catch (IOException | SQLException e) {
-//            return new ProcessResponse(
-//                    HttpStatusCode.NOT_FOUND,
-//                    e.getMessage());
-//        }
     }
 
     private void startProcessingThread() {
@@ -171,6 +168,7 @@ public class ProcessCommands extends Command {
             rawFilesDir = fetchRawFilesDirFromDB(expId);
             profileFilesDir = fetchProfileFilesDirFromDB(expId);
             for (ProcessCommand processCommand : processCommands) {
+                processCommand.expID = expId;
                 processCommand
                         .doProcess(pool, rawFilesDir, profileFilesDir);
             }

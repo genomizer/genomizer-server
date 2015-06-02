@@ -285,6 +285,8 @@ public class PutAdminUserCommandTest {
     public void testValidationProperlyFormatted() throws ValidateException {
         json = createJSON("a","b","c","d","e");
         PutAdminUserCommand cmd = gson.fromJson(json, PutAdminUserCommand.class);
+
+        uuid = Authenticate.updateActiveUser(null, "testuser");
         cmd.setFields("uri", null, uuid, UserType.ADMIN);
 
         cmd.validate();

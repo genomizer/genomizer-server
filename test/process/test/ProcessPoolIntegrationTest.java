@@ -63,10 +63,16 @@ public class ProcessPoolIntegrationTest {
     @Ignore
     public void shouldSmoothOneFile() throws Exception {
         String json = "{\"expId\":\"processpool_test\"," +
-                      "\"processCommands\":[{\"type\":\"smooth\"," +
-                      "\"files\":[{\"infile\":\"stepTestInfile.sgr\"," +
-                      "\"outfile\":\"stepTestOutfile.sgr\"," +
-                      "\"stepSize\":\"30\"}]}]}";
+                      "\"processCommands\":[{\"type\":\"smoothing\"," +
+                      "\"files\":[{" +
+                      "\"infile\":\"SGR-testdata-2.sgr\"," +
+                      "\"outfile\":\"smoothOutfile.sgr\"," +
+                      "\"windowSize\":\"10\"," +
+                      "\"meanOrMedian\":\"mean\"," +
+                      "\"minSmooth\":\"5\"" +
+                      "}]}]}";
+
+        System.out.println("json = " + json);
 
         ProcessCommands commands = gson.fromJson(json, ProcessCommands.class);
         commands.setPool(pool);
@@ -113,12 +119,40 @@ public class ProcessPoolIntegrationTest {
         String json =
                 "{\"expId\":\"processpool_test\"," +
                 "\"processCommands\":[{\"type\":\"rawToProfile\"," +
-                "\"files\":[{\"infile\":\"stepTestInfile.sgr\"," +
-                "\"outfile\":\"shtrhtrshts\",\"genomeVersion\":\"hg38\"," +
-                "\"params\":\"-a -m 1 --best -p 10 -v 2 -q -S\"," +
-                "\"keepSam\":\"on\"}]}]}";
+                "\"files\":[{" +
+                "\"infile\":\"smalltest1.fastq\"," +
+                "\"outfile\":\"smalltest1.wig\"," +
+                "\"genomeVersion\":\"GenomV1\"," +
+                "\"params\":\"-a -S\"," +
+                "\"keepSam\":true" +
+                "}]}]}";
+
+        System.out.println("json = " + json);
 
         ProcessCommands commands = gson.fromJson(json, ProcessCommands.class);
+        commands.setPool(pool);
+
+        commands.doProcesses();
+    }
+
+    @Test
+    @Ignore
+    public void shouldRatioOneFile() throws Exception {
+        String json =
+                "{\"expId\":\"processpool_test\"," +
+                "\"processCommands\":[{\"type\":\"ratio\"," +
+                "\"files\":[{\"preChipFile\":\"stepTestInfile.sgr\",\"postChipFile" +
+                "\":\"stepTestInfile.sgr\"," +
+                "\"outfile\":\"ratioOutFile.sgr\"," +
+                "\"mean\":\"single\"," +
+                "\"readsCutOff\":5," +
+                "\"chromosomes\":\"0\"" +
+                "}]}]}";
+
+        System.out.println("json = " + json);
+
+        ProcessCommands commands = gson.fromJson(json, ProcessCommands.class);
+
         commands.setPool(pool);
 
         commands.doProcesses();

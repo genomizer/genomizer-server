@@ -1,9 +1,9 @@
 package command.process;
 
+import command.Process;
 import command.ValidateException;
 import response.HttpStatusCode;
 import response.Response;
-import server.Doorman;
 import server.ProcessPool;
 
 import java.util.ArrayList;
@@ -22,6 +22,8 @@ import java.util.concurrent.Future;
 
 public abstract class ProcessCommand {
 
+    protected String expID;
+
     public void doProcess(ProcessPool pool, String rawFilesDir, String profileFilesDir)
             throws ExecutionException, InterruptedException {
 
@@ -29,7 +31,9 @@ public abstract class ProcessCommand {
         for (Callable<Response> callable : getCallables(
                 rawFilesDir,
                 profileFilesDir)) {
-            UUID uuid = pool.addProcess(callable);
+            UUID uuid = pool.addProcess(
+                    new Process(expID, "UNKNOWN_AUTHOR"),
+                    callable);
             futures.add(pool.getFuture(uuid));
         }
         for (Future<Response> future : futures) {
@@ -37,6 +41,10 @@ public abstract class ProcessCommand {
                 throw new InterruptedException(future.get().getMessage());
             }
         }
+    }
+
+    public void setExpID(String expID) {
+        this.expID = expID;
     }
 
     protected abstract Collection<Callable<Response>> getCallables(

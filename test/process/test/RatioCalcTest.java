@@ -7,7 +7,6 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import process.Ratio;
-import process.Step;
 
 import java.io.File;
 
@@ -50,21 +49,21 @@ public class RatioCalcTest {
     @After
     public void tearDown() throws Exception {
         new File(OUTFILE).delete();
+        new File(OUTFILE_PATH).delete();
     }
 
-    @Ignore
-    @Test
-    public void shouldNotThrowValidationExceptionNoChroms() throws Exception {
-        new Ratio(
-                INFILE_1,
-                INFILE_2,
-                OUTFILE,
-                MEAN,
-                READS_CUT_OFF,
-                NO_CHROMOSOMES).validate();
-    }
+//    @Ignore
+//    @Test
+//    public void shouldNotThrowValidationExceptionNoChroms() throws Exception {
+//        new Ratio(
+//                INFILE_1,
+//                INFILE_2,
+//                OUTFILE,
+//                MEAN,
+//                READS_CUT_OFF,
+//                NO_CHROMOSOMES).validate();
+//    }
 
-    @Ignore
     @Test
     public void shouldNotThrowValidationExceptionWithChroms() throws Exception {
         new Ratio(INFILE_1, INFILE_2, OUTFILE, MEAN, READS_CUT_OFF, CHROMOSOMES)
@@ -139,34 +138,33 @@ public class RatioCalcTest {
                 .validate();
     }
 
-    /**
-     * TODO check constraints for chromosomes
-     */
-    @Test(expected = ValidateException.class)
-    @Ignore
-    public void shouldThrowValidationExceptionInvalidChroms() throws Exception {
-        new Ratio(
-                INFILE_1,
-                INFILE_2,
-                OUTFILE,
-                MEAN,
-                READS_CUT_OFF,
-                BAD_CHROMOSOMES)
-                .validate();
-    }
-
-    /**
-     * TODO check constraints for cutOff
-     */
-    @Test(expected = ValidateException.class)
-    @Ignore
-    public void shouldThrowValidationExceptionInvalidCutOff() throws Exception {
-        new Ratio(INFILE_1, INFILE_2, OUTFILE, MEAN, READS_CUT_OFF, CHROMOSOMES)
-                .validate();
-    }
+//    /**
+//     * check constraints for chromosomes
+//     */
+//    @Test(expected = ValidateException.class)
+//    @Ignore
+//    public void shouldThrowValidationExceptionInvalidChroms() throws Exception {
+//        new Ratio(
+//                INFILE_1,
+//                INFILE_2,
+//                OUTFILE,
+//                MEAN,
+//                READS_CUT_OFF,
+//                BAD_CHROMOSOMES)
+//                .validate();
+//    }
+//
+//    /**
+//     * check constraints for cutOff
+//     */
+//    @Test(expected = ValidateException.class)
+//    @Ignore
+//    public void shouldThrowValidationExceptionInvalidCutOff() throws Exception {
+//        new Ratio(INFILE_1, INFILE_2, OUTFILE, MEAN, READS_CUT_OFF, CHROMOSOMES)
+//                .validate();
+//    }
 
     @Test
-    @Ignore
     public void shouldProduceOutfile() throws Exception {
         new Ratio(
                 INFILE_1,
@@ -174,23 +172,27 @@ public class RatioCalcTest {
                 OUTFILE,
                 MEAN,
                 READS_CUT_OFF,
-                CHROMOSOMES);
-        assertTrue(new File(OUTFILE).exists());
+                CHROMOSOMES).validate().execute();
+
+        assertTrue(new File(OUTFILE).isFile());
     }
 
-    @Test
-    @Ignore
-    public void shouldProduceCorrectFile() throws Exception {
-        new Ratio(
-                INFILE_1,
-                INFILE_2,
-                OUTFILE,
-                MEAN,
-                READS_CUT_OFF,
-                CHROMOSOMES);
-        assertTrue(
-                FileUtils.contentEquals(
-                        new File(OUTFILE),
-                        new File(CORRECT_FILE)));
-    }
+//    /**
+//     * determine expected content of ratio calculation output files
+//     */
+//    @Test
+//    @Ignore
+//    public void shouldProduceCorrectFile() throws Exception {
+//        new Ratio(
+//                INFILE_1,
+//                INFILE_2,
+//                OUTFILE,
+//                MEAN,
+//                READS_CUT_OFF,
+//                CHROMOSOMES);
+//        assertTrue(
+//                FileUtils.contentEquals(
+//                        new File(OUTFILE),
+//                        new File(CORRECT_FILE)));
+//    }
 }
