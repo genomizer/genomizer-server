@@ -28,6 +28,8 @@ public class PostLoginCommand extends Command {
 	@Expose
 	private String password = null;
 
+	private final static String errMsg = "Login attempt unsuccessful, incorrect Username/Password.";
+
 	@Override
 	public int getExpectedNumberOfURIFields() {
 		return 1;
@@ -42,55 +44,51 @@ public class PostLoginCommand extends Command {
 	public void validateUserAndPassword(String string, int maxLength) throws
 			ValidateException {
 		if (string == null) {
-			throw new ValidateException(HttpStatusCode.BAD_REQUEST,
-					"Login attempt unsuccessful, incorrect Username/Password.");
+			badRequest();
 		}
-
 		if (string.equals("null")) {
-			throw new ValidateException(HttpStatusCode.BAD_REQUEST,
-					"Login attempt unsuccessful, incorrect Username/Password.");
+			badRequest();
 		}
 		if(string.length() > maxLength || string.length() < 1) {
-			throw new ValidateException(HttpStatusCode.BAD_REQUEST,
-					"Login attempt unsuccessful, incorrect Username/Password.");
+			badRequest();
 		}
 		if(hasInvalidCharacters(string)) {
-				throw new ValidateException(HttpStatusCode.BAD_REQUEST,
-						"Login attempt unsuccessful, incorrect " +
-								"Username/Password.");
+			badRequest();
 		}
+	}
+
+	private void badRequest() throws ValidateException {
+		throw new ValidateException(HttpStatusCode.BAD_REQUEST, errMsg);
 	}
 
 	@Override
 	public Response execute() {
 		Response response;
 		try (DatabaseAccessor db = initDB()) {
-			String dbHash;
-			if ((dbHash = db.getPasswordHash(username)) != null) {
+			String dbHash = db.getPasswordHash(username);
+			if (dbHash != null) {
 				LoginAttempt login = Authenticate.login(uuid, username,
 						password, dbHash);
-				if (login.wasSuccessful())
-					response = new LoginResponse(login.getUUID(),
+				if (login.wasSuccessful()) {
+					return new LoginResponse(login.getUUID(),
 							db.getRole(username).name());
-				else
-					response = new ErrorResponse(HttpStatusCode.UNAUTHORIZED,
-							"Login attempt unsuccessful, incorrect " +
-									"Username/Password.");
+				}
+				else {
+					return unauthorized();
+				}
 			} else {
-				response = new ErrorResponse(HttpStatusCode.UNAUTHORIZED,
-						"Login attempt unsuccessful, incorrect " +
-								"Username/Password");
+				return unauthorized();
 			}
-		} catch (IOException e) {
-			response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
-					"Login attempt unsuccessful.");
-		} catch (SQLException e) {
-			response = new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+		}
+		catch (IOException | SQLException e) {
+			Debug.log("Reason: " + e.getMessage());
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
 					"Login attempt unsuccessful due to temporary database " +
 							"problems.");
-			Debug.log("Reason: " + e.getMessage());
 		}
+	}
 
-		return response;
+	private Response unauthorized() {
+		return new ErrorResponse(HttpStatusCode.UNAUTHORIZED, errMsg);
 	}
 }
