@@ -21,3 +21,5 @@ resources/processTest/test_sorted.sam
 resources/processTest/test_sorted_without_duplicates.sam
 pyicos.log
 
+log.txt
+resources/processTest/results/
