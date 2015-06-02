@@ -71,6 +71,7 @@ public class UserRights {
         userRights.put(PutProcessCommands.class, UserType.USER);
         userRights.put(GetProcessStatusCommand.class, UserType.USER);
         userRights.put(GetProcessDummyCommand.class,UserType.GUEST);
+        userRights.put(CancelProcessCommand.class,UserType.USER);
 
         /** Search */
         userRights.put(SearchCommand.class, UserType.GUEST);
