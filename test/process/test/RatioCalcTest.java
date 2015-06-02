@@ -64,7 +64,6 @@ public class RatioCalcTest {
 //    }
 
     @Test
-    @Ignore
     public void shouldNotThrowValidationExceptionWithChroms() throws Exception {
         new Ratio(INFILE_1, INFILE_2, OUTFILE, MEAN, READS_CUT_OFF, CHROMOSOMES)
                 .validate();
