@@ -57,6 +57,9 @@
 			"write": true,
 			"order": [
 				"dc69cc4a-2b7e-a5b4-c154-bb07048e4ff4",
+				"246776b9-553f-e6f9-ab1d-21634b3958e8",
+				"0a282091-90c6-ce1a-7637-454e0584c657",
+				"4bd1c299-401c-44de-bbfe-c071763b5f03",
 				"f8b9a363-a2dc-e6ea-9212-9734df6e54d6"
 			],
 			"collection_name": "Genomizer",
@@ -268,6 +271,28 @@
 			"rawModeData": "{ \"username\" : \"{{EnvVarUser}}\", password : \"{{EnvVarPassword}}\" }"
 		},
 		{
+			"id": "0a282091-90c6-ce1a-7637-454e0584c657",
+			"headers": "Authorization: {{EnvVarToken}}\n",
+			"url": "{{EnvVarServer}}/genomeRelease/Insect",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "GET",
+			"collectionId": "28286ab2-d6a4-ede3-53db-c54fc3506853",
+			"data": [],
+			"dataMode": "params",
+			"name": "Get all Insect genome releases",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1433249390563,
+			"version": 2,
+			"responses": [],
+			"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;\n\nvar data = JSON.parse(responseBody);\n\ntests[\"Contains only one genome version\"] = data.length === 1;\n\nvar names = _.map(data, function (genome) { return genome.genomeVersion; });\ntests[\"Contains genome version 'GenomV1'\"] = _.includes(names, \"GenomV1\");\n\nvar species = _.map(data, function (genome) { return genome.species; });\ntests[\"Contains species 'Insect'\"] = _.includes(species, \"Insect\");\n",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"folder": "a2992ed6-466c-affb-5ebd-81ae7f58cc80",
+			"synced": false
+		},
+		{
 			"id": "0a88bbda-a689-4d49-b618-bca428e953e2",
 			"headers": "Authorization: {{EnvVarToken}}\n",
 			"url": "{{EnvVarServer}}/login",
@@ -352,6 +377,26 @@
 			"responses": [],
 			"synced": false,
 			"rawModeData": "{ \"username\" : \"{{GarbageString}}\", password : \"{{EnvVarPassword}}\" }"
+		},
+		{
+			"id": "246776b9-553f-e6f9-ab1d-21634b3958e8",
+			"headers": "Authorization: {{EnvVarToken}}\n",
+			"url": "{{EnvVarServer}}/genomeRelease",
+			"preRequestScript": "",
+			"pathVariables": {},
+			"method": "GET",
+			"data": [],
+			"dataMode": "params",
+			"version": 2,
+			"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;\n\nvar data = JSON.parse(responseBody);\n\nvar names = _.map(data, function (genome) { return genome.genomeVersion; });\ntests[\"Contains genome version 'GenomV1'\"] = _.includes(names, \"GenomV1\");\ntests[\"Contains genome version 'hg18'\"]    = _.includes(names, \"hg18\");\ntests[\"Contains genome version 'hg19'\"]    = _.includes(names, \"hg19\");\ntests[\"Contains genome version 'hg38'\"]    = _.includes(names, \"hg38\");\ntests[\"Contains genome version 'rn3'\"]     = _.includes(names, \"rn3\");\ntests[\"Contains genome version 'rn4'\"]     = _.includes(names, \"rn4\");\ntests[\"Contains genome version 'rn5'\"]     = _.includes(names, \"rn5\");\n\nvar species = _.map(data, function (genome) { return genome.species; });\ntests[\"Contains species 'Insect'\"] = _.includes(species, \"Insect\");\ntests[\"Contains species 'Human'\"]  = _.includes(species, \"Human\");\ntests[\"Contains species 'Rat'\"]    = _.includes(species, \"Rat\");",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1433249258664,
+			"name": "Get all genome releases",
+			"description": "",
+			"collectionId": "28286ab2-d6a4-ede3-53db-c54fc3506853",
+			"responses": [],
+			"synced": false
 		},
 		{
 			"id": "2626075d-9fe0-b5ed-d660-0d19213f1586",
@@ -465,6 +510,26 @@
 			"collectionOwner": 0,
 			"folder": "dbe623bc-eb8c-1e02-2e6f-696d3a3fa844",
 			"rawModeData": ""
+		},
+		{
+			"id": "4bd1c299-401c-44de-bbfe-c071763b5f03",
+			"headers": "Authorization: {{EnvVarToken}}\n",
+			"url": "{{EnvVarServer}}/genomeRelease/Human",
+			"preRequestScript": "",
+			"pathVariables": {},
+			"method": "GET",
+			"data": [],
+			"dataMode": "params",
+			"version": 2,
+			"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;\n\nvar data = JSON.parse(responseBody);\n\ntests[\"Contains only three genome version\"] = data.length === 3;\n\ntests[\"Status code is 200\"] = responseCode.code === 200;\n\nvar data = JSON.parse(responseBody);\n\nvar names = _.map(data, function (genome) { return genome.genomeVersion; });\ntests[\"Contains genome version 'hg18'\"]    = _.includes(names, \"hg18\");\ntests[\"Contains genome version 'hg19'\"]    = _.includes(names, \"hg19\");\ntests[\"Contains genome version 'hg38'\"]    = _.includes(names, \"hg38\");\n\nvar species = _.map(data, function (genome) { return genome.species; });\ntests[\"Contains species 'Human'\"]  = _.includes(species, \"Human\");",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1433255521972,
+			"name": "Get all Human genome releases",
+			"description": "",
+			"collectionId": "28286ab2-d6a4-ede3-53db-c54fc3506853",
+			"responses": [],
+			"synced": false
 		},
 		{
 			"id": "4ec6fb8c-3a02-cee5-f7f1-03006822e3b8",
@@ -986,16 +1051,13 @@
 			"tests": "data = JSON.parse(responseBody);\ntests[\"Token is present\"] = \"token\" in data;\npostman.setEnvironmentVariable(\"EnvVarToken\", data.token);\ntests[\"Response code\"] = responseCode.code === 200;\ntests[\"Role is present\"] = \"role\" in data;\ntests[\"Correct role is returned\"] = data.role === \"USER\";",
 			"currentHelper": "normal",
 			"helperAttributes": {},
-			"time": 1433168437737,
+			"time": 1433249608947,
 			"name": "Login",
 			"description": "Login and set the token environment variable.",
 			"collectionId": "28286ab2-d6a4-ede3-53db-c54fc3506853",
 			"responses": [],
-			"write": true,
-			"collectionOwner": 0,
 			"synced": false,
-			"folder": "a2992ed6-466c-affb-5ebd-81ae7f58cc80",
-			"rawModeData": "{ username : {{EnvVarUser}}, password: {{EnvVarPassword}}}"
+			"rawModeData": "{ \"username\" : \"{{EnvVarUser}}\", \"password\" : \"{{EnvVarPassword}}\" }"
 		},
 		{
 			"id": "e035b4d5-d638-e5a3-737d-ad648f17c90f",
