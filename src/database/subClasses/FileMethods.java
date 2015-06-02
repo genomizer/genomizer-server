@@ -80,12 +80,12 @@ public class FileMethods {
 										  String checkSumMD5, String status)
 			throws SQLException, IOException {
 
-		if (!FileValidator.fileNameCheck(fileName)) {
+		if (!FileValidator.checkIsValidFileName(fileName)) {
 			throw new IOException("Invalid filename");
 		}
 
 		if (inputFileName != null) {
-			if (!FileValidator.fileNameCheck(inputFileName)) {
+			if (!FileValidator.checkIsValidFileName(inputFileName)) {
 				throw new IOException("Invalid input filename");
 			}
 		}

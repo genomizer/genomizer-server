@@ -11,32 +11,33 @@ public class FileNameValidatorTest {
 
 	@Test
 	public void shouldReturnTrue(){
-		assertTrue(FileValidator.fileNameCheck("hej.txt"));
+		assertTrue(FileValidator.checkIsValidFileName("hej.txt"));
 	}
 
 	@Test
 	public void shouldReturnTrueWithSpecialSymbols(){
-		assertTrue(FileValidator.fileNameCheck("håj.tät"));
+		assertTrue(FileValidator.checkIsValidFileName("håj.tät"));
 	}
 
 	@Test
 	public void shouldReturnFalse1(){
-		assertFalse(FileValidator.fileNameCheck("hej."));
+		assertFalse(FileValidator.checkIsValidFileName("hej."));
 	}
 
 	@Test
 	public void shouldReturnFalse2(){
-		assertFalse(FileValidator.fileNameCheck("hej.*"));
+		assertFalse(FileValidator.checkIsValidFileName("hej.*"));
 	}
 
 	@Test
 	public void shouldReturnFalse3(){
-		assertFalse(FileValidator.fileNameCheck(".&"));
+		assertFalse(FileValidator.checkIsValidFileName(".&"));
 	}
 
 	@Test
 	public void shouldReturnTrueWithLongName(){
-		assertTrue(FileValidator.fileNameCheck("hej.txtasdfasdfasdfasdfasd.dsfgdgdfg"));
+		assertTrue(FileValidator.checkIsValidFileName(
+						"hej.txtasdfasdfasdfasdfasd.dsfgdgdfg"));
 
 	}
 }

@@ -101,7 +101,7 @@ public class GenomeMethods {
      */
     public String addGenomeReleaseWithStatus(String genomeVersion, String species,
             String filename, String checkSumMD5, String status) throws SQLException, IOException {
-    	if(!FileValidator.fileNameCheck(filename)){
+    	if(!FileValidator.checkIsValidFileName(filename)){
     		throw new IOException("Invalid file name");
     	}
 		String folderPath = fpg.generateGenomeReleaseFolder(genomeVersion,
@@ -497,7 +497,7 @@ public class GenomeMethods {
 	public String addChainFileWithStatus(String fromVersion, String toVersion,
 										 String fileName, String checkSumMD5, String status) throws SQLException, IOException {
 
-		if(!FileValidator.fileNameCheck(fileName)) {
+		if(!FileValidator.checkIsValidFileName(fileName)) {
 			throw new IOException("Invalid file name");
 		}
 

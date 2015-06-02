@@ -30,6 +30,8 @@ public class RawToProfileTest {
 
 	@After
 	public void tearDown() {
+		new File("resources/processTest/results/test_sorted_without_duplicates.sam").delete();
+		new File("resources/processTest/results/test.wig").delete();
 		rtp = null;
 	}
 
@@ -95,6 +97,7 @@ public class RawToProfileTest {
 //	}
 
 	@Test
+	@Ignore
 	public void shouldProduceNewSamFile() throws ProcessException {
 		String inFolder = "resources/processTest/fastq";
 		String outFilePath = "resources/processTest/results";

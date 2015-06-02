@@ -94,7 +94,6 @@ public class RawToProfProcessCommandTest {
         processCommands.validate();
     }
 
-
     /**
      * Test checks that exception can be thrown with an incorrect GenomeVersion name.
      * @throws ValidateException
@@ -144,10 +143,31 @@ public class RawToProfProcessCommandTest {
     public void canGiveValidateExceptionOnParamsNull() throws ValidateException {
         String json =
                 "{\"expId\":\"asd\"," +
-                        "\"processCommands\":[{\"type\":\"rawToProfile\"," +
-                        "\"files\":[{\"infile\":\"bigtest1.fastq\"," +
-                        "\"outfile\":\"awsd\",\"genomeVersion\":\"theR\"," +
-                        "\"keepSam\":\"on\"}]}]}";
+                "\"processCommands\":[{\"type\":\"rawToProfile\"," +
+                "\"files\":[{\"infile\":\"bigtest1.fastq\"," +
+                "\"outfile\":\"awsd\",\"genomeVersion\":\"theR\"," +
+                "\"keepSam\":\"on\"}]}]}";
+        PutProcessCommands processCommands = gson.fromJson(json, PutProcessCommands.class);
+        processCommands.setFields(null, null, null, UserMethods.UserType.USER);
+        processCommands.validate();
+    }
+
+    /**
+     * Test checks that exception can be thrown with params being null.
+     * @throws ValidateException
+     */
+    @Test(expected = ValidateException.class)
+    public void canGiveValidateExceptionOnInvalidParameters() throws ValidateException {
+        String json =
+                "{\"expId\":\"asd\"," +
+                "\"processCommands\":[{" +
+                "\"type\":\"rawToProfile\"," +
+                "\"files\":[{" +
+                "\"infile\":\"bigtest1.fastq\"," +
+                "\"outfile\":\"awsd\"," +
+                "\"genomeVersion\":\"theR\"," +
+                "\"keepSam\":true," +
+                "\"params\":\"-a -m 1 --best -p 10 -v 2 -q -S--phred33\"}]}]}";
         PutProcessCommands processCommands = gson.fromJson(json, PutProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();
