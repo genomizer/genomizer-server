@@ -72,7 +72,7 @@ public class DatabaseAccessor implements AutoCloseable {
         props.setProperty("password", password);
 
         conn = DriverManager.getConnection(url, props);
-        conn.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+        conn.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
 
         fpg = new FilePathGenerator(DATAFOLDER);
         pm2sql = new PubMedToSQLConverter();

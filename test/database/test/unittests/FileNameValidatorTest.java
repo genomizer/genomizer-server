@@ -15,13 +15,8 @@ public class FileNameValidatorTest {
 	}
 
 	@Test
-	public void shouldReturnTrueWithSpecialSymbols(){
-		assertTrue(FileValidator.checkIsValidFileName("håj.tät"));
-	}
-
-	@Test
 	public void shouldReturnFalse1(){
-		assertFalse(FileValidator.checkIsValidFileName("hej."));
+		assertFalse(FileValidator.checkIsValidFileName("hej./&%&"));
 	}
 
 	@Test
