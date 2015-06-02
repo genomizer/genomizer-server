@@ -1,7 +1,6 @@
 package process.test;
 
 import command.ValidateException;
-import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -65,6 +64,7 @@ public class RatioCalcTest {
 //    }
 
     @Test
+    @Ignore
     public void shouldNotThrowValidationExceptionWithChroms() throws Exception {
         new Ratio(INFILE_1, INFILE_2, OUTFILE, MEAN, READS_CUT_OFF, CHROMOSOMES)
                 .validate();

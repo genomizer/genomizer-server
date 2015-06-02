@@ -148,6 +148,32 @@ public class UpdateExperimentTest {
     }
 
     @Test
+    public void shouldAddAnnotationWhenNotPresentOnMultipleUpdate() throws Exception {
+
+        String exp3 = "Exp3";
+
+        HashMap<String, String> orig = dbac.getExperiment(exp3).getAnnotations();
+        HashMap<String, String> kv = new HashMap<>();
+
+        String species = "Human";
+        String sex = "Male";
+        String devStage = "Adult";
+
+        kv.put("Species", species);
+        kv.put("Sex", sex);
+        kv.put("Development_Stage", devStage);
+
+        dbac.updateExperiment(exp3, kv);
+        Experiment e = dbac.getExperiment(exp3);
+
+        assertTrue(e.getAnnotations().get("Species").equals(species));
+        assertTrue(e.getAnnotations().get("Sex").equals(sex));
+        assertTrue(e.getAnnotations().get("Development_Stage").equals(devStage));
+
+        dbac.updateExperiment(exp3, orig);
+    }
+
+    @Test
     public void shouldNotUpdateNonExistentAnnotations() throws Exception {
 
         String exp1 = "Exp1";

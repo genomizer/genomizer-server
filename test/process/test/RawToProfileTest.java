@@ -94,9 +94,8 @@ public class RawToProfileTest {
 //		rtp.specificParamProcedure(new String[]{""});
 //	}
 
-	@Ignore
 	@Test
-	public void shouldProduceNewSamFile() throws ProcessException{
+	public void shouldProduceNewSamFile() throws ProcessException {
 		String inFolder = "resources/processTest/fastq";
 		String outFilePath = "resources/processTest/results";
 

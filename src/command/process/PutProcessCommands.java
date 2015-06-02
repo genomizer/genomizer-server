@@ -3,6 +3,7 @@ package command.process;
 import com.google.gson.annotations.Expose;
 import command.*;
 import database.constants.MaxLength;
+import response.ErrorResponse;
 import response.HttpStatusCode;
 import response.ProcessResponse;
 import response.Response;
@@ -13,13 +14,16 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
+import java.util.ArrayList;
+import java.util.Map;
+import server.Debug;
 
 /**
  * The class handles processing a list of processing commands. The list of
  * commands each have a list of files to
  * process.
  */
-public class ProcessCommands extends Command {
+public class PutProcessCommands extends Command {
 
     @Expose
     protected String expId;
@@ -55,9 +59,8 @@ public class ProcessCommands extends Command {
         hasRights(UserRights.getRights(this.getClass()));
         validateName(expId, MaxLength.EXPID, "Experiment ID");
 
-        if (processCommands == null || processCommands.size() < 1) {
-            throw new ValidateException(
-                    HttpStatusCode.BAD_REQUEST,
+        if (processCommands == null || processCommands.isEmpty()) {
+            throw new ValidateException(HttpStatusCode.BAD_REQUEST,
                     "Specify processes for the experiment.");
         }
 
@@ -151,7 +154,6 @@ public class ProcessCommands extends Command {
         return new ProcessResponse(
                 HttpStatusCode.OK,
                 "Processing of experiment " + expId + " has begun.");
-
     }
 
     private void startProcessingThread() {

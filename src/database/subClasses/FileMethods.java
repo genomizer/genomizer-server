@@ -98,8 +98,6 @@ public class FileMethods {
 		}
 		expID = e.getID(); // Correct expID for in case sensitivity
 
-
-
 		String path = fpg.generateFilePath(expID, fileType, fileName);
 		FileTuple ft = getFileTuple(path);
 
