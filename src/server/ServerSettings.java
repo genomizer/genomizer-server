@@ -20,9 +20,11 @@ public class ServerSettings {
 	public static String bowtieLocation = "resources/bowtie/bowtie";
 	public static String bowtie2Location = "resources/bowtie2/bowtie2";
 	public static String picardLocation = "resources/picard-tools/picard.jar";
+	public static String smoothingJarLocation = "resources/smoothing.jar";
 	public static int nrOfProcessThreads = 5;
 	public static String uploadTempDir = System.getProperty("java.io.tmpdir");
 	public static boolean shouldUseBowtie2 = false;
+	public static boolean shouldUseJavaSmoothing = false;
 
 	private static String downloadURL = "/download?path=";
 	private static String uploadURL = "/upload?path=";
@@ -44,6 +46,9 @@ public class ServerSettings {
 					+ "bowtieLocation = " + bowtieLocation + "\n"
 					+ "bowtie2Location = " + bowtie2Location + "\n"
 					+ "picardLocation = " + picardLocation + "\n"
+					+ "smoothingJarLocation = " + smoothingJarLocation + "\n"
+					+ "shouldUseBowtie2 = " + shouldUseBowtie2 + "\n"
+					+ "shouldUseJavaSmoothing = " + shouldUseJavaSmoothing + "\n"
 					+ "pyicosLocation = " + pyicosLocation + "\n"
 					+ "uploadTempDir = " + uploadTempDir + "\n";
 
@@ -76,8 +81,10 @@ public class ServerSettings {
 		nullCheck(bowtie2Location, "bowtie2Location");
 		nullCheck(picardLocation, "picardLocation");
 		nullCheck(pyicosLocation, "pyicosLocation");
+		nullCheck(smoothingJarLocation, "smoothingJarLocation");
 		nullCheck(uploadTempDir, "uploadTempDir");
 		nullCheck(shouldUseBowtie2, "shouldUseBowtie2");
+		nullCheck(shouldUseJavaSmoothing, "shouldUseJavaSmoothing");
 	}
 
 	private static void nullCheck(int parameter, String name) {
@@ -162,11 +169,17 @@ public class ServerSettings {
 				case "pyicoslocation":
 					pyicosLocation = value;
 					break;
+				case "smoothingjarlocation":
+					smoothingJarLocation = value;
+					break;
 				case "uploadtempdir":
 					uploadTempDir = value;
 					break;
-				case "shouldUseBowtie2":
+				case "shouldusebowtie2":
 					shouldUseBowtie2 = Boolean.parseBoolean(value);
+					break;
+				case "shouldusejavasmoothing":
+					shouldUseJavaSmoothing = Boolean.parseBoolean(value);
 					break;
 				default:
 					String msg = "Unrecognized setting: " + key;
@@ -196,7 +209,10 @@ public class ServerSettings {
 							+ "\tbowtie2Location = " + bowtie2Location + "\n"
 							+ "\tpicardLocation = " + picardLocation + "\n"
 							+ "\tpyicosLocation = " + pyicosLocation + "\n"
+							+ "\tsmoothingJarLocation = " + smoothingJarLocation + "\n"
 							+ "\tuploadTempDir = " + uploadTempDir + "\n"
+							+ "\tshouldUseBowtie2 = " + shouldUseBowtie2 + "\n"
+							+ "\tshouldUseJavaSmoothing = " + shouldUseJavaSmoothing + "\n"
 							+ "\n";
 
 			Debug.log("Imported the following settings:\n" + dataInfo);

@@ -73,8 +73,8 @@ public class SmoothingAndStep {
         }
 
         try {
-            setupBuffertReader(inPath);
-            setupBuffertWriter(outPath);
+            setupBufferReader(inPath);
+            setupBufferWriter(outPath);
 
             for(int i = 0; i<params[0]; i++){
 
@@ -355,7 +355,7 @@ public class SmoothingAndStep {
         return true;
     }
 
-    private void setupBuffertWriter(String outPath) throws IOException {
+    private void setupBufferWriter(String outPath) throws IOException {
         File outFile = new File(outPath);
         if (!outFile.exists()) {
             outFile.createNewFile();
@@ -363,7 +363,7 @@ public class SmoothingAndStep {
         bw = new BufferedWriter(new FileWriter(outFile.getAbsoluteFile()));
     }
 
-    private void setupBuffertReader(String inPath) throws FileNotFoundException{
+    private void setupBufferReader(String inPath) throws FileNotFoundException{
         br = new BufferedReader(new InputStreamReader(new DataInputStream(new FileInputStream(inPath))));
     }
 

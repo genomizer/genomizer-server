@@ -11,10 +11,11 @@ import java.util.ArrayList;
 
 /**
  * Class which is responsible for running smoothing.
+ * Uses the 'smooth_v4.pl' Perl script.
  */
 public class Smooth extends Executor {
 
-    private final SmoothingParameters parameters;
+    protected final SmoothingParameters parameters;
     private static final String smoothingScriptCmd   = "expect";
     private static final String smoothingScriptExp   = "resources/smooth_v4.exp";
     private static final String smoothingScriptPerl  = "resources/smooth_v4.pl";
@@ -105,7 +106,7 @@ public class Smooth extends Executor {
     /**
      * Simple wrapper around smoothing parameters.
      */
-    private class SmoothingParameters {
+    protected class SmoothingParameters {
         private String path         = null;
         private int windowSize      = 10;
         private int meanType        = 1;
