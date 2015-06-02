@@ -66,7 +66,6 @@ public class ProcessPool {
      *  @param callable - Function to execute.
      *  @return PID of the newly-created process.
      */
-    @Deprecated
     public UUID addProcess(Process process, Callable<Response> callable) {
         UUID uuid = UUID.randomUUID();
         process.PID = uuid.toString();
@@ -90,6 +89,7 @@ public class ProcessPool {
      *  @param callable - function to execute.
      *  @return PID of the newly-created process.
      */
+    @Deprecated
     public UUID addProcess(Callable<Response> callable) {
         UUID uuid = UUID.randomUUID();
         Process process = new Process();

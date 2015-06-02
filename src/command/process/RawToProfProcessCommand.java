@@ -61,7 +61,7 @@ public class RawToProfProcessCommand extends ProcessCommand {
             if (file.shouldKeepSam() == null) {
                 throw new ValidateException(
                         HttpStatusCode.BAD_REQUEST,
-                        "KeepSam can not be null.");
+                        "Specify if .SAM file should be kept.");
             }
         }
     }
@@ -195,17 +195,18 @@ public class RawToProfProcessCommand extends ProcessCommand {
 
             String referenceGenome = genomeFolderPath + genomeFilePrefix;
 
-            RawToProfileConverter rawToProfileConverter =
-                    new RawToProfileConverter();
-            System.out.println("getParams(): " + getParams());
-            System.out.println("getInfile(): " + getInfile());
-            System.out.println("getOutfile(): " + getOutfile());
-            System.out.println("shouldKeepSam(): " + shouldKeepSam());
-            System.out.println("getGenomeVersion(): " + getGenomeVersion());
-            System.out.println("referenceGenome: " + referenceGenome);
-            System.out.println("rawFilesDir: " + rawFilesDir);
-            System.out.println("profileFilesDir: " + profileFilesDir);
-            rawToProfileConverter.procedureRaw(
+            System.out.println("\nParameters for raw to profile:");
+            System.out.println("    - params: " + getParams());
+            System.out.println("    - infile: " + getInfile());
+            System.out.println("    - outfile: " + getOutfile());
+            System.out.println("    - should keep .SAM: " + shouldKeepSam());
+            System.out.println("    - Genome version: " + getGenomeVersion());
+            System.out.println("    - Genome version location: " + referenceGenome);
+            System.out.println("    - infile dir: " + rawFilesDir);
+            System.out.println("    - outfile dir: " + profileFilesDir);
+            System.out.println();
+
+            RawToProfileConverter.procedureRaw(
                     getParams(),
                     getInfile(),
                     getOutfile(),
@@ -239,7 +240,7 @@ public class RawToProfProcessCommand extends ProcessCommand {
                         /* genomeVersion =*/ inTuple.grVersion,
                         /* md5 = */ "",
                         /* status */ "Done");
-                Debug.log("Add<ing to DB: " + outTuple);
+                Debug.log("Adding to DB: " + outTuple);
                 fileMethods.updateFileSize(outTuple.id, fileSize);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -262,7 +263,9 @@ public class RawToProfProcessCommand extends ProcessCommand {
                 public Response call() throws Exception {
                     try {
                         processFile(expId, rawFilesDir, profileFilesDir);
-                        return new ProcessResponse(HttpStatusCode.OK);
+                        return new ProcessResponse(HttpStatusCode.OK,
+                                "Raw to profile process for " + expId +
+                                " completed successfully, outfile: " + outfile);
                     } catch (SQLException | IOException e) {
                         Debug.log(
                                 "Error when processing. Could not execute raw" +

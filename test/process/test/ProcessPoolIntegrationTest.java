@@ -123,8 +123,8 @@ public class ProcessPoolIntegrationTest {
                 "\"infile\":\"smalltest1.fastq\"," +
                 "\"outfile\":\"smalltest1.wig\"," +
                 "\"genomeVersion\":\"GenomV1\"," +
-                "\"params\":\"-a -m 1 --best -p 10 -v 2 -q -S\"," +
-                "\"keepSam\":\"on\"" +
+                "\"params\":\"-a -S\"," +
+                "\"keepSam\":true" +
                 "}]}]}";
 
         System.out.println("json = " + json);

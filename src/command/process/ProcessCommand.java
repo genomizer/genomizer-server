@@ -1,9 +1,9 @@
 package command.process;
 
+import command.Process;
 import command.ValidateException;
 import response.HttpStatusCode;
 import response.Response;
-import server.Doorman;
 import server.ProcessPool;
 
 import java.util.ArrayList;
@@ -31,7 +31,9 @@ public abstract class ProcessCommand {
         for (Callable<Response> callable : getCallables(
                 rawFilesDir,
                 profileFilesDir)) {
-            UUID uuid = pool.addProcess(callable);
+            UUID uuid = pool.addProcess(
+                    new Process(expID, "UNKNOWN_AUTHOR"),
+                    callable);
             futures.add(pool.getFuture(uuid));
         }
         for (Future<Response> future : futures) {

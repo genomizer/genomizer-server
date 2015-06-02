@@ -47,6 +47,12 @@ public class Process implements Comparable<Process> {
 		PID = UUID.randomUUID().toString();
 	}
 
+	public Process(String expId, String author) {
+		this();
+		experimentName = expId;
+		this.author = author;
+	}
+
 	/**
 	 * Constructs a new instance of DeleteExperimentCommand using the supplied
 	 * PutProcessCommand.
