@@ -80,12 +80,12 @@ public class FileMethods {
 										  String checkSumMD5, String status)
 			throws SQLException, IOException {
 
-		if (!FileValidator.fileNameCheck(fileName)) {
+		if (!FileValidator.checkIsValidFileName(fileName)) {
 			throw new IOException("Invalid filename");
 		}
 
 		if (inputFileName != null) {
-			if (!FileValidator.fileNameCheck(inputFileName)) {
+			if (!FileValidator.checkIsValidFileName(inputFileName)) {
 				throw new IOException("Invalid input filename");
 			}
 		}
@@ -97,11 +97,6 @@ public class FileMethods {
 					+ " does not exist!");
 		}
 		expID = e.getID(); // Correct expID for in case sensitivity
-
-		if (fileType == FileTuple.RAW && e.getNrRawFiles() >= 2) {
-			throw new IOException(
-					"There are already two raw files for this experiment!");
-		}
 
 		String path = fpg.generateFilePath(expID, fileType, fileName);
 		FileTuple ft = getFileTuple(path);

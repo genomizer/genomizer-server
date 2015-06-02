@@ -13,8 +13,8 @@ $step=$ARGV[0];
 $infile=$ARGV[1];
 $outfile=$ARGV[2];
 
-open INFILE, "<", $infile or die "Can't open infile!\n";
-open OUTFILE, ">", $outfile or die "Can't open outfile!\n";
+open INFILE, "<", $infile or die "Can't open infile: $infile\n";
+open OUTFILE, ">", $outfile or die "Can't open outfile: $outfile\n";
 
 $nr_row=0;
 @chrom_arr=();

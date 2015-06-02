@@ -4,22 +4,33 @@ import com.google.gson.annotations.Expose;
 import command.Command;
 import command.ValidateException;
 import database.constants.MaxLength;
+import database.containers.FileTuple;
+import database.subClasses.FileMethods;
+import org.apache.commons.io.FileUtils;
+import process.Step;
 import response.HttpStatusCode;
+import response.ProcessResponse;
+import response.Response;
+import server.Debug;
 
+import java.io.File;
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Map;
+import java.util.Collection;
+import java.util.concurrent.Callable;
+
+import static command.Command.initDB;
 
 
 /**
- * Class is used to handle step processing. The command can include multiple file packages to run one at a time.
+ * Class is used to handle step processing. The command can include multiple
+ * file packages to run one at a time.
  */
 public class StepProcessCommand extends ProcessCommand {
-    @Override
-    public void doProcess(Map.Entry<String, String> filePath) {
-        for (StepProcessFile file : files) {
-            file.ProcessFile(filePath);
-        }
-    }
+
+    @Expose
+    protected ArrayList<StepProcessFile> files;
 
     /**
      * Validate to make sure all input from clients is in correct format.
@@ -27,47 +38,54 @@ public class StepProcessCommand extends ProcessCommand {
      */
     @Override
     public void validate() throws ValidateException {
-        for(StepProcessFile file: files) {
-            Command.validateName(file.getInfile(), MaxLength.FILE_FILENAME, "Infile");
-            Command.validateName(file.getOutfile(), MaxLength.FILE_FILENAME, "Outfile");
-            if(file.getStepSize()<0) {
-                throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Error validating StepProcessCommand. " +
-                        "StepSize can not be less than 0");
-            }
-            if(file.getStepSize()==null) {
-                throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Error validating StepProcessCommand. " +
+        for (StepProcessFile file : files) {
+            Command.validateName(
+                    file.getInfile(),
+                    MaxLength.FILE_FILENAME,
+                    "Infile");
+            Command.validateName(
+                    file.getOutfile(),
+                    MaxLength.FILE_FILENAME,
+                    "Outfile");
+            if (file.getStepSize() == null) {
+                throw new ValidateException(
+                        HttpStatusCode.BAD_REQUEST,
+                        "Error validating StepProcessCommand. " +
                         "StepSize can not be null.");
             }
+            if (file.getStepSize() < 1) {
+                throw new ValidateException(
+                        HttpStatusCode.BAD_REQUEST,
+                        "Error validating StepProcessCommand. " +
+                        "Step size must be a positive integer");
+            }
         }
-
     }
-
-    public ArrayList<StepProcessFile> getFiles() {return files;}
 
     @Override
-    public String toString() {
-        return "StepProcessingCommand{" +
-                "files=" + files +
-                '}';
+    protected Collection<Callable<Response>> getCallables(
+            String rawFilesDir,
+            String profileFilesDir) {
+        Collection<Callable<Response>> callables = new ArrayList<>();
+        for (StepProcessFile file : files) {
+            callables.add(file.getCallable(expID, profileFilesDir));
+        }
+        return callables;
     }
-    @Expose
-    private ArrayList<StepProcessFile> files;
 
-    public class StepProcessFile {
-
-        /**
-         * Class is used to start a single step processing with correct parameters.
-         */
+    /**
+     * Class is used to start a single step processing with correct parameters.
+     */
+    public static class StepProcessFile {
 
         @Expose
-        private String infile;
+        protected String infile;
 
         @Expose
-        private String outfile;
+        protected String outfile;
 
         @Expose
-        private Integer stepSize;
-
+        protected Integer stepSize;
 
         public String getInfile() {return infile;}
 
@@ -78,21 +96,89 @@ public class StepProcessCommand extends ProcessCommand {
         @Override
         public String toString() {
             return "RawToProfProcessFile{" +
-                    "infile='" + infile + '\'' +
-                    ", outfile='" + outfile + '\'' +
-                    ", stepSize='" + stepSize + '\'' +
-                    '}';
+                   "infile='" + infile + '\'' +
+                   ", outfile='" + outfile + '\'' +
+                   ", stepSize='" + stepSize + '\'' +
+                   '}';
         }
 
-        /**
-         * Call upon a single step processing with correct parameters.
-         * @param filePaths
-         */
-        public void ProcessFile(Map.Entry<String, String> filePaths) {
-            // TODO: Run step with getInfile(), getOutfile(), getStepSize()
+        public void processFile(
+                final String expId,
+                final String profileFilesDir)
+                throws IOException, InterruptedException,
+                       ValidateException, SQLException {
 
-            throw new UnsupportedOperationException("Error when processing. Step processing not implemented.");
+            String inPath =
+                    new File(profileFilesDir + "/" + infile).getAbsolutePath();
+            String outPath =
+                    new File(profileFilesDir + "/" + outfile).getAbsolutePath();
+            Step.runStep(inPath, outPath, stepSize);
+
+            // Add generated file to the database.
+            FileTuple outTuple = null;
+            try {
+                FileMethods fileMethods = initDB().getFileMethods();
+                FileTuple inTuple = fileMethods.getFileTuple(inPath);
+
+                long fileSize = FileUtils.sizeOf(new File(outPath));
+
+                outTuple = fileMethods.addNewFileWithStatus(
+                        /* expId = */ expId,
+                        /* fileType = */ FileTuple.PROFILE,
+                        /* fileName = */ outfile,
+                        /* inputFilename = */ infile,
+                        /* metaData = */ "step size: " + stepSize,
+                        /* author = */ "Generated by Genomizer",
+                        /* uploader = */ "Generated by Genomizer",
+                        /* isPrivate = */ false,
+                        /* genomeVersion =*/ inTuple.grVersion,
+                        /* md5 = */ "",
+                        /* status */ "Done");
+                Debug.log("Add<ing to DB: " + outTuple);
+                fileMethods.updateFileSize(outTuple.id, fileSize);
+            } catch (Exception e) {
+                Debug.log("Unable to add " + getOutfile() + " to DB");
+                Debug.log("Removing out file: " + outfile);
+                new File(profileFilesDir + "/" + getOutfile()).delete();
+                if (outTuple != null) {
+                    initDB().deleteFile(outTuple.id);
+                }
+                throw e;
+            }
         }
 
+        public Callable<Response> getCallable(
+                final String expId,
+                final String profileFilesDir) {
+            return new Callable<Response>() {
+                @Override
+                public Response call() throws Exception {
+                    try {
+                        processFile(expId, profileFilesDir);
+                        return new ProcessResponse(HttpStatusCode.OK,
+                                "Stepping process for " + expId +
+                                " completed successfully, outfile: " + outfile);
+                    } catch (Exception e) {
+                        Debug.log(
+                                "Unable to perform stepping for " + expId +
+                                ": " + e.getMessage());
+                        return new ProcessResponse(
+                                HttpStatusCode.INTERNAL_SERVER_ERROR,
+                                "Unable to perform stepping for " + expId +
+                                ": " +
+                                e.getClass().getName() + ": " + e.getMessage());
+                    }
+                }
+            };
+        }
+    }
+
+    public ArrayList<StepProcessFile> getFiles() {return files;}
+
+    @Override
+    public String toString() {
+        return "StepProcessingCommand{" +
+               "files=" + files +
+               '}';
     }
 }

@@ -21,7 +21,7 @@ import java.util.UUID;
  * @author Kommunikation/kontroll 2014.
  * @version 1.0
  */
-@SuppressWarnings("deprecation")
+@Deprecated
 public class PutProcessCommandTest {
 
 	UUID PID = UUID.randomUUID();

@@ -104,9 +104,11 @@ public class PutProcessCommand extends Command {
 
 	@Override
 	public Response execute() {
-		return addToProcessPool(Doorman.getProcessPool());
+		return new ErrorResponse(HttpStatusCode.NOT_FOUND,"Command deprecated, use PUT /process/processCommands/");
+		//return addToProcessPool(Doorman.getProcessPool());
 	}
 
+	@SuppressWarnings("deprecation")
 	public Response addToProcessPool(ProcessPool pool) {
 		Process process = new Process(this);
 

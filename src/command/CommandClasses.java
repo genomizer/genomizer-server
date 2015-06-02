@@ -73,9 +73,10 @@ public class CommandClasses {
 
         //Processing
         classes.put("GET /process", GetProcessStatusCommand.class);
-        classes.put("DELETE /process", CancelProcessCommand.class);
-        classes.put("PUT /process/rawtoprofile", PutProcessCommand.class);
         classes.put("GET /process/dummy", GetProcessDummyCommand.class);
+        classes.put("PUT /process/rawtoprofile", PutProcessCommand.class);
+        classes.put("PUT /process/processCommands", PutProcessCommands.class);
+        classes.put("DELETE /process", CancelProcessCommand.class);
 
         //Annotation handling commands
         classes.put("POST /annotation/field", PostAnnotationFieldCommand.class);
@@ -95,7 +96,6 @@ public class CommandClasses {
         classes.put("GET /genomeRelease", GetGenomeReleaseCommand.class);
         classes.put("GET /genomeRelease/", GetGenomeReleaseSpeciesCommand.
                 class);
-        classes.put("PUT /process/processCommands", ProcessCommands.class);
 
         //Geo commands
 

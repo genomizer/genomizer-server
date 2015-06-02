@@ -23,13 +23,12 @@ import java.sql.SQLException;
  * @version 1.1
  */
 public class PostLoginCommand extends Command {
-
 	@Expose
 	private String username = null;
-
 	@Expose
 	private String password = null;
 
+	private final static String errMsg = "Login attempt unsuccessful, incorrect Username/Password.";
 
 	@Override
 	public int getExpectedNumberOfURIFields() {
@@ -38,70 +37,58 @@ public class PostLoginCommand extends Command {
 
 	@Override
 	public void validate() throws ValidateException {
-		validateUserAndPassword(username, MaxLength.USERNAME,
-				"Username/Password");
-		validateUserAndPassword(password, MaxLength.PASSWORD,
-				"Username/Password");
+		validateUserAndPassword(username, MaxLength.USERNAME);
+		validateUserAndPassword(password, MaxLength.PASSWORD);
 	}
 
-	public void validateUserAndPassword(String string, int maxLength,
-										String field) throws ValidateException {
+	public void validateUserAndPassword(String string, int maxLength) throws
+			ValidateException {
 		if (string == null) {
-			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Specify " +
-					"an " + field.toLowerCase() + ".");
+			badRequest();
 		}
-
 		if (string.equals("null")) {
-			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Invalid "
-					+ field.toLowerCase() + ".");
+			badRequest();
 		}
+		if(string.length() > maxLength || string.length() < 1) {
+			badRequest();
+		}
+		if(hasInvalidCharacters(string)) {
+			badRequest();
+		}
+	}
 
-		if (string.length() > maxLength || string.length() < 1) {
-			throw new ValidateException(HttpStatusCode.BAD_REQUEST, field +
-					" has to be between 1 and " + maxLength +
-					" characters long.");
-		}
-		if (hasInvalidCharacters(string)) {
-			throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Invalid" +
-					" characters in " + field.toLowerCase() +
-					". Valid characters are: " + VALID_CHARACTERS);
-		}
+	private void badRequest() throws ValidateException {
+		throw new ValidateException(HttpStatusCode.BAD_REQUEST, errMsg);
 	}
 
 	@Override
 	public Response execute() {
-		DatabaseAccessor db = null;
 		Response response;
-
-		try {
-			db = initDB();
-			String dbHash;
-			if ((dbHash = db.getPasswordHash(username)) != null) {
-				LoginAttempt login = Authenticate.login(uuid, username, password,
-						dbHash);
-				if (login.wasSuccessful())
-					response = new LoginResponse(login.getUUID(),
+		try (DatabaseAccessor db = initDB()) {
+			String dbHash = db.getPasswordHash(username);
+			if (dbHash != null) {
+				LoginAttempt login = Authenticate.login(uuid, username,
+						password, dbHash);
+				if (login.wasSuccessful()) {
+					return new LoginResponse(login.getUUID(),
 							db.getRole(username).name());
-				else
-					response = new ErrorResponse(HttpStatusCode.UNAUTHORIZED,
-							"Login attempt unsuccessful, incorrect password");
+				}
+				else {
+					return unauthorized();
+				}
 			} else {
-				response = new ErrorResponse(HttpStatusCode.UNAUTHORIZED,
-						"Login attempt unsuccessful, invalid username");
+				return unauthorized();
 			}
-		} catch (IOException e) {
-			response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
-					"Login attempt unsuccessful. " + e.getMessage());
-		} catch (SQLException e) {
-			response = new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
-					"Login attempt unsuccessful due to temporary database " +
-							"problems");
-			Debug.log("Reason: " + e.getMessage());
-		} finally {
-			if (db != null)
-				db.close();
 		}
+		catch (IOException | SQLException e) {
+			Debug.log("Reason: " + e.getMessage());
+			return new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+					"Login attempt unsuccessful due to temporary database " +
+							"problems.");
+		}
+	}
 
-		return response;
+	private Response unauthorized() {
+		return new ErrorResponse(HttpStatusCode.UNAUTHORIZED, errMsg);
 	}
 }

@@ -71,11 +71,15 @@ public class PostExperimentCommand extends Command {
 								"all forced values are present.");
 			} else {
 				db.addExperiment(name);
-				for (Annotation annotation : annotations) {
-					db.annotateExperiment(name, annotation.getName(),
-							annotation.getValue());
+				try {
+					for (Annotation annotation : annotations) {
+						db.annotateExperiment(name, annotation.getName(),
+								annotation.getValue());
+					}
+				}catch(IOException ie){
+					removeExperiment();
+					throw ie;
 				}
-
 				response = new MinimalResponse(HttpStatusCode.OK);
 			}
 		} catch (SQLException e) {
@@ -99,5 +103,11 @@ public class PostExperimentCommand extends Command {
 		}
 
 		return nameList;
+	}
+
+	private void removeExperiment() {
+		try (DatabaseAccessor db = initDB()) {
+			db.deleteExperiment(name);
+		} catch (SQLException | IOException e) {}
 	}
 }

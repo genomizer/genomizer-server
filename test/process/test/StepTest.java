@@ -4,12 +4,12 @@ import command.ValidateException;
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import process.Step;
 
 import java.io.File;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -79,6 +79,7 @@ public class StepTest {
     public void shouldProduceOutfile() throws Exception {
         new Step(INFILE, OUTFILE, 20).validate().execute();
         assertTrue(new File(OUTFILE).exists());
+        assertFalse(0 == FileUtils.sizeOf(new File(OUTFILE)));
     }
 
     @Test
