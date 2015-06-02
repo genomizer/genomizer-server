@@ -2,7 +2,7 @@
 
 =head1 NAME
 
-smooth – parse sgr file data, calculate median or trimed mean for a window size with step pos limit
+smooth – parse sgr file data, calculate median or trimmed mean for a window size with step pos limit
 
 =head1 HEADER
 
@@ -12,11 +12,11 @@ how to use? perl smooth_v4.pl, arguments will be asked
 
 =head1 REQUIRES
 
-OS used for development (Linux CentOS 5.3), Perl version (Perl5.8.8) 
+OS used for development (Linux CentOS 5.3), Perl version (Perl5.8.8)
 
 =head1 DESCRIPTION
 
-parse sgr file data, calculate median or trimed mean for a window size with step pos limit
+parse sgr file data, calculate median or trimmed mean for a window size with step pos limit
 create smoothed files in smooth folder
 
 ####### Modification Block #######
@@ -33,16 +33,17 @@ You modify this program under the same terms as Perl itself
 
 use strict;
 use warnings;
+use File::Spec::Functions;
+use File::Basename;
 
 my $VERSION = 4;
 # This variable holds the current time #
 my $now = time;
 #print "Data in file processed while reading, please make sure you dont have empty lines at end of the file\n";
-print "Enter the path of sgr files\n";
-chomp(my $dir = <STDIN>);
-#my $dir = $ARGV[0];
-my @files = <$dir\/*.sgr>;
-my $file = '';
+print "Enter the path to the sgr file\n";
+chomp(my $file = <STDIN>);
+my @files = ($file);
+my $dir = dirname($file);
 print "Enter window size\n";
 chomp(my $window_size = <STDIN>);
 #my $window_size = $ARGV[1];
@@ -63,7 +64,8 @@ my ($prev_chr, $signals, $probes, $chr) = ('', '', '', '');
 my ($flag, $probe, $stop, $mean, $signal_value, $median, $start, $last_key, $i, $window_size_half) = (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 my $parentdir = $dir;  ## added by philge 13/04/18
 #$parentdir =~ s/sgr\/$//;  ## added by philge 13/04/18
-mkdir "$parentdir"."smoothed", unless -d "$parentdir"."smoothed";  ## added by philge 13/04/18
+my $smootheddir = File::Spec->catdir("$parentdir","smoothed");
+mkdir "$smootheddir", unless -d "$smootheddir";  ## added by philge 13/04/18
 foreach $file (@files){
     #print "$file\n$window_size\n$median_or_mean\n$minimum_probes\n";
     (@signals_sub, @signals, @probes, @probes_temp, @probes_new, @signals_temp, @signals_for_total_mean) = ();
@@ -77,13 +79,15 @@ foreach $file (@files){
     #    $total_line_count = $1;
     #}
     my $file1 = $file;
-    $file1 =~ s/$dir/$parentdir\/smoothed/;
+    $file1 =~ s/$dir/$smootheddir/;
     if($median_or_mean == 1) {
-        $file1=~s/\.sgr/_median_smooth/;
+        $file1 =~ s/\.sgr//;
+        $file1 .= '_median_smooth';
         $file1 .= '_winSiz-'.$window_size.'_minProbe-'.$minimum_probes.'.sgr';
     }
-    if($median_or_mean == 0) {
-        $file1=~s/\.sgr/_trimmed_mean_smooth/;
+    elsif($median_or_mean == 0) {
+        $file1 =~ s/\.sgr//;
+        $file1 .= '_trimmed_mean_smooth';
         $file1 .= '_winSiz-'.$window_size.'_minProbe-'.$minimum_probes.'.sgr';
     }
     print "\n$file1\n";
@@ -269,21 +273,21 @@ sub calculate_trimmed_mean
     }
 }
 
-sub average { 
-my ($array_ref) = @_; 
-my $sum; 
-my $count = scalar @$array_ref; 
-foreach (@$array_ref) { $sum += $_; } 
-return $sum / $count; 
-} 
+sub average {
+my ($array_ref) = @_;
+my $sum;
+my $count = scalar @$array_ref;
+foreach (@$array_ref) { $sum += $_; }
+return $sum / $count;
+}
 
-sub median { 
-my ($array_ref) = @_; 
-my $count = scalar @$array_ref; 
-my @array = sort { $a <=> $b } @$array_ref; 
-if ($count % 2) { 
-return $array[int($count/2)]; 
-} else { 
-return ($array[$count/2] + $array[$count/2 - 1]) / 2; 
+sub median {
+my ($array_ref) = @_;
+my $count = scalar @$array_ref;
+my @array = sort { $a <=> $b } @$array_ref;
+if ($count % 2) {
+return $array[int($count/2)];
+} else {
+return ($array[$count/2] + $array[$count/2 - 1]) / 2;
 }
 }

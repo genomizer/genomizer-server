@@ -103,7 +103,7 @@ public class Doorman {
 	 */
 	public void start() {
 		httpServer.start();
-		System.out.println("Doorman started on port " +
+		Debug.log("Doorman started on port " +
 				ServerSettings.genomizerPort);
 	}
 

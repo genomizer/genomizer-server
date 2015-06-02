@@ -22,6 +22,7 @@ public class ServerSettings {
 	public static String picardLocation = "resources/picard-tools/picard.jar";
 	public static int nrOfProcessThreads = 5;
 	public static String uploadTempDir = System.getProperty("java.io.tmpdir");
+	public static boolean shouldUseBowtie2 = false;
 
 	private static String downloadURL = "/download?path=";
 	private static String uploadURL = "/upload?path=";
@@ -76,6 +77,7 @@ public class ServerSettings {
 		nullCheck(picardLocation, "picardLocation");
 		nullCheck(pyicosLocation, "pyicosLocation");
 		nullCheck(uploadTempDir, "uploadTempDir");
+		nullCheck(shouldUseBowtie2, "shouldUseBowtie2");
 	}
 
 	private static void nullCheck(int parameter, String name) {
@@ -162,6 +164,9 @@ public class ServerSettings {
 					break;
 				case "uploadtempdir":
 					uploadTempDir = value;
+					break;
+				case "shouldUseBowtie2":
+					shouldUseBowtie2 = Boolean.parseBoolean(value);
 					break;
 				default:
 					String msg = "Unrecognized setting: " + key;

@@ -1,5 +1,7 @@
 package process;
 
+import server.Debug;
+
 /**
  * Class used to validate incoming parameters to RawToProfile.
  * v 1.0
@@ -113,7 +115,7 @@ public class ParameterValidator extends Executor {
 	 */
 	public boolean validateRatioCalculation(String RatioParam,
 			String smoothParam) throws ProcessException {
-		System.out.println("RATIO CHECKER");
+		Debug.log("RATIO CHECKER");
 		String[] ratio = parse(RatioParam);
 
 		if (ratio.length != 3) {
@@ -121,7 +123,7 @@ public class ParameterValidator extends Executor {
 					"Incorrect number of parameters for ratio calculation, should be 3");
 		}
 
-		System.out.println("ratioLength = " + ratio.length);
+		Debug.log("ratioLength = " + ratio.length);
 		String firstParam = ratio[0];
 
 		float[] ratioFloat = new float[2];

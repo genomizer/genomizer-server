@@ -59,7 +59,11 @@ public class PostFileCommand extends Command {
 		validateName(experimentID, MaxLength.EXPID, "Experiment name");
 		validateName(type, MaxLength.FILE_FILETYPE, "File type");
 		validateName(author, MaxLength.FILE_AUTHOR, "Author");
-		validateName(grVersion, MaxLength.FILE_GRVERSION, "Genome release");
+		if (!type.toLowerCase().equals("raw")) {
+			validateName(grVersion, MaxLength.FILE_GRVERSION, "Genome release");
+		} else {
+			grVersion = "";
+		}
 		validateName(fileName, MaxLength.FILE_FILENAME, "Filename");
 		validateExists(metaData, MaxLength.FILE_METADATA, "Metadata");
 		validateMD5(this.checkSumMD5);

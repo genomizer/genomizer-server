@@ -172,11 +172,11 @@ public class SmoothingProcessCommandTest {
     public void shouldGiveValidateExceptionOnWindowSizeSmallerThan0() throws ValidateException {
         String json =
                 "{\"expId\":\"asd\"," +
-                        "\"processCommands\":[{\"type\":\"smoothing\"," +
-                        "\"files\":[{\"infile\":\"bigtest1.fastq\"," +
-                        "\"outfile\":\"awe\",\"windowSize\":\"-1\"," +
-                        "\"meanOrMedian\":\"mean\"," +
-                        "\"minSmooth\":\"-2\"}]}]}";
+                "\"processCommands\":[{\"type\":\"smoothing\"," +
+                "\"files\":[{\"infile\":\"bigtest1.fastq\"," +
+                "\"outfile\":\"awe\",\"windowSize\":\"-1\"," +
+                "\"meanOrMedian\":\"mean\"," +
+                "\"minSmooth\":\"-2\"}]}]}";
         PutProcessCommands processCommands = gson.fromJson(json, PutProcessCommands.class);
         processCommands.setFields(null, null, null, UserMethods.UserType.USER);
         processCommands.validate();

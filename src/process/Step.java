@@ -24,6 +24,7 @@ public class Step extends Executor {
     }
 
     public Step validate() throws ValidateException {
+
         if (infile == null) {
             throw new ValidateException(0, "Specify infile.");
         }
@@ -60,5 +61,14 @@ public class Step extends Executor {
             throws IOException, InterruptedException, ValidateException {
 
         return new Step(infile, outfile, stepSize).validate().execute();
+    }
+
+    @Override
+    public String toString() {
+        return "Step{" +
+               "infile='" + infile + '\'' +
+               ", outfile='" + outfile + '\'' +
+               ", stepSize=" + stepSize +
+               '}';
     }
 }

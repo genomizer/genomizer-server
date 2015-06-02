@@ -420,7 +420,7 @@ public class PostFileCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateGrVersionMissing() throws ValidateException {
 
-		String json = jsonBuilder("id","name","raw","metameta","name",null);
+		String json = jsonBuilder("id","name","profile","metameta","name",null);
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
 		c.setFields("uri", null, "uuid", UserType.ADMIN);
 		c.validate();
@@ -438,7 +438,7 @@ public class PostFileCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateGrVersionEmptyString() throws ValidateException {
 
-		String json = jsonBuilder("id","name","raw","metameta","name","");
+		String json = jsonBuilder("id","name","profile","metameta","name","");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
 		c.setFields("uri", null, "uuid", UserType.ADMIN);
 		c.validate();
@@ -460,7 +460,7 @@ public class PostFileCommandTest {
 		for(int i = 0; i < MaxLength.FILE_GRVERSION + 1; i++) {
 			big = big + "a";
 		}
-		String json = jsonBuilder("id","name","raw","metameta","name",big);
+		String json = jsonBuilder("id","name","profile","metameta","name",big);
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
 		c.setFields("uri", null, "uuid", UserType.ADMIN);
 		c.validate();
@@ -478,7 +478,7 @@ public class PostFileCommandTest {
 	@Test(expected = ValidateException.class)
 	public void testValidateGrVersionInvalidCharacters() throws ValidateException {
 
-		String json = jsonBuilder("id","name","raw","metameta","name","relea/seNr");
+		String json = jsonBuilder("id","name","region","metameta","name","relea/seNr");
 		PostFileCommand c = gson.fromJson(json, PostFileCommand.class);
 		c.setFields("uri", null, "uuid", UserType.ADMIN);
 		c.validate();

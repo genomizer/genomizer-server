@@ -3,6 +3,7 @@ package server;
 import authentication.Authenticate;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParseException;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import command.*;
@@ -116,11 +117,19 @@ public class RequestHandler implements HttpHandler {
         Command command = null;
         try {
             command = gson.fromJson(json, commandClass);
-        } catch (Exception e) {
-            Debug.log("Could not parse query");
-            respond(new ErrorResponse(HttpStatusCode.INTERNAL_SERVER_ERROR,
+        } catch (JsonParseException jpe) {
+            Debug.log("Could not parse query: " + jpe.getMessage());
+            respond(new ErrorResponse(HttpStatusCode.BAD_REQUEST,
                             "ERROR : Could not parse query: "
-                                    + e.getMessage() ), exchange);
+                            + jpe.getMessage()), exchange);
+            return;
+        } catch (Exception e) {
+            Debug.log("Could not parse query: " + e.getMessage());
+            respond(
+                    new ErrorResponse(
+                            HttpStatusCode.INTERNAL_SERVER_ERROR,
+                            "ERROR : Could not parse query: "
+                            + e.getMessage()), exchange);
             return;
         }
 
@@ -175,13 +184,7 @@ public class RequestHandler implements HttpHandler {
 			return;
 		}
 
-        if (commandClass.equals(PutProcessCommands.class)) {
-            respond(new ProcessResponse(HttpStatusCode.NOT_IMPLEMENTED),
-                    exchange);
-//            respond(new ProcessResponse(HttpStatusCode.OK), exchange);
-        } else {
-            respond(command.execute(), exchange);
-        }
+        respond(command.execute(), exchange);
 	}
 
     /*Used to send a response back to the client*/
