@@ -84,6 +84,7 @@ public class PostExperimentCommand extends Command {
 							"temporary database problems");
 			Debug.log("Reason: " + e.getMessage());
 		} catch (IOException e) {
+			removeExperiment();
 			response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
 					"Adding experiment '" + name + "' unsuccessful. " +
 							e.getMessage());
@@ -99,5 +100,11 @@ public class PostExperimentCommand extends Command {
 		}
 
 		return nameList;
+	}
+
+	private void removeExperiment() {
+		try (DatabaseAccessor db = initDB()) {
+			db.deleteExperiment(name);
+		} catch (SQLException | IOException e) {}
 	}
 }
