@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 
-@Ignore
 public class ProcessPoolTest {
 
     private static ProcessPool processPool;

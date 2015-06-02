@@ -63,12 +63,12 @@ public class UserRights {
         /** Admin */
         userRights.put(PutAdminUserCommand.class, UserType.ADMIN);
         userRights.put(PostAdminUserCommand.class, UserType.ADMIN);
-        userRights.put(GetAdminUserCommand.class,UserType.ADMIN);
+        userRights.put(GetAdminUserListCommand.class,UserType.ADMIN);
         userRights.put(DeleteAdminUserCommand.class, UserType.ADMIN);
 
         /** Process */
         userRights.put(PutProcessCommand.class, UserType.USER);
-        userRights.put(ProcessCommands.class, UserType.USER);
+        userRights.put(PutProcessCommands.class, UserType.USER);
         userRights.put(GetProcessStatusCommand.class, UserType.USER);
         userRights.put(GetProcessDummyCommand.class,UserType.GUEST);
 

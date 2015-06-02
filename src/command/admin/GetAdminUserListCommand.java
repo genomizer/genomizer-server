@@ -17,7 +17,7 @@ import java.util.List;
  * @author Business Logic 2015
  * @version 1.0
  */
-public class GetAdminUserCommand extends Command{
+public class GetAdminUserListCommand extends Command{
     @Override
     public int getExpectedNumberOfURIFields() { return 2; }
 
@@ -28,22 +28,23 @@ public class GetAdminUserCommand extends Command{
 
     @Override
     public Response execute() {
-        List<String> usernameArr;
+        Response response;
 
-        try (DatabaseAccessor db = initDB()){
-            usernameArr = db.getUsers();
-
+        try (DatabaseAccessor db = initDB()) {
+            List<String> usernameArr;
+            if ((usernameArr = db.getUsers()) != null)
+                response = new UserListResponse(usernameArr);
+            else
+                response = new ErrorResponse(HttpStatusCode.NOT_FOUND,
+                        "Retrieval of user list unsuccessful, no users exist");
         } catch (SQLException e) {
+            response = new DatabaseErrorResponse("Retrieval of user list");
             Debug.log("Reason: " + e.getMessage());
-            return new DatabaseErrorResponse("Retrieving list of users");
         } catch (IOException e) {
-            Debug.log("Reason: " + e.getMessage());
-            return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
-                    "Retrieving list of users"+ e.getMessage());
+            response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
+                    "Retrieval of user list unsuccessful. " + e.getMessage());
         }
-        if(usernameArr == null){
-            return new ErrorResponse(HttpStatusCode.NOT_FOUND,"Could not find any users");
-        }
-        return new UserListResponse(usernameArr);
+
+        return response;
     }
 }

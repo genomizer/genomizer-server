@@ -165,7 +165,6 @@ public class RawToProfProcessCommand extends ProcessCommand {
                 g = db.getGenomeRelease(getGenomeVersion());
             }
 
-
             if (g == null) {
                 throw new IOException(
                         "Could not find genome version: " +

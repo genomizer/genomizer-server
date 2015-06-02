@@ -9,7 +9,6 @@ package command.test.process;
 import com.google.gson.Gson;
 import command.process.RawToProfProcessCommand;
 import command.process.ProcessCommand;
-import command.process.ProcessCommandAdapter;
 import org.junit.Test;
 import server.RequestHandler;
 
@@ -19,6 +18,10 @@ public class ProcessCommandAdapterTest {
 
     private final Gson gson = new RequestHandler().getGson();
 
+    /**
+     * Test that command parses as raw to profile.
+     * @throws Exception
+     */
     @Test
     public void shouldParseRawToProfCommand() throws Exception {
         String json = "{\"type\": \"rawToProfile\", " +
@@ -38,6 +41,10 @@ public class ProcessCommandAdapterTest {
 
     }
 
+    /**
+     * Test that parsing of as raw to profile infile works.
+     * @throws Exception
+     */
     @Test
     public void shouldParseRawToProfCommandInfile() throws Exception {
         String json = "{\"type\": \"rawToProfile\", " +
@@ -61,6 +68,11 @@ public class ProcessCommandAdapterTest {
 
         assertEquals("infileName", file.getInfile());
     }
+
+    /**
+     * Test that parsing of as raw to profile outfile works.
+     * @throws Exception
+     */
     @Test
     public void shouldParseRawToProfCommandOutfile() throws Exception {
         String json = "{\"type\": \"rawToProfile\", " +
@@ -84,6 +96,11 @@ public class ProcessCommandAdapterTest {
 
         assertEquals("outfileName", file.getOutfile());
     }
+
+    /**
+     * Test that parsing of as raw to profile genomeVersion works.
+     * @throws Exception
+     */
     @Test
     public void shouldParseRawToProfCommandGenomeVersion() throws Exception {
         String json = "{\"type\": \"rawToProfile\", " +
@@ -107,6 +124,11 @@ public class ProcessCommandAdapterTest {
 
         assertEquals("theGR", file.getGenomeVersion());
     }
+
+    /**
+     * Test that parsing of as raw to profile params works.
+     * @throws Exception
+     */
     @Test
     public void shouldParseRawToProfParams() throws Exception {
         String json = "{\"type\": \"rawToProfile\", " +
@@ -130,6 +152,11 @@ public class ProcessCommandAdapterTest {
 
         assertEquals("theParams", file.getParams());
     }
+
+    /**
+     * Test that parsing of as raw to profile keepSam works.
+     * @throws Exception
+     */
     @Test
     public void shouldParseRawToProfKeepSam() throws Exception {
         String json = "{\"type\": \"rawToProfile\", " +

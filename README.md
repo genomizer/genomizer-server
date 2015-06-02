@@ -124,6 +124,6 @@ Response
     ]
 
 ##Links
-[Client-Server API](http://docs.genomizer.apiary.io/)
+[Client-Server API](http://docs.genomizerexperimental.apiary.io/)
 
 [Git merge instructions](https://github.com/genomizer/genomizer-server/wiki/Merging-in-Git)

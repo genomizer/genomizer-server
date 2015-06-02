@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class UserListResponse extends Response {
 
-    private JsonArray usernameArray;
+    private JsonObject JsonObject;
 
     /**
      * converts a list of username to a json object
@@ -21,14 +21,9 @@ public class UserListResponse extends Response {
      */
     public UserListResponse(List<String> usernameList){
         this.code = HttpStatusCode.OK;
-        usernameArray = new JsonArray();
-
-
-        for (String username: usernameList) {
-            JsonObject usernameJson = new JsonObject();
-            usernameJson.addProperty("username",username);
-            usernameArray.add(usernameJson);
-        }
+        JsonObject = new JsonObject();
+        Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+        JsonObject.add("username", gson.toJsonTree(usernameList));
     }
 
     /**
@@ -38,6 +33,6 @@ public class UserListResponse extends Response {
     @Override
     public String getBody() {
 
-        return usernameArray.toString();
+        return JsonObject.toString();
     }
 }
