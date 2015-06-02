@@ -1,7 +1,7 @@
 package process.test;
 
 import com.google.gson.Gson;
-import command.process.ProcessCommands;
+import command.process.PutProcessCommands;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -53,7 +53,7 @@ public class ProcessPoolIntegrationTest {
                       "\"outfile\":\"stepTestOutfile.sgr\"," +
                       "\"stepSize\":\"30\"}]}]}";
 
-        ProcessCommands commands = gson.fromJson(json, ProcessCommands.class);
+        PutProcessCommands commands = gson.fromJson(json, PutProcessCommands.class);
         commands.setPool(pool);
 
         commands.doProcesses();
@@ -74,7 +74,7 @@ public class ProcessPoolIntegrationTest {
 
         System.out.println("json = " + json);
 
-        ProcessCommands commands = gson.fromJson(json, ProcessCommands.class);
+        PutProcessCommands commands = gson.fromJson(json, PutProcessCommands.class);
         commands.setPool(pool);
 
         commands.doProcesses();
@@ -98,7 +98,7 @@ public class ProcessPoolIntegrationTest {
         jsonBuilder.append("]}");
         String json = jsonBuilder.toString();
         System.out.println("json = " + json);
-        ProcessCommands commands = gson.fromJson(json, ProcessCommands.class);
+        PutProcessCommands commands = gson.fromJson(json, PutProcessCommands.class);
 
         commands.setPool(pool);
         commands.doProcesses();
@@ -129,7 +129,7 @@ public class ProcessPoolIntegrationTest {
 
         System.out.println("json = " + json);
 
-        ProcessCommands commands = gson.fromJson(json, ProcessCommands.class);
+        PutProcessCommands commands = gson.fromJson(json, PutProcessCommands.class);
         commands.setPool(pool);
 
         commands.doProcesses();
@@ -145,13 +145,13 @@ public class ProcessPoolIntegrationTest {
                 "\":\"stepTestInfile.sgr\"," +
                 "\"outfile\":\"ratioOutFile.sgr\"," +
                 "\"mean\":\"single\"," +
-                "\"readsCutOff\":5," +
+                "\"readsCutoff\":5," +
                 "\"chromosomes\":\"0\"" +
                 "}]}]}";
 
         System.out.println("json = " + json);
 
-        ProcessCommands commands = gson.fromJson(json, ProcessCommands.class);
+        PutProcessCommands commands = gson.fromJson(json, PutProcessCommands.class);
 
         commands.setPool(pool);
 

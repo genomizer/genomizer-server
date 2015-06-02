@@ -137,9 +137,8 @@ public class StepProcessCommand extends ProcessCommand {
                 Debug.log("Add<ing to DB: " + outTuple);
                 fileMethods.updateFileSize(outTuple.id, fileSize);
             } catch (Exception e) {
-                e.printStackTrace();
                 Debug.log("Unable to add " + getOutfile() + " to DB");
-                Debug.log("Removing out file");
+                Debug.log("Removing out file: " + outfile);
                 new File(profileFilesDir + "/" + getOutfile()).delete();
                 if (outTuple != null) {
                     initDB().deleteFile(outTuple.id);
@@ -156,15 +155,17 @@ public class StepProcessCommand extends ProcessCommand {
                 public Response call() throws Exception {
                     try {
                         processFile(expId, profileFilesDir);
-                        return new ProcessResponse(HttpStatusCode.OK);
+                        return new ProcessResponse(HttpStatusCode.OK,
+                                "Stepping process for " + expId +
+                                " completed successfully, outfile: " + outfile);
                     } catch (Exception e) {
-                        e.printStackTrace();
                         Debug.log(
-                                "Unable to perform stepping: " +
-                                e.getMessage());
+                                "Unable to perform stepping for " + expId +
+                                ": " + e.getMessage());
                         return new ProcessResponse(
                                 HttpStatusCode.INTERNAL_SERVER_ERROR,
-                                e.getMessage());
+                                "Unable to perform stepping for " + expId +
+                                ": " + e.getMessage());
                     }
                 }
             };
