@@ -76,6 +76,9 @@ public class PutProcessCommand extends Command {
 	@Override
 	public void validate() throws ValidateException {
 
+		throw new ValidateException(HttpStatusCode.NOT_FOUND, "This command is deprecated. " +
+				"Use: PUT /process/processCommands");
+		/*
 		hasRights(UserRights.getRights(this.getClass()));
 		validateName(username, MaxLength.USERNAME, "Username");
 		validateName(expid, MaxLength.EXPID, "Experiment name");
@@ -100,11 +103,15 @@ public class PutProcessCommand extends Command {
 				throw new ValidateException(HttpStatusCode.BAD_REQUEST, "Invalid " +
 						"process type");
 		}
+		*/
 	}
 
 	@Override
 	public Response execute() {
-		return addToProcessPool(Doorman.getProcessPool());
+
+		return new ErrorResponse(HttpStatusCode.NOT_FOUND, "This command is deprecated. " +
+				"Use: PUT /process/processCommands");
+		//return addToProcessPool(Doorman.getProcessPool());
 	}
 
 	@SuppressWarnings("deprecation")
