@@ -17,7 +17,7 @@ import java.util.Map;
 public class RawToProfileTest {
 	RawToProfileConverter rtp = null;
 	String path = "test/male.sam";
-	String bowTie = "-a -v 2 -S";
+	String bowTie = "-a -S";
 	//"d_melanogaster_fb5_22 -q reads/MOF_male_wt_reads_sample.fastq -S " +path;
 	String genomeBowtie2 = "resources/bowtie2/example/index/lambda_virus";
 	String genomeBowtie = "resources/processTest/genomes/d_melanogaster_fb5_22";

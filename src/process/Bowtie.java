@@ -100,13 +100,14 @@ public class Bowtie extends Executor{
     public String execute() throws InterruptedException, IOException {
         ArrayList<String> args = new ArrayList<>();
         args.add(ServerSettings.bowtieLocation);
+        for (String additionalParam : params) {
+            args.add(additionalParam);
+        }
         args.add(genomeRelease);
         args.add(inFileUnpaired);
         args.add(outFile);
 
-        for (String additionalParam : params) {
-            args.add(additionalParam);
-        }
+
 
         return executeCommand(args.toArray(new String []{}));
     }

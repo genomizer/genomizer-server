@@ -52,22 +52,27 @@ public class RawToProfileConverter extends Executor {
 
 	/**
 	 * This method might be deleted or edited to be the new procedure. Work in progress atm with Adam
-	 * @param params
-	 * @param fastqFile
-	 * @param wigFile
-	 *@param keepSam
-	 * @param genomeVersion
-	 * @param referenceGenome
-	 * @param filepaths     @return
+	 * @param params Bowtie parameters
+	 * @param fastqFile The raw file which is to be processed.
+	 * @param wigFile The name of the output file produced
+	 *@param keepSam Boolean telling whether intermediate .sam file should be
+	 *               saved.
+	 * @param genomeVersion Version of genome, not used at the moment.
+	 * @param referenceGenome Path to reference genome.
+	 * @param filepathRaw File path to experiment raw file directory
+	 * @param filepathProfile File path to experiment profile file directory
+	 * @return Processed files to save to database.
 	 * @throws ProcessException
 	 */
-	public static String procedureRaw(String params, String fastqFile,
+	public static File [] procedureRaw(String params, String fastqFile,
 									  String wigFile, boolean keepSam,
 									  String genomeVersion,
 									  String referenceGenome,
 									  String filepathRaw,
 									  String filepathProfile)
 			throws ProcessException, IOException {
+
+		ArrayList<File> returnFilesToAddToDatabase = new ArrayList();
 
 		/* Make sure that the output directory exists. */
 		new File(filepathProfile).mkdirs();
@@ -221,10 +226,11 @@ public class RawToProfileConverter extends Executor {
 				System.out.println("Moving: "+filePair.getKey());
 				Files.move(Paths.get(filePair.getKey()),
 						Paths.get(filePair.getValue()));
+				returnFilesToAddToDatabase.add(new File(filePair.getValue()));
 
 			} catch (IOException e) {
-				ErrorLogger.log("SYSTEM", "Error moving file "+ "["+filePair+"]"+
-				" to "+filepathProfile);
+				ErrorLogger.log("SYSTEM", "Error moving file "+ "["+
+										  filePair+"] to "+filepathProfile);
 				throw e;
 			}
 		}
@@ -235,7 +241,7 @@ public class RawToProfileConverter extends Executor {
 			System.out.println("Removing: "+file.getCanonicalPath());
 			file.delete();
 		}
-		return null;
+		return (File []) returnFilesToAddToDatabase.toArray();
 	}
 
 	private static String fixEndOfPath(String filepathRaw) {
