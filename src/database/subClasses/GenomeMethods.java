@@ -679,7 +679,7 @@ public class GenomeMethods {
 	public List<Genome> getAllGenomeReleases() throws SQLException {
 		String query = "SELECT * FROM Genome_Release "
 				+ "NATURAL JOIN Genome_Release_Files "
-				+ "WHERE Status = 'Done' ";
+				+ "WHERE Status = 'Done' ORDER BY Version";
 
 		PreparedStatement stmt = conn.prepareStatement(query);
 		ResultSet rs = stmt.executeQuery();
