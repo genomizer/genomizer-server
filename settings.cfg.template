@@ -1,16 +1,16 @@
 # Database settings.
 
-databaseUser        = postgres
-databasePassword    = pvt
-databaseHost        = localhost:6000
-databaseName        = genomizer
+databaseUser        = DB_USER
+databasePassword    = DB_PASSWORD
+databaseHost        = DB_HOST
+databaseName        = DB_NAME
 
 # Port number on which the server listens for HTTP connections.
 genomizerPort       = 7000
 
 # Directory on the server where uploaded files are stored.
 
-fileLocation        = /path/to/resources/
+fileLocation        = /tmp/
 
 # Max. number of threads in the processing work pool.
 
@@ -37,10 +37,10 @@ shouldUseJavaSmoothing = false
 # 'wwwTunnelPath' is the path on the WWW server that
 # requests to genomizer server are mapped to (usually '/api').
 
-wwwTunnelHost       = https://localhost
-wwwTunnelPort       = 7000
-wwwTunnelPath       = /api
+wwwTunnelHost       = WWW_TUNNEL_HOST
+wwwTunnelPort       = WWW_TUNNEL_PORT
+wwwTunnelPath       = WWW_TUNNEL_PATH
 
 # Directory used for storing temporary files during uploading.
 # Should be on the same partition as 'fileLocation'.
-uploadTempDir       = /data/tmp/
+uploadTempDir       = /tmp/
