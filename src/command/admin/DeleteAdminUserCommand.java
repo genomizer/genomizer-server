@@ -46,35 +46,32 @@ public class DeleteAdminUserCommand extends Command {
 
 	@Override
 	public Response execute() {
-		Response response;
 		if (Authenticate.getUsernameByID(uuid).equals(username)) {
-			response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
 					"Deletion of user '" + username +
 							" unsuccessful. Deletion of admins own account " +
 							"is not allowed. Use another admin user " +
 							"to delete the account.");
-		} else {
-			try (DatabaseAccessor db = initDB()) {
-					if (db.deleteUser(username) != 0) {
-						response = new MinimalResponse(HttpStatusCode.OK);
-						Authenticate.deleteUsername(username);
-					} else {
-						response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
-								"Deletion of user '" + username +
-										"' unsuccessful, user does not exist.");
-					}
-			} catch (SQLException e) {
-				response = new ErrorResponse(HttpStatusCode.
-						INTERNAL_SERVER_ERROR, "Deletion of user '" + username +
-						"' unsuccessful due to temporary database problems.");
-				Debug.log("Reason: " + e.getMessage());
-			} catch (IOException e) {
-				response = new ErrorResponse(HttpStatusCode.BAD_REQUEST,
-						"Deletion of user '" + username + "' unsuccessful. " +
-								e.getMessage());
-			}
-		}
+		} 
 
-		return response;
+		try (DatabaseAccessor db = initDB()) {
+			if (db.deleteUser(username) != 0) {
+				Authenticate.deleteUsername(username);
+				return new MinimalResponse(HttpStatusCode.OK);
+			} else {
+				return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
+						"Deletion of user '" + username +
+								"' unsuccessful, user does not exist.");
+			}
+		} catch (SQLException e) {
+			Debug.log("DeleteAdminUserCommand.execute: SQLException. Reason: " + e.getMessage());
+			return new ErrorResponse(HttpStatusCode.
+					INTERNAL_SERVER_ERROR, "Deletion of user '" + username +
+					"' unsuccessful due to temporary database problems.");
+		} catch (IOException e) {
+			return new ErrorResponse(HttpStatusCode.BAD_REQUEST,
+					"Deletion of user '" + username + "' unsuccessful. " +
+							e.getMessage());
+		}
 	}
 }
