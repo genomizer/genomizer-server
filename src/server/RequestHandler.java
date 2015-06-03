@@ -194,6 +194,7 @@ public class RequestHandler implements HttpHandler {
                 exchange.sendResponseHeaders(response.getCode(), 0);
             } else {
                 String body = response.getBody();
+                Debug.log("Response code: " + response.getCode());
                 Debug.log("Response body: \n" + body);
 
                 exchange.sendResponseHeaders(response.getCode(),
