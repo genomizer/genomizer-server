@@ -74,12 +74,14 @@ public class PutAdminUserCommand extends Command {
     public Response execute() {
         Response response;
 
-        // Do not allow admin editing of admins own account. Instead PutUserCommand should be used.
+        // Do not allow admins to lower privileges of their own accounts. Instead PutUserCommand should be used.
         // This ensures admins can not self edit their privileges, potentially destroying the last admin account.
-        if(Authenticate.getUsernameByID(uuid).equals(username))
-            if(!privileges.equals(UserType.ADMIN.name()))
-                response = new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Changing of privileges on user "+username+
-                    " is not allowed. You may not lower your own privileges.");
+        if(Authenticate.getUsernameByID(uuid).equals(username)) {
+            if (!privileges.equals(UserType.ADMIN.name())) {
+                return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Changing of privileges on user " + username +
+                        " is not allowed. You may not lower your own privileges.");
+            }
+        }
 
         try(DatabaseAccessor db = initDB()) {
             String hash = BCrypt.hashpw(password, BCrypt.gensalt());
