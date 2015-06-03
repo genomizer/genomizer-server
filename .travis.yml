@@ -14,14 +14,17 @@ before_script:
   - export PATH=$PATH:$PWD/resources/
   - psql -c 'create database c5dv151_vt14;' -U postgres
   - psql -f sql/genomizer_database_tables.sql -U postgres -d c5dv151_vt14
-  - psql -f sql/add_test_tuples.sql -U postgres -d c5dv151_vt14
-  - psql -f sql/release_database_tuple.sql -U postgres -d c5dv151_vt14
 
 script:
   - ant test
+  - psql -f sql/drop_all_tables.sql -U postgres -d c5dv151_vt14
+  - psql -f sql/genomizer_database_tables.sql -U postgres -d c5dv151_vt14
+  - psql -f sql/add_test_tuples.sql -U postgres -d c5dv151_vt14
+  - psql -f sql/release_database_tuple.sql -U postgres -d c5dv151_vt14
   - sed -f travis.sed <settings.cfg.template >settings.cfg
   - ant run 2>&1 > log.txt &
   - git clone -b travis-acceptance https://github.com/23Skidoo/genomizer-server-tester.git
   - cd genomizer-server-tester
   - ant jar
   - java -jar genomizer-server-tester.jar "http://localhost:7000"
+  - cat ../log.txt
