@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project basedir="." default="compile" name="genomizer-server-tester">
+
+  <property file="build.properties"/>
+  <property name="target" value="1.7"/>
+  <property name="source" value="1.7"/>
+  <path id="genomizer-server-tester.classpath">
+    <pathelement location="out/"/>
+    <fileset dir="external-libs" id="fileset.jars">
+      <include name="*.jar"/>
+    </fileset>
+  </path>
+
+
+
+  <target name="init">
+    <mkdir dir="out"/>
+    <copy includeemptydirs="false" todir="out">
+      <fileset dir="src">
+        <exclude name="**/*.java"/>
+      </fileset>
+    </copy>
+    <copy includeemptydirs="false" todir="out">
+      <fileset dir="external-libs">
+        <exclude name="**/*.java"/>
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="compile" depends="init">
+    <echo message="${ant.project.name}: ${ant.file}"/>
+    <javac destdir="out" includeantruntime="false" source="${source}" target="${target}" encoding="ISO-8859-1">
+      <src path="src"/>
+      <classpath>
+        <path refid="genomizer-server-tester.classpath"/>
+      </classpath>
+      <compilerarg value="-Xlint:all"/>
+    </javac>
+  </target>
+
+  <target name="jar" depends="compile">
+    <jar destfile="genomizer-server-tester.jar">
+      <fileset dir="out/" id="fileset.class">
+        <include name ="**/*.class" />
+      </fileset>
+      <zipgroupfileset refid="fileset.jars" />
+      <manifest>
+        <attribute name="Main-Class" value="GenomizerAPITester" />
+      </manifest>
+    </jar>
+  </target>
+
+  <target name="clean">
+    <delete dir="out" />
+  </target>
+
+  </project>
