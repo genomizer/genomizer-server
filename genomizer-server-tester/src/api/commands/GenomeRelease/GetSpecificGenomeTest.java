@@ -42,8 +42,9 @@ public class GetSpecificGenomeTest extends SuperTestCommand {
 
             if (CommandTester.conn.getResponseCode() == 200) {
                 String respBody = CommandTester.conn.getResponseBody();
+                super.finalResult = true;
                 for (String expectedStr : expected)
-                    super.finalResult = respBody.contains(expectedStr);
+                  super.finalResult = (super.finalResult && respBody.contains(expectedStr));
             }
         } catch (RequestException e) {
             if (super.expectedResult) ErrorLogger.log(e);
