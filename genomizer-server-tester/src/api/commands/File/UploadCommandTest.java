@@ -39,11 +39,13 @@ public class UploadCommandTest extends SuperTestCommand {
             upload.sendFile(CommandTester.token);
             if (upload.getResponseCode() == 200) {
                 super.finalResult = true;
-
+                Thread.sleep(1000);
             }
         } catch (IOException e) {
             if (super.expectedResult) ErrorLogger.log(e);
 
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
     }
