@@ -2,7 +2,9 @@ package process;
 
 import command.ValidateException;
 import server.Debug;
+import server.ErrorLogger;
 import server.ServerSettings;
+import smoothing.SmoothingAndStep;
 
 import java.io.File;
 import java.io.IOException;
@@ -66,16 +68,12 @@ public class SmoothJava extends Smooth {
                                     String outputPath, int stepSize)
             throws ValidateException, InterruptedException, IOException {
 
-        SmoothJava smooth = new SmoothJava(windowSize, meanType, minPos,
-                calcTotalMean, printPos, path, outputPath, stepSize);
-        Debug.log("Started smoothing on " + path);
-
-        smooth.validate();
-        Debug.log("Validated smoothing on " + path);
-
-        smooth.execute();
-        Debug.log("Executed smoothing on " + path);
-
-        Debug.log("Output filename is " + outputPath);
+        SmoothingAndStep sas = new SmoothingAndStep();
+        int[] params = {windowSize, meanType, minPos, calcTotalMean, printPos};
+        try {
+            sas.smoothing(params, path, outputPath, stepSize);
+        } catch (ProcessException e) {
+            ErrorLogger.log("SMOOTHING", "ProcessException in runSmoothing. \n" + e.getMessage());
+        }
     }
 }

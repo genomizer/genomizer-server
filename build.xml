@@ -69,7 +69,6 @@
             <fileset dir="bin/" id="fileset.class">
                 <include name ="**/*.class" />
                 <exclude name="**/test/**/*" />
-                <exclude name="smoothing/*" />
             </fileset>
             <zipgroupfileset refid="fileset.jars" />
             <manifest>
