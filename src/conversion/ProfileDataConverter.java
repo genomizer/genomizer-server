@@ -330,15 +330,17 @@ public class ProfileDataConverter {
 
             String line;
             String []columns;
-
+            Integer mid;
             line = fr.readLine();
             columns = line.split("\\s+");
             if (columns[0].equals("track") && columns[1].equals("type=wiggle_0"))
                 line = fr.readLine();
 
             do {
+
                 columns = line.split("\\s+");
-                fw.write(columns[0]+"\t"+columns[1]+"\t"+columns[3]+"\n");
+                mid = Integer.parseInt(columns[1]) + (Integer.parseInt(columns[2]) - Integer.parseInt(columns[1]))/2;
+                fw.write(columns[0]+"\t"+mid+"\t"+columns[3]+"\n");
             } while ((line = fr.readLine()) != null);
 
             fw.close();
