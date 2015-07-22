@@ -72,6 +72,8 @@ public class SmoothJava extends Smooth {
         int[] params = {windowSize, meanType, minPos, calcTotalMean, printPos};
         try {
             sas.smoothing(params, path, outputPath, stepSize);
+        } catch (InterruptedException e) {
+            ErrorLogger.log("SMOOTHING", "Process interrupted successfully. \n" + e.getMessage());
         } catch (ProcessException e) {
             ErrorLogger.log("SMOOTHING", "ProcessException in runSmoothing. \n" + e.getMessage());
         }

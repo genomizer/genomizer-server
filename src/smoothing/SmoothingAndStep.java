@@ -10,7 +10,7 @@ import java.util.Arrays;
 
 public class SmoothingAndStep {
 
-    public static void main(String[] args) throws ProcessException {
+    public static void main(String[] args) throws ProcessException, InterruptedException {
         int[] params = new int[5];
         for (int i=0; i<5; ++i) {
             params[i] = Integer.parseInt(args[i]);
@@ -58,7 +58,7 @@ public class SmoothingAndStep {
      *
      */
     public double smoothing(int[] params, String inPath, String outPath,
-                                 int stepSize) throws ProcessException {
+                                 int stepSize) throws ProcessException, InterruptedException {
         validateInput(params, stepSize);
 
         data = new ArrayList<Tuple>();
