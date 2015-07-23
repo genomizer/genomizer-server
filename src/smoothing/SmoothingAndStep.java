@@ -80,6 +80,10 @@ public class SmoothingAndStep {
 
                 if((strLine = br.readLine()) != null){
                     while(!addLine(strLine)){
+                        if(Thread.currentThread().isInterrupted()){
+                            tearDown();
+                            return 0;
+                        }
                         strLine = br.readLine();
                     }
                 }
@@ -96,6 +100,10 @@ public class SmoothingAndStep {
             smoothOneRow(params,params[0]);
 
             while((strLine = br.readLine()) != null){
+                if(Thread.currentThread().isInterrupted()){
+                    tearDown();
+                    return 0;
+                }
                 shiftLeft(strLine, params);
                 smoothOneRow(params,params[0]);
             }
@@ -105,6 +113,10 @@ public class SmoothingAndStep {
 
             if (params[0]%2==1){
                 for (int i = 1;i<(params[0]-params[2]);i++){
+                    if(Thread.currentThread().isInterrupted()){
+                        tearDown();
+                        return 0;
+                    }
                     smoothOneRow(params,params[0]-i);
                     if(data.size() > 0){
                         data.remove(0);
@@ -115,6 +127,10 @@ public class SmoothingAndStep {
                 }
             }else{
                 for (int i = 1;i<(params[0]-params[2]+1);i++){
+                    if(Thread.currentThread().isInterrupted()){
+                        tearDown();
+                        return 0;
+                    }
                     smoothOneRow(params,params[0]-i);
                     if(data.size() > 0){
                         data.remove(0);
