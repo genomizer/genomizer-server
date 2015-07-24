@@ -78,8 +78,9 @@ public class PutAdminUserCommand extends Command {
         // This ensures admins can not self edit their privileges, potentially destroying the last admin account.
         if(Authenticate.getUsernameByID(uuid).equals(username)) {
             if (!privileges.equals(UserType.ADMIN.name())) {
-                return new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Changing of privileges on user " + username +
+                response = new ErrorResponse(HttpStatusCode.BAD_REQUEST, "Changing of privileges on user " + username +
                         " is not allowed. You may not lower your own privileges.");
+                return response;
             }
         }
 
