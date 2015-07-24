@@ -13,6 +13,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.security.AccessControlException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.Stack;
@@ -43,6 +44,7 @@ public abstract class Executor {
 			throws InterruptedException, IOException, RuntimeException {
 
 		File pathToExecutable = new File(FILEPATH+command[0]);
+
 
 		command[0] = pathToExecutable.getAbsolutePath();
 		return executeCommand(command);
@@ -102,6 +104,7 @@ public abstract class Executor {
 	 */
 	protected String executeCommand(String[] command)
 			throws InterruptedException, IOException {
+                command = prependNiceCommand(command);
 		ProcessBuilder builder = new ProcessBuilder(command);
 
 		builder.directory(new File(FILEPATH).getAbsoluteFile());
@@ -349,4 +352,13 @@ public abstract class Executor {
 		}
 		return true;
 	}
+
+        private String[] prependNiceCommand(String[] command) {
+		ArrayList<String> temp = new ArrayList<String>(Arrays.asList(command));
+		temp.add(0, "19");
+		temp.add(0, "-n");
+		temp.add(0, "nice");
+		command = temp.toArray(new String[temp.size()]);
+                return command;
+        }
 }

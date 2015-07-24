@@ -54,10 +54,10 @@ public class RawToProfProcessCommand extends ProcessCommand {
                     file.getGenomeVersion(),
                     MaxLength.GENOME_VERSION,
                     "Genome version");
-            Command.validateExists(
-                    file.getParams(),
-                    MaxLength.FILE_METADATA,
-                    "Parameters");
+            if(file.getParams() == null){
+                throw new ValidateException(
+                        HttpStatusCode.BAD_REQUEST, "Parameters can not be null");
+            }
             if (file.shouldKeepSam() == null) {
                 throw new ValidateException(
                         HttpStatusCode.BAD_REQUEST,
