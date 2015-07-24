@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -36,10 +37,14 @@ public abstract class ProcessCommand {
                     callable);
             futures.add(pool.getFuture(uuid));
         }
-        for (Future<Response> future : futures) {
-            if (future.get().getCode() != HttpStatusCode.OK) {
-                throw new InterruptedException(future.get().getMessage());
+        try {
+            for (Future<Response> future : futures) {
+                if (future.get().getCode() != HttpStatusCode.OK) {
+                    throw new InterruptedException(future.get().getMessage());
+                }
             }
+        } catch (CancellationException e){
+            throw new InterruptedException(e.getMessage());
         }
     }
 

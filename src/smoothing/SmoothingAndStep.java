@@ -10,7 +10,7 @@ import java.util.Arrays;
 
 public class SmoothingAndStep {
 
-    public static void main(String[] args) throws ProcessException {
+    public static void main(String[] args) throws ProcessException, InterruptedException {
         int[] params = new int[5];
         for (int i=0; i<5; ++i) {
             params[i] = Integer.parseInt(args[i]);
@@ -58,7 +58,7 @@ public class SmoothingAndStep {
      *
      */
     public double smoothing(int[] params, String inPath, String outPath,
-                                 int stepSize) throws ProcessException {
+                                 int stepSize) throws ProcessException, InterruptedException {
         validateInput(params, stepSize);
 
         data = new ArrayList<Tuple>();
@@ -80,6 +80,10 @@ public class SmoothingAndStep {
 
                 if((strLine = br.readLine()) != null){
                     while(!addLine(strLine)){
+                        if(Thread.currentThread().isInterrupted()){
+                            tearDown();
+                            throw new InterruptedException();
+                        }
                         strLine = br.readLine();
                     }
                 }
@@ -96,6 +100,10 @@ public class SmoothingAndStep {
             smoothOneRow(params,params[0]);
 
             while((strLine = br.readLine()) != null){
+                if(Thread.currentThread().isInterrupted()){
+                    tearDown();
+                    throw new InterruptedException();
+                }
                 shiftLeft(strLine, params);
                 smoothOneRow(params,params[0]);
             }
@@ -105,6 +113,10 @@ public class SmoothingAndStep {
 
             if (params[0]%2==1){
                 for (int i = 1;i<(params[0]-params[2]);i++){
+                    if(Thread.currentThread().isInterrupted()){
+                        tearDown();
+                        throw new InterruptedException();
+                    }
                     smoothOneRow(params,params[0]-i);
                     if(data.size() > 0){
                         data.remove(0);
@@ -115,6 +127,10 @@ public class SmoothingAndStep {
                 }
             }else{
                 for (int i = 1;i<(params[0]-params[2]+1);i++){
+                    if(Thread.currentThread().isInterrupted()){
+                        tearDown();
+                        throw new InterruptedException();
+                    }
                     smoothOneRow(params,params[0]-i);
                     if(data.size() > 0){
                         data.remove(0);
