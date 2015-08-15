@@ -11,10 +11,6 @@ mean=$5;
 readsCutOff=$6;
 chromosomes=$7;
 
-infiledir=`echo $input | perl -pe 's/\/[^\/]+$//'`/
-
-echo infiledir: $infiledir
-
 # workingdir=workingdir-ratio-`echo $input | perl -pe 's/[\_\/]//g'`/
 resultdir=$workingdir/ratios/
 
@@ -26,6 +22,3 @@ cp $input $workingdir/x_input_step.sgr
 cp $IP $workingdir/x_IP_step.sgr
 
 perl $ratio_calc $workingdir $mean $cutoff $chromosomes
-
-# mv $resultdir/* $infiledir/
-# rm -rf $resultdir
