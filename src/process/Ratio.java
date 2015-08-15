@@ -74,8 +74,8 @@ public class Ratio extends Executor {
         File profileFilesDir = new File(infile1).getParentFile();
         Debug.log("profileFilesDir = " + profileFilesDir.getAbsolutePath());
         File workingDir = new File(
-                "resources/ratioCalcTestData/workingDir-ratio-" +
-                infile1.replaceAll("[_/]", ""));
+                "/tmp/ratioCalcTmp/workingDir-ratio-" +
+                infile1.replaceAll("[_./]", ""));
         File resultsDir = new File(workingDir.getAbsolutePath() + "/ratios");
         File ratioWrapper = new File("resources/ratio/ratio_calc_wrapper.sh");
 
