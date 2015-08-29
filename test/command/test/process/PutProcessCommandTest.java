@@ -2,7 +2,6 @@ package command.test.process;
 
 import static org.junit.Assert.*;
 
-import authentication.Authenticate;
 import command.process.*;
 import database.constants.MaxLength;
 import database.subClasses.UserMethods.UserType;

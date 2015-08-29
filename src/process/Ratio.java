@@ -3,11 +3,9 @@ package process;
 import command.ValidateException;
 import org.apache.commons.io.FileUtils;
 import server.Debug;
-import server.ErrorLogger;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  * File:        Ratio.java

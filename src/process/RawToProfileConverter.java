@@ -28,12 +28,12 @@ public class RawToProfileConverter extends Executor {
 	private String samToGff;
 	private String gffToAllnusgr;
 	private File fileDir;
-	private String inFolder;
+	protected String inFolder;
 	private String[] parameters;
 	private String rawFile1;
 	private String rawFile2;
 	private String rawFile_1_Name;
-	private String rawFile_2_Name;
+	protected String rawFile_2_Name;
 	private String logString;
 	private RawToProfileProcessChecker checker;
 	private ParameterValidator validator;
@@ -91,7 +91,7 @@ public class RawToProfileConverter extends Executor {
 							Thread.currentThread().getId()+"/";
 
 
-		File tmpDir = createDirectory(tmpDirPath);
+		createDirectory(tmpDirPath);
 
 
 		/* Append end of paths with '/' if not present */
@@ -284,7 +284,7 @@ public class RawToProfileConverter extends Executor {
 
 		/* Will initiate files, directories et c. needed to run procedure,
 		 * can cast exceptions */
-		File[] inFiles = initiateProcedure(parameters, inFolder, outFilePath);
+		initiateProcedure(parameters, inFolder, outFilePath);
 
 		ErrorLogger.log("SYSTEM", Arrays.toString(parameters));
 
@@ -910,7 +910,7 @@ public class RawToProfileConverter extends Executor {
 	 *            the name of the unsorted sam file
 	 * @throws ProcessException
 	 */
-	private void sortSamFile(String unsortedSamFileName)
+	protected void sortSamFile(String unsortedSamFileName)
 			throws ProcessException {
 
 		String sortSam = "sort " + dir + unsortedSamFileName + ".sam"
@@ -996,10 +996,10 @@ public class RawToProfileConverter extends Executor {
 		return (new File(folder)).isDirectory();
 	}
 
-	private String runPicard(String command, String arguments) {
-		/* TODO Refactor to use this? */
-		return null;
-	}
+//	private String runPicard(String command, String arguments) {
+//		/* TODO Refactor to use this? */
+//		return null;
+//	}
 
     /**
      * Makes external call to Picard that removes duplicates in input .sam file.
@@ -1013,7 +1013,7 @@ public class RawToProfileConverter extends Executor {
      * @throws IllegalArgumentException If input or output file was
      * not .sam format
      */
-    private String runRemoveDuplicates(
+    protected String runRemoveDuplicates(
             String inputFile, String outputFile,
             String metrics) throws ProcessException {
 		/* Check if input is .sam format */
@@ -1057,7 +1057,7 @@ public class RawToProfileConverter extends Executor {
 
 	}
 
-	private String runSortSam(String inputFile, String outputFile)
+	protected String runSortSam(String inputFile, String outputFile)
 			throws ProcessException {
 		/* Check if input is .sam format */
 		if (!inputFile.endsWith(".sam")) {

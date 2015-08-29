@@ -16,7 +16,6 @@ import process.ProcessException;
 import process.RawToProfileConverter;
 import response.*;
 import server.Debug;
-import server.Doorman;
 import server.ErrorLogger;
 import server.ProcessPool;
 

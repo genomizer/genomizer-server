@@ -13,8 +13,6 @@ import server.ServerSettings;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * TODO class description goes here...
@@ -22,12 +20,6 @@ import java.util.regex.Pattern;
 public class Bowtie extends Executor{
 
     public enum ScoringScheme { Phred33, Phred64 };
-
-    // Path to the script for FASTQ format detection.
-    private static final String fastqFormatDetectPath = "resources/fastqFormatDetect.pl";
-
-    // Scoring scheme to use.
-    private ScoringScheme scoringScheme = ScoringScheme.Phred33;
 
     // Input genome release (-x), obligatory.
     private String genomeRelease;

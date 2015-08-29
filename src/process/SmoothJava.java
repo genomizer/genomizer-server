@@ -1,7 +1,6 @@
 package process;
 
 import command.ValidateException;
-import server.Debug;
 import server.ErrorLogger;
 import server.ServerSettings;
 import smoothing.SmoothingAndStep;

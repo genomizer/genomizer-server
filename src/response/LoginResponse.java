@@ -14,7 +14,7 @@ public class LoginResponse extends Response {
 	private String token;
 
 	@Expose
-	private String role;
+	protected String role;
 
 
 	/**

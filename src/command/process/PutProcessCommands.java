@@ -3,7 +3,6 @@ package command.process;
 import com.google.gson.annotations.Expose;
 import command.*;
 import database.constants.MaxLength;
-import response.ErrorResponse;
 import response.HttpStatusCode;
 import response.ProcessResponse;
 import response.Response;
@@ -12,11 +11,9 @@ import server.ProcessPool;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.ArrayList;
 import java.util.Map;
-import server.Debug;
 
 /**
  * The class handles processing a list of processing commands. The list of
@@ -72,70 +69,70 @@ public class PutProcessCommands extends Command {
     }
 
     // Validate that the list of ProcessCommands is in the correct order.
-    private void validateCommandOrder() throws ValidateException {
-        ArrayList<ProcessCommand> before = new ArrayList<>();
+//    private void validateCommandOrder() throws ValidateException {
+//        ArrayList<ProcessCommand> before = new ArrayList<>();
+//
+//        HashSet<Class<? extends  ProcessCommand>> rawToProfAllowedBeforeSet
+//                = new HashSet<>();
+//
+//        HashSet<Class<? extends  ProcessCommand>> ratioAllowedBeforeSet
+//                = new HashSet<>();
+//        ratioAllowedBeforeSet.add(RawToProfProcessCommand.class);
+//        ratioAllowedBeforeSet.add(SmoothingProcessCommand.class);
+//        ratioAllowedBeforeSet.add(StepProcessCommand.class);
+//
+//        HashSet<Class<? extends  ProcessCommand>> smoothingAllowedBeforeSet
+//                = new HashSet<>();
+//        smoothingAllowedBeforeSet.add(RawToProfProcessCommand.class);
+//        smoothingAllowedBeforeSet.add(RatioProcessCommand.class);
+//
+//        HashSet<Class<? extends  ProcessCommand>> stepAllowedBeforeSet
+//                = new HashSet<>();
+//        stepAllowedBeforeSet.add(RawToProfProcessCommand.class);
+//        stepAllowedBeforeSet.add(RatioProcessCommand.class);
+//        stepAllowedBeforeSet.add(SmoothingProcessCommand.class);
+//
+//        for (ProcessCommand processCommand : processCommands) {
+//            if (processCommand.getClass().equals(RawToProfProcessCommand.class)) {
+//                validateCommandsAllowedBefore(before,
+//                        rawToProfAllowedBeforeSet, processCommand);
+//            }
+//            else if (processCommand.getClass().equals(RatioProcessCommand.class)) {
+//                validateCommandsAllowedBefore(before,
+//                        ratioAllowedBeforeSet, processCommand);
+//            }
+//            else if (processCommand.getClass().equals(SmoothingProcessCommand.class)) {
+//                validateCommandsAllowedBefore(before,
+//                        smoothingAllowedBeforeSet, processCommand);
+//
+//            }
+//            else if (processCommand.getClass().equals(StepProcessCommand.class)) {
+//                validateCommandsAllowedBefore(before,
+//                        stepAllowedBeforeSet, processCommand);
+//            }
+//            else {
+//                throw new ValidateException(HttpStatusCode.BAD_REQUEST,
+//                        "Unknown process command in process commands list!");
+//            }
+//
+//            before.add(processCommand);
+//        }
+//    }
 
-        HashSet<Class<? extends  ProcessCommand>> rawToProfAllowedBeforeSet
-                = new HashSet<>();
-
-        HashSet<Class<? extends  ProcessCommand>> ratioAllowedBeforeSet
-                = new HashSet<>();
-        ratioAllowedBeforeSet.add(RawToProfProcessCommand.class);
-        ratioAllowedBeforeSet.add(SmoothingProcessCommand.class);
-        ratioAllowedBeforeSet.add(StepProcessCommand.class);
-
-        HashSet<Class<? extends  ProcessCommand>> smoothingAllowedBeforeSet
-                = new HashSet<>();
-        smoothingAllowedBeforeSet.add(RawToProfProcessCommand.class);
-        smoothingAllowedBeforeSet.add(RatioProcessCommand.class);
-
-        HashSet<Class<? extends  ProcessCommand>> stepAllowedBeforeSet
-                = new HashSet<>();
-        stepAllowedBeforeSet.add(RawToProfProcessCommand.class);
-        stepAllowedBeforeSet.add(RatioProcessCommand.class);
-        stepAllowedBeforeSet.add(SmoothingProcessCommand.class);
-
-        for (ProcessCommand processCommand : processCommands) {
-            if (processCommand.getClass().equals(RawToProfProcessCommand.class)) {
-                validateCommandsAllowedBefore(before,
-                        rawToProfAllowedBeforeSet, processCommand);
-            }
-            else if (processCommand.getClass().equals(RatioProcessCommand.class)) {
-                validateCommandsAllowedBefore(before,
-                        ratioAllowedBeforeSet, processCommand);
-            }
-            else if (processCommand.getClass().equals(SmoothingProcessCommand.class)) {
-                validateCommandsAllowedBefore(before,
-                        smoothingAllowedBeforeSet, processCommand);
-
-            }
-            else if (processCommand.getClass().equals(StepProcessCommand.class)) {
-                validateCommandsAllowedBefore(before,
-                        stepAllowedBeforeSet, processCommand);
-            }
-            else {
-                throw new ValidateException(HttpStatusCode.BAD_REQUEST,
-                        "Unknown process command in process commands list!");
-            }
-
-            before.add(processCommand);
-        }
-    }
-
-    // Helper used by validateCommandOrder().
-    private void validateCommandsAllowedBefore(List<ProcessCommand> before,
-                                              Set<Class<? extends ProcessCommand>> allowed,
-                                              ProcessCommand current)
-            throws ValidateException
-    {
-        for (ProcessCommand processCommand : before) {
-            if (!allowed.contains(processCommand.getClass())) {
-                throw new ValidateException(HttpStatusCode.BAD_REQUEST,
-                        "Wrong command order: " + processCommand.getClass()
-                                + "not allowed before " + current.getClass());
-            }
-        }
-    }
+//    // Helper used by validateCommandOrder().
+//    private void validateCommandsAllowedBefore(List<ProcessCommand> before,
+//                                              Set<Class<? extends ProcessCommand>> allowed,
+//                                              ProcessCommand current)
+//            throws ValidateException
+//    {
+//        for (ProcessCommand processCommand : before) {
+//            if (!allowed.contains(processCommand.getClass())) {
+//                throw new ValidateException(HttpStatusCode.BAD_REQUEST,
+//                        "Wrong command order: " + processCommand.getClass()
+//                                + "not allowed before " + current.getClass());
+//            }
+//        }
+//    }
 
     /**
      * Run processing on all commands.

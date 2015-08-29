@@ -9,7 +9,6 @@ import database.DatabaseAccessor;
 import database.containers.Experiment;
 import database.containers.FileTuple;
 import database.test.TestInitializer;
-import static org.junit.Assert.*;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -196,7 +195,6 @@ public class FileTableTests {
                 false,
                 null,
                 null);
-        File fileToAdd = new File(addedFile.path);
         addMockFile(addedFile.path);
         if (!(new File(addedFile.path).exists()))
             fail("Test file could not be created.");
@@ -226,7 +224,6 @@ public class FileTableTests {
                 false,
                 null,
                 null);
-        File fileToAdd = new File(addedFile.path);
         addMockFile(addedFile.path);
         if (!(new File(addedFile.path).exists()))
             fail("Test file could not be created.");
@@ -256,7 +253,6 @@ public class FileTableTests {
                 false,
                 null,
                 null);
-        File fileToAdd = new File(addedFile.path);
         addMockFile(addedFile.path);
         if (!(new File(addedFile.path).exists()))
             fail("Test file could not be created.");

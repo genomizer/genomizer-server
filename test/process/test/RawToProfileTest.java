@@ -10,8 +10,6 @@ import process.RawToProfileConverter;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.AbstractMap;
-import java.util.Map;
 
 @SuppressWarnings("deprecation")
 public class RawToProfileTest {
