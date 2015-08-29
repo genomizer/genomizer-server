@@ -5,7 +5,6 @@ import command.Command;
 import command.UserRights;
 import command.ValidateException;
 import database.DatabaseAccessor;
-import database.constants.MaxLength;
 import database.subClasses.UserMethods;
 import response.*;
 import server.Debug;

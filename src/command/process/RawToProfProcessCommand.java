@@ -216,8 +216,6 @@ public class RawToProfProcessCommand extends ProcessCommand {
                     profileFilesDir);
 
 
-            String inPath = new File(rawFilesDir + "/" + infile).getAbsolutePath();
-
             // Add generated file to the database.
 
             try {
@@ -225,7 +223,6 @@ public class RawToProfProcessCommand extends ProcessCommand {
                 for (File outFile: outFiles) {
 
                     FileMethods fileMethods = initDB().getFileMethods();
-                    FileTuple inTuple = fileMethods.getFileTuple(inPath);
 
                     long fileSize = FileUtils.sizeOf(outFile);
 

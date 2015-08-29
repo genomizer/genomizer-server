@@ -63,7 +63,6 @@ public class PostLoginCommand extends Command {
 
 	@Override
 	public Response execute() {
-		Response response;
 		try (DatabaseAccessor db = initDB()) {
 			String dbHash = db.getPasswordHash(username);
 			if (dbHash != null) {

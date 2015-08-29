@@ -21,8 +21,8 @@ public class Picard extends Executor{
     private final String command;
     private final String inFile;
     private final String outFile;
-    private final String inFormat;
-    private final String outFormat;
+    protected final String inFormat;
+    protected final String outFormat;
     private final String [] params;
 
     public Picard(String command, String inFile, String outFile,

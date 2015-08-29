@@ -7,12 +7,10 @@ import command.ValidateException;
 import conversion.ConversionHandler;
 import database.constants.MaxLength;
 import database.containers.FileTuple;
-import database.subClasses.UserMethods;
 import response.*;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.HashMap;
 
 /**
  * Command used to convert a file.

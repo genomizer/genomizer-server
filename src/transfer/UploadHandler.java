@@ -9,7 +9,6 @@ import database.DatabaseAccessor;
 import database.containers.ChainFile;
 import database.containers.FileTuple;
 import database.containers.GenomeFile;
-import database.containers.HasCheckSumMD5;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUpload;
 import org.apache.commons.fileupload.FileUploadException;
@@ -258,27 +257,27 @@ public class UploadHandler {
 
     // Verify the file's MD5 checksum.
     // If the client hasn't sent us one, just save the actual checksum.
-    private void verifyOrUpdateMD5(HasCheckSumMD5 file, String actualMD5, DatabaseAccessor db)
-            throws SQLException, ValidateException {
-        String checkSumMD5 = file.getCheckSumMD5();
-
-        if (checkSumMD5 != null) {
-            if (!actualMD5.equals(checkSumMD5)) {
-                Debug.log("MD5 verification error. Expected: "
-                        + checkSumMD5 + ", actual: " + actualMD5 + ".");
-                throw new ValidateException(HttpStatusCode.BAD_REQUEST,
-                        "Incorrect checksum!");
-            }
-            else {
-                Debug.log("MD5 checksum verified successfully.");
-                return;
-            }
-        }
-        else {
-            Debug.log("MD5 checksum not provided by the client: "
-                    + "updating the database with actual checksum.");
-            file.setCheckSumMD5(db, actualMD5);
-            return;
-        }
-    }
+//    private void verifyOrUpdateMD5(HasCheckSumMD5 file, String actualMD5, DatabaseAccessor db)
+//            throws SQLException, ValidateException {
+//        String checkSumMD5 = file.getCheckSumMD5();
+//
+//        if (checkSumMD5 != null) {
+//            if (!actualMD5.equals(checkSumMD5)) {
+//                Debug.log("MD5 verification error. Expected: "
+//                        + checkSumMD5 + ", actual: " + actualMD5 + ".");
+//                throw new ValidateException(HttpStatusCode.BAD_REQUEST,
+//                        "Incorrect checksum!");
+//            }
+//            else {
+//                Debug.log("MD5 checksum verified successfully.");
+//                return;
+//            }
+//        }
+//        else {
+//            Debug.log("MD5 checksum not provided by the client: "
+//                    + "updating the database with actual checksum.");
+//            file.setCheckSumMD5(db, actualMD5);
+//            return;
+//        }
+//    }
 }

@@ -14,14 +14,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Ignore;
-import org.junit.Test;
 
-import database.DatabaseAccessor;
-import database.containers.Experiment;
-import database.test.TestInitializer;
 import static org.junit.Assert.assertEquals;
 
 public class SearchDatabaseTests {

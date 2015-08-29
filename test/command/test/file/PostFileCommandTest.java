@@ -6,7 +6,6 @@ import command.file.PostFileCommand;
 import database.constants.MaxLength;
 import database.subClasses.UserMethods.UserType;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

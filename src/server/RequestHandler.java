@@ -13,7 +13,6 @@ import database.DatabaseAccessor;
 import database.subClasses.UserMethods.UserType;
 import response.ErrorResponse;
 import response.HttpStatusCode;
-import response.ProcessResponse;
 import response.Response;
 import transfer.DownloadHandler;
 import transfer.UploadHandler;

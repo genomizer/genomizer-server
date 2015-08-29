@@ -3,7 +3,6 @@ package process.test;
 import command.ValidateException;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import process.Ratio;
 
@@ -32,11 +31,11 @@ public class RatioCalcTest {
             "resources/ratioCalcTestData/out/";
     private static final Ratio.Mean MEAN = Ratio.Mean.SINGLE;
     private static final int READS_CUT_OFF = 0; // TODO check
-    private static final String NO_CHROMOSOMES = "";
+//    private static final String NO_CHROMOSOMES = "";
     private static final String CHROMOSOMES = "chr1,chr2";
-    private static final String BAD_CHROMOSOMES = "";
-    private static final String CORRECT_FILE =
-            "resources/ratioCalcTestData/correct/correctOutfile.sgr";
+//    private static final String BAD_CHROMOSOMES = "";
+//    private static final String CORRECT_FILE =
+//            "resources/ratioCalcTestData/correct/correctOutfile.sgr";
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     @Before
