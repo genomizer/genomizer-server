@@ -78,8 +78,8 @@
         <jar destfile="resources/smoothing.jar">
             <fileset dir="bin/" id="fileset.smoothing.class">
                 <include name ="smoothing/SmoothingAndStep.class" />
+            	<include name ="smoothing/Tuple.class" />
                 <include name ="process/ProcessException.class" />
-                <include name ="process/Tuple.class" />
             </fileset>
             <manifest>
                 <attribute name="Main-Class"
