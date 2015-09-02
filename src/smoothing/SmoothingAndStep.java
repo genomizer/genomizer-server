@@ -434,7 +434,7 @@ public class SmoothingAndStep {
             throw new ProcessException("When calculating trimmed mean, window size needs to be atleast 3 or larger");
         }
         if(params[0] < 2){
-            throw new ProcessException( "Window size needs to be atleast 2 or larger");
+            throw new ProcessException( "Window size needs to be at least 2 or larger");
         }
         if(params[2] < 1){
             throw new ProcessException("Minimum positions to smooth needs to be positive");
