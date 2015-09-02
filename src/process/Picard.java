@@ -10,6 +10,7 @@ import command.ValidateException;
 import server.ErrorLogger;
 import server.ServerSettings;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -47,11 +48,10 @@ public class Picard extends Executor{
             throw new ValidateException(1, "Unsupported command");
         }
 
-     /*   if(!new File(inFile).exists()) {
+        if(!new File(inFile).exists()) {
             throw new ValidateException(1, "Input file ["+
                                            inFile+"] does not exist");
         }
-*/
     }
 
     public String execute() throws IOException, InterruptedException {

@@ -17,14 +17,11 @@ public class ServerSettings {
 	public static int genomizerPort = -1;
 	public static String fileLocation = "/var/www/data/";
 	public static String pyicosLocation = "resources/pyicoteo/pyicos";
-	public static String bowtieLocation = "resources/bowtie/bowtie";
 	public static String bowtie2Location = "resources/bowtie2/bowtie2";
 	public static String picardLocation = "resources/picard-tools/picard.jar";
 	public static String smoothingJarLocation = "resources/smoothing.jar";
 	public static int nrOfProcessThreads = 5;
 	public static String uploadTempDir = System.getProperty("java.io.tmpdir");
-	public static boolean shouldUseBowtie2 = false;
-	public static boolean shouldUseJavaSmoothing = false;
 
 	private static String downloadURL = "/download?path=";
 	private static String uploadURL = "/upload?path=";
@@ -43,12 +40,9 @@ public class ServerSettings {
 					+ "genomizerPort  = " + genomizerPort + "\n"
 					+ "fileLocation = " + fileLocation + "\n"
 					+ "nrOfProcessThreads = " + nrOfProcessThreads + "\n"
-					+ "bowtieLocation = " + bowtieLocation + "\n"
 					+ "bowtie2Location = " + bowtie2Location + "\n"
 					+ "picardLocation = " + picardLocation + "\n"
 					+ "smoothingJarLocation = " + smoothingJarLocation + "\n"
-					+ "shouldUseBowtie2 = " + shouldUseBowtie2 + "\n"
-					+ "shouldUseJavaSmoothing = " + shouldUseJavaSmoothing + "\n"
 					+ "pyicosLocation = " + pyicosLocation + "\n"
 					+ "uploadTempDir = " + uploadTempDir + "\n";
 
@@ -77,14 +71,11 @@ public class ServerSettings {
 		nullCheck(genomizerPort, "genomizerPort");
 		nullCheck(fileLocation, "fileLocation");
 		nullCheck(nrOfProcessThreads, "nrOfProcessThreads");
-		nullCheck(bowtieLocation, "bowtieLocation");
 		nullCheck(bowtie2Location, "bowtie2Location");
 		nullCheck(picardLocation, "picardLocation");
 		nullCheck(pyicosLocation, "pyicosLocation");
 		nullCheck(smoothingJarLocation, "smoothingJarLocation");
 		nullCheck(uploadTempDir, "uploadTempDir");
-		nullCheck(shouldUseBowtie2, "shouldUseBowtie2");
-		nullCheck(shouldUseJavaSmoothing, "shouldUseJavaSmoothing");
 	}
 
 	private static void nullCheck(int parameter, String name) {
@@ -157,9 +148,6 @@ public class ServerSettings {
 				case "nrofprocessthreads":
 					nrOfProcessThreads = Integer.parseInt(value);
 					break;
-				case "bowtielocation":
-					bowtieLocation = value;
-					break;
 				case "bowtie2location":
 					bowtie2Location = value;
 					break;
@@ -174,12 +162,6 @@ public class ServerSettings {
 					break;
 				case "uploadtempdir":
 					uploadTempDir = value;
-					break;
-				case "shouldusebowtie2":
-					shouldUseBowtie2 = Boolean.parseBoolean(value);
-					break;
-				case "shouldusejavasmoothing":
-					shouldUseJavaSmoothing = Boolean.parseBoolean(value);
 					break;
 				default:
 					String msg = "Unrecognized setting: " + key;
@@ -205,14 +187,11 @@ public class ServerSettings {
 							+ "\tgenomizerPort = " + genomizerPort + "\n"
 							+ "\tfileLocation = " + fileLocation + "\n"
 							+ "\tnrOfProcessThreads = " + nrOfProcessThreads + "\n"
-							+ "\tbowtieLocation = " + bowtieLocation + "\n"
 							+ "\tbowtie2Location = " + bowtie2Location + "\n"
 							+ "\tpicardLocation = " + picardLocation + "\n"
 							+ "\tpyicosLocation = " + pyicosLocation + "\n"
 							+ "\tsmoothingJarLocation = " + smoothingJarLocation + "\n"
 							+ "\tuploadTempDir = " + uploadTempDir + "\n"
-							+ "\tshouldUseBowtie2 = " + shouldUseBowtie2 + "\n"
-							+ "\tshouldUseJavaSmoothing = " + shouldUseJavaSmoothing + "\n"
 							+ "\n";
 
 			Debug.log("Imported the following settings:\n" + dataInfo);
