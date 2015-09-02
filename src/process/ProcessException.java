@@ -1,5 +1,7 @@
 package process;
 
+import command.ValidateException;
+
 /**
  * Class used by the process part of the genomizer program to throw our own
  * specified exceptions.
@@ -19,9 +21,13 @@ public class ProcessException extends Exception {
 	public ProcessException(String string) {
 		message = string;
 	}
+	
+	public ProcessException(ValidateException e) {
+		this.message = e.getMessage();
+	}
 
 	/**
-	 * Overriden getMessage method.
+	 * Overridden getMessage method.
 	 */
 	@Override
 	public String getMessage() {

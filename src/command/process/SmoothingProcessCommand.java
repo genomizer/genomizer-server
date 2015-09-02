@@ -8,13 +8,11 @@ import database.constants.MaxLength;
 import database.containers.FileTuple;
 import database.subClasses.FileMethods;
 import org.apache.commons.io.FileUtils;
-import process.Smooth;
 import process.SmoothJava;
 import response.HttpStatusCode;
 import response.ProcessResponse;
 import response.Response;
 import server.Debug;
-import server.ServerSettings;
 
 import java.io.File;
 import java.io.IOException;
@@ -172,27 +170,15 @@ public class SmoothingProcessCommand extends ProcessCommand {
                             "Should be either 'mean' or 'median'.");
             }
 
-            if (!ServerSettings.shouldUseJavaSmoothing) {
-                Smooth.runSmoothing(
-                        infileFile.getAbsolutePath(),
-                        getWindowSize(),
-                        meanOrMedian,
-                        getMinSmooth(),
-                        0,
-                        0,
-                        outfileFile.getAbsolutePath());
-            }
-            else {
-                SmoothJava.runSmoothing(
-                        infileFile.getAbsolutePath(),
-                        getWindowSize(),
-                        meanOrMedian,
-                        getMinSmooth(),
-                        0,
-                        0,
-                        outfileFile.getAbsolutePath(),
-                        /* Step size, 1 == no stepping. */ 1);
-            }
+            SmoothJava.runSmoothing(
+            		infileFile.getAbsolutePath(),
+            		getWindowSize(),
+            		meanOrMedian,
+            		getMinSmooth(),
+            		0,
+            		0,
+            		outfileFile.getAbsolutePath(),
+            		/* Step size, 1 == no stepping. */ 1);
 
             // Add generated file to the database.
             FileTuple outTuple = null;

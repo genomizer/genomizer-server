@@ -26,9 +26,8 @@ public class GetProcessDummyCommand extends Command {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public Response execute() {
-        Process p1 = new Process(new PutProcessCommand());
+        Process p1 = new Process();
         p1.experimentName = "Exp1";
         p1.status = "Finished";
         p1.outputFiles = new String[]{"file1.wig"};
@@ -38,7 +37,7 @@ public class GetProcessDummyCommand extends Command {
         p1.timeFinished = p1.timeStarted + 10012000;
         p1.PID = UUID.randomUUID().toString();
 
-        Process p2 = new Process(new PutProcessCommand());
+        Process p2 = new Process();
         p2.experimentName = "Exp2";
         p2.status = "Waiting";
         p2.outputFiles = new String[]{"file2.wig"};
@@ -48,7 +47,7 @@ public class GetProcessDummyCommand extends Command {
         p2.timeFinished = 0;
         p2.PID = UUID.randomUUID().toString();
 
-        Process p3 = new Process(new PutProcessCommand());
+        Process p3 = new Process();
         p3.experimentName = "Exp3";
         p3.status = "Crashed";
         p3.outputFiles = new String[]{"file3.wig"};
@@ -58,7 +57,7 @@ public class GetProcessDummyCommand extends Command {
         p3.timeFinished = p3.timeStarted + 76511243;
         p3.PID = UUID.randomUUID().toString();
 
-        Process p4 = new Process(new PutProcessCommand());
+        Process p4 = new Process();
         p4.experimentName = "Exp4";
         p4.status = "Started";
         p4.outputFiles = new String[]{"file4.wig"};

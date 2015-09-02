@@ -1,7 +1,6 @@
 package command;
 
 import com.google.gson.annotations.Expose;
-import command.process.*;
 
 import java.util.UUID;
 
@@ -53,19 +52,6 @@ public class Process implements Comparable<Process> {
 		this.author = author;
 	}
 
-	/**
-	 * Constructs a new instance of DeleteExperimentCommand using the supplied
-	 * PutProcessCommand.
-	 * @param command a PutProcessCommand.
-	 */
-	@SuppressWarnings("deprecation")
-	public Process(PutProcessCommand command) {
-		status = STATUS_WAITING;
-		author = command.getUsername();
-		experimentName = command.getExpId();
-		timeAdded = System.currentTimeMillis();
-		outputFiles = new String[0];
-	}
 
 	@Override
 	public int compareTo(Process other) {

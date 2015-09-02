@@ -157,7 +157,8 @@ public class RawToProfProcessCommand extends ProcessCommand {
                 String expId,
                 String rawFilesDir,
                 String profileFilesDir)
-                throws IOException, SQLException, ProcessException {
+                throws InterruptedException, IOException,
+                	SQLException, ProcessException {
 
             //Get the genome information from the database.
             Genome g;

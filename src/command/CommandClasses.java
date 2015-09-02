@@ -78,7 +78,6 @@ public class CommandClasses {
         //Processing
         classes.put("GET /process/", GetProcessStatusCommand.class);
         classes.put("GET /process/dummy/", GetProcessDummyCommand.class);
-        classes.put("PUT /process/rawtoprofile/", PutProcessCommand.class);
         classes.put("PUT /process/processCommands/", PutProcessCommands.class);
         classes.put("DELETE /process/", CancelProcessCommand.class);
 
