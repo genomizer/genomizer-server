@@ -83,6 +83,14 @@ public class Bowtie2 extends Executor {
         ArrayList<String> args = new ArrayList<>();
         args.add(ServerSettings.bowtie2Location);
         args.add(scoringSchemeArg());
+        
+        // Bowtie2 additional params *must* go before other options, 
+        // otherwise it crashes and burns.
+        // See http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml#command-line-2
+        for (String additionalParam : params) {
+            args.add(additionalParam);
+        }
+        
         args.add("-x");
         args.add(genomeRelease);
 
@@ -103,10 +111,6 @@ public class Bowtie2 extends Executor {
 
         args.add("-S");
         args.add(outFile);
-
-        for (String additionalParam : params) {
-            args.add(additionalParam);
-        }
 
         return executeCommand(args.toArray(new String []{}));
     }
