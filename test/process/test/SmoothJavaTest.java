@@ -20,12 +20,12 @@ public class SmoothJavaTest {
         try {
             new File(outDir).mkdirs();
 
-            SmoothJava.runSmoothing("resources/smoothTestData/SGR-testdata-2.sgr", 1, 1, 1, 0, 0,
-                    PathUtils.join(outDir, "SGR-testdata-2-smoothed.sgr"));
+            SmoothJava.runSmoothing("resources/smoothTestData/SGR-testdata-2.sgr", 2, 1, 1, 0, 0,
+                    PathUtils.join(outDir, "SGR-testdata-2-smoothed.sgr"), 1);
             SmoothJava.runSmoothing("resources/smoothTestData/SGR-testdata-3.sgr", 2, 1, 1, 0, 0,
-                    PathUtils.join(outDir, "SGR-testdata-3-smoothed.sgr"));
+                    PathUtils.join(outDir, "SGR-testdata-3-smoothed.sgr"), 1);
             SmoothJava.runSmoothing("resources/smoothTestData/SGR-testdata-4.sgr", 2, 1, 1, 0, 0,
-                    PathUtils.join(outDir, "SGR-testdata-4-smoothed.sgr"));
+                    PathUtils.join(outDir, "SGR-testdata-4-smoothed.sgr"), 1);
 
             File [] finalFiles = new File(outDir).listFiles();
             final int numFilesInOutDir = finalFiles.length;

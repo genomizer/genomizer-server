@@ -1,6 +1,7 @@
 package process;
 
 import command.ValidateException;
+import server.Debug;
 import server.ErrorLogger;
 import server.ServerSettings;
 import smoothing.SmoothingAndStep;
@@ -11,11 +12,12 @@ import java.util.ArrayList;
 
 // Like process.Smooth, but uses Java code
 // from 'smoothing.SmoothingAndStep' for smoothing.
-public class SmoothJava extends Smooth {
+public class SmoothJava extends Executor {
 
     private String inFile;
     private String outFile;
     private int    stepSize;
+    protected final SmoothingParameters parameters;
 
     public SmoothJava (int    windowSize,
                        int    meanType,
@@ -25,13 +27,20 @@ public class SmoothJava extends Smooth {
                        String inFile,
                        String outFile,
                        int stepSize) {
-        super(inFile, windowSize, meanType, minPos, calcTotalMean, printPos);
         this.inFile = inFile;
         this.outFile = outFile;
         this.stepSize = stepSize;
+        
+        /* We insert all parameters we've received. */
+        this.parameters = new SmoothingParameters();
+        parameters.setPath(inFile);
+        parameters.setWindowSize(windowSize);
+        parameters.setMeanType(meanType);
+        parameters.setMinPos(minPos);
+        parameters.setCalcTotalMean(calcTotalMean);
+        parameters.setPrintPos(printPos);
     }
 
-    @Override
     public void validate() throws ValidateException {
         /* Validate parameters */
         this.parameters.validateParameters();
@@ -42,7 +51,6 @@ public class SmoothJava extends Smooth {
                     ServerSettings.smoothingJarLocation + "' is missing!");
     }
 
-    @Override
     public String execute() throws IOException, InterruptedException {
         ArrayList<String> args = new ArrayList<>();
 
@@ -74,5 +82,97 @@ public class SmoothJava extends Smooth {
         } catch (ProcessException e) {
             ErrorLogger.log("SMOOTHING", "ProcessException in runSmoothing. \n" + e.getMessage());
         }
+    }
+    
+    /**
+     * Simple wrapper around smoothing parameters.
+     */
+    protected class SmoothingParameters {
+        private String path         = null;
+        private int windowSize      = 10;
+        private int meanType        = 1;
+        private int minPos          = 0;
+        private int calcTotalMean   = 0;
+        private int printPos        = 0;
+
+        public String getPath() {
+            return path;
+        }
+
+        public void setPath(String path) {
+            this.path = path;
+        }
+
+        public int getWindowSize() {
+            return windowSize;
+        }
+
+        public void setWindowSize(int windowSize) {
+            this.windowSize = windowSize;
+        }
+
+        public int getMeanType() {
+            return meanType;
+        }
+
+        public void setMeanType(int meanType) {
+            this.meanType = meanType;
+        }
+
+        public int getMinPos() {
+            return minPos;
+        }
+
+        public void setMinPos(int minPos) {
+            this.minPos = minPos;
+        }
+
+        public int getCalcTotalMean() {
+            return calcTotalMean;
+        }
+
+        public void setCalcTotalMean(int calcTotalMean) {
+            this.calcTotalMean = calcTotalMean;
+        }
+
+        public int getPrintPos() {
+            return printPos;
+        }
+
+        public void setPrintPos(int printPos) {
+            this.printPos = printPos;
+        }
+
+        public void validateParameters() throws ValidateException {
+            if (path == null)
+                throw new ValidateException(400,
+                        "No path was supplied to script!");
+            if (!(meanType == 0 || meanType == 1))
+                throw new ValidateException(400,
+                        "Invalid option " + meanType +
+                                " for meanType. Allowed is (1) or (0).");
+            if (windowSize < 0)
+                throw new ValidateException(400,
+                        "Window size can not be negative.");
+            if (minPos < 0)
+                throw new ValidateException(400,
+                        "Minimum pos can not be negative.");
+            if (!(calcTotalMean == 0 || calcTotalMean == 1))
+                throw new ValidateException(400,
+                        "Invalid option " + calcTotalMean +
+                                " for calcTotalMean. Allowed is (1) or (0).");
+            if (!(printPos == 0 || printPos == 1))
+                throw new ValidateException(400,
+                        "Invalid option " + printPos +
+                                " for printPos. Allowed is (1) or (0).");
+            Debug.log("Validated with parameters: " + " " +
+                      "Path: " + path + " " +
+                      "MeanType: " + meanType + " " +
+                      "WindowSize: " + windowSize + " " +
+                      "MinPos: " + minPos + " " +
+                      "CalcTotalMean: " + calcTotalMean + " " +
+                      "PrintPos: " + printPos);
+        }
+
     }
 }
