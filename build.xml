@@ -69,6 +69,7 @@
             <fileset dir="bin/" id="fileset.class">
                 <include name ="**/*.class" />
                 <exclude name="**/test/**/*" />
+                <exclude name="smoothing/*" />
             </fileset>
             <zipgroupfileset refid="fileset.jars" />
             <manifest>
@@ -78,7 +79,7 @@
         <jar destfile="resources/smoothing.jar">
             <fileset dir="bin/" id="fileset.smoothing.class">
                 <include name ="smoothing/SmoothingAndStep.class" />
-            	<include name ="smoothing/Tuple.class" />
+                <include name ="smoothing/Tuple.class" />
                 <include name ="process/ProcessException.class" />
             </fileset>
             <manifest>
@@ -92,15 +93,16 @@
         <delete dir="bin"/>
         <delete dir="${junit.output.dir}"/>
         <delete file="server.jar"/>
+        <delete file="resources/smoothing.jar"/>
     </target>
 
     <target name="run" depends="jar">
       <java jar="server.jar" fork="true">
-	<arg value="-debug"/>
+    <arg value="-debug"/>
       </java>
     </target>
 
-    <target name="test" depends="build">
+    <target name="test" depends="build,jar">
       <junit printsummary="withOutAndErr">
         <formatter type="xml"/>
         <classpath>

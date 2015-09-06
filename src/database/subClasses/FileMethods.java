@@ -548,8 +548,8 @@ public class FileMethods {
 
 	/**
 	 * Changes the Filename for a specific file with given fileID. This method
-	 * affects bothe the saved file name, but also the entries path and fileName
-	 * in database.
+	 * affects both the saved file name,the entries path and fileName in
+	 * database.
 	 *
 	 * @return resCount int, the number of rows affected by the change.
 	 * @throws SQLException

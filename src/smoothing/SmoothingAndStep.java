@@ -80,10 +80,6 @@ public class SmoothingAndStep {
 
                 if((strLine = br.readLine()) != null){
                     while(!addLine(strLine)){
-                        if(Thread.currentThread().isInterrupted()){
-                            tearDown();
-                            throw new InterruptedException();
-                        }
                         strLine = br.readLine();
                     }
                 }
@@ -100,10 +96,6 @@ public class SmoothingAndStep {
             smoothOneRow(params,params[0]);
 
             while((strLine = br.readLine()) != null){
-                if(Thread.currentThread().isInterrupted()){
-                    tearDown();
-                    throw new InterruptedException();
-                }
                 shiftLeft(strLine, params);
                 smoothOneRow(params,params[0]);
             }
@@ -113,10 +105,6 @@ public class SmoothingAndStep {
 
             if (params[0]%2==1){
                 for (int i = 1;i<(params[0]-params[2]);i++){
-                    if(Thread.currentThread().isInterrupted()){
-                        tearDown();
-                        throw new InterruptedException();
-                    }
                     smoothOneRow(params,params[0]-i);
                     if(data.size() > 0){
                         data.remove(0);
@@ -127,10 +115,6 @@ public class SmoothingAndStep {
                 }
             }else{
                 for (int i = 1;i<(params[0]-params[2]+1);i++){
-                    if(Thread.currentThread().isInterrupted()){
-                        tearDown();
-                        throw new InterruptedException();
-                    }
                     smoothOneRow(params,params[0]-i);
                     if(data.size() > 0){
                         data.remove(0);
@@ -434,7 +418,7 @@ public class SmoothingAndStep {
             throw new ProcessException("When calculating trimmed mean, window size needs to be atleast 3 or larger");
         }
         if(params[0] < 2){
-            throw new ProcessException( "Window size needs to be at least 2 or larger");
+            throw new ProcessException( "Window size needs to be atleast 2 or larger");
         }
         if(params[2] < 1){
             throw new ProcessException("Minimum positions to smooth needs to be positive");
