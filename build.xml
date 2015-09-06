@@ -93,6 +93,7 @@
         <delete dir="bin"/>
         <delete dir="${junit.output.dir}"/>
         <delete file="server.jar"/>
+        <delete file="resources/smoothing.jar"/>
     </target>
 
     <target name="run" depends="jar">
@@ -101,7 +102,7 @@
       </java>
     </target>
 
-    <target name="test" depends="build">
+    <target name="test" depends="build,jar">
       <junit printsummary="withOutAndErr">
         <formatter type="xml"/>
         <classpath>
