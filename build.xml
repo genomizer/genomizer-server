@@ -79,7 +79,7 @@
         <jar destfile="resources/smoothing.jar">
             <fileset dir="bin/" id="fileset.smoothing.class">
                 <include name ="smoothing/SmoothingAndStep.class" />
-            	<include name ="smoothing/Tuple.class" />
+                <include name ="smoothing/Tuple.class" />
                 <include name ="process/ProcessException.class" />
             </fileset>
             <manifest>
@@ -97,7 +97,7 @@
 
     <target name="run" depends="jar">
       <java jar="server.jar" fork="true">
-	<arg value="-debug"/>
+    <arg value="-debug"/>
       </java>
     </target>
 
