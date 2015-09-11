@@ -1,0 +1,11 @@
+To get the server up and running (assuming that the database already is):
+
+$ docker build -t genomizer/postgres .
+
+$ docker run -d -P -v `pwd`/../../server.jar:/server.jar \
+        -v `pwd`/../../resources:/resources \
+        -v `pwd`/../../settings.cfg:/settings.cfg \
+        -v `pwd`/data:/data \
+        --name=genomizer-server \
+        --link genomizer-postgres:postgres \
+        genomizer/server

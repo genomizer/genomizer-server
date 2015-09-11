@@ -1,36 +1,41 @@
 language: java
-sudo: false
+sudo: required
+dist: trusty
+
+services:
+  - docker
 
 jdk:
   - openjdk7
 
 addons:
   postgresql: "9.4"
-
-before_install:
-  - openssl aes-256-cbc -K $encrypted_159a1b5319b6_key -iv $encrypted_159a1b5319b6_iv -in deploy_key.aes256.enc -out id_rsa -d
-  - mv id_rsa ~/.ssh/id_rsa
-  - chmod 400 ~/.ssh/id_rsa
+  apt:
+    packages:
+      - expect
 
 before_script:
   - export PATH=$PATH:$PWD/resources/
-  - psql -c 'create database c5dv151_vt14;' -U postgres
-  - psql -f sql/genomizer_database_tables.sql -U postgres -d c5dv151_vt14 > /dev/null
+#  - psql -c 'create database c5dv151_vt14;' -U postgres
+#  - psql -f sql/genomizer_database_tables.sql -U postgres -d c5dv151_vt14 > /dev/null
 
 script:
-  - ant test
-  - psql -f sql/drop_all_tables.sql -U postgres -d c5dv151_vt14 > /dev/null
-  - psql -f sql/genomizer_database_tables.sql -U postgres -d c5dv151_vt14 > /dev/null
-  - psql -f sql/add_test_tuples.sql -U postgres -d c5dv151_vt14 > /dev/null
-  - psql -f sql/release_database_tuple.sql -U postgres -d c5dv151_vt14 > /dev/null
-  - sed -f travis.sed <settings.cfg.template >settings.cfg
-  - ant run 2>&1 > log.txt &
-  - cd genomizer-server-tester
   - ant jar
-  - java -jar genomizer-server-tester.jar "http://localhost:7000"
-  - cd ..
-  - cat log.txt
-  - cat errorLog.txt
+#  - ant test
+#  - mkdir cert && cd cert && ../deployment/generate_certificates.expect && cd ..
+  - ant -v deploy
+  - docker ps
+  - docker version
+  - docker info
+  - docker inspect genomizer-postgres
+  - docker inspect genomizer-server
+  - docker exec genomizer-server cat /etc/hosts
+  - docker exec genomizer-server env
+#  - docker inspect genomizer-nginx
+  - cd genomizer-server-tester && ant -Dserver="https://localhost:8080" run
+  - docker logs genomizer-postgres
+  - docker logs genomizer-server
+#  - docker logs genomizer-nginx
 
 after_success:
   - git config --global user.email "builds@travis-ci.org"

@@ -1,0 +1,11 @@
+To get the database up and running:
+
+$ docker build -t genomizer/postgres .
+
+$ docker run -d -v `pwd`/pgdata:/var/lib/postgresql/data/pgdata \
+    -v `pwd`/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d:ro \
+    -v `pwd`/../../sql:/sql:ro \
+    -v /etc/localtime:/etc/localtime \
+    -v /etc/timezone:/etc/timezone \
+    --name=genomizer-postgres \
+    genomizer/postgres
