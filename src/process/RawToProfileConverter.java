@@ -49,6 +49,7 @@ public class RawToProfileConverter extends Executor {
 	 */
 	public static File [] procedureRaw(String params, String fastqFile,
 									  String wigFile, boolean keepSam,
+									   boolean removeDups,
 									  String genomeVersion,
 									  String referenceGenome,
 									  String filepathRaw,
@@ -131,20 +132,24 @@ public class RawToProfileConverter extends Executor {
 		}
 
 		/* Run remove duplicates */
-		try {
-			ErrorLogger.log("SYSTEM","Running RemoveDuplicates");
-			Picard.runRemoveDuplicates(sortedSam, sortedSamWithoutDups);
-			ErrorLogger.log("SYSTEM", "Finished RemoveDuplicates");
-			toBeRemoved.push(sortedSam);
-		} catch (ValidateException e) {
-			ErrorLogger.log("SYSTEM",
-					"Error validating picard markDuplicates" );
-			throw new ProcessException(e);
-		} catch (IOException | InterruptedException e) {
-			ErrorLogger.log("SYSTEM",
-					"Error executing picard markDuplicates");
-			ErrorLogger.log("SYSTEM", e.getMessage());
-			throw e;
+		if(removeDups){
+			try {
+				ErrorLogger.log("SYSTEM","Running RemoveDuplicates");
+				Picard.runRemoveDuplicates(sortedSam, sortedSamWithoutDups);
+				ErrorLogger.log("SYSTEM", "Finished RemoveDuplicates");
+				toBeRemoved.push(sortedSam);
+			} catch (ValidateException e) {
+				ErrorLogger.log("SYSTEM",
+						"Error validating picard markDuplicates" );
+				throw new ProcessException(e);
+			} catch (IOException | InterruptedException e) {
+				ErrorLogger.log("SYSTEM",
+						"Error executing picard markDuplicates");
+				ErrorLogger.log("SYSTEM", e.getMessage());
+				throw e;
+			}
+		}else{
+			sortedSamWithoutDups = sortedSam;
 		}
 
 		/* Run conversion from .sam to .wig, final step */
