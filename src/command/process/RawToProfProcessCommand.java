@@ -207,6 +207,7 @@ public class RawToProfProcessCommand extends ProcessCommand {
                       "    - infile: " + getInfile() +
                       "    - outfile: " + getOutfile() +
                       "    - should keep .SAM: " + shouldKeepSam() +
+                      "    - should remove dups: " + shouldRemoveDups() +
                       "    - Genome version: " + getGenomeVersion() +
                       "    - Genome version location: " + referenceGenome +
                       "    - infile dir: " + rawFilesDir +
