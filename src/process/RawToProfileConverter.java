@@ -1,6 +1,7 @@
 package process;
 
 import command.ValidateException;
+import conversion.ProfileDataConverter;
 import org.apache.commons.io.FilenameUtils;
 import server.Debug;
 import server.ErrorLogger;
@@ -152,7 +153,7 @@ public class RawToProfileConverter extends Executor {
 			sortedSamWithoutDups = sortedSam;
 		}
 
-		/* Run conversion from .sam to .wig, final step */
+		/* Run conversion from .sam to .wig */
 		try {
 			ErrorLogger.log("SYSTEM","Running .wig conversion");
 			Pyicos.runConvert(sortedSamWithoutDups,
@@ -172,6 +173,13 @@ public class RawToProfileConverter extends Executor {
 					"Error executing pyicos conversion to .wig");
 			throw e;
 		}
+
+		/* Run conversion from .wig to .sgr, final step */
+		ErrorLogger.log("SYSTEM", "Running .sgr conversion");
+		ProfileDataConverter pdc = new ProfileDataConverter();
+		String sgrFile = pdc.wigToSgr("bed", tmpDirPath+FilenameUtils.getName(wigFile));
+		filesToSaveToExperiment.push(new AbstractMap.SimpleEntry<>(
+				sgrFile, filepathProfile+FilenameUtils.getName(sgrFile)));
 
 		/* Save .sam file to experiment if wanted */
 		if (keepSam) {
