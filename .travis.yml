@@ -36,7 +36,7 @@ after_success:
   - git config --global user.email "builds@travis-ci.org"
   - git config --global user.name "Travis CI User"
   - mkdir -p /tmp/deploy
-  - cp genomizer-server.jar /tmp/deploy/genomizer-server.jar
+  - cp server.jar /tmp/deploy/genomizer-server.jar
   - cd /tmp/deploy
   - git init
   - git add .
