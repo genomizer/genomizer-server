@@ -7,6 +7,11 @@ jdk:
 addons:
   postgresql: "9.4"
 
+before_install:
+  - openssl aes-256-cbc -K $encrypted_159a1b5319b6_key -iv $encrypted_159a1b5319b6_iv -in deploy_key.aes256.enc -out id_rsa -d
+  - mv id_rsa ~/.ssh/id_rsa
+  - chmod 400 ~/.ssh/id_rsa
+
 before_script:
   - export PATH=$PATH:$PWD/resources/
   - psql -c 'create database c5dv151_vt14;' -U postgres
@@ -23,5 +28,15 @@ script:
   - cd genomizer-server-tester
   - ant jar
   - java -jar genomizer-server-tester.jar "http://localhost:7000"
-  - cat ../log.txt
-  - cat ../errorLog.txt
+  - cd ..
+  - cat log.txt
+  - cat errorLog.txt
+
+after_success:
+  - mkdir -p /tmp/deploy
+  - cp genomizer-server.jar /tmp/deploy/genomizer-server.jar
+  - cd /tmp/deploy
+  - git init
+  - git add .
+  - git commit -m "Deploy to GitHub ($(date))."
+  - test $TRAVIS_PULL_REQUEST == "false" && (test $TRAVIS_BRANCH == "master" || test $TRAVIS_BRANCH == "develop") && git push --force --quiet git@github.com:genomizer/genomizer-downloads.git "master:genomizer-server-$TRAVIS_BRANCH"
