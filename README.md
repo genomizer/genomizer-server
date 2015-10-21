@@ -3,9 +3,19 @@ Genomizer Server [![Build Status](https://secure.travis-ci.org/genomizer/genomiz
 
 This is the main repository for the server side of the Genomizer system.
 
+##Downloads
+
+Auto-generated JAR snapshots are uploaded by the Travis build bot to the 
+[`genomizer-downloads`](https://github.com/genomizer/genomizer-downloads) repository after each successful build.
+
+The following downloads are available:
+
+  * [`genomizer-server.jar` (`master` branch)](https://github.com/genomizer/genomizer-downloads/raw/genomizer-server-master/genomizer-server.jar).
+  * [`genomizer-server.jar` (`develop` branch)](https://github.com/genomizer/genomizer-downloads/raw/genomizer-server-develop/genomizer-server.jar).
+
 ##Building
 
-To build the `server.jar` file, run `ant jar` from the console. To just compile
+To build the `server.jar` file manually, run `ant jar` from the console. To just compile
 the sources, use `ant build` or `ant compile`. To run tests, use `ant test`. To
 run individual tests or test groups, use an IDE (e.g. in Eclipse you can import
 the project with 'File > New > Project > Java > Java Project from Existing Ant
