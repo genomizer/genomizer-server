@@ -112,6 +112,9 @@ public class RawToProfProcessCommand extends ProcessCommand {
         @Expose
         protected Boolean keepSam;
 
+        @Expose
+        protected Boolean removeDups;
+
 
         public String getInfile() {
             return infile;
@@ -131,6 +134,10 @@ public class RawToProfProcessCommand extends ProcessCommand {
 
         public Boolean shouldKeepSam() {
             return keepSam;
+        }
+
+        private Boolean shouldRemoveDups() {
+            return removeDups;
         }
 
         @Override
@@ -200,6 +207,7 @@ public class RawToProfProcessCommand extends ProcessCommand {
                       "    - infile: " + getInfile() +
                       "    - outfile: " + getOutfile() +
                       "    - should keep .SAM: " + shouldKeepSam() +
+                      "    - should remove dups: " + shouldRemoveDups() +
                       "    - Genome version: " + getGenomeVersion() +
                       "    - Genome version location: " + referenceGenome +
                       "    - infile dir: " + rawFilesDir +
@@ -211,6 +219,7 @@ public class RawToProfProcessCommand extends ProcessCommand {
                     getInfile(),
                     getOutfile(),
                     shouldKeepSam(),
+                    shouldRemoveDups(),
                     getGenomeVersion(),
                     referenceGenome,
                     rawFilesDir,

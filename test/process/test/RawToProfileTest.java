@@ -34,7 +34,7 @@ public class RawToProfileTest {
 		String inFile = "test.fastq";
 		String outFile = "test.wig";
 		RawToProfileConverter.procedureRaw(
-				bowtieParams, inFile, outFile, true,"GENOMEVERSION",genomeBowtie2,
+				bowtieParams, inFile, outFile, true,true,"GENOMEVERSION",genomeBowtie2,
 						"resources/processTest/fastq/",
 				"resources/processTest/results/");
 	}
