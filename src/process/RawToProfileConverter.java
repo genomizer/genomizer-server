@@ -38,7 +38,7 @@ public class RawToProfileConverter extends Executor {
 	 * This method might be deleted or edited to be the new procedure. Work in progress atm with Adam
 	 * @param params Bowtie parameters
 	 * @param fastqFile The raw file which is to be processed.
-	 * @param wigFile The name of the output file produced
+	 * @param sgrFile The name of the output file produced
 	 *@param keepSam Boolean telling whether intermediate .sam file should be
 	 *               saved.
 	 * @param genomeVersion Version of genome, not used at the moment.
@@ -49,12 +49,12 @@ public class RawToProfileConverter extends Executor {
 	 * @throws ProcessException
 	 */
 	public static File [] procedureRaw(String params, String fastqFile,
-									  String wigFile, boolean keepSam,
+									   String sgrFile, boolean keepSam,
 									   boolean removeDups,
-									  String genomeVersion,
-									  String referenceGenome,
-									  String filepathRaw,
-									  String filepathProfile)
+									   String genomeVersion,
+									   String referenceGenome,
+									   String filepathRaw,
+									   String filepathProfile)
 			throws ProcessException, InterruptedException, IOException {
 
 		ArrayList<File> returnFiles = new ArrayList<>();
@@ -84,7 +84,7 @@ public class RawToProfileConverter extends Executor {
 
 		fastqFile = filepathRaw+fastqFile;
 
-		String samFile = tmpDirPath + FilenameUtils.getBaseName(fastqFile)+
+		String samFile = tmpDirPath + FilenameUtils.getBaseName(sgrFile)+
 						 ".sam";
 		String sortedSam = FilenameUtils.removeExtension(samFile)
 						   +"_sorted.sam";
@@ -157,12 +157,8 @@ public class RawToProfileConverter extends Executor {
 		try {
 			ErrorLogger.log("SYSTEM","Running .wig conversion");
 			Pyicos.runConvert(sortedSamWithoutDups,
-					tmpDirPath+FilenameUtils.getName(wigFile));
+					tmpDirPath+FilenameUtils.getBaseName(sgrFile) + ".wig");
 			ErrorLogger.log("SYSTEM", "Finished .wig conversion");
-
-			filesToSaveToExperiment.push(new AbstractMap.SimpleEntry<>(
-					tmpDirPath+FilenameUtils.getName(wigFile),
-					filepathProfile+wigFile));
 		} catch (ValidateException e) {
 			ErrorLogger.log("SYSTEM",
 					"Error validating pyicos conversion to .wig");
@@ -177,7 +173,8 @@ public class RawToProfileConverter extends Executor {
 		/* Run conversion from .wig to .sgr, final step */
 		ErrorLogger.log("SYSTEM", "Running .sgr conversion");
 		ProfileDataConverter pdc = new ProfileDataConverter();
-		String sgrFile = pdc.wigToSgr("bed", tmpDirPath+FilenameUtils.getName(wigFile));
+		String testSgrFile = pdc.wigToSgr("bed", tmpDirPath+FilenameUtils.getBaseName(sgrFile) + ".wig");
+		ErrorLogger.log("SYSTEM", "Saving .sgr file: " + testSgrFile + " - should be named: " + sgrFile);
 		filesToSaveToExperiment.push(new AbstractMap.SimpleEntry<>(
 				sgrFile, filepathProfile+FilenameUtils.getName(sgrFile)));
 
