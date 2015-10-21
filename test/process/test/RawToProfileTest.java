@@ -13,7 +13,7 @@ import java.io.IOException;
 
 public class RawToProfileTest {
 	RawToProfileConverter rtp = null;
-	String bowtieParams = "-a";
+	String bowtieParams = "";
 	String genomeBowtie2 = "resources/bowtie2/example/index/lambda_virus";
 
 	@Before
@@ -31,11 +31,11 @@ public class RawToProfileTest {
 	@Test
 	public void shouldRunStaticCall() 
 			throws ProcessException, IOException, InterruptedException {
-		String inFile = "test.fastq";
+		String inFile = "reads_1.fq";
 		String outFile = "test.sgr";
 		RawToProfileConverter.procedureRaw(
 				bowtieParams, inFile, outFile, true,true,"GENOMEVERSION",genomeBowtie2,
-						"resources/processTest/fastq/",
+						"resources/bowtie2/example/reads/",
 				"resources/processTest/results/");
 	}
 
