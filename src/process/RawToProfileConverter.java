@@ -176,7 +176,7 @@ public class RawToProfileConverter extends Executor {
 		String testSgrFile = pdc.wigToSgr("bed", tmpDirPath+FilenameUtils.getBaseName(sgrFile) + ".wig");
 		ErrorLogger.log("SYSTEM", "Saving .sgr file: " + testSgrFile + " - should be named: " + sgrFile);
 		filesToSaveToExperiment.push(new AbstractMap.SimpleEntry<>(
-				sgrFile, filepathProfile+FilenameUtils.getName(sgrFile)));
+				tmpDirPath+sgrFile, filepathProfile+FilenameUtils.getName(sgrFile)));
 
 		/* Save .sam file to experiment if wanted */
 		if (keepSam) {
