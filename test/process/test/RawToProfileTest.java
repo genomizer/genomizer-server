@@ -24,7 +24,7 @@ public class RawToProfileTest {
 	@After
 	public void tearDown() {
 		new File("resources/processTest/results/test_sorted_without_duplicates.sam").delete();
-		new File("resources/processTest/results/test.wig").delete();
+		new File("resources/processTest/results/test.sgr").delete();
 		rtp = null;
 	}
 
@@ -32,7 +32,7 @@ public class RawToProfileTest {
 	public void shouldRunStaticCall() 
 			throws ProcessException, IOException, InterruptedException {
 		String inFile = "test.fastq";
-		String outFile = "test.wig";
+		String outFile = "test.sgr";
 		RawToProfileConverter.procedureRaw(
 				bowtieParams, inFile, outFile, true,true,"GENOMEVERSION",genomeBowtie2,
 						"resources/processTest/fastq/",
