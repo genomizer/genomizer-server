@@ -5,10 +5,12 @@ import command.UserRights;
 import command.ValidateException;
 import database.DatabaseAccessor;
 import database.constants.MaxLength;
+import database.containers.FileTuple;
 import database.subClasses.UserMethods.UserType;
 import response.*;
 import server.Debug;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -46,19 +48,27 @@ public class DeleteFileCommand extends Command {
 		Response response;
 		try (DatabaseAccessor db = initDB()) {
 			if (isNumeric(fileID)) {
-				if (db.deleteFile(Integer.parseInt(fileID)) == 1)
+				if (db.deleteFile(Integer.parseInt(fileID)) == 1){
+					FileTuple ft = db.getFileTuple(Integer.parseInt(fileID));
+					File file = new File(ft.path);
+					file.delete();
 					response = new MinimalResponse(HttpStatusCode.OK);
-				else
+				} else {
 					response = new ErrorResponse(HttpStatusCode.NOT_FOUND,
 							"Deletion of file unsuccessful, file id '" +
 									fileID + "' does not exist");
+				}
 			} else {
-				if (db.deleteFile(fileID) == 1)
+				if (db.deleteFile(fileID) == 1){
+					FileTuple ft = db.getFileTuple(fileID);
+					File file = new File(ft.path);
+					file.delete();
 					response = new MinimalResponse(HttpStatusCode.OK);
-				else
+				} else {
 					response = new ErrorResponse(HttpStatusCode.NOT_FOUND,
 							"Deletion of file unsuccessful, file path '" +
 									fileID + "' does not exist");
+				}
 			}
 		} catch (SQLException e) {
 			response = new DatabaseErrorResponse("Deletion of file '" + fileID +
