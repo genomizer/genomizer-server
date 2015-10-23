@@ -47,11 +47,9 @@ public class DeleteFileCommand extends Command {
 	public Response execute() {
 		Response response;
 		try (DatabaseAccessor db = initDB()) {
+			FileTuple ft = db.getFileTuple(Integer.parseInt(fileID));
 			if (isNumeric(fileID)) {
 				if (db.deleteFile(Integer.parseInt(fileID)) == 1){
-					FileTuple ft = db.getFileTuple(Integer.parseInt(fileID));
-					File file = new File(ft.path);
-					file.delete();
 					response = new MinimalResponse(HttpStatusCode.OK);
 				} else {
 					response = new ErrorResponse(HttpStatusCode.NOT_FOUND,
@@ -60,15 +58,16 @@ public class DeleteFileCommand extends Command {
 				}
 			} else {
 				if (db.deleteFile(fileID) == 1){
-					FileTuple ft = db.getFileTuple(fileID);
-					File file = new File(ft.path);
-					file.delete();
 					response = new MinimalResponse(HttpStatusCode.OK);
 				} else {
 					response = new ErrorResponse(HttpStatusCode.NOT_FOUND,
 							"Deletion of file unsuccessful, file path '" +
 									fileID + "' does not exist");
 				}
+			}
+			if(response.getClass().equals(MinimalResponse.class)){
+				File file = new File(ft.path);
+				file.delete();
 			}
 		} catch (SQLException e) {
 			response = new DatabaseErrorResponse("Deletion of file '" + fileID +
