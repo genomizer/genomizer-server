@@ -7,9 +7,11 @@ package process;
  */
 
 import command.ValidateException;
+import server.ServerSettings;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Step extends Executor {
 
@@ -46,15 +48,20 @@ public class Step extends Executor {
     }
 
     public String execute() throws IOException, InterruptedException {
+        ArrayList<String> args = new ArrayList<>();
+        args.add("java");
+        args.add("-jar");
+        args.add(ServerSettings.smoothingJarLocation);
 
-        return executeCommand(
-                new String[]{
-                        "perl",
-                        "resources/step.pl",
-                        "" + stepSize,
-                        infile,
-                        outfile
-                });
+        args.add("3");
+        args.add("0");
+        args.add("1");
+        args.add("0");
+        args.add("0");
+        args.add(infile);
+        args.add(outfile);
+        args.add(String.valueOf(stepSize));
+        return executeCommand(args.toArray(new String[args.size()]));
     }
 
     public static String runStep(String infile, String outfile, int stepSize)
