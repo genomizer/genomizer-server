@@ -53,9 +53,9 @@ public class Step extends Executor {
         args.add("-jar");
         args.add(ServerSettings.smoothingJarLocation);
 
-        args.add("3");
         args.add("0");
-        args.add("1");
+        args.add("0");
+        args.add("0");
         args.add("0");
         args.add("0");
         args.add(infile);

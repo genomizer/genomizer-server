@@ -58,7 +58,10 @@ public class SmoothingAndStep {
      *
      */
     public double smoothing(int[] params, String inPath, String outPath,
-                                 int stepSize) throws ProcessException, InterruptedException {
+                            int stepSize) throws ProcessException, InterruptedException {
+        if(params[0] == 0 && stepSize > 1){
+            return stepping(inPath, outPath, stepSize);
+        }
         validateInput(params, stepSize);
 
         data = new ArrayList<Tuple>();
@@ -140,6 +143,71 @@ public class SmoothingAndStep {
             Debug.log("Total mean for file is: " + (readSumValue / noOfValues));
         }
         return readSumValue/noOfValues;
+    }
+
+    /*
+     * Parameters:
+     *
+     * inPath:	  A string that tells the location and name of the source file.
+     * outPath:	  A string that tells the location and name of the output file.
+     *
+     * stepSize:  Has to be larger than 0.
+     *
+     *
+     *
+     * 		Version 1.0.0, approved by Philge. If changes are made to this program
+     * 		researchers at EpiCon needs to check the results and approve the new version.
+     *
+     */
+    public int stepping(String inPath, String outPath, int stepSize) throws ProcessException, InterruptedException {
+        if(stepSize < 1){
+            throw new ProcessException("Stepsize has to be larger than 1. ");
+        }
+        data = new ArrayList<>();
+        String strLine;
+        this.stepSize = stepSize;
+        int nrRows = 0;
+        int count = 0;
+
+        try {
+            setupBufferReader(inPath);
+            setupBufferWriter(outPath);
+
+            while((strLine = br.readLine()) != null){
+                System.err.println(strLine);
+                data.add(new Tuple(strLine));
+                nrRows++;
+            }
+            System.err.println("FINISHED LOADING FILE");
+
+            int pos = 0;
+            for(int i = 0; i < nrRows - 1; i++){
+                if(!data.get(i).getChromosome().equals(data.get(i+1).getChromosome())){
+                    pos = 0;
+                    continue;
+                }
+
+                if(pos == 0){
+                    while(pos <= data.get(i).getPosition()){
+                        pos += stepSize;
+                    }
+                }
+
+                while(pos < data.get(i+1).getPosition()){
+                    String writeData = new String(data.get(i).getChromosome() + "\t" + pos + "\t" + data.get(i).getSignal() + "\n");
+                    System.err.println(writeData);
+                    bw.write(writeData.toString());
+                    pos += stepSize;
+                    count++;
+                }
+            }
+
+            tearDown();
+
+        } catch (IOException e) {
+            throw new ProcessException("IOException when reading/writing in Smoothing: "+ e.getMessage());
+        }
+        return count;
     }
 
     private void smoothOneRow(int[] params, int noOfRowsToSmooth, int index) throws IOException, ProcessException {
