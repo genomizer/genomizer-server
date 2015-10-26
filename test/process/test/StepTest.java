@@ -86,8 +86,8 @@ public class StepTest {
     public void shouldProduceCorrectFile() throws Exception {
         new Step(INFILE, OUTFILE, 20).validate().execute();
         assertTrue(
-                FileUtils.contentEquals(
+                FileUtils.contentEqualsIgnoreEOL(
                         new File(OUTFILE),
-                        new File(CORRECT_FILE)));
+                        new File(CORRECT_FILE), null));
     }
 }
