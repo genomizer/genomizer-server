@@ -1,0 +1,45 @@
+#!/usr/bin/env expect
+
+# Generate private key
+system openssl genrsa -out genomizer.key 2048
+
+# Generate CSR
+spawn openssl req -new -key genomizer.key -out genomizer.csr
+
+expect "Country Name (2 letter code)"
+send -- "SE\r"
+
+expect "State or Province Name (full name)"
+send -- "Vaesterbotten\r"
+
+expect "Locality Name (eg, city)"
+send -- "Umea\r"
+
+expect "Organization Name (eg, company)"
+send -- "EpiCoN\r"
+
+expect "Organizational Unit Name (eg, section)"
+send -- "Genomizer\r"
+
+expect "Common Name"
+send -- "Genomizer\r"
+
+expect "Email Address"
+send -- "5dv151@cs.umu.se\r"
+
+expect "A challenge password"
+send -- "\r"
+
+expect "An optional company name"
+send -- "\r"
+
+expect eof
+
+# Generate self signed key
+system openssl x509 -req -days 365 -in genomizer.csr -signkey genomizer.key -out genomizer.crt
+
+# Copy to files to the correct locations
+system mkdir -p cert
+system mv genomizer.crt cert/
+system mv genomizer.key cert/
+system mv genomizer.csr cert/

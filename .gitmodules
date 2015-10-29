@@ -1,0 +1,3 @@
+[submodule "docker/genomizer-nginx/genomizer-web"]
+	path = docker/genomizer-nginx/genomizer-web
+	url = https://github.com/genomizer/genomizer-web

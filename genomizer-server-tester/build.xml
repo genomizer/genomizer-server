@@ -11,8 +11,6 @@
     </fileset>
   </path>
 
-
-
   <target name="init">
     <mkdir dir="out"/>
     <copy includeemptydirs="false" todir="out">
@@ -48,6 +46,12 @@
         <attribute name="Main-Class" value="GenomizerAPITester" />
       </manifest>
     </jar>
+  </target>
+
+  <target name="run" depends="jar" >
+    <java jar="genomizer-server-tester.jar" fork="true" failonerror="true">
+      <arg value="${server}"/>
+    </java>
   </target>
 
   <target name="clean">

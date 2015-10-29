@@ -72,7 +72,7 @@ public class ServerMain {
 		}
 		catch (IOException | SQLException ex) {
 			String msg = "Warning: a connection to the database could not be " +
-					"made.";
+              "made, reason: " + ex.getMessage();
 			Debug.log(msg);
 			ErrorLogger.log("SYSTEM", msg);
 		}

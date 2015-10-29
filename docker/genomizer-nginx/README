@@ -1,0 +1,10 @@
+To get the nginx reverse proxy up and running (assuming that the database and
+the server already are):
+
+$ docker build -t genomizer/nginx .
+
+$ docker run -d -P -v `pwd`/genomizer-web/app:/usr/share/nginx/html:ro \
+        -v `pwd`/cert:/usr/share/nginx/cert:ro \
+        --name=genomizer-nginx \
+        --link genomizer-server:genomizer \
+        genomizer/nginx

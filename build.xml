@@ -97,8 +97,8 @@
     </target>
 
     <target name="run" depends="jar">
-      <java jar="server.jar" fork="true">
-    <arg value="-debug"/>
+      <java jar="server.jar" fork="true" failonerror="true">
+        <arg value="-debug"/>
       </java>
     </target>
 
@@ -127,6 +127,55 @@
             </fileset>
             <report format="frames" todir="${junit.output.dir}"/>
         </junitreport>
+    </target>
+
+    <target name="deploy" depends="jar">
+      <exec executable="docker" dir="docker/genomizer-postgres" failonerror="true">
+        <arg line="build -t genomizer/postgres ." />
+      </exec>
+      <exec executable="docker" dir="docker/genomizer-server" failonerror="true">
+        <arg line="build -t genomizer/server ." />
+      </exec>
+      <exec executable="docker" dir="docker/genomizer-nginx" failonerror="true">
+        <arg line="build -t genomizer/nginx ." />
+      </exec>
+      <mkdir dir="pgdata" />
+      <mkdir dir="data" />
+      <exec executable="docker" failonerror="true">
+        <arg line="run -d -v ${user.dir}/pgdata:/var/lib/postgresql/data/pgdata
+-v ${user.dir}/docker/genomizer-postgres/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d:ro
+-v ${user.dir}/sql:/sql:ro
+--name=genomizer-postgres
+genomizer/postgres" />
+      </exec>
+      <exec executable="docker" failonerror="true">
+        <arg line="run -d -v ${user.dir}/server.jar:/server.jar
+-v ${user.dir}/resources:/resources
+-v ${user.dir}/settings.cfg:/settings.cfg
+-v ${user.dir}/data:/data
+-p 8080:7000
+--name=genomizer-server
+--link genomizer-postgres:postgres
+genomizer/server" />
+      </exec>
+<!--       <exec executable="git" failonerror="true"> -->
+<!--         <arg line="submodule init"/> -->
+<!--       </exec> -->
+<!--       <exec executable="git" failonerror="true"> -->
+<!--         <arg line="submodule update"/> -->
+<!--       </exec> -->
+<!--       <exec executable="expect" failonerror="true" dir="docker/genomizer-nginx"> -->
+<!--         <arg line="../../deployment/generate_certificates.expect"/> -->
+<!--       </exec> -->
+<!--       <exec executable="docker" failonerror="true"> -->
+<!--         <arg line="run -d -p 8090:80 -p 4453:443 -->
+<!-- -v ${user.dir}/docker/genomizer-nginx/genomizer-web/app:/usr/share/nginx/html -->
+<!-- -v ${user.dir}/docker/genomizer-nginx/cert:/etc/nginx/ssl:ro -->
+<!-- -v ${user.dir}/docker/genomizer-nginx/nginx.conf:/etc/nginx/nginx.conf:ro -->
+<!-- - -name=genomizer-nginx -->
+<!-- - -link genomizer-server:genomizer -->
+<!-- genomizer/nginx" /> -->
+<!--       </exec> -->
     </target>
 
 </project>
