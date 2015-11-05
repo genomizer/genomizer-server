@@ -13,7 +13,7 @@ import java.io.IOException;
 
 public class RawToProfileTest {
 	RawToProfileConverter rtp = null;
-	String bowtieParams = "-a";
+	String bowtieParams = "";
 	String genomeBowtie2 = "resources/bowtie2/example/index/lambda_virus";
 
 	@Before
@@ -24,18 +24,18 @@ public class RawToProfileTest {
 	@After
 	public void tearDown() {
 		new File("resources/processTest/results/test_sorted_without_duplicates.sam").delete();
-		new File("resources/processTest/results/test.wig").delete();
+		new File("resources/processTest/results/test.sgr").delete();
 		rtp = null;
 	}
 
 	@Test
 	public void shouldRunStaticCall() 
 			throws ProcessException, IOException, InterruptedException {
-		String inFile = "test.fastq";
-		String outFile = "test.wig";
+		String inFile = "reads_1.fq";
+		String outFile = "test.sgr";
 		RawToProfileConverter.procedureRaw(
-				bowtieParams, inFile, outFile, true,"GENOMEVERSION",genomeBowtie2,
-						"resources/processTest/fastq/",
+				bowtieParams, inFile, outFile, true,true,"GENOMEVERSION",genomeBowtie2,
+						"resources/bowtie2/example/reads/",
 				"resources/processTest/results/");
 	}
 
