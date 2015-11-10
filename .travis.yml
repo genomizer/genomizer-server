@@ -13,7 +13,6 @@ before_install:
   - chmod 400 ~/.ssh/id_rsa
 
 before_script:
-  - export PATH=$PATH:$PWD/resources/
   - psql -c 'create database c5dv151_vt14;' -U postgres
   - psql -f sql/genomizer_database_tables.sql -U postgres -d c5dv151_vt14 > /dev/null
 
