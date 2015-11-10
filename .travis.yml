@@ -37,6 +37,9 @@ after_success:
   - git config --global user.name "Travis CI User"
   - mkdir -p /tmp/deploy
   - cp server.jar /tmp/deploy/genomizer-server.jar
+  - tar cJf resources.tar.xz resources/
+  - cp resources.tar.xz /tmp/deploy/genomizer-server-resources.tar.xz
+  - cp settings.cfg /tmp/deploy/settings.cfg
   - cd /tmp/deploy
   - git init
   - git add .
