@@ -25,7 +25,7 @@ script:
   - sed -f travis.sed <settings.cfg.template >settings.cfg
   - ant run 2>&1 > log.txt &
   - cd genomizer-server-tester
-  - ant run "-Dserver:http://localhost:7000"
+  - ant -Dserver="http://localhost:7000" run
   - cd ..
   - cat log.txt
   - cat errorLog.txt
