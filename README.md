@@ -5,13 +5,19 @@ This is the main repository for the server side of the Genomizer system.
 
 ##Downloads
 
-Auto-generated JAR snapshots are uploaded by the Travis build bot to the 
+Auto-generated binary snapshots are uploaded by the Travis build bot to the
 [`genomizer-downloads`](https://github.com/genomizer/genomizer-downloads) repository after each successful build.
 
 The following downloads are available:
 
-  * [`genomizer-server.jar` (`master` branch)](https://github.com/genomizer/genomizer-downloads/raw/genomizer-server-master/genomizer-server.jar).
-  * [`genomizer-server.jar` (`develop` branch)](https://github.com/genomizer/genomizer-downloads/raw/genomizer-server-develop/genomizer-server.jar).
+ * **master branch:**
+  * [`genomizer-server.jar`](https://github.com/genomizer/genomizer-downloads/raw/genomizer-server-master/genomizer-server.jar).
+  * [`genomizer-server-resources.tar.xz`](https://github.com/genomizer/genomizer-downloads/raw/genomizer-server-master/genomizer-server-resources.tar.xz).
+  * [`settings.cfg`](https://github.com/genomizer/genomizer-downloads/raw/genomizer-server-master/settings.cfg).
+ * **develop branch:**
+  * [`genomizer-server.jar`](https://github.com/genomizer/genomizer-downloads/raw/genomizer-server-develop/genomizer-server.jar).
+  * [`genomizer-server-resources.tar.xz`](https://github.com/genomizer/genomizer-downloads/raw/genomizer-server-develop/genomizer-server-resources.tar.xz).
+  * [`settings.cfg`](https://github.com/genomizer/genomizer-downloads/raw/genomizer-server-develop/settings.cfg).
 
 ##Building
 
@@ -26,7 +32,7 @@ one step (useful during development), use `ant run`.
 ##Usage
 
 The server requires Java 1.7 to run. This is the default on lab
-computers, so you can just use 
+computers, so you can just use
 
     java -jar server.jar
 
@@ -37,13 +43,13 @@ The program can be run with the following options:
 
     -p [NUMBER]    The listening port for the server, default is 7000
 
-    -f [FILE] 	   Reads the database information from a file. The file
+    -f [FILE]      Reads the database information from a file. The file
                    should contain a single line with 4 words, each
                    separated by a space.  It should be written in the
                    following format: USERNAME PASSWORD DATABASE HOST
 
-    -nri 	   "No remove inactive", don't remove inactive users that are
-    		   logged in.
+    -nri       "No remove inactive", don't remove inactive users that are
+               logged in.
 
     -debug         Print out various debug information.
 
@@ -51,13 +57,13 @@ If no options are used the server will listen on port 7000 and look
 for a file named "settings.cfg" in the current folder to read settings
 from.
 
-##Development 
+##Development
 
 The main development branch is called *`develop`*. New feature
 development is done on separate feature branches. When a feature is
 completed, the feature branch is merged into *`develop`* after a code
 review. The *`develop`* branch is itself regularly merged into
-*`master`* (usually before a delivery). 
+*`master`* (usually before a delivery).
 
 More on this branching model can be found
 [here](http://nvie.com/posts/a-successful-git-branching-model/). A
