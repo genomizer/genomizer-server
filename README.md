@@ -12,12 +12,15 @@ The following downloads are available:
 
  * **master branch:**
   * [`genomizer-server.jar`](https://github.com/genomizer/genomizer-downloads/raw/genomizer-server-master/genomizer-server.jar)
-  * [`genomizer-server-resources.tar.xz`](https://github.com/genomizer/genomizer-downloads/raw/genomizer-server-master/genomizer-server-resources.tar.xz)
   * [`settings.cfg`](https://github.com/genomizer/genomizer-downloads/raw/genomizer-server-master/settings.cfg)
  * **develop branch:**
   * [`genomizer-server.jar`](https://github.com/genomizer/genomizer-downloads/raw/genomizer-server-develop/genomizer-server.jar)
-  * [`genomizer-server-resources.tar.xz`](https://github.com/genomizer/genomizer-downloads/raw/genomizer-server-develop/genomizer-server-resources.tar.xz)
   * [`settings.cfg`](https://github.com/genomizer/genomizer-downloads/raw/genomizer-server-develop/settings.cfg)
+ * **Resources (common for both branches):**
+  * [`genomizer-server-resources.tar.xz`](https://github.com/genomizer/genomizer-downloads/releases/download/genomizer-server-resources/genomizer-server-resources.tar.xz)
+
+**NB:** The `genomizer-server-resources.tar.xz` archive is updated manually due to
+its large size. GitHub Releases feature is used to host it.
 
 ##Building
 
