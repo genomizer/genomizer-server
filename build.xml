@@ -97,8 +97,8 @@
     </target>
 
     <target name="run" depends="jar">
-      <java jar="server.jar" fork="true">
-    <arg value="-debug"/>
+      <java jar="server.jar" fork="true" failonerror="true">
+        <arg value="-debug"/>
       </java>
     </target>
 
