@@ -50,6 +50,12 @@
     </jar>
   </target>
 
+  <target name="run" depends="jar" >
+    <java jar="genomizer-server-tester.jar" fork="true" failonerror="true">
+      <arg value="${server}"/>
+    </java>
+  </target>
+
   <target name="clean">
     <delete dir="out" />
   </target>
