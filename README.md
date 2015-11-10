@@ -11,13 +11,13 @@ Auto-generated binary snapshots are uploaded by the Travis build bot to the
 The following downloads are available:
 
  * **master branch:**
-  * [`genomizer-server.jar`](https://github.com/genomizer/genomizer-downloads/raw/genomizer-server-master/genomizer-server.jar).
-  * [`genomizer-server-resources.tar.xz`](https://github.com/genomizer/genomizer-downloads/raw/genomizer-server-master/genomizer-server-resources.tar.xz).
-  * [`settings.cfg`](https://github.com/genomizer/genomizer-downloads/raw/genomizer-server-master/settings.cfg).
+  * [`genomizer-server.jar`](https://github.com/genomizer/genomizer-downloads/raw/genomizer-server-master/genomizer-server.jar)
+  * [`genomizer-server-resources.tar.xz`](https://github.com/genomizer/genomizer-downloads/raw/genomizer-server-master/genomizer-server-resources.tar.xz)
+  * [`settings.cfg`](https://github.com/genomizer/genomizer-downloads/raw/genomizer-server-master/settings.cfg)
  * **develop branch:**
-  * [`genomizer-server.jar`](https://github.com/genomizer/genomizer-downloads/raw/genomizer-server-develop/genomizer-server.jar).
-  * [`genomizer-server-resources.tar.xz`](https://github.com/genomizer/genomizer-downloads/raw/genomizer-server-develop/genomizer-server-resources.tar.xz).
-  * [`settings.cfg`](https://github.com/genomizer/genomizer-downloads/raw/genomizer-server-develop/settings.cfg).
+  * [`genomizer-server.jar`](https://github.com/genomizer/genomizer-downloads/raw/genomizer-server-develop/genomizer-server.jar)
+  * [`genomizer-server-resources.tar.xz`](https://github.com/genomizer/genomizer-downloads/raw/genomizer-server-develop/genomizer-server-resources.tar.xz)
+  * [`settings.cfg`](https://github.com/genomizer/genomizer-downloads/raw/genomizer-server-develop/settings.cfg)
 
 ##Building
 
