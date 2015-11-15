@@ -13,8 +13,10 @@ before_install:
   - chmod 400 ~/.ssh/id_rsa
 
 before_script:
-  - psql -c 'create database c5dv151_vt14;' -U postgres
-  - psql -f sql/genomizer_database_tables.sql -U postgres -d c5dv151_vt14 > /dev/null
+  - psql -c 'create database genomizerdb;' -U "$POSTGRES_USER"
+  - psql -c 'create user genomizer;' -U "$POSTGRES_USER"
+  - psql -c 'grant all privileges on database genomizerdb to genomizer;' -U "$POSTGRES_USER"
+  - psql -f sql/genomizer_database_tables.sql -U genomizer -d genomizerdb > /dev/null
 
 script:
   - ant test
@@ -22,7 +24,7 @@ script:
   - psql -f sql/genomizer_database_tables.sql -U postgres -d c5dv151_vt14 > /dev/null
   - psql -f sql/add_test_tuples.sql -U postgres -d c5dv151_vt14 > /dev/null
   - psql -f sql/release_database_tuple.sql -U postgres -d c5dv151_vt14 > /dev/null
-  - sed -f travis.sed <settings.cfg.template >settings.cfg
+  - mv settings.cfg.travis settings.cfg
   - ant run 2>&1 > log.txt &
   - cd genomizer-server-tester
   - ant -Dserver="http://localhost:7000" run

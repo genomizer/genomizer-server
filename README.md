@@ -46,10 +46,7 @@ The program can be run with the following options:
 
     -p [NUMBER]    The listening port for the server, default is 7000
 
-    -f [FILE]      Reads the database information from a file. The file
-                   should contain a single line with 4 words, each
-                   separated by a space.  It should be written in the
-                   following format: USERNAME PASSWORD DATABASE HOST
+    -f [FILE]      Use a custom config file instead of settings.cfg.
 
     -nri       "No remove inactive", don't remove inactive users that are
                logged in.

@@ -1,9 +1,9 @@
 # Database settings.
 
-databaseUser        = DB_USER
-databasePassword    = DB_PASSWORD
-databaseHost        = DB_HOST
-databaseName        = DB_NAME
+databaseUser        = genomizer
+databasePassword    =
+databaseHost        = localhost
+databaseName        = genomizerdb
 
 # Port number on which the server listens for HTTP connections.
 genomizerPort       = 7000
@@ -18,19 +18,19 @@ nrOfProcessThreads  = 5
 
 # Paths to various programs that we use.
 
-picardLocation		= resources/picard-tools/picard.jar
-bowtie2Location		= resources/bowtie2/bowtie2
-pyicosLocation		= resources/pyicoteo/pyicos
-smoothingJarLocation	= resources/smoothing.jar
+picardLocation       = resources/picard-tools/picard.jar
+bowtie2Location      = resources/bowtie2/bowtie2
+pyicosLocation       = resources/pyicoteo/pyicos
+smoothingJarLocation = resources/smoothing.jar
 
 # Address and port of the publicly visible WWW server (if any)
 # that is tunnelling requests to the genomizer server.
 # 'wwwTunnelPath' is the path on the WWW server that
 # requests to genomizer server are mapped to (usually '/api').
 
-wwwTunnelHost       = WWW_TUNNEL_HOST
-wwwTunnelPort       = WWW_TUNNEL_PORT
-wwwTunnelPath       = WWW_TUNNEL_PATH
+wwwTunnelHost       = http:://localhost/
+wwwTunnelPort       = 7000
+wwwTunnelPath       =
 
 # Directory used for storing temporary files during uploading.
 # Should be on the same partition as 'fileLocation'.
