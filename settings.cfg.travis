@@ -28,9 +28,9 @@ smoothingJarLocation = resources/smoothing.jar
 # 'wwwTunnelPath' is the path on the WWW server that
 # requests to genomizer server are mapped to (usually '/api').
 
-wwwTunnelHost       = http://localhost/
+wwwTunnelHost       = http://localhost
 wwwTunnelPort       = 7000
-wwwTunnelPath       =
+wwwTunnelPath       = /
 
 # Directory used for storing temporary files during uploading.
 # Should be on the same partition as 'fileLocation'.
