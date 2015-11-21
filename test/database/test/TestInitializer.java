@@ -39,10 +39,10 @@ public class TestInitializer {
         String travis = System.getenv("TRAVIS");
         if(travis != null && travis.equals("true")) {
             // Running on Travis.
-            username = "postgres";
+            username = "genomizer";
             password = "";
             host     = "localhost";
-            database = "c5dv151_vt14";
+            database = "genomizerdb";
         }
         else {
             // Running in a CS lab.

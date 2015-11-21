@@ -50,13 +50,9 @@ public class DatabaseAccessor implements AutoCloseable {
     /**
      * Creates a databaseAccessor that opens a connection to a database.
      *
-     * @param username - The username to log in to the database as. Should
-     *            be "c5dv151_vt14" as of now.
-     * @param password - The password to log in to the database. Should be
-     *            "shielohh" as of now.
-     * @param host - The name of the database management system. Will
-     *            problebly always be "postgres" unless the DMS is switched with
-     *            something else.
+     * @param username - The username to log in to the database as.
+     * @param password - The password to log in to the database.
+     * @param host - The name of the database management system.
      * @param database - The name of the database
      * @throws SQLException
      * @throws IOException
