@@ -20,10 +20,10 @@ before_script:
 
 script:
   - ant test
-  - psql -f sql/drop_all_tables.sql -U postgres -d c5dv151_vt14 > /dev/null
-  - psql -f sql/genomizer_database_tables.sql -U postgres -d c5dv151_vt14 > /dev/null
-  - psql -f sql/add_test_tuples.sql -U postgres -d c5dv151_vt14 > /dev/null
-  - psql -f sql/release_database_tuple.sql -U postgres -d c5dv151_vt14 > /dev/null
+  - psql -f sql/drop_all_tables.sql -U genomizer -d genomizerdb > /dev/null
+  - psql -f sql/genomizer_database_tables.sql -U genomizer -d genomizerdb > /dev/null
+  - psql -f sql/add_test_tuples.sql -U genomizer -d genomizerdb > /dev/null
+  - psql -f sql/release_database_tuple.sql -U genomizer -d genomizerdb > /dev/null
   - mv settings.cfg.travis settings.cfg
   - ant run 2>&1 > log.txt &
   - cd genomizer-server-tester
