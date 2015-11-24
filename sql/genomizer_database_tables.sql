@@ -67,28 +67,28 @@ CREATE TABLE User_Info
 CREATE TABLE Working_on
 (
     Username VARCHAR(32) NOT NULL,
-	WorkspaceID VARCHAR(32) NOT NULL,
-	CONSTRAINT pkey_working_on PRIMARY KEY(Username, WorkspaceID),
-	CONSTRAINT fkey_username FOREIGN KEY (Username) REFERENCES User_Info(Username)
+    WorkspaceID VARCHAR(32) NOT NULL,
+    CONSTRAINT pkey_working_on PRIMARY KEY(Username, WorkspaceID),
+    CONSTRAINT fkey_username FOREIGN KEY (Username) REFERENCES User_Info(Username)
 );
 
 CREATE TABLE Workspace
 (
-	WorkspaceID VARCHAR(32) NOT NULL,
-	Name VARCHAR(64) NOT NULL,
-	CONSTRAINT pkey_workspace PRIMARY KEY(WorkspaceID)
+    WorkspaceID VARCHAR(32) NOT NULL,
+    Name VARCHAR(64) NOT NULL,
+    CONSTRAINT pkey_workspace PRIMARY KEY(WorkspaceID)
 );
 
 ALTER TABLE Working_on ADD CONSTRAINT fkey_workspaceid FOREIGN KEY (WorkspaceID) REFERENCES Workspace(WorkspaceID);
 
 CREATE TABLE Used_In
 (
-	FileID INT NOT NULL,
-	WorkspaceID VARCHAR(32) NOT NULL,
-	VPath VARCHAR(128) NOT NULL,
-	CONSTRAINT pkey_used_in PRIMARY KEY(FileID, WorkspaceID, VPath),
-	CONSTRAINT fkey_fileid FOREIGN KEY (FileID) REFERENCES File(FileID),
-	CONSTRAINT fkey_workspaceid FOREIGN KEY (WorkspaceID) REFERENCES Workspace(WorkspaceID)
+    FileID INT NOT NULL,
+    WorkspaceID VARCHAR(32) NOT NULL,
+    VPath VARCHAR(128) NOT NULL,
+    CONSTRAINT pkey_used_in PRIMARY KEY(FileID, WorkspaceID, VPath),
+    CONSTRAINT fkey_fileid FOREIGN KEY (FileID) REFERENCES File(FileID),
+    CONSTRAINT fkey_workspaceid FOREIGN KEY (WorkspaceID) REFERENCES Workspace(WorkspaceID)
 );
 
 CREATE TABLE Published_In
