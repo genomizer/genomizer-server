@@ -5,6 +5,11 @@ import static util.Util.*;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
+import java.net.URI;
+import java.net.URLDecoder;
+import java.util.HashMap;
 
 public class UtilTest {
 
@@ -41,6 +46,19 @@ public class UtilTest {
     @Test(expected=IOException.class)
     public void invalidCharactersAreNotAllowed() throws IOException {
         validatePath("a/path/with/some/invalid!?#$%^*/characters/in/it");
+    }
+
+    @Test
+    public void parseURIWithEncodedSpaces() 
+    		throws URISyntaxException, UnsupportedEncodingException {
+      HashMap<String, String> outParams = new HashMap<>();
+      String str = "http://server.com/some/path?foo=bar%20baar&baz=quux";
+      String path = parseURI(new URI(str), outParams);
+
+      assertEquals("/some/path", path);
+      assertEquals("bar baar", outParams.get("foo"));
+      assertEquals("bar baar", URLDecoder.decode(outParams.get("foo"), "UTF-8"));
+      assertEquals("quux", outParams.get("baz"));
     }
 
     @Test
