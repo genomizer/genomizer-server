@@ -31,7 +31,7 @@ public class CommandTester {
      * Runs all the different kinds of commands defined in the test classes.
      * @param connection The established connection to send the commands to.
      */
-    public CommandTester (Connection connection){
+    public CommandTester (Connection connection) throws Exception {
         for(int i = 0; i < TestCollection.laps; i++){
             conn = connection;
 

@@ -21,7 +21,7 @@ public class GenomizerAPITester {
     /**
      * MAIN
      */
-    public static void main(String[] args){
+    public static void main(String[] args) throws Exception {
 
         // path to server
         if (args.length != 1) {
