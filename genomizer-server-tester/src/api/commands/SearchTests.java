@@ -26,7 +26,7 @@ public class SearchTests extends TestCollection {
           (new SearchTestExpID
            ("SEARCH MULTI",
             URLEncoder.encode("Exp1[ExpID] AND Human[Species]", "UTF-8"),
-            "testExp1", true));
+            "Exp1", true));
         super.commandList.add(new SearchTestExpID("SEARCH INVALID", "OAJHG", "", false));
         super.commandList.add(new SearchTestExpID("SEARCH EMPTY", "", "testExp1", true));
     }
