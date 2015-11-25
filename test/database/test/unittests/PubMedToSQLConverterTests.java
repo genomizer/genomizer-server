@@ -5,25 +5,19 @@ import static org.junit.Assert.*;
 import java.io.IOException;
 import java.sql.SQLException;
 
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 
-import database.DatabaseAccessor;
 import database.PubMedToSQLConverter;
-import database.test.TestInitializer;
 
 public class PubMedToSQLConverterTests {
 
-    private static DatabaseAccessor dbac;
-    private static PubMedToSQLConverter pm2sql;
+	private static PubMedToSQLConverter pm2sql;
 
     public String expConstraintPmStr = "Human[Species]";
     public String fileConstraintPmStr = "Ruaridh Watt[Author]";
 
-    public String multipleExpConstraintsSpace = 
-    		"Exp1[ExpID] Human[Species]";
     public String multipleExpConstraintsPmStr =
     		"Human[Species] AnD Unknown[Sex]";
     public String multipleExpConstraintsPmStrWithBrackets =
@@ -61,17 +55,7 @@ public class PubMedToSQLConverterTests {
 
     @BeforeClass
     public static void setupBeforeClass() throws SQLException, IOException {
-
-        dbac = new DatabaseAccessor(TestInitializer.username,
-        		TestInitializer.password, TestInitializer.host,
-        		TestInitializer.database);
         pm2sql = new PubMedToSQLConverter();
-    }
-
-    @AfterClass
-    public static void teardownAfterClass() throws SQLException, IOException {
-
-        dbac.close();
     }
 
     @Test
@@ -107,9 +91,9 @@ public class PubMedToSQLConverterTests {
     public void shouldConvertMultipleExpConstraintsSpace() throws Exception {
 
         String query = pm2sql
-                .convertExperimentSearch(multipleExpConstraintsSpace);
+                .convertExperimentSearch("Exp1[ExpID] Human[Species]");
 
-        String expected = sqlFragmentForExpSearch;
+        String expected = "SELECT ExpID FROM Experiment WHERE ExpID ~* ?SELECT ExpID FROM Experiment NATURAL JOIN Annotated_With WHERE Label ~~* ? AND Value ~* ?\nORDER BY ExpID";
 
         assertEquals(expected, query);
     }
