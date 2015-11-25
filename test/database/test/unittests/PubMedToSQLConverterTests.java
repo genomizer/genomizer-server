@@ -22,6 +22,8 @@ public class PubMedToSQLConverterTests {
     public String expConstraintPmStr = "Human[Species]";
     public String fileConstraintPmStr = "Ruaridh Watt[Author]";
 
+    public String multipleExpConstraintsSpace = 
+    		"Exp1[ExpID] Human[Species]";
     public String multipleExpConstraintsPmStr =
     		"Human[Species] AnD Unknown[Sex]";
     public String multipleExpConstraintsPmStrWithBrackets =
@@ -33,7 +35,7 @@ public class PubMedToSQLConverterTests {
     public String expConstraintPmStrNOT = "NOT Human[Species]";
     public String multipleExpConstraintsPmStrNOT =
     		"Human[Species] NOT Unknown[Sex]";
-
+    
     private String sqlFragmentForExpSearch =
     		"SELECT ExpID FROM Experiment NATURAL JOIN Annotated_With "
             + "WHERE Label ~~* ? AND Value ~* ?";
@@ -101,6 +103,17 @@ public class PubMedToSQLConverterTests {
         assertEquals("Unknown", pm2sql.getParameters().get(3).getKey());
     }
 
+    @Test
+    public void shouldConvertMultipleExpConstraintsSpace() throws Exception {
+
+        String query = pm2sql
+                .convertExperimentSearch(multipleExpConstraintsSpace);
+
+        String expected = sqlFragmentForExpSearch;
+
+        assertEquals(expected, query);
+    }
+    
     @Test
     public void shouldConvertMultipleExpConstraintPmStrRetainingRoundBrackets()
             throws Exception {
