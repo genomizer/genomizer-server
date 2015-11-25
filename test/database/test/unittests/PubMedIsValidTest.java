@@ -39,6 +39,7 @@ public class PubMedIsValidTest {
 	@Test
 	public void pubMedStringWithSpacesShouldBeValid() throws IOException {
 
+		// FIXME: This syntax is actually invalid.
 		assertTrue(dbac.isPubMedStringValid("Exp1[ExpID] Human[Species]"));
 	}
 	

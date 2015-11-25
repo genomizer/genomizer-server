@@ -93,6 +93,7 @@ public class PubMedToSQLConverterTests {
         String query = pm2sql
                 .convertExperimentSearch("Exp1[ExpID] Human[Species]");
 
+        // FIXME: The output is invalid.
         String expected = "SELECT ExpID FROM Experiment WHERE ExpID ~* ?SELECT ExpID FROM Experiment NATURAL JOIN Annotated_With WHERE Label ~~* ? AND Value ~* ?\nORDER BY ExpID";
 
         assertEquals(expected, query);
