@@ -34,7 +34,7 @@ public class RawToProfileTest {
 		String inFile = "reads_1.fq";
 		String outFile = "test.sgr";
 		RawToProfileConverter.procedureRaw(
-				bowtieParams, inFile, outFile, true,true,"GENOMEVERSION",genomeBowtie2,
+				bowtieParams, inFile, outFile, true,true,true,"GENOMEVERSION",genomeBowtie2,
 						"resources/bowtie2/example/reads/",
 				"resources/processTest/results/");
 	}

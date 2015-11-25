@@ -51,7 +51,7 @@ public class PyicosTest {
     public void convertShouldSucceed()
             throws ValidateException, InterruptedException, IOException {
         String res = Pyicos.runConvert(inSamFile.getCanonicalPath(),
-                outWigFile.getCanonicalPath());
+                outWigFile.getCanonicalPath(), true);
         assertTrue(outWigFile.exists());
         assertTrue(new File(res).exists());
     }
