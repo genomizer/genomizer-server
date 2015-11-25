@@ -51,6 +51,7 @@ public class RawToProfileConverter extends Executor {
 	public static File [] procedureRaw(String params, String fastqFile,
 									   String sgrFile, boolean keepSam,
 									   boolean removeDups,
+									   boolean extendReads,
 									   String genomeVersion,
 									   String referenceGenome,
 									   String filepathRaw,
@@ -157,7 +158,7 @@ public class RawToProfileConverter extends Executor {
 		try {
 			ErrorLogger.log("SYSTEM","Running .wig conversion");
 			Pyicos.runConvert(sortedSamWithoutDups,
-					tmpDirPath+FilenameUtils.getBaseName(sgrFile) + ".wig");
+					tmpDirPath+FilenameUtils.getBaseName(sgrFile) + ".wig", extendReads);
 			ErrorLogger.log("SYSTEM", "Finished .wig conversion");
 		} catch (ValidateException e) {
 			ErrorLogger.log("SYSTEM",
