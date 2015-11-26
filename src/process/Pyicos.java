@@ -151,11 +151,15 @@ public class Pyicos extends Executor {
     }
 
     // Convert a sam file to a wig file. Returns the name of the newly-produced wig file.
-    public static String runConvert(String samFile, String wigFile)
+    public static String runConvert(String samFile, String wigFile, boolean extendReads)
             throws ValidateException, InterruptedException, IOException {
         // Get the extension length from strcorr.
-        int extensionLength = runStrcorr(samFile);
-	ErrorLogger.log("SYSTEM", "Done with strcorr");
+        int extensionLength = 0;
+
+        if(extendReads){
+            extensionLength = runStrcorr(samFile);
+        }
+        ErrorLogger.log("SYSTEM", "Done with strcorr");
 
         // Run 'convert'.
         Pyicos convert = new Pyicos("convert", samFile, wigFile,
