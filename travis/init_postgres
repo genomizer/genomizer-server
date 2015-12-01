@@ -1,0 +1,9 @@
+#! /bin/bash
+
+set -e
+
+psql -c "create database $DBNAME;" -U "$POSTGRES_USER"
+psql -c "create user $DBUSER;" -U "$POSTGRES_USER"
+psql -c "grant all privileges on database $DBNAME to $DBUSER;" \
+    -U "$POSTGRES_USER"
+psql -f sql/genomizer_database_tables.sql -U $DBUSER -d $DBNAME > /dev/null

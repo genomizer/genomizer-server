@@ -1,0 +1,8 @@
+#! /bin/bash
+
+set -e
+
+psql -f sql/drop_all_tables.sql -U $DBUSER -d $DBNAME > /dev/null
+psql -f sql/genomizer_database_tables.sql -U $DBUSER -d $DBNAME > /dev/null
+psql -f sql/add_test_tuples.sql -U $DBUSER -d $DBNAME > /dev/null
+psql -f sql/release_database_tuples.sql -U $DBUSER -d $DBNAME > /dev/null
