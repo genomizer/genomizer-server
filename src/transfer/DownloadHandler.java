@@ -32,26 +32,39 @@ public class DownloadHandler {
 
         // List the directory contents. Quite verbose, but...
         final ArrayList<String> fileList = new ArrayList<>();
-        Files.walkFileTree((new File(downloadDir)).toPath(), new FileVisitor<Path>() {
+        Files.walkFileTree((new File(downloadDir)).toPath(),
+                           new FileVisitor<Path>() {
             @Override
-            public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+            public FileVisitResult
+              preVisitDirectory(Path dir,
+                                BasicFileAttributes attrs) throws IOException
+            {
                 return FileVisitResult.CONTINUE;
             }
 
             @Override
-            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+            public FileVisitResult
+              visitFile(Path file,
+                        BasicFileAttributes attrs) throws IOException
+            {
                 // ...this is the only interesting line of code.
                 fileList.add(file.toString());
                 return FileVisitResult.CONTINUE;
             }
 
             @Override
-            public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+            public FileVisitResult
+              visitFileFailed(Path file,
+                              IOException exc) throws IOException
+            {
                 return FileVisitResult.CONTINUE;
             }
 
             @Override
-            public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+            public FileVisitResult
+              postVisitDirectory(Path dir,
+                                 IOException exc) throws IOException
+            {
                 return FileVisitResult.CONTINUE;
             }
         });
@@ -119,7 +132,8 @@ public class DownloadHandler {
         if (reqPath.equals(this.handlerRoot)
                 || reqPath.equals(this.handlerRoot + "/")) {
             if (reqParams.containsKey("path")) {
-                Debug.log("Using legacy download method ('?path=/absolute/path').");
+                Debug.log("Using legacy download method " +
+                          "('?path=/absolute/path').");
                 serveFile(exchange, new File(reqParams.get("path")));
             }
             else {
