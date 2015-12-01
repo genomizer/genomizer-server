@@ -40,7 +40,7 @@ public class UploadHandler {
         this.uploadDir   = uploadDir;
         this.handlerRoot = handlerRoot;
         this.tmpDir      = tmpDir;
-        
+
         new File(tmpDir).mkdirs();
     }
 
@@ -90,6 +90,7 @@ public class UploadHandler {
 
                 Debug.log("Successfully saved the uploaded file to '"
                         + outFile.toString() + "'.");
+                fileItem.delete();
             }
         }
     }
@@ -104,7 +105,8 @@ public class UploadHandler {
 
             // Save uploaded files to memory or a temp directory.
             FileUpload fileUpload = new FileUpload();
-            DiskFileItemFactory fileItemFactory = new DiskFileItemFactory(64 * 1024, new File(this.tmpDir));
+            DiskFileItemFactory fileItemFactory =
+              new DiskFileItemFactory(64 * 1024, new File(this.tmpDir));
             fileUpload.setFileItemFactory(fileItemFactory);
             final Headers headers = exchange.getRequestHeaders();
             for (String header : headers.keySet()) {
@@ -144,7 +146,8 @@ public class UploadHandler {
 
             } else {
                 resp = "ERROR".getBytes();
-                exchange.sendResponseHeaders(HttpStatusCode.BAD_REQUEST, resp.length);
+                exchange.sendResponseHeaders(HttpStatusCode.BAD_REQUEST,
+                                             resp.length);
             }
 
             out.write(resp);
@@ -165,7 +168,8 @@ public class UploadHandler {
         String reqPath = Util.parseURI(requestURI, reqParams);
         String absUploadPath = null;
         if (reqParams.containsKey("path")) {
-            Debug.log("Using legacy upload method ('upload?path=/absolute/path').");
+            Debug.log("Using legacy upload method " +
+                      "('upload?path=/absolute/path').");
             absUploadPath = reqParams.get("path");
         }
         else {
@@ -179,26 +183,26 @@ public class UploadHandler {
     private void rollbackFile(String absUploadPath)
         throws  SQLException, IOException {
 
-	Debug.log("Rolling back file, upload was not successful");
+    Debug.log("Rolling back file, upload was not successful");
 
         try ( DatabaseAccessor db = Command.initDB()) {
             FileTuple ft = db.getFileTupleInProgress(absUploadPath);
             if (ft != null) {
-		Debug.log("Removing file tuple " + ft.path);
+        Debug.log("Removing file tuple " + ft.path);
                 db.deleteFile(ft.path);
                 return;
             }
 
             GenomeFile gf = db.getGenomeReleaseFileInProgress(absUploadPath);
             if (gf != null) {
-		Debug.log("Removing genome release file " + gf.fileName);
+        Debug.log("Removing genome release file " + gf.fileName);
                 db.removeGenomeReleaseFile(gf.genomeVersion, gf.fileName);
                 return;
             }
 
             ChainFile cf = db.getChainFileInProgress(absUploadPath);
             if (cf != null) {
-		Debug.log("Removing chain file " + cf.fileName);
+        Debug.log("Removing chain file " + cf.fileName);
                 db.removeChainFiles(cf.fromVersion, cf.toVersion);
                 return;
             }
@@ -239,19 +243,23 @@ public class UploadHandler {
                 return;
             }
 
-            Debug.log("File '" + absUploadPath + "' not registered in the database!");
+            Debug.log("File '" + absUploadPath +
+                      "' not registered in the database!");
             Files.delete(new File(absUploadPath).toPath());
             throw new ValidateException(HttpStatusCode.BAD_REQUEST,
-                    "Request to upload a file that wasn't previously registered!");
+                                        "Request to upload a file that " +
+                                        "wasn't previously registered!");
         }
     }
 
     // Helper function for 'commitFile'.
-    private void checkMarkReadyForDownloadSucceeded (int countUpdated, String fileName)
+    private void checkMarkReadyForDownloadSucceeded (int countUpdated,
+                                                     String fileName)
             throws ValidateException {
         if (countUpdated <= 0) {
             throw new ValidateException(HttpStatusCode.INTERNAL_SERVER_ERROR,
-                    "Couldn't mark file '" + fileName + "' as ready for download!");
+                    "Couldn't mark file '" + fileName
+                                        + "' as ready for download!");
         }
     }
 

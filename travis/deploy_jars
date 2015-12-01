@@ -1,0 +1,21 @@
+#! /bin/bash
+
+set -e
+
+if [[ $TRAVIS_PULL_REQUEST == "false" \
+      && ($TRAVIS_BRANCH == "master" || $TRAVIS_BRANCH == "develop") ]]; then
+
+    git config --global user.email "builds@travis-ci.org"
+    git config --global user.name "Travis CI User"
+    mkdir -p /tmp/deploy
+    cp server.jar /tmp/deploy/genomizer-server.jar
+    cp genomizer-server-tester/genomizer-server-tester.jar \
+        /tmp/deploy/genomizer-server-tester.jar
+    cd /tmp/deploy
+    git init
+    git add .
+    git commit -m "Deploy to GitHub ($(date))."
+    git push --force --quiet git@github.com:genomizer/genomizer-downloads.git \
+        "master:genomizer-server-$TRAVIS_BRANCH"
+
+fi

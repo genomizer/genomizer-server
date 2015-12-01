@@ -7,23 +7,18 @@ jdk:
 addons:
   postgresql: "9.4"
 
+env:
+  - DBUSER=genomizer DBNAME=genomizerdb
+
 before_install:
-  - openssl aes-256-cbc -K $encrypted_159a1b5319b6_key -iv $encrypted_159a1b5319b6_iv -in deploy_key.aes256.enc -out id_rsa -d
-  - mv id_rsa ~/.ssh/id_rsa
-  - chmod 400 ~/.ssh/id_rsa
+  - ./travis/install_deploy_key
 
 before_script:
-  - psql -c 'create database genomizerdb;' -U "$POSTGRES_USER"
-  - psql -c 'create user genomizer;' -U "$POSTGRES_USER"
-  - psql -c 'grant all privileges on database genomizerdb to genomizer;' -U "$POSTGRES_USER"
-  - psql -f sql/genomizer_database_tables.sql -U genomizer -d genomizerdb > /dev/null
+  - ./travis/init_postgres
 
 script:
   - ant test
-  - psql -f sql/drop_all_tables.sql -U genomizer -d genomizerdb > /dev/null
-  - psql -f sql/genomizer_database_tables.sql -U genomizer -d genomizerdb > /dev/null
-  - psql -f sql/add_test_tuples.sql -U genomizer -d genomizerdb > /dev/null
-  - psql -f sql/release_database_tuples.sql -U genomizer -d genomizerdb > /dev/null
+  - ./travis/repopulate_postgres
   - mv settings.cfg.travis settings.cfg
   - ant run 2>&1 > log.txt &
   - cd genomizer-server-tester
@@ -33,13 +28,4 @@ script:
   - cat errorLog.txt
 
 after_success:
-  - git config --global user.email "builds@travis-ci.org"
-  - git config --global user.name "Travis CI User"
-  - mkdir -p /tmp/deploy
-  - cp server.jar /tmp/deploy/genomizer-server.jar
-  - cp genomizer-server-tester/genomizer-server-tester.jar /tmp/deploy/genomizer-server-tester.jar
-  - cd /tmp/deploy
-  - git init
-  - git add .
-  - git commit -m "Deploy to GitHub ($(date))."
-  - test $TRAVIS_PULL_REQUEST == "false" && (test $TRAVIS_BRANCH == "master" || test $TRAVIS_BRANCH == "develop") && git push --force --quiet git@github.com:genomizer/genomizer-downloads.git "master:genomizer-server-$TRAVIS_BRANCH"
+  - ./travis/deploy_jars
