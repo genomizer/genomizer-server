@@ -90,6 +90,7 @@ public class UploadHandler {
 
                 Debug.log("Successfully saved the uploaded file to '"
                         + outFile.toString() + "'.");
+                fileItem.delete();
             }
         }
     }
