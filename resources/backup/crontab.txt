@@ -1,8 +1,0 @@
-To enable the server to automatically do syncronizations to the backupserver
-one line have to be added to a crontab config file. open the file by typing:
-
-sudo crontab -e
-
-1 0 * * * /path/to/script
-
-This will run the script the first minute of every midnight all year around
